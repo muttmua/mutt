@@ -932,29 +932,41 @@ int imap_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
   return 0;
 }
 
+static void
+flush_buffer(char *buf, size_t *len, CONNECTION *conn)
+{
+  buf[*len] = '\0';
+  mutt_socket_write(conn, buf);
+  *len = 0;
+}
+
 int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 {
   FILE *fp;
-  struct stat s;
   char seq[8];
   char buf[LONG_STRING];
-
-  if (stat (msg->path, &s) == -1)
+  size_t len;
+  int c, last;
+  
+  if ((fp = fopen (msg->path, "r")) == NULL)
   {
     mutt_perror (msg->path);
     return (-1);
   }
 
-  if ((fp = safe_fopen (msg->path, "r")) == NULL)
+  for(last = EOF, len = 0; (c = fgetc(fp)) != EOF; last = c)
   {
-    mutt_perror (msg->path);
-    return (-1);
-  }
+    if(c == '\n' && last != '\r')
+      len++;
 
+    len++;
+  }
+  rewind(fp);
+  
   mutt_message ("Sending APPEND command ...");
   imap_make_sequence (seq, sizeof (seq));
   snprintf (buf, sizeof (buf), "%s APPEND %s {%d}\r\n", seq, 
-      CTX_DATA->mailbox, s.st_size);
+      CTX_DATA->mailbox, len);
 
   mutt_socket_write (CTX_DATA->conn, buf);
 
@@ -990,10 +1002,22 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   }
 
   mutt_message ("Uploading message ...");
-  while (fgets (buf, sizeof (buf), fp) != NULL)
+
+  for(last = EOF, len = 0; (c = fgetc(fp)) != EOF; last = c)
   {
-    mutt_socket_write (CTX_DATA->conn, buf);
+    if(c == '\n' && last != '\r')
+      buf[len++] = '\r';
+
+    buf[len++] = c;
+
+    if(len > sizeof(buf) - 3)
+      flush_buffer(buf, &len, CTX_DATA->conn);
   }
+  
+  if(len)
+    flush_buffer(buf, &len, CTX_DATA->conn);
+
+    
   mutt_socket_write (CTX_DATA->conn, "\r\n");
   fclose (fp);
 
