@@ -591,7 +591,16 @@ int mutt_save_message (HEADER *h, int delete, int decode, int *redraw)
     if (h)
     {
       if (decode)
+      {
 	mutt_parse_mime_message (Context, h);
+#ifdef _PGPPATH
+	if((h->pgp & PGPENCRYPT) && !pgp_valid_passphrase())
+	{
+	  mx_close_mailbox (&ctx);
+	  return (-1);
+	}
+#endif /* _PGPPATH */
+      }
       if (mutt_append_message (&ctx, Context, h, cmflags, chflags) == 0 && delete)
       {
 	mutt_set_flag (Context, h, M_DELETE, 1);
@@ -606,7 +615,13 @@ int mutt_save_message (HEADER *h, int delete, int decode, int *redraw)
 	{
 	  h = Context->hdrs[Context->v2r[i]];
 	  if (decode)
+	  {
 	    mutt_parse_mime_message (Context, h);
+#ifdef _PGPPATH
+	    if((h->pgp & PGPENCRYPT) && !pgp_valid_passphrase())
+	      continue;
+#endif /* _PGPPATH */
+	  }
 	  mutt_append_message (&ctx, Context, h, cmflags, chflags);
 	  if (delete)
 	  {
