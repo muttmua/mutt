@@ -435,6 +435,7 @@ int mutt_send_menu (HEADER *msg,   /* structure for new message */
   /* Sort, SortAux could be changed in mutt_index_menu() */
   int oldSort = Sort, oldSortAux = SortAux;
   HEADER **hdrs = NULL;
+  struct stat st;
 
   idx = mutt_gen_attach_list (msg->content, idx, &idxlen, &idxmax, 0, 1);
 
@@ -845,13 +846,23 @@ int mutt_send_menu (HEADER *msg,   /* structure for new message */
 	if (mutt_get_field ("Rename to: ", fname, sizeof (fname), M_FILE) == 0
 								  && fname[0])
 	{
-	  mutt_expand_path (fname, sizeof (fname));
-	  if (!mutt_rename_file (idx[menu->current]->content->filename, fname))
+	  if(stat(idx[menu->current]->content->filename, &st) == -1)
 	  {
-	    safe_free ((void **) &idx[menu->current]->content->filename);
-	    idx[menu->current]->content->filename = safe_strdup (fname);
-	    menu->redraw = REDRAW_CURRENT;
+	    mutt_error("Can't stat: %s", fname);
+	    break;
 	  }
+
+	  mutt_expand_path (fname, sizeof (fname));
+	  if(mutt_rename_file (idx[menu->current]->content->filename, fname))
+	    break;
+	  
+	  safe_free ((void **) &idx[menu->current]->content->filename);
+	  idx[menu->current]->content->filename = safe_strdup (fname);
+	  menu->redraw = REDRAW_CURRENT;
+
+	  if(idx[menu->current]->content->stamp >= st.st_mtime)
+	    mutt_stamp_attachment(idx[menu->current]->content);
+	  
 	}
 	break;
 

@@ -863,7 +863,7 @@ static void mutt_set_encoding (BODY *b, CONTENT *info)
     b->encoding = ENC7BIT;
 }
 
-static void stamp_attachment(BODY *a)
+void mutt_stamp_attachment(BODY *a)
 {
   a->stamp = time(NULL);
 }
@@ -877,7 +877,7 @@ void mutt_update_encoding (BODY *a)
     return;
 
   mutt_set_encoding (a, info);
-  stamp_attachment(a);
+  mutt_stamp_attachment(a);
   
   if (a->type == TYPETEXT)
   {
@@ -1001,7 +1001,7 @@ BODY *mutt_make_file_attach (const char *path)
   } 
 
   mutt_set_encoding (att, info);
-  stamp_attachment(att);
+  mutt_stamp_attachment(att);
 
 #ifdef _PGPPATH
   /*
