@@ -1,11 +1,5 @@
 			KNOWN BUGS
 
-
-- In the "compose" menu tag a few attachments, and pipe
-  them to "less"; there's no way to convince Mutt to pipe
-  them as a single file instead of doing that one by one
-  (the "attach_split" and "attach_sep" has disappeared).
-
 - In the "attachment" menu, assume this:
 
 	1 [text/plain, 7bit, 1.1K]           <no description>
@@ -38,5 +32,3 @@
   it doesn't honor $tmpdir under some conditions if
   matching nametemplates exist.
 
-- mutt_gen_msgid() should _always_ rely on the real FQDN,
-  regardless of the hidden_domain feature.
