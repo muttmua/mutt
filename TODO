@@ -8,8 +8,6 @@ I'm listing the problems in approximate order of priority.
 
 - Fix the "unexpected EXPUNGE" IMAP bug.
 
-- Fix the "bare newlines" IMAP bug.
-
 - Ask IMAP servers for hierarchy separators. (-> Brandon's
   note from Aug 18)
 
@@ -96,17 +94,21 @@ I'm listing the problems in approximate order of priority.
 
   Please note that mutt's just assuming RFC-compliant mail
   here.  Fixing this stuff may become a PITA.
-  
-- In maildir folders, the cursor will jump to an
+
+
+
+- mailbox resync code for mh and maildir mailboxes.  This
+  will most probably help to fix the following problems:
+
+  In maildir folders, the cursor will jump to an
   unpredictible message when new mail arrives.
 
-- When accessing maildir folders with two mutts in
+  When accessing maildir folders with two mutts in
   parallel, messages which have been marked read (and thus
   moved to the cur/ subdirectory) by one of the mutts
   can't be read from the other one.
 
-- mailbox resync code for mh and maildir mailboxes
-  
+
 - BODY struct should probably have a pointer to its
   corresponding HEADER struct.  this is needed for
   mh/maildir mailboxes so the correct pathname can be
