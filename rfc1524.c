@@ -55,14 +55,17 @@ int rfc1524_expand_command (BODY *a, char *filename, char *type,
   int needspipe = TRUE;
   char buf[LONG_STRING];
 
-  while (command[x] && x<clen && y<sizeof(buf)) {
+  while (command[x] && x<clen && y<sizeof(buf)) 
+  {
     if (command[x] == '\\') {
       x++;
       buf[y++] = command[x++];
     }
-    else if (command[x] == '%') {
+    else if (command[x] == '%') 
+    {
       x++;
-      if (command[x] == '{') {
+      if (command[x] == '{') 
+      {
 	char param[STRING];
 	int z = 0;
 	char *ret = NULL;
@@ -421,7 +424,8 @@ void mutt_adv_mktemp (char *s, size_t l)
   char buf[_POSIX_PATH_MAX];
   char tmp[_POSIX_PATH_MAX];
   char *period;
-
+  size_t sl;
+  
   strfcpy (buf, NONULL (Tempdir), sizeof (buf));
   mutt_expand_path (buf, sizeof (buf));
   if (s[0] == '\0')
@@ -442,130 +446,144 @@ void mutt_adv_mktemp (char *s, size_t l)
     if (period != NULL)
     {
       *period = '.';
-      strcat (s, period);
+      sl = strlen(s);
+      strfcpy(s + sl, period, l - sl);
     }
   }
 }
 
-/* This routine expands the filename given to match the format of the
- * nametemplate given.  It returns various values based on what operations
- * it performs.
- *
+/* This routine will create a _temporary_ filename matching the
+ * name template given if this needs to be done.
+ * 
+ * Please note that only the last path element of the
+ * template and/or the old file name will be used for the
+ * comparison and the temporary file name.
+ * 
  * Returns 0 if oldfile is fine as is.
  * Returns 1 if newfile specified
  */
+
+static void strnfcpy(char *d, char *s, size_t siz, size_t len)
+{
+  if(len > siz)
+    len = siz - 1;
+  strfcpy(d, s, len);
+}
 
 int rfc1524_expand_filename (char *nametemplate,
 			     char *oldfile, 
 			     char *newfile,
 			     size_t nflen)
 {
-  int z = 0;
-  int i = 0, j = 0;
-  int lmatch = TRUE;
-  int match = TRUE;
-  size_t len = 0;
+  int i, j, k, ps, r;
   char *s;
-
+  short lmatch = 0, rmatch = 0; 
+  char left[_POSIX_PATH_MAX];
+  char right[_POSIX_PATH_MAX];
+  
   newfile[0] = 0;
 
+  /* first, ignore leading path components.
+   */
+  
   if (nametemplate && (s = strrchr (nametemplate, '/')))
     nametemplate = s + 1;
 
   if (oldfile && (s = strrchr (oldfile, '/')))
-  {
-    len = s - oldfile + 1;
-    if (len > nflen)
-      len = nflen;
-    strfcpy (newfile, oldfile, len + 1);
-    oldfile += len;
-  }
-
-  /* If nametemplate is NULL, create a newfile from oldfile and return 0 */
+    oldfile = s + 1;
+    
   if (!nametemplate)
   {
     if (oldfile)
       strfcpy (newfile, oldfile, nflen);
-    mutt_adv_mktemp (newfile, nflen);
-    return 0;
   }
-
-  /* If oldfile is NULL, just return a newfile name */
-  if (!oldfile)
+  else if (!oldfile)
   {
     snprintf (newfile, nflen, nametemplate, "mutt");
-    mutt_adv_mktemp (newfile, nflen);
+  }
+  else /* oldfile && nametemplate */
+  {
+
+    /* first, compare everything left from the "%s" 
+     * (if there is one).
+     */
+    
+    lmatch = 1; ps = 0;
+    for(i = 0; nametemplate[i]; i++)
+    {
+      if(nametemplate[i] == '%' && nametemplate[i+1] == 's')
+      { 
+	ps = 1;
+	break;
+      }
+
+      /* note that the following will _not_ read beyond oldfile's end. */
+
+      if(lmatch && nametemplate[i] != oldfile[i])
+	lmatch = 0;
+    }
+
+    if(ps)
+    {
+      
+      /* If we had a "%s", check the rest. */
+      
+      /* now, for the right part: compare everything right from 
+       * the "%s" to the final part of oldfile.
+       * 
+       * The logic here is as follows:
+       * 
+       * - We start reading from the end.
+       * - There must be a match _right_ from the "%s",
+       *   thus the i + 2.  
+       * - If there was a left hand match, this stuff
+       *   must not be counted again.  That's done by the
+       *   condition (j >= (lmatch ? i : 0)).
+       */
+      
+      rmatch = 1;
+
+      for(r = 0, j = strlen(oldfile) - 1, k = strlen(nametemplate) - 1 ;
+	  j >= (lmatch ? i : 0) && k >= i + 2;
+	  j--, k--)
+      {
+	if(nametemplate[k] != oldfile[j])
+	{
+	  rmatch = 0;
+	  break;
+	}
+      }
+      
+      /* Now, check if we had a full match. */
+      
+      if(k >= i + 2)
+	rmatch = 0;
+      
+      if(lmatch) *left = 0;
+      else strnfcpy(left, nametemplate, sizeof(left), i);
+      
+      if(rmatch) *right = 0;
+      else strfcpy(right, nametemplate + i + 2, sizeof(right));
+      
+      snprintf(newfile, nflen, "%s%s%s", left, oldfile, right);
+    }
+    else
+    {
+      /* no "%s" in the name template. */
+      strfcpy(newfile, nametemplate, nflen);
+    }
+  }
+  
+  mutt_adv_mktemp(newfile, nflen);
+
+  if(rmatch && lmatch)
     return 0;
-  }
-
-  /* Next, attempt to determine if the oldfile already matches nametemplate */
-  /* Nametemplate is of the form pre%spost, only replace pre or post if
-   * they don't already match the oldfilename */
-  /* Test pre */
-
-  if ((s = strrchr (nametemplate, '%')) != NULL)
-  {
-    newfile[len] = '\0';
-
-    z = s - nametemplate;
-
-    for (i = 0; i < z && i < nflen; i++)
-    {
-      if (oldfile[i] != nametemplate[i])
-      {
-	lmatch=FALSE;
-	break;
-      }
-    }
-
-    if (!lmatch)
-    {
-      match = FALSE;
-      i = nflen - len;
-      if (i > z)
-	i = z;
-      strfcpy (newfile + len, nametemplate, i);
-    }
-
-    strfcpy (newfile + strlen (newfile), 
-	    oldfile, nflen - strlen (newfile));
-
-    dprint (1, (debugfile,"template: %s, oldfile: %s, newfile: %s\n",
-	      nametemplate, oldfile, newfile));
-
-    /* test post */
-    lmatch = TRUE;
-
-    for (z += 2, i = strlen (oldfile) - 1, j = strlen (nametemplate) - 1; 
-	i && j > z; i--, j--)
-      if (oldfile[i] != nametemplate[j])
-      {
-	lmatch = FALSE;
-	break;
-      }
-
-    if (!lmatch)
-    {
-      match = FALSE;
-      strfcpy (newfile + strlen (newfile),
-	      nametemplate + z, nflen - strlen (newfile));
-    }
-
-    if (match) 
-      return 0;
-
+  else 
     return 1;
-  }
-  else
-  {
-    /* no %s in nametemplate, graft unto path of oldfile */
-    strfcpy (newfile, nametemplate, nflen);
-    return 1;
-  }
+  
 }
 
-/* For nametemplate support, we may need to rename a file.
- * If rfc1524_expand_command() is used on a recv'd message, then
+/* If rfc1524_expand_command() is used on a recv'd message, then
  * the filename doesn't exist yet, but if its used while sending a message,
  * then we need to rename the existing file.
  *

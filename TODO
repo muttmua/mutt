@@ -109,16 +109,16 @@ I'm listing the problems in approximate order of priority.
   can't be read from the other one.
 
 
+- Re-visit nametemplate support.  Currently, we use
+  symbolic links in our temporary directory for this.
+
+
 - BODY struct should probably have a pointer to its
   corresponding HEADER struct.  this is needed for
   mh/maildir mailboxes so the correct pathname can be
   found.  Or perhaps all we need is a .hdr member of the
   STATE struct so that all of the MIME handlers can look
   up the corresponding HEADERs if need be?
-
-- rfc1524_expand_filename() doesn't work as expected, as
-  it doesn't honor $tmpdir under some conditions if
-  matching nametemplates exist.
 
 - option to not include attachments in replies
 
