@@ -736,13 +736,15 @@ int mutt_index_menu (int attach_msg /* invoked while attaching a message */)
 	  if (mx_sync_mailbox (Context) == 0)
 	  {
 	    if (Context->vcount != oldvcount)
-	    {
 	      menu->current -= dcount;
-	      if (menu->current < 0 || menu->current >= Context->vcount)
-		menu->current = ci_first_message ();
-	    }
 	    set_option (OPTSEARCHINVALID);
 	  }
+	  
+	  /* do a sanity check even if mx_sync_mailbox failed.
+	   */
+
+	  if (menu->current < 0 || menu->current >= Context->vcount)
+	    menu->current = ci_first_message ();
 	}
 
 	/* check for a fatal error, or all messages deleted */
