@@ -853,7 +853,7 @@ int imap_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
     {
       /* clear the previous entry */
       unlink (cache->path);
-      free (cache->path);
+      FREE (&cache->path);
     }
   }
 
