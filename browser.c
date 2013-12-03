@@ -451,8 +451,10 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
     if (lstat (buffer, &s) == -1)
       continue;
     
-    if ((! S_ISREG (s.st_mode)) && (! S_ISDIR (s.st_mode)) &&
-	(! S_ISLNK (s.st_mode)))
+    /* No size for directories or symlinks */
+    if (S_ISDIR (s.st_mode) || S_ISLNK (s.st_mode))
+      s.st_size = 0;
+    else if (! S_ISREG (s.st_mode))
       continue;
     
     tmp = Incoming;
