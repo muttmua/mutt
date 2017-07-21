@@ -572,6 +572,11 @@ static void update_content_info (CONTENT *info, CONTENT_STATE *s, char *d, size_
       info->ascii++;
       whitespace++;
     }
+    else if (ch == 0)
+    {
+      info->nulbin++;
+      info->lobin++;
+    }
     else if (ch < 32 || ch == 127)
       info->lobin++;
     else
@@ -1362,22 +1367,7 @@ BODY *mutt_make_file_attach (const char *path)
   /* Attempt to determine the appropriate content-type based on the filename
    * suffix.
    */
-
-#if 0
-
-  if ((n = mutt_lookup_mime_type (buf, sizeof (buf), xbuf, sizeof (xbuf), path)) != TYPEOTHER
-      || *xbuf != '\0')
-  {
-    att->type = n;
-    att->subtype = safe_strdup (buf);
-    att->xtype = safe_strdup (xbuf);
-  }
-
-#else
-
   mutt_lookup_mime_type (att, path);
-
-#endif
 
   if ((info = mutt_get_content_info (path, att)) == NULL)
   {
@@ -1387,7 +1377,8 @@ BODY *mutt_make_file_attach (const char *path)
 
   if (!att->subtype)
   {
-    if (info->lobin == 0 || (info->lobin + info->hibin + info->ascii)/ info->lobin >= 10)
+    if ((info->nulbin == 0) &&
+        (info->lobin == 0 || (info->lobin + info->hibin + info->ascii)/ info->lobin >= 10))
     {
       /*
        * Statistically speaking, there should be more than 10% "lobin"
