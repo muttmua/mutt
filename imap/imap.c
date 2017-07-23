@@ -832,8 +832,12 @@ void imap_logout (IMAP_DATA** idata)
    * receive a bye response (so it doesn't freak out and close the conn) */
   (*idata)->status = IMAP_BYE;
   imap_cmd_start (*idata, "LOGOUT");
-  while (imap_cmd_step (*idata) == IMAP_CMD_CONTINUE)
-    ;
+  if (ImapPollTimeout <= 0 ||
+      mutt_socket_poll ((*idata)->conn, ImapPollTimeout) != 0)
+  {
+    while (imap_cmd_step (*idata) == IMAP_CMD_CONTINUE)
+      ;
+  }
 
   mutt_socket_close ((*idata)->conn);
   imap_free_idata (idata);
@@ -1476,7 +1480,7 @@ int imap_check_mailbox (CONTEXT *ctx, int *index_hint, int force)
 
   if ((force ||
        (idata->state != IMAP_IDLE && time(NULL) >= idata->lastread + Timeout))
-      && imap_exec (idata, "NOOP", 0) != 0)
+      && imap_exec (idata, "NOOP", IMAP_CMD_POLL) != 0)
     return -1;
 
   /* We call this even when we haven't run NOOP in case we have pending
@@ -1600,14 +1604,14 @@ int imap_buffy_check (int force, int check_stats)
       snprintf (command, sizeof (command),
 	      "STATUS %s (UIDNEXT UIDVALIDITY UNSEEN RECENT)", munged);
 
-    if (imap_exec (idata, command, IMAP_CMD_QUEUE) < 0)
+    if (imap_exec (idata, command, IMAP_CMD_QUEUE | IMAP_CMD_POLL) < 0)
     {
       dprint (1, (debugfile, "Error queueing command\n"));
       return 0;
     }
   }
 
-  if (lastdata && (imap_exec (lastdata, NULL, IMAP_CMD_FAIL_OK) == -1))
+  if (lastdata && (imap_exec (lastdata, NULL, IMAP_CMD_FAIL_OK | IMAP_CMD_POLL) == -1))
   {
     dprint (1, (debugfile, "Error polling mailboxes\n"));
     return 0;

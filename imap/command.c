@@ -39,7 +39,7 @@
 /* forward declarations */
 static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags);
 static int cmd_queue_full (IMAP_DATA* idata);
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr);
+static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags);
 static IMAP_COMMAND* cmd_new (IMAP_DATA* idata);
 static int cmd_status (const char *s);
 static void cmd_handle_fatal (IMAP_DATA* idata);
@@ -237,6 +237,7 @@ const char* imap_cmd_trailer (IMAP_DATA* idata)
  *     for checking for a mailbox on append and login
  *   IMAP_CMD_PASS: command contains a password. Suppress logging.
  *   IMAP_CMD_QUEUE: only queue command, do not execute.
+ *   IMAP_CMD_POLL: poll the socket for a response before running imap_cmd_step.
  * Return 0 on success, -1 on Failure, -2 on OK Failure
  */
 int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
@@ -251,6 +252,16 @@ int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
 
   if (flags & IMAP_CMD_QUEUE)
     return 0;
+
+  if ((flags & IMAP_CMD_POLL) &&
+      (ImapPollTimeout > 0) &&
+      (mutt_socket_poll (idata->conn, ImapPollTimeout)) == 0)
+  {
+    mutt_error (_("Connection to %s timed out"), idata->conn->account.host);
+    mutt_sleep (2);
+    cmd_handle_fatal (idata);
+    return -1;
+  }
 
   do
     rc = imap_cmd_step (idata);
@@ -377,7 +388,7 @@ static IMAP_COMMAND* cmd_new (IMAP_DATA* idata)
 }
 
 /* queues command. If the queue is full, attempts to drain it. */
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr)
+static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags)
 {
   IMAP_COMMAND* cmd;
   int rc;
@@ -386,7 +397,7 @@ static int cmd_queue (IMAP_DATA* idata, const char* cmdstr)
   {
     dprint (3, (debugfile, "Draining IMAP command pipeline\n"));
 
-    rc = imap_exec (idata, NULL, IMAP_CMD_FAIL_OK);
+    rc = imap_exec (idata, NULL, IMAP_CMD_FAIL_OK | (flags & IMAP_CMD_POLL));
 
     if (rc < 0 && rc != -2)
       return rc;
@@ -411,7 +422,7 @@ static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags)
     return -1;
   }
 
-  if (cmdstr && ((rc = cmd_queue (idata, cmdstr)) < 0))
+  if (cmdstr && ((rc = cmd_queue (idata, cmdstr, flags)) < 0))
     return rc;
 
   if (flags & IMAP_CMD_QUEUE)

@@ -233,6 +233,7 @@ WHERE LIST *SidebarWhitelist INITVAL(0);
 #ifdef USE_IMAP
 WHERE short ImapKeepalive;
 WHERE short ImapPipelineDepth;
+WHERE short ImapPollTimeout;
 #endif
 
 /* flags for received signals */

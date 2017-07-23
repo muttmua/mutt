@@ -70,6 +70,7 @@
 #define IMAP_CMD_FAIL_OK (1<<0)
 #define IMAP_CMD_PASS    (1<<1)
 #define IMAP_CMD_QUEUE   (1<<2)
+#define IMAP_CMD_POLL    (1<<3)
 
 /* length of "DD-MMM-YYYY HH:MM:SS +ZZzz" (null-terminated) */
 #define IMAP_DATELEN 27

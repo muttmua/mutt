@@ -1310,6 +1310,14 @@ struct option_t MuttVars[] = {
   ** .pp
   ** \fBNote:\fP Changes to this variable have no effect on open connections.
   */
+  { "imap_poll_timeout", DT_NUM,  R_NONE, UL &ImapPollTimeout, 15 },
+  /*
+  ** .pp
+  ** This variable specifies the maximum amount of time in seconds
+  ** that mutt will wait for a response when polling IMAP connections
+  ** for new mail, before timing out and closing the connection.  Set
+  ** to 0 to disable timing out.
+  */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
   ** .pp
