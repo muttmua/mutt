@@ -1459,7 +1459,7 @@ int imap_check_mailbox (CONTEXT *ctx, int *index_hint, int force)
   }
   if (idata->state == IMAP_IDLE)
   {
-    while ((result = mutt_socket_poll (idata->conn)) > 0)
+    while ((result = mutt_socket_poll (idata->conn, 0)) > 0)
     {
       if (imap_cmd_step (idata) != IMAP_CMD_CONTINUE)
       {

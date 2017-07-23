@@ -153,13 +153,13 @@ int mutt_socket_write_d (CONNECTION *conn, const char *buf, int len, int dbg)
  *   Returns: >0 if there is data to read,
  *            0 if a read would block,
  *            -1 if this connection doesn't support polling */
-int mutt_socket_poll (CONNECTION* conn)
+int mutt_socket_poll (CONNECTION* conn, time_t wait_secs)
 {
   if (conn->bufpos < conn->available)
     return conn->available - conn->bufpos;
 
   if (conn->conn_poll)
-    return conn->conn_poll (conn);
+    return conn->conn_poll (conn, wait_secs);
 
   return -1;
 }
@@ -431,18 +431,41 @@ int raw_socket_write (CONNECTION* conn, const char* buf, size_t count)
   return rc;
 }
 
-int raw_socket_poll (CONNECTION* conn)
+int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
 {
   fd_set rfds;
-  struct timeval tv = { 0, 0 };
+  struct timeval tv;
+  struct timespec pre_t, post_t;
+  time_t sleep_secs;
+  int rv;
 
   if (conn->fd < 0)
     return -1;
 
-  FD_ZERO (&rfds);
-  FD_SET (conn->fd, &rfds);
-  
-  return select (conn->fd + 1, &rfds, NULL, NULL, &tv);
+  FOREVER
+  {
+    tv.tv_sec = wait_secs;
+    tv.tv_usec = 0;
+
+    FD_ZERO (&rfds);
+    FD_SET (conn->fd, &rfds);
+
+    clock_gettime (CLOCK_MONOTONIC, &pre_t);
+    rv = select (conn->fd + 1, &rfds, NULL, NULL, &tv);
+    clock_gettime (CLOCK_MONOTONIC, &post_t);
+
+    if (rv > 0 ||
+        (rv < 0 && errno != EINTR))
+      return rv;
+
+    if (SigInt)
+      mutt_query_exit ();
+
+    sleep_secs = post_t.tv_sec - pre_t.tv_sec;
+    if (wait_secs <= sleep_secs)
+      return 0;
+    wait_secs -= sleep_secs;
+  }
 }
 
 int raw_socket_open (CONNECTION* conn)
