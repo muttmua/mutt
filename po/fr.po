@@ -19,10 +19,10 @@
 # , fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 1.8.0\n"
+"Project-Id-Version: Mutt 1.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-03 18:37-0700\n"
-"PO-Revision-Date: 2017-03-13 01:36+0100\n"
+"POT-Creation-Date: 2017-07-26 23:43+0100\n"
+"PO-Revision-Date: 2017-07-27 00:17+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -609,38 +609,37 @@ msgstr "Il n'y a pas d'attachements."
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:82
 msgid "From: "
-msgstr ""
+msgstr "De : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:84 send.c:222
 msgid "To: "
-msgstr ""
+msgstr "À : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:86 send.c:224
 msgid "Cc: "
-msgstr ""
+msgstr "Cc : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:88 send.c:226
 msgid "Bcc: "
-msgstr ""
+msgstr "Cci : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:90 compose.c:722 send.c:251
 msgid "Subject: "
-msgstr ""
+msgstr "Objet : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:92
-#, fuzzy
 msgid "Reply-To: "
-msgstr "Répondre"
+msgstr "Réponse à : "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:94 compose.c:739
 msgid "Fcc: "
-msgstr ""
+msgstr "Fcc : "
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
 #: compose.c:97
@@ -650,7 +649,7 @@ msgstr "Mix : "
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
 #: compose.c:100
 msgid "Security: "
-msgstr ""
+msgstr "Sécurité : "
 
 #. L10N:
 #. * This string is used by the compose menu.
@@ -663,7 +662,7 @@ msgstr ""
 #.
 #: compose.c:110 crypt-gpgme.c:4837 pgp.c:1821 smime.c:2222 smime.c:2237
 msgid "Sign as: "
-msgstr "Signer en tant que : "
+msgstr "Signer avec : "
 
 #: compose.c:114
 msgid "Send"
@@ -676,17 +675,17 @@ msgstr "Abandonner"
 #. L10N: compose menu help line entry
 #: compose.c:117
 msgid "To"
-msgstr ""
+msgstr "À"
 
 #. L10N: compose menu help line entry
 #: compose.c:119
 msgid "CC"
-msgstr ""
+msgstr "CC"
 
 #. L10N: compose menu help line entry
 #: compose.c:121
 msgid "Subj"
-msgstr ""
+msgstr "Obj"
 
 #: compose.c:122 compose.c:836
 msgid "Attach file"
@@ -831,7 +830,7 @@ msgstr "Renommer en : "
 # , c-format
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1210 editmsg.c:96 editmsg.c:121 sendlib.c:872
+#: compose.c:1210 editmsg.c:96 editmsg.c:121 sendlib.c:877
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Impossible d'obtenir le statut de %s : %s"
@@ -1300,47 +1299,39 @@ msgstr "[Impossible d'afficher cet ID d'utilisateur (DN invalide)]"
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
 #: crypt-gpgme.c:3389
-#, fuzzy
 msgid "Name: "
-msgstr "Nom ........: "
+msgstr "Nom : "
 
 # , c-format
 #: crypt-gpgme.c:3391
-#, fuzzy
 msgid "Valid From: "
-msgstr "From valide : %s\n"
+msgstr "From valide : "
 
 # , c-format
 #: crypt-gpgme.c:3392
-#, fuzzy
 msgid "Valid To: "
-msgstr "To valide ..: %s\n"
+msgstr "To valide : "
 
 #: crypt-gpgme.c:3393
-#, fuzzy
 msgid "Key Type: "
-msgstr "Utilisation : "
+msgstr "Type de clé : "
 
 #: crypt-gpgme.c:3394
-#, fuzzy
 msgid "Key Usage: "
-msgstr "Utilisation : "
+msgstr "Utilisation : "
 
 #: crypt-gpgme.c:3396
-#, fuzzy
 msgid "Serial-No: "
-msgstr "N° de série : 0x%s\n"
+msgstr "N° de série : "
 
 #: crypt-gpgme.c:3397
-#, fuzzy
 msgid "Issued By: "
-msgstr "Publiée par : "
+msgstr "Publiée par : "
 
 # , c-format
 #: crypt-gpgme.c:3398
-#, fuzzy
 msgid "Subkey: "
-msgstr "Sous-clé ...: 0x%s"
+msgstr "Sous-clé : "
 
 # , c-format
 #. L10N: comes after the Name or aka if the key is invalid
@@ -1352,9 +1343,9 @@ msgstr "[Invalide]"
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
 #: crypt-gpgme.c:3501 crypt-gpgme.c:3660
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %lu bit %s\n"
-msgstr "Type de clé : %s, %lu bits %s\n"
+msgstr "%s, %lu bits, %s\n"
 
 #. L10N: value in Key Usage: field
 #: crypt-gpgme.c:3510 crypt-gpgme.c:3668
@@ -1730,7 +1721,7 @@ msgstr "non"
 msgid "Exit Mutt?"
 msgstr "Quitter Mutt ?"
 
-#: curs_lib.c:761 mutt_socket.c:586 mutt_ssl.c:577
+#: curs_lib.c:761 mutt_socket.c:610 mutt_ssl.c:577
 msgid "unknown error"
 msgstr "erreur inconnue"
 
@@ -1820,7 +1811,7 @@ msgid "No tagged messages."
 msgstr "Pas de messages marqués."
 
 # , c-format
-#: curs_main.c:753 menu.c:1043
+#: curs_main.c:753 menu.c:1050
 msgid "Nothing to do."
 msgstr "Rien à faire."
 
@@ -1963,11 +1954,11 @@ msgstr "Pas de message non effacé."
 msgid "You are on the first message."
 msgstr "Vous êtes sur le premier message."
 
-#: curs_main.c:1613 menu.c:867 pager.c:2187 pattern.c:1575
+#: curs_main.c:1613 menu.c:874 pager.c:2187 pattern.c:1609
 msgid "Search wrapped to top."
 msgstr "La recherche est repartie du début."
 
-#: curs_main.c:1622 pager.c:2209 pattern.c:1586
+#: curs_main.c:1622 pager.c:2209 pattern.c:1620
 msgid "Search wrapped to bottom."
 msgstr "La recherche est repartie de la fin."
 
@@ -2499,7 +2490,13 @@ msgstr "Le renommage a échoué : %s"
 msgid "Mailbox renamed."
 msgstr "Boîte aux lettres renommée."
 
-#: imap/command.c:447
+# , c-format
+#: imap/command.c:260
+#, c-format
+msgid "Connection to %s timed out"
+msgstr "Connexion à %s interrompue"
+
+#: imap/command.c:467
 msgid "Mailbox closed"
 msgstr "Boîte aux lettres fermée"
 
@@ -2540,78 +2537,78 @@ msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:819 imap/imap.c:2183 imap/message.c:1014 muttlib.c:1683
+#: imap/imap.c:818 imap/imap.c:2190 imap/message.c:1014 muttlib.c:1683
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
 
-#: imap/imap.c:1212
+#: imap/imap.c:1215
 msgid "Expunge failed"
 msgstr "Expunge a échoué"
 
 # , c-format
-#: imap/imap.c:1224
+#: imap/imap.c:1227
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Marquage de %d messages à effacer..."
 
 # , c-format
-#: imap/imap.c:1256
+#: imap/imap.c:1259
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "La sauvegarde a changé des messages... [%d/%d]"
 
-#: imap/imap.c:1312
+#: imap/imap.c:1315
 msgid "Error saving flags. Close anyway?"
 msgstr "Erreur en sauvant les indicateurs. Fermer tout de même ?"
 
-#: imap/imap.c:1320
+#: imap/imap.c:1323
 msgid "Error saving flags"
 msgstr "Erreur en sauvant les indicateurs"
 
-#: imap/imap.c:1343
+#: imap/imap.c:1346
 msgid "Expunging messages from server..."
 msgstr "Effacement des messages sur le serveur..."
 
-#: imap/imap.c:1349
+#: imap/imap.c:1352
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:1833
+#: imap/imap.c:1839
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:1904
+#: imap/imap.c:1910
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1928
+#: imap/imap.c:1934
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:1930
+#: imap/imap.c:1936
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:1940
+#: imap/imap.c:1946
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:1942
+#: imap/imap.c:1948
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2168 imap/message.c:978
+#: imap/imap.c:2175 imap/message.c:978
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
@@ -3251,68 +3248,68 @@ msgstr "La boîte aux lettres n'a pas pu être réouverte !"
 msgid "Reopening mailbox..."
 msgstr "Réouverture de la boîte aux lettres..."
 
-#: menu.c:435
+#: menu.c:442
 msgid "Jump to: "
 msgstr "Aller à : "
 
-#: menu.c:444
+#: menu.c:451
 msgid "Invalid index number."
 msgstr "Numéro d'index invalide."
 
-#: menu.c:448 menu.c:469 menu.c:534 menu.c:577 menu.c:593 menu.c:604 menu.c:615
-#: menu.c:626 menu.c:639 menu.c:652 menu.c:1174
+#: menu.c:455 menu.c:476 menu.c:541 menu.c:584 menu.c:600 menu.c:611 menu.c:622
+#: menu.c:633 menu.c:646 menu.c:659 menu.c:1181
 msgid "No entries."
 msgstr "Pas d'entrées."
 
-#: menu.c:466
+#: menu.c:473
 msgid "You cannot scroll down farther."
 msgstr "Défilement vers le bas impossible."
 
-#: menu.c:484
+#: menu.c:491
 msgid "You cannot scroll up farther."
 msgstr "Défilement vers le haut impossible."
 
-#: menu.c:527
+#: menu.c:534
 msgid "You are on the first page."
 msgstr "Vous êtes sur la première page."
 
-#: menu.c:528
+#: menu.c:535
 msgid "You are on the last page."
 msgstr "Vous êtes sur la dernière page."
 
-#: menu.c:663
+#: menu.c:670
 msgid "You are on the last entry."
 msgstr "Vous êtes sur la dernière entrée."
 
-#: menu.c:674
+#: menu.c:681
 msgid "You are on the first entry."
 msgstr "Vous êtes sur la première entrée."
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2231 pattern.c:1548
 msgid "Search for: "
 msgstr "Rechercher : "
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2231 pattern.c:1548
 msgid "Reverse search for: "
 msgstr "Rechercher en arrière : "
 
-#: menu.c:885 pager.c:2184 pager.c:2206 pager.c:2326 pattern.c:1629
+#: menu.c:892 pager.c:2184 pager.c:2206 pager.c:2326 pattern.c:1663
 msgid "Not found."
 msgstr "Non trouvé."
 
-#: menu.c:1037
+#: menu.c:1044
 msgid "No tagged entries."
 msgstr "Pas d'entrées marquées."
 
-#: menu.c:1138
+#: menu.c:1145
 msgid "Search is not implemented for this menu."
 msgstr "La recherche n'est pas implémentée pour ce menu."
 
-#: menu.c:1143
+#: menu.c:1150
 msgid "Jumping is not implemented for dialogs."
 msgstr "Le saut n'est pas implémenté pour les dialogues."
 
-#: menu.c:1177
+#: menu.c:1184
 msgid "Tagging is not supported."
 msgstr "Le marquage n'est pas supporté."
 
@@ -3352,50 +3349,50 @@ msgid "Error setting SASL external user name"
 msgstr "Erreur lors de la mise en place du nom d'utilisateur externe"
 
 # , c-format
-#: mutt_socket.c:104 mutt_socket.c:182
+#: mutt_socket.c:105 mutt_socket.c:183
 #, c-format
 msgid "Connection to %s closed"
 msgstr "Connexion à %s fermée"
 
-#: mutt_socket.c:301
+#: mutt_socket.c:302
 msgid "SSL is unavailable."
 msgstr "SSL n'est pas disponible."
 
-#: mutt_socket.c:333
+#: mutt_socket.c:334
 msgid "Preconnect command failed."
 msgstr "La commande Preconnect a échoué."
 
 # , c-format
-#: mutt_socket.c:412 mutt_socket.c:426
+#: mutt_socket.c:413 mutt_socket.c:427
 #, c-format
 msgid "Error talking to %s (%s)"
 msgstr "Erreur en parlant à %s (%s)"
 
-#: mutt_socket.c:479 mutt_socket.c:538
+#: mutt_socket.c:503 mutt_socket.c:562
 #, c-format
 msgid "Bad IDN \"%s\"."
 msgstr "Mauvais IDN « %s »."
 
 # , c-format
-#: mutt_socket.c:487 mutt_socket.c:546
+#: mutt_socket.c:511 mutt_socket.c:570
 #, c-format
 msgid "Looking up %s..."
 msgstr "Recherche de %s..."
 
 # , c-format
-#: mutt_socket.c:497 mutt_socket.c:555
+#: mutt_socket.c:521 mutt_socket.c:579
 #, c-format
 msgid "Could not find the host \"%s\""
 msgstr "Impossible de trouver la machine \"%s\""
 
 # , c-format
-#: mutt_socket.c:503 mutt_socket.c:561
+#: mutt_socket.c:527 mutt_socket.c:585
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Connexion à %s..."
 
 # , c-format
-#: mutt_socket.c:585
+#: mutt_socket.c:609
 #, c-format
 msgid "Could not connect to %s (%s)."
 msgstr "Impossible de se connecter à %s (%s)."
@@ -3890,79 +3887,79 @@ msgid "Invalid relative date: %s"
 msgstr "Date relative invalide : %s"
 
 # , c-format
-#: pattern.c:818 pattern.c:977
+#: pattern.c:819 pattern.c:987
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "erreur dans le motif à : %s"
 
-#: pattern.c:845
+#: pattern.c:846
 #, c-format
 msgid "missing pattern: %s"
 msgstr "motif manquant : %s"
 
 # , c-format
-#: pattern.c:855
+#: pattern.c:865
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "parenthésage incorrect : %s"
 
 # , c-format
-#: pattern.c:915
+#: pattern.c:925
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c : modificateur de motif invalide"
 
 # , c-format
-#: pattern.c:921
+#: pattern.c:931
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c : non supporté dans ce mode"
 
-#: pattern.c:934
+#: pattern.c:944
 msgid "missing parameter"
 msgstr "paramètre manquant"
 
 # , c-format
-#: pattern.c:950
+#: pattern.c:960
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "parenthésage incorrect : %s"
 
-#: pattern.c:984
+#: pattern.c:994
 msgid "empty pattern"
 msgstr "motif vide"
 
 # , c-format
-#: pattern.c:1310
+#: pattern.c:1344
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "erreur : opération inconnue %d (signalez cette erreur)."
 
-#: pattern.c:1393 pattern.c:1535
+#: pattern.c:1427 pattern.c:1569
 msgid "Compiling search pattern..."
 msgstr "Compilation du motif de recherche..."
 
-#: pattern.c:1414
+#: pattern.c:1448
 msgid "Executing command on matching messages..."
 msgstr "Exécution de la commande sur les messages correspondants..."
 
-#: pattern.c:1483
+#: pattern.c:1517
 msgid "No messages matched criteria."
 msgstr "Aucun message ne correspond au critère."
 
-#: pattern.c:1565
+#: pattern.c:1599
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: pattern.c:1578
+#: pattern.c:1612
 msgid "Search hit bottom without finding match"
 msgstr "Fin atteinte sans rien avoir trouvé"
 
-#: pattern.c:1589
+#: pattern.c:1623
 msgid "Search hit top without finding match"
 msgstr "Début atteint sans rien avoir trouvé"
 
-#: pattern.c:1621
+#: pattern.c:1655
 msgid "Search interrupted."
 msgstr "Recherche interrompue."
 
@@ -4616,32 +4613,32 @@ msgid "%s no longer exists!"
 msgstr "%s n'existe plus !"
 
 # , c-format
-#: sendlib.c:878
+#: sendlib.c:883
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s n'est pas un fichier ordinaire."
 
 # , c-format
-#: sendlib.c:1051
+#: sendlib.c:1056
 #, c-format
 msgid "Could not open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: sendlib.c:2364
+#: sendlib.c:2355
 msgid "$sendmail must be set in order to send mail."
 msgstr "$sendmail doit avoir une valeur pour pouvoir envoyer du courrier."
 
 # , c-format
-#: sendlib.c:2463
+#: sendlib.c:2454
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "Erreur en envoyant le message, fils terminé avec le code %d (%s)."
 
-#: sendlib.c:2469
+#: sendlib.c:2460
 msgid "Output of the delivery process"
 msgstr "Sortie du processus de livraison"
 
-#: sendlib.c:2644
+#: sendlib.c:2635
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "Mauvais IDN %s lors de la préparation du resent-from."
@@ -4738,8 +4735,7 @@ msgstr "Pas de sortie pour OpenSSL..."
 
 #: smime.c:1536
 msgid "Can't sign: No key specified. Use Sign As."
-msgstr ""
-"Impossible de signer : pas de clé spécifiée. Utilisez « Signer en tant que »."
+msgstr "Impossible de signer : pas de clé spécifiée. Utilisez « Signer avec »."
 
 #: smime.c:1588
 msgid "Can't open OpenSSL subprocess!"
@@ -4946,7 +4942,7 @@ msgstr "Inverser l'affichage des sous-parties"
 
 #: ../keymap_alldefs.h:10
 msgid "move to the bottom of the page"
-msgstr "se déplacer en bas de la page"
+msgstr "aller en bas de la page"
 
 #: ../keymap_alldefs.h:11
 msgid "remail a message to another user"
@@ -5275,7 +5271,7 @@ msgstr "filtrer un attachement au moyen d'une commande shell"
 
 #: ../keymap_alldefs.h:92
 msgid "move to the first entry"
-msgstr "se déplacer sur la première entrée"
+msgstr "aller à la première entrée"
 
 #: ../keymap_alldefs.h:93
 msgid "toggle a message's 'important' flag"
@@ -5766,21 +5762,3 @@ msgstr "extraire les clés publiques supportées"
 #: ../keymap_alldefs.h:214
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
-
-#~ msgid "sign as: "
-#~ msgstr "signer en tant que : "
-
-#~ msgid " aka ......: "
-#~ msgstr "alias ......: "
-
-#~ msgid "Query"
-#~ msgstr "Requête"
-
-#~ msgid "Fingerprint: %s"
-#~ msgstr "Empreinte : %s"
-
-#~ msgid "move to the first message"
-#~ msgstr "aller au premier message"
-
-#~ msgid "move to the last message"
-#~ msgstr "aller au dernier message"
