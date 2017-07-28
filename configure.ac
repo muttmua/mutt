@@ -643,13 +643,6 @@ if test "$need_socket" = "yes"
 then
         AC_CHECK_HEADERS([sys/select.h])
 
-        mutt_save_LIBS="$LIBS"
-        LIBS=
-        AC_SEARCH_LIBS([clock_gettime], [rt],
-                MUTTLIBS="$MUTTLIBS $LIBS",
-                AC_MSG_ERROR([Unable to find clock_gettime function]))
-        LIBS="$mutt_save_LIBS"
-
         AC_MSG_CHECKING([for socklen_t])
         AC_EGREP_HEADER(socklen_t, sys/socket.h, AC_MSG_RESULT([yes]),
                 AC_MSG_RESULT([no])
