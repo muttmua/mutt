@@ -1630,7 +1630,7 @@ typedef struct
 static void pager_menu_redraw (MUTTMENU *pager_menu)
 {
   pager_redraw_data_t *rd = pager_menu->redraw_data;
-  int i, j;
+  int i, j, err;
   char buffer[LONG_STRING];
 
   if (!rd)
@@ -1697,10 +1697,18 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
     {
       if ((rd->SearchCompiled = Resize->SearchCompiled))
       {
-        REGCOMP
-          (&rd->SearchRE, rd->searchbuf, REG_NEWLINE | mutt_which_case (rd->searchbuf));
-        rd->SearchFlag = MUTT_SEARCH;
-        rd->SearchBack = Resize->SearchBack;
+        if ((err = REGCOMP (&rd->SearchRE, rd->searchbuf,
+                            REG_NEWLINE | mutt_which_case (rd->searchbuf))) != 0)
+        {
+          regerror (err, &rd->SearchRE, buffer, sizeof (buffer));
+          mutt_error ("%s", buffer);
+          rd->SearchCompiled = 0;
+        }
+        else
+        {
+          rd->SearchFlag = MUTT_SEARCH;
+          rd->SearchBack = Resize->SearchBack;
+        }
       }
       rd->lines = Resize->line;
       pager_menu->redraw |= REDRAW_FLOW;
