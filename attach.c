@@ -1042,3 +1042,20 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     return 0;
   }
 }
+
+void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
+{
+  int i;
+  ATTACH_CONTEXT *actx = *pactx;
+
+  for (i = 0; i < actx->idxlen; i++)
+  {
+    if (actx->idx[i]->content)
+      actx->idx[i]->content->aptr = NULL;
+    FREE (&actx->idx[i]->tree);
+    FREE (&actx->idx[i]);
+  }
+  FREE (&actx->idx);
+
+  FREE (pactx);  /* __FREE_CHECKED__ */
+}
