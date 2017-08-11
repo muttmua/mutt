@@ -1042,15 +1042,26 @@ int mutt_print_attachment (FILE *fp, BODY *a)
   }
 }
 
-void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
+void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *menu)
 {
   int i;
-  ATTACH_CONTEXT *actx;
 
-  if (!pactx || !*pactx)
-    return;
+  if (actx->idxlen == actx->idxmax)
+  {
+    actx->idxmax += 5;
+    safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * actx->idxmax);
+    for (i = actx->idxlen; i < actx->idxmax; i++)
+      actx->idx[i] = NULL;
+    if (menu)
+      menu->data = actx->idx;
+  }
 
-  actx = *pactx;
+  actx->idx[actx->idxlen++] = attach;
+}
+
+void mutt_actx_free_entries (ATTACH_CONTEXT *actx)
+{
+  int i;
 
   for (i = 0; i < actx->idxlen; i++)
   {
@@ -1059,7 +1070,19 @@ void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
     FREE (&actx->idx[i]->tree);
     FREE (&actx->idx[i]);
   }
-  FREE (&actx->idx);
 
+  actx->idxlen = 0;
+}
+
+void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
+{
+  ATTACH_CONTEXT *actx;
+
+  if (!pactx || !*pactx)
+    return;
+
+  actx = *pactx;
+  mutt_actx_free_entries (actx);
+  FREE (&actx->idx);
   FREE (pactx);  /* __FREE_CHECKED__ */
 }

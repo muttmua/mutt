@@ -59,6 +59,8 @@ void mutt_attach_resend (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_forward (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_reply (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *, int);
 
+void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *menu);
+void mutt_actx_free_entries (ATTACH_CONTEXT *actx);
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx);
 
 #endif /* _ATTACH_H_ */

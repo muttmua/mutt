@@ -450,13 +450,14 @@ static int delete_attachment (MUTTMENU *menu, short *idxlen, int x)
   return (0);
 }
 
-static void update_idx (MUTTMENU *menu, ATTACH_CONTEXT *actx)
+static void update_idx (MUTTMENU *menu, ATTACH_CONTEXT *actx, ATTACHPTR *new)
 {
-  actx->idx[actx->idxlen]->level = (actx->idxlen > 0) ? actx->idx[actx->idxlen-1]->level : 0;
+  new->level = (actx->idxlen > 0) ? actx->idx[actx->idxlen-1]->level : 0;
   if (actx->idxlen)
-    actx->idx[actx->idxlen - 1]->content->next = actx->idx[actx->idxlen]->content;
-  actx->idx[actx->idxlen]->content->aptr = actx->idx[actx->idxlen];
-  menu->current = actx->idxlen++;
+    actx->idx[actx->idxlen - 1]->content->next = new->content;
+  new->content->aptr = new;
+  mutt_actx_add_attach (actx, new, menu);
+  menu->current = actx->idxlen - 1;
   mutt_update_tree (actx);
   menu->max = actx->idxlen;
 }
@@ -646,6 +647,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   char fname[_POSIX_PATH_MAX];
   MUTTMENU *menu;
   ATTACH_CONTEXT *actx;
+  ATTACHPTR *new;
   int i, close = 0;
   int r = -1;		/* return value */
   int op = 0;
@@ -784,12 +786,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	/* attachments may have been added */
 	if (actx->idxlen && actx->idx[actx->idxlen - 1]->content->next)
 	{
-	  for (i = 0; i < actx->idxlen; i++)
-          {
-            FREE (&actx->idx[i]->tree);
-	    FREE (&actx->idx[i]);
-          }
-	  actx->idxlen = 0;
+          mutt_actx_free_entries (actx);
 	  mutt_gen_attach_list (actx, msg->content, -1, 0, 1);
 	  menu->data = actx->idx;
 	  menu->max = actx->idxlen;
@@ -803,24 +800,19 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
       case OP_COMPOSE_ATTACH_KEY:
         if (!(WithCrypto & APPLICATION_PGP))
-          break;       
-	if (actx->idxlen == actx->idxmax)
-        {
-	  safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * (actx->idxmax += 5));
-	  menu->data = actx->idx;
-	}
-	
-	actx->idx[actx->idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-	if ((actx->idx[actx->idxlen]->content = crypt_pgp_make_key_attachment(NULL)) != NULL)
+          break;
+
+	new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+	if ((new->content = crypt_pgp_make_key_attachment(NULL)) != NULL)
 	{
-	  update_idx (menu, actx);
+	  update_idx (menu, actx, new);
 	  menu->redraw |= REDRAW_INDEX;
 	}
 	else
-	  FREE (&actx->idx[actx->idxlen]);
+	  FREE (&new);
 
 	menu->redraw |= REDRAW_STATUS;
-	
+
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -839,32 +831,26 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	      *fname == '\0')
 	    break;
 
-	  if (actx->idxlen + numfiles >= actx->idxmax)
-	  {
-	    safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * (actx->idxmax += 5 + numfiles));
-	    menu->data = actx->idx;
-	  }
-
 	  error = 0;
 	  if (numfiles > 1)
 	    mutt_message _("Attaching selected files...");
 	  for (i = 0; i < numfiles; i++)
 	  {
 	    char *att = files[i];
-	    actx->idx[actx->idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-            actx->idx[actx->idxlen]->unowned = 1;
-	    actx->idx[actx->idxlen]->content = mutt_make_file_attach (att);
-	    if (actx->idx[actx->idxlen]->content != NULL)
-	      update_idx (menu, actx);
+	    new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+            new->unowned = 1;
+	    new->content = mutt_make_file_attach (att);
+	    if (new->content != NULL)
+	      update_idx (menu, actx, new);
 	    else
 	    {
 	      error = 1;
 	      mutt_error (_("Unable to attach %s!"), att);
-	      FREE (&actx->idx[actx->idxlen]);
+	      FREE (&new);
 	    }
             FREE (&files[i]);
 	  }
-	  
+
 	  FREE (&files);
 	  if (!error) mutt_clear_error ();
 
@@ -923,7 +909,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
 	  this = Context; /* remember current folder and sort methods*/
 	  oldSort = Sort; oldSortAux = SortAux;
-	  
+
 	  Context = ctx;
 	  set_option(OPTATTACHMSG);
 	  mutt_message _("Tag the messages you want to attach!");
@@ -941,25 +927,19 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	    break;
 	  }
 
-	  if (actx->idxlen + Context->tagged >= actx->idxmax)
-	  {
-	    safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * (actx->idxmax += 5 + Context->tagged));
-	    menu->data = actx->idx;
-	  }
-
 	  for (i = 0; i < Context->msgcount; i++)
 	  {
 	    h = Context->hdrs[i];
 	    if (h->tagged)
 	    {
-	      actx->idx[actx->idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-	      actx->idx[actx->idxlen]->content = mutt_make_message_attach (Context, h, 1);
-	      if (actx->idx[actx->idxlen]->content != NULL)
-		update_idx (menu, actx);
+	      new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+	      new->content = mutt_make_message_attach (Context, h, 1);
+	      if (new->content != NULL)
+		update_idx (menu, actx, new);
 	      else
 	      {
 		mutt_error _("Unable to attach!");
-		FREE (&actx->idx[actx->idxlen]);
+		FREE (&new);
 	      }
 	    }
 	  }
@@ -1254,28 +1234,24 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	    mutt_error (_("Unknown Content-Type %s"), type);
 	    continue;
 	  }
-	  if (actx->idxlen == actx->idxmax)
-	  {
-	    safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * (actx->idxmax += 5));
-	    menu->data = actx->idx;
-	  }
 
-	  actx->idx[actx->idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+	  new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
 	  /* Touch the file */
 	  if (!(fp = safe_fopen (fname, "w")))
 	  {
 	    mutt_error (_("Can't create file %s"), fname);
-	    FREE (&actx->idx[actx->idxlen]);
+	    FREE (&new);
 	    continue;
 	  }
 	  safe_fclose (&fp);
 
-	  if ((actx->idx[actx->idxlen]->content = mutt_make_file_attach (fname)) == NULL)
+	  if ((new->content = mutt_make_file_attach (fname)) == NULL)
 	  {
 	    mutt_error _("What we have here is a failure to make an attachment");
+            FREE (&new);
 	    continue;
 	  }
-	  update_idx (menu, actx);
+	  update_idx (menu, actx, new);
 
 	  actx->idx[menu->current]->content->type = itype;
 	  mutt_str_replace (&actx->idx[menu->current]->content->subtype, p);
