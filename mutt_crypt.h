@@ -212,7 +212,7 @@ pgp_key_t crypt_pgp_ask_for_key (char *tag, char *whatfor,
                                  short abilities, pgp_ring_t keyring);
 
 /* Check for a traditional PGP message in body B. */
-int crypt_pgp_check_traditional (FILE *fp, BODY *b, int tagged_only);
+int crypt_pgp_check_traditional (FILE *fp, BODY *b, int just_one);
 
 /* fixme: needs documentation. */
 BODY *crypt_pgp_traditional_encryptsign (BODY *a, int flags, char *keylist);
