@@ -330,7 +330,7 @@ void mutt_check_lookup_list (BODY *b, char *type, int len)
 
 /* returns -1 on error, 0 or the return code from mutt_do_pager() on success */
 int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
-			  ATTACHPTR **idx, short idxlen)
+			  ATTACH_CONTEXT *actx)
 {
   char tempfile[_POSIX_PATH_MAX] = "";
   char pagerfile[_POSIX_PATH_MAX] = "";
@@ -571,8 +571,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     info.fp = fp;
     info.bdy = a;
     info.ctx = Context;
-    info.idx = idx;
-    info.idxlen = idxlen;
+    info.actx = actx;
     info.hdr = hdr;
 
     rc = mutt_do_pager (descrip, pagerfile,
@@ -1046,7 +1045,12 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
 {
   int i;
-  ATTACH_CONTEXT *actx = *pactx;
+  ATTACH_CONTEXT *actx;
+
+  if (!pactx || !*pactx)
+    return;
+
+  actx = *pactx;
 
   for (i = 0; i < actx->idxlen; i++)
   {

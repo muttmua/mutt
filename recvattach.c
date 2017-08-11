@@ -839,7 +839,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 
       case OP_VIEW_ATTACH:
 	op = mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_REGULAR,
-				   hdr, actx->idx, actx->idxlen);
+				   hdr, actx);
 	break;
 
       case OP_NEXT_ENTRY:
@@ -1037,13 +1037,13 @@ void mutt_view_attachments (HEADER *hdr)
     {
       case OP_ATTACH_VIEW_MAILCAP:
 	mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_MAILCAP,
-			      hdr, actx->idx, actx->idxlen);
+			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_ATTACH_VIEW_TEXT:
 	mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_AS_TEXT,
-			      hdr, actx->idx, actx->idxlen);
+			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -1201,21 +1201,21 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_RESEND:
         CHECK_ATTACH;
-        mutt_attach_resend (fp, hdr, actx->idx, actx->idxlen,
+        mutt_attach_resend (fp, hdr, actx,
 			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
         menu->redraw = REDRAW_FULL;
       	break;
       
       case OP_BOUNCE_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_bounce (fp, hdr, actx->idx, actx->idxlen,
+        mutt_attach_bounce (fp, hdr, actx,
 			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
         menu->redraw = REDRAW_FULL;
       	break;
 
       case OP_FORWARD_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_forward (fp, hdr, actx->idx, actx->idxlen,
+        mutt_attach_forward (fp, hdr, actx,
 			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
         menu->redraw = REDRAW_FULL;
         break;
@@ -1229,7 +1229,7 @@ void mutt_view_attachments (HEADER *hdr)
         flags = SENDREPLY | 
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
-        mutt_attach_reply (fp, hdr, actx->idx, actx->idxlen, 
+        mutt_attach_reply (fp, hdr, actx,
 			   menu->tagprefix ? NULL : actx->idx[menu->current]->content, flags);
 	menu->redraw = REDRAW_FULL;
 	break;

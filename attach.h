@@ -42,7 +42,7 @@ typedef struct attach_ctx
 
 void mutt_gen_attach_list (ATTACH_CONTEXT *, BODY *, int, int, int);
 void mutt_update_tree (ATTACH_CONTEXT *);
-int mutt_view_attachment (FILE*, BODY *, int, HEADER *, ATTACHPTR **, short);
+int mutt_view_attachment (FILE*, BODY *, int, HEADER *, ATTACH_CONTEXT *);
 
 int mutt_tag_attach (MUTTMENU *menu, int n, int m);
 int mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
@@ -54,10 +54,10 @@ void mutt_save_attachment_list (FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTM
 void mutt_pipe_attachment_list (FILE *fp, int tag, BODY *top, int filter);
 void mutt_print_attachment_list (FILE *fp, int tag, BODY *top);
 
-void mutt_attach_bounce (FILE *, HEADER *, ATTACHPTR **, short, BODY *);
-void mutt_attach_resend (FILE *, HEADER *, ATTACHPTR **, short, BODY *);
-void mutt_attach_forward (FILE *, HEADER *, ATTACHPTR **, short, BODY *);
-void mutt_attach_reply (FILE *, HEADER *, ATTACHPTR **, short, BODY *, int);
+void mutt_attach_bounce (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
+void mutt_attach_resend (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
+void mutt_attach_forward (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
+void mutt_attach_reply (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *, int);
 
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx);
 
