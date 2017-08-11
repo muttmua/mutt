@@ -228,7 +228,7 @@ void mutt_attach_bounce (FILE * fp, HEADER * hdr,
     for (i = 0; i < actx->idxlen; i++)
     {
       if (actx->idx[i]->content->tagged)
-	if (mutt_bounce_message (fp, actx->idx[i]->content->hdr, adr))
+	if (mutt_bounce_message (actx->idx[i]->fp, actx->idx[i]->content->hdr, adr))
 	  ret = 1;
     }
   }
@@ -237,6 +237,8 @@ void mutt_attach_bounce (FILE * fp, HEADER * hdr,
     mutt_message (p ? _("Message bounced.") : _("Messages bounced."));
   else
     mutt_error (p ? _("Error bouncing message!") : _("Error bouncing messages!"));
+
+  rfc822_free_address (&adr);
 }
 
 
@@ -262,7 +264,7 @@ void mutt_attach_resend (FILE * fp, HEADER * hdr, ATTACH_CONTEXT *actx,
   {
     for (i = 0; i < actx->idxlen; i++)
       if (actx->idx[i]->content->tagged)
-	mutt_resend_message (fp, Context, actx->idx[i]->content->hdr);
+	mutt_resend_message (actx->idx[i]->fp, Context, actx->idx[i]->content->hdr);
   }
 }
 
@@ -275,7 +277,7 @@ void mutt_attach_resend (FILE * fp, HEADER * hdr, ATTACH_CONTEXT *actx,
   
 /* try to find a common parent message for the tagged attachments. */
 
-static HEADER *find_common_parent (ATTACH_CONTEXT *actx, short nattach)
+static ATTACHPTR *find_common_parent (ATTACH_CONTEXT *actx, short nattach)
 {
   short i;
   short nchildren;
@@ -290,7 +292,7 @@ static HEADER *find_common_parent (ATTACH_CONTEXT *actx, short nattach)
     {
       nchildren = count_tagged_children (actx, i);
       if (nchildren == nattach)
-	return actx->idx[i]->content->hdr;
+	return actx->idx[i];
     }
   }
 
@@ -318,10 +320,10 @@ static int is_parent (short i, ATTACH_CONTEXT *actx, BODY *cur)
   return 0;
 }
 
-static HEADER *find_parent (ATTACH_CONTEXT *actx, BODY *cur, short nattach)
+static ATTACHPTR *find_parent (ATTACH_CONTEXT *actx, BODY *cur, short nattach)
 {
   short i;
-  HEADER *parent = NULL;
+  ATTACHPTR *parent = NULL;
   
   if (cur)
   {
@@ -329,7 +331,7 @@ static HEADER *find_parent (ATTACH_CONTEXT *actx, BODY *cur, short nattach)
     {
       if (mutt_is_message_type (actx->idx[i]->content->type, actx->idx[i]->content->subtype) 
 	  && is_parent (i, actx, cur))
-	parent = actx->idx[i]->content->hdr;
+	parent = actx->idx[i];
       if (actx->idx[i]->content == cur)
 	break;
     }
@@ -369,8 +371,7 @@ static void include_header (int quote, FILE * ifp,
 /* Attach all the body parts which can't be decoded. 
  * This code is shared by forwarding and replying. */
 
-static BODY ** copy_problematic_attachments (FILE *fp,
-					     BODY **last, 
+static BODY ** copy_problematic_attachments (BODY **last, 
 					     ATTACH_CONTEXT *actx,
 					     short force)
 {
@@ -381,7 +382,7 @@ static BODY ** copy_problematic_attachments (FILE *fp,
     if (actx->idx[i]->content->tagged && 
 	(force || !mutt_can_decode (actx->idx[i]->content)))
     {
-      if (mutt_copy_body (fp, last, actx->idx[i]->content) == -1)
+      if (mutt_copy_body (actx->idx[i]->fp, last, actx->idx[i]->content) == -1)
 	return NULL;		/* XXXXX - may lead to crashes */
       last = &((*last)->next);
     }
@@ -402,7 +403,9 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   short i;
   short mime_fwd_all = 0;
   short mime_fwd_any = 1;
-  HEADER *parent = NULL;
+  ATTACHPTR *parent = NULL;
+  HEADER *parent_hdr;
+  FILE *parent_fp;
   HEADER *tmphdr = NULL;
   BODY **last;
   char tmpbody[_POSIX_PATH_MAX];
@@ -422,14 +425,21 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
 
 
   parent = find_parent (actx, cur, nattach);
-  
-  if (parent == NULL)
-    parent = hdr;
+  if (parent)
+  {
+    parent_hdr = parent->content->hdr;
+    parent_fp = parent->fp;
+  }
+  else
+  {
+    parent_hdr = hdr;
+    parent_fp = actx->root_fp;
+  }
 
 
   tmphdr = mutt_new_header ();
   tmphdr->env = mutt_new_envelope ();
-  mutt_make_forward_subject (tmphdr->env, Context, parent);
+  mutt_make_forward_subject (tmphdr->env, Context, parent_hdr);
 
   mutt_mktemp (tmpbody, sizeof (tmpbody));
   if ((tmpfp = safe_fopen (tmpbody, "w")) == NULL)
@@ -438,7 +448,7 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
     return;
   }
 
-  mutt_forward_intro (Context, parent, tmpfp);
+  mutt_forward_intro (Context, parent_hdr, tmpfp);
 
   /* prepare the prefix here since we'll need it later. */
 
@@ -446,12 +456,12 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   {
     if (!option (OPTTEXTFLOWED))
       _mutt_make_string (prefix, sizeof (prefix), NONULL (Prefix), Context,
-			 parent, 0);
+			 parent_hdr, 0);
     else
       strfcpy (prefix, ">", sizeof (prefix));
   }
     
-  include_header (option (OPTFORWQUOTE), fp, parent,
+  include_header (option (OPTFORWQUOTE), parent_fp, parent_hdr,
 		  tmpfp, prefix);
 
 
@@ -494,7 +504,6 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
   st.flags = MUTT_CHARCONV;
   if (option (OPTWEED))
     st.flags |= MUTT_WEED;
-  st.fpin = fp;
   st.fpout = tmpfp;
 
   /* where do we append new MIME parts? */
@@ -506,6 +515,7 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
 
     if (!mime_fwd_all && mutt_can_decode (cur))
     {
+      st.fpin = fp;
       mutt_body_handler (cur, &st);
       state_putc ('\n', &st);
     }
@@ -526,6 +536,7 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
       {
 	if (actx->idx[i]->content->tagged && mutt_can_decode (actx->idx[i]->content))
 	{
+          st.fpin = actx->idx[i]->fp;
 	  mutt_body_handler (actx->idx[i]->content, &st);
 	  state_putc ('\n', &st);
 	}
@@ -533,17 +544,17 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
     }
 
     if (mime_fwd_any && 
-	copy_problematic_attachments (fp, last, actx, mime_fwd_all) == NULL)
+	copy_problematic_attachments (last, actx, mime_fwd_all) == NULL)
       goto bail;
   }
   
-  mutt_forward_trailer (Context, parent, tmpfp);
+  mutt_forward_trailer (Context, parent_hdr, tmpfp);
   
   safe_fclose (&tmpfp);
   tmpfp = NULL;
 
   /* now that we have the template, send it. */
-  ci_send_message (0, tmphdr, tmpbody, NULL, parent);
+  ci_send_message (0, tmphdr, tmpbody, NULL, parent_hdr);
   return;
   
   bail:
@@ -649,7 +660,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
 	{
 	  /* mutt_message_hook (idx[i]->content->hdr, MUTT_MESSAGEHOOK); */ 
 	  mutt_forward_intro (Context, actx->idx[i]->content->hdr, tmpfp);
-	  _mutt_copy_message (tmpfp, fp, actx->idx[i]->content->hdr,
+	  _mutt_copy_message (tmpfp, actx->idx[i]->fp, actx->idx[i]->content->hdr,
 			      actx->idx[i]->content->hdr->content, cmflags, chflags);
 	  mutt_forward_trailer (Context, actx->idx[i]->content->hdr, tmpfp);
 	}
@@ -667,7 +678,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
       for (i = 0; i < actx->idxlen; i++)
 	if (actx->idx[i]->content->tagged)
 	{
-	  mutt_copy_body (fp, last, actx->idx[i]->content);
+	  mutt_copy_body (actx->idx[i]->fp, last, actx->idx[i]->content);
 	  last = &((*last)->next);
 	}
     }
@@ -820,7 +831,9 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   short mime_reply_any = 0;
   
   short nattach = 0;
-  HEADER *parent = NULL;
+  ATTACHPTR *parent = NULL;
+  HEADER *parent_hdr = NULL;
+  FILE *parent_fp = NULL;
   HEADER *tmphdr = NULL;
   short i;
 
@@ -834,8 +847,16 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   if (check_all_msg (actx, cur, 0) == -1)
   {
     nattach = count_tagged (actx);
-    if ((parent = find_parent (actx, cur, nattach)) == NULL)
-      parent = hdr;
+    if ((parent = find_parent (actx, cur, nattach)) != NULL)
+    {
+      parent_hdr = parent->content->hdr;
+      parent_fp = parent->fp;
+    }
+    else
+    {
+      parent_hdr = hdr;
+      parent_fp = actx->root_fp;
+    }
   }
 
   if (nattach > 1 && !check_can_decode (actx, cur))
@@ -853,7 +874,7 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   tmphdr->env = mutt_new_envelope ();
 
   if (attach_reply_envelope_defaults (tmphdr->env, actx,
-				      parent ? parent : (cur ? cur->hdr : NULL), flags) == -1)
+				      parent ? parent_hdr : (cur ? cur->hdr : NULL), flags) == -1)
   {
     mutt_free_header (&tmphdr);
     return;
@@ -876,21 +897,20 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
       for (i = 0; i < actx->idxlen; i++)
       {
 	if (actx->idx[i]->content->tagged)
-	  attach_include_reply (fp, tmpfp, actx->idx[i]->content->hdr, flags);
+	  attach_include_reply (actx->idx[i]->fp, tmpfp, actx->idx[i]->content->hdr, flags);
       }
     }
   }
   else
   {
-    mutt_make_attribution (Context, parent, tmpfp);
+    mutt_make_attribution (Context, parent_hdr, tmpfp);
     
     memset (&st, 0, sizeof (STATE));
-    st.fpin = fp;
     st.fpout = tmpfp;
 
     if (!option (OPTTEXTFLOWED))
       _mutt_make_string (prefix, sizeof (prefix), NONULL (Prefix), 
-			 Context, parent, 0);
+			 Context, parent_hdr, 0);
     else
       strfcpy (prefix, ">", sizeof (prefix));
 
@@ -901,12 +921,13 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
       st.flags |= MUTT_WEED;
 
     if (option (OPTHEADER))
-      include_header (1, fp, parent, tmpfp, prefix);
+      include_header (1, parent_fp, parent_hdr, tmpfp, prefix);
 
     if (cur)
     {
       if (mutt_can_decode (cur))
       {
+        st.fpin = fp;
 	mutt_body_handler (cur, &st);
 	state_putc ('\n', &st);
       }
@@ -919,16 +940,17 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
       {
 	if (actx->idx[i]->content->tagged && mutt_can_decode (actx->idx[i]->content))
 	{
+          st.fpin = actx->idx[i]->fp;
 	  mutt_body_handler (actx->idx[i]->content, &st);
 	  state_putc ('\n', &st);
 	}
       }
     }
 
-    mutt_make_post_indent (Context, parent, tmpfp);
+    mutt_make_post_indent (Context, parent_hdr, tmpfp);
 
     if (mime_reply_any && !cur && 
-	copy_problematic_attachments (fp, &tmphdr->content, actx, 0) == NULL)
+	copy_problematic_attachments (&tmphdr->content, actx, 0) == NULL)
     {
       mutt_free_header (&tmphdr);
       safe_fclose (&tmpfp);
@@ -939,7 +961,7 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   safe_fclose (&tmpfp);
   
   if (ci_send_message (flags, tmphdr, tmpbody, NULL,
-			  parent ? parent : (cur ? cur->hdr : NULL)) == 0)
+			  parent ? parent_hdr : (cur ? cur->hdr : NULL)) == 0)
     mutt_set_flag (Context, hdr, MUTT_REPLIED, 1);
 }
 

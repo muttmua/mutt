@@ -2614,7 +2614,7 @@ search_next:
       case OP_PIPE:
 	CHECK_MODE(IsHeader (extra) || IsAttach (extra));
 	if (IsAttach (extra))
-	  mutt_pipe_attachment_list (extra->fp, 0, extra->bdy, 0);
+	  mutt_pipe_attachment_list (extra->actx, extra->fp, 0, extra->bdy, 0);
 	else
 	  mutt_pipe_message (extra->hdr);
 	break;
@@ -2622,7 +2622,7 @@ search_next:
       case OP_PRINT:
 	CHECK_MODE(IsHeader (extra) || IsAttach (extra));
         if (IsAttach (extra))
-	  mutt_print_attachment_list (extra->fp, 0, extra->bdy);
+	  mutt_print_attachment_list (extra->actx, extra->fp, 0, extra->bdy);
         else
 	  mutt_print_message (extra->hdr);
 	break;
@@ -2695,7 +2695,7 @@ search_next:
       case OP_SAVE:
 	if (IsAttach (extra))
 	{
-	  mutt_save_attachment_list (extra->fp, 0, extra->bdy, extra->hdr, NULL);
+	  mutt_save_attachment_list (extra->actx, extra->fp, 0, extra->bdy, extra->hdr, NULL);
 	  break;
 	}
 	/* fall through */

@@ -491,18 +491,23 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   return 0;
 }
     
-void mutt_save_attachment_list (FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
+void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
 {
   char buf[_POSIX_PATH_MAX], tfile[_POSIX_PATH_MAX];
   char *directory = NULL;
-  int rc = 1;
+  int i, rc = 1;
   int last = menu ? menu->current : -1;
   FILE *fpout;
 
   buf[0] = 0;
 
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       if (!option (OPTATTACHSPLIT))
@@ -553,8 +558,6 @@ void mutt_save_attachment_list (FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTM
 	  break;
       }
     }
-    else if (top->parts)
-      mutt_save_attachment_list (fp, 1, top->parts, hdr, menu);
     if (!tag)
       break;
   }
@@ -636,11 +639,18 @@ static void pipe_attachment (FILE *fp, BODY *b, STATE *state)
 }
 
 static void
-pipe_attachment_list (char *command, FILE *fp, int tag, BODY *top, int filter,
-		      STATE *state)
+pipe_attachment_list (char *command, ATTACH_CONTEXT *actx, FILE *fp, int tag,
+                      BODY *top, int filter, STATE *state)
 {
-  for (; top; top = top->next)
+  int i;
+
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       if (!filter && !option (OPTATTACHSPLIT))
@@ -648,14 +658,12 @@ pipe_attachment_list (char *command, FILE *fp, int tag, BODY *top, int filter,
       else
 	mutt_query_pipe_attachment (command, fp, top, filter);
     }
-    else if (top->parts)
-      pipe_attachment_list (command, fp, tag, top->parts, filter, state);
     if (!tag)
       break;
   }
 }
 
-void mutt_pipe_attachment_list (FILE *fp, int tag, BODY *top, int filter)
+void mutt_pipe_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, int filter)
 {
   STATE state;
   char buf[SHORT_STRING];
@@ -679,21 +687,24 @@ void mutt_pipe_attachment_list (FILE *fp, int tag, BODY *top, int filter)
   {
     mutt_endwin (NULL);
     thepid = mutt_create_filter (buf, &state.fpout, NULL, NULL);
-    pipe_attachment_list (buf, fp, tag, top, filter, &state);
+    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
     safe_fclose (&state.fpout);
     if (mutt_wait_filter (thepid) != 0 || option (OPTWAITKEY))
       mutt_any_key_to_continue (NULL);
   }
   else
-    pipe_attachment_list (buf, fp, tag, top, filter, &state);
+    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
 }
 
-static int can_print (BODY *top, int tag)
+static int can_print (ATTACH_CONTEXT *actx, BODY *top, int tag)
 {
   char type [STRING];
+  int i;
 
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+      top = actx->idx[i]->content;
     snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
     if (!tag || top->tagged)
     {
@@ -710,21 +721,24 @@ static int can_print (BODY *top, int tag)
 	}
       }
     }
-    else if (top->parts)
-      return (can_print (top->parts, tag));
     if (!tag)
       break;
   }
   return (1);
 }
 
-static void print_attachment_list (FILE *fp, int tag, BODY *top, STATE *state)
+static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, STATE *state)
 {
+  int i;
   char type [STRING];
 
-
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
@@ -757,14 +771,12 @@ static void print_attachment_list (FILE *fp, int tag, BODY *top, STATE *state)
       else
 	mutt_print_attachment (fp, top);
     }
-    else if (top->parts)
-      print_attachment_list (fp, tag, top->parts, state);
     if (!tag)
-      return;
+      break;
   }
 }
 
-void mutt_print_attachment_list (FILE *fp, int tag, BODY *top)
+void mutt_print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top)
 {
   STATE state;
   
@@ -774,24 +786,24 @@ void mutt_print_attachment_list (FILE *fp, int tag, BODY *top)
 
   if (!option (OPTATTACHSPLIT))
   {
-    if (!can_print (top, tag))
+    if (!can_print (actx, top, tag))
       return;
     mutt_endwin (NULL);
     memset (&state, 0, sizeof (STATE));
     thepid = mutt_create_filter (NONULL (PrintCmd), &state.fpout, NULL, NULL);
-    print_attachment_list (fp, tag, top, &state);
+    print_attachment_list (actx, fp, tag, top, &state);
     safe_fclose (&state.fpout);
     if (mutt_wait_filter (thepid) != 0 || option (OPTWAITKEY))
       mutt_any_key_to_continue (NULL);
   }
   else
-    print_attachment_list (fp, tag, top, &state);
+    print_attachment_list (actx, fp, tag, top, &state);
 }
 
 
 int
-mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
-			  BODY *cur, ATTACH_CONTEXT *actx, int recv)
+mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
+			  ATTACH_CONTEXT *actx, int recv)
 {
   int i;
 
@@ -804,7 +816,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 	/* fall through */
 
       case OP_VIEW_ATTACH:
-	op = mutt_view_attachment (fp, CURATTACH->content, MUTT_REGULAR,
+	op = mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_REGULAR,
 				   hdr, actx);
 	break;
 
@@ -831,7 +843,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
       case OP_EDIT_TYPE:
 	/* when we edit the content-type, we should redisplay the attachment
 	   immediately */
-	mutt_edit_content_type (hdr, CURATTACH->content, fp);
+	mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp);
         if (recv)
         {
           /* Editing the content type can rewrite the body structure. */
@@ -964,10 +976,12 @@ decrypt_failed:
       new->level = level;
       new->decrypted = decrypted;
 
-      if (m->type == TYPEMULTIPART ||
-          mutt_is_message_type(m->type, m->subtype))
-      {
+      if (m->type == TYPEMULTIPART)
         mutt_generate_recvattach_list (actx, hdr, m->parts, fp, m->type, level + 1, decrypted);
+      else if (mutt_is_message_type (m->type, m->subtype))
+      {
+        mutt_generate_recvattach_list (actx, m->hdr, m->parts, fp, m->type, level + 1, decrypted);
+        hdr->security |= m->hdr->security;
       }
     }
   }
@@ -1085,20 +1099,20 @@ void mutt_view_attachments (HEADER *hdr)
     switch (op)
     {
       case OP_ATTACH_VIEW_MAILCAP:
-	mutt_view_attachment (fp, CURATTACH->content, MUTT_MAILCAP,
+	mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_MAILCAP,
 			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_ATTACH_VIEW_TEXT:
-	mutt_view_attachment (fp, CURATTACH->content, MUTT_AS_TEXT,
+	mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_AS_TEXT,
 			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_DISPLAY_HEADERS:
       case OP_VIEW_ATTACH:
-        op = mutt_attach_display_loop (menu, op, fp, hdr, cur, actx, 1);
+        op = mutt_attach_display_loop (menu, op, hdr, actx, 1);
         menu->redraw = REDRAW_FULL;
         continue;
 
@@ -1137,22 +1151,22 @@ void mutt_view_attachments (HEADER *hdr)
         break;
 
       case OP_PRINT:
-	mutt_print_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : CURATTACH->content);
+	mutt_print_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                    CURATTACH->content);
 	break;
 
       case OP_PIPE:
-	mutt_pipe_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : CURATTACH->content, 0);
+	mutt_pipe_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                   CURATTACH->content, 0);
 	break;
 
       case OP_SAVE:
-	mutt_save_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ?  cur : CURATTACH->content, hdr, menu);
+	mutt_save_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                   CURATTACH->content, hdr, menu);
 
         if (!menu->tagprefix && option (OPTRESOLVE) && menu->current < menu->max - 1)
 	  menu->current++;
-      
+
         menu->redraw = REDRAW_MOTION_RESYNCH | REDRAW_FULL;
 	break;
 
@@ -1247,35 +1261,35 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_RESEND:
         CHECK_ATTACH;
-        mutt_attach_resend (fp, hdr, actx,
-			     menu->tagprefix ? NULL : CURATTACH->content);
+        mutt_attach_resend (CURATTACH->fp, hdr, actx,
+                            menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
-      
+
       case OP_BOUNCE_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_bounce (fp, hdr, actx,
-			     menu->tagprefix ? NULL : CURATTACH->content);
+        mutt_attach_bounce (CURATTACH->fp, hdr, actx,
+                            menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
 
       case OP_FORWARD_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_forward (fp, hdr, actx,
+        mutt_attach_forward (CURATTACH->fp, hdr, actx,
 			     menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
         break;
-      
+
       case OP_REPLY:
       case OP_GROUP_REPLY:
       case OP_LIST_REPLY:
 
         CHECK_ATTACH;
-      
-        flags = SENDREPLY | 
+
+        flags = SENDREPLY |
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
-        mutt_attach_reply (fp, hdr, actx,
+        mutt_attach_reply (CURATTACH->fp, hdr, actx,
 			   menu->tagprefix ? NULL : CURATTACH->content, flags);
 	menu->redraw = REDRAW_FULL;
 	break;
