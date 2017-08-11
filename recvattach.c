@@ -831,12 +831,31 @@ static int recvattach_pgp_check_traditional (ATTACH_CONTEXT *actx, MUTTMENU *men
   return rv;
 }
 
+static void recvattach_edit_content_type (ATTACH_CONTEXT *actx, MUTTMENU *menu, HEADER *hdr)
+{
+  int i;
+
+  if (mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp) == 1)
+  {
+    /* The mutt_update_recvattach_menu() will overwrite any changes
+     * made to a decrypted CURATTACH->content, so warn the user. */
+    if (CURATTACH->decrypted)
+    {
+      mutt_message _("Structural changes to decrypted attachments are not supported");
+      mutt_sleep (1);
+    }
+    /* Editing the content type can rewrite the body structure. */
+    for (i = 0; i < actx->idxlen; i++)
+      actx->idx[i]->content = NULL;
+    mutt_actx_free_entries (actx);
+    mutt_update_recvattach_menu (actx, menu, 1);
+  }
+}
+
 int
 mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
 			  ATTACH_CONTEXT *actx, int recv)
 {
-  int i;
-
   do
   {
     switch (op)
@@ -873,15 +892,12 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
       case OP_EDIT_TYPE:
 	/* when we edit the content-type, we should redisplay the attachment
 	   immediately */
-	mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp);
         if (recv)
-        {
-          /* Editing the content type can rewrite the body structure. */
-          for (i = 0; i < actx->idxlen; i++)
-            actx->idx[i]->content = NULL;
-          mutt_actx_free_entries (actx);
-          mutt_update_recvattach_menu (actx, menu, 1);
-        }
+          recvattach_edit_content_type (actx, menu, hdr);
+        else
+          mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp);
+
+        menu->redraw |= REDRAW_INDEX;
         op = OP_VIEW_ATTACH;
 	break;
       /* functions which are passed through from the pager */
@@ -1096,7 +1112,6 @@ void mutt_view_attachments (HEADER *hdr)
   MUTTMENU *menu;
   BODY *cur = NULL;
   MESSAGE *msg;
-  FILE *fp;
   ATTACH_CONTEXT *actx;
   int flags = 0;
   int op = OP_NULL;
@@ -1322,12 +1337,8 @@ void mutt_view_attachments (HEADER *hdr)
 	break;
 
       case OP_EDIT_TYPE:
-	mutt_edit_content_type (hdr, CURATTACH->content, fp);
-        /* Editing the content type can rewrite the body structure. */
-        for (i = 0; i < actx->idxlen; i++)
-          actx->idx[i]->content = NULL;
-        mutt_actx_free_entries (actx);
-        mutt_update_recvattach_menu (actx, menu, 1);
+        recvattach_edit_content_type (actx, menu, hdr);
+        menu->redraw |= REDRAW_INDEX;
 	break;
 
       case OP_EXIT:
