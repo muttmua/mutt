@@ -1059,6 +1059,36 @@ void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *me
   actx->idx[actx->idxlen++] = attach;
 }
 
+void mutt_actx_add_fp (ATTACH_CONTEXT *actx, FILE *new_fp)
+{
+  int i;
+
+  if (actx->fp_len == actx->fp_max)
+  {
+    actx->fp_max += 5;
+    safe_realloc (&actx->fp_idx, sizeof (FILE *) * actx->fp_max);
+    for (i = actx->fp_len; i < actx->fp_max; i++)
+      actx->fp_idx[i] = NULL;
+  }
+
+  actx->fp_idx[actx->fp_len++] = new_fp;
+}
+
+void mutt_actx_add_body (ATTACH_CONTEXT *actx, BODY *new_body)
+{
+  int i;
+
+  if (actx->body_len == actx->body_max)
+  {
+    actx->body_max += 5;
+    safe_realloc (&actx->body_idx, sizeof (BODY *) * actx->body_max);
+    for (i = actx->body_len; i < actx->body_max; i++)
+      actx->body_idx[i] = NULL;
+  }
+
+  actx->body_idx[actx->body_len++] = new_body;
+}
+
 void mutt_actx_free_entries (ATTACH_CONTEXT *actx)
 {
   int i;
@@ -1070,8 +1100,15 @@ void mutt_actx_free_entries (ATTACH_CONTEXT *actx)
     FREE (&actx->idx[i]->tree);
     FREE (&actx->idx[i]);
   }
-
   actx->idxlen = 0;
+
+  for (i = 0; i < actx->fp_len; i++)
+    safe_fclose (&actx->fp_idx[i]);
+  actx->fp_len = 0;
+
+  for (i = 0; i < actx->body_len; i++)
+    mutt_free_body (&actx->body_idx[i]);
+  actx->body_len = 0;
 }
 
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
@@ -1084,5 +1121,7 @@ void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
   actx = *pactx;
   mutt_actx_free_entries (actx);
   FREE (&actx->idx);
+  FREE (&actx->fp_idx);
+  FREE (&actx->body_idx);
   FREE (pactx);  /* __FREE_CHECKED__ */
 }

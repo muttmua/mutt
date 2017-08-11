@@ -450,6 +450,38 @@ static int delete_attachment (MUTTMENU *menu, short *idxlen, int x)
   return (0);
 }
 
+static void mutt_gen_compose_attach_list (ATTACH_CONTEXT *actx,
+                                          BODY *m,
+                                          int parent_type,
+                                          int level)
+{
+  ATTACHPTR *new;
+
+  for (; m; m = m->next)
+  {
+    if (m->type == TYPEMULTIPART && m->parts
+        && (!(WithCrypto & APPLICATION_PGP) || !mutt_is_multipart_encrypted(m))
+	)
+    {
+      mutt_gen_compose_attach_list (actx, m->parts, m->type, level);
+    }
+    else
+    {
+      new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+      mutt_actx_add_attach (actx, new, NULL);
+      new->content = m;
+      m->aptr = new;
+      new->parent_type = parent_type;
+      new->level = level;
+
+      /* We don't support multipart messages in the compose menu yet */
+    }
+  }
+
+  if (level == 0)
+    mutt_update_tree (actx);
+}
+
 static void update_idx (MUTTMENU *menu, ATTACH_CONTEXT *actx, ATTACHPTR *new)
 {
   new->level = (actx->idxlen > 0) ? actx->idx[actx->idxlen-1]->level : 0;
@@ -665,8 +697,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   rd.fcc = fcc;
 
   actx = safe_calloc (sizeof(ATTACH_CONTEXT), 1);
-  mutt_attach_init (msg->content);
-  mutt_gen_attach_list (actx, msg->content, -1, 0, 1);
+  mutt_gen_compose_attach_list (actx, msg->content, -1, 0);
+  mutt_attach_init (actx);
 
   menu = mutt_new_menu (MENU_COMPOSE);
   menu->offset = HDR_ATTACH;
@@ -787,7 +819,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	if (actx->idxlen && actx->idx[actx->idxlen - 1]->content->next)
 	{
           mutt_actx_free_entries (actx);
-	  mutt_gen_attach_list (actx, msg->content, -1, 0, 1);
+	  mutt_gen_compose_attach_list (actx, msg->content, -1, 0);
 	  menu->data = actx->idx;
 	  menu->max = actx->idxlen;
 	}

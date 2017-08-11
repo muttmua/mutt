@@ -26,21 +26,34 @@
 typedef struct attachptr
 {
   BODY *content;
+  FILE *fp;                   /* used in the recvattach menu. */
   int parent_type;
   char *tree;
   int level;
   int num;
   unsigned int unowned : 1;   /* don't unlink on detach */
+  unsigned int decrypted : 1;   /* not part of message as stored in the hdr->content. */
 } ATTACHPTR;
 
 typedef struct attach_ctx
 {
+  HEADER *hdr;          /* used by recvattach for updating */
+  FILE *root_fp;        /* used by recvattach for updating */
+
   ATTACHPTR **idx;
   short idxlen;
   short idxmax;
+
+  FILE **fp_idx;        /* Extra FILE* used for decryption */
+  short fp_len;
+  short fp_max;
+
+  BODY **body_idx;      /* Extra BODY* used for decryption */
+  short body_len;
+  short body_max;
 } ATTACH_CONTEXT;
 
-void mutt_gen_attach_list (ATTACH_CONTEXT *, BODY *, int, int, int);
+void mutt_attach_init (ATTACH_CONTEXT *);
 void mutt_update_tree (ATTACH_CONTEXT *);
 int mutt_view_attachment (FILE*, BODY *, int, HEADER *, ATTACH_CONTEXT *);
 
@@ -60,6 +73,8 @@ void mutt_attach_forward (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_reply (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *, int);
 
 void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *menu);
+void mutt_actx_add_fp (ATTACH_CONTEXT *actx, FILE *new_fp);
+void mutt_actx_add_body (ATTACH_CONTEXT *actx, BODY *new_body);
 void mutt_actx_free_entries (ATTACH_CONTEXT *actx);
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx);
 

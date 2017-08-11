@@ -40,6 +40,8 @@
 #include <string.h>
 #include <errno.h>
 
+static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, int init);
+
 static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
 
 #define CHECK_READONLY if (Context->readonly) \
@@ -96,49 +98,6 @@ void mutt_update_tree (ATTACH_CONTEXT *actx)
       *s++ = '\006';
     }
   }
-}
-
-void mutt_gen_attach_list (ATTACH_CONTEXT *actx,
-                           BODY *m,
-			   int parent_type,
-			   int level,
-			   int compose)
-{
-  ATTACHPTR *new;
-
-  for (; m; m = m->next)
-  {
-    if (m->type == TYPEMULTIPART && m->parts
-	&& (compose || (parent_type == -1 && ascii_strcasecmp ("alternative", m->subtype)))
-        && (!(WithCrypto & APPLICATION_PGP) || !mutt_is_multipart_encrypted(m))
-	)
-    {
-      mutt_gen_attach_list (actx, m->parts, m->type, level, compose);
-    }
-    else
-    {
-      new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-      mutt_actx_add_attach (actx, new, NULL);
-      new->content = m;
-      m->aptr = new;
-      new->parent_type = parent_type;
-      new->level = level;
-
-      /* We don't support multipart messages in the compose menu yet */
-      if (!compose && !m->collapsed &&
-	  ((m->type == TYPEMULTIPART
-            && (!(WithCrypto & APPLICATION_PGP)
-                || !mutt_is_multipart_encrypted (m))
-	    )
-	   || mutt_is_message_type(m->type, m->subtype)))
-      {
-	mutt_gen_attach_list (actx, m->parts, m->type, level + 1, compose);
-      }
-    }
-  }
-
-  if (level == 0)
-    mutt_update_tree (actx);
 }
 
 /* %c = character set: convert?
@@ -796,26 +755,13 @@ void mutt_print_attachment_list (FILE *fp, int tag, BODY *top)
     print_attachment_list (fp, tag, top, &state);
 }
 
-static void
-mutt_update_attach_index (ATTACH_CONTEXT *actx, BODY *cur, MUTTMENU *menu)
-{
-  mutt_actx_free_entries (actx);
-  mutt_gen_attach_list (actx, cur, -1, 0, 0);
-
-  menu->max  = actx->idxlen;
-  menu->data = actx->idx;
-
-  if (menu->current >= menu->max)
-    menu->current = menu->max - 1;
-  menu_check_recenter (menu);
-  menu->redraw |= REDRAW_INDEX;
-}
-
 
 int
 mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 			  BODY *cur, ATTACH_CONTEXT *actx, int recv)
 {
+  int i;
+
   do
   {
     switch (op)
@@ -854,7 +800,13 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 	   immediately */
 	mutt_edit_content_type (hdr, actx->idx[menu->current]->content, fp);
         if (recv)
-	  mutt_update_attach_index (actx, cur, menu);
+        {
+          /* Editing the content type can rewrite the body structure. */
+          for (i = 0; i < actx->idxlen; i++)
+            actx->idx[i]->content = NULL;
+          mutt_actx_free_entries (actx);
+          mutt_update_recvattach_menu (actx, menu, 1);
+        }
         op = OP_VIEW_ATTACH;
 	break;
       /* functions which are passed through from the pager */
@@ -881,6 +833,143 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
   return op;
 }
 
+static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
+                                           HEADER *hdr,
+                                           BODY *m,
+                                           FILE *fp,
+                                           int parent_type,
+                                           int level,
+                                           int decrypted)
+{
+  ATTACHPTR *new;
+  BODY *new_body = NULL;
+  FILE *new_fp = NULL;
+  int need_secured, secured;
+
+  for (; m; m = m->next)
+  {
+    need_secured = secured = 0;
+
+    if ((WithCrypto & APPLICATION_SMIME) &&
+        mutt_is_application_smime (m))
+    {
+      need_secured = 1;
+
+      if (!crypt_valid_passphrase (APPLICATION_SMIME))
+        goto decrypt_failed;
+
+      if (hdr->env)
+        crypt_smime_getkeys (hdr->env);
+
+      secured = !crypt_smime_decrypt_mime (fp, &new_fp, m, &new_body);
+
+      /* S/MIME nesting */
+      if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE))
+      {
+        BODY *outer_new_body = new_body;
+        FILE *outer_fp = new_fp;
+
+        new_body = NULL;
+        new_fp = NULL;
+
+        secured = !crypt_smime_decrypt_mime (outer_fp, &new_fp, outer_new_body,
+                                               &new_body);
+
+        mutt_free_body (&outer_new_body);
+        safe_fclose (&outer_fp);
+      }
+
+      if (secured)
+        hdr->security |= SMIMEENCRYPT;
+    }
+
+    if ((WithCrypto & APPLICATION_PGP) &&
+        (mutt_is_multipart_encrypted (m) ||
+         mutt_is_malformed_multipart_pgp_encrypted (m)))
+    {
+      need_secured = 1;
+
+      if (!crypt_valid_passphrase (APPLICATION_PGP))
+        goto decrypt_failed;
+
+      secured = !crypt_pgp_decrypt_mime (fp, &new_fp, m, &new_body);
+
+      if (secured)
+        hdr->security |= PGPENCRYPT;
+    }
+
+    if (need_secured && secured)
+    {
+      mutt_actx_add_fp (actx, new_fp);
+      mutt_actx_add_body (actx, new_body);
+      mutt_generate_recvattach_list (actx, hdr, new_body, new_fp, parent_type, level, 1);
+      continue;
+    }
+
+decrypt_failed:
+    /* Fall through and show the original parts if decryption fails */
+    if (need_secured && !secured)
+      mutt_error _("Can't decrypt encrypted message!");
+
+    /* Strip out the top level multipart */
+    if (m->type == TYPEMULTIPART &&
+        m->parts &&
+        !need_secured &&
+        (parent_type == -1 && ascii_strcasecmp ("alternative", m->subtype)))
+    {
+      mutt_generate_recvattach_list (actx, hdr, m->parts, fp, m->type, level, decrypted);
+    }
+    else
+    {
+      new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+      mutt_actx_add_attach (actx, new, NULL);
+
+      new->content = m;
+      new->fp = fp;
+      m->aptr = new;
+      new->parent_type = parent_type;
+      new->level = level;
+      new->decrypted = decrypted;
+
+      if (m->type == TYPEMULTIPART ||
+          mutt_is_message_type(m->type, m->subtype))
+      {
+        mutt_generate_recvattach_list (actx, hdr, m->parts, fp, m->type, level + 1, decrypted);
+      }
+    }
+  }
+}
+
+void mutt_attach_init (ATTACH_CONTEXT *actx)
+{
+  int i;
+
+  for (i = 0; i < actx->idxlen; i++)
+  {
+    actx->idx[i]->content->tagged = 0;
+    actx->idx[i]->content->collapsed = 0;
+  }
+}
+
+static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, int init)
+{
+  if (init)
+    mutt_generate_recvattach_list (actx, actx->hdr, actx->hdr->content,
+                                   actx->root_fp, -1, 0, 0);
+
+  /* TODO: regenerate virtual index */
+  mutt_update_tree (actx);
+
+  menu->max  = actx->idxlen;
+  menu->data = actx->idx;
+
+  if (menu->current >= menu->max)
+    menu->current = menu->max - 1;
+  menu_check_recenter (menu);
+  menu->redraw |= REDRAW_INDEX;
+}
+
+/* TODO: fix this to use the index */
 static void attach_collapse (BODY *b, short collapse, short init, short just_one)
 {
   short i;
@@ -898,17 +987,6 @@ static void attach_collapse (BODY *b, short collapse, short init, short just_one
   }
 }
 
-void mutt_attach_init (BODY *b)
-{
-  for (; b; b = b->next)
-  {
-    b->tagged = 0;
-    b->collapsed = 0;
-    if (b->parts) 
-      mutt_attach_init (b->parts);
-  }
-}
-
 static const char *Function_not_permitted = N_("Function not permitted in attach-message mode.");
 
 #define CHECK_ATTACH if(option(OPTATTACHMSG)) \
@@ -923,9 +1001,6 @@ static const char *Function_not_permitted = N_("Function not permitted in attach
 
 void mutt_view_attachments (HEADER *hdr)
 {
-  int secured = 0;
-  int need_secured = 0;
-
   char helpstr[LONG_STRING];
   MUTTMENU *menu;
   BODY *cur = NULL;
@@ -944,66 +1019,6 @@ void mutt_view_attachments (HEADER *hdr)
   if ((msg = mx_open_message (Context, hdr->msgno)) == NULL)
     return;
 
-
-  if (WithCrypto && ((hdr->security & ENCRYPT) ||
-                     (mutt_is_application_smime(hdr->content) & SMIMEOPAQUE)))
-  {
-    need_secured  = 1;
-
-    if ((hdr->security & ENCRYPT) && !crypt_valid_passphrase(hdr->security))
-    {
-      mx_close_message (Context, &msg);
-      return;
-    }
-    if ((WithCrypto & APPLICATION_SMIME) && (hdr->security & APPLICATION_SMIME))
-    {
-      if (hdr->env)
-	  crypt_smime_getkeys (hdr->env);
-
-      if (mutt_is_application_smime(hdr->content))
-      {
-	secured = ! crypt_smime_decrypt_mime (msg->fp, &fp,
-                                              hdr->content, &cur);
-	
-	/* S/MIME nesting */
-	if ((mutt_is_application_smime (cur) & SMIMEOPAQUE))
-	{
-	  BODY *_cur = cur;
-	  FILE *_fp = fp;
-	  
-	  fp = NULL; cur = NULL;
-	  secured = !crypt_smime_decrypt_mime (_fp, &fp, _cur, &cur);
-	  
-	  mutt_free_body (&_cur);
-	  safe_fclose (&_fp);
-	}
-      }
-      else
-	need_secured = 0;
-    }
-    if ((WithCrypto & APPLICATION_PGP) && (hdr->security & APPLICATION_PGP))
-    {
-      if (mutt_is_multipart_encrypted(hdr->content) ||
-          mutt_is_malformed_multipart_pgp_encrypted(hdr->content))
-	secured = !crypt_pgp_decrypt_mime (msg->fp, &fp, hdr->content, &cur);
-      else
-	need_secured = 0;
-    }
-
-    if (need_secured && !secured)
-    {
-      mx_close_message (Context, &msg);
-      mutt_error _("Can't decrypt encrypted message!");
-      return;
-    }
-  }
-  
-  if (!WithCrypto || !need_secured)
-  {
-    fp = msg->fp;
-    cur = hdr->content;
-  }
-
   menu = mutt_new_menu (MENU_ATTACH);
   menu->title = _("Attachments");
   menu->make_entry = attach_entry;
@@ -1012,9 +1027,10 @@ void mutt_view_attachments (HEADER *hdr)
   mutt_push_current_menu (menu);
 
   actx = safe_calloc (sizeof(ATTACH_CONTEXT), 1);
-  mutt_attach_init (cur);
-  attach_collapse (cur, 0, 1, 0);
-  mutt_update_attach_index (actx, cur, menu);
+  actx->hdr = hdr;
+  actx->root_fp = msg->fp;
+  mutt_update_recvattach_menu (actx, menu, 1);
+  mutt_attach_init (actx);
 
   FOREVER
   {
@@ -1050,7 +1066,7 @@ void mutt_view_attachments (HEADER *hdr)
 	  attach_collapse (actx->idx[menu->current]->content, 1, 0, 1);
         else
 	  attach_collapse (actx->idx[menu->current]->content, 0, 1, 1);
-        mutt_update_attach_index (actx, cur, menu);
+        mutt_update_recvattach_menu (actx, menu, 0);
         break;
       
       case OP_FORGET_PASSPHRASE:
@@ -1223,7 +1239,11 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_EDIT_TYPE:
 	mutt_edit_content_type (hdr, actx->idx[menu->current]->content, fp);
-        mutt_update_attach_index (actx, cur, menu);
+        /* Editing the content type can rewrite the body structure. */
+        for (i = 0; i < actx->idxlen; i++)
+          actx->idx[i]->content = NULL;
+        mutt_actx_free_entries (actx);
+        mutt_update_recvattach_menu (actx, menu, 1);
 	break;
 
       case OP_EXIT:
@@ -1241,12 +1261,6 @@ void mutt_view_attachments (HEADER *hdr)
 	  hdr->changed = 1;
 
         mutt_free_attach_context (&actx);
-
-        if (WithCrypto && need_secured && secured)
-	{
-	  safe_fclose (&fp);
-	  mutt_free_body (&cur);
-	}
 
         mutt_pop_current_menu (menu);
 	mutt_menuDestroy  (&menu);
