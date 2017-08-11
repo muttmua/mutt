@@ -1042,7 +1042,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
   }
 }
 
-void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *menu)
+void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach)
 {
   int i;
 
@@ -1050,10 +1050,9 @@ void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *me
   {
     actx->idxmax += 5;
     safe_realloc (&actx->idx, sizeof (ATTACHPTR *) * actx->idxmax);
+    safe_realloc (&actx->v2r, sizeof (short) * actx->idxmax);
     for (i = actx->idxlen; i < actx->idxmax; i++)
       actx->idx[i] = NULL;
-    if (menu)
-      menu->data = actx->idx;
   }
 
   actx->idx[actx->idxlen++] = attach;
@@ -1101,6 +1100,7 @@ void mutt_actx_free_entries (ATTACH_CONTEXT *actx)
     FREE (&actx->idx[i]);
   }
   actx->idxlen = 0;
+  actx->vcount = 0;
 
   for (i = 0; i < actx->fp_len; i++)
     safe_fclose (&actx->fp_idx[i]);
@@ -1121,6 +1121,7 @@ void mutt_free_attach_context (ATTACH_CONTEXT **pactx)
   actx = *pactx;
   mutt_actx_free_entries (actx);
   FREE (&actx->idx);
+  FREE (&actx->v2r);
   FREE (&actx->fp_idx);
   FREE (&actx->body_idx);
   FREE (pactx);  /* __FREE_CHECKED__ */

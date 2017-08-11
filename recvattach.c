@@ -51,6 +51,8 @@ static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
     break; \
 }
 
+#define CURATTACH actx->idx[actx->v2r[menu->current]]
+
 static const struct mapping_t AttachHelp[] = {
   { N_("Exit"),  OP_EXIT },
   { N_("Save"),  OP_SAVE },
@@ -60,21 +62,48 @@ static const struct mapping_t AttachHelp[] = {
   { NULL,        0 }
 };
 
+static void mutt_update_v2r (ATTACH_CONTEXT *actx)
+{
+  int vindex, rindex, curlevel;
+
+  vindex = rindex = 0;
+
+  while (rindex < actx->idxlen)
+  {
+    actx->v2r[vindex++] = rindex;
+    if (actx->idx[rindex]->content->collapsed)
+    {
+      curlevel = actx->idx[rindex]->level;
+      do
+        rindex++;
+      while ((rindex < actx->idxlen) &&
+             (actx->idx[rindex]->level > curlevel));
+    }
+    else
+      rindex++;
+  }
+
+  actx->vcount = vindex;
+}
+
 void mutt_update_tree (ATTACH_CONTEXT *actx)
 {
   char buf[STRING];
   char *s;
-  int x;
+  int rindex, vindex;
 
-  for (x = 0; x < actx->idxlen; x++)
+  mutt_update_v2r (actx);
+
+  for (vindex = 0; vindex < actx->vcount; vindex++)
   {
-    actx->idx[x]->num = x;
-    if (2 * (actx->idx[x]->level + 2) < sizeof (buf))
+    rindex = actx->v2r[vindex];
+    actx->idx[rindex]->num = vindex;
+    if (2 * (actx->idx[rindex]->level + 2) < sizeof (buf))
     {
-      if (actx->idx[x]->level)
+      if (actx->idx[rindex]->level)
       {
-	s = buf + 2 * (actx->idx[x]->level - 1);
-	*s++ = (actx->idx[x]->content->next) ? MUTT_TREE_LTEE : MUTT_TREE_LLCORNER;
+	s = buf + 2 * (actx->idx[rindex]->level - 1);
+	*s++ = (actx->idx[rindex]->content->next) ? MUTT_TREE_LTEE : MUTT_TREE_LLCORNER;
 	*s++ = MUTT_TREE_HLINE;
 	*s++ = MUTT_TREE_RARROW;
       }
@@ -83,18 +112,18 @@ void mutt_update_tree (ATTACH_CONTEXT *actx)
       *s = 0;
     }
 
-    if (actx->idx[x]->tree)
+    if (actx->idx[rindex]->tree)
     {
-      if (mutt_strcmp (actx->idx[x]->tree, buf) != 0)
-	mutt_str_replace (&actx->idx[x]->tree, buf);
+      if (mutt_strcmp (actx->idx[rindex]->tree, buf) != 0)
+	mutt_str_replace (&actx->idx[rindex]->tree, buf);
     }
     else
-      actx->idx[x]->tree = safe_strdup (buf);
+      actx->idx[rindex]->tree = safe_strdup (buf);
 
-    if (2 * (actx->idx[x]->level + 2) < sizeof (buf) && actx->idx[x]->level)
+    if (2 * (actx->idx[rindex]->level + 2) < sizeof (buf) && actx->idx[rindex]->level)
     {
-      s = buf + 2 * (actx->idx[x]->level - 1);
-      *s++ = (actx->idx[x]->content->next) ? '\005' : '\006';
+      s = buf + 2 * (actx->idx[rindex]->level - 1);
+      *s++ = (actx->idx[rindex]->content->next) ? '\005' : '\006';
       *s++ = '\006';
     }
   }
@@ -335,14 +364,18 @@ const char *mutt_attach_fmt (char *dest,
 
 static void attach_entry (char *b, size_t blen, MUTTMENU *menu, int num)
 {
-  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt, (unsigned long) (((ATTACHPTR **)menu->data)[num]), MUTT_FORMAT_ARROWCURSOR);
+  ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
+
+  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt,
+                     (unsigned long) (actx->idx[actx->v2r[num]]), MUTT_FORMAT_ARROWCURSOR);
 }
 
 int mutt_tag_attach (MUTTMENU *menu, int n, int m)
 {
-  BODY *cur = ((ATTACHPTR **) menu->data)[n]->content;
+  ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
+  BODY *cur = actx->idx[actx->v2r[n]]->content;
   int ot = cur->tagged;
-  
+
   cur->tagged = (m >= 0 ? m : !cur->tagged);
   return cur->tagged - ot;
 }
@@ -771,7 +804,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 	/* fall through */
 
       case OP_VIEW_ATTACH:
-	op = mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_REGULAR,
+	op = mutt_view_attachment (fp, CURATTACH->content, MUTT_REGULAR,
 				   hdr, actx);
 	break;
 
@@ -798,7 +831,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
       case OP_EDIT_TYPE:
 	/* when we edit the content-type, we should redisplay the attachment
 	   immediately */
-	mutt_edit_content_type (hdr, actx->idx[menu->current]->content, fp);
+	mutt_edit_content_type (hdr, CURATTACH->content, fp);
         if (recv)
         {
           /* Editing the content type can rewrite the body structure. */
@@ -922,7 +955,7 @@ decrypt_failed:
     else
     {
       new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-      mutt_actx_add_attach (actx, new, NULL);
+      mutt_actx_add_attach (actx, new);
 
       new->content = m;
       new->fp = fp;
@@ -954,14 +987,16 @@ void mutt_attach_init (ATTACH_CONTEXT *actx)
 static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, int init)
 {
   if (init)
+  {
     mutt_generate_recvattach_list (actx, actx->hdr, actx->hdr->content,
                                    actx->root_fp, -1, 0, 0);
+    mutt_attach_init (actx);
+    menu->data = actx;
+  }
 
-  /* TODO: regenerate virtual index */
   mutt_update_tree (actx);
 
-  menu->max  = actx->idxlen;
-  menu->data = actx->idx;
+  menu->max  = actx->vcount;
 
   if (menu->current >= menu->max)
     menu->current = menu->max - 1;
@@ -1030,7 +1065,6 @@ void mutt_view_attachments (HEADER *hdr)
   actx->hdr = hdr;
   actx->root_fp = msg->fp;
   mutt_update_recvattach_menu (actx, menu, 1);
-  mutt_attach_init (actx);
 
   FOREVER
   {
@@ -1039,13 +1073,13 @@ void mutt_view_attachments (HEADER *hdr)
     switch (op)
     {
       case OP_ATTACH_VIEW_MAILCAP:
-	mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_MAILCAP,
+	mutt_view_attachment (fp, CURATTACH->content, MUTT_MAILCAP,
 			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_ATTACH_VIEW_TEXT:
-	mutt_view_attachment (fp, actx->idx[menu->current]->content, MUTT_AS_TEXT,
+	mutt_view_attachment (fp, CURATTACH->content, MUTT_AS_TEXT,
 			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
@@ -1057,15 +1091,15 @@ void mutt_view_attachments (HEADER *hdr)
         continue;
 
       case OP_ATTACH_COLLAPSE:
-        if (!actx->idx[menu->current]->content->parts)
+        if (!CURATTACH->content->parts)
         {
 	  mutt_error _("There are no subparts to show!");
 	  break;
 	}
-        if (!actx->idx[menu->current]->content->collapsed)
-	  attach_collapse (actx->idx[menu->current]->content, 1, 0, 1);
+        if (!CURATTACH->content->collapsed)
+	  attach_collapse (CURATTACH->content, 1, 0, 1);
         else
-	  attach_collapse (actx->idx[menu->current]->content, 0, 1, 1);
+	  attach_collapse (CURATTACH->content, 0, 1, 1);
         mutt_update_recvattach_menu (actx, menu, 0);
         break;
       
@@ -1077,7 +1111,7 @@ void mutt_view_attachments (HEADER *hdr)
         if ((WithCrypto & APPLICATION_PGP))
         {
           crypt_pgp_extract_keys_from_attachment_list (fp, menu->tagprefix, 
-		    menu->tagprefix ? cur : actx->idx[menu->current]->content);
+		    menu->tagprefix ? cur : CURATTACH->content);
           menu->redraw = REDRAW_FULL;
         }
         break;
@@ -1085,7 +1119,7 @@ void mutt_view_attachments (HEADER *hdr)
       case OP_CHECK_TRADITIONAL:
         if ((WithCrypto & APPLICATION_PGP)
             && crypt_pgp_check_traditional (fp, menu->tagprefix ? cur
-                                              : actx->idx[menu->current]->content,
+                                              : CURATTACH->content,
                                       menu->tagprefix))
         {
 	  hdr->security = crypt_query (cur);
@@ -1095,17 +1129,17 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_PRINT:
 	mutt_print_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : actx->idx[menu->current]->content);
+		  menu->tagprefix ? cur : CURATTACH->content);
 	break;
 
       case OP_PIPE:
 	mutt_pipe_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : actx->idx[menu->current]->content, 0);
+		  menu->tagprefix ? cur : CURATTACH->content, 0);
 	break;
 
       case OP_SAVE:
 	mutt_save_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ?  cur : actx->idx[menu->current]->content, hdr, menu);
+		  menu->tagprefix ?  cur : CURATTACH->content, hdr, menu);
 
         if (!menu->tagprefix && option (OPTRESOLVE) && menu->current < menu->max - 1)
 	  menu->current++;
@@ -1138,9 +1172,9 @@ void mutt_view_attachments (HEADER *hdr)
         }
         if (!menu->tagprefix)
         {
-          if (actx->idx[menu->current]->parent_type == TYPEMULTIPART)
+          if (CURATTACH->parent_type == TYPEMULTIPART)
           {
-            actx->idx[menu->current]->content->deleted = 1;
+            CURATTACH->content->deleted = 1;
             if (option (OPTRESOLVE) && menu->current < menu->max - 1)
             {
               menu->current++;
@@ -1178,7 +1212,7 @@ void mutt_view_attachments (HEADER *hdr)
        CHECK_READONLY;
        if (!menu->tagprefix)
        {
-	 actx->idx[menu->current]->content->deleted = 0;
+	 CURATTACH->content->deleted = 0;
 	 if (option (OPTRESOLVE) && menu->current < menu->max - 1)
 	 {
 	   menu->current++;
@@ -1205,21 +1239,21 @@ void mutt_view_attachments (HEADER *hdr)
       case OP_RESEND:
         CHECK_ATTACH;
         mutt_attach_resend (fp, hdr, actx,
-			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
+			     menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
       
       case OP_BOUNCE_MESSAGE:
         CHECK_ATTACH;
         mutt_attach_bounce (fp, hdr, actx,
-			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
+			     menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
 
       case OP_FORWARD_MESSAGE:
         CHECK_ATTACH;
         mutt_attach_forward (fp, hdr, actx,
-			     menu->tagprefix ? NULL : actx->idx[menu->current]->content);
+			     menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
         break;
       
@@ -1233,12 +1267,12 @@ void mutt_view_attachments (HEADER *hdr)
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
         mutt_attach_reply (fp, hdr, actx,
-			   menu->tagprefix ? NULL : actx->idx[menu->current]->content, flags);
+			   menu->tagprefix ? NULL : CURATTACH->content, flags);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_EDIT_TYPE:
-	mutt_edit_content_type (hdr, actx->idx[menu->current]->content, fp);
+	mutt_edit_content_type (hdr, CURATTACH->content, fp);
         /* Editing the content type can rewrite the body structure. */
         for (i = 0; i < actx->idxlen; i++)
           actx->idx[i]->content = NULL;

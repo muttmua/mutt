@@ -44,6 +44,9 @@ typedef struct attach_ctx
   short idxlen;
   short idxmax;
 
+  short *v2r;             /* mapping from virtual to real attachment */
+  short vcount;           /* the number of virtual attachments */
+
   FILE **fp_idx;        /* Extra FILE* used for decryption */
   short fp_len;
   short fp_max;
@@ -72,7 +75,7 @@ void mutt_attach_resend (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_forward (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_reply (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *, int);
 
-void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach, MUTTMENU *menu);
+void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach);
 void mutt_actx_add_fp (ATTACH_CONTEXT *actx, FILE *new_fp);
 void mutt_actx_add_body (ATTACH_CONTEXT *actx, BODY *new_body);
 void mutt_actx_free_entries (ATTACH_CONTEXT *actx);
