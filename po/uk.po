@@ -2,14 +2,14 @@
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # Andrej N. Gritsenko <andrej@lucky.net>, 1998-2001
 # Maxim Krasilnikov <pseudo@avalon.org.ua>, 2013
-# Vsevolod Volkov <vvv@mutt.org.ua>, 2016
+# Vsevolod Volkov <vvv@mutt.org.ua>, 2016-2017
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mutt-1.8.0\n"
+"Project-Id-Version: mutt-1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-03 18:37-0700\n"
-"PO-Revision-Date: 2017-02-16 21:22+0200\n"
+"POT-Creation-Date: 2017-08-20 14:26+0300\n"
+"PO-Revision-Date: 2017-08-20 17:06+0300\n"
 "Last-Translator: Vsevolod Volkov <vvv@mutt.org.ua>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -28,7 +28,7 @@ msgid "Password for %s@%s: "
 msgstr "Пароль для %s@%s: "
 
 #: addrbook.c:37 browser.c:46 pager.c:1575 postpone.c:41 query.c:48
-#: recvattach.c:53
+#: recvattach.c:57
 msgid "Exit"
 msgstr "Вихід"
 
@@ -44,9 +44,9 @@ msgstr "Відн."
 msgid "Select"
 msgstr "Вибір"
 
-#: addrbook.c:41 browser.c:49 compose.c:124 crypt-gpgme.c:4088 curs_main.c:493
-#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:1023 pager.c:1973 pgpkey.c:522
-#: postpone.c:44 query.c:53 recvattach.c:57 smime.c:440
+#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4088 curs_main.c:493
+#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:1023 pager.c:1981 pgpkey.c:522
+#: postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
 msgid "Help"
 msgstr "Допомога"
 
@@ -89,8 +89,8 @@ msgstr "Повне ім’я: "
 msgid "[%s = %s] Accept?"
 msgstr "[%s = %s] Вірно?"
 
-#: alias.c:347 recvattach.c:457 recvattach.c:483 recvattach.c:496
-#: recvattach.c:509 recvattach.c:539
+#: alias.c:347 recvattach.c:435 recvattach.c:461 recvattach.c:474
+#: recvattach.c:487 recvattach.c:522
 msgid "Save to file: "
 msgstr "Зберегти до файлу: "
 
@@ -106,7 +106,7 @@ msgstr "Псевдонім додано."
 msgid "Error seeking in alias file"
 msgstr "Помилка позиціонування в файлі псевдонімів"
 
-#: attach.c:113 attach.c:245 attach.c:400 attach.c:927
+#: attach.c:113 attach.c:245 attach.c:400 attach.c:926
 msgid "Can't match nametemplate, continue?"
 msgstr "Немає відповідного імені, далі?"
 
@@ -115,8 +115,8 @@ msgstr "Немає відповідного імені, далі?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "Спосіб створення, вказаний у mailcap, потребує параметра %%s"
 
-#: attach.c:134 attach.c:266 commands.c:223 compose.c:1383 compress.c:444
-#: curs_lib.c:218 curs_lib.c:809
+#: attach.c:134 attach.c:266 commands.c:223 compose.c:1390 compress.c:444
+#: curs_lib.c:218 curs_lib.c:809 sendlib.c:1372
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Помилка виконання \"%s\"!"
@@ -180,16 +180,16 @@ msgstr "---Додаток: %s: %s"
 msgid "---Attachment: %s"
 msgstr "---Додаток: %s"
 
-#: attach.c:633 attach.c:665 attach.c:960 attach.c:1018 handler.c:1363
+#: attach.c:632 attach.c:664 attach.c:959 attach.c:1017 handler.c:1363
 #: pgpkey.c:572 pgpkey.c:760
 msgid "Can't create filter"
 msgstr "Неможливо створити фільтр"
 
-#: attach.c:799
+#: attach.c:798
 msgid "Write fault!"
 msgstr "Збій запису!"
 
-#: attach.c:1041
+#: attach.c:1040
 msgid "I don't know how to print that!"
 msgstr "Не знаю, як це друкувати!"
 
@@ -397,50 +397,50 @@ msgstr "Перевірити підпис PGP неможливо."
 msgid "Command: "
 msgstr "Команда: "
 
-#: commands.c:256 commands.c:266 recvcmd.c:148 recvcmd.c:161
+#: commands.c:256 commands.c:266 recvcmd.c:146 recvcmd.c:159
 msgid "Warning: message contains no From: header"
 msgstr "Попередження: лист не має заголовку From:"
 
-#: commands.c:274 recvcmd.c:171
+#: commands.c:274 recvcmd.c:169
 msgid "Bounce message to: "
 msgstr "Надіслати копію листа: "
 
-#: commands.c:276 recvcmd.c:173
+#: commands.c:276 recvcmd.c:171
 msgid "Bounce tagged messages to: "
 msgstr "Надіслати копії виділених листів: "
 
-#: commands.c:284 recvcmd.c:182
+#: commands.c:284 recvcmd.c:180
 msgid "Error parsing address!"
 msgstr "Помилка розбору адреси!"
 
-#: commands.c:292 recvcmd.c:190
+#: commands.c:292 recvcmd.c:188
 #, c-format
 msgid "Bad IDN: '%s'"
 msgstr "Некоректний IDN: %s"
 
-#: commands.c:303 recvcmd.c:204
+#: commands.c:303 recvcmd.c:202
 #, c-format
 msgid "Bounce message to %s"
 msgstr "Надіслати копію листа %s"
 
-#: commands.c:303 recvcmd.c:204
+#: commands.c:303 recvcmd.c:202
 #, c-format
 msgid "Bounce messages to %s"
 msgstr "Надіслати копії листів %s"
 
-#: commands.c:319 recvcmd.c:220
+#: commands.c:319 recvcmd.c:218
 msgid "Message not bounced."
 msgstr "Копію листа не переслано."
 
-#: commands.c:319 recvcmd.c:220
+#: commands.c:319 recvcmd.c:218
 msgid "Messages not bounced."
 msgstr "Копії листів не переслано."
 
-#: commands.c:329 recvcmd.c:239
+#: commands.c:329 recvcmd.c:237
 msgid "Message bounced."
 msgstr "Копію листа переслано."
 
-#: commands.c:329 recvcmd.c:239
+#: commands.c:329 recvcmd.c:237
 msgid "Messages bounced."
 msgstr "Копії листів переслано."
 
@@ -544,26 +544,26 @@ msgstr " виділені"
 msgid "Copying to %s..."
 msgstr "Копіювання до %s..."
 
-#: commands.c:932
+#: commands.c:939
 #, c-format
 msgid "Convert to %s upon sending?"
 msgstr "Перетворити на %s при надсиланні?"
 
-#: commands.c:942
+#: commands.c:949
 #, c-format
 msgid "Content-Type changed to %s."
 msgstr "Тип даних змінено на %s."
 
-#: commands.c:947
+#: commands.c:954
 #, c-format
 msgid "Character set changed to %s; %s."
 msgstr "Кодування змінено на %s; %s."
 
-#: commands.c:949
+#: commands.c:956
 msgid "not converting"
 msgstr "не перетворюється"
 
-#: commands.c:949
+#: commands.c:956
 msgid "converting"
 msgstr "перетворюється"
 
@@ -572,50 +572,49 @@ msgid "There are no attachments."
 msgstr "Додатків немає."
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:82
+#: compose.c:83
 msgid "From: "
-msgstr ""
+msgstr "From: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:84 send.c:222
+#: compose.c:85 send.c:222
 msgid "To: "
-msgstr ""
+msgstr "To: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:86 send.c:224
+#: compose.c:87 send.c:224
 msgid "Cc: "
-msgstr ""
+msgstr "Cc: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:88 send.c:226
+#: compose.c:89 send.c:226
 msgid "Bcc: "
-msgstr ""
+msgstr "Bcc: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:90 compose.c:722 send.c:251
+#: compose.c:91 compose.c:774 send.c:251
 msgid "Subject: "
-msgstr ""
+msgstr "Subject: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:92
-#, fuzzy
+#: compose.c:93
 msgid "Reply-To: "
-msgstr "Відп."
+msgstr "Reply-To: "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:94 compose.c:739
+#: compose.c:95 compose.c:791
 msgid "Fcc: "
-msgstr ""
+msgstr "Fcc: "
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
-#: compose.c:97
+#: compose.c:98
 msgid "Mix: "
 msgstr "Mix: "
 
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
-#: compose.c:100
+#: compose.c:101
 msgid "Security: "
-msgstr ""
+msgstr "Безпека: "
 
 #. L10N:
 #. * This string is used by the compose menu.
@@ -626,222 +625,222 @@ msgstr ""
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:110 crypt-gpgme.c:4837 pgp.c:1821 smime.c:2222 smime.c:2237
+#: compose.c:111 crypt-gpgme.c:4837 pgp.c:1821 smime.c:2222 smime.c:2237
 msgid "Sign as: "
 msgstr "Підпис як: "
 
-#: compose.c:114
+#: compose.c:115
 msgid "Send"
 msgstr "Відправити"
 
-#: compose.c:115 remailer.c:484
+#: compose.c:116 remailer.c:484
 msgid "Abort"
 msgstr "Відміна"
 
 #. L10N: compose menu help line entry
-#: compose.c:117
+#: compose.c:118
 msgid "To"
-msgstr ""
+msgstr "To"
 
 #. L10N: compose menu help line entry
-#: compose.c:119
+#: compose.c:120
 msgid "CC"
-msgstr ""
+msgstr "CC"
 
 #. L10N: compose menu help line entry
-#: compose.c:121
+#: compose.c:122
 msgid "Subj"
-msgstr ""
+msgstr "Subj"
 
-#: compose.c:122 compose.c:836
+#: compose.c:123 compose.c:876
 msgid "Attach file"
 msgstr "Додати файл"
 
-#: compose.c:123
+#: compose.c:124
 msgid "Descrip"
 msgstr "Опис"
 
-#: compose.c:191
+#: compose.c:194
 msgid "Not supported"
 msgstr "Не підтримується."
 
-#: compose.c:198
+#: compose.c:201
 msgid "Sign, Encrypt"
 msgstr "Підписати, зашифрувати"
 
-#: compose.c:203
+#: compose.c:206
 msgid "Encrypt"
 msgstr "зашифрувати"
 
-#: compose.c:208
+#: compose.c:211
 msgid "Sign"
 msgstr "Підписати"
 
-#: compose.c:213
+#: compose.c:216
 msgid "None"
 msgstr "Нічого"
 
-#: compose.c:222
+#: compose.c:225
 msgid " (inline PGP)"
 msgstr " (PGP/текст)"
 
-#: compose.c:224
+#: compose.c:227
 msgid " (PGP/MIME)"
 msgstr " (PGP/MIME)"
 
-#: compose.c:228
+#: compose.c:231
 msgid " (S/MIME)"
 msgstr " (S/MIME)"
 
-#: compose.c:232
+#: compose.c:235
 msgid " (OppEnc mode)"
 msgstr " (режим OppEnc)"
 
-#: compose.c:244 compose.c:253
+#: compose.c:247 compose.c:256
 msgid "<default>"
 msgstr "<типово>"
 
-#: compose.c:263
+#: compose.c:266
 msgid "Encrypt with: "
 msgstr "Зашифрувати: "
 
-#: compose.c:320
+#: compose.c:323
 #, c-format
 msgid "%s [#%d] no longer exists!"
 msgstr "%s [#%d] більше не існує!"
 
-#: compose.c:328
+#: compose.c:331
 #, c-format
 msgid "%s [#%d] modified. Update encoding?"
 msgstr "%s [#%d] змінено. Змінити кодування?"
 
-#: compose.c:383
+#: compose.c:386
 msgid "-- Attachments"
 msgstr "-- Додатки"
 
-#: compose.c:405
+#: compose.c:408
 #, c-format
 msgid "Warning: '%s' is a bad IDN."
 msgstr "Попередження: некоректне IDN: %s"
 
-#: compose.c:426
+#: compose.c:428
 msgid "You may not delete the only attachment."
 msgstr "Це єдина частина листа, її неможливо видалити."
 
-#: compose.c:770 send.c:1689
+#: compose.c:822 send.c:1689
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Некоректне IDN в \"%s\": %s"
 
-#: compose.c:852
+#: compose.c:886
 msgid "Attaching selected files..."
 msgstr "Додавання вибраних файлів..."
 
-#: compose.c:864
+#: compose.c:898
 #, c-format
 msgid "Unable to attach %s!"
 msgstr "Неможливо додати %s!"
 
-#: compose.c:884
+#: compose.c:918
 msgid "Open mailbox to attach message from"
 msgstr "Скринька, з якої додати повідомлення"
 
-#: compose.c:914
+#: compose.c:948
 #, c-format
 msgid "Unable to open mailbox %s"
 msgstr "Неможливо відкрити скриньку %s"
 
-#: compose.c:922
+#: compose.c:956
 msgid "No messages in that folder."
 msgstr "Ця скринька зовсім порожня."
 
-#: compose.c:931
+#: compose.c:965
 msgid "Tag the messages you want to attach!"
 msgstr "Виділіть повідомлення для додавання!"
 
-#: compose.c:963
+#: compose.c:991
 msgid "Unable to attach!"
 msgstr "Неможливо додати!"
 
-#: compose.c:1014
+#: compose.c:1031
 msgid "Recoding only affects text attachments."
 msgstr "Перекодування може бути застосоване тільки до текстових додатків."
 
-#: compose.c:1019
+#: compose.c:1036
 msgid "The current attachment won't be converted."
 msgstr "Поточний додаток не буде перетворено."
 
-#: compose.c:1021
+#: compose.c:1038
 msgid "The current attachment will be converted."
 msgstr "Поточний додаток буде перетворено."
 
-#: compose.c:1096
+#: compose.c:1112
 msgid "Invalid encoding."
 msgstr "Невірне кодування."
 
-#: compose.c:1122
+#: compose.c:1138
 msgid "Save a copy of this message?"
 msgstr "Зберегти копію цього повідомлення?"
 
-#: compose.c:1185
+#: compose.c:1201
 msgid "Send attachment with name: "
 msgstr "Відправити додаток з ім’ям: "
 
-#: compose.c:1203
+#: compose.c:1219
 msgid "Rename to: "
 msgstr "Перейменувати у: "
 
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1210 editmsg.c:96 editmsg.c:121 sendlib.c:872
+#: compose.c:1226 editmsg.c:96 editmsg.c:121 sendlib.c:877
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Неможливо отримати дані %s: %s"
 
-#: compose.c:1237
+#: compose.c:1253
 msgid "New file: "
 msgstr "Новий файл: "
 
-#: compose.c:1250
+#: compose.c:1266
 msgid "Content-Type is of the form base/sub"
 msgstr "Поле Content-Type повинно мати форму тип/підтип"
 
-#: compose.c:1256
+#: compose.c:1272
 #, c-format
 msgid "Unknown Content-Type %s"
 msgstr "Невідомий Content-Type %s"
 
-#: compose.c:1269
+#: compose.c:1280
 #, c-format
 msgid "Can't create file %s"
 msgstr "Неможливо створити файл %s"
 
-#: compose.c:1277
+#: compose.c:1288
 msgid "What we have here is a failure to make an attachment"
 msgstr "Не вийшло створити додаток"
 
-#: compose.c:1337
+#: compose.c:1349
 msgid "Postpone this message?"
 msgstr "Залишити лист до подальшого редагування та відправки?"
 
-#: compose.c:1401
+#: compose.c:1408
 msgid "Write message to mailbox"
 msgstr "Записати лист до поштової скриньки"
 
-#: compose.c:1404
+#: compose.c:1411
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "Запис листа до %s..."
 
-#: compose.c:1413
+#: compose.c:1420
 msgid "Message written."
 msgstr "Лист записано."
 
-#: compose.c:1427
+#: compose.c:1434
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME вже вибрано. Очистити і продовжити? "
 
-#: compose.c:1460
+#: compose.c:1467
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP вже вибрано. Очистити і продовжити? "
 
@@ -1238,44 +1237,36 @@ msgstr "[Неможливо відобразити ID цього користу�
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
 #: crypt-gpgme.c:3389
-#, fuzzy
 msgid "Name: "
-msgstr "Ім’я ......: "
+msgstr "Ім’я: "
 
 #: crypt-gpgme.c:3391
-#, fuzzy
 msgid "Valid From: "
-msgstr "Дійсно з...: %s\n"
+msgstr "Дійсний з: "
 
 #: crypt-gpgme.c:3392
-#, fuzzy
 msgid "Valid To: "
-msgstr "Дійсно до..: %s\n"
+msgstr "Дійсний до: "
 
 #: crypt-gpgme.c:3393
-#, fuzzy
 msgid "Key Type: "
-msgstr "Використано: "
+msgstr "Тип ключа: "
 
 #: crypt-gpgme.c:3394
-#, fuzzy
 msgid "Key Usage: "
-msgstr "Використано: "
+msgstr "Використання: "
 
 #: crypt-gpgme.c:3396
-#, fuzzy
 msgid "Serial-No: "
-msgstr "Сер. номер : 0x%s\n"
+msgstr "Сер. номер: "
 
 #: crypt-gpgme.c:3397
-#, fuzzy
 msgid "Issued By: "
-msgstr "Видано ....: "
+msgstr "Виданий: "
 
 #: crypt-gpgme.c:3398
-#, fuzzy
 msgid "Subkey: "
-msgstr "Підключ ...: 0x%s"
+msgstr "Підключ: "
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
@@ -1286,9 +1277,9 @@ msgstr "[Неправильно]"
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
 #: crypt-gpgme.c:3501 crypt-gpgme.c:3660
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %lu bit %s\n"
-msgstr "Тип ключа .: %s, %lu біт %s\n"
+msgstr "%s, %lu біт %s\n"
 
 #. L10N: value in Key Usage: field
 #: crypt-gpgme.c:3510 crypt-gpgme.c:3668
@@ -1660,7 +1651,7 @@ msgstr "ні"
 msgid "Exit Mutt?"
 msgstr "Покинути Mutt?"
 
-#: curs_lib.c:761 mutt_socket.c:586 mutt_ssl.c:577
+#: curs_lib.c:761 mutt_socket.c:612 mutt_ssl.c:577
 msgid "unknown error"
 msgstr "невідома помилка"
 
@@ -1680,11 +1671,11 @@ msgstr "Немає відкритої поштової скриньки."
 msgid "There are no messages."
 msgstr "Жодного повідомлення немає."
 
-#: curs_main.c:59 mx.c:1131 pager.c:55 recvattach.c:43
+#: curs_main.c:59 mx.c:1131 pager.c:55 recvattach.c:45
 msgid "Mailbox is read-only."
 msgstr "Поштова скринька відкрита тільки для читання"
 
-#: curs_main.c:60 pager.c:56 recvattach.c:943
+#: curs_main.c:60 pager.c:56 recvattach.c:1097
 msgid "Function not permitted in attach-message mode."
 msgstr "Функцію не дозволено в режимі додавання повідомлення."
 
@@ -1714,7 +1705,7 @@ msgstr "Зміни у скриньці не буде записано."
 msgid "Quit"
 msgstr "Вийти"
 
-#: curs_main.c:489 recvattach.c:54
+#: curs_main.c:489 recvattach.c:58
 msgid "Save"
 msgstr "Збер."
 
@@ -1747,7 +1738,7 @@ msgstr "Поштову скриньку змінила зовнішня прог
 msgid "No tagged messages."
 msgstr "Жодного листа не виділено."
 
-#: curs_main.c:753 menu.c:1043
+#: curs_main.c:753 menu.c:1050
 msgid "Nothing to do."
 msgstr "Нічого робити."
 
@@ -1768,7 +1759,7 @@ msgid "Invalid message number."
 msgstr "Невірний номер листа."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:895 curs_main.c:2031 pager.c:2532
+#: curs_main.c:895 curs_main.c:2031 pager.c:2538
 msgid "Cannot delete message(s)"
 msgstr "Неможливо видалити повідомлення"
 
@@ -1794,7 +1785,7 @@ msgstr "Обмежитись повідомленнями за шаблоном:
 msgid "To view all messages, limit to \"all\"."
 msgstr "Щоб побачити всі повідомлення, встановіть шаблон \"all\"."
 
-#: curs_main.c:968 pager.c:2069
+#: curs_main.c:968 pager.c:2077
 msgid "Quit Mutt?"
 msgstr "Вийти з Mutt?"
 
@@ -1803,7 +1794,7 @@ msgid "Tag messages matching: "
 msgstr "Виділити листи за шаблоном: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1068 curs_main.c:2382 pager.c:2787
+#: curs_main.c:1068 curs_main.c:2382 pager.c:2792
 msgid "Cannot undelete message(s)"
 msgstr "Неможливо відновити повідомлення"
 
@@ -1886,11 +1877,11 @@ msgstr "Немає відновлених листів."
 msgid "You are on the first message."
 msgstr "Це перший лист."
 
-#: curs_main.c:1613 menu.c:867 pager.c:2187 pattern.c:1575
+#: curs_main.c:1613 menu.c:874 pager.c:2195 pattern.c:1609
 msgid "Search wrapped to top."
 msgstr "Досягнуто кінець. Пошук перенесено на початок."
 
-#: curs_main.c:1622 pager.c:2209 pattern.c:1586
+#: curs_main.c:1622 pager.c:2217 pattern.c:1620
 msgid "Search wrapped to bottom."
 msgstr "Досягнуто початок. Пошук перенесено на кінець."
 
@@ -1916,7 +1907,7 @@ msgid "Cannot flag message"
 msgstr "Неможливо змінити атрибут листа"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1731 pager.c:2750
+#: curs_main.c:1731 pager.c:2755
 msgid "Cannot toggle new"
 msgstr "Неможливо змінити атрибут \"Нове\""
 
@@ -1933,7 +1924,7 @@ msgid "Thread contains unread messages."
 msgstr "Розмова має нечитані листи."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1987 pager.c:2499
+#: curs_main.c:1987 pager.c:2505
 msgid "Cannot delete message"
 msgstr "Неможливо видалити лист"
 
@@ -1944,7 +1935,7 @@ msgstr "Неможливо редагувати лист"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2114 pager.c:2838
+#: curs_main.c:2114 pager.c:2843
 #, c-format
 msgid "%d labels changed."
 msgstr "Позначки було змінено: %d"
@@ -1952,7 +1943,7 @@ msgstr "Позначки було змінено: %d"
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2120 pager.c:2841
+#: curs_main.c:2120 pager.c:2846
 msgid "No labels changed."
 msgstr "Жодної позначки не було змінено."
 
@@ -1989,7 +1980,7 @@ msgid "No message ID to macro."
 msgstr "Немає Message-ID для створення макроса."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2352 pager.c:2770
+#: curs_main.c:2352 pager.c:2775
 msgid "Cannot undelete message"
 msgstr "Неможливо відновити лист"
 
@@ -2393,7 +2384,12 @@ msgstr "Помилка переіменування: %s"
 msgid "Mailbox renamed."
 msgstr "Поштову скриньку переіменовано."
 
-#: imap/command.c:447
+#: imap/command.c:260
+#, c-format
+msgid "Connection to %s timed out"
+msgstr "Вичерпано час очікування з’єднання з %s"
+
+#: imap/command.c:467
 msgid "Mailbox closed"
 msgstr "Поштову скриньку закрито"
 
@@ -2432,71 +2428,71 @@ msgstr "Вибір %s..."
 msgid "Error opening mailbox"
 msgstr "Помилка відкриття поштової скриньки"
 
-#: imap/imap.c:819 imap/imap.c:2183 imap/message.c:1014 muttlib.c:1683
+#: imap/imap.c:818 imap/imap.c:2190 imap/message.c:1014 muttlib.c:1683
 #, c-format
 msgid "Create %s?"
 msgstr "Створити %s?"
 
-#: imap/imap.c:1212
+#: imap/imap.c:1215
 msgid "Expunge failed"
 msgstr "Помилка видалення"
 
-#: imap/imap.c:1224
+#: imap/imap.c:1227
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Маркування %d повідомлень видаленими..."
 
-#: imap/imap.c:1256
+#: imap/imap.c:1259
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Збереження змінених листів... [%d/%d]"
 
-#: imap/imap.c:1312
+#: imap/imap.c:1315
 msgid "Error saving flags. Close anyway?"
 msgstr "Помилка збереження атрибутів. Закрити все одно?"
 
-#: imap/imap.c:1320
+#: imap/imap.c:1323
 msgid "Error saving flags"
 msgstr "Помилка збереження атрибутів"
 
-#: imap/imap.c:1343
+#: imap/imap.c:1346
 msgid "Expunging messages from server..."
 msgstr "Видалення повідомлень з серверу..."
 
-#: imap/imap.c:1349
+#: imap/imap.c:1352
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox: помилка EXPUNGE"
 
-#: imap/imap.c:1833
+#: imap/imap.c:1839
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Пошук заголовка без вказання його імені: %s"
 
-#: imap/imap.c:1904
+#: imap/imap.c:1910
 msgid "Bad mailbox name"
 msgstr "Погане ім’я скриньки"
 
-#: imap/imap.c:1928
+#: imap/imap.c:1934
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Підписування на %s..."
 
-#: imap/imap.c:1930
+#: imap/imap.c:1936
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Відписування від %s..."
 
-#: imap/imap.c:1940
+#: imap/imap.c:1946
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Підписано на %s..."
 
-#: imap/imap.c:1942
+#: imap/imap.c:1948
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Відписано від %s..."
 
-#: imap/imap.c:2168 imap/message.c:978
+#: imap/imap.c:2175 imap/message.c:978
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Копіювання %d листів до %s..."
@@ -3100,68 +3096,68 @@ msgstr "Не вийшло відкрити поштову скриньку зн�
 msgid "Reopening mailbox..."
 msgstr "Повторне відкриття поштової скриньки..."
 
-#: menu.c:435
+#: menu.c:442
 msgid "Jump to: "
 msgstr "Перейти до: "
 
-#: menu.c:444
+#: menu.c:451
 msgid "Invalid index number."
 msgstr "Невірний номер переліку."
 
-#: menu.c:448 menu.c:469 menu.c:534 menu.c:577 menu.c:593 menu.c:604 menu.c:615
-#: menu.c:626 menu.c:639 menu.c:652 menu.c:1174
+#: menu.c:455 menu.c:476 menu.c:541 menu.c:584 menu.c:600 menu.c:611 menu.c:622
+#: menu.c:633 menu.c:646 menu.c:659 menu.c:1181
 msgid "No entries."
 msgstr "Жодної позицїї."
 
-#: menu.c:466
+#: menu.c:473
 msgid "You cannot scroll down farther."
 msgstr "Нижче прокручувати неможна."
 
-#: menu.c:484
+#: menu.c:491
 msgid "You cannot scroll up farther."
 msgstr "Вище прокручувати неможна."
 
-#: menu.c:527
+#: menu.c:534
 msgid "You are on the first page."
 msgstr "Це перша сторінка."
 
-#: menu.c:528
+#: menu.c:535
 msgid "You are on the last page."
 msgstr "Це остання сторінка."
 
-#: menu.c:663
+#: menu.c:670
 msgid "You are on the last entry."
 msgstr "Це остання позиція."
 
-#: menu.c:674
+#: menu.c:681
 msgid "You are on the first entry."
 msgstr "Це перша позиція."
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2239 pattern.c:1548
 msgid "Search for: "
 msgstr "Шукати вираз:"
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2239 pattern.c:1548
 msgid "Reverse search for: "
 msgstr "Зворотній пошук виразу: "
 
-#: menu.c:885 pager.c:2184 pager.c:2206 pager.c:2326 pattern.c:1629
+#: menu.c:892 pager.c:2192 pager.c:2214 pager.c:2334 pattern.c:1663
 msgid "Not found."
 msgstr "Не знайдено."
 
-#: menu.c:1037
+#: menu.c:1044
 msgid "No tagged entries."
 msgstr "Жодної позиції не вибрано."
 
-#: menu.c:1138
+#: menu.c:1145
 msgid "Search is not implemented for this menu."
 msgstr "Пошук у цьому меню не підтримується."
 
-#: menu.c:1143
+#: menu.c:1150
 msgid "Jumping is not implemented for dialogs."
 msgstr "Перехід у цьому діалозі не підримується."
 
-#: menu.c:1177
+#: menu.c:1184
 msgid "Tagging is not supported."
 msgstr "Виділення не підтримується."
 
@@ -3198,52 +3194,52 @@ msgstr "Помилка встановлення рівня зовнішньої 
 msgid "Error setting SASL external user name"
 msgstr "Помилка встановлення зовнішнього імені користувача SASL"
 
-#: mutt_socket.c:104 mutt_socket.c:182
+#: mutt_socket.c:105 mutt_socket.c:183
 #, c-format
 msgid "Connection to %s closed"
 msgstr "З’єднання з %s закрито"
 
-#: mutt_socket.c:301
+#: mutt_socket.c:302
 msgid "SSL is unavailable."
 msgstr "SSL недоступний."
 
-#: mutt_socket.c:333
+#: mutt_socket.c:334
 msgid "Preconnect command failed."
 msgstr "Помилка команди, попередньої з’єднанню."
 
-#: mutt_socket.c:412 mutt_socket.c:426
+#: mutt_socket.c:413 mutt_socket.c:427
 #, c-format
 msgid "Error talking to %s (%s)"
 msgstr "Помилка у з’єднанні з сервером %s (%s)"
 
-#: mutt_socket.c:479 mutt_socket.c:538
+#: mutt_socket.c:505 mutt_socket.c:564
 #, c-format
 msgid "Bad IDN \"%s\"."
 msgstr "Погане IDN \"%s\"."
 
-#: mutt_socket.c:487 mutt_socket.c:546
+#: mutt_socket.c:513 mutt_socket.c:572
 #, c-format
 msgid "Looking up %s..."
 msgstr "Пошук %s..."
 
-#: mutt_socket.c:497 mutt_socket.c:555
+#: mutt_socket.c:523 mutt_socket.c:581
 #, c-format
 msgid "Could not find the host \"%s\""
 msgstr "Не вийшло знайти адресу \"%s\"."
 
-#: mutt_socket.c:503 mutt_socket.c:561
+#: mutt_socket.c:529 mutt_socket.c:587
 #, c-format
 msgid "Connecting to %s..."
 msgstr "З’єднання з %s..."
 
-#: mutt_socket.c:585
+#: mutt_socket.c:611
 #, c-format
 msgid "Could not connect to %s (%s)."
 msgstr "Не вийшло з’єднатися з %s (%s)."
 
 #: mutt_ssl.c:247 mutt_ssl.c:500
 msgid "Warning: error enabling ssl_verify_partial_chains"
-msgstr ""
+msgstr "Попередження: помилка ввімкнення ssl_verify_partial_chains"
 
 #: mutt_ssl.c:326
 msgid "Failed to find enough entropy on your system"
@@ -3276,7 +3272,7 @@ msgstr "Неможливо створити SSL контекст"
 #. * the correct certificate if it supports multiple hosts.
 #: mutt_ssl.c:560 mutt_ssl_gnutls.c:423
 msgid "Warning: unable to set TLS SNI host name"
-msgstr ""
+msgstr "Попередження: не вдалось встановити ім’я хоста TLS SNI"
 
 #: mutt_ssl.c:571
 msgid "I/O error"
@@ -3381,21 +3377,19 @@ msgstr "Перевірка сертифікату (сертифікат %d з %d
 #.
 #: mutt_ssl.c:1238
 msgid "roas"
-msgstr ""
+msgstr "roas"
 
 #: mutt_ssl.c:1242
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
-msgstr "(r)не приймати, прийняти (o)одноразово або (a)завжди"
+msgstr "(r)не приймати, прийняти (o)одноразово або (a)завжди, (s)пропустити"
 
 #: mutt_ssl.c:1244 mutt_ssl_gnutls.c:999
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)не приймати, прийняти (o)одноразово або (a)завжди"
 
 #: mutt_ssl.c:1249
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (s)kip"
-msgstr "(r)не приймати, (o)прийняти одноразово"
+msgstr "(r)не приймати, (o)прийняти одноразово, (s)пропустити"
 
 #: mutt_ssl.c:1251 mutt_ssl_gnutls.c:1010
 msgid "(r)eject, accept (o)nce"
@@ -3562,7 +3556,7 @@ msgstr "Не вийшло заблокувати %s за допомогою dotl
 
 #: mx.c:219
 msgid "Timeout exceeded while attempting fcntl lock!"
-msgstr "Вичерпано час на блокування через fctnl!"
+msgstr "Вичерпано час очікування блокування через fctnl!"
 
 #: mx.c:225
 #, c-format
@@ -3571,7 +3565,7 @@ msgstr "Чекання блокування fctnl... %d"
 
 #: mx.c:252
 msgid "Timeout exceeded while attempting flock lock!"
-msgstr "Вичерпано час блокування через flock"
+msgstr "Вичерпано час очікування блокування через flock!"
 
 #: mx.c:259
 #, c-format
@@ -3654,23 +3648,23 @@ msgstr "Додатки"
 msgid "Next"
 msgstr "Наст"
 
-#: pager.c:2085 pager.c:2116 pager.c:2148 pager.c:2435
+#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2443
 msgid "Bottom of message is shown."
 msgstr "Ви бачите кінець листа."
 
-#: pager.c:2101 pager.c:2123 pager.c:2130 pager.c:2137
+#: pager.c:2109 pager.c:2131 pager.c:2138 pager.c:2145
 msgid "Top of message is shown."
 msgstr "Ви бачите початок листа."
 
-#: pager.c:2373
+#: pager.c:2381
 msgid "Help is currently being shown."
 msgstr "Підказку зараз показано."
 
-#: pager.c:2402
+#: pager.c:2410
 msgid "No more quoted text."
 msgstr "Цитованого тексту більш немає."
 
-#: pager.c:2415
+#: pager.c:2423
 msgid "No more unquoted text after quoted text."
 msgstr "Після цитованого тексту нічого немає."
 
@@ -3702,74 +3696,74 @@ msgstr "Місяць \"%s\" не існує"
 msgid "Invalid relative date: %s"
 msgstr "Неможлива відносна дата: %s"
 
-#: pattern.c:818 pattern.c:977
+#: pattern.c:819 pattern.c:987
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "помилка у шаблоні: %s"
 
-#: pattern.c:845
+#: pattern.c:846
 #, c-format
 msgid "missing pattern: %s"
 msgstr "відсутній шаблон: %s"
 
-#: pattern.c:855
+#: pattern.c:865
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "невідповідна дужка: %s"
 
-#: pattern.c:915
+#: pattern.c:925
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: невірний модифікатор шаблона"
 
-#: pattern.c:921
+#: pattern.c:931
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "в цьому режимі \"%c\" не підтримується"
 
-#: pattern.c:934
+#: pattern.c:944
 msgid "missing parameter"
 msgstr "відсутній параметр"
 
-#: pattern.c:950
+#: pattern.c:960
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "невідповідна дужка: %s"
 
-#: pattern.c:984
+#: pattern.c:994
 msgid "empty pattern"
 msgstr "порожній шаблон"
 
-#: pattern.c:1310
+#: pattern.c:1344
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "помилка: невідоме op %d (повідомте цю помилку)."
 
-#: pattern.c:1393 pattern.c:1535
+#: pattern.c:1427 pattern.c:1569
 msgid "Compiling search pattern..."
 msgstr "Компіляція виразу пошуку..."
 
-#: pattern.c:1414
+#: pattern.c:1448
 msgid "Executing command on matching messages..."
 msgstr "Виконання команди до відповідних листів..."
 
-#: pattern.c:1483
+#: pattern.c:1517
 msgid "No messages matched criteria."
 msgstr "Листів, що відповідають критерію, не знайдено."
 
-#: pattern.c:1565
+#: pattern.c:1599
 msgid "Searching..."
 msgstr "Пошук..."
 
-#: pattern.c:1578
+#: pattern.c:1612
 msgid "Search hit bottom without finding match"
 msgstr "Пошук дійшов до кінця, але не знайдено нічого"
 
-#: pattern.c:1589
+#: pattern.c:1623
 msgid "Search hit top without finding match"
 msgstr "Пошук дійшов до початку, але не знайдено нічого"
 
-#: pattern.c:1621
+#: pattern.c:1655
 msgid "Search interrupted."
 msgstr "Пошук перервано."
 
@@ -4077,78 +4071,82 @@ msgstr "Запит:"
 msgid "Query '%s'"
 msgstr "Запит \"%s\""
 
-#: recvattach.c:55
+#: recvattach.c:59
 msgid "Pipe"
 msgstr "Передати"
 
-#: recvattach.c:56
+#: recvattach.c:60
 msgid "Print"
 msgstr "Друк"
 
-#: recvattach.c:501
+#: recvattach.c:479
 msgid "Saving..."
 msgstr "Збереження..."
 
-#: recvattach.c:504 recvattach.c:595
+#: recvattach.c:482 recvattach.c:576
 msgid "Attachment saved."
 msgstr "Додаток записано."
 
-#: recvattach.c:607
+#: recvattach.c:588
 #, c-format
 msgid "WARNING!  You are about to overwrite %s, continue?"
 msgstr "ОБЕРЕЖНО! Ви знищите існуючий %s при запису. Ви певні?"
 
-#: recvattach.c:625
+#: recvattach.c:606
 msgid "Attachment filtered."
 msgstr "Додаток відфільтровано."
 
-#: recvattach.c:694
+#: recvattach.c:680
 msgid "Filter through: "
 msgstr "Фільтрувати через: "
 
-#: recvattach.c:694
+#: recvattach.c:680
 msgid "Pipe to: "
 msgstr "Передати команді: "
 
-#: recvattach.c:729
+#: recvattach.c:718
 #, c-format
 msgid "I don't know how to print %s attachments!"
 msgstr "Невідомо, як друкувати додатки типу %s!"
 
-#: recvattach.c:794
+#: recvattach.c:784
 msgid "Print tagged attachment(s)?"
 msgstr "Друкувати виділені додатки?"
 
-#: recvattach.c:794
+#: recvattach.c:784
 msgid "Print attachment?"
 msgstr "Друкувати додаток?"
 
-#: recvattach.c:1028
+#: recvattach.c:844
+msgid "Structural changes to decrypted attachments are not supported"
+msgstr "Змінення структури розшифрованих додатків не підтримується"
+
+#: recvattach.c:1003
 msgid "Can't decrypt encrypted message!"
 msgstr "Не можу розшифрувати листа!"
 
-#: recvattach.c:1040
+#: recvattach.c:1129
 msgid "Attachments"
 msgstr "Додатки"
 
-#: recvattach.c:1077
+#: recvattach.c:1167
 msgid "There are no subparts to show!"
 msgstr "Немає підчастин для проглядання!"
 
-#: recvattach.c:1138
+#: recvattach.c:1222
 msgid "Can't delete attachment from POP server."
 msgstr "Неможливо видалити додаток з сервера POP."
 
-#: recvattach.c:1146
+#: recvattach.c:1230
 msgid "Deletion of attachments from encrypted messages is unsupported."
 msgstr "Видалення додатків з шифрованих листів не підтримується."
 
-#: recvattach.c:1152
+#: recvattach.c:1236
 msgid ""
 "Deletion of attachments from signed messages may invalidate the signature."
 msgstr "Видалення додатків з підписаних листів може анулювати підпис."
 
-#: recvattach.c:1169 recvattach.c:1186
+#: recvattach.c:1253 recvattach.c:1270
 msgid "Only deletion of multipart attachments is supported."
 msgstr "Підтримується тільки видалення в багаточастинних листах."
 
@@ -4156,45 +4154,45 @@ msgstr "Підтримується тільки видалення в багат
 msgid "You may only bounce message/rfc822 parts."
 msgstr "Ви можете надсилати тільки копії частин в форматі message/rfc822."
 
-#: recvcmd.c:241
+#: recvcmd.c:239
 msgid "Error bouncing message!"
 msgstr "Помилка при пересилці листа!"
 
-#: recvcmd.c:241
+#: recvcmd.c:239
 msgid "Error bouncing messages!"
 msgstr "Помилка при пересилці листів!"
 
-#: recvcmd.c:441
+#: recvcmd.c:447
 #, c-format
 msgid "Can't open temporary file %s."
 msgstr "Неможливо відкрити тимчасовий файл %s."
 
-#: recvcmd.c:472
+#: recvcmd.c:478
 msgid "Forward as attachments?"
 msgstr "Переслати як додатки?"
 
-#: recvcmd.c:486
+#: recvcmd.c:492
 msgid "Can't decode all tagged attachments.  MIME-forward the others?"
 msgstr "Неможливо декодувати всі виділені додатки. Пересилати їх як MIME?"
 
-#: recvcmd.c:611
+#: recvcmd.c:618
 msgid "Forward MIME encapsulated?"
 msgstr "Переслати енкапсульованим у відповідності до MIME?"
 
-#: recvcmd.c:619 recvcmd.c:869
+#: recvcmd.c:626 recvcmd.c:886
 #, c-format
 msgid "Can't create %s."
 msgstr "Неможливо створити %s."
 
-#: recvcmd.c:752
+#: recvcmd.c:759
 msgid "Can't find any tagged messages."
 msgstr "Не знайдено виділених листів."
 
-#: recvcmd.c:773 send.c:737
+#: recvcmd.c:780 send.c:737
 msgid "No mailing lists found!"
 msgstr "Не знайдено списків розсилки!"
 
-#: recvcmd.c:848
+#: recvcmd.c:865
 msgid "Can't decode all tagged attachments.  MIME-encapsulate the others?"
 msgstr "Неможливо декодувати всі виділені додатки. Капсулювати їх у MIME?"
 
@@ -4399,30 +4397,30 @@ msgstr "Немає параметру межі! [сповістіть про ц�
 msgid "%s no longer exists!"
 msgstr "%s більше не існує!"
 
-#: sendlib.c:878
+#: sendlib.c:883
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s не є звичайним файлом."
 
-#: sendlib.c:1051
+#: sendlib.c:1056
 #, c-format
 msgid "Could not open %s"
 msgstr "Не вийшло відкрити %s"
 
-#: sendlib.c:2364
+#: sendlib.c:2394
 msgid "$sendmail must be set in order to send mail."
 msgstr "$sendmail має бути встановленим для відправки пошти."
 
-#: sendlib.c:2463
+#: sendlib.c:2493
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "Помилка відправки, код повернення %d (%s)."
 
-#: sendlib.c:2469
+#: sendlib.c:2499
 msgid "Output of the delivery process"
 msgstr "Вивід процесу доставки"
 
-#: sendlib.c:2644
+#: sendlib.c:2674
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "Погане IDN %s при підготовці resent-from."
@@ -5536,12 +5534,3 @@ msgstr "розпакувати підтримувані відкриті клю�
 #: ../keymap_alldefs.h:214
 msgid "show S/MIME options"
 msgstr "показати параметри S/MIME"
-
-#~ msgid "sign as: "
-#~ msgstr "підписати як:"
-
-#~ msgid " aka ......: "
-#~ msgstr " aka ......: "
-
-#~ msgid "Query"
-#~ msgstr "Запит"
