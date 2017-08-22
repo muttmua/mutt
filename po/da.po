@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-22 08:51-0700\n"
-"PO-Revision-Date: 2017-08-22 19:23+0200\n"
+"PO-Revision-Date: 2017-08-22 21:21+0200\n"
 "Last-Translator: Morten Bo Johansen <mbj@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -5282,10 +5282,9 @@ msgstr "gå til den forrige side"
 msgid "print the current entry"
 msgstr "udskriv den aktuelle listning"
 
-# msgid: missing question mark -MBJ
 #: ../keymap_alldefs.h:151
 msgid "really delete the current entry, bypassing the trash folder"
-msgstr "skal den aktuelle listning virkelig slettes, uden om papirkurven?"
+msgstr "Om det aktuelle brev virkelig skal slettes, uden om papirkurven"
 
 #: ../keymap_alldefs.h:152
 msgid "query external program for addresses"
