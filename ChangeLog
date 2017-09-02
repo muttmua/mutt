@@ -1,3 +1,1708 @@
+2017-09-02 09:36 -0700  Kevin McCarthy  <kevin@8t8.us>  (3cd63d517453)
+
+	* po/cs.po, po/eo.po, po/nl.po: Fix the new certificate prompt
+	translations.
+
+	The Esperanto, Dutch, and Czech po files weren't updated in time for
+	1.9. Fix the certificate prompt translations by adding a "(s)kip"
+	choice. Otherwise the prompts would not be functional.
+
+2017-08-29 09:19 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (52ba6fd58607)
+
+	* po/ja.po: Updated Japanese translation.
+
+2017-08-27 09:28 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net>  (2666f4de9eb8)
+
+	* po/ca.po: Updated Catalan translation.
+
+2017-08-22 19:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (b506fa3e7aab)
+
+	* UPDATING: Add 1.9.0 entries to the UPDATING file.
+
+2017-08-22 13:51 -0700  Morten Bo Johansen  <mjb@spamcop.net>  (f1638434cb43)
+
+	* po/da.po: Updated Danish translation.
+
+2017-08-22 10:59 -0700  Morten Bo Johansen  <mjb@spamcop.net>  (cce15c0169af)
+
+	* po/da.po: Updated Danish translation.
+
+2017-08-22 10:28 -0700  Olaf Hering  <olaf@aepfle.de>  (3606d018ea75)
+
+	* po/de.po: Updated German translation.
+
+2017-08-20 09:39 -0700  Vsevolod Volkov  <vvv@mutt.org.ua>  (584cc7ee5016)
+
+	* po/ru.po: Updated Russian translation.
+
+2017-08-20 09:31 -0700  Vsevolod Volkov  <vvv@mutt.org.ua>  (ed0fff2be143)
+
+	* po/uk.po: Updated Ukrainian translation.
+
+2017-08-19 08:33 -0700  Kevin McCarthy  <kevin@8t8.us>  (190e778db4d6)
+
+	* doc/manual.xml.head, globals.h, init.h, mutt.h, sendlib.c: Add
+	option to run command to query attachment mime type. (closes #2933)
+	(closes #3959)
+
+	Add $mime_type_query_command to specify a command to run if the
+	attachment extension is not in the mime.types file.
+
+	Add $mime_type_query_first to allow the query command to be run
+	before the mime.types lookup.
+
+2017-08-12 22:17 +0200  Vincent Lefevre  <vincent@vinc17.net>  (69e3bde9f83d)
+
+	* po/fr.po: Updated French translation.
+
+2017-08-11 09:04 -0700  Kevin McCarthy  <kevin@8t8.us>  (1306ee5f4bf7)
+
+	* recvcmd.c: Fix parent_hdr usage in mutt_attach_reply(). (see #3728)
+
+	If the selected attachments are not messages and no (common) parent
+	is found, parent_hdr is set to the passed in hdr. In that case,
+	parent will still be NULL, but parent_hdr and parent_fp will be set.
+
+	Change the test to parent_hdr being NULL, not parent, to check for
+	this case.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (052ad4fcdd6b)
+
+	* commands.c, protos.h, recvattach.c: Add edit-content-type helper and
+	warning for decrypted attachments. (closes #3728)
+
+	Regenerating the actx index will overwrite any changes made to a
+	decrypted attachment. Change the mutt_edit_content_type() function
+	to return 1 when a structural change is made. Add a warning message
+	when that is the case and a decrypted message was edited, so the
+	user is not surprised.
+
+	Note: mutt_edit_content_type() appeared to regenerate multipart
+	subparts every time, leading to a memory leak. I believe this was an
+	oversite, and it should have regenerated only when there were no
+	subparts, so have "fixed" this.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (38855dc0a02a)
+
+	* crypt-gpgme.c, crypt-gpgme.h, crypt-mod-pgp-classic.c, crypt-mod-
+	pgp-gpgme.c, crypt-mod.h, cryptglue.c, mutt_crypt.h, pgp.c,
+	recvattach.c: Fix attachment check_traditional and extract_keys
+	operations. (see #3728)
+
+	Add helpers and iterate over the actx->idx instead of the BODY
+	structure.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (e6e8b2f1fae3)
+
+	* attach.h, compose.c, pager.c, recvattach.c, recvcmd.c: Fix shared
+	attachment functions. (see #3728)
+
+	With nested decryption, the correct FP is associated with the
+	ATTACHPTR entry. Also, the BODY entries are not continguous, so the
+	functions need to iterate over the actx index, not the BODY
+	structure.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (26e06bd4f29d)
+
+	* recvattach.c: Fix the expand/collapse code to use the virtual index.
+	(see #3728)
+
+	Fix the init code to respect OPTDIGESTCOLLAPSE.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (c7fe290bc3a3)
+
+	* attach.c, attach.h, compose.c, recvattach.c: Add virtual index to
+	actx. (see #3728)
+
+	The virtual index is modeled after the CONTEXT. Add a CURATTACH
+	helper to reduce code verbosity. Store the actx as menu->data.
+
+	Simplify and consolidate the recvattach and compose menu update code
+	inside a function.
+
+	Because compose and recvattach share so much code, change compose to
+	use the virtual index even though it has no collapse/expand
+	functionality.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (23ce88ed8961)
+
+	* attach.c, attach.h, compose.c, protos.h, recvattach.c: Change
+	recvattach to allow nested encryption. (see #3728)
+
+	* Add a FP and BODY array to the actx. These are used to allow
+	proper cleanup.
+
+	* Add HEADER and root_fp entries, to allow for index regeneration.
+
+	* Separate out the compose and recvattach index generation
+	functions.
+
+	* Change the recvattach index generator to decrypt as encrypted
+	parts are found.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (ee1fd4a71a8a)
+
+	* attach.c, attach.h, compose.c, recvattach.c: Add helpers to add and
+	remove actx entries. (see #3728)
+
+	Use the helper in compose update_idx(), to consolidate the resize
+	logic and simplify the code.
+
+	Separate out the actx "free" routine from a routine to empty out the
+	idx. The index regeneration routines should flush and rebuild the
+	index without having to renerate the actx structure.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (b8bbccd98632)
+
+	* attach.c, attach.h, browser.c, compose.c, pager.c, pager.h,
+	recvattach.c, recvcmd.c: Change helpers functions to pass actx. (see
+	#3728)
+
+	Change the pager, compose, recvattach and recvcmd to pass the actx
+	instead of the individual idx and idxlen parameters.
+
+	Separate out the compose menu exit logic to first free the BODY data
+	and then call the shared actx free function at the bottom.
+
+2017-08-10 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (278b6efc6bba)
+
+	* attach.c, attach.h, compose.c, recvattach.c: Create ATTACH_CONTEXT
+	to hold attachment index. (see #3728)
+
+	Move the idx and idxlen into ATTACH_CONTEXT. In subsequence patches,
+	this structure will hold more useful items, such as the virtual
+	index.
+
+	The swap out is straightforward, except for:
+	  * update_idx() in compose.c, which post-increments the idxlen in the
+	call and again in the function.
+	  * mutt_gen_attach_list() which doesn't need to returns the new values.
+
+2017-08-09 08:08 -0700  lilydjwg  <lilydjwg@gmail.com>  (5f034395e53d)
+
+	* po/zh_CN.po: Updated Simplified Chinese translation.
+
+2017-08-08 09:13 -0700  Olaf Hering  <olaf@aepfle.de>  (86f709e4be55)
+
+	* po/de.po: Updated German translation.
+
+2017-08-06 10:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (f8df8c43e5c0)
+
+	* pager.c: Handle error if REGCOMP in pager fails when resizing.
+
+	Thanks to JiaZhouyang for finding this issue and supplying the
+	original patch.
+
+2017-08-04 09:29 -0700  Olaf Hering  <olaf@aepfle.de>  (ac2fda8bc9c4)
+
+	* po/de.po: Updated German translation.
+
+2017-07-28 10:54 -0700  Kevin McCarthy  <kevin@8t8.us>  (f83de1e03e08)
+
+	* configure.ac, mutt_socket.c: Convert raw_socket_poll() to use
+	gettimeofday().
+
+	As long as gettimeofday() is supported, it's better to be consistent
+	within mutt and ensure greater portability.
+
+	Change the raw_socket_poll() wait timer to count milliseconds, like
+	the mutt_progess_update() code.
+
+	Thanks to Vincent Lefèvre for his, as always, invaluable advice.
+
+2017-07-27 00:20 +0100  Vincent Lefevre  <vincent@vinc17.net>  (eeb5ff58ab14)
+
+	* po/fr.po: Updated French translation.
+
+2017-07-24 11:19 -0700  Kevin McCarthy  <kevin@8t8.us>  (f94a97422cd0)
+
+	* configure.ac, mutt_socket.c: Add autoconf search for clock_gettime.
+
+	It appears to be specified in POSIX.1-2001, so just abort if it's
+	not found.
+
+	Add a missing time.h include in mutt_socket.c
+
+2017-07-22 19:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (4a1390537a29)
+
+	* globals.h, imap/command.c, imap/imap.c, imap/imap_private.h, init.h:
+	Add $imap_poll_timeout to allow mailbox polling to time out.
+
+	Enable the polling flag for the NOOP in imap_check_mailbox(), the
+	STATUS command in imap_buffy_check(), and the LOGOUT command.
+
+	This is not intended to handle all blocking-IO related issues.
+	However, the periodic NOOP and STATUS are the most frequent places
+	for mutt to freeze up, especially after a laptop is sleep/woken.
+
+	Since these are quick operations with little data, this is a good
+	place to check if the connection is still working before hanging on
+	a read.
+
+2017-07-22 19:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (908bea74acef)
+
+	* imap/imap.c, mutt_sasl.c, mutt_sasl.h, mutt_socket.c, mutt_socket.h,
+	mutt_tunnel.c: Add timeout parameter to mutt_socket_poll.
+
+	This will be used in the next commit to add a timeout when polling
+	for new mail.
+
+2017-07-20 17:30 -0700  Kevin McCarthy  <kevin@8t8.us>  (a533c22715c8)
+
+	* mutt.h, sendlib.c: When guessing an attachment type, don't allow
+	text/plain if there is a null character. (see #2933)
+
+	Type text/plain should not contain any null characters. Slightly
+	improve the type guesser by forcing an attachment with any null
+	characters to be application/octet-stream.
+
+	Note the type guesser could use much more improvement, but this is
+	an easy and obvious fix.
+
+2017-07-19 14:12 -0700  Kevin McCarthy  <kevin@8t8.us>  (2204d7ed4d94)
+
+	* imap/command.c, imap/imap.c, menu.c: merge stable
+
+2017-07-19 14:04 -0700  Kevin McCarthy  <kevin@8t8.us>  (78cc40b6ba9e)
+
+	* imap/command.c, imap/imap.c: Change imap_cmd_start() to return OK
+	when the cmd_queue is finished. (closes #3956)
+
+	Some response handlers can end up recursively calling
+	imap_cmd_start(), processing all the command completions. If the
+	outer call was an imap_exec(), this would result in the loop never
+	being terminated (or just blocking reading a server that has already
+	finished all the commands).
+
+	Change the callers that are simply using it to read a response,
+	without having called cmd_start(), to check for IMAP_CMD_OK instead.
+	Currently this is just the open connection function.
+
+2017-07-19 14:04 -0700  Kevin McCarthy  <kevin@8t8.us>  (cf98f5d606a3)
+
+	* menu.c: Fix menu color calls to occur before positioning the cursor.
+	(see #3956)
+
+	It is possible for menu->color() to end up fetching an imap message,
+	and therefore generating a status message.
+
+	Because of this, we need to make those calls before we position the
+	cursor.
+
+2017-07-14 15:19 -0700  Kevin McCarthy  <kevin@8t8.us>  (c4e507003aa0)
+
+	* regex.c: Decrease regex failure stack limit. (closes #3955)
+
+	When using alloca(), the built-in regexp library limited the failure
+	stack to 20,000 entries. This value is too large, and causes
+	alloca() to segfault in the example provided in the ticket.
+
+	Decrease the limit to 8000.
+
+	Thanks to Thorsten Wißmann for the excellent bug report, which made
+	debugging this much easier.
+
+2017-07-13 22:05 -0700  Brendan Cully  <brendan@kublai.com>  (9430d2357bc2)
+
+	* imap/imap.c, imap/imap.h, mx.c: drop unused flags argument from
+	imap_access
+
+	We are not using an actual interface so it is pointless.
+
+2017-07-12 21:20 -0700  Brendan Cully  <brendan@kublai.com>  (742c96078159)
+
+	* bcache.c: bcache: cast to avoid implicit signed/unsigned comparison
+	in bcache_path
+
+2017-07-12 12:39 -0700  Kevin McCarthy  <kevin@8t8.us>  (51d22025190a)
+
+	* imap/imap.c: merge stable
+
+2017-07-12 12:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (02c6dd3a30cc)
+
+	* imap/imap.c: Fix crash when $postponed is on another server.
+
+	imap_mxcmp() translates NULL to "INBOX". When $postponed points to a
+	URL with an empty or "INBOX" path, this will end up matching against
+	a NULL idata->mailbox in imap_status(). This resulted in a crash
+	because idata->ctx is also NULL.
+
+	Thanks to Olaf Hering for the detailed bug report and suggested fix.
+
+2017-07-08 16:35 -0700  Brendan Cully  <brendan@kublai.com>  (952e4fcf1e2b)
+
+	* imap/imap.c: fix signed/unsigned comparison in longest_common_prefix
+
+2017-07-05 19:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (428e36fb2262)
+
+	* doc/manual.xml.head, doc/muttrc.man.head, mutt.h, pattern.c: Add
+	~<() and ~>() immediate parent/children patterns. (closes #3144)
+
+	Thanks to Jeremie Le Hen for the original patch, and for his
+	persistence in getting this feature merged.
+
+2017-07-03 19:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (c87d2a88308a)
+
+	* po/bg.po, po/de.po, po/el.po, po/eo.po, po/es.po, po/et.po,
+	po/eu.po, po/ga.po, po/gl.po, po/hu.po, po/id.po, po/it.po,
+	po/ko.po, po/lt.po, po/pl.po, po/pt_BR.po, po/sk.po, po/sv.po,
+	po/tr.po, po/zh_CN.po, po/zh_TW.po: Remove stale certificate prompt
+	translations.
+
+	With the OpenSSL changes, unmaintained translation prompts will not
+	function properly.
+
+	Clear out the translation strings for those using different action
+	keys.
+
+	This changeset does not touch the translation files that are
+	actively maintained. They will be properly updated before the 1.9.0
+	release.
+
+2017-07-03 19:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (752f3e879d50)
+
+	* po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po, po/el.po,
+	po/eo.po, po/es.po, po/et.po, po/eu.po, po/fr.po, po/ga.po,
+	po/gl.po, po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
+	po/lt.po, po/nl.po, po/pl.po, po/pt_BR.po, po/ru.po, po/sk.po,
+	po/sv.po, po/tr.po, po/uk.po, po/zh_CN.po, po/zh_TW.po: Update po
+	files.
+
+2017-07-03 19:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (b90d818b768c)
+
+	* mutt_ssl_gnutls.c: Add L10N comments to the GNUTLS certificate
+	prompt.
+
+	The prompts are shared with OpenSSL, and so the prompts end up being
+	separate from the action key strings.
+
+2017-07-02 17:53 -0700  Kevin McCarthy  <kevin@8t8.us>  (680300397f3d)
+
+	* init.h: Add more description for the %S and %Z $index_format
+	characters.
+
+2017-07-01 19:32 -0700  Kevin McCarthy  <kevin@8t8.us>  (c45291f87137)
+
+	* globals.h, init.h, protos.h, recvcmd.c, send.c: Add config vars for
+	forwarded message attribution intro/trailer.
+
+	Add $forward_attribution_intro and $forward_attribution_trailer to
+	allow the default strings to be overridden.
+
+2017-06-26 15:54 -0700  Antonio Radici  <antonio@dyne.org>  (88602d33a49a)
+
+	* init.h: Fix typo in smime_self_encrypt_as documentation. (closes
+	#3953)
+
+2017-06-26 15:47 -0700  Kevin McCarthy  <kevin@8t8.us>  (c50abea2ec80)
+
+	* init.h: merge stable
+
+2017-06-26 15:44 -0700  Regid Ichira  <regid23@nt1.in>  (826efa89631f)
+
+	* init.h: Minor documentation fixes.
+
+	The muttrc man page doesn't contain the "Format Strings" section in
+	the manual, so add a pointer to the explanation of conditionals in
+	$status_format.
+
+2017-06-20 15:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (219b9064cf28)
+
+	* mutt_socket.c: Block SIGWINCH during connect(). (closes #3941)
+
+	FreeBSD's connect() does not respect SA_RESTART, so a SIGWINCH will
+	end up interrupting the connect.
+
+	If this code is needed in other places, it should be moved into
+	signal.c. For this one place, inlining the sigprocmask() seemed
+	okay.
+
+2017-06-18 10:58 -0700  Kevin McCarthy  <kevin@8t8.us>  (d56fd3f91de9)
+
+	* compose.c: Improve the L10N comment about Sign as.
+
+	Make it clearer what the indentation behavior is, and add
+	suggestions about the width.
+
+	Thanks to TAKAHASHI Tamotsu for the original patch suggesting
+	changes to the L10N comments.
+
+2017-06-18 10:58 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (0efae3363358)
+
+	* po/ja.po: Updated Japanese translation.
+
+2017-06-14 19:21 -0700  Kevin McCarthy  <kevin@8t8.us>  (7dc8a6a3592a)
+
+	* crypt-gpgme.c: Auto-pad translation for the GPGME key selection
+	"verify key" headers.
+
+	Remove the ridiculous need for the translators to pad the
+	translation strings themselves.
+
+2017-06-14 15:23 -0700  Morten Bo Johansen  <mjb@spamcop.net>  (2188de087f35)
+
+	* po/da.po: Updated Danish translation.
+
+2017-06-14 15:12 -0700  Kevin McCarthy  <kevin@8t8.us>  (e8368cedbd95)
+
+	* compose.c, init.h, send.c: Enable all header fields in the compose
+	menu to be translated.
+
+	While it is suggested they need not be, for some locales it might be
+	preferable to be able to localize the fields.
+
+	For instance, fr_FR may want to change the punctuation to have a
+	space in front of the colon. ja_JP may be more comfortable with a
+	native character set description of the field when using it every
+	day.
+
+2017-06-12 18:29 -0700  Kevin McCarthy  <kevin@8t8.us>  (0e3730ed2c3c)
+
+	* sendlib.c: Force hard redraw after $sendmail instead of calling
+	mutt_endwin. (closes #3952) (see #3948)
+
+	Adding a mutt_endwin() seemed like a clean solution to allowing
+	ncurses pinentry for $sendmail, but it leaves other users watching a
+	blank screen. This change is extremely likely to generate a large
+	number of complaints and bug reports. So instead, force a hard
+	refresh afterwards.
+
+2017-06-12 17:57 -0700  Kevin McCarthy  <kevin@8t8.us>  (26cbf2cac701)
+
+	* crypt-gpgme.c: Make GPGME key selection behavior the same as
+	classic-PGP. (see #3950)
+
+	Classic-PGP key selection auto-selected a match if there was a
+	single strong, valid, address-match result, even if there were other
+	weak matches.
+
+	GPGME was prompting in the same situation, if there were other weak
+	matches.
+
+	Change GPGME to match the classic behavior, as this is more useful
+	and matches the manual description.
+
+2017-06-09 11:31 -0700  Consus  <consus@gmx.com>  (dd0208f13983)
+
+	* compose.c: Rename 'sign as' to 'Sign as'; makes compose menu more
+	consistent.
+
+2017-06-09 11:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (b4d0bb558636)
+
+	* compose.c: Change the compose menu fields to be dynamically padded.
+
+	Pad based on the maximum width of the fields. Note that this is a
+	bit of a mess, because some of the fields are translated while
+	others are not.
+
+2017-06-08 13:26 -0700  Kevin McCarthy  <kevin@8t8.us>  (966f08249216)
+
+	* init.c, pgp.c: Backout 02ff4277259e (see #3948)
+
+	Vincent expressed some legitimate concerns about exporting this to
+	all programs lauched by mutt. The user can always set GPG_TTY in
+	their .bashrc if needed for $sendmail. cf90bf5989f3 should resolve
+	the refresh issue.
+
+2017-06-06 18:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (cf90bf5989f3)
+
+	* sendlib.c: Add a mutt_endwin() before invoking $sendmail. (closes
+	#3948)
+
+	This is to support invoking a program such as msmtp that can use gpg
+	to decrypt a password. The ncurses pinentry can corrupt the screen
+	unless we exit curses.
+
+2017-06-06 18:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (02ff4277259e)
+
+	* init.c, pgp.c: Move setting of GPG_TTY to mutt_init(). (see #3948)
+
+	This allows other programs mutt runs to use the ncurses pinentry if
+	needed.
+
+2017-06-06 18:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (915ba3928d49)
+
+	* configure.ac, m4/gettext.m4, pgp.c, protos.h, setenv.c: Restore
+	setenv function.
+
+	Partially revert fa1192803257, restoring setenv. It turns out we
+	still need the function.
+
+2017-06-02 13:17 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (a11770c2137b)
+
+	* po/ja.po: Updated Japanese translation.
+
+2017-06-01 15:17 -0700  Kevin McCarthy  <kevin@8t8.us>  (f26adb2b0543)
+
+	* curs_main.c, menu.c: Fix tag-prefix to not abort on $timeout.
+
+	If $timeout is set very low, then it can cancel the tag-prefix
+	before the user has time to press the desired command.
+
+	Change the code to set the tag flag, and then recontinue with normal
+	event processing instead. Cancel on an abort, but continue with a
+	timeout.
+
+	Thanks to Lauri Tirkkonen for reporting the issue.
+
+2017-06-01 15:17 -0700  Kevin McCarthy  <kevin@8t8.us>  (ec6530cb0a5a)
+
+	* curs_main.c, enter.c, keymap.c, menu.c, pager.c: Change km_dokey()
+	to return -2 on a timeout/sigwinch.
+
+	In some cases, such as tag-prefix or _mutt_enter_string(), it is
+	desirable to be able to distinguish between a timeout/sigwinch event
+	and an input error/abort/ctrl-g.
+
+2017-06-01 13:55 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (152d548c1bcf)
+
+	* main.c: Enable TEXTDOMAINDIR override to make translation testing
+	easier.
+
+	If set, TEXTDOMAINDIR will point to a translation directory instead
+	of using the mutt installation directory.
+
+2017-06-01 13:33 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (4e29b337e967)
+
+	* crypt-gpgme.c, hook.c, init.c, main.c, mutt_ssl.c, pattern.c, pop.c,
+	pop_auth.c: Fix "format string is not a string literal" warnings.
+	(closes #3949)
+
+	Mutt calls msgfmt with '-c' to verify that translation format
+	strings match, but it is still safer to indirect strings with no
+	formatting through %s.
+
+2017-05-31 16:19 -0700  Kevin McCarthy  <kevin@8t8.us>  (093b0c6c6d86)
+
+	* doc/manual.xml.head: merge stable
+
+2017-05-31 16:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (d3922568a777)
+
+	* doc/manual.xml.head: Add note about message scoring and thread
+	patterns. (see #3947)
+
+	Because scoring occurs before the mailbox is sorted, thread patterns
+	don't work. Document a suggested workaround of pushing the score
+	command in a folder hook.
+
+	Also, fix the link target for the score command synopsis.
+
+2017-05-30 12:49 -0700  Kevin McCarthy  <kevin@8t8.us>  (35fba390b1f3)
+
+	* merge stable
+
+2017-05-30 12:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (fff7d4bb459a)
+
+	* .hgsigs: mutt-1.8.3 signed
+
+2017-05-30 12:47 -0700  Kevin McCarthy  <kevin@8t8.us>  (6a54fbc38fa4)
+
+	* .hgtags: Added tag mutt-1-8-3-rel for changeset fe5275246e13
+
+2017-05-30 12:47 -0700  Kevin McCarthy  <kevin@8t8.us>  (fe5275246e13)
+
+	* ChangeLog, UPDATING, VERSION: automatic post-release commit for
+	mutt-1.8.3
+
+2017-05-29 11:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (228364e8abb7)
+
+	* init.h, send.c: Change $postpone_encrypt to use self-encrypt
+	variables first.
+
+	The concept of postpone encryption is similar to self-encrypting on
+	send. The problem is the $postpone_encrypt_as option doesn't take
+	into account whether PGP or S/MIME is being used.
+
+	Since we need to add the new options for self-encryption, modify
+	$postpone_encrypt to use them by default instead, falling back to
+	$postpone_encrypt_as if they are unset. Note $postpone_encrypt_as is
+	deprecated in the documentation.
+
+2017-05-29 11:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (ca95f3e38355)
+
+	* crypt.c, globals.h, init.h, mutt.h: Add self-encrypt options for PGP
+	and S/MIME.
+
+	Add $pgp_self_encrypt, $pgp_self_encrypt_as, $smime_self_encrypt,
+	$smime_self_encrypt_as.
+
+	$pgp_sign_as and $smime_default_key are inappropriate to use, as
+	they specify signing key/certs. In some cases, this is a different
+	value than the encryption key/cert.
+
+2017-05-29 11:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (085fc55029d8)
+
+	* smime.c: Convert classic s/mime to space delimit findKeys output.
+
+	Unlike gpgme and classic pgp, smime used a "cert\ncert\n" pattern.
+	Convert to use a space-delimited format, so the self-encrypt option
+	code can be uniform across pgp, s/mime, and gpgme.
+
+2017-05-24 15:46 -0700  Kevin McCarthy  <kevin@8t8.us>  (a636bc4a4940)
+
+	* imap/message.c: Change imap body cache cleanup to use the uid_hash.
+
+	This should speed up $message_cache_clean cleanup when syncing.
+
+2017-05-23 15:54 -0700  Kevin McCarthy  <kevin@8t8.us>  (8904261ed212)
+
+	* merge stable
+
+2017-05-23 15:53 -0700  Kevin McCarthy  <kevin@8t8.us>  (fa0c2155ab8f)
+
+	* mx.c: Fix memory leak when closing mailbox and using the sidebar.
+
+	The code updating the sidebar counts decremented the msgcount, but
+	did not set it back to the original value. Which means fastclose was
+	not freeing all the headers.
+
+	Update the sidebar only when something is deleted, since I don't
+	believe it's required otherwise and the code is a bit cleaner that
+	way.
+
+2017-05-22 18:30 -0700  Kevin McCarthy  <kevin@8t8.us>  (407100d15766)
+
+	* imap/imap.c: Don't clean up msn idata when closing an open-append
+	mailbox. (see #3942)
+
+	This is a continuation of commit 59a2125b49f2 with changes made in
+	the default branch.
+
+	Thanks again to Will Yardley for helping test the imap read-headers
+	changes and discovering this bug.
+
+2017-05-22 18:25 -0700  Kevin McCarthy  <kevin@8t8.us>  (aec6b48e8ea5)
+
+	* imap/imap.c: merge stable
+
+2017-05-22 18:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (59a2125b49f2)
+
+	* imap/imap.c: Don't clean up idata when closing an open-append
+	mailbox.
+
+	open-append borrows the idata just for the connection. The "mailbox
+	specific" part of the idata may be being used by a normal open-
+	mailbox.
+
+	Don't free the idata "mailbox specific" part when closing an open-
+	append mailbox.
+
+	Thanks to Will Yardley for discovering the bug as part of testing
+	the revised IMAP fetch_headers code (in the default branch).
+
+2017-05-22 05:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (e614fb00459b)
+
+	* merge stable
+
+2017-05-22 05:08 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (1ddf2641f369)
+
+	* mx.c: Fix potential segv if mx_open_mailbox is passed an empty
+	string. (closes #3945)
+
+	If path is "", ctx->path will be NULL. realpath() generally will
+	segv if the first parameter is NULL.
+
+2017-05-22 04:43 -0700  Kevin McCarthy  <kevin@8t8.us>  (4ab3a8a2e321)
+
+	* imap/message.c: Fix mfc overflow check and uninitialized variable.
+
+	The check borrowed from mx_alloc_memory() works because it is
+	incremented 25 at a time. I don't believe it will work for the
+	direct set case used in imap_alloc_msn_index(). Instead, use a more
+	conservative check.
+
+	In imap_read_headers(), make sure mfhrc is initialized. It would be
+	tested without being set if imap_cmd_step() returned OK right away.
+
+2017-05-21 18:45 -0700  Kevin McCarthy  <kevin@8t8.us>  (5904c6376f77)
+
+	* imap/message.c: Don't abort header cache evaluation when there is a
+	hole. (see #3942)
+
+	Instead, find the first missing MSN and generate a more complicated
+	sequence set specifying the missing ranges.
+
+	This removes the assumption that the header cache query returned
+	results in MSN order.
+
+2017-05-21 18:45 -0700  Kevin McCarthy  <kevin@8t8.us>  (1658ab70377b)
+
+	* imap/message.c: Small imap fetch fixes. (see #3942)
+
+	Add an integer overflow test, pulled from mx_alloc_memory(), since
+	the count comes from a potentially hostile server.
+
+	After reviewing the RFC a bit, it turns out the server is not
+	supposed to send EXPUNGE responses during a FETCH. Change the
+	comment, but keep the conservative code.
+
+2017-05-21 10:51 -0700  Kevin McCarthy  <kevin@8t8.us>  (f87c679e508f)
+
+	* imap/message.c: Properly adjust fetch ranges when handling new mail.
+	(see #3942)
+
+	When pulling down headers, it is possible for expunge responses to
+	happen too. If we get a new mail count, we need to take into account
+	changes to the max_msn due to the expunges.
+
+2017-05-20 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (77d3173aecff)
+
+	* imap/command.c, imap/imap.c, imap/imap_private.h, imap/message.c:
+	Add msn_index and max_msn to find and check boundaries by MSN. (see
+	#3942)
+
+	Since there can be gaps in MSNs, the largest MSN in the context is
+	not necessarily ctx->msgcount.
+
+	Use max_msn instead of ctx->msgcount for:
+	  - the starting MSN of new mail header fetching
+	  - boundary checking in fetch, expunge, and other places
+
+	Use msn_index to efficiently look up headers by MSN. This makes the
+	expunge code slightly more efficient. It also makes FETCH handling,
+	and duplicate FETCH FLAG handling efficient.
+
+2017-05-20 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (5289d2caadbb)
+
+	* imap/command.c, imap/imap.c, imap/imap_private.h, imap/message.c:
+	Start fixing imap_read_headers() to account for MSN gaps. (see
+	#3942)
+
+	Change the parameters to pass MSN instead of index, to make a bit
+	simpler.
+
+	Change header cache evaluation to look at the largest MSN retrieved
+	instead of ctx->msgcount for the next fetch start point. This still
+	depends on the assumption that MSNs are retrieved in ascending
+	order, which needs to be fixed.
+
+	Simplify the header cache inner loop termination and memory cleanup
+	logic. Fix a memory leak if a hole in the header cache occured.
+
+	Fix the header retrieval logic to take into account MSN gaps in the
+	results. Loop only as long as we get IMAP_CMD_CONTINUE instead of
+	over a fixed count. Simplify the inner loop termination and memory
+	cleanup logic too.
+
+	Simplify the "new mail while fetching" logic by creating a third
+	outer loop to handle re-fetches.
+
+	Fix msg_fetch_header() to return -2 if msg_parse_fetch() encounters
+	a corrupt FETCH response. Previously it would pass on the rc of
+	msg_parse_fetch(), meaning it would return -1 even though the
+	response was corrupt.
+
+2017-05-20 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (b85bf6466c79)
+
+	* imap/command.c: Fix cmd_parse_fetch() to match against MSN. (see
+	#3942)
+
+2017-05-20 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (ab3595fbb698)
+
+	* imap/command.c, imap/imap.c: Fix imap expunge to match msn and fix
+	index. (see #3942)
+
+	The expunge needs to match against the MSN now. Since
+	cmd_parse_expunge() does not automatically fix h->index anymore,
+	change imap_expunge_mailbox() to fix up the h->index values.
+
+2017-05-20 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (27bb55faa024)
+
+	* imap/message.c, imap/message.h: Move the IMAP msn field to
+	IMAP_HEADER_DATA. (see #3942)
+
+	Ticket 3942 revealed that it is possible for a FETCH to have gaps in
+	the MSN numbers of the results. The code makes many assumptions that
+	equate context index counts and MSN. This is the first in a series
+	of commits fixing that assumption.
+
+	The header->index field is supposed to hold the SORT_ORDER index
+	number of the message. If there are gaps in the MSN, than the
+	highext MSN can in fact be out of the range 0..ctx->msgcount-1.
+
+	After studying the code, I believe curs_main.c would actually work
+	with header->index values out of the range, at least for IMAP. But
+	some other parts of the code, such as mutt_reopen_mailbox(), do rely
+	on the values being a valid index to ctx->hdrs[]. And the
+	intertwining of menu->oldcurrent with header->index values makes me
+	nervous about future changes.
+
+	So, to be safe, move the MSN to its own field in IMAP_HEADER_DATA.
+
+	The next commit will fix the EXPUNGE behavior.
+
+2017-05-13 09:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (4bffaa6d189a)
+
+	* history.c: Don't filter new entries when compacting history save
+	file.
+
+	If new entries are added between the two passes, they won't be in
+	the dup_hash. The original intent was to filter added duplicates,
+	but the check would also filter brand new entries.
+
+2017-05-12 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (7a4cc1750940)
+
+	* doc/manual.xml.head, history.c, init.h: Also remove duplicates from
+	the history file.
+
+	When $history_remove_dups is set, remove duplicates from the history
+	file when it is periodically compacted.
+
+2017-05-12 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (e66c6c0e8cc6)
+
+	* doc/manual.xml.head, history.c, init.h, mutt.h: Add
+	$history_remove_dups option to remove dups from history ring.
+
+	When set, duplicate entries will be removed from the history ring
+	when a new entry is added. The duplicate removal rearranges the
+	history ring such that created empty slots are right after the
+	"last" position in the ring, preserving the most history.
+
+	Rewrite the next/prev functions to take into account that blank
+	slots can now be in the middle of the array.
+
+2017-05-12 09:16 -0700  Kevin McCarthy  <kevin@8t8.us>  (149f842ed1d0)
+
+	* merge stable
+
+2017-05-12 09:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (a97afb72d892)
+
+	* imap/imap.c: Turn IMAP_EXPUNGE_EXPECTED back off when syncing.
+	(closes #3940).
+
+	imap_sync_mailbox() turned on IMAP_EXPUNGE_EXPECTED when issuing a
+	EXPUNGE command during a sync. However, it forgot to turn it back
+	off.
+
+	That meant that an unexpected EXPUNGE that occurred during a
+	mx_check_mailbox -> imap_check_mailbox() -> imap_cmd_finish() call
+	was not setting idata->check_status = IMAP_EXPUNGE_PENDING; and so
+	imap_check_mailbox() was not returning MUTT_REOPENED.
+
+	This meant that although the Context had been changed, the index did
+	not run update_index(), resulting in a possible segfault.
+
+	Thanks to Uroš Juvan for reporting the issue, and his invaluable
+	description of how to reproduce the problem.
+
+2017-05-09 16:07 -0700  Kevin McCarthy  <kevin@8t8.us>  (7f95b4c993b2)
+
+	* init.c, init.h, menu.c, mutt_menu.h, pager.c: Create R_PAGER_FLOW
+	config variable flag.
+
+	Use this for $header_color_partial, $markers, and $smart_wrap. When
+	these options are changed in the pager, this flag will force a
+	recalculation of lineInfo.
+
+	Remove the manual checks in OP_ENTER_COMMAND for $markers and
+	$smart_wrap, and instead use the same REDRAW_FLOW processing used
+	for a SigWinch.
+
+2017-05-09 16:07 -0700  Kevin McCarthy  <kevin@8t8.us>  (3fd8c4af4658)
+
+	* curs_lib.c, mutt_menu.h, pager.c: Rename REDRAW_SIGWINCH to
+	REDRAW_FLOW.
+
+	The next patch will attach this redraw flag to pager settings. The
+	former name becomes somewhat confusing with the expanded usage, so
+	rename it to something more relevant to what is being redrawn.
+
+2017-05-08 18:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (92d9db08a35e)
+
+	* doc/manual.xml.head, init.h, mutt.h, pager.c: Add
+	$header_color_partial to allow partial coloring of headers.
+
+	When set, a regexp match will color only the matched text in the
+	header. When unset (the default), the entire header will have color
+	applied.
+
+	With appropriate regexps, this allows coloring of just the header
+	field name. Of course, it can also be used to highlight arbitrary
+	phrases in the headers too.
+
+2017-05-07 15:11 -0700  Kevin McCarthy  <kevin@8t8.us>  (5006a0a36405)
+
+	* mh.c: Improve maildir and mh to report flag changes in
+	mx_check_mailbox() (closes #3865)
+
+	mx_check_mailbox() would update the header flags, but was not
+	returning MUTT_FLAGS back to the index loop. That meant a screen
+	redraw was needed to be notified of externally modified flags.
+
+	Change maildir_update_flags() to return 1 if the flags were actually
+	changed. Change maildir_check_mailbox() and mh_check_mailbox() to
+	return MUTT_FLAGS when that happens.
+
+	Thanks to jcdenton and mike-burns for the original patch.
+
+2017-05-05 14:03 -0700  Kevin McCarthy  <kevin@8t8.us>  (161d5f18cae5)
+
+	* curs_main.c: merge stable
+
+2017-05-05 13:55 -0700  Kevin McCarthy  <kevin@8t8.us>  (71cb68efe98e)
+
+	* curs_main.c: Don't modify LastFolder/CurrentFolder upon aborting a
+	change folder operation.
+
+	Set LastFolder and CurrentFolder after mx_close_mailbox() has
+	successfully completed. Otherwise, if the close is aborted, they
+	will have incorrect values.
+
+2017-05-05 12:46 -0700  Kevin McCarthy  <kevin@8t8.us>  (6d4ceb8c5b9e)
+
+	* curs_main.c, menu.c, pager.c, postpone.c: Change message modifying
+	operations to additively set redraw flags.
+
+	With the ability to set redraw flags with the menu stack operations,
+	some operations internally modify the current menu redraw flag. For
+	instance, _mutt_set_flag() can now set REDRAW_SIDEBAR.
+
+	Change the ops that modify messages to use 'redraw |= REDRAW_X'
+	instead of overwriting the flag value.
+
+2017-05-04 18:11 -0700  Kevin McCarthy  <kevin@8t8.us>  (c8ac1df1dcc9)
+
+	* merge stable
+
+2017-05-04 18:05 -0700  Kevin McCarthy  <kevin@8t8.us>  (c08c72a0e24c)
+
+	* mx.c: Fix sidebar count updates when closing mailbox. (closes #3938)
+
+	The context unread and flagged counts were being updated too early
+	in mx_close_mailbox(). Cancelling at any of the following prompts
+	would leave them in an incorrect state. Additionally, $move could
+	increase the delete count (for flagged messages), and $delete, if
+	answered no, could turn off message deletion.
+
+	Move all the sidebar buffy stat updating to the bottom of the
+	function, after all the prompts and processing.
+
+2017-05-03 18:52 -0700  Kevin McCarthy  <kevin@8t8.us>  (a6db4750f675)
+
+	* color.c, compose.c, doc/manual.xml.head, mutt_curses.h: Add color
+	commands for the compose menu headers and security status. (closes
+	#3915).
+
+	Add "color compose header" to color the From/To/Subject/etc fields
+	in the compose menu.
+
+	Add "color compose security_encrypt/sign/both/none" to color the
+	security status of the message.
+
+2017-04-30 15:56 -0700  Kevin McCarthy  <kevin@8t8.us>  (7e1edf6a7ed7)
+
+	* sendlib.c: Remove glibc-specific execvpe() call in sendlib.c. (see
+	#3937)
+
+	Changeset fa1192803257 converted all exec calls to use
+	mutt_envlist(). Unfortunately, the call in sendlib.c, execvpe(), is
+	a glibc extension.
+
+	Convert back to execvp() for now, to fix the build on MacOS.
+
+2017-04-30 15:21 -0700  Kevin McCarthy  <kevin@8t8.us>  (7dd3de416a54)
+
+	* merge stable
+
+2017-04-30 15:20 -0700  Kevin McCarthy  <kevin@8t8.us>  (829584614fd6)
+
+	* headers.c: Refresh header color when updating label. (closes #3935)
+
+	color index with a '~y' pattern were not being updated after
+	adding/removing labels.
+
+2017-04-30 14:25 -0700  Kevin McCarthy  <kevin@8t8.us>  (84acb1832fa9)
+
+	* init.c, init.h: merge stable
+
+2017-04-30 14:24 -0700  Kevin McCarthy  <kevin@8t8.us>  (c54ac874a32b)
+
+	* init.c, init.h: Fix unused function warnings when sidebar is
+	disabled. (closes #3936)
+
+	parse_path_list/unlist are currently only used by the
+	un/sidebar_whitelist commands. Add an ifdef around them to stop an
+	unused function warning. Add a comment too, so it's clear why they
+	are ifdef'ed.
+
+2017-04-30 13:32 -0700  Kevin McCarthy  <kevin@8t8.us>  (b3d9d7a2f677)
+
+	* merge stable
+
+2017-04-30 13:32 -0700  Kevin McCarthy  <kevin@8t8.us>  (deb66bd24b9d)
+
+	* doc/manual.xml.head: Note that mbox-hooks are dependent on $move.
+
+	Add a note to the "Using Multiple Spool Mailboxes" section.
+
+2017-04-30 12:25 -0700  Vincent Lefevre  <vincent@vinc17.org>  (fa1192803257)
+
+	* configure.ac, m4/gettext.m4, mutt_tunnel.c, pgp.c, protos.h,
+	sendlib.c, setenv.c: Convert all exec calls to use mutt_envlist(),
+	remove setenv function.
+
+	The documentation implies that all children processes will be
+	affected by the setenv command, so convert all the exec calls to use
+	mutt_envlist().
+
+	The setenv("GPG_TTY") call is no longer needed so remove it.
+
+	With that removed, there are no other setenv calls in mutt, so
+	remove the autoconf check and replacement function.
+
+2017-04-27 21:23 -0700  Kevin McCarthy  <kevin@8t8.us>  (c65d0c23c142)
+
+	* curs_lib.c, keymap.c, mutt_curses.h: merge stable
+
+2017-04-27 21:22 -0700  Kevin McCarthy  <kevin@8t8.us>  (b8952095b583)
+
+	* curs_lib.c, keymap.c, mutt_curses.h: Fix km_error_key() infinite
+	loop and unget buffer pollution.
+
+	'bind pager \Ch help' produces an infinite loop when an unbound key
+	is pressed in the pager. The reason is because km_error_key() tries
+	to verify that the key sequence is really bound to the OP_HELP
+	operation. It does this by using km_expand_key(),
+	tokenize_unget_string() on the resulting buffer, then checking if
+	the next km_dokey() returns OP_HELP.
+
+	The problem is that km_expand_key() does not always produce a string
+	that is properly reparsed by tokenize_unget_string(). Control-h
+	sequences are expanded to ^H. tokenize_unget_string() recognizes
+	this as two characters '^' and 'H'. km_error_key() checks the OP
+	returned, which is OP_PAGER_TOP for the '^'. This is not OP_HELP, so
+	it prints a generic error and returns. This leaves the 'H' in the
+	input buffer! Since 'H' (by default) is unbound in the pager, it
+	retriggers km_error_key(), resulting in an infinite loop.
+
+	The same issues can occur without control sequences: bind generic ?
+	noop bind generic dq help In the index, hitting an unbound key will
+	end up leaving 'q' in the unget buffer, because 'd' is bound in the
+	index menu and will be read by km_dokey().
+
+	A simple approach to fix this would be to just use the same code as
+	in mutt_make_help(), which has no double-check. This would be no
+	worse than the help menu, but can generate an inaccurate error
+	message (e.g if '?' were bound to noop)
+
+	This patch instead uses OP_END_COND as a barrier in the unget
+	buffer. It directly inserts the keys in the OP_HELP keymap, instead
+	of using km_expand_key() + tokenize_unget_string(). After calling
+	km_dokey() it flushes the unget buffer to the OP_END_COND barrier.
+
+	Thanks to Walter Alejandro Iglesias for reporting the bug.
+
+2017-04-26 15:43 -0700  Kevin McCarthy  <kevin@8t8.us>  (92671c9c17bd)
+
+	* merge stable
+
+2017-04-26 15:40 -0700  Roger Cornelius  <rac@tenzing.org>  (9a0afe7815d1)
+
+	* mx.c: Fix error message when opening a mailbox with no read
+	permission. (closes #3934)
+
+	ctx->mx_ops ends up being NULL for both the case that ctx->magic is
+	0 and -1. This meant the mutt_perror() error message was never being
+	printed, because the check for ctx->mx_ops == NULL was taking place
+	first.
+
+	Move the "ctx->magic == -1" check first, so mutt will print out an
+	appropriate perror message in that case.
+
+2017-04-18 16:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (69df899cdfa9)
+
+	* merge stable
+
+2017-04-18 16:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (2c57a7b4dc0b)
+
+	* .hgsigs: mutt-1.8.2 signed
+
+2017-04-18 16:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (455a698f274b)
+
+	* .hgtags: Added tag mutt-1-8-2-rel for changeset c6ea4aed6bec
+
+2017-04-18 16:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (c6ea4aed6bec)
+
+	* ChangeLog, UPDATING, VERSION: automatic post-release commit for
+	mutt-1.8.2
+
+2017-04-18 13:13 -0700  Kevin McCarthy  <kevin@8t8.us>  (385ba6449c30)
+
+	* commands.c: Revert sort prompt labels. (see #3930)
+
+	Using the (s)ort style may look a bit better, but it makes the
+	prompt over 80 columns. The multichoice prompt supports multiple
+	lines now, but it is better to have it fit on one line if possible.
+
+	Revert back to the "capital letter" method, but leave the ticket
+	open, to explore other ideas that Vincent and chdiza have for better
+	ways to present a long choice like this.
+
+2017-04-18 12:25 -0700  Kevin McCarthy  <kevin@8t8.us>  (67677bca06fe)
+
+	* init.c, pgp.c, protos.h: merge stable
+
+2017-04-18 12:25 -0700  Kevin McCarthy  <kevin@8t8.us>  (33995363e723)
+
+	* filter.c, init.c, pgp.c, protos.h: Fix GPG_TTY to be added to
+	envlist. (closes #3931)
+
+	Changeset 37209157e33c converted filters to use the envlist.
+	Unfortunately, I missed that pgp.c sets GPG_TTY when using the GnuPG
+	agent. Convert to add GPG_TTY to the envlist too.
+
+2017-04-17 17:40 -0700  Kevin McCarthy  <kevin@8t8.us>  (851a7ec95399)
+
+	* pager.c: Handle the pager sort prompt inside the pager.
+
+	Display the prompt in the pager, so a multiline prompt or resize
+	doesn't refresh the index menu. Then, bounce back through the index
+	to handle resorting and status line updates.
+
+	This also fixes cancelling to stay in the pager.
+
+2017-04-17 17:40 -0700  Kevin McCarthy  <kevin@8t8.us>  (979f1e669c16)
+
+	* commands.c: Change the sort prompt to use (s)ort style prompts.
+
+	This is consistent with the rest of mutt, and in my opinion, more
+	readable.
+
+2017-04-16 14:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (61295113f7ab)
+
+	* curs_lib.c: Add multiline and sigwinch handling to mutt_yesorno.
+	(closes #3877)
+
+	Most of the yes/no and query_quadoption prompts are pretty short,
+	but for completeness add handling for those too.
+
+2017-04-15 12:56 -0700  Kevin McCarthy  <kevin@8t8.us>  (2be3dd383c35)
+
+	* curs_lib.c, pager.c: Set pager's REDRAW_SIGWINCH when reflowing
+	windows.
+
+	So that all external reflow handling functions don't have to
+	remember to set the flag too.
+
+2017-04-15 12:56 -0700  Kevin McCarthy  <kevin@8t8.us>  (5849d1a052bb)
+
+	* curs_lib.c: Add multiline and sigwinch handling to
+	mutt_multi_choice. (see #3877)
+
+	Resize the message window up to three lines to fix wide prompts.
+
+	Enable sigwinch processing and redraw the current menu as needed.
+
+2017-04-15 12:56 -0700  Kevin McCarthy  <kevin@8t8.us>  (24e38e932693)
+
+	* curs_lib.c, enter.c: Add ifdefs around new mutt_resize_screen calls.
+
+	Changeset 231fa2eff206 added sigwinch handling to
+	_mutt_enter_string() but neglected to add an ifdef check.
+
+2017-04-12 18:00 -0700  Kevin McCarthy  <kevin@8t8.us>  (39bf12dccf0c)
+
+	* merge stable
+
+2017-04-12 17:45 -0700  Kevin McCarthy  <kevin@8t8.us>  (feccc2ac1b9a)
+
+	* .hgsigs: mutt-1.8.1 signed
+
+2017-04-12 17:44 -0700  Kevin McCarthy  <kevin@8t8.us>  (491f7cfa03d9)
+
+	* .hgtags: Added tag mutt-1-8-1-rel for changeset f44974c10990
+
+2017-04-12 17:43 -0700  Kevin McCarthy  <kevin@8t8.us>  (f44974c10990)
+
+	* ChangeLog, UPDATING, VERSION: automatic post-release commit for
+	mutt-1.8.1
+
+2017-04-11 12:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (3c46ef05dca9)
+
+	* compose.c: merge stable
+
+2017-04-11 12:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (b825cbcaf6b5)
+
+	* compose.c: Fix memleak when attaching files.
+
+2017-04-08 14:21 -0700  Kevin McCarthy  <kevin@8t8.us>  (29239b1a6d50)
+
+	* commands.c: Ensure mutt stays in endwin during calls to pipe_msg()
+	(closes #3929)
+
+	The previous commit solved the problem reported in #3929:
+	progressbar output while downloading a message via IMAP was
+	refreshing the mutt ncurses session after launching the pipe
+	program.
+
+	To ensure another place in the code doesn't inadvertantly generate
+	output, wrap OPTKEEPQUIET around the calls to
+	pipe_msg()/mutt_wait_filter() too.
+
+2017-04-08 14:21 -0700  Kevin McCarthy  <kevin@8t8.us>  (0bf83c2fbbf2)
+
+	* merge stable
+
+2017-04-08 14:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (a8b1017a4cc1)
+
+	* imap/message.c: Silence imap progress messages for pipe-message.
+	(see #3929)
+
+	_mutt_pipe_message() calls endwin(), and then calls pipe_msg(). If
+	an imap message body hasn't already been downloaded, this can end up
+	calling imap_fetch_message().
+
+	The progress messages in imap_fetch_message() were restoring curses,
+	just after extract_url was running. This was leading to a condition
+	where mutt curses didn't think the screen had changed after
+	extract_url exited.
+
+	There was already a check for isendwin() inside
+	imap_fetch_message(), but it wasn't wrapped around the progressbar
+	creation/usage. Add a check for those places too.
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (303fc058692f)
+
+	* query.c: Don't create query menu until after initial prompt. (see
+	#3877)
+
+	A resize in the prompt will trigger a redraw, but the data won't be
+	loaded yet, displaying a blank screen instead of the previous menu.
+	Once the query is done, the data is loaded, but the menu->redraw
+	state has been changed by the resize.
+
+	We could manually flag a redraw, but it makes more sense visually
+	logically to just create the menu after the query and results are
+	loaded.
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (86848e5932b0)
+
+	* curs_lib.c, pager.c: Separate out the pager menu redrawing. (see
+	#3877)
+
+	The pager relies on REDRAW_SIGWINCH, so add that to
+	_mutt_get_field().
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (dcc95921c3c5)
+
+	* pager.c: Prepare for pager redraw separation. (see #3877)
+
+	Move some of the code inside SigWinch handling into the REDRAW part
+	of the code.
+
+	SigInt is handled by mutt_getch(), so remove the redundant code from
+	inside the pager.
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (178bd8b53cab)
+
+	* curs_main.c: Separate out the index menu redrawing. (see #3877)
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (c651b528f958)
+
+	* compose.c, menu.c, mutt_menu.h: Separate out the compose menu
+	redrawing. (see #3877)
+
+	Add a custom_menu_redraw to the menu and change menu_redraw() to
+	call that instead if set.
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (231fa2eff206)
+
+	* curs_lib.c, enter.c, keymap.c, menu.c, mutt_menu.h: Change
+	km_dokey() to pass SigWinch on for the MENU_EDITOR. (see #3877)
+
+	Change _mutt_enter_string() to pass the SigWinch through for
+	_mutt_get_field() or mutt_enter_string() to handle.
+
+	Add a call to mutt_current_menu() in _mutt_get_field() to properly
+	redisplay the screen in that case.
+
+2017-04-05 16:09 -0700  Kevin McCarthy  <kevin@8t8.us>  (7f6ff45a7f59)
+
+	* init.c: Remove redraw flag setting after mutt_endwin().
+
+	There is no need to set a redraw flag in this case. The screen will
+	automatically be properly redrawn on the next refresh().
+
+	Remove, lest it get propagated.
+
+2017-03-31 18:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (8b9bbd983b1a)
+
+	* commands.c, compose.c, curs_lib.c, curs_main.c, pager.c, protos.h:
+	Remove refresh parameter from mutt_enter_fname().
+
+	Also remove it from mutt_save_message(), which used it to pass
+	through to mutt_enter_fname(). The callers of this already had
+	redraw logic, to which REDRAW_STATUS merely needed to be added.
+
+2017-03-31 18:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (68bbc47c8498)
+
+	* init.c, init.h: Create R_MENU redraw option.
+
+	Previously, the R_INDEX option meant both the index as well as all
+	other menus. The removal of the OPTFORCEREDRAWINDEX option caused
+	problems with redrawing other menus for options such as
+	arrow_cursor.
+
+	One solution would be change R_INDEX back to meaning "everything"
+	except pager, but there are only a handful of options that affect
+	other menus.
+
+	Instead, create R_MENU to indicate options that affect either all
+	menus or one of the other menus beside the index and pager.
+
+2017-03-31 18:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (7f47e330bd72)
+
+	* curs_lib.c, curs_main.c, init.h, pager.c: Change reflow_windows() to
+	set full redraw.
+
+	A full redraw should always be set in this case. This also enables
+	us to remove redraw flags for some options.
+
+2017-03-31 18:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (b36e4918d1d9)
+
+	* buffy.c, curs_main.c, flags.c, globals.h, imap/command.c, init.c,
+	menu.c, pager.c, sidebar.c: Remove SidebarNeedsRedraw.
+
+	The menu stack can be used to flag a redraw of the sidebar window.
+
+2017-03-31 18:15 -0700  Kevin McCarthy  <kevin@8t8.us>  (06553f524887)
+
+	* color.c, curs_lib.c, curs_main.c, init.c, menu.c, mutt.h,
+	mutt_menu.h, pager.c, score.c: Remove the OPTFORCEREDRAW options.
+
+	Use the menu stack to flag redraws for the index and pager.
+
+2017-03-31 17:29 +0200  Vincent Lefevre  <vincent@vinc17.net>  (6fb6021389c8)
+
+	* mbyte.c: Filter other directional markers that corrupt the screen.
+
+2017-03-27 11:46 -0700  Kevin McCarthy  <kevin@8t8.us>  (4c7881c441e7)
+
+	* init.h: merge stable
+
+2017-03-27 11:39 -0700  Kevin McCarthy  <kevin@8t8.us>  (77032036c642)
+
+	* init.c, init.h: Fix (un)sidebar_whitelist to expand paths.
+
+	Thanks to Arturo for reporting the issue.
+
+2017-03-26 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (4d06d85a4dd7)
+
+	* curs_main.c: Don't full redraw the index when handling a command
+	from the pager.
+
+	This causes a noticable flicker when moving through messages from
+	the pager.
+
+2017-03-26 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (cb57cd88846b)
+
+	* compose.c, crypt-gpgme.c, crypt-gpgme.h, crypt-mod-pgp-classic.c,
+	crypt-mod-pgp-gpgme.c, crypt-mod-smime-classic.c, crypt-mod-smime-
+	gpgme.c, crypt-mod.h, cryptglue.c, mutt_crypt.h, pgp.c, pgp.h,
+	smime.c, smime.h: Remove redraw parameter from crypt send_menus.
+
+	The parameter was used to notify the caller if the sign (a)s menu
+	was invoked, which displayed the key selection menu. This is no
+	longer necessary with the menu stack pop operation.
+
+2017-03-26 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (7cced4378ed5)
+
+	* addrbook.c, browser.c, commands.c, compose.c, crypt-gpgme.c,
+	curs_lib.c, curs_main.c, enter.c, menu.c, mutt.h, mutt_curses.h,
+	mutt_menu.h, mutt_ssl.c, pager.c, pgpkey.c, protos.h, query.c,
+	remailer.c, remailer.h, smime.c: Set refresh when popping the menu
+	stack.
+
+	This removes the need for the OPTNEEDREDRAW option and MAYBE_REDRAW
+	macro previously used to communicate back the need to refresh after
+	exiting a menu.
+
+	Remove the redraw parameter from ci_bounce_message() and
+	mix_make_chain() which served the same purpose.
+
+2017-03-26 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (dbb9fbe9b3de)
+
+	* curs_main.c, menu.c, pager.c: Change CurrentMenu to be controlled by
+	the menu stack.
+
+	The pager menu is a bit tricky with respect to the menu->menu and
+	CurrentMenu, so add a few comments.
+
+2017-03-26 18:31 -0700  Kevin McCarthy  <kevin@8t8.us>  (6551825f99fa)
+
+	* addrbook.c, browser.c, compose.c, crypt-gpgme.c, curs_main.c,
+	menu.c, mutt_menu.h, mutt_ssl.c, mutt_ssl_gnutls.c, pager.c,
+	pgpkey.c, postpone.c, query.c, recvattach.c, remailer.c, smime.c:
+	Add a menu stack to track current and past menus.
+
+	Change the pager to use a MENU, right now just to hold the refresh
+	state.
+
+2017-03-26 12:27 -0700  Kevin McCarthy  <kevin@8t8.us>  (b8519ee6bd74)
+
+	* merge stable
+
+2017-03-26 12:27 -0700  Kevin McCarthy  <kevin@8t8.us>  (9da67ea88f25)
+
+	* curs_lib.c: Fix mutt_refresh() pausing during macro events.
+
+	Changeset a07e8215a0ef split input buffering into two pools.
+	Unfortunately, the mutt_refresh() was not changed to check the
+	correct buffer count, resulting in unnecessary refreshes during
+	macros.
+
+	The SSL interactive certificate prompts set OPTIGNOREMACROEVENTS and
+	then put up a confirmation menu. Perhaps we've just been lucky, but
+	it seems we should refresh the screen in those cases if we're in the
+	middle of a macro. Add a check for this option in mutt_refresh()
+	too.
+
+2017-03-20 10:18 -0700  Kevin McCarthy  <kevin@8t8.us>  (c875e6f4785d)
+
+	* merge stable
+
+2017-03-20 10:16 -0700  Kevin McCarthy  <kevin@8t8.us>  (7cefa378ab7e)
+
+	* init.c: Fix setenv overwriting to not truncate the envlist. (see
+	#3922)
+
+	The refactor in 2b9c40f13e13 exposed a bug I hadn't noticed. The
+	match loop performed a FREE() on the slot. Then, below, it was
+	checking if (*envp) to see whether it was overwriting or creating a
+	new slot. However, FREE() nulls out *envp. This would end up
+	truncating the envlist just after the set slot!
+
+	Move the free down, using a mutt_str_replace(), when overwriting the
+	slot.
+
+2017-03-18 14:47 -0700  Kevin McCarthy  <kevin@8t8.us>  (741865dfc052)
+
+	* merge stable
+
+2017-03-18 14:39 -0700  Kevin McCarthy  <kevin@8t8.us>  (2b9c40f13e13)
+
+	* init.c: Fix mutt_envlist_set() for the case that envlist is null.
+	(see #3922)
+
+2017-03-18 13:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (37209157e33c)
+
+	* filter.c, init.c, protos.h, system.c: Pass envlist to filter
+	children too. (closes #3922)
+
+	The new setenv patch neglected to pass the envlist for filters too.
+
+	Unfortunately, the filter code was already set up to pass COLUMNS to
+	children, so it needed to be changed to add this to the envlist
+	instead.
+
+	Factor out mutt_envlist_set() from the parse_setenv() function,
+	which the filter code can then use to set COLUMNS after forking.
+
+2017-03-18 13:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (f09b8b2454c9)
+
+	* main.c: Fix conststrings type mismatches. (closes #3926)
+
+	The generation programs for conststrings.c: txt2c.c and txt2c.sh,
+	specified the resultant types as "unsigned char[]" while main.c
+	declared them as "const char[]".
+
+	txt2.c generates 0xXX hex codes for each individual character, thus
+	the "unsigned" definition. With link-time optimization, some
+	versions of gcc notice the mismatch and emit a warning.
+
+	Change the declarations to match the definitions and cast to char[]
+	when they are used.
+
+2017-03-13 18:38 -0700  Kevin McCarthy  <kevin@8t8.us>  (23c00b71f653)
+
+	* mutt_ssl.c: Change OpenSSL to use SHA-256 for cert comparison.
+	(closes #3924)
+
+	Note the GnuTLS code compares the certs directly to check if they
+	are in the certfile.
+
+2017-03-13 01:38 +0100  Vincent Lefevre  <vincent@vinc17.net>  (00cef7557f38)
+
+	* po/fr.po: Updated French translation.
+
+2017-03-12 10:54 -0700  Dmitri Vereshchagin  <dmitri.vereshchagin@gmail.com>  (fc4beb8e0d56)
+
+	* browser.c: Add shortcuts for IMAP and POP mailboxes in the file
+	browser
+
+	Mailbox list may not be properly displayed in a standard 80-column
+	terminal window if the $folder variable contains a long URL. In such
+	a case only left part of each entry name can be visible with the
+	default value of $folder_format. What's worse, this visible part may
+	not be enough to distinguish between the entries.
+
+	Thus in this case mutt_pretty_mailbox() will be just as useful as
+	for local mailboxes.
+
+2017-03-09 13:38 -0800  Kevin McCarthy  <kevin@8t8.us>  (5f65f3bcc066)
+
+	* mutt_ssl_gnutls.c: Add SNI support for GnuTLS. (closes #3923)
+
+2017-03-09 13:00 -0800  Kevin McCarthy  <kevin@8t8.us>  (9d3d80dd963a)
+
+	* mutt_ssl.c: Add SNI support for OpenSSL. (see #3923)
+
+	The original patch for this is by Phil Pennock at:
+	https://people.spodhuis.org/phil.pennock/software/mutt-patches/
+
+	I have removed the OpenSSL version check and
+	defined(OPENSSL_NO_TLSEXT) check because:
+	  * SSL_set_tlsext_host_name() was added in 0.9.8f [11 Oct 2007]
+	  * OpenSSL 1.1 no longer has the OPENSSL_NO_TLSEXT compilation option
+	  * https://rt.openssl.org/Ticket/Display.html?id=2788&user=guest&pass=g
+	uest shows that the no-tlsext compilation option has been broken for
+	some time.
+	  * Going forward, I'd like to minimize and start removing cruft
+	required to support ancient/insecure versions of libraries.
+
+2017-03-09 11:59 -0800  Kevin McCarthy  <kevin@8t8.us>  (be5d02a8e782)
+
+	* mutt_ssl.c: OpenSSL: Don't offer (a)ccept always choice for hostname
+	mismatches. (closes #3914)
+
+	On a hostname mismatch, saving the certificate is pointless because
+	mutt will ask the user no matter if the certificate is saved or not.
+
+	The only invocation allowing "accept always" is guarded by a call to
+	check_certificate_digest(), which means the check_certificate_file()
+	check is redundant. Therefore remove that check and add a comment
+	noting why.
+
+	Thanks to Matthias Andree for the original version of this patch.
+
+2017-03-09 10:56 -0800  Kevin McCarthy  <kevin@8t8.us>  (f949694ea461)
+
+	* mutt_ssl.c: Prevent skipped certs from showing a second time. (see
+	#3916)
+
+	OpenSSL sometimes passes a skipped certificate to
+	ssl_verify_callback() a second time, with preverify_ok=1. From
+	OpenSSL's viewpoint there is nothing wrong with this, but mutt will
+	end up showing the certificate in the interactive prompt again.
+
+	Cache the last cert and position, and compare with the latest when
+	skip_mode and preverify_ok are both set.
+
+2017-03-07 18:26 -0800  Kevin McCarthy  <kevin@8t8.us>  (2a0d3c4a9b0f)
+
+	* mutt_ssl.c: Don't allow storing duplicate certs for OpenSSL
+	interactive prompt. (closes #3914)
+
+	Check to make sure the certificate is not already in the
+	$certificate_file before offering the (a)ccept always option.
+
+	To allow a cert with a new validity timespan to be added to the
+	file, check the expiration dates when comparing certificates in the
+	certficate file.
+
+2017-03-07 18:26 -0800  Kevin McCarthy  <kevin@8t8.us>  (4cb6408b5fef)
+
+	* configure.ac, doc/makedoc-defs.h, init.h, mutt.h, mutt_ssl.c: Move
+	the OpenSSL partial chain support check inside configure.ac. (see
+	#3916)
+
+	Instead of directly checking whether X509_V_FLAG_PARTIAL_CHAIN is
+	defined everywhere, do it once inside configure. This will allow
+	better support in the future if the test needs to change.
+
+2017-03-07 18:26 -0800  Matthias Andree  <matthias.andree@gmx.de>  (5a04f3797f03)
+
+	* doc/makedoc-defs.h, init.h, mutt.h, mutt_ssl.c: Add
+	$ssl_verify_partial_chains option for OpenSSL. (closes #3916)
+
+	The reworked OpenSSL certificate validation took away a "feature" of
+	the previous implementation: the ability to reject a node in the
+	chain and yet continue to the next node.
+
+	If this new option is set to 'yes', enables OpenSSL's
+	X509_V_FLAG_PARTIAL_CHAIN flag to reinstate the functionality and
+	permit to use a non-root certificate as the trust anchor.
+
+	This option is only available if OpenSSL offers the
+	X509_V_FLAG_PARTIAL_CHAIN macro, which should be the case as of
+	1.0.2b or later.
+
+	Code written by Kevin McCarthy and Matthias Andree.
+
+2017-03-05 15:26 -0800  Kevin McCarthy  <kevin@8t8.us>  (daa9111c1f42)
+
+	* merge stable
+
+2017-03-05 15:24 -0800  Kevin McCarthy  <kevin@8t8.us>  (f0e3b2875065)
+
+	* account.h: Increase ACCOUNT.pass field size. (closes #3921)
+
+	#3921 reported his password token used for Google XOAUTH2 is size
+	129. The ACCOUNT structure currently uses a size 128 buffer. Who
+	knew a password field would ever be bigger than that?
+
+	Since the ACCOUNT structure has no allocation/dellocation routines,
+	the easiest fix is to increase the size. Bump the size up to 256.
+
+2017-03-02 15:54 -0800  Kevin McCarthy  <kevin@8t8.us>  (d15de76f7123)
+
+	* merge stable
+
+2017-03-02 15:53 -0800  Matthias Andree  <matthias.andree@gmx.de>  (5fc3c0729a07)
+
+	* mutt_ssl.c: SSL: Fix memory leak in subject alternative name code.
+	(closes #3920)
+
+2017-03-02 14:58 -0800  Kevin McCarthy  <kevin@8t8.us>  (9ede6c95d3d5)
+
+	* merge stable
+
+2017-03-02 14:53 -0800  Kevin McCarthy  <kevin@8t8.us>  (e3e47b2f1370)
+
+	* mbox.c: Prevent segv if open-appending to an mbox fails. (closes
+	#3918)
+
+	If mbox_open_mailbox_append() fails, ctx->fp will be null. Add a
+	check in mbox_close_mailbox(), to prevent a segv from passing null
+	to fileno().
+
+2017-03-02 13:17 -0800  Kevin McCarthy  <kevin@8t8.us>  (28d7872d0646)
+
+	* merge stable
+
+2017-03-02 13:11 -0800  Kevin McCarthy  <kevin@8t8.us>  (e82253beaa9f)
+
+	* mutt_ssl.c: Clear out extraneous errors before SSL_connect() (see
+	#3916)
+
+	Call ERR_clear_error() just before the call to SSL_connect() to make
+	sure the error queue doesn't have any old errors in it.
+
+	PEM_read_X509() sets an error PEM_R_NO_START_LINE on end-of-file.
+	Clear that out so it doesn't show up as the SSL_connect() error
+	message.
+
+2017-02-24 11:00 -0800  Kevin McCarthy  <kevin@8t8.us>  (f85c3eb8d065)
+
+	* merge default into stable
+
+2017-02-24 10:55 -0800  Kevin McCarthy  <kevin@8t8.us>  (7cc47d82cac4)
+
+	* .hgsigs: mutt-1.8.0 signed
+
+2017-02-24 10:50 -0800  Kevin McCarthy  <kevin@8t8.us>  (1672b430cbc3)
+
+	* .hgtags: Added tag mutt-1-8-rel for changeset d897983752f9
+
+2017-02-24 10:50 -0800  Kevin McCarthy  <kevin@8t8.us>  (d897983752f9)
+
+	* ChangeLog, VERSION, po/bg.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/eo.po, po/es.po, po/et.po, po/eu.po,
+	po/fr.po, po/ga.po, po/gl.po, po/hu.po, po/id.po, po/it.po,
+	po/ja.po, po/ko.po, po/lt.po, po/nl.po, po/pl.po, po/pt_BR.po,
+	po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po, po/zh_CN.po,
+	po/zh_TW.po: automatic post-release commit for mutt-1.8.0
+
 2017-05-23 15:53 -0700  Kevin McCarthy  <kevin@8t8.us>  (fa0c2155ab8f)
 
 	* mx.c: Fix memory leak when closing mailbox and using the sidebar.

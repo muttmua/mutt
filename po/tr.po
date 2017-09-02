@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-03 18:37-0700\n"
+"POT-Creation-Date: 2017-09-02 11:32-0700\n"
 "PO-Revision-Date: 2006-01-11 04:13+0200\n"
 "Last-Translator: Recai Oktaş <roktas@debian.org>\n"
 "Language-Team: Debian L10n Turkish <debian-l10n-turkish@lists.debian.org>\n"
@@ -27,7 +27,7 @@ msgid "Password for %s@%s: "
 msgstr "%s@%s için parola: "
 
 #: addrbook.c:37 browser.c:46 pager.c:1575 postpone.c:41 query.c:48
-#: recvattach.c:53
+#: recvattach.c:57
 msgid "Exit"
 msgstr "Çık"
 
@@ -43,9 +43,9 @@ msgstr "Kurtar"
 msgid "Select"
 msgstr "Seç"
 
-#: addrbook.c:41 browser.c:49 compose.c:124 crypt-gpgme.c:4088 curs_main.c:493
-#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:1023 pager.c:1973 pgpkey.c:522
-#: postpone.c:44 query.c:53 recvattach.c:57 smime.c:440
+#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4088 curs_main.c:493
+#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:1023 pager.c:1981 pgpkey.c:522
+#: postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
 msgid "Help"
 msgstr "Yardım"
 
@@ -88,8 +88,8 @@ msgstr "Kişisel isim: "
 msgid "[%s = %s] Accept?"
 msgstr "[%s = %s] Kabul?"
 
-#: alias.c:347 recvattach.c:457 recvattach.c:483 recvattach.c:496
-#: recvattach.c:509 recvattach.c:539
+#: alias.c:347 recvattach.c:435 recvattach.c:461 recvattach.c:474
+#: recvattach.c:487 recvattach.c:522
 msgid "Save to file: "
 msgstr "Dosyaya kaydet: "
 
@@ -107,7 +107,7 @@ msgstr "Lâkap eklendi."
 msgid "Error seeking in alias file"
 msgstr "Dosya görüntülenirken hata oluştu"
 
-#: attach.c:113 attach.c:245 attach.c:400 attach.c:927
+#: attach.c:113 attach.c:245 attach.c:400 attach.c:926
 msgid "Can't match nametemplate, continue?"
 msgstr "İsim şablonuna uymuyor, devam edilsin mi?"
 
@@ -116,8 +116,8 @@ msgstr "İsim şablonuna uymuyor, devam edilsin mi?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "Mailcap düzenleme birimi %%s gerektiriyor"
 
-#: attach.c:134 attach.c:266 commands.c:223 compose.c:1383 compress.c:444
-#: curs_lib.c:218 curs_lib.c:809
+#: attach.c:134 attach.c:266 commands.c:223 compose.c:1390 compress.c:444
+#: curs_lib.c:218 curs_lib.c:809 sendlib.c:1372
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "\"%s\" çalıştırılırken bir hata oluştu!"
@@ -181,16 +181,16 @@ msgstr "-- Ekler"
 msgid "---Attachment: %s"
 msgstr "-- Ekler"
 
-#: attach.c:633 attach.c:665 attach.c:960 attach.c:1018 handler.c:1363
+#: attach.c:632 attach.c:664 attach.c:959 attach.c:1017 handler.c:1363
 #: pgpkey.c:572 pgpkey.c:760
 msgid "Can't create filter"
 msgstr "Süzgeç oluşturulamadı"
 
-#: attach.c:799
+#: attach.c:798
 msgid "Write fault!"
 msgstr "Yazma hatası!"
 
-#: attach.c:1041
+#: attach.c:1040
 msgid "I don't know how to print that!"
 msgstr "Bu ekin nasıl yazdırılacağı bilinmiyor!"
 
@@ -398,50 +398,50 @@ msgstr "PGP imzası doğrulanamadı."
 msgid "Command: "
 msgstr "Komut: "
 
-#: commands.c:256 commands.c:266 recvcmd.c:148 recvcmd.c:161
+#: commands.c:256 commands.c:266 recvcmd.c:146 recvcmd.c:159
 msgid "Warning: message contains no From: header"
 msgstr ""
 
-#: commands.c:274 recvcmd.c:171
+#: commands.c:274 recvcmd.c:169
 msgid "Bounce message to: "
 msgstr "İletinin geri gönderme adresi: "
 
-#: commands.c:276 recvcmd.c:173
+#: commands.c:276 recvcmd.c:171
 msgid "Bounce tagged messages to: "
 msgstr "İşaretli iletileri geri gönder:"
 
-#: commands.c:284 recvcmd.c:182
+#: commands.c:284 recvcmd.c:180
 msgid "Error parsing address!"
 msgstr "Adres ayrıştırılırken hata!"
 
-#: commands.c:292 recvcmd.c:190
+#: commands.c:292 recvcmd.c:188
 #, c-format
 msgid "Bad IDN: '%s'"
 msgstr "Hatalı IDN: '%s'"
 
-#: commands.c:303 recvcmd.c:204
+#: commands.c:303 recvcmd.c:202
 #, c-format
 msgid "Bounce message to %s"
 msgstr "İletiyi %s adresine geri gönder"
 
-#: commands.c:303 recvcmd.c:204
+#: commands.c:303 recvcmd.c:202
 #, c-format
 msgid "Bounce messages to %s"
 msgstr "İletilerin geri gönderme adresi: %s"
 
-#: commands.c:319 recvcmd.c:220
+#: commands.c:319 recvcmd.c:218
 msgid "Message not bounced."
 msgstr "İleti geri gönderilmedi."
 
-#: commands.c:319 recvcmd.c:220
+#: commands.c:319 recvcmd.c:218
 msgid "Messages not bounced."
 msgstr "İletiler geri gönderilmedi."
 
-#: commands.c:329 recvcmd.c:239
+#: commands.c:329 recvcmd.c:237
 msgid "Message bounced."
 msgstr "İleti geri gönderildi."
 
-#: commands.c:329 recvcmd.c:239
+#: commands.c:329 recvcmd.c:237
 msgid "Messages bounced."
 msgstr "İletiler geri gönderildi."
 
@@ -548,26 +548,26 @@ msgstr " işaretliler"
 msgid "Copying to %s..."
 msgstr "%s konumuna kopyalanıyor..."
 
-#: commands.c:932
+#: commands.c:939
 #, c-format
 msgid "Convert to %s upon sending?"
 msgstr "Gönderilirken %s karakter kümesine dönüştürülsün mü?"
 
-#: commands.c:942
+#: commands.c:949
 #, c-format
 msgid "Content-Type changed to %s."
 msgstr "İçerik-Tipi %s olarak değiştirildi."
 
-#: commands.c:947
+#: commands.c:954
 #, c-format
 msgid "Character set changed to %s; %s."
 msgstr "Karakter kümesi %s olarak değiştirildi; %s."
 
-#: commands.c:949
+#: commands.c:956
 msgid "not converting"
 msgstr "dönüştürme yapılmıyor"
 
-#: commands.c:949
+#: commands.c:956
 msgid "converting"
 msgstr "dönüştürme yapılıyor"
 
@@ -576,48 +576,48 @@ msgid "There are no attachments."
 msgstr "Posta eki yok."
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:82
+#: compose.c:83
 msgid "From: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:84 send.c:222
+#: compose.c:85 send.c:222
 msgid "To: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:86 send.c:224
+#: compose.c:87 send.c:224
 msgid "Cc: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:88 send.c:226
+#: compose.c:89 send.c:226
 msgid "Bcc: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:90 compose.c:722 send.c:251
+#: compose.c:91 compose.c:774 send.c:251
 msgid "Subject: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:92
+#: compose.c:93
 #, fuzzy
 msgid "Reply-To: "
 msgstr "Cevapla"
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:94 compose.c:739
+#: compose.c:95 compose.c:791
 msgid "Fcc: "
 msgstr ""
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
-#: compose.c:97
+#: compose.c:98
 msgid "Mix: "
 msgstr ""
 
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
-#: compose.c:100
+#: compose.c:101
 msgid "Security: "
 msgstr ""
 
@@ -630,226 +630,226 @@ msgstr ""
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:110 crypt-gpgme.c:4837 pgp.c:1821 smime.c:2222 smime.c:2237
+#: compose.c:111 crypt-gpgme.c:4837 pgp.c:1821 smime.c:2222 smime.c:2237
 msgid "Sign as: "
 msgstr "Farklı imzala: "
 
-#: compose.c:114
+#: compose.c:115
 msgid "Send"
 msgstr "Gönder"
 
-#: compose.c:115 remailer.c:484
+#: compose.c:116 remailer.c:484
 msgid "Abort"
 msgstr "İptal"
 
 #. L10N: compose menu help line entry
-#: compose.c:117
+#: compose.c:118
 msgid "To"
 msgstr ""
 
 #. L10N: compose menu help line entry
-#: compose.c:119
+#: compose.c:120
 msgid "CC"
 msgstr ""
 
 #. L10N: compose menu help line entry
-#: compose.c:121
+#: compose.c:122
 msgid "Subj"
 msgstr ""
 
-#: compose.c:122 compose.c:836
+#: compose.c:123 compose.c:876
 msgid "Attach file"
 msgstr "Dosya ekle"
 
-#: compose.c:123
+#: compose.c:124
 msgid "Descrip"
 msgstr "Açıklama"
 
-#: compose.c:191
+#: compose.c:194
 #, fuzzy
 msgid "Not supported"
 msgstr "İşaretleme desteklenmiyor."
 
-#: compose.c:198
+#: compose.c:201
 msgid "Sign, Encrypt"
 msgstr "İmzala, Şifrele"
 
-#: compose.c:203
+#: compose.c:206
 msgid "Encrypt"
 msgstr "Şifrele"
 
-#: compose.c:208
+#: compose.c:211
 msgid "Sign"
 msgstr "İmzala"
 
-#: compose.c:213
+#: compose.c:216
 msgid "None"
 msgstr ""
 
-#: compose.c:222
+#: compose.c:225
 #, fuzzy
 msgid " (inline PGP)"
 msgstr " (satıriçi)"
 
-#: compose.c:224
+#: compose.c:227
 msgid " (PGP/MIME)"
 msgstr " (PGP/MIME)"
 
-#: compose.c:228
+#: compose.c:231
 #, fuzzy
 msgid " (S/MIME)"
 msgstr " (PGP/MIME)"
 
-#: compose.c:232
+#: compose.c:235
 msgid " (OppEnc mode)"
 msgstr ""
 
-#: compose.c:244 compose.c:253
+#: compose.c:247 compose.c:256
 msgid "<default>"
 msgstr "<varsayılan>"
 
-#: compose.c:263
+#: compose.c:266
 msgid "Encrypt with: "
 msgstr "Şifreleme anahtarı: "
 
-#: compose.c:320
+#: compose.c:323
 #, c-format
 msgid "%s [#%d] no longer exists!"
 msgstr "%s [#%d] artık mevcut değil!"
 
-#: compose.c:328
+#: compose.c:331
 #, c-format
 msgid "%s [#%d] modified. Update encoding?"
 msgstr "%s [#%d] değiştirildi. Kodlama yenilensin mi?"
 
-#: compose.c:383
+#: compose.c:386
 msgid "-- Attachments"
 msgstr "-- Ekler"
 
-#: compose.c:405
+#: compose.c:408
 #, c-format
 msgid "Warning: '%s' is a bad IDN."
 msgstr "Uyarı: '%s' hatalı bir IDN."
 
-#: compose.c:426
+#: compose.c:428
 msgid "You may not delete the only attachment."
 msgstr "Tek kalmış bir eki silemezsiniz."
 
-#: compose.c:770 send.c:1689
+#: compose.c:822 send.c:1689
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "\"%s\" hatalı IDN'e sahip: '%s'"
 
-#: compose.c:852
+#: compose.c:886
 msgid "Attaching selected files..."
 msgstr "Seçili dosyalar ekleniyor..."
 
-#: compose.c:864
+#: compose.c:898
 #, c-format
 msgid "Unable to attach %s!"
 msgstr "%s eklenemedi!"
 
-#: compose.c:884
+#: compose.c:918
 msgid "Open mailbox to attach message from"
 msgstr "Eklenecek iletileri içeren eposta kutusunu seçin"
 
-#: compose.c:914
+#: compose.c:948
 #, fuzzy, c-format
 msgid "Unable to open mailbox %s"
 msgstr "Eposta kutusu kilitlenemedi!"
 
-#: compose.c:922
+#: compose.c:956
 msgid "No messages in that folder."
 msgstr "Bu klasörde ileti yok."
 
-#: compose.c:931
+#: compose.c:965
 msgid "Tag the messages you want to attach!"
 msgstr "Eklemek istediğiniz iletileri işaretleyin!"
 
-#: compose.c:963
+#: compose.c:991
 msgid "Unable to attach!"
 msgstr "Eklenemedi!"
 
-#: compose.c:1014
+#: compose.c:1031
 msgid "Recoding only affects text attachments."
 msgstr "Tekrar kodlama sadece metin ekleri üzerinde etkilidir."
 
-#: compose.c:1019
+#: compose.c:1036
 msgid "The current attachment won't be converted."
 msgstr "Mevcut ek dönüştürülmeyecek."
 
-#: compose.c:1021
+#: compose.c:1038
 msgid "The current attachment will be converted."
 msgstr "Mevcut ek dönüştürülecek."
 
-#: compose.c:1096
+#: compose.c:1112
 msgid "Invalid encoding."
 msgstr "Geçersiz kodlama."
 
-#: compose.c:1122
+#: compose.c:1138
 msgid "Save a copy of this message?"
 msgstr "Bu iletinin bir kopyası kaydedilsin mi?"
 
-#: compose.c:1185
+#: compose.c:1201
 #, fuzzy
 msgid "Send attachment with name: "
 msgstr "eki metin olarak göster"
 
-#: compose.c:1203
+#: compose.c:1219
 msgid "Rename to: "
 msgstr "Yeniden adlandır: "
 
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1210 editmsg.c:96 editmsg.c:121 sendlib.c:872
+#: compose.c:1226 editmsg.c:96 editmsg.c:121 sendlib.c:877
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "%s incelenemiyor: %s"
 
-#: compose.c:1237
+#: compose.c:1253
 msgid "New file: "
 msgstr "Yeni dosya: "
 
-#: compose.c:1250
+#: compose.c:1266
 msgid "Content-Type is of the form base/sub"
 msgstr "İçerik-Tipi temel/alt-tür biçiminde girilmeli"
 
-#: compose.c:1256
+#: compose.c:1272
 #, c-format
 msgid "Unknown Content-Type %s"
 msgstr "Bilinmeyen İçerik-Tipi %s"
 
-#: compose.c:1269
+#: compose.c:1280
 #, c-format
 msgid "Can't create file %s"
 msgstr "Dosya %s yaratılamadı"
 
-#: compose.c:1277
+#: compose.c:1288
 msgid "What we have here is a failure to make an attachment"
 msgstr "Ek hazırlanırken bir hata oluştu"
 
-#: compose.c:1337
+#: compose.c:1349
 msgid "Postpone this message?"
 msgstr "İletinin gönderilmesi ertelensin mi?"
 
-#: compose.c:1401
+#: compose.c:1408
 msgid "Write message to mailbox"
 msgstr "İletiyi eposta kutusuna kaydet"
 
-#: compose.c:1404
+#: compose.c:1411
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "İleti %s eposta kutusuna kaydediliyor..."
 
-#: compose.c:1413
+#: compose.c:1420
 msgid "Message written."
 msgstr "İleti kaydedildi."
 
-#: compose.c:1427
+#: compose.c:1434
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME zaten seçili durumda. Önceki iptâl edilerek devam edilsin mi?"
 
-#: compose.c:1460
+#: compose.c:1467
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP zaten seçili durumda. Önceki iptâl edilerek devam edilsin mi?"
 
@@ -1692,7 +1692,7 @@ msgstr "hayır"
 msgid "Exit Mutt?"
 msgstr "Mutt'tan çıkılsın mı?"
 
-#: curs_lib.c:761 mutt_socket.c:586 mutt_ssl.c:577
+#: curs_lib.c:761 mutt_socket.c:612 mutt_ssl.c:577
 msgid "unknown error"
 msgstr "bilinmeyen hata"
 
@@ -1712,11 +1712,11 @@ msgstr "Hiç bir eposta kutusu açık değil."
 msgid "There are no messages."
 msgstr "İleti yok."
 
-#: curs_main.c:59 mx.c:1131 pager.c:55 recvattach.c:43
+#: curs_main.c:59 mx.c:1131 pager.c:55 recvattach.c:45
 msgid "Mailbox is read-only."
 msgstr "Eposta kutusu salt okunur."
 
-#: curs_main.c:60 pager.c:56 recvattach.c:943
+#: curs_main.c:60 pager.c:56 recvattach.c:1097
 msgid "Function not permitted in attach-message mode."
 msgstr "Bu işleve ileti ekle kipinde izin verilmiyor."
 
@@ -1746,7 +1746,7 @@ msgstr "Klasördeki değişiklikler kaydedilmeyecek."
 msgid "Quit"
 msgstr "Çık"
 
-#: curs_main.c:489 recvattach.c:54
+#: curs_main.c:489 recvattach.c:58
 msgid "Save"
 msgstr "Kaydet"
 
@@ -1778,7 +1778,7 @@ msgstr "Eposta kutusu değiştirildi."
 msgid "No tagged messages."
 msgstr "İşaretlenmiş ileti yok."
 
-#: curs_main.c:753 menu.c:1043
+#: curs_main.c:753 menu.c:1050
 msgid "Nothing to do."
 msgstr "Yapılacak bir işlem yok."
 
@@ -1799,7 +1799,7 @@ msgid "Invalid message number."
 msgstr "Geçersiz ileti numarası."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:895 curs_main.c:2031 pager.c:2532
+#: curs_main.c:895 curs_main.c:2031 pager.c:2538
 #, fuzzy
 msgid "Cannot delete message(s)"
 msgstr "Kurtarılan ileti yok."
@@ -1826,7 +1826,7 @@ msgstr "Sadece tabire uyan iletiler: "
 msgid "To view all messages, limit to \"all\"."
 msgstr "İletilerin hepsini görmek için \"all\" tabirini kullanın."
 
-#: curs_main.c:968 pager.c:2069
+#: curs_main.c:968 pager.c:2077
 msgid "Quit Mutt?"
 msgstr "Mutt'tan çıkılsın mı?"
 
@@ -1835,7 +1835,7 @@ msgid "Tag messages matching: "
 msgstr "Tabire uyan iletileri işaretle: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1068 curs_main.c:2382 pager.c:2787
+#: curs_main.c:1068 curs_main.c:2382 pager.c:2792
 #, fuzzy
 msgid "Cannot undelete message(s)"
 msgstr "Kurtarılan ileti yok."
@@ -1920,11 +1920,11 @@ msgstr "Kurtarılan ileti yok."
 msgid "You are on the first message."
 msgstr "İlk iletidesiniz."
 
-#: curs_main.c:1613 menu.c:867 pager.c:2187 pattern.c:1575
+#: curs_main.c:1613 menu.c:874 pager.c:2195 pattern.c:1609
 msgid "Search wrapped to top."
 msgstr "Arama başa döndü."
 
-#: curs_main.c:1622 pager.c:2209 pattern.c:1586
+#: curs_main.c:1622 pager.c:2217 pattern.c:1620
 msgid "Search wrapped to bottom."
 msgstr "Arama sona ulaştı."
 
@@ -1955,7 +1955,7 @@ msgid "Cannot flag message"
 msgstr "iletiyi göster"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1731 pager.c:2750
+#: curs_main.c:1731 pager.c:2755
 msgid "Cannot toggle new"
 msgstr ""
 
@@ -1972,7 +1972,7 @@ msgid "Thread contains unread messages."
 msgstr "İlmek okunmamış iletiler içeriyor."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1987 pager.c:2499
+#: curs_main.c:1987 pager.c:2505
 #, fuzzy
 msgid "Cannot delete message"
 msgstr "Kurtarılan ileti yok."
@@ -1985,7 +1985,7 @@ msgstr "İleti yazılamadı"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2114 pager.c:2838
+#: curs_main.c:2114 pager.c:2843
 #, fuzzy, c-format
 msgid "%d labels changed."
 msgstr "Eposta kutusunda değişiklik yok."
@@ -1993,7 +1993,7 @@ msgstr "Eposta kutusunda değişiklik yok."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2120 pager.c:2841
+#: curs_main.c:2120 pager.c:2846
 #, fuzzy
 msgid "No labels changed."
 msgstr "Eposta kutusunda değişiklik yok."
@@ -2035,7 +2035,7 @@ msgid "No message ID to macro."
 msgstr "Bu klasörde ileti yok."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2352 pager.c:2770
+#: curs_main.c:2352 pager.c:2775
 #, fuzzy
 msgid "Cannot undelete message"
 msgstr "Kurtarılan ileti yok."
@@ -2448,7 +2448,12 @@ msgstr "Yeniden isimlendirme başarısız: %s"
 msgid "Mailbox renamed."
 msgstr "Eposta kutusu yeniden isimlendirildi."
 
-#: imap/command.c:447
+#: imap/command.c:260
+#, fuzzy, c-format
+msgid "Connection to %s timed out"
+msgstr "%s soketine yapılan bağlantı kapatıldı"
+
+#: imap/command.c:467
 msgid "Mailbox closed"
 msgstr "Eposta kutusu kapatıldı"
 
@@ -2487,72 +2492,72 @@ msgstr "%s seçiliyor..."
 msgid "Error opening mailbox"
 msgstr "Eposta kutusu açılırken hata oluştu!"
 
-#: imap/imap.c:819 imap/imap.c:2183 imap/message.c:1014 muttlib.c:1683
+#: imap/imap.c:818 imap/imap.c:2190 imap/message.c:1014 muttlib.c:1683
 #, c-format
 msgid "Create %s?"
 msgstr "%s yaratılsın mı?"
 
-#: imap/imap.c:1212
+#: imap/imap.c:1215
 msgid "Expunge failed"
 msgstr "Silme işlemi başarısız oldu"
 
-#: imap/imap.c:1224
+#: imap/imap.c:1227
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "%d ileti silinmek için işaretlendi..."
 
-#: imap/imap.c:1256
+#: imap/imap.c:1259
 #, fuzzy, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "İleti durum bayrakları kaydediliyor... [%d/%d]"
 
-#: imap/imap.c:1312
+#: imap/imap.c:1315
 msgid "Error saving flags. Close anyway?"
 msgstr ""
 
-#: imap/imap.c:1320
+#: imap/imap.c:1323
 #, fuzzy
 msgid "Error saving flags"
 msgstr "Adres ayrıştırılırken hata!"
 
-#: imap/imap.c:1343
+#: imap/imap.c:1346
 msgid "Expunging messages from server..."
 msgstr "İletileri sunucudan sil..."
 
-#: imap/imap.c:1349
+#: imap/imap.c:1352
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox: EXPUNGE başarısız oldu"
 
-#: imap/imap.c:1833
+#: imap/imap.c:1839
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "%s başlık ismi verilmeden başlık araması"
 
-#: imap/imap.c:1904
+#: imap/imap.c:1910
 msgid "Bad mailbox name"
 msgstr "Eposta kutusu ismi hatalı"
 
-#: imap/imap.c:1928
+#: imap/imap.c:1934
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "%s eposta kutusuna abone olunuyor..."
 
-#: imap/imap.c:1930
+#: imap/imap.c:1936
 #, fuzzy, c-format
 msgid "Unsubscribing from %s..."
 msgstr "%s aboneliği iptal ediliyor..."
 
-#: imap/imap.c:1940
+#: imap/imap.c:1946
 #, fuzzy, c-format
 msgid "Subscribed to %s"
 msgstr "%s eposta kutusuna abone olunuyor..."
 
-#: imap/imap.c:1942
+#: imap/imap.c:1948
 #, fuzzy, c-format
 msgid "Unsubscribed from %s"
 msgstr "%s aboneliği iptal ediliyor..."
 
-#: imap/imap.c:2168 imap/message.c:978
+#: imap/imap.c:2175 imap/message.c:978
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "%d ileti %s eposta kutusuna kopyalanıyor..."
@@ -3162,68 +3167,68 @@ msgstr "Eposta kutusu yeniden açılamadı!"
 msgid "Reopening mailbox..."
 msgstr "Eposta kutusu yeniden açılıyor..."
 
-#: menu.c:435
+#: menu.c:442
 msgid "Jump to: "
 msgstr "Geç: "
 
-#: menu.c:444
+#: menu.c:451
 msgid "Invalid index number."
 msgstr "Geçersiz indeks numarası."
 
-#: menu.c:448 menu.c:469 menu.c:534 menu.c:577 menu.c:593 menu.c:604 menu.c:615
-#: menu.c:626 menu.c:639 menu.c:652 menu.c:1174
+#: menu.c:455 menu.c:476 menu.c:541 menu.c:584 menu.c:600 menu.c:611 menu.c:622
+#: menu.c:633 menu.c:646 menu.c:659 menu.c:1181
 msgid "No entries."
 msgstr "Öge yok."
 
-#: menu.c:466
+#: menu.c:473
 msgid "You cannot scroll down farther."
 msgstr "Daha aşağıya inemezsiniz."
 
-#: menu.c:484
+#: menu.c:491
 msgid "You cannot scroll up farther."
 msgstr "Daha yukarı çıkamazsınız."
 
-#: menu.c:527
+#: menu.c:534
 msgid "You are on the first page."
 msgstr "İlk sayfadasınız."
 
-#: menu.c:528
+#: menu.c:535
 msgid "You are on the last page."
 msgstr "Son sayfadasınız."
 
-#: menu.c:663
+#: menu.c:670
 msgid "You are on the last entry."
 msgstr "Son ögedesiniz."
 
-#: menu.c:674
+#: menu.c:681
 msgid "You are on the first entry."
 msgstr "İlk ögedesiniz."
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2239 pattern.c:1548
 msgid "Search for: "
 msgstr "Ara: "
 
-#: menu.c:841 pager.c:2231 pattern.c:1514
+#: menu.c:848 pager.c:2239 pattern.c:1548
 msgid "Reverse search for: "
 msgstr "Ters ara: "
 
-#: menu.c:885 pager.c:2184 pager.c:2206 pager.c:2326 pattern.c:1629
+#: menu.c:892 pager.c:2192 pager.c:2214 pager.c:2334 pattern.c:1663
 msgid "Not found."
 msgstr "Bulunamadı."
 
-#: menu.c:1037
+#: menu.c:1044
 msgid "No tagged entries."
 msgstr "İşaretlenmiş öge yok."
 
-#: menu.c:1138
+#: menu.c:1145
 msgid "Search is not implemented for this menu."
 msgstr "Bu menüde arama özelliği şimdilik gerçeklenmemiş."
 
-#: menu.c:1143
+#: menu.c:1150
 msgid "Jumping is not implemented for dialogs."
 msgstr "Sorgu alanları arasında geçiş özelliği şimdilik gerçeklenmemiş."
 
-#: menu.c:1177
+#: menu.c:1184
 msgid "Tagging is not supported."
 msgstr "İşaretleme desteklenmiyor."
 
@@ -3263,45 +3268,45 @@ msgstr ""
 msgid "Error setting SASL external user name"
 msgstr ""
 
-#: mutt_socket.c:104 mutt_socket.c:182
+#: mutt_socket.c:105 mutt_socket.c:183
 #, c-format
 msgid "Connection to %s closed"
 msgstr "%s soketine yapılan bağlantı kapatıldı"
 
-#: mutt_socket.c:301
+#: mutt_socket.c:302
 msgid "SSL is unavailable."
 msgstr "SSL erişilir durumda değil."
 
-#: mutt_socket.c:333
+#: mutt_socket.c:334
 msgid "Preconnect command failed."
 msgstr "Önceden bağlanma komutu (preconnect) başarısız oldu."
 
-#: mutt_socket.c:412 mutt_socket.c:426
+#: mutt_socket.c:413 mutt_socket.c:427
 #, c-format
 msgid "Error talking to %s (%s)"
 msgstr "%s soketiyle konuşurken hata oluştu (%s)"
 
-#: mutt_socket.c:479 mutt_socket.c:538
+#: mutt_socket.c:505 mutt_socket.c:564
 #, c-format
 msgid "Bad IDN \"%s\"."
 msgstr "Hatalı IDN \"%s\"."
 
-#: mutt_socket.c:487 mutt_socket.c:546
+#: mutt_socket.c:513 mutt_socket.c:572
 #, c-format
 msgid "Looking up %s..."
 msgstr "%s aranıyor..."
 
-#: mutt_socket.c:497 mutt_socket.c:555
+#: mutt_socket.c:523 mutt_socket.c:581
 #, c-format
 msgid "Could not find the host \"%s\""
 msgstr "\"%s\" sunucusu bulunamadı."
 
-#: mutt_socket.c:503 mutt_socket.c:561
+#: mutt_socket.c:529 mutt_socket.c:587
 #, c-format
 msgid "Connecting to %s..."
 msgstr "%s sunucusuna bağlanılıyor..."
 
-#: mutt_socket.c:585
+#: mutt_socket.c:611
 #, c-format
 msgid "Could not connect to %s (%s)."
 msgstr "%s sunucusuna bağlanılamadı (%s)."
@@ -3454,7 +3459,6 @@ msgid "roas"
 msgstr ""
 
 #: mutt_ssl.c:1242
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr ""
 
@@ -3463,7 +3467,6 @@ msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr ""
 
 #: mutt_ssl.c:1249
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr ""
 
@@ -3727,23 +3730,23 @@ msgstr "Eki Görüntüle"
 msgid "Next"
 msgstr "Sonraki"
 
-#: pager.c:2085 pager.c:2116 pager.c:2148 pager.c:2435
+#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2443
 msgid "Bottom of message is shown."
 msgstr "İletinin sonu."
 
-#: pager.c:2101 pager.c:2123 pager.c:2130 pager.c:2137
+#: pager.c:2109 pager.c:2131 pager.c:2138 pager.c:2145
 msgid "Top of message is shown."
 msgstr "İletinin başı."
 
-#: pager.c:2373
+#: pager.c:2381
 msgid "Help is currently being shown."
 msgstr "Şu an yardım gösteriliyor."
 
-#: pager.c:2402
+#: pager.c:2410
 msgid "No more quoted text."
 msgstr "Alıntı metni sonu."
 
-#: pager.c:2415
+#: pager.c:2423
 msgid "No more unquoted text after quoted text."
 msgstr "Alıntı metnini takip eden normal metnin sonu."
 
@@ -3775,75 +3778,75 @@ msgstr "Geçersiz ay: %s"
 msgid "Invalid relative date: %s"
 msgstr "Geçersiz göreceli tarih: %s"
 
-#: pattern.c:818 pattern.c:977
+#: pattern.c:819 pattern.c:987
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "tabirdeki hata konumu: %s"
 
-#: pattern.c:845
+#: pattern.c:846
 #, fuzzy, c-format
 msgid "missing pattern: %s"
 msgstr "eksik argüman"
 
-#: pattern.c:855
+#: pattern.c:865
 #, fuzzy, c-format
 msgid "mismatched brackets: %s"
 msgstr "eşleşmeyen parantezler: %s"
 
-#: pattern.c:915
+#: pattern.c:925
 #, fuzzy, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: geçersiz komut"
 
-#: pattern.c:921
+#: pattern.c:931
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c : bu kipte desteklenmiyor"
 
-#: pattern.c:934
+#: pattern.c:944
 msgid "missing parameter"
 msgstr "eksik argüman"
 
-#: pattern.c:950
+#: pattern.c:960
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "eşleşmeyen parantezler: %s"
 
-#: pattern.c:984
+#: pattern.c:994
 msgid "empty pattern"
 msgstr "boş tabir"
 
-#: pattern.c:1310
+#: pattern.c:1344
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "hata: bilinmeyen işlem kodu %d (bu hatayı bildirin)."
 
-#: pattern.c:1393 pattern.c:1535
+#: pattern.c:1427 pattern.c:1569
 msgid "Compiling search pattern..."
 msgstr "Arama tabiri derleniyor..."
 
-#: pattern.c:1414
+#: pattern.c:1448
 msgid "Executing command on matching messages..."
 msgstr "Komut, eşleşen bütün iletilerde çalıştırılıyor..."
 
-#: pattern.c:1483
+#: pattern.c:1517
 msgid "No messages matched criteria."
 msgstr "Tabire uygun ileti bulunamadı."
 
-#: pattern.c:1565
+#: pattern.c:1599
 #, fuzzy
 msgid "Searching..."
 msgstr "Kaydediliyor..."
 
-#: pattern.c:1578
+#: pattern.c:1612
 msgid "Search hit bottom without finding match"
 msgstr "Arama hiç bir şey bulunamadan sona erişti"
 
-#: pattern.c:1589
+#: pattern.c:1623
 msgid "Search hit top without finding match"
 msgstr "Arama hiçbir şey bulunamadan başa erişti"
 
-#: pattern.c:1621
+#: pattern.c:1655
 msgid "Search interrupted."
 msgstr "Arama iptal edildi."
 
@@ -4160,79 +4163,83 @@ msgstr "Sorgulama: "
 msgid "Query '%s'"
 msgstr "Sorgulama '%s'"
 
-#: recvattach.c:55
+#: recvattach.c:59
 msgid "Pipe"
 msgstr "Boru"
 
-#: recvattach.c:56
+#: recvattach.c:60
 msgid "Print"
 msgstr "Yazdır"
 
-#: recvattach.c:501
+#: recvattach.c:479
 msgid "Saving..."
 msgstr "Kaydediliyor..."
 
-#: recvattach.c:504 recvattach.c:595
+#: recvattach.c:482 recvattach.c:576
 msgid "Attachment saved."
 msgstr "Ek kaydedildi."
 
-#: recvattach.c:607
+#: recvattach.c:588
 #, c-format
 msgid "WARNING!  You are about to overwrite %s, continue?"
 msgstr "UYARI!  %s dosyasının üzerine yazılacak, devam edilsin mi?"
 
-#: recvattach.c:625
+#: recvattach.c:606
 msgid "Attachment filtered."
 msgstr "Ek, süzgeçten geçirildi."
 
-#: recvattach.c:694
+#: recvattach.c:680
 msgid "Filter through: "
 msgstr "Süzgeç: "
 
-#: recvattach.c:694
+#: recvattach.c:680
 msgid "Pipe to: "
 msgstr "Borula: "
 
-#: recvattach.c:729
+#: recvattach.c:718
 #, fuzzy, c-format
 msgid "I don't know how to print %s attachments!"
 msgstr "%s eklerinin nasıl yazdırılacağı bilinmiyor!"
 
-#: recvattach.c:794
+#: recvattach.c:784
 msgid "Print tagged attachment(s)?"
 msgstr "İşaretli ileti(ler) yazdırılsın mı?"
 
-#: recvattach.c:794
+#: recvattach.c:784
 msgid "Print attachment?"
 msgstr "Ek yazdırılsın mı?"
 
-#: recvattach.c:1028
+#: recvattach.c:844
+msgid "Structural changes to decrypted attachments are not supported"
+msgstr ""
+
+#: recvattach.c:1003
 msgid "Can't decrypt encrypted message!"
 msgstr "Şifrelenmiş ileti çözülemiyor!"
 
-#: recvattach.c:1040
+#: recvattach.c:1129
 msgid "Attachments"
 msgstr "Ekler"
 
-#: recvattach.c:1077
+#: recvattach.c:1167
 msgid "There are no subparts to show!"
 msgstr "Gösterilecek bir alt bölüm yok!"
 
-#: recvattach.c:1138
+#: recvattach.c:1222
 msgid "Can't delete attachment from POP server."
 msgstr "Ek, POP sunucusundan silinemiyor."
 
-#: recvattach.c:1146
+#: recvattach.c:1230
 msgid "Deletion of attachments from encrypted messages is unsupported."
 msgstr "Şifrelenmiş bir iletiye ait eklerin silinmesi desteklenmiyor."
 
-#: recvattach.c:1152
+#: recvattach.c:1236
 #, fuzzy
 msgid ""
 "Deletion of attachments from signed messages may invalidate the signature."
 msgstr "Şifrelenmiş bir iletiye ait eklerin silinmesi desteklenmiyor."
 
-#: recvattach.c:1169 recvattach.c:1186
+#: recvattach.c:1253 recvattach.c:1270
 msgid "Only deletion of multipart attachments is supported."
 msgstr "Sadece çok parçalı (multipart) eklerin silinmesi destekleniyor."
 
@@ -4240,46 +4247,46 @@ msgstr "Sadece çok parçalı (multipart) eklerin silinmesi destekleniyor."
 msgid "You may only bounce message/rfc822 parts."
 msgstr "Sadece ileti ya da rfc822 kısımları geri gönderilebilir."
 
-#: recvcmd.c:241
+#: recvcmd.c:239
 msgid "Error bouncing message!"
 msgstr "İleti geri gönderilirken hata oluştu!"
 
-#: recvcmd.c:241
+#: recvcmd.c:239
 msgid "Error bouncing messages!"
 msgstr "İleti geri gönderilirken hata oluştu!"
 
-#: recvcmd.c:441
+#: recvcmd.c:447
 #, c-format
 msgid "Can't open temporary file %s."
 msgstr "Geçici dosya %s açılamıyor."
 
-#: recvcmd.c:472
+#: recvcmd.c:478
 msgid "Forward as attachments?"
 msgstr "Ekler halinde iletilsin mi?"
 
-#: recvcmd.c:486
+#: recvcmd.c:492
 msgid "Can't decode all tagged attachments.  MIME-forward the others?"
 msgstr ""
 "İşaretlenmiş eklerin hepsi çözülemiyor. Kalanlar MIME olarak iletilsin mi?"
 
-#: recvcmd.c:611
+#: recvcmd.c:618
 msgid "Forward MIME encapsulated?"
 msgstr "MIME ile sarmalanmış hâlde iletilsin mi?"
 
-#: recvcmd.c:619 recvcmd.c:869
+#: recvcmd.c:626 recvcmd.c:886
 #, c-format
 msgid "Can't create %s."
 msgstr "%s yaratılamadı."
 
-#: recvcmd.c:752
+#: recvcmd.c:759
 msgid "Can't find any tagged messages."
 msgstr "İşaretli hiç bir ileti yok."
 
-#: recvcmd.c:773 send.c:737
+#: recvcmd.c:780 send.c:737
 msgid "No mailing lists found!"
 msgstr "Herhangi bir eposta listesi bulunamadı!"
 
-#: recvcmd.c:848
+#: recvcmd.c:865
 msgid "Can't decode all tagged attachments.  MIME-encapsulate the others?"
 msgstr ""
 "İşaretlenmiş eklerin hepsi çözülemiyor. Kalanlar MIME ile sarmalanmış olarak "
@@ -4489,30 +4496,30 @@ msgstr "Sınırlandırma değişkeni bulunamadı! [bu hatayı bildirin]"
 msgid "%s no longer exists!"
 msgstr "%s artık mevcut değil!"
 
-#: sendlib.c:878
+#: sendlib.c:883
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s uygun bir dosya değil!"
 
-#: sendlib.c:1051
+#: sendlib.c:1056
 #, c-format
 msgid "Could not open %s"
 msgstr "%s açılamadı"
 
-#: sendlib.c:2364
+#: sendlib.c:2394
 msgid "$sendmail must be set in order to send mail."
 msgstr ""
 
-#: sendlib.c:2463
+#: sendlib.c:2493
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "İleti gönderilirken hata oluştu, alt süreç %d ile sonlandı (%s)."
 
-#: sendlib.c:2469
+#: sendlib.c:2499
 msgid "Output of the delivery process"
 msgstr "Gönderme işleminin ürettiği çıktı"
 
-#: sendlib.c:2644
+#: sendlib.c:2674
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "\"resent-from\" hazırlanırken hatalı IDN %s"
