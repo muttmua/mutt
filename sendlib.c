@@ -572,6 +572,11 @@ static void update_content_info (CONTENT *info, CONTENT_STATE *s, char *d, size_
       info->ascii++;
       whitespace++;
     }
+    else if (ch == 0)
+    {
+      info->nulbin++;
+      info->lobin++;
+    }
     else if (ch < 32 || ch == 127)
       info->lobin++;
     else
@@ -1351,6 +1356,35 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
   return (body);
 }
 
+static void run_mime_type_query (BODY *att)
+{
+  FILE *fp, *fperr;
+  char cmd[HUGE_STRING];
+  char *buf = NULL;
+  size_t buflen;
+  int dummy = 0;
+  pid_t thepid;
+
+  mutt_expand_file_fmt (cmd, sizeof(cmd), MimeTypeQueryCmd, att->filename);
+
+  if ((thepid = mutt_create_filter (cmd, NULL, &fp, &fperr)) < 0)
+  {
+    mutt_error (_("Error running \"%s\"!"), cmd);
+    return;
+  }
+
+  if ((buf = mutt_read_line (buf, &buflen, fp, &dummy, 0)) != NULL)
+  {
+    if (strchr(buf, '/'))
+      mutt_parse_content_type (buf, att);
+    FREE (&buf);
+  }
+
+  safe_fclose (&fp);
+  safe_fclose (&fperr);
+  mutt_wait_filter (thepid);
+}
+
 BODY *mutt_make_file_attach (const char *path)
 {
   BODY *att;
@@ -1359,25 +1393,20 @@ BODY *mutt_make_file_attach (const char *path)
   att = mutt_new_body ();
   att->filename = safe_strdup (path);
 
+  if (MimeTypeQueryCmd && *MimeTypeQueryCmd &&
+      option (OPTMIMETYPEQUERYFIRST))
+    run_mime_type_query (att);
+
   /* Attempt to determine the appropriate content-type based on the filename
    * suffix.
    */
+  if (!att->subtype)
+    mutt_lookup_mime_type (att, path);
 
-#if 0
-
-  if ((n = mutt_lookup_mime_type (buf, sizeof (buf), xbuf, sizeof (xbuf), path)) != TYPEOTHER
-      || *xbuf != '\0')
-  {
-    att->type = n;
-    att->subtype = safe_strdup (buf);
-    att->xtype = safe_strdup (xbuf);
-  }
-
-#else
-
-  mutt_lookup_mime_type (att, path);
-
-#endif
+  if (!att->subtype &&
+      MimeTypeQueryCmd && *MimeTypeQueryCmd &&
+      !option (OPTMIMETYPEQUERYFIRST))
+    run_mime_type_query (att);
 
   if ((info = mutt_get_content_info (path, att)) == NULL)
   {
@@ -1387,7 +1416,8 @@ BODY *mutt_make_file_attach (const char *path)
 
   if (!att->subtype)
   {
-    if (info->lobin == 0 || (info->lobin + info->hibin + info->ascii)/ info->lobin >= 10)
+    if ((info->nulbin == 0) &&
+        (info->lobin == 0 || (info->lobin + info->hibin + info->ascii)/ info->lobin >= 10))
     {
       /*
        * Statistically speaking, there should be more than 10% "lobin"
@@ -2240,6 +2270,8 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
 	  _exit (S_ERR);
       }
 
+      /* execvpe is a glibc extension */
+      /* execvpe (path, args, mutt_envlist ()); */
       execvp (path, args);
       _exit (S_ERR);
     }
@@ -2443,6 +2475,13 @@ mutt_invoke_sendmail (ADDRESS *from,	/* the sender */
     safe_realloc (&args, sizeof (char *) * (++argsmax));
 
   args[argslen++] = NULL;
+
+  /* Some user's $sendmail command uses gpg for password decryption,
+   * and is set up to prompt using ncurses pinentry.  If we
+   * mutt_endwin() it leaves other users staring at a blank screen.
+   * So instead, just force a hard redraw on the next refresh. */
+  if (!option (OPTNOCURSES))
+    mutt_need_hard_redraw ();
 
   if ((i = send_msg (path, args, msg, option(OPTNOCURSES) ? NULL : &childout)) != (EX_OK & 0xff))
   {

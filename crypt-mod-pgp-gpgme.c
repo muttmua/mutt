@@ -60,9 +60,9 @@ static int crypt_mod_pgp_encrypted_handler (BODY *m, STATE *s)
   return pgp_gpgme_encrypted_handler (m, s);
 }
 
-static int crypt_mod_pgp_check_traditional (FILE *fp, BODY *b, int tagged_only)
+static int crypt_mod_pgp_check_traditional (FILE *fp, BODY *b, int just_one)
 {
-  return pgp_gpgme_check_traditional (fp, b, tagged_only);
+  return pgp_gpgme_check_traditional (fp, b, just_one);
 }
 
 static void crypt_mod_pgp_invoke_import (const char *fname)
@@ -85,9 +85,9 @@ static int crypt_mod_pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
   return pgp_gpgme_verify_one (sigbdy, s, tempf);
 }
 
-static int crypt_mod_pgp_send_menu (HEADER *msg, int *redraw)
+static int crypt_mod_pgp_send_menu (HEADER *msg)
 {
-  return pgp_gpgme_send_menu (msg, redraw);
+  return pgp_gpgme_send_menu (msg);
 }
 
 static BODY *crypt_mod_pgp_encrypt_message (BODY *a, char *keylist, int sign)

@@ -132,6 +132,11 @@ enum
   MT_COLOR_SB_INDICATOR,
   MT_COLOR_SB_SPOOLFILE,
 #endif
+  MT_COLOR_COMPOSE_HEADER,
+  MT_COLOR_COMPOSE_SECURITY_ENCRYPT,
+  MT_COLOR_COMPOSE_SECURITY_SIGN,
+  MT_COLOR_COMPOSE_SECURITY_BOTH,
+  MT_COLOR_COMPOSE_SECURITY_NONE,
   MT_COLOR_MAX
 };
 
@@ -232,8 +237,6 @@ void ci_start_color (void);
 
 /* reset the color to the normal terminal color as defined by 'color normal ...' */
 #define NORMAL_COLOR SETCOLOR(MT_COLOR_NORMAL)
-
-#define MAYBE_REDRAW(x) if (option (OPTNEEDREDRAW)) { unset_option (OPTNEEDREDRAW); x = REDRAW_FULL; }
 
 /* ----------------------------------------------------------------------------
  * These are here to avoid compiler warnings with -Wall under SunOS 4.1.x

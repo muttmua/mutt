@@ -447,6 +447,7 @@ static smime_key_t *smime_select_key (smime_key_t *keys, char *query)
   menu->help = helpstr;
   menu->data = table;
   menu->title = title;
+  mutt_push_current_menu (menu);
   /* sorting keys might be done later - TODO */
 
   mutt_clear_error();
@@ -493,9 +494,9 @@ static smime_key_t *smime_select_key (smime_key_t *keys, char *query)
     }
   }
 
+  mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);
   FREE (&table);
-  set_option (OPTNEEDREDRAW);
 
   return selected_key;
 }
@@ -910,11 +911,11 @@ char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode)
       FREE (&keylist);
       return NULL;
     }
-    
+
     keyID = key->hash;
     keylist_size += mutt_strlen (keyID) + 2;
     safe_realloc (&keylist, keylist_size);
-    sprintf (keylist + keylist_used, "%s\n", keyID);	/* __SPRINTF_CHECKED__ */
+    sprintf (keylist + keylist_used, "%s%s", keylist_used ? " " : "", keyID);	/* __SPRINTF_CHECKED__ */
     keylist_used = mutt_strlen (keylist);
 
     smime_free_key (&key);
@@ -1373,10 +1374,10 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   char buf[LONG_STRING], certfile[LONG_STRING];
   char tempfile[_POSIX_PATH_MAX], smimeerrfile[_POSIX_PATH_MAX];
   char smimeinfile[_POSIX_PATH_MAX];
-  char *cert_start = certlist, *cert_end = certlist;
+  char *cert_start, *cert_end;
   FILE *smimein = NULL, *smimeerr = NULL, *fpout = NULL, *fptmp = NULL;
   BODY *t;
-  int err = 0, empty;
+  int err = 0, empty, off;
   pid_t thepid;
   
   mutt_mktemp (tempfile, sizeof (tempfile));
@@ -1407,17 +1408,18 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   }
 
   *certfile = '\0';
-  while (1)
+  for (cert_start = certlist; cert_start; cert_start = cert_end)
   {
-    int off = mutt_strlen (certfile);
-    while (*++cert_end && *cert_end != '\n');
-    if (!*cert_end) break;
-    *cert_end = '\0';
-    snprintf (certfile+off, sizeof (certfile)-off, " %s/%s",
-	      NONULL(SmimeCertificates), cert_start);
-    *cert_end = '\n';
-    cert_start = cert_end;
-    cert_start++;
+    if ((cert_end = strchr (cert_start, ' ')))
+      *cert_end = '\0';
+    if (*cert_start)
+    {
+      off = mutt_strlen (certfile);
+      snprintf (certfile+off, sizeof (certfile)-off, "%s%s/%s",
+                off ? " " : "", NONULL(SmimeCertificates), cert_start);
+    }
+    if (cert_end)
+      *cert_end++ = ' ';
   }
 
   /* write a MIME entity */
@@ -2089,7 +2091,7 @@ int smime_application_smime_handler (BODY *m, STATE *s)
   return smime_handle_entity (m, s, NULL) ? 0 : -1;
 }
 
-int smime_send_menu (HEADER *msg, int *redraw)
+int smime_send_menu (HEADER *msg)
 {
   smime_key_t *key;
   char *prompt, *letters, *choices;
@@ -2217,8 +2219,6 @@ int smime_send_menu (HEADER *msg, int *redraw)
     case 'S': /* (s)ign in oppenc mode */
       if(!SmimeDefaultKey)
       {
-        *redraw = REDRAW_FULL;
-
         if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0)))
         {
           mutt_str_replace (&SmimeDefaultKey, key->hash);
@@ -2245,7 +2245,6 @@ int smime_send_menu (HEADER *msg, int *redraw)
         crypt_smime_void_passphrase ();
       }
 
-      *redraw = REDRAW_FULL;
       break;
 
     case 'b': /* (b)oth */

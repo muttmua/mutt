@@ -418,6 +418,7 @@ static int retry_generic (int menu, keycode_t *keys, int keyslen, int lastkey)
  *	>0		function to execute
  *	OP_NULL		no function bound to key sequence
  *	-1		error occurred while reading input
+ *	-2		a timeout or sigwinch occurred
  */
 int km_dokey (int menu)
 {
@@ -464,13 +465,13 @@ int km_dokey (int menu)
 #ifdef USE_IMAP
   gotkey:
 #endif
-    /* hide timeouts and window resizes from line editor. */
-    if (menu == MENU_EDITOR && tmp.ch == -2)
+    /* hide timeouts, but not window resizes, from the line editor. */
+    if (menu == MENU_EDITOR && tmp.ch == -2 && !SigWinch)
       continue;
 
     LastKey = tmp.ch;
     if (LastKey < 0)
-      return -1;
+      return LastKey;
 
     /* do we have an op already? */
     if (tmp.op)

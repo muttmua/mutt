@@ -39,7 +39,7 @@ typedef int (*crypt_func_encrypted_handler_t) (BODY *m, STATE *s);
 
 typedef void (*crypt_func_pgp_invoke_getkeys_t) (ADDRESS *addr);
 typedef int (*crypt_func_pgp_check_traditional_t) (FILE *fp, BODY *b,
-                                                   int tagged_only);
+                                                   int just_one);
 typedef BODY *(*crypt_func_pgp_traditional_encryptsign_t) (BODY *a, int flags,
                                                            char *keylist);
 typedef BODY *(*crypt_func_pgp_make_key_attachment_t) (char *tempf);
@@ -53,7 +53,7 @@ typedef int (*crypt_func_verify_one_t) (BODY *sigbdy, STATE *s,
 typedef void (*crypt_func_pgp_extract_keys_from_attachment_list_t) 
                                            (FILE *fp, int tag, BODY *top);
 
-typedef int (*crypt_func_send_menu_t) (HEADER *msg, int *redraw);
+typedef int (*crypt_func_send_menu_t) (HEADER *msg);
 
  /* (SMIME) */
 typedef void (*crypt_func_smime_getkeys_t) (ENVELOPE *env);

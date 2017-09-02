@@ -212,7 +212,7 @@ pgp_key_t crypt_pgp_ask_for_key (char *tag, char *whatfor,
                                  short abilities, pgp_ring_t keyring);
 
 /* Check for a traditional PGP message in body B. */
-int crypt_pgp_check_traditional (FILE *fp, BODY *b, int tagged_only);
+int crypt_pgp_check_traditional (FILE *fp, BODY *b, int just_one);
 
 /* fixme: needs documentation. */
 BODY *crypt_pgp_traditional_encryptsign (BODY *a, int flags, char *keylist);
@@ -239,7 +239,7 @@ BODY *crypt_pgp_encrypt_message (BODY *a, char *keylist, int sign);
 /* Invoke the PGP command to import a key. */
 void crypt_pgp_invoke_import (const char *fname);
 
-int crypt_pgp_send_menu (HEADER *msg, int *redraw);
+int crypt_pgp_send_menu (HEADER *msg);
 
 /* fixme: needs documentation */
 int crypt_pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempf);
@@ -289,7 +289,7 @@ BODY *crypt_smime_build_smime_entity (BODY *a, char *certlist);
 /* Add a certificate and update index file (externally). */
 void crypt_smime_invoke_import (char *infile, char *mailbox);
 
-int crypt_smime_send_menu (HEADER *msg, int *redraw);
+int crypt_smime_send_menu (HEADER *msg);
 
 void crypt_smime_set_sender (const char *sender);
 

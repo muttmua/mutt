@@ -26,6 +26,7 @@
 #endif
 
 #include "mutt.h"
+#include "mutt_menu.h"
 #include "imap_private.h"
 #include "mx.h"
 #include "buffy.h"
@@ -38,7 +39,7 @@
 /* forward declarations */
 static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags);
 static int cmd_queue_full (IMAP_DATA* idata);
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr);
+static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags);
 static IMAP_COMMAND* cmd_new (IMAP_DATA* idata);
 static int cmd_status (const char *s);
 static void cmd_handle_fatal (IMAP_DATA* idata);
@@ -236,6 +237,7 @@ const char* imap_cmd_trailer (IMAP_DATA* idata)
  *     for checking for a mailbox on append and login
  *   IMAP_CMD_PASS: command contains a password. Suppress logging.
  *   IMAP_CMD_QUEUE: only queue command, do not execute.
+ *   IMAP_CMD_POLL: poll the socket for a response before running imap_cmd_step.
  * Return 0 on success, -1 on Failure, -2 on OK Failure
  */
 int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
@@ -250,6 +252,16 @@ int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
 
   if (flags & IMAP_CMD_QUEUE)
     return 0;
+
+  if ((flags & IMAP_CMD_POLL) &&
+      (ImapPollTimeout > 0) &&
+      (mutt_socket_poll (idata->conn, ImapPollTimeout)) == 0)
+  {
+    mutt_error (_("Connection to %s timed out"), idata->conn->account.host);
+    mutt_sleep (2);
+    cmd_handle_fatal (idata);
+    return -1;
+  }
 
   do
     rc = imap_cmd_step (idata);
@@ -287,18 +299,18 @@ void imap_cmd_finish (IMAP_DATA* idata)
   
   if (idata->reopen & IMAP_REOPEN_ALLOW)
   {
-    int count = idata->newMailCount;
+    unsigned int count = idata->newMailCount;
 
     if (!(idata->reopen & IMAP_EXPUNGE_PENDING) &&
 	(idata->reopen & IMAP_NEWMAIL_PENDING)
-	&& count > idata->ctx->msgcount)
+	&& count > idata->max_msn)
     {
       /* read new mail messages */
       dprint (2, (debugfile, "imap_cmd_finish: Fetching new mail\n"));
       /* check_status: curs_main uses imap_check_mailbox to detect
        *   whether the index needs updating */
       idata->check_status = IMAP_NEWMAIL_PENDING;
-      imap_read_headers (idata, idata->ctx->msgcount, count-1);
+      imap_read_headers (idata, idata->max_msn+1, count);
     }
     else if (idata->reopen & IMAP_EXPUNGE_PENDING)
     {
@@ -376,7 +388,7 @@ static IMAP_COMMAND* cmd_new (IMAP_DATA* idata)
 }
 
 /* queues command. If the queue is full, attempts to drain it. */
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr)
+static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags)
 {
   IMAP_COMMAND* cmd;
   int rc;
@@ -385,7 +397,7 @@ static int cmd_queue (IMAP_DATA* idata, const char* cmdstr)
   {
     dprint (3, (debugfile, "Draining IMAP command pipeline\n"));
 
-    rc = imap_exec (idata, NULL, IMAP_CMD_FAIL_OK);
+    rc = imap_exec (idata, NULL, IMAP_CMD_FAIL_OK | (flags & IMAP_CMD_POLL));
 
     if (rc < 0 && rc != -2)
       return rc;
@@ -410,7 +422,7 @@ static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags)
     return -1;
   }
 
-  if (cmdstr && ((rc = cmd_queue (idata, cmdstr)) < 0))
+  if (cmdstr && ((rc = cmd_queue (idata, cmdstr, flags)) < 0))
     return rc;
 
   if (flags & IMAP_CMD_QUEUE)
@@ -466,7 +478,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
 {
   char* s;
   char* pn;
-  int count;
+  unsigned int count;
 
   s = imap_next_word (idata->buf);
   pn = imap_next_word (s);
@@ -487,7 +499,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
       count = atoi (pn);
 
       if ( !(idata->reopen & IMAP_EXPUNGE_PENDING) &&
-	   count < idata->ctx->msgcount)
+	   count < idata->max_msn)
       {
         /* Notes 6.0.3 has a tendency to report fewer messages exist than
          * it should. */
@@ -496,7 +508,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
       }
       /* at least the InterChange server sends EXISTS messages freely,
        * even when there is no new mail */
-      else if (count == idata->ctx->msgcount)
+      else if (count == idata->max_msn)
 	dprint (3, (debugfile,
           "cmd_handle_untagged: superfluous EXISTS message.\n"));
       else
@@ -597,26 +609,36 @@ static void cmd_parse_capability (IMAP_DATA* idata, char* s)
  *   be reopened at our earliest convenience */
 static void cmd_parse_expunge (IMAP_DATA* idata, const char* s)
 {
-  int expno, cur;
+  unsigned int exp_msn, cur;
   HEADER* h;
 
   dprint (2, (debugfile, "Handling EXPUNGE\n"));
 
-  expno = atoi (s);
+  exp_msn = atoi (s);
+  if (exp_msn < 1 || exp_msn > idata->max_msn)
+    return;
 
-  /* walk headers, zero seqno of expunged message, decrement seqno of those
-   * above. Possibly we could avoid walking the whole list by resorting
-   * and guessing a good starting point, but I'm guessing the resort would
-   * nullify the gains */
-  for (cur = 0; cur < idata->ctx->msgcount; cur++)
+  h = idata->msn_index[exp_msn - 1];
+  if (h)
   {
-    h = idata->ctx->hdrs[cur];
-
-    if (h->index+1 == expno)
-      h->index = -1;
-    else if (h->index+1 > expno)
-      h->index--;
+    /* imap_expunge_mailbox() will rewrite h->index.
+     * It needs to resort using SORT_ORDER anyway, so setting to INT_MAX
+     * makes the code simpler and possibly more efficient. */
+    h->index = INT_MAX;
+    HEADER_DATA(h)->msn = 0;
   }
+
+  /* decrement seqno of those above. */
+  for (cur = exp_msn; cur < idata->max_msn; cur++)
+  {
+    h = idata->msn_index[cur];
+    if (h)
+      HEADER_DATA(h)->msn--;
+    idata->msn_index[cur - 1] = h;
+  }
+
+  idata->msn_index[idata->max_msn - 1] = NULL;
+  idata->max_msn--;
 
   idata->reopen |= IMAP_EXPUNGE_PENDING;
 }
@@ -627,34 +649,26 @@ static void cmd_parse_expunge (IMAP_DATA* idata, const char* s)
  *   Of course, a lot of code here duplicates code in message.c. */
 static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 {
-  int msgno, cur;
-  HEADER* h = NULL;
+  unsigned int msn;
+  HEADER *h;
 
   dprint (3, (debugfile, "Handling FETCH\n"));
 
-  msgno = atoi (s);
-  
-  if (msgno <= idata->ctx->msgcount)
-  /* see cmd_parse_expunge */
-    for (cur = 0; cur < idata->ctx->msgcount; cur++)
-    {
-      h = idata->ctx->hdrs[cur];
-      
-      if (h && h->active && h->index+1 == msgno)
-      {
-	dprint (2, (debugfile, "Message UID %d updated\n", HEADER_DATA(h)->uid));
-	break;
-      }
-      
-      h = NULL;
-    }
-  
-  if (!h)
+  msn = atoi (s);
+  if (msn < 1 || msn > idata->max_msn)
   {
     dprint (3, (debugfile, "FETCH response ignored for this message\n"));
     return;
   }
-  
+
+  h = idata->msn_index[msn - 1];
+  if (!h || !h->active)
+  {
+    dprint (3, (debugfile, "FETCH response ignored for this message\n"));
+    return;
+  }
+
+  dprint (2, (debugfile, "Message UID %d updated\n", HEADER_DATA(h)->uid));
   /* skip FETCH */
   s = imap_next_word (s);
   s = imap_next_word (s);
@@ -1013,7 +1027,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
         if ((inc->new != new) ||
             (inc->msg_count != status->messages) ||
             (inc->msg_unread != status->unseen))
-          SidebarNeedsRedraw = 1;
+          mutt_set_current_menu_redraw (REDRAW_SIDEBAR);
 #endif
         inc->new = new;
         if (new_msg_count)

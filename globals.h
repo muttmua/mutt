@@ -51,6 +51,8 @@ WHERE char *DsnReturn;
 WHERE char *Editor;
 WHERE char *EscChar;
 WHERE char *FolderFormat;
+WHERE char *ForwardAttrIntro;
+WHERE char *ForwardAttrTrailer;
 WHERE char *ForwFmt;
 WHERE char *Fqdn;
 WHERE char *HdrFmt;
@@ -82,6 +84,7 @@ WHERE char *MarkMacroPrefix;
 WHERE char *MhFlagged;
 WHERE char *MhReplied;
 WHERE char *MhUnseen;
+WHERE char *MimeTypeQueryCmd;
 WHERE char *MsgFmt;
 
 #ifdef USE_SOCKET
@@ -226,12 +229,12 @@ WHERE short ScoreThresholdFlag;
 #ifdef USE_SIDEBAR
 WHERE short SidebarWidth;
 WHERE LIST *SidebarWhitelist INITVAL(0);
-WHERE int SidebarNeedsRedraw INITVAL (0);
 #endif
 
 #ifdef USE_IMAP
 WHERE short ImapKeepalive;
 WHERE short ImapPipelineDepth;
+WHERE short ImapPollTimeout;
 #endif
 
 /* flags for received signals */
@@ -263,6 +266,7 @@ WHERE char *PgpVerifyKeyCommand;
 WHERE char *PgpListSecringCommand;
 WHERE char *PgpListPubringCommand;
 WHERE char *PgpGetkeysCommand;
+WHERE char *PgpSelfEncryptAs;
 
 /*-- formerly in smime.h --*/
 WHERE char *SmimeDefaultKey;
@@ -283,6 +287,7 @@ WHERE char *SmimePk7outCommand;
 WHERE char *SmimeGetCertCommand;
 WHERE char *SmimeImportCertCommand;
 WHERE char *SmimeGetCertEmailCommand;
+WHERE char *SmimeSelfEncryptAs;
 
 
 

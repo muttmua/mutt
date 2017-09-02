@@ -57,14 +57,16 @@
 
 /* forced redraw/resort types */
 #define R_NONE		0
-#define R_INDEX		(1<<0)
-#define R_PAGER		(1<<1)
-#define R_RESORT	(1<<2)	/* resort the mailbox */
-#define R_RESORT_SUB	(1<<3)	/* resort subthreads */
-#define R_RESORT_INIT	(1<<4)  /* resort from scratch */
-#define R_TREE		(1<<5)  /* redraw the thread tree */
-#define R_REFLOW        (1<<6)  /* reflow window layout */
-#define R_SIDEBAR       (1<<7)  /* redraw the sidebar */
+#define R_INDEX		(1<<0)  /* redraw the index menu (MENU_MAIN) */
+#define R_PAGER		(1<<1)  /* redraw the pager menu */
+#define R_PAGER_FLOW    (1<<2)  /* reflow lineInfo and redraw the pager menu */
+#define R_RESORT	(1<<3)	/* resort the mailbox */
+#define R_RESORT_SUB	(1<<4)	/* resort subthreads */
+#define R_RESORT_INIT	(1<<5)  /* resort from scratch */
+#define R_TREE		(1<<6)  /* redraw the thread tree */
+#define R_REFLOW        (1<<7)  /* reflow window layout and full redraw */
+#define R_SIDEBAR       (1<<8)  /* redraw the sidebar */
+#define R_MENU          (1<<9)  /* redraw all menus */
 #define R_BOTH		(R_INDEX | R_PAGER)
 #define R_RESORT_BOTH	(R_RESORT | R_RESORT_SUB)
 
@@ -78,7 +80,6 @@ struct option_t
 };
 
 #define UL (unsigned long)
-
 #endif /* _MAKEDOC */
 
 #ifndef ISPELL
@@ -153,7 +154,7 @@ struct option_t MuttVars[] = {
   ** and give it the same color as your attachment color (see also
   ** $$crypt_timestamp).
   */
-  { "arrow_cursor",	DT_BOOL, R_BOTH, OPTARROWCURSOR, 0 },
+  { "arrow_cursor",	DT_BOOL, R_MENU, OPTARROWCURSOR, 0 },
   /*
   ** .pp
   ** When \fIset\fP, an arrow (``->'') will be used to indicate the current entry
@@ -406,7 +407,7 @@ struct option_t MuttVars[] = {
   ** When \fIunset\fP, Mutt will not collapse a thread if it contains any
   ** unread messages.
   */
-  { "compose_format",	DT_STR,	 R_BOTH, UL &ComposeFormat, UL "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-" },
+  { "compose_format",	DT_STR,	 R_MENU, UL &ComposeFormat, UL "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-" },
   /*
   ** .pp
   ** Controls the format of the status line displayed in the ``compose''
@@ -605,7 +606,7 @@ struct option_t MuttVars[] = {
   ** If \fI``no''\fP, never attempt to verify cryptographic signatures.
   ** (Crypto only)
   */
-  { "date_format",	DT_STR,	 R_BOTH, UL &DateFmt, UL "!%a, %b %d, %Y at %I:%M:%S%p %Z" },
+  { "date_format",	DT_STR,	 R_MENU, UL &DateFmt, UL "!%a, %b %d, %Y at %I:%M:%S%p %Z" },
   /*
   ** .pp
   ** This variable controls the format of the date printed by the ``%d''
@@ -724,6 +725,13 @@ struct option_t MuttVars[] = {
   ** This option allows you to edit the header of your outgoing messages
   ** along with the body of your message.
   ** .pp
+  ** Although the compose menu may have localized header labels, the
+  ** labels passed to your editor will be standard RFC 2822 headers,
+  ** (e.g. To:, Cc:, Subject:).  Headers added in your editor must
+  ** also be RFC 2822 headers, or one of the pseudo headers listed in
+  ** ``$edit-header''.  Mutt will not understand localized header
+  ** labels, just as it would not when parsing an actual email.
+  ** .pp
   ** \fBNote\fP that changes made to the References: and Date: headers are
   ** ignored for interoperability reasons.
   */
@@ -815,7 +823,7 @@ struct option_t MuttVars[] = {
   ** you use ``+'' or ``='' for any other variables since expansion takes place
   ** when handling the ``$mailboxes'' command.
   */
-  { "folder_format",	DT_STR,	 R_INDEX, UL &FolderFormat, UL "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f" },
+  { "folder_format",	DT_STR,	 R_MENU, UL &FolderFormat, UL "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f" },
   /*
   ** .pp
   ** This variable allows you to customize the file browser display to your
@@ -879,6 +887,22 @@ struct option_t MuttVars[] = {
   ** you are sending to even if that mailbox does not exist.
   ** .pp
   ** Also see the $$record variable.
+  */
+  { "forward_attribution_intro", DT_STR, R_NONE, UL &ForwardAttrIntro, UL "----- Forwarded message from %f -----" },
+  /*
+  ** .pp
+  ** This is the string that will precede a message which has been forwarded
+  ** in the main body of a message (when $$mime_forward is unset).
+  ** For a full listing of defined \fCprintf(3)\fP-like sequences see
+  ** the section on $$index_format.  See also $$attribution_locale.
+  */
+  { "forward_attribution_trailer", DT_STR, R_NONE, UL &ForwardAttrTrailer, UL "----- End forwarded message -----" },
+  /*
+  ** .pp
+  ** This is the string that will follow a message which has been forwarded
+  ** in the main body of a message (when $$mime_forward is unset).
+  ** For a full listing of defined \fCprintf(3)\fP-like sequences see
+  ** the section on $$index_format.  See also $$attribution_locale.
   */
   { "forward_decode",	DT_BOOL, R_NONE, OPTFORWDECODE, 1 },
   /*
@@ -1007,7 +1031,18 @@ struct option_t MuttVars[] = {
   */
 #endif /* HAVE_GDBM || HAVE_DB4 */
 #endif /* USE_HCACHE */
-  { "help",		DT_BOOL, R_BOTH|R_REFLOW, OPTHELP, 1 },
+  { "header_color_partial", DT_BOOL, R_PAGER_FLOW, OPTHEADERCOLORPARTIAL, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, color header regexps behave like color body regexps:
+  ** color is applied to the exact text matched by the regexp.  When
+  ** \fIunset\fP, color is applied to the entire header.
+  ** .pp
+  ** One use of this option might be to apply color to just the header labels.
+  ** .pp
+  ** See ``$color'' for more details.
+  */
+  { "help",		DT_BOOL, R_REFLOW, OPTHELP, 1 },
   /*
   ** .pp
   ** When \fIset\fP, help lines describing the bindings for the major functions
@@ -1071,6 +1106,15 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** The file in which Mutt will save its history.
+  ** .pp
+  ** Also see $$save_history.
+  */
+  { "history_remove_dups", DT_BOOL, R_NONE, OPTHISTREMOVEDUPS, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, all of the string history will be scanned for duplicates
+  ** when a new entry is added.  Duplicate entries in the $$history_file will
+  ** also be removed when it is periodically compacted.
   */
   { "honor_disposition", DT_BOOL, R_NONE, OPTHONORDISP, 0 },
   /*
@@ -1108,14 +1152,14 @@ struct option_t MuttVars[] = {
   ** Also see $$use_domain and $$hidden_host.
   */
 #ifdef HAVE_LIBIDN
-  { "idn_decode",	DT_BOOL, R_BOTH, OPTIDNDECODE, 1},
+  { "idn_decode",	DT_BOOL, R_MENU, OPTIDNDECODE, 1},
   /*
   ** .pp
   ** When \fIset\fP, Mutt will show you international domain names decoded.
   ** Note: You can use IDNs for addresses even if this is \fIunset\fP.
   ** This variable only affects decoding. (IDN only)
   */
-  { "idn_encode",	DT_BOOL, R_BOTH, OPTIDNENCODE, 1},
+  { "idn_encode",	DT_BOOL, R_MENU, OPTIDNENCODE, 1},
   /*
   ** .pp
   ** When \fIset\fP, Mutt will encode international domain names using
@@ -1266,6 +1310,14 @@ struct option_t MuttVars[] = {
   ** .pp
   ** \fBNote:\fP Changes to this variable have no effect on open connections.
   */
+  { "imap_poll_timeout", DT_NUM,  R_NONE, UL &ImapPollTimeout, 15 },
+  /*
+  ** .pp
+  ** This variable specifies the maximum amount of time in seconds
+  ** that mutt will wait for a response when polling IMAP connections
+  ** for new mail, before timing out and closing the connection.  Set
+  ** to 0 to disable timing out.
+  */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
   ** .pp
@@ -1364,7 +1416,7 @@ struct option_t MuttVars[] = {
   ** .dt %r .dd comma separated list of ``To:'' recipients
   ** .dt %R .dd comma separated list of ``Cc:'' recipients
   ** .dt %s .dd subject of the message
-  ** .dt %S .dd status of the message (``N''/``D''/``d''/``!''/``r''/\(as)
+  ** .dt %S .dd single character status of the message (``N''/``O''/``D''/``d''/``!''/``r''/``\(as'')
   ** .dt %t .dd ``To:'' field (recipients)
   ** .dt %T .dd the appropriate character from the $$to_chars string
   ** .dt %u .dd user (login) name of the author
@@ -1375,7 +1427,11 @@ struct option_t MuttVars[] = {
   ** .dt %Y .dd ``X-Label:'' field, if present, and \fI(1)\fP not at part of a thread tree,
   **            \fI(2)\fP at the top of a thread, or \fI(3)\fP ``X-Label:'' is different from
   **            preceding message's ``X-Label:''.
-  ** .dt %Z .dd message status flags
+  ** .dt %Z .dd a three character set of message status flags.
+  **            the first character is new/read/replied flags (``n''/``o''/``r''/``O''/``N'').
+  **            the second is deleted or encryption flags (``D''/``d''/``S''/``P''/``s''/``K'').
+  **            the third is either tagged/flagged (``\(as''/``!''), or one of the characters
+  **            listed in $$to_chars.
   ** .dt %{fmt} .dd the date and time of the message is converted to sender's
   **                time zone, and ``fmt'' is expanded by the library function
   **                \fCstrftime(3)\fP; a leading bang disables locales
@@ -1508,7 +1564,7 @@ struct option_t MuttVars[] = {
   ** will show up with an ``O'' next to them in the index menu,
   ** indicating that they are old.
   */
-  { "markers",		DT_BOOL, R_PAGER, OPTMARKERS, 1 },
+  { "markers",		DT_BOOL, R_PAGER_FLOW, OPTMARKERS, 1 },
   /*
   ** .pp
   ** Controls the display of wrapped lines in the internal pager. If set, a
@@ -1663,6 +1719,32 @@ struct option_t MuttVars[] = {
   ** When forwarding multiple attachments of a MIME message from the attachment
   ** menu, attachments which cannot be decoded in a reasonable manner will
   ** be attached to the newly composed message if this option is \fIset\fP.
+  */
+  { "mime_type_query_command", DT_STR, R_NONE, UL &MimeTypeQueryCmd, UL "" },
+  /*
+  ** .pp
+  ** This specifies a command to run, to determine the mime type of a
+  ** new attachment when composing a message.  Unless
+  ** $$mime_type_query_first is set, this will only be run if the
+  ** attachment's extension is not found in the mime.types file.
+  ** .pp
+  ** The string may contain a ``%s'', which will be substituted with the
+  ** attachment filename.  Mutt will add quotes around the string substituted
+  ** for ``%s'' automatically according to shell quoting rules, so you should
+  ** avoid adding your own.  If no ``%s'' is found in the string, Mutt will
+  ** append the attachment filename to the end of the string.
+  ** .pp
+  ** The command should output a single line containing the
+  ** attachment's mime type.
+  ** .pp
+  ** Suggested values are ``xdg-mime query filetype'' or
+  ** ``file -bi''.
+  */
+  { "mime_type_query_first", DT_BOOL, R_NONE, OPTMIMETYPEQUERYFIRST, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, the $$mime_type_query_command will be run before the
+  ** mime.types lookup.
   */
 #ifdef MIXMASTER
   { "mix_entry_format", DT_STR,  R_NONE, UL &MixEntryFormat, UL "%4n %c %-16s %a" },
@@ -2039,6 +2121,21 @@ struct option_t MuttVars[] = {
   ** removed, while the inner \fCmultipart/signed\fP part is retained.
   ** (PGP only)
   */
+  { "pgp_self_encrypt",    DT_BOOL, R_NONE, OPTPGPSELFENCRYPT, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, PGP encrypted messages will also be encrypted
+  ** using the key in $$pgp_self_encrypt_as.
+  ** (PGP only)
+  */
+  { "pgp_self_encrypt_as", DT_STR,  R_NONE, UL &PgpSelfEncryptAs, 0 },
+  /*
+  ** .pp
+  ** This is an additional key used to encrypt messages when $$pgp_self_encrypt
+  ** is \fIset\fP.  It is also used to specify the key for $$postpone_encrypt.
+  ** It should be in keyid or fingerprint form (e.g. 0x00112233).
+  ** (PGP only)
+  */
   { "pgp_show_unusable", DT_BOOL, R_NONE, OPTPGPSHOWUNUSABLE, 1 },
   /*
   ** .pp
@@ -2258,15 +2355,16 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** When \fIset\fP, postponed messages that are marked for encryption will be
-  ** encrypted using the key in $$postpone_encrypt_as before saving.
+  ** self-encrypted.  Mutt will first try to encrypt using the value specified
+  ** in $$pgp_self_encrypt_as or $$smime_self_encrypt_as.  If those are not
+  ** set, it will try the deprecated $$postpone_encrypt_as.
   ** (Crypto only)
   */
   { "postpone_encrypt_as", DT_STR,  R_NONE, UL &PostponeEncryptAs, 0 },
   /*
   ** .pp
-  ** This is the key used to encrypt postponed messages.  It should be in
-  ** keyid or fingerprint form (e.g. 0x00112233 for PGP or the
-  ** hash-value that OpenSSL generates for S/MIME).
+  ** This is a deprecated fall-back variable for $$postpone_encrypt.
+  ** Please use $$pgp_self_encrypt_as or $$smime_self_encrypt_as.
   ** (Crypto only)
   */
 #ifdef USE_SOCKET
@@ -2839,7 +2937,7 @@ struct option_t MuttVars[] = {
   ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
   ** order (example: ``\fCset sort_browser=reverse-date\fP'').
   */
-  { "sidebar_visible", DT_BOOL, R_BOTH|R_REFLOW, OPTSIDEBAR, 0 },
+  { "sidebar_visible", DT_BOOL, R_REFLOW, OPTSIDEBAR, 0 },
   /*
   ** .pp
   ** This specifies whether or not to show sidebar. The sidebar shows a list of
@@ -2847,7 +2945,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** \fBSee also:\fP $$sidebar_format, $$sidebar_width
   */
-  { "sidebar_width", DT_NUM, R_BOTH|R_REFLOW, UL &SidebarWidth, 30 },
+  { "sidebar_width", DT_NUM, R_REFLOW, UL &SidebarWidth, 30 },
   /*
   ** .pp
   ** This controls the width of the sidebar.  It is measured in screen columns.
@@ -2901,7 +2999,7 @@ struct option_t MuttVars[] = {
   ** messages from the current folder.  The default is to pause one second, so
   ** a value of zero for this option suppresses the pause.
   */
-  { "smart_wrap",	DT_BOOL, R_PAGER, OPTWRAP, 1 },
+  { "smart_wrap",	DT_BOOL, R_PAGER_FLOW, OPTWRAP, 1 },
   /*
   ** .pp
   ** Controls the display of lines longer than the screen width in the
@@ -3074,6 +3172,22 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This is a format string, see the $$smime_decrypt_command command for
   ** possible \fCprintf(3)\fP-like sequences.
+  ** (S/MIME only)
+  */
+  { "smime_self_encrypt",    DT_BOOL, R_NONE, OPTSMIMESELFENCRYPT, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, S/MIME encrypted messages will also be encrypted
+  ** using the certificate in $$smime_self_encrypt_as.
+  ** (S/MIME only)
+  */
+  { "smime_self_encrypt_as", DT_STR,  R_NONE, UL &SmimeSelfEncryptAs, 0 },
+  /*
+  ** .pp
+  ** This is an additional certificate used to encrypt messages when
+  ** $$smime_self_encrypt is \fIset\fP.  It is also used to specify the
+  ** certificate for $$postpone_encrypt.  It should be the hash-value that
+  ** OpenSSL generates.
   ** (S/MIME only)
   */
   { "smime_sign_command", 	DT_STR, R_NONE, UL &SmimeSignCommand, 0},
@@ -3378,6 +3492,24 @@ struct option_t MuttVars[] = {
   ** URL. You should only unset this for particular known hosts, using
   ** the \fC$<account-hook>\fP function.
   */
+# ifdef USE_SSL_OPENSSL
+#  ifdef HAVE_SSL_PARTIAL_CHAIN
+  { "ssl_verify_partial_chains", DT_BOOL, R_NONE, OPTSSLVERIFYPARTIAL, 0 },
+  /*
+  ** .pp
+  ** This option should not be changed from the default unless you understand
+  ** what you are doing.
+  ** .pp
+  ** Setting this variable to \fIyes\fP will permit verifying partial
+  ** certification chains, i. e. a certificate chain where not the root,
+  ** but an intermediate certificate CA, or the host certificate, are
+  ** marked trusted (in $$certificate_file), without marking the root
+  ** signing CA as trusted.
+  ** .pp
+  ** (OpenSSL 1.0.2b and newer only).
+  */
+#  endif /* defined HAVE_SSL_PARTIAL_CHAIN */
+# endif /* defined USE_SSL_OPENSSL */
   { "ssl_ciphers", DT_STR, R_NONE, UL &SslCiphers, UL 0 },
   /*
   ** .pp
@@ -3477,7 +3609,7 @@ struct option_t MuttVars[] = {
   ** will replace any dots in the expansion by underscores. This might be helpful
   ** with IMAP folders that don't like dots in folder names.
   */
-  { "status_on_top",	DT_BOOL, R_BOTH|R_REFLOW, OPTSTATUSONTOP, 0 },
+  { "status_on_top",	DT_BOOL, R_REFLOW, OPTSTATUSONTOP, 0 },
   /*
   ** .pp
   ** Setting this variable causes the ``status bar'' to be displayed on

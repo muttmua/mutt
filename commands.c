@@ -238,7 +238,7 @@ int mutt_display_message (HEADER *cur)
   return rc;
 }
 
-void ci_bounce_message (HEADER *h, int *redraw)
+void ci_bounce_message (HEADER *h)
 {
   char prompt[SHORT_STRING];
   char scratch[SHORT_STRING];
@@ -276,13 +276,6 @@ void ci_bounce_message (HEADER *h, int *redraw)
     strfcpy(prompt, _("Bounce tagged messages to: "), sizeof(prompt));
   
   rc = mutt_get_field (prompt, buf, sizeof (buf), MUTT_ALIAS);
-
-  if (option (OPTNEEDREDRAW))
-  {
-    unset_option (OPTNEEDREDRAW);
-    *redraw = REDRAW_FULL;
-  }
-
   if (rc || !buf[0])
     return;
 
@@ -413,10 +406,12 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
       mutt_perror _("Can't create filter process");
       return 1;
     }
-      
+
+    set_option (OPTKEEPQUIET);
     pipe_msg (h, fpout, decode, print);
     safe_fclose (&fpout);
     rc = mutt_wait_filter (thepid);
+    unset_option (OPTKEEPQUIET);
   }
   else
   { /* handle tagged messages */
@@ -447,12 +442,14 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
 	    mutt_perror _("Can't create filter process");
 	    return 1;
 	  }
+          set_option (OPTKEEPQUIET);
           pipe_msg (Context->hdrs[Context->v2r[i]], fpout, decode, print);
           /* add the message separator */
           if (sep)  fputs (sep, fpout);
 	  safe_fclose (&fpout);
 	  if (mutt_wait_filter (thepid) != 0)
 	    rc = 1;
+          unset_option (OPTKEEPQUIET);
         }
       }
     }
@@ -464,6 +461,7 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
 	mutt_perror _("Can't create filter process");
 	return 1;
       }
+      set_option (OPTKEEPQUIET);
       for (i = 0; i < Context->vcount; i++)
       {
         if (Context->hdrs[Context->v2r[i]]->tagged)
@@ -477,6 +475,7 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
       safe_fclose (&fpout);
       if (mutt_wait_filter (thepid) != 0)
 	rc = 1;
+      unset_option (OPTKEEPQUIET);
     }
   }
 
@@ -534,12 +533,13 @@ int mutt_select_sort (int reverse)
 
   switch (mutt_multi_choice (reverse ?
        /* L10N: The following three are the sort/reverse sort prompts.
-        * Capital letters must match the order of the characters in the third
-        * string.
+        * Letters must match the order of the characters in the third
+        * string.  Note that mutt now supports multiline prompts, so
+        * it's okay for the translation to take up to three lines.
         */
-			     _("Rev-Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: ") :
-			     _("Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "),
-			     _("dfrsotuzcpl")))
+	_("Rev-Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: ") :
+	_("Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "),
+	_("dfrsotuzcpl")))
   {
   case -1: /* abort - don't resort */
     return -1;
@@ -734,8 +734,7 @@ int _mutt_save_message (HEADER *h, CONTEXT *ctx, int delete, int decode, int dec
 }
 
 /* returns 0 if the copy/save was successful, or -1 on error/abort */
-int mutt_save_message (HEADER *h, int delete, 
-		       int decode, int decrypt, int *redraw)
+int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 {
   int i, need_buffy_cleanup;
   int need_passphrase = 0, app=0;
@@ -743,9 +742,6 @@ int mutt_save_message (HEADER *h, int delete,
   CONTEXT ctx;
   struct stat st;
 
-  *redraw = 0;
-
-  
   snprintf (prompt, sizeof (prompt),
 	    decode  ? (delete ? _("Decode-save%s to mailbox") :
 		       _("Decode-copy%s to mailbox")) :
@@ -793,16 +789,8 @@ int mutt_save_message (HEADER *h, int delete,
   }
 
   mutt_pretty_mailbox (buf, sizeof (buf));
-  if (mutt_enter_fname (prompt, buf, sizeof (buf), redraw, 0) == -1)
+  if (mutt_enter_fname (prompt, buf, sizeof (buf), 0) == -1)
     return (-1);
-
-  if (*redraw != REDRAW_FULL)
-  {
-    if (!h)
-      *redraw = REDRAW_INDEX | REDRAW_STATUS;
-    else
-      *redraw = REDRAW_STATUS;
-  }
 
   if (!buf[0])
     return (-1);
@@ -890,7 +878,13 @@ void mutt_version (void)
   mutt_message ("Mutt %s (%s)", MUTT_VERSION, ReleaseDate);
 }
 
-void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
+/*
+ * Returns:
+ *   1 when a structural change is made.
+ *     recvattach requires this to know when to regenerate the actx.
+ *   0 otherwise.
+ */
+int mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
 {
   char buf[LONG_STRING];
   char obuf[LONG_STRING];
@@ -902,6 +896,7 @@ void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
 
   short charset_changed = 0;
   short type_changed = 0;
+  short structure_changed = 0;
   
   cp = mutt_get_parameter ("charset", b->parameter);
   strfcpy (charset, NONULL (cp), sizeof (charset));
@@ -923,7 +918,7 @@ void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
   
   if (mutt_get_field ("Content-Type: ", buf, sizeof (buf), 0) != 0 ||
       buf[0] == 0)
-    return;
+    return 0;
   
   /* clean up previous junk */
   mutt_free_parameter (&b->parameter);
@@ -964,15 +959,22 @@ void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
   b->force_charset |= charset_changed ? 1 : 0;
 
   if (!is_multipart (b) && b->parts)
+  {
+    structure_changed = 1;
     mutt_free_body (&b->parts);
+  }
   if (!mutt_is_message_type (b->type, b->subtype) && b->hdr)
   {
+    structure_changed = 1;
     b->hdr->content = NULL;
     mutt_free_header (&b->hdr);
   }
 
-  if (fp && (is_multipart (b) || mutt_is_message_type (b->type, b->subtype)))
+  if (fp && !b->parts && (is_multipart (b) || mutt_is_message_type (b->type, b->subtype)))
+  {
+    structure_changed = 1;
     mutt_parse_part (fp, b);
+  }
   
   if (WithCrypto && h)
   {
@@ -981,6 +983,8 @@ void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
 
     h->security |= crypt_query (b);
   }
+
+  return structure_changed;
 }
 
 

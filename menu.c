@@ -30,6 +30,11 @@
 
 char* SearchBuffers[MENU_MAX];
 
+/* These are used to track the active menus, for redraw operations. */
+static size_t MenuStackCount = 0;
+static size_t MenuStackLen = 0;
+static MUTTMENU **MenuStack = NULL;
+
 static void print_enriched_string (int attr, unsigned char *s, int do_color)
 {
   wchar_t wc;
@@ -237,7 +242,7 @@ void menu_redraw_status (MUTTMENU *menu)
 #ifdef USE_SIDEBAR
 void menu_redraw_sidebar (MUTTMENU *menu)
 {
-  SidebarNeedsRedraw = 0;
+  menu->redraw &= ~REDRAW_SIDEBAR;
   mutt_sb_draw ();
 }
 #endif
@@ -396,7 +401,7 @@ void menu_check_recenter (MUTTMENU *menu)
     if (menu->top != 0) 
     {
       menu->top = 0;
-      set_option (OPTNEEDREDRAW);
+      menu->redraw |= REDRAW_INDEX;
     }
   }
   else 
@@ -716,6 +721,7 @@ MUTTMENU *mutt_new_menu (int menu)
   p->messagewin = MuttMessageWindow;
   p->color = default_color;
   p->search = menu_search_generic;
+
   return (p);
 }
 
@@ -733,6 +739,94 @@ void mutt_menuDestroy (MUTTMENU **p)
 
   FREE (p);		/* __FREE_CHECKED__ */
 }
+
+static MUTTMENU *get_current_menu (void)
+{
+  return MenuStackCount ? MenuStack[MenuStackCount - 1] : NULL;
+}
+
+void mutt_push_current_menu (MUTTMENU *menu)
+{
+  if (MenuStackCount >= MenuStackLen)
+  {
+    MenuStackLen += 5;
+    safe_realloc (&MenuStack, MenuStackLen * sizeof(MUTTMENU *));
+  }
+
+  MenuStack[MenuStackCount++] = menu;
+  CurrentMenu = menu->menu;
+}
+
+void mutt_pop_current_menu (MUTTMENU *menu)
+{
+  MUTTMENU *prev_menu;
+
+  if (!MenuStackCount ||
+      (MenuStack[MenuStackCount - 1] != menu))
+  {
+    dprint (1, (debugfile, "mutt_pop_current_menu() called with inactive menu\n"));
+    return;
+  }
+
+  MenuStackCount--;
+  prev_menu = get_current_menu ();
+  if (prev_menu)
+  {
+    CurrentMenu = prev_menu->menu;
+    prev_menu->redraw = REDRAW_FULL;
+  }
+  else
+  {
+    CurrentMenu = MENU_MAIN;
+  }
+}
+
+void mutt_set_current_menu_redraw (int redraw)
+{
+  MUTTMENU *current_menu;
+
+  current_menu = get_current_menu ();
+  if (current_menu)
+    current_menu->redraw |= redraw;
+}
+
+void mutt_set_current_menu_redraw_full (void)
+{
+  MUTTMENU *current_menu;
+
+  current_menu = get_current_menu ();
+  if (current_menu)
+    current_menu->redraw = REDRAW_FULL;
+}
+
+void mutt_set_menu_redraw (int menu_type, int redraw)
+{
+  if (CurrentMenu == menu_type)
+    mutt_set_current_menu_redraw (redraw);
+}
+
+void mutt_set_menu_redraw_full (int menu_type)
+{
+  if (CurrentMenu == menu_type)
+    mutt_set_current_menu_redraw_full ();
+}
+
+void mutt_current_menu_redraw ()
+{
+  MUTTMENU *current_menu;
+
+  current_menu = get_current_menu ();
+  if (current_menu)
+  {
+    if (menu_redraw (current_menu) == OP_REDRAW)
+    /* On a REDRAW_FULL with a non-customized redraw, menu_redraw()
+     * will return OP_REDRAW to give the calling menu-loop a chance to
+     * customize output.
+     */
+       menu_redraw (current_menu);
+  }
+}
+
 
 #define MUTT_SEARCH_UP   1
 #define MUTT_SEARCH_DOWN 2
@@ -845,6 +939,12 @@ static int menu_dialog_dokey (MUTTMENU *menu, int *ip)
 
 int menu_redraw (MUTTMENU *menu)
 {
+  if (menu->custom_menu_redraw)
+  {
+    menu->custom_menu_redraw (menu);
+    return OP_NULL;
+  }
+
   /* See if all or part of the screen needs to be updated.  */
   if (menu->redraw & REDRAW_FULL)
   {
@@ -859,7 +959,7 @@ int menu_redraw (MUTTMENU *menu)
   if (menu->redraw & REDRAW_STATUS)
     menu_redraw_status (menu);
 #ifdef USE_SIDEBAR
-  if (menu->redraw & REDRAW_SIDEBAR || SidebarNeedsRedraw)
+  if (menu->redraw & REDRAW_SIDEBAR)
     menu_redraw_sidebar (menu);
 #endif
   if (menu->redraw & REDRAW_INDEX)
@@ -886,19 +986,30 @@ int mutt_menuLoop (MUTTMENU *menu)
       unset_option (OPTMENUCALLER);
       return OP_NULL;
     }
-    
-    
+
+    /* Clear the tag prefix unless we just started it.  Don't clear
+     * the prefix on a timeout (i==-2), but do clear on an abort (i==-1)
+     */
+    if (menu->tagprefix &&
+        i != OP_TAG_PREFIX && i != OP_TAG_PREFIX_COND && i != -2)
+      menu->tagprefix = 0;
+
     mutt_curs_set (0);
 
     if (menu_redraw (menu) == OP_REDRAW)
       return OP_REDRAW;
-    
+
+    /* give visual indication that the next command is a tag- command */
+    if (menu->tagprefix)
+    {
+      mutt_window_mvaddstr (menu->messagewin, 0, 0, "tag-");
+      mutt_window_clrtoeol (menu->messagewin);
+    }
+
     menu->oldcurrent = menu->current;
 
 
     /* move the cursor out of the way */
-    
-    
     if (option (OPTARROWCURSOR))
       mutt_window_move (menu->indexwin, menu->current - menu->top + menu->offset, 2);
     else if (option (OPTBRAILLEFRIENDLY))
@@ -908,21 +1019,25 @@ int mutt_menuLoop (MUTTMENU *menu)
                         menu->indexwin->cols - 1);
 
     mutt_refresh ();
-    
+
     /* try to catch dialog keys before ops */
     if (menu->dialog && menu_dialog_dokey (menu, &i) == 0)
       return i;
-		    
+
     i = km_dokey (menu->menu);
     if (i == OP_TAG_PREFIX || i == OP_TAG_PREFIX_COND)
     {
+      if (menu->tagprefix)
+      {
+        menu->tagprefix = 0;
+        mutt_window_clearline (menu->messagewin, 0);
+        continue;
+      }
+
       if (menu->tagged)
       {
-        mutt_window_mvaddstr (menu->messagewin, 0, 0, "Tag-");
-	mutt_window_clrtoeol (menu->messagewin);
-	i = km_dokey (menu->menu);
 	menu->tagprefix = 1;
-        mutt_window_clearline (menu->messagewin, 0);
+        continue;
       }
       else if (i == OP_TAG_PREFIX)
       {
@@ -938,8 +1053,6 @@ int mutt_menuLoop (MUTTMENU *menu)
     }
     else if (menu->tagged && option (OPTAUTOTAG))
       menu->tagprefix = 1;
-    else
-      menu->tagprefix = 0;
 
     mutt_curs_set (1);
 
@@ -947,14 +1060,17 @@ int mutt_menuLoop (MUTTMENU *menu)
     if (SigWinch)
     {
       mutt_resize_screen ();
-      menu->redraw = REDRAW_FULL;
       SigWinch = 0;
       clearok(stdscr,TRUE);/*force complete redraw*/
     }
 #endif
 
-    if (i == -1)
+    if (i < 0)
+    {
+      if (menu->tagprefix)
+        mutt_window_clearline (menu->messagewin, 0);
       continue;
+    }
 
     if (!menu->dialog)
       mutt_clear_error ();
@@ -1037,14 +1153,7 @@ int mutt_menuLoop (MUTTMENU *menu)
 	break;
 
       case OP_ENTER_COMMAND:
-	CurrentMenu = menu->menu;
 	mutt_enter_command ();
-	if (option (OPTFORCEREDRAWINDEX))
-	{
-	  menu->redraw = REDRAW_FULL;
-	  unset_option (OPTFORCEREDRAWINDEX);
-	  unset_option (OPTFORCEREDRAWPAGER);
-	}
 	break;
 
       case OP_TAG:
@@ -1054,7 +1163,7 @@ int mutt_menuLoop (MUTTMENU *menu)
 	  {
 	    for (i = 0; i < menu->max; i++)
 	      menu->tagged += menu->tag (menu, i, 0);
-	    menu->redraw = REDRAW_INDEX;
+	    menu->redraw |= REDRAW_INDEX;
 	  }
 	  else if (menu->max)
 	  {
@@ -1063,10 +1172,10 @@ int mutt_menuLoop (MUTTMENU *menu)
 	    if (i && option (OPTRESOLVE) && menu->current < menu->max - 1)
 	    {
 	      menu->current++;
-	      menu->redraw = REDRAW_MOTION_RESYNCH;
+	      menu->redraw |= REDRAW_MOTION_RESYNCH;
 	    }
 	    else
-	      menu->redraw = REDRAW_CURRENT;
+	      menu->redraw |= REDRAW_CURRENT;
 	  }
 	  else
 	    mutt_error _("No entries.");
@@ -1077,7 +1186,6 @@ int mutt_menuLoop (MUTTMENU *menu)
 
       case OP_SHELL_ESCAPE:
 	mutt_shell_escape ();
-	MAYBE_REDRAW (menu->redraw);
 	break;
 
       case OP_WHAT_KEY:

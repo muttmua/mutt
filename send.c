@@ -219,11 +219,11 @@ static int edit_envelope (ENVELOPE *en)
   char buf[HUGE_STRING];
   LIST *uh = UserHeader;
 
-  if (edit_address (&en->to, "To: ") == -1 || en->to == NULL)
+  if (edit_address (&en->to, _("To: ")) == -1 || en->to == NULL)
     return (-1);
-  if (option (OPTASKCC) && edit_address (&en->cc, "Cc: ") == -1)
+  if (option (OPTASKCC) && edit_address (&en->cc, _("Cc: ")) == -1)
     return (-1);
-  if (option (OPTASKBCC) && edit_address (&en->bcc, "Bcc: ") == -1)
+  if (option (OPTASKBCC) && edit_address (&en->bcc, _("Bcc: ")) == -1)
     return (-1);
 
   if (en->subject)
@@ -248,7 +248,7 @@ static int edit_envelope (ENVELOPE *en)
     }
   }
   
-  if (mutt_get_field ("Subject: ", buf, sizeof (buf), 0) != 0 ||
+  if (mutt_get_field (_("Subject: "), buf, sizeof (buf), 0) != 0 ||
       (!buf[0] && query_quadoption (OPT_SUBJECT, _("No subject, abort?")) != MUTT_NO))
   {
     mutt_message _("No subject, aborting.");
@@ -324,20 +324,33 @@ static void process_user_header (ENVELOPE *env)
   }
 }
 
-void mutt_forward_intro (FILE *fp, HEADER *cur)
+void mutt_forward_intro (CONTEXT *ctx, HEADER *cur, FILE *fp)
 {
-  char buffer[STRING];
-  
-  fputs ("----- Forwarded message from ", fp);
-  buffer[0] = 0;
-  rfc822_write_address (buffer, sizeof (buffer), cur->env->from, 1);
-  fputs (buffer, fp);
-  fputs (" -----\n\n", fp);
+  char buffer[LONG_STRING];
+
+  if (ForwardAttrIntro)
+  {
+    setlocale (LC_TIME, NONULL (AttributionLocale));
+    mutt_make_string (buffer, sizeof (buffer), ForwardAttrIntro, ctx, cur);
+    setlocale (LC_TIME, "");
+    fputs (buffer, fp);
+    fputs ("\n\n", fp);
+  }
 }
 
-void mutt_forward_trailer (FILE *fp)
+void mutt_forward_trailer (CONTEXT *ctx, HEADER *cur, FILE *fp)
 {
-  fputs ("\n----- End forwarded message -----\n", fp);
+  char buffer[LONG_STRING];
+
+  if (ForwardAttrTrailer)
+  {
+    setlocale (LC_TIME, NONULL (AttributionLocale));
+    mutt_make_string (buffer, sizeof (buffer), ForwardAttrTrailer, ctx, cur);
+    setlocale (LC_TIME, "");
+    fputc ('\n', fp);
+    fputs (buffer, fp);
+    fputc ('\n', fp);
+  }
 }
 
 
@@ -354,7 +367,7 @@ static int include_forward (CONTEXT *ctx, HEADER *cur, FILE *out)
     crypt_valid_passphrase (cur->security);
   }
 
-  mutt_forward_intro (out, cur);
+  mutt_forward_intro (ctx, cur, out);
 
   if (option (OPTFORWDECODE))
   {
@@ -373,7 +386,7 @@ static int include_forward (CONTEXT *ctx, HEADER *cur, FILE *out)
   chflags |= CH_DISPLAY;
 
   mutt_copy_message (out, ctx, cur, cmflags, chflags);
-  mutt_forward_trailer (out);
+  mutt_forward_trailer (ctx, cur, out);
   return 0;
 }
 
@@ -1599,26 +1612,37 @@ main_loop:
       if (msg->content->next)
 	msg->content = mutt_make_multipart (msg->content);
 
-      if (WithCrypto && option (OPTPOSTPONEENCRYPT) && PostponeEncryptAs
-          && (msg->security & ENCRYPT))
+      if (WithCrypto && option (OPTPOSTPONEENCRYPT) && (msg->security & ENCRYPT))
       {
-        int is_signed = msg->security & SIGN;
-        if (is_signed)
-          msg->security &= ~SIGN;
+        char *encrypt_as = NULL;
 
-        pgpkeylist = safe_strdup (PostponeEncryptAs);
-        if (mutt_protect (msg, pgpkeylist) == -1)
+        if ((WithCrypto & APPLICATION_PGP) && (msg->security & APPLICATION_PGP))
+          encrypt_as = PgpSelfEncryptAs;
+        else if ((WithCrypto & APPLICATION_SMIME) && (msg->security & APPLICATION_SMIME))
+          encrypt_as = SmimeSelfEncryptAs;
+        if (!(encrypt_as && *encrypt_as))
+          encrypt_as = PostponeEncryptAs;
+
+        if (encrypt_as && *encrypt_as)
         {
+          int is_signed = msg->security & SIGN;
+          if (is_signed)
+            msg->security &= ~SIGN;
+
+          pgpkeylist = safe_strdup (encrypt_as);
+          if (mutt_protect (msg, pgpkeylist) == -1)
+          {
+            if (is_signed)
+              msg->security |= SIGN;
+            FREE (&pgpkeylist);
+            msg->content = mutt_remove_multipart (msg->content);
+            goto main_loop;
+          }
+
           if (is_signed)
             msg->security |= SIGN;
           FREE (&pgpkeylist);
-          msg->content = mutt_remove_multipart (msg->content);
-          goto main_loop;
         }
-
-        if (is_signed)
-          msg->security |= SIGN;
-        FREE (&pgpkeylist);
       }
 
       /*

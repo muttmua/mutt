@@ -33,7 +33,7 @@ BODY *smime_gpgme_build_smime_entity (BODY *a, char *keylist);
 int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur);
 int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur);
 
-int pgp_gpgme_check_traditional (FILE *fp, BODY *b, int tagged_only);
+int pgp_gpgme_check_traditional (FILE *fp, BODY *b, int just_one);
 void pgp_gpgme_invoke_import (const char* fname);
 
 int pgp_gpgme_application_handler (BODY *m, STATE *s);
@@ -48,8 +48,8 @@ BODY *smime_gpgme_sign_message (BODY *a);
 int pgp_gpgme_verify_one (BODY *sigbdy, STATE *s, const char *tempfile);
 int smime_gpgme_verify_one (BODY *sigbdy, STATE *s, const char *tempfile);
 
-int pgp_gpgme_send_menu (HEADER *msg, int *redraw);
-int smime_gpgme_send_menu (HEADER *msg, int *redraw);
+int pgp_gpgme_send_menu (HEADER *msg);
+int smime_gpgme_send_menu (HEADER *msg);
 
 int smime_gpgme_verify_sender (HEADER *h);
 

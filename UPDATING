@@ -8,6 +8,44 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.9.0 (2017-09-02):
+
+  + $ssl_verify_partial_chains permits verifying partial certificate chains.
+    This allows the storage of only intermediate/host certificates in the
+    $certificate_file. (OpenSSL 1.0.2b and newer only)
+  ! SNI support added for OpenSSL and GnuTLS.
+  + Choice and confirmation prompts can now wrap across multiple lines.
+  + Window resizes are handled while in the line editor.
+  + "color compose" can color the compose menu header fields and the
+    security status.  See "Using Color and Mono Video Attributes" in the
+    manual for more details.
+  + Setting $header_color_partial allows partial coloring of headers in the
+    pager.  This can be used to color just the header labels, or strings
+    inside the headers.  hdrdefault controls the color of the unmatched part.
+  + When $history_remove_dups is set, duplicates in the history ring will
+    be scanned and removed each time a new entry is added.
+  ! IMAP header downloading was improved to support out-of-order and
+    missing MSN entries.
+  ! $message_cache_clean should be faster for large mailboxes.
+  + Self-encryption can be enabled using the $pgp_self_encrypt,
+    $pgp_self_encrypt_as, $smime_self_encrypt, and $smime_self_encrypt_as
+    options.
+  ! $postpone_encrypt now will use the $pgp_self_encrypt_as or
+    $smime_self_encrypt_as option values first.  $postpone_encrypt_as will
+    be checked second, but should be considered deprecated.
+  + $forward_attribution_intro and $forward_attribution_trailer can be used
+    to customize the message preceding and following a forwarded message.
+  + The ~<() and ~>() pattern operators match messages whose immediate parent,
+    or immediate children respectively, match the subpattern inside ().
+    They are more specific versions of the ~() pattern operator.
+  + $imap_poll_timeout allow IMAP mailbox polling to time out.  This defaults
+    to 15 seconds.
+  + The attachment menu now supports nested encryption.  This allows
+    attachments in nested encrypted messages to be saved or operated on.
+  + $mime_type_query_command specifies a command to run to determine
+    a new attachment's mime type.  When $mime_type_query_first is set,
+    this command will be run before looking at the mime.types file.
+
 1.8.3 (2017-05-30):
 
   ! Bug fix release.

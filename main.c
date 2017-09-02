@@ -163,9 +163,9 @@ options:\n\
   exit (0);
 }
 
-extern const char cc_version[];
-extern const char cc_cflags[];
-extern const char configure_options[];
+extern unsigned char cc_version[];
+extern unsigned char cc_cflags[];
+extern unsigned char configure_options[];
 
 static char *
 rstrip_in_place(char *s)
@@ -222,13 +222,13 @@ static void show_version (void)
 
   puts ("\n\nCompiler:");
   rstrip_in_place((char *)cc_version);
-  puts (cc_version);
+  puts ((char *)cc_version);
 
   rstrip_in_place((char *)configure_options);
-  printf ("\nConfigure options: %s\n", configure_options);
+  printf ("\nConfigure options: %s\n", (char *)configure_options);
 
   rstrip_in_place((char *)cc_cflags);
-  printf ("\nCompilation CFLAGS: %s\n", cc_cflags);
+  printf ("\nCompilation CFLAGS: %s\n", (char *)cc_cflags);
 
   puts (_("\nCompile options:"));
 
@@ -608,9 +608,15 @@ int main (int argc, char **argv, char **environ)
   setlocale (LC_ALL, "");
 
 #ifdef ENABLE_NLS
-  /* FIXME what about init.c:1439 ? */
-  bindtextdomain (PACKAGE, MUTTLOCALEDIR);
-  textdomain (PACKAGE);
+  /* FIXME what about the LOCALES_HACK in mutt_init() [init.c] ? */
+  {
+    char *domdir = getenv ("TEXTDOMAINDIR");
+    if (domdir && domdir[0])
+      bindtextdomain (PACKAGE, domdir);
+    else
+      bindtextdomain (PACKAGE, MUTTLOCALEDIR);
+    textdomain (PACKAGE);
+  }
 #endif
 
   mutt_error = mutt_nocurses_error;
@@ -699,7 +705,7 @@ int main (int argc, char **argv, char **environ)
 	}
 	printf (_("Debugging at level %d.\n"), debuglevel);
 #else
-	printf _("DEBUG was not defined during compilation.  Ignored.\n");
+	printf ("%s", _("DEBUG was not defined during compilation.  Ignored.\n"));
 #endif
 	break;
 

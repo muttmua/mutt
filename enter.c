@@ -203,22 +203,42 @@ static inline int is_shell_char(wchar_t ch)
   return wcschr(shell_chars, ch) != NULL;
 }
 
-/*
+/* This function is for very basic input, currently used only by the
+ * built-in editor.  It does not handle screen redrawing on resizes
+ * well, because there is no active menu for the built-in editor.
+ * Most callers should prefer mutt_get_field() instead.
+ *
  * Returns:
- *	1 need to redraw the screen and call me again
  *	0 if input was given
  * 	-1 if abort.
  */
-
 int  mutt_enter_string(char *buf, size_t buflen, int col, int flags)
 {
   int rv;
   ENTER_STATE *es = mutt_new_enter_state ();
-  rv = _mutt_enter_string (buf, buflen, col, flags, 0, NULL, NULL, es);
+  do
+  {
+#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+    if (SigWinch)
+    {
+      SigWinch = 0;
+      mutt_resize_screen ();
+      clearok(stdscr, TRUE);
+    }
+#endif
+    rv = _mutt_enter_string (buf, buflen, col, flags, 0, NULL, NULL, es);
+  }
+  while (rv == 1);
   mutt_free_enter_state (&es);
   return rv;
 }
 
+/*
+ * Returns:
+ *      1 need to redraw the screen and call me again
+ *	0 if input was given
+ * 	-1 if abort.
+ */
 int _mutt_enter_string (char *buf, size_t buflen, int col,
 			int flags, int multiple, char ***files, int *numfiles,
 			ENTER_STATE *state)
@@ -295,9 +315,9 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
     }
     mutt_refresh ();
 
-    if ((ch = km_dokey (MENU_EDITOR)) == -1)
+    if ((ch = km_dokey (MENU_EDITOR)) < 0)
     {
-      rv = -1; 
+      rv = (SigWinch && ch == -2) ? 1 : -1;
       goto bye;
     }
 
@@ -532,7 +552,6 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 		!memcmp (tempbuf, state->wbuf + i, (state->lastchar - i) * sizeof (wchar_t)))
 	    {
 	      mutt_select_file (buf, buflen, (flags & MUTT_EFILE) ? MUTT_SEL_FOLDER : 0);
-	      set_option (OPTNEEDREDRAW);
 	      if (*buf)
 		replace_part (state, i, buf);
 	      rv = 1; 
@@ -643,7 +662,6 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	      _mutt_select_file (buf, buflen, 
 				 ((flags & MUTT_EFILE) ? MUTT_SEL_FOLDER : 0) | (multiple ? MUTT_SEL_MULTI : 0), 
 				 files, numfiles);
-	      set_option (OPTNEEDREDRAW);
 	      if (*buf)
 	      {
 		mutt_pretty_mailbox (buf, buflen);
@@ -787,7 +805,7 @@ self_insert:
   }
   
   bye:
-  
+
   mutt_reset_history_state (hclass);
   FREE (&tempbuf);
   return rv;

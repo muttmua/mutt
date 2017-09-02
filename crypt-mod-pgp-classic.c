@@ -61,9 +61,9 @@ static int crypt_mod_pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
   return pgp_verify_one (sigbdy, s, tempf);
 }
 
-static int crypt_mod_pgp_send_menu (HEADER *msg, int *redraw)
+static int crypt_mod_pgp_send_menu (HEADER *msg)
 {
-  return pgp_send_menu (msg, redraw);
+  return pgp_send_menu (msg);
 }
 
 static BODY *crypt_mod_pgp_encrypt_message (BODY *a, char *keylist, int sign)
@@ -76,9 +76,9 @@ static BODY *crypt_mod_pgp_make_key_attachment (char *tempf)
   return pgp_make_key_attachment (tempf);
 }
 
-static int crypt_mod_pgp_check_traditional (FILE *fp, BODY *b, int tagged_only)
+static int crypt_mod_pgp_check_traditional (FILE *fp, BODY *b, int just_one)
 {
-  return pgp_check_traditional (fp, b, tagged_only);
+  return pgp_check_traditional (fp, b, just_one);
 }
 
 static BODY *crypt_mod_pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)

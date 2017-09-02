@@ -417,6 +417,13 @@ static int tls_negotiate (CONNECTION * conn)
   /* set socket */
   gnutls_transport_set_ptr (data->state, (gnutls_transport_ptr_t)(long)conn->fd);
 
+  if (gnutls_server_name_set (data->state, GNUTLS_NAME_DNS, conn->account.host,
+                              mutt_strlen (conn->account.host)))
+  {
+    mutt_error _("Warning: unable to set TLS SNI host name");
+    mutt_sleep (1);
+  }
+
   if (tls_set_priority(data) < 0) {
     goto fail;
   }
@@ -855,6 +862,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
   for (i = 0; i < menu->max; i++)
     menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
+  mutt_push_current_menu (menu);
 
   row = 0;
   strfcpy (menu->dialog[row], _("This certificate belongs to:"), SHORT_STRING);
@@ -989,11 +997,23 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
                         | CERTERR_REVOKED)))
   {
     menu->prompt = _("(r)eject, accept (o)nce, (a)ccept always");
+  /* L10N:
+   * These three letters correspond to the choices in the string:
+   * (r)eject, accept (o)nce, (a)ccept always.
+   * This is an interactive certificate confirmation prompt for
+   * a GNUTLS connection.
+   */
     menu->keys = _("roa");
   }
   else
   {
     menu->prompt = _("(r)eject, accept (o)nce");
+  /* L10N:
+   * These two letters correspond to the choices in the string:
+   * (r)eject, accept (o)nce.
+   * These is an interactive certificate confirmation prompt for
+   * a GNUTLS connection.
+   */
     menu->keys = _("ro");
   }
 
@@ -1058,6 +1078,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
     }
   }
   unset_option (OPTIGNOREMACROEVENTS);
+  mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);
   gnutls_x509_crt_deinit (cert);
 

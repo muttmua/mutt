@@ -40,6 +40,8 @@
 #include <string.h>
 #include <errno.h>
 
+static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, int init);
+
 static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
 
 #define CHECK_READONLY if (Context->readonly) \
@@ -48,6 +50,8 @@ static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
     mutt_error _(Mailbox_is_read_only); \
     break; \
 }
+
+#define CURATTACH actx->idx[actx->v2r[menu->current]]
 
 static const struct mapping_t AttachHelp[] = {
   { N_("Exit"),  OP_EXIT },
@@ -58,21 +62,48 @@ static const struct mapping_t AttachHelp[] = {
   { NULL,        0 }
 };
 
-void mutt_update_tree (ATTACHPTR **idx, short idxlen)
+static void mutt_update_v2r (ATTACH_CONTEXT *actx)
+{
+  int vindex, rindex, curlevel;
+
+  vindex = rindex = 0;
+
+  while (rindex < actx->idxlen)
+  {
+    actx->v2r[vindex++] = rindex;
+    if (actx->idx[rindex]->content->collapsed)
+    {
+      curlevel = actx->idx[rindex]->level;
+      do
+        rindex++;
+      while ((rindex < actx->idxlen) &&
+             (actx->idx[rindex]->level > curlevel));
+    }
+    else
+      rindex++;
+  }
+
+  actx->vcount = vindex;
+}
+
+void mutt_update_tree (ATTACH_CONTEXT *actx)
 {
   char buf[STRING];
   char *s;
-  int x;
+  int rindex, vindex;
 
-  for (x = 0; x < idxlen; x++)
+  mutt_update_v2r (actx);
+
+  for (vindex = 0; vindex < actx->vcount; vindex++)
   {
-    idx[x]->num = x;
-    if (2 * (idx[x]->level + 2) < sizeof (buf))
+    rindex = actx->v2r[vindex];
+    actx->idx[rindex]->num = vindex;
+    if (2 * (actx->idx[rindex]->level + 2) < sizeof (buf))
     {
-      if (idx[x]->level)
+      if (actx->idx[rindex]->level)
       {
-	s = buf + 2 * (idx[x]->level - 1);
-	*s++ = (idx[x]->content->next) ? MUTT_TREE_LTEE : MUTT_TREE_LLCORNER;
+	s = buf + 2 * (actx->idx[rindex]->level - 1);
+	*s++ = (actx->idx[rindex]->content->next) ? MUTT_TREE_LTEE : MUTT_TREE_LLCORNER;
 	*s++ = MUTT_TREE_HLINE;
 	*s++ = MUTT_TREE_RARROW;
       }
@@ -81,78 +112,21 @@ void mutt_update_tree (ATTACHPTR **idx, short idxlen)
       *s = 0;
     }
 
-    if (idx[x]->tree)
+    if (actx->idx[rindex]->tree)
     {
-      if (mutt_strcmp (idx[x]->tree, buf) != 0)
-	mutt_str_replace (&idx[x]->tree, buf);
+      if (mutt_strcmp (actx->idx[rindex]->tree, buf) != 0)
+	mutt_str_replace (&actx->idx[rindex]->tree, buf);
     }
     else
-      idx[x]->tree = safe_strdup (buf);
+      actx->idx[rindex]->tree = safe_strdup (buf);
 
-    if (2 * (idx[x]->level + 2) < sizeof (buf) && idx[x]->level)
+    if (2 * (actx->idx[rindex]->level + 2) < sizeof (buf) && actx->idx[rindex]->level)
     {
-      s = buf + 2 * (idx[x]->level - 1);
-      *s++ = (idx[x]->content->next) ? '\005' : '\006';
+      s = buf + 2 * (actx->idx[rindex]->level - 1);
+      *s++ = (actx->idx[rindex]->content->next) ? '\005' : '\006';
       *s++ = '\006';
     }
   }
-}
-
-ATTACHPTR **mutt_gen_attach_list (BODY *m,
-				  int parent_type,
-				  ATTACHPTR **idx,
-				  short *idxlen,
-				  short *idxmax,
-				  int level,
-				  int compose)
-{
-  ATTACHPTR *new;
-  int i;
-  
-  for (; m; m = m->next)
-  {
-    if (*idxlen == *idxmax)
-    {
-      safe_realloc (&idx, sizeof (ATTACHPTR *) * ((*idxmax) += 5));
-      for (i = *idxlen; i < *idxmax; i++)
-	idx[i] = NULL;
-    }
-
-    if (m->type == TYPEMULTIPART && m->parts
-	&& (compose || (parent_type == -1 && ascii_strcasecmp ("alternative", m->subtype)))
-        && (!(WithCrypto & APPLICATION_PGP) || !mutt_is_multipart_encrypted(m))
-	)
-    {
-      idx = mutt_gen_attach_list (m->parts, m->type, idx, idxlen, idxmax, level, compose);
-    }
-    else
-    {
-      if (!idx[*idxlen])
-	idx[*idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-
-      new = idx[(*idxlen)++];
-      new->content = m;
-      m->aptr = new;
-      new->parent_type = parent_type;
-      new->level = level;
-
-      /* We don't support multipart messages in the compose menu yet */
-      if (!compose && !m->collapsed && 
-	  ((m->type == TYPEMULTIPART
-            && (!(WithCrypto & APPLICATION_PGP)
-                || !mutt_is_multipart_encrypted (m))
-	    )
-	   || mutt_is_message_type(m->type, m->subtype)))
-      {
-	idx = mutt_gen_attach_list (m->parts, m->type, idx, idxlen, idxmax, level + 1, compose);
-      }
-    }
-  }
-
-  if (level == 0)
-    mutt_update_tree (idx, *idxlen);
-
-  return (idx);
 }
 
 /* %c = character set: convert?
@@ -390,14 +364,18 @@ const char *mutt_attach_fmt (char *dest,
 
 static void attach_entry (char *b, size_t blen, MUTTMENU *menu, int num)
 {
-  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt, (unsigned long) (((ATTACHPTR **)menu->data)[num]), MUTT_FORMAT_ARROWCURSOR);
+  ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
+
+  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt,
+                     (unsigned long) (actx->idx[actx->v2r[num]]), MUTT_FORMAT_ARROWCURSOR);
 }
 
 int mutt_tag_attach (MUTTMENU *menu, int n, int m)
 {
-  BODY *cur = ((ATTACHPTR **) menu->data)[n]->content;
+  ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
+  BODY *cur = actx->idx[actx->v2r[n]]->content;
   int ot = cur->tagged;
-  
+
   cur->tagged = (m >= 0 ? m : !cur->tagged);
   return cur->tagged - ot;
 }
@@ -513,18 +491,23 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   return 0;
 }
     
-void mutt_save_attachment_list (FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
+void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
 {
   char buf[_POSIX_PATH_MAX], tfile[_POSIX_PATH_MAX];
   char *directory = NULL;
-  int rc = 1;
+  int i, rc = 1;
   int last = menu ? menu->current : -1;
   FILE *fpout;
 
   buf[0] = 0;
 
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       if (!option (OPTATTACHSPLIT))
@@ -575,8 +558,6 @@ void mutt_save_attachment_list (FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTM
 	  break;
       }
     }
-    else if (top->parts)
-      mutt_save_attachment_list (fp, 1, top->parts, hdr, menu);
     if (!tag)
       break;
   }
@@ -658,11 +639,18 @@ static void pipe_attachment (FILE *fp, BODY *b, STATE *state)
 }
 
 static void
-pipe_attachment_list (char *command, FILE *fp, int tag, BODY *top, int filter,
-		      STATE *state)
+pipe_attachment_list (char *command, ATTACH_CONTEXT *actx, FILE *fp, int tag,
+                      BODY *top, int filter, STATE *state)
 {
-  for (; top; top = top->next)
+  int i;
+
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       if (!filter && !option (OPTATTACHSPLIT))
@@ -670,14 +658,12 @@ pipe_attachment_list (char *command, FILE *fp, int tag, BODY *top, int filter,
       else
 	mutt_query_pipe_attachment (command, fp, top, filter);
     }
-    else if (top->parts)
-      pipe_attachment_list (command, fp, tag, top->parts, filter, state);
     if (!tag)
       break;
   }
 }
 
-void mutt_pipe_attachment_list (FILE *fp, int tag, BODY *top, int filter)
+void mutt_pipe_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, int filter)
 {
   STATE state;
   char buf[SHORT_STRING];
@@ -701,21 +687,24 @@ void mutt_pipe_attachment_list (FILE *fp, int tag, BODY *top, int filter)
   {
     mutt_endwin (NULL);
     thepid = mutt_create_filter (buf, &state.fpout, NULL, NULL);
-    pipe_attachment_list (buf, fp, tag, top, filter, &state);
+    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
     safe_fclose (&state.fpout);
     if (mutt_wait_filter (thepid) != 0 || option (OPTWAITKEY))
       mutt_any_key_to_continue (NULL);
   }
   else
-    pipe_attachment_list (buf, fp, tag, top, filter, &state);
+    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
 }
 
-static int can_print (BODY *top, int tag)
+static int can_print (ATTACH_CONTEXT *actx, BODY *top, int tag)
 {
   char type [STRING];
+  int i;
 
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+      top = actx->idx[i]->content;
     snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
     if (!tag || top->tagged)
     {
@@ -732,21 +721,24 @@ static int can_print (BODY *top, int tag)
 	}
       }
     }
-    else if (top->parts)
-      return (can_print (top->parts, tag));
     if (!tag)
       break;
   }
   return (1);
 }
 
-static void print_attachment_list (FILE *fp, int tag, BODY *top, STATE *state)
+static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, STATE *state)
 {
+  int i;
   char type [STRING];
 
-
-  for (; top; top = top->next)
+  for (i = 0; !tag || i < actx->idxlen; i++)
   {
+    if (tag)
+    {
+      fp = actx->idx[i]->fp;
+      top = actx->idx[i]->content;
+    }
     if (!tag || top->tagged)
     {
       snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
@@ -779,14 +771,12 @@ static void print_attachment_list (FILE *fp, int tag, BODY *top, STATE *state)
       else
 	mutt_print_attachment (fp, top);
     }
-    else if (top->parts)
-      print_attachment_list (fp, tag, top->parts, state);
     if (!tag)
-      return;
+      break;
   }
 }
 
-void mutt_print_attachment_list (FILE *fp, int tag, BODY *top)
+void mutt_print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top)
 {
   STATE state;
   
@@ -796,54 +786,76 @@ void mutt_print_attachment_list (FILE *fp, int tag, BODY *top)
 
   if (!option (OPTATTACHSPLIT))
   {
-    if (!can_print (top, tag))
+    if (!can_print (actx, top, tag))
       return;
     mutt_endwin (NULL);
     memset (&state, 0, sizeof (STATE));
     thepid = mutt_create_filter (NONULL (PrintCmd), &state.fpout, NULL, NULL);
-    print_attachment_list (fp, tag, top, &state);
+    print_attachment_list (actx, fp, tag, top, &state);
     safe_fclose (&state.fpout);
     if (mutt_wait_filter (thepid) != 0 || option (OPTWAITKEY))
       mutt_any_key_to_continue (NULL);
   }
   else
-    print_attachment_list (fp, tag, top, &state);
+    print_attachment_list (actx, fp, tag, top, &state);
 }
 
-static void
-mutt_update_attach_index (BODY *cur, ATTACHPTR ***idxp,
-				      short *idxlen, short *idxmax,
-				      MUTTMENU *menu)
+static void recvattach_extract_pgp_keys (ATTACH_CONTEXT *actx, MUTTMENU *menu)
 {
-  ATTACHPTR **idx = *idxp;
-  while (--(*idxlen) >= 0)
-    idx[(*idxlen)]->content = NULL;
-  *idxlen = 0;
+  int i;
 
-  idx = *idxp = mutt_gen_attach_list (cur, -1, idx, idxlen, idxmax, 0, 0);
-  
-  menu->max  = *idxlen;
-  menu->data = *idxp;
-
-  if (menu->current >= menu->max)
-    menu->current = menu->max - 1;
-  menu_check_recenter (menu);
-  menu->redraw |= REDRAW_INDEX;
-  
+  if (!menu->tagprefix)
+    crypt_pgp_extract_keys_from_attachment_list (CURATTACH->fp, 0, CURATTACH->content);
+  else
+  {
+    for (i = 0; i < actx->idxlen; i++)
+      if (actx->idx[i]->content->tagged)
+        crypt_pgp_extract_keys_from_attachment_list (actx->idx[i]->fp, 0,
+                                                     actx->idx[i]->content);
+  }
 }
 
+static int recvattach_pgp_check_traditional (ATTACH_CONTEXT *actx, MUTTMENU *menu)
+{
+  int i, rv = 0;
+
+  if (!menu->tagprefix)
+    rv = crypt_pgp_check_traditional (CURATTACH->fp, CURATTACH->content, 1);
+  else
+  {
+    for (i = 0; i < actx->idxlen; i++)
+      if (actx->idx[i]->content->tagged)
+        rv = rv || crypt_pgp_check_traditional (actx->idx[i]->fp, actx->idx[i]->content, 1);
+  }
+
+  return rv;
+}
+
+static void recvattach_edit_content_type (ATTACH_CONTEXT *actx, MUTTMENU *menu, HEADER *hdr)
+{
+  int i;
+
+  if (mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp) == 1)
+  {
+    /* The mutt_update_recvattach_menu() will overwrite any changes
+     * made to a decrypted CURATTACH->content, so warn the user. */
+    if (CURATTACH->decrypted)
+    {
+      mutt_message _("Structural changes to decrypted attachments are not supported");
+      mutt_sleep (1);
+    }
+    /* Editing the content type can rewrite the body structure. */
+    for (i = 0; i < actx->idxlen; i++)
+      actx->idx[i]->content = NULL;
+    mutt_actx_free_entries (actx);
+    mutt_update_recvattach_menu (actx, menu, 1);
+  }
+}
 
 int
-mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
-			  BODY *cur, ATTACHPTR ***idxp, short *idxlen, short *idxmax,
-			  int recv)
+mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
+			  ATTACH_CONTEXT *actx, int recv)
 {
-  ATTACHPTR **idx = *idxp;
-#if 0
-  int old_optweed = option (OPTWEED);
-  set_option (OPTWEED);
-#endif
-  
   do
   {
     switch (op)
@@ -853,8 +865,8 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
 	/* fall through */
 
       case OP_VIEW_ATTACH:
-	op = mutt_view_attachment (fp, idx[menu->current]->content, MUTT_REGULAR,
-				   hdr, idx, *idxlen);
+	op = mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_REGULAR,
+				   hdr, actx);
 	break;
 
       case OP_NEXT_ENTRY:
@@ -880,12 +892,12 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
       case OP_EDIT_TYPE:
 	/* when we edit the content-type, we should redisplay the attachment
 	   immediately */
-	mutt_edit_content_type (hdr, idx[menu->current]->content, fp);
-        if (idxmax)
-        {
-	  mutt_update_attach_index (cur, idxp, idxlen, idxmax, menu);
-	  idx = *idxp;
-	}
+        if (recv)
+          recvattach_edit_content_type (actx, menu, hdr);
+        else
+          mutt_edit_content_type (hdr, CURATTACH->content, CURATTACH->fp);
+
+        menu->redraw |= REDRAW_INDEX;
         op = OP_VIEW_ATTACH;
 	break;
       /* functions which are passed through from the pager */
@@ -912,31 +924,173 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, FILE *fp, HEADER *hdr,
   return op;
 }
 
-static void attach_collapse (BODY *b, short collapse, short init, short just_one)
+static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
+                                           HEADER *hdr,
+                                           BODY *m,
+                                           FILE *fp,
+                                           int parent_type,
+                                           int level,
+                                           int decrypted)
 {
-  short i;
-  for (; b; b = b->next)
+  ATTACHPTR *new;
+  BODY *new_body = NULL;
+  FILE *new_fp = NULL;
+  int need_secured, secured;
+
+  for (; m; m = m->next)
   {
-    i = init || b->collapsed;
-    if (i && option (OPTDIGESTCOLLAPSE) && b->type == TYPEMULTIPART
-	&& !ascii_strcasecmp (b->subtype, "digest"))
-      attach_collapse (b->parts, 1, 1, 0);
-    else if (b->type == TYPEMULTIPART || mutt_is_message_type (b->type, b->subtype))
-      attach_collapse (b->parts, collapse, i, 0);
-    b->collapsed = collapse;
-    if (just_one)
-      return;
+    need_secured = secured = 0;
+
+    if ((WithCrypto & APPLICATION_SMIME) &&
+        mutt_is_application_smime (m))
+    {
+      need_secured = 1;
+
+      if (!crypt_valid_passphrase (APPLICATION_SMIME))
+        goto decrypt_failed;
+
+      if (hdr->env)
+        crypt_smime_getkeys (hdr->env);
+
+      secured = !crypt_smime_decrypt_mime (fp, &new_fp, m, &new_body);
+
+      /* S/MIME nesting */
+      if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE))
+      {
+        BODY *outer_new_body = new_body;
+        FILE *outer_fp = new_fp;
+
+        new_body = NULL;
+        new_fp = NULL;
+
+        secured = !crypt_smime_decrypt_mime (outer_fp, &new_fp, outer_new_body,
+                                               &new_body);
+
+        mutt_free_body (&outer_new_body);
+        safe_fclose (&outer_fp);
+      }
+
+      if (secured)
+        hdr->security |= SMIMEENCRYPT;
+    }
+
+    if ((WithCrypto & APPLICATION_PGP) &&
+        (mutt_is_multipart_encrypted (m) ||
+         mutt_is_malformed_multipart_pgp_encrypted (m)))
+    {
+      need_secured = 1;
+
+      if (!crypt_valid_passphrase (APPLICATION_PGP))
+        goto decrypt_failed;
+
+      secured = !crypt_pgp_decrypt_mime (fp, &new_fp, m, &new_body);
+
+      if (secured)
+        hdr->security |= PGPENCRYPT;
+    }
+
+    if (need_secured && secured)
+    {
+      mutt_actx_add_fp (actx, new_fp);
+      mutt_actx_add_body (actx, new_body);
+      mutt_generate_recvattach_list (actx, hdr, new_body, new_fp, parent_type, level, 1);
+      continue;
+    }
+
+decrypt_failed:
+    /* Fall through and show the original parts if decryption fails */
+    if (need_secured && !secured)
+      mutt_error _("Can't decrypt encrypted message!");
+
+    /* Strip out the top level multipart */
+    if (m->type == TYPEMULTIPART &&
+        m->parts &&
+        !need_secured &&
+        (parent_type == -1 && ascii_strcasecmp ("alternative", m->subtype)))
+    {
+      mutt_generate_recvattach_list (actx, hdr, m->parts, fp, m->type, level, decrypted);
+    }
+    else
+    {
+      new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+      mutt_actx_add_attach (actx, new);
+
+      new->content = m;
+      new->fp = fp;
+      m->aptr = new;
+      new->parent_type = parent_type;
+      new->level = level;
+      new->decrypted = decrypted;
+
+      if (m->type == TYPEMULTIPART)
+        mutt_generate_recvattach_list (actx, hdr, m->parts, fp, m->type, level + 1, decrypted);
+      else if (mutt_is_message_type (m->type, m->subtype))
+      {
+        mutt_generate_recvattach_list (actx, m->hdr, m->parts, fp, m->type, level + 1, decrypted);
+        hdr->security |= m->hdr->security;
+      }
+    }
   }
 }
 
-void mutt_attach_init (BODY *b)
+void mutt_attach_init (ATTACH_CONTEXT *actx)
 {
-  for (; b; b = b->next)
+  int i;
+
+  for (i = 0; i < actx->idxlen; i++)
   {
-    b->tagged = 0;
-    b->collapsed = 0;
-    if (b->parts) 
-      mutt_attach_init (b->parts);
+    actx->idx[i]->content->tagged = 0;
+    if (option (OPTDIGESTCOLLAPSE) &&
+        actx->idx[i]->content->type == TYPEMULTIPART &&
+	!ascii_strcasecmp (actx->idx[i]->content->subtype, "digest"))
+      actx->idx[i]->content->collapsed = 1;
+    else
+      actx->idx[i]->content->collapsed = 0;
+  }
+}
+
+static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, int init)
+{
+  if (init)
+  {
+    mutt_generate_recvattach_list (actx, actx->hdr, actx->hdr->content,
+                                   actx->root_fp, -1, 0, 0);
+    mutt_attach_init (actx);
+    menu->data = actx;
+  }
+
+  mutt_update_tree (actx);
+
+  menu->max  = actx->vcount;
+
+  if (menu->current >= menu->max)
+    menu->current = menu->max - 1;
+  menu_check_recenter (menu);
+  menu->redraw |= REDRAW_INDEX;
+}
+
+static void attach_collapse (ATTACH_CONTEXT *actx, MUTTMENU *menu)
+{
+  int rindex, curlevel;
+
+  CURATTACH->content->collapsed = !CURATTACH->content->collapsed;
+  /* When expanding, expand all the children too */
+  if (CURATTACH->content->collapsed)
+    return;
+
+  curlevel = CURATTACH->level;
+  rindex = actx->v2r[menu->current] + 1;
+
+  while ((rindex < actx->idxlen) &&
+         (actx->idx[rindex]->level > curlevel))
+  {
+    if (option (OPTDIGESTCOLLAPSE) &&
+        actx->idx[rindex]->content->type == TYPEMULTIPART &&
+	!ascii_strcasecmp (actx->idx[rindex]->content->subtype, "digest"))
+      actx->idx[rindex]->content->collapsed = 1;
+    else
+      actx->idx[rindex]->content->collapsed = 0;
+    rindex++;
   }
 }
 
@@ -954,97 +1108,34 @@ static const char *Function_not_permitted = N_("Function not permitted in attach
 
 void mutt_view_attachments (HEADER *hdr)
 {
-  int secured = 0;
-  int need_secured = 0;
-
   char helpstr[LONG_STRING];
   MUTTMENU *menu;
   BODY *cur = NULL;
   MESSAGE *msg;
-  FILE *fp;
-  ATTACHPTR **idx = NULL;
-  short idxlen = 0;
-  short idxmax = 0;
+  ATTACH_CONTEXT *actx;
   int flags = 0;
   int op = OP_NULL;
-  
+  int i;
+
   /* make sure we have parsed this message */
   mutt_parse_mime_message (Context, hdr);
 
   mutt_message_hook (Context, hdr, MUTT_MESSAGEHOOK);
-  
+
   if ((msg = mx_open_message (Context, hdr->msgno)) == NULL)
     return;
-
-
-  if (WithCrypto && ((hdr->security & ENCRYPT) ||
-                     (mutt_is_application_smime(hdr->content) & SMIMEOPAQUE)))
-  {
-    need_secured  = 1;
-
-    if ((hdr->security & ENCRYPT) && !crypt_valid_passphrase(hdr->security))
-    {
-      mx_close_message (Context, &msg);
-      return;
-    }
-    if ((WithCrypto & APPLICATION_SMIME) && (hdr->security & APPLICATION_SMIME))
-    {
-      if (hdr->env)
-	  crypt_smime_getkeys (hdr->env);
-
-      if (mutt_is_application_smime(hdr->content))
-      {
-	secured = ! crypt_smime_decrypt_mime (msg->fp, &fp,
-                                              hdr->content, &cur);
-	
-	/* S/MIME nesting */
-	if ((mutt_is_application_smime (cur) & SMIMEOPAQUE))
-	{
-	  BODY *_cur = cur;
-	  FILE *_fp = fp;
-	  
-	  fp = NULL; cur = NULL;
-	  secured = !crypt_smime_decrypt_mime (_fp, &fp, _cur, &cur);
-	  
-	  mutt_free_body (&_cur);
-	  safe_fclose (&_fp);
-	}
-      }
-      else
-	need_secured = 0;
-    }
-    if ((WithCrypto & APPLICATION_PGP) && (hdr->security & APPLICATION_PGP))
-    {
-      if (mutt_is_multipart_encrypted(hdr->content) ||
-          mutt_is_malformed_multipart_pgp_encrypted(hdr->content))
-	secured = !crypt_pgp_decrypt_mime (msg->fp, &fp, hdr->content, &cur);
-      else
-	need_secured = 0;
-    }
-
-    if (need_secured && !secured)
-    {
-      mx_close_message (Context, &msg);
-      mutt_error _("Can't decrypt encrypted message!");
-      return;
-    }
-  }
-  
-  if (!WithCrypto || !need_secured)
-  {
-    fp = msg->fp;
-    cur = hdr->content;
-  }
 
   menu = mutt_new_menu (MENU_ATTACH);
   menu->title = _("Attachments");
   menu->make_entry = attach_entry;
   menu->tag = mutt_tag_attach;
   menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_ATTACH, AttachHelp);
+  mutt_push_current_menu (menu);
 
-  mutt_attach_init (cur);
-  attach_collapse (cur, 0, 1, 0);
-  mutt_update_attach_index (cur, &idx, &idxlen, &idxmax, menu);
+  actx = safe_calloc (sizeof(ATTACH_CONTEXT), 1);
+  actx->hdr = hdr;
+  actx->root_fp = msg->fp;
+  mutt_update_recvattach_menu (actx, menu, 1);
 
   FOREVER
   {
@@ -1053,36 +1144,33 @@ void mutt_view_attachments (HEADER *hdr)
     switch (op)
     {
       case OP_ATTACH_VIEW_MAILCAP:
-	mutt_view_attachment (fp, idx[menu->current]->content, MUTT_MAILCAP,
-			      hdr, idx, idxlen);
+	mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_MAILCAP,
+			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_ATTACH_VIEW_TEXT:
-	mutt_view_attachment (fp, idx[menu->current]->content, MUTT_AS_TEXT,
-			      hdr, idx, idxlen);
+	mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_AS_TEXT,
+			      hdr, actx);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_DISPLAY_HEADERS:
       case OP_VIEW_ATTACH:
-        op = mutt_attach_display_loop (menu, op, fp, hdr, cur, &idx, &idxlen, &idxmax, 1);
+        op = mutt_attach_display_loop (menu, op, hdr, actx, 1);
         menu->redraw = REDRAW_FULL;
         continue;
 
       case OP_ATTACH_COLLAPSE:
-        if (!idx[menu->current]->content->parts)
+        if (!CURATTACH->content->parts)
         {
 	  mutt_error _("There are no subparts to show!");
 	  break;
 	}
-        if (!idx[menu->current]->content->collapsed)
-	  attach_collapse (idx[menu->current]->content, 1, 0, 1);
-        else
-	  attach_collapse (idx[menu->current]->content, 0, 1, 1);
-        mutt_update_attach_index (cur, &idx, &idxlen, &idxmax, menu);
+        attach_collapse (actx, menu);
+        mutt_update_recvattach_menu (actx, menu, 0);
         break;
-      
+
       case OP_FORGET_PASSPHRASE:
         crypt_forget_passphrase ();
         break;
@@ -1090,17 +1178,14 @@ void mutt_view_attachments (HEADER *hdr)
       case OP_EXTRACT_KEYS:
         if ((WithCrypto & APPLICATION_PGP))
         {
-          crypt_pgp_extract_keys_from_attachment_list (fp, menu->tagprefix, 
-		    menu->tagprefix ? cur : idx[menu->current]->content);
+          recvattach_extract_pgp_keys (actx, menu);
           menu->redraw = REDRAW_FULL;
         }
         break;
-      
+
       case OP_CHECK_TRADITIONAL:
-        if ((WithCrypto & APPLICATION_PGP)
-            && crypt_pgp_check_traditional (fp, menu->tagprefix ? cur
-                                              : idx[menu->current]->content,
-                                      menu->tagprefix))
+        if ((WithCrypto & APPLICATION_PGP) &&
+            recvattach_pgp_check_traditional (actx, menu))
         {
 	  hdr->security = crypt_query (cur);
 	  menu->redraw = REDRAW_FULL;
@@ -1108,22 +1193,22 @@ void mutt_view_attachments (HEADER *hdr)
         break;
 
       case OP_PRINT:
-	mutt_print_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : idx[menu->current]->content);
+	mutt_print_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                    CURATTACH->content);
 	break;
 
       case OP_PIPE:
-	mutt_pipe_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ? cur : idx[menu->current]->content, 0);
+	mutt_pipe_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                   CURATTACH->content, 0);
 	break;
 
       case OP_SAVE:
-	mutt_save_attachment_list (fp, menu->tagprefix, 
-		  menu->tagprefix ?  cur : idx[menu->current]->content, hdr, menu);
+	mutt_save_attachment_list (actx, CURATTACH->fp, menu->tagprefix,
+                                   CURATTACH->content, hdr, menu);
 
         if (!menu->tagprefix && option (OPTRESOLVE) && menu->current < menu->max - 1)
 	  menu->current++;
-      
+
         menu->redraw = REDRAW_MOTION_RESYNCH | REDRAW_FULL;
 	break;
 
@@ -1152,9 +1237,9 @@ void mutt_view_attachments (HEADER *hdr)
         }
         if (!menu->tagprefix)
         {
-          if (idx[menu->current]->parent_type == TYPEMULTIPART)
+          if (CURATTACH->parent_type == TYPEMULTIPART)
           {
-            idx[menu->current]->content->deleted = 1;
+            CURATTACH->content->deleted = 1;
             if (option (OPTRESOLVE) && menu->current < menu->max - 1)
             {
               menu->current++;
@@ -1173,11 +1258,11 @@ void mutt_view_attachments (HEADER *hdr)
 
           for (x = 0; x < menu->max; x++)
           {
-            if (idx[x]->content->tagged)
+            if (actx->idx[x]->content->tagged)
             {
-              if (idx[x]->parent_type == TYPEMULTIPART)
+              if (actx->idx[x]->parent_type == TYPEMULTIPART)
               {
-                idx[x]->content->deleted = 1;
+                actx->idx[x]->content->deleted = 1;
                 menu->redraw = REDRAW_INDEX;
               }
               else
@@ -1192,7 +1277,7 @@ void mutt_view_attachments (HEADER *hdr)
        CHECK_READONLY;
        if (!menu->tagprefix)
        {
-	 idx[menu->current]->content->deleted = 0;
+	 CURATTACH->content->deleted = 0;
 	 if (option (OPTRESOLVE) && menu->current < menu->max - 1)
 	 {
 	   menu->current++;
@@ -1207,9 +1292,9 @@ void mutt_view_attachments (HEADER *hdr)
 
 	 for (x = 0; x < menu->max; x++)
 	 {
-	   if (idx[x]->content->tagged)
+	   if (actx->idx[x]->content->tagged)
 	   {
-	     idx[x]->content->deleted = 0;
+	     actx->idx[x]->content->deleted = 0;
 	     menu->redraw = REDRAW_INDEX;
 	   }
 	 }
@@ -1218,69 +1303,61 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_RESEND:
         CHECK_ATTACH;
-        mutt_attach_resend (fp, hdr, idx, idxlen,
-			     menu->tagprefix ? NULL : idx[menu->current]->content);
+        mutt_attach_resend (CURATTACH->fp, hdr, actx,
+                            menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
-      
+
       case OP_BOUNCE_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_bounce (fp, hdr, idx, idxlen,
-			     menu->tagprefix ? NULL : idx[menu->current]->content);
+        mutt_attach_bounce (CURATTACH->fp, hdr, actx,
+                            menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
       	break;
 
       case OP_FORWARD_MESSAGE:
         CHECK_ATTACH;
-        mutt_attach_forward (fp, hdr, idx, idxlen,
-			     menu->tagprefix ? NULL : idx[menu->current]->content);
+        mutt_attach_forward (CURATTACH->fp, hdr, actx,
+			     menu->tagprefix ? NULL : CURATTACH->content);
         menu->redraw = REDRAW_FULL;
         break;
-      
+
       case OP_REPLY:
       case OP_GROUP_REPLY:
       case OP_LIST_REPLY:
 
         CHECK_ATTACH;
-      
-        flags = SENDREPLY | 
+
+        flags = SENDREPLY |
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
-        mutt_attach_reply (fp, hdr, idx, idxlen, 
-			   menu->tagprefix ? NULL : idx[menu->current]->content, flags);
+        mutt_attach_reply (CURATTACH->fp, hdr, actx,
+			   menu->tagprefix ? NULL : CURATTACH->content, flags);
 	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_EDIT_TYPE:
-	mutt_edit_content_type (hdr, idx[menu->current]->content, fp);
-        mutt_update_attach_index (cur, &idx, &idxlen, &idxmax, menu);
+        recvattach_edit_content_type (actx, menu, hdr);
+        menu->redraw |= REDRAW_INDEX;
 	break;
 
       case OP_EXIT:
 	mx_close_message (Context, &msg);
+
 	hdr->attach_del = 0;
-	while (idxmax-- > 0)
-	{
-	  if (!idx[idxmax])
-	    continue;
-	  if (idx[idxmax]->content && idx[idxmax]->content->deleted)
+        for (i = 0; i < actx->idxlen; i++)
+	  if (actx->idx[i]->content &&
+              actx->idx[i]->content->deleted)
+          {
 	    hdr->attach_del = 1;
-	  if (idx[idxmax]->content)
-	    idx[idxmax]->content->aptr = NULL;
-	  FREE (&idx[idxmax]->tree);
-	  FREE (&idx[idxmax]);
-	}
+            break;
+          }
 	if (hdr->attach_del)
 	  hdr->changed = 1;
-	FREE (&idx);
-	idxmax = 0;
 
-        if (WithCrypto && need_secured && secured)
-	{
-	  safe_fclose (&fp);
-	  mutt_free_body (&cur);
-	}
+        mutt_free_attach_context (&actx);
 
+        mutt_pop_current_menu (menu);
 	mutt_menuDestroy  (&menu);
 	return;
     }

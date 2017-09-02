@@ -587,7 +587,8 @@ bind editor &lt;delete&gt; backspace
 Mutt maintains a history for the built-in editor.  The number of items
 is controlled by the <link linkend="history">$history</link> variable
 and can be made persistent using an external file specified using <link
-linkend="history-file">$history_file</link>.  You may cycle through them
+linkend="history-file">$history_file</link> and <link
+linkend="save-history">$save_history</link>.  You may cycle through them
 at an editor prompt by using the <literal>&lt;history-up&gt;</literal>
 and/or <literal>&lt;history-down&gt;</literal> commands.  Mutt will
 remember the currently entered text as you cycle through history, and
@@ -610,9 +611,11 @@ following categories:
 
 <para>
 Mutt automatically filters out consecutively repeated items from the
-history. It also mimics the behavior of some shells by ignoring items
-starting with a space. The latter feature can be useful in macros to not
-clobber the history's valuable entries with unwanted entries.
+history.  If <link linkend="history-remove-dups">$history_remove_dups</link>
+is set, all repeated items are removed from the history.  It also mimics the
+behavior of some shells by ignoring items starting with a space. The latter
+feature can be useful in macros to not clobber the history's valuable entries
+with unwanted entries.
 </para>
 
 </sect2>
@@ -2664,6 +2667,20 @@ silently truncated at the screen width, and are not wrapped.
 <replaceable class="parameter">pattern</replaceable>
 </arg>
 
+<command>color</command>
+<arg choice="plain">
+<option>compose</option>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">foreground</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">background</replaceable>
+</arg>
+
 <command>uncolor</command>
 <group choice="req">
 <arg choice="plain">
@@ -2704,6 +2721,14 @@ patterns.
 </para>
 
 <para>
+When <link linkend="header-color-partial">$header_color_partial</link>
+is unset (the default), a <emphasis>header</emphasis> matched by
+<emphasis>regexp</emphasis> will have color applied to the entire header.
+When set, color is applied only to the exact text matched by
+<emphasis>regexp</emphasis>.
+</para>
+
+<para>
 <emphasis>object</emphasis> can be one of:
 </para>
 
@@ -2725,6 +2750,18 @@ patterns.
 <listitem><para>tilde (the <quote>~</quote> used to pad blank lines in the pager)</para></listitem>
 <listitem><para>tree (thread tree drawn in the message index and attachment menu)</para></listitem>
 <listitem><para>underline (highlighting underlined patterns in the body of messages)</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>composeobject</emphasis> can be one of:
+</para>
+
+<itemizedlist>
+<listitem><para>header</para></listitem>
+<listitem><para>security_encrypt</para></listitem>
+<listitem><para>security_sign</para></listitem>
+<listitem><para>security_both</para></listitem>
+<listitem><para>security_none</para></listitem>
 </itemizedlist>
 
 <para>
@@ -2841,6 +2878,17 @@ command. Usage:
 <replaceable class="parameter">pattern</replaceable>
 </arg>
 
+<command>mono</command>
+<arg choice="plain">
+<option>compose</option>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">attribute</replaceable>
+</arg>
+
 <command>unmono</command>
 <group choice="req">
 <arg choice="plain">
@@ -2864,8 +2912,9 @@ command. Usage:
 </cmdsynopsis>
 
 <para>
-For <emphasis>object</emphasis>, see the <command>color</command>
-command. <emphasis>attribute</emphasis> can be one of the following:
+For <emphasis>object</emphasis> and <emphasis>composeobject</emphasis>,
+see the <command>color</command> command. <emphasis>attribute</emphasis>
+can be one of the following:
 </para>
 
 <itemizedlist>
@@ -5164,6 +5213,12 @@ shows several ways to select messages.
 <row><entry>~(<emphasis>PATTERN</emphasis>)</entry><entry>messages in threads
 containing messages matching <emphasis>PATTERN</emphasis>, e.g. all
 threads containing messages from you: ~(~P)</entry></row>
+<row><entry>~&lt;(<emphasis>PATTERN</emphasis>)</entry><entry>messages
+whose immediate parent matches <emphasis>PATTERN</emphasis>,
+e.g. replies to your messages: ~&lt;(~P)</entry></row>
+<row><entry>~&gt;(<emphasis>PATTERN</emphasis>)</entry><entry>messages
+having an immediate child matching <emphasis>PATTERN</emphasis>,
+e.g. messages you replied to: ~&gt;(~P)</entry></row>
 </tbody>
 </tgroup>
 </table>
@@ -6693,9 +6748,11 @@ to use.
 
 <para>
 If Mutt can not determine the MIME type by the extension of the file you
-attach, it will look at the file.  If the file is free of binary
-information, Mutt will assume that the file is plain text, and mark it
-as <literal>text/plain</literal>.  If the file contains binary
+attach, it will run the command specified in
+<link linkend="mime-type-query-command">$mime_type_query_command</link>.
+If that command is not specified, Mutt will look at the file.  If the file
+is free of binary information, Mutt will assume that the file is plain text,
+and mark it as <literal>text/plain</literal>.  If the file contains binary
 information, then Mutt will mark it as
 <literal>application/octet-stream</literal>.  You can change the MIME
 type that Mutt assigns to an attachment by using the
@@ -9516,6 +9573,20 @@ The following are the commands understood by Mutt:
 <replaceable class="parameter">pattern</replaceable>
 </arg>
 
+<command><link linkend="color">color</link></command>
+<arg choice="plain">
+<option>compose</option>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">foreground</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">background</replaceable>
+</arg>
+
 <command><link linkend="color">uncolor</link></command>
 <group choice="req">
 <arg choice="plain">
@@ -9857,6 +9928,17 @@ The following are the commands understood by Mutt:
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">pattern</replaceable>
+</arg>
+
+<command><link linkend="mono">mono</link></command>
+<arg choice="plain">
+<option>compose</option>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="plain">
+<replaceable class="parameter">attribute</replaceable>
 </arg>
 
 <command><link linkend="mono">unmono</link></command>

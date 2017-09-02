@@ -101,7 +101,7 @@ static int mutt_sasl_conn_close (CONNECTION* conn);
 static int mutt_sasl_conn_read (CONNECTION* conn, char* buf, size_t len);
 static int mutt_sasl_conn_write (CONNECTION* conn, const char* buf,
   size_t count);
-static int mutt_sasl_conn_poll (CONNECTION* conn);
+static int mutt_sasl_conn_poll (CONNECTION* conn, time_t wait_secs);
 
 /* utility function, stolen from sasl2 sample code */
 static int iptostring(const struct sockaddr *addr, socklen_t addrlen,
@@ -613,13 +613,13 @@ static int mutt_sasl_conn_write (CONNECTION* conn, const char* buf,
   return -1;
 }
 
-static int mutt_sasl_conn_poll (CONNECTION* conn)
+static int mutt_sasl_conn_poll (CONNECTION* conn, time_t wait_secs)
 {
   SASL_DATA* sasldata = conn->sockdata;
   int rc;
 
   conn->sockdata = sasldata->sockdata;
-  rc = sasldata->msasl_poll (conn);
+  rc = sasldata->msasl_poll (conn, wait_secs);
   conn->sockdata = sasldata;
 
   return rc;
