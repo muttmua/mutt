@@ -3390,25 +3390,25 @@ msgstr "Kontrolo de SSL-atestilo (%d de %d en ĉeno)"
 #.
 #: mutt_ssl.c:1238
 msgid "roas"
-msgstr ""
+msgstr "muas"
 
 #: mutt_ssl.c:1242
 #, fuzzy
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
-msgstr ""
+msgstr "(m)alakcepti, akcepti (u)nufoje, (a)kcepti ĉiam, (s)kip"
 
 #: mutt_ssl.c:1244 mutt_ssl_gnutls.c:999
 msgid "(r)eject, accept (o)nce, (a)ccept always"
-msgstr ""
+msgstr "(m)alakcepti, akcepti (u)nufoje, (a)kcepti ĉiam"
 
 #: mutt_ssl.c:1249
 #, fuzzy
 msgid "(r)eject, accept (o)nce, (s)kip"
-msgstr ""
+msgstr "(m)alakcepti, akcepti (u)nufoje, (s)kip"
 
 #: mutt_ssl.c:1251 mutt_ssl_gnutls.c:1010
 msgid "(r)eject, accept (o)nce"
-msgstr ""
+msgstr "(m)alakcepti, akcepti (u)nufoje"
 
 #: mutt_ssl.c:1284 mutt_ssl_gnutls.c:1066
 msgid "Warning: Couldn't save certificate"
@@ -3475,7 +3475,7 @@ msgstr "AVERTO: Subskribinto de servilo-atestilo ne estas CA"
 #.
 #: mutt_ssl_gnutls.c:1006
 msgid "roa"
-msgstr ""
+msgstr "mua"
 
 #. L10N:
 #. * These two letters correspond to the choices in the string:
@@ -3485,7 +3485,7 @@ msgstr ""
 #.
 #: mutt_ssl_gnutls.c:1017
 msgid "ro"
-msgstr ""
+msgstr "mu"
 
 #: mutt_ssl_gnutls.c:1100 mutt_ssl_gnutls.c:1135 mutt_ssl_gnutls.c:1145
 msgid "Unable to get certificate from peer"
