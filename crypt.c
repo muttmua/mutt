@@ -153,6 +153,16 @@ int mutt_protect (HEADER *msg, char *keylist)
         return -1;
       }
     }
+    else if (!mutt_strcasecmp ("flowed",
+                               mutt_get_parameter ("format", msg->content->parameter)))
+    {
+      if ((i = query_quadoption (OPT_PGPMIMEAUTO,
+              _("Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"))) != MUTT_YES)
+      {
+        mutt_error _("Mail not sent: inline PGP can't be used with format=flowed.");
+        return -1;
+      }
+    }
     else
     {
       /* they really want to send it inline... go for it */
