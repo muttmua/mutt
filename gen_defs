@@ -10,7 +10,10 @@ for mode in help defs; do
 		help)
 			echo "#ifdef HELP_C"
 			echo "const char *HelpStrings[] = {"
-			expr='s;^[^ ]* *\(.*\);	N_(\1),;'
+			expr='i\
+	/* L10N: Help screen function description.\
+	         Generated from one of the OPS files. */
+s;^[^ ]* *\(.*\);	N_(\1),;'
 			;;
 		*)
 			echo "enum {"
