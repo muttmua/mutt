@@ -953,7 +953,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
         if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->active &&
             ctx->hdrs[n]->changed)
         {
-          rc = imap_sync_message (idata, ctx->hdrs[n], &sync_cmd, &err_continue);
+          rc = imap_sync_message_for_copy (idata, ctx->hdrs[n], &sync_cmd, &err_continue);
           if (rc < 0)
           {
             dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
@@ -984,7 +984,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
 
       if (h->active && h->changed)
       {
-        rc = imap_sync_message (idata, h, &sync_cmd, &err_continue);
+        rc = imap_sync_message_for_copy (idata, h, &sync_cmd, &err_continue);
         if (rc < 0)
         {
           dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));

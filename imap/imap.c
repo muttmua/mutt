@@ -1051,8 +1051,9 @@ out:
   return rc;
 }
 
-/* returns 0 if mutt's flags match cached server flags */
-static int compare_flags (HEADER* h)
+/* returns 0 if mutt's flags match cached server flags:
+ * EXCLUDING the deleted flag. */
+static int compare_flags_for_copy (HEADER* h)
 {
   IMAP_HEADER_DATA* hd = (IMAP_HEADER_DATA*)h->data;
 
@@ -1064,24 +1065,28 @@ static int compare_flags (HEADER* h)
     return 1;
   if (h->replied != hd->replied)
     return 1;
-  if (h->deleted != hd->deleted)
-    return 1;
 
   return 0;
 }
 
-/* Update the IMAP server to reflect the flags a single message.  */
-int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
+/* Update the IMAP server to reflect the flags for a single message before
+ * performing a "UID COPY".
+ * NOTE: This does not sync the "deleted" flag state, because it is not
+ *       desirable to propagate that flag into the copy.
+ */
+int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
 		       int *err_continue)
 {
   char flags[LONG_STRING];
   char uid[11];
 
-  hdr->changed = 0;
-
-  if (!compare_flags (hdr))
+  if (!compare_flags_for_copy (hdr))
   {
-    idata->ctx->changed--;
+    if (hdr->deleted == HEADER_DATA(hdr)->deleted)
+    {
+      hdr->changed = 0;
+      idata->ctx->changed--;
+    }
     return 0;
   }
 
@@ -1100,8 +1105,8 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
 		 "\\Flagged ", flags, sizeof (flags));
   imap_set_flag (idata, MUTT_ACL_WRITE, hdr->replied,
 		 "\\Answered ", flags, sizeof (flags));
-  imap_set_flag (idata, MUTT_ACL_DELETE, hdr->deleted,
-		 "\\Deleted ", flags, sizeof (flags));
+  imap_set_flag (idata, MUTT_ACL_DELETE, HEADER_DATA(hdr)->deleted,
+                "\\Deleted ", flags, sizeof (flags));
 
   /* now make sure we don't lose custom tags */
   if (mutt_bit_isset (idata->ctx->rights, MUTT_ACL_WRITE))
@@ -1117,7 +1122,8 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     imap_set_flag (idata, MUTT_ACL_WRITE, 1, "Old ", flags, sizeof (flags));
     imap_set_flag (idata, MUTT_ACL_WRITE, 1, "\\Flagged ", flags, sizeof (flags));
     imap_set_flag (idata, MUTT_ACL_WRITE, 1, "\\Answered ", flags, sizeof (flags));
-    imap_set_flag (idata, MUTT_ACL_DELETE, 1, "\\Deleted ", flags, sizeof (flags));
+    imap_set_flag (idata, MUTT_ACL_DELETE, !HEADER_DATA(hdr)->deleted,
+                   "\\Deleted ", flags, sizeof (flags));
 
     mutt_remove_trailing_ws (flags);
 
@@ -1139,11 +1145,18 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     *err_continue = imap_continue ("imap_sync_message: STORE failed",
 				   idata->buf);
     if (*err_continue != MUTT_YES)
+    {
+      hdr->active = 1;
       return -1;
+    }
   }
 
   hdr->active = 1;
-  idata->ctx->changed--;
+  if (hdr->deleted == HEADER_DATA(hdr)->deleted)
+  {
+    hdr->changed = 0;
+    idata->ctx->changed--;
+  }
 
   return 0;
 }
@@ -2123,9 +2136,11 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
   char mbox[LONG_STRING];
   char mmbox[LONG_STRING];
   char prompt[LONG_STRING];
-  int rc;
+  int n, rc;
   IMAP_MBOX mx;
   int triedcreate = 0;
+  BUFFER *sync_cmd = NULL;
+  int err_continue = MUTT_NO;
 
   idata = (IMAP_DATA*) ctx->data;
 
@@ -2148,17 +2163,24 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
     strfcpy (mbox, "INBOX", sizeof (mbox));
   imap_munge_mbox_name (idata, mmbox, sizeof (mmbox), mbox);
 
+  sync_cmd = mutt_buffer_new ();
+  for (n = 0; n < ctx->msgcount; n++)
+  {
+    if (ctx->hdrs[n]->active && ctx->hdrs[n]->changed &&
+        ctx->hdrs[n]->deleted && !ctx->hdrs[n]->purge)
+    {
+      rc = imap_sync_message_for_copy (idata, ctx->hdrs[n], sync_cmd, &err_continue);
+      if (rc < 0)
+      {
+        dprint (1, (debugfile, "imap_fast_trash: could not sync\n"));
+        goto out;
+      }
+    }
+  }
+
   /* loop in case of TRYCREATE */
   do
   {
-    rc = imap_exec_msgset (idata, "UID STORE", "+FLAGS.SILENT (\\Seen)",
-                           MUTT_TRASH, 0, 0);
-    if (rc < 0)
-    {
-      dprint (1, (debugfile, "imap_fast_trash: Unable to mark messages as seen\n"));
-      goto out;
-    }
-
     rc = imap_exec_msgset (idata, "UID COPY", mmbox, MUTT_TRASH, 0, 0);
     if (!rc)
     {
@@ -2209,6 +2231,7 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
   rc = 0;
 
  out:
+  mutt_buffer_free (&sync_cmd);
   FREE (&mx.mbox);
 
   return rc < 0 ? -1 : rc;
