@@ -1196,7 +1196,7 @@ char* imap_set_flags (IMAP_DATA* idata, HEADER* h, char* s)
   hd = h->data;
   newh.data = hd;
 
-  dprint (2, (debugfile, "imap_fetch_message: parsing FLAGS\n"));
+  dprint (2, (debugfile, "imap_set_flags: parsing FLAGS\n"));
   if ((s = msg_parse_flags (&newh, s)) == NULL)
     return NULL;
 
