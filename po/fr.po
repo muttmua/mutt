@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 17:26+0200\n"
-"PO-Revision-Date: 2017-09-05 17:30+0200\n"
+"POT-Creation-Date: 2017-09-22 17:50+0200\n"
+"PO-Revision-Date: 2017-09-22 17:51+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -219,7 +219,7 @@ msgid "Mask"
 msgstr "Masque"
 
 # , c-format
-#: browser.c:426 browser.c:1088
+#: browser.c:426 browser.c:1090
 #, c-format
 msgid "%s is not a directory."
 msgstr "%s n'est pas un répertoire."
@@ -246,7 +246,7 @@ msgstr "Répertoire [%s], masque de fichier : %s"
 msgid "Can't attach a directory!"
 msgstr "Impossible d'attacher un répertoire !"
 
-#: browser.c:737 browser.c:1154 browser.c:1249
+#: browser.c:737 browser.c:1156 browser.c:1251
 msgid "No files match the file mask"
 msgstr "Aucun fichier ne correspond au masque"
 
@@ -275,43 +275,47 @@ msgstr "Voulez-vous vraiment supprimer la boîte aux lettres \"%s\" ?"
 msgid "Mailbox deleted."
 msgstr "Boîte aux lettres supprimée."
 
-#: browser.c:1019
+#: browser.c:1018
+msgid "Mailbox deletion failed."
+msgstr "La suppression de la boîte aux lettres a échoué."
+
+#: browser.c:1021
 msgid "Mailbox not deleted."
 msgstr "Boîte aux lettres non supprimée."
 
-#: browser.c:1038
+#: browser.c:1040
 msgid "Chdir to: "
 msgstr "Changement de répertoire vers : "
 
-#: browser.c:1077 browser.c:1148
+#: browser.c:1079 browser.c:1150
 msgid "Error scanning directory."
 msgstr "Erreur de lecture du répertoire."
 
-#: browser.c:1099
+#: browser.c:1101
 msgid "File Mask: "
 msgstr "Masque de fichier : "
 
-#: browser.c:1169
+#: browser.c:1171
 msgid "Reverse sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? "
 msgstr "Tri inverse par (d)ate, (a)lphabétique, (t)aille ou (n)e pas trier ? "
 
-#: browser.c:1170
+#: browser.c:1172
 msgid "Sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? "
 msgstr "Tri par (d)ate, (a)lphabétique, (t)aille ou (n)e pas trier ? "
 
-#: browser.c:1171
+#: browser.c:1173
 msgid "dazn"
 msgstr "datn"
 
-#: browser.c:1238
+#: browser.c:1240
 msgid "New file name: "
 msgstr "Nouveau nom de fichier : "
 
-#: browser.c:1266
+#: browser.c:1268
 msgid "Can't view a directory"
 msgstr "Impossible de visualiser un répertoire"
 
-#: browser.c:1283
+#: browser.c:1285
 msgid "Error trying to view file"
 msgstr "Erreur en essayant de visualiser le fichier"
 
@@ -2545,78 +2549,78 @@ msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:818 imap/imap.c:2190 imap/message.c:1014 muttlib.c:1683
+#: imap/imap.c:818 imap/imap.c:2212 imap/message.c:1014 muttlib.c:1683
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
 
-#: imap/imap.c:1215
+#: imap/imap.c:1228
 msgid "Expunge failed"
 msgstr "Expunge a échoué"
 
 # , c-format
-#: imap/imap.c:1227
+#: imap/imap.c:1240
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Marquage de %d messages à effacer..."
 
 # , c-format
-#: imap/imap.c:1259
+#: imap/imap.c:1272
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "La sauvegarde a changé des messages... [%d/%d]"
 
-#: imap/imap.c:1315
+#: imap/imap.c:1328
 msgid "Error saving flags. Close anyway?"
 msgstr "Erreur en sauvant les indicateurs. Fermer tout de même ?"
 
-#: imap/imap.c:1323
+#: imap/imap.c:1336
 msgid "Error saving flags"
 msgstr "Erreur en sauvant les indicateurs"
 
-#: imap/imap.c:1346
+#: imap/imap.c:1359
 msgid "Expunging messages from server..."
 msgstr "Effacement des messages sur le serveur..."
 
-#: imap/imap.c:1352
+#: imap/imap.c:1365
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:1839
+#: imap/imap.c:1852
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:1910
+#: imap/imap.c:1923
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1934
+#: imap/imap.c:1947
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:1936
+#: imap/imap.c:1949
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:1946
+#: imap/imap.c:1959
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:1948
+#: imap/imap.c:1961
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2175 imap/message.c:978
+#: imap/imap.c:2197 imap/message.c:978
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
