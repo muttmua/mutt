@@ -8,6 +8,10 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.9.1 (2017-09-23):
+
+  ! Bug fix release.
+
 1.9.0 (2017-09-02):
 
   + $ssl_verify_partial_chains permits verifying partial certificate chains.

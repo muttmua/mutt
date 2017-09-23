@@ -1,3 +1,130 @@
+2017-09-22 11:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (19c81a140c6e)
+
+	* imap/imap.c: Add missing IMAP_CMD_POLL flag in imap buffy check.
+
+	I missed adding the flag to one of the imap_exec() calls inside the
+	loop, when a different server is encountered in the mailboxes list.
+
+2017-09-22 11:12 -0700  Kevin McCarthy  <kevin@8t8.us>  (9e53c623d102)
+
+	* imap/command.c: Close the imap socket for the selected mailbox on
+	error.
+
+	The new $imap_poll_timeout calls the cmd_handle_fatal() error
+	handler on timeout, which is supposed to close and cleanup.
+
+	However, for the currently selected mailbox, the error handler was
+	not closing the socket after closing up the mailbox. This left extra
+	SSL/GnuTLS data around and was causing errors on an attempt to
+	reconnect.
+
+	Thanks to Fabian Groffen for reporting the issue.
+
+2017-09-22 11:07 -0700  Kevin McCarthy  <kevin@8t8.us>  (7155392ed28b)
+
+	* imap/imap.c: Fix imap sync segfault due to inactive headers during
+	an expunge. (closes #3971)
+
+	Mutt has several places where it turns off h->active as a hack. For
+	example to avoid FLAG updates, or to exclude from imap_exec_msgset.
+
+	Unfortunately, when a reopen is allowed and the IMAP_EXPUNGE_PENDING
+	flag becomes set (e.g. a flag update to a modified header),
+	imap_expunge_mailbox() will be called by imap_cmd_finish().
+
+	The mx_update_tables() would free and remove these "inactive"
+	headers, despite that an EXPUNGE was not received for them. This
+	would result in memory leaks and segfaults due to dangling pointers
+	in the msn_index and uid_hash.
+
+	There should probably be a more elegant solution, removing the
+	initial hacks. However, this is causing a segfault, and the best
+	solution right now is to turn active back on for non-expunged
+	messages in imap_expunge_mailbox().
+
+	Extra thanks to chdiza, who bravely runs tip and found this issue
+	quickly.
+
+2017-09-14 12:43 -0700  Kevin McCarthy  <kevin@8t8.us>  (12d3714d8bfa)
+
+	* imap/command.c, imap/message.c: Improve imap fetch handler to accept
+	an initial UID. (closes #3969)
+
+	Gmail sends flag updates with a UID before the FLAGS. The handler
+	was very simple, and so ignored the flag update in that case.
+
+	Pull the code from msg_parse_fetch(), paring down to just UID and
+	FLAGS. This will handle arbitrary order data items.
+
+2017-09-13 15:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (f90712538cd9)
+
+	* imap/imap.c, imap/imap_private.h, imap/message.c: Change imap
+	copy/save and trash to sync flags, excluding deleted. (closes #3966)
+	(closes #3860)
+
+	imap_copy_messages() uses a helper to sync the flags before
+	performing a server-side copy. However, it had a bug that the
+	"deleted" flag on a local message, if set, will be propagated to the
+	copy too.
+
+	Change the copy sync helper to ignore the deleted flag. Then, change
+	the imap trash function to use the same helper.
+
+	Thanks to Anton Lindqvist for his excellent bug report, suggested
+	fixes, and help testing.
+
+2017-09-13 15:48 -0700  Kevin McCarthy  <kevin@8t8.us>  (19597bb7baa6)
+
+	* imap/imap.c: Remove \Seen flag setting for imap trash. (see #3966)
+	(see #3860)
+
+	Commit 323e3d6e5e4c has a side effect where spurious FETCH flag
+	updates after setting the \Seen flag can cause a sync to abort.
+
+	Remove manually setting \Seen for all trashed message before
+	copying.
+
+	The next commit will change the imap trash function to use the same
+	code as the imap copy/save function for syncing the message before
+	server-side copying.
+
+2017-09-04 09:40 -0700  Kevin McCarthy  <kevin@8t8.us>  (3c6f3ca07807)
+
+	* curs_lib.c: Fix rv assignment in mutt_window_mvprintw(). (closes
+	#3964)
+
+	Mutt doesn't check the return value, so this wasn't causing a bug,
+	but was incorrect.
+
+	Thanks to dcb314 for reporting the issue.
+
+2017-09-04 09:20 -0700  Kevin McCarthy  <kevin@8t8.us>  (f2298b3e6b93)
+
+	* mutt_ssl_gnutls.c: Fix fp resource leak. (closes #3965)
+
+	Thanks to dcb314 for reporting the issue.
+
+2017-09-02 12:20 -0700  Kevin McCarthy  <kevin@8t8.us>  (ed024cc919fe)
+
+	* setenv.c: merge default into stable
+
+2017-09-02 12:12 -0700  Kevin McCarthy  <kevin@8t8.us>  (a586abf3c62d)
+
+	* .hgsigs: mutt-1.9.0 signed
+
+2017-09-02 12:11 -0700  Kevin McCarthy  <kevin@8t8.us>  (b050efec0ed4)
+
+	* .hgtags: Added tag mutt-1-9-rel for changeset 549821ba69e5
+
+2017-09-02 11:32 -0700  Kevin McCarthy  <kevin@8t8.us>  (549821ba69e5)
+
+	* ChangeLog, VERSION, po/bg.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/eo.po, po/es.po, po/et.po, po/eu.po,
+	po/fr.po, po/ga.po, po/gl.po, po/hu.po, po/id.po, po/it.po,
+	po/ja.po, po/ko.po, po/lt.po, po/nl.po, po/pl.po, po/pt_BR.po,
+	po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po, po/zh_CN.po,
+	po/zh_TW.po: automatic post-release commit for mutt-1.9.0
+
 2017-09-02 09:36 -0700  Kevin McCarthy  <kevin@8t8.us>  (3cd63d517453)
 
 	* po/cs.po, po/eo.po, po/nl.po: Fix the new certificate prompt
