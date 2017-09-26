@@ -2095,6 +2095,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   struct maildir *md;		/* list of messages in the mailbox */
   struct maildir **last, *p;
   int i;
+  int count = 0;
   HASH *fnames;			/* hash table for quickly looking up the base filename
 				   for a maildir message */
   struct mh_data *data = mh_data (ctx);
@@ -2132,15 +2133,15 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   md = NULL;
   last = &md;
   if (changed & 1)
-    maildir_parse_dir (ctx, &last, "new", NULL, NULL);
+    maildir_parse_dir (ctx, &last, "new", &count, NULL);
   if (changed & 2)
-    maildir_parse_dir (ctx, &last, "cur", NULL, NULL);
+    maildir_parse_dir (ctx, &last, "cur", &count, NULL);
 
   /* we create a hash table keyed off the canonical (sans flags) filename
    * of each message we scanned.  This is used in the loop over the
    * existing messages below to do some correlation.
    */
-  fnames = hash_create (1031, 0);
+  fnames = hash_create (count, 0);
 
   for (p = md; p; p = p->next)
   {
@@ -2248,6 +2249,7 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
   struct maildir *md, *p;
   struct maildir **last = NULL;
   struct mh_sequences mhs;
+  int count = 0;
   HASH *fnames;
   int i;
   struct mh_data *data = mh_data (ctx);
@@ -2292,7 +2294,7 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
   md   = NULL;
   last = &md;
 
-  maildir_parse_dir (ctx, &last, NULL, NULL, NULL);
+  maildir_parse_dir (ctx, &last, NULL, &count, NULL);
   maildir_delayed_parsing (ctx, &md, NULL);
 
   if (mh_read_sequences (&mhs, ctx->path) < 0)
@@ -2301,7 +2303,7 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
   mhs_free_sequences (&mhs);
 
   /* check for modifications and adjust flags */
-  fnames = hash_create (1031, 0);
+  fnames = hash_create (count, 0);
 
   for (p = md; p; p = p->next)
   {
