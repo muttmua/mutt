@@ -652,6 +652,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 {
   unsigned int msn, uid;
   HEADER *h;
+  int server_changes = 0;
 
   dprint (3, (debugfile, "Handling FETCH\n"));
 
@@ -687,13 +688,14 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 
     if (ascii_strncasecmp ("FLAGS", s, 5) == 0)
     {
-      /* If server flags could conflict with mutt's flags, reopen the mailbox. */
-      if (h->changed)
-        idata->reopen |= IMAP_EXPUNGE_PENDING;
-      else
+      imap_set_flags (idata, h, s, &server_changes);
+      if (server_changes)
       {
-        imap_set_flags (idata, h, s);
-        idata->check_status = IMAP_FLAGS_PENDING;
+        /* If server flags could conflict with mutt's flags, reopen the mailbox. */
+        if (h->changed)
+          idata->reopen |= IMAP_EXPUNGE_PENDING;
+        else
+          idata->check_status = IMAP_FLAGS_PENDING;
       }
       return;
     }
