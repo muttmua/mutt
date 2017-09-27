@@ -1102,10 +1102,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   if (!compare_flags_for_copy (hdr))
   {
     if (hdr->deleted == HEADER_DATA(hdr)->deleted)
-    {
       hdr->changed = 0;
-      idata->ctx->changed--;
-    }
     return 0;
   }
 
@@ -1172,10 +1169,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
 
   hdr->active = 1;
   if (hdr->deleted == HEADER_DATA(hdr)->deleted)
-  {
     hdr->changed = 0;
-    idata->ctx->changed--;
-  }
 
   return 0;
 }
