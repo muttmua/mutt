@@ -494,10 +494,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
 
       phraselen = 0;
       commentlen = 0;
-      s++;
 #ifdef EXACT_ADDRESS
-      begin = skip_email_wsp(s);
+      begin = s;
 #endif
+      s++;
     }
     else if (*s == '<')
     {
