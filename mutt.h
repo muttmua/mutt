@@ -72,10 +72,16 @@
 #endif
 
 #ifdef HAVE_FGETS_UNLOCKED
+# ifdef fgets
+#  undef fgets
+# endif
 # define fgets fgets_unlocked
 #endif
 
 #ifdef HAVE_FGETC_UNLOCKED
+# ifdef fgetc
+#  undef fgetc
+# endif
 # define fgetc fgetc_unlocked
 #endif
 
