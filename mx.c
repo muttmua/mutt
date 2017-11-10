@@ -828,7 +828,8 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     if (isSpool && *mbox)
     {
       mutt_expand_path (mbox, sizeof (mbox));
-      snprintf (buf, sizeof (buf), _("Move read messages to %s?"), mbox);
+      snprintf (buf, sizeof (buf), _("Move %d read messages to %s?"),
+                read_msgs, mbox);
       if ((move_messages = query_quadoption (OPT_MOVE, buf)) == -1)
       {
 	ctx->closing = 0;
