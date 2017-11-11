@@ -19,10 +19,10 @@
 # , fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 1.8.3\n"
+"Project-Id-Version: Mutt 1.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 17:50+0200\n"
-"PO-Revision-Date: 2017-09-22 17:51+0200\n"
+"POT-Creation-Date: 2017-11-11 19:08+0100\n"
+"PO-Revision-Date: 2017-11-11 19:12+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -1753,7 +1753,7 @@ msgstr "Aucune boîte aux lettres n'est ouverte."
 msgid "There are no messages."
 msgstr "Il n'y a pas de messages."
 
-#: curs_main.c:59 mx.c:1131 pager.c:55 recvattach.c:45
+#: curs_main.c:59 mx.c:1132 pager.c:55 recvattach.c:45
 msgid "Mailbox is read-only."
 msgstr "La boîte aux lettres est en lecture seule."
 
@@ -2458,7 +2458,7 @@ msgstr "Authentification (%s)..."
 msgid "SASL authentication failed."
 msgstr "L'authentification SASL a échoué."
 
-#: imap/browse.c:59 imap/imap.c:579
+#: imap/browse.c:59 imap/imap.c:598
 #, c-format
 msgid "%s is an invalid IMAP path"
 msgstr "%s n'est pas un chemin IMAP valide"
@@ -2503,12 +2503,12 @@ msgid "Mailbox renamed."
 msgstr "Boîte aux lettres renommée."
 
 # , c-format
-#: imap/command.c:260
+#: imap/command.c:260 imap/command.c:345
 #, c-format
 msgid "Connection to %s timed out"
 msgstr "Connexion à %s interrompue"
 
-#: imap/command.c:467
+#: imap/command.c:482
 msgid "Mailbox closed"
 msgstr "Boîte aux lettres fermée"
 
@@ -2522,110 +2522,110 @@ msgstr "CREATE a échoué : %s"
 msgid "Closing connection to %s..."
 msgstr "Fermeture de la connexion à %s..."
 
-#: imap/imap.c:319
+#: imap/imap.c:338
 msgid "This IMAP server is ancient. Mutt does not work with it."
 msgstr "Ce serveur IMAP est trop ancien. Mutt ne marche pas avec."
 
-#: imap/imap.c:444 pop_lib.c:295 smtp.c:466
+#: imap/imap.c:463 pop_lib.c:295 smtp.c:466
 msgid "Secure connection with TLS?"
 msgstr "Connexion sécurisée avec TLS ?"
 
-#: imap/imap.c:453 pop_lib.c:315 smtp.c:478
+#: imap/imap.c:472 pop_lib.c:315 smtp.c:478
 msgid "Could not negotiate TLS connection"
 msgstr "Impossible de négocier la connexion TLS"
 
-#: imap/imap.c:469 pop_lib.c:336
+#: imap/imap.c:488 pop_lib.c:336
 msgid "Encrypted connection unavailable"
 msgstr "Connexion chiffrée non disponible"
 
 # , c-format
-#: imap/imap.c:613
+#: imap/imap.c:632
 #, c-format
 msgid "Selecting %s..."
 msgstr "Sélection de %s..."
 
-#: imap/imap.c:768
+#: imap/imap.c:787
 msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:818 imap/imap.c:2212 imap/message.c:1014 muttlib.c:1683
+#: imap/imap.c:837 imap/imap.c:2225 imap/message.c:1014 muttlib.c:1683
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
 
-#: imap/imap.c:1228
+#: imap/imap.c:1241
 msgid "Expunge failed"
 msgstr "Expunge a échoué"
 
 # , c-format
-#: imap/imap.c:1240
+#: imap/imap.c:1253
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Marquage de %d messages à effacer..."
 
 # , c-format
-#: imap/imap.c:1272
+#: imap/imap.c:1285
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "La sauvegarde a changé des messages... [%d/%d]"
 
-#: imap/imap.c:1328
+#: imap/imap.c:1341
 msgid "Error saving flags. Close anyway?"
 msgstr "Erreur en sauvant les indicateurs. Fermer tout de même ?"
 
-#: imap/imap.c:1336
+#: imap/imap.c:1349
 msgid "Error saving flags"
 msgstr "Erreur en sauvant les indicateurs"
 
-#: imap/imap.c:1359
+#: imap/imap.c:1372
 msgid "Expunging messages from server..."
 msgstr "Effacement des messages sur le serveur..."
 
-#: imap/imap.c:1365
+#: imap/imap.c:1378
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:1852
+#: imap/imap.c:1865
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:1923
+#: imap/imap.c:1936
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1947
+#: imap/imap.c:1960
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:1949
+#: imap/imap.c:1962
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:1959
+#: imap/imap.c:1972
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:1961
+#: imap/imap.c:1974
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2197 imap/message.c:978
+#: imap/imap.c:2210 imap/message.c:978
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
 
-#: imap/message.c:84 mx.c:1368
+#: imap/message.c:84 mx.c:1369
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Dépassement de capacité sur entier -- impossible d'allouer la mémoire."
 
@@ -3773,60 +3773,60 @@ msgstr "Impossible d'ouvrir la corbeille"
 # , c-format
 #: mx.c:831
 #, c-format
-msgid "Move read messages to %s?"
-msgstr "Déplacer les messages lus dans %s ?"
+msgid "Move %d read messages to %s?"
+msgstr "Déplacer %d messages lus dans %s ?"
 
 # , c-format
-#: mx.c:847 mx.c:1147
+#: mx.c:848 mx.c:1148
 #, c-format
 msgid "Purge %d deleted message?"
-msgstr "Effacer %d message(s) marqué(s) à effacer ?"
+msgstr "Effacer %d message marqué à effacer ?"
 
 # , c-format
-#: mx.c:847 mx.c:1147
+#: mx.c:848 mx.c:1148
 #, c-format
 msgid "Purge %d deleted messages?"
-msgstr "Effacer %d message(s) marqué(s) à effacer ?"
+msgstr "Effacer %d messages marqués à effacer ?"
 
 # , c-format
-#: mx.c:868
+#: mx.c:869
 #, c-format
 msgid "Moving read messages to %s..."
 msgstr "Déplacement des messages lus dans %s..."
 
-#: mx.c:929 mx.c:1138
+#: mx.c:930 mx.c:1139
 msgid "Mailbox is unchanged."
 msgstr "La boîte aux lettres est inchangée."
 
 # , c-format
-#: mx.c:982
+#: mx.c:983
 #, c-format
 msgid "%d kept, %d moved, %d deleted."
 msgstr "%d gardé(s), %d déplacé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:985 mx.c:1199
+#: mx.c:986 mx.c:1200
 #, c-format
 msgid "%d kept, %d deleted."
 msgstr "%d gardé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:1122
+#: mx.c:1123
 #, c-format
 msgid " Press '%s' to toggle write"
 msgstr " Appuyez sur '%s' pour inverser l'écriture autorisée"
 
-#: mx.c:1124
+#: mx.c:1125
 msgid "Use 'toggle-write' to re-enable write!"
 msgstr "Utilisez 'toggle-write' pour réautoriser l'écriture !"
 
 # , c-format
-#: mx.c:1126
+#: mx.c:1127
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
 msgstr "La boîte aux lettres est protégée contre l'écriture. %s"
 
-#: mx.c:1193
+#: mx.c:1194
 msgid "Mailbox checkpointed."
 msgstr "Boîte aux lettres vérifiée."
 
@@ -4920,7 +4920,7 @@ msgstr "Tri de la boîte aux lettres..."
 msgid "Could not find sorting function! [report this bug]"
 msgstr "Fonction de tri non trouvée ! [signalez ce bug]"
 
-#: status.c:111
+#: status.c:112
 msgid "(no mailbox)"
 msgstr "(pas de boîte aux lettres)"
 
