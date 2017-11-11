@@ -1213,6 +1213,11 @@ int mutt_index_menu (void)
 #endif
 	else
 	{
+          if (option (OPTCHANGEFOLDERNEXT) && Context && Context->path)
+          {
+            strfcpy (buf, Context->path, sizeof (buf));
+            mutt_pretty_mailbox (buf, sizeof (buf));
+          }
 	  mutt_buffy (buf, sizeof (buf));
 
           if (mutt_enter_fname (cp, buf, sizeof (buf), 1) == -1)
