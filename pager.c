@@ -1464,15 +1464,19 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   {
     if (cnt < b_read)
     {
-      if (ch != -1 && buf[0] != ' ' && buf[0] != '\t' &&
+      if (ch != -1 &&
 	  buf[cnt] != ' ' && buf[cnt] != '\t' && buf[cnt] != '\n' && buf[cnt] != '\r')
       {
 	buf_ptr = buf + ch;
 	/* skip trailing blanks */
 	while (ch && (buf[ch] == ' ' || buf[ch] == '\t' || buf[ch] == '\r'))
 	  ch--;
-        /* a very long word with leading spaces causes infinite wrapping */
-        if ((!ch) && (flags & MUTT_PAGER_NSKIP))
+        /* A very long word with leading spaces causes infinite
+         * wrapping when MUTT_PAGER_NSKIP is set.  A folded header
+         * with a single long word shouldn't be smartwrapped
+         * either.  So just disable smart_wrap if it would wrap at the
+         * beginning of the line. */
+        if (!ch)
           buf_ptr = buf + cnt;
         else
           cnt = ch + 1;
