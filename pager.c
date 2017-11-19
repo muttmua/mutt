@@ -296,7 +296,7 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
     {
       color ^= A_BLINK;
     }
-    else if (a->attr & ANSI_OFF)
+    else if (a->attr == ANSI_OFF)
     {
       a->attr = 0;
     }
