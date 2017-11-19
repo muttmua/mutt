@@ -1684,7 +1684,7 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
   int first = 1, enc, col = 0, w, l = 0, fold;
 
   dprint(4,(debugfile,"mwoh: pfx=[%s], tag=[%s], flags=%d value=[%s]\n",
-	    pfx, tag, flags, value));
+	    NONULL (pfx), tag, flags, value));
 
   if (tag && *tag && fprintf (fp, "%s%s: ", NONULL (pfx), tag) < 0)
     return -1;
