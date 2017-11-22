@@ -136,7 +136,7 @@ void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
   hdr->score = 0; /* in case of re-scoring */
   for (tmp = Score; tmp; tmp = tmp->next)
   {
-    if (mutt_pattern_exec (tmp->pat, 0, NULL, hdr, &cache) > 0)
+    if (mutt_pattern_exec (tmp->pat, MUTT_MATCH_FULL_ADDRESS, NULL, hdr, &cache) > 0)
     {
       if (tmp->exact || tmp->val == 9999 || tmp->val == -9999)
       {
