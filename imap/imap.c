@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 1996-1998,2012 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 1996-1999 Brandon Long <blong@fiction.net>
- * Copyright (C) 1999-2009,2012 Brendan Cully <brendan@kublai.com>
+ * Copyright (C) 1999-2009,2012,2017 Brendan Cully <brendan@kublai.com>
  *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
