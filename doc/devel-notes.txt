@@ -7,8 +7,8 @@ majordomo@mutt.org).  Announcements about recent development
 versions go to that mailing list, as go technical discussions and
 patches.
 
-Patches should, if possible, be made using Mercurial against
-the latest revision.
+Patches should, if possible, be made using Git against the latest
+revision.
 
 You'll need several GNU development utilities for working on mutt:
 
@@ -121,13 +121,13 @@ to turn the HTML into text, so if that fails you may need to install
 something else.
 
 
-Getting started from Mercurial
-------------------------------
+Getting started from Git
+------------------------
 
-The official Mercurial repository is located at:
-http://dev.mutt.org/hg/mutt/. You can get a fresh clone via:
+The official Git repository is located at:
+https://gitlab.com/muttmua/mutt. You can get a fresh clone via:
 
-  $ hg clone http://dev.mutt.org/hg/mutt/ mutt
+  $ git clone https://gitlab.com/muttmua/mutt.git mutt
 
 Once you've checked out a copy of the source, or changed your
 automake version, you'll need to run the script called './prepare' that
@@ -138,16 +138,16 @@ magic that needs to be done with a fresh checkout.
 Contributing patches
 --------------------
 
-As Mercurial is a distributed version control system, it's easy to
+As Git is a distributed version control system, it's easy to
 commit changes locally without impacting anybody else's work, starting
 over again, or turn several commit and backouts into a new single patch
 ready for submission.
 
 These so-called "changesets" (a diff with a reasonable message
-describing the change) can be exported using Mercurial through the
-"patchbomb" extension shipped with Mercurial (please see the hg
-documentation for details) which also is the preferred format for
-submission to the mutt-dev mailing list for discussion and review.
+describing the change) can be exported using Git through the
+"send-email" command (please see the git documentation for details)
+which also is the preferred format for submission to the mutt-dev
+mailing list for discussion and review.
 
 In order to ease later bisecting in case of bugs and code history,
 changes should be grouped logically, feature by feature or bugfix by
