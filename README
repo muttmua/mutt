@@ -5,9 +5,9 @@ When updating mutt from an earlier release or from Mercurial, please
 make sure to read the compatibility notes in ``UPDATING''. Older changes
 between mutt-1.2 and mutt-1.4 are listed in NEWS.
 
-If you got the mutt source code from the public Mercurial repository
-(http://dev.mutt.org/hg/mutt/), please read doc/devel-notes.txt to make
-sure that you have a complete development environment.
+If you got the mutt source code from the public source code
+repository, please read doc/devel-notes.txt to make sure that you have
+a complete development environment.
 
 Installation instructions are detailed in ``INSTALL''. The user manual
 is in doc/manual.txt. PGP users should read doc/PGP-Notes.txt.
