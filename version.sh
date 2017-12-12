@@ -9,28 +9,13 @@ srcdir=`dirname "$0"` && cd "$srcdir" || exit 1
 # If not, just cat the VERSION file; it contains the latest release number.
 [ -d ".git" ] || exec cat VERSION
 
-# translate release tags into ##.##.## notation
-get_tag () {
-	sed -e 's/mutt-//' -e 's/-rel.*//' | tr - .
-}
-
-get_dist_node() {
-	sed -e 's/.*-rel-//' -e 's/-/ /'
-}
-
-describe=`git describe --tags --long --match 'mutt-*-rel' 2>/dev/null` || exec cat VERSION
-
-tag=`echo $describe | get_tag`
-
-set -- `echo $describe | get_dist_node`
-dist="$1"
-node="$2"
-
-if [ $dist -eq 0 ]; then
-	dist=
+latesttag="$(git tag --merged=HEAD --list 'mutt-*-rel' | tr - . | sort -Vr | head -n1 | tr . -)"
+version="$(echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g)"
+distance="$(git rev-list --count $latesttag..)"
+commitid="$(git rev-parse --short HEAD)"
+if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+  dirty=+
 else
-	dist="+$dist"
+  dirty=""
 fi
-
-echo "$tag$dist ($node)"
-exit 0
+echo "${version}+${distance} (g${commitid}${dirty})"
