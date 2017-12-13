@@ -156,6 +156,8 @@ should be avoided.
 
 Before submitting patches, please make sure the check_sec.sh script
 in the top-level source directory reports no errors/warnings.
+Documentation changes should be validated by running 'make validate'
+in the doc subdirectory.
 
 A word about warnings
 ---------------------
