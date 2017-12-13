@@ -7,30 +7,18 @@ srcdir=`dirname "$0"` && cd "$srcdir" || exit 1
 
 # Ensure that we have a repo here.
 # If not, just cat the VERSION file; it contains the latest release number.
-[ -d ".git" ] || exec cat VERSION
+{ [ -d ".git" ] && command -v git >/dev/null 2>&1; } \
+|| exec cat VERSION
 
-# translate release tags into ##.##.## notation
-get_tag () {
-	sed -e 's/mutt-//' -e 's/-rel.*//' | tr - .
-}
+latesttag="$(git tag --merged=HEAD --list 'mutt-*-rel' | tr - . | sort -Vr | head -n1 | tr . -)"
+version="$(echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g)"
+distance="$(git rev-list --count $latesttag..)"
+commitid="$(git rev-parse --short HEAD)"
 
-get_dist_node() {
-	sed -e 's/.*-rel-//' -e 's/-/ /'
-}
-
-describe=`git describe --tags --long --match 'mutt-*-rel' 2>/dev/null` || exec cat VERSION
-
-tag=`echo $describe | get_tag`
-
-set -- `echo $describe | get_dist_node`
-dist="$1"
-node="$2"
-
-if [ $dist -eq 0 ]; then
-	dist=
+if [ $distance -eq 0 ]; then
+  distance=
 else
-	dist="+$dist"
+  distance="+$distance"
 fi
 
-echo "$tag$dist ($node)"
-exit 0
+echo "${version}${distance} (${commitid})"
