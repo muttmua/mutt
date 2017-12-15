@@ -1391,8 +1391,8 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   if ((smimeerr = safe_fopen (smimeerrfile, "w+")) == NULL)
   {
     mutt_perror (smimeerrfile);
-    safe_fclose (&fpout);
     mutt_unlink (tempfile);
+    safe_fclose (&fpout);
     return NULL;
   }
   mutt_unlink (smimeerrfile);
@@ -1433,9 +1433,10 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
 			     fileno (fpout), fileno (smimeerr),
 			     smimeinfile, certfile)) == -1)
   {
+    mutt_unlink (tempfile);
+    safe_fclose (&fpout);
     safe_fclose (&smimeerr);
     mutt_unlink (smimeinfile);
-    mutt_unlink (certfile);
     return (NULL);
   }
 
@@ -1443,7 +1444,6 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   
   mutt_wait_filter (thepid);
   mutt_unlink (smimeinfile);
-  mutt_unlink (certfile);
   
   fflush (fpout);
   rewind (fpout);
