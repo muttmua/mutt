@@ -1,3 +1,150 @@
+2017-12-15 12:09:42 -0800  Kevin McCarthy  <kevin@8t8.us> (9eedfd4e)
+
+        * Fix s/mime certificate deletion bug. (closes #3982)
+        
+        Commit c1bcf4ba exposed a bug in the s/mime encryption code.  It was
+        errorneously calling unlink on the list of generated cert files to
+        use.
+        
+        Prior to that commit, the list had an initial space, which apparently
+        made the unlink fail.  After that commit, encrypting to a single
+        certificate would end up deleting the certificate.
+        
+        Remove the calls to unlink the cert file.  Add some missing cleanup if
+        the call to openssl fails.
+
+M	smime.c
+
+2017-12-14 16:16:27 -0800  Kevin McCarthy  <kevin@8t8.us> (841f7101)
+
+        * Update mkchangelog.sh to use git.
+        
+        The output isn't quite as nice as the hg generated version, but is
+        close.
+        
+        With Mercurial, and now Git, I'm not sure of the usefulness of
+        maintaining a ChangeLog file in the repos, but that is another
+        discussion.
+
+D	hg-changelog-map
+M	mkchangelog.sh
+
+2017-12-12 19:09:42 -0800  Kevin McCarthy  <kevin@8t8.us> (ecbd86c9)
+
+        * Remove hg-commit and Makefile commit target.
+        
+        I haven't ever used this script, and we only update the ChangeLog
+        during releases now.
+        
+        doc/devel-notes already mentions running check_sec.sh.  Add a mention
+        of the 'make validate' target too.
+
+M	Makefile.am
+M	doc/devel-notes.txt
+D	hg-commit
+
+2017-12-12 18:17:10 -0800  Kevin McCarthy  <kevin@8t8.us> (a4d08d25)
+
+        * Minor tweaks to the version.sh fixes from last commit.
+        
+        Add back a check for whether the git program exists.
+        
+        Don't show distance if it is zero.
+        
+        Remove the dirty flag.
+        
+        Remove the initial "g" prefix from the commitid.  This is added by git
+        describe, but I don't think we need to preserve it.
+
+M	version.sh
+
+2017-12-11 21:46:30 -0500  Aaron Schrab  <aaron+mutt@schrab.com> (8648db83)
+
+        * Change version.sh to manually compute version and distance.
+        
+        In some cases `git describe` gives bizarre results (see URL below),
+        instead get the highest version-numbered tag contained in HEAD then
+        count the number of commits that aren't included in it.
+        
+        https://public-inbox.org/git/20161205232712.GA23868@pug.qqx.org/
+
+M	version.sh
+
+2017-12-10 20:03:30 -0800  Kevin McCarthy  <kevin@8t8.us> (7b65f780)
+
+        * Update some of the documentation to refer to git.
+        
+        Also update the repos URL.
+
+M	COPYRIGHT
+M	README
+M	doc/devel-notes.txt
+
+2017-12-03 17:55:59 -0800  Kevin McCarthy  <kevin@8t8.us> (6df931c8)
+
+        * Convert version.sh to work with git.
+        
+        Use the built-in `git describe` to get the tag, distance, and
+        revision id.
+
+M	version.sh
+
+2017-12-02 19:27:14 -0800  Kevin McCarthy  <kevin@8t8.us> (0ad4c11d)
+
+        * Convert to .gitignore file.
+
+A	.gitignore
+D	.hgignore
+
+2017-09-30 19:15:08 -0700  Kevin McCarthy  <kevin@8t8.us> (1f4a6c67)
+
+        * Fix address group terminator "exact address" printing to display trailing semicolon.
+        
+        The exact-address handling for comma and colon are different because
+        those are added outside the exact-address printing.
+        
+        The semicolon needs to be inside the address->val field of the address
+        group terminator.
+
+M	rfc822.c
+
+2017-09-26 19:44:11 -0700  Kevin McCarthy  <kevin@8t8.us> (0bcb77a6)
+
+        * Fix uses of context->changed as a counter.
+        
+        The first was in mx_update_tables(), but only when "not committing".
+        This is used by mh/maildir during an "occult" update, and in imap when
+        expunging the mailbox.  It meant to simply turn on changed when a
+        single changed header is seen.
+        
+        The second use was in imap_sync_message_for_copy().  Previously this
+        was used for a server side copy/save, but is now also used for
+        fast-trash copying.  Remove the code that was trying to decrement the
+        counter: this function is not capable of properly setting a status
+        bit.
+
+M	imap/imap.c
+M	mx.c
+
+2017-09-23 11:40:44 -0700  Kevin McCarthy  <kevin@8t8.us> (b333df6d)
+
+        * mutt-1.9.1 signed
+
+M	.hgsigs
+
+2017-09-23 11:39:54 -0700  Kevin McCarthy  <kevin@8t8.us> (5e007dac)
+
+        * Added tag mutt-1-9-1-rel for changeset 869633ef393e
+
+M	.hgtags
+
+2017-09-23 11:39:45 -0700  Kevin McCarthy  <kevin@8t8.us> (8473efa7)
+
+        * automatic post-release commit for mutt-1.9.1
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
 2017-09-22 11:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (19c81a140c6e)
 
 	* imap/imap.c: Add missing IMAP_CMD_POLL flag in imap buffy check.
