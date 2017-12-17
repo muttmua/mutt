@@ -392,6 +392,12 @@ static void show_version (void)
 #else
 	"-HAVE_RESIZETERM  "
 #endif
+	
+#ifdef HAVE_FUTIMENS
+	"+HAVE_FUTIMENS  "
+#else
+	"-HAVE_FUTIMENS  "
+#endif
         );	
   
   puts (
