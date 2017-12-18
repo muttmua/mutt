@@ -7,10 +7,10 @@ srcdir=`dirname "$0"` && cd "$srcdir" || exit 1
 
 # Ensure that we have a repo here.
 # If not, just cat the VERSION file; it contains the latest release number.
-{ [ -d ".git" ] && command -v git >/dev/null 2>&1; } \
+{ [ -e ".git" ] && command -v git >/dev/null 2>&1; } \
 || exec cat VERSION
 
-latesttag="$(git tag --merged=HEAD --list 'mutt-*-rel' | tr - . | sort -Vr | head -n1 | tr . -)"
+latesttag="$(git describe --tags --match 'mutt-*-rel' --abbrev=0)"
 version="$(echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g)"
 distance="$(git rev-list --count $latesttag..)"
 commitid="$(git rev-parse --short HEAD)"
