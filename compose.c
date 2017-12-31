@@ -1426,6 +1426,11 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
       case OP_COMPOSE_PGP_MENU:
         if (!(WithCrypto & APPLICATION_PGP))
           break;
+        if (!crypt_has_module_backend (APPLICATION_PGP))
+        {
+          mutt_error _("No PGP backend configured");
+          break;
+        }
 	if ((WithCrypto & APPLICATION_SMIME)
             && (msg->security & APPLICATION_SMIME))
 	{
@@ -1458,6 +1463,11 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
       case OP_COMPOSE_SMIME_MENU:
         if (!(WithCrypto & APPLICATION_SMIME))
           break;
+        if (!crypt_has_module_backend (APPLICATION_SMIME))
+        {
+          mutt_error _("No S/MIME backend configured");
+          break;
+        }
 
 	if ((WithCrypto & APPLICATION_PGP)
             && (msg->security & APPLICATION_PGP))

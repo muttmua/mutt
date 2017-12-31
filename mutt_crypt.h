@@ -188,6 +188,9 @@ short crypt_is_numerical_keyid (const char *s);
 /* Show a message that a backend will be invoked. */
 void crypt_invoke_message (int type);
 
+/* Returns 1 if a module backend is registered for the type */
+int crypt_has_module_backend (int type);
+
 
 /* Silently forget about a passphrase. */
 void crypt_pgp_void_passphrase (void);
