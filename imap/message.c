@@ -529,7 +529,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   char buf[LONG_STRING];
   char path[_POSIX_PATH_MAX];
   char *pc;
-  long bytes;
+  unsigned int bytes;
   progress_t progressbar;
   unsigned int uid;
   int cacheno;
@@ -1234,7 +1234,7 @@ char* imap_set_flags (IMAP_DATA* idata, HEADER* h, char* s)
 static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
 {
   IMAP_DATA* idata;
-  long bytes;
+  unsigned int bytes;
   int rc = -1; /* default now is that string isn't FETCH response*/
   int parse_rc;
 

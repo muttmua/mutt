@@ -729,7 +729,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
   IMAP_LIST* list;
   IMAP_LIST lb;
   char delimbuf[5]; /* worst case: "\\"\0 */
-  long litlen;
+  unsigned int litlen;
 
   if (idata->cmddata && idata->cmdtype == IMAP_CT_LIST)
     list = (IMAP_LIST*)idata->cmddata;
@@ -936,7 +936,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
   unsigned int count;
   IMAP_STATUS *status;
   unsigned int olduv, oldun;
-  long litlen;
+  unsigned int litlen;
   short new = 0;
   short new_msg_count = 0;
 

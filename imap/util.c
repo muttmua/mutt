@@ -476,7 +476,7 @@ void imap_cachepath(IMAP_DATA* idata, const char* mailbox, char* dest,
 
 /* imap_get_literal_count: write number of bytes in an IMAP literal into
  *   bytes, return 0 on success, -1 on failure. */
-int imap_get_literal_count(const char *buf, long *bytes)
+int imap_get_literal_count(const char *buf, unsigned int *bytes)
 {
   char *pc;
   char *pn;
@@ -489,7 +489,8 @@ int imap_get_literal_count(const char *buf, long *bytes)
   while (isdigit ((unsigned char) *pc))
     pc++;
   *pc = 0;
-  *bytes = atoi(pn);
+  if (mutt_atoui (pn, bytes) < 0)
+    return -1;
 
   return 0;
 }
