@@ -531,7 +531,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   char *pc;
   long bytes;
   progress_t progressbar;
-  int uid;
+  unsigned int uid;
   int cacheno;
   IMAP_CACHE *cache;
   int read;
@@ -618,7 +618,8 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
 	if (ascii_strncasecmp ("UID", pc, 3) == 0)
 	{
 	  pc = imap_next_word (pc);
-	  uid = atoi (pc);
+	  if (mutt_atoui (pc, &uid) < 0)
+            goto bail;
 	  if (uid != HEADER_DATA(h)->uid)
 	    mutt_error (_("The message index is incorrect. Try reopening the mailbox."));
 	}
@@ -1244,7 +1245,8 @@ static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
 
   /* skip to message number */
   buf = imap_next_word (buf);
-  h->data->msn = atoi (buf);
+  if (mutt_atoui (buf, &h->data->msn) < 0)
+    return rc;
 
   /* find FETCH tag */
   buf = imap_next_word (buf);
@@ -1316,7 +1318,8 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     {
       s += 3;
       SKIPWS (s);
-      h->data->uid = (unsigned int) atoi (s);
+      if (mutt_atoui (s, &h->data->uid) < 0)
+        return -1;
 
       s = imap_next_word (s);
     }
@@ -1347,7 +1350,8 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
       while (isdigit ((unsigned char) *s))
         *ptmp++ = *s++;
       *ptmp = 0;
-      h->content_length = atoi (tmp);
+      if (mutt_atol (tmp, &h->content_length) < 0)
+        return -1;
     }
     else if (!ascii_strncasecmp ("BODY", s, 4) ||
       !ascii_strncasecmp ("RFC822.HEADER", s, 13))

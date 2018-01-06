@@ -33,6 +33,7 @@
 
 #include <ctype.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #define IMAP_CMD_BUFSIZE 512
 
@@ -497,7 +498,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
       dprint (2, (debugfile, "Handling EXISTS\n"));
 
       /* new mail arrived */
-      count = atoi (pn);
+      mutt_atoui (pn, &count);
 
       if ( !(idata->reopen & IMAP_EXPUNGE_PENDING) &&
 	   count < idata->max_msn)
@@ -615,8 +616,8 @@ static void cmd_parse_expunge (IMAP_DATA* idata, const char* s)
 
   dprint (2, (debugfile, "Handling EXPUNGE\n"));
 
-  exp_msn = atoi (s);
-  if (exp_msn < 1 || exp_msn > idata->max_msn)
+  if (mutt_atoui (s, &exp_msn) < 0 ||
+      exp_msn < 1 || exp_msn > idata->max_msn)
     return;
 
   h = idata->msn_index[exp_msn - 1];
@@ -655,8 +656,8 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 
   dprint (3, (debugfile, "Handling FETCH\n"));
 
-  msn = atoi (s);
-  if (msn < 1 || msn > idata->max_msn)
+  if (mutt_atoui (s, &msn) < 0 ||
+      msn < 1 || msn > idata->max_msn)
   {
     dprint (3, (debugfile, "FETCH response ignored for this message\n"));
     return;
@@ -669,7 +670,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
     return;
   }
 
-  dprint (2, (debugfile, "Message UID %d updated\n", HEADER_DATA(h)->uid));
+  dprint (2, (debugfile, "Message UID %u updated\n", HEADER_DATA(h)->uid));
   /* skip FETCH */
   s = imap_next_word (s);
   s = imap_next_word (s);
@@ -701,7 +702,11 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
     {
       s += 3;
       SKIPWS (s);
-      uid = (unsigned int) atoi (s);
+      if (mutt_atoui (s, &uid) < 0)
+      {
+        dprint (2, (debugfile, "Illegal UID.  Skipping update.\n"));
+        return;
+      }
       if (uid != HEADER_DATA(h)->uid)
       {
         dprint (2, (debugfile, "FETCH UID vs MSN mismatch.  Skipping update.\n"));
@@ -912,7 +917,8 @@ static void cmd_parse_search (IMAP_DATA* idata, const char* s)
 
   while ((s = imap_next_word ((char*)s)) && *s != '\0')
   {
-    uid = (unsigned int)atoi (s);
+    if (mutt_atoui (s, &uid) < 0)
+      continue;
     h = (HEADER *)int_hash_find (idata->uid_hash, uid);
     if (h)
       h->matched = 1;
@@ -927,7 +933,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
   char* value;
   BUFFY* inc;
   IMAP_MBOX mx;
-  int count;
+  unsigned int count;
   IMAP_STATUS *status;
   unsigned int olduv, oldun;
   long litlen;
@@ -969,7 +975,14 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
   while (*s && *s != ')')
   {
     value = imap_next_word (s);
-    count = strtol (value, &value, 10);
+
+    errno = 0;
+    count = strtoul (value, &value, 10);
+    if (errno == ERANGE && count == ULONG_MAX)
+    {
+      dprint (1, (debugfile, "Error parsing STATUS number\n"));
+      return;
+    }
 
     if (!ascii_strncmp ("MESSAGES", s, 8))
     {
@@ -989,7 +1002,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
     if (*s && *s != ')')
       s = imap_next_word (s);
   }
-  dprint (3, (debugfile, "%s (UIDVALIDITY: %d, UIDNEXT: %d) %d messages, %d recent, %d unseen\n",
+  dprint (3, (debugfile, "%s (UIDVALIDITY: %u, UIDNEXT: %u) %d messages, %d recent, %d unseen\n",
               status->name, status->uidvalidity, status->uidnext,
               status->messages, status->recent, status->unseen));
 
@@ -1028,7 +1041,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
 
       if (value && !imap_mxcmp (mailbox, value))
       {
-        dprint (3, (debugfile, "Found %s in buffy list (OV: %d ON: %d U: %d)\n",
+        dprint (3, (debugfile, "Found %s in buffy list (OV: %u ON: %u U: %d)\n",
                     mailbox, olduv, oldun, status->unseen));
         
 	if (option(OPTMAILCHECKRECENT))
