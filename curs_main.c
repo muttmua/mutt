@@ -636,6 +636,12 @@ int mutt_index_menu (void)
 	  mutt_message _("New mail in this mailbox.");
 	  if (option (OPTBEEPNEW))
 	    beep ();
+	  if (NewMailCmd)
+	  {
+	    char cmd[LONG_STRING];
+	    menu_status_line(cmd, sizeof(cmd), menu, NONULL(NewMailCmd));
+	    mutt_system(cmd);
+	  }
 	} else if (check == MUTT_FLAGS)
 	  mutt_message _("Mailbox was externally modified.");
 
@@ -662,6 +668,12 @@ int mutt_index_menu (void)
          menu->redraw |= REDRAW_STATUS;
          if (option (OPTBEEPNEW))
            beep();
+	 if (NewMailCmd)
+	 {
+	   char cmd[LONG_STRING];
+	   menu_status_line(cmd, sizeof(cmd), menu, NONULL(NewMailCmd));
+	   mutt_system(cmd);
+	 }
        }
      }
      else
