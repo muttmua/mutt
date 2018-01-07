@@ -199,9 +199,9 @@ void imap_logout_all (void)
 /* imap_read_literal: read bytes bytes from server into file. Not explicitly
  *   buffered, relies on FILE buffering. NOTE: strips \r from \r\n.
  *   Apparently even literals use \r\n-terminated strings ?! */
-int imap_read_literal (FILE* fp, IMAP_DATA* idata, long bytes, progress_t* pbar)
+int imap_read_literal (FILE* fp, IMAP_DATA* idata, unsigned int bytes, progress_t* pbar)
 {
-  long pos;
+  unsigned int pos;
   char c;
 
   int r = 0;
@@ -266,7 +266,7 @@ void imap_expunge_mailbox (IMAP_DATA* idata)
 
     if (h->index == INT_MAX)
     {
-      dprint (2, (debugfile, "Expunging message UID %d.\n", HEADER_DATA (h)->uid));
+      dprint (2, (debugfile, "Expunging message UID %u.\n", HEADER_DATA (h)->uid));
 
       h->active = 0;
       idata->ctx->size -= h->content->length;
@@ -704,7 +704,8 @@ static int imap_open_mailbox (CONTEXT* ctx)
       dprint (3, (debugfile, "Getting mailbox UIDVALIDITY\n"));
       pc += 3;
       pc = imap_next_word (pc);
-      idata->uid_validity = strtol (pc, NULL, 10);
+      if (mutt_atoui (pc, &idata->uid_validity) < 0)
+        goto fail;
       status->uidvalidity = idata->uid_validity;
     }
     else if (ascii_strncasecmp ("OK [UIDNEXT", pc, 11) == 0)
@@ -712,7 +713,8 @@ static int imap_open_mailbox (CONTEXT* ctx)
       dprint (3, (debugfile, "Getting mailbox UIDNEXT\n"));
       pc += 3;
       pc = imap_next_word (pc);
-      idata->uidnext = strtol (pc, NULL, 10);
+      if (mutt_atoui (pc, &idata->uidnext) < 0)
+        goto fail;
       status->uidnext = idata->uidnext;
     }
     else
@@ -1751,7 +1753,7 @@ IMAP_STATUS* imap_mboxcache_get (IMAP_DATA* idata, const char* mbox, int create)
       }
       status->uidvalidity = *uidvalidity;
       status->uidnext = uidnext ? *uidnext: 0;
-      dprint (3, (debugfile, "mboxcache: hcache uidvalidity %d, uidnext %d\n",
+      dprint (3, (debugfile, "mboxcache: hcache uidvalidity %u, uidnext %u\n",
                   status->uidvalidity, status->uidnext));
     }
     mutt_hcache_free ((void **)&uidvalidity);
