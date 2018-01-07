@@ -949,6 +949,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
   char* value;
   BUFFY* inc;
   IMAP_MBOX mx;
+  unsigned long ulcount;
   unsigned int count;
   IMAP_STATUS *status;
   unsigned int olduv, oldun;
@@ -993,12 +994,14 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
     value = imap_next_word (s);
 
     errno = 0;
-    count = strtoul (value, &value, 10);
-    if (errno == ERANGE && count == ULONG_MAX)
+    ulcount = strtoul (value, &value, 10);
+    if ((errno == ERANGE && ulcount == ULONG_MAX) ||
+        ((unsigned int) ulcount != ulcount))
     {
       dprint (1, (debugfile, "Error parsing STATUS number\n"));
       return;
     }
+    count = (unsigned int) ulcount;
 
     if (!ascii_strncmp ("MESSAGES", s, 8))
     {
