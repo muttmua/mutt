@@ -1800,7 +1800,7 @@ struct option_t MuttVars[] = {
    ** See also $$read_inc, $$write_inc and $$net_inc.
    */
 #endif
-  { "new_mail_command",	DT_PATH, R_NONE, UL &NewMailCmd, UL NULL },
+  { "new_mail_command",	DT_PATH, R_NONE, UL &NewMailCmd, 0 },
   /*
   ** .pp
   ** If \fIset\fP, Mutt will call this command after a new message is received.
