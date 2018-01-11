@@ -703,10 +703,15 @@ static gpgme_key_t *create_recipient_set (const char *keylist,
 /* Make sure that the correct signer is set. Returns 0 on success. */
 static int set_signer (gpgme_ctx_t ctx, int for_smime)
 {
-  char *signid = for_smime ? SmimeDefaultKey: PgpSignAs;
+  char *signid;
   gpgme_error_t err;
   gpgme_ctx_t listctx;
   gpgme_key_t key, key2;
+
+  if (for_smime)
+    signid = (SmimeSignAs && *SmimeSignAs) ? SmimeSignAs : SmimeDefaultKey;
+  else
+    signid = (PgpSignAs && *PgpSignAs) ? PgpSignAs : PgpDefaultKey;
 
   if (!signid || !*signid)
     return 0;
@@ -4840,8 +4845,8 @@ static int gpgme_send_menu (HEADER *msg, int is_smime)
       {
         snprintf (input_signas, sizeof (input_signas), "0x%s",
             crypt_fpr_or_lkeyid (p));
-        mutt_str_replace (is_smime? &SmimeDefaultKey : &PgpSignAs, input_signas);
-        crypt_free_key (&p); 
+        mutt_str_replace (is_smime? &SmimeSignAs : &PgpSignAs, input_signas);
+        crypt_free_key (&p);
 
         msg->security |= SIGN;
       }

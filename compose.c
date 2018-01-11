@@ -253,7 +253,7 @@ static void redraw_crypt_lines (HEADER *msg)
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     printw ("%*s", HeaderPadding[HDR_CRYPTINFO], _(Prompts[HDR_CRYPTINFO]));
     NORMAL_COLOR;
-    printw ("%s", SmimeDefaultKey ? SmimeDefaultKey : _("<default>"));
+    printw ("%s", SmimeSignAs ? SmimeSignAs : _("<default>"));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)

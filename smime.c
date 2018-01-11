@@ -1527,11 +1527,13 @@ BODY *smime_sign_message (BODY *a )
   int err = 0;
   int empty = 0;
   pid_t thepid;
-  smime_key_t *default_key;
+  char *signas;
+  smime_key_t *signas_key;
   char *intermediates;
   char *micalg;
 
-  if (!SmimeDefaultKey)
+  signas = (SmimeSignAs && *SmimeSignAs) ? SmimeSignAs : SmimeDefaultKey;
+  if (!signas || !*signas)
   {
     mutt_error _("Can't sign: No key specified. Use Sign As.");
     return NULL;
@@ -1563,22 +1565,22 @@ BODY *smime_sign_message (BODY *a )
   
 
   snprintf (SmimeKeyToUse, sizeof (SmimeKeyToUse), "%s/%s", 
-	   NONULL(SmimeKeys), SmimeDefaultKey);
+	   NONULL(SmimeKeys), signas);
 
   snprintf (SmimeCertToUse, sizeof (SmimeCertToUse), "%s/%s",
-	   NONULL(SmimeCertificates), SmimeDefaultKey);
+	   NONULL(SmimeCertificates), signas);
   
-  default_key = smime_get_key_by_hash (SmimeDefaultKey, 1);
-  if ((! default_key) ||
-      (! mutt_strcmp ("?", default_key->issuer)))
-    intermediates = SmimeDefaultKey; /* so openssl won't complain in any case */
+  signas_key = smime_get_key_by_hash (signas, 1);
+  if ((! signas_key) ||
+      (! mutt_strcmp ("?", signas_key->issuer)))
+    intermediates = signas; /* so openssl won't complain in any case */
   else
-    intermediates = default_key->issuer;
+    intermediates = signas_key->issuer;
 
   snprintf (SmimeIntermediateToUse, sizeof (SmimeIntermediateToUse), "%s/%s",
 	   NONULL(SmimeCertificates), intermediates);
 
-  smime_free_key (&default_key);
+  smime_free_key (&signas_key);
   
 
 
@@ -2216,19 +2218,11 @@ int smime_send_menu (HEADER *msg)
       break;
 
     case 's': /* (s)ign */
+      msg->security &= ~ENCRYPT;
+      msg->security |= SIGN;
+      break;
+
     case 'S': /* (s)ign in oppenc mode */
-      if(!SmimeDefaultKey)
-      {
-        if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0)))
-        {
-          mutt_str_replace (&SmimeDefaultKey, key->hash);
-          smime_free_key (&key);
-        }
-        else
-          break;
-      }
-      if (choices[choice - 1] == 's')
-        msg->security &= ~ENCRYPT;
       msg->security |= SIGN;
       break;
 
@@ -2236,9 +2230,9 @@ int smime_send_menu (HEADER *msg)
 
       if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0))) 
       {
-        mutt_str_replace (&SmimeDefaultKey, key->hash);
+        mutt_str_replace (&SmimeSignAs, key->hash);
         smime_free_key (&key);
-          
+
         msg->security |= SIGN;
 
         /* probably need a different passphrase */

@@ -832,7 +832,7 @@ int crypt_get_keys (HEADER *msg, char **keylist, int oppenc_mode)
        }
        unset_option (OPTPGPCHECKTRUST);
        if (option (OPTPGPSELFENCRYPT))
-         self_encrypt = PgpSelfEncryptAs;
+         self_encrypt = PgpDefaultKey;
      }
      if ((WithCrypto & APPLICATION_SMIME)
          && (msg->security & APPLICATION_SMIME))
@@ -843,7 +843,7 @@ int crypt_get_keys (HEADER *msg, char **keylist, int oppenc_mode)
            return (-1);
        }
        if (option (OPTSMIMESELFENCRYPT))
-         self_encrypt = SmimeSelfEncryptAs;
+         self_encrypt = SmimeDefaultKey;
      }
   }
 
