@@ -2947,7 +2947,7 @@ msgstr ""
 
 #: main.c:139
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
-msgstr "  -d <level>\tSschreibe Debug-Informationen nach ~/.muttdebug0"
+msgstr "  -d <level>\tSchreibe Debug-Informationen nach ~/.muttdebug0"
 
 #: main.c:142
 msgid ""
