@@ -1557,24 +1557,22 @@ msgid "esabmfco"
 msgstr "zpjosa"
 
 #: crypt-gpgme.c:4810
-#, fuzzy
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr ""
 "S/MIME: (z)aszyfruj, (p)odpisz, podpisz (j)ako, (o)ba, p(g)p, (a)nuluj?"
 
 #: crypt-gpgme.c:4811
 msgid "esabpfc"
-msgstr "zpjoga"
+msgstr "zpjogaa"
 
 #: crypt-gpgme.c:4816
-#, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr ""
 "PGP: (z)aszyfruj, (p)odpisz, podpisz (j)ako, (o)ba, (s)/mime, (a)nuluj?"
 
 #: crypt-gpgme.c:4817
 msgid "esabmfc"
-msgstr "zpjosa"
+msgstr "zpjosaa"
 
 #: crypt-gpgme.c:4976
 msgid "Failed to verify sender"
