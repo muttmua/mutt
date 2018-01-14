@@ -1,4 +1,4 @@
-image: gcc
+image: mutt/ubuntu:16.04
 
 stages:
   - build
@@ -6,6 +6,5 @@ stages:
 build:
   stage: build
   script:
-    - ./prepare
-    - make
-
+    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache
+    - make -j
