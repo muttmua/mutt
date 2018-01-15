@@ -2,9 +2,23 @@ image: mutt/ubuntu:16.04
 
 stages:
   - build
+  - deploy
 
 build:
   stage: build
   script:
     - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache
     - make -j
+
+pages:
+  stage: deploy
+  script:
+    - ./prepare
+    - make update-doc
+    - mkdir -p public
+    - cp doc/manual.html public/manual-dev.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
