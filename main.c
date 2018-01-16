@@ -75,7 +75,7 @@ Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n\
 Mutt is free software, and you are welcome to redistribute it\n\
 under certain conditions; type `mutt -vv' for details.\n");
 
-static const char *Copyright = N_("\
+static const char Copyright[] = "\
 Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n\
 Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n\
 Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n\
@@ -84,8 +84,9 @@ Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n\
 Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n\
 Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n\
 Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n\
-Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n\
-\n\
+Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n";
+
+static const char *Thanks = N_("\
 Many others not mentioned here contributed code, fixes,\n\
 and suggestions.\n");
 
@@ -796,7 +797,8 @@ int main (int argc, char **argv, char **environ)
       break;
     default:
       puts (mutt_make_version ());
-      puts (_(Copyright));
+      puts (Copyright);
+      puts (_(Thanks));
       puts (_(Licence));
       puts (_(Obtaining));
       puts (_(ReachingUs));
