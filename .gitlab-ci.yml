@@ -4,10 +4,16 @@ stages:
   - build
   - deploy
 
-build:
+openssl:
   stage: build
   script:
-    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache
+    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-ssl
+    - make -j
+
+gnutls:
+  stage: build
+  script:
+    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-gnutls
     - make -j
 
 pages:
