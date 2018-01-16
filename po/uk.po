@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt-1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:41+0100\n"
+"POT-Creation-Date: 2018-01-15 08:49+0100\n"
 "PO-Revision-Date: 2017-08-20 17:06+0300\n"
 "Last-Translator: Vsevolod Volkov <vvv@mutt.org.ua>\n"
 "Language-Team: \n"
@@ -2852,36 +2852,16 @@ msgstr ""
 "розповсюдження\n"
 "з деякими умовами. Детальніше: mutt -vv.\n"
 
-#: main.c:78
+#: main.c:89
 #, fuzzy
 msgid ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
 msgstr ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2014 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2016 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Багато інших не вказаних тут осіб залишили свій код, виправлення і "
 "побажання.\n"
 
-#: main.c:92
+#: main.c:93
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2903,7 +2883,7 @@ msgstr ""
 "ЖОДНИХ ГАРАНТІЙ, включаючи гарантії придатності до будь-яких конкретних\n"
 "завдань. Більш детально дивіться GNU General Public License.\n"
 
-#: main.c:102
+#: main.c:103
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2914,7 +2894,7 @@ msgstr ""
 "Якщо це не так, звертайтесь до Free Software Foundation, Inc:\n"
 "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n"
 
-#: main.c:121
+#: main.c:122
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -2939,7 +2919,7 @@ msgstr ""
 "       mutt [<options>] -D\n"
 "       mutt -v[v]\n"
 
-#: main.c:130
+#: main.c:131
 msgid ""
 "options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -2956,11 +2936,11 @@ msgstr ""
 "  -c <address>\tвказати адресу копії (CC)\n"
 "  -D\t\tпоказати значення всіх змінних"
 
-#: main.c:139
+#: main.c:140
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <level>\tзаписати інформацію для налагодження в ~/.muttdebug0"
 
-#: main.c:142
+#: main.c:143
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
 "  -e <command>\tspecify a command to be executed after initialization\n"
@@ -2982,7 +2962,7 @@ msgstr ""
 "  -n\t\tвказує Mutt не читати системний Muttrc\n"
 "  -p\t\tвикликати залишений лист"
 
-#: main.c:152
+#: main.c:153
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3004,7 +2984,7 @@ msgstr ""
 "  -Z\t\tвідкрити першу скриньку з новим листом, якщо немає - одразу вийти\n"
 "  -h\t\tця підказка"
 
-#: main.c:233
+#: main.c:234
 msgid ""
 "\n"
 "Compile options:"
@@ -3012,60 +2992,60 @@ msgstr ""
 "\n"
 "Параметри компіляції:"
 
-#: main.c:555
+#: main.c:556
 msgid "Error initializing terminal."
 msgstr "Помилка ініціалізації терміналу."
 
-#: main.c:709
+#: main.c:710
 #, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "Помилка: значення \"%s\" некорректне для -d.\n"
 
-#: main.c:712
+#: main.c:713
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "Відлагодження з рівнем %d.\n"
 
-#: main.c:714
+#: main.c:715
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "DEBUG не вказано під час компіляції. Ігнорується.\n"
 
-#: main.c:892
+#: main.c:895
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s не існує. Створити його?"
 
-#: main.c:896
+#: main.c:899
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Неможливо створити %s: %s"
 
-#: main.c:936
+#: main.c:939
 msgid "Failed to parse mailto: link\n"
 msgstr "Неможливо розібрати почилання mailto:\n"
 
-#: main.c:948
+#: main.c:951
 msgid "No recipients specified.\n"
 msgstr "Отримувачів не вказано.\n"
 
-#: main.c:974
+#: main.c:977
 msgid "Cannot use -E flag with stdin\n"
 msgstr "Неможливо використовувати -E з stdin\n"
 
-#: main.c:1127
+#: main.c:1130
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: неможливо додати файл.\n"
 
-#: main.c:1208
+#: main.c:1211
 msgid "No mailbox with new mail."
 msgstr "Немає поштової скриньки з новою поштою."
 
-#: main.c:1217
+#: main.c:1220
 msgid "No incoming mailboxes defined."
 msgstr "Вхідних поштових скриньок не вказано."
 
-#: main.c:1245
+#: main.c:1248
 msgid "Mailbox is empty."
 msgstr "Поштова скринька порожня."
 

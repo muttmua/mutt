@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.5.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:41+0100\n"
+"POT-Creation-Date: 2018-01-15 08:49+0100\n"
 "PO-Revision-Date: 2006-10-16 14:22-0500\n"
 "Last-Translator: Kevin Patrick Scannell <scannell@SLU.EDU>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -2922,33 +2922,14 @@ msgstr ""
 "a athdháileadh, agus fáilte, ach de réir coinníollacha áirithe.\n"
 "Iontráil `mutt -vv' chun tuilleadh eolais a fháil.\n"
 
-#: main.c:78
+#: main.c:89
 #, fuzzy
 msgid ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
-msgstr ""
-"Copyright © 1996-2004 Michael R. Elkins <me@mutt.org>\n"
-"Copyright © 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright © 1997-2006 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright © 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright © 1999-2006 Brendan Cully <brendan@kublai.com>\n"
-"Copyright © 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright © 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n"
-"\n"
-"Thug neart daoine eile cód, ceartúcháin, agus moltaí dúinn.\n"
+msgstr "Thug neart daoine eile cód, ceartúcháin, agus moltaí dúinn.\n"
 
-#: main.c:92
+#: main.c:93
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2972,7 +2953,7 @@ msgstr ""
 "    AR LEITH.  Féach ar an GNU General Public License chun níos mó\n"
 "    sonraí a fháil.\n"
 
-#: main.c:102
+#: main.c:103
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2984,7 +2965,7 @@ msgstr ""
 "    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
 "    Boston, MA 02110-1301 USA.\n"
 
-#: main.c:121
+#: main.c:122
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -2998,7 +2979,7 @@ msgid ""
 "       mutt -v[v]\n"
 msgstr ""
 
-#: main.c:130
+#: main.c:131
 #, fuzzy
 msgid ""
 "options:\n"
@@ -3016,11 +2997,11 @@ msgstr ""
 "  -c <seoladh>\tsonraigh seoladh CC\n"
 "  -D\t\tpriontáil luach de gach athróg go stdout"
 
-#: main.c:139
+#: main.c:140
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <leibhéal>\tscríobh aschur dífhabhtaithe i ~/.muttdebug0"
 
-#: main.c:142
+#: main.c:143
 #, fuzzy
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
@@ -3042,7 +3023,7 @@ msgstr ""
 "  -n\t\tná léigh Muttrc an chórais\n"
 "  -p\t\tathghair teachtaireacht atá ar athlá"
 
-#: main.c:152
+#: main.c:153
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3065,7 +3046,7 @@ msgstr ""
 "  -Z\t\toscail an chéad fhillteán le tcht nua, scoir mura bhfuil ceann ann\n"
 "  -h\t\tan chabhair seo"
 
-#: main.c:233
+#: main.c:234
 msgid ""
 "\n"
 "Compile options:"
@@ -3073,62 +3054,62 @@ msgstr ""
 "\n"
 "Roghanna tiomsaithe:"
 
-#: main.c:555
+#: main.c:556
 msgid "Error initializing terminal."
 msgstr "Earráid agus teirminéal á thúsú."
 
-#: main.c:709
+#: main.c:710
 #, fuzzy, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "Earráid: Is drochIDN é '%s'."
 
-#: main.c:712
+#: main.c:713
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "Leibhéal dífhabhtaithe = %d.\n"
 
-#: main.c:714
+#: main.c:715
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr ""
 "Níor sonraíodh an athróg DEBUG le linn tiomsaithe.  Rinneadh neamhshuim "
 "air.\n"
 
-#: main.c:892
+#: main.c:895
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "Níl a leithéid de %s ann.  Cruthaigh?"
 
-#: main.c:896
+#: main.c:899
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Ní féidir %s a chruthú: %s."
 
-#: main.c:936
+#: main.c:939
 msgid "Failed to parse mailto: link\n"
 msgstr ""
 
-#: main.c:948
+#: main.c:951
 msgid "No recipients specified.\n"
 msgstr "Níor sonraíodh aon fhaighteoir.\n"
 
-#: main.c:974
+#: main.c:977
 msgid "Cannot use -E flag with stdin\n"
 msgstr ""
 
-#: main.c:1127
+#: main.c:1130
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: ní féidir an comhad a cheangal.\n"
 
-#: main.c:1208
+#: main.c:1211
 msgid "No mailbox with new mail."
 msgstr "Níl aon bhosca le ríomhphost nua."
 
-#: main.c:1217
+#: main.c:1220
 msgid "No incoming mailboxes defined."
 msgstr "Níl aon bhosca isteach socraithe agat."
 
-#: main.c:1245
+#: main.c:1248
 msgid "Mailbox is empty."
 msgstr "Tá an bosca poist folamh."
 

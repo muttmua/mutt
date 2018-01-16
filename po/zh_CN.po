@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:41+0100\n"
+"POT-Creation-Date: 2018-01-15 08:49+0100\n"
 "PO-Revision-Date: 2015-02-07 12:21+0800\n"
 "Last-Translator: lilydjwg <lilydjwg@gmail.com>\n"
 "Language-Team: \n"
@@ -2850,35 +2850,14 @@ msgstr ""
 "Mutt 是自由软件, 欢迎您在遵守指定条款的前提下再次发布；\n"
 "请键入“mutt -vv”以获取详细信息。\n"
 
-#: main.c:78
+#: main.c:89
 #, fuzzy
 msgid ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
-msgstr ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2014 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2016 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
-"许多这里没有提到的人也贡献了代码，修正以及建议。\n"
+msgstr "许多这里没有提到的人也贡献了代码，修正以及建议。\n"
 
-#: main.c:92
+#: main.c:93
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2897,7 +2876,7 @@ msgstr ""
 "    本程序是基于使用目的而加以发布，然而不负任何担保责任；亦无对适售性或\n"
 "    特定目的适用性所为的默示性担保。详情请参照 GNU 通用公共许可。\n"
 
-#: main.c:102
+#: main.c:103
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2908,7 +2887,7 @@ msgstr ""
 "    至自由软件基金会，51 Franklin Street, Fifth Floor, Boston, MA "
 "02110-1301, USA.\n"
 
-#: main.c:121
+#: main.c:122
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -2932,7 +2911,7 @@ msgstr ""
 "      mutt [<选项>] -D\n"
 "      mutt -v[v]\n"
 
-#: main.c:130
+#: main.c:131
 msgid ""
 "options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -2949,11 +2928,11 @@ msgstr ""
 "  -c <地址>\t指定一个抄送(CC)地址\n"
 "  -D\t\t打印所有变量的值到标准输出"
 
-#: main.c:139
+#: main.c:140
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <级别>\t将调试输出记录到 ~/.muttdebug0"
 
-#: main.c:142
+#: main.c:143
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
 "  -e <command>\tspecify a command to be executed after initialization\n"
@@ -2975,7 +2954,7 @@ msgstr ""
 "  -n\t\t使 Mutt 不去读取系统的 Muttrc\n"
 "  -p\t\t取回一个延迟寄送的邮件"
 
-#: main.c:152
+#: main.c:153
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -2997,7 +2976,7 @@ msgstr ""
 "  -Z\t\t打开第一个有新邮件的文件夹，如果一个也没有的话立即退出\n"
 "  -h\t\t本帮助消息"
 
-#: main.c:233
+#: main.c:234
 msgid ""
 "\n"
 "Compile options:"
@@ -3005,60 +2984,60 @@ msgstr ""
 "\n"
 "编译选项："
 
-#: main.c:555
+#: main.c:556
 msgid "Error initializing terminal."
 msgstr "初始化终端时出错。"
 
-#: main.c:709
+#: main.c:710
 #, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "错误：值“%s”对于 -d 来说无效。\n"
 
-#: main.c:712
+#: main.c:713
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "正在使用调试级别 %d。\n"
 
-#: main.c:714
+#: main.c:715
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "编译时没有定义 DEBUG。已忽略。\n"
 
-#: main.c:892
+#: main.c:895
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s 不存在。创建它吗？"
 
-#: main.c:896
+#: main.c:899
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "无法创建 %s: %s。"
 
-#: main.c:936
+#: main.c:939
 msgid "Failed to parse mailto: link\n"
 msgstr "解析 mailto: 链接失败\n"
 
-#: main.c:948
+#: main.c:951
 msgid "No recipients specified.\n"
 msgstr "没有指定收件人。\n"
 
-#: main.c:974
+#: main.c:977
 msgid "Cannot use -E flag with stdin\n"
 msgstr "无法将 -E 标志用于标准输入\n"
 
-#: main.c:1127
+#: main.c:1130
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s：无法添加附件。\n"
 
-#: main.c:1208
+#: main.c:1211
 msgid "No mailbox with new mail."
 msgstr "没有邮箱有新邮件。"
 
-#: main.c:1217
+#: main.c:1220
 msgid "No incoming mailboxes defined."
 msgstr "未定义收信邮箱"
 
-#: main.c:1245
+#: main.c:1248
 msgid "Mailbox is empty."
 msgstr "邮箱是空的。"
 

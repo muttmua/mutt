@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.3.22.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:41+0100\n"
+"POT-Creation-Date: 2018-01-15 08:49+0100\n"
 "PO-Revision-Date: 2001-09-06 18:25+0800\n"
 "Last-Translator: Anthony Wong <ypwong@debian.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -2984,23 +2984,13 @@ msgstr ""
 "Mutt 是一個自由軟體, 歡迎您在某些特定的條件上，重新將它分發。\n"
 "若需要更詳細的資料, 請鍵入 `mutt -vv'\n"
 
-#: main.c:78
+#: main.c:89
 msgid ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -3013,7 +3003,7 @@ msgid ""
 "    GNU General Public License for more details.\n"
 msgstr ""
 
-#: main.c:102
+#: main.c:103
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -3021,7 +3011,7 @@ msgid ""
 "02110-1301, USA.\n"
 msgstr ""
 
-#: main.c:121
+#: main.c:122
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -3035,7 +3025,7 @@ msgid ""
 "       mutt -v[v]\n"
 msgstr ""
 
-#: main.c:130
+#: main.c:131
 msgid ""
 "options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -3046,11 +3036,11 @@ msgid ""
 "  -D\t\tprint the value of all variables to stdout"
 msgstr ""
 
-#: main.c:139
+#: main.c:140
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr ""
 
-#: main.c:142
+#: main.c:143
 #, fuzzy
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
@@ -3091,7 +3081,7 @@ msgstr ""
 "  -Z\t\t開啟第一個附有新郵件的資料夾，如果沒有的話立即離開\n"
 "  -h\t\t這個說明訊息"
 
-#: main.c:152
+#: main.c:153
 #, fuzzy
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
@@ -3138,7 +3128,7 @@ msgstr ""
 "  -Z\t\t開啟第一個附有新郵件的資料夾，如果沒有的話立即離開\n"
 "  -h\t\t這個說明訊息"
 
-#: main.c:233
+#: main.c:234
 msgid ""
 "\n"
 "Compile options:"
@@ -3146,60 +3136,60 @@ msgstr ""
 "\n"
 "編譯選項："
 
-#: main.c:555
+#: main.c:556
 msgid "Error initializing terminal."
 msgstr "無法初始化終端機。"
 
-#: main.c:709
+#: main.c:710
 #, fuzzy, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "錯誤：「%s」是無效的 IDN。"
 
-#: main.c:712
+#: main.c:713
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "除錯模式在第 %d 層。\n"
 
-#: main.c:714
+#: main.c:715
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "在編譯時候沒有定義 DEBUG。放棄執行。\n"
 
-#: main.c:892
+#: main.c:895
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s 不存在。建立嗎？"
 
-#: main.c:896
+#: main.c:899
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "無法建立 %s: %s."
 
-#: main.c:936
+#: main.c:939
 msgid "Failed to parse mailto: link\n"
 msgstr ""
 
-#: main.c:948
+#: main.c:951
 msgid "No recipients specified.\n"
 msgstr "沒有指定收件人。\n"
 
-#: main.c:974
+#: main.c:977
 msgid "Cannot use -E flag with stdin\n"
 msgstr ""
 
-#: main.c:1127
+#: main.c:1130
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s：無法附帶檔案。\n"
 
-#: main.c:1208
+#: main.c:1211
 msgid "No mailbox with new mail."
 msgstr "沒有信箱有新信件。"
 
-#: main.c:1217
+#: main.c:1220
 msgid "No incoming mailboxes defined."
 msgstr "沒有定義任何的收信郵箱"
 
-#: main.c:1245
+#: main.c:1248
 msgid "Mailbox is empty."
 msgstr "信箱內空無一物。"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:41+0100\n"
+"POT-Creation-Date: 2018-01-15 08:49+0100\n"
 "PO-Revision-Date: 2017-02-22 21:14+0100\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -2867,36 +2867,16 @@ msgstr ""
 "Mutt estas libera programo, kaj vi rajtas pludoni kopiojn\n"
 "sub difinitaj kondiĉoj; tajpu 'mutt -vv' por detaloj.\n"
 
-#: main.c:78
+#: main.c:89
 #, fuzzy
 msgid ""
-"Copyright (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Copyright (C) 1999-2017 Brendan Cully <brendan@kublai.com>\n"
-"Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Copyright (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Copyright (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Copyright (C) 2014-2017 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
 msgstr ""
-"Kopirajto (C) 1996-2016 Michael R. Elkins <me@mutt.org>\n"
-"Kopirajto (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
-"Kopirajto (C) 1997-2009 Thomas Roessler <roessler@does-not-exist.org>\n"
-"Kopirajto (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
-"Kopirajto (C) 1999-2014 Brendan Cully <brendan@kublai.com>\n"
-"Kopirajto (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
-"Kopirajto (C) 2000-2004 Edmund Grimley Evans <edmundo@rano.org>\n"
-"Kopirajto (C) 2006-2009 Rocco Rutte <pdmef@gmx.net>\n"
-"Kopirajto (C) 2014-2016 Kevin J. McCarthy <kevin@8t8.us>\n"
-"\n"
 "Multaj aliaj homoj ne menciitaj ĉi tie kontribuis programliniojn,\n"
 "riparojn, kaj sugestojn.\n"
 
-#: main.c:92
+#: main.c:93
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2918,7 +2898,7 @@ msgstr ""
 "    KOMERCA KVALITO aŭ ADEKVATECO POR DIFINITA CELO. Vidu la\n"
 "    Ĝeneralan Publikan Rajtigilon de GNU por pli da detaloj.\n"
 
-#: main.c:102
+#: main.c:103
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2929,7 +2909,7 @@ msgstr ""
 "    GNU kun ĉi tiu programo; se ne, skribu al Free Software Foundation,\n"
 "    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, Usono.\n"
 
-#: main.c:121
+#: main.c:122
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -2954,7 +2934,7 @@ msgstr ""
 "            mutt [<opcioj>] -D\n"
 "            mutt -v[v]\n"
 
-#: main.c:130
+#: main.c:131
 msgid ""
 "options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -2972,11 +2952,11 @@ msgstr ""
 "  -c <adreso>    specifi adreson por kopio (CC)\n"
 "  -D             montri en ĉefeligujo la valorojn de ĉiuj variabloj"
 
-#: main.c:139
+#: main.c:140
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <nivelo>    skribi sencimigan eligon al ~/.muttdebug0"
 
-#: main.c:142
+#: main.c:143
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
 "  -e <command>\tspecify a command to be executed after initialization\n"
@@ -2998,7 +2978,7 @@ msgstr ""
 "  -n             indikas al Mutt ne legi la sisteman dosieron Muttrc\n"
 "  -p             revoki prokrastitan mesaĝon"
 
-#: main.c:152
+#: main.c:153
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3021,7 +3001,7 @@ msgstr ""
 "mankas\n"
 "  -h             doni ĉi tiun helpmesaĝon"
 
-#: main.c:233
+#: main.c:234
 msgid ""
 "\n"
 "Compile options:"
@@ -3029,60 +3009,60 @@ msgstr ""
 "\n"
 "Parametroj de la tradukaĵo:"
 
-#: main.c:555
+#: main.c:556
 msgid "Error initializing terminal."
 msgstr "Eraro dum startigo de la terminalo."
 
-#: main.c:709
+#: main.c:710
 #, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "Eraro: valoro '%s' ne validas por '-d'.\n"
 
-#: main.c:712
+#: main.c:713
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "Sencimigo ĉe la nivelo %d.\n"
 
-#: main.c:714
+#: main.c:715
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "DEBUG ne estis difinita por la tradukado.  Ignoriĝas.\n"
 
-#: main.c:892
+#: main.c:895
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s ne ekzistas.  Ĉu krei ĝin?"
 
-#: main.c:896
+#: main.c:899
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Ne eblas krei %s: %s."
 
-#: main.c:936
+#: main.c:939
 msgid "Failed to parse mailto: link\n"
 msgstr "Malsukcesis analizi 'mailto:'-ligon\n"
 
-#: main.c:948
+#: main.c:951
 msgid "No recipients specified.\n"
 msgstr "Nenia ricevonto specifita.\n"
 
-#: main.c:974
+#: main.c:977
 msgid "Cannot use -E flag with stdin\n"
 msgstr "Ne eblas uzi opcio '-E' kun ĉefenigujo\n"
 
-#: main.c:1127
+#: main.c:1130
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: ne eblas aldoni dosieron.\n"
 
-#: main.c:1208
+#: main.c:1211
 msgid "No mailbox with new mail."
 msgstr "Mankas poŝtfako kun nova poŝto."
 
-#: main.c:1217
+#: main.c:1220
 msgid "No incoming mailboxes defined."
 msgstr "Neniu enir-poŝtfako estas difinita."
 
-#: main.c:1245
+#: main.c:1248
 msgid "Mailbox is empty."
 msgstr "Poŝtfako estas malplena."
 
