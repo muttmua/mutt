@@ -7,14 +7,20 @@ stages:
 openssl:
   stage: build
   script:
-    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-ssl
-    - make -j
+    - scan-build-5.0 ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-ssl
+    - scan-build-5.0 -o scan-build-openssl make -j
+  artifacts:
+    paths:
+      - scan-build-openssl
 
 gnutls:
   stage: build
   script:
-    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-gnutls
-    - make -j
+    - scan-build-5.0 ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-gnutls
+    - scan-build-5.0 -o scan-build-gnutls make -j
+  artifacts:
+    paths:
+      - scan-build-gnutls
 
 pages:
   stage: deploy
