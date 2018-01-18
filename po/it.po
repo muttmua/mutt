@@ -2860,10 +2860,10 @@ msgstr "Memoria esaurita!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Per contattare gli sviluppatori scrivere a <mutt-dev@mutt.org>.\n"
-"Per segnalare un bug, visitare http://bugs.mutt.org/.\n"
+"Per segnalare un bug, visitare https://gitlab.com/muttmua/mutt/issues.\n"
 
 #: main.c:72
 #, fuzzy

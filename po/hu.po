@@ -2923,10 +2923,10 @@ msgstr "Elfogyott a memória!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "A fejlesztõkkel a <mutt-dev@mutt.org> címen veheted fel a kapcsolatot.\n"
-"Hiba jelentéséhez kérlek használd a flea(1) programot.\n"
+"Hiba jelentéséhez kérlek használd a https://gitlab.com/muttmua/mutt/issues programot.\n"
 
 #: main.c:72
 #, fuzzy

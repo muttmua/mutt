@@ -2932,10 +2932,10 @@ msgstr "Недостатъчно памет!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "За контакт с програмистите, моля изпратете писмо до <mutt-dev@mutt.org>.\n"
-"За да съобщите за грешка, моля използвайте скрипта flea(1).\n"
+"За да съобщите за грешка, моля използвайте скрипта https://gitlab.com/muttmua/mutt/issues.\n"
 
 #: main.c:72
 #, fuzzy

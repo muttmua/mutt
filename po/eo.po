@@ -2826,10 +2826,10 @@ msgstr "Mankas sufiĉa memoro!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Por kontakti la kreantojn, bonvolu skribi al <mutt-dev@mutt.org>.\n"
-"Por raporti cimon, bonvolu iri al http://bugs.mutt.org/.\n"
+"Por raporti cimon, bonvolu iri al https://gitlab.com/muttmua/mutt/issues.\n"
 
 #: main.c:72
 msgid ""

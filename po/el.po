@@ -3410,11 +3410,11 @@ msgstr "Η μνήμη εξαντλήθηκε!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Για να επικοινωνήσετε με τους developers, στείλτε mail στο <mutt-dev@mutt."
 "org>.\n"
-"Για να αναφέρετε ένα πρόβλημα χρησιμοποιήσετε το εργαλείο flea(1).\n"
+"Για να αναφέρετε ένα πρόβλημα χρησιμοποιήσετε το εργαλείο https://gitlab.com/muttmua/mutt/issues.\n"
 
 #
 #: main.c:72

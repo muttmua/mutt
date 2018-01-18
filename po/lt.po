@@ -2954,10 +2954,10 @@ msgstr "Baigësi atmintis!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Kad susisiektum su kûrëjais, raðyk laiðkus á <mutt-dev@mutt.org>.\n"
-"Kad praneðtum klaidà, naudok flea(1) áranká.\n"
+"Kad praneðtum klaidà, naudok https://gitlab.com/muttmua/mutt/issues áranká.\n"
 
 #: main.c:72
 #, fuzzy

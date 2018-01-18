@@ -2887,10 +2887,10 @@ msgstr "Buset, memory abis!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Untuk menghubungi developers, kirim email ke <mutt-dev@mutt.org>.\n"
-"Untuk melaporkan bug, mohon kunjungi http://bugs.mutt.org/.\n"
+"Untuk melaporkan bug, mohon kunjungi https://gitlab.com/muttmua/mutt/issues.\n"
 
 #: main.c:72
 #, fuzzy

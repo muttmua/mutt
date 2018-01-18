@@ -2863,11 +2863,11 @@ msgstr "Memoriaz kanpo!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Garatzaileekin harremanetan ipintzeko , idatzi <mutt-dev@mutt.org> "
 "helbidera.\n"
-"Programa-errore baten berri emateko joan http://bugs.mutt.org/ helbidera.\n"
+"Programa-errore baten berri emateko joan https://gitlab.com/muttmua/mutt/issues helbidera.\n"
 
 #: main.c:72
 msgid ""

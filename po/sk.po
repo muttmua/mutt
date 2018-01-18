@@ -2960,7 +2960,7 @@ msgstr "Nedostatok pamäte!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr "Ak chcete kontaktova» vývojárov, napí¹te na <mutt-dev@mutt.org>.\n"
 
 #: main.c:72

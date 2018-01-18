@@ -108,7 +108,7 @@ For version control access, please refer to the
 <listitem>
 <para>
 The official Mutt bug tracking system can be found at
-<ulink url="http://bugs.mutt.org/">http://bugs.mutt.org/</ulink>
+<ulink url="https://gitlab.com/muttmua/mutt/issues">https://gitlab.com/muttmua/mutt/issues</ulink>
 </para>
 </listitem>
 </varlistentry>

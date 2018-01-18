@@ -2809,10 +2809,10 @@ msgstr "内存不足！"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "要联系开发者，请发邮件到 <mutt-dev@mutt.org>。\n"
-"要报告问题，请访问 http://bugs.mutt.org/。\n"
+"要报告问题，请访问 https://gitlab.com/muttmua/mutt/issues。\n"
 
 #: main.c:72
 msgid ""

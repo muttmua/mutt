@@ -2946,11 +2946,11 @@ msgstr "¡Sin memoria!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Para contactar a los desarrolladores mande un mensaje a <mutt-dev@mutt."
 "org>.\n"
-"Para reportar un fallo use la utilería flea(1) por favor.\n"
+"Para reportar un fallo use la utilería https://gitlab.com/muttmua/mutt/issues por favor.\n"
 
 #: main.c:72
 #, fuzzy

@@ -2963,7 +2963,7 @@ msgstr "Acabou a memória!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Para contactar os programadores, envie uma mensagem para <mutt-dev@mutt."
 "org>.\n"

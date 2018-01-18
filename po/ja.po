@@ -2830,10 +2830,10 @@ msgstr "メモリ不足!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "開発者(本家)に連絡をとるには <mutt-dev@mutt.org> へメールせよ。\n"
-"バグをレポートするには http://bugs.mutt.org/ を参照のこと。\n"
+"バグをレポートするには https://gitlab.com/muttmua/mutt/issues を参照のこと。\n"
 "日本語版のバグレポートおよび連絡は mutt-j-users ML へ。\n"
 
 #: main.c:72

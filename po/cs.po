@@ -2836,11 +2836,11 @@ msgstr "Paměť vyčerpána!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "Vývojáře programu můžete kontaktovat na adrese <mutt-dev@mutt.org> "
 "(anglicky).\n"
-"Chcete-li oznámit chybu v programu, navštivte http://bugs.mutt.org/.\n"
+"Chcete-li oznámit chybu v programu, navštivte https://gitlab.com/muttmua/mutt/issues.\n"
 "Připomínky k překladu (česky) zasílejte na adresu\n"
 "<translation-team-cs@lists.sourceforge.net>.\n"
 

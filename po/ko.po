@@ -2906,10 +2906,10 @@ msgstr "메모리 부족!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit http://bugs.mutt.org/.\n"
+"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
 msgstr ""
 "개발자와 연락하려면 <mutt-dev@mutt.org>로 메일을 보내십시오.\n"
-"버그 보고는 flea(1) 유틸리티를 사용해 주십시오.\n"
+"버그 보고는 https://gitlab.com/muttmua/mutt/issues 유틸리티를 사용해 주십시오.\n"
 
 #: main.c:72
 #, fuzzy
