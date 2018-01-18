@@ -3521,18 +3521,6 @@ void mutt_init (int skip_sys_rc, LIST *commands)
    */
   add_to_list(&MailtoAllow, "body");
   add_to_list(&MailtoAllow, "subject");
-  
-  
-  
-  /*
-   * 
-   *			   BIG FAT WARNING
-   * 
-   * When changing the code which looks for a configuration file,
-   * please also change the corresponding code in muttbug.sh.in.
-   * 
-   * 
-   */
 
   if (!Muttrc)
   {

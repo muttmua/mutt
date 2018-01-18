@@ -14,7 +14,6 @@
 /config.status
 /configure
 /hcachever.sh
-/muttbug.sh
 /stamp-h1
 /doc/Muttrc
 /doc/instdoc.sh
@@ -27,7 +26,6 @@
 /mkinstalldirs
 
 # built objects
-/flea
 /hcversion.h
 /keymap_defs.h
 /keymap_alldefs.h
