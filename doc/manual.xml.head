@@ -92,8 +92,8 @@ url="http://www.mutt.org/download.html">http://www.mutt.org/download.html</ulink
 </para>
 
 <para>
-For nightly tarballs and version control access, please refer to the
-<ulink url="http://dev.mutt.org/">Mutt development site</ulink>.
+For version control access, please refer to the
+<ulink url="https://gitlab.com/muttmua/mutt">Mutt development site</ulink>.
 </para>
 
 </sect1>
@@ -108,7 +108,7 @@ For nightly tarballs and version control access, please refer to the
 <listitem>
 <para>
 The official Mutt bug tracking system can be found at
-<ulink url="http://bugs.mutt.org/">http://bugs.mutt.org/</ulink>
+<ulink url="https://gitlab.com/muttmua/mutt/issues">https://gitlab.com/muttmua/mutt/issues</ulink>
 </para>
 </listitem>
 </varlistentry>

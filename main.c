@@ -67,7 +67,7 @@
 
 static const char *ReachingUs = N_("\
 To contact the developers, please mail to <mutt-dev@mutt.org>.\n\
-To report a bug, please visit http://bugs.mutt.org/.\n");
+To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n");
 
 static const char *Notice = N_("\
 Copyright (C) 1996-2016 Michael R. Elkins and others.\n\
