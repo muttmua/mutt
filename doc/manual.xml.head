@@ -168,7 +168,7 @@ improve and continue to maintain stale translations.
 <para>
 For contributing code patches for new features and bug fixes, please
 refer to the developer pages at
-<ulink url="http://dev.mutt.org/">http://dev.mutt.org/</ulink> for more details.
+<ulink url="https://gitlab.com/muttmua/mutt">https://gitlab.com/muttmua/mutt</ulink> for more details.
 </para>
 
 </sect1>
