@@ -3385,6 +3385,8 @@ Mutt provides a number of advanced features for handling (possibly many)
 folders and new mail within them, please refer to <xref
 linkend="new-mail"/> for details (including in what situations and how
 often Mutt checks for new mail).
+Additionally, <link linkend="new-mail-command">$new_mail_command</link>
+can be used to run a command when new mail is detected.
 </para>
 
 <para>
