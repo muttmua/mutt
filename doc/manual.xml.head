@@ -86,7 +86,7 @@ not need to be subscribed to both lists.
 
 <para>
 Mutt releases can be downloaded from <ulink
-url="ftp://ftp.mutt.org/mutt/">ftp://ftp.mutt.org/mutt/</ulink>.  For a
+url="ftp://ftp.mutt.org/pub/mutt/">ftp://ftp.mutt.org/pub/mutt/</ulink>.  For a
 list of mirror sites, please refer to <ulink
 url="http://www.mutt.org/download.html">http://www.mutt.org/download.html</ulink>.
 </para>
@@ -6468,7 +6468,7 @@ If a message contains URLs, it is efficient to get a menu with all the
 URLs and start a WWW browser on one of them.  This functionality is
 provided by the external urlview program which can be retrieved at
 <ulink
-url="ftp://ftp.mutt.org/mutt/contrib/">ftp://ftp.mutt.org/mutt/contrib/</ulink>
+url="https://github.com/sigpipe/urlview">https://github.com/sigpipe/urlview</ulink>
 and the configuration commands:
 </para>
 
