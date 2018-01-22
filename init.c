@@ -399,12 +399,9 @@ static void add_to_list (LIST **list, const char *str)
     t = (LIST *) safe_calloc (1, sizeof (LIST));
     t->data = safe_strdup (str);
     if (last)
-    {
       last->next = t;
-      last = last->next;
-    }
     else
-      *list = last = t;
+      *list = t;
   }
 }
 
@@ -440,12 +437,9 @@ int mutt_add_to_rx_list (RX_LIST **list, const char *s, int flags, BUFFER *err)
     t = mutt_new_rx_list();
     t->rx = rx;
     if (last)
-    {
       last->next = t;
-      last = last->next;
-    }
     else
-      *list = last = t;
+      *list = t;
   }
   else /* duplicate */
     mutt_free_regexp (&rx);
