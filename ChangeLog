@@ -1,3 +1,185 @@
+2018-01-21 18:33:16 -0800  Kevin McCarthy  <kevin@8t8.us> (45b15d3d)
+
+        * Fix the ftp site url in the manual.
+        
+        Also fix the urlview link to point to sigpipe's github account.
+
+M	doc/manual.xml.head
+
+2018-01-17 19:19:01 -0800  Kevin McCarthy  <kevin@8t8.us> (ffdda7e6)
+
+        * Fix one more dev site reference in the manual.
+
+M	doc/manual.xml.head
+
+2018-01-17 18:57:49 -0800  Kevin McCarthy  <kevin@8t8.us> (e9ef2a16)
+
+        * Fix a couple memory leaks in pattern.c
+        
+        BUFFER.data was not being freed in a couple cases.
+        
+        The pattern and simple search were not being freed if imap_search()
+        failed.
+
+M	pattern.c
+
+2018-01-17 18:05:28 -0800  Kevin McCarthy  <kevin@8t8.us> (f1307ce5)
+
+        * Change bug reporting URL to gitlab issues.
+
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
+2018-01-17 18:01:31 -0800  Kevin McCarthy  <kevin@8t8.us> (c041535f)
+
+        * Pull latest Polish translation from master.
+
+M	po/pl.po
+
+2018-01-17 16:21:53 -0800  Kevin McCarthy  <kevin@8t8.us> (32ce9f35)
+
+        * Update manual to point to gitlab.com as development site.
+
+M	doc/manual.xml.head
+
+2018-01-17 16:16:10 -0800  Kevin McCarthy  <kevin@8t8.us> (eff9dfbf)
+
+        * Remove muttbug and flea.
+        
+        We have pretty much transitioned over to gitlab.com.
+
+M	.gitignore
+M	Makefile.am
+M	configure.ac
+M	doc/Makefile.am
+D	doc/muttbug.man
+M	init.c
+D	muttbug
+D	muttbug.sh.in
+
+2018-01-11 15:08:30 -0800  Kevin McCarthy  <kevin@8t8.us> (667a4710)
+
+        * Add missing setup calls when resuming encrypted drafts.
+        
+        Calls to get the passphrase were missing for app/pgp and app/smime.
+        App/smime was also missing a call to crypt_smime_getkeys().
+        
+        If a failure occurs, report it back, rather than just continuing.
+        Otherwise, postponed messages could be completely lost.
+
+M	postpone.c
+
+2018-01-07 12:12:42 -0800  Kevin McCarthy  <kevin@8t8.us> (a37a2c4d)
+
+        * Fix imap status count range check.
+        
+        The strtoul() call for parsing the STATUS count wasn't checking the
+        range properly, because it was assigning to an unsigned int.
+        
+        Change to assign to a unsigned long, and also add the conversion check
+        from mutt_atoui().
+        
+        Thanks to Charles (@chdiza) for quickly noticing the problem!
+
+M	imap/command.c
+
+2018-01-06 15:55:17 -0800  Kevin McCarthy  <kevin@8t8.us> (8fcf8eda)
+
+        * Change imap literal counts to parse and store unsigned ints.
+        
+        IMAP literals are of type number.  Change imap_get_literal_count() to
+        use mutt_atoui() instead of atoi().  Change the return type variables
+        used to store the count to type unsigned int.
+        
+        It's doubtful this was a real issue, but as long as we're cleaning up
+        incorrect atoi() usage, we should fix this too.
+
+M	imap/command.c
+M	imap/imap.c
+M	imap/imap_private.h
+M	imap/message.c
+M	imap/util.c
+
+2018-01-05 20:39:50 -0800  Kevin McCarthy  <kevin@8t8.us> (b8190ef3)
+
+        * Fix improper signed int conversion of IMAP uid and msn values.
+        
+        Several places in the imap code, when parsing "number" and "nz-number"
+        values from the IMAP data, use atoi() and strtol().  This is
+        incorrect, and can result in failures when a uid value happens to be
+        larger than 2^31.
+        
+        Create a helper function, mutt_atoui() and use that instead.  One
+        place was using strtol() and relying on the endptr parameter, and so
+        was changed to use strtoul() instead.
+        
+        Thanks to Paul Saunders for the bug report and original patch, which
+        this commit is based on.
+
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	lib.c
+M	lib.h
+
+2017-12-26 15:09:07 -0800  Kevin McCarthy  <kevin@8t8.us> (363f12a3)
+
+        * Update wiki link in manual.
+
+M	doc/manual.xml.head
+
+2017-12-18 12:55:20 -0800  Kevin McCarthy  <kevin@8t8.us> (80d06b0c)
+
+        * Determine latest tag using git describe.
+        
+        Commit 8648db83 relies on `sort -V` which is unavailable on some
+        platforms.  Instead just use `git describe` with --abbrev=0 to only
+        output the tag.  We still manually compute the distance to avoid the
+        problem mentioned in that commit.
+        
+        Additionally, add Vincent's fix from commit 3b142cea to the stable
+        branch.
+
+M	mkchangelog.sh
+M	version.sh
+
+2017-12-15 15:31:23 -0800  Kevin McCarthy  <kevin@8t8.us> (8e0d8616)
+
+        * automatic post-release commit for mutt-1.9.2
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
 2017-12-15 12:09:42 -0800  Kevin McCarthy  <kevin@8t8.us> (9eedfd4e)
 
         * Fix s/mime certificate deletion bug. (closes #3982)
