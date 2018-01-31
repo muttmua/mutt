@@ -3440,7 +3440,7 @@ msgid ""
 msgstr ""
 "Για να επικοινωνήσετε με τους developers, στείλτε mail στο <mutt-dev@mutt."
 "org>.\n"
-"Για να αναφέρετε ένα πρόβλημα χρησιμοποιήσετε το εργαλείο https://gitlab.com/muttmua/mutt/issues.\n"
+"Για να αναφέρετε ένα πρόβλημα χρησιμοποιήσετε το εργαλείο <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #
 #: main.c:72

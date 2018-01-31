@@ -2972,7 +2972,7 @@ msgid ""
 msgstr ""
 "Para contactar a los desarrolladores mande un mensaje a <mutt-dev@mutt."
 "org>.\n"
-"Para reportar un fallo use la utilería https://gitlab.com/muttmua/mutt/issues por favor.\n"
+"Para reportar un fallo use la utilería <https://gitlab.com/muttmua/mutt/issues> por favor.\n"
 
 #: main.c:72
 #, fuzzy
