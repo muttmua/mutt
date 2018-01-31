@@ -2917,7 +2917,7 @@ msgid ""
 msgstr ""
 "Arendajatega kontakteerumiseks saatke palun kiri aadressil <mutt-dev@mutt."
 "org>.\n"
-"Veast teatamiseks kasutage palun käsku https://gitlab.com/muttmua/mutt/issues.\n"
+"Veast teatamiseks kasutage palun käsku <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #: main.c:72
 #, fuzzy
