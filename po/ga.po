@@ -2902,7 +2902,7 @@ msgstr "Cuimhne ídithe!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Chun dul i dteagmháil leis na forbróirí, seol ríomhphost\n"
 "chuig <mutt-dev@mutt.org> le do thoil.  Chun tuairisc ar fhabht\n"
