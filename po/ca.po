@@ -3032,11 +3032,11 @@ msgstr "No resta memòria."
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Per a contactar amb els desenvolupadors, per favor envieu un missatge de\n"
 "correu a <mutt-dev@mutt.org>.  Per a informar d’un error, per favor visiteu\n"
-"https://gitlab.com/muttmua/mutt/issues.  Si teniu observacions sobre la traducció, contacteu\n"
+"<https://gitlab.com/muttmua/mutt/issues>.  Si teniu observacions sobre la traducció, contacteu\n"
 "amb Ivan Vilata i Balaguer <ivan@selidor.net>.\n"
 
 #: main.c:72

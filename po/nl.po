@@ -2833,10 +2833,10 @@ msgstr "Onvoldoende geheugen!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Stuur een bericht naar <mutt-dev@mutt.org> om de auteurs te bereiken.\n"
-"Ga naar https://gitlab.com/muttmua/mutt/issues om een programmafout te melden.\n"
+"Ga naar <https://gitlab.com/muttmua/mutt/issues> om een programmafout te melden.\n"
 
 #: main.c:72
 msgid ""

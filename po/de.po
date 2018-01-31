@@ -2820,11 +2820,11 @@ msgstr "Kein Speicher verfügbar!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Um die Entwickler zu kontaktieren, schicken Sie bitte\n"
 "eine Nachricht (in englisch) an <mutt-dev@mutt.org>.\n"
-"Um einen Bug zu melden, besuchen Sie bitte https://gitlab.com/muttmua/mutt/issues.\n"
+"Um einen Bug zu melden, besuchen Sie bitte <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #: main.c:72
 msgid ""

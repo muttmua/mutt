@@ -2954,10 +2954,10 @@ msgstr "Plus de mémoire !"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Pour contacter les développeurs, veuillez écrire à <mutt-dev@mutt.org>.\n"
-"Pour signaler un bug, veuillez aller sur https://gitlab.com/muttmua/mutt/issues.\n"
+"Pour signaler un bug, veuillez aller sur <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #: main.c:72
 msgid ""

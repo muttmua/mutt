@@ -2958,11 +2958,11 @@ msgstr "¡Memoria agotada!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Para pórse en contacto cós desenvolvedores, manda unha mensaxe a <mutt-"
 "dev@mutt.org>.\n"
-"Para informar dun fallo, use a utilidade https://gitlab.com/muttmua/mutt/issues.\n"
+"Para informar dun fallo, use a utilidade <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #: main.c:72
 #, fuzzy

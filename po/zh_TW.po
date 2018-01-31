@@ -2944,10 +2944,10 @@ msgstr "記憶體不足！"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "要與開發人員連絡，請寄信給 <mutt-dev@mutt.org>。\n"
-"如發現問題，請利用 https://gitlab.com/muttmua/mutt/issues 程式告之。\n"
+"如發現問題，請利用 <https://gitlab.com/muttmua/mutt/issues> 程式告之。\n"
 
 #: main.c:72
 #, fuzzy

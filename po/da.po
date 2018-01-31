@@ -2804,10 +2804,10 @@ msgstr "Ikke mere hukommelse!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "For at kontakte Mutts udviklere, skriv venligst til <mutt-dev@mutt.org>.\n"
-"Besøg netstedet https://gitlab.com/muttmua/mutt/issues, hvis du vil rapportere en "
+"Besøg netstedet <https://gitlab.com/muttmua/mutt/issues>, hvis du vil rapportere en "
 "programfejl.\n"
 
 #: main.c:72

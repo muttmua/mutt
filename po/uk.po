@@ -2810,10 +2810,10 @@ msgstr "Не вистачає пам’яті!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Для зв’язку з розробниками, шліть лист до <mutt-dev@mutt.org>.\n"
-"Для повідомлення про ваду використовуйте https://gitlab.com/muttmua/mutt/issues..\n"
+"Для повідомлення про ваду використовуйте <https://gitlab.com/muttmua/mutt/issues>..\n"
 
 #: main.c:72
 msgid ""

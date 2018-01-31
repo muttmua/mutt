@@ -2898,10 +2898,10 @@ msgstr "Brak pamięci!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Aby powiadomić autorów, proszę pisać na <mutt-dev@mutt.org>.\n"
-"Aby zgłosić błąd, odwiedź stronę https://gitlab.com/muttmua/mutt/issues.\n"
+"Aby zgłosić błąd, odwiedź stronę <https://gitlab.com/muttmua/mutt/issues>.\n"
 
 #: main.c:72
 #, fuzzy

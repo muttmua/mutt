@@ -2946,7 +2946,7 @@ msgstr "¡Sin memoria!"
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Para contactar a los desarrolladores mande un mensaje a <mutt-dev@mutt."
 "org>.\n"

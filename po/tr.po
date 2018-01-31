@@ -2881,10 +2881,10 @@ msgstr "Bellek tükendi!"
 #: main.c:68
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit https://gitlab.com/muttmua/mutt/issues.\n"
+"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
 msgstr ""
 "Geliştiricilere ulaşmak için lütfen <mutt-dev@mutt.org> listesiyle\n"
-"irtibata geçin.  Hata bildirimi için lütfen https://gitlab.com/muttmua/mutt/issues\n"
+"irtibata geçin.  Hata bildirimi için lütfen <https://gitlab.com/muttmua/mutt/issues>\n"
 "sayfasını ziyaret edin.\n"
 
 #: main.c:72
