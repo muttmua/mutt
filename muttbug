@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "To report a bug, please contact the Mutt maintainers via gitlab:"
+echo
+echo "       https://gitlab.com/muttmua/mutt/issues"

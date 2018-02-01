@@ -27,6 +27,7 @@
 /mkinstalldirs
 
 # built objects
+/flea
 /hcversion.h
 /keymap_defs.h
 /keymap_alldefs.h
