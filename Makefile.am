@@ -16,7 +16,7 @@ endif
 
 SUBDIRS = m4 po intl $(DOC_SUBDIR) contrib $(IMAP_SUBDIR)
 
-bin_SCRIPTS = $(SMIMEAUX_TARGET)
+bin_SCRIPTS = muttbug flea $(SMIMEAUX_TARGET)
 
 if BUILD_HCACHE
 HCVERSION = hcversion.h
@@ -74,7 +74,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h \
 	README.SSL smime.h group.h \
-	pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
+	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
 	ChangeLog mkchangelog.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
 	snprintf.c regex.c crypt-gpgme.h hcachever.sh.in \
 	txt2c.c txt2c.sh version.sh check_sec.sh
@@ -116,11 +116,15 @@ conststrings.c: txt2c config.status
 
 CLEANFILES = mutt_dotlock.c keymap_alldefs.h $(BUILT_SOURCES)
 
-DISTCLEANFILES= smime_keys txt2c po/$(PACKAGE).pot
+DISTCLEANFILES= flea smime_keys txt2c po/$(PACKAGE).pot
 
 ACLOCAL_AMFLAGS = -I m4
 
 LDADD = $(LIBOBJS) $(INTLLIBS)
+
+flea: $(srcdir)/muttbug
+	cp $(srcdir)/muttbug flea
+	chmod +x flea
 
 smime_keys: $(srcdir)/smime_keys.pl
 	cp $(srcdir)/smime_keys.pl smime_keys
