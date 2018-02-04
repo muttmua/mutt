@@ -22,6 +22,7 @@
 
 #include "mutt.h"
 #include "history.h"
+#include "mutt_menu.h"
 
 #include <stdint.h>
 
@@ -69,6 +70,14 @@ struct history
   short cur;
   short last;
 }; 
+
+static const struct mapping_t HistoryHelp[] = {
+  { N_("Exit"),   OP_EXIT },
+  { N_("Select"), OP_GENERIC_SELECT_ENTRY },
+  { N_("Search"), OP_SEARCH },
+  { N_("Help"),   OP_HELP },
+  { NULL,	  0 }
+};
 
 /* global vars used for the string-history routines */
 
@@ -477,3 +486,105 @@ void mutt_history_save_scratch (history_class_t hclass, const char *s)
    * an old garbage value that should be overwritten */
   mutt_str_replace (&h->hist[h->last], s);
 }
+
+static const char *
+history_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
+                    const char *fmt, const char *ifstring, const char *elsestring,
+                    unsigned long data, format_flag flags)
+{
+  char *match = (char *)data;
+
+  switch (op)
+  {
+    case 's':
+      mutt_format_s (dest, destlen, fmt, match);
+      break;
+  }
+
+  return (src);
+}
+
+static void history_entry (char *s, size_t slen, MUTTMENU *m, int num)
+{
+  char *entry = ((char **)m->data)[num];
+
+  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, "%s", history_format_str,
+		     (unsigned long) entry, MUTT_FORMAT_ARROWCURSOR);
+}
+
+static void history_menu (char *buf, size_t buflen, char **matches, int match_count)
+{
+  MUTTMENU *menu;
+  int done = 0;
+  char helpstr[LONG_STRING];
+  char title[STRING];
+
+  snprintf (title, sizeof (title), _(" History '%s'"), buf);
+
+  menu = mutt_new_menu (MENU_GENERIC);
+  menu->make_entry = history_entry;
+  menu->title = title;
+  menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_GENERIC, HistoryHelp);
+  mutt_push_current_menu (menu);
+
+  menu->max = match_count;
+  menu->data = matches;
+
+  while (!done)
+  {
+    switch (mutt_menuLoop (menu))
+    {
+      case OP_GENERIC_SELECT_ENTRY:
+        strfcpy (buf, matches[menu->current], buflen);
+        /* fall through */
+
+      case OP_EXIT:
+        done = 1;
+        break;
+    }
+  }
+
+  mutt_pop_current_menu (menu);
+  mutt_menuDestroy (&menu);
+}
+
+static int search_history (char *search_buf, history_class_t hclass, char **matches)
+{
+  struct history *h = GET_HISTORY(hclass);
+  int match_count = 0, cur;
+
+  if (!HistSize || !h)
+    return 0;
+
+  cur = h->last;
+  do
+  {
+    cur--;
+    if (cur < 0)
+      cur = HistSize;
+    if (cur == h->last)
+      break;
+    if (mutt_stristr (h->hist[cur], search_buf))
+      matches[match_count++] = h->hist[cur];
+  } while (match_count < HistSize);
+
+  return match_count;
+}
+
+void mutt_history_complete (char *buf, size_t buflen, history_class_t hclass)
+{
+  char **matches;
+  int match_count;
+
+  matches = safe_calloc (HistSize, sizeof (char *));
+  match_count = search_history (buf, hclass, matches);
+  if (match_count)
+  {
+    if (match_count == 1)
+      strfcpy (buf, matches[0], buflen);
+    else
+      history_menu (buf, buflen, matches, match_count);
+  }
+  FREE(&matches);
+}
+

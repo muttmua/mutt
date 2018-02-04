@@ -557,6 +557,7 @@ descriptions.
 <row><entry>^V</entry><entry><literal>&lt;quote-char&gt;</literal></entry><entry>quote the next typed key</entry></row>
 <row><entry>&lt;Up&gt;</entry><entry><literal>&lt;history-up&gt;</literal></entry><entry>recall previous string from history</entry></row>
 <row><entry>&lt;Down&gt;</entry><entry><literal>&lt;history-down&gt;</literal></entry><entry>recall next string from history</entry></row>
+<row><entry>^R</entry><entry><literal>&lt;history-search&gt;</literal></entry><entry>use current input to search history</entry></row>
 <row><entry>&lt;BackSpace&gt;</entry><entry><literal>&lt;backspace&gt;</literal></entry><entry>kill the char in front of the cursor</entry></row>
 <row><entry>Esc u</entry><entry><literal>&lt;upcase-word&gt;</literal></entry><entry>convert word to upper case</entry></row>
 <row><entry>Esc l</entry><entry><literal>&lt;downcase-word&gt;</literal></entry><entry>convert word to lower case</entry></row>

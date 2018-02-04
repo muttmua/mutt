@@ -44,5 +44,6 @@ char *mutt_history_prev(history_class_t);
 void mutt_reset_history_state (history_class_t);
 int mutt_history_at_scratch (history_class_t);
 void mutt_history_save_scratch (history_class_t, const char *);
+void mutt_history_complete (char *, size_t, history_class_t);
 
 #endif
