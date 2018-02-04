@@ -2394,8 +2394,8 @@ msgstr "Mauvais format de fichier d'historique (ligne %d)"
 # , c-format
 #: history.c:522
 #, c-format
-msgid " History '%s'"
-msgstr " Historique '%s'"
+msgid "History '%s'"
+msgstr "Historique '%s'"
 
 #: hook.c:97
 msgid "current mailbox shortcut '^' is unset"

@@ -519,7 +519,7 @@ static void history_menu (char *buf, size_t buflen, char **matches, int match_co
   char helpstr[LONG_STRING];
   char title[STRING];
 
-  snprintf (title, sizeof (title), _(" History '%s'"), buf);
+  snprintf (title, sizeof (title), _("History '%s'"), buf);
 
   menu = mutt_new_menu (MENU_GENERIC);
   menu->make_entry = history_entry;
