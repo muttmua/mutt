@@ -529,6 +529,8 @@ static void show_version (void)
   puts ("-MIXMASTER");
 #endif
 
+  putchar ('\n');
+
   puts(_(ReachingUs));
 
   mutt_print_patchlist();
