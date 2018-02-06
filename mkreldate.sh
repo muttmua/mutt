@@ -8,4 +8,4 @@ else
   reldate=$(head -n 1 ChangeLog | LC_ALL=C cut -d ' ' -f 1)
 fi
 
-echo 'const char *ReleaseDate = "'$reldate'";'
+echo $reldate

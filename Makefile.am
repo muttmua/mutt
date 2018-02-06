@@ -140,7 +140,7 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP $(srcdir
 			> keymap_alldefs.h
 
 reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
-	(cd $(srcdir) && ./mkreldate.sh) > reldate.h
+	echo 'const char *ReleaseDate = "'`(cd $(srcdir) && ./mkreldate.sh)`'";' > reldate.h
 
 # The '#undef ENABLE_NLS' is to work around an automake ordering issue:
 # BUILT_SOURCES are processed before SUBDIRS.

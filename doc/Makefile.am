@@ -187,8 +187,9 @@ smime_keys.1: $(srcdir)/smime_keys.man
 stamp-doc-xml: makedoc$(EXEEXT) $(top_srcdir)/init.h \
                manual.xml.head $(top_srcdir)/functions.h $(top_srcdir)/OPS* manual.xml.tail \
                $(srcdir)/gen-map-doc $(top_srcdir)/VERSION $(top_srcdir)/ChangeLog
-	( date=`head -n 1 $(top_srcdir)/ChangeLog | LC_ALL=C cut -d ' ' -f 1` && \
-	  sed -e "s/@VERSION\@/`cat $(top_srcdir)/VERSION` ($$date)/" $(srcdir)/manual.xml.head && \
+	( date=`(cd $(top_srcdir) && ./mkreldate.sh)` && \
+	  version=`(cd $(top_srcdir) && env sh ./version.sh)` && \
+	  sed -e "s/@VERSION\@/$$version ($$date)/" $(srcdir)/manual.xml.head && \
 	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -s && \
 	  $(MAKEDOC_CPP) $(top_srcdir)/functions.h | \
 	    perl $(srcdir)/gen-map-doc $(srcdir)/manual.xml.tail $(top_srcdir)/OPS* \
