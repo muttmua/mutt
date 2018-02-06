@@ -75,7 +75,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h \
 	README.SSL smime.h group.h \
 	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
-	ChangeLog mkchangelog.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
+	ChangeLog mkchangelog.sh mkreldate.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
 	snprintf.c regex.c crypt-gpgme.h hcachever.sh.in \
 	txt2c.c txt2c.sh version.sh check_sec.sh
 
@@ -139,10 +139,8 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP $(srcdir
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
 
-reldate.h: $(srcdir)/ChangeLog
-	echo 'const char *ReleaseDate = "'`head -n 1 $(srcdir)/ChangeLog | LC_ALL=C cut -d ' ' -f 1`'";' > reldate.h.tmp; \
-	cmp -s reldate.h.tmp reldate.h || cp reldate.h.tmp reldate.h; \
-	rm reldate.h.tmp
+reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
+	(cd $(srcdir) && ./mkreldate.sh) > reldate.h
 
 # The '#undef ENABLE_NLS' is to work around an automake ordering issue:
 # BUILT_SOURCES are processed before SUBDIRS.
