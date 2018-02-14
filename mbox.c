@@ -317,7 +317,11 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 	LOFF_T tmploc;
 
 	loc = ftello (ctx->fp);
-	tmploc = loc + curhdr->content->length + 1;
+
+	/* The test below avoids a potential integer overflow if the
+	 * content-length is huge (thus necessarily invalid).
+	 */
+	tmploc = curhdr->content->length < ctx->size ? loc + curhdr->content->length + 1 : -1;
 
 	if (0 < tmploc && tmploc < ctx->size)
 	{
