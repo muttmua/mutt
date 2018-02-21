@@ -409,7 +409,7 @@ int mutt_parse_unmono (BUFFER *buf, BUFFER *s, unsigned long data,
 static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
 				BUFFER *err, short parse_uncolor)
 {
-  int object = 0, do_cache = 0;
+  int object = 0, is_index = 0, do_cache = 0;
   COLOR_LINE *tmp, *last = NULL;
   COLOR_LINE **list;
 
@@ -422,7 +422,10 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
   }
 
   if (mutt_strncmp (buf->data, "index", 5) == 0)
+  {
+    is_index = 1;
     list = &ColorIndexList;
+  }
   else if (mutt_strncmp (buf->data, "body", 4) == 0)
     list = &ColorBodyList;
   else if (mutt_strncmp (buf->data, "header", 7) == 0)
@@ -502,7 +505,7 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
   while (MoreArgs (s));
 
 
-  if (do_cache && !option (OPTNOCURSES))
+  if (is_index && do_cache && !option (OPTNOCURSES))
   {
     int i;
     mutt_set_menu_redraw_full (MENU_MAIN);
@@ -567,8 +570,6 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
     tmp = mutt_new_color_line ();
     if (is_index) 
     {
-      int i;
-
       strfcpy(buf, NONULL(s), sizeof(buf));
       mutt_check_simple (buf, sizeof (buf), NONULL(SimpleSearch));
       if((tmp->color_pattern = mutt_pattern_comp (buf, MUTT_FULL_MSG, err)) == NULL)
@@ -576,9 +577,6 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
 	mutt_free_color_line(&tmp, 1);
 	return -1;
       }
-      /* force re-caching of index colors */
-      for (i = 0; Context && i < Context->msgcount; i++)
-	Context->hdrs[i]->pair = 0;
     }
     else if ((r = REGCOMP (&tmp->rx, s, (sensitive ? mutt_which_case (s) : REG_ICASE))) != 0)
     {
@@ -598,6 +596,15 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
 #endif
     tmp->pair = attr;
     *top = tmp;
+  }
+
+  /* force re-caching of index colors */
+  if (is_index)
+  {
+    int i;
+
+    for (i = 0; Context && i < Context->msgcount; i++)
+      Context->hdrs[i]->pair = 0;
   }
 
   return 0;
