@@ -72,14 +72,20 @@ time_t mutt_local_tz (time_t t)
 time_t mutt_mktime (struct tm *t, int local)
 {
   time_t g;
+  int year;
 
   static const int AccumDaysPerMonth[12] = {
     0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
   };
 
-  /* Prevent an integer overflow.
+  /* Large years, even those that are less than INT_MAX, seem to give
+   * gmtime() and localtime() indigestion.  Cap the year at 9999 to
+   * prevent those from returning NULL. */
+  year = (t->tm_year > 9999-1900) ? 9999-1900 : t->tm_year;
+
+  /* Prevent an integer overflow for 32-bit time_t platforms.
    * The time_t cast is an attempt to silence a clang range warning. */
-  if ((time_t)t->tm_year > TM_YEAR_MAX)
+  if ((time_t)year > TM_YEAR_MAX)
     return TIME_T_MAX;
 
   /* Compute the number of days since January 1 in the same year */
@@ -88,13 +94,13 @@ time_t mutt_mktime (struct tm *t, int local)
   /* The leap years are 1972 and every 4. year until 2096,
    * but this algorithm will fail after year 2099 */
   g += t->tm_mday;
-  if ((t->tm_year % 4) || t->tm_mon < 2)
+  if ((year % 4) || t->tm_mon < 2)
     g--;
   t->tm_yday = g;
 
   /* Compute the number of days since January 1, 1970 */
-  g += (t->tm_year - 70) * (time_t)365;
-  g += (t->tm_year - 69) / 4;
+  g += (year - 70) * (time_t)365;
+  g += (year - 69) / 4;
 
   /* Compute the number of hours */
   g *= 24;
