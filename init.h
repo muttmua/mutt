@@ -88,6 +88,25 @@ struct option_t
 
 struct option_t MuttVars[] = {
   /*++*/
+  { "abort_noattach", DT_QUAD, R_NONE, OPT_ABORTNOATTACH, MUTT_NO },
+  /*
+  ** .pp
+  ** When the body of the message matches $$abort_noattach_regexp and
+  ** there are no attachments, this quadoption controls whether to
+  ** abort sending the message.
+  */
+  { "abort_noattach_regexp",  DT_RX,  R_NONE, UL &AbortNoattachRegexp, UL "attach" },
+  /*
+  ** .pp
+  ** Specifies a regular expression to match against the body of the
+  ** message, to determine if an attachment was mentioned but
+  ** mistakenly forgotten.  If it matches, $$abort_noattach will be
+  ** consulted to determine if message sending will be aborted.
+  ** .pp
+  ** Like other regular expressions in Mutt, the search is case
+  ** sensitive if the pattern contains at least one upper case letter,
+  ** and case insensitive otherwise.
+  */
   { "abort_nosubject",	DT_QUAD, R_NONE, OPT_SUBJECT, MUTT_ASKYES },
   /*
   ** .pp

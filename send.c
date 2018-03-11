@@ -1133,6 +1133,31 @@ static int has_recips (ADDRESS *a)
   return c;
 }
 
+static int has_attach_keyword (char *filename)
+{
+  int match = 0;
+  char buffer[LONG_STRING];
+  FILE *fp;
+
+  if ((fp = safe_fopen (filename, "r")) == NULL)
+  {
+    mutt_perror (filename);
+    return 0;
+  }
+
+  while (fgets (buffer, sizeof(buffer), fp) != NULL)
+  {
+    if (regexec (AbortNoattachRegexp.rx, buffer, 0, NULL, 0) == 0)
+    {
+      match = 1;
+      break;
+    }
+  }
+  safe_fclose (&fp);
+
+  return match;
+}
+
 /*
  * Returns 0 if the message was successfully sent
  *        -1 if the message was aborted or an error occurred
@@ -1713,6 +1738,24 @@ main_loop:
     if (quadoption (OPT_SUBJECT) == MUTT_YES)
       mutt_error _("No subject specified.");
     goto main_loop;
+  }
+
+  /* Scan for a mention of an attachment in the message body and
+   * prompt if there is none. */
+  if (!(flags & SENDBATCH) &&
+      (quadoption (OPT_ABORTNOATTACH) != MUTT_NO) &&
+      AbortNoattachRegexp.pattern &&
+      !msg->content->next &&
+      (msg->content->type == TYPETEXT) &&
+      !ascii_strcasecmp (msg->content->subtype, "plain") &&
+      has_attach_keyword (msg->content->filename))
+  {
+    if (query_quadoption (OPT_ABORTNOATTACH, _("No attachments, abort sending?")) != MUTT_NO)
+    {
+      if (quadoption (OPT_ABORTNOATTACH) == MUTT_YES)
+        mutt_error _("Attachment referenced in message is missing");
+      goto main_loop;
+    }
   }
 
   if (msg->content->next)

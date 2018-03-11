@@ -46,6 +46,7 @@ typedef struct
   int not;		/* do not match */
 } REGEXP;
 
+WHERE REGEXP AbortNoattachRegexp;
 WHERE REGEXP Mask;
 WHERE REGEXP QuoteRegexp;
 WHERE REGEXP ReplyRegexp;
