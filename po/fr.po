@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-12 12:22+0100\n"
-"PO-Revision-Date: 2018-03-12 12:23+0100\n"
+"POT-Creation-Date: 2018-03-14 04:25+0100\n"
+"PO-Revision-Date: 2018-03-14 04:27+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -1680,13 +1680,13 @@ msgstr ""
 
 #: crypt.c:971
 msgid ""
-"[-- Error: Inconsistent multipart/signed structure! --]\n"
+"[-- Error: Missing or bad-format multipart/signed signature! --]\n"
 "\n"
 msgstr ""
-"[-- Erreur : Structure multipart/signed incohérente ! --]\n"
+"[-- Erreur : Signature multipart/signed manquante ou mauvais format ! --]\n"
 "\n"
 
-#: crypt.c:1010
+#: crypt.c:1011
 #, c-format
 msgid ""
 "[-- Warning: We can't verify %s/%s signatures. --]\n"
@@ -1695,7 +1695,7 @@ msgstr ""
 "[-- Attention : les signatures %s/%s ne peuvent pas être vérifiées. --]\n"
 "\n"
 
-#: crypt.c:1022
+#: crypt.c:1023
 msgid ""
 "[-- The following data is signed --]\n"
 "\n"
@@ -1703,7 +1703,7 @@ msgstr ""
 "[-- Les données suivantes sont signées --]\n"
 "\n"
 
-#: crypt.c:1028
+#: crypt.c:1029
 msgid ""
 "[-- Warning: Can't find any signatures. --]\n"
 "\n"
@@ -1711,7 +1711,7 @@ msgstr ""
 "[-- Attention : Impossible de trouver des signatures. --]\n"
 "\n"
 
-#: crypt.c:1034
+#: crypt.c:1035
 msgid ""
 "\n"
 "[-- End of signed data --]\n"
