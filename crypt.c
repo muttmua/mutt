@@ -969,7 +969,8 @@ int mutt_signed_handler (BODY *a, STATE *s)
   if (inconsistent)
   {
     state_attach_puts (_("[-- Error: "
-                         "Inconsistent multipart/signed structure! --]\n\n"),
+                         "Missing or bad-format multipart/signed signature!"
+                         " --]\n\n"),
                        s);
     return mutt_body_handler (a, s);
   }
