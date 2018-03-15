@@ -4994,7 +4994,7 @@ int smime_gpgme_verify_sender (HEADER *h)
 
 void mutt_gpgme_set_sender (const char *sender)
 {
-  mutt_error ("[setting sender] mailbox: %s\n", sender);
+  dprint (2, (debugfile, "mutt_gpgme_set_sender: setting to: %s\n", sender));
   FREE (&current_sender);
   current_sender = safe_strdup (sender);
 }
