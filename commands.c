@@ -87,7 +87,8 @@ int mutt_display_message (HEADER *cur)
     else if (cur->security & SIGN)
     {
       /* find out whether or not the verify signature */
-      if (query_quadoption (OPT_VERIFYSIG, _("Verify PGP signature?")) == MUTT_YES)
+      /* L10N: Used for the $crypt_verify_sig prompt */
+      if (query_quadoption (OPT_VERIFYSIG, _("Verify signature?")) == MUTT_YES)
       {
 	cmflags |= MUTT_CM_VERIFY;
       }
