@@ -1690,9 +1690,9 @@ static BODY *decrypt_part (BODY *a, STATE *s, FILE *fpout, int is_smime,
   if (r_is_signed)
     *r_is_signed = 0;
 
+restart:
   ctx = create_gpgme_context (is_smime);
 
- restart:
   /* Make a data object from the body, create context etc. */
   ciphertext = file_to_data_object (s->fpin, a->offset, a->length);
   if (!ciphertext)
@@ -1735,6 +1735,9 @@ static BODY *decrypt_part (BODY *a, STATE *s, FILE *fpout, int is_smime,
             {
               maybe_signed = 1;
               gpgme_data_release (plaintext);
+              /* We release the context because recent versions of gpgme+gpgsm
+               * appear to end the session after an error */
+              gpgme_release (ctx);
               goto restart;
             }
         }
