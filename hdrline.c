@@ -688,7 +688,8 @@ hdr_format_str (char *dest,
       	ch = 'P';
       else if (WithCrypto && hdr->security & SIGN)
         ch = 's';
-      else if ((WithCrypto & APPLICATION_PGP) && hdr->security & PGPKEY)
+      else if ((WithCrypto & APPLICATION_PGP) &&
+               ((hdr->security & PGPKEY) == PGPKEY))
         ch = 'K';
 
       snprintf (buf2, sizeof (buf2),

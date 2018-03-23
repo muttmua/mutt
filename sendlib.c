@@ -1321,15 +1321,15 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
       cmflags = MUTT_CM_DECODE_PGP;
       pgp &= ~PGPENCRYPT;
     }
-    else if ((WithCrypto & APPLICATION_PGP)
-             && (mutt_is_application_pgp (hdr->content) & PGPENCRYPT))
+    else if ((WithCrypto & APPLICATION_PGP) &&
+             ((mutt_is_application_pgp (hdr->content) & PGPENCRYPT) == PGPENCRYPT))
     {
       chflags |= CH_MIME | CH_TXTPLAIN;
       cmflags = MUTT_CM_DECODE | MUTT_CM_CHARCONV;
       pgp &= ~PGPENCRYPT;
     }
-    else if ((WithCrypto & APPLICATION_SMIME)
-              && mutt_is_application_smime (hdr->content) & SMIMEENCRYPT)
+    else if ((WithCrypto & APPLICATION_SMIME) &&
+             ((mutt_is_application_smime (hdr->content) & SMIMEENCRYPT) == SMIMEENCRYPT))
     {
       chflags |= CH_MIME | CH_TXTPLAIN;
       cmflags = MUTT_CM_DECODE | MUTT_CM_CHARCONV;

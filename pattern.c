@@ -1323,7 +1323,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
    case MUTT_PGP_KEY:
      if (!(WithCrypto & APPLICATION_PGP))
        break;
-     return (pat->not ^ ((h->security & APPLICATION_PGP) && (h->security & PGPKEY)));
+     return (pat->not ^ ((h->security & PGPKEY) == PGPKEY));
     case MUTT_XLABEL:
       return (pat->not ^ (h->env->x_label && patmatch (pat, h->env->x_label) == 0));
     case MUTT_HORMEL:

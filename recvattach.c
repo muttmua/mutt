@@ -955,7 +955,7 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
       secured = !crypt_smime_decrypt_mime (fp, &new_fp, m, &new_body);
 
       /* S/MIME nesting */
-      if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE))
+      if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE) == SMIMEOPAQUE)
       {
         BODY *outer_new_body = new_body;
         FILE *outer_fp = new_fp;
