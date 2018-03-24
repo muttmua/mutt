@@ -41,8 +41,8 @@ enum
 
 typedef struct
 {
-  char user[64];
-  char login[64];
+  char user[128];
+  char login[128];
   char pass[256];
   char host[128];
   unsigned short port;
