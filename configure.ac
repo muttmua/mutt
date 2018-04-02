@@ -299,12 +299,15 @@ main ()
         AC_CHECK_LIB($cf_ncurses, initscr,
                 [MUTTLIBS="$MUTTLIBS -l$cf_ncurses"
 
-                AC_CHECK_LIB(tinfo, tgetent, [MUTTLIBS="$MUTTLIBS -ltinfo"])
-
                 if test "$cf_ncurses" = ncursesw; then
+                  AC_CHECK_LIB(tinfow, tgetent, [MUTTLIBS="$MUTTLIBS -ltinfow"],
+                               AC_CHECK_LIB(tinfo, tgetent, [MUTTLIBS="$MUTTLIBS -ltinfo"]))
+
                   AC_CHECK_HEADERS(ncursesw/ncurses.h,[cf_cv_ncurses_header="ncursesw/ncurses.h"],
                     [AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])])
                 else
+                  AC_CHECK_LIB(tinfo, tgetent, [MUTTLIBS="$MUTTLIBS -ltinfo"])
+
                   AC_CHECK_HEADERS(ncurses/ncurses.h,[cf_cv_ncurses_header="ncurses/ncurses.h"],
                     [AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])])
 		fi],
