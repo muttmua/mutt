@@ -24,7 +24,7 @@
 #define MUTT_REGEX_H
 
 #ifdef USE_GNU_REGEX
-#include "_regex.h"
+#include "_mutt_regex.h"
 #else
 #include <regex.h>
 #endif

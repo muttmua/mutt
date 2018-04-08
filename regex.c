@@ -212,7 +212,7 @@ init_syntax_once ()
 
 /* Changed to fit into mutt - tlr, 1999-01-06 */
 
-#include "_regex.h"
+#include "_mutt_regex.h"
 
 /* isalpha etc. are used for the character classes.  */
 #include <ctype.h>
