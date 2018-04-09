@@ -52,6 +52,9 @@
 # ifndef HAVE_LIBIDN
 #  define HAVE_LIBIDN
 # endif
+# ifndef HAVE_LIBIDN2
+#  define HAVE_LIBIDN2
+# endif
 # ifndef HAVE_GETADDRINFO
 #  define HAVE_GETADDRINFO
 # endif

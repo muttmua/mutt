@@ -26,13 +26,17 @@
 #include <idna.h>
 #elif defined(HAVE_IDN_IDNA_H)
 #include <idn/idna.h>
+#elif defined(HAVE_IDN2_H)
+#include <idn2.h>
+#elif defined(HAVE_IDN_IDN2_H)
+#include <idn/idn2.h>
 #endif
 
 #define MI_MAY_BE_IRREVERSIBLE		(1 << 0)
 
 /* Work around incompatibilities in the libidn API */
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
 # if (!defined(HAVE_IDNA_TO_ASCII_8Z) && defined(HAVE_IDNA_TO_ASCII_FROM_UTF8))
 #  define idna_to_ascii_8z(a,b,c) idna_to_ascii_from_utf8(a,b,(c)&1,((c)&2)?1:0)
 # endif
@@ -42,7 +46,7 @@
 # if (!defined(HAVE_IDNA_TO_UNICODE_8Z8Z) && defined(HAVE_IDNA_TO_UNICODE_UTF8_FROM_UTF8))
 #  define idna_to_unicode_8z8z(a,b,c) idna_to_unicode_utf8_from_utf8(a,b,(c)&1,((c)&2)?1:0)
 # endif
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
 
 #ifdef HAVE_ICONV

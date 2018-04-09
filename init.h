@@ -1177,7 +1177,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$use_domain and $$hidden_host.
   */
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   { "idn_decode",	DT_BOOL, R_MENU, OPTIDNDECODE, 1},
   /*
   ** .pp
@@ -1192,7 +1192,7 @@ struct option_t MuttVars[] = {
   ** IDN.  Unset this if your SMTP server can handle newer (RFC 6531)
   ** UTF-8 encoded domains. (IDN only)
   */
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
   { "ignore_linear_white_space",    DT_BOOL, R_NONE, OPTIGNORELWS, 0 },
   /*
   ** .pp

@@ -218,6 +218,11 @@ static void show_version (void)
 	  STRINGPREP_VERSION);
 #endif
 
+#ifdef HAVE_LIBIDN2
+  printf ("\nlibidn2: %s (compiled with %s)", idn2_check_version (NULL),
+	  IDN2_VERSION);
+#endif
+
 #ifdef USE_HCACHE
   printf ("\nhcache backend: %s", mutt_hcache_backend ());
 #endif
@@ -485,7 +490,13 @@ static void show_version (void)
 #else
 	"-HAVE_LIBIDN  "
 #endif
-	
+
+#if HAVE_LIBIDN2
+	"+HAVE_LIBIDN2  "
+#else
+	"-HAVE_LIBIDN2  "
+#endif
+
 #if HAVE_GETSID
 	"+HAVE_GETSID  "
 #else

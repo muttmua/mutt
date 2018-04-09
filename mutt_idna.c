@@ -24,7 +24,7 @@
 #include "charset.h"
 #include "mutt_idna.h"
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
 static int check_idn (char *domain)
 {
   if (! domain)
@@ -41,7 +41,7 @@ static int check_idn (char *domain)
 
   return 0;
 }
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
 static int mbox_to_udomain (const char *mbx, char **user, char **domain)
 {
@@ -90,14 +90,14 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
   char *local_user = NULL, *local_domain = NULL, *mailbox = NULL;
   char *reversed_user = NULL, *reversed_domain = NULL;
   char *tmp = NULL;
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   int is_idn_encoded = 0;
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
   local_user = safe_strdup (orig_user);
   local_domain = safe_strdup (orig_domain);
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   is_idn_encoded = check_idn (local_domain);
   if (is_idn_encoded && option (OPTIDNDECODE))
   {
@@ -106,7 +106,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
     mutt_str_replace (&local_domain, tmp);
     FREE (&tmp);
   }
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
   /* we don't want charset-hook effects, so we set flags to 0 */
   if (mutt_convert_string (&local_user, "utf-8", Charset, 0) == -1)
@@ -148,7 +148,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
       goto cleanup;
     }
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
     /* If the original domain was UTF-8, idna encoding here could
      * produce a non-matching domain!  Thus we only want to do the
      * idna_to_ascii_8z() if the original domain was IDNA encoded.
@@ -164,7 +164,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
       }
       mutt_str_replace (&reversed_domain, tmp);
     }
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
     if (ascii_strcasecmp (orig_domain, reversed_domain))
     {
@@ -203,14 +203,14 @@ static char *local_to_intl (char *user, char *domain)
   if (mutt_convert_string (&intl_domain, Charset, "utf-8", 0) == -1)
     goto cleanup;
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   if (option (OPTIDNENCODE))
   {
     if (idna_to_ascii_8z (intl_domain, &tmp, IDNA_ALLOW_UNASSIGNED) != IDNA_SUCCESS)
       goto cleanup;
     mutt_str_replace (&intl_domain, tmp);
   }
-#endif /* HAVE_LIBIDN */
+#endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
   mailbox = safe_malloc (mutt_strlen (intl_user) + mutt_strlen (intl_domain) + 2);
   sprintf (mailbox, "%s@%s", NONULL(intl_user), NONULL(intl_domain)); /* __SPRINTF_CHECKED__ */

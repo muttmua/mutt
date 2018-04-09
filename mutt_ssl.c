@@ -935,7 +935,7 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
   /* Check if 'hostname' matches the one of the subjectAltName extensions of
    * type DNS or the Common Name (CN). */
 
-#ifdef HAVE_LIBIDN
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   if (idna_to_ascii_lz(hostname, &hostname_ascii, 0) != IDNA_SUCCESS)
   {
     hostname_ascii = safe_strdup(hostname);

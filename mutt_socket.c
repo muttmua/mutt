@@ -499,7 +499,7 @@ int raw_socket_open (CONNECTION* conn)
 
   snprintf (port, sizeof (port), "%d", conn->account.port);
   
-# ifdef HAVE_LIBIDN
+# if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   if (idna_to_ascii_lz (conn->account.host, &host_idna, 1) != IDNA_SUCCESS)
   {
     mutt_error (_("Bad IDN \"%s\"."), conn->account.host);
@@ -514,7 +514,7 @@ int raw_socket_open (CONNECTION* conn)
   
   rc = getaddrinfo (host_idna, port, &hints, &res);
 
-# ifdef HAVE_LIBIDN
+# if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   FREE (&host_idna);
 # endif
 
@@ -558,7 +558,7 @@ int raw_socket_open (CONNECTION* conn)
   sin.sin_port = htons (conn->account.port);
   sin.sin_family = AF_INET;
 
-# ifdef HAVE_LIBIDN
+# if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
   if (idna_to_ascii_lz (conn->account.host, &host_idna, 1) != IDNA_SUCCESS)
   {
     mutt_error (_("Bad IDN \"%s\"."), conn->account.host);
@@ -573,7 +573,7 @@ int raw_socket_open (CONNECTION* conn)
 
   he = gethostbyname (host_idna);
 
-# ifdef HAVE_LIBIDN
+# if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
     FREE (&host_idna);
 # endif
 
