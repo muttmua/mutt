@@ -7,7 +7,7 @@ srcdir=`dirname "$0"` && cd "$srcdir" || exit 1
 
 # Ensure that we have a repo here.
 # If not, just cat the VERSION file; it contains the latest release number.
-{ [ -e ".git" ] && command -v git >/dev/null 2>&1; } \
+{ [ -r ".git" ] && command -v git >/dev/null 2>&1; } \
 || exec cat VERSION
 
 latesttag="$(git describe --tags --match 'mutt-*-rel' --abbrev=0)"
