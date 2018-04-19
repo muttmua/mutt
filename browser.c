@@ -495,7 +495,8 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
     }
 
     strfcpy (buffer, NONULL (tmp->path), sizeof (buffer));
-    mutt_pretty_mailbox (buffer, sizeof (buffer));
+    if (option (OPTBROWSERABBRMAILBOXES))
+      mutt_pretty_mailbox (buffer, sizeof (buffer));
 
 #ifdef USE_IMAP
     if (mx_is_imap (tmp->path))
