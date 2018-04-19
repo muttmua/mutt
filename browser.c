@@ -105,6 +105,26 @@ static int browser_compare_size (const void *a, const void *b)
   return ((BrowserSort & SORT_REVERSE) ? -r : r);
 }
 
+static int browser_compare_count (const void *a, const void *b)
+{
+  struct folder_file *pa = (struct folder_file *) a;
+  struct folder_file *pb = (struct folder_file *) b;
+
+  int r = pa->msg_count - pb->msg_count;
+
+  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+}
+
+static int browser_compare_unread (const void *a, const void *b)
+{
+  struct folder_file *pa = (struct folder_file *) a;
+  struct folder_file *pb = (struct folder_file *) b;
+
+  int r = pa->msg_unread - pb->msg_unread;
+
+  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+}
+
 static void browser_sort (struct browser_state *state)
 {
   int (*f) (const void *, const void *);
@@ -118,6 +138,12 @@ static void browser_sort (struct browser_state *state)
       break;
     case SORT_SIZE:
       f = browser_compare_size;
+      break;
+    case SORT_COUNT:
+      f = browser_compare_count;
+      break;
+    case SORT_UNREAD:
+      f = browser_compare_unread;
       break;
     case SORT_SUBJECT:
     default:
@@ -1171,9 +1197,9 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	  int reverse = (i == OP_SORT_REVERSE);
 	  
 	  switch (mutt_multi_choice ((reverse) ?
-	      _("Reverse sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? ") :
-	      _("Sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? "),
-	      _("dazn")))
+	      _("Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? ") :
+	      _("Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "),
+	      _("dazcun")))
 	  {
 	    case -1: /* abort */
 	      resort = 0;
@@ -1191,7 +1217,15 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	      BrowserSort = SORT_SIZE;
 	      break;
 
-            case 4: /* do(n)'t sort */
+            case 4: /* (c)ount */
+	      BrowserSort = SORT_COUNT;
+	      break;
+
+            case 5: /* (u)nread */
+	      BrowserSort = SORT_UNREAD;
+	      break;
+
+            case 6: /* do(n)'t sort */
 	      BrowserSort = SORT_ORDER;
 	      resort = 0;
 	      break;

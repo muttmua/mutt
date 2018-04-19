@@ -3413,8 +3413,10 @@ struct option_t MuttVars[] = {
   ** entries are sorted alphabetically.  Valid values:
   ** .il
   ** .dd alpha (alphabetically)
+  ** .dd count
   ** .dd date
   ** .dd size
+  ** .dd unread
   ** .dd unsorted
   ** .ie
   ** .pp
@@ -4038,8 +4040,10 @@ const struct mapping_t SortAuxMethods[] = {
 
 const struct mapping_t SortBrowserMethods[] = {
   { "alpha",	SORT_SUBJECT },
+  { "count",	SORT_COUNT },
   { "date",	SORT_DATE },
   { "size",	SORT_SIZE },
+  { "unread",	SORT_UNREAD },
   { "unsorted",	SORT_ORDER },
   { NULL,       0 }
 };
