@@ -818,6 +818,14 @@ struct option_t MuttVars[] = {
   ** Manually sets the \fIenvelope\fP sender for outgoing messages.
   ** This value is ignored if $$use_envelope_from is \fIunset\fP.
   */
+  { "error_history",	DT_NUM,	 R_NONE, UL &ErrorHistSize, 30 },
+  /*
+  ** .pp
+  ** This variable controls the size (in number of strings remembered)
+  ** of the error messages displayed by mutt.  These can be shown with
+  ** the \fC<error-history>\fP function.  The history is cleared each
+  ** time this variable is set.
+  */
   { "escape",		DT_STR,	 R_NONE, UL &EscChar, UL "~" },
   /*
   ** .pp

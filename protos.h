@@ -198,6 +198,8 @@ void mutt_curses_message (const char *, ...);
 void mutt_encode_descriptions (BODY *, short);
 void mutt_encode_path (char *, size_t, const char *);
 void mutt_enter_command (void);
+void mutt_error_history_display (void);
+void mutt_error_history_init (void);
 void mutt_expand_aliases_env (ENVELOPE *);
 void mutt_expand_file_fmt (char *, size_t, const char *, const char *);
 void mutt_expand_fmt (char *, size_t, const char *, const char *);

@@ -2381,6 +2381,11 @@ search_next:
 	  mutt_error _("Help is currently being shown.");
 	break;
 
+      case OP_ERROR_HISTORY:
+        mutt_error_history_display ();
+        pager_menu->redraw = REDRAW_FULL;
+        break;
+
       case OP_PAGER_HIDE_QUOTED:
 	if (rd.has_types)
 	{

@@ -926,6 +926,12 @@ int mutt_index_menu (void)
 	menu->redraw = REDRAW_FULL;
 	break;
 
+      case OP_ERROR_HISTORY:
+
+	mutt_error_history_display ();
+	menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_MAIN_SHOW_LIMIT:
 	CHECK_IN_MAILBOX;
 	if (!Context->pattern)

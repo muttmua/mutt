@@ -2451,6 +2451,12 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	  *ptr = 0;
 	mutt_init_history ();
       }
+      else if (mutt_strcmp (MuttVars[idx].option, "error_history") == 0)
+      {
+	if (*ptr < 0)
+	  *ptr = 0;
+	mutt_error_history_init ();
+      }
       else if (mutt_strcmp (MuttVars[idx].option, "pager_index_lines") == 0)
       {
 	if (*ptr < 0)
@@ -3505,6 +3511,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 #endif
 
   mutt_init_history ();
+  mutt_error_history_init ();
 
   /* RFC2368, "4. Unsafe headers"
    * The creator of a mailto URL cannot expect the resolver of a URL to

@@ -1202,6 +1202,11 @@ int mutt_menuLoop (MUTTMENU *menu)
 	menu->redraw = REDRAW_FULL;
 	break;
 
+      case OP_ERROR_HISTORY:
+	mutt_error_history_display ();
+	menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_NULL:
 	km_error_key (menu->menu);
 	break;

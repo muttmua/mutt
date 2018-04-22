@@ -78,6 +78,7 @@ const struct binding_t OpGeneric[] = { /* map: generic */
   { "current-top",      OP_CURRENT_TOP,		NULL },
   { "current-middle",   OP_CURRENT_MIDDLE,	NULL },
   { "current-bottom",   OP_CURRENT_BOTTOM,	NULL },
+  { "error-history",    OP_ERROR_HISTORY,	NULL },
   { "what-key",		OP_WHAT_KEY,		NULL },
   { NULL,		0,			NULL }
 };
@@ -264,6 +265,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "search-reverse",	OP_SEARCH_REVERSE,		"\033/" },
   { "search-opposite",	OP_SEARCH_OPPOSITE,		NULL },
   { "next-line",	OP_NEXT_LINE,			MUTT_ENTER_S },
+  { "error-history",	OP_ERROR_HISTORY,		NULL },
   { "jump",		OP_JUMP,			NULL },
   { "next-unread",	OP_MAIN_NEXT_UNREAD,		NULL },
   { "previous-new",	OP_MAIN_PREV_NEW,		NULL },

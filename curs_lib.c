@@ -44,6 +44,16 @@
 #include <langinfo.h>
 #endif
 
+/* Error message ring */
+struct error_history
+{
+  char **msg;
+  short last;
+} ErrorHistory = {0, 0};
+
+static short OldErrorHistSize = 0;
+
+
 /* not possible to unget more than one char under some curses libs, and it
  * is impossible to unget function keys in SLang, so roll our own input
  * buffering routines.
@@ -62,6 +72,7 @@ static event_t *MacroEvents;
 static size_t UngetCount = 0;
 static size_t UngetLen = 0;
 static event_t *UngetKeyEvents;
+
 
 mutt_window_t *MuttHelpWindow = NULL;
 mutt_window_t *MuttIndexWindow = NULL;
@@ -392,11 +403,94 @@ void mutt_query_exit (void)
   SigInt = 0;
 }
 
+void mutt_error_history_init (void)
+{
+  short i;
+
+  if (OldErrorHistSize && ErrorHistory.msg)
+  {
+    for (i = 0; i < OldErrorHistSize; i++)
+      FREE (&ErrorHistory.msg[i]);
+    FREE (&ErrorHistory.msg);
+  }
+
+  if (ErrorHistSize)
+    ErrorHistory.msg = safe_calloc (ErrorHistSize, sizeof (char *));
+  ErrorHistory.last = 0;
+
+  OldErrorHistSize = ErrorHistSize;
+}
+
+static void error_history_add (const char *s)
+{
+  static int in_process = 0;
+
+  if (!ErrorHistSize || in_process || !s || !*s)
+    return;
+  in_process = 1;
+
+  mutt_str_replace (&ErrorHistory.msg[ErrorHistory.last], s);
+  if (++ErrorHistory.last >= ErrorHistSize)
+    ErrorHistory.last = 0;
+
+  in_process = 0;
+}
+
+static void error_history_dump (FILE *f)
+{
+  short cur;
+
+  cur = ErrorHistory.last;
+  do
+  {
+    if (ErrorHistory.msg[cur])
+    {
+      fputs (ErrorHistory.msg[cur], f);
+      fputc ('\n', f);
+    }
+    if (++cur >= ErrorHistSize)
+      cur = 0;
+  } while (cur != ErrorHistory.last);
+}
+
+void mutt_error_history_display ()
+{
+  static int in_process = 0;
+  char t[_POSIX_PATH_MAX];
+  FILE *f;
+
+  if (!ErrorHistSize)
+  {
+    mutt_error _("Error History is disabled.");
+    return;
+  }
+
+  if (in_process)
+  {
+    mutt_error _("Error History is currently being shown.");
+    return;
+  }
+
+  mutt_mktemp (t, sizeof (t));
+  if ((f = safe_fopen (t, "w")) == NULL)
+  {
+    mutt_perror (t);
+    return;
+  }
+  error_history_dump (f);
+  safe_fclose (&f);
+
+  in_process = 1;
+  mutt_do_pager (_("Error History"), t, 0, NULL);
+  in_process = 0;
+}
+
 static void curses_message (int error, const char *fmt, va_list ap)
 {
   char scratch[LONG_STRING];
 
   vsnprintf (scratch, sizeof (scratch), fmt, ap);
+  error_history_add (scratch);
 
   dprint (1, (debugfile, "%s\n", scratch));
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
