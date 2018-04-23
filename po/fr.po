@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-20 17:17+0200\n"
-"PO-Revision-Date: 2018-04-20 17:26+0200\n"
+"POT-Creation-Date: 2018-04-23 23:44+0200\n"
+"PO-Revision-Date: 2018-04-23 23:47+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -129,7 +129,7 @@ msgid "Mailcap compose entry requires %%s"
 msgstr "L'entrée compose du fichier mailcap nécessite %%s"
 
 #: attach.c:134 attach.c:266 commands.c:224 compose.c:1390 compress.c:444
-#: curs_lib.c:218 curs_lib.c:809 sendlib.c:1372
+#: curs_lib.c:229 curs_lib.c:903 sendlib.c:1372
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Erreur en exécutant \"%s\" !"
@@ -296,11 +296,14 @@ msgstr "Masque de fichier : "
 #: browser.c:1200
 msgid ""
 "Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
-msgstr "Tri inv par (d)ate, (a)lpha, (t)aille, nom(b)re, non l(u)s ou (n)e pas trier ? "
+msgstr ""
+"Tri inv par (d)ate, (a)lpha, (t)aille, nom(b)re, non l(u)s ou (n)e pas "
+"trier ? "
 
 #: browser.c:1201
 msgid "Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
-msgstr "Tri par (d)ate, (a)lpha, (t)aille, nom(b)re, non l(u)s ou (n)e pas trier ? "
+msgstr ""
+"Tri par (d)ate, (a)lpha, (t)aille, nom(b)re, non l(u)s ou (n)e pas trier ? "
 
 #: browser.c:1202
 msgid "dazcun"
@@ -1729,27 +1732,39 @@ msgstr "\"crypt_use_gpgme\" positionné mais non construit avec support GPGME."
 msgid "Invoking S/MIME..."
 msgstr "Appel de S/MIME..."
 
-#: curs_lib.c:232
+#: curs_lib.c:243
 msgid "yes"
 msgstr "oui"
 
-#: curs_lib.c:233
+#: curs_lib.c:244
 msgid "no"
 msgstr "non"
 
-#: curs_lib.c:385
+#: curs_lib.c:396
 msgid "Exit Mutt?"
 msgstr "Quitter Mutt ?"
 
-#: curs_lib.c:761 mutt_socket.c:612 mutt_ssl.c:577
+#: curs_lib.c:464
+msgid "Error History is disabled."
+msgstr "L'historique des erreurs est désactivé."
+
+#: curs_lib.c:470
+msgid "Error History is currently being shown."
+msgstr "L'historique des erreurs est actuellement affiché."
+
+#: curs_lib.c:484
+msgid "Error History"
+msgstr "Historique des erreurs"
+
+#: curs_lib.c:855 mutt_socket.c:612 mutt_ssl.c:577
 msgid "unknown error"
 msgstr "erreur inconnue"
 
-#: curs_lib.c:781
+#: curs_lib.c:875
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: curs_lib.c:826
+#: curs_lib.c:920
 msgid " ('?' for list): "
 msgstr " ('?' pour avoir la liste) : "
 
@@ -1852,7 +1867,7 @@ msgid "Invalid message number."
 msgstr "Numéro de message invalide."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:907 curs_main.c:2048 pager.c:2538
+#: curs_main.c:907 curs_main.c:2054 pager.c:2543
 msgid "Cannot delete message(s)"
 msgstr "Impossible d'effacer le(s) message(s)"
 
@@ -1860,179 +1875,179 @@ msgstr "Impossible d'effacer le(s) message(s)"
 msgid "Delete messages matching: "
 msgstr "Effacer les messages correspondant à : "
 
-#: curs_main.c:932
+#: curs_main.c:938
 msgid "No limit pattern is in effect."
 msgstr "Aucun motif de limite n'est en vigueur."
 
 # , c-format
 #. L10N: ask for a limit to apply
-#: curs_main.c:937
+#: curs_main.c:943
 #, c-format
 msgid "Limit: %s"
 msgstr "Limite : %s"
 
-#: curs_main.c:947
+#: curs_main.c:953
 msgid "Limit to messages matching: "
 msgstr "Limiter aux messages correspondant à : "
 
-#: curs_main.c:968
+#: curs_main.c:974
 msgid "To view all messages, limit to \"all\"."
 msgstr "Pour voir tous les messages, limiter à \"all\"."
 
-#: curs_main.c:980 pager.c:2077
+#: curs_main.c:986 pager.c:2077
 msgid "Quit Mutt?"
 msgstr "Quitter Mutt ?"
 
-#: curs_main.c:1070
+#: curs_main.c:1076
 msgid "Tag messages matching: "
 msgstr "Marquer les messages correspondant à : "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1080 curs_main.c:2399 pager.c:2792
+#: curs_main.c:1086 curs_main.c:2405 pager.c:2797
 msgid "Cannot undelete message(s)"
 msgstr "Impossible de récupérer le(s) message(s)"
 
-#: curs_main.c:1082
+#: curs_main.c:1088
 msgid "Undelete messages matching: "
 msgstr "Récupérer les messages correspondant à : "
 
-#: curs_main.c:1090
+#: curs_main.c:1096
 msgid "Untag messages matching: "
 msgstr "Démarquer les messages correspondant à : "
 
-#: curs_main.c:1116
+#: curs_main.c:1122
 msgid "Logged out of IMAP servers."
 msgstr "Déconnecté des serveurs IMAP."
 
-#: curs_main.c:1201
+#: curs_main.c:1207
 msgid "Open mailbox in read-only mode"
 msgstr "Ouvrir la boîte aux lettres en lecture seule"
 
-#: curs_main.c:1203
+#: curs_main.c:1209
 msgid "Open mailbox"
 msgstr "Ouvrir la boîte aux lettres"
 
-#: curs_main.c:1213
+#: curs_main.c:1219
 msgid "No mailboxes have new mail"
 msgstr "Pas de boîte aux lettres avec des nouveaux messages"
 
 # , c-format
-#: curs_main.c:1255 mx.c:516 mx.c:614
+#: curs_main.c:1261 mx.c:516 mx.c:614
 #, c-format
 msgid "%s is not a mailbox."
 msgstr "%s n'est pas une boîte aux lettres."
 
-#: curs_main.c:1378
+#: curs_main.c:1384
 msgid "Exit Mutt without saving?"
 msgstr "Quitter Mutt sans sauvegarder ?"
 
-#: curs_main.c:1396 curs_main.c:1432 curs_main.c:1892 curs_main.c:1924
+#: curs_main.c:1402 curs_main.c:1438 curs_main.c:1898 curs_main.c:1930
 #: flags.c:303 thread.c:1025 thread.c:1081 thread.c:1148
 msgid "Threading is not enabled."
 msgstr "L'affichage des discussions n'est pas activé."
 
-#: curs_main.c:1408
+#: curs_main.c:1414
 msgid "Thread broken"
 msgstr "Discussion cassée"
 
-#: curs_main.c:1419
+#: curs_main.c:1425
 msgid "Thread cannot be broken, message is not part of a thread"
 msgstr ""
 "La discussion ne peut pas être cassée, le message n'est pas dans une "
 "discussion"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1429
+#: curs_main.c:1435
 msgid "Cannot link threads"
 msgstr "Impossible de lier les discussions"
 
-#: curs_main.c:1434
+#: curs_main.c:1440
 msgid "No Message-ID: header available to link thread"
 msgstr "Pas d'en-tête Message-ID: disponible pour lier la discussion"
 
-#: curs_main.c:1436
+#: curs_main.c:1442
 msgid "First, please tag a message to be linked here"
 msgstr "D'abord, veuillez marquer un message à lier ici"
 
-#: curs_main.c:1448
+#: curs_main.c:1454
 msgid "Threads linked"
 msgstr "Discussions liées"
 
-#: curs_main.c:1451
+#: curs_main.c:1457
 msgid "No thread linked"
 msgstr "Pas de discussion liée"
 
-#: curs_main.c:1487 curs_main.c:1512
+#: curs_main.c:1493 curs_main.c:1518
 msgid "You are on the last message."
 msgstr "Vous êtes sur le dernier message."
 
-#: curs_main.c:1494 curs_main.c:1538
+#: curs_main.c:1500 curs_main.c:1544
 msgid "No undeleted messages."
 msgstr "Pas de message non effacé."
 
-#: curs_main.c:1531 curs_main.c:1555
+#: curs_main.c:1537 curs_main.c:1561
 msgid "You are on the first message."
 msgstr "Vous êtes sur le premier message."
 
-#: curs_main.c:1630 menu.c:874 pager.c:2195 pattern.c:1612
+#: curs_main.c:1636 menu.c:874 pager.c:2195 pattern.c:1612
 msgid "Search wrapped to top."
 msgstr "La recherche est repartie du début."
 
-#: curs_main.c:1639 pager.c:2217 pattern.c:1623
+#: curs_main.c:1645 pager.c:2217 pattern.c:1623
 msgid "Search wrapped to bottom."
 msgstr "La recherche est repartie de la fin."
 
-#: curs_main.c:1683
+#: curs_main.c:1689
 msgid "No new messages in this limited view."
 msgstr "Pas de nouveaux messages dans cette vue limitée."
 
-#: curs_main.c:1685
+#: curs_main.c:1691
 msgid "No new messages."
 msgstr "Pas de nouveaux messages."
 
-#: curs_main.c:1690
+#: curs_main.c:1696
 msgid "No unread messages in this limited view."
 msgstr "Pas de messages non lus dans cette vue limitée."
 
-#: curs_main.c:1692
+#: curs_main.c:1698
 msgid "No unread messages."
 msgstr "Pas de messages non lus."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1710
+#: curs_main.c:1716
 msgid "Cannot flag message"
 msgstr "Impossible de marquer le message"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1748 pager.c:2755
+#: curs_main.c:1754 pager.c:2760
 msgid "Cannot toggle new"
 msgstr "Impossible d'inverser l'indic. 'nouveau'"
 
-#: curs_main.c:1825
+#: curs_main.c:1831
 msgid "No more threads."
 msgstr "Pas d'autres discussions."
 
-#: curs_main.c:1827
+#: curs_main.c:1833
 msgid "You are on the first thread."
 msgstr "Vous êtes sur la première discussion."
 
-#: curs_main.c:1910
+#: curs_main.c:1916
 msgid "Thread contains unread messages."
 msgstr "Cette discussion contient des messages non-lus."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2004 pager.c:2505
+#: curs_main.c:2010 pager.c:2510
 msgid "Cannot delete message"
 msgstr "Impossible d'effacer le message"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2085
+#: curs_main.c:2091
 msgid "Cannot edit message"
 msgstr "Impossible d'éditer le message"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2131 pager.c:2843
+#: curs_main.c:2137 pager.c:2848
 #, c-format
 msgid "%d labels changed."
 msgstr "%d labels ont changé."
@@ -2040,12 +2055,12 @@ msgstr "%d labels ont changé."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2137 pager.c:2846
+#: curs_main.c:2143 pager.c:2851
 msgid "No labels changed."
 msgstr "Aucun label n'a changé."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2236
+#: curs_main.c:2242
 msgid "Cannot mark message(s) as read"
 msgstr "Impossible de marquer le(s) message(s) comme lu(s)"
 
@@ -2053,32 +2068,32 @@ msgstr "Impossible de marquer le(s) message(s) comme lu(s)"
 #. L10N: This is the prompt for <mark-message>.  Whatever they
 #. enter will be prefixed by $mark_macro_prefix and will become
 #. a macro hotkey to jump to the currently selected message.
-#: curs_main.c:2272
+#: curs_main.c:2278
 msgid "Enter macro stroke: "
 msgstr "Entrez les touches de la macro : "
 
 #. L10N: "message hotkey" is the key bindings menu description of a
 #. macro created by <mark-message>.
-#: curs_main.c:2280
+#: curs_main.c:2286
 msgid "message hotkey"
 msgstr "hotkey (marque-page)"
 
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
-#: curs_main.c:2285
+#: curs_main.c:2291
 #, c-format
 msgid "Message bound to %s."
 msgstr "Message lié à %s."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
-#: curs_main.c:2293
+#: curs_main.c:2299
 msgid "No message ID to macro."
 msgstr "Pas de Message-ID pour la macro."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2369 pager.c:2775
+#: curs_main.c:2375 pager.c:2780
 msgid "Cannot undelete message"
 msgstr "Impossible de récupérer le message"
 
@@ -2827,79 +2842,79 @@ msgid "number overflow"
 msgstr "nombre trop grand"
 
 # , c-format
-#: init.c:2500
+#: init.c:2506
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s : valeur invalide"
 
 # , c-format
-#: init.c:2544
+#: init.c:2550
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s : type inconnu."
 
 # , c-format
-#: init.c:2571
+#: init.c:2577
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s : type inconnu"
 
 # , c-format
-#: init.c:2646
+#: init.c:2652
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Erreur dans %s, ligne %d : %s"
 
 # , c-format
-#: init.c:2669
+#: init.c:2675
 #, c-format
 msgid "source: errors in %s"
 msgstr "source : erreurs dans %s"
 
-#: init.c:2670
+#: init.c:2676
 #, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "source : lecture interrompue car trop d'erreurs dans %s"
 
 # , c-format
-#: init.c:2684
+#: init.c:2690
 #, c-format
 msgid "source: error at %s"
 msgstr "source : erreur dans %s"
 
-#: init.c:2689
+#: init.c:2695
 msgid "source: too many arguments"
 msgstr "source : trop d'arguments"
 
 # , c-format
-#: init.c:2743
+#: init.c:2749
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s : commande inconnue"
 
 # , c-format
-#: init.c:3236
+#: init.c:3242
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Erreur dans la ligne de commande : %s\n"
 
-#: init.c:3357
+#: init.c:3363
 msgid "unable to determine home directory"
 msgstr "impossible de déterminer le répertoire personnel"
 
-#: init.c:3365
+#: init.c:3371
 msgid "unable to determine username"
 msgstr "impossible de déterminer le nom d'utilisateur"
 
-#: init.c:3391
+#: init.c:3397
 msgid "unable to determine nodename via uname()"
 msgstr "impossible de déterminer nodename via uname()"
 
-#: init.c:3620
+#: init.c:3627
 msgid "-group: no group name"
 msgstr "-group: pas de nom de groupe"
 
-#: init.c:3630
+#: init.c:3637
 msgid "out of arguments"
 msgstr "pas assez d'arguments"
 
@@ -3848,7 +3863,7 @@ msgstr "Voir attach."
 msgid "Next"
 msgstr "Suivant"
 
-#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2443
+#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2448
 msgid "Bottom of message is shown."
 msgstr "La fin du message est affichée."
 
@@ -3860,11 +3875,11 @@ msgstr "Le début du message est affiché."
 msgid "Help is currently being shown."
 msgstr "L'aide est actuellement affichée."
 
-#: pager.c:2410
+#: pager.c:2415
 msgid "No more quoted text."
 msgstr "Il n'y a plus de texte cité."
 
-#: pager.c:2423
+#: pager.c:2428
 msgid "No more unquoted text after quoted text."
 msgstr "Il n'y a plus de texte non cité après le texte cité."
 
