@@ -575,6 +575,9 @@ messages either originated or received by any member of \fIGROUP\fP
 ~m \fIMIN\fP-\fIMAX\fP
 message in the range \fIMIN\fP to \fIMAX\fP
 .TP
+~M \fIEXPR\fP
+messages which contain a mime Content-Type matching \fIEXPR\fP
+.TP
 ~n \fIMIN\fP-\fIMAX\fP
 messages with a score in the range \fIMIN\fP to \fIMAX\fP
 .TP

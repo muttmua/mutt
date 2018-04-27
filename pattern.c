@@ -25,6 +25,7 @@
 #include "keymap.h"
 #include "mailbox.h"
 #include "copy.h"
+#include "mime.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -76,6 +77,7 @@ Flags[] =
   { 'l', MUTT_LIST,		0,		NULL },
   { 'L', MUTT_ADDRESS,		0,		eat_regexp },
   { 'm', MUTT_MESSAGE,		0,		eat_range },
+  { 'M', MUTT_MIMETYPE,		MUTT_FULL_MSG,	eat_regexp },
   { 'n', MUTT_SCORE,		0,		eat_range },
   { 'N', MUTT_NEW,			0,		NULL },
   { 'O', MUTT_OLD,			0,		NULL },
@@ -1138,6 +1140,28 @@ static int match_threadchildren(struct pattern_t *pat, pattern_exec_flag flags, 
   return 0;
 }
 
+static int match_content_type(const pattern_t* pat, BODY *b)
+{
+  char buffer[STRING];
+  if (!b)
+    return 0;
+
+  snprintf (buffer, STRING, "%s/%s", TYPE (b), b->subtype);
+
+  if (patmatch (pat, buffer) == 0)
+    return 1;
+  if (match_content_type (pat, b->parts))
+    return 1;
+  if (match_content_type (pat, b->next))
+    return 1;
+  return 0;
+}
+
+static int match_mime_content_type(const pattern_t *pat, CONTEXT *ctx, HEADER *hdr)
+{
+  mutt_parse_mime_message(ctx, hdr);
+  return match_content_type(pat, hdr->content);
+}
 
 /* Sets a value in the pattern_cache_t cache entry.
  * Normalizes the "true" value to 2. */
@@ -1338,6 +1362,10 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ (count >= pat->min && (pat->max == MUTT_MAXRANGE ||
                                                 count <= pat->max)));
       }
+    case MUTT_MIMETYPE:
+      if (!ctx)
+        return 0;
+      return (pat->not ^ match_mime_content_type (pat, ctx, h));
     case MUTT_UNREFERENCED:
       return (pat->not ^ (h->thread && !h->thread->child));
   }
