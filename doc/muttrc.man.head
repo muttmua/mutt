@@ -504,10 +504,13 @@ all messages
 messages which contain \fIEXPR\fP in the message body.
 .TP
 =b \fISTRING\fP
-messages which contain \fISTRING\fP in the message body. If IMAP is enabled, searches for \fISTRING\fP on the server, rather than downloading each message and searching it locally.
+If IMAP is enabled, like ~b but searches for \fISTRING\fP on the server, rather than downloading each message and searching it locally.
 .TP
 ~B \fIEXPR\fP
 messages which contain \fIEXPR\fP in the whole message.
+.TP
+=B \fISTRING\fP
+If IMAP is enabled, like ~B but searches for \fISTRING\fP on the server, rather than downloading each message and searching it locally.
 .TP
 ~c \fIEXPR\fP
 messages carbon-copied to \fIEXPR\fP
@@ -553,6 +556,9 @@ PGP encrypted messages
 .TP
 ~h \fIEXPR\fP
 messages which contain \fIEXPR\fP in the message header
+.TP
+=h \fISTRING\fP
+If IMAP is enabled, like ~h but searches for \fISTRING\fP on the server, rather than downloading each message and searching it locally.  \fISTRING\fP must be of the form \(lqheader: substring\(rq
 .TP
 ~H \fIEXPR\fP
 messages with spam tags matching \fIEXPR\fP
@@ -663,6 +669,12 @@ specify ranges in the forms \fB<\fP\fIMAX\fP, \fB>\fP\fIMIN\fP,
 .PP
 With the \fB~z\fP operator, the suffixes \(lqK\(rq and \(lqM\(rq are allowed to specify
 kilobyte and megabyte respectively.
+.PP
+The \fB~b\fP, \fB~B\fP, \fB~h\fP, \fB~M\fP, and \fB~X\fP operators
+require reading each message in, which can be much slower.
+.PP
+You can force Mutt to treat \fIEXPR\fP as a simple string instead of a
+regular expression by using = instead of ~ in the pattern name.
 .SS Matching dates
 .PP
 The \fB~d\fP and \fB~r\fP operators are used to match date ranges,

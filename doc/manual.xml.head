@@ -3904,18 +3904,19 @@ equivalent to <quote><literal>push &lt;function&gt;</literal></quote>.
 </cmdsynopsis>
 
 <para>
-The <command>score</command> commands adds <emphasis>value</emphasis> to
-a message's score if <emphasis>pattern</emphasis> matches it.
-<emphasis>pattern</emphasis> is a string in the format described in the
-<link linkend="patterns">patterns</link> section (note: For efficiency
-reasons, patterns which scan information not available in the index,
-such as <literal>~b</literal>, <literal>~B</literal>, <literal>~h</literal>,
-or <literal>~X</literal> may not be used).  <emphasis>value</emphasis> is
-a positive or negative integer.  A message's final score is the sum
-total of all matching <command>score</command> entries.  However, you
-may optionally prefix <emphasis>value</emphasis> with an equal sign
-(<quote>=</quote>) to cause evaluation to stop at a particular entry if
-there is a match.  Negative final scores are rounded up to 0.
+The <command>score</command> commands adds <emphasis>value</emphasis>
+to a message's score if <emphasis>pattern</emphasis> matches it.
+<emphasis>pattern</emphasis> is a string in the format described in
+the <link linkend="patterns">patterns</link> section (note: For
+efficiency reasons, patterns which scan information not available in
+the index, such as <literal>~b</literal>, <literal>~B</literal>,
+<literal>~h</literal>, <literal>~M</literal>, or <literal>~X</literal>
+may not be used).  <emphasis>value</emphasis> is a positive or
+negative integer.  A message's final score is the sum total of all
+matching <command>score</command> entries.  However, you may
+optionally prefix <emphasis>value</emphasis> with an equal sign
+(<quote>=</quote>) to cause evaluation to stop at a particular entry
+if there is a match.  Negative final scores are rounded up to 0.
 </para>
 
 <para>
@@ -5176,10 +5177,10 @@ shows several ways to select messages.
 </thead>
 <tbody>
 <row><entry>~A</entry><entry>all messages</entry></row>
-<row><entry>~b <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the message body</entry></row>
-<row><entry>=b <emphasis>STRING</emphasis></entry><entry>messages which contain <emphasis>STRING</emphasis> in the message body. If IMAP is enabled, searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally.</entry></row>
-<row><entry>~B <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the whole message</entry></row>
-<row><entry>=B <emphasis>STRING</emphasis></entry><entry>messages which contain <emphasis>STRING</emphasis> in the whole message. If IMAP is enabled, searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally.</entry></row>
+<row><entry>~b <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the message body ***)</entry></row>
+<row><entry>=b <emphasis>STRING</emphasis></entry><entry>If IMAP is enabled, like ~b but searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally.</entry></row>
+<row><entry>~B <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the whole message ***)</entry></row>
+<row><entry>=B <emphasis>STRING</emphasis></entry><entry>If IMAP is enabled, like ~B but searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally.</entry></row>
 <row><entry>~c <emphasis>EXPR</emphasis></entry><entry>messages carbon-copied to <emphasis>EXPR</emphasis></entry></row>
 <row><entry>%c <emphasis>GROUP</emphasis></entry><entry>messages carbon-copied to any member of <emphasis>GROUP</emphasis></entry></row>
 <row><entry>~C <emphasis>EXPR</emphasis></entry><entry>messages either to: or cc: <emphasis>EXPR</emphasis></entry></row>
@@ -5194,8 +5195,8 @@ shows several ways to select messages.
 <row><entry>%f <emphasis>GROUP</emphasis></entry><entry>messages originating from any member of <emphasis>GROUP</emphasis></entry></row>
 <row><entry>~g</entry><entry>cryptographically signed messages</entry></row>
 <row><entry>~G</entry><entry>cryptographically encrypted messages</entry></row>
-<row><entry>~h <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the message header</entry></row>
-<row><entry>=h <emphasis>STRING</emphasis></entry><entry>messages which contain <emphasis>STRING</emphasis> in the message header. If IMAP is enabled, searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally; <emphasis>STRING</emphasis> must be of the form <quote>header: substring</quote> (see below).</entry></row>
+<row><entry>~h <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the message header ***)</entry></row>
+<row><entry>=h <emphasis>STRING</emphasis></entry><entry>If IMAP is enabled, like ~h but searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally; <emphasis>STRING</emphasis> must be of the form <quote>header: substring</quote> (see below).</entry></row>
 <row><entry>~H <emphasis>EXPR</emphasis></entry><entry>messages with a spam attribute matching <emphasis>EXPR</emphasis></entry></row>
 <row><entry>~i <emphasis>EXPR</emphasis></entry><entry>messages which match <emphasis>EXPR</emphasis> in the <quote>Message-ID</quote> field</entry></row>
 <row><entry>~k</entry><entry>messages which contain PGP key material</entry></row>
@@ -5203,7 +5204,7 @@ shows several ways to select messages.
 <row><entry>%L <emphasis>GROUP</emphasis></entry><entry>message either originated or received by any member of <emphasis>GROUP</emphasis></entry></row>
 <row><entry>~l</entry><entry>messages addressed to a known mailing list</entry></row>
 <row><entry>~m [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages in the range <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> *)</entry></row>
-<row><entry>~M <emphasis>EXPR</emphasis></entry><entry>messages which contain a mime Content-Type matching <emphasis>EXPR</emphasis></entry></row>
+<row><entry>~M <emphasis>EXPR</emphasis></entry><entry>messages which contain a mime Content-Type matching <emphasis>EXPR</emphasis> ***)</entry></row>
 <row><entry>~n [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with a score in the range <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> *)</entry></row>
 <row><entry>~N</entry><entry>new messages</entry></row>
 <row><entry>~O</entry><entry>old messages</entry></row>
@@ -5221,7 +5222,7 @@ shows several ways to select messages.
 <row><entry>~v</entry><entry>messages part of a collapsed thread.</entry></row>
 <row><entry>~V</entry><entry>cryptographically verified messages</entry></row>
 <row><entry>~x <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the <quote>References</quote> or <quote>In-Reply-To</quote> field</entry></row>
-<row><entry>~X [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> attachments *)</entry></row>
+<row><entry>~X [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> attachments *) ***)</entry></row>
 <row><entry>~y <emphasis>EXPR</emphasis></entry><entry>messages which contain <emphasis>EXPR</emphasis> in the <quote>X-Label</quote> field</entry></row>
 <row><entry>~z [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with a size in the range <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> *) **)</entry></row>
 <row><entry>~=</entry><entry>duplicated messages (see <link linkend="duplicate-threads">$duplicate_threads</link>)</entry></row>
@@ -5257,23 +5258,39 @@ specify kilobyte and megabyte respectively.
 </para>
 
 <para>
+***) These patterns read each message in, and can therefore be much
+slower.  Over IMAP this will entail downloading each message.  They
+can not be used for <link linkend="score-command">message
+scoring</link>, and it is recommended to avoid using them for index
+coloring.
+</para>
+
+<para>
 Special attention has to be payed when using regular expressions inside
 of patterns.  Specifically, Mutt's parser for these patterns will strip
 one level of backslash (<quote>\</quote>), which is normally used for
 quoting.  If it is your intention to use a backslash in the regular
 expression, you will need to use two backslashes instead
-(<quote>\\</quote>). You can force Mutt to treat
+(<quote>\\</quote>).
+</para>
+
+<para>
+You can force Mutt to treat
 <emphasis>EXPR</emphasis> as a simple string instead of a regular
 expression by using = instead of ~ in the pattern name. For example,
 <literal>=b *.*</literal> will find all messages that contain the
 literal string <quote>*.*</quote>. Simple string matches are less
-powerful than regular expressions but can be considerably faster. This
-is especially true for IMAP folders, because string matches can be
-performed on the server instead of by fetching every message. IMAP
-treats <literal>=h</literal> specially: it must be of the form
-<quote>header: substring</quote> and will not partially match header
-names. The substring part may be omitted if you simply wish to find
-messages containing a particular header without regard to its value.
+powerful than regular expressions but can be considerably faster.
+</para>
+
+<para>
+For IMAP folders, string matches <literal>=b</literal>,
+<literal>=B</literal>, and <literal>=h</literal> will be performed on
+the server instead of by fetching every message. IMAP treats
+<literal>=h</literal> specially: it must be of the form <quote>header:
+substring</quote> and will not partially match header names. The
+substring part may be omitted if you simply wish to find messages
+containing a particular header without regard to its value.
 </para>
 
 <para>
