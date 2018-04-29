@@ -4101,6 +4101,7 @@ static int parse_lists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_alias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unalias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_echo (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_ignore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unignore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_source (BUFFER *, BUFFER *, unsigned long, BUFFER *);
@@ -4149,6 +4150,7 @@ const struct command_t Commands[] = {
   { "color",		mutt_parse_color,	0 },
   { "uncolor",		mutt_parse_uncolor,	0 },
 #endif
+  { "echo",		parse_echo,		0 },
   { "exec",		mutt_parse_exec,	0 },
   { "fcc-hook",		mutt_parse_hook,	MUTT_FCCHOOK },
   { "fcc-save-hook",	mutt_parse_hook,	MUTT_FCCHOOK | MUTT_SAVEHOOK },

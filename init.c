@@ -692,6 +692,22 @@ static int parse_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
+static int parse_echo (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  if (!MoreArgs (s))
+  {
+    strfcpy (err->data, _("not enough arguments"), err->dsize);
+    return -1;
+  }
+  mutt_extract_token (buf, s, 0);
+  set_option (OPTFORCEREFRESH);
+  mutt_message ("%s", buf->data);
+  unset_option (OPTFORCEREFRESH);
+  mutt_sleep (0);
+
+  return 0;
+}
+
 static void _alternates_clean (void)
 {
   int i;
