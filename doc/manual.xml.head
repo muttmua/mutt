@@ -3225,9 +3225,13 @@ effect as specifying the list address via the <command>lists</command>
 command (except the group feature). Once you have done this, the <link
 linkend="list-reply"><literal>&lt;list-reply&gt;</literal></link>
 function will work for all known lists.  Additionally, when you send a
-message to a subscribed list, Mutt will add a Mail-Followup-To header to
-tell other users' mail user agents not to send copies of replies to your
-personal address.
+message to a known list and <link
+linkend="followup-to">$followup_to</link> is set, Mutt will add a
+Mail-Followup-To header.  For unsubscribed lists, this will include
+your personal address, ensuring you receive a copy of replies.  For
+subscribed mailing lists, the header will not, telling other users'
+mail user agents not to send copies of replies to your personal
+address.
 </para>
 
 <note>
@@ -6093,14 +6097,17 @@ specified by <literal>Mail-Followup-To</literal>, see below).
 <para>
 Mutt also supports the <literal>Mail-Followup-To</literal> header.  When
 you send a message to a list of recipients which includes one or several
-subscribed mailing lists, and if the <link
+known mailing lists, and if the <link
 linkend="followup-to">$followup_to</link> option is set, Mutt will
-generate a Mail-Followup-To header which contains all the recipients to
-whom you send this message, but not your address. This indicates that
+generate a Mail-Followup-To header.  If any of the recipients are
+subscribed mailing lists, this header will contain all the recipients
+to whom you send this message, but not your address. This indicates that
 group-replies or list-replies (also known as <quote>followups</quote>)
 to this message should only be sent to the original recipients of the
 message, and not separately to you - you'll receive your copy through
-one of the mailing lists you are subscribed to.
+one of the mailing lists you are subscribed to.  If none of the
+recipients are subscribed mailing lists the header will also contain
+your address, ensuring you receive a copy of replies.
 </para>
 
 <para>
