@@ -6124,7 +6124,7 @@ group-replies or list-replies (also known as <quote>followups</quote>)
 to this message should only be sent to the original recipients of the
 message, and not separately to you - you'll receive your copy through
 one of the mailing lists you are subscribed to.  If none of the
-recipients are subscribed mailing lists the header will also contain
+recipients are subscribed mailing lists, the header will also contain
 your address, ensuring you receive a copy of replies.
 </para>
 
