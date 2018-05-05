@@ -8,6 +8,44 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.10.0 (2018-05-19):
+
+  ! $reply_self is now respected for group-reply, even with $metoo unset.
+  ! Enabled $imap_poll_timeout when $imap_idle is set.
+  ! Added %R (number of read messages) expando for $status_format.
+  + When $change_folder_next is set, the <change-folder> function
+    mailbox suggestion will start at the next folder in your
+    "mailboxes" list, instead of starting at the first folder in the
+    list.
+  + $new_mail_command specifies a command to run after a new message is
+    received.
+  + $pgp_default_key specifies the default key-pair to use for PGP
+    operations.  It will be used for both encryption and signing
+    (unless $pgp_sign_as is set).  See contrib/gpg.rc.
+  ! $smime_default_key now specifies the default key-pair to use for
+    both encryption and signing S/MIME operations.  See
+    contrib/smime.rc.
+  + $smime_sign_as can be used to specify a sign-only key-pair for
+    S/MIME operations.
+  - $pgp_self_encrypt_as is now deprecated, and is an alias for
+    $pgp_default_key.  $smime_self_encrypt_as is also deprecated, and
+    is an alias for $smime_default_key.
+  + The <history-search> function (default: ^R) will search history based
+    on the text currently typed in.  That is, type the search string first,
+    then hit ^R.
+  + The $abort_noattach quadoption controls whether to abort sending a
+    message that matches $abort_noattach_regexp and has no attachments.
+  + Mutt can now be configured --with-idn2.
+  + Unsetting $browser_abbreviate_mailboxes turns off '=' and '~'
+    shortcuts for mailbox names in the browser mailbox list.
+  ! $sort_browser now has 'count' and 'unread' options.
+  + <error-history> will display the last $error_history count of
+    error/informational messages generated.
+  + The ~M pattern matches content-type headers.  Note that this
+    pattern may be slow because it reads each message in.
+  + The "echo" command can be used to display a message, for instance
+    when running a macro or sourcing a file.
+
 1.9.5 (2018-04-14):
 
   ! Bug fix release.
