@@ -1354,9 +1354,7 @@ fi
 dnl idna2
 if test "x$with_idn2" != "xno"; then
   if test "$am_cv_func_iconv" != "yes"; then
-    if test "$with_idn2" != "auto"; then
-      AC_MSG_ERROR([IDN2 requested but iconv is disabled or unavailable])
-    fi
+    AC_MSG_ERROR([IDN2 requested but iconv is disabled or unavailable])
   else
     dnl Solaris 11 has /usr/include/idn
     have_idn2_h=no
@@ -1371,18 +1369,46 @@ if test "x$with_idn2" != "xno"; then
       AC_DEFINE([HAVE_LIBIDN2], 1, [Define to 1 if you have the GNU idn2 library])
       MUTTLIBS="$MUTTLIBS $LIBS"
 
+      dnl libidn2 >= 2.0.0 declares compatibility macros in idn2.h
       LIBS="$LIBS $LIBICONV"
-      AC_DEFINE([HAVE_IDNA_TO_UNICODE_8Z8Z])
-      AC_DEFINE([HAVE_IDNA_TO_ASCII_8Z])
-      AC_DEFINE([HAVE_IDNA_TO_ASCII_LZ])
+      AC_CHECK_DECL([idna_to_unicode_8z8z],
+                    [AC_DEFINE([HAVE_IDNA_TO_UNICODE_8Z8Z])], [],
+                    [[
+#if defined(HAVE_IDN2_H)
+#include <idn2.h>
+#elif defined(HAVE_IDN_IDN2_H)
+#include <idn/idn2.h>
+#endif
+        ]])
+      AC_CHECK_DECL([idna_to_ascii_8z],
+                    [AC_DEFINE([HAVE_IDNA_TO_ASCII_8Z])], [],
+                    [[
+#if defined(HAVE_IDN2_H)
+#include <idn2.h>
+#elif defined(HAVE_IDN_IDN2_H)
+#include <idn/idn2.h>
+#endif
+        ]])
+      AC_CHECK_DECL([idna_to_ascii_lz],
+                    [AC_DEFINE([HAVE_IDNA_TO_ASCII_LZ])], [],
+                    [[
+#if defined(HAVE_IDN2_H)
+#include <idn2.h>
+#elif defined(HAVE_IDN_IDN2_H)
+#include <idn/idn2.h>
+#endif
+        ]])
     ])
 
     LIBS="$mutt_save_LIBS"
 
-    if test "$with_idn2" != "no"; then
-      if test "$have_idn2_h" = "no" || test "$ac_cv_search_idn2_check_version" = "no"; then
-        AC_MSG_ERROR([IDN2 was requested, but libidn2 was not usable on this system])
-      fi
+    if test "$have_idn2_h" = "no" || \
+       test "$ac_cv_search_idn2_check_version" = "no" || \
+       test "x$ac_cv_have_decl_idna_to_unicode_8z8z" != "xyes" || \
+       test "x$ac_cv_have_decl_idna_to_ascii_8z" != "xyes" || \
+       test "x$ac_cv_have_decl_idna_to_ascii_lz" != "xyes"
+    then
+      AC_MSG_ERROR([IDN2 was requested, but libidn2 was not usable on this system])
     fi
   fi
 fi
