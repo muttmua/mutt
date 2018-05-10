@@ -30,6 +30,10 @@ The keys used are:
   - $pgp_self_encrypt_as is now deprecated, and is an alias for
     $pgp_default_key.  $smime_self_encrypt_as is also deprecated, and
     is an alias for $smime_default_key.
+  ! $pgp_self_encrypt and $smime_self_encrypt now default to set.
+    This makes setting $pgp_default_key or $smime_default_key all that
+    is required to enable self-encryption (for both classic and GPGME
+    mode).
   + The <history-search> function (default: ^R) will search history based
     on the text currently typed in.  That is, type the search string first,
     then hit ^R.
