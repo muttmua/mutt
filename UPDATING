@@ -35,7 +35,8 @@ The keys used are:
     then hit ^R.
   + The $abort_noattach quadoption controls whether to abort sending a
     message that matches $abort_noattach_regexp and has no attachments.
-  + Mutt can now be configured --with-idn2.
+  + Mutt can now be configured --with-idn2.  This requires the libidn1
+    compatibility layer present in libidn2 v2.0.0 or greater.
   + Unsetting $browser_abbreviate_mailboxes turns off '=' and '~'
     shortcuts for mailbox names in the browser mailbox list.
   ! $sort_browser now has 'count' and 'unread' options.
