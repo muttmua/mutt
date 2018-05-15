@@ -657,8 +657,15 @@ static int imap_open_mailbox (CONTEXT* ctx)
     imap_status (Postponed, 1);
   FREE (&pmx.mbox);
 
-  snprintf (bufout, sizeof (bufout), "%s %s",
-    ctx->readonly ? "EXAMINE" : "SELECT", buf);
+  snprintf (bufout, sizeof (bufout), "%s %s%s",
+            ctx->readonly ? "EXAMINE" : "SELECT",
+            buf,
+#if USE_HCACHE
+            mutt_bit_isset (idata->capabilities, CONDSTORE) &&
+            option (OPTIMAPCONDSTORE) ? " (CONDSTORE)" : "");
+#else
+            "");
+#endif
 
   idata->state = IMAP_SELECTED;
 
@@ -716,6 +723,20 @@ static int imap_open_mailbox (CONTEXT* ctx)
       if (mutt_atoui (pc, &idata->uidnext) < 0)
         goto fail;
       status->uidnext = idata->uidnext;
+    }
+    else if (ascii_strncasecmp ("OK [HIGHESTMODSEQ", pc, 17) == 0)
+    {
+      dprint (3, (debugfile, "Getting mailbox HIGHESTMODSEQ\n"));
+      pc += 3;
+      pc = imap_next_word (pc);
+      if (mutt_atoull (pc, &idata->modseq) < 0)
+        goto fail;
+      status->modseq = idata->modseq;
+    }
+    else if (ascii_strncasecmp ("OK [NOMODSEQ", pc, 12) == 0)
+    {
+      dprint (3, (debugfile, "Mailbox has NOMODSEQ set\n"));
+      status->modseq = idata->modseq = 0;
     }
     else
     {
@@ -1710,6 +1731,7 @@ IMAP_STATUS* imap_mboxcache_get (IMAP_DATA* idata, const char* mbox, int create)
   header_cache_t *hc = NULL;
   unsigned int *uidvalidity = NULL;
   unsigned int *uidnext = NULL;
+  unsigned long long *modseq = NULL;
 #endif
 
   for (cur = idata->mboxcache; cur; cur = cur->next)
@@ -1738,22 +1760,26 @@ IMAP_STATUS* imap_mboxcache_get (IMAP_DATA* idata, const char* mbox, int create)
   {
     uidvalidity = mutt_hcache_fetch_raw (hc, "/UIDVALIDITY", imap_hcache_keylen);
     uidnext = mutt_hcache_fetch_raw (hc, "/UIDNEXT", imap_hcache_keylen);
+    modseq = mutt_hcache_fetch_raw (hc, "/MODSEQ", imap_hcache_keylen);
     if (uidvalidity)
     {
       if (!status)
       {
         mutt_hcache_free ((void **)&uidvalidity);
         mutt_hcache_free ((void **)&uidnext);
+        mutt_hcache_free ((void **)&modseq);
         mutt_hcache_close (hc);
         return imap_mboxcache_get (idata, mbox, 1);
       }
       status->uidvalidity = *uidvalidity;
       status->uidnext = uidnext ? *uidnext: 0;
-      dprint (3, (debugfile, "mboxcache: hcache uidvalidity %u, uidnext %u\n",
-                  status->uidvalidity, status->uidnext));
+      status->modseq = modseq ? *modseq: 0;
+      dprint (3, (debugfile, "mboxcache: hcache uidvalidity %u, uidnext %u, modseq %llu\n",
+                  status->uidvalidity, status->uidnext, status->modseq));
     }
     mutt_hcache_free ((void **)&uidvalidity);
     mutt_hcache_free ((void **)&uidnext);
+    mutt_hcache_free ((void **)&modseq);
     mutt_hcache_close (hc);
   }
 #endif

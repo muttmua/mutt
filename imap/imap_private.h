@@ -118,6 +118,7 @@ enum
   IDLE,                         /* RFC 2177: IDLE */
   SASL_IR,                      /* SASL initial response draft */
   ENABLE,                       /* RFC 5161 */
+  CONDSTORE,                    /* RFC 7162 */
 
   CAPMAX
 };
@@ -142,6 +143,7 @@ typedef struct
   unsigned int uidnext;
   unsigned int uidvalidity;
   unsigned int unseen;
+  unsigned long long modseq;  /* Used by CONDSTORE. 1 <= modseq < 2^63 */
 } IMAP_STATUS;
 
 typedef struct
@@ -219,6 +221,7 @@ typedef struct
   HASH *uid_hash;
   unsigned int uid_validity;
   unsigned int uidnext;
+  unsigned long long modseq;
   HEADER **msn_index;          /* look up headers by (MSN-1) */
   unsigned int msn_index_size; /* allocation size */
   unsigned int max_msn;        /* the largest MSN fetched so far */

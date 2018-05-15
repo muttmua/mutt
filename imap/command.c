@@ -70,6 +70,7 @@ static const char * const Capabilities[] = {
   "IDLE",
   "SASL-IR",
   "ENABLE",
+  "CONDSTORE",
 
   NULL
 };
@@ -731,6 +732,28 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
         return;
       }
       s = imap_next_word (s);
+    }
+    else if (ascii_strncasecmp ("MODSEQ", s, 6) == 0)
+    {
+      s += 6;
+      SKIPWS(s);
+      if (*s != '(')
+      {
+        dprint (1, (debugfile, "cmd_parse_fetch: bogus MODSEQ response: %s\n",
+                    s));
+        return;
+      }
+      s++;
+      while (*s && *s != ')')
+        s++;
+      if (*s == ')')
+        s++;
+      else
+      {
+        dprint (1, (debugfile,
+                    "cmd_parse_fetch: Unterminated MODSEQ response: %s\n", s));
+        return;
+      }
     }
     else if (*s == ')')
       s++; /* end of request */

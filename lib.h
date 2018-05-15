@@ -193,6 +193,7 @@ int mutt_atoi (const char *, int *);
 int mutt_atol (const char *, long *);
 int mutt_atoui (const char *, unsigned int *);
 int mutt_atoul (const char *, unsigned long *);
+int mutt_atoull (const char *, unsigned long long *);
 
 const char *mutt_stristr (const char *, const char *);
 const char *mutt_basename (const char *);
