@@ -1,3 +1,1324 @@
+2018-05-17 12:24:31 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net> (70c9c89b)
+
+        * Updated Catalan translation.
+
+M	po/ca.po
+
+2018-05-17 10:10:52 -0700  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp> (5c717661)
+
+        * Updated Japanese translation.
+
+M	po/ja.po
+
+2018-05-17 12:45:39 +0200  Vincent Lefevre  <vincent@vinc17.net> (30778c5e)
+
+        * fr.po: updated Project-Id-Version and removed old translations.
+
+M	po/fr.po
+
+2018-05-14 09:12:11 +0200  Olaf Hering  <olaf@aepfle.de> (f77b641d)
+
+        * Updated German translation.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2018-05-10 09:12:19 -0700  Kevin McCarthy  <kevin@8t8.us> (400b44a1)
+
+        * Note that $pgp/smime_self_encrypt now default to set.
+
+M	UPDATING
+
+2018-05-10 09:00:21 -0700  Kevin McCarthy  <kevin@8t8.us> (2364c059)
+
+        * Add note about libidn2 v2.0.0 or greater to UPDATING file.
+
+M	UPDATING
+
+2018-05-09 09:32:48 -0700  Vsevolod Volkov  <vvv@mutt.org.ua> (435ca12e)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2018-05-09 09:30:55 -0700  Vsevolod Volkov  <vvv@mutt.org.ua> (c4559f92)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2018-05-08 19:32:12 -0700  Kevin McCarthy  <kevin@8t8.us> (16a581cf)
+
+        * Add declaration checks for libidn2.
+        
+        The libidn compatibilty layer was only added in version
+        2.0.0 (2017-03-29).  idn2.h defines macros, so use AC_CHECK_DECL
+        instead of AC_CHECK_FUNC.
+        
+        $with_idn2 doesn't have an "auto" state, so remove a few unneeded
+        copy/paste checks from idn.
+
+M	configure.ac
+
+2018-05-08 10:11:17 -0700  Petr Pisar  <petr.pisar@atlas.cz> (249a6f6c)
+
+        * Updated Czech translation.
+
+M	po/cs.po
+
+2018-05-05 07:35:59 -0700  Kevin McCarthy  <kevin@8t8.us> (0e9f0bed)
+
+        * Update the UPDATING file for 1.10.0.
+
+M	UPDATING
+
+2018-05-06 09:43:25 -0700  Morten Bo Johansen  <mjb@spamcop.net> (cd981cd0)
+
+        * Updated Danish translation.
+
+M	po/da.po
+
+2018-05-05 07:39:36 -0700  lilydjwg  <lilydjwg@gmail.com> (3d9b2704)
+
+        * Updated Simplified Chinese translation.
+
+M	po/zh_CN.po
+
+2018-05-04 02:43:56 +0200  Vincent Lefevre  <vincent@vinc17.net> (643e31c3)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-04-29 15:10:21 -0700  Kevin McCarthy  <kevin@8t8.us> (97bc33dc)
+
+        * Add echo command.
+        
+        Prints messages using mutt_message().  Sets OPTFORCEREFRESH to allow
+        updates in the middle of a macro.
+        
+        Calls mutt_sleep(0) to pause for $sleep_time seconds after displaying
+        the message.
+
+M	doc/manual.xml.head
+M	init.c
+M	init.h
+
+2018-05-03 12:24:55 +0200  Vincent Lefevre  <vincent@vinc17.net> (92ae6db7)
+
+        * Missing comma.
+
+M	doc/manual.xml.head
+
+2018-05-01 15:13:51 -0700  Kevin McCarthy  <kevin@8t8.us> (9e8ee145)
+
+        * Update copyright notices.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	doc/smime_keys.man
+M	main.c
+
+2018-04-28 13:21:42 -0700  Kevin McCarthy  <kevin@8t8.us> (e4557546)
+
+        * Update pattern documentation.
+        
+        Note that ~b, ~B, ~h, ~M, and ~X read the message in, and that this
+        can be much slower.
+        
+        Change =b, =B, =h table rows to document just the IMAP behavior.  The
+        "=" simple string behavior is already covered below, and makes it less
+        obvious whether "***)" should be added to those entries in the table.
+        
+        Break up the simple string and imap server-side matching explanation
+        into two paragraphs.
+        
+        Add ~M to the list of patterns you can't use message scoring with.
+        
+        Add equivalent, if briefer, explanations to the muttrc.man page.
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+
+2018-04-26 18:00:00 -0700  Ammon Riley  <ammon.riley@gmail.com> (974235c7)
+
+        * Add ~M pattern to match mime Content-Types.
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+M	mutt.h
+M	pattern.c
+
+2018-04-30 16:17:52 -0700  Kevin McCarthy  <kevin@8t8.us> (c9f5498c)
+
+        * Add more explanation of known vs subscribed lists to manual.
+        
+        Mention in both the "Mailing Lists" and "Handling Mailing Lists"
+        sections the difference between known and subscribed mailing lists.
+        
+        Note that the Mail-Followup-To header is generated if any of the
+        recipients are known mailing lists.  If any of those are subscribed
+        mailing lists, the sender's address will not be in the header.  If all
+        of them are known (but not subscribed), the sender's address will be
+        added to the header.
+
+M	doc/manual.xml.head
+
+2018-04-23 23:48:33 +0200  Vincent Lefevre  <vincent@vinc17.net> (d12c361c)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-04-22 13:02:06 -0700  Kevin McCarthy  <kevin@8t8.us> (26b82202)
+
+        * Add Error History function and config var.
+        
+        <error-history>, by default unbound, shows a list of the recent error
+        messages displayed by Mutt via mutt_message() or mutt_error().
+        
+        $error_history sets the size of the history ring.
+        
+        For now, I've decided to include mutt_message() messages too.  If this
+        is too chatty, we can restrict it to mutt_error() easily in the
+        future.
+
+M	OPS
+M	curs_lib.c
+M	curs_main.c
+M	functions.h
+M	globals.h
+M	init.c
+M	init.h
+M	menu.c
+M	pager.c
+M	protos.h
+
+2018-04-20 17:28:47 +0200  Vincent Lefevre  <vincent@vinc17.net> (f2e8392f)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-04-19 15:40:35 -0700  Kevin McCarthy  <kevin@8t8.us> (3ec02fbc)
+
+        * Add $sort_browser options for count and unread.
+
+M	browser.c
+M	init.h
+
+2018-04-19 13:51:07 -0700  Kevin McCarthy  <kevin@8t8.us> (69959820)
+
+        * Add $browser_abbreviate_mailboxes.
+        
+        This allows '=' and '~' mailboxes shortcuts to be turned off in the
+        browser mailbox list.
+        
+        The default $sort_browser value of "alpha" uses strcoll(3), which
+        ignores some punctuation.  When using multiple accounts with
+        dynamically changing values of $folder, this can lead to an
+        unintuitive sorting order.  (See issue #22 for an example.)
+        
+        This problem came about because of commit 8328ce68, which enabled
+        mutt_pretty_mailbox() calls for IMAP and POP mailboxes too.  The
+        commit had a valid point about consistency and too-wide mailbox
+        listings, so I don't really want to revert it.
+        
+        This option provides an alternative to completely enable/disable the
+        shortcuts for those who run into an issue.
+
+M	browser.c
+M	init.h
+M	mutt.h
+
+2018-04-16 16:32:33 -0700  Kevin McCarthy  <kevin@8t8.us> (4e4574c4)
+
+        * Fix mkreldate.sh in master to use [-r] test too.
+
+M	mkreldate.sh
+
+2018-04-16 16:31:08 -0700  Kevin McCarthy  <kevin@8t8.us> (8da2e090)
+
+        * Merge branch 'stable'
+
+2018-04-16 16:29:08 -0700  Kevin McCarthy  <kevin@8t8.us> (296ccab5)
+
+        * Switch to using [ -r ] in version.sh for Bourne shell compatibility.
+        
+        Thanks to Paul Keusemann for pointing out the issue.
+
+M	version.sh
+
+2018-04-15 15:57:28 -0700  Kevin McCarthy  <kevin@8t8.us> (79939350)
+
+        * Add a comment in auth_gss about RFCs and null-termination.
+
+M	imap/auth_gss.c
+
+2018-04-09 13:46:42 +0200  Matej Muzila  <mmuzila@redhat.com> (13a2f614)
+
+        * Add libidn2 support
+
+M	configure.ac
+M	doc/makedoc-defs.h
+M	init.h
+M	main.c
+M	mutt.h
+M	mutt_idna.c
+M	mutt_idna.h
+M	mutt_socket.c
+M	mutt_ssl.c
+
+2018-04-14 13:28:11 -0700  Kevin McCarthy  <kevin@8t8.us> (a21fb60e)
+
+        * Merge branch 'stable'
+
+2018-04-14 13:22:48 -0700  Kevin McCarthy  <kevin@8t8.us> (bf161cf5)
+
+        * automatic post-release commit for mutt-1.9.5
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
+
+2018-04-13 20:48:28 -0700  Kevin McCarthy  <kevin@8t8.us> (2e8f6e3f)
+
+        * Merge branch 'stable'
+
+2018-04-13 19:17:24 -0700  Kevin McCarthy  <kevin@8t8.us> (13a8f660)
+
+        * Merge branch 'stable'
+
+2018-04-09 15:39:08 -0700  Kevin McCarthy  <kevin@8t8.us> (29d6f261)
+
+        * Merge branch 'stable'
+
+2018-04-02 11:36:05 -0700  Kevin McCarthy  <kevin@8t8.us> (9bb76cce)
+
+        * Merge branch 'stable'
+
+2018-04-02 10:28:12 -0700  Grzegorz Szymaszek  <gszymaszek@short.pl> (1e9df3c8)
+
+        * Updated Polish translation.
+
+M	po/pl.po
+
+2018-03-30 13:37:54 +0100  Christian Ebert  <blacktrash@gmx.net> (e56d30e5)
+
+        * pager specifc "show incoming mailboxes list" macro
+        
+        Exiting the pager before change-folder avoids 'Not available in this
+        menu' error when selecting a different entry in some circumstances.
+
+M	doc/Muttrc.head
+
+2018-03-24 15:10:13 -0700  Kevin McCarthy  <kevin@8t8.us> (ed3f8b6a)
+
+        * Increase account.user/login size to 128.
+        
+        Like the pass field in commit 52949004, the existing size was
+        insufficient for the reporter of issue #18.  For now, just bump up the
+        size, but I'll move up looking into making these dynamically sized.
+
+M	account.h
+
+2018-03-22 20:23:46 -0700  Kevin McCarthy  <kevin@8t8.us> (3ffc0ec4)
+
+        * Remove dead code in pgp.c
+        
+        pgp_extract_keys_from_messages() has been subsumed by
+        crypt_extract_keys_from_messages().  The function had incorrect
+        multi-bit flag comparisons, but since it's dead code, remove it
+        instead.
+
+M	pgp.c
+
+2018-03-22 20:04:46 -0700  Kevin McCarthy  <kevin@8t8.us> (47e6c5aa)
+
+        * Fix comparison of flags with multiple bits set.
+        
+        PGPENCRYPT, PGPKEY, SMIMEENCRYPT, and SMIMEOPAQUE are all combination
+        flags, with multiple bits set.  In a few places these flags were
+        bitwise-and'ed incorrectly: expecting a non-zero result to indicate
+        all the bits in the flag were set.  Change those to explicitly compare
+        the result against the original flag.
+
+M	hdrline.c
+M	pattern.c
+M	recvattach.c
+M	sendlib.c
+
+2018-03-23 02:59:38 +0100  Vincent Lefevre  <vincent@vinc17.net> (66063c45)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-03-22 12:29:59 -0700  Kevin McCarthy  <kevin@8t8.us> (94b9549e)
+
+        * Change prompt string for $crypt_verify_sig
+        
+        Thanks to Michael Tatge for pointing out that the prompt is used for
+        both PGP and S/MIME.
+
+M	commands.c
+
+2018-03-22 09:39:49 -0700  Kevin McCarthy  <kevin@8t8.us> (e275bb06)
+
+        * Merge branch 'stable'
+
+2018-03-15 10:24:35 -0700  Kevin McCarthy  <kevin@8t8.us> (e250c602)
+
+        * Change mutt_error call in mutt_gpgme_set_sender() to dprint.
+        
+        The message is not an error message, and flies by so quickly it has
+        little informative content.  Change it to use dprint instead.
+        
+        Thanks to Darac Marjal for reporting the issue.
+
+M	crypt-gpgme.c
+
+2018-03-14 04:28:20 +0100  Vincent Lefevre  <vincent@vinc17.net> (2ddd541e)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-03-13 19:09:45 -0700  Kevin McCarthy  <kevin@8t8.us> (a0b3740b)
+
+        * Improve the error message when a signature is missing.
+        
+        Thanks to Vincent Lefèvre for reporting the issue and for the wording
+        suggestion!
+
+M	crypt.c
+
+2018-03-12 12:24:24 +0100  Vincent Lefevre  <vincent@vinc17.net> (f6232a25)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-03-11 12:48:46 -0700  Kevin McCarthy  <kevin@8t8.us> (f47a159b)
+
+        * Add $abort_noattach and $abort_noattach_regexp options.
+        
+        $abort_noattach_regexp is matched against the body of a message.  If
+        so, the $abort_noattach quadoption is used to prompt whether to abort
+        sending.
+        
+        Thanks to Antonio Radici for bringing the original version of the
+        patch to our attention, which he pulled from
+        https://github.com/tlvince/pkgbuild/blob/master/mutt-kiss/mutt-attach.patch
+        
+        This version was rewritten to use a regexp, to fix a few issues, and
+        to better fit in with Mutt styles and conventions.
+
+M	init.h
+M	mutt.h
+M	mutt_regex.h
+M	send.c
+
+2018-03-03 13:44:12 -0800  Kevin McCarthy  <kevin@8t8.us> (6829c390)
+
+        * Merge branch 'stable'
+
+2018-02-28 15:21:50 -0800  Kevin McCarthy  <kevin@8t8.us> (7561d7bc)
+
+        * Merge branch 'stable'
+
+2018-02-21 18:32:12 -0800  Kevin McCarthy  <kevin@8t8.us> (338019b3)
+
+        * Merge branch 'stable'
+
+2018-02-20 19:09:16 -0800  Kevin McCarthy  <kevin@8t8.us> (2d4081ac)
+
+        * Improve index color cache flushing behavior.
+        
+        Flush when redefining the colors for an existing color line, in
+        addition to when defining a new color line.
+        
+        Flush only when uncoloring the index.
+
+M	color.c
+
+2018-02-14 10:33:41 +0100  Vincent Lefevre  <vincent@vinc17.net> (ebd93b50)
+
+        * Avoid a potential integer overflow if a Content-Length value is huge.
+
+M	mbox.c
+
+2018-02-08 12:20:02 +0100  Vincent Lefevre  <vincent@vinc17.net> (088e1903)
+
+        * Change mkreldate.sh to use the UTC date with git, so that it is increasing.
+
+M	mkreldate.sh
+
+2018-02-06 14:42:40 -0800  Kevin McCarthy  <kevin@8t8.us> (02d571c2)
+
+        * Fix document version and date for git build.
+        
+        Change mkreldate.sh to output just the date, so it can be used in the
+        manual too.
+
+M	Makefile.am
+M	doc/Makefile.am
+M	mkreldate.sh
+
+2018-02-05 18:43:12 -0800  Kevin McCarthy  <kevin@8t8.us> (fefbd81f)
+
+        * Use git to generate the release date if available.
+        
+        For now, fall back to the ChangeLog.  Perhaps the release date should
+        be generated from a file, similar to VERSION, for those cases instead.
+
+M	Makefile.am
+A	mkreldate.sh
+
+2018-02-06 01:57:48 +0100  Vincent Lefevre  <vincent@vinc17.net> (65e1f5c8)
+
+        * Add a blank line between the compile options and the contact info for mutt -v
+
+M	main.c
+
+2018-02-05 13:19:40 +0100  Vincent Lefevre  <vincent@vinc17.net> (731629e2)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-02-04 15:24:59 -0800  Kevin McCarthy  <kevin@8t8.us> (e82c9ce2)
+
+        * Put gitlab issues url on a separate line.
+        
+        This removes the need to use brackets, and makes it easier for
+        translations to fit within 80 columns.
+        
+        Thanks to Derek Martin for the suggested wording, and to Vincent
+        Lefèvre for proofreading and noticing a small error.
+
+M	main.c
+
+2018-02-04 15:15:55 -0800  Kevin McCarthy  <kevin@8t8.us> (1fe6318b)
+
+        * Fix history menu title.
+        
+        Remove an accidental leading space.  Thanks to Vincent Lefèvre for
+        noticing the problem and providing a patch!
+
+M	history.c
+M	po/fr.po
+
+2018-02-04 18:29:52 +0100  Vincent Lefevre  <vincent@vinc17.net> (f57e5171)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-02-03 18:08:28 -0800  Kevin McCarthy  <kevin@8t8.us> (aa6903c9)
+
+        * Add history-search function, bound to ctrl-r.
+        
+        Create a very basic "search history" functionality in the line editor.
+        It uses the current input, and searches backward through history.  If
+        there is one match, it immediately uses that otherwise it pops up a
+        simple menu of matches.
+
+M	OPS
+M	doc/manual.xml.head
+M	enter.c
+M	functions.h
+M	history.c
+M	history.h
+
+2018-02-01 11:14:11 -0800  Kevin McCarthy  <kevin@8t8.us> (d5544ef6)
+
+        * Merge branch 'stable'
+
+2018-01-31 15:01:18 -0800  Kevin McCarthy  <kevin@8t8.us> (22e1e87c)
+
+        * Merge branch 'stable'
+
+2018-01-31 14:22:07 -0800  Kevin McCarthy  <kevin@8t8.us> (fea9f7db)
+
+        * Merge branch 'stable'
+
+2018-01-27 11:58:12 -0800  Kevin McCarthy  <kevin@8t8.us> (eca744f5)
+
+        * Merge branch 'stable'
+
+2018-01-21 19:41:47 -0800  Kevin McCarthy  <kevin@8t8.us> (9ee1f84d)
+
+        * Remove useless assignments in add_to_list functions.
+        
+        The code was probably pulled from some of the header processing
+        functions, which were in a loop.  In those versions, "last" pointed to
+        a collection of new entries appended, but in these two functions,
+        updating last just obfuscates the code.
+
+M	init.c
+
+2018-01-21 18:56:12 -0800  Kevin McCarthy  <kevin@8t8.us> (8dd14816)
+
+        * Add a blurb about $new_mail_command in the mailboxes section.
+
+M	doc/manual.xml.head
+
+2018-01-21 18:34:45 -0800  Kevin McCarthy  <kevin@8t8.us> (18701782)
+
+        * Merge branch 'stable'
+
+2018-01-17 19:20:04 -0800  Kevin McCarthy  <kevin@8t8.us> (95c7ff2b)
+
+        * Merge branch 'stable'
+
+2018-01-17 19:00:50 -0800  Kevin McCarthy  <kevin@8t8.us> (fb3593b3)
+
+        * Merge branch 'stable'
+
+2018-01-17 18:18:20 -0800  Kevin McCarthy  <kevin@8t8.us> (49c0d177)
+
+        * Merge branch 'stable'
+
+2018-01-16 09:40:11 +0100  Olaf Hering  <olaf@aepfle.de> (8fac7a94)
+
+        * Update po
+        
+        Followup for untranslate Copyright list.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
+2018-01-16 09:40:06 +0100  Olaf Hering  <olaf@aepfle.de> (18894e9c)
+
+        * Split Copyright and Thanks in help output.
+        
+        The Copyright string is changing often, and its content is obvious.
+        It does not need translation. The remaining string can be translated.
+        This change avoids a stale translation once one of the years change.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	main.c
+
+2018-01-16 09:39:57 +0100  Olaf Hering  <olaf@aepfle.de> (34267ed4)
+
+        * Update po
+        
+        Preparation for following changes.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
+2018-01-15 20:20:17 -0800  Brendan Cully  <brendan@cully.org> (38d106c6)
+
+        * add clang static analysis to builds
+
+M	.gitlab-ci.yml
+
+2018-01-15 18:40:20 -0800  Brendan Cully  <brendan@cully.org> (4e2b370c)
+
+        * gitlab-ci: build against openssl and gnutls
+
+M	.gitlab-ci.yml
+
+2018-01-15 16:06:30 -0800  Kevin McCarthy  <kevin@8t8.us> (3e9647b9)
+
+        * Add pgp_default_key and smime_sign_as info to contrib rc files.
+        
+        Explain $pgp_default_key vs $pgp_sign_as in gpg.rc.
+        
+        Explain $smime_default_key vs $smime_sign_as in smime.rc.
+
+M	contrib/gpg.rc
+M	contrib/smime.rc
+
+2018-01-15 14:20:28 -0800  Kevin McCarthy  <kevin@8t8.us> (ee28581a)
+
+        * Add pages to .gitlab-ci.yml
+        
+        Use this to regenerate the manual and store it in the pages for the
+        project.
+
+M	.gitlab-ci.yml
+
+2018-01-15 14:43:53 +0000  Konstantin Stephan  <pigleich3@gmx.net> (6bd130cf)
+
+        * Update smime.rc: Typo fix, consistent headings
+
+M	contrib/smime.rc
+
+2018-01-14 15:50:34 -0800  Brendan Cully  <brendan@cully.org> (d1724851)
+
+        * use mutt/ubuntu build image, build with everything on
+
+M	.gitlab-ci.yml
+
+2018-01-13 14:49:35 -0800  Brendan Cully  <brendan@cully.org> (797a9e38)
+
+        * skeleton .gitlab-ci.yml to compile commits
+
+A	.gitlab-ci.yml
+
+2018-01-13 21:21:35 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (7ddb1ae3)
+
+        * Fixed GPGME translations that weren’t shown but affected the keyboard
+
+M	po/pl.po
+
+2018-01-13 20:27:11 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (637d4229)
+
+        * Update pl.po
+
+M	po/pl.po
+
+2018-01-13 09:47:09 +0100  Olaf Hering  <olaf@aepfle.de> (6c271bc4)
+
+        * Fix typo in de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2013-12-03 16:42:39 +0100  Olaf Hering  <olaf@aepfle.de> (5619de2b)
+
+        * examine_directory: set directory/symlink size to zero
+        
+        The size of a directory or symlink in the folder browser is not meaningful.
+        For directories it means just how many blocks were allocated to hold all
+        entries. It does not mean that the entries are still present in the directory.
+        For symlinks its the size of the target.
+        Set both to zero to simplify the folder browser output.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	browser.c
+
+2013-12-03 16:43:49 +0100  Olaf Hering  <olaf@aepfle.de> (0fa64ba9)
+
+        * mutt_pretty_size: show real number for small files
+        
+        If a file is smaller than a certain size it is unfriendly to print 0K or
+        0,1K as number of mails or as file size. Instead use the real number.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	muttlib.c
+
+2018-01-11 15:16:07 -0800  Kevin McCarthy  <kevin@8t8.us> (4fa32548)
+
+        * Merge branch 'stable'
+
+2018-01-11 13:24:30 -0800  Kevin McCarthy  <kevin@8t8.us> (db252e61)
+
+        * Create pgp and s/mime default and sign_as key vars. (see #3983)
+        
+        The $postpone_encrypt and $(pgp/smime)_self_encrypt configuration
+        variables have created a somewhat messier situation for users.  Many
+        of them now have to specify their keys across multiple configuration
+        variables.
+        
+        (Trac) Ticket #3983 had a reasonable request: "if my encrypt and
+        signing keys are the same, why can't I just specify my key once in my
+        .muttrc?"
+        
+        The problem currently is that $smime_default_key and $pgp_sign_as are
+        both used to specify signing keys, and are set by the "sign (a)s"
+        security menu choice.  So we can't store encryption keys there because
+        some users have separate sign-only capability keys.
+        
+        Create $pgp_default_key to store the default encryption key.  Change
+        signing to use $pgp_default_key, unless overridden by $pgp_sign_as.
+        The pgp "sign (a)s" will continue setting $pgp_sign_as.
+        
+        Create $smime_sign_as.  Change signing to use $smime_default_key
+        unless overridden by $smime_sign_as.  Change s/mime "sign (a)s" menu
+        to set $smime_sign_as instead.
+        
+        Change $postpone_encrypt and $(pgp/smime)_self_encrypt to use
+        $(pgp/smime)_default_key by default.
+        
+        Mark $(pgp/smime)_self_encrypt_as deprecated.  They are now aliases
+        for the $(pgp/smime)_default_key config vars.
+        
+        Change $(pgp/smime)_self_encrypt default to set.
+        
+        The intent is that most users now need only set
+        $(pgp/smime)_default_key.  If they have a sign-only key, or have
+        separate signing and encryption keys, they can put that in
+        $(pgp/smime)_sign_as.  This also enables to default self_encrypt on
+        and solve a very common request.
+        
+        Thanks to Michele Marcionelli and Vincent Lefèvre for gently pushing
+        me towards a solution.
+
+M	compose.c
+M	crypt-gpgme.c
+M	crypt.c
+M	doc/manual.xml.head
+M	globals.h
+M	init.h
+M	pgpinvoke.c
+M	postpone.c
+M	send.c
+M	sendlib.c
+M	smime.c
+
+2018-01-09 04:09:11 +0100  Vincent Lefevre  <vincent@vinc17.net> (be68a00c)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2018-01-08 18:07:24 -0800  Kevin McCarthy  <kevin@8t8.us> (2d2665d4)
+
+        * Change the default of NewMailCmd to 0.
+        
+        This is so the documentation is generated consistently for unset
+        strings.
+
+M	init.h
+
+2018-01-07 14:49:45 +0100  Yoshiki Vázquez Baeza  <yoshiki89@gmail.com> (2f39cf2a)
+
+        * NewMailCmd: optionally execute a command upon new mail arrival
+        
+        This setting allows to run any external program to e.g. produce a
+        notification on the desktop when Mutt finds new mail.
+        
+        Signed-off-by: Fabian Groffen <grobian@gentoo.org>
+
+M	curs_main.c
+M	globals.h
+M	init.h
+
+2018-01-07 13:06:56 +0100  Fabian Groffen  <grobian@gentoo.org> (5d5dce99)
+
+        * cmd_handle_fatal: make error message a bit more descriptive
+        
+        When there are multiple IMAP connections available, "Mailbox closed"
+        doesn't give a hint as to which one.  Use account info to identify which
+        mailbox was closed.
+
+M	imap/command.c
+
+2018-01-07 12:18:37 -0800  Kevin McCarthy  <kevin@8t8.us> (0df23207)
+
+        * Merge branch 'stable'
+
+2018-01-06 16:15:39 -0800  Kevin McCarthy  <kevin@8t8.us> (e0229b87)
+
+        * Merge branch 'stable'
+
+2018-01-04 17:59:20 +0100  Vincent Lefevre  <vincent@vinc17.net> (2f510d60)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2017-12-30 19:10:16 -0800  Kevin McCarthy  <kevin@8t8.us> (561e106c)
+
+        * Disable message security if the backend is not available.
+        
+        Gitlab issue #3 exposed an awkward corner case: if mutt is configured
+        without PGP or S/MIME, and with GPGME, but $crypt_use_gpgme is unset.
+        In this case, no backend will be available, but WithCrypto will be set
+        with both APPLICATION_PGP and APPLICATION_SMIME bits.
+        
+        That will allow various config vars to enable encryption or signing,
+        even though there will be no backend available to perform them.  The
+        message security flag might then be set, but when the user hits send,
+        will end up back at the compose menu due to the error.
+        
+        The pgp or smime menu might not even be available to clear the
+        security setting!
+        
+        Add a check in send.c before the compose menu is invoked, and give a
+        warning message for the menu ops inside the compose menu.
+        
+        I believe this should prevent the issue.  However this is a corner
+        case combined with user misconfiguration, so I don't believe is worth
+        a large effort to completely eradicate.
+
+M	compose.c
+M	cryptglue.c
+M	mutt_crypt.h
+M	send.c
+
+2017-12-29 15:20:38 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (521e45e7)
+
+        * Converted po/pl.po from ISO-8859-2 to UTF-8
+        
+        I’ve converted the Polish translation file to UTF-8 using iconv 2.25.
+
+M	po/pl.po
+
+2017-12-28 13:07:21 -0800  Kevin McCarthy  <kevin@8t8.us> (8b77d84d)
+
+        * Mention self_encrypt options in the documentation. (closes #3983)
+        
+        Add a paragraph to the "Sending Cryptographically Signed/Encrypted
+        Messages" section of the manual.
+
+M	doc/manual.xml.head
+
+2017-12-26 15:09:28 -0800  Kevin McCarthy  <kevin@8t8.us> (e7addcf0)
+
+        * Merge branch 'stable'
+
+2017-12-18 13:02:17 -0800  Kevin McCarthy  <kevin@8t8.us> (248e9972)
+
+        * Merge branch 'stable'
+
+2017-12-18 03:01:07 +0100  Vincent Lefevre  <vincent@vinc17.net> (3b142cea)
+
+        * Fixed git repo detection: for worktrees, .git is a plain file.
+
+M	version.sh
+
+2017-12-17 13:36:21 +0100  Adam Borowski  <kilobyte@angband.pl> (489a1c39)
+
+        * manually touch atime when reading a mbox file
+        
+        The only common use of atime left is local mail agents leaving a mark on
+        mbox file after the mail has been read.  And, since POSIX-2008, it is
+        possible to use futimens() to alter atime even on filesystems mounted with
+        noatime.
+        
+        There's no extra cost for doing this on when atime updates are enabled:
+        the inode will be dirty already.
+
+M	configure.ac
+M	main.c
+M	mbox.c
+M	muttlib.c
+M	protos.h
+
+2017-12-17 12:16:10 -0800  Kevin McCarthy  <kevin@8t8.us> (f030bd36)
+
+        * Add config.cache to .gitignore file.
+
+M	.gitignore
+
+2017-12-15 15:56:39 -0800  Kevin McCarthy  <kevin@8t8.us> (89e44318)
+
+        * Merge branch 'stable'
+
+2017-12-15 12:18:12 -0800  Kevin McCarthy  <kevin@8t8.us> (8b17d880)
+
+        * Merge branch 'stable'
+
+2017-12-14 16:21:04 -0800  Kevin McCarthy  <kevin@8t8.us> (35850181)
+
+        * Merge branch 'stable'
+
+2017-12-12 18:27:24 -0800  Kevin McCarthy  <kevin@8t8.us> (e290a8fc)
+
+        * Merge branch 'stable'
+
+2017-12-10 20:06:05 -0800  Kevin McCarthy  <kevin@8t8.us> (f9ca5cda)
+
+        * Merge branch 'stable'
+
+2017-12-03 18:15:21 -0800  Kevin McCarthy  <kevin@8t8.us> (50f85f3b)
+
+        * Merge branch 'stable'
+
+2017-12-02 19:27:14 -0800  Kevin McCarthy  <kevin@8t8.us> (56be6f0a)
+
+        * Convert to .gitignore file.
+
+A	.gitignore
+D	.hgignore
+
+2017-11-29 04:21:26 +0100  Vincent Lefevre  <vincent@vinc17.net> (376280bf)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2017-11-28 19:01:15 -0800  Kevin McCarthy  <kevin@8t8.us> (8b3d4db4)
+
+        * Update copyright notices.
+
+M	COPYRIGHT
+M	bcache.c
+M	buffy.c
+M	imap/imap.c
+M	imap/imap.h
+M	main.c
+M	sidebar.c
+
+2017-11-21 18:22:26 -0800  Kevin McCarthy  <kevin@8t8.us> (20f5519e)
+
+        * Enable full address matching during message scoring. (closes #2179) (see #3243)
+        
+        The tickets are old, but it seems reasonable to expect the pattern
+        matching to behave the same in scoring as when applying limits or
+        searching.
+        
+        I don't foresee a huge performance hit, and there are no arguments
+        against the change in the tickets.
+        
+        Thanks to the muttng devs (noted in ticket 2179) and Kornilios Kourtis
+        (from the Debian ticket referenced in ticket 3243).
+
+M	score.c
+
+2017-11-19 15:47:45 -0800  Anton Lindqvist  <anton.lindqvist@gmail.com> (117f7de1)
+
+        * Add NONULL to debug statement in fold_one_header().
+
+M	sendlib.c
+
+2017-11-18 19:13:08 -0800  Kevin McCarthy  <kevin@8t8.us> (3ccd1990)
+
+        * Fix ansi escape sequences with both reset and color parameters. (closes #3689)
+        
+        The initial 0 "reset/normal" was setting attr = ANSI_OFF, which was
+        subsequently being or'ed with ANSI_COLOR.
+        
+        The color resolution was then checking for the ANSI_OFF bit and
+        turning all coloring off, even though ANSI_COLOR was also set.
+        
+        Change the color resolution to check for "attr == ANSI_OFF" instead, so
+        the color isn't reset unless the reset occurs last in the sequence.
+
+M	pager.c
+
+2017-11-15 14:53:24 -0800  Kevin McCarthy  <kevin@8t8.us> (78d2c197)
+
+        * Remove useless else branch in the $smart_wrap code. (see #3857)
+        
+        Thanks to Vincent Lefèvre for noticing the nested else was redundant,
+        since buf_ptr is already set to "buf + cnt" after the format_line()
+        call.
+        
+        This allows us to merge the inner and outer if statement, resulting in
+        simpler code.
+
+M	pager.c
+
+2017-11-15 14:53:19 -0800  Kevin McCarthy  <kevin@8t8.us> (b3940ed4)
+
+        * Fix $smart_wrap to not be disabled by whitespace-prefixed lines. (closes #3857)
+        
+        changeset:737102af74eb fixed a folded header display issue with $smart_wrap
+        by disabling $smart_wrap for lines beginning with whitespace.
+        
+        Unfortunately, this turns off smart wrapping in the body of an email
+        too, even when the line has other whitespace breaks in it.
+        
+        An earlier commit, changeset:125076e0fdfa added an infinite loop fix
+        when MUTT_PAGER_NSKIP is set, by disabling the smart_wrap if the space
+        backtracking went to the beginning of the line.  That is, a line
+        beginning with 1+ whitespace followed by a single long word.
+        
+        Extend this second commit by always disabling the smart_wrap in that
+        case, not just when MUTT_PAGER_NSKIP is set.  This also solves the
+        folded header issue without other side effects.
+
+M	pager.c
+
+2017-11-11 15:49:15 -0800  Kevin McCarthy  <kevin@8t8.us> (610c6b0a)
+
+        * Add $change_folder_next option to control mailbox suggestion order.
+        
+        This patch is out of the Gentoo package maintained by Fabian Groffen.
+        From the link below, it appears the original author was Simon Burge.
+        
+        I made some minor changes to get it to apply correctly, and cleaned up
+        the documentation a bit.
+        
+        Original patch description:
+        This patch brings back the original behaviour of change-folder, which
+        some people find more useful.  It suggests the next folder in your
+        mailboxes list that has new mail measured from the current folder,
+        instead of the first folder from your mailboxes list in any case.  This
+        prevents starvation of folders defined at the back of your list ;)
+        See discussion: http://thread.gmane.org/gmane.mail.mutt.devel/12457
+
+M	curs_main.c
+M	init.h
+M	mutt.h
+
+2017-11-11 19:13:40 +0100  Vincent Lefevre  <vincent@vinc17.net> (11a10487)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2017-11-11 18:59:31 +0100  Vincent Lefevre  <vincent@vinc17.net> (14e37771)
+
+        * Add %R (number of read messages) for $status_format.
+
+M	init.h
+M	status.c
+
+2017-11-10 13:06:43 -0800  Kevin McCarthy  <kevin@8t8.us> (d1659601)
+
+        * Add message count to $move quadoption prompt.
+        
+        Display the number of messages that will be moved in the quadoption
+        prompt, which might prove helpful for some people.
+        
+        Thank you to Daan van Rossum for suggesting the improvement.
+
+M	mx.c
+
+2017-11-09 15:06:19 +0100  Vincent Lefevre  <vincent@vinc17.net> (6db8d16a)
+
+        * Make sure that fgets and fgetc are undefined before their redefinition.
+        
+        This fixes a potential issue from changeset e0a103845344.
+
+M	mutt.h
+
+2017-11-08 13:40:34 -0800  David Wilson  <dw@botanicus.net> (829db35b)
+
+        * Use fgets_unlocked and fgetc_unlocked if available.
+        
+        Since mutt does not use threads, there is no reason it should use the
+        locked variants of the FILE* IO functions. This checks if the unlocked
+        functions are available, and if so enables them globally via mutt.h.
+        
+        Cuts load time for a 56k message, 1.8GB /var/mail mailbox from 14
+        seconds to ~6 seconds, since we avoid acquiring and releasing a mutex
+        for every character of input read.
+        
+        Before: 0m14.376s
+        
+            74.98%          mutt  libc-2.18.so        [.] _IO_getc
+            11.87%          mutt  mutt                [.] mbox_parse_mailbox
+             0.94%          mutt  [kernel.kallsyms]   [k] copy_user_generic_string
+             0.83%          mutt  libc-2.18.so        [.] __strchr_sse2
+             0.53%          mutt  libc-2.18.so        [.] __memcpy_sse2
+             0.44%          mutt  libc-2.18.so        [.] _int_malloc
+        
+        After: 6 seconds
+        
+            68.92%     mutt  mutt                  [.] mbox_parse_mailbox
+             2.25%     mutt  [kernel.kallsyms]     [k] copy_user_generic_string
+             1.73%     mutt  libc-2.18.so          [.] __strchr_sse2
+             1.24%     mutt  libc-2.18.so          [.] __memcpy_sse2
+             1.17%     mutt  libc-2.18.so          [.] _int_malloc
+             0.87%     mutt  libc-2.18.so          [.] __strspn_sse42
+
+M	configure.ac
+M	mutt.h
+
+2017-11-08 12:57:50 -0800  Kevin McCarthy  <kevin@8t8.us> (d2262ccb)
+
+        * Note which ssl config vars are GnuTLS or OpenSSL only. (closes #3781)
+        
+        It was not obvious that the ssl_ca_certificates_file was only for
+        GnuTLS, or that the ssl_usesystemcerts was only for OpenSSL.
+
+M	init.h
+
+2017-10-15 15:13:18 +0800  Kevin McCarthy  <kevin@8t8.us> (336f7d88)
+
+        * Add polling for the IDLE command. (closes #3957)
+        
+        Add $imap_poll_timeout poll for IDLE, since this is also a command
+        that will freeze after waking if $imap_idle is set.
+
+M	imap/command.c
+
+2017-09-30 19:16:56 -0700  Kevin McCarthy  <kevin@8t8.us> (d7e84d75)
+
+        * merge stable
+
+2017-09-28 11:57:56 -0700  Roger Pau Monne  <roger.pau@citrix.com> (cfcd8787)
+
+        * Enable $reply_self for group-reply, even with $metoo unset.
+        
+        For a (r)eply, the $metoo variable does not have any effect because
+        there is a single recipient.
+        
+        However with (g)roup reply, the To was initially set to the sender,
+        but subsequently removed my $nometoo.  The empty To line is then
+        replaced with the Cc line, resulting in a (logically correct but)
+        surprising outcome.
+        
+        Change the behavior such that $nometoo will not strip a single To
+        recipient when $reply_self is set.
+
+M	send.c
+
+2017-09-27 13:45:36 -0700  Kevin McCarthy  <kevin@8t8.us> (285baf9a)
+
+        * Make cmd_parse_fetch() more precise about setting reopen/check flags.
+        
+        Previously any FETCH with FLAGS would result in either
+          idata->reopen |= IMAP_EXPUNGE_PENDING;
+          -or-
+          idata->check_status = IMAP_FLAGS_PENDING;
+        being set.
+        
+        This is unnecessary in the case of responses to FLAGS.SILENT updates
+        sent by mutt (which seem to commonly happen now-a-days).
+        
+        Change imap_set_flags() to compare the old server flags against the
+        new ones, and report when _those_ updates would/did result in a local
+        header flag change.  Only set one of the reopen/check_status flags in
+        the event of an actual change (or potential change if a local change
+        has been made to the header.)
+
+M	imap/command.c
+M	imap/imap_private.h
+M	imap/message.c
+
+2017-09-26 19:45:23 -0700  Kevin McCarthy  <kevin@8t8.us> (1099795d)
+
+        * merge stable
+
+2017-09-25 18:40:32 -0700  Kevin McCarthy  <kevin@8t8.us> (bf34a038)
+
+        * Change maildir and mh check_mailbox to use dynamic sized hash. (closes #3973)
+        
+        The original patch is by Matt Fleming, originally posted at
+        http://www.codeblueprint.co.uk/2017/01/15/a-kernel-devs-approach-to-improving2
+        
+        The comments there indicate Matt tried to submit to trac and mutt-dev,
+        but ran into registration problems.  Thank you for the patch, and
+        sorry for those problems, Matt.
+        
+        I modified the patch by making the same change to the
+        mh_check_mailbox() code too.
+
+M	mh.c
+
+2017-09-23 11:41:25 -0700  Kevin McCarthy  <kevin@8t8.us> (f5935f3d)
+
+        * merge stable
+
+2017-09-22 11:26:19 -0700  Kevin McCarthy  <kevin@8t8.us> (fa79d68e)
+
+        * merge stable
+
+2017-09-22 17:52:16 +0200  Vincent Lefevre  <vincent@vinc17.net> (83d23fd9)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2017-09-20 10:43:33 -0700  Kevin McCarthy  <kevin@8t8.us> (56729e32)
+
+        * Display an error message when delete mailbox fails. (see #3968)
+
+M	browser.c
+
+2017-09-14 12:48:26 -0700  Kevin McCarthy  <kevin@8t8.us> (bd906764)
+
+        * merge stable
+
+2017-09-13 15:54:31 -0700  Kevin McCarthy  <kevin@8t8.us> (baffaa68)
+
+        * merge stable
+
+2017-09-05 17:33:45 +0200  Vincent Lefevre  <vincent@vinc17.net> (e5515a9c)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2017-09-04 15:51:07 -0700  Kevin McCarthy  <kevin@8t8.us> (03b0bec0)
+
+        * Remove 'really' from the purge-message help description.
+        
+        This made it sound to the translators like a question.
+
+M	OPS
+
+2017-09-04 15:34:32 -0700  Kevin McCarthy  <kevin@8t8.us> (563143f8)
+
+        * Add L10N comment to generated keymap_defs.h files.
+        
+        Make it clearer to translators that the strings are for the help
+        screen.
+
+M	gen_defs
+
+2017-09-04 13:26:55 -0700  Kevin McCarthy  <kevin@8t8.us> (f2216024)
+
+        * Add warning about using inline pgp with format=flowed. (closes #3963)
+        
+        The reporter noted that when trying to use inline signing with
+        format=flowed, the flowed was turned off.
+        
+        After some research, this appears to be deliberate, probably because
+        of strange interactions between inline PGP and format=flowed.  In fact
+        the RFC strongly discourages their combined use:
+        https://tools.ietf.org/html/rfc3676#section-4.6
+        
+        Add a warning and prompt to use PGP/MIME in mutt_protect().
+
+M	crypt.c
+
+2017-09-04 09:47:26 -0700  Kevin McCarthy  <kevin@8t8.us> (61c7e548)
+
+        * merge stable
 2018-04-13 20:39:35 -0700  Kevin McCarthy  <kevin@8t8.us> (ceb0534d)
 
         * Improve gss debug printing of status_string.

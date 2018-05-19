@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-04 10:02-0700\n"
+"POT-Creation-Date: 2018-05-19 10:53-0700\n"
 "PO-Revision-Date: 2018-05-17 14:44-0400\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -556,11 +556,13 @@ msgstr "No s’han pogut imprimir els missatges."
 #.
 #: commands.c:541
 msgid "Rev-Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
-msgstr "Descendent per Data/Orig/Rebut/Tema/deSt/Fil/Cap/Mida/Punts/spAm/Etiqueta: "
+msgstr ""
+"Descendent per Data/Orig/Rebut/Tema/deSt/Fil/Cap/Mida/Punts/spAm/Etiqueta: "
 
 #: commands.c:542
 msgid "Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
-msgstr "Ascendent per Data/Orig/Rebut/Tema/deSt/Fil/Cap/Mida/Punts/spAm/Etiqueta: "
+msgstr ""
+"Ascendent per Data/Orig/Rebut/Tema/deSt/Fil/Cap/Mida/Punts/spAm/Etiqueta: "
 
 # Data/Orig/Rebut/Tema/deSt/Fil/Cap/Mida/Punts/spAm/Etiqueta  ivb
 #: commands.c:543
@@ -1730,7 +1732,9 @@ msgstr "No es pot emprar PGP en línia amb «format=flowed».  Emprar PGP/MIME?"
 
 #: crypt.c:162
 msgid "Mail not sent: inline PGP can't be used with format=flowed."
-msgstr "No s’ha enviat el missatge: no es pot emprar PGP en línia amb «format=flowed»."
+msgstr ""
+"No s’ha enviat el missatge: no es pot emprar PGP en línia amb "
+"«format=flowed»."
 
 #: crypt.c:169 cryptglue.c:110 pgpkey.c:564 pgpkey.c:753
 msgid "Invoking PGP..."
@@ -1772,7 +1776,9 @@ msgstr ""
 msgid ""
 "[-- Error: Missing or bad-format multipart/signed signature! --]\n"
 "\n"
-msgstr "[-- Error: La signatura de «multipart/signed» manca o és feta malbé. --]\n\n"
+msgstr ""
+"[-- Error: La signatura de «multipart/signed» manca o és feta malbé. --]\n"
+"\n"
 
 #: crypt.c:1011
 #, c-format
@@ -3081,7 +3087,8 @@ msgid ""
 msgstr ""
 "Per a contactar amb els desenvolupadors, per favor envieu un missatge de\n"
 "correu a <mutt-dev@mutt.org>.  Per a informar d’un error, contacteu amb els\n"
-"mantenidors de Mutt via GitLab a <https://gitlab.com/muttmua/mutt/issues>.  Si\n"
+"mantenidors de Mutt via GitLab a <https://gitlab.com/muttmua/mutt/issues>.  "
+"Si\n"
 "teniu observacions sobre la traducció, contacteu amb Ivan Vilata i Balaguer\n"
 "<ivan@selidor.net>.\n"
 
@@ -4711,7 +4718,9 @@ msgstr "S’avorta el missatge no modificat."
 # No heu configurat cap implementació criptogràfica.  S’inhabilita l’opció de seguretat del missatge.
 #: send.c:1604
 msgid "No crypto backend configured.  Disabling message security setting."
-msgstr "Cal configurar implementació criptogràfica.  Es retira seguretat del missatge."
+msgstr ""
+"Cal configurar implementació criptogràfica.  Es retira seguretat del "
+"missatge."
 
 #: send.c:1703
 msgid "Message postponed."

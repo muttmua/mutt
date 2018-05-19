@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-13 21:30+0900\n"
+"POT-Creation-Date: 2018-05-19 10:53-0700\n"
 "PO-Revision-Date: 2018-05-17 15:00+0900\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: mutt-j <mutt-j-users@lists.osdn.me>\n"
@@ -1573,8 +1573,7 @@ msgstr "添付ファイルがあるとインライン PGP にできない。PGP/
 
 #: crypt.c:152
 msgid "Mail not sent: inline PGP can't be used with attachments."
-msgstr ""
-"メールは未送信: 添付ファイルがあるとインライン PGP にできない。"
+msgstr "メールは未送信: 添付ファイルがあるとインライン PGP にできない。"
 
 #: crypt.c:160
 msgid "Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"
@@ -1582,8 +1581,7 @@ msgstr "format=flowed にインライン PGP は使えない。PGP/MIME に戻�
 
 #: crypt.c:162
 msgid "Mail not sent: inline PGP can't be used with format=flowed."
-msgstr ""
-"メールは未送信: format=flowed にインライン PGP は使えない。"
+msgstr "メールは未送信: format=flowed にインライン PGP は使えない。"
 
 #: crypt.c:169 cryptglue.c:110 pgpkey.c:564 pgpkey.c:753
 msgid "Invoking PGP..."

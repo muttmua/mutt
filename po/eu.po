@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 08:49+0100\n"
+"POT-Creation-Date: 2018-05-19 10:53-0700\n"
 "PO-Revision-Date: 2008-05-20 22:39+0200\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
 "Language-Team: Euskara <debian-l10n-basque@lists.debian.org>\n"
@@ -26,8 +26,8 @@ msgstr "%s -n erabiltzaile izena: "
 msgid "Password for %s@%s: "
 msgstr "%s@%s-ren pasahitza: "
 
-#: addrbook.c:37 browser.c:46 pager.c:1575 postpone.c:41 query.c:48
-#: recvattach.c:57
+#: addrbook.c:37 browser.c:46 history.c:75 pager.c:1575 postpone.c:41
+#: query.c:48 recvattach.c:57
 msgid "Exit"
 msgstr "Irten"
 
@@ -39,13 +39,13 @@ msgstr "Ezab"
 msgid "Undel"
 msgstr "Desezabatu"
 
-#: addrbook.c:40
+#: addrbook.c:40 history.c:76
 msgid "Select"
 msgstr "Hautatu"
 
-#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4093 curs_main.c:493
-#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:1024 pager.c:1981 pgpkey.c:522
-#: postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
+#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4096 curs_main.c:493
+#: history.c:78 mutt_ssl.c:1257 mutt_ssl_gnutls.c:1024 pager.c:1981
+#: pgpkey.c:522 postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
 msgid "Help"
 msgstr "Laguntza"
 
@@ -114,8 +114,8 @@ msgstr "Ezin da txantiloi izena aurkitu, jarraitu?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "Mailcap konposaketa sarrerak hau behar du %%s"
 
-#: attach.c:134 attach.c:266 commands.c:223 compose.c:1390 compress.c:444
-#: curs_lib.c:218 curs_lib.c:809 sendlib.c:1372
+#: attach.c:134 attach.c:266 commands.c:224 compose.c:1390 compress.c:444
+#: curs_lib.c:229 curs_lib.c:903 sendlib.c:1372
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Errorea \"%s\" abiarazten!"
@@ -200,101 +200,104 @@ msgstr "Karpetara joan: "
 msgid "Mask"
 msgstr "Maskara"
 
-#: browser.c:426 browser.c:1092
+#: browser.c:452 browser.c:1119
 #, c-format
 msgid "%s is not a directory."
 msgstr "%s ez da karpeta bat."
 
-#: browser.c:576
+#: browser.c:603
 #, c-format
 msgid "Mailboxes [%d]"
 msgstr "Postakutxak [%d]"
 
-#: browser.c:583
+#: browser.c:610
 #, c-format
 msgid "Subscribed [%s], File mask: %s"
 msgstr "Harpidedun [%s], Fitxategi maskara: %s"
 
-#: browser.c:587
+#: browser.c:614
 #, c-format
 msgid "Directory [%s], File mask: %s"
 msgstr "Karpeta [%s], Fitxategi maskara: %s"
 
-#: browser.c:599
+#: browser.c:626
 msgid "Can't attach a directory!"
 msgstr "Ezin da karpeta bat gehitu!"
 
-#: browser.c:739 browser.c:1158 browser.c:1253
+#: browser.c:766 browser.c:1185 browser.c:1288
 msgid "No files match the file mask"
 msgstr "Ez da fitxategi maskara araberako fitxategirik aurkitu"
 
-#: browser.c:942
+#: browser.c:969
 msgid "Create is only supported for IMAP mailboxes"
 msgstr "\"Create\" IMAP posta kutxek bakarrik onartzen dute"
 
-#: browser.c:965
+#: browser.c:992
 msgid "Rename is only supported for IMAP mailboxes"
 msgstr "Berrizendaketa IMAP postakutxentzat bakarrik onartzen da"
 
-#: browser.c:987
+#: browser.c:1014
 msgid "Delete is only supported for IMAP mailboxes"
 msgstr "\"Delete\" IMAP posta kutxek bakarrik onartzen dute"
 
-#: browser.c:997
+#: browser.c:1024
 msgid "Cannot delete root folder"
 msgstr "Ezin da erro karpeta ezabatu"
 
-#: browser.c:1000
+#: browser.c:1027
 #, c-format
 msgid "Really delete mailbox \"%s\"?"
 msgstr "Benetan \"%s\" postakutxa ezabatu?"
 
-#: browser.c:1016
+#: browser.c:1043
 msgid "Mailbox deleted."
 msgstr "Postakutxa ezabatua."
 
-#: browser.c:1020
+#: browser.c:1047
 #, fuzzy
 msgid "Mailbox deletion failed."
 msgstr "Postakutxa ezabatua."
 
-#: browser.c:1023
+#: browser.c:1050
 msgid "Mailbox not deleted."
 msgstr "Postakutxa ez da ezabatu."
 
-#: browser.c:1042
+#: browser.c:1069
 msgid "Chdir to: "
 msgstr "Karpetara joan: "
 
-#: browser.c:1081 browser.c:1152
+#: browser.c:1108 browser.c:1179
 msgid "Error scanning directory."
 msgstr "Errorea karpeta arakatzerakoan."
 
-#: browser.c:1103
+#: browser.c:1130
 msgid "File Mask: "
 msgstr "Fitxategi maskara: "
 
-#: browser.c:1173
-msgid "Reverse sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? "
+#: browser.c:1200
+#, fuzzy
+msgid ""
+"Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
 msgstr "Atzekoz aurrera (d)ataz, (a)lphaz, tamaina(z) edo ez orde(n)atu? "
 
-#: browser.c:1174
-msgid "Sort by (d)ate, (a)lpha, si(z)e or do(n)'t sort? "
+#: browser.c:1201
+#, fuzzy
+msgid "Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
 msgstr "(d)ataz, (a)lpha, tamaina(z) edo ez orde(n)atu? "
 
-#: browser.c:1175
-msgid "dazn"
-msgstr "fats"
+#: browser.c:1202
+msgid "dazcun"
+msgstr ""
 
-#: browser.c:1242
+#: browser.c:1277
 msgid "New file name: "
 msgstr "Fitxategi izen berria: "
 
-#: browser.c:1270
+#: browser.c:1305
 msgid "Can't view a directory"
 msgstr "Ezin da karpeta ikusi"
 
-#: browser.c:1287
+#: browser.c:1322
 msgid "Error trying to view file"
 msgstr "Errorea fitxategia ikusten saiatzerakoan"
 
@@ -312,174 +315,176 @@ msgstr "%s: kolorea ez du terminalak onartzen"
 msgid "%s: no such color"
 msgstr "%s: ez da kolorea aurkitu"
 
-#: color.c:420 color.c:626 color.c:647 color.c:653
+#: color.c:420 color.c:633 color.c:654 color.c:660
 #, c-format
 msgid "%s: no such object"
 msgstr "%s: ez da objektua aurkitu"
 
-#: color.c:433
+#: color.c:436
 #, fuzzy, c-format
 msgid "%s: command valid only for index, body, header objects"
 msgstr "%s: komandoa sarrera objektutan bakarrik erabili daiteke"
 
-#: color.c:441
+#: color.c:444
 #, c-format
 msgid "%s: too few arguments"
 msgstr "%s: argumentu gutxiegi"
 
-#: color.c:614 color.c:639
+#: color.c:621 color.c:646
 msgid "Missing arguments."
 msgstr "Ez dira argumentuak aurkitzen."
 
-#: color.c:669 color.c:680
+#: color.c:676 color.c:687
 msgid "color: too few arguments"
 msgstr "kolorea:argumentu gutxiegi"
 
-#: color.c:703
+#: color.c:710
 msgid "mono: too few arguments"
 msgstr "mono: argumentu gutxiegi"
 
-#: color.c:723
+#: color.c:730
 #, c-format
 msgid "%s: no such attribute"
 msgstr "%s: ez da atributua aurkitu"
 
-#: color.c:763 hook.c:73 hook.c:81 init.c:1958 init.c:2033 keymap.c:951
+#: color.c:770 hook.c:73 hook.c:81 init.c:1968 init.c:2043 keymap.c:951
 msgid "too few arguments"
 msgstr "argumentu gutxiegi"
 
-#: color.c:772 hook.c:87
+#: color.c:779 hook.c:87
 msgid "too many arguments"
 msgstr "argumentu gehiegi"
 
-#: color.c:788
+#: color.c:795
 msgid "default colors not supported"
 msgstr "lehenetsitako kolorea ez da onartzen"
 
-#: commands.c:90
-msgid "Verify PGP signature?"
+#. L10N: Used for the $crypt_verify_sig prompt
+#: commands.c:91
+#, fuzzy
+msgid "Verify signature?"
 msgstr "PGP sinadura egiaztatu?"
 
-#: commands.c:115 mbox.c:874
+#: commands.c:116 mbox.c:878
 msgid "Could not create temporary file!"
 msgstr "Ezin da behin-behineko fitxategia sortu!"
 
-#: commands.c:128
+#: commands.c:129
 msgid "Cannot create display filter"
 msgstr "Ezin da bistaratze iragazkia sortu"
 
-#: commands.c:152
+#: commands.c:153
 msgid "Could not copy message"
 msgstr "Ezin da mezurik kopiatu"
 
-#: commands.c:189
+#: commands.c:190
 msgid "S/MIME signature successfully verified."
 msgstr "S/MIME sinadura arrakastatsuki egiaztaturik."
 
-#: commands.c:191
+#: commands.c:192
 msgid "S/MIME certificate owner does not match sender."
 msgstr "S/MIME ziurtagiriaren jabea ez da mezua bidali duena."
 
-#: commands.c:194 commands.c:205
+#: commands.c:195 commands.c:206
 msgid "Warning: Part of this message has not been signed."
 msgstr "Abisua -.Mezu honen zati bat ezin izan da sinatu."
 
-#: commands.c:196
+#: commands.c:197
 msgid "S/MIME signature could NOT be verified."
 msgstr "S/MIME sinadura EZIN da egiaztatu."
 
-#: commands.c:203
+#: commands.c:204
 msgid "PGP signature successfully verified."
 msgstr "PGP sinadura arrakastatsuki egiaztaturik."
 
-#: commands.c:207
+#: commands.c:208
 msgid "PGP signature could NOT be verified."
 msgstr "PGP sinadura EZIN da egiaztatu."
 
-#: commands.c:231
+#: commands.c:232
 msgid "Command: "
 msgstr "Komandoa: "
 
-#: commands.c:256 commands.c:266 recvcmd.c:146 recvcmd.c:159
+#: commands.c:257 commands.c:267 recvcmd.c:146 recvcmd.c:159
 msgid "Warning: message contains no From: header"
 msgstr ""
 
-#: commands.c:274 recvcmd.c:169
+#: commands.c:275 recvcmd.c:169
 msgid "Bounce message to: "
 msgstr "Mezuak hona errebotatu: "
 
-#: commands.c:276 recvcmd.c:171
+#: commands.c:277 recvcmd.c:171
 msgid "Bounce tagged messages to: "
 msgstr "Markatutako mezuak hona errebotatu: "
 
-#: commands.c:284 recvcmd.c:180
+#: commands.c:285 recvcmd.c:180
 msgid "Error parsing address!"
 msgstr "Errorea helbidea analizatzean!"
 
-#: commands.c:292 recvcmd.c:188
+#: commands.c:293 recvcmd.c:188
 #, c-format
 msgid "Bad IDN: '%s'"
 msgstr "IDN Okerra: '%s'"
 
-#: commands.c:303 recvcmd.c:202
+#: commands.c:304 recvcmd.c:202
 #, c-format
 msgid "Bounce message to %s"
 msgstr "Mezua %s-ra errebotatu"
 
-#: commands.c:303 recvcmd.c:202
+#: commands.c:304 recvcmd.c:202
 #, c-format
 msgid "Bounce messages to %s"
 msgstr "Mezuak %s-ra errebotatu"
 
-#: commands.c:319 recvcmd.c:218
+#: commands.c:320 recvcmd.c:218
 msgid "Message not bounced."
 msgstr "Mezua ez da errebotatu."
 
-#: commands.c:319 recvcmd.c:218
+#: commands.c:320 recvcmd.c:218
 msgid "Messages not bounced."
 msgstr "Mezuak ez dira errebotatu."
 
-#: commands.c:329 recvcmd.c:237
+#: commands.c:330 recvcmd.c:237
 msgid "Message bounced."
 msgstr "Mezua errebotaturik."
 
-#: commands.c:329 recvcmd.c:237
+#: commands.c:330 recvcmd.c:237
 msgid "Messages bounced."
 msgstr "Mezuak errebotaturik."
 
-#: commands.c:406 commands.c:442 commands.c:461
+#: commands.c:407 commands.c:443 commands.c:462
 msgid "Can't create filter process"
 msgstr "Ezin da iragazki prozesua sortu"
 
-#: commands.c:492
+#: commands.c:493
 msgid "Pipe to command: "
 msgstr "Komandora hodia egin: "
 
-#: commands.c:509
+#: commands.c:510
 msgid "No printing command has been defined."
 msgstr "Ez da inprimatze komandorik ezarri."
 
-#: commands.c:514
+#: commands.c:515
 msgid "Print message?"
 msgstr "Mezua inprimatu?"
 
-#: commands.c:514
+#: commands.c:515
 msgid "Print tagged messages?"
 msgstr "Markatutako mezuak inprimatu?"
 
-#: commands.c:523
+#: commands.c:524
 msgid "Message printed"
 msgstr "Mezua inprimaturik"
 
-#: commands.c:523
+#: commands.c:524
 msgid "Messages printed"
 msgstr "Mezuak inprimaturik"
 
-#: commands.c:525
+#: commands.c:526
 msgid "Message could not be printed"
 msgstr "Ezin da mezua inprimatu"
 
-#: commands.c:526
+#: commands.c:527
 msgid "Messages could not be printed"
 msgstr "Ezin dira mezuak inprimatu"
 
@@ -488,88 +493,88 @@ msgstr "Ezin dira mezuak inprimatu"
 #. * string.  Note that mutt now supports multiline prompts, so
 #. * it's okay for the translation to take up to three lines.
 #.
-#: commands.c:540
+#: commands.c:541
 #, fuzzy
 msgid "Rev-Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
 msgstr ""
 "Alderantziz-Ordenatu (d)ata/(j)at/ja(s)/(g)aia/(n)ori/(h)aria/(e)z-ordenatu/"
 "(t)amaina/(p)untuak/(z)abor-posta?: "
 
-#: commands.c:541
+#: commands.c:542
 #, fuzzy
 msgid "Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
 msgstr ""
 "Ordenatu (d)ata/(j)at/ja(s)/(g)aia/(n)ori/(h)aria/(e)z-ordenatu/(t)amaina/"
 "(p)untuak/(z)abor-posta?  "
 
-#: commands.c:542
+#: commands.c:543
 #, fuzzy
 msgid "dfrsotuzcpl"
 msgstr "djsgnhetpz"
 
-#: commands.c:603
+#: commands.c:604
 msgid "Shell command: "
 msgstr "Shell komandoa: "
 
-#: commands.c:746
+#: commands.c:747
 #, c-format
 msgid "Decode-save%s to mailbox"
 msgstr "Deskodifikatu-gorde%s postakutxan"
 
-#: commands.c:747
+#: commands.c:748
 #, c-format
 msgid "Decode-copy%s to mailbox"
 msgstr "Deskodifikatu-kopiatu%s postakutxan"
 
-#: commands.c:748
+#: commands.c:749
 #, c-format
 msgid "Decrypt-save%s to mailbox"
 msgstr "Desenkriptatu-gorde%s postakutxan"
 
-#: commands.c:749
+#: commands.c:750
 #, c-format
 msgid "Decrypt-copy%s to mailbox"
 msgstr "Desenkriptatu-kopiatu%s postakutxan"
 
-#: commands.c:750
+#: commands.c:751
 #, c-format
 msgid "Save%s to mailbox"
 msgstr "%s posta-kutxan gorde"
 
-#: commands.c:750
+#: commands.c:751
 #, c-format
 msgid "Copy%s to mailbox"
 msgstr "%s posta-kutxan kopiatu"
 
-#: commands.c:751
+#: commands.c:752
 msgid " tagged"
 msgstr " markatua"
 
-#: commands.c:816
+#: commands.c:817
 #, c-format
 msgid "Copying to %s..."
 msgstr "Hona kopiatzen %s..."
 
-#: commands.c:939
+#: commands.c:940
 #, c-format
 msgid "Convert to %s upon sending?"
 msgstr "Bidali aurretik %s-ra bihurtu?"
 
-#: commands.c:949
+#: commands.c:950
 #, c-format
 msgid "Content-Type changed to %s."
 msgstr "Eduki mota %s-ra aldatzen."
 
-#: commands.c:954
+#: commands.c:955
 #, c-format
 msgid "Character set changed to %s; %s."
 msgstr "Karaktere ezarpena %s-ra aldaturik: %s."
 
-#: commands.c:956
+#: commands.c:957
 msgid "not converting"
 msgstr "ez da bihurtzen"
 
-#: commands.c:956
+#: commands.c:957
 msgid "converting"
 msgstr "bihurtzen"
 
@@ -632,7 +637,7 @@ msgstr ""
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:111 crypt-gpgme.c:4842 pgp.c:1821 smime.c:2231
+#: compose.c:111 crypt-gpgme.c:4845 pgp.c:1758 smime.c:2231
 msgid "Sign as: "
 msgstr "Honela sinatu: "
 
@@ -737,7 +742,7 @@ msgstr "Kontuz: '%s' IDN okerra da."
 msgid "You may not delete the only attachment."
 msgstr "Ezin duzu gehigarri bakarra ezabatu."
 
-#: compose.c:822 send.c:1701
+#: compose.c:822 send.c:1726
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "IDN okerra \"%s\"-n: '%s'"
@@ -863,7 +868,7 @@ msgstr ""
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP dagoeneko aukeraturik. Garbitu eta jarraitu ? "
 
-#: compress.c:481 compress.c:551 compress.c:706 compress.c:895 mbox.c:848
+#: compress.c:481 compress.c:551 compress.c:706 compress.c:895 mbox.c:852
 msgid "Unable to lock mailbox!"
 msgstr "Ezin da postakutxa blokeatu!"
 
@@ -934,7 +939,7 @@ msgstr "errorea CMS protokoloa gaitzerakoan: %s\n"
 msgid "error creating gpgme data object: %s\n"
 msgstr "errorea gpgme datu objektua sortzerakoan: %s\n"
 
-#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1548 crypt-gpgme.c:2263
+#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1548 crypt-gpgme.c:2266
 #, c-format
 msgid "error allocating data object: %s\n"
 msgstr "errorea datu objektua esleitzerakoan: %s\n"
@@ -949,7 +954,7 @@ msgstr "errorea datu objektua atzera eraman: %s\n"
 msgid "error reading data object: %s\n"
 msgstr "errorea datu objektua irakurtzerakoan: %s\n"
 
-#: crypt-gpgme.c:573 crypt-gpgme.c:3707 pgpkey.c:560 pgpkey.c:740
+#: crypt-gpgme.c:573 crypt-gpgme.c:3710 pgpkey.c:560 pgpkey.c:740
 msgid "Can't create temporary file"
 msgstr "Ezin da behin-behineko fitxategia sortu"
 
@@ -1036,7 +1041,7 @@ msgstr "KONTUAZ: PKA sarrera ez da sinatzaile helbidearen berdina: "
 msgid "PKA verified signer's address is: "
 msgstr "PKA egiaztaturiko sinatzaile helbidea: "
 
-#: crypt-gpgme.c:1269 crypt-gpgme.c:3400
+#: crypt-gpgme.c:1269 crypt-gpgme.c:3403
 msgid "Fingerprint: "
 msgstr "Hatz-marka: "
 
@@ -1060,7 +1065,7 @@ msgstr ""
 "ABISUA: Ez da egia gakoa aurrerantzean behean agertzen den pertsonarena "
 "dela\n"
 
-#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3395
+#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3398
 msgid "aka: "
 msgstr ""
 
@@ -1101,7 +1106,7 @@ msgstr "Hemendik ondo sinaturik: "
 msgid "               expires: "
 msgstr "                ezizena: "
 
-#: crypt-gpgme.c:1556 crypt-gpgme.c:1779 crypt-gpgme.c:2480
+#: crypt-gpgme.c:1556 crypt-gpgme.c:1782 crypt-gpgme.c:2483
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Sinadura argibide hasiera --]\n"
 
@@ -1119,7 +1124,7 @@ msgstr "*** Hasiera idazkera (sinadura: %s) ***\n"
 msgid "*** End Notation ***\n"
 msgstr "*** Amaiera idazkera ***\n"
 
-#: crypt-gpgme.c:1652 crypt-gpgme.c:1792 crypt-gpgme.c:2493
+#: crypt-gpgme.c:1652 crypt-gpgme.c:1795 crypt-gpgme.c:2496
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1127,7 +1132,7 @@ msgstr ""
 "[-- Sinadura argibide amaiera --] \n"
 "\n"
 
-#: crypt-gpgme.c:1747
+#: crypt-gpgme.c:1750
 #, c-format
 msgid ""
 "[-- Error: decryption failed: %s --]\n"
@@ -1136,21 +1141,21 @@ msgstr ""
 "[-- Errorea: desenkriptatzerakoan huts: %s --]\n"
 "\n"
 
-#: crypt-gpgme.c:2270
+#: crypt-gpgme.c:2273
 #, fuzzy
 msgid "Error extracting key data!\n"
 msgstr "Errorea gako argibideak eskuratzen: "
 
-#: crypt-gpgme.c:2456
+#: crypt-gpgme.c:2459
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Errorea: desenkriptazio/egiaztapenak huts egin du: %s\n"
 
-#: crypt-gpgme.c:2501
+#: crypt-gpgme.c:2504
 msgid "Error: copy data failed\n"
 msgstr "Errorea: huts datuak kopiatzerakoan\n"
 
-#: crypt-gpgme.c:2522 pgp.c:522
+#: crypt-gpgme.c:2525 pgp.c:522
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1158,11 +1163,11 @@ msgstr ""
 "[-- PGP MEZU HASIERA --]\n"
 "\n"
 
-#: crypt-gpgme.c:2524 pgp.c:524
+#: crypt-gpgme.c:2527 pgp.c:524
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- PGP PUBLIKO GAKO BLOKE HASIERA --]\n"
 
-#: crypt-gpgme.c:2527 pgp.c:526
+#: crypt-gpgme.c:2530 pgp.c:526
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1170,19 +1175,19 @@ msgstr ""
 "[-- PGP SINATUTAKO MEZUAREN HASIERA --]\n"
 "\n"
 
-#: crypt-gpgme.c:2554 pgp.c:569
+#: crypt-gpgme.c:2557 pgp.c:569
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- PGP MEZU BUKAERA--]\n"
 
-#: crypt-gpgme.c:2556 pgp.c:576
+#: crypt-gpgme.c:2559 pgp.c:576
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- PGP PUBLIKO GAKO BLOKE AMAIERA --]\n"
 
-#: crypt-gpgme.c:2558 pgp.c:578
+#: crypt-gpgme.c:2561 pgp.c:578
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- PGP SINATUTAKO MEZU BUKAERA --]\n"
 
-#: crypt-gpgme.c:2581 pgp.c:611
+#: crypt-gpgme.c:2584 pgp.c:611
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1190,11 +1195,11 @@ msgstr ""
 "[-- Errorea: ezin da PGP mezuaren hasiera aurkitu! --]\n"
 "\n"
 
-#: crypt-gpgme.c:2612 crypt-gpgme.c:2685 pgp.c:1094
+#: crypt-gpgme.c:2615 crypt-gpgme.c:2688 pgp.c:1031
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Errorea: ezin da behin-behineko fitxategi sortu! --]\n"
 
-#: crypt-gpgme.c:2624
+#: crypt-gpgme.c:2627
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1202,7 +1207,7 @@ msgstr ""
 "[-- Hurrengo datuak PGP/MIME bidez sinatu eta enkriptaturik daude --]\n"
 "\n"
 
-#: crypt-gpgme.c:2625 pgp.c:1103
+#: crypt-gpgme.c:2628 pgp.c:1040
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1210,23 +1215,23 @@ msgstr ""
 "[-- Hurrengo datuak PGP/MIME bidez enkriptaturik daude --]\n"
 "\n"
 
-#: crypt-gpgme.c:2647
+#: crypt-gpgme.c:2650
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- PGP/MIME bidez sinatu eta enkriptaturiko datuen amaiera --]\n"
 
-#: crypt-gpgme.c:2648 pgp.c:1123
+#: crypt-gpgme.c:2651 pgp.c:1060
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- PGP/MIME bidez enkriptaturiko datuen amaiera --]\n"
 
-#: crypt-gpgme.c:2653 pgp.c:573 pgp.c:1128
+#: crypt-gpgme.c:2656 pgp.c:573 pgp.c:1065
 msgid "PGP message successfully decrypted."
 msgstr "PGP mezua arrakastatsuki desenkriptatu da."
 
-#: crypt-gpgme.c:2657 pgp.c:508 pgp.c:571 pgp.c:1132
+#: crypt-gpgme.c:2660 pgp.c:508 pgp.c:571 pgp.c:1069
 msgid "Could not decrypt PGP message"
 msgstr "Ezin da PGP mezua desenkriptatu"
 
-#: crypt-gpgme.c:2697
+#: crypt-gpgme.c:2700
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1234,7 +1239,7 @@ msgstr ""
 "[-- hurrengo datuak S/MIME bidez sinaturik daude --]\n"
 "\n"
 
-#: crypt-gpgme.c:2698
+#: crypt-gpgme.c:2701
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1242,23 +1247,23 @@ msgstr ""
 "[-- hurrengo datuak S/MIME bidez enkriptaturik daude --]\n"
 "\n"
 
-#: crypt-gpgme.c:2728
+#: crypt-gpgme.c:2731
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- S/MIME bidez sinaturiko datuen amaiera --]\n"
 
-#: crypt-gpgme.c:2729
+#: crypt-gpgme.c:2732
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- S/MIME bidez enkriptaturiko datuen amaiera --]\n"
 
-#: crypt-gpgme.c:3313
+#: crypt-gpgme.c:3316
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Ezin da erabiltzaile ID hau bistarazi (kodeketa ezezaguna)]"
 
-#: crypt-gpgme.c:3315
+#: crypt-gpgme.c:3318
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Ezin da erabiltzaile ID hau bistarazi (kodeketa baliogabea)]"
 
-#: crypt-gpgme.c:3320
+#: crypt-gpgme.c:3323
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Ezin da erabiltzaile ID hau bistarazi (DN baliogabea)]"
 
@@ -1266,158 +1271,158 @@ msgstr "[Ezin da erabiltzaile ID hau bistarazi (DN baliogabea)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3394
+#: crypt-gpgme.c:3397
 #, fuzzy
 msgid "Name: "
 msgstr "Izena ......: "
 
-#: crypt-gpgme.c:3396
+#: crypt-gpgme.c:3399
 #, fuzzy
 msgid "Valid From: "
 msgstr "Baliozko Nork: %s\n"
 
-#: crypt-gpgme.c:3397
+#: crypt-gpgme.c:3400
 #, fuzzy
 msgid "Valid To: "
 msgstr "Baliozko Nori ..: %s\n"
 
-#: crypt-gpgme.c:3398
+#: crypt-gpgme.c:3401
 #, fuzzy
 msgid "Key Type: "
 msgstr "Tekla Erabilera .: "
 
-#: crypt-gpgme.c:3399
+#: crypt-gpgme.c:3402
 #, fuzzy
 msgid "Key Usage: "
 msgstr "Tekla Erabilera .: "
 
-#: crypt-gpgme.c:3401
+#: crypt-gpgme.c:3404
 #, fuzzy
 msgid "Serial-No: "
 msgstr "Serial-Zb .: 0x%s\n"
 
-#: crypt-gpgme.c:3402
+#: crypt-gpgme.c:3405
 #, fuzzy
 msgid "Issued By: "
 msgstr "Emana : "
 
-#: crypt-gpgme.c:3403
+#: crypt-gpgme.c:3406
 #, fuzzy
 msgid "Subkey: "
 msgstr "Azpigakoa ....: 0x%s"
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3454 crypt-gpgme.c:3609
+#: crypt-gpgme.c:3457 crypt-gpgme.c:3612
 msgid "[Invalid]"
 msgstr "[Baliogabea]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:3506 crypt-gpgme.c:3665
+#: crypt-gpgme.c:3509 crypt-gpgme.c:3668
 #, fuzzy, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "Gako mota ..: %s, %lu bit %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3515 crypt-gpgme.c:3673
+#: crypt-gpgme.c:3518 crypt-gpgme.c:3676
 msgid "encryption"
 msgstr "enkriptazioa"
 
-#: crypt-gpgme.c:3516 crypt-gpgme.c:3522 crypt-gpgme.c:3528 crypt-gpgme.c:3674
-#: crypt-gpgme.c:3679 crypt-gpgme.c:3684
+#: crypt-gpgme.c:3519 crypt-gpgme.c:3525 crypt-gpgme.c:3531 crypt-gpgme.c:3677
+#: crypt-gpgme.c:3682 crypt-gpgme.c:3687
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3521 crypt-gpgme.c:3678
+#: crypt-gpgme.c:3524 crypt-gpgme.c:3681
 msgid "signing"
 msgstr "sinatzen"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3527 crypt-gpgme.c:3683
+#: crypt-gpgme.c:3530 crypt-gpgme.c:3686
 msgid "certification"
 msgstr "ziurtapena"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3603
+#: crypt-gpgme.c:3606
 msgid "[Revoked]"
 msgstr "[Indargabetua]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3615
+#: crypt-gpgme.c:3618
 msgid "[Expired]"
 msgstr "[Iraungia]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3621
+#: crypt-gpgme.c:3624
 msgid "[Disabled]"
 msgstr "[Desgaitua]"
 
-#: crypt-gpgme.c:3710
+#: crypt-gpgme.c:3713
 msgid "Collecting data..."
 msgstr "Datuak batzen..."
 
-#: crypt-gpgme.c:3736
+#: crypt-gpgme.c:3739
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Errorea jaulkitzaile gakoa bilatzean: %s\n"
 
-#: crypt-gpgme.c:3746
+#: crypt-gpgme.c:3749
 #, fuzzy
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Errorea: ziurtagiri kate luzeegia - hemen gelditzen\n"
 
-#: crypt-gpgme.c:3757 pgpkey.c:582
+#: crypt-gpgme.c:3760 pgpkey.c:582
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "Gako IDa: 0x%s"
 
-#: crypt-gpgme.c:3840
+#: crypt-gpgme.c:3843
 #, c-format
 msgid "gpgme_new failed: %s"
 msgstr "gpgme_new hutsa: %s"
 
-#: crypt-gpgme.c:3879 crypt-gpgme.c:3954
+#: crypt-gpgme.c:3882 crypt-gpgme.c:3957
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "gpgme_op_keylist_start hutsa: %s"
 
-#: crypt-gpgme.c:3941 crypt-gpgme.c:3985
+#: crypt-gpgme.c:3944 crypt-gpgme.c:3988
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "gpgme_op_keylist_next hutsa: %s"
 
-#: crypt-gpgme.c:4056
+#: crypt-gpgme.c:4059
 msgid "All matching keys are marked expired/revoked."
 msgstr "Pareko gako guztiak iraungita/errebokatua bezala markaturik daude."
 
-#: crypt-gpgme.c:4085 mutt_ssl.c:1255 mutt_ssl_gnutls.c:1022 pgpkey.c:515
+#: crypt-gpgme.c:4088 mutt_ssl.c:1255 mutt_ssl_gnutls.c:1022 pgpkey.c:515
 #: smime.c:435
 msgid "Exit  "
 msgstr "Irten  "
 
-#: crypt-gpgme.c:4087 pgpkey.c:517 smime.c:437
+#: crypt-gpgme.c:4090 pgpkey.c:517 smime.c:437
 msgid "Select  "
 msgstr "Aukeratu  "
 
-#: crypt-gpgme.c:4090 pgpkey.c:520
+#: crypt-gpgme.c:4093 pgpkey.c:520
 msgid "Check key  "
 msgstr "Gakoa egiaztatu  "
 
-#: crypt-gpgme.c:4107
+#: crypt-gpgme.c:4110
 msgid "PGP and S/MIME keys matching"
 msgstr "PGP eta S/MIME gako parekatzea"
 
-#: crypt-gpgme.c:4109
+#: crypt-gpgme.c:4112
 msgid "PGP keys matching"
 msgstr "PGP gako parekatzea"
 
-#: crypt-gpgme.c:4111
+#: crypt-gpgme.c:4114
 msgid "S/MIME keys matching"
 msgstr "S/MIME gako parekatzea"
 
-#: crypt-gpgme.c:4113
+#: crypt-gpgme.c:4116
 msgid "keys matching"
 msgstr "gako parekatzea"
 
@@ -1425,63 +1430,63 @@ msgstr "gako parekatzea"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4120
+#: crypt-gpgme.c:4123
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4124
+#: crypt-gpgme.c:4127
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s \"%s\"."
 
-#: crypt-gpgme.c:4151 pgpkey.c:602
+#: crypt-gpgme.c:4154 pgpkey.c:602
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr "Gako hau ezin da erabili: iraungita/desgaitua/errebokatuta."
 
-#: crypt-gpgme.c:4165 pgpkey.c:614 smime.c:468
+#: crypt-gpgme.c:4168 pgpkey.c:614 smime.c:468
 msgid "ID is expired/disabled/revoked."
 msgstr "ID-a denboraz kanpo/ezgaitua/ukatua dago."
 
-#: crypt-gpgme.c:4173 pgpkey.c:618 smime.c:471
+#: crypt-gpgme.c:4176 pgpkey.c:618 smime.c:471
 msgid "ID has undefined validity."
 msgstr "ID-ak mugagabeko balioa du."
 
-#: crypt-gpgme.c:4176 pgpkey.c:621
+#: crypt-gpgme.c:4179 pgpkey.c:621
 msgid "ID is not valid."
 msgstr "ID-a ez da baliozkoa."
 
-#: crypt-gpgme.c:4179 pgpkey.c:624
+#: crypt-gpgme.c:4182 pgpkey.c:624
 msgid "ID is only marginally valid."
 msgstr "ID bakarrik marginalki erabilgarria da."
 
-#: crypt-gpgme.c:4188 pgpkey.c:628 smime.c:478
+#: crypt-gpgme.c:4191 pgpkey.c:628 smime.c:478
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%sZihur zaude gakoa erabili nahi duzula?"
 
-#: crypt-gpgme.c:4243 crypt-gpgme.c:4359 pgpkey.c:838 pgpkey.c:965
+#: crypt-gpgme.c:4246 crypt-gpgme.c:4362 pgpkey.c:838 pgpkey.c:965
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "\"%s\" duten gakoen bila..."
 
-#: crypt-gpgme.c:4514 pgp.c:1307
+#: crypt-gpgme.c:4517 pgp.c:1244
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "ID-gakoa=\"%s\" %s-rako erabili?"
 
-#: crypt-gpgme.c:4572 pgp.c:1356 smime.c:797 smime.c:903
+#: crypt-gpgme.c:4575 pgp.c:1293 smime.c:797 smime.c:903
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "%s-rako ID-gakoa sartu: "
 
-#: crypt-gpgme.c:4649 pgpkey.c:725
+#: crypt-gpgme.c:4652 pgpkey.c:725
 msgid "Please enter the key ID: "
 msgstr "Mesedez sar ezazu gako-ID-a: "
 
-#: crypt-gpgme.c:4662
+#: crypt-gpgme.c:4665
 #, fuzzy, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Errorea gako argibideak eskuratzen: "
@@ -1490,20 +1495,20 @@ msgstr "Errorea gako argibideak eskuratzen: "
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:4682
+#: crypt-gpgme.c:4685
 #, fuzzy, c-format
 msgid "PGP Key 0x%s."
 msgstr "PGP Gakoa %s."
 
-#: crypt-gpgme.c:4724
+#: crypt-gpgme.c:4727
 msgid "GPGME: OpenPGP protocol not available"
 msgstr ""
 
-#: crypt-gpgme.c:4732
+#: crypt-gpgme.c:4735
 msgid "GPGME: CMS protocol not available"
 msgstr ""
 
-#: crypt-gpgme.c:4769
+#: crypt-gpgme.c:4772
 #, fuzzy
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr "S/MIME (e)nkript, (s)ina, sin (a) honela, (b)iak, (p)gp or (g)arbitu?"
@@ -1512,66 +1517,66 @@ msgstr "S/MIME (e)nkript, (s)ina, sin (a) honela, (b)iak, (p)gp or (g)arbitu?"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:4774
+#: crypt-gpgme.c:4777
 msgid "sapfco"
 msgstr ""
 
-#: crypt-gpgme.c:4779
+#: crypt-gpgme.c:4782
 #, fuzzy
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (e)nkrippt, (s)ina, sin(a)tu hola, (b)iak, s/(m)ime edo (g)abitu?"
 
-#: crypt-gpgme.c:4780
+#: crypt-gpgme.c:4783
 msgid "samfco"
 msgstr ""
 
-#: crypt-gpgme.c:4792
+#: crypt-gpgme.c:4795
 #, fuzzy
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "S/MIME (e)nkript, (s)ina, sin (a) honela, (b)iak, (p)gp or (g)arbitu?"
 
-#: crypt-gpgme.c:4793
+#: crypt-gpgme.c:4796
 #, fuzzy
 msgid "esabpfco"
 msgstr "esabpfg"
 
-#: crypt-gpgme.c:4798
+#: crypt-gpgme.c:4801
 #, fuzzy
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "PGP (e)nkrippt, (s)ina, sin(a)tu hola, (b)iak, s/(m)ime edo (g)abitu?"
 
-#: crypt-gpgme.c:4799
+#: crypt-gpgme.c:4802
 #, fuzzy
 msgid "esabmfco"
 msgstr "esabmfg"
 
-#: crypt-gpgme.c:4810
+#: crypt-gpgme.c:4813
 #, fuzzy
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr "S/MIME (e)nkript, (s)ina, sin (a) honela, (b)iak, (p)gp or (g)arbitu?"
 
-#: crypt-gpgme.c:4811
+#: crypt-gpgme.c:4814
 msgid "esabpfc"
 msgstr "esabpfg"
 
-#: crypt-gpgme.c:4816
+#: crypt-gpgme.c:4819
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr "PGP (e)nkrippt, (s)ina, sin(a)tu hola, (b)iak, s/(m)ime edo (g)abitu?"
 
-#: crypt-gpgme.c:4817
+#: crypt-gpgme.c:4820
 msgid "esabmfc"
 msgstr "esabmfg"
 
-#: crypt-gpgme.c:4976
+#: crypt-gpgme.c:4979
 msgid "Failed to verify sender"
 msgstr "Huts bidaltzailea egiaztatzerakoan"
 
-#: crypt-gpgme.c:4979
+#: crypt-gpgme.c:4982
 msgid "Failed to figure out sender"
 msgstr "Ezin izan da biltzailea atzeman"
 
@@ -1615,7 +1620,7 @@ msgstr "PGP deitzen..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Mezua ezin da erantsia bidali.  PGP/MIME erabiltzea itzuli?"
 
-#: crypt.c:180 send.c:1618
+#: crypt.c:180 send.c:1643
 msgid "Mail not sent."
 msgstr "Eposta ez da bidali."
 
@@ -1641,14 +1646,15 @@ msgstr ""
 "\n"
 
 #: crypt.c:971
+#, fuzzy
 msgid ""
-"[-- Error: Inconsistent multipart/signed structure! --]\n"
+"[-- Error: Missing or bad-format multipart/signed signature! --]\n"
 "\n"
 msgstr ""
 "[-- Errorea: konsistentzi gabeko zatianitz/sinaturiko estruktura! --]\n"
 "\n"
 
-#: crypt.c:1010
+#: crypt.c:1011
 #, c-format
 msgid ""
 "[-- Warning: We can't verify %s/%s signatures. --]\n"
@@ -1657,7 +1663,7 @@ msgstr ""
 "[-- Kontuz: Ezin dira %s/%s sinadurak egiaztatu. --]\n"
 "\n"
 
-#: crypt.c:1022
+#: crypt.c:1023
 msgid ""
 "[-- The following data is signed --]\n"
 "\n"
@@ -1665,7 +1671,7 @@ msgstr ""
 "[-- Hurrengo datuak sinaturik daude --]\n"
 "\n"
 
-#: crypt.c:1028
+#: crypt.c:1029
 msgid ""
 "[-- Warning: Can't find any signatures. --]\n"
 "\n"
@@ -1673,7 +1679,7 @@ msgstr ""
 "[-- Kontuz: Ez da sinadurarik aurkitu. --]\n"
 "\n"
 
-#: crypt.c:1034
+#: crypt.c:1035
 msgid ""
 "\n"
 "[-- End of signed data --]\n"
@@ -1689,27 +1695,40 @@ msgstr "\"crypt_use_gpgme\" ezarria bina ez dago GPGME onarpenik."
 msgid "Invoking S/MIME..."
 msgstr "S/MIME deitzen..."
 
-#: curs_lib.c:232
+#: curs_lib.c:243
 msgid "yes"
 msgstr "bai"
 
-#: curs_lib.c:233
+#: curs_lib.c:244
 msgid "no"
 msgstr "ez"
 
-#: curs_lib.c:385
+#: curs_lib.c:396
 msgid "Exit Mutt?"
 msgstr "Mutt utzi?"
 
-#: curs_lib.c:761 mutt_socket.c:612 mutt_ssl.c:577
+#: curs_lib.c:464
+msgid "Error History is disabled."
+msgstr ""
+
+#: curs_lib.c:470
+#, fuzzy
+msgid "Error History is currently being shown."
+msgstr "Laguntza erakutsirik dago."
+
+#: curs_lib.c:484
+msgid "Error History"
+msgstr ""
+
+#: curs_lib.c:855 mutt_socket.c:612 mutt_ssl.c:577
 msgid "unknown error"
 msgstr "errore ezezaguna"
 
-#: curs_lib.c:781
+#: curs_lib.c:875
 msgid "Press any key to continue..."
 msgstr "Edozein tekla jo jarraitzeko..."
 
-#: curs_lib.c:826
+#: curs_lib.c:920
 msgid " ('?' for list): "
 msgstr " (? zerrendarako): "
 
@@ -1808,7 +1827,7 @@ msgid "Invalid message number."
 msgstr "Mezu zenbaki okerra."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:907 curs_main.c:2048 pager.c:2538
+#: curs_main.c:907 curs_main.c:2054 pager.c:2543
 #, fuzzy
 msgid "Cannot delete message(s)"
 msgstr "desezabatu mezua(k)"
@@ -1817,185 +1836,185 @@ msgstr "desezabatu mezua(k)"
 msgid "Delete messages matching: "
 msgstr "Horrelako mezuak ezabatu: "
 
-#: curs_main.c:932
+#: curs_main.c:938
 msgid "No limit pattern is in effect."
 msgstr "Ez da muga patroirik funtzionamenduan."
 
 #. L10N: ask for a limit to apply
-#: curs_main.c:937
+#: curs_main.c:943
 #, c-format
 msgid "Limit: %s"
 msgstr "Muga: %s"
 
-#: curs_main.c:947
+#: curs_main.c:953
 msgid "Limit to messages matching: "
 msgstr "Hau duten mezuetara mugatu: "
 
-#: curs_main.c:968
+#: curs_main.c:974
 msgid "To view all messages, limit to \"all\"."
 msgstr "Mezu guztiak ikusteko, \"dena\" bezala mugatu."
 
-#: curs_main.c:980 pager.c:2077
+#: curs_main.c:986 pager.c:2077
 msgid "Quit Mutt?"
 msgstr "Mutt Itxi?"
 
-#: curs_main.c:1070
+#: curs_main.c:1076
 msgid "Tag messages matching: "
 msgstr "Horrelako mezuak markatu: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1080 curs_main.c:2399 pager.c:2792
+#: curs_main.c:1086 curs_main.c:2405 pager.c:2797
 #, fuzzy
 msgid "Cannot undelete message(s)"
 msgstr "desezabatu mezua(k)"
 
-#: curs_main.c:1082
+#: curs_main.c:1088
 msgid "Undelete messages matching: "
 msgstr "Hau betetzen duten mezua desezabatu: "
 
-#: curs_main.c:1090
+#: curs_main.c:1096
 msgid "Untag messages matching: "
 msgstr "Horrelako mezuen marka ezabatzen: "
 
-#: curs_main.c:1116
+#: curs_main.c:1122
 msgid "Logged out of IMAP servers."
 msgstr ""
 
-#: curs_main.c:1201
+#: curs_main.c:1207
 msgid "Open mailbox in read-only mode"
 msgstr "Postakutxa irakurtzeko bakarrik ireki"
 
-#: curs_main.c:1203
+#: curs_main.c:1209
 msgid "Open mailbox"
 msgstr "Postakutxa ireki"
 
-#: curs_main.c:1213
+#: curs_main.c:1219
 msgid "No mailboxes have new mail"
 msgstr "Ez dago posta berririk duen postakutxarik"
 
-#: curs_main.c:1255 mx.c:516 mx.c:614
+#: curs_main.c:1261 mx.c:516 mx.c:614
 #, c-format
 msgid "%s is not a mailbox."
 msgstr "%s ez da postakutxa bat."
 
-#: curs_main.c:1378
+#: curs_main.c:1384
 msgid "Exit Mutt without saving?"
 msgstr "Mutt gorde gabe itxi?"
 
-#: curs_main.c:1396 curs_main.c:1432 curs_main.c:1892 curs_main.c:1924
+#: curs_main.c:1402 curs_main.c:1438 curs_main.c:1898 curs_main.c:1930
 #: flags.c:303 thread.c:1025 thread.c:1081 thread.c:1148
 msgid "Threading is not enabled."
 msgstr "Hari bihurketa ez dago gaiturik."
 
-#: curs_main.c:1408
+#: curs_main.c:1414
 msgid "Thread broken"
 msgstr "Haria apurturik"
 
-#: curs_main.c:1419
+#: curs_main.c:1425
 msgid "Thread cannot be broken, message is not part of a thread"
 msgstr ""
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1429
+#: curs_main.c:1435
 #, fuzzy
 msgid "Cannot link threads"
 msgstr "hariak lotu"
 
-#: curs_main.c:1434
+#: curs_main.c:1440
 msgid "No Message-ID: header available to link thread"
 msgstr "Ez da Mezu-ID burua jaso harira lotzeko"
 
-#: curs_main.c:1436
+#: curs_main.c:1442
 msgid "First, please tag a message to be linked here"
 msgstr "Lehenengo, markatu mezu bat hemen lotzeko"
 
-#: curs_main.c:1448
+#: curs_main.c:1454
 msgid "Threads linked"
 msgstr "Hariak loturik"
 
-#: curs_main.c:1451
+#: curs_main.c:1457
 msgid "No thread linked"
 msgstr "Hariak ez dira lotu"
 
-#: curs_main.c:1487 curs_main.c:1512
+#: curs_main.c:1493 curs_main.c:1518
 msgid "You are on the last message."
 msgstr "Azkenengo mezuan zaude."
 
-#: curs_main.c:1494 curs_main.c:1538
+#: curs_main.c:1500 curs_main.c:1544
 msgid "No undeleted messages."
 msgstr "Ez dago desezabatutako mezurik."
 
-#: curs_main.c:1531 curs_main.c:1555
+#: curs_main.c:1537 curs_main.c:1561
 msgid "You are on the first message."
 msgstr "Lehenengo mezuan zaude."
 
-#: curs_main.c:1630 menu.c:874 pager.c:2195 pattern.c:1609
+#: curs_main.c:1636 menu.c:874 pager.c:2195 pattern.c:1640
 msgid "Search wrapped to top."
 msgstr "Bilaketa berriz hasieratik hasi da."
 
-#: curs_main.c:1639 pager.c:2217 pattern.c:1620
+#: curs_main.c:1645 pager.c:2217 pattern.c:1651
 msgid "Search wrapped to bottom."
 msgstr "Bilaketa berriz amaieratik hasi da."
 
-#: curs_main.c:1683
+#: curs_main.c:1689
 #, fuzzy
 msgid "No new messages in this limited view."
 msgstr "Jatorrizko mezua ez da ikusgarria bistaratze mugatu honetan."
 
-#: curs_main.c:1685
+#: curs_main.c:1691
 #, fuzzy
 msgid "No new messages."
 msgstr "Ez dago mezu berririk"
 
-#: curs_main.c:1690
+#: curs_main.c:1696
 #, fuzzy
 msgid "No unread messages in this limited view."
 msgstr "Jatorrizko mezua ez da ikusgarria bistaratze mugatu honetan."
 
-#: curs_main.c:1692
+#: curs_main.c:1698
 #, fuzzy
 msgid "No unread messages."
 msgstr "Ez dago irakurgabeko mezurik"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1710
+#: curs_main.c:1716
 #, fuzzy
 msgid "Cannot flag message"
 msgstr "markatu mezua"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1748 pager.c:2755
+#: curs_main.c:1754 pager.c:2760
 #, fuzzy
 msgid "Cannot toggle new"
 msgstr "txandakatu berria"
 
-#: curs_main.c:1825
+#: curs_main.c:1831
 msgid "No more threads."
 msgstr "Ez dago hari gehiagorik."
 
-#: curs_main.c:1827
+#: curs_main.c:1833
 msgid "You are on the first thread."
 msgstr "Lehenengo harian zaude."
 
-#: curs_main.c:1910
+#: curs_main.c:1916
 msgid "Thread contains unread messages."
 msgstr "Irakurgabeko mezuak dituen haria."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2004 pager.c:2505
+#: curs_main.c:2010 pager.c:2510
 #, fuzzy
 msgid "Cannot delete message"
 msgstr "desezabatu mezua"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2085
+#: curs_main.c:2091
 #, fuzzy
 msgid "Cannot edit message"
 msgstr "Ezin da mezua idatzi"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2131 pager.c:2843
+#: curs_main.c:2137 pager.c:2848
 #, fuzzy, c-format
 msgid "%d labels changed."
 msgstr "Postakutxak ez du aldaketarik."
@@ -2003,13 +2022,13 @@ msgstr "Postakutxak ez du aldaketarik."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2137 pager.c:2846
+#: curs_main.c:2143 pager.c:2851
 #, fuzzy
 msgid "No labels changed."
 msgstr "Postakutxak ez du aldaketarik."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2236
+#: curs_main.c:2242
 #, fuzzy
 msgid "Cannot mark message(s) as read"
 msgstr "markatu mezua(k) irakurri gisa"
@@ -2017,14 +2036,14 @@ msgstr "markatu mezua(k) irakurri gisa"
 #. L10N: This is the prompt for <mark-message>.  Whatever they
 #. enter will be prefixed by $mark_macro_prefix and will become
 #. a macro hotkey to jump to the currently selected message.
-#: curs_main.c:2272
+#: curs_main.c:2278
 #, fuzzy
 msgid "Enter macro stroke: "
 msgstr "IDgakoa sartu: "
 
 #. L10N: "message hotkey" is the key bindings menu description of a
 #. macro created by <mark-message>.
-#: curs_main.c:2280
+#: curs_main.c:2286
 #, fuzzy
 msgid "message hotkey"
 msgstr "Mezua atzeraturik."
@@ -2032,20 +2051,20 @@ msgstr "Mezua atzeraturik."
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
-#: curs_main.c:2285
+#: curs_main.c:2291
 #, fuzzy, c-format
 msgid "Message bound to %s."
 msgstr "Mezua errebotaturik."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
-#: curs_main.c:2293
+#: curs_main.c:2299
 #, fuzzy
 msgid "No message ID to macro."
 msgstr "Ez dago mezurik karpeta honetan."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2369 pager.c:2775
+#: curs_main.c:2375 pager.c:2780
 #, fuzzy
 msgid "Cannot undelete message"
 msgstr "desezabatu mezua"
@@ -2332,10 +2351,19 @@ msgstr ""
 msgid "Help for %s"
 msgstr "%s-rako laguntza"
 
-#: history.c:117 history.c:201 history.c:240
+#: history.c:77 query.c:52
+msgid "Search"
+msgstr "Bilatu"
+
+#: history.c:126 history.c:210 history.c:249
 #, c-format
 msgid "Bad history file format (line %d)"
 msgstr "Okerreko historia fitxategi formatua (%d lerroa)"
+
+#: history.c:522
+#, fuzzy, c-format
+msgid "History '%s'"
+msgstr "Bilaketa '%s'"
 
 #: hook.c:97
 msgid "current mailbox shortcut '^' is unset"
@@ -2383,11 +2411,11 @@ msgstr "(CRAM-MD5) autentifikatzen..."
 msgid "CRAM-MD5 authentication failed."
 msgstr "CRAM-MD5 autentifikazioak huts egin du."
 
-#: imap/auth_gss.c:145
+#: imap/auth_gss.c:162
 msgid "Authenticating (GSSAPI)..."
 msgstr "(GSSAPI) autentifikazioa..."
 
-#: imap/auth_gss.c:312
+#: imap/auth_gss.c:329
 msgid "GSSAPI authentication failed."
 msgstr "GSSAPI autentifikazioak huts egin du."
 
@@ -2614,199 +2642,199 @@ msgstr "%d mezua %s-ra kopiatzen..."
 msgid "Continue?"
 msgstr "Jarraitu?"
 
-#: init.c:60 init.c:2114 pager.c:54
+#: init.c:60 init.c:2124 pager.c:54
 msgid "Not available in this menu."
 msgstr "Menu honetan ezin da egin."
 
-#: init.c:470
+#: init.c:464
 #, c-format
 msgid "Bad regexp: %s"
 msgstr "Okerreko espresio erregularra: %s"
 
-#: init.c:527
+#: init.c:521
 #, fuzzy
 msgid "Not enough subexpressions for template"
 msgstr "Ez dago zabor-posta txantiloirako aski azpiespresio"
 
-#: init.c:770 init.c:778 init.c:799
+#: init.c:699 init.c:780 init.c:788 init.c:809
 #, fuzzy
 msgid "not enough arguments"
 msgstr "argumentu gehiegi"
 
-#: init.c:860
+#: init.c:870
 msgid "spam: no matching pattern"
 msgstr "zabor-posta: ez da patroia aurkitu"
 
-#: init.c:862
+#: init.c:872
 msgid "nospam: no matching pattern"
 msgstr "ez zabor-posta: ez da patroia aurkitu"
 
-#: init.c:1053
+#: init.c:1063
 #, fuzzy, c-format
 msgid "%sgroup: missing -rx or -addr."
 msgstr "-rx edo -helb falta da."
 
-#: init.c:1071
+#: init.c:1081
 #, fuzzy, c-format
 msgid "%sgroup: warning: bad IDN '%s'.\n"
 msgstr "Kontuz: '%s' IDN okerra.\n"
 
-#: init.c:1286
+#: init.c:1296
 msgid "attachments: no disposition"
 msgstr "eranskinak: disposiziorik ez"
 
-#: init.c:1322
+#: init.c:1332
 msgid "attachments: invalid disposition"
 msgstr "eranskinak: disposizio okerra"
 
-#: init.c:1336
+#: init.c:1346
 msgid "unattachments: no disposition"
 msgstr "deseranskinak: disposiziorik ez"
 
-#: init.c:1359
+#: init.c:1369
 msgid "unattachments: invalid disposition"
 msgstr "deseranskinak: disposizio okerra"
 
-#: init.c:1486
+#: init.c:1496
 msgid "alias: no address"
 msgstr "ezizena: helbide gabea"
 
-#: init.c:1534
+#: init.c:1544
 #, c-format
 msgid "Warning: Bad IDN '%s' in alias '%s'.\n"
 msgstr "Kontuz: '%s' IDN okerra '%s' ezizenean.\n"
 
-#: init.c:1622
+#: init.c:1632
 msgid "invalid header field"
 msgstr "baliogabeko mezu burua"
 
-#: init.c:1675
+#: init.c:1685
 #, c-format
 msgid "%s: unknown sorting method"
 msgstr "%s: sailkatze modu ezezaguna"
 
-#: init.c:1786
+#: init.c:1796
 #, c-format
 msgid "mutt_restore_default(%s): error in regexp: %s\n"
 msgstr "mutt_restore_default(%s): errorea espresio erregularrean: %s\n"
 
-#: init.c:1995 init.c:2161
+#: init.c:2005 init.c:2171
 #, c-format
 msgid "%s is unset"
 msgstr "%s ezarri gabe dago"
 
-#: init.c:2091 init.c:2206
+#: init.c:2101 init.c:2216
 #, c-format
 msgid "%s: unknown variable"
 msgstr "%s: aldagai ezezaguna"
 
-#: init.c:2100
+#: init.c:2110
 msgid "prefix is illegal with reset"
 msgstr "aurrizkia legezkanpokoa da reset-ekin"
 
-#: init.c:2106
+#: init.c:2116
 msgid "value is illegal with reset"
 msgstr "balioa legezkanpokoa da reset-ekin"
 
-#: init.c:2141 init.c:2153
+#: init.c:2151 init.c:2163
 msgid "Usage: set variable=yes|no"
 msgstr "Erabilera: set variable=yes|no"
 
-#: init.c:2161
+#: init.c:2171
 #, c-format
 msgid "%s is set"
 msgstr "%s ezarririk dago"
 
-#: init.c:2272
+#: init.c:2282
 #, fuzzy, c-format
 msgid "Invalid value for option %s: \"%s\""
 msgstr "Baliogabeko hilabete eguna: %s"
 
-#: init.c:2414
+#: init.c:2424
 #, c-format
 msgid "%s: invalid mailbox type"
 msgstr "%s: posta-kutxa mota okerra"
 
-#: init.c:2445
+#: init.c:2455
 #, fuzzy, c-format
 msgid "%s: invalid value (%s)"
 msgstr "%s: balio okerra"
 
-#: init.c:2446
+#: init.c:2456
 msgid "format error"
 msgstr ""
 
-#: init.c:2446
+#: init.c:2456
 msgid "number overflow"
 msgstr ""
 
-#: init.c:2506
+#: init.c:2522
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s: balio okerra"
 
-#: init.c:2550
+#: init.c:2566
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s Mota ezezaguna."
 
-#: init.c:2577
+#: init.c:2593
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s: mota ezezaguna"
 
-#: init.c:2652
+#: init.c:2668
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Errorea %s-n, %d lerroan: %s"
 
-#: init.c:2675
+#: init.c:2691
 #, c-format
 msgid "source: errors in %s"
 msgstr "jatorria: erroreak %s-n"
 
-#: init.c:2676
+#: init.c:2692
 #, fuzzy, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "jatorria: %s-n akats gehiegiengatik irakurketa ezeztatua"
 
-#: init.c:2690
+#: init.c:2706
 #, c-format
 msgid "source: error at %s"
 msgstr "jatorria: %s-n errorea"
 
-#: init.c:2695
+#: init.c:2711
 msgid "source: too many arguments"
 msgstr "jatorria : argumentu gutxiegi"
 
-#: init.c:2749
+#: init.c:2765
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s: komando ezezaguna"
 
-#: init.c:3242
+#: init.c:3258
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Komando lerroan errorea: %s\n"
 
-#: init.c:3363
+#: init.c:3379
 msgid "unable to determine home directory"
 msgstr "ezin da \"home\" karpeta aukeratu"
 
-#: init.c:3371
+#: init.c:3387
 msgid "unable to determine username"
 msgstr "ezinda erabiltzaile izena aurkitu"
 
-#: init.c:3397
+#: init.c:3413
 #, fuzzy
 msgid "unable to determine nodename via uname()"
 msgstr "ezinda erabiltzaile izena aurkitu"
 
-#: init.c:3638
+#: init.c:3643
 msgid "-group: no group name"
 msgstr "-group: ez dago talde izenik"
 
-#: init.c:3648
+#: init.c:3653
 msgid "out of arguments"
 msgstr "argumentu gehiegi"
 
@@ -2884,15 +2912,18 @@ msgid "Out of memory!"
 msgstr "Memoriaz kanpo!"
 
 #: main.c:68
+#, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
-"To report a bug, please visit <https://gitlab.com/muttmua/mutt/issues>.\n"
+"To report a bug, please contact the Mutt maintainers via gitlab:\n"
+"    https://gitlab.com/muttmua/mutt/issues\n"
 msgstr ""
 "Garatzaileekin harremanetan ipintzeko , idatzi <mutt-dev@mutt.org> "
 "helbidera.\n"
-"Programa-errore baten berri emateko joan <https://gitlab.com/muttmua/mutt/issues> helbidera.\n"
+"Programa-errore baten berri emateko joan <https://gitlab.com/muttmua/mutt/"
+"issues> helbidera.\n"
 
-#: main.c:72
+#: main.c:73
 msgid ""
 "Copyright (C) 1996-2016 Michael R. Elkins and others.\n"
 "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
@@ -2900,7 +2931,7 @@ msgid ""
 "under certain conditions; type `mutt -vv' for details.\n"
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 #, fuzzy
 msgid ""
 "Many others not mentioned here contributed code, fixes,\n"
@@ -2909,7 +2940,7 @@ msgstr ""
 "Izendatzen ez diren beste zenbaitek kodea, zuzenketak eta gomendioekin\n"
 "lagundu dute.\n"
 
-#: main.c:93
+#: main.c:94
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2922,7 +2953,7 @@ msgid ""
 "    GNU General Public License for more details.\n"
 msgstr ""
 
-#: main.c:103
+#: main.c:104
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2930,7 +2961,7 @@ msgid ""
 "02110-1301, USA.\n"
 msgstr ""
 
-#: main.c:122
+#: main.c:123
 #, fuzzy
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
@@ -2953,7 +2984,7 @@ msgstr ""
 "       mutt [<aukerak>] -D\n"
 "       mutt -v[v]\n"
 
-#: main.c:131
+#: main.c:132
 #, fuzzy
 msgid ""
 "options:\n"
@@ -2971,11 +3002,11 @@ msgstr ""
 "  -c <helbidea>\tzehaztu kopiarako (CC) helbide bat\n"
 "  -D\t\tinprimatu aldagai guztien balioa irteera estandarrean"
 
-#: main.c:140
+#: main.c:141
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <maila>\tinprimatu arazpen irteera hemen: ~/.muttdebug0"
 
-#: main.c:143
+#: main.c:144
 #, fuzzy
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
@@ -2998,7 +3029,7 @@ msgstr ""
 "  -n\t\tMutt-ek sistema Muttrc ez irakurtzea eragiten du\n"
 "  -p\t\tatzeratutako mezu bat berreskuratzen du"
 
-#: main.c:153
+#: main.c:154
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3020,7 +3051,7 @@ msgstr ""
 "  -Z\t\tireki mezu berri bat duen lehen karpeta, irten batez ez balego\n"
 "  -h\t\tlaguntza testu hau"
 
-#: main.c:234
+#: main.c:240
 msgid ""
 "\n"
 "Compile options:"
@@ -3028,60 +3059,60 @@ msgstr ""
 "\n"
 "Konpilazio aukerak:"
 
-#: main.c:556
+#: main.c:570
 msgid "Error initializing terminal."
 msgstr "Errorea terminala abiaraztekoan."
 
-#: main.c:710
+#: main.c:724
 #, fuzzy, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "Errorea: '%s' IDN okerra da."
 
-#: main.c:713
+#: main.c:727
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "%d. mailan arazten.\n"
 
-#: main.c:715
+#: main.c:729
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "DEBUG ez dago kopiatzerakoan definiturik.  Alde batetara uzten.\n"
 
-#: main.c:895
+#: main.c:908
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s ez da existitzen. Sortu?"
 
-#: main.c:899
+#: main.c:912
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Ezin da %s sortu: %s."
 
-#: main.c:939
+#: main.c:952
 msgid "Failed to parse mailto: link\n"
 msgstr "Huts maito: lotura analizatzean\n"
 
-#: main.c:951
+#: main.c:964
 msgid "No recipients specified.\n"
 msgstr "Ez da jasotzailerik eman.\n"
 
-#: main.c:977
+#: main.c:990
 msgid "Cannot use -E flag with stdin\n"
 msgstr ""
 
-#: main.c:1130
+#: main.c:1143
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: ezin da fitxategia txertatu.\n"
 
-#: main.c:1211
+#: main.c:1224
 msgid "No mailbox with new mail."
 msgstr "Ez dago posta berririk duen postakutxarik."
 
-#: main.c:1220
+#: main.c:1233
 msgid "No incoming mailboxes defined."
 msgstr "Ez da sarrera postakutxarik ezarri."
 
-#: main.c:1248
+#: main.c:1261
 msgid "Mailbox is empty."
 msgstr "Postakutxa hutsik dago."
 
@@ -3094,47 +3125,47 @@ msgstr "%s irakurtzen..."
 msgid "Mailbox is corrupt!"
 msgstr "Postakutxa hondaturik dago!"
 
-#: mbox.c:457
+#: mbox.c:461
 #, c-format
 msgid "Couldn't lock %s\n"
 msgstr "Ezin da %s blokeatu\n"
 
-#: mbox.c:502 mbox.c:517
+#: mbox.c:506 mbox.c:521
 msgid "Can't write message"
 msgstr "Ezin da mezua idatzi"
 
-#: mbox.c:757
+#: mbox.c:761
 msgid "Mailbox was corrupted!"
 msgstr "Postakutxa hondaturik zegoen!"
 
-#: mbox.c:839 mbox.c:1099
+#: mbox.c:843 mbox.c:1103
 msgid "Fatal error!  Could not reopen mailbox!"
 msgstr "Errore konponezina!  Ezin da postakutxa berrireki!"
 
-#: mbox.c:891
+#: mbox.c:895
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
 msgstr ""
 "sync: mbox aldatuta baina ez dira mezuak aldatu! (zorri honen berri eman)"
 
-#: mbox.c:915 mh.c:1892 mx.c:714
+#: mbox.c:919 mh.c:1892 mx.c:714
 #, c-format
 msgid "Writing %s..."
 msgstr "%s idazten..."
 
-#: mbox.c:1050
+#: mbox.c:1054
 msgid "Committing changes..."
 msgstr "Aldaketak eguneratzen..."
 
-#: mbox.c:1085
+#: mbox.c:1089
 #, c-format
 msgid "Write failed!  Saved partial mailbox to %s"
 msgstr "Idazteak huts egin du!  postakutxa zatia %s-n gorderik"
 
-#: mbox.c:1154
+#: mbox.c:1158
 msgid "Could not reopen mailbox!"
 msgstr "Ezin da postakutxa berrireki!"
 
-#: mbox.c:1181
+#: mbox.c:1185
 msgid "Reopening mailbox..."
 msgstr "Postakutxa berrirekitzen..."
 
@@ -3175,15 +3206,15 @@ msgstr "Azkenengo sarreran zaude."
 msgid "You are on the first entry."
 msgstr "Lehenengo sarreran zaude."
 
-#: menu.c:848 pager.c:2239 pattern.c:1548
+#: menu.c:848 pager.c:2239 pattern.c:1578
 msgid "Search for: "
 msgstr "Bilatu hau: "
 
-#: menu.c:848 pager.c:2239 pattern.c:1548
+#: menu.c:848 pager.c:2239 pattern.c:1578
 msgid "Reverse search for: "
 msgstr "Bilatu hau atzetik-aurrera: "
 
-#: menu.c:892 pager.c:2192 pager.c:2214 pager.c:2334 pattern.c:1663
+#: menu.c:892 pager.c:2192 pager.c:2214 pager.c:2334 pattern.c:1694
 msgid "Not found."
 msgstr "Ez da aurkitu."
 
@@ -3699,7 +3730,7 @@ msgstr "Ikusi gehigar."
 msgid "Next"
 msgstr "Hurrengoa"
 
-#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2443
+#: pager.c:2093 pager.c:2124 pager.c:2156 pager.c:2448
 msgid "Bottom of message is shown."
 msgstr "Mezuaren bukaera erakutsita dago."
 
@@ -3711,11 +3742,11 @@ msgstr "Mezuaren hasiera erakutsita dago."
 msgid "Help is currently being shown."
 msgstr "Laguntza erakutsirik dago."
 
-#: pager.c:2410
+#: pager.c:2415
 msgid "No more quoted text."
 msgstr "Ez dago gakoarteko testu gehiago."
 
-#: pager.c:2423
+#: pager.c:2428
 msgid "No more unquoted text after quoted text."
 msgstr "Ez dago gakogabeko testu gehiago gakoarteko testuaren ondoren."
 
@@ -3724,98 +3755,98 @@ msgstr "Ez dago gakogabeko testu gehiago gakoarteko testuaren ondoren."
 msgid "multipart message has no boundary parameter!"
 msgstr "zati anitzeko mezuak ez du errebote parametrorik!"
 
-#: pattern.c:266 pattern.c:586
+#: pattern.c:268 pattern.c:588
 #, c-format
 msgid "Error in expression: %s"
 msgstr "Espresioan errorea: %s"
 
-#: pattern.c:271 pattern.c:591
+#: pattern.c:273 pattern.c:593
 msgid "Empty expression"
 msgstr "Espresio hutsa"
 
-#: pattern.c:404
+#: pattern.c:406
 #, c-format
 msgid "Invalid day of month: %s"
 msgstr "Baliogabeko hilabete eguna: %s"
 
-#: pattern.c:418
+#: pattern.c:420
 #, c-format
 msgid "Invalid month: %s"
 msgstr "Baliogabeko hilabetea: %s"
 
-#: pattern.c:570
+#: pattern.c:572
 #, c-format
 msgid "Invalid relative date: %s"
 msgstr "Data erlatibo baliogabea: %s"
 
-#: pattern.c:819 pattern.c:987
+#: pattern.c:821 pattern.c:989
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "patroiean akatsa: %s"
 
-#: pattern.c:846
+#: pattern.c:848
 #, fuzzy, c-format
 msgid "missing pattern: %s"
 msgstr "galdutako parametroa"
 
-#: pattern.c:865
+#: pattern.c:867
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "parentesiak ez datoz bat: %s"
 
-#: pattern.c:925
+#: pattern.c:927
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: patroi eraldatzaile baliogabea"
 
-#: pattern.c:931
+#: pattern.c:933
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c: ez da onartzen modu honetan"
 
-#: pattern.c:944
+#: pattern.c:946
 msgid "missing parameter"
 msgstr "galdutako parametroa"
 
-#: pattern.c:960
+#: pattern.c:962
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "parentesiak ez datoz bat: %s"
 
-#: pattern.c:994
+#: pattern.c:996
 msgid "empty pattern"
 msgstr "patroi hutsa"
 
-#: pattern.c:1344
+#: pattern.c:1372
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "errorea:%d aukera ezezaguna (errore honen berri eman)."
 
-#: pattern.c:1427 pattern.c:1569
+#: pattern.c:1455 pattern.c:1599
 msgid "Compiling search pattern..."
 msgstr "Bilaketa patroia konpilatzen..."
 
-#: pattern.c:1448
+#: pattern.c:1474
 msgid "Executing command on matching messages..."
 msgstr "Markaturiko mezuetan komandoa abiarazten..."
 
-#: pattern.c:1517
+#: pattern.c:1543
 msgid "No messages matched criteria."
 msgstr "Ez eskatutako parametroetako mezurik aurkitu."
 
-#: pattern.c:1599
+#: pattern.c:1630
 msgid "Searching..."
 msgstr "Bilatzen..."
 
-#: pattern.c:1612
+#: pattern.c:1643
 msgid "Search hit bottom without finding match"
 msgstr "Bilaketa bukaeraraino iritsi da parekorik aurkitu gabe"
 
-#: pattern.c:1623
+#: pattern.c:1654
 msgid "Search hit top without finding match"
 msgstr "Bilaketa hasieraraino iritsi da parekorik aurkitu gabe"
 
-#: pattern.c:1655
+#: pattern.c:1686
 msgid "Search interrupted."
 msgstr "Bilaketa geldiarazirik."
 
@@ -3831,7 +3862,7 @@ msgstr "PGP pasahitza ahazturik."
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
 msgstr "[-- Errorea: Ezin da PGP azpiprozesua sortu! --]\n"
 
-#: pgp.c:486 pgp.c:755 pgp.c:967
+#: pgp.c:486 pgp.c:755 pgp.c:904
 msgid ""
 "[-- End of PGP output --]\n"
 "\n"
@@ -3839,11 +3870,11 @@ msgstr ""
 "[-- PGP irteeraren amaiera --]\n"
 "\n"
 
-#: pgp.c:863
+#: pgp.c:800
 msgid "Internal error.  Please submit a bug report."
 msgstr ""
 
-#: pgp.c:924
+#: pgp.c:861
 msgid ""
 "[-- Error: could not create a PGP subprocess! --]\n"
 "\n"
@@ -3851,28 +3882,28 @@ msgstr ""
 "[-- Errorea: ezin da PGP azpiprozesua sortu! --]\n"
 "\n"
 
-#: pgp.c:955 pgp.c:979
+#: pgp.c:892 pgp.c:916
 msgid "Decryption failed"
 msgstr "Desenkriptazio hutsa"
 
-#: pgp.c:1185
+#: pgp.c:1122
 msgid "Can't open PGP subprocess!"
 msgstr "Ezin da PGP azpiprozesua ireki!"
 
-#: pgp.c:1619
+#: pgp.c:1556
 msgid "Can't invoke PGP"
 msgstr "Ezin da PGP deitu"
 
-#: pgp.c:1733
+#: pgp.c:1670
 #, fuzzy, c-format
 msgid "PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1734 pgp.c:1764 pgp.c:1786
+#: pgp.c:1671 pgp.c:1701 pgp.c:1723
 msgid "PGP/M(i)ME"
 msgstr "PGP/M(i)ME"
 
-#: pgp.c:1734 pgp.c:1764 pgp.c:1786
+#: pgp.c:1671 pgp.c:1701 pgp.c:1723
 msgid "(i)nline"
 msgstr "(i)barnean"
 
@@ -3880,57 +3911,57 @@ msgstr "(i)barnean"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: pgp.c:1740
+#: pgp.c:1677
 msgid "safcoi"
 msgstr ""
 
-#: pgp.c:1745
+#: pgp.c:1682
 #, fuzzy
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1746
+#: pgp.c:1683
 msgid "safco"
 msgstr ""
 
-#: pgp.c:1763
+#: pgp.c:1700
 #, fuzzy, c-format
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1766
+#: pgp.c:1703
 #, fuzzy
 msgid "esabfcoi"
 msgstr "esabpfg"
 
-#: pgp.c:1771
+#: pgp.c:1708
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1772
+#: pgp.c:1709
 #, fuzzy
 msgid "esabfco"
 msgstr "esabpfg"
 
-#: pgp.c:1785
+#: pgp.c:1722
 #, fuzzy, c-format
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1788
+#: pgp.c:1725
 #, fuzzy
 msgid "esabfci"
 msgstr "esabpfg"
 
-#: pgp.c:1793
+#: pgp.c:1730
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (c)lear? "
 msgstr "PGP (e)nkript, (s)ina, sign (a)tu hola, (b)iak, %s, edo (g)arbitu? "
 
-#: pgp.c:1794
+#: pgp.c:1731
 #, fuzzy
 msgid "esabfc"
 msgstr "esabpfg"
@@ -4109,10 +4140,6 @@ msgstr "Bilaketa berria"
 #: query.c:51
 msgid "Make Alias"
 msgstr "Aliasa egin"
-
-#: query.c:52
-msgid "Search"
-msgstr "Bilatu"
 
 #: query.c:114
 msgid "Waiting for response..."
@@ -4395,64 +4422,73 @@ msgstr "Gehigarri gisa berbidali?"
 msgid "Preparing forwarded message..."
 msgstr "Berbidalketa mezua prestatzen..."
 
-#: send.c:1173
+#: send.c:1198
 msgid "Recall postponed message?"
 msgstr "Atzeraturiko mezuak hartu?"
 
-#: send.c:1423
+#: send.c:1448
 msgid "Edit forwarded message?"
 msgstr "Berbidalitako mezua editatu?"
 
-#: send.c:1472
+#: send.c:1497
 msgid "Abort unmodified message?"
 msgstr "Aldatugabeko mezua ezeztatu?"
 
-#: send.c:1474
+#: send.c:1499
 msgid "Aborted unmodified message."
 msgstr "Aldatugabeko mezua ezeztatuta."
 
-#: send.c:1579
+#: send.c:1604
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 
-#: send.c:1678
+#: send.c:1703
 msgid "Message postponed."
 msgstr "Mezua atzeraturik."
 
-#: send.c:1689
+#: send.c:1714
 msgid "No recipients are specified!"
 msgstr "Ez da hartzailerik eman!"
 
-#: send.c:1694
+#: send.c:1719
 msgid "No recipients were specified."
 msgstr "Ez zen hartzailerik eman."
 
-#: send.c:1710
+#: send.c:1735
 msgid "No subject, abort sending?"
 msgstr "Ez dago gairik, bidalketa ezeztatzen?"
 
-#: send.c:1714
+#: send.c:1739
 msgid "No subject specified."
 msgstr "Ez da gairik ezarri."
 
-#: send.c:1776 smtp.c:188
+#: send.c:1753
+#, fuzzy
+msgid "No attachments, abort sending?"
+msgstr "Ez dago gairik, bidalketa ezeztatzen?"
+
+#: send.c:1756
+msgid "Attachment referenced in message is missing"
+msgstr ""
+
+#: send.c:1819 smtp.c:188
 msgid "Sending message..."
 msgstr "Mezua bidaltzen..."
 
-#: send.c:1809
+#: send.c:1852
 #, fuzzy
 msgid "Save attachments in Fcc?"
 msgstr "gehigarriak testua balira ikusi"
 
-#: send.c:1919
+#: send.c:1962
 msgid "Could not send the message."
 msgstr "Ezin da mezua bidali."
 
-#: send.c:1924
+#: send.c:1967
 msgid "Mail sent."
 msgstr "Mezua bidalirik."
 
-#: send.c:1924
+#: send.c:1967
 msgid "Sending in background."
 msgstr "Bigarren planoan bidaltzen."
 
@@ -5219,833 +5255,849 @@ msgstr "historia zerrendan aurrera mugitu"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:229
+#, fuzzy
+msgid "search through the history list"
+msgstr "historia zerrendan aurrera mugitu"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:232
 msgid "delete chars from cursor to end of line"
 msgstr "kurtsoretik lerro bukaerara dauden karakterrak ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:232
+#: ../keymap_alldefs.h:235
 msgid "delete chars from the cursor to the end of the word"
 msgstr "kurtsoretik hitzaren bukaerara dauden karakterrak ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:235
+#: ../keymap_alldefs.h:238
 msgid "delete all chars on the line"
 msgstr "lerro honetako karaktere guziak ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:238
+#: ../keymap_alldefs.h:241
 msgid "delete the word in front of the cursor"
 msgstr "kurtsorearen aurrean dagoen hitza ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:241
+#: ../keymap_alldefs.h:244
 msgid "quote the next typed key"
 msgstr "sakatzen den hurrengo tekla markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:244
+#: ../keymap_alldefs.h:247
 msgid "transpose character under cursor with previous"
 msgstr "kurtsorearen azpiko karakterra aurrekoarekin irauli"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:247
+#: ../keymap_alldefs.h:250
 msgid "capitalize the word"
 msgstr "hitza kapitalizatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:250
+#: ../keymap_alldefs.h:253
 msgid "convert the word to lower case"
 msgstr "hitza minuskuletara bihurtu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:253
+#: ../keymap_alldefs.h:256
 msgid "convert the word to upper case"
 msgstr "hitza maiuskuletara bihurtu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:256
+#: ../keymap_alldefs.h:259
 msgid "enter a muttrc command"
 msgstr "sar muttrc komandoa"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:259
+#: ../keymap_alldefs.h:262
 msgid "enter a file mask"
 msgstr "fitxategi maskara sartu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:262
+#: ../keymap_alldefs.h:265
+msgid "display recent history of error messages"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:268
 msgid "exit this menu"
 msgstr "menu hau utzi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:265
+#: ../keymap_alldefs.h:271
 msgid "filter attachment through a shell command"
 msgstr "sheel komando bidezko gehigarri iragazkia"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:268
+#: ../keymap_alldefs.h:274
 msgid "move to the first entry"
 msgstr "lehenengo sarrerara mugitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:271
+#: ../keymap_alldefs.h:277
 msgid "toggle a message's 'important' flag"
 msgstr "mezuen bandera garrantzitsuak txandakatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:274
+#: ../keymap_alldefs.h:280
 msgid "forward a message with comments"
 msgstr "birbidali mezua iruzkinekin"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:277
+#: ../keymap_alldefs.h:283
 msgid "select the current entry"
 msgstr "uneko sarrera aukeratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:280
+#: ../keymap_alldefs.h:286
 msgid "reply to all recipients"
 msgstr "denei erantzun"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:283
+#: ../keymap_alldefs.h:289
 msgid "scroll down 1/2 page"
 msgstr "orrialde erdia jaitsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:286
+#: ../keymap_alldefs.h:292
 msgid "scroll up 1/2 page"
 msgstr "orrialde erdia igo"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:289
+#: ../keymap_alldefs.h:295
 msgid "this screen"
 msgstr "leiho hau"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:292
+#: ../keymap_alldefs.h:298
 msgid "jump to an index number"
 msgstr "joan sarrera zenbakira"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:295
+#: ../keymap_alldefs.h:301
 msgid "move to the last entry"
 msgstr "azkenengo sarrerara salto egin"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:298
+#: ../keymap_alldefs.h:304
 msgid "reply to specified mailing list"
 msgstr "emandako eposta zerrendara erantzun"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:301
+#: ../keymap_alldefs.h:307
 msgid "execute a macro"
 msgstr "macro bat abiarazi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:304
+#: ../keymap_alldefs.h:310
 msgid "compose a new mail message"
 msgstr "eposta mezu berri bat idatzi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:307
+#: ../keymap_alldefs.h:313
 msgid "break the thread in two"
 msgstr "haria bitan zatitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:310
+#: ../keymap_alldefs.h:316
 msgid "open a different folder"
 msgstr "beste karpeta bat ireki"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:313
+#: ../keymap_alldefs.h:319
 msgid "open a different folder in read only mode"
 msgstr "irakurketa soilerako beste karpeta bat ireki"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:316
+#: ../keymap_alldefs.h:322
 msgid "clear a status flag from a message"
 msgstr "mezuaren egoera bandera ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:319
+#: ../keymap_alldefs.h:325
 msgid "delete messages matching a pattern"
 msgstr "emandako patroiaren araberako mezuak ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:322
+#: ../keymap_alldefs.h:328
 msgid "force retrieval of mail from IMAP server"
 msgstr "IMAP zerbitzari batetatik ePosta jasotzea behartu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:325
+#: ../keymap_alldefs.h:331
 msgid "logout from all IMAP servers"
 msgstr ""
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:328
+#: ../keymap_alldefs.h:334
 msgid "retrieve mail from POP server"
 msgstr "POP zerbitzaritik ePosta jaso"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:331
+#: ../keymap_alldefs.h:337
 msgid "show only messages matching a pattern"
 msgstr "emandako patroia betetzen duten mezuak bakarrik erakutsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:334
+#: ../keymap_alldefs.h:340
 msgid "link tagged message to the current one"
 msgstr "lotu markaturiko mezua honetara"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:337
+#: ../keymap_alldefs.h:343
 msgid "open next mailbox with new mail"
 msgstr "ireki posta berria duen hurrengo postakutxa"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:340
+#: ../keymap_alldefs.h:346
 msgid "jump to the next new message"
 msgstr "hurrengo mezu berrira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:343
+#: ../keymap_alldefs.h:349
 msgid "jump to the next new or unread message"
 msgstr "hurrengo mezu berri edo irakurgabera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:346
+#: ../keymap_alldefs.h:352
 msgid "jump to the next subthread"
 msgstr "hurrengo azpiharira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:349
+#: ../keymap_alldefs.h:355
 msgid "jump to the next thread"
 msgstr "hurrengo harira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:352
+#: ../keymap_alldefs.h:358
 msgid "move to the next undeleted message"
 msgstr "hurrengo ezabatu gabeko mezura joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:355
+#: ../keymap_alldefs.h:361
 msgid "jump to the next unread message"
 msgstr "hurrengo irakurgabeko mezura joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:358
+#: ../keymap_alldefs.h:364
 msgid "jump to parent message in thread"
 msgstr "hariko goiko mezura joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:361
+#: ../keymap_alldefs.h:367
 msgid "jump to previous thread"
 msgstr "aurreko harira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:364
+#: ../keymap_alldefs.h:370
 msgid "jump to previous subthread"
 msgstr "aurreko harirazpira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:367
+#: ../keymap_alldefs.h:373
 msgid "move to the previous undeleted message"
 msgstr "ezabatugabeko hurrengo mezura joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:370
+#: ../keymap_alldefs.h:376
 msgid "jump to the previous new message"
 msgstr "aurreko mezu berrira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:373
+#: ../keymap_alldefs.h:379
 msgid "jump to the previous new or unread message"
 msgstr "aurreko mezu berri edo irakurgabera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:376
+#: ../keymap_alldefs.h:382
 msgid "jump to the previous unread message"
 msgstr "aurreko mezu irakurgabera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:379
+#: ../keymap_alldefs.h:385
 msgid "mark the current thread as read"
 msgstr "uneko haria irakurria bezala markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:382
+#: ../keymap_alldefs.h:388
 msgid "mark the current subthread as read"
 msgstr "uneko azpiharia irakurria bezala markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:385
+#: ../keymap_alldefs.h:391
 #, fuzzy
 msgid "jump to root message in thread"
 msgstr "hariko goiko mezura joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:388
+#: ../keymap_alldefs.h:394
 msgid "set a status flag on a message"
 msgstr "egoera bandera ezarri mezuari"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:391
+#: ../keymap_alldefs.h:397
 msgid "save changes to mailbox"
 msgstr "postakutxaren aldaketak gorde"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:394
+#: ../keymap_alldefs.h:400
 msgid "tag messages matching a pattern"
 msgstr "emandako patroiaren araberako mezuak markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:397
+#: ../keymap_alldefs.h:403
 msgid "undelete messages matching a pattern"
 msgstr "emandako patroiaren araberako mezuak berreskuratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:400
+#: ../keymap_alldefs.h:406
 msgid "untag messages matching a pattern"
 msgstr "emandako patroiaren araberako mezuak desmarkatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:403
+#: ../keymap_alldefs.h:409
 msgid "create a hotkey macro for the current message"
 msgstr ""
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:406
+#: ../keymap_alldefs.h:412
 msgid "move to the middle of the page"
 msgstr "orriaren erdira joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:409
+#: ../keymap_alldefs.h:415
 msgid "move to the next entry"
 msgstr "hurrengo sarrerara joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:412
+#: ../keymap_alldefs.h:418
 msgid "scroll down one line"
 msgstr "lerro bat jaitsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:415
+#: ../keymap_alldefs.h:421
 msgid "move to the next page"
 msgstr "hurrengo orrialdera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:418
+#: ../keymap_alldefs.h:424
 msgid "jump to the bottom of the message"
 msgstr "mezuaren bukaerara joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:421
+#: ../keymap_alldefs.h:427
 msgid "toggle display of quoted text"
 msgstr "gako arteko testuaren erakustaldia aldatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:424
+#: ../keymap_alldefs.h:430
 msgid "skip beyond quoted text"
 msgstr "gako arteko testuaren atzera salto egin"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:427
+#: ../keymap_alldefs.h:433
 msgid "jump to the top of the message"
 msgstr "mezuaren hasierara joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:430
+#: ../keymap_alldefs.h:436
 msgid "pipe message/attachment to a shell command"
 msgstr "mezua/gehigarria shell komando batetara bideratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:433
+#: ../keymap_alldefs.h:439
 msgid "move to the previous entry"
 msgstr "aurreko sarrerara joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:436
+#: ../keymap_alldefs.h:442
 msgid "scroll up one line"
 msgstr "lerro bat igo"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:439
+#: ../keymap_alldefs.h:445
 msgid "move to the previous page"
 msgstr "aurreko orrialdera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:442
+#: ../keymap_alldefs.h:448
 msgid "print the current entry"
 msgstr "uneko sarrera inprimatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:445
+#: ../keymap_alldefs.h:451
 #, fuzzy
 msgid "delete the current entry, bypassing the trash folder"
 msgstr "uneko sarrera ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:448
+#: ../keymap_alldefs.h:454
 msgid "query external program for addresses"
 msgstr "galdetu kanpoko aplikazioari helbidea lortzeko"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:451
+#: ../keymap_alldefs.h:457
 msgid "append new query results to current results"
 msgstr "emaitza hauei bilaketa berriaren emaitzak gehitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:454
+#: ../keymap_alldefs.h:460
 msgid "save changes to mailbox and quit"
 msgstr "aldaketak postakutxan gorde eta utzi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:457
+#: ../keymap_alldefs.h:463
 msgid "recall a postponed message"
 msgstr "atzeratiutako mezua berriz hartu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:460
+#: ../keymap_alldefs.h:466
 msgid "clear and redraw the screen"
 msgstr "pantaila garbitu eta berriz marraztu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:463
+#: ../keymap_alldefs.h:469
 msgid "{internal}"
 msgstr "{barnekoa}"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:466
+#: ../keymap_alldefs.h:472
 msgid "rename the current mailbox (IMAP only)"
 msgstr "uneko postakutxa berrizendatu (IMAP soilik)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:469
+#: ../keymap_alldefs.h:475
 msgid "reply to a message"
 msgstr "mezuari erantzuna"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:472
+#: ../keymap_alldefs.h:478
 msgid "use the current message as a template for a new one"
 msgstr "unekoa mezu berri bat egiteko txantiloi gisa erabili"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:475
+#: ../keymap_alldefs.h:481
 #, fuzzy
 msgid "save message/attachment to a mailbox/file"
 msgstr "mezua/gehigarria fitxategi batetan gorde"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:478
+#: ../keymap_alldefs.h:484
 msgid "search for a regular expression"
 msgstr "espresio erregular bat bilatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:481
+#: ../keymap_alldefs.h:487
 msgid "search backwards for a regular expression"
 msgstr "espresio erregular baten bidez atzeraka bilatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:484
+#: ../keymap_alldefs.h:490
 msgid "search for next match"
 msgstr "hurrengo parekatzera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:487
+#: ../keymap_alldefs.h:493
 msgid "search for next match in opposite direction"
 msgstr "beste zentzuan hurrengoa parekatzea bilatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:490
+#: ../keymap_alldefs.h:496
 msgid "toggle search pattern coloring"
 msgstr "bilaketa patroiaren kolorea txandakatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:493
+#: ../keymap_alldefs.h:499
 msgid "invoke a command in a subshell"
 msgstr "komando bat subshell batetan deitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:496
+#: ../keymap_alldefs.h:502
 msgid "sort messages"
 msgstr "mezuak ordenatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:499
+#: ../keymap_alldefs.h:505
 msgid "sort messages in reverse order"
 msgstr "mezuak atzekoz aurrera ordenatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:502
+#: ../keymap_alldefs.h:508
 msgid "tag the current entry"
 msgstr "uneko sarrera markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:505
+#: ../keymap_alldefs.h:511
 msgid "apply next function to tagged messages"
 msgstr "markatutako mezuei funtzio hau aplikatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:508
+#: ../keymap_alldefs.h:514
 msgid "apply next function ONLY to tagged messages"
 msgstr "hurrengo funtzioa BAKARRIK markaturiko mezuetan erabili"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:511
+#: ../keymap_alldefs.h:517
 msgid "tag the current subthread"
 msgstr "uneko azpiharia markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:514
+#: ../keymap_alldefs.h:520
 msgid "tag the current thread"
 msgstr "uneko haria markatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:517
+#: ../keymap_alldefs.h:523
 msgid "toggle a message's 'new' flag"
 msgstr "mezuaren 'berria' bandera aldatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:520
+#: ../keymap_alldefs.h:526
 msgid "toggle whether the mailbox will be rewritten"
 msgstr "posta-kutxaren datuak berritzen direnean aldatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:523
+#: ../keymap_alldefs.h:529
 msgid "toggle whether to browse mailboxes or all files"
 msgstr "postakutxak eta artxibo guztien ikustaldia aldatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:526
+#: ../keymap_alldefs.h:532
 msgid "move to the top of the page"
 msgstr "orriaren goikaldera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:529
+#: ../keymap_alldefs.h:535
 msgid "undelete the current entry"
 msgstr "uneko sarrera berreskuratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:532
+#: ../keymap_alldefs.h:538
 msgid "undelete all messages in thread"
 msgstr "hariko mezu guztiak berreskuratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:535
+#: ../keymap_alldefs.h:541
 msgid "undelete all messages in subthread"
 msgstr "azpihariko mezu guztiak berreskuratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:538
+#: ../keymap_alldefs.h:544
 msgid "show the Mutt version number and date"
 msgstr "Mutt bertsio zenbakia eta data erakutsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:541
+#: ../keymap_alldefs.h:547
 msgid "view attachment using mailcap entry if necessary"
 msgstr "gehigarria erakutsi beharrezkoa balitz mailcap sarrera erabiliaz"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:544
+#: ../keymap_alldefs.h:550
 msgid "show MIME attachments"
 msgstr "MIME gehigarriak ikusi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:547
+#: ../keymap_alldefs.h:553
 msgid "display the keycode for a key press"
 msgstr "zanpatutako teklaren tekla-kodea erakutsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:550
+#: ../keymap_alldefs.h:556
 msgid "show currently active limit pattern"
 msgstr "unean gaitutako patroiaren muga erakutsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:553
+#: ../keymap_alldefs.h:559
 msgid "collapse/uncollapse current thread"
 msgstr "uneko haria zabaldu/trinkotu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:556
+#: ../keymap_alldefs.h:562
 msgid "collapse/uncollapse all threads"
 msgstr "hari guztiak zabaldu/trinkotu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:559
+#: ../keymap_alldefs.h:565
 msgid "move the highlight to next mailbox"
 msgstr ""
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:562
+#: ../keymap_alldefs.h:568
 #, fuzzy
 msgid "move the highlight to next mailbox with new mail"
 msgstr "ireki posta berria duen hurrengo postakutxa"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:565
+#: ../keymap_alldefs.h:571
 #, fuzzy
 msgid "open highlighted mailbox"
 msgstr "Postakutxa berrirekitzen..."
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:568
+#: ../keymap_alldefs.h:574
 #, fuzzy
 msgid "scroll the sidebar down 1 page"
 msgstr "orrialde erdia jaitsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:571
+#: ../keymap_alldefs.h:577
 #, fuzzy
 msgid "scroll the sidebar up 1 page"
 msgstr "orrialde erdia igo"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:574
+#: ../keymap_alldefs.h:580
 #, fuzzy
 msgid "move the highlight to previous mailbox"
 msgstr "aurreko orrialdera joan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:577
+#: ../keymap_alldefs.h:583
 #, fuzzy
 msgid "move the highlight to previous mailbox with new mail"
 msgstr "ireki posta berria duen hurrengo postakutxa"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:580
+#: ../keymap_alldefs.h:586
 msgid "make the sidebar (in)visible"
 msgstr ""
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:583
+#: ../keymap_alldefs.h:589
 msgid "attach a PGP public key"
 msgstr "PGP gako publikoa gehitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:586
+#: ../keymap_alldefs.h:592
 msgid "show PGP options"
 msgstr "PGP aukerak ikusi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:589
+#: ../keymap_alldefs.h:595
 msgid "mail a PGP public key"
 msgstr "PGP gako publikoa epostaz bidali"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:592
+#: ../keymap_alldefs.h:598
 msgid "verify a PGP public key"
 msgstr "PGP gako publikoa egiaztatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:595
+#: ../keymap_alldefs.h:601
 msgid "view the key's user id"
 msgstr "gakoaren erabiltzaile id-a erakutsi"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:598
+#: ../keymap_alldefs.h:604
 msgid "check for classic PGP"
 msgstr "PGP klasiko bila arakatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:601
+#: ../keymap_alldefs.h:607
 #, fuzzy
 msgid "accept the chain constructed"
 msgstr "Eratutako katea onartu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:604
+#: ../keymap_alldefs.h:610
 #, fuzzy
 msgid "append a remailer to the chain"
 msgstr "Kateari berbidaltze bat gehitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:607
+#: ../keymap_alldefs.h:613
 #, fuzzy
 msgid "insert a remailer into the chain"
 msgstr "Kateari berbidaltze bat gehitu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:610
+#: ../keymap_alldefs.h:616
 #, fuzzy
 msgid "delete a remailer from the chain"
 msgstr "Kateari berbidaltze bat ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:613
+#: ../keymap_alldefs.h:619
 #, fuzzy
 msgid "select the previous element of the chain"
 msgstr "Katearen aurreko elementua aukeratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:616
+#: ../keymap_alldefs.h:622
 #, fuzzy
 msgid "select the next element of the chain"
 msgstr "Katearen hurrengo elementua aukeratu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:619
+#: ../keymap_alldefs.h:625
 msgid "send the message through a mixmaster remailer chain"
 msgstr "mixmaster berbidalketa katearen bidez bidali mezua"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:622
+#: ../keymap_alldefs.h:628
 msgid "make decrypted copy and delete"
 msgstr "enkriptatu gabeko kopia egin eta ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:625
+#: ../keymap_alldefs.h:631
 msgid "make decrypted copy"
 msgstr "enkriptatu gabeko kopia egin"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:628
+#: ../keymap_alldefs.h:634
 msgid "wipe passphrase(s) from memory"
 msgstr "pasahitza(k) memoriatik ezabatu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:631
+#: ../keymap_alldefs.h:637
 msgid "extract supported public keys"
 msgstr "onartutako gako publikoak atera"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:634
+#: ../keymap_alldefs.h:640
 msgid "show S/MIME options"
 msgstr "S/MIME aukerak ikusi"
+
+#~ msgid "dazn"
+#~ msgstr "fats"
 
 #, fuzzy
 #~ msgid "sign as: "

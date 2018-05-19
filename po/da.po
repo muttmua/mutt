@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-04 10:02-0700\n"
+"POT-Creation-Date: 2018-05-19 10:53-0700\n"
 "PO-Revision-Date: 2018-05-05 12:20+0200\n"
 "Last-Translator: Morten Bo Johansen <mbj@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -2150,7 +2150,8 @@ msgstr "Fjern statusindikator"
 
 #: handler.c:1139
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
-msgstr "[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
+msgstr ""
+"[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
 
 #: handler.c:1254
 #, c-format
@@ -3862,7 +3863,8 @@ msgstr "usgyoi"
 
 #: pgp.c:1682
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
-msgstr "PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
+msgstr ""
+"PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
 
 #: pgp.c:1683
 msgid "safco"
