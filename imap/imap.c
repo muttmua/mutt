@@ -1017,11 +1017,7 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
   int rc;
   int count = 0;
 
-  if (! (cmd = mutt_buffer_new ()))
-  {
-    dprint (1, (debugfile, "imap_exec_msgset: unable to allocate buffer\n"));
-    return -1;
-  }
+  cmd = mutt_buffer_new ();
 
   /* We make a copy of the headers just in case resorting doesn't give
    exactly the original order (duplicate messages?), because other parts of
