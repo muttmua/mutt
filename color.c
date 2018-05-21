@@ -428,7 +428,7 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
   }
   else if (mutt_strncmp (buf->data, "body", 4) == 0)
     list = &ColorBodyList;
-  else if (mutt_strncmp (buf->data, "header", 7) == 0)
+  else if (mutt_strncmp (buf->data, "header", 6) == 0)
     list = &ColorHdrList;
   else
   {
