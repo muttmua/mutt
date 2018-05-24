@@ -119,6 +119,7 @@ enum
   SASL_IR,                      /* SASL initial response draft */
   ENABLE,                       /* RFC 5161 */
   CONDSTORE,                    /* RFC 7162 */
+  QRESYNC,                      /* RFC 7162 */
 
   CAPMAX
 };
@@ -195,6 +196,8 @@ typedef struct
    * than mUTF7 */
   int unicode;
 
+  int qresync;  /* Set to 1 if QRESYNC is successfully ENABLE'd */
+
   /* if set, the response parser will store results for complicated commands
    * here. */
   IMAP_COMMAND_TYPE cmdtype;
@@ -234,6 +237,16 @@ typedef struct
 #endif
 } IMAP_DATA;
 /* I wish that were called IMAP_CONTEXT :( */
+
+typedef struct
+{
+  char *full_seqset;
+  char *eostr;
+  int in_range;
+  int down;
+  unsigned int range_cur, range_end;
+  char *substr_cur, *substr_end;
+} SEQSET_ITERATOR;
 
 /* -- macros -- */
 #define CTX_DATA ((IMAP_DATA *) ctx->data)
@@ -288,6 +301,8 @@ void imap_hcache_close (IMAP_DATA* idata);
 HEADER* imap_hcache_get (IMAP_DATA* idata, unsigned int uid);
 int imap_hcache_put (IMAP_DATA* idata, HEADER* h);
 int imap_hcache_del (IMAP_DATA* idata, unsigned int uid);
+int imap_hcache_store_uid_seqset (IMAP_DATA *idata);
+char *imap_hcache_get_uid_seqset (IMAP_DATA *idata);
 #endif
 
 int imap_continue (const char* msg, const char* resp);
@@ -311,6 +326,9 @@ void imap_unquote_string (char* s);
 void imap_munge_mbox_name (IMAP_DATA *idata, char *dest, size_t dlen, const char *src);
 void imap_unmunge_mbox_name (IMAP_DATA *idata, char *s);
 int imap_wordcasecmp(const char *a, const char *b);
+SEQSET_ITERATOR *mutt_seqset_iterator_new (const char *seqset);
+int mutt_seqset_iterator_next (SEQSET_ITERATOR *iter, unsigned int *next);
+void mutt_seqset_iterator_free (SEQSET_ITERATOR **p_iter);
 
 /* utf7.c */
 void imap_utf_encode (IMAP_DATA *idata, char **s);

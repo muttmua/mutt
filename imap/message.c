@@ -108,8 +108,8 @@ static void imap_alloc_msn_index (IMAP_DATA *idata, unsigned int msn_count)
  * Ideally, we would generate multiple requests if the number of ranges
  * is too big, but for now just abort to using the whole range.
  */
-static void imap_generate_seqset (BUFFER *b, IMAP_DATA *idata, unsigned int msn_begin,
-                                  unsigned int msn_end)
+static void imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, unsigned int msn_begin,
+                                   unsigned int msn_end)
 {
   int chunks = 0;
   int state = 0;  /* 1: single msn, 2: range of msn */
@@ -451,7 +451,7 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
     {
       /* In case there are holes in the header cache. */
       evalhc = 0;
-      imap_generate_seqset (b, idata, msn_begin, msn_end);
+      imap_fetch_msn_seqset (b, idata, msn_begin, msn_end);
     }
     else
       mutt_buffer_printf (b, "%u:%u", msn_begin, msn_end);
