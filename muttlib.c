@@ -1805,6 +1805,20 @@ BUFFER *mutt_buffer_init (BUFFER *b) {
   return b;
 }
 
+/* Increases the allocated size of the buffer */
+void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
+{
+  size_t offset;
+
+  if (buf->dsize < new_size)
+  {
+    offset = buf->dptr - buf->data;
+    buf->dsize = new_size;
+    safe_realloc (&buf->data, buf->dsize);
+    buf->dptr = buf->data + offset;
+  }
+}
+
 /*
  * Creates and initializes a BUFFER*. If passed an existing BUFFER*,
  * just initializes. Frees anything already in the buffer. Copies in

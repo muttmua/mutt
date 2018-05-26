@@ -41,6 +41,7 @@ void mutt_make_string_info (char *, size_t, int, const char *, struct hdr_format
 int mutt_extract_token (BUFFER *, BUFFER *, int);
 BUFFER *mutt_buffer_new (void);
 BUFFER * mutt_buffer_init (BUFFER *);
+void mutt_buffer_increase_size (BUFFER *, size_t);
 BUFFER * mutt_buffer_from (char *);
 void mutt_buffer_free(BUFFER **);
 int mutt_buffer_printf (BUFFER*, const char*, ...);
