@@ -1383,6 +1383,14 @@ struct option_t MuttVars[] = {
   ** for new mail, before timing out and closing the connection.  Set
   ** to 0 to disable timing out.
   */
+  { "imap_qresync",  DT_BOOL, R_NONE, OPTIMAPQRESYNC, 0 },
+  /*
+   ** .pp
+   **
+   ** When \fIset\fP, mutt will use the QRESYNC extension (RFC 7162)
+   ** if advertised by the server.  Mutt's current implementation is basic,
+   ** used only for initial message fetching and flag updates.
+   */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
   ** .pp

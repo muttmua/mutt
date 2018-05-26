@@ -302,6 +302,7 @@ HEADER* imap_hcache_get (IMAP_DATA* idata, unsigned int uid);
 int imap_hcache_put (IMAP_DATA* idata, HEADER* h);
 int imap_hcache_del (IMAP_DATA* idata, unsigned int uid);
 int imap_hcache_store_uid_seqset (IMAP_DATA *idata);
+int imap_hcache_clear_uid_seqset (IMAP_DATA *idata);
 char *imap_hcache_get_uid_seqset (IMAP_DATA *idata);
 #endif
 

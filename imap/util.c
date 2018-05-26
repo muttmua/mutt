@@ -250,6 +250,14 @@ int imap_hcache_store_uid_seqset (IMAP_DATA *idata)
   return rc;
 }
 
+int imap_hcache_clear_uid_seqset (IMAP_DATA *idata)
+{
+  if (!idata->hcache)
+    return -1;
+
+  return mutt_hcache_delete (idata->hcache, "/UIDSEQSET", imap_hcache_keylen);
+}
+
 char *imap_hcache_get_uid_seqset (IMAP_DATA *idata)
 {
   char *hc_seqset, *seqset;
