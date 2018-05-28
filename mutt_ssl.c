@@ -277,9 +277,11 @@ int mutt_ssl_starttls (CONNECTION* conn)
   return 0;
 
  bail_ssl:
-  FREE (&ssldata->ssl);
+  SSL_free (ssldata->ssl);
+  ssldata->ssl = 0;
  bail_ctx:
-  FREE (&ssldata->ctx);
+  SSL_CTX_free (ssldata->ctx);
+  ssldata->ctx = 0;
  bail_ssldata:
   FREE (&ssldata);
  bail:
