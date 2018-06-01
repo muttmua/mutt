@@ -296,7 +296,7 @@ int mutt_ssl_starttls (CONNECTION* conn)
  * Even though only OpenSSL 0.9.5 and later will complain about the
  * lack of entropy, we try to our best and fill the pool with older
  * versions also. (That's the reason for the ugly #ifdefs and macros,
- * otherwise I could have simply #ifdef'd the whole ssl_init funcion)
+ * otherwise I could have simply #ifdef'd the whole ssl_init function)
  */
 static int ssl_init (void)
 {

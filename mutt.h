@@ -665,7 +665,7 @@ typedef struct parameter
   struct parameter *next;
 } PARAMETER;
 
-/* Information that helps in determing the Content-* of an attachment */
+/* Information that helps in determining the Content-* of an attachment */
 typedef struct content
 {
   long hibin;              /* 8-bit characters */

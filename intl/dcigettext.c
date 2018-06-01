@@ -573,7 +573,7 @@ DCIGETTEXT (domainname, msgid1, msgid2, plural, n, category)
 	  /* When this is a SUID binary we must not allow accessing files
 	     outside the dedicated directories.  */
 	  if (ENABLE_SECURE && IS_PATH_WITH_DIR (single_locale))
-	    /* Ingore this entry.  */
+	    /* Ignore this entry.  */
 	    continue;
 	}
 

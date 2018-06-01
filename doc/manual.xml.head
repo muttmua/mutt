@@ -5266,7 +5266,7 @@ coloring.
 </para>
 
 <para>
-Special attention has to be payed when using regular expressions inside
+Special attention has to be paid when using regular expressions inside
 of patterns.  Specifically, Mutt's parser for these patterns will strip
 one level of backslash (<quote>\</quote>), which is normally used for
 quoting.  If it is your intention to use a backslash in the regular

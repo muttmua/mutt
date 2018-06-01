@@ -176,7 +176,7 @@ Usage: smime_keys <operation>  [file(s) | keyID [file(s)]]
         label     : keyID required. changes/removes/adds label.
         remove    : keyID required.
         verify    : 1=keyID and optionally 2=CRL
-                    Verifies the certificate chain, and optionally wether
+                    Verifies the certificate chain, and optionally whether
                     this certificate is included in supplied CRL (PEM format).
                     Note: to verify all certificates at the same time,
                     replace keyID with "all"
@@ -615,7 +615,7 @@ sub openssl_dump_cert ($) {
   my $format = openssl_format($filename);
   my @args = ("x509", "-in", $filename, "-inform", $format);
   my $output = join("", openssl_exec(@args));
-  $? and die "openssl x509 certicate dump returned $?";
+  $? and die "openssl x509 certificate dump returned $?";
 
   return $output;
 }

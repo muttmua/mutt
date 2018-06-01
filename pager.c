@@ -179,7 +179,7 @@ static void
 resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
     ansi_attr *a)
 {
-  int def_color;		/* color without syntax hilight */
+  int def_color;		/* color without syntax highlight */
   int color;			/* final color */
   static int last_color;	/* last color set */
   int search = 0, i, m;

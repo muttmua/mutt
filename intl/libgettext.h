@@ -42,7 +42,7 @@
 
 #endif
 
-/* For automatical extraction of messages sometimes no real
+/* For automatic extraction of messages sometimes no real
    translation is needed.  Instead the string itself is the result.  */
 #define gettext_noop(Str) (Str)
 

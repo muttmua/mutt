@@ -686,7 +686,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
   return hcpath;
 }
 
-/* This function transforms a header into a char so that it is useable by
+/* This function transforms a header into a char so that it is usable by
  * db_store.
  */
 static void *

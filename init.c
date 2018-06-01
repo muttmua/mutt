@@ -3571,7 +3571,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     AliasFile = safe_strdup (Muttrc);
   }
 
-  /* Process the global rc file if it exists and the user hasn't explicity
+  /* Process the global rc file if it exists and the user hasn't explicitly
      requested not to via "-n".  */
   if (!skip_sys_rc)
   {

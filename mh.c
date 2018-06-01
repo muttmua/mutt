@@ -265,7 +265,7 @@ static int mh_already_notified(BUFFY *b, int msgno)
 }
 
 /* Checks new mail for a mh mailbox.
- * check_stats: if true, also count total, new, and flagged mesages.
+ * check_stats: if true, also count total, new, and flagged messages.
  * Returns 1 if the mailbox has new mail.
  */
 int mh_buffy (BUFFY *mailbox, int check_stats)
@@ -1394,7 +1394,7 @@ static void maildir_flags (char *dest, size_t destlen, HEADER * hdr)
 
   /*
    * The maildir specification requires that all files in the cur
-   * subdirectory have the :unique string appeneded, regardless of whether
+   * subdirectory have the :unique string appended, regardless of whether
    * or not there are any flags.  If .old is set, we know that this message
    * will end up in the cur directory, so we include it in the following
    * test even though there is no associated flag.
