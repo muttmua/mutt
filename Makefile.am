@@ -56,7 +56,7 @@ AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(GPGME_CFLAGS) -Iintl
 
 EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-classic.c \
 	crypt-mod-pgp-gpgme.c crypt-mod-smime-classic.c \
-	crypt-mod-smime-gpgme.c dotlock.c gnupgparse.c hcache.c md5.c \
+	crypt-mod-smime-gpgme.c dotlock.c gnupgparse.c hcache.c md5.c monitor.c \
 	mutt_idna.c mutt_sasl.c mutt_socket.c mutt_ssl.c mutt_ssl_gnutls.c \
 	mutt_tunnel.c pgp.c pgpinvoke.c pgpkey.c pgplib.c pgpmicalg.c \
 	pgppacket.c pop.c pop_auth.c pop_lib.c remailer.c resize.c sha1.c \

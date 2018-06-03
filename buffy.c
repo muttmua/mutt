@@ -37,6 +37,10 @@
 #include "imap.h"
 #endif
 
+#ifdef USE_INOTIFY
+#include "monitor.h"
+#endif
+
 #include <string.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -242,6 +246,9 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
 #ifdef USE_SIDEBAR
 	mutt_sb_notify_mailbox (*tmp, 0);
 #endif
+#ifdef USE_INOTIFY
+        mutt_monitor_remove (*tmp);
+#endif
         buffy_free (tmp);
         *tmp=tmp1;
       }
@@ -272,6 +279,9 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
 #ifdef USE_SIDEBAR
 	mutt_sb_notify_mailbox (*tmp, 0);
 #endif
+#ifdef USE_INOTIFY
+        mutt_monitor_remove (*tmp);
+#endif
         buffy_free (tmp);
         *tmp=tmp1;
       }
@@ -282,6 +292,10 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       *tmp = buffy_new (buf);
 #ifdef USE_SIDEBAR
       mutt_sb_notify_mailbox (*tmp, 1);
+#endif
+#ifdef USE_INOTIFY
+      (*tmp)->magic = mx_get_magic ((*tmp)->path);
+      mutt_monitor_add (*tmp);
 #endif
     }
 

@@ -26,6 +26,9 @@
 #include "mutt_curses.h"
 #include "pager.h"
 #include "mbyte.h"
+#ifdef USE_INOTIFY
+#include "monitor.h"
+#endif
 
 #include <termios.h>
 #include <sys/types.h>
@@ -131,7 +134,12 @@ event_t mutt_getch (void)
   ch = KEY_RESIZE;
   while (ch == KEY_RESIZE)
 #endif /* KEY_RESIZE */
-    ch = getch ();
+#ifdef USE_INOTIFY
+    if (mutt_monitor_poll () != 0)
+      ch = ERR;
+    else
+#endif
+      ch = getch ();
   mutt_allow_interrupt (0);
 
   if (SigInt)

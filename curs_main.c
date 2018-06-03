@@ -41,6 +41,10 @@
 #include "imap_private.h"
 #endif
 
+#ifdef USE_INOTIFY
+#include "monitor.h"
+#endif
+
 #include "mutt_crypt.h"
 
 
@@ -577,6 +581,9 @@ int mutt_index_menu (void)
 
   if (!attach_msg)
     mutt_buffy_check(1); /* force the buffy check after we enter the folder */
+#ifdef USE_INOTIFY
+  mutt_monitor_add (NULL);
+#endif
 
   FOREVER
   {
@@ -1270,7 +1277,11 @@ int mutt_index_menu (void)
         {
 	  int check;
           char *new_last_folder;
+#ifdef USE_INOTIFY
+          int monitor_remove_rc;
 
+          monitor_remove_rc = mutt_monitor_remove (NULL);
+#endif
 #ifdef USE_COMPRESSED
 	  if (Context->compress_info && Context->realpath)
 	    new_last_folder = safe_strdup (Context->realpath);
@@ -1281,6 +1292,10 @@ int mutt_index_menu (void)
 
 	  if ((check = mx_close_mailbox (Context, &index_hint)) != 0)
 	  {
+#ifdef USE_INOTIFY
+            if (!monitor_remove_rc)
+              mutt_monitor_add (NULL);
+#endif
 	    if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED)
 	      update_index (menu, Context, check, oldcount, index_hint);
 
@@ -1312,6 +1327,9 @@ int mutt_index_menu (void)
 					MUTT_READONLY : 0, NULL)) != NULL)
 	{
 	  menu->current = ci_first_message ();
+#ifdef USE_INOTIFY
+          mutt_monitor_add (NULL);
+#endif
 	}
 	else
 	  menu->current = 0;

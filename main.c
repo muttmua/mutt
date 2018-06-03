@@ -47,6 +47,10 @@
 #include "hcache.h"
 #endif
 
+#ifdef USE_INOTIFY
+#include "monitor.h"
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -509,6 +513,8 @@ static void show_version (void)
 	"-USE_HCACHE  "
 #endif
 
+	"\n"
+
 #ifdef USE_SIDEBAR
 	"+USE_SIDEBAR  "
 #else
@@ -519,6 +525,12 @@ static void show_version (void)
 	"+USE_COMPRESSED  "
 #else
 	"-USE_COMPRESSED  "
+#endif
+
+#ifdef USE_INOTIFY
+	"+USE_INOTIFY  "
+#else
+	"-USE_INOTIFY  "
 #endif
 
 	);

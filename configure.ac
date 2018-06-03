@@ -832,6 +832,26 @@ if test $mutt_cv_fcntl = yes; then
         AC_DEFINE(USE_FCNTL,1, [ Define to use fcntl() to lock folders. ])
 fi
 
+AC_ARG_ENABLE(filemonitor, AS_HELP_STRING([--disable-filemonitor],[Disable file monitoring support (Linux only)]),
+[       if test x$enableval = xno ; then
+                have_filemonitor=no
+        fi
+])
+
+if test x$have_filemonitor != xno ; then
+        AC_CHECK_FUNCS(inotify_init1 inotify_add_watch inotify_rm_watch,
+        [
+                AC_DEFINE(USE_INOTIFY,1,[ Define if want to use inotify for filesystem monitoring (available in Linux only). ])
+        ],
+        [
+                have_filemonitor=no
+        ])
+        if test x$have_filemonitor != xno ; then
+                AC_CHECK_HEADERS(sys/inotify.h)
+                MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS monitor.o"
+        fi
+fi
+
 AC_MSG_CHECKING(whether struct dirent defines d_ino)
 ac_cv_dirent_d_ino=no
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <dirent.h>]], [[struct dirent dp; (void)dp.d_ino]])],[ac_cv_dirent_d_ino=yes],[])
