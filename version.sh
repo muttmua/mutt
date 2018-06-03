@@ -10,10 +10,10 @@ srcdir=`dirname "$0"` && cd "$srcdir" || exit 1
 { [ -r ".git" ] && command -v git >/dev/null 2>&1; } \
 || exec cat VERSION
 
-latesttag="$(git describe --tags --match 'mutt-*-rel' --abbrev=0)"
-version="$(echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g)"
-distance="$(git rev-list --count $latesttag..)"
-commitid="$(git rev-parse --short HEAD)"
+latesttag=`git describe --tags --match 'mutt-*-rel' --abbrev=0`
+version=`echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g`
+distance=`git rev-list --count $latesttag..`
+commitid=`git rev-parse --short HEAD`
 
 if [ $distance -eq 0 ]; then
   distance=
