@@ -703,7 +703,10 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  {
 	    event_t event;
 	    /*ADDCH (LastKey);*/
-	    event = mutt_getch ();
+            do
+            {
+              event = mutt_getch ();
+            } while (event.ch == -2);
 	    if (event.ch >= 0)
 	    {
 	      LastKey = event.ch;

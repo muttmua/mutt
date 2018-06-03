@@ -917,7 +917,10 @@ static int menu_dialog_dokey (MUTTMENU *menu, int *ip)
   event_t ch;
   char *p;
 
-  ch = mutt_getch ();
+  do
+  {
+    ch = mutt_getch();
+  } while (ch.ch == -2);
 
   if (ch.ch < 0)
   {

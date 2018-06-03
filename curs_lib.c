@@ -932,7 +932,10 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy, in
   mutt_window_clrtoeol (MuttMessageWindow);
   mutt_refresh ();
 
-  ch = mutt_getch();
+  do
+  {
+    ch = mutt_getch();
+  } while (ch.ch == -2);
   if (ch.ch < 0)
   {
     mutt_window_clearline (MuttMessageWindow, 0);
