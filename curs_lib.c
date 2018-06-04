@@ -114,6 +114,19 @@ void mutt_need_hard_redraw (void)
   mutt_set_current_menu_redraw_full ();
 }
 
+/* delay is just like for timeout() or poll():
+ *   the number of milliseconds mutt_getch() should block for input.
+ *   delay == 0 means mutt_getch() is non-blocking.
+ *   delay < 0 means mutt_getch is blocking.
+ */
+void mutt_getch_timeout (int delay)
+{
+  timeout (delay);
+#ifdef USE_INOTIFY
+  mutt_monitor_set_poll_timeout (delay);
+#endif
+}
+
 event_t mutt_getch (void)
 {
   int ch;
@@ -322,9 +335,9 @@ int mutt_yesorno (const char *msg, int def)
 
     mutt_refresh ();
     /* SigWinch is not processed unless timeout is set */
-    timeout (30 * 1000);
+    mutt_getch_timeout (30 * 1000);
     ch = mutt_getch ();
-    timeout (-1);
+    mutt_getch_timeout (-1);
     if (ch.ch == -2)
       continue;
     if (CI_is_return (ch.ch))
@@ -400,7 +413,7 @@ void mutt_query_exit (void)
   mutt_flushinp ();
   curs_set (1);
   if (Timeout)
-    timeout (-1); /* restore blocking operation */
+    mutt_getch_timeout (-1); /* restore blocking operation */
   if (mutt_yesorno (_("Exit Mutt?"), MUTT_YES) == MUTT_YES)
   {
     endwin ();
@@ -1095,9 +1108,9 @@ int mutt_multi_choice (char *prompt, char *letters)
 
     mutt_refresh ();
     /* SigWinch is not processed unless timeout is set */
-    timeout (30 * 1000);
+    mutt_getch_timeout (30 * 1000);
     ch  = mutt_getch ();
-    timeout (-1);
+    mutt_getch_timeout (-1);
     if (ch.ch == -2)
       continue;
     /* (ch.ch == 0) is technically possible.  Treat the same as < 0 (abort) */

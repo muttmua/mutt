@@ -50,6 +50,7 @@ static MONITOR *Monitor = NULL;
 static size_t PollFdsCount = 0;
 static size_t PollFdsLen = 0;
 static struct pollfd *PollFds;
+static int PollTimeout = -1;
 
 typedef struct monitorinfo_t
 {
@@ -202,6 +203,11 @@ static int monitor_handle_ignore (int descr)
   return new_descr;
 }
 
+void mutt_monitor_set_poll_timeout (int timeout)
+{
+  PollTimeout = timeout;
+}
+
 #define EVENT_BUFLEN MAX(4096, sizeof(struct inotify_event) + NAME_MAX + 1)
 
 /* mutt_monitor_poll: Waits for I/O ready file descriptors or signals.
@@ -226,7 +232,7 @@ int mutt_monitor_poll ()
 
   if (INotifyFd != -1)
   {
-    fds = poll (PollFds, PollFdsLen, -1);
+    fds = poll (PollFds, PollFdsLen, PollTimeout);
 
     if (fds == -1)
     {
