@@ -17,6 +17,9 @@ set pgp_good_sign = "Good signature"
 # decrypt a pgp/mime attachment
 set pgp_decrypt_command="PGPPASSFD=0; export PGPPASSFD; cat - %f | pgpv +language=mutt +verbose=0 +batchmode --OutputInformationFD=2 -f"
 
+# don't check for GnuPG decryption status codes
+unset pgp_check_gpg_decrypt_status_fd
+
 # create a pgp/mime signed attachment
 set pgp_sign_command="PGPPASSFD=0; export PGPPASSFD; cat - %f | pgps +language=mutt +verbose=0 +batchmode -abft %?a? -u %a?"
 

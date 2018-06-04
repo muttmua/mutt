@@ -231,7 +231,7 @@ static int pgp_copy_checksig (FILE *fpin, FILE *fpout)
  * This protects against messages with multipart/encrypted headers
  * but which aren't actually encrypted.  See ticket #3770
  */
-static int pgp_check_decryption_okay (FILE *fpin)
+static int pgp_check_pgp_decryption_okay_regexp (FILE *fpin)
 {
   int rv = -1;
 
@@ -245,26 +245,79 @@ static int pgp_check_decryption_okay (FILE *fpin)
     {
       if (regexec (PgpDecryptionOkay.rx, line, 0, NULL, 0) == 0)
       {
-        dprint (2, (debugfile, "pgp_check_decryption_okay: \"%s\" matches regexp.\n",
+        dprint (2, (debugfile, "pgp_check_pgp_decryption_okay_regexp: \"%s\" matches regexp.\n",
                     line));
         rv = 0;
         break;
       }
       else
-        dprint (2, (debugfile, "pgp_check_decryption_okay: \"%s\" doesn't match regexp.\n",
+        dprint (2, (debugfile, "pgp_check_pgp_decryption_okay_regexp: \"%s\" doesn't match regexp.\n",
                     line));
     }
     FREE (&line);
   }
   else
   {
-    dprint (2, (debugfile, "pgp_check_decryption_okay: No pattern.\n"));
+    dprint (2, (debugfile, "pgp_check_pgp_decryption_okay_regexp: No pattern.\n"));
     rv = 1;
   }
 
   return rv;
 }
 
+/* Checks GnuPGP status fd output for various status codes indicating
+ * an issue.  If $pgp_check_gpg_decrypt_status_fd is unset, it falls
+ * back to the old behavior of just scanning for $pgp_decryption_okay.
+ */
+static int pgp_check_decryption_okay (FILE *fpin)
+{
+  int rv = -1;
+  char *line = NULL, *s;
+  int lineno = 0;
+  size_t linelen;
+  int inside_decrypt = 0;
+
+  if (!option (OPTPGPCHECKGPGDECRYPTSTATUSFD))
+    return pgp_check_pgp_decryption_okay_regexp (fpin);
+
+  while ((line = mutt_read_line (line, &linelen, fpin, &lineno, 0)) != NULL)
+  {
+    if (strncmp (line, "[GNUPG:] ", 9) != 0)
+      continue;
+    s = line + 9;
+    dprint (2, (debugfile, "pgp_check_decryption_okay: checking \"%s\".\n",
+                  line));
+    if (mutt_strncmp (s, "BEGIN_DECRYPTION", 16) == 0)
+      inside_decrypt = 1;
+    else if (mutt_strncmp (s, "END_DECRYPTION", 14) == 0)
+      inside_decrypt = 0;
+    else if (mutt_strncmp (s, "PLAINTEXT", 9) == 0)
+    {
+      if (!inside_decrypt)
+      {
+        dprint (2, (debugfile, "\tPLAINTEXT encountered outside of DECRYPTION.  Failure.\n"));
+        rv = -1;
+        break;
+      }
+    }
+    else if (mutt_strncmp (s, "DECRYPTION_FAILED", 17) == 0)
+    {
+      dprint (2, (debugfile, "\tDECRYPTION_FAILED encountered.  Failure.\n"));
+      rv = -1;
+      break;
+    }
+    else if (mutt_strncmp (s, "DECRYPTION_OKAY", 15) == 0)
+    {
+      /* Don't break out because we still have to check for
+       * PLAINTEXT outside of the decryption boundaries. */
+      dprint (2, (debugfile, "\tDECRYPTION_OKAY encountered.\n"));
+      rv = 0;
+    }
+  }
+  FREE (&line);
+
+  return rv;
+}
 
 /* 
  * Copy a clearsigned message, and strip the signature and PGP's
