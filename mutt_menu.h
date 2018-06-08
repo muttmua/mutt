@@ -127,7 +127,7 @@ void mutt_menuDestroy (MUTTMENU **);
 void mutt_push_current_menu (MUTTMENU *);
 void mutt_pop_current_menu (MUTTMENU *);
 void mutt_set_current_menu_redraw (int);
-void mutt_set_current_menu_redraw_full ();
+void mutt_set_current_menu_redraw_full (void);
 void mutt_set_menu_redraw (int, int);
 void mutt_set_menu_redraw_full (int);
 void mutt_current_menu_redraw (void);
