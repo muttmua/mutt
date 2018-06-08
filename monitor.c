@@ -190,7 +190,7 @@ static int monitor_handle_ignore (int descr)
     }
     else
     {
-      dprint (3, (debugfile, "monitor: cleanup watch (implicitely removed) - descriptor=%d\n", descr));
+      dprint (3, (debugfile, "monitor: cleanup watch (implicitly removed) - descriptor=%d\n", descr));
     }
 
     if (new_descr == -1)
