@@ -27,6 +27,6 @@ int mutt_monitor_remove (BUFFY *b);
 #endif
 void mutt_monitor_set_poll_timeout (int timeout);
 int mutt_monitor_get_poll_timeout (void);
-int mutt_monitor_poll ();
+int mutt_monitor_poll (void);
 
 #endif /* MONITOR_H */

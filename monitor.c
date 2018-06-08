@@ -227,7 +227,7 @@ int mutt_monitor_get_poll_timeout (void)
  * Only STDIN and INotify file handles currently expected/supported.
  * More would ask for common infrastructur (sockets?).
  */
-int mutt_monitor_poll ()
+int mutt_monitor_poll (void)
 {
   int rc = 0, fds, i, inputReady;
   char buf[EVENT_BUFLEN]
