@@ -86,6 +86,8 @@ void mutt_curs_set (int);
 #define CI_is_return(c) ((c) == '\r' || (c) == '\n')
 #endif
 
+extern int MuttGetchTimeout;
+
 event_t mutt_getch (void);
 
 void mutt_getch_timeout (int);
