@@ -112,6 +112,7 @@ enum
   ACRAM_MD5,			/* RFC 2195: CRAM-MD5 authentication */
   AGSSAPI,			/* RFC 1731: GSSAPI authentication */
   AUTH_ANON,			/* AUTH=ANONYMOUS */
+  AUTH_OAUTHBEARER,             /* RFC 7628: AUTH=OAUTHBEARER */
   STARTTLS,			/* RFC 2595: STARTTLS */
   LOGINDISABLED,		/*           LOGINDISABLED */
   IDLE,                         /* RFC 2177: IDLE */

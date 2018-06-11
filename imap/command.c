@@ -64,6 +64,7 @@ static const char * const Capabilities[] = {
   "AUTH=CRAM-MD5",
   "AUTH=GSSAPI",
   "AUTH=ANONYMOUS",
+  "AUTH=OAUTHBEARER",
   "STARTTLS",
   "LOGINDISABLED",
   "IDLE",

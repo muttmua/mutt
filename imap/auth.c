@@ -42,6 +42,7 @@ static const imap_auth_t imap_authenticators[] = {
   { imap_auth_cram_md5, "cram-md5" },
 #endif
   { imap_auth_login, "login" },
+  { imap_auth_oauth, "oauthbearer" },
 
   { NULL, NULL }
 };
