@@ -3333,7 +3333,6 @@ struct option_t MuttVars[] = {
   ** (S/MIME only)
   */
 #ifdef USE_SMTP
-# ifdef USE_SASL
   { "smtp_authenticators", DT_STR, R_NONE, UL &SmtpAuthenticators, UL 0 },
   /*
   ** .pp
@@ -3350,7 +3349,6 @@ struct option_t MuttVars[] = {
   ** set smtp_authenticators="digest-md5:cram-md5"
   ** .te
   */
-# endif /* USE_SASL */
   { "smtp_pass", 	DT_STR,  R_NONE, UL &SmtpPass, UL 0 },
   /*
   ** .pp
