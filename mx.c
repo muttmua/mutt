@@ -422,7 +422,11 @@ int mx_get_magic (const char *path)
   }
   else if ((f = fopen (path, "r")) != NULL)
   {
+#ifdef HAVE_UTIMENSAT
+    struct timespec ts[2];
+#else
     struct utimbuf times;
+#endif /* HAVE_UTIMENSAT */
     int ch;
 
     /* Some mailbox creation tools erroneously append a blank line to
@@ -452,9 +456,15 @@ int mx_get_magic (const char *path)
        * only the type was accessed.  This is important, because detection
        * of "new mail" depends on those times set correctly.
        */
+#ifdef HAVE_UTIMENSAT
+      mutt_get_stat_timespec (&ts[0], &st, MUTT_STAT_ATIME);
+      mutt_get_stat_timespec (&ts[1], &st, MUTT_STAT_MTIME);
+      utimensat (0, path, ts, 0);
+#else
       times.actime = st.st_atime;
       times.modtime = st.st_mtime;
       utime (path, &times);
+#endif
     }
   }
   else
@@ -661,16 +671,28 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
 void mx_fastclose_mailbox (CONTEXT *ctx)
 {
   int i;
-  struct utimbuf ut;
+#ifdef HAVE_UTIMENSAT
+    struct timespec ts[2];
+#else
+    struct utimbuf ut;
+#endif /* HAVE_UTIMENSAT */
 
   if(!ctx) 
     return;
 
   /* fix up the times so buffy won't get confused */
-  if (ctx->peekonly && ctx->path && (ctx->mtime > ctx->atime)) {
-    ut.actime  = ctx->atime;
-    ut.modtime = ctx->mtime;
+  if (ctx->peekonly && ctx->path &&
+      (mutt_timespec_compare (&ctx->mtime, &ctx->atime) > 0))
+  {
+#ifdef HAVE_UTIMENSAT
+    ts[0] = ctx->atime;
+    ts[1] = ctx->mtime;
+    utimensat (0, ctx->path, ts, 0);
+#else
+    ut.actime  = ctx->atime.tv_sec;
+    ut.modtime = ctx->mtime.tv_sec;
     utime (ctx->path, &ut);
+#endif /* HAVE_UTIMENSAT */
   }
 
   /* never announce that a mailbox we've just left has new mail. #3290

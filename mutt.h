@@ -85,6 +85,14 @@
 # define fgetc fgetc_unlocked
 #endif
 
+#ifndef HAVE_STRUCT_TIMESPEC
+struct timespec
+{
+  time_t tv_sec;
+  long tv_nsec;
+};
+#endif
+
 /* nifty trick I stole from ELM 2.5alpha. */
 #ifdef MAIN_C
 #define WHERE 
@@ -134,6 +142,14 @@ typedef struct
 
 /* flags for _mutt_system() */
 #define MUTT_DETACH_PROCESS	1	/* detach subprocess from group */
+
+/* flags for mutt_get_stat_timespec */
+typedef enum
+{
+  MUTT_STAT_ATIME,
+  MUTT_STAT_MTIME,
+  MUTT_STAT_CTIME
+} mutt_stat_type;
 
 /* flags for mutt_FormatString() */
 typedef enum
@@ -970,8 +986,8 @@ typedef struct _context
   char *path;
   char *realpath;               /* used for buffy comparison and the sidebar */
   FILE *fp;
-  time_t atime;
-  time_t mtime;
+  struct timespec atime;
+  struct timespec mtime;
   off_t size;
   off_t vsize;
   char *pattern;                /* limit pattern string */

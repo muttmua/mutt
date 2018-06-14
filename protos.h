@@ -123,6 +123,11 @@ time_t mutt_mktime (struct tm *, int);
 time_t mutt_parse_date (const char *, HEADER *);
 int is_from (const char *, char *, size_t, time_t *);
 void mutt_touch_atime (int);
+int mutt_timespec_compare (struct timespec *a, struct timespec *b);
+void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_type type);
+int mutt_stat_timespec_compare (struct stat *sba, mutt_stat_type type, struct timespec *b);
+int mutt_stat_compare (struct stat *sba, mutt_stat_type sba_type, struct stat *sbb, mutt_stat_type sbb_type);
+
 
 const char *mutt_attach_fmt (
 	char *dest,

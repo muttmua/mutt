@@ -149,7 +149,11 @@ static int test_new_folder (const char *path)
 
 void mutt_buffy_cleanup (const char *buf, struct stat *st)
 {
+#ifdef HAVE_UTIMENSAT
+  struct timespec ts[2];
+#else
   struct utimbuf ut;
+#endif
   BUFFY *tmp;
 
   if (option(OPTCHECKMBOXSIZE))
@@ -163,12 +167,30 @@ void mutt_buffy_cleanup (const char *buf, struct stat *st)
     /* fix up the times so buffy won't get confused */
     if (st->st_mtime > st->st_atime)
     {
+#ifdef HAVE_UTIMENSAT
+      ts[0].tv_sec = 0;
+      ts[0].tv_nsec = UTIME_OMIT;
+      ts[1].tv_sec = 0;
+      ts[1].tv_nsec = UTIME_NOW;
+      utimensat (0, buf, ts, 0);
+#else
       ut.actime = st->st_atime;
       ut.modtime = time (NULL);
       utime (buf, &ut); 
+#endif
     }
     else
+    {
+#ifdef HAVE_UTIMENSAT
+      ts[0].tv_sec = 0;
+      ts[0].tv_nsec = UTIME_NOW;
+      ts[1].tv_sec = 0;
+      ts[1].tv_nsec = UTIME_NOW;
+      utimensat (0, buf, ts, 0);
+#else
       utime (buf, NULL);
+#endif
+    }
   }
 }
 
@@ -342,7 +364,8 @@ static int buffy_maildir_check_dir (BUFFY* mailbox, const char *dir_name, int ch
    */
   if (check_new && option(OPTMAILCHECKRECENT))
   {
-    if (stat(path, &sb) == 0 && sb.st_mtime < mailbox->last_visited)
+    if (stat(path, &sb) == 0 &&
+        mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &mailbox->last_visited) < 0)
     {
       rc = 0;
       check_new = 0;
@@ -383,7 +406,8 @@ static int buffy_maildir_check_dir (BUFFY* mailbox, const char *dir_name, int ch
         {
           snprintf(msgpath, sizeof(msgpath), "%s/%s", path, de->d_name);
           /* ensure this message was received since leaving this mailbox */
-          if (stat(msgpath, &sb) == 0 && (sb.st_ctime <= mailbox->last_visited))
+          if (stat(msgpath, &sb) == 0 &&
+              (mutt_stat_timespec_compare (&sb, MUTT_STAT_CTIME, &mailbox->last_visited) <= 0))
             continue;
         }
         mailbox->new = 1;
@@ -438,12 +462,15 @@ static int buffy_mbox_check (BUFFY* mailbox, struct stat *sb, int check_stats)
   if (option (OPTCHECKMBOXSIZE))
     new_or_changed = sb->st_size > mailbox->size;
   else
-    new_or_changed = sb->st_mtime > sb->st_atime
-      || (mailbox->newly_created && sb->st_ctime == sb->st_mtime && sb->st_ctime == sb->st_atime);
+    new_or_changed = (mutt_stat_compare (sb, MUTT_STAT_MTIME, sb, MUTT_STAT_ATIME) > 0)
+      || (mailbox->newly_created &&
+          (mutt_stat_compare (sb, MUTT_STAT_CTIME, sb, MUTT_STAT_MTIME) == 0) &&
+          (mutt_stat_compare (sb, MUTT_STAT_CTIME, sb, MUTT_STAT_ATIME) == 0));
 
   if (new_or_changed)
   {
-    if (!option(OPTMAILCHECKRECENT) || sb->st_mtime > mailbox->last_visited)
+    if (!option(OPTMAILCHECKRECENT) ||
+        (mutt_stat_timespec_compare (sb, MUTT_STAT_MTIME, &mailbox->last_visited) > 0))
     {
       rc = 1;
       mailbox->new = 1;
@@ -460,7 +487,7 @@ static int buffy_mbox_check (BUFFY* mailbox, struct stat *sb, int check_stats)
     mailbox->newly_created = 0;
 
   if (check_stats &&
-      (mailbox->stats_last_checked < sb->st_mtime))
+      (mutt_stat_timespec_compare (sb, MUTT_STAT_MTIME, &mailbox->stats_last_checked) > 0))
   {
     if (mx_open_mailbox (mailbox->path,
                          MUTT_READONLY | MUTT_QUIET | MUTT_NOSORT | MUTT_PEEK,
@@ -671,7 +698,12 @@ void mutt_buffy_setnotified (const char *path)
     return;
 
   buffy->notified = 1;
-  time(&buffy->last_visited);
+#if HAVE_CLOCK_GETTIME
+  clock_gettime (CLOCK_REALTIME, &buffy->last_visited);
+#else
+  buffy->last_visited.tv_nsec = 0;
+  time(&buffy->last_visited.tv_sec);
+#endif
 }
 
 int mutt_buffy_notify (void)

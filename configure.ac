@@ -454,6 +454,20 @@ AC_CHECK_FUNCS(strftime, , [AC_CHECK_LIB(intl, strftime)])
 dnl Set the atime of files
 AC_CHECK_FUNCS(futimens)
 
+dnl Check for struct timespec
+AC_CHECK_TYPES([struct timespec],,,[[#include <time.h>]])
+
+dnl Check for stat nanosecond resolutions
+AC_CHECK_MEMBERS([struct stat.st_atim.tv_nsec,
+                  struct stat.st_mtim.tv_nsec,
+                  struct stat.st_ctim.tv_nsec],,,[[#include <sys/stat.h>]])
+
+dnl Check for utimesnsat
+AC_CHECK_FUNCS(utimensat)
+
+dnl Check for clock_gettime
+AC_CHECK_FUNCS(clock_gettime)
+
 dnl AIX may not have fchdir()
 AC_CHECK_FUNCS(fchdir, , [mutt_cv_fchdir=no])
 

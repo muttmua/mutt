@@ -1956,6 +1956,65 @@ void mutt_touch_atime (int f)
 #endif
 }
 
+int mutt_timespec_compare (struct timespec *a, struct timespec *b)
+{
+  if (a->tv_sec < b->tv_sec)
+    return -1;
+  if (a->tv_sec > b->tv_sec)
+    return 1;
+
+  if (a->tv_nsec < b->tv_nsec)
+    return -1;
+  if (a->tv_nsec > b->tv_nsec)
+    return 1;
+  return 0;
+}
+
+void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_type type)
+{
+  dest->tv_nsec = 0;
+
+  switch (type)
+  {
+    case MUTT_STAT_ATIME:
+      dest->tv_sec = sb->st_atime;
+#ifdef HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC
+      dest->tv_nsec = sb->st_atim.tv_nsec;
+#endif
+      break;
+    case MUTT_STAT_MTIME:
+      dest->tv_sec = sb->st_mtime;
+#ifdef HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC
+      dest->tv_nsec = sb->st_mtim.tv_nsec;
+#endif
+      break;
+    case MUTT_STAT_CTIME:
+      dest->tv_sec = sb->st_ctime;
+#ifdef HAVE_STRUCT_STAT_ST_CTIM_TV_NSEC
+      dest->tv_nsec = sb->st_ctim.tv_nsec;
+#endif
+      break;
+  }
+}
+
+int mutt_stat_timespec_compare (struct stat *sba, mutt_stat_type type, struct timespec *b)
+{
+  struct timespec a;
+
+  mutt_get_stat_timespec (&a, sba, type);
+  return mutt_timespec_compare (&a, b);
+}
+
+int mutt_stat_compare (struct stat *sba, mutt_stat_type sba_type,
+                       struct stat *sbb, mutt_stat_type sbb_type)
+{
+  struct timespec a, b;
+
+  mutt_get_stat_timespec (&a, sba, sba_type);
+  mutt_get_stat_timespec (&b, sbb, sbb_type);
+  return mutt_timespec_compare (&a, &b);
+}
+
 const char *mutt_make_version (void)
 {
   static char vstring[STRING];

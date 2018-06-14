@@ -90,6 +90,9 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
   HEADER *hdr;
   struct stat sb;
 #ifdef NFS_ATTRIBUTE_HACK
+#ifdef HAVE_UTIMENSAT
+  struct timespec ts[2];
+#endif /* HAVE_UTIMENSAT */
   struct utimbuf newtime;
 #endif
   progress_t progress;
@@ -100,16 +103,24 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
     mutt_perror (ctx->path);
     return (-1);
   }
-  ctx->atime = sb.st_atime;
-  ctx->mtime = sb.st_mtime;
+  mutt_get_stat_timespec (&ctx->atime, &sb, MUTT_STAT_ATIME);
+  mutt_get_stat_timespec (&ctx->mtime, &sb, MUTT_STAT_MTIME);
   ctx->size = sb.st_size;
 
 #ifdef NFS_ATTRIBUTE_HACK
   if (sb.st_mtime > sb.st_atime)
   {
-    newtime.modtime = sb.st_mtime;
+#ifdef HAVE_UTIMENSAT
+    ts[0].tv_sec = 0;
+    ts[0].tv_nsec = UTIME_NOW;
+    ts[1].tv_sec = 0;
+    ts[1].tv_nsec = UTIME_OMIT;
+    utimensat (0, ctx->path, ts, 0);
+#else
     newtime.actime = time (NULL);
+    newtime.modtime = sb.st_mtime;
     utime (ctx->path, &newtime);
+#endif /* HAVE_UTIMENSAT */
   }
 #endif
 
@@ -238,6 +249,9 @@ int mbox_parse_mailbox (CONTEXT *ctx)
   int count = 0, lines = 0;
   LOFF_T loc;
 #ifdef NFS_ATTRIBUTE_HACK
+#ifdef HAVE_UTIMENSAT
+  struct timespec ts[2];
+#endif /* HAVE_UTIMENSAT */
   struct utimbuf newtime;
 #endif
   progress_t progress;
@@ -251,15 +265,23 @@ int mbox_parse_mailbox (CONTEXT *ctx)
   }
 
   ctx->size = sb.st_size;
-  ctx->mtime = sb.st_mtime;
-  ctx->atime = sb.st_atime;
+  mutt_get_stat_timespec (&ctx->mtime, &sb, MUTT_STAT_MTIME);
+  mutt_get_stat_timespec (&ctx->atime, &sb, MUTT_STAT_ATIME);
 
 #ifdef NFS_ATTRIBUTE_HACK
   if (sb.st_mtime > sb.st_atime)
   {
-    newtime.modtime = sb.st_mtime;
+#ifdef HAVE_UTIMENSAT
+    ts[0].tv_sec = 0;
+    ts[0].tv_nsec = UTIME_NOW;
+    ts[1].tv_sec = 0;
+    ts[1].tv_nsec = UTIME_OMIT;
+    utimensat (0, ctx->path, ts, 0);
+#else
     newtime.actime = time (NULL);
+    newtime.modtime = sb.st_mtime;
     utime (ctx->path, &newtime);
+#endif /* HAVE_UTIMENSAT */
   }
 #endif
 
@@ -666,13 +688,14 @@ static int mbox_check_mailbox (CONTEXT *ctx, int *index_hint)
 
   if (stat (ctx->path, &st) == 0)
   {
-    if (st.st_mtime == ctx->mtime && st.st_size == ctx->size)
+    if ((mutt_stat_timespec_compare (&st, MUTT_STAT_MTIME, &ctx->mtime) == 0) &&
+        st.st_size == ctx->size)
       return (0);
 
     if (st.st_size == ctx->size)
     {
       /* the file was touched, but it is still the same length, so just exit */
-      ctx->mtime = st.st_mtime;
+      mutt_get_stat_timespec (&ctx->mtime, &st, MUTT_STAT_MTIME);
       return (0);
     }
 
