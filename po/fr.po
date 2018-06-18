@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-14 08:57+0200\n"
-"PO-Revision-Date: 2018-06-14 09:08+0200\n"
+"POT-Creation-Date: 2018-06-18 17:17+0200\n"
+"PO-Revision-Date: 2018-06-18 17:18+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -56,7 +56,7 @@ msgstr "Récup"
 msgid "Select"
 msgstr "Sélectionner"
 
-#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4096 curs_main.c:497
+#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4100 curs_main.c:497
 #: history.c:78 mutt_ssl.c:1259 mutt_ssl_gnutls.c:1024 pager.c:1981
 #: pgpkey.c:522 postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
 msgid "Help"
@@ -322,7 +322,7 @@ msgid "Error trying to view file"
 msgstr "Erreur en essayant de visualiser le fichier"
 
 # , c-format
-#: buffy.c:622
+#: buffy.c:649
 msgid "New mail in "
 msgstr "Nouveau(x) message(s) dans "
 
@@ -391,7 +391,7 @@ msgstr "La couleur default n'est pas disponible"
 msgid "Verify signature?"
 msgstr "Vérifier la signature ?"
 
-#: commands.c:116 mbox.c:878
+#: commands.c:116 mbox.c:901
 msgid "Could not create temporary file!"
 msgstr "Impossible de créer le fichier temporaire !"
 
@@ -667,7 +667,7 @@ msgstr "Sécurité : "
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:111 crypt-gpgme.c:4845 pgp.c:1849 smime.c:2231
+#: compose.c:111 crypt-gpgme.c:4849 pgp.c:1849 smime.c:2231
 msgid "Sign as: "
 msgstr "Signer avec : "
 
@@ -900,7 +900,7 @@ msgstr "Pas de backend S/MIME configuré"
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP déjà sélectionné. Effacer & continuer ? "
 
-#: compress.c:481 compress.c:551 compress.c:706 compress.c:895 mbox.c:852
+#: compress.c:481 compress.c:551 compress.c:706 compress.c:895 mbox.c:875
 msgid "Unable to lock mailbox!"
 msgstr "Impossible de verrouiller la boîte aux lettres !"
 
@@ -978,7 +978,7 @@ msgid "error creating gpgme data object: %s\n"
 msgstr "erreur lors de la création de l'objet gpgme : %s\n"
 
 # , c-format
-#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1548 crypt-gpgme.c:2266
+#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1552 crypt-gpgme.c:2270
 #, c-format
 msgid "error allocating data object: %s\n"
 msgstr "erreur lors de l'allocation de l'objet : %s\n"
@@ -995,7 +995,7 @@ msgstr "erreur lors du retour au début de l'objet : %s\n"
 msgid "error reading data object: %s\n"
 msgstr "erreur lors de la lecture de l'objet : %s\n"
 
-#: crypt-gpgme.c:573 crypt-gpgme.c:3710 pgpkey.c:560 pgpkey.c:740
+#: crypt-gpgme.c:573 crypt-gpgme.c:3714 pgpkey.c:560 pgpkey.c:740
 msgid "Can't create temporary file"
 msgstr "Impossible de créer le fichier temporaire"
 
@@ -1087,7 +1087,7 @@ msgstr ""
 msgid "PKA verified signer's address is: "
 msgstr "L'adresse du signataire vérifiée par PKA est : "
 
-#: crypt-gpgme.c:1269 crypt-gpgme.c:3403
+#: crypt-gpgme.c:1269 crypt-gpgme.c:3407
 msgid "Fingerprint: "
 msgstr "Empreinte : "
 
@@ -1111,63 +1111,67 @@ msgstr ""
 "ATTENTION ! Il n'est PAS certain que la clé appartienne à la personne nommée "
 "ci-dessus\n"
 
-#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3398
+#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3402
 msgid "aka: "
 msgstr "aka : "
 
-#: crypt-gpgme.c:1385
+#: crypt-gpgme.c:1386
+msgid "no signature fingerprint available"
+msgstr "pas d'empreinte de signature disponible"
+
+#: crypt-gpgme.c:1388
 msgid "KeyID "
 msgstr "ID de la clé "
 
 # , c-format
-#: crypt-gpgme.c:1394 crypt-gpgme.c:1399
+#: crypt-gpgme.c:1398 crypt-gpgme.c:1403
 msgid "created: "
 msgstr "créée : "
 
-#: crypt-gpgme.c:1472
+#: crypt-gpgme.c:1476
 #, c-format
 msgid "Error getting key information for KeyID %s: %s\n"
 msgstr "Erreur en récupérant les infos de la clé pour l'ID %s : %s\n"
 
-#: crypt-gpgme.c:1479 crypt-gpgme.c:1494
+#: crypt-gpgme.c:1483 crypt-gpgme.c:1498
 msgid "Good signature from:"
 msgstr "Bonne signature de :"
 
-#: crypt-gpgme.c:1486
+#: crypt-gpgme.c:1490
 msgid "*BAD* signature from:"
 msgstr "*MAUVAISE* signature de :"
 
-#: crypt-gpgme.c:1502
+#: crypt-gpgme.c:1506
 msgid "Problem signature from:"
 msgstr "Signature problématique de :"
 
 #. L10N:
 #. This is trying to match the width of the
 #. "Problem signature from:" translation just above.
-#: crypt-gpgme.c:1509
+#: crypt-gpgme.c:1513
 msgid "               expires: "
 msgstr "                    expire : "
 
-#: crypt-gpgme.c:1556 crypt-gpgme.c:1782 crypt-gpgme.c:2483
+#: crypt-gpgme.c:1560 crypt-gpgme.c:1786 crypt-gpgme.c:2487
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Début des informations sur la signature --]\n"
 
 # , c-format
-#: crypt-gpgme.c:1568
+#: crypt-gpgme.c:1572
 #, c-format
 msgid "Error: verification failed: %s\n"
 msgstr "Erreur : la vérification a échoué : %s\n"
 
-#: crypt-gpgme.c:1622
+#: crypt-gpgme.c:1626
 #, c-format
 msgid "*** Begin Notation (signature by: %s) ***\n"
 msgstr "*** Début de la note (signature par : %s) ***\n"
 
-#: crypt-gpgme.c:1644
+#: crypt-gpgme.c:1648
 msgid "*** End Notation ***\n"
 msgstr "*** Fin de la note ***\n"
 
-#: crypt-gpgme.c:1652 crypt-gpgme.c:1795 crypt-gpgme.c:2496
+#: crypt-gpgme.c:1656 crypt-gpgme.c:1799 crypt-gpgme.c:2500
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1175,7 +1179,7 @@ msgstr ""
 "[-- Fin des informations sur la signature --]\n"
 "\n"
 
-#: crypt-gpgme.c:1750
+#: crypt-gpgme.c:1754
 #, c-format
 msgid ""
 "[-- Error: decryption failed: %s --]\n"
@@ -1184,20 +1188,20 @@ msgstr ""
 "[-- Erreur : le déchiffrement a échoué : %s --]\n"
 "\n"
 
-#: crypt-gpgme.c:2273
+#: crypt-gpgme.c:2277
 msgid "Error extracting key data!\n"
 msgstr "Erreur d'extraction des données de la clé !\n"
 
-#: crypt-gpgme.c:2459
+#: crypt-gpgme.c:2463
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Erreur : le déchiffrement/vérification a échoué : %s\n"
 
-#: crypt-gpgme.c:2504
+#: crypt-gpgme.c:2508
 msgid "Error: copy data failed\n"
 msgstr "Erreur : la copie des données a échoué\n"
 
-#: crypt-gpgme.c:2525 pgp.c:617
+#: crypt-gpgme.c:2529 pgp.c:617
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1205,11 +1209,11 @@ msgstr ""
 "[-- DÉBUT DE MESSAGE PGP --]\n"
 "\n"
 
-#: crypt-gpgme.c:2527 pgp.c:619
+#: crypt-gpgme.c:2531 pgp.c:619
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- DÉBUT DE BLOC DE CLÉ PUBLIQUE PGP --]\n"
 
-#: crypt-gpgme.c:2530 pgp.c:621
+#: crypt-gpgme.c:2534 pgp.c:621
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1217,19 +1221,19 @@ msgstr ""
 "[-- DÉBUT DE MESSAGE SIGNÉ PGP --]\n"
 "\n"
 
-#: crypt-gpgme.c:2557 pgp.c:661
+#: crypt-gpgme.c:2561 pgp.c:661
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- FIN DE MESSAGE PGP --]\n"
 
-#: crypt-gpgme.c:2559 pgp.c:670
+#: crypt-gpgme.c:2563 pgp.c:670
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- FIN DE BLOC DE CLÉ PUBLIQUE PGP --]\n"
 
-#: crypt-gpgme.c:2561 pgp.c:672
+#: crypt-gpgme.c:2565 pgp.c:672
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- FIN DE MESSAGE SIGNÉ PGP --]\n"
 
-#: crypt-gpgme.c:2584 pgp.c:702
+#: crypt-gpgme.c:2588 pgp.c:702
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1237,11 +1241,11 @@ msgstr ""
 "[-- Erreur : impossible de trouver le début du message PGP ! --]\n"
 "\n"
 
-#: crypt-gpgme.c:2615 crypt-gpgme.c:2688 pgp.c:1122
+#: crypt-gpgme.c:2619 crypt-gpgme.c:2692 pgp.c:1122
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Erreur : impossible de créer le fichier temporaire ! --]\n"
 
-#: crypt-gpgme.c:2627
+#: crypt-gpgme.c:2631
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1249,7 +1253,7 @@ msgstr ""
 "[-- Les données suivantes sont signées et chiffrées avec PGP/MIME --]\n"
 "\n"
 
-#: crypt-gpgme.c:2628 pgp.c:1131
+#: crypt-gpgme.c:2632 pgp.c:1131
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1257,23 +1261,23 @@ msgstr ""
 "[-- Les données suivantes sont chiffrées avec PGP/MIME --]\n"
 "\n"
 
-#: crypt-gpgme.c:2650
+#: crypt-gpgme.c:2654
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- Fin des données signées et chiffrées avec PGP/MIME --]\n"
 
-#: crypt-gpgme.c:2651 pgp.c:1151
+#: crypt-gpgme.c:2655 pgp.c:1151
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- Fin des données chiffrées avec PGP/MIME --]\n"
 
-#: crypt-gpgme.c:2656 pgp.c:667 pgp.c:1156
+#: crypt-gpgme.c:2660 pgp.c:667 pgp.c:1156
 msgid "PGP message successfully decrypted."
 msgstr "Message PGP déchiffré avec succès."
 
-#: crypt-gpgme.c:2660 pgp.c:603 pgp.c:663 pgp.c:1160
+#: crypt-gpgme.c:2664 pgp.c:603 pgp.c:663 pgp.c:1160
 msgid "Could not decrypt PGP message"
 msgstr "Impossible de déchiffrer le message PGP"
 
-#: crypt-gpgme.c:2700
+#: crypt-gpgme.c:2704
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1281,7 +1285,7 @@ msgstr ""
 "[-- Les données suivantes sont signées avec S/MIME --]\n"
 "\n"
 
-#: crypt-gpgme.c:2701
+#: crypt-gpgme.c:2705
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1289,23 +1293,23 @@ msgstr ""
 "[-- Les données suivantes sont chiffrées avec S/MIME --]\n"
 "\n"
 
-#: crypt-gpgme.c:2731
+#: crypt-gpgme.c:2735
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- Fin des données signées avec S/MIME --]\n"
 
-#: crypt-gpgme.c:2732
+#: crypt-gpgme.c:2736
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- Fin des données chiffrées avec S/MIME --]\n"
 
-#: crypt-gpgme.c:3316
+#: crypt-gpgme.c:3320
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Impossible d'afficher cet ID d'utilisateur (encodage inconnu)]"
 
-#: crypt-gpgme.c:3318
+#: crypt-gpgme.c:3322
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Impossible d'afficher cet ID d'utilisateur (encodage invalide)]"
 
-#: crypt-gpgme.c:3323
+#: crypt-gpgme.c:3327
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Impossible d'afficher cet ID d'utilisateur (DN invalide)]"
 
@@ -1313,156 +1317,156 @@ msgstr "[Impossible d'afficher cet ID d'utilisateur (DN invalide)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3397
+#: crypt-gpgme.c:3401
 msgid "Name: "
 msgstr "Nom : "
 
 # , c-format
-#: crypt-gpgme.c:3399
+#: crypt-gpgme.c:3403
 msgid "Valid From: "
 msgstr "From valide : "
 
 # , c-format
-#: crypt-gpgme.c:3400
+#: crypt-gpgme.c:3404
 msgid "Valid To: "
 msgstr "To valide : "
 
-#: crypt-gpgme.c:3401
+#: crypt-gpgme.c:3405
 msgid "Key Type: "
 msgstr "Type de clé : "
 
-#: crypt-gpgme.c:3402
+#: crypt-gpgme.c:3406
 msgid "Key Usage: "
 msgstr "Utilisation : "
 
-#: crypt-gpgme.c:3404
+#: crypt-gpgme.c:3408
 msgid "Serial-No: "
 msgstr "N° de série : "
 
-#: crypt-gpgme.c:3405
+#: crypt-gpgme.c:3409
 msgid "Issued By: "
 msgstr "Publiée par : "
 
 # , c-format
-#: crypt-gpgme.c:3406
+#: crypt-gpgme.c:3410
 msgid "Subkey: "
 msgstr "Sous-clé : "
 
 # , c-format
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3457 crypt-gpgme.c:3612
+#: crypt-gpgme.c:3461 crypt-gpgme.c:3616
 msgid "[Invalid]"
 msgstr "[Invalide]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:3509 crypt-gpgme.c:3668
+#: crypt-gpgme.c:3513 crypt-gpgme.c:3672
 #, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "%s, %lu bits, %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3518 crypt-gpgme.c:3676
+#: crypt-gpgme.c:3522 crypt-gpgme.c:3680
 msgid "encryption"
 msgstr "chiffrement"
 
-#: crypt-gpgme.c:3519 crypt-gpgme.c:3525 crypt-gpgme.c:3531 crypt-gpgme.c:3677
-#: crypt-gpgme.c:3682 crypt-gpgme.c:3687
+#: crypt-gpgme.c:3523 crypt-gpgme.c:3529 crypt-gpgme.c:3535 crypt-gpgme.c:3681
+#: crypt-gpgme.c:3686 crypt-gpgme.c:3691
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3524 crypt-gpgme.c:3681
+#: crypt-gpgme.c:3528 crypt-gpgme.c:3685
 msgid "signing"
 msgstr "signature"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3530 crypt-gpgme.c:3686
+#: crypt-gpgme.c:3534 crypt-gpgme.c:3690
 msgid "certification"
 msgstr "certification"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3606
+#: crypt-gpgme.c:3610
 msgid "[Revoked]"
 msgstr "[Révoquée]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3618
+#: crypt-gpgme.c:3622
 msgid "[Expired]"
 msgstr "[Expirée]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3624
+#: crypt-gpgme.c:3628
 msgid "[Disabled]"
 msgstr "[Désactivée]"
 
 # , c-format
-#: crypt-gpgme.c:3713
+#: crypt-gpgme.c:3717
 msgid "Collecting data..."
 msgstr "Récupération des données..."
 
 # , c-format
-#: crypt-gpgme.c:3739
+#: crypt-gpgme.c:3743
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Erreur en cherchant la clé de l'émetteur : %s\n"
 
-#: crypt-gpgme.c:3749
+#: crypt-gpgme.c:3753
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Erreur : chaîne de certification trop longue - on arrête ici\n"
 
 # , c-format
-#: crypt-gpgme.c:3760 pgpkey.c:582
+#: crypt-gpgme.c:3764 pgpkey.c:582
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "ID de la clé : 0x%s"
 
-#: crypt-gpgme.c:3843
+#: crypt-gpgme.c:3847
 #, c-format
 msgid "gpgme_new failed: %s"
 msgstr "gpgme_new a échoué : %s"
 
-#: crypt-gpgme.c:3882 crypt-gpgme.c:3957
+#: crypt-gpgme.c:3886 crypt-gpgme.c:3961
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "gpgme_op_keylist_start a échoué : %s"
 
-#: crypt-gpgme.c:3944 crypt-gpgme.c:3988
+#: crypt-gpgme.c:3948 crypt-gpgme.c:3992
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "gpgme_op_keylist_next a échoué : %s"
 
-#: crypt-gpgme.c:4059
+#: crypt-gpgme.c:4063
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4088 mutt_ssl.c:1257 mutt_ssl_gnutls.c:1022 pgpkey.c:515
+#: crypt-gpgme.c:4092 mutt_ssl.c:1257 mutt_ssl_gnutls.c:1022 pgpkey.c:515
 #: smime.c:435
 msgid "Exit  "
 msgstr "Quitter  "
 
-#: crypt-gpgme.c:4090 pgpkey.c:517 smime.c:437
+#: crypt-gpgme.c:4094 pgpkey.c:517 smime.c:437
 msgid "Select  "
 msgstr "Sélectionner  "
 
-#: crypt-gpgme.c:4093 pgpkey.c:520
+#: crypt-gpgme.c:4097 pgpkey.c:520
 msgid "Check key  "
 msgstr "Vérifier clé  "
 
-#: crypt-gpgme.c:4110
+#: crypt-gpgme.c:4114
 msgid "PGP and S/MIME keys matching"
 msgstr "clés PGP et S/MIME correspondant à"
 
-#: crypt-gpgme.c:4112
+#: crypt-gpgme.c:4116
 msgid "PGP keys matching"
 msgstr "clés PGP correspondant à"
 
-#: crypt-gpgme.c:4114
+#: crypt-gpgme.c:4118
 msgid "S/MIME keys matching"
 msgstr "clés S/MIME correspondant à"
 
-#: crypt-gpgme.c:4116
+#: crypt-gpgme.c:4120
 msgid "keys matching"
 msgstr "clés correspondant à"
 
@@ -1470,66 +1474,66 @@ msgstr "clés correspondant à"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4123
+#: crypt-gpgme.c:4127
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4127
+#: crypt-gpgme.c:4131
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s \"%s\"."
 
-#: crypt-gpgme.c:4154 pgpkey.c:602
+#: crypt-gpgme.c:4158 pgpkey.c:602
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr "Cette clé ne peut pas être utilisée : expirée/désactivée/révoquée."
 
-#: crypt-gpgme.c:4168 pgpkey.c:614 smime.c:468
+#: crypt-gpgme.c:4172 pgpkey.c:614 smime.c:468
 msgid "ID is expired/disabled/revoked."
 msgstr "L'ID est expiré/désactivé/révoqué."
 
-#: crypt-gpgme.c:4176 pgpkey.c:618 smime.c:471
+#: crypt-gpgme.c:4180 pgpkey.c:618 smime.c:471
 msgid "ID has undefined validity."
 msgstr "L'ID a une validité indéfinie."
 
-#: crypt-gpgme.c:4179 pgpkey.c:621
+#: crypt-gpgme.c:4183 pgpkey.c:621
 msgid "ID is not valid."
 msgstr "L'ID n'est pas valide."
 
-#: crypt-gpgme.c:4182 pgpkey.c:624
+#: crypt-gpgme.c:4186 pgpkey.c:624
 msgid "ID is only marginally valid."
 msgstr "L'ID n'est que peu valide."
 
 # , c-format
-#: crypt-gpgme.c:4191 pgpkey.c:628 smime.c:478
+#: crypt-gpgme.c:4195 pgpkey.c:628 smime.c:478
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%s Voulez-vous vraiment utiliser la clé ?"
 
-#: crypt-gpgme.c:4246 crypt-gpgme.c:4362 pgpkey.c:838 pgpkey.c:965
+#: crypt-gpgme.c:4250 crypt-gpgme.c:4366 pgpkey.c:838 pgpkey.c:965
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "Recherche des clés correspondant à \"%s\"..."
 
 # , c-format
-#: crypt-gpgme.c:4517 pgp.c:1335
+#: crypt-gpgme.c:4521 pgp.c:1335
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "Utiliser keyID = \"%s\" pour %s ?"
 
 # , c-format
-#: crypt-gpgme.c:4575 pgp.c:1384 smime.c:797 smime.c:903
+#: crypt-gpgme.c:4579 pgp.c:1384 smime.c:797 smime.c:903
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "Entrez keyID pour %s : "
 
-#: crypt-gpgme.c:4652 pgpkey.c:725
+#: crypt-gpgme.c:4656 pgpkey.c:725
 msgid "Please enter the key ID: "
 msgstr "Veuillez entrer l'ID de la clé : "
 
-#: crypt-gpgme.c:4665
+#: crypt-gpgme.c:4669
 #, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Erreur à l'export de la clé : %s\n"
@@ -1539,20 +1543,20 @@ msgstr "Erreur à l'export de la clé : %s\n"
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:4685
+#: crypt-gpgme.c:4689
 #, c-format
 msgid "PGP Key 0x%s."
 msgstr "Clé PGP 0x%s."
 
-#: crypt-gpgme.c:4727
+#: crypt-gpgme.c:4731
 msgid "GPGME: OpenPGP protocol not available"
 msgstr "GPGME : protocole OpenPGP non disponible"
 
-#: crypt-gpgme.c:4735
+#: crypt-gpgme.c:4739
 msgid "GPGME: CMS protocol not available"
 msgstr "GPGME : protocole CMS non disponible"
 
-#: crypt-gpgme.c:4772
+#: crypt-gpgme.c:4776
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr "Signer s/mime, En tant que, Pgp, Rien, ou mode Oppenc inactif ? "
 
@@ -1560,61 +1564,61 @@ msgstr "Signer s/mime, En tant que, Pgp, Rien, ou mode Oppenc inactif ? "
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:4777
+#: crypt-gpgme.c:4781
 msgid "sapfco"
 msgstr "seprro"
 
-#: crypt-gpgme.c:4782
+#: crypt-gpgme.c:4786
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr "Signer pgp, En tant que, s/Mime, Rien, ou mode Oppenc inactif ? "
 
-#: crypt-gpgme.c:4783
+#: crypt-gpgme.c:4787
 msgid "samfco"
 msgstr "semrro"
 
-#: crypt-gpgme.c:4795
+#: crypt-gpgme.c:4799
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
 msgstr ""
 "Chiffrer s/mime, Signer, En tant que, les Deux, Pgp, Rien, ou mode Oppenc ? "
 
-#: crypt-gpgme.c:4796
+#: crypt-gpgme.c:4800
 msgid "esabpfco"
 msgstr "csedprro"
 
-#: crypt-gpgme.c:4801
+#: crypt-gpgme.c:4805
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
 msgstr ""
 "Chiffrer pgp, Signer, En tant que, les Deux, s/Mime, Rien, ou mode Oppenc ? "
 
-#: crypt-gpgme.c:4802
+#: crypt-gpgme.c:4806
 msgid "esabmfco"
 msgstr "csedmrro"
 
-#: crypt-gpgme.c:4813
+#: crypt-gpgme.c:4817
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr "Chiffrer s/mime, Signer, En tant que, les Deux, Pgp, ou Rien ? "
 
-#: crypt-gpgme.c:4814
+#: crypt-gpgme.c:4818
 msgid "esabpfc"
 msgstr "csedprr"
 
-#: crypt-gpgme.c:4819
+#: crypt-gpgme.c:4823
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr "Chiffrer pgp, Signer, En tant que, les Deux, s/Mime, ou Rien ? "
 
-#: crypt-gpgme.c:4820
+#: crypt-gpgme.c:4824
 msgid "esabmfc"
 msgstr "csedmrr"
 
-#: crypt-gpgme.c:4979
+#: crypt-gpgme.c:4983
 msgid "Failed to verify sender"
 msgstr "Impossible de vérifier l'expéditeur"
 
-#: crypt-gpgme.c:4982
+#: crypt-gpgme.c:4986
 msgid "Failed to figure out sender"
 msgstr "Impossible de trouver l'expéditeur"
 
@@ -1776,7 +1780,7 @@ msgstr "Aucune boîte aux lettres n'est ouverte."
 msgid "There are no messages."
 msgstr "Il n'y a pas de messages."
 
-#: curs_main.c:63 mx.c:1132 pager.c:55 recvattach.c:45
+#: curs_main.c:63 mx.c:1154 pager.c:55 recvattach.c:45
 msgid "Mailbox is read-only."
 msgstr "La boîte aux lettres est en lecture seule."
 
@@ -1932,7 +1936,7 @@ msgid "No mailboxes have new mail"
 msgstr "Pas de boîte aux lettres avec des nouveaux messages"
 
 # , c-format
-#: curs_main.c:1268 mx.c:516 mx.c:614
+#: curs_main.c:1268 mx.c:526 mx.c:624
 #, c-format
 msgid "%s is not a mailbox."
 msgstr "%s n'est pas une boîte aux lettres."
@@ -2659,7 +2663,7 @@ msgstr "Désabonné de %s"
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
 
-#: imap/message.c:84 mx.c:1369
+#: imap/message.c:84 mx.c:1391
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Dépassement de capacité sur entier -- impossible d'allouer la mémoire."
 
@@ -3222,58 +3226,58 @@ msgid "Mailbox is empty."
 msgstr "La boîte aux lettres est vide."
 
 # , c-format
-#: mbox.c:120 mbox.c:271 mh.c:1258 mx.c:632
+#: mbox.c:131 mbox.c:293 mh.c:1258 mx.c:642
 #, c-format
 msgid "Reading %s..."
 msgstr "Lecture de %s..."
 
-#: mbox.c:158 mbox.c:215
+#: mbox.c:169 mbox.c:226
 msgid "Mailbox is corrupt!"
 msgstr "La boîte aux lettres est altérée !"
 
 # , c-format
-#: mbox.c:461
+#: mbox.c:483
 #, c-format
 msgid "Couldn't lock %s\n"
 msgstr "Impossible de verrouiller %s\n"
 
-#: mbox.c:506 mbox.c:521
+#: mbox.c:528 mbox.c:543
 msgid "Can't write message"
 msgstr "Impossible d'écrire le message"
 
-#: mbox.c:761
+#: mbox.c:784
 msgid "Mailbox was corrupted!"
 msgstr "La boîte aux lettres a été altérée !"
 
-#: mbox.c:843 mbox.c:1103
+#: mbox.c:866 mbox.c:1126
 msgid "Fatal error!  Could not reopen mailbox!"
 msgstr "Erreur fatale ! La boîte aux lettres n'a pas pu être réouverte !"
 
-#: mbox.c:895
+#: mbox.c:918
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
 msgstr "sync : BAL modifiée, mais pas de message modifié ! (signalez ce bug)"
 
 # , c-format
-#: mbox.c:919 mh.c:1892 mx.c:714
+#: mbox.c:942 mh.c:1892 mx.c:736
 #, c-format
 msgid "Writing %s..."
 msgstr "Écriture de %s..."
 
-#: mbox.c:1054
+#: mbox.c:1077
 msgid "Committing changes..."
 msgstr "Écriture des changements..."
 
 # , c-format
-#: mbox.c:1089
+#: mbox.c:1112
 #, c-format
 msgid "Write failed!  Saved partial mailbox to %s"
 msgstr "Erreur d'écriture ! Boîte aux lettres partielle sauvée dans %s"
 
-#: mbox.c:1158
+#: mbox.c:1181
 msgid "Could not reopen mailbox!"
 msgstr "La boîte aux lettres n'a pas pu être réouverte !"
 
-#: mbox.c:1185
+#: mbox.c:1208
 msgid "Reopening mailbox..."
 msgstr "Réouverture de la boîte aux lettres..."
 
@@ -3778,72 +3782,72 @@ msgid "Waiting for flock attempt... %d"
 msgstr "Attente de la tentative de flock... %d"
 
 # , c-format
-#: mx.c:746
+#: mx.c:768
 msgid "message(s) not deleted"
 msgstr "message(s) non effacé(s)"
 
 # , c-format
-#: mx.c:779
+#: mx.c:801
 msgid "Can't open trash folder"
 msgstr "Impossible d'ouvrir la corbeille"
 
 # , c-format
-#: mx.c:831
+#: mx.c:853
 #, c-format
 msgid "Move %d read messages to %s?"
 msgstr "Déplacer %d messages lus dans %s ?"
 
 # , c-format
-#: mx.c:848 mx.c:1148
+#: mx.c:870 mx.c:1170
 #, c-format
 msgid "Purge %d deleted message?"
 msgstr "Effacer %d message marqué à effacer ?"
 
 # , c-format
-#: mx.c:848 mx.c:1148
+#: mx.c:870 mx.c:1170
 #, c-format
 msgid "Purge %d deleted messages?"
 msgstr "Effacer %d messages marqués à effacer ?"
 
 # , c-format
-#: mx.c:869
+#: mx.c:891
 #, c-format
 msgid "Moving read messages to %s..."
 msgstr "Déplacement des messages lus dans %s..."
 
-#: mx.c:930 mx.c:1139
+#: mx.c:952 mx.c:1161
 msgid "Mailbox is unchanged."
 msgstr "La boîte aux lettres est inchangée."
 
 # , c-format
-#: mx.c:983
+#: mx.c:1005
 #, c-format
 msgid "%d kept, %d moved, %d deleted."
 msgstr "%d gardé(s), %d déplacé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:986 mx.c:1200
+#: mx.c:1008 mx.c:1222
 #, c-format
 msgid "%d kept, %d deleted."
 msgstr "%d gardé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:1123
+#: mx.c:1145
 #, c-format
 msgid " Press '%s' to toggle write"
 msgstr " Appuyez sur '%s' pour inverser l'écriture autorisée"
 
-#: mx.c:1125
+#: mx.c:1147
 msgid "Use 'toggle-write' to re-enable write!"
 msgstr "Utilisez 'toggle-write' pour réautoriser l'écriture !"
 
 # , c-format
-#: mx.c:1127
+#: mx.c:1149
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
 msgstr "La boîte aux lettres est protégée contre l'écriture. %s"
 
-#: mx.c:1194
+#: mx.c:1216
 msgid "Mailbox checkpointed."
 msgstr "Boîte aux lettres vérifiée."
 
