@@ -254,7 +254,7 @@ WHERE REGEXP PgpGoodSign;
 WHERE REGEXP PgpDecryptionOkay;
 WHERE char *PgpDefaultKey;
 WHERE char *PgpSignAs;
-WHERE short PgpTimeout;
+WHERE long  PgpTimeout;
 WHERE char *PgpEntryFormat;
 WHERE char *PgpClearSignCommand;
 WHERE char *PgpDecodeCommand;
@@ -273,7 +273,7 @@ WHERE char *PgpGetkeysCommand;
 /*-- formerly in smime.h --*/
 WHERE char *SmimeDefaultKey;
 WHERE char *SmimeSignAs;
-WHERE short SmimeTimeout;
+WHERE long  SmimeTimeout;
 WHERE char *SmimeCertificates;
 WHERE char *SmimeKeys;
 WHERE char *SmimeCryptAlg;

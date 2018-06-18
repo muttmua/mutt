@@ -120,6 +120,19 @@ time_t mutt_mktime (struct tm *t, int local)
   return (g);
 }
 
+/* Safely add a timeout to a given time_t value, truncating instead of
+ * overflowing. */
+time_t mutt_add_timeout (time_t now, long timeout)
+{
+  if (timeout < 0)
+    return now;
+
+  if (TIME_T_MAX - now < timeout)
+    return TIME_T_MAX;
+
+  return now + timeout;
+}
+
 /* Return 1 if month is February of leap year, else 0 */
 static int isLeapYearFeb (struct tm *tm)
 {

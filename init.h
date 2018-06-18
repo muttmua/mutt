@@ -29,7 +29,7 @@
 #ifndef _MAKEDOC
 #define DT_MASK		0x0f
 #define DT_BOOL		1 /* boolean option */
-#define DT_NUM		2 /* a number */
+#define DT_NUM		2 /* a number (short) */
 #define DT_STR		3 /* a string */
 #define DT_PATH		4 /* a pathname */
 #define DT_QUAD		5 /* quad-option (yes/no/ask-yes/ask-no) */
@@ -39,6 +39,7 @@
 #define DT_SYN		9 /* synonym for another variable */
 #define DT_ADDR	       10 /* e-mail address */
 #define DT_MBCHARTBL   11 /* multibyte char table */
+#define DT_LNUM        12 /* a number (long) */
 
 #define DTYPE(x) ((x) & DT_MASK)
 
@@ -2265,7 +2266,7 @@ struct option_t MuttVars[] = {
   ** this if you know what you are doing.
   ** (PGP only)
   */
-  { "pgp_timeout",	DT_NUM,	 R_NONE, UL &PgpTimeout, 300 },
+  { "pgp_timeout",	DT_LNUM,	 R_NONE, UL &PgpTimeout, 300 },
   /*
   ** .pp
   ** The number of seconds after which a cached passphrase will expire if
@@ -3306,7 +3307,7 @@ struct option_t MuttVars[] = {
   ** possible \fCprintf(3)\fP-like sequences.
   ** (S/MIME only)
   */
-  { "smime_timeout",		DT_NUM,	 R_NONE, UL &SmimeTimeout, 300 },
+  { "smime_timeout",		DT_LNUM,	 R_NONE, UL &SmimeTimeout, 300 },
   /*
   ** .pp
   ** The number of seconds after which a cached passphrase will expire if

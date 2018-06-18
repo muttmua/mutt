@@ -90,7 +90,7 @@ int pgp_valid_passphrase (void)
 
   if (mutt_get_password (_("Enter PGP passphrase:"), PgpPass, sizeof (PgpPass)) == 0)
     {
-      PgpExptime = time (NULL) + PgpTimeout;
+      PgpExptime = mutt_add_timeout (time (NULL), PgpTimeout);
       return (1);
     }
   else

@@ -121,6 +121,7 @@ time_t mutt_decrease_mtime (const char *, struct stat *);
 time_t mutt_local_tz (time_t);
 time_t mutt_mktime (struct tm *, int);
 time_t mutt_parse_date (const char *, HEADER *);
+time_t mutt_add_timeout (time_t, long);
 int is_from (const char *, char *, size_t, time_t *);
 void mutt_touch_atime (int);
 int mutt_timespec_compare (struct timespec *a, struct timespec *b);
