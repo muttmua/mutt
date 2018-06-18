@@ -1382,8 +1382,12 @@ static void print_smime_keyinfo (const char* msg, gpgme_signature_t sig,
   }
   else
   {
-    state_puts (_("KeyID "), s);
-    state_puts (sig->fpr, s);
+    if (sig->fpr == NULL)
+      state_puts (_("no signature fingerprint available"), s);
+    else {
+      state_puts (_("KeyID "), s);
+      state_puts (sig->fpr, s);
+    }
     state_puts ("\n", s);
   }
 
