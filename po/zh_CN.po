@@ -2543,7 +2543,7 @@ msgstr "正在复制 %d 个邮件到 %s ..."
 
 #: imap/message.c:84 mx.c:1369
 msgid "Integer overflow -- can't allocate memory."
-msgstr "整数溢出 -- 无法分配到内存。"
+msgstr "整数溢出 -- 无法分配内存。"
 
 #: imap/message.c:202
 msgid "Unable to fetch headers from this IMAP server version."
@@ -4124,7 +4124,7 @@ msgstr "通过管道传给："
 #: recvattach.c:718
 #, c-format
 msgid "I don't know how to print %s attachments!"
-msgstr "我不知道要怎么打印 %s 附件！"
+msgstr "我不知道要如何打印 %s 类型的附件！"
 
 #: recvattach.c:784
 msgid "Print tagged attachment(s)?"
