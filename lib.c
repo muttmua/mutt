@@ -1077,6 +1077,7 @@ int mutt_atol (const char *str, long *dst)
     return 0;
   }
 
+  errno = 0;
   *res = strtol (str, &e, 10);
   if ((*res == LONG_MAX && errno == ERANGE) ||
       (e && *e != '\0'))
