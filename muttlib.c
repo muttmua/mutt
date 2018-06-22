@@ -1972,6 +1972,7 @@ int mutt_timespec_compare (struct timespec *a, struct timespec *b)
 
 void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_type type)
 {
+  dest->tv_sec = 0;
   dest->tv_nsec = 0;
 
   switch (type)
