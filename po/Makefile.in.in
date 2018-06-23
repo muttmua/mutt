@@ -149,7 +149,7 @@ uninstall:
 
 check: all
 
-dvi info tags TAGS ID:
+ctags dvi info tags TAGS ID:
 
 mostlyclean:
 	rm -f core core.* *.pox $(PACKAGE).po *.new.po

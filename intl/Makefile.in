@@ -257,6 +257,11 @@ $(OBJECTS): ../config.h libgnuintl.h
 bindtextdom.$lo finddomain.$lo loadmsgcat.$lo: gettextP.h gettext.h loadinfo.h
 dcgettext.$lo: gettextP.h gettext.h hash-string.h loadinfo.h
 
+.PHONY: ctags id tags
+
+ctags: $(HEADERS) $(SOURCES)
+	here=`pwd`; cd $(srcdir) && ctags -o $$here/tags $(HEADERS) $(SOURCES)
+
 tags: TAGS
 
 TAGS: $(HEADERS) $(SOURCES)
@@ -276,7 +281,7 @@ mostlyclean:
 clean: mostlyclean
 
 distclean: clean
-	rm -f Makefile ID TAGS
+	rm -f Makefile ID TAGS tags
 	if test "$(PACKAGE)" = gettext; then \
 	  rm -f ChangeLog.inst $(DISTFILES.normal); \
 	else \
