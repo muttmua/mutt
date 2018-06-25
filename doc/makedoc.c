@@ -394,8 +394,10 @@ static int buff2type (const char *s)
   for (type = DT_NONE; types[type].machine; type++)
     if (!strcmp (types[type].machine, s))
 	return type;
-  
-  return DT_NONE;
+
+  fprintf (stderr, "%s: Unknown type %s.  Please update makedoc.c\n",
+           Progname, s);
+  exit (1);
 }
 
 static const char *type2human (int type)

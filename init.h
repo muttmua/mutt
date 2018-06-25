@@ -27,6 +27,7 @@
 #include "buffy.h"
 
 #ifndef _MAKEDOC
+/* If you add a data type, be sure to update doc/makedoc.c */
 #define DT_MASK		0x0f
 #define DT_BOOL		1 /* boolean option */
 #define DT_NUM		2 /* a number (short) */
