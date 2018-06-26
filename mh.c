@@ -37,6 +37,9 @@
 #endif
 #include "mutt_curses.h"
 #include "buffy.h"
+#ifdef USE_INOTIFY
+#include "monitor.h"
+#endif
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -2123,9 +2126,21 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   if (!changed)
     return 0;			/* nothing to do */
 
-  /* update the modification times on the mailbox */
-  mutt_get_stat_timespec (&data->mtime_cur, &st_cur, MUTT_STAT_MTIME);
-  mutt_get_stat_timespec (&ctx->mtime, &st_new, MUTT_STAT_MTIME);
+  /* Update the modification times on the mailbox.
+   *
+   * The monitor code notices changes in the open mailbox too quickly.
+   * In practice, this sometimes leads to all the new messages not being
+   * noticed during the SAME group of mtime stat updates.  To work around
+   * the problem, don't update the stat times for a monitor caused check. */
+#ifdef USE_INOTIFY
+  if (MonitorContextChanged)
+    MonitorContextChanged = 0;
+  else
+#endif
+  {
+    mutt_get_stat_timespec (&data->mtime_cur, &st_cur, MUTT_STAT_MTIME);
+    mutt_get_stat_timespec (&ctx->mtime, &st_new, MUTT_STAT_MTIME);
+  }
 
   /* do a fast scan of just the filenames in
    * the subdirectories that have changed.
@@ -2287,8 +2302,21 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
   if (!modified)
     return 0;
 
-  mutt_get_stat_timespec (&data->mtime_cur, &st_cur, MUTT_STAT_MTIME);
-  mutt_get_stat_timespec (&ctx->mtime, &st, MUTT_STAT_MTIME);
+  /* Update the modification times on the mailbox.
+   *
+   * The monitor code notices changes in the open mailbox too quickly.
+   * In practice, this sometimes leads to all the new messages not being
+   * noticed during the SAME group of mtime stat updates.  To work around
+   * the problem, don't update the stat times for a monitor caused check. */
+#ifdef USE_INOTIFY
+  if (MonitorContextChanged)
+    MonitorContextChanged = 0;
+  else
+#endif
+  {
+    mutt_get_stat_timespec (&data->mtime_cur, &st_cur, MUTT_STAT_MTIME);
+    mutt_get_stat_timespec (&ctx->mtime, &st, MUTT_STAT_MTIME);
+  }
 
   memset (&mhs, 0, sizeof (mhs));
 

@@ -52,6 +52,8 @@ static size_t PollFdsCount = 0;
 static size_t PollFdsLen = 0;
 static struct pollfd *PollFds;
 
+static int MonitorContextDescriptor = -1;
+
 typedef struct monitorinfo_t
 {
   short magic;
@@ -193,6 +195,9 @@ static int monitor_handle_ignore (int descr)
       dprint (3, (debugfile, "monitor: cleanup watch (implicitly removed) - descriptor=%d\n", descr));
     }
 
+    if (MonitorContextDescriptor == descr)
+      MonitorContextDescriptor = new_descr;
+
     if (new_descr == -1)
     {
       monitor_delete (iter);
@@ -275,6 +280,8 @@ int mutt_monitor_poll (void)
                             event->wd, event->mask));
                 if (event->mask & IN_IGNORED)
                   monitor_handle_ignore (event->wd);
+                else if (event->wd == MonitorContextDescriptor)
+                  MonitorContextChanged = 1;
                 ptr += sizeof(struct inotify_event) + event->len;
               }
             }
@@ -374,7 +381,11 @@ int mutt_monitor_add (BUFFY *buffy)
 
   descr = monitor_resolve (&info, buffy);
   if (descr != RESOLVERES_OK_NOTEXISTING)
+  {
+    if (!buffy && (descr == RESOLVERES_OK_EXISTING))
+      MonitorContextDescriptor = info.monitor->descr;
     return descr == RESOLVERES_OK_EXISTING ? 0 : -1;
+  }
 
   mask = info.isdir ? INOTIFY_MASK_DIR : INOTIFY_MASK_FILE;
   if ((INotifyFd == -1 && monitor_init () == -1)
@@ -385,6 +396,9 @@ int mutt_monitor_add (BUFFY *buffy)
   }
 
   dprint (3, (debugfile, "monitor: inotify_add_watch descriptor=%d for '%s'\n", descr, info.path));
+  if (!buffy)
+    MonitorContextDescriptor = descr;
+
   monitor_create (&info, descr);
   return 0;
 }
@@ -420,6 +434,9 @@ int mutt_monitor_remove (BUFFY *buffy)
 
   inotify_rm_watch(info.monitor->descr, INotifyFd);
   dprint (3, (debugfile, "monitor: inotify_rm_watch for '%s' descriptor=%d\n", info.path, info.monitor->descr));
+
+  if (!buffy && (MonitorContextDescriptor == info.monitor->descr))
+    MonitorContextDescriptor = -1;
 
   monitor_delete (info.monitor);
   monitor_check_free ();
