@@ -684,51 +684,24 @@ fail:
 static int smtp_auth_oauth (CONNECTION* conn)
 {
   char* ibuf = NULL;
-  char* oauth_buf = NULL;
-  int len, ilen, oalen;
+  char* oauthbearer = NULL;
+  int ilen;
   int rc;
 
   mutt_message _("Authenticating (OAUTHBEARER)...");
 
-  /* get auth info */
-  if (mutt_account_getlogin (&conn->account))
+  /* We get the access token from the smtp_oauth_refresh_command */
+  oauthbearer = mutt_account_getoauthbearer (&conn->account);
+  if (oauthbearer == NULL)
     return SMTP_AUTH_FAIL;
 
-  /* We get the access token from the "smtp_pass" field */
-  if (mutt_account_getpass (&conn->account))
-    return SMTP_AUTH_FAIL;
-
-  /* Determine the length of the keyed message digest, add 50 for
-   * overhead.
-   */
-  oalen = strlen (conn->account.user) +
-    strlen (conn->account.host) + 
-    strlen (conn->account.pass) + 50; 
-  oauth_buf = safe_malloc (oalen);
-
-  snprintf (oauth_buf, oalen,
-    "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
-    conn->account.user, conn->account.host, conn->account.port,
-    conn->account.pass);
-
-  /* ibuf must be long enough to store the base64 encoding of
-   * oauth_buf, plus the additional debris.
-   */
-
-  ilen = strlen (oauth_buf) * 2 + 30;
+  ilen = strlen (oauthbearer) + 30;
   ibuf = safe_malloc (ilen);
-  ibuf[0] = '\0';
 
-  safe_strcat (ibuf, ilen, "AUTH OAUTHBEARER ");
-  len = strlen(ibuf);
-  
-  mutt_to_base64 ((unsigned char*) (ibuf + len),
-                  (unsigned char*) oauth_buf, strlen (oauth_buf),
-		  ilen - len);
-  safe_strcat (ibuf, ilen, "\r\n");
+  snprintf (ibuf, ilen, "AUTH OAUTHBEARER %s\r\n", oauthbearer);
 
   rc = mutt_socket_write (conn, ibuf);
-  FREE (&oauth_buf);
+  FREE (&oauthbearer);
   FREE (&ibuf);
 
   if (rc == -1)

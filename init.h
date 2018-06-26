@@ -1320,6 +1320,14 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This variable defaults to the value of $$imap_user.
   */
+  { "imap_oauth_refresh_command", DT_STR, R_NONE, UL &ImapOauthRefreshCmd, UL "" },
+  /*
+  ** .pp
+  ** The command to run to generate an OAUTH refresh token for
+  ** authorizing your connection to your IMAP server.  This command will be
+  ** run on every connection attempt that uses the OAUTHBEARER authentication
+  ** mechanism.
+  */
   { "imap_pass", 	DT_STR,  R_NONE, UL &ImapPass, UL 0 },
   /*
   ** .pp
@@ -2385,6 +2393,14 @@ struct option_t MuttVars[] = {
   ** for retrieving only unread messages from the POP server when using
   ** the \fC$<fetch-mail>\fP function.
   */
+  { "pop_oauth_refresh_command", DT_STR, R_NONE, UL &PopOauthRefreshCmd, UL "" },
+  /*
+  ** .pp
+  ** The command to run to generate an OAUTH refresh token for
+  ** authorizing your connection to your POP server.  This command will be
+  ** run on every connection attempt that uses the OAUTHBEARER authentication
+  ** mechanism.
+  */
   { "pop_pass",		DT_STR,	 R_NONE, UL &PopPass, UL "" },
   /*
   ** .pp
@@ -3354,6 +3370,14 @@ struct option_t MuttVars[] = {
   ** .ts
   ** set smtp_authenticators="digest-md5:cram-md5"
   ** .te
+  */
+  { "smtp_oauth_refresh_command", DT_STR, R_NONE, UL &SmtpOauthRefreshCmd, UL "" },
+  /*
+  ** .pp
+  ** The command to run to generate an OAUTH refresh token for
+  ** authorizing your connection to your SMTP server.  This command will be
+  ** run on every connection attempt that uses the OAUTHBEARER authentication
+  ** mechanism.
   */
   { "smtp_pass", 	DT_STR,  R_NONE, UL &SmtpPass, UL 0 },
   /*
