@@ -414,11 +414,14 @@ int mutt_monitor_remove (BUFFY *buffy)
 {
   MONITORINFO info, info2;
 
+  if (!buffy)
+  {
+    MonitorContextDescriptor = -1;
+    MonitorContextChanged = 0;
+  }
+
   if (monitor_resolve (&info, buffy) != RESOLVERES_OK_EXISTING)
     return 2;
-
-  if (!buffy && (MonitorContextDescriptor == info.monitor->descr))
-    MonitorContextDescriptor = -1;
 
   if (Context)
   {
