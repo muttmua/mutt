@@ -417,6 +417,9 @@ int mutt_monitor_remove (BUFFY *buffy)
   if (monitor_resolve (&info, buffy) != RESOLVERES_OK_EXISTING)
     return 2;
 
+  if (!buffy && (MonitorContextDescriptor == info.monitor->descr))
+    MonitorContextDescriptor = -1;
+
   if (Context)
   {
     if (buffy)
@@ -434,9 +437,6 @@ int mutt_monitor_remove (BUFFY *buffy)
 
   inotify_rm_watch(info.monitor->descr, INotifyFd);
   dprint (3, (debugfile, "monitor: inotify_rm_watch for '%s' descriptor=%d\n", info.path, info.monitor->descr));
-
-  if (!buffy && (MonitorContextDescriptor == info.monitor->descr))
-    MonitorContextDescriptor = -1;
 
   monitor_delete (info.monitor);
   monitor_check_free ();
