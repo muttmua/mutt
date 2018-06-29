@@ -80,6 +80,7 @@ const struct binding_t OpGeneric[] = { /* map: generic */
   { "current-bottom",   OP_CURRENT_BOTTOM,	NULL },
   { "error-history",    OP_ERROR_HISTORY,	NULL },
   { "what-key",		OP_WHAT_KEY,		NULL },
+  { "check-stats",	OP_CHECK_STATS,		NULL },
   { NULL,		0,			NULL }
 };
 
@@ -290,6 +291,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "decrypt-save",    	OP_DECRYPT_SAVE,		NULL },
 
   { "what-key",		OP_WHAT_KEY,		NULL },
+  { "check-stats",	OP_CHECK_STATS,		NULL },
 
 #ifdef USE_SIDEBAR
   { "sidebar-next",		OP_SIDEBAR_NEXT,		NULL },

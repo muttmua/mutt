@@ -63,4 +63,8 @@ void mutt_buffy_setnotified (const char *path);
 
 int mh_buffy (BUFFY *, int);
 
+/* force flags passed to mutt_buffy_check() */
+#define MUTT_BUFFY_CHECK_FORCE       1
+#define MUTT_BUFFY_CHECK_FORCE_STATS (1<<1)
+
 #endif /* _BUFFY_H */

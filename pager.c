@@ -2884,6 +2884,10 @@ search_next:
 	mutt_what_key ();
 	break;
 
+      case OP_CHECK_STATS:
+	mutt_check_stats ();
+	break;
+
 #ifdef USE_SIDEBAR
       case OP_SIDEBAR_NEXT:
       case OP_SIDEBAR_NEXT_NEW:

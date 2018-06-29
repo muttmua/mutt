@@ -505,7 +505,9 @@ static int buffy_mbox_check (BUFFY* mailbox, struct stat *sb, int check_stats)
 }
 
 /* Check all Incoming for new mail and total/new/flagged messages
- * force: if true, ignore BuffyTimeout and check for new mail anyway
+ * The force argument may be any combination of the following values:
+ *   MUTT_BUFFY_CHECK_FORCE        ignore BuffyTimeout and check for new mail
+ *   MUTT_BUFFY_CHECK_FORCE_STATS  ignore BuffyTimeout and calculate statistics
  */
 int mutt_buffy_check (int force)
 {
@@ -525,7 +527,7 @@ int mutt_buffy_check (int force)
 
 #ifdef USE_IMAP
   /* update postponed count as well, on force */
-  if (force)
+  if (force & MUTT_BUFFY_CHECK_FORCE)
     mutt_update_num_postponed ();
 #endif
 
@@ -536,8 +538,9 @@ int mutt_buffy_check (int force)
   if (!force && (t - BuffyTime < BuffyTimeout))
     return BuffyCount;
 
-  if (option (OPTMAILCHECKSTATS) &&
-      (t - BuffyStatsTime >= BuffyCheckStatsInterval))
+  if ((force & MUTT_BUFFY_CHECK_FORCE_STATS) ||
+      (option (OPTMAILCHECKSTATS) &&
+       (t - BuffyStatsTime >= BuffyCheckStatsInterval)))
   {
     check_stats = 1;
     BuffyStatsTime = t;
@@ -744,7 +747,8 @@ void mutt_buffy (char *s, size_t slen)
 	  found = 1;
       }
 
-    mutt_buffy_check (1); /* buffy was wrong - resync things */
+    mutt_buffy_check (MUTT_BUFFY_CHECK_FORCE); /* buffy was wrong - resync
+						  things */
   }
 
   /* no folders with new mail */

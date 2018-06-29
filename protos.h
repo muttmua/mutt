@@ -178,6 +178,7 @@ void mutt_break_thread (HEADER *);
 void mutt_buffy (char *, size_t);
 int  mutt_buffy_list (void);
 void mutt_canonical_charset (char *, size_t, const char *);
+void mutt_check_stats(void);
 int mutt_count_body_parts (CONTEXT *, HEADER *);
 void mutt_check_rescore (CONTEXT *);
 void mutt_clear_error (void);

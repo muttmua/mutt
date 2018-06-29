@@ -579,8 +579,10 @@ int mutt_index_menu (void)
   menu->custom_menu_redraw = index_menu_redraw;
   mutt_push_current_menu (menu);
 
-  if (!attach_msg)
-    mutt_buffy_check(1); /* force the buffy check after we enter the folder */
+  if (!attach_msg) {
+    mutt_buffy_check(MUTT_BUFFY_CHECK_FORCE); /* force the buffy check after we
+						 enter the folder */
+  }
 #ifdef USE_INOTIFY
   mutt_monitor_add (NULL);
 #endif
@@ -1339,8 +1341,9 @@ int mutt_index_menu (void)
 #endif
 
 	mutt_clear_error ();
-	mutt_buffy_check(1); /* force the buffy check after we have changed
-			      the folder */
+	mutt_buffy_check(MUTT_BUFFY_CHECK_FORCE); /* force the buffy check after
+						     we have changed the
+						     folder */
 	menu->redraw = REDRAW_FULL;
 	set_option (OPTSEARCHINVALID);
 	break;
@@ -2465,6 +2468,10 @@ int mutt_index_menu (void)
 
       case OP_WHAT_KEY:
 	mutt_what_key();
+	break;
+
+      case OP_CHECK_STATS:
+	mutt_check_stats();
 	break;
 
 #ifdef USE_SIDEBAR

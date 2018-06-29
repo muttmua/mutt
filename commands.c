@@ -1028,4 +1028,7 @@ int mutt_check_traditional_pgp (HEADER *h, int *redraw)
   return rv;
 }
 
-
+void mutt_check_stats (void)
+{
+  mutt_buffy_check (MUTT_BUFFY_CHECK_FORCE | MUTT_BUFFY_CHECK_FORCE_STATS);
+}
