@@ -81,7 +81,7 @@ all: all-@USE_NLS@
 all-yes: $(CATALOGS)
 all-no:
 
-$(top_builddir)/keymap_alldefs.h:
+$(top_builddir)/keymap_alldefs.h: $(top_srcdir)/OPS $(top_srcdir)/OPS.SIDEBAR $(top_srcdir)/OPS.PGP $(top_srcdir)/OPS.MIX $(top_srcdir)/OPS.CRYPT $(top_srcdir)/OPS.SMIME $(top_srcdir)/gen_defs
 	( cd $(top_builddir) && $(MAKE) keymap_alldefs.h )
 
 # Note: Target 'all' must not depend on target '$(srcdir)/$(PACKAGE).pot',
