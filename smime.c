@@ -1930,6 +1930,17 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   {
     fflush (smimeout);
     rewind (smimeout);
+
+    if (type & ENCRYPT)
+    {
+      /* void the passphrase, even if that wasn't the problem */
+      if (fgetc (smimeout) == EOF)
+      {
+        mutt_error _("Decryption failed");
+        smime_void_passphrase ();
+      }
+      rewind (smimeout);
+    }
     
     if (outFile) fpout = outFile;
     else
@@ -1955,7 +1966,6 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
     fflush (fpout);
     rewind (fpout); 
 
-
     if ((p = mutt_read_mime_header (fpout, 0)) != NULL)
     {
       fstat (fileno (fpout), &info);
@@ -1972,6 +1982,7 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
       }
       
     }
+
     safe_fclose (&smimeout);
     smimeout = NULL;
     mutt_unlink (outfile);
