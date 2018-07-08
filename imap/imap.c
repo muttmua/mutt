@@ -1926,6 +1926,7 @@ int imap_subscribe (char *path, int subscribe)
   char buf[LONG_STRING];
   char mbox[LONG_STRING];
   char errstr[STRING];
+  int mblen;
   BUFFER err, token;
   IMAP_MBOX mx;
 
@@ -1947,8 +1948,10 @@ int imap_subscribe (char *path, int subscribe)
     mutt_buffer_init (&err);
     err.data = errstr;
     err.dsize = sizeof (errstr);
-    snprintf (mbox, sizeof (mbox), "%smailboxes \"%s\"",
-              subscribe ? "" : "un", path);
+    mblen = snprintf (mbox, sizeof (mbox), "%smailboxes ",
+                      subscribe ? "" : "un");
+    imap_quote_string_and_backquotes (mbox + mblen, sizeof(mbox) - mblen,
+                                      path);
     if (mutt_parse_rc_line (mbox, &token, &err))
       dprint (1, (debugfile, "Error adding subscribed mailbox: %s\n", errstr));
     FREE (&token.data);

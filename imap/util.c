@@ -598,11 +598,9 @@ void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
 }
 
 
-/* imap_quote_string: quote string according to IMAP rules:
- *   surround string with quotes, escape " and \ with \ */
-void imap_quote_string (char *dest, size_t dlen, const char *src)
+static void _imap_quote_string (char *dest, size_t dlen, const char *src,
+                                const char *to_quote)
 {
-  static const char quote[] = "\"\\";
   char *pt;
   const char *s;
 
@@ -615,7 +613,7 @@ void imap_quote_string (char *dest, size_t dlen, const char *src)
 
   for (; *s && dlen; s++)
   {
-    if (strchr (quote, *s))
+    if (strchr (to_quote, *s))
     {
       dlen -= 2;
       if (!dlen)
@@ -631,6 +629,23 @@ void imap_quote_string (char *dest, size_t dlen, const char *src)
   }
   *pt++ = '"';
   *pt = 0;
+}
+
+/* imap_quote_string: quote string according to IMAP rules:
+ *   surround string with quotes, escape " and \ with \ */
+void imap_quote_string (char *dest, size_t dlen, const char *src)
+{
+  _imap_quote_string (dest, dlen, src, "\"\\");
+}
+
+/* imap_quote_string_and_backquotes: quote string according to IMAP rules:
+ *   surround string with quotes, escape " and \ with \.
+ * Additionally, escape backquotes with \ to protect against code injection
+ * when using the resulting string in mutt_parse_rc_line().
+ */
+void imap_quote_string_and_backquotes (char *dest, size_t dlen, const char *src)
+{
+  _imap_quote_string (dest, dlen, src, "\"\\`");
 }
 
 /* imap_unquote_string: equally stupid unquoting routine */

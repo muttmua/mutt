@@ -843,8 +843,9 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 
   strfcpy (buf, "mailboxes \"", sizeof (buf));
   mutt_account_tourl (&idata->conn->account, &url);
-  /* escape \ and " */
-  imap_quote_string(errstr, sizeof (errstr), list.name);
+  /* escape \ and ". Also escape ` because the resulting
+   * string will be passed to mutt_parse_rc_line. */
+  imap_quote_string_and_backquotes (errstr, sizeof (errstr), list.name);
   url.path = errstr + 1;
   url.path[strlen(url.path) - 1] = '\0';
   if (!mutt_strcmp (url.user, ImapUser))
