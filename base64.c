@@ -81,7 +81,7 @@ void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
 
 /* Convert '\0'-terminated base 64 string to raw bytes.
  * Returns length of returned buffer, or -1 on error */
-int mutt_from_base64 (char *out, const char *in)
+int mutt_from_base64 (char *out, const char *in, size_t olen)
 {
   int len = 0;
   register unsigned char digit1, digit2, digit3, digit4;
@@ -103,14 +103,20 @@ int mutt_from_base64 (char *out, const char *in)
     in += 4;
 
     /* digits are already sanity-checked */
+    if (len == olen)
+      return len;
     *out++ = (base64val(digit1) << 2) | (base64val(digit2) >> 4);
     len++;
     if (digit3 != '=')
     {
+      if (len == olen)
+        return len;
       *out++ = ((base64val(digit2) << 4) & 0xf0) | (base64val(digit3) >> 2);
       len++;
       if (digit4 != '=')
       {
+        if (len == olen)
+          return len;
 	*out++ = ((base64val(digit3) << 6) & 0xc0) | base64val(digit4);
 	len++;
       }
