@@ -1345,6 +1345,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
 {
   char tmp[SHORT_STRING];
   char *ptmp;
+  size_t dlen;
 
   if (!s)
     return -1;
@@ -1378,8 +1379,12 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
       }
       s++;
       ptmp = tmp;
-      while (*s && *s != '\"')
+      dlen = sizeof(tmp) - 1;
+      while (*s && *s != '\"' && dlen)
+      {
         *ptmp++ = *s++;
+        dlen--;
+      }
       if (*s != '\"')
         return -1;
       s++; /* skip past the trailing " */
@@ -1391,8 +1396,12 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
       s += 11;
       SKIPWS (s);
       ptmp = tmp;
-      while (isdigit ((unsigned char) *s))
+      dlen = sizeof(tmp) - 1;
+      while (isdigit ((unsigned char) *s) && dlen)
+      {
         *ptmp++ = *s++;
+        dlen--;
+      }
       *ptmp = 0;
       if (mutt_atol (tmp, &h->content_length) < 0)
         return -1;
