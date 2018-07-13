@@ -586,7 +586,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
     dprint (2, (debugfile, "Handling untagged NO\n"));
 
     /* Display the warning message from the server */
-    mutt_error ("%s", s+3);
+    mutt_error ("%s", s+2);
     mutt_sleep (2);
   }
 
