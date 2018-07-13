@@ -614,20 +614,29 @@ static void _imap_quote_string (char *dest, size_t dlen, const char *src,
   char *pt;
   const char *s;
 
+  if (!(dest && dlen && src && to_quote))
+    return;
+
+  if (dlen < 3)
+  {
+    *dest = 0;
+    return;
+  }
+
   pt = dest;
   s  = src;
 
-  *pt++ = '"';
-  /* save room for trailing quote-char */
-  dlen -= 2;
+  /* save room for pre/post quote-char and trailing null */
+  dlen -= 3;
 
+  *pt++ = '"';
   for (; *s && dlen; s++)
   {
     if (strchr (to_quote, *s))
     {
+      if (dlen < 2)
+        break;
       dlen -= 2;
-      if (!dlen)
-	break;
       *pt++ = '\\';
       *pt++ = *s;
     }
