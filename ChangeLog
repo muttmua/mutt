@@ -1,3 +1,233 @@
+2018-07-13 14:25:28 -0700  Kevin McCarthy  <kevin@8t8.us> (3d9028fe)
+
+        * Check outbuf length in mutt_from_base64()
+        
+        The obuf can be overflowed in auth_cram.c, and possibly auth_gss.c.
+        
+        Thanks to Jeriko One for the bug report.
+
+M	base64.c
+M	imap/auth_cram.c
+M	imap/auth_gss.c
+M	protos.h
+
+2018-07-13 13:05:22 -0700  Kevin McCarthy  <kevin@8t8.us> (6962328c)
+
+        * Check destlen and truncate in url_pct_encode().
+        
+        Thanks to Jeriko One for the patch, which this commit is based upon.
+
+M	url.c
+
+2018-07-13 12:35:50 -0700  Kevin McCarthy  <kevin@8t8.us> (e57a8602)
+
+        * Verify IMAP status mailbox literal count size.
+        
+        Ensure the length isn't bigger than the idata->buf.
+        
+        Thanks to Jeriko One fo the bug report and patch, which this commit is
+        based upon.
+
+M	imap/command.c
+
+2018-07-13 12:24:58 -0700  JerikoOne  <jeriko.one@gmx.us> (9347b5c0)
+
+        * Handle NO response without message properly
+
+M	imap/command.c
+
+2018-07-13 12:15:00 -0700  Kevin McCarthy  <kevin@8t8.us> (3287534d)
+
+        * Don't overflow tmp in msg_parse_fetch.
+        
+        Ensure INTERNALDATE and RFC822.SIZE field sizes fit temp buffer.
+        
+        Thanks to Jeriko One for the bug report and patch, which this patch is
+        based upon.
+
+M	imap/message.c
+
+2018-07-13 11:33:16 -0700  Richard Russon  <rich@flatcap.org> (31eef6c7)
+
+        * Selectively cache headers.
+        
+        Thanks to NeoMutt and Jeriko One for the patch, which was slightly
+        modified to apply to the Mutt code.
+
+M	imap/util.c
+
+2018-07-13 11:16:33 -0700  Kevin McCarthy  <kevin@8t8.us> (6aed28b4)
+
+        * Sanitize POP bcache paths.
+        
+        Protect against bcache directory path traversal for UID values.
+        
+        Thanks for Jeriko One for the bug report and patch, which this commit
+        is based upon.
+
+M	pop.c
+
+2018-07-13 10:47:11 -0700  JerikoOne  <jeriko.one@gmx.us> (e154cba1)
+
+        * Ensure UID in fetch_uidl.
+
+M	pop.c
+
+2018-07-12 21:41:17 -0700  Kevin McCarthy  <kevin@8t8.us> (4d0cd265)
+
+        * Fix buffer size check in cmd_parse_lsub.
+        
+        The size parameter to url_ciss_tostring() was off by one.
+
+M	imap/command.c
+
+2018-07-12 20:46:37 -0700  Kevin McCarthy  <kevin@8t8.us> (e0131852)
+
+        * Fix imap_quote_string() length check errors.
+        
+        The function wasn't properly checking for dlen<2 before quoting, and
+        wasn't properly pre-adjusting dlen to include the initial quote.
+        
+        Thanks to Jeriko One for reporting these issues.
+
+M	imap/util.c
+
+2018-07-07 19:32:57 -0700  Kevin McCarthy  <kevin@8t8.us> (4ff007ca)
+
+        * Mention $pgp_decode_command for $pgp_check_gpg_decrypt_status_fd
+        
+        It scans $pgp_decode_command for inline and application/pgp mime
+        types.
+
+M	init.h
+
+2018-07-07 19:03:44 -0700  Kevin McCarthy  <kevin@8t8.us> (18515281)
+
+        * Properly quote IMAP mailbox names when (un)subscribing.
+        
+        When handling automatic subscription (via $imap_check_subscribed), or
+        manual subscribe/unsubscribe commands, mutt generating a "mailboxes"
+        command but failed to properly escape backquotes.
+        
+        Thanks to Jeriko One for the detailed bug report and patch, which this
+        commit is based upon.
+
+M	imap/command.c
+M	imap/imap.c
+M	imap/imap_private.h
+M	imap/util.c
+
+2018-06-18 11:21:38 +0200  Philipp Gesang  <philipp.gesang@intra2net.com> (df4affd1)
+
+        * crypt-gpgme: prevent crash on bad S/MIME signature
+        
+        Inform the user about the fingerprint being unavailable instead
+        of crashing if the S/MIME signature is bad.
+
+M	crypt-gpgme.c
+
+2018-06-04 21:31:33 -0700  Kevin McCarthy  <kevin@8t8.us> (edb4ec84)
+
+        * Add GnuPG status fd checks for inline pgp.
+        
+        The difficulty is that "BEGIN PGP MESSAGE" could be a signed and
+        armored part, so we can't fail hard if it isn't encrypted.
+        
+        Change pgp_check_decryption_okay() to return more status codes, with
+        >=0 indicating an actual decryption; -2 and -1 indicating plaintext
+        found; and -3 indicating an actual DECRYPTION_FAILED status code seen.
+        
+        Fail hard on -3, but change the message for -2 and -1 to indicate the
+        message was not encrypted.
+
+M	pgp.c
+
+2018-06-04 15:40:57 -0700  Kevin McCarthy  <kevin@8t8.us> (8ec6d766)
+
+        * Add $pgp_check_gpg_decrypt_status_fd.
+        
+        If set (the default) mutt performs more thorough checking of the
+        $pgp_decrypt_command status output for GnuPG result codes.
+        
+        Ticket #39 revealed that GnuPG (currently) does not protect against
+        messages that have been manipulated to contain an empty encryption
+        packet followed by a plaintext packet.
+        
+        A huge thanks to Marcus Brinkmann for researching this issue, taking
+        the time to report it to us (and the GnuPG team), and taking even more
+        time to clarify exactly what needed to be checked for.   
+
+M	contrib/gpg.rc
+M	contrib/pgp2.rc
+M	contrib/pgp5.rc
+M	contrib/pgp6.rc
+M	init.h
+M	mutt.h
+M	pgp.c
+
+2018-06-03 14:52:37 -0700  Kevin McCarthy  <kevin@8t8.us> (cb2329ae)
+
+        * Revert showing real size for small files in mutt_pretty_size().
+        
+        I thought the change made in 0fa64ba9 was small enough not to matter,
+        but at least one long-time user took the time to track down the change
+        and request it be reverted.
+
+M	muttlib.c
+
+2018-06-03 14:40:31 -0700  Kevin McCarthy  <kevin@8t8.us> (33290d12)
+
+        * Switch build scripts to use `` instead of $()
+        
+        This is for older systems running Bourne shell as /bin/sh.
+
+M	mkchangelog.sh
+M	mkreldate.sh
+M	version.sh
+
+2013-01-06 19:24:18 +0100  Oswald Buddenhagen  <ossi@kde.org> (ec96f5f5)
+
+        * fix inappropriate use of FREE() in ssl init error path
+        
+        OpenSSL structures need to be freed with dedicated functions.
+
+M	mutt_ssl.c
+
+2018-05-19 10:57:10 -0700  Kevin McCarthy  <kevin@8t8.us> (d55950a8)
+
+        * automatic post-release commit for mutt-1.10.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
 2018-05-17 12:24:31 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net> (70c9c89b)
 
         * Updated Catalan translation.
