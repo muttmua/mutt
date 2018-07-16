@@ -587,7 +587,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
     dprint (2, (debugfile, "Handling untagged NO\n"));
 
     /* Display the warning message from the server */
-    mutt_error ("%s", s+3);
+    mutt_error ("%s", s+2);
     mutt_sleep (2);
   }
 
@@ -850,7 +850,7 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
   url.path[strlen(url.path) - 1] = '\0';
   if (!mutt_strcmp (url.user, ImapUser))
     url.user = NULL;
-  url_ciss_tostring (&url, buf + 11, sizeof (buf) - 10, 0);
+  url_ciss_tostring (&url, buf + 11, sizeof (buf) - 11, 0);
   safe_strcat (buf, sizeof (buf), "\"");
   mutt_buffer_init (&token);
   mutt_buffer_init (&err);
@@ -970,6 +970,13 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
       idata->status = IMAP_FATAL;
       return;
     }
+
+    if (strlen(idata->buf) < litlen)
+    {
+      dprint (1, (debugfile, "Error parsing STATUS mailbox\n"));
+      return;
+    }
+
     mailbox = idata->buf;
     s = mailbox + litlen;
     *s = '\0';

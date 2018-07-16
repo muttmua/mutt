@@ -40,6 +40,25 @@
 #define HC_FEXT		"hcache"	/* extension for hcache as POP lacks paths */
 #endif
 
+/**
+ * cache_id - Make a message-cache-compatible id
+ * @param id POP message id
+ * @retval ptr Sanitised string
+ *
+ * The POP message id may contain '/' and other awkward characters.
+ *
+ * @note This function returns a pointer to a static buffer.
+ */
+static const char *cache_id(const char *id)
+{
+  static char clean[SHORT_STRING];
+
+  strfcpy (clean, id, sizeof(clean));
+  mutt_sanitize_filename (clean, 1);
+
+  return clean;
+}
+
 /* write line to file */
 static int fetch_message (char *line, void *file)
 {
@@ -152,6 +171,10 @@ static int fetch_uidl (char *line, void *data)
       endp++;
   memmove(line, endp, strlen(endp) + 1);
 
+  /* uid must be at least be 1 byte */
+  if (strlen(line) == 0)
+    return -1;
+
   for (i = 0; i < ctx->msgcount; i++)
     if (!mutt_strcmp (line, ctx->hdrs[i]->data))
       break;
@@ -201,7 +224,7 @@ static int msg_cache_check (const char *id, body_cache_t *bcache, void *data)
   /* message not found in context -> remove it from cache
    * return the result of bcache, so we stop upon its first error
    */
-  return mutt_bcache_del (bcache, id);
+  return mutt_bcache_del (bcache, cache_id (id));
 }
 
 #ifdef USE_HCACHE
@@ -351,7 +374,7 @@ static int pop_fetch_headers (CONTEXT *ctx)
        *        - if we also have a body: read
        *        - if we don't have a body: new
        */
-      bcached = mutt_bcache_exists (pop_data->bcache, ctx->hdrs[i]->data) == 0;
+      bcached = mutt_bcache_exists (pop_data->bcache, cache_id (ctx->hdrs[i]->data)) == 0;
       ctx->hdrs[i]->old = 0;
       ctx->hdrs[i]->read = 0;
       if (hcached)
@@ -527,7 +550,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
   unsigned short bcache = 1;
 
   /* see if we already have the message in body cache */
-  if ((msg->fp = mutt_bcache_get (pop_data->bcache, h->data)))
+  if ((msg->fp = mutt_bcache_get (pop_data->bcache, cache_id (h->data))))
     return 0;
 
   /*
@@ -574,7 +597,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
 			MUTT_PROGRESS_SIZE, NetInc, h->content->length + h->content->offset - 1);
 
     /* see if we can put in body cache; use our cache as fallback */
-    if (!(msg->fp = mutt_bcache_put (pop_data->bcache, h->data, 1)))
+    if (!(msg->fp = mutt_bcache_put (pop_data->bcache, cache_id (h->data), 1)))
     {
       /* no */
       bcache = 0;
@@ -620,7 +643,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
    * portion of the headers, those required for the main display.
    */
   if (bcache)
-    mutt_bcache_commit (pop_data->bcache, h->data);
+    mutt_bcache_commit (pop_data->bcache, cache_id (h->data));
   else
   {
     cache->index = h->index;
@@ -700,7 +723,7 @@ static int pop_sync_mailbox (CONTEXT *ctx, int *index_hint)
 	snprintf (buf, sizeof (buf), "DELE %d\r\n", ctx->hdrs[i]->refno);
 	if ((ret = pop_query (pop_data, buf, sizeof (buf))) == 0)
 	{
-	  mutt_bcache_del (pop_data->bcache, ctx->hdrs[i]->data);
+	  mutt_bcache_del (pop_data->bcache, cache_id (ctx->hdrs[i]->data));
 #if USE_HCACHE
 	  mutt_hcache_delete (hc, ctx->hdrs[i]->data, strlen);
 #endif

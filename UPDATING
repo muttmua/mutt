@@ -8,6 +8,13 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.10.1 (2018-07-16):
+
+  ! Bug fix release.
+  + $pgp_check_gpg_decrypt_status_fd, when set (the default), checks
+    GnuPG status fd output more thoroughly for spooofed encrypted
+    messages.  Please see contrib/gpg.rc for suggested values.
+
 1.10.0 (2018-05-19):
 
   ! $reply_self is now respected for group-reply, even with $metoo unset.
