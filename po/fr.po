@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-02 12:36+0200\n"
-"PO-Revision-Date: 2018-07-02 12:37+0200\n"
+"POT-Creation-Date: 2018-07-17 17:01+0200\n"
+"PO-Revision-Date: 2018-07-17 17:05+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -38,6 +38,21 @@ msgstr "Nom d'utilisateur sur %s : "
 #, c-format
 msgid "Password for %s@%s: "
 msgstr "Mot de passe pour %s@%s : "
+
+#: account.c:279
+msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
+msgstr ""
+"mutt_account_getoauthbearer: Commande de rafraîchissement OAUTH non définie"
+
+#: account.c:285
+msgid "mutt_account_getoauthbearer: Unable to run refresh command"
+msgstr ""
+"mutt_account_getoauthbearer: Impossible d'exécuter la commande de "
+"rafraîchissement"
+
+#: account.c:296
+msgid "mutt_account_getoauthbearer: Command returned empty string"
+msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
 #: addrbook.c:37 browser.c:46 history.c:75 pager.c:1575 postpone.c:41
 #: query.c:48 recvattach.c:57
@@ -2446,7 +2461,7 @@ msgstr "unhook : type hook inconnu : %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook : impossible de supprimer un %s à l'intérieur d'un %s."
 
-#: imap/auth.c:109 pop_auth.c:425 smtp.c:571
+#: imap/auth.c:109 pop_auth.c:492 smtp.c:571
 msgid "No authenticators available"
 msgstr "Pas d'authentificateurs disponibles"
 
@@ -2478,11 +2493,11 @@ msgstr "L'authentification GSSAPI a échoué."
 msgid "LOGIN disabled on this server."
 msgstr "LOGIN désactivée sur ce serveur."
 
-#: imap/auth_login.c:47 pop_auth.c:258
+#: imap/auth_login.c:47 pop_auth.c:270
 msgid "Logging in..."
 msgstr "Connexion..."
 
-#: imap/auth_login.c:70 pop_auth.c:301
+#: imap/auth_login.c:70 pop_auth.c:313
 msgid "Login failed."
 msgstr "La connexion a échoué."
 
@@ -2491,7 +2506,7 @@ msgstr "La connexion a échoué."
 msgid "Authenticating (%s)..."
 msgstr "Authentification (%s)..."
 
-#: imap/auth_sasl.c:228 pop_auth.c:180
+#: imap/auth_sasl.c:228 pop_auth.c:184
 msgid "SASL authentication failed."
 msgstr "L'authentification SASL a échoué."
 
@@ -2587,7 +2602,7 @@ msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:839 imap/imap.c:2223 imap/message.c:1015 muttlib.c:1687
+#: imap/imap.c:839 imap/imap.c:2226 imap/message.c:1015 muttlib.c:1687
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
@@ -2629,36 +2644,36 @@ msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:1934
+#: imap/imap.c:1935
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1958
+#: imap/imap.c:1961
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:1960
+#: imap/imap.c:1963
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:1970
+#: imap/imap.c:1973
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:1972
+#: imap/imap.c:1975
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2208 imap/message.c:979
+#: imap/imap.c:2211 imap/message.c:979
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
@@ -2686,15 +2701,15 @@ msgid "Evaluating cache..."
 msgstr "Évaluation du cache..."
 
 # , c-format
-#: imap/message.c:340 pop.c:281
+#: imap/message.c:340 pop.c:304
 msgid "Fetching message headers..."
 msgstr "Récupération des en-têtes des messages..."
 
-#: imap/message.c:577 imap/message.c:637 pop.c:573
+#: imap/message.c:577 imap/message.c:637 pop.c:596
 msgid "Fetching message..."
 msgstr "Récupération du message..."
 
-#: imap/message.c:624 pop.c:568
+#: imap/message.c:624 pop.c:591
 msgid "The message index is incorrect. Try reopening the mailbox."
 msgstr ""
 "L'index du message est incorrect. Essayez de rouvrir la boîte aux lettres."
@@ -2709,7 +2724,7 @@ msgstr "Chargement du message..."
 msgid "Copying message %d to %s..."
 msgstr "Copie du message %d dans %s..."
 
-#: imap/util.c:357
+#: imap/util.c:364
 msgid "Continue?"
 msgstr "Continuer ?"
 
@@ -4139,96 +4154,104 @@ msgstr "Impossible d'ouvrir /dev/null"
 msgid "PGP Key %s."
 msgstr "Clé PGP %s."
 
-#: pop.c:102 pop_lib.c:210
+#: pop.c:121 pop_lib.c:210
 msgid "Command TOP is not supported by server."
 msgstr "La commande TOP n'est pas supportée par le serveur."
 
-#: pop.c:129
+#: pop.c:148
 msgid "Can't write header to temporary file!"
 msgstr "Impossible d'écrire l'en-tête dans le fichier temporaire !"
 
-#: pop.c:276 pop_lib.c:212
+#: pop.c:299 pop_lib.c:212
 msgid "Command UIDL is not supported by server."
 msgstr "La commande UIDL n'est pas supportée par le serveur."
 
-#: pop.c:296
+#: pop.c:319
 #, c-format
 msgid "%d messages have been lost. Try reopening the mailbox."
 msgstr "%d messages ont été perdus. Essayez de rouvrir la boîte aux lettres."
 
-#: pop.c:411 pop.c:809
+#: pop.c:434 pop.c:832
 #, c-format
 msgid "%s is an invalid POP path"
 msgstr "%s est un chemin POP invalide"
 
-#: pop.c:455
+#: pop.c:478
 msgid "Fetching list of messages..."
 msgstr "Récupération de la liste des messages..."
 
-#: pop.c:613
+#: pop.c:636
 msgid "Can't write message to temporary file!"
 msgstr "Impossible d'écrire le message dans le fichier temporaire !"
 
 # , c-format
-#: pop.c:686
+#: pop.c:709
 msgid "Marking messages deleted..."
 msgstr "Marquage des messages à effacer..."
 
-#: pop.c:764 pop.c:829
+#: pop.c:787 pop.c:852
 msgid "Checking for new messages..."
 msgstr "Recherche de nouveaux messages..."
 
-#: pop.c:793
+#: pop.c:816
 msgid "POP host is not defined."
 msgstr "Le serveur POP n'est pas défini."
 
-#: pop.c:857
+#: pop.c:880
 msgid "No new mail in POP mailbox."
 msgstr "Aucun nouveau message dans la boîte aux lettres POP."
 
-#: pop.c:864
+#: pop.c:887
 msgid "Delete messages from server?"
 msgstr "Effacer les messages sur le serveur ?"
 
 # , c-format
-#: pop.c:866
+#: pop.c:889
 #, c-format
 msgid "Reading new messages (%d bytes)..."
 msgstr "Lecture de nouveaux messages (%d octets)..."
 
-#: pop.c:908
+#: pop.c:931
 msgid "Error while writing mailbox!"
 msgstr "Erreur à l'écriture de la boîte aux lettres !"
 
 # , c-format
-#: pop.c:912
+#: pop.c:935
 #, c-format
 msgid "%s [%d of %d messages read]"
 msgstr "%s [%d messages lus sur %d]"
 
-#: pop.c:935 pop_lib.c:378
+#: pop.c:958 pop_lib.c:378
 msgid "Server closed connection!"
 msgstr "Le serveur a fermé la connexion !"
 
-#: pop_auth.c:83
+#: pop_auth.c:87
 msgid "Authenticating (SASL)..."
 msgstr "Authentification (SASL)..."
 
-#: pop_auth.c:215
+#: pop_auth.c:223
 msgid "POP timestamp is invalid!"
 msgstr "L'horodatage POP est invalide !"
 
-#: pop_auth.c:220
+#: pop_auth.c:228
 msgid "Authenticating (APOP)..."
 msgstr "Authentification (APOP)..."
 
-#: pop_auth.c:243
+#: pop_auth.c:251
 msgid "APOP authentication failed."
 msgstr "L'authentification APOP a échoué."
 
-#: pop_auth.c:278
+#: pop_auth.c:290
 msgid "Command USER is not supported by server."
 msgstr "La commande USER n'est pas supportée par le serveur."
+
+#: pop_auth.c:329 smtp.c:691
+msgid "Authenticating (OAUTHBEARER)..."
+msgstr "Authentification (OAUTHBEARER)..."
+
+#: pop_auth.c:368
+msgid "Authentication failed."
+msgstr "L'authentification a échoué."
 
 # , c-format
 #: pop_lib.c:57
@@ -4950,10 +4973,6 @@ msgstr "L'authentification SMTP nécessite SASL"
 #: smtp.c:566
 msgid "SASL authentication failed"
 msgstr "L'authentification SASL a échoué"
-
-#: smtp.c:691
-msgid "Authenticating (OAUTHBEARER)..."
-msgstr "Authentification (OAUTHBEARER)..."
 
 #: sort.c:297
 msgid "Sorting mailbox..."
