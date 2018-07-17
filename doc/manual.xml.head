@@ -334,7 +334,7 @@ per-folder basis and much more.
 
 <para>
 Besides an interactive mode, Mutt can also be used as a command-line
-tool only send messages. It also supports a
+tool to send messages. It also supports a
 <literal>mailx(1)</literal>-compatible interface, see <xref
 linkend="tab-commandline-options"/> for a complete list of command-line
 options.
