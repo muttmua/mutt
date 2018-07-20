@@ -351,21 +351,83 @@ static int mx_toggle_write (CONTEXT *ctx)
   return 0;
 }
 
-static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
-			  int oldcount, int index_hint)
+static void update_index_threaded (CONTEXT *ctx, int check, int oldcount)
 {
-  /* store pointers to the newly added messages */
-  HEADER  **save_new = NULL;
+  HEADER **save_new = NULL;
   int j;
 
-  /* take note of the current message */
-  if (oldcount)
+  /* save the list of new messages */
+  if ((check != MUTT_REOPENED) && oldcount &&
+      (ctx->pattern || option (OPTUNCOLLAPSENEW)))
   {
-    if (menu->current < ctx->vcount)
-      menu->oldcurrent = index_hint;
-    else
-      oldcount = 0; /* invalid message number! */
+    save_new = (HEADER **) safe_malloc (sizeof (HEADER *) * (ctx->msgcount - oldcount));
+    for (j = oldcount; j < ctx->msgcount; j++)
+      save_new[j-oldcount] = ctx->hdrs[j];
   }
+
+  /* Sort first to thread the new messages, because some patterns
+   * require the threading information.
+   *
+   * If the mailbox was reopened, need to rethread from scratch. */
+  mutt_sort_headers (ctx, (check == MUTT_REOPENED));
+
+  if (ctx->pattern)
+  {
+    for (j = (check == MUTT_REOPENED) ? 0 : oldcount; j < ctx->msgcount; j++)
+    {
+      HEADER *h;
+
+      if ((check != MUTT_REOPENED) && oldcount)
+        h = save_new[j-oldcount];
+      else
+        h = ctx->hdrs[j];
+
+      if (mutt_pattern_exec (ctx->limit_pattern,
+			     MUTT_MATCH_FULL_ADDRESS,
+			     ctx, h, NULL))
+      {
+        /* virtual will get properly set by mutt_set_virtual(), which
+         * is called by mutt_sort_headers() just below. */
+        h->virtual = 1;
+        h->limited = 1;
+      }
+    }
+    /* Need a second sort to set virtual numbers and redraw the tree */
+    mutt_sort_headers (ctx, 0);
+  }
+
+  /* uncollapse threads with new mail */
+  if (option(OPTUNCOLLAPSENEW))
+  {
+    if (check == MUTT_REOPENED)
+    {
+      THREAD *h, *j;
+
+      ctx->collapsed = 0;
+
+      for (h = ctx->tree; h; h = h->next)
+      {
+	for (j = h; !j->message; j = j->child)
+	  ;
+	mutt_uncollapse_thread (ctx, j->message);
+      }
+      mutt_set_virtual (ctx);
+    }
+    else if (oldcount)
+    {
+      for (j = 0; j < ctx->msgcount - oldcount; j++)
+        if (!ctx->pattern || save_new[j]->limited)
+          mutt_uncollapse_thread (ctx, save_new[j]);
+      mutt_set_virtual (ctx);
+    }
+  }
+
+  FREE (&save_new);
+}
+
+static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
+{
+  int j;
 
   /* We are in a limited view. Check if the new message(s) satisfy
    * the limit criteria. If they do, set their virtual msgno so that
@@ -393,52 +455,28 @@ static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
 #undef THIS_BODY
   }
 
-  /* save the list of new messages */
-  if (option(OPTUNCOLLAPSENEW) && oldcount && check != MUTT_REOPENED
-      && ((Sort & SORT_MASK) == SORT_THREADS))
-  {
-    save_new = (HEADER **) safe_malloc (sizeof (HEADER *) * (ctx->msgcount - oldcount));
-    for (j = oldcount; j < ctx->msgcount; j++)
-      save_new[j-oldcount] = ctx->hdrs[j];
-  }
-
   /* if the mailbox was reopened, need to rethread from scratch */
   mutt_sort_headers (ctx, (check == MUTT_REOPENED));
+}
 
-  /* uncollapse threads with new mail */
-  if (option(OPTUNCOLLAPSENEW) && ((Sort & SORT_MASK) == SORT_THREADS))
+static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
+			  int oldcount, int index_hint)
+{
+  int j;
+
+  /* take note of the current message */
+  if (oldcount)
   {
-    if (check == MUTT_REOPENED)
-    {
-      THREAD *h, *j;
-
-      ctx->collapsed = 0;
-
-      for (h = ctx->tree; h; h = h->next)
-      {
-	for (j = h; !j->message; j = j->child)
-	  ;
-	mutt_uncollapse_thread (ctx, j->message);
-      }
-      mutt_set_virtual (ctx);
-    }
-    else if (oldcount)
-    {
-      for (j = 0; j < ctx->msgcount - oldcount; j++)
-      {
-	int k;
-
-	for (k = 0; k < ctx->msgcount; k++)
-	{
-	  HEADER *h = ctx->hdrs[k];
-	  if (h == save_new[j] && (!ctx->pattern || h->limited))
-	    mutt_uncollapse_thread (ctx, h);
-	}
-      }
-      FREE (&save_new);
-      mutt_set_virtual (ctx);
-    }
+    if (menu->current < ctx->vcount)
+      menu->oldcurrent = index_hint;
+    else
+      oldcount = 0; /* invalid message number! */
   }
+
+  if ((Sort & SORT_MASK) == SORT_THREADS)
+    update_index_threaded (ctx, check, oldcount);
+  else
+    update_index_unthreaded (ctx, check, oldcount);
 
   menu->current = -1;
   if (oldcount)
@@ -456,7 +494,6 @@ static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
 
   if (menu->current < 0)
     menu->current = ci_first_message ();
-
 }
 
 static void resort_index (MUTTMENU *menu)
