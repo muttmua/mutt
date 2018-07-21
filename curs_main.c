@@ -434,7 +434,6 @@ static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
    * they will be visible in the limited view */
   if (ctx->pattern)
   {
-#define THIS_BODY ctx->hdrs[j]->content
     for (j = (check == MUTT_REOPENED) ? 0 : oldcount; j < ctx->msgcount; j++)
     {
       if (!j)
@@ -444,15 +443,16 @@ static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
 			     MUTT_MATCH_FULL_ADDRESS,
 			     ctx, ctx->hdrs[j], NULL))
       {
+	BODY *this_body = ctx->hdrs[j]->content;
+
 	assert (ctx->vcount < ctx->msgcount);
 	ctx->hdrs[j]->virtual = ctx->vcount;
 	ctx->v2r[ctx->vcount] = j;
 	ctx->hdrs[j]->limited = 1;
 	ctx->vcount++;
-	ctx->vsize += THIS_BODY->length + THIS_BODY->offset - THIS_BODY->hdr_offset;
+	ctx->vsize += this_body->length + this_body->offset - this_body->hdr_offset;
       }
     }
-#undef THIS_BODY
   }
 
   /* if the mailbox was reopened, need to rethread from scratch */
