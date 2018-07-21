@@ -437,7 +437,10 @@ static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
     for (j = (check == MUTT_REOPENED) ? 0 : oldcount; j < ctx->msgcount; j++)
     {
       if (!j)
+      {
 	ctx->vcount = 0;
+	ctx->vsize = 0;
+      }
 
       if (mutt_pattern_exec (ctx->limit_pattern,
 			     MUTT_MATCH_FULL_ADDRESS,
