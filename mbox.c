@@ -1246,6 +1246,7 @@ int mutt_reopen_mailbox (CONTEXT *ctx, int *index_hint)
   ctx->hdrmax = 0;	/* force allocation of new headers */
   ctx->msgcount = 0;
   ctx->vcount = 0;
+  ctx->vsize = 0;
   ctx->tagged = 0;
   ctx->deleted = 0;
   ctx->new = 0;

@@ -289,6 +289,7 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
      * in that routine, so we must make sure to zero the vcount member.
      */
     ctx->vcount = 0;
+    ctx->vsize = 0;
     mutt_clear_threads (ctx);
     return; /* nothing to do! */
   }
