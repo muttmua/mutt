@@ -880,7 +880,6 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
   if ((i = mbox_check_mailbox (ctx, index_hint)) == MUTT_NEW_MAIL ||  i == MUTT_REOPENED)
   {
     /* new mail arrived, or mailbox reopened */
-    need_sort = i;
     rc = i;
     goto bail;
   }
