@@ -1445,7 +1445,7 @@ int mutt_pattern_func (int op, char *prompt)
   pattern_t *pat = NULL;
   char buf[LONG_STRING] = "", *simple = NULL;
   BUFFER err;
-  int i, rv = -1;
+  int i, rv = -1, padding;
   progress_t progress;
 
   strfcpy (buf, NONULL (Context->pattern), sizeof (buf));
@@ -1480,6 +1480,7 @@ int mutt_pattern_func (int op, char *prompt)
     Context->vcount    = 0;
     Context->vsize     = 0;
     Context->collapsed = 0;
+    padding = mx_msg_padding_size (Context);
 
     for (i = 0; i < Context->msgcount; i++)
     {
@@ -1498,7 +1499,7 @@ int mutt_pattern_func (int op, char *prompt)
 	Context->v2r[Context->vcount] = i;
 	Context->vcount++;
 	Context->vsize += this_body->length + this_body->offset -
-	  this_body->hdr_offset;
+	                  this_body->hdr_offset + padding;
       }
     }
   }

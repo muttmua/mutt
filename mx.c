@@ -1042,7 +1042,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 
 void mx_update_tables(CONTEXT *ctx, int committing)
 {
-  int i, j;
+  int i, j, padding;
   
   /* update memory to reflect the new state of the mailbox */
   ctx->vcount = 0;
@@ -1053,6 +1053,7 @@ void mx_update_tables(CONTEXT *ctx, int committing)
   ctx->unread = 0;
   ctx->changed = 0;
   ctx->flagged = 0;
+  padding = mx_msg_padding_size (ctx);
 #define this_body ctx->hdrs[j]->content
   for (i = 0, j = 0; i < ctx->msgcount; i++)
   {
@@ -1071,7 +1072,7 @@ void mx_update_tables(CONTEXT *ctx, int committing)
 	ctx->v2r[ctx->vcount] = j;
 	ctx->hdrs[j]->virtual = ctx->vcount++;
 	ctx->vsize += this_body->length + this_body->offset -
-	  this_body->hdr_offset;
+	              this_body->hdr_offset + padding;
       }
 
       if (committing)

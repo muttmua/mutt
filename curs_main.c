@@ -427,13 +427,14 @@ static void update_index_threaded (CONTEXT *ctx, int check, int oldcount)
 
 static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
 {
-  int j;
+  int j, padding;
 
   /* We are in a limited view. Check if the new message(s) satisfy
    * the limit criteria. If they do, set their virtual msgno so that
    * they will be visible in the limited view */
   if (ctx->pattern)
   {
+    padding = mx_msg_padding_size (ctx);
     for (j = (check == MUTT_REOPENED) ? 0 : oldcount; j < ctx->msgcount; j++)
     {
       if (!j)
@@ -453,7 +454,8 @@ static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
 	ctx->v2r[ctx->vcount] = j;
 	ctx->hdrs[j]->limited = 1;
 	ctx->vcount++;
-	ctx->vsize += this_body->length + this_body->offset - this_body->hdr_offset;
+	ctx->vsize += this_body->length + this_body->offset -
+                      this_body->hdr_offset + padding;
       }
     }
   }

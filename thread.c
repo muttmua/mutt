@@ -22,6 +22,7 @@
 
 #include "mutt.h"
 #include "sort.h"
+#include "mailbox.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -1114,11 +1115,12 @@ int mutt_parent_message (CONTEXT *ctx, HEADER *hdr, int find_root)
 
 void mutt_set_virtual (CONTEXT *ctx)
 {
-  int i;
+  int i, padding;
   HEADER *cur;
 
   ctx->vcount = 0;
   ctx->vsize = 0;
+  padding = mx_msg_padding_size (ctx);
 
   for (i = 0; i < ctx->msgcount; i++)
   {
@@ -1128,7 +1130,8 @@ void mutt_set_virtual (CONTEXT *ctx)
       cur->virtual = ctx->vcount;
       ctx->v2r[ctx->vcount] = i;
       ctx->vcount++;
-      ctx->vsize += cur->content->length + cur->content->offset - cur->content->hdr_offset;
+      ctx->vsize += cur->content->length + cur->content->offset -
+                    cur->content->hdr_offset + padding;
       cur->num_hidden = mutt_get_hidden (ctx, cur);
     }
   }
