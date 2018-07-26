@@ -129,7 +129,7 @@ stamp-doc-chunked: $(srcdir)/chunk.xsl $(srcdir)/mutt.xsl stamp-doc-xml $(srcdir
 $(CHUNKED_DOCFILES): stamp-doc-chunked
 
 manual.pdf: manual.tex
-	-if test -f manual.tex; then pdfjadetex manual.tex; fi
+	-if test -f manual.tex; then pdfjadetex manual.tex; pdfjadetex manual.tex; pdfjadetex manual.tex; fi
 
 manual.tex: stamp-doc-xml
 	-if test -n "$(DSLROOT)"; then \
