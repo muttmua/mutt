@@ -1385,6 +1385,16 @@ int mbox_check_empty (const char *path)
   return ((st.st_size == 0));
 }
 
+static int mbox_msg_padding_size (CONTEXT *ctx)
+{
+  return 1;
+}
+
+static int mmdf_msg_padding_size (CONTEXT *ctx)
+{
+  return 10;
+}
+
 struct mx_ops mx_mbox_ops = {
   .open = mbox_open_mailbox,
   .open_append = mbox_open_mailbox_append,
@@ -1395,6 +1405,7 @@ struct mx_ops mx_mbox_ops = {
   .open_new_msg = mbox_open_new_message,
   .check = mbox_check_mailbox,
   .sync = mbox_sync_mailbox,
+  .msg_padding_size = mbox_msg_padding_size,
 };
 
 struct mx_ops mx_mmdf_ops = {
@@ -1407,4 +1418,5 @@ struct mx_ops mx_mmdf_ops = {
   .open_new_msg = mbox_open_new_message,
   .check = mbox_check_mailbox,
   .sync = mbox_sync_mailbox,
+  .msg_padding_size = mmdf_msg_padding_size,
 };

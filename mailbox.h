@@ -81,6 +81,7 @@ int mx_is_pop (const char *);
 
 int mx_access (const char*, int);
 int mx_check_empty (const char *);
+int mx_msg_padding_size (CONTEXT *);
 
 int mx_is_maildir (const char *);
 int mx_is_mh (const char *);

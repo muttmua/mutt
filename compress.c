@@ -939,6 +939,29 @@ mutt_comp_valid_command (const char *cmd)
   return (strstr (cmd, "%f") && strstr (cmd, "%t"));
 }
 
+/**
+ * compress_msg_padding_size - Returns the padding between messages.
+ */
+static int
+compress_msg_padding_size (CONTEXT *ctx)
+{
+  COMPRESS_INFO *ci;
+  struct mx_ops *ops;
+
+  if (!ctx)
+    return 0;
+
+  ci = ctx->compress_info;
+  if (!ci)
+    return 0;
+
+  ops = ci->child_ops;
+  if (!ops || !ops->msg_padding_size)
+    return 0;
+
+  return ops->msg_padding_size (ctx);
+}
+
 
 /**
  * mx_comp_ops - Mailbox callback functions
@@ -956,6 +979,7 @@ struct mx_ops mx_comp_ops =
   .open_msg     = open_message,
   .close_msg    = close_message,
   .commit_msg   = commit_message,
-  .open_new_msg = open_new_message
+  .open_new_msg = open_new_message,
+  .msg_padding_size = compress_msg_padding_size,
 };
 
