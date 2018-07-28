@@ -1231,6 +1231,11 @@ int main (int argc, char **argv, char **environ)
   {
     if (flags & MUTT_BUFFY)
     {
+#ifdef USE_IMAP
+      int passive = option (OPTIMAPPASSIVE);
+      if (passive)
+        unset_option (OPTIMAPPASSIVE);
+#endif
       if (!mutt_buffy_check (0))
       {
 	mutt_endwin _("No mailbox with new mail.");
@@ -1238,6 +1243,10 @@ int main (int argc, char **argv, char **environ)
       }
       folder[0] = 0;
       mutt_buffy (folder, sizeof (folder));
+#ifdef USE_IMAP
+      if (passive)
+        set_option (OPTIMAPPASSIVE);
+#endif
     }
     else if (flags & MUTT_SELECT)
     {

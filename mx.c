@@ -1498,6 +1498,20 @@ int mx_check_empty (const char *path)
       return mh_check_empty (path);
     case MUTT_MAILDIR:
       return maildir_check_empty (path);
+#ifdef USE_IMAP
+    case MUTT_IMAP:
+    {
+      int passive, rv;
+
+      passive = option (OPTIMAPPASSIVE);
+      if (passive)
+        unset_option (OPTIMAPPASSIVE);
+      rv = imap_status (path, 0);
+      if (passive)
+        set_option (OPTIMAPPASSIVE);
+      return (rv <= 0);
+    }
+#endif
     default:
       errno = EINVAL;
       return -1;

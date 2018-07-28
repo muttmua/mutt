@@ -1654,7 +1654,7 @@ int imap_buffy_check (int force, int check_stats)
 /* imap_status: returns count of messages in mailbox, or -1 on error.
  * if queue != 0, queue the command and expect it to have been run
  * on the next call (for pipelining the postponed count) */
-int imap_status (char* path, int queue)
+int imap_status (const char* path, int queue)
 {
   static int queued = 0;
 
