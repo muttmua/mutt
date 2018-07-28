@@ -203,8 +203,7 @@ static int compare_spam (const void *a, const void *b)
   if (result == 0)
   {
     result = strcmp(aptr, bptr);
-    if (result == 0)
-      AUXSORT(result, a, b);
+    AUXSORT(result, a, b);
   }
 
   return (SORTCODE(result));
