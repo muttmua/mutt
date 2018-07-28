@@ -131,6 +131,13 @@ $(CHUNKED_DOCFILES): stamp-doc-chunked
 manual.pdf: manual.tex
 	-if test -f manual.tex; then pdfjadetex manual.tex; pdfjadetex manual.tex; pdfjadetex manual.tex; fi
 
+# Note / Request For Help:
+# On Debian, the below invocation of openjade is not working for me.
+# I was able to generate manual.tex by instead running:
+#     openjade -t tex -D $(DSLROOT) -d print/docbook.dsl \
+#       -i xml /usr/share/xml/declaration/xml.dcl manual.xml
+# However, being completely unfamiliar with these tools, am unsure how to
+# make this portable.
 manual.tex: stamp-doc-xml
 	-if test -n "$(DSLROOT)"; then \
 	  openjade -t tex -D $(DSLROOT) -d print/docbook.dsl dtds/decls/xml.dcl manual.xml; \
