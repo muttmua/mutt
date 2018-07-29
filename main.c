@@ -628,6 +628,8 @@ int main (int argc, char **argv, char **environ)
   extern char *optarg;
   extern int optind;
   int double_dash = argc, nargc = 1;
+  int exit_code = 1;
+  const char *exit_endwin_msg = NULL;
 
   /* sanity check against stupid administrators */
   
@@ -873,25 +875,26 @@ int main (int argc, char **argv, char **environ)
 
   if (alias_queries)
   {
-    int rv = 0;
     ADDRESS *a;
+
+    exit_code = 0;
     for (; optind < argc; optind++)
       alias_queries = mutt_add_list (alias_queries, argv[optind]);
     for (; alias_queries; alias_queries = alias_queries->next)
     {
       if ((a = mutt_lookup_alias (alias_queries->data)))
-      {	
+      {
 	/* output in machine-readable form */
 	mutt_addrlist_to_intl (a, NULL);
 	mutt_write_address_list (a, stdout, 0, 0);
       }
       else
       {
-	rv = 1;
+        exit_code = 1;
 	printf ("%s\n", alias_queries->data);
       }
     }
-    return rv;
+    goto cleanup_and_exit;
   }
 
   if (!option (OPTNOCURSES))
@@ -931,8 +934,6 @@ int main (int argc, char **argv, char **environ)
     if (!option (OPTNOCURSES))
       mutt_flushinp ();
     ci_send_message (SENDPOSTPONED, NULL, NULL, NULL, NULL);
-    mutt_free_windows ();
-    mutt_endwin (NULL);
   }
   else if (subject || msg || sendflags || draftFile || includeFile || attach ||
 	   optind < argc)
@@ -960,9 +961,12 @@ int main (int argc, char **argv, char **environ)
         if (url_parse_mailto (msg->env, &bodytext, argv[i]) < 0)
         {
           if (!option (OPTNOCURSES))
+          {
             mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
           fputs (_("Failed to parse mailto: link\n"), stderr);
-          exit (1);
+          goto cleanup_and_exit;
         }
       }
       else
@@ -972,9 +976,12 @@ int main (int argc, char **argv, char **environ)
     if (!draftFile && option (OPTAUTOEDIT) && !msg->env->to && !msg->env->cc)
     {
       if (!option (OPTNOCURSES))
+      {
         mutt_endwin (NULL);
+        set_option (OPTNOCURSES);
+      }
       fputs (_("No recipients specified.\n"), stderr);
-      exit (1);
+      goto cleanup_and_exit;
     }
 
     if (subject)
@@ -1000,7 +1007,7 @@ int main (int argc, char **argv, char **environ)
           if (edit_infile)
           {
             fputs (_("Cannot use -E flag with stdin\n"), stderr);
-            exit (1);
+            goto cleanup_and_exit;
           }
 	  fin = stdin;
         }
@@ -1011,9 +1018,12 @@ int main (int argc, char **argv, char **environ)
 	  if ((fin = fopen (expanded_infile, "r")) == NULL)
 	  {
 	    if (!option (OPTNOCURSES))
+            {
 	      mutt_endwin (NULL);
+              set_option (OPTNOCURSES);
+            }
 	    perror (expanded_infile);
-	    exit (1);
+            goto cleanup_and_exit;
 	  }
 	}
       }
@@ -1030,11 +1040,14 @@ int main (int argc, char **argv, char **environ)
         if ((fout = safe_fopen (tempfile, "w")) == NULL)
         {
           if (!option (OPTNOCURSES))
+          {
             mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
           perror (tempfile);
           safe_fclose (&fin);
           FREE (&tempfile);
-          exit (1);
+          goto cleanup_and_exit;
         }
         if (fin)
         {
@@ -1049,10 +1062,13 @@ int main (int argc, char **argv, char **environ)
         if ((fin = fopen (tempfile, "r")) == NULL)
         {
           if (!option (OPTNOCURSES))
+          {
             mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
           perror (tempfile);
           FREE (&tempfile);
-          exit (1);
+          goto cleanup_and_exit;
         }
       }
       /* If editing the infile, keep it around afterwards so
@@ -1083,7 +1099,7 @@ int main (int argc, char **argv, char **environ)
         if (fstat (fileno (fin), &st))
         {
           perror (draftFile);
-          exit (1);
+          goto cleanup_and_exit;
         }
         context_hdr->content->length = st.st_size;
 
@@ -1151,10 +1167,13 @@ int main (int argc, char **argv, char **environ)
 	if (!a)
 	{
 	  if (!option (OPTNOCURSES))
+          {
 	    mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
 	  fprintf (stderr, _("%s: unable to attach file.\n"), t->data);
 	  mutt_free_list (&attach);
-	  exit (1);
+	  goto cleanup_and_exit;
 	}
 	t = t->next;
       }
@@ -1172,16 +1191,22 @@ int main (int argc, char **argv, char **environ)
         if (truncate (expanded_infile, 0) == -1)
         {
           if (!option (OPTNOCURSES))
+          {
             mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
           perror (expanded_infile);
-          exit (1);
+          goto cleanup_and_exit;
         }
         if ((fout = safe_fopen (expanded_infile, "a")) == NULL)
         {
           if (!option (OPTNOCURSES))
+          {
             mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
           perror (expanded_infile);
-          exit (1);
+          goto cleanup_and_exit;
         }
 
         /* If the message was sent or postponed, these will already
@@ -1202,10 +1227,8 @@ int main (int argc, char **argv, char **environ)
         fputc ('\n', fout);
         if ((mutt_write_mime_body (msg->content, fout) == -1))
         {
-          if (!option (OPTNOCURSES))
-            mutt_endwin (NULL);
           safe_fclose (&fout);
-          exit (1);
+          goto cleanup_and_exit;
         }
         safe_fclose (&fout);
       }
@@ -1220,12 +1243,8 @@ int main (int argc, char **argv, char **environ)
       FREE (&tempfile);
     }
 
-    mutt_free_windows ();
-    if (!option (OPTNOCURSES))
-      mutt_endwin (NULL);
-
     if (rv)
-      exit(1);
+      goto cleanup_and_exit;
   }
   else
   {
@@ -1238,8 +1257,8 @@ int main (int argc, char **argv, char **environ)
 #endif
       if (!mutt_buffy_check (0))
       {
-	mutt_endwin _("No mailbox with new mail.");
-	exit (1);
+        exit_endwin_msg = _("No mailbox with new mail.");
+        goto cleanup_and_exit;
       }
       folder[0] = 0;
       mutt_buffy (folder, sizeof (folder));
@@ -1250,16 +1269,17 @@ int main (int argc, char **argv, char **environ)
     }
     else if (flags & MUTT_SELECT)
     {
-      if (!Incoming) {
-	mutt_endwin _("No incoming mailboxes defined.");
-	exit (1);
+      if (!Incoming)
+      {
+        exit_endwin_msg = _("No incoming mailboxes defined.");
+	goto cleanup_and_exit;
       }
       folder[0] = 0;
       mutt_select_file (folder, sizeof (folder), MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
       if (!folder[0])
       {
-	mutt_endwin (NULL);
-	exit (0);
+        exit_code = 0;
+	goto cleanup_and_exit;
       }
     }
 
@@ -1276,11 +1296,11 @@ int main (int argc, char **argv, char **environ)
       switch (mx_check_empty (folder))
       {
 	case -1:
-	  mutt_endwin (strerror (errno));
-	  exit (1);
+          exit_endwin_msg = strerror (errno);
+          goto cleanup_and_exit;
 	case 1:
-	  mutt_endwin _("Mailbox is empty.");
-	  exit (1);
+          exit_endwin_msg = _("Mailbox is empty.");
+	  goto cleanup_and_exit;
       }
     }
 
@@ -1296,16 +1316,22 @@ int main (int argc, char **argv, char **environ)
       if (Context)
 	FREE (&Context);
     }
-#ifdef USE_IMAP
-    imap_logout_all ();
-#endif
-#ifdef USE_SASL
-    mutt_sasl_done ();
-#endif
-    mutt_free_opts ();
-    mutt_free_windows ();
-    mutt_endwin (Errorbuf);
+
+    exit_endwin_msg = Errorbuf;
   }
 
-  exit (0);
+  exit_code = 0;
+
+cleanup_and_exit:
+#ifdef USE_IMAP
+  imap_logout_all ();
+#endif
+#ifdef USE_SASL
+  mutt_sasl_done ();
+#endif
+  mutt_free_opts ();
+  mutt_free_windows ();
+  if (!option (OPTNOCURSES))
+    mutt_endwin (exit_endwin_msg);
+  exit (exit_code);
 }
