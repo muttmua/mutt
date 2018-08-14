@@ -1148,7 +1148,8 @@ static int has_attach_keyword (char *filename)
 
   while ((buf = mutt_read_line (buf, &blen, fp, NULL, 0)) != NULL)
   {
-    if (regexec (AbortNoattachRegexp.rx, buf, 0, NULL, 0) == 0)
+    if (!mutt_is_quote_line (buf, NULL) &&
+        regexec (AbortNoattachRegexp.rx, buf, 0, NULL, 0) == 0)
     {
       match = 1;
       break;
