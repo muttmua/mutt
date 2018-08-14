@@ -1136,7 +1136,8 @@ static int has_recips (ADDRESS *a)
 static int has_attach_keyword (char *filename)
 {
   int match = 0;
-  char buffer[LONG_STRING];
+  char *buf = NULL;
+  size_t blen = 0;
   FILE *fp;
 
   if ((fp = safe_fopen (filename, "r")) == NULL)
@@ -1145,15 +1146,16 @@ static int has_attach_keyword (char *filename)
     return 0;
   }
 
-  while (fgets (buffer, sizeof(buffer), fp) != NULL)
+  while ((buf = mutt_read_line (buf, &blen, fp, NULL, 0)) != NULL)
   {
-    if (regexec (AbortNoattachRegexp.rx, buffer, 0, NULL, 0) == 0)
+    if (regexec (AbortNoattachRegexp.rx, buf, 0, NULL, 0) == 0)
     {
       match = 1;
       break;
     }
   }
   safe_fclose (&fp);
+  FREE (&buf);
 
   return match;
 }
