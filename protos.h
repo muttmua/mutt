@@ -336,6 +336,7 @@ int mutt_is_mail_list (ADDRESS *);
 int mutt_is_message_type(int, const char *);
 int mutt_is_list_cc (int, ADDRESS *, ADDRESS *);
 int mutt_is_list_recipient (int, ADDRESS *, ADDRESS *);
+int mutt_is_quote_line (char *, regmatch_t *);
 int mutt_is_subscribed_list (ADDRESS *);
 int mutt_is_text_part (BODY *);
 int mutt_is_valid_mailbox (const char *);

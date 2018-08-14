@@ -707,13 +707,51 @@ static int brailleCol = -1;
 
 static int check_attachment_marker (char *);
 
+/* Checks if buf matches the QuoteRegexp and doesn't match Smileys.
+ * pmatch, if non-null, is populated with the regexec match against
+ * QuoteRegexp.  This is used by the pager for calling classify_quote.
+ */
+int
+mutt_is_quote_line (char *buf, regmatch_t *pmatch)
+{
+  int is_quote = 0;
+  regmatch_t pmatch_internal[1], smatch[1];
+  char c;
+
+  if (!pmatch)
+    pmatch = pmatch_internal;
+
+  if (QuoteRegexp.rx &&
+      regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+  {
+    if (Smileys.rx &&
+        regexec ((regex_t *) Smileys.rx, buf, 1, smatch, 0) == 0)
+    {
+      if (smatch[0].rm_so > 0)
+      {
+	c = buf[smatch[0].rm_so];
+	buf[smatch[0].rm_so] = 0;
+
+	if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+          is_quote = 1;
+
+	buf[smatch[0].rm_so] = c;
+      }
+    }
+    else
+      is_quote = 1;
+  }
+
+  return is_quote;
+}
+
 static void
 resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 		struct q_class_t **QuoteList, int *q_level, int *force_redraw,
 		int q_classify)
 {
   COLOR_LINE *color_line;
-  regmatch_t pmatch[1], smatch[1];
+  regmatch_t pmatch[1];
   int found, offset, null_rx, i;
 
   if (n == 0 || ISHEADER (lineInfo[n-1].type))
@@ -807,43 +845,13 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
   }
   else if (check_sig (buf, lineInfo, n - 1) == 0)
     lineInfo[n].type = MT_COLOR_SIGNATURE;
-  else if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+  else if (mutt_is_quote_line (buf, pmatch))
   {
-    if (regexec ((regex_t *) Smileys.rx, buf, 1, smatch, 0) == 0)
-    {
-      if (smatch[0].rm_so > 0)
-      {
-	char c;
-
-	/* hack to avoid making an extra copy of buf */
-	c = buf[smatch[0].rm_so];
-	buf[smatch[0].rm_so] = 0;
-
-	if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
-	{
-	  if (q_classify && lineInfo[n].quote == NULL)
-	    lineInfo[n].quote = classify_quote (QuoteList,
-				  buf + pmatch[0].rm_so,
-				  pmatch[0].rm_eo - pmatch[0].rm_so,
-				  force_redraw, q_level);
-	  lineInfo[n].type = MT_COLOR_QUOTED;
-	}
-	else
-	  lineInfo[n].type = MT_COLOR_NORMAL;
-
-	buf[smatch[0].rm_so] = c;
-      }
-      else
-	lineInfo[n].type = MT_COLOR_NORMAL;
-    }
-    else
-    {
-      if (q_classify && lineInfo[n].quote == NULL)
-	lineInfo[n].quote = classify_quote (QuoteList, buf + pmatch[0].rm_so,
-			      pmatch[0].rm_eo - pmatch[0].rm_so,
-			      force_redraw, q_level);
-      lineInfo[n].type = MT_COLOR_QUOTED;
-    }
+    if (q_classify && lineInfo[n].quote == NULL)
+      lineInfo[n].quote = classify_quote (QuoteList, buf + pmatch[0].rm_so,
+                                          pmatch[0].rm_eo - pmatch[0].rm_so,
+                                          force_redraw, q_level);
+    lineInfo[n].type = MT_COLOR_QUOTED;
   }
   else
     lineInfo[n].type = MT_COLOR_NORMAL;
