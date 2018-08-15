@@ -59,7 +59,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
 
 static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
                                    unsigned int msn_end, int evalhc,
-                                   unsigned int *maxuid);
+                                   unsigned int *maxuid, int initial_download);
 
 
 static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h);
@@ -71,6 +71,28 @@ static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf,
   FILE* fp);
 static int msg_parse_fetch (IMAP_HEADER* h, char* s);
 static char* msg_parse_flags (IMAP_HEADER* h, char* s);
+
+
+/* If the user hits ctrl-c during an initial header download for a mailbox,
+ * prompt whether to completely abort the download and close the mailbox.
+ */
+static int query_abort_header_download (IMAP_DATA *idata)
+{
+  int abort = 0;
+
+  mutt_flushinp ();
+  /* L10N: This prompt is made if the user hits Ctrl-C when opening
+   * an IMAP mailbox */
+  if (mutt_yesorno (_("Abort download and close mailbox?"), MUTT_YES) == MUTT_YES)
+  {
+    abort = 1;
+    imap_close_connection (idata);
+  }
+  SigInt = 0;
+
+  return abort;
+}
+
 
 static void imap_alloc_msn_index (IMAP_DATA *idata, unsigned int msn_count)
 {
@@ -288,7 +310,8 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
   }
 #endif /* USE_HCACHE */
 
-  if (read_headers_fetch_new (idata, msn_begin, msn_end, evalhc, &maxuid) < 0)
+  if (read_headers_fetch_new (idata, msn_begin, msn_end, evalhc, &maxuid,
+                              initial_download) < 0)
     goto bail;
 
   if (maxuid && (status = imap_mboxcache_get (idata, idata->mailbox, 0)) &&
@@ -390,6 +413,9 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
   rc = IMAP_CMD_CONTINUE;
   for (msgno = 1; rc == IMAP_CMD_CONTINUE; msgno++)
   {
+    if (SigInt && query_abort_header_download (idata))
+      return -1;
+
     mutt_progress_update (&progress, msgno, -1);
 
     memset (&h, 0, sizeof (h));
@@ -584,6 +610,9 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
   rc = IMAP_CMD_CONTINUE;
   for (msgno = 1; rc == IMAP_CMD_CONTINUE; msgno++)
   {
+    if (SigInt && query_abort_header_download (idata))
+      return -1;
+
     mutt_progress_update (&progress, msgno, -1);
 
     /* cmd_parse_fetch will update the flags */
@@ -635,7 +664,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
  */
 static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
                                    unsigned int msn_end, int evalhc,
-                                   unsigned int *maxuid)
+                                   unsigned int *maxuid, int initial_download)
 {
   CONTEXT* ctx;
   int idx, msgno, rc, mfhrc = 0, retval = -1;
@@ -704,6 +733,10 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
     rc = IMAP_CMD_CONTINUE;
     for (msgno = msn_begin; rc == IMAP_CMD_CONTINUE; msgno++)
     {
+      if (initial_download && SigInt &&
+          query_abort_header_download (idata))
+        goto bail;
+
       mutt_progress_update (&progress, msgno, -1);
 
       rewind (fp);
