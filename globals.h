@@ -240,6 +240,7 @@ WHERE LIST *SidebarWhitelist INITVAL(0);
 #endif
 
 #ifdef USE_IMAP
+WHERE long  ImapFetchChunkSize;
 WHERE short ImapKeepalive;
 WHERE short ImapPipelineDepth;
 WHERE short ImapPollTimeout;
