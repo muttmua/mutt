@@ -1367,6 +1367,8 @@ if test "x$with_idn2" != "xno"; then
 
     AC_SEARCH_LIBS([idn2_check_version], [idn2], [
       AC_DEFINE([HAVE_LIBIDN2], 1, [Define to 1 if you have the GNU idn2 library])
+      dnl -lunistring is needed for static linking
+      AC_SEARCH_LIBS([u8_strconv_from_locale], [unistring])
       MUTTLIBS="$MUTTLIBS $LIBS"
 
       dnl libidn2 >= 2.0.0 declares compatibility macros in idn2.h
