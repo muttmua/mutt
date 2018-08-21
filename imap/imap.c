@@ -604,6 +604,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
   int count = 0;
   IMAP_MBOX mx, pmx;
   int rc;
+  const char *condstore;
 
   if (imap_parse_path (ctx->path, &mx))
   {
@@ -669,15 +670,17 @@ static int imap_open_mailbox (CONTEXT* ctx)
     imap_status (Postponed, 1);
   FREE (&pmx.mbox);
 
+#if USE_HCACHE
+  if (mutt_bit_isset (idata->capabilities, CONDSTORE) &&
+      option (OPTIMAPCONDSTORE))
+    condstore = " (CONDSTORE)";
+  else
+#endif
+    condstore = "";
+
   snprintf (bufout, sizeof (bufout), "%s %s%s",
             ctx->readonly ? "EXAMINE" : "SELECT",
-            buf,
-#if USE_HCACHE
-            mutt_bit_isset (idata->capabilities, CONDSTORE) &&
-            option (OPTIMAPCONDSTORE) ? " (CONDSTORE)" : "");
-#else
-            "");
-#endif
+            buf, condstore);
 
   idata->state = IMAP_SELECTED;
 
