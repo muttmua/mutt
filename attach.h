@@ -73,6 +73,7 @@ void mutt_attach_bounce (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_resend (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_forward (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 void mutt_attach_reply (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *, int);
+void mutt_attach_mail_sender (FILE *, HEADER *, ATTACH_CONTEXT *, BODY *);
 
 void mutt_actx_add_attach (ATTACH_CONTEXT *actx, ATTACHPTR *attach);
 void mutt_actx_add_fp (ATTACH_CONTEXT *actx, FILE *new_fp);

@@ -706,6 +706,38 @@ void mutt_attach_forward (FILE * fp, HEADER * hdr,
   }
 }
 
+void mutt_attach_mail_sender (FILE *fp, HEADER *hdr, ATTACH_CONTEXT *actx,
+                              BODY *cur)
+{
+  HEADER *tmphdr = NULL;
+  short i;
+
+  if (check_all_msg (actx, cur, 0) == -1)
+  {
+    mutt_error _("You may only compose to sender with message/rfc822 parts.");
+    return;
+  }
+
+  tmphdr = mutt_new_header ();
+  tmphdr->env = mutt_new_envelope ();
+
+  if (cur)
+  {
+    if (mutt_fetch_recips (tmphdr->env, cur->hdr->env, SENDTOSENDER) == -1)
+      return;
+  }
+  else
+  {
+    for (i = 0; i < actx->idxlen; i++)
+    {
+      if (actx->idx[i]->content->tagged &&
+	  mutt_fetch_recips (tmphdr->env, actx->idx[i]->content->hdr->env,
+                             SENDTOSENDER) == -1)
+	return;
+    }
+  }
+  ci_send_message (0, tmphdr, NULL, NULL, NULL);
+}
 
 
 /**

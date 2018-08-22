@@ -2056,6 +2056,15 @@ int mutt_index_menu (void)
 	ci_bounce_message (tag ? NULL : CURHDR);
 	break;
 
+      case OP_COMPOSE_TO_SENDER:
+
+	CHECK_ATTACH;
+	CHECK_MSGCOUNT;
+        CHECK_VISIBLE;
+	ci_send_message (SENDTOSENDER, NULL, NULL, Context, tag ? NULL : CURHDR);
+	menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_CREATE_ALIAS:
 
         mutt_create_alias (Context && Context->vcount ? CURHDR->env : NULL, NULL);

@@ -549,6 +549,8 @@ int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
         default_to (&out->cc, in, flags & SENDLISTREPLY, hmfupto) == -1)
       return (-1); /* abort */
   }
+  else if (flags & SENDTOSENDER)
+    rfc822_append (&out->to, in->from, 0);
   else
   {
     if (default_to (&out->to, in, flags & SENDGROUPREPLY, hmfupto) == -1)
@@ -716,7 +718,7 @@ envelope_defaults (ENVELOPE *env, CONTEXT *ctx, HEADER *cur, int flags)
   else
     curenv = cur->env;
 
-  if (flags & SENDREPLY)
+  if (flags & (SENDREPLY|SENDTOSENDER))
   {
     if (tag)
     {
@@ -738,8 +740,11 @@ envelope_defaults (ENVELOPE *env, CONTEXT *ctx, HEADER *cur, int flags)
       return (-1);
     }
 
-    mutt_make_misc_reply_headers (env, ctx, cur, curenv);
-    mutt_make_reference_headers (tag ? NULL : curenv, env, ctx);
+    if (flags & SENDREPLY)
+    {
+      mutt_make_misc_reply_headers (env, ctx, cur, curenv);
+      mutt_make_reference_headers (tag ? NULL : curenv, env, ctx);
+    }
   }
   else if (flags & SENDFORWARD)
     mutt_make_forward_subject (env, ctx, cur);
@@ -1315,7 +1320,7 @@ ci_send_message (int flags,		/* send mode */
   if (! (flags & (SENDPOSTPONED|SENDRESEND)) &&
       ! ((flags & SENDDRAFTFILE) && option (OPTRESUMEDRAFTFILES)))
   {
-    if ((flags & (SENDREPLY | SENDFORWARD)) && ctx &&
+    if ((flags & (SENDREPLY | SENDFORWARD | SENDTOSENDER)) && ctx &&
 	envelope_defaults (msg->env, ctx, cur, flags) == -1)
       goto cleanup;
 

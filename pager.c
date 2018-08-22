@@ -2471,7 +2471,18 @@ search_next:
 	  rc = OP_CHECK_TRADITIONAL;
 	}
         break;
-      
+
+      case OP_COMPOSE_TO_SENDER:
+	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_ATTACH;
+        if (IsMsgAttach (extra))
+	  mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
+                                   extra->bdy);
+	else
+	  ci_send_message (SENDTOSENDER, NULL, NULL, extra->ctx, extra->hdr);
+	pager_menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_CREATE_ALIAS:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         if (IsMsgAttach (extra))

@@ -93,6 +93,7 @@ const struct binding_t OpMain[] = { /* map: index */
   { "next-unread-mailbox",	OP_MAIN_NEXT_UNREAD_MAILBOX,    NULL },
   { "collapse-thread",		OP_MAIN_COLLAPSE_THREAD,	"\033v" },
   { "collapse-all",		OP_MAIN_COLLAPSE_ALL,		"\033V" },
+  { "compose-to-sender",        OP_COMPOSE_TO_SENDER,           NULL},
   { "copy-message",		OP_COPY_MESSAGE,		"C" },
   { "decode-copy",		OP_DECODE_COPY,			"\033C" },
   { "decode-save",		OP_DECODE_SAVE,			"\033s" },
@@ -195,6 +196,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "change-folder",	OP_MAIN_CHANGE_FOLDER,		"c" },
   { "change-folder-readonly",	OP_MAIN_CHANGE_FOLDER_READONLY,	"\033c" },
   { "next-unread-mailbox",	OP_MAIN_NEXT_UNREAD_MAILBOX, NULL },
+  { "compose-to-sender",        OP_COMPOSE_TO_SENDER,           NULL},
   { "copy-message",	OP_COPY_MESSAGE,		"C" },
   { "decode-copy",	OP_DECODE_COPY,			"\033C" },
   { "delete-message",	OP_DELETE,			"d" },
@@ -310,6 +312,7 @@ const struct binding_t OpPager[] = { /* map: pager */
 const struct binding_t OpAttach[] = { /* map: attachment */
   { "bounce-message",	OP_BOUNCE_MESSAGE,		"b" },
   { "display-toggle-weed",	OP_DISPLAY_HEADERS,	"h" },
+  { "compose-to-sender",        OP_COMPOSE_TO_SENDER,           NULL},
   { "edit-type",	OP_EDIT_TYPE,			"\005" },
   { "print-entry",	OP_PRINT,			"p" },
   { "save-entry",	OP_SAVE,			"s" },
