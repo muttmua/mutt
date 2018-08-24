@@ -199,8 +199,7 @@ static const char * query_format_str (char *dest, size_t destlen, size_t col, in
   {
   case 'a':
     rfc822_write_address (buf2, sizeof (buf2), query->addr, 1);
-    snprintf (tmp, sizeof (tmp), "%%%ss", fmt);
-    snprintf (dest, destlen, tmp, buf2);
+    mutt_format_s (dest, destlen, fmt, buf2);
     break;
   case 'c':
     snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
@@ -208,16 +207,12 @@ static const char * query_format_str (char *dest, size_t destlen, size_t col, in
     break;
   case 'e':
     if (!optional)
-    {
-      snprintf (tmp, sizeof (tmp), "%%%ss", fmt);
-      snprintf (dest, destlen, tmp, NONULL (query->other));
-    }
+      mutt_format_s (dest, destlen, fmt, NONULL (query->other));
     else if (!query->other || !*query->other)
       optional = 0;
     break;
   case 'n':
-    snprintf (tmp, sizeof (tmp), "%%%ss", fmt);
-    snprintf (dest, destlen, tmp, NONULL (query->name));
+    mutt_format_s (dest, destlen, fmt, NONULL (query->name));
     break;
   case 't':
     snprintf (tmp, sizeof (tmp), "%%%sc", fmt);
