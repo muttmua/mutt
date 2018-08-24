@@ -729,13 +729,25 @@ void mx_fastclose_mailbox (CONTEXT *ctx)
 /* save changes to disk */
 static int sync_mailbox (CONTEXT *ctx, int *index_hint)
 {
+  int rc;
+
   if (!ctx->mx_ops || !ctx->mx_ops->sync)
     return -1;
 
   if (!ctx->quiet)
+  {
+    /* L10N: Displayed before/as a mailbox is being synced */
     mutt_message (_("Writing %s..."), ctx->path);
+  }
 
-  return ctx->mx_ops->sync (ctx, index_hint);
+  rc = ctx->mx_ops->sync (ctx, index_hint);
+  if (rc != 0 && !ctx->quiet)
+  {
+    /* L10N: Displayed if a mailbox sync fails */
+    mutt_error (_("Unable to write %s!"), ctx->path);
+  }
+
+  return rc;
 }
 
 /* move deleted mails to the trash folder */
