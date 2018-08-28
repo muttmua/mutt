@@ -15,7 +15,7 @@ AC_DEFINE_UNQUOTED(MUTT_VERSION,"$MUTT_VERSION", [Full textual version string.])
 
 AC_USE_SYSTEM_EXTENSIONS
 
-ALL_LINGUAS="de eu ru it es uk fr pl nl cs id sk ko el zh_TW zh_CN pt_BR eo gl sv da lt tr ja hu et ca bg ga"
+ALL_LINGUAS="de eu ru it es uk fr pl nl cs id sk ko el zh_TW zh_CN pt_BR eo gl sv da lt tr ja hu et ca bg ga fi"
 
 AC_CANONICAL_HOST
 
@@ -168,7 +168,7 @@ AC_ARG_ENABLE(smime, AS_HELP_STRING([--disable-smime],[Disable SMIME support]),
 		have_smime=no
 	fi
 ])
- 
+
 if test x$have_smime != xno ; then
 	AC_DEFINE(CRYPT_BACKEND_CLASSIC_SMIME, 1, [Define if you want classic S/MIME support.])
 	MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS smime.o crypt-mod-smime-classic.o"
@@ -676,7 +676,7 @@ fi
 
 dnl -- imap dependencies --
 
-AC_ARG_WITH(gss, AS_HELP_STRING([--with-gss@<:@=PFX@:>@],[Compile in GSSAPI authentication for IMAP]), 
+AC_ARG_WITH(gss, AS_HELP_STRING([--with-gss@<:@=PFX@:>@],[Compile in GSSAPI authentication for IMAP]),
     gss_prefix="$withval", gss_prefix="no")
 if test "$gss_prefix" != "no"
 then
@@ -792,7 +792,7 @@ fi
 AM_CONDITIONAL(USE_SSL, test x$need_ssl = xyes)
 
 AC_ARG_WITH(sasl, AS_HELP_STRING([--with-sasl@<:@=PFX@:>@],[Use SASL network security library]),
-        [	
+        [
         if test "$with_sasl" != "no"
         then
           if test "$need_socket" != "yes"
@@ -992,7 +992,7 @@ then
         db_requested=kc
       fi
     fi
-    
+
     dnl -- Tokyo Cabinet --
     if test "$with_tokyocabinet" != "no" \
 	    && test "$db_requested" = auto -o "$db_requested" = tc
