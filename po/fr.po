@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.10.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-28 13:51+0200\n"
-"PO-Revision-Date: 2018-08-28 13:58+0200\n"
+"PO-Revision-Date: 2018-08-28 14:06+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -4474,7 +4474,8 @@ msgstr "Impossible de créer %s."
 
 #: recvcmd.c:717
 msgid "You may only compose to sender with message/rfc822 parts."
-msgstr "Vous ne pouvez composer à l'expéditeur que des parties message/rfc822."
+msgstr ""
+"Vous ne pouvez composer à l'expéditeur qu'avec des parties message/rfc822."
 
 #: recvcmd.c:791
 msgid "Can't find any tagged messages."
