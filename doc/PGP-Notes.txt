@@ -134,7 +134,7 @@ which contains empty strings for the messages we don't want to see.
 To use this, copy either language.txt or language50.txt (depending
 on what PGP version you are using) to your $PGPPATH.  Make sure the
 PGP command formats pass "+language=pgp" to all the PGP binaries
-(but not to pgpring!).
+(but not to mutt_pgpring!).
 
 For PGP 2.6, a German version called "muttde" is available
 as well.
@@ -160,12 +160,12 @@ Auxiliary Programs
 ------------------
 
 Mutt needs two auxiliary programs for its PGP support: pgpewrap and
-pgpring.
+mutt_pgpring.
 
 
-1. pgpring
+1. mutt_pgpring
 
-pgpring is a key ring dumper.  It extracts information from PGP's
+mutt_pgpring is a key ring dumper.  It extracts information from PGP's
 binary key ring and emits it in an (almost) readable output format
 understood by mutt's key selection routines.  This output format
 mimics the one used by the GNU Privacy Guard (GPG).

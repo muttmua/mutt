@@ -50,7 +50,7 @@ topsrcdir_DOCFILES = COPYRIGHT GPL INSTALL ChangeLog	\
 
 all: makedoc-all
 
-makedoc-all: mutt.1 smime_keys.1 muttrc.man manual.html stamp-doc-rc stamp-doc-chunked manual.txt pgpewrap.1 pgpring.1
+makedoc-all: mutt.1 smime_keys.1 muttrc.man manual.html stamp-doc-rc stamp-doc-chunked manual.txt pgpewrap.1 mutt_pgpring.1
 
 install-data-local: makedoc-all instdoc
 	$(MKDIR_P) $(DESTDIR)$(mandir)/man1
@@ -59,7 +59,7 @@ install-data-local: makedoc-all instdoc
 	./instdoc mutt.1 $(DESTDIR)$(mandir)/man1/mutt.1
 	./instdoc smime_keys.1 $(DESTDIR)$(mandir)/man1/smime_keys.1
 	./instdoc pgpewrap.1 $(DESTDIR)$(mandir)/man1/pgpewrap.1
-	./instdoc pgpring.1 $(DESTDIR)$(mandir)/man1/pgpring.1
+	./instdoc mutt_pgpring.1 $(DESTDIR)$(mandir)/man1/mutt_pgpring.1
 	test x$(DOTLOCK_TARGET) = x || ./instdoc $(srcdir)/dotlock.man \
 		$(DESTDIR)$(mandir)/man1/mutt_dotlock.1
 	./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5
@@ -86,7 +86,7 @@ install-data-local: makedoc-all instdoc
 	fi
 
 uninstall-local:
-	for f in mutt.1 mutt_dotlock.1 smime_keys.1 pgpewrap.1 pgpring.1; do \
+	for f in mutt.1 mutt_dotlock.1 smime_keys.1 pgpewrap.1 mutt_pgpring.1; do \
 		rm -f $(DESTDIR)$(mandir)/man1/$$f ; \
 	done
 	for f in muttrc.5 mbox.5 mmdf.5 ; do \
@@ -158,7 +158,7 @@ sortcheck: manual.xml
 	rm -rf vars.tmp.1 vars.tmp.2
 
 clean-local:
-	rm -f *~ *.html *.orig *.rej  stamp-doc-* *.ps mutt.1 smime_keys.1 muttrc.man pgpewrap.1 pgpring.1
+	rm -f *~ *.html *.orig *.rej  stamp-doc-* *.ps mutt.1 smime_keys.1 muttrc.man pgpewrap.1 mutt_pgpring.1
 	rm -f *.aux *.log *.tex *.out
 
 DISTCLEANFILES=manual.txt manual.html manual.xml manual.pdf html \
@@ -185,7 +185,7 @@ mutt.1: $(srcdir)/mutt.man
 pgpewrap.1: $(srcdir)/pgpewrap.man
 	$(EDIT) $(srcdir)/pgpewrap.man > $@
 
-pgpring.1: $(srcdir)/pgpring.man
+mutt_pgpring.1: $(srcdir)/pgpring.man
 	$(EDIT) $(srcdir)/pgpring.man > $@
 
 smime_keys.1: $(srcdir)/smime_keys.man

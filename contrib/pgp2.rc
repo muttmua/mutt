@@ -42,10 +42,10 @@ set pgp_export_command="pgp -kxaf +language=mutt %r"
 set pgp_verify_key_command="pgp -kcc +language=mutt %r"
 
 # read in the public key ring
-set pgp_list_pubring_command="pgpring -2 %r"
+set pgp_list_pubring_command="mutt_pgpring -2 %r"
 
 # read in the secret key ring
-set pgp_list_secring_command="pgpring -s -2 %r"
+set pgp_list_secring_command="mutt_pgpring -s -2 %r"
 
 # pattern for good signature
 set pgp_good_sign="Good signature"

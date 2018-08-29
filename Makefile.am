@@ -3,7 +3,7 @@
 include $(top_srcdir)/flymake.am
 
 AUTOMAKE_OPTIONS = 1.6 foreign
-EXTRA_PROGRAMS = mutt_dotlock pgpring pgpewrap mutt_md5
+EXTRA_PROGRAMS = mutt_dotlock mutt_pgpring pgpewrap mutt_md5
 
 if BUILD_DOC
 DOC_SUBDIR = doc
@@ -85,9 +85,9 @@ mutt_dotlock_SOURCES = mutt_dotlock.c
 mutt_dotlock_LDADD = $(LIBOBJS)
 mutt_dotlock_DEPENDENCIES = $(LIBOBJS)
 
-pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5.c pgppacket.c ascii.c
-pgpring_LDADD = $(LIBOBJS) $(INTLLIBS)
-pgpring_DEPENDENCIES = $(LIBOBJS) $(INTLDEPS)
+mutt_pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5.c pgppacket.c ascii.c
+mutt_pgpring_LDADD = $(LIBOBJS) $(INTLLIBS)
+mutt_pgpring_DEPENDENCIES = $(LIBOBJS) $(INTLDEPS)
 
 mutt_md5_SOURCES = md5.c
 mutt_md5_CFLAGS = -DMD5UTIL

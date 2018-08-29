@@ -36,10 +36,10 @@ set pgp_export_command="pgp6 +compatible  -kxaf  %r"
 set pgp_verify_key_command="pgp6 +compatible  -kcc  %r"
 
 # read in the public key ring
-set pgp_list_pubring_command="pgpring -5 %r"
+set pgp_list_pubring_command="mutt_pgpring -5 %r"
 
 # read in the secret key ring
-set pgp_list_secring_command="pgpring -s -5 %r"
+set pgp_list_secring_command="mutt_pgpring -s -5 %r"
 
 # create a clearsigned message
 set pgp_clearsign_command="PGPPASSFD=0; export PGPPASSFD; cat - %f | pgp6 +compatible   +verbose=0 +batchmode +clearsig -afst %?a? -u %a?"

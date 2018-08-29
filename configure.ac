@@ -159,7 +159,7 @@ AC_ARG_ENABLE(pgp, AS_HELP_STRING([--disable-pgp],[Disable PGP support]),
 
 if test x$have_pgp != xno ; then
         AC_DEFINE(CRYPT_BACKEND_CLASSIC_PGP,1, [Define if you want classic PGP support.])
-        PGPAUX_TARGET="pgpring\$(EXEEXT) pgpewrap\$(EXEEXT)"
+        PGPAUX_TARGET="mutt_pgpring\$(EXEEXT) pgpewrap\$(EXEEXT)"
         MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS pgp.o pgpinvoke.o pgpkey.o pgplib.o gnupgparse.o pgpmicalg.o pgppacket.o crypt-mod-pgp-classic.o"
 fi
 
