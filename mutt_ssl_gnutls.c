@@ -594,11 +594,11 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
 static void tls_fingerprint (gnutls_digest_algorithm_t algo,
                              char* s, int l, const gnutls_datum_t* data)
 {
-  unsigned char md[36];
+  unsigned char md[64];
   size_t n;
   int j;
 
-  n = 36;
+  n = 64;
 
   if (gnutls_fingerprint (algo, data, (char *)md, &n) < 0)
   {
@@ -859,7 +859,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   }
 
   menu = mutt_new_menu (MENU_GENERIC);
-  menu->max = 25;
+  menu->max = 26;
   menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
   for (i = 0; i < menu->max; i++)
     menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
@@ -958,8 +958,13 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   tls_fingerprint (GNUTLS_DIG_SHA, fpbuf, sizeof (fpbuf), certdata);
   snprintf (menu->dialog[row++], SHORT_STRING, _("SHA1 Fingerprint: %s"), fpbuf);
   fpbuf[0] = '\0';
-  tls_fingerprint (GNUTLS_DIG_MD5, fpbuf, sizeof (fpbuf), certdata);
-  snprintf (menu->dialog[row++], SHORT_STRING, _("MD5 Fingerprint: %s"), fpbuf);
+  fpbuf[40] = '\0';  /* Ensure the second printed line is null terminated */
+  tls_fingerprint (GNUTLS_DIG_SHA256, fpbuf, sizeof (fpbuf), certdata);
+  fpbuf[39] = '\0';  /* Divide into two lines of output */
+  snprintf (menu->dialog[row++], SHORT_STRING, "%s%s",
+            _("SHA256 Fingerprint: "), fpbuf);
+  snprintf (menu->dialog[row++], SHORT_STRING, "%*s%s",
+            (int)mutt_strlen (_("SHA256 Fingerprint: ")), "", fpbuf + 40);
 
   if (certerr & CERTERR_NOTYETVALID)
   {
@@ -1043,6 +1048,8 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
 	  /* save hostname if necessary */
 	  if (certerr & CERTERR_HOSTNAME)
 	  {
+            fpbuf[0] = '\0';
+            tls_fingerprint (GNUTLS_DIG_MD5, fpbuf, sizeof (fpbuf), certdata);
 	    fprintf(fp, "#H %s %s\n", hostname, fpbuf);
 	    done = 1;
 	  }
