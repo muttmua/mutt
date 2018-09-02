@@ -8927,7 +8927,7 @@ please have a look at the mixmaster documentation.
         then you can use <literal>.</literal> as the regexp.
       </para>
 
-      <sect4 id="compress-open-hook-example">
+      <example id="compress-open-hook-example">
         <title>Example of open-hook</title>
 
         <screen>open-hook '\.gz$' &quot;gzip -cd '%f' &gt; '%t'&quot;</screen>
@@ -8942,7 +8942,7 @@ please have a look at the mixmaster documentation.
               to create a temporary file that it <emphasis>can</emphasis>
               read</para></listitem>
         </itemizedlist>
-      </sect4>
+      </example>
     </sect3>
 
     <sect3 id="close-hook">
@@ -8963,7 +8963,7 @@ please have a look at the mixmaster documentation.
         </para>
       </note>
 
-      <sect4 id="compress-close-hook-example">
+      <example id="compress-close-hook-example">
         <title>Example of close-hook</title>
 
         <screen>close-hook '\.gz$' &quot;gzip -c '%t' &gt; '%f'&quot;</screen>
@@ -8977,7 +8977,7 @@ please have a look at the mixmaster documentation.
           <listitem><para>Mutt uses the command <literal>gzip -c</literal>
               to create a new compressed file</para></listitem>
         </itemizedlist>
-      </sect4>
+      </example>
     </sect3>
 
     <sect3 id="append-hook">
@@ -9016,7 +9016,7 @@ please have a look at the mixmaster documentation.
         </para>
       </note>
 
-      <sect4 id="compress-append-hook-example">
+      <example id="compress-append-hook-example">
         <title>Example of append-hook</title>
 
         <screen>append-hook '\.gz$' &quot;gzip -c '%t' &gt;&gt; '%f'&quot;</screen>
@@ -9031,7 +9031,7 @@ please have a look at the mixmaster documentation.
           <listitem><para>Mutt uses the command <literal>gzip -c</literal>
               to append to an existing compressed file</para></listitem>
         </itemizedlist>
-      </sect4>
+      </example>
 
     </sect3>
 
