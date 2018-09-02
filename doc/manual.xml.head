@@ -2464,7 +2464,7 @@ specified key sequence.
 <replaceable class="parameter">charset</replaceable>
 </arg>
 
-<command>iconv-hook<anchor id="iconv-hook"/></command>
+<command>iconv-hook</command>
 <arg choice="plain">
 <replaceable class="parameter">charset</replaceable>
 </arg>
@@ -5747,7 +5747,7 @@ option/command.  See:
 
 <listitem>
 <para>
-<link linkend="iconv-hook"><command>iconv-hook</command></link>
+<link linkend="charset-hook"><command>iconv-hook</command></link>
 </para>
 </listitem>
 
@@ -8636,10 +8636,10 @@ please have a look at the mixmaster documentation.
     </table>
   </sect2>
 
-  <sect2 id="sidebar-commands">
+  <sect2 id="sidebar-whitelist">
     <title>Commands</title>
     <cmdsynopsis>
-      <command>sidebar_whitelist<anchor id="sidebar-whitelist"/></command>
+      <command>sidebar_whitelist</command>
       <arg choice="plain">
 	<replaceable class="parameter">mailbox</replaceable>
       </arg>
@@ -8647,7 +8647,7 @@ please have a look at the mixmaster documentation.
 	<replaceable class="parameter">mailbox</replaceable>
       </arg>
 
-      <command>unsidebar_whitelist<anchor id="unsidebar-whitelist"/></command>
+      <command>unsidebar_whitelist</command>
       <group choice="req">
       <arg choice="plain">
 	<replaceable class="parameter">*</replaceable>
@@ -9648,7 +9648,7 @@ The following are the commands understood by Mutt:
 
 <listitem>
 <cmdsynopsis>
-<command><link linkend="iconv-hook">iconv-hook</link></command>
+<command><link linkend="charset-hook">iconv-hook</link></command>
 <arg choice="plain">
 <replaceable class="parameter">charset</replaceable>
 </arg>
@@ -10272,7 +10272,7 @@ The following are the commands understood by Mutt:
 <replaceable class="parameter">mailbox</replaceable>
 </arg>
 
-<command><link linkend="unsidebar-whitelist">unsidebar_whitelist</link></command>
+<command><link linkend="sidebar-whitelist">unsidebar_whitelist</link></command>
 <group choice="req">
 <arg choice="plain">
 <replaceable class="parameter">*</replaceable>
