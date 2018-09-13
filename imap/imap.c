@@ -344,8 +344,16 @@ static int imap_check_capabilities (IMAP_DATA* idata)
   return 0;
 }
 
-/* imap_conn_find: Find an open IMAP connection matching account, or open
- *   a new one if none can be found. */
+/**
+ * imap_conn_find
+ *
+ * Returns an authenticated IMAP connection matching account, or NULL
+ * if that isn't possible.
+ *
+ * flags:
+ *   MUTT_IMAP_CONN_NONEW    - must be an existing connection
+ *   MUTT_IMAP_CONN_NOSELECT - must not be in the IMAP_SELECTED state.
+ */
 IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
 {
   CONNECTION* conn = NULL;
@@ -381,15 +389,10 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
   if (!conn)
     return NULL; /* this happens when the initial connection fails */
 
+  /* The current connection is a new connection */
   if (!idata)
   {
-    /* The current connection is a new connection */
-    if (! (idata = imap_new_idata ()))
-    {
-      mutt_socket_free (conn);
-      return NULL;
-    }
-
+    idata = imap_new_idata ();
     conn->data = idata;
     idata->conn = conn;
     new = 1;
@@ -438,6 +441,9 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
     /* we may need the root delimiter before we open a mailbox */
     imap_exec (idata, NULL, IMAP_CMD_FAIL_OK);
   }
+
+  if (idata->state < IMAP_AUTHENTICATED)
+    return NULL;
 
   return idata;
 }
@@ -615,8 +621,6 @@ static int imap_open_mailbox (CONTEXT* ctx)
   /* we require a connection which isn't currently in IMAP_SELECTED state */
   if (!(idata = imap_conn_find (&(mx.account), MUTT_IMAP_CONN_NOSELECT)))
     goto fail_noidata;
-  if (idata->state < IMAP_AUTHENTICATED)
-    goto fail;
 
   /* once again the context is new */
   ctx->data = idata;
@@ -1580,8 +1584,7 @@ static int imap_get_mailbox (const char* path, IMAP_DATA** hidata, char* buf, si
     dprint (1, (debugfile, "imap_get_mailbox: Error parsing %s\n", path));
     return -1;
   }
-  if (!(*hidata = imap_conn_find (&(mx.account), option (OPTIMAPPASSIVE) ? MUTT_IMAP_CONN_NONEW : 0))
-      || (*hidata)->state < IMAP_AUTHENTICATED)
+  if (!(*hidata = imap_conn_find (&(mx.account), option (OPTIMAPPASSIVE) ? MUTT_IMAP_CONN_NONEW : 0)))
   {
     FREE (&mx.mbox);
     return -1;
