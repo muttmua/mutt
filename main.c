@@ -868,10 +868,15 @@ int main (int argc, char **argv, char **environ)
   {
     for (; optind < argc; optind++)
       queries = mutt_add_list (queries, argv[optind]);
-    return mutt_query_variables (queries);
+    exit_code = mutt_query_variables (queries);
+    mutt_free_list (&queries);
+    goto cleanup_and_exit;
   }
   if (dump_variables)
-    return mutt_dump_variables();
+  {
+    exit_code = mutt_dump_variables();
+    goto cleanup_and_exit;
+  }
 
   if (alias_queries)
   {
@@ -894,6 +899,7 @@ int main (int argc, char **argv, char **environ)
 	printf ("%s\n", alias_queries->data);
       }
     }
+    mutt_free_list (&alias_queries);
     goto cleanup_and_exit;
   }
 
