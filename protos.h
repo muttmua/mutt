@@ -385,6 +385,7 @@ int mutt_thread_set_flag (HEADER *, int, int, int);
 int mutt_user_is_recipient (HEADER *);
 void mutt_update_num_postponed (void);
 int mutt_wait_filter (pid_t);
+int mutt_wait_interactive_filter (pid_t);
 int mutt_which_case (const char *);
 int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int, char *);
 int mutt_write_mime_body (BODY *, FILE *);

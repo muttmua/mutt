@@ -479,11 +479,15 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	else
 	  snprintf (descrip, sizeof (descrip),
 		    _("---Command: %-30.30s Attachment: %s"), command, type);
-      }
 
-      if ((mutt_wait_filter (thepid) || (entry->needsterminal &&
-	  option (OPTWAITKEY))) && !use_pager)
-	mutt_any_key_to_continue (NULL);
+        mutt_wait_filter (thepid);
+      }
+      else
+      {
+        if (mutt_wait_interactive_filter (thepid) ||
+            (entry->needsterminal && option (OPTWAITKEY)))
+          mutt_any_key_to_continue (NULL);
+      }
 
       if (tempfd != -1)
 	close (tempfd);

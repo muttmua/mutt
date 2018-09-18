@@ -22,6 +22,9 @@
 
 #include "mutt.h"
 #include "mutt_curses.h"
+#ifdef USE_IMAP
+# include "imap.h"
+#endif
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -187,5 +190,28 @@ int mutt_wait_filter (pid_t pid)
   mutt_unblock_signals_system (1);
   rc = WIFEXITED (rc) ? WEXITSTATUS (rc) : -1;
   
+  return rc;
+}
+
+/*
+ * This is used for filters that are actually interactive commands
+ * with input piped in: e.g. in mutt_view_attachment(), a mailcap
+ * entry without copiousoutput _and_ without a %s.
+ *
+ * For those cases, we treat it like a blocking system command, and
+ * poll IMAP to keep connections open.
+ */
+int mutt_wait_interactive_filter (pid_t pid)
+{
+  int rc;
+
+#ifndef USE_IMAP
+  waitpid (pid, &rc, 0);
+#else
+  rc = imap_wait_keepalive (pid);
+#endif
+  mutt_unblock_signals_system (1);
+  rc = WIFEXITED (rc) ? WEXITSTATUS (rc) : -1;
+
   return rc;
 }
