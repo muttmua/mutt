@@ -29,8 +29,8 @@
 /* imap_auth_login: Plain LOGIN support */
 imap_auth_res_t imap_auth_login (IMAP_DATA* idata, const char* method)
 {
-  char q_user[SHORT_STRING], q_pass[SHORT_STRING];
-  char buf[STRING];
+  char q_user[STRING], q_pass[STRING];
+  char buf[LONG_STRING];
   int rc;
 
   if (mutt_bit_isset (idata->capabilities, LOGINDISABLED))
