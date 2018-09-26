@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#define SORTCODE(x) (Sort & SORT_REVERSE) ? -(x) : x
+#define SORTCODE(x) ((option(OPTAUXSORT) ? SortAux : Sort) & SORT_REVERSE) ? -(x) : x
 
 /* function to use as discriminator when normal sort method is equal */
 static sort_t *AuxSort = NULL;
@@ -38,6 +38,8 @@ static sort_t *AuxSort = NULL;
   set_option(OPTAUXSORT); \
   code = AuxSort(a,b); \
   unset_option(OPTAUXSORT); \
+  if (code) \
+    return (code); \
 } \
 if (!code) \
   code = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
