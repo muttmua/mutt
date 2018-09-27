@@ -481,7 +481,20 @@ AC_CACHE_CHECK([whether your system's regexp library is completely broken],
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <unistd.h>
 #include <regex.h>
-main() { regex_t blah ; regmatch_t p; p.rm_eo = p.rm_eo; return regcomp(&blah, "foo.*bar", REG_NOSUB) || regexec (&blah, "foobar", 0, NULL, 0); }]])],[mutt_cv_regex_broken=no],[mutt_cv_regex_broken=yes],[mutt_cv_regex_broken=yes]))
+int main() {
+  regex_t blah;
+  regmatch_t p;
+  p.rm_eo = p.rm_eo;
+  if (regcomp(&blah, "foo.*bar", REG_NOSUB) ||
+      regexec(&blah, "foobar", 0, NULL, 0))
+    return(1);
+  regfree(&blah);
+  return(0);
+}]])],
+                [mutt_cv_regex_broken=no],
+                [mutt_cv_regex_broken=yes],
+                [mutt_cv_regex_broken=yes]))
+
         if test $mutt_cv_regex_broken = yes ; then
                 echo "Using the included GNU regex instead." >&AS_MESSAGE_FD
                 mutt_cv_regex=yes
