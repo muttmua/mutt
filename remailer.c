@@ -744,24 +744,25 @@ int mix_check_message (HEADER *msg)
 
 int mix_send_message (LIST *chain, const char *tempfile)
 {
-  char cmd[HUGE_STRING];
-  char tmp[HUGE_STRING];
+  BUFFER *cmd;
   char cd_quoted[STRING];
   int i;
 
-  snprintf (cmd, sizeof (cmd), "cat %s | %s -m ", tempfile, Mixmaster);
-  
+  cmd = mutt_buffer_new ();
+  mutt_buffer_increase_size (cmd, HUGE_STRING);
+  mutt_buffer_printf (cmd, "cat %s | %s -m ", tempfile, Mixmaster);
+
   for (i = 0; chain; chain = chain->next, i = 1)
   {
-    strfcpy (tmp, cmd, sizeof (tmp));
+    mutt_buffer_addstr (cmd, i ? "," : " -l ");
     mutt_quote_filename (cd_quoted, sizeof (cd_quoted), (char *) chain->data);
-    snprintf (cmd, sizeof (cmd), "%s%s%s", tmp, i ? "," : " -l ", cd_quoted);
+    mutt_buffer_addstr (cmd, cd_quoted);
   }
 
   if (!option (OPTNOCURSES))
     mutt_endwin (NULL);
-  
-  if ((i = mutt_system (cmd)))
+
+  if ((i = mutt_system (cmd->data)))
   {
     fprintf (stderr, _("Error sending message, child exited %d.\n"), i);
     if (!option (OPTNOCURSES))
@@ -771,9 +772,10 @@ int mix_send_message (LIST *chain, const char *tempfile)
     }
   }
 
+  mutt_buffer_free (&cmd);
   unlink (tempfile);
   return i;
 }
-  
+
 
 #endif
