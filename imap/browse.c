@@ -43,7 +43,7 @@ int imap_browse (char* path, struct browser_state* state)
 {
   IMAP_DATA* idata;
   IMAP_LIST list;
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char munged_mbox[LONG_STRING];
   char list_cmd[5];

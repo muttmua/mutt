@@ -59,7 +59,7 @@ int imap_access (const char* path)
 {
   IMAP_DATA* idata;
   IMAP_MBOX mx;
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   char mailbox[LONG_STRING];
   char mbox[LONG_STRING];
   int rc;
@@ -115,7 +115,7 @@ int imap_access (const char* path)
 
 int imap_create_mailbox (IMAP_DATA* idata, char* mailbox)
 {
-  char buf[LONG_STRING], mbox[LONG_STRING];
+  char buf[LONG_STRING*2], mbox[LONG_STRING];
 
   imap_munge_mbox_name (idata, mbox, sizeof (mbox), mailbox);
   snprintf (buf, sizeof (buf), "CREATE %s", mbox);
@@ -133,7 +133,7 @@ int imap_rename_mailbox (IMAP_DATA* idata, IMAP_MBOX* mx, const char* newname)
 {
   char oldmbox[LONG_STRING];
   char newmbox[LONG_STRING];
-  char buf[LONG_STRING];
+  char buf[HUGE_STRING];
 
   imap_munge_mbox_name (idata, oldmbox, sizeof (oldmbox), mx->mbox);
   imap_munge_mbox_name (idata, newmbox, sizeof (newmbox), newname);
@@ -148,7 +148,7 @@ int imap_rename_mailbox (IMAP_DATA* idata, IMAP_MBOX* mx, const char* newname)
 
 int imap_delete_mailbox (CONTEXT* ctx, IMAP_MBOX mx)
 {
-  char buf[LONG_STRING], mbox[LONG_STRING];
+  char buf[LONG_STRING*2], mbox[LONG_STRING];
   IMAP_DATA *idata;
 
   if (!ctx || !ctx->data) {
@@ -606,7 +606,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
   IMAP_DATA *idata;
   IMAP_STATUS* status;
   char buf[LONG_STRING];
-  char bufout[LONG_STRING];
+  char bufout[LONG_STRING*2];
   int count = 0;
   IMAP_MBOX mx, pmx;
   int rc;
@@ -1607,7 +1607,7 @@ int imap_buffy_check (int force, int check_stats)
   IMAP_DATA* lastdata = NULL;
   BUFFY* mailbox;
   char name[LONG_STRING];
-  char command[LONG_STRING];
+  char command[LONG_STRING*2];
   char munged[LONG_STRING];
   int buffies = 0;
 
@@ -1698,7 +1698,7 @@ int imap_status (const char* path, int queue)
   static int queued = 0;
 
   IMAP_DATA *idata;
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   IMAP_STATUS* status;
 
@@ -1967,7 +1967,7 @@ int imap_search (CONTEXT* ctx, const pattern_t* pat)
 int imap_subscribe (char *path, int subscribe)
 {
   IMAP_DATA *idata;
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char errstr[STRING];
   int mblen;
@@ -2097,7 +2097,7 @@ imap_complete_hosts (char *dest, size_t len)
 int imap_complete(char* dest, size_t dlen, char* path) {
   IMAP_DATA* idata;
   char list[LONG_STRING];
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   IMAP_LIST listresp;
   char completion[LONG_STRING];
   int clen;

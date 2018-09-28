@@ -1089,7 +1089,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 {
   IMAP_DATA* idata;
   FILE *fp;
-  char buf[LONG_STRING];
+  char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char mailbox[LONG_STRING];
   char internaldate[IMAP_DATELEN];
