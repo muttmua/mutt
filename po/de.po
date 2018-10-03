@@ -377,11 +377,11 @@ msgstr "Konnte Nachricht nicht kopieren"
 
 #: commands.c:190
 msgid "S/MIME signature successfully verified."
-msgstr "S/MIME Unterschrift erfolgreich überprüft."
+msgstr "S/MIME-Unterschrift erfolgreich überprüft."
 
 #: commands.c:192
 msgid "S/MIME certificate owner does not match sender."
-msgstr "S/MIME Zertifikat-Inhaber stimmt nicht mit Absender überein."
+msgstr "S/MIME-Zertifikat-Inhaber stimmt nicht mit Absender überein."
 
 #: commands.c:195 commands.c:206
 msgid "Warning: Part of this message has not been signed."
@@ -389,15 +389,15 @@ msgstr "Warnung: Ein Teil dieser Nachricht wurde nicht signiert."
 
 #: commands.c:197
 msgid "S/MIME signature could NOT be verified."
-msgstr "S/MIME Unterschrift konnte NICHT überprüft werden."
+msgstr "S/MIME-Unterschrift konnte NICHT überprüft werden."
 
 #: commands.c:204
 msgid "PGP signature successfully verified."
-msgstr "PGP Unterschrift erfolgreich überprüft."
+msgstr "PGP-Unterschrift erfolgreich überprüft."
 
 #: commands.c:208
 msgid "PGP signature could NOT be verified."
-msgstr "PGP Unterschrift konnte NICHT überprüft werden."
+msgstr "PGP-Unterschrift konnte NICHT überprüft werden."
 
 #: commands.c:232
 msgid "Command: "
@@ -1209,11 +1209,11 @@ msgstr "[-- Ende der PGP/MIME-verschlüsselten Daten --]\n"
 
 #: crypt-gpgme.c:2656 pgp.c:573 pgp.c:1065
 msgid "PGP message successfully decrypted."
-msgstr "PGP Nachricht erfolgreich entschlüsselt."
+msgstr "PGP-Nachricht erfolgreich entschlüsselt."
 
 #: crypt-gpgme.c:2660 pgp.c:508 pgp.c:571 pgp.c:1069
 msgid "Could not decrypt PGP message"
-msgstr "Konnte PGP Nachricht nicht entschlüsseln"
+msgstr "Konnte PGP-Nachricht nicht entschlüsseln"
 
 #: crypt-gpgme.c:2700
 msgid ""
@@ -1387,15 +1387,15 @@ msgstr "Schlüssel prüfen  "
 
 #: crypt-gpgme.c:4110
 msgid "PGP and S/MIME keys matching"
-msgstr "Passende PGP und S/MIME Schlüssel"
+msgstr "Passende PGP- und S/MIME-Schlüssel"
 
 #: crypt-gpgme.c:4112
 msgid "PGP keys matching"
-msgstr "Passende PGP Schlüssel"
+msgstr "Passende PGP-Schlüssel"
 
 #: crypt-gpgme.c:4114
 msgid "S/MIME keys matching"
-msgstr "Passende S/MIME Schlüssel"
+msgstr "Passende S/MIME-Schlüssel"
 
 #: crypt-gpgme.c:4116
 msgid "keys matching"
@@ -1474,7 +1474,7 @@ msgstr "Fehler beim exportieren des Schlüssels: %s\n"
 #: crypt-gpgme.c:4685
 #, c-format
 msgid "PGP Key 0x%s."
-msgstr "PGP Schlüssel 0x%s."
+msgstr "PGP-Schlüssel 0x%s."
 
 #: crypt-gpgme.c:4727
 msgid "GPGME: OpenPGP protocol not available"
@@ -1601,15 +1601,15 @@ msgstr "Nachricht nicht verschickt."
 #: crypt.c:493
 msgid "S/MIME messages with no hints on content are unsupported."
 msgstr ""
-"S/MIME Nachrichten ohne Hinweis auf den Inhalt werden nicht unterstützt."
+"S/MIME-Nachrichten ohne Hinweis auf den Inhalt werden nicht unterstützt."
 
 #: crypt.c:713 crypt.c:757
 msgid "Trying to extract PGP keys...\n"
-msgstr "Versuche PGP Keys zu extrahieren...\n"
+msgstr "Versuche PGP-Keys zu extrahieren...\n"
 
 #: crypt.c:737 crypt.c:777
 msgid "Trying to extract S/MIME certificates...\n"
-msgstr "Versuche S/MIME Zertifikate zu extrahieren...\n"
+msgstr "Versuche S/MIME-Zertifikate zu extrahieren...\n"
 
 #: crypt.c:937
 #, c-format
@@ -1665,7 +1665,7 @@ msgstr ""
 #: cryptglue.c:89
 msgid "\"crypt_use_gpgme\" set but not built with GPGME support."
 msgstr ""
-"\"crypt_use_gpgme\" gesetzt, obwohl nicht mit GPGME Support kompiliert."
+"\"crypt_use_gpgme\" gesetzt, obwohl nicht mit GPGME-Support kompiliert."
 
 #: cryptglue.c:112
 msgid "Invoking S/MIME..."
@@ -2367,7 +2367,7 @@ msgstr "Authentifiziere (CRAM-MD5)..."
 
 #: imap/auth_cram.c:128
 msgid "CRAM-MD5 authentication failed."
-msgstr "CRAM-MD5 Authentifizierung fehlgeschlagen."
+msgstr "CRAM-MD5-Authentifizierung fehlgeschlagen."
 
 #: imap/auth_gss.c:162
 msgid "Authenticating (GSSAPI)..."
@@ -3313,7 +3313,7 @@ msgstr "SSL deaktiviert, weil nicht genügend Entropie zur Verfügung steht"
 #.
 #: mutt_ssl.c:444
 msgid "Unable to create SSL context"
-msgstr "OpenSSL Initialisierung fehlgeschlagen"
+msgstr "OpenSSL-Initialisierung fehlgeschlagen"
 
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
@@ -3405,17 +3405,17 @@ msgstr "     an %s"
 #: mutt_ssl.c:1206 mutt_ssl_gnutls.c:959
 #, c-format
 msgid "SHA1 Fingerprint: %s"
-msgstr "SHA1 Fingerabdruck: %s"
+msgstr "SHA1-Fingerabdruck: %s"
 
 #: mutt_ssl.c:1209 mutt_ssl_gnutls.c:962
 #, c-format
 msgid "MD5 Fingerprint: %s"
-msgstr "MD5 Fingerabdruck: %s"
+msgstr "MD5-Fingerabdruck: %s"
 
 #: mutt_ssl.c:1212 mutt_ssl_gnutls.c:991
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
-msgstr "SSL Zertifikatprüfung (Zertifikat %d von %d in Kette)"
+msgstr "SSL-Zertifikatprüfung (Zertifikat %d von %d in Kette)"
 
 #. L10N:
 #. * These four letters correspond to the choices in the next four strings:
@@ -3458,7 +3458,7 @@ msgstr "Fehler: kein TLS Socket offen"
 
 #: mutt_ssl_gnutls.c:312 mutt_ssl_gnutls.c:351
 msgid "All available protocols for TLS/SSL connection disabled"
-msgstr "Alle verfügbaren TLS/SSL Protokolle sind deaktiviert"
+msgstr "Alle verfügbaren TLS/SSL-Protokolle sind deaktiviert"
 
 #: mutt_ssl_gnutls.c:357
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
@@ -3581,7 +3581,7 @@ msgstr "uab"
 
 #: muttlib.c:1649
 msgid "Can't save message to POP mailbox."
-msgstr "Kann Nachricht nicht in POP Mailbox schreiben."
+msgstr "Kann Nachricht nicht in POP-Mailbox schreiben."
 
 #: muttlib.c:1658
 #, c-format
@@ -3933,7 +3933,7 @@ msgstr "vsabuu"
 
 #: pgpinvoke.c:314
 msgid "Fetching PGP key..."
-msgstr "Hole PGP Schlüssel..."
+msgstr "Hole PGP-Schlüssel..."
 
 #: pgpkey.c:491
 msgid "All matching keys are expired, revoked, or disabled."
@@ -3957,7 +3957,7 @@ msgstr "Kann /dev/null nicht öffnen"
 #: pgpkey.c:778
 #, c-format
 msgid "PGP Key %s."
-msgstr "PGP Schlüssel %s."
+msgstr "PGP-Schlüssel %s."
 
 #: pop.c:102 pop_lib.c:210
 msgid "Command TOP is not supported by server."
@@ -3980,7 +3980,7 @@ msgstr ""
 #: pop.c:411 pop.c:809
 #, c-format
 msgid "%s is an invalid POP path"
-msgstr "%s ist ein ungültiger POP Pfad"
+msgstr "%s ist ein ungültiger POP-Pfad"
 
 #: pop.c:455
 msgid "Fetching list of messages..."
@@ -4034,7 +4034,7 @@ msgstr "Authentifiziere (SASL)..."
 
 #: pop_auth.c:215
 msgid "POP timestamp is invalid!"
-msgstr "POP Zeitstempel ist ungültig!"
+msgstr "POP-Zeitstempel ist ungültig!"
 
 #: pop_auth.c:220
 msgid "Authenticating (APOP)..."
@@ -4042,7 +4042,7 @@ msgstr "Authentifiziere (APOP)..."
 
 #: pop_auth.c:243
 msgid "APOP authentication failed."
-msgstr "APOP Authentifizierung fehlgeschlagen."
+msgstr "APOP-Authentifizierung fehlgeschlagen."
 
 #: pop_auth.c:278
 msgid "Command USER is not supported by server."
@@ -4051,7 +4051,7 @@ msgstr "Kommando USER wird vom Server nicht unterstützt."
 #: pop_lib.c:57
 #, c-format
 msgid "Invalid POP URL: %s\n"
-msgstr "Ungültige POP URL: %s\n"
+msgstr "Ungültige POP-URL: %s\n"
 
 #: pop_lib.c:208
 msgid "Unable to leave messages on server."
@@ -4084,11 +4084,11 @@ msgstr "Keine zurückgestellten Nachrichten."
 
 #: postpone.c:459 postpone.c:480 postpone.c:514
 msgid "Illegal crypto header"
-msgstr "Unzulässiger Crypto Header"
+msgstr "Unzulässiger Crypto-Header"
 
 #: postpone.c:500
 msgid "Illegal S/MIME header"
-msgstr "Unzulässiger S/MIME Header"
+msgstr "Unzulässiger S/MIME-Header"
 
 #: postpone.c:597 postpone.c:695 postpone.c:718
 msgid "Decrypting message..."
@@ -4274,7 +4274,7 @@ msgstr "Kann die \"type2.list\" für Mixmaster nicht holen!"
 
 #: remailer.c:535
 msgid "Select a remailer chain."
-msgstr "Wähle eine Remailer Kette aus."
+msgstr "Wähle eine Remailer-Kette aus."
 
 #: remailer.c:595
 #, c-format
@@ -4545,7 +4545,7 @@ msgstr "Unbekannt "
 #: smime.c:430
 #, c-format
 msgid "S/MIME certificates matching \"%s\"."
-msgstr "S/MIME Zertifikate, die zu \"%s\" passen."
+msgstr "S/MIME-Zertifikate, die zu \"%s\" passen."
 
 #: smime.c:474
 msgid "ID is not trusted."
@@ -4562,7 +4562,7 @@ msgstr "Kein (gültiges) Zertifikat für %s gefunden."
 
 #: smime.c:963 smime.c:993 smime.c:1060 smime.c:1104 smime.c:1169 smime.c:1244
 msgid "Error: unable to create OpenSSL subprocess!"
-msgstr "Fehler: Kann keinen OpenSSL Prozess erzeugen!"
+msgstr "Fehler: Kann keinen OpenSSL-Prozess erzeugen!"
 
 #: smime.c:1232
 msgid "Label for certificate: "
@@ -6008,7 +6008,7 @@ msgstr "Wähle das nächste Element der Kette aus"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:625
 msgid "send the message through a mixmaster remailer chain"
-msgstr "Verschicke die Nachricht über eine Mixmaster Remailer Kette"
+msgstr "Verschicke die Nachricht über eine Mixmaster-Remailer-Kette"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6038,7 +6038,7 @@ msgstr "Extrahiere unterstützte öffentliche Schlüssel"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:640
 msgid "show S/MIME options"
-msgstr "Zeige S/MIME Optionen"
+msgstr "Zeige S/MIME-Optionen"
 
 #~ msgid "dazn"
 #~ msgstr "dagn"
