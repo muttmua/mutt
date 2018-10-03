@@ -981,7 +981,7 @@ msgstr "Fehler beim Verschlüsseln der Daten: %s\n"
 #: crypt-gpgme.c:938
 #, c-format
 msgid "error signing data: %s\n"
-msgstr "Fehler beim Signiren der Daten: %s\n"
+msgstr "Fehler beim Signieren der Daten: %s\n"
 
 #: crypt-gpgme.c:949
 msgid "$pgp_sign_as unset and no default key specified in ~/.gnupg/gpg.conf"
@@ -1337,7 +1337,7 @@ msgstr "[Deaktiviert]"
 
 #: crypt-gpgme.c:3713
 msgid "Collecting data..."
-msgstr "Sammle Informtionen..."
+msgstr "Sammle Informationen..."
 
 #: crypt-gpgme.c:3739
 #, c-format
@@ -2130,7 +2130,7 @@ msgstr "Konnte nicht in temporäre Mailbox schreiben: %s"
 #: editmsg.c:110
 #, c-format
 msgid "could not truncate temporary mail folder: %s"
-msgstr "Konnte temporäre Mailbox nicht sutzen: %s"
+msgstr "Konnte temporäre Mailbox nicht stutzen: %s"
 
 #: editmsg.c:127
 msgid "Message file is empty!"
@@ -2638,19 +2638,19 @@ msgstr "%sgroup: Warnung: Ungültige IDN '%s'.\n"
 
 #: init.c:1296
 msgid "attachments: no disposition"
-msgstr "attachments: keine disposition"
+msgstr "attachments: keine Disposition"
 
 #: init.c:1332
 msgid "attachments: invalid disposition"
-msgstr "attachments: ungültige disposition"
+msgstr "attachments: ungültige Disposition"
 
 #: init.c:1346
 msgid "unattachments: no disposition"
-msgstr "unattachments: keine disposition"
+msgstr "unattachments: keine Disposition"
 
 #: init.c:1369
 msgid "unattachments: invalid disposition"
-msgstr "unattachments: ungültige disposition"
+msgstr "unattachments: ungültige Disposition"
 
 #: init.c:1496
 msgid "alias: no address"
@@ -3377,7 +3377,7 @@ msgstr "Zertifikat-Inhaber stimmt nicht mit Rechnername %s überein"
 #: mutt_ssl.c:1116
 #, c-format
 msgid "Certificate host check failed: %s"
-msgstr "Prüfung des Rechnernames in Zertifikat gescheitert: %s"
+msgstr "Prüfung des Rechnernamens in Zertifikat gescheitert: %s"
 
 #: mutt_ssl.c:1181 mutt_ssl_gnutls.c:869
 msgid "This certificate belongs to:"
@@ -4076,7 +4076,7 @@ msgstr "Verbindung unterbrochen. Verbindung zum POP-Server wiederherstellen?"
 
 #: postpone.c:165
 msgid "Postponed Messages"
-msgstr "Zurückgestelle Nachrichten"
+msgstr "Zurückgestellte Nachrichten"
 
 #: postpone.c:248 postpone.c:257
 msgid "No postponed messages."
@@ -5660,7 +5660,7 @@ msgstr "Drucke aktuellen Eintrag"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:451
 msgid "delete the current entry, bypassing the trash folder"
-msgstr "Den Eintrag endgütlig löschen"
+msgstr "Den Eintrag endgültig löschen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
