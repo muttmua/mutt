@@ -2278,7 +2278,7 @@ msgstr "%s: Kann Datei nicht anhängen"
 
 #: help.c:310
 msgid "ERROR: please report this bug"
-msgstr "ERROR: Bitte melden sie diesen Fehler"
+msgstr "FEHLER: Bitte melden sie diesen Fehler"
 
 #: help.c:352
 msgid "<UNKNOWN>"
@@ -3838,7 +3838,7 @@ msgstr ""
 
 #: pgp.c:800
 msgid "Internal error.  Please submit a bug report."
-msgstr "ERROR: Bitte melden sie diesen Fehler."
+msgstr "INTERNER FEHLER: Bitte melden sie diesen Fehler."
 
 #: pgp.c:861
 msgid ""
