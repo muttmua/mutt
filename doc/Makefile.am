@@ -5,6 +5,10 @@ AUTOMAKE_OPTIONS = 1.6 foreign
 
 subdir = doc
 
+if BUILD_INFO
+INFO_DOCFILES = mutt.info
+endif
+
 DEFS = -DSYSCONFDIR=\"$(sysconfdir)\" -DBINDIR=\"$(bindir)\" -DHAVE_CONFIG_H=1
 AM_CPPFLAGS = -I. -I.. -I$(includedir) -I$(top_srcdir)
 
@@ -40,7 +44,7 @@ CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
 
 HTML_DOCFILES = manual.html $(CHUNKED_DOCFILES)
 
-BUILT_DISTFILES = stamp-doc-xml stamp-doc-chunked manual.txt $(HTML_DOCFILES)
+BUILT_DISTFILES = stamp-doc-xml stamp-doc-chunked manual.txt $(HTML_DOCFILES) $(INFO_DOCFILES)
 
 srcdir_DOCFILES = PGP-Notes.txt applying-patches.txt	\
 	devel-notes.txt patch-notes.txt smime-notes.txt
@@ -50,7 +54,7 @@ topsrcdir_DOCFILES = COPYRIGHT GPL INSTALL ChangeLog	\
 
 all: makedoc-all
 
-makedoc-all: mutt.1 smime_keys.1 muttrc.man manual.html stamp-doc-rc stamp-doc-chunked manual.txt pgpewrap.1 mutt_pgpring.1
+makedoc-all: mutt.1 smime_keys.1 muttrc.man manual.html stamp-doc-rc stamp-doc-chunked manual.txt pgpewrap.1 mutt_pgpring.1 $(INFO_DOCFILES)
 
 install-data-local: makedoc-all instdoc
 	$(MKDIR_P) $(DESTDIR)$(mandir)/man1
@@ -84,6 +88,11 @@ install-data-local: makedoc-all instdoc
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttrc ] ; then \
 		$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir) ; \
 	fi
+	-if [ -f mutt.info ] ; then \
+		$(MKDIR_P) $(DESTDIR)$(infodir) ; \
+		$(INSTALL) -m 644 mutt.info $(DESTDIR)$(infodir) ; \
+		install-info $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
+	fi
 
 uninstall-local:
 	for f in mutt.1 mutt_dotlock.1 smime_keys.1 pgpewrap.1 mutt_pgpring.1; do \
@@ -103,6 +112,8 @@ uninstall-local:
 	  fi ; \
 	  rm $(DESTDIR)$(sysconfdir)/$${i}.dist ; \
 	done
+	install-info --delete $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir
+	rm -f $(DESTDIR)$(infodir)/mutt.info
 
 check:
 manual.txt: manual.html
@@ -143,6 +154,16 @@ manual.tex: stamp-doc-xml
 	  openjade -t tex -D $(DSLROOT) -d print/docbook.dsl dtds/decls/xml.dcl manual.xml; \
 	fi
 
+mutt.texi: stamp-doc-xml
+	docbook2x-texi --encoding=utf-8 \
+	    --string-param output-file=mutt \
+	    --string-param 'directory-category=Email-software' \
+	    --string-param 'directory-description=Text based mail reader' \
+	    manual.xml
+
+mutt.info: mutt.texi
+	makeinfo --no-split -o mutt.info mutt.texi
+
 validate: stamp-doc-xml
 	xmllint --noout --noblanks --postvalid manual.xml
 
@@ -159,7 +180,7 @@ sortcheck: manual.xml
 
 clean-local:
 	rm -f *~ *.html *.orig *.rej  stamp-doc-* *.ps mutt.1 smime_keys.1 muttrc.man pgpewrap.1 mutt_pgpring.1
-	rm -f *.aux *.log *.tex *.out
+	rm -f *.aux *.log *.tex *.out mutt.texi $(INFO_DOCFILES)
 
 DISTCLEANFILES=manual.txt manual.html manual.xml manual.pdf html \
 	       instdoc Muttrc

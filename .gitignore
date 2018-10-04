@@ -57,6 +57,8 @@
 /doc/pgpewrap.1
 /doc/mutt_pgpring.1
 /doc/*.html
+/doc/mutt.info
+/doc/mutt.texi
 /doc/stamp-*
 /doc/smime_keys.1
 /po/mutt.pot
