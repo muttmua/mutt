@@ -89,9 +89,11 @@ install-data-local: makedoc-all instdoc
 		$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir) ; \
 	fi
 	-if [ -f mutt.info ] ; then \
-		$(MKDIR_P) $(DESTDIR)$(infodir) ; \
-		$(INSTALL) -m 644 mutt.info $(DESTDIR)$(infodir) ; \
-		install-info $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
+	  $(MKDIR_P) $(DESTDIR)$(infodir) ; \
+	  $(INSTALL) -m 644 mutt.info $(DESTDIR)$(infodir) ; \
+	  if command -v install-info >/dev/null 2>&1 ; then \
+	    install-info $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
+	  fi \
 	fi
 
 uninstall-local:
@@ -108,12 +110,16 @@ uninstall-local:
 	-rm -f $(DESTDIR)$(docdir)/manual.txt
 	for i in Muttrc ; do \
 	  if cmp -s $(DESTDIR)$(sysconfdir)/$$i.dist $(DESTDIR)$(sysconfdir)/$$i ; then \
-		rm $(DESTDIR)$(sysconfdir)/$$i ; \
+		rm -f $(DESTDIR)$(sysconfdir)/$$i ; \
 	  fi ; \
-	  rm $(DESTDIR)$(sysconfdir)/$${i}.dist ; \
+	  rm -f $(DESTDIR)$(sysconfdir)/$${i}.dist ; \
 	done
-	install-info --delete $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir
-	rm -f $(DESTDIR)$(infodir)/mutt.info
+	-if [ -f $(DESTDIR)$(infodir)/mutt.info ] ; then \
+	  if command -v install-info >/dev/null 2>&1 ; then \
+	    install-info --delete $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
+	  fi ; \
+	  rm -f $(DESTDIR)$(infodir)/mutt.info ; \
+	fi
 
 check:
 manual.txt: manual.html
