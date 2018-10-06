@@ -1337,6 +1337,7 @@ cleanup_and_exit:
 #endif
   mutt_free_opts ();
   mutt_free_windows ();
+  mutt_buffer_pool_free ();
   if (!option (OPTNOCURSES))
     mutt_endwin (exit_endwin_msg);
   exit (exit_code);

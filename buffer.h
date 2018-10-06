@@ -29,15 +29,27 @@ typedef struct
   int destroy;	/* destroy `data' when done? */
 } BUFFER;
 
+/* Convert a buffer to a const char * "string" */
+#define mutt_b2s(b) (b->data ? (const char *)b->data : "")
+
 BUFFER *mutt_buffer_new (void);
 BUFFER *mutt_buffer_init (BUFFER *);
 void mutt_buffer_free (BUFFER **);
 BUFFER *mutt_buffer_from (char *);
+void mutt_buffer_clear (BUFFER *);
 
 void mutt_buffer_increase_size (BUFFER *, size_t);
 
 int mutt_buffer_printf (BUFFER*, const char*, ...);
 void mutt_buffer_addstr (BUFFER*, const char*);
 void mutt_buffer_addch (BUFFER*, char);
+void mutt_buffer_strcpy (BUFFER *, const char *);
+
+
+void mutt_buffer_pool_init (void);
+void mutt_buffer_pool_free (void);
+
+BUFFER *mutt_buffer_pool_get (void);
+void mutt_buffer_pool_release (BUFFER **);
 
 #endif

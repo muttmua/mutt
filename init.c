@@ -3387,6 +3387,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   
   mutt_menu_init ();
   mutt_srandom ();
+  mutt_buffer_pool_init ();
 
   /* 
    * XXX - use something even more difficult to predict?

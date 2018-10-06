@@ -25,6 +25,12 @@
 #include "mutt.h"
 #include "buffer.h"
 
+
+static size_t BufferPoolCount = 0;
+static size_t BufferPoolLen  = 0;
+static BUFFER **BufferPool = NULL;
+
+
 /* Creates and initializes a BUFFER */
 BUFFER *mutt_buffer_new (void)
 {
@@ -52,6 +58,13 @@ void mutt_buffer_free (BUFFER **p)
    FREE (&(*p)->data);
    /* dptr is just an offset to data and shouldn't be freed */
    FREE (p);		/* __FREE_CHECKED__ */
+}
+
+void mutt_buffer_clear (BUFFER *b)
+{
+  b->dptr = b->data;
+  if (b->dptr)
+    *(b->dptr) = '\0';
 }
 
 /* Creates and initializes a BUFFER by copying the seed string. */
@@ -139,4 +152,78 @@ void mutt_buffer_addstr (BUFFER* buf, const char* s)
 void mutt_buffer_addch (BUFFER* buf, char c)
 {
   mutt_buffer_add (buf, &c, 1);
+}
+
+void mutt_buffer_strcpy (BUFFER *buf, const char *s)
+{
+  mutt_buffer_clear (buf);
+  mutt_buffer_addstr (buf, s);
+}
+
+
+static void increase_buffer_pool (void)
+{
+  BUFFER *newbuf;
+
+  BufferPoolLen += 5;
+  safe_realloc (&BufferPool, BufferPoolLen * sizeof (BUFFER *));
+  while (BufferPoolCount < 5)
+  {
+    newbuf = mutt_buffer_new ();
+    mutt_buffer_increase_size (newbuf, LONG_STRING);
+    mutt_buffer_clear (newbuf);
+    BufferPool[BufferPoolCount++] = newbuf;
+  }
+}
+
+void mutt_buffer_pool_init (void)
+{
+  increase_buffer_pool ();
+}
+
+void mutt_buffer_pool_free (void)
+{
+  if (BufferPoolCount != BufferPoolLen)
+  {
+    dprint (1, (debugfile, "Buffer pool leak: %zu/%zu\n",
+                BufferPoolCount, BufferPoolLen));
+  }
+  while (BufferPoolCount)
+    mutt_buffer_free (&BufferPool[--BufferPoolCount]);
+  FREE (&BufferPool);
+  BufferPoolLen = 0;
+}
+
+BUFFER *mutt_buffer_pool_get (void)
+{
+  if (!BufferPoolCount)
+    increase_buffer_pool ();
+  return BufferPool[--BufferPoolCount];
+}
+
+void mutt_buffer_pool_release (BUFFER **pbuf)
+{
+  BUFFER *buf;
+
+  if (!pbuf || !*pbuf)
+    return;
+
+  if (BufferPoolCount >= BufferPoolLen)
+  {
+    dprint (1, (debugfile, "Internal buffer pool error\n"));
+    mutt_buffer_free (pbuf);
+    return;
+  }
+
+  buf = *pbuf;
+  if (buf->dsize > LONG_STRING*2)
+  {
+    buf->dsize = LONG_STRING;
+    safe_realloc (&buf->data, buf->dsize);
+  }
+  mutt_buffer_clear (buf);
+  buf->destroy = 0;
+  BufferPool[BufferPoolCount++] = buf;
+
+  *pbuf = NULL;
 }
