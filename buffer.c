@@ -25,20 +25,47 @@
 #include "mutt.h"
 #include "buffer.h"
 
-/* creates and initializes a BUFFER */
-BUFFER *mutt_buffer_new(void) {
+/* Creates and initializes a BUFFER */
+BUFFER *mutt_buffer_new (void)
+{
   BUFFER *b;
 
-  b = safe_malloc(sizeof(BUFFER));
+  b = safe_malloc (sizeof(BUFFER));
 
-  mutt_buffer_init(b);
+  mutt_buffer_init (b);
 
   return b;
 }
 
-/* initialize a new BUFFER */
-BUFFER *mutt_buffer_init (BUFFER *b) {
-  memset(b, 0, sizeof(BUFFER));
+/* Initialize a new BUFFER */
+BUFFER *mutt_buffer_init (BUFFER *b)
+{
+  memset (b, 0, sizeof(BUFFER));
+  return b;
+}
+
+void mutt_buffer_free (BUFFER **p)
+{
+  if (!p || !*p)
+    return;
+
+   FREE (&(*p)->data);
+   /* dptr is just an offset to data and shouldn't be freed */
+   FREE (p);		/* __FREE_CHECKED__ */
+}
+
+/* Creates and initializes a BUFFER by copying the seed string. */
+BUFFER *mutt_buffer_from (char *seed)
+{
+  BUFFER *b;
+
+  if (!seed)
+    return NULL;
+
+  b = mutt_buffer_new ();
+  b->data = safe_strdup (seed);
+  b->dsize = mutt_strlen (seed);
+  b->dptr = (char *) b->data + b->dsize;
   return b;
 }
 
@@ -56,32 +83,11 @@ void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
   }
 }
 
-/*
- * Creates and initializes a BUFFER*. If passed an existing BUFFER*,
- * just initializes. Frees anything already in the buffer. Copies in
- * the seed string.
- *
- * Disregards the 'destroy' flag, which seems reserved for caller.
- * This is bad, but there's no apparent protocol for it.
- */
-BUFFER *mutt_buffer_from (char *seed) {
-  BUFFER *b;
-
-  if (!seed)
-    return NULL;
-
-  b = mutt_buffer_new ();
-  b->data = safe_strdup(seed);
-  b->dsize = mutt_strlen(seed);
-  b->dptr = (char *) b->data + b->dsize;
-  return b;
-}
-
 int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
 {
   va_list ap, ap_retry;
   int len, blen, doff;
-  
+
   va_start (ap, fmt);
   va_copy (ap_retry, ap);
 
@@ -94,18 +100,14 @@ int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
   if (!blen)
   {
     blen = 128;
-    buf->dsize += blen;
-    safe_realloc (&buf->data, buf->dsize);
-    buf->dptr = buf->data + doff;
+    mutt_buffer_increase_size (buf, buf->dsize + blen);
   }
   if ((len = vsnprintf (buf->dptr, blen, fmt, ap)) >= blen)
   {
     blen = ++len - blen;
     if (blen < 128)
       blen = 128;
-    buf->dsize += blen;
-    safe_realloc (&buf->data, buf->dsize);
-    buf->dptr = buf->data + doff;
+    mutt_buffer_increase_size (buf, buf->dsize + blen);
     len = vsnprintf (buf->dptr, len, fmt, ap_retry);
   }
   if (len > 0)
@@ -117,6 +119,18 @@ int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
   return len;
 }
 
+/* Dynamically grows a BUFFER to accommodate s, in increments of 128 bytes.
+ * Always one byte bigger than necessary for the null terminator, and
+ * the buffer is always null-terminated */
+static void mutt_buffer_add (BUFFER* buf, const char* s, size_t len)
+{
+  if (buf->dptr + len + 1 > buf->data + buf->dsize)
+    mutt_buffer_increase_size (buf, buf->dsize + (len < 128 ? 128 : len + 1));
+  memcpy (buf->dptr, s, len);
+  buf->dptr += len;
+  *(buf->dptr) = '\0';
+}
+
 void mutt_buffer_addstr (BUFFER* buf, const char* s)
 {
   mutt_buffer_add (buf, s, mutt_strlen (s));
@@ -125,34 +139,4 @@ void mutt_buffer_addstr (BUFFER* buf, const char* s)
 void mutt_buffer_addch (BUFFER* buf, char c)
 {
   mutt_buffer_add (buf, &c, 1);
-}
-
-void mutt_buffer_free (BUFFER **p)
-{
-  if (!p || !*p) 
-    return;
-
-   FREE(&(*p)->data);
-   /* dptr is just an offset to data and shouldn't be freed */
-   FREE(p);		/* __FREE_CHECKED__ */
-}
-
-/* dynamically grows a BUFFER to accommodate s, in increments of 128 bytes.
- * Always one byte bigger than necessary for the null terminator, and
- * the buffer is always null-terminated */
-void mutt_buffer_add (BUFFER* buf, const char* s, size_t len)
-{
-  size_t offset;
-
-  if (buf->dptr + len + 1 > buf->data + buf->dsize)
-  {
-    offset = buf->dptr - buf->data;
-    buf->dsize += len < 128 ? 128 : len + 1;
-    /* suppress compiler aliasing warning */
-    safe_realloc ((void**) (void*) &buf->data, buf->dsize);
-    buf->dptr = buf->data + offset;
-  }
-  memcpy (buf->dptr, s, len);
-  buf->dptr += len;
-  *(buf->dptr) = '\0';
 }
