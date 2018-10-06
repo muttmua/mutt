@@ -346,8 +346,7 @@ pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
   char quoted[HUGE_STRING];
   pid_t rc;
 
-  uids = mutt_buffer_new ();
-  mutt_buffer_increase_size (uids, HUGE_STRING);
+  uids = mutt_buffer_pool_get ();
 
   for (; hints; hints = hints->next)
   {
@@ -358,10 +357,10 @@ pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
   }
 
   rc = pgp_invoke (pgpin, pgpout, pgperr, pgpinfd, pgpoutfd, pgperrfd,
-		     0, NULL, NULL, uids->data,
+                   0, NULL, NULL, mutt_b2s (uids),
 		     keyring == PGP_SECRING ? PgpListSecringCommand :
 		     PgpListPubringCommand);
 
-  mutt_buffer_free (&uids);
+  mutt_buffer_pool_release (&uids);
   return rc;
 }

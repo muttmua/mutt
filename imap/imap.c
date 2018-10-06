@@ -139,14 +139,13 @@ int imap_rename_mailbox (IMAP_DATA* idata, IMAP_MBOX* mx, const char* newname)
   imap_munge_mbox_name (idata, oldmbox, sizeof (oldmbox), mx->mbox);
   imap_munge_mbox_name (idata, newmbox, sizeof (newmbox), newname);
 
-  b = mutt_buffer_new ();
-  mutt_buffer_increase_size (b, LONG_STRING);
+  b = mutt_buffer_pool_get ();
   mutt_buffer_printf (b, "RENAME %s %s", oldmbox, newmbox);
 
-  if (imap_exec (idata, b->data, 0) != 0)
+  if (imap_exec (idata, mutt_b2s (b), 0) != 0)
     rc = -1;
 
-  mutt_buffer_free (&b);
+  mutt_buffer_pool_release (&b);
 
   return rc;
 }
