@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 1996-2002,2010,2013 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 2004 g10 Code GmbH
@@ -63,6 +62,7 @@
 #include "rfc822.h"
 #include "hash.h"
 #include "charset.h"
+#include "buffer.h"
 
 #ifndef HAVE_WC_FUNCS
 # ifdef MB_LEN_MAX
@@ -125,14 +125,6 @@ struct timespec
 #define MUTT_TOKEN_PATTERN    (1<<4)  /* !)|~ are terms (for patterns) */
 #define MUTT_TOKEN_COMMENT    (1<<5)  /* don't reap comments */
 #define MUTT_TOKEN_SEMICOLON  (1<<6)  /* don't treat ; as special */
-
-typedef struct
-{
-  char *data;	/* pointer to data */
-  char *dptr;	/* current read/write position */
-  size_t dsize;	/* length of data */
-  int destroy;	/* destroy `data' when done? */
-} BUFFER;
 
 typedef struct
 {

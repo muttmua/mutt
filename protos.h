@@ -39,15 +39,6 @@ struct hdr_format_info
 void mutt_make_string_info (char *, size_t, int, const char *, struct hdr_format_info *, format_flag);
 
 int mutt_extract_token (BUFFER *, BUFFER *, int);
-BUFFER *mutt_buffer_new (void);
-BUFFER * mutt_buffer_init (BUFFER *);
-void mutt_buffer_increase_size (BUFFER *, size_t);
-BUFFER * mutt_buffer_from (char *);
-void mutt_buffer_free(BUFFER **);
-int mutt_buffer_printf (BUFFER*, const char*, ...);
-void mutt_buffer_add (BUFFER*, const char*, size_t);
-void mutt_buffer_addstr (BUFFER*, const char*);
-void mutt_buffer_addch (BUFFER*, char);
 void mutt_free_opts (void);
 
 #define mutt_system(x) _mutt_system(x,0)
