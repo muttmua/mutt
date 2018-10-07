@@ -1562,8 +1562,8 @@ static int _maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
 {
   char subdir[4];
   char suffix[16];
-  char path[_POSIX_PATH_MAX];
-  char full[_POSIX_PATH_MAX];
+  int rc = 0;
+  BUFFER *path = NULL, *full = NULL;
   char *s;
 
   if (safe_fsync_close (&msg->fp))
@@ -1583,20 +1583,22 @@ static int _maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
     suffix[0] = '\0';
 
   /* construct a new file name. */
+  path = mutt_buffer_pool_get ();
+  full = mutt_buffer_pool_get ();
   FOREVER
   {
-    snprintf (path, _POSIX_PATH_MAX, "%s/%lld.%u_%d.%s%s", subdir,
+    mutt_buffer_printf (path, "%s/%lld.%u_%d.%s%s", subdir,
 	      (long long)time (NULL), (unsigned int)getpid (), Counter++,
 	      NONULL (Hostname), suffix);
-    snprintf (full, _POSIX_PATH_MAX, "%s/%s", ctx->path, path);
+    mutt_buffer_printf (full, "%s/%s", ctx->path, mutt_b2s (path));
 
     dprint (2, (debugfile, "_maildir_commit_message (): renaming %s to %s.\n",
-		msg->path, full));
+		msg->path, mutt_b2s (full)));
 
-    if (safe_rename (msg->path, full) == 0)
+    if (safe_rename (msg->path, mutt_b2s (full)) == 0)
     {
       if (hdr)
-	mutt_str_replace (&hdr->path, path);
+	mutt_str_replace (&hdr->path, mutt_b2s (path));
       FREE (&msg->path);
 
       /*
@@ -1611,21 +1613,28 @@ static int _maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
 
 	ut.actime = msg->received;
 	ut.modtime = msg->received;
-	if (utime (full, &ut))
+	if (utime (mutt_b2s (full), &ut))
 	{
 	  mutt_perror (_("_maildir_commit_message(): unable to set time on file"));
-	  return -1;
+	  rc = -1;
 	}
       }
 
-      return 0;
+      goto cleanup;
     }
     else if (errno != EEXIST)
     {
       mutt_perror (ctx->path);
-      return -1;
+      rc = -1;
+      goto cleanup;
     }
   }
+
+cleanup:
+  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release (&full);
+
+  return rc;
 }
 
 static int maildir_commit_message (CONTEXT * ctx, MESSAGE * msg)
