@@ -810,21 +810,26 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 {
   DIR *dirp;
   struct dirent *de;
-  char buf[_POSIX_PATH_MAX];
-  int is_old = 0;
+  BUFFER *buf = NULL;
+  int rc = 0, is_old = 0;
   struct maildir *entry;
   HEADER *h;
 
+  buf = mutt_buffer_pool_get ();
+
   if (subdir)
   {
-    snprintf (buf, sizeof (buf), "%s/%s", ctx->path, subdir);
+    mutt_buffer_printf (buf, "%s/%s", ctx->path, subdir);
     is_old = (mutt_strcmp ("cur", subdir) == 0);
   }
   else
-    strfcpy (buf, ctx->path, sizeof (buf));
+    mutt_buffer_strcpy (buf, ctx->path);
 
-  if ((dirp = opendir (buf)) == NULL)
-    return -1;
+  if ((dirp = opendir (mutt_b2s (buf))) == NULL)
+  {
+    rc = -1;
+    goto cleanup;
+  }
 
   while ((de = readdir (dirp)) != NULL)
   {
@@ -851,9 +856,8 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
     if (subdir)
     {
-      char tmp[_POSIX_PATH_MAX];
-      snprintf (tmp, sizeof (tmp), "%s/%s", subdir, de->d_name);
-      h->path = safe_strdup (tmp);
+      mutt_buffer_printf (buf, "%s/%s", subdir, de->d_name);
+      h->path = safe_strdup (mutt_b2s (buf));
     }
     else
       h->path = safe_strdup (de->d_name);
@@ -869,7 +873,10 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
   closedir (dirp);
 
-  return 0;
+cleanup:
+  mutt_buffer_pool_release (&buf);
+
+  return rc;
 }
 
 static int maildir_add_to_context (CONTEXT * ctx, struct maildir *md)
