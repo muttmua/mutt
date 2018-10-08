@@ -40,10 +40,14 @@ void mutt_buffer_clear (BUFFER *);
 
 void mutt_buffer_increase_size (BUFFER *, size_t);
 
+/* These two replace the buffer contents. */
 int mutt_buffer_printf (BUFFER*, const char*, ...);
+void mutt_buffer_strcpy (BUFFER *, const char *);
+
+/* These append to the buffer. */
+int mutt_buffer_add_printf (BUFFER*, const char*, ...);
 void mutt_buffer_addstr (BUFFER*, const char*);
 void mutt_buffer_addch (BUFFER*, char);
-void mutt_buffer_strcpy (BUFFER *, const char *);
 
 
 void mutt_buffer_pool_init (void);

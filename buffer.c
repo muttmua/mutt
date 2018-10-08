@@ -96,12 +96,11 @@ void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
   }
 }
 
-int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
+static int _mutt_buffer_add_printf (BUFFER* buf, const char* fmt, va_list ap)
 {
-  va_list ap, ap_retry;
+  va_list ap_retry;
   int len, blen, doff;
 
-  va_start (ap, fmt);
   va_copy (ap_retry, ap);
 
   if (!buf->dptr)
@@ -126,10 +125,34 @@ int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
   if (len > 0)
     buf->dptr += len;
 
-  va_end (ap);
   va_end (ap_retry);
 
   return len;
+}
+
+int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
+{
+  va_list ap;
+  int rv;
+
+  va_start (ap, fmt);
+  mutt_buffer_clear (buf);
+  rv = _mutt_buffer_add_printf (buf, fmt, ap);
+  va_end (ap);
+
+  return rv;
+}
+
+int mutt_buffer_add_printf (BUFFER* buf, const char* fmt, ...)
+{
+  va_list ap;
+  int rv;
+
+  va_start (ap, fmt);
+  rv = _mutt_buffer_add_printf (buf, fmt, ap);
+  va_end (ap);
+
+  return rv;
 }
 
 /* Dynamically grows a BUFFER to accommodate s, in increments of 128 bytes.

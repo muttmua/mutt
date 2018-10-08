@@ -362,7 +362,7 @@ int imap_cmd_idle (IMAP_DATA* idata)
     /* successfully entered IDLE state */
     idata->state = IMAP_IDLE;
     /* queue automatic exit when next command is issued */
-    mutt_buffer_printf (idata->cmdbuf, "DONE\r\n");
+    mutt_buffer_addstr (idata->cmdbuf, "DONE\r\n");
     rc = IMAP_CMD_OK;
   }
   if (rc != IMAP_CMD_OK)
@@ -425,7 +425,7 @@ static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags)
   if (!(cmd = cmd_new (idata)))
     return IMAP_CMD_BAD;
 
-  if (mutt_buffer_printf (idata->cmdbuf, "%s %s\r\n", cmd->seq, cmdstr) < 0)
+  if (mutt_buffer_add_printf (idata->cmdbuf, "%s %s\r\n", cmd->seq, cmdstr) < 0)
     return IMAP_CMD_BAD;
 
   return 0;

@@ -175,9 +175,9 @@ static void imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, unsigned int msn
         break;
 
       if (state == 1)
-        mutt_buffer_printf (b, "%u", range_begin);
+        mutt_buffer_add_printf (b, "%u", range_begin);
       else if (state == 2)
-        mutt_buffer_printf (b, "%u:%u", range_begin, range_end);
+        mutt_buffer_add_printf (b, "%u:%u", range_begin, range_end);
       state = 0;
     }
   }
@@ -186,7 +186,7 @@ static void imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, unsigned int msn
   if (chunks == 150 || mutt_strlen (b->data) > 500)
   {
     b->dptr = b->data;
-    mutt_buffer_printf (b, "%u:%u", msn_begin, msn_end);
+    mutt_buffer_add_printf (b, "%u:%u", msn_begin, msn_end);
   }
 }
 
@@ -721,7 +721,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
       imap_fetch_msn_seqset (b, idata, msn_begin, msn_end);
     }
     else
-      mutt_buffer_printf (b, "%u:%u", msn_begin, msn_end);
+      mutt_buffer_add_printf (b, "%u:%u", msn_begin, msn_end);
 
     fetch_msn_end = msn_end;
     safe_asprintf (&cmd, "FETCH %s (UID FLAGS INTERNALDATE RFC822.SIZE %s)",
@@ -1317,7 +1317,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
     else
     {
       mutt_message (_("Copying message %d to %s..."), h->index+1, mbox);
-      mutt_buffer_printf (&cmd, "UID COPY %u %s", HEADER_DATA (h)->uid, mmbox);
+      mutt_buffer_add_printf (&cmd, "UID COPY %u %s", HEADER_DATA (h)->uid, mmbox);
 
       if (h->active && h->changed)
       {

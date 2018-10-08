@@ -1016,22 +1016,22 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
         setstart = HEADER_DATA (hdrs[n])->uid;
         if (started == 0)
 	{
-	  mutt_buffer_printf (buf, "%u", HEADER_DATA (hdrs[n])->uid);
+	  mutt_buffer_add_printf (buf, "%u", HEADER_DATA (hdrs[n])->uid);
 	  started = 1;
 	}
         else
-	  mutt_buffer_printf (buf, ",%u", HEADER_DATA (hdrs[n])->uid);
+	  mutt_buffer_add_printf (buf, ",%u", HEADER_DATA (hdrs[n])->uid);
       }
       /* tie up if the last message also matches */
       else if (n == idata->ctx->msgcount-1)
-	mutt_buffer_printf (buf, ":%u", HEADER_DATA (hdrs[n])->uid);
+	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n])->uid);
     }
     /* End current set if message doesn't match or we've reached the end
      * of the mailbox via inactive messages following the last match. */
     else if (setstart && (hdrs[n]->active || n == idata->ctx->msgcount-1))
     {
       if (HEADER_DATA (hdrs[n-1])->uid > setstart)
-	mutt_buffer_printf (buf, ":%u", HEADER_DATA (hdrs[n-1])->uid);
+	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n-1])->uid);
       setstart = 0;
     }
   }
@@ -1083,11 +1083,11 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
   do
   {
     cmd->dptr = cmd->data;
-    mutt_buffer_printf (cmd, "%s ", pre);
+    mutt_buffer_add_printf (cmd, "%s ", pre);
     rc = imap_make_msg_set (idata, cmd, flag, changed, invert, &pos);
     if (rc > 0)
     {
-      mutt_buffer_printf (cmd, " %s", post);
+      mutt_buffer_add_printf (cmd, " %s", post);
       if (imap_exec (idata, cmd->data, IMAP_CMD_QUEUE))
       {
         rc = -1;

@@ -298,7 +298,7 @@ static int eat_regexp (pattern_t *pat, BUFFER *s, BUFFER *err)
     if (r)
     {
       regerror (r, pat->p.rx, errmsg, sizeof (errmsg));
-      mutt_buffer_printf (err, "'%s': %s", buf.data, errmsg);
+      mutt_buffer_add_printf (err, "'%s': %s", buf.data, errmsg);
       FREE (&buf.data);
       FREE (&pat->p.rx);
       return (-1);
