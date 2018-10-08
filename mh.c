@@ -2028,18 +2028,19 @@ err:
   return -1;
 }
 
-static char *maildir_canon_filename (char *dest, const char *src, size_t l)
+static void maildir_canon_filename (BUFFER *dest, const char *src)
 {
   char *t, *u;
 
   if ((t = strrchr (src, '/')))
     src = t + 1;
 
-  strfcpy (dest, src, l);
-  if ((u = strrchr (dest, ':')))
+  mutt_buffer_strcpy (dest, src);
+  if ((u = strrchr (dest->data, ':')))
+  {
     *u = '\0';
-
-  return dest;
+    dest->dptr = u;
+  }
 }
 
 static void maildir_update_tables (CONTEXT *ctx, int *index_hint)
@@ -2123,7 +2124,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
 {
   struct stat st_new;		/* status of the "new" subdirectory */
   struct stat st_cur;		/* status of the "cur" subdirectory */
-  char buf[_POSIX_PATH_MAX];
+  BUFFER *buf = NULL;
   int changed = 0;		/* bitmask representing which subdirectories
 				   have changed.  0x1 = new, 0x2 = cur */
   int occult = 0;		/* messages were removed from the mailbox */
@@ -2143,13 +2144,20 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   if (!option (OPTCHECKNEW))
     return 0;
 
-  snprintf (buf, sizeof (buf), "%s/new", ctx->path);
-  if (stat (buf, &st_new) == -1)
+  buf = mutt_buffer_pool_get ();
+  mutt_buffer_printf (buf, "%s/new", ctx->path);
+  if (stat (mutt_b2s (buf), &st_new) == -1)
+  {
+    mutt_buffer_pool_release (&buf);
     return -1;
+  }
 
-  snprintf (buf, sizeof (buf), "%s/cur", ctx->path);
-  if (stat (buf, &st_cur) == -1)
+  mutt_buffer_printf (buf, "%s/cur", ctx->path);
+  if (stat (mutt_b2s (buf), &st_cur) == -1)
+  {
+    mutt_buffer_pool_release (&buf);
     return -1;
+  }
 
   /* determine which subdirectories need to be scanned */
   if (mutt_stat_timespec_compare (&st_new, MUTT_STAT_MTIME, &ctx->mtime) > 0)
@@ -2158,7 +2166,10 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
     changed |= 2;
 
   if (!changed)
+  {
+    mutt_buffer_pool_release (&buf);
     return 0;			/* nothing to do */
+  }
 
   /* Update the modification times on the mailbox.
    *
@@ -2194,8 +2205,8 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
 
   for (p = md; p; p = p->next)
   {
-    maildir_canon_filename (buf, p->h->path, sizeof (buf));
-    p->canon_fname = safe_strdup (buf);
+    maildir_canon_filename (buf, p->h->path);
+    p->canon_fname = safe_strdup (mutt_b2s (buf));
     hash_insert (fnames, p->canon_fname, p);
   }
 
@@ -2203,8 +2214,8 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   for (i = 0; i < ctx->msgcount; i++)
   {
     ctx->hdrs[i]->active = 0;
-    maildir_canon_filename (buf, ctx->hdrs[i]->path, sizeof (buf));
-    p = hash_find (fnames, buf);
+    maildir_canon_filename (buf, ctx->hdrs[i]->path);
+    p = hash_find (fnames, mutt_b2s (buf));
     if (p && p->h)
     {
       /* message already exists, merge flags */
@@ -2269,6 +2280,8 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
 
   /* Incorporate new messages */
   have_new = maildir_move_to_context (ctx, &md);
+
+  mutt_buffer_pool_release (&buf);
 
   if (occult)
     return MUTT_REOPENED;
@@ -2426,9 +2439,9 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
 static FILE *_maildir_open_find_message (const char *folder, const char *unique,
 				  const char *subfolder)
 {
-  char dir[_POSIX_PATH_MAX];
-  char tunique[_POSIX_PATH_MAX];
-  char fname[_POSIX_PATH_MAX];
+  BUFFER *dir = mutt_buffer_pool_get ();
+  BUFFER *tunique = mutt_buffer_pool_get ();
+  BUFFER *fname = mutt_buffer_pool_get ();
 
   DIR *dp;
   struct dirent *de;
@@ -2436,23 +2449,23 @@ static FILE *_maildir_open_find_message (const char *folder, const char *unique,
   FILE *fp = NULL;
   int oe = ENOENT;
 
-  snprintf (dir, sizeof (dir), "%s/%s", folder, subfolder);
+  mutt_buffer_printf (dir, "%s/%s", folder, subfolder);
 
-  if ((dp = opendir (dir)) == NULL)
+  if ((dp = opendir (mutt_b2s (dir))) == NULL)
   {
     errno = ENOENT;
-    return NULL;
+    goto cleanup;
   }
 
   while ((de = readdir (dp)))
   {
-    maildir_canon_filename (tunique, de->d_name, sizeof (tunique));
+    maildir_canon_filename (tunique, de->d_name);
 
-    if (!mutt_strcmp (tunique, unique))
+    if (!mutt_strcmp (mutt_b2s (tunique), unique))
     {
-      snprintf (fname, sizeof (fname), "%s/%s/%s", folder, subfolder,
+      mutt_buffer_printf (fname, "%s/%s/%s", folder, subfolder,
 		de->d_name);
-      fp = fopen (fname, "r");	/* __FOPEN_CHECKED__ */
+      fp = fopen (mutt_b2s (fname), "r");	/* __FOPEN_CHECKED__ */
       oe = errno;
       break;
     }
@@ -2461,21 +2474,28 @@ static FILE *_maildir_open_find_message (const char *folder, const char *unique,
   closedir (dp);
 
   errno = oe;
+
+cleanup:
+  mutt_buffer_pool_release (&dir);
+  mutt_buffer_pool_release (&tunique);
+  mutt_buffer_pool_release (&fname);
+
   return fp;
 }
 
 FILE *maildir_open_find_message (const char *folder, const char *msg)
 {
-  char unique[_POSIX_PATH_MAX];
-  FILE *fp;
+  BUFFER *unique = NULL;
+  FILE *fp = NULL;
 
   static unsigned int new_hits = 0, cur_hits = 0;	/* simple dynamic optimization */
 
-  maildir_canon_filename (unique, msg, sizeof (unique));
+  unique = mutt_buffer_pool_get ();
+  maildir_canon_filename (unique, msg);
 
   if (
       (fp =
-       _maildir_open_find_message (folder, unique,
+       _maildir_open_find_message (folder, mutt_b2s (unique),
 				   new_hits > cur_hits ? "new" : "cur"))
       || errno != ENOENT)
   {
@@ -2485,11 +2505,11 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
       cur_hits += (new_hits > cur_hits ? 0 : 1);
     }
 
-    return fp;
+    goto cleanup;
   }
   if (
       (fp =
-       _maildir_open_find_message (folder, unique,
+       _maildir_open_find_message (folder, mutt_b2s (unique),
 				   new_hits > cur_hits ? "cur" : "new"))
       || errno != ENOENT)
   {
@@ -2499,10 +2519,15 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
       cur_hits += (new_hits > cur_hits ? 1 : 0);
     }
 
-    return fp;
+    goto cleanup;
   }
 
-  return NULL;
+  fp = NULL;
+
+cleanup:
+  mutt_buffer_pool_release (&unique);
+
+  return fp;
 }
 
 
