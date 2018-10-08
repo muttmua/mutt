@@ -748,8 +748,7 @@ int mix_send_message (LIST *chain, const char *tempfile)
   char cd_quoted[STRING];
   int i;
 
-  cmd = mutt_buffer_new ();
-  mutt_buffer_increase_size (cmd, HUGE_STRING);
+  cmd = mutt_buffer_pool_get ();
   mutt_buffer_printf (cmd, "cat %s | %s -m ", tempfile, Mixmaster);
 
   for (i = 0; chain; chain = chain->next, i = 1)
@@ -772,7 +771,7 @@ int mix_send_message (LIST *chain, const char *tempfile)
     }
   }
 
-  mutt_buffer_free (&cmd);
+  mutt_buffer_pool_release (&cmd);
   unlink (tempfile);
   return i;
 }
