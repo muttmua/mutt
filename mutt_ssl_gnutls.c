@@ -42,6 +42,7 @@
 #define CERTERR_HOSTNAME    16
 #define CERTERR_SIGNERNOTCA 32
 #define CERTERR_INSECUREALG 64
+#define CERTERR_OTHER       128
 
 /* deprecated types compatibility */
 
@@ -719,46 +720,25 @@ static int tls_check_preauth (const gnutls_datum_t *certdata,
       && !tls_check_stored_hostname (certdata, hostname))
     *certerr |= CERTERR_HOSTNAME;
 
+  if (certstat & GNUTLS_CERT_REVOKED)
+  {
+    *certerr |= CERTERR_REVOKED;
+    certstat ^= GNUTLS_CERT_REVOKED;
+  }
+
   /* see whether certificate is in our cache (certificates file) */
   if (tls_compare_certificates (certdata))
   {
     *savedcert = 1;
 
-    if (chainidx == 0 && (certstat & GNUTLS_CERT_INVALID))
+    /* We check above for certs with bad dates or that are revoked.
+     * These must be accepted manually each time.  Otherwise, we
+     * accept saved certificates as valid. */
+    if (*certerr == CERTERR_VALID)
     {
-      /* doesn't matter - have decided is valid because server
-       certificate is in our trusted cache */
-      certstat ^= GNUTLS_CERT_INVALID;
+      gnutls_x509_crt_deinit (cert);
+      return 0;
     }
-
-    if (chainidx == 0 && (certstat & GNUTLS_CERT_SIGNER_NOT_FOUND))
-    {
-      /* doesn't matter that we haven't found the signer, since
-       certificate is in our trusted cache */
-      certstat ^= GNUTLS_CERT_SIGNER_NOT_FOUND;
-    }
-
-    if (chainidx <= 1 && (certstat & GNUTLS_CERT_SIGNER_NOT_CA))
-    {
-      /* Hmm. Not really sure how to handle this, but let's say
-       that we don't care if the CA certificate hasn't got the
-       correct X.509 basic constraints if server or first signer
-       certificate is in our cache. */
-      certstat ^= GNUTLS_CERT_SIGNER_NOT_CA;
-    }
-
-    if (chainidx == 0 && (certstat & GNUTLS_CERT_INSECURE_ALGORITHM))
-    {
-      /* doesn't matter that it was signed using an insecure
-         algorithm, since certificate is in our trusted cache */
-      certstat ^= GNUTLS_CERT_INSECURE_ALGORITHM;
-    }
-  }
-
-  if (certstat & GNUTLS_CERT_REVOKED)
-  {
-    *certerr |= CERTERR_REVOKED;
-    certstat ^= GNUTLS_CERT_REVOKED;
   }
 
   if (certstat & GNUTLS_CERT_INVALID)
@@ -788,12 +768,15 @@ static int tls_check_preauth (const gnutls_datum_t *certdata,
     certstat ^= GNUTLS_CERT_INSECURE_ALGORITHM;
   }
 
+  /* we've been zeroing the interesting bits in certstat -
+   * don't return OK if there are any unhandled bits we don't
+   * understand */
+  if (certstat != 0)
+    *certerr |= CERTERR_OTHER;
+
   gnutls_x509_crt_deinit (cert);
 
-  /* we've been zeroing the interesting bits in certstat -
-   don't return OK if there are any unhandled bits we don't
-   understand */
-  if (*certerr == CERTERR_VALID && certstat == 0)
+  if (*certerr == CERTERR_VALID)
     return 0;
 
   return -1;
@@ -831,17 +814,6 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
       &savedcert))
     return 1;
 
-  /* skip signers if insecure algorithm was used */
-  if (idx && (certerr & CERTERR_INSECUREALG))
-  {
-    if (idx == 1)
-    {
-      mutt_error (_("Warning: Server certificate was signed using an insecure algorithm"));
-      mutt_sleep (2);
-    }
-    return 0;
-  }
-
   /* interactive check from user */
   if (gnutls_x509_crt_init (&cert) < 0)
   {
@@ -859,7 +831,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   }
 
   menu = mutt_new_menu (MENU_GENERIC);
-  menu->max = 26;
+  menu->max = 27;
   menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
   for (i = 0; i < menu->max; i++)
     menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
@@ -990,6 +962,13 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   {
     row++;
     strfcpy (menu->dialog[row], _("WARNING: Signer of server certificate is not a CA"), SHORT_STRING);
+  }
+  if (certerr & CERTERR_INSECUREALG)
+  {
+    row++;
+    strfcpy (menu->dialog[row],
+             _("Warning: Server certificate was signed using an insecure algorithm"),
+             SHORT_STRING);
   }
 
   snprintf (title, sizeof (title),
