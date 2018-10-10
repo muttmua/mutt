@@ -168,7 +168,7 @@ static int mh_read_token (char *t, int *first, int *last)
 
 static int mh_read_sequences (struct mh_sequences *mhs, const char *path)
 {
-  FILE *fp;
+  FILE *fp = NULL;
   int line = 1;
   char *buff = NULL;
   char *t;
@@ -177,11 +177,11 @@ static int mh_read_sequences (struct mh_sequences *mhs, const char *path)
   short f;
   int first, last, rc = 0;
 
-  char pathname[_POSIX_PATH_MAX];
-  snprintf (pathname, sizeof (pathname), "%s/.mh_sequences", path);
+  BUFFER *pathname = mutt_buffer_pool_get ();
+  mutt_buffer_printf (pathname, "%s/.mh_sequences", path);
 
-  if (!(fp = fopen (pathname, "r")))
-    return 0; /* yes, ask callers to silently ignore the error */
+  if (!(fp = fopen (mutt_b2s (pathname), "r")))
+    goto out; /* yes, ask callers to silently ignore the error */
 
   while ((buff = mutt_read_line (buff, &sz, fp, &line, 0)))
   {
@@ -213,6 +213,7 @@ static int mh_read_sequences (struct mh_sequences *mhs, const char *path)
   rc = 0;
 
 out:
+  mutt_buffer_pool_release (&pathname);
   FREE (&buff);
   safe_fclose (&fp);
   return rc;
@@ -242,13 +243,16 @@ static inline mode_t mh_umask (CONTEXT* ctx)
  */
 static int mh_sequences_changed(BUFFY *b)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   struct stat sb;
+  int rc = -1;
 
-  if ((snprintf(path, sizeof(path), "%s/.mh_sequences", b->path) < sizeof(path)) &&
-      (stat(path, &sb) == 0))
-    return (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) > 0);
-  return -1;
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_printf (path, "%s/.mh_sequences", b->path);
+  if (stat (mutt_b2s (path), &sb) == 0)
+    rc = (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) > 0);
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 /*
@@ -258,13 +262,16 @@ static int mh_sequences_changed(BUFFY *b)
  */
 static int mh_already_notified(BUFFY *b, int msgno)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   struct stat sb;
+  int rc = -1;
 
-  if ((snprintf(path, sizeof(path), "%s/%d", b->path, msgno) < sizeof(path)) &&
-      (stat(path, &sb) == 0))
-    return (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) <= 0);
-  return -1;
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_printf (path, "%s/%d", b->path, msgno);
+  if (stat (mutt_b2s (path), &sb) == 0)
+    rc = (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) <= 0);
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 /* Checks new mail for a mh mailbox.
@@ -352,26 +359,29 @@ int mh_buffy (BUFFY *mailbox, int check_stats)
 static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
 {
   int fd;
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   mode_t omask;
+  int rc = 0;
 
+  path = mutt_buffer_pool_get ();
   omask = umask (mh_umask (dest));
   FOREVER
   {
-    snprintf (path, _POSIX_PATH_MAX, "%s/.mutt-%s-%d-%d",
+    mutt_buffer_printf (path, "%s/.mutt-%s-%d-%d",
 	      dest->path, NONULL (Hostname), (int) getpid (), Counter++);
-    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
+    if ((fd = open (mutt_b2s (path), O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
     {
       if (errno != EEXIST)
       {
-	mutt_perror (path);
+	mutt_perror (mutt_b2s (path));
 	umask (omask);
-	return -1;
+	rc = -1;
+        goto out;
       }
     }
     else
     {
-      *tgt = safe_strdup (path);
+      *tgt = safe_strdup (mutt_b2s (path));
       break;
     }
   }
@@ -381,11 +391,15 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
   {
     FREE (tgt);		/* __FREE_CHECKED__ */
     close (fd);
-    unlink (path);
-    return (-1);
+    unlink (mutt_b2s (path));
+    rc = -1;
+    goto out;
   }
 
-  return 0;
+out:
+  mutt_buffer_pool_release (&path);
+
+  return rc;
 }
 
 static void mhs_write_one_sequence (FILE * fp, struct mh_sequences *mhs,
@@ -436,7 +450,7 @@ static void mh_update_sequences (CONTEXT * ctx)
 {
   FILE *ofp, *nfp;
 
-  char sequences[_POSIX_PATH_MAX];
+  BUFFER *sequences = NULL;
   char *tmpfname;
   char *buff = NULL;
   char *p;
@@ -466,11 +480,12 @@ static void mh_update_sequences (CONTEXT * ctx)
     return;
   }
 
-  snprintf (sequences, sizeof (sequences), "%s/.mh_sequences", ctx->path);
+  sequences = mutt_buffer_pool_get ();
+  mutt_buffer_printf (sequences, "%s/.mh_sequences", ctx->path);
 
 
   /* first, copy unknown sequences */
-  if ((ofp = fopen (sequences, "r")))
+  if ((ofp = fopen (mutt_b2s (sequences), "r")))
   {
     while ((buff = mutt_read_line (buff, &s, ofp, &l, 0)))
     {
@@ -531,12 +546,13 @@ static void mh_update_sequences (CONTEXT * ctx)
   /* try to commit the changes - no guarantee here */
   safe_fclose (&nfp);
 
-  unlink (sequences);
-  if (safe_rename (tmpfname, sequences) != 0)
+  unlink (mutt_b2s (sequences));
+  if (safe_rename (tmpfname, mutt_b2s (sequences)) != 0)
   {
     /* report an error? */
     unlink (tmpfname);
   }
+  mutt_buffer_pool_release (&sequences);
 
   FREE (&tmpfname);
 }
@@ -551,7 +567,7 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
   FILE *ofp = NULL, *nfp = NULL;
 
   char *tmpfname;
-  char sequences[_POSIX_PATH_MAX];
+  BUFFER *sequences = NULL;
 
   char seq_unseen[STRING];
   char seq_replied[STRING];
@@ -568,8 +584,9 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
   snprintf (seq_replied, sizeof (seq_replied), "%s:", NONULL (MhReplied));
   snprintf (seq_flagged, sizeof (seq_flagged), "%s:", NONULL (MhFlagged));
 
-  snprintf (sequences, sizeof (sequences), "%s/.mh_sequences", ctx->path);
-  if ((ofp = fopen (sequences, "r")))
+  sequences = mutt_buffer_pool_get ();
+  mutt_buffer_printf (sequences, "%s/.mh_sequences", ctx->path);
+  if ((ofp = fopen (mutt_b2s (sequences), "r")))
   {
     while ((buff = mutt_read_line (buff, &sz, ofp, &line, 0)))
     {
@@ -606,9 +623,10 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
 
   safe_fclose (&nfp);
 
-  unlink (sequences);
-  if (safe_rename (tmpfname, sequences) != 0)
+  unlink (mutt_b2s (sequences));
+  if (safe_rename (tmpfname, mutt_b2s (sequences)) != 0)
     unlink (tmpfname);
+  mutt_buffer_pool_release (&sequences);
 
   FREE (&tmpfname);
 }
@@ -722,28 +740,32 @@ static void maildir_parse_flags (HEADER * h, const char *path)
 
 static void maildir_update_mtime (CONTEXT * ctx)
 {
-  char buf[_POSIX_PATH_MAX];
+  BUFFER *buf = NULL;
   struct stat st;
   struct mh_data *data = mh_data (ctx);
 
+  buf = mutt_buffer_pool_get ();
+
   if (ctx->magic == MUTT_MAILDIR)
   {
-    snprintf (buf, sizeof (buf), "%s/%s", ctx->path, "cur");
-    if (stat (buf, &st) == 0)
+    mutt_buffer_printf (buf, "%s/%s", ctx->path, "cur");
+    if (stat (mutt_b2s (buf), &st) == 0)
       mutt_get_stat_timespec (&data->mtime_cur, &st, MUTT_STAT_MTIME);
-    snprintf (buf, sizeof (buf), "%s/%s", ctx->path, "new");
+    mutt_buffer_printf (buf, "%s/%s", ctx->path, "new");
   }
   else
   {
-    snprintf (buf, sizeof (buf), "%s/.mh_sequences", ctx->path);
-    if (stat (buf, &st) == 0)
+    mutt_buffer_printf (buf, "%s/.mh_sequences", ctx->path);
+    if (stat (mutt_b2s (buf), &st) == 0)
       mutt_get_stat_timespec (&data->mtime_cur, &st, MUTT_STAT_MTIME);
 
-    strfcpy (buf, ctx->path, sizeof (buf));
+    mutt_buffer_strcpy (buf, ctx->path);
   }
 
-  if (stat (buf, &st) == 0)
+  if (stat (mutt_b2s (buf), &st) == 0)
     mutt_get_stat_timespec (&ctx->mtime, &st, MUTT_STAT_MTIME);
+
+  mutt_buffer_pool_release (&buf);
 }
 
 /* 
@@ -1114,7 +1136,7 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 			      progress_t *progress)
 { 
   struct maildir *p, *last = NULL;
-  char fn[_POSIX_PATH_MAX];
+  BUFFER *fn = NULL;
   int count;
 #if HAVE_DIRENT_D_INO
   int sort = 0;
@@ -1139,7 +1161,7 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
       last->next = p; \
     sort = 1; \
     p = skip_duplicates (p, &last); \
-    snprintf (fn, sizeof (fn), "%s/%s", ctx->path, p->h->path); \
+    mutt_buffer_printf (fn, "%s/%s", ctx->path, p->h->path); \
   } \
 } while(0)
 #else
@@ -1149,6 +1171,8 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 #if USE_HCACHE
   hc = mutt_hcache_open (HeaderCache, ctx->path, NULL);
 #endif
+
+  fn = mutt_buffer_pool_get ();
 
   for (p = *md, count = 0; p; p = p->next, count++)
    {
@@ -1163,12 +1187,12 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 
     DO_SORT();
 
-    snprintf (fn, sizeof (fn), "%s/%s", ctx->path, p->h->path);
+    mutt_buffer_printf (fn, "%s/%s", ctx->path, p->h->path);
 
 #if USE_HCACHE
     if (option(OPTHCACHEVERIFY))
     {
-       ret = stat(fn, &lastchanged);
+      ret = stat(mutt_b2s (fn), &lastchanged);
     }
     else
     {
@@ -1186,13 +1210,13 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
     {
       p->h = mutt_hcache_restore ((unsigned char *)data, &p->h);
       if (ctx->magic == MUTT_MAILDIR)
-	maildir_parse_flags (p->h, fn);
+	maildir_parse_flags (p->h, mutt_b2s (fn));
     }
     else
     {
 #endif /* USE_HCACHE */
 
-    if (maildir_parse_message (ctx->magic, fn, p->h->old, p->h))
+    if (maildir_parse_message (ctx->magic, mutt_b2s (fn), p->h->old, p->h))
     {
       p->header_parsed = 1;
 #if USE_HCACHE
@@ -1212,6 +1236,8 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 #if USE_HCACHE
   mutt_hcache_close (hc);
 #endif
+
+  mutt_buffer_pool_release (&fn);
 
 #undef DO_SORT
 
@@ -1308,48 +1334,56 @@ static int maildir_open_mailbox (CONTEXT *ctx)
 
 static int maildir_open_mailbox_append (CONTEXT *ctx, int flags)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
+  int rc = -1;
+
+  tmp = mutt_buffer_pool_get ();
 
   if (flags & MUTT_APPENDNEW)
   {
     if (mkdir (ctx->path, S_IRWXU))
     {
       mutt_perror (ctx->path);
-      return (-1);
+      goto out;
     }
 
-    snprintf (tmp, sizeof (tmp), "%s/cur", ctx->path);
-    if (mkdir (tmp, S_IRWXU))
+    mutt_buffer_printf (tmp, "%s/cur", ctx->path);
+    if (mkdir (mutt_b2s (tmp), S_IRWXU))
     {
-      mutt_perror (tmp);
+      mutt_perror (mutt_b2s (tmp));
       rmdir (ctx->path);
-      return (-1);
+      goto out;
     }
 
-    snprintf (tmp, sizeof (tmp), "%s/new", ctx->path);
-    if (mkdir (tmp, S_IRWXU))
+    mutt_buffer_printf (tmp, "%s/new", ctx->path);
+    if (mkdir (mutt_b2s (tmp), S_IRWXU))
     {
-      mutt_perror (tmp);
-      snprintf (tmp, sizeof (tmp), "%s/cur", ctx->path);
-      rmdir (tmp);
+      mutt_perror (mutt_b2s (tmp));
+      mutt_buffer_printf (tmp, "%s/cur", ctx->path);
+      rmdir (mutt_b2s (tmp));
       rmdir (ctx->path);
-      return (-1);
+      goto out;
     }
 
-    snprintf (tmp, sizeof (tmp), "%s/tmp", ctx->path);
-    if (mkdir (tmp, S_IRWXU))
+    mutt_buffer_printf (tmp, "%s/tmp", ctx->path);
+    if (mkdir (mutt_b2s (tmp), S_IRWXU))
     {
-      mutt_perror (tmp);
-      snprintf (tmp, sizeof (tmp), "%s/cur", ctx->path);
-      rmdir (tmp);
-      snprintf (tmp, sizeof (tmp), "%s/new", ctx->path);
-      rmdir (tmp);
+      mutt_perror (mutt_b2s (tmp));
+      mutt_buffer_printf (tmp, "%s/cur", ctx->path);
+      rmdir (mutt_b2s (tmp));
+      mutt_buffer_printf (tmp, "%s/new", ctx->path);
+      rmdir (mutt_b2s (tmp));
       rmdir (ctx->path);
-      return (-1);
+      goto out;
     }
   }
 
-  return 0;
+  rc = 0;
+
+out:
+  mutt_buffer_pool_release (&tmp);
+
+  return rc;
 }
 
 static int mh_open_mailbox (CONTEXT *ctx)
@@ -1359,7 +1393,7 @@ static int mh_open_mailbox (CONTEXT *ctx)
 
 static int mh_open_mailbox_append (CONTEXT *ctx, int flags)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   int i;
 
   if (flags & MUTT_APPENDNEW)
@@ -1370,14 +1404,17 @@ static int mh_open_mailbox_append (CONTEXT *ctx, int flags)
       return (-1);
     }
 
-    snprintf (tmp, sizeof (tmp), "%s/.mh_sequences", ctx->path);
-    if ((i = creat (tmp, S_IRWXU)) == -1)
+    tmp = mutt_buffer_pool_get ();
+    mutt_buffer_printf (tmp, "%s/.mh_sequences", ctx->path);
+    if ((i = creat (mutt_b2s (tmp), S_IRWXU)) == -1)
     {
-      mutt_perror (tmp);
+      mutt_perror (mutt_b2s (tmp));
       rmdir (ctx->path);
+      mutt_buffer_pool_release (&tmp);
       return (-1);
     }
     close (i);
+    mutt_buffer_pool_release (&tmp);
   }
 
   return 0;
@@ -1429,23 +1466,27 @@ static int maildir_mh_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno,
                                     int is_maildir)
 {
   HEADER *cur = ctx->hdrs[msgno];
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
+  int rc = 0;
 
-  snprintf (path, sizeof (path), "%s/%s", ctx->path, cur->path);
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_printf (path, "%s/%s", ctx->path, cur->path);
 
-  msg->fp = fopen (path, "r");
+  msg->fp = fopen (mutt_b2s (path), "r");
   if (msg->fp == NULL && errno == ENOENT && is_maildir)
     msg->fp = maildir_open_find_message (ctx->path, cur->path);
 
   if (!msg->fp)
   {
-    mutt_perror (path);
+    mutt_perror (mutt_b2s (path));
     dprint (1, (debugfile, "maildir_mh_open_message: fopen: %s: %s (errno %d).\n",
-            path, strerror (errno), errno));
-    return -1;
+                mutt_b2s (path), strerror (errno), errno));
+    rc = -1;
   }
 
-  return 0;
+  mutt_buffer_pool_release (&path);
+
+  return rc;
 }
 
 static int maildir_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
@@ -1473,11 +1514,13 @@ static int mh_close_message (CONTEXT *ctx, MESSAGE *msg)
 
 static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
 {
-  int fd;
-  char path[_POSIX_PATH_MAX];
+  int fd, rc = 0;
+  BUFFER *path = NULL;
   char suffix[16];
   char subdir[16];
   mode_t omask;
+
+  path = mutt_buffer_pool_get ();
 
   if (hdr)
   {
@@ -1499,26 +1542,27 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
   omask = umask (mh_umask (dest));
   FOREVER
   {
-    snprintf (path, _POSIX_PATH_MAX, "%s/tmp/%s.%lld.%u_%d.%s%s",
+    mutt_buffer_printf (path, "%s/tmp/%s.%lld.%u_%d.%s%s",
 	      dest->path, subdir, (long long)time (NULL), (unsigned int)getpid (),
 	      Counter++, NONULL (Hostname), suffix);
 
     dprint (2, (debugfile, "maildir_open_new_message (): Trying %s.\n",
-		path));
+		mutt_b2s (path)));
 
-    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
+    if ((fd = open (mutt_b2s (path), O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
     {
       if (errno != EEXIST)
       {
 	umask (omask);
-	mutt_perror (path);
-	return -1;
+	mutt_perror (mutt_b2s (path));
+	rc = -1;
+        goto out;
       }
     }
     else
     {
       dprint (2, (debugfile, "maildir_open_new_message (): Success.\n"));
-      msg->path = safe_strdup (path);
+      msg->path = safe_strdup (mutt_b2s (path));
       break;
     }
   }
@@ -1528,11 +1572,15 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
   {
     FREE (&msg->path);
     close (fd);
-    unlink (path);
-    return (-1);
+    unlink (mutt_b2s (path));
+    rc = -1;
+    goto out;
   }
 
-  return 0;
+out:
+  mutt_buffer_pool_release (&path);
+
+  return rc;
 }
 
 
@@ -1655,8 +1703,9 @@ static int _mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr,
   struct dirent *de;
   char *cp, *dep;
   unsigned int n, hi = 0;
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   char tmp[16];
+  int rc = 0;
 
   if (safe_fsync_close (&msg->fp))
   {
@@ -1699,12 +1748,14 @@ static int _mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr,
    * slot.
    */
 
+  path = mutt_buffer_pool_get ();
+
   FOREVER
   {
     hi++;
     snprintf (tmp, sizeof (tmp), "%d", hi);
-    snprintf (path, sizeof (path), "%s/%s", ctx->path, tmp);
-    if (safe_rename (msg->path, path) == 0)
+    mutt_buffer_printf (path, "%s/%s", ctx->path, tmp);
+    if (safe_rename (msg->path, mutt_b2s (path)) == 0)
     {
       if (hdr)
 	mutt_str_replace (&hdr->path, tmp);
@@ -1714,13 +1765,18 @@ static int _mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr,
     else if (errno != EEXIST)
     {
       mutt_perror (ctx->path);
-      return -1;
+      rc = -1;
+      goto out;
     }
   }
   if (updseq)
     mh_sequences_add_one (ctx, hi, !msg->flags.read, msg->flags.flagged,
 			  msg->flags.replied);
-  return 0;
+
+out:
+  mutt_buffer_pool_release (&path);
+
+  return rc;
 }
 
 static int mh_commit_message (CONTEXT * ctx, MESSAGE * msg)
@@ -1742,9 +1798,9 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
 
   int rc;
   short restore = 1;
-  char oldpath[_POSIX_PATH_MAX];
-  char newpath[_POSIX_PATH_MAX];
-  char partpath[_POSIX_PATH_MAX];
+  BUFFER *oldpath = NULL;
+  BUFFER *newpath = NULL;
+  BUFFER *partpath = NULL;
 
   long old_body_offset = h->content->offset;
   long old_body_length = h->content->length;
@@ -1756,8 +1812,11 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
   if ((rc = mutt_copy_message (dest->fp, ctx, h,
 			       MUTT_CM_UPDATE, CH_UPDATE | CH_UPDATE_LEN)) == 0)
   {
-    snprintf (oldpath, _POSIX_PATH_MAX, "%s/%s", ctx->path, h->path);
-    strfcpy (partpath, h->path, _POSIX_PATH_MAX);
+    oldpath = mutt_buffer_pool_get ();
+    partpath = mutt_buffer_pool_get ();
+
+    mutt_buffer_printf (oldpath, "%s/%s", ctx->path, h->path);
+    mutt_buffer_strcpy (partpath, h->path);
 
     if (ctx->magic == MUTT_MAILDIR)
       rc = _maildir_commit_message (ctx, dest, h);
@@ -1768,7 +1827,7 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
 
     if (rc == 0)
     {
-      unlink (oldpath);
+      unlink (mutt_b2s (oldpath));
       restore = 0;
     }
 
@@ -1789,10 +1848,17 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
 
     if (ctx->magic == MUTT_MH && rc == 0)
     {
-      snprintf (newpath, _POSIX_PATH_MAX, "%s/%s", ctx->path, h->path);
-      if ((rc = safe_rename (newpath, oldpath)) == 0)
-	mutt_str_replace (&h->path, partpath);
+      newpath = mutt_buffer_pool_get ();
+
+      mutt_buffer_printf (newpath, "%s/%s", ctx->path, h->path);
+      if ((rc = safe_rename (mutt_b2s (newpath), mutt_b2s (oldpath))) == 0)
+	mutt_str_replace (&h->path, mutt_b2s (partpath));
+
+      mutt_buffer_pool_release (&newpath);
     }
+
+    mutt_buffer_pool_release (&oldpath);
+    mutt_buffer_pool_release (&partpath);
   }
   else
     mx_close_message (ctx, &dest);
@@ -1903,7 +1969,7 @@ cleanup:
 
 int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
 {
-  char path[_POSIX_PATH_MAX], tmp[_POSIX_PATH_MAX];
+  BUFFER *path = NULL, *tmp = NULL;
   int i, j;
 #if USE_HCACHE
   header_cache_t *hc = NULL;
@@ -1930,6 +1996,9 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
     mutt_progress_init (&progress, msgbuf, MUTT_PROGRESS_MSG, WriteInc, ctx->msgcount);
   }
 
+  path = mutt_buffer_pool_get ();
+  tmp = mutt_buffer_pool_get ();
+
   for (i = 0; i < ctx->msgcount; i++)
   {
     if (!ctx->quiet)
@@ -1938,7 +2007,7 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
     if (ctx->hdrs[i]->deleted
 	&& (ctx->magic != MUTT_MAILDIR || !option (OPTMAILDIRTRASH)))
     {
-      snprintf (path, sizeof (path), "%s/%s", ctx->path, ctx->hdrs[i]->path);
+      mutt_buffer_printf (path, "%s/%s", ctx->path, ctx->hdrs[i]->path);
       if (ctx->magic == MUTT_MAILDIR
 	  || (option (OPTMHPURGE) && ctx->magic == MUTT_MH))
       {
@@ -1948,17 +2017,17 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
 	else if (ctx->magic == MUTT_MH)
 	  mutt_hcache_delete (hc, ctx->hdrs[i]->path, strlen);
 #endif /* USE_HCACHE */
-	unlink (path);
+	unlink (mutt_b2s (path));
       }
       else if (ctx->magic == MUTT_MH)
       {
 	/* MH just moves files out of the way when you delete them */
 	if (*ctx->hdrs[i]->path != ',')
 	{
-	  snprintf (tmp, sizeof (tmp), "%s/,%s", ctx->path,
+	  mutt_buffer_printf (tmp, "%s/,%s", ctx->path,
 		    ctx->hdrs[i]->path);
-	  unlink (tmp);
-	  rename (path, tmp);
+	  unlink (mutt_b2s (tmp));
+	  rename (mutt_b2s (path), mutt_b2s (tmp));
 	}
 
       }
@@ -1994,6 +2063,9 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
 
   }
 
+  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release (&tmp);
+
 #if USE_HCACHE
   if (ctx->magic == MUTT_MAILDIR || ctx->magic == MUTT_MH)
     mutt_hcache_close (hc);
@@ -2021,6 +2093,8 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
   return 0;
 
 err:
+  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release (&tmp);
 #if USE_HCACHE
   if (ctx->magic == MUTT_MAILDIR || ctx->magic == MUTT_MH)
     mutt_hcache_close (hc);
@@ -2305,7 +2379,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
 
 static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
 {
-  char buf[_POSIX_PATH_MAX];
+  BUFFER *buf = NULL;
   struct stat st, st_cur;
   short modified = 0, have_new = 0, occult = 0, flags_changed = 0;;
   struct maildir *md, *p;
@@ -2319,13 +2393,17 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
   if (!option (OPTCHECKNEW))
     return 0;
 
-  strfcpy (buf, ctx->path, sizeof (buf));
-  if (stat (buf, &st) == -1)
+  buf = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (buf, ctx->path);
+  if (stat (mutt_b2s (buf), &st) == -1)
+  {
+    mutt_buffer_pool_release (&buf);
     return -1;
+  }
   
   /* create .mh_sequences when there isn't one. */
-  snprintf (buf, sizeof (buf), "%s/.mh_sequences", ctx->path);
-  if ((i = stat (buf, &st_cur)) == -1 && errno == ENOENT)
+  mutt_buffer_printf (buf, "%s/.mh_sequences", ctx->path);
+  if ((i = stat (mutt_b2s (buf), &st_cur)) == -1 && errno == ENOENT)
   {
     char *tmp;
     FILE *fp = NULL;
@@ -2333,14 +2411,16 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
     if (mh_mkstemp (ctx, &fp, &tmp) == 0)
     {
       safe_fclose (&fp);
-      if (safe_rename (tmp, buf) == -1)
+      if (safe_rename (tmp, mutt_b2s (buf)) == -1)
 	unlink (tmp);
       FREE (&tmp);
     }
   }
 
-  if (i == -1 && stat (buf, &st_cur) == -1)
+  if (i == -1 && stat (mutt_b2s (buf), &st_cur) == -1)
     modified = 1;
+
+  mutt_buffer_pool_release (&buf);
 
   if ((mutt_stat_timespec_compare (&st, MUTT_STAT_MTIME, &ctx->mtime) > 0) ||
       (mutt_stat_timespec_compare (&st_cur, MUTT_STAT_MTIME, &data->mtime_cur) > 0))
@@ -2542,19 +2622,24 @@ int maildir_check_empty (const char *path)
   DIR *dp;
   struct dirent *de;
   int r = 1; /* assume empty until we find a message */
-  char realpath[_POSIX_PATH_MAX];
+  BUFFER *realpath = NULL;
   int iter = 0;
 
   /* Strategy here is to look for any file not beginning with a period */
+
+  realpath = mutt_buffer_pool_get ();
 
   do {
     /* we do "cur" on the first iteration since its more likely that we'll
      * find old messages without having to scan both subdirs
      */
-    snprintf (realpath, sizeof (realpath), "%s/%s", path,
+    mutt_buffer_printf (realpath, "%s/%s", path,
 	      iter == 0 ? "cur" : "new");
-    if ((dp = opendir (realpath)) == NULL)
-      return -1;
+    if ((dp = opendir (mutt_b2s (realpath))) == NULL)
+    {
+      r = -1;
+      goto out;
+    }
     while ((de = readdir (dp)))
     {
       if (*de->d_name != '.')
@@ -2566,6 +2651,9 @@ int maildir_check_empty (const char *path)
     closedir (dp);
     iter++;
   } while (r && iter < 2);
+
+out:
+  mutt_buffer_pool_release (&realpath);
 
   return r;
 }
@@ -2599,49 +2687,61 @@ int mh_check_empty (const char *path)
 
 int mx_is_maildir (const char *path)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   struct stat st;
+  int rc = 0;
 
-  snprintf (tmp, sizeof (tmp), "%s/cur", path);
-  if (stat (tmp, &st) == 0 && S_ISDIR (st.st_mode))
-    return 1;
-  return 0;
+  tmp = mutt_buffer_pool_get ();
+  mutt_buffer_printf (tmp, "%s/cur", path);
+  if (stat (mutt_b2s (tmp), &st) == 0 && S_ISDIR (st.st_mode))
+    rc = 1;
+
+  mutt_buffer_pool_release (&tmp);
+  return rc;
 }
 
 int mx_is_mh (const char *path)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
+  int rc = 1;
 
-  snprintf (tmp, sizeof (tmp), "%s/.mh_sequences", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  tmp = mutt_buffer_pool_get ();
 
-  snprintf (tmp, sizeof (tmp), "%s/.xmhcache", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  mutt_buffer_printf (tmp, "%s/.mh_sequences", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
 
-  snprintf (tmp, sizeof (tmp), "%s/.mew_cache", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  mutt_buffer_printf (tmp, "%s/.xmhcache", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
 
-  snprintf (tmp, sizeof (tmp), "%s/.mew-cache", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  mutt_buffer_printf (tmp, "%s/.mew_cache", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
 
-  snprintf (tmp, sizeof (tmp), "%s/.sylpheed_cache", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  mutt_buffer_printf (tmp, "%s/.mew-cache", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
+
+  mutt_buffer_printf (tmp, "%s/.sylpheed_cache", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
 
   /*
    * ok, this isn't an mh folder, but mh mode can be used to read
    * Usenet news from the spool. ;-)
    */
 
-  snprintf (tmp, sizeof (tmp), "%s/.overview", path);
-  if (access (tmp, F_OK) == 0)
-    return 1;
+  mutt_buffer_printf (tmp, "%s/.overview", path);
+  if (access (mutt_b2s (tmp), F_OK) == 0)
+    goto out;
 
-  return 0;
+  rc = 0;
+
+out:
+  mutt_buffer_pool_release (&tmp);
+
+  return rc;
 }
 
 struct mx_ops mx_maildir_ops = {
