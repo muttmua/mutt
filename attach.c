@@ -234,25 +234,25 @@ bailout:
 int mutt_edit_attachment (BODY *a)
 {
   char type[STRING];
-  char command[STRING];
-  char newfile[_POSIX_PATH_MAX] = "";
+  BUFFER *command = mutt_buffer_pool_get ();
+  BUFFER *newfile = mutt_buffer_pool_get ();
   rfc1524_entry *entry = rfc1524_new_entry ();
   short unlink_newfile = 0;
   int rc = 0;
-  
+
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
   if (rfc1524_mailcap_lookup (a, type, entry, MUTT_EDIT))
   {
     if (entry->editcommand)
     {
 
-      strfcpy (command, entry->editcommand, sizeof (command));
-      if (rfc1524_expand_filename (entry->nametemplate,
-				      a->filename, newfile, sizeof (newfile)))
+      mutt_buffer_strcpy (command, entry->editcommand);
+      if (mutt_buffer_rfc1524_expand_filename (entry->nametemplate,
+                                               a->filename, newfile))
       {
 	dprint(1, (debugfile, "oldfile: %s\t newfile: %s\n",
-				  a->filename, newfile));
-	if (safe_symlink (a->filename, newfile) == -1)
+                   a->filename, mutt_b2s (newfile)));
+	if (safe_symlink (a->filename, mutt_b2s (newfile)) == -1)
 	{
 	  if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
 	    goto bailout;
@@ -261,10 +261,10 @@ int mutt_edit_attachment (BODY *a)
 	  unlink_newfile = 1;
       }
       else
-	strfcpy(newfile, a->filename, sizeof(newfile));
+	mutt_buffer_strcpy (newfile, a->filename);
 
-      if (rfc1524_expand_command (a, newfile, type,
-				      command, sizeof (command)))
+      if (mutt_buffer_rfc1524_expand_command (a, mutt_b2s (newfile), type,
+                                              command))
       {
 	/* For now, editing requires a file, no piping */
 	mutt_error _("Mailcap Edit entry requires %%s");
@@ -273,9 +273,9 @@ int mutt_edit_attachment (BODY *a)
       else
       {
 	mutt_endwin (NULL);
-	if (mutt_system (command) == -1)
+	if (mutt_system (mutt_b2s (command)) == -1)
         {
-	  mutt_error (_("Error running \"%s\"!"), command);
+	  mutt_error (_("Error running \"%s\"!"), mutt_b2s (command));
           goto bailout;
         }
       }
@@ -288,9 +288,9 @@ int mutt_edit_attachment (BODY *a)
   }
   else
   {
-    rfc1524_free_entry (&entry);
     mutt_error (_("No mailcap edit entry for %s"),type);
-    return 0;
+    rc = 0;
+    goto bailout;
   }
 
   rc = 1;
@@ -298,7 +298,10 @@ int mutt_edit_attachment (BODY *a)
   bailout:
   
   if(unlink_newfile)
-    unlink(newfile);
+    unlink(mutt_b2s (newfile));
+
+  mutt_buffer_pool_release (&command);
+  mutt_buffer_pool_release (&newfile);
   
   rfc1524_free_entry (&entry);
   return rc;
