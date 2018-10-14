@@ -42,6 +42,18 @@
 #include <errno.h>
 #include <unistd.h>
 
+int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
+                                        BUFFER *command)
+{
+  int rc;
+
+  mutt_buffer_increase_size (command, LONG_STRING);
+  rc = rfc1524_expand_command (a, filename, _type, command->data, command->dsize);
+  mutt_buffer_fix_dptr (command);
+
+  return rc;
+}
+
 /* The command semantics include the following:
  * %s is the filename that contains the mail body data
  * %t is the content type, like text/plain
@@ -55,7 +67,7 @@
  * In addition, this function returns a 0 if the command works on a file,
  * and 1 if the command works on a pipe.
  */
-int rfc1524_expand_command (BODY *a, char *filename, char *_type,
+int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
     char *command, int clen)
 {
   int x=0,y=0;
@@ -438,15 +450,28 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
  * Returns 1 if newfile specified
  */
 
-static void strnfcpy(char *d, char *s, size_t siz, size_t len)
+static void strnfcpy(char *d, const char *s, size_t siz, size_t len)
 {
   if(len > siz)
     len = siz - 1;
   strfcpy(d, s, len);
 }
 
-int rfc1524_expand_filename (char *nametemplate,
-			     char *oldfile, 
+int mutt_buffer_rfc1524_expand_filename (const char *nametemplate,
+                                         const char *oldfile,
+                                         BUFFER *newfile)
+{
+  int rc;
+
+  mutt_buffer_increase_size (newfile, LONG_STRING);
+  rc = rfc1524_expand_filename (nametemplate, oldfile, newfile->data, newfile->dsize);
+  mutt_buffer_fix_dptr (newfile);
+
+  return rc;
+}
+
+int rfc1524_expand_filename (const char *nametemplate,
+			     const char *oldfile,
 			     char *newfile,
 			     size_t nflen)
 {

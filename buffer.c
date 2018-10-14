@@ -96,6 +96,18 @@ void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
   }
 }
 
+/* Ensure buffer->dptr points to the end of the buffer. */
+void mutt_buffer_fix_dptr (BUFFER *buf)
+{
+  buf->dptr = buf->data;
+
+  if (buf->data)
+  {
+    buf->data[buf->dsize - 1] = '\0';
+    buf->dptr = strchr (buf->data, '\0');
+  }
+}
+
 static int _mutt_buffer_add_printf (BUFFER* buf, const char* fmt, va_list ap)
 {
   va_list ap_retry;

@@ -39,6 +39,7 @@ BUFFER *mutt_buffer_from (char *);
 void mutt_buffer_clear (BUFFER *);
 
 void mutt_buffer_increase_size (BUFFER *, size_t);
+void mutt_buffer_fix_dptr (BUFFER *);
 
 /* These two replace the buffer contents. */
 int mutt_buffer_printf (BUFFER*, const char*, ...);
