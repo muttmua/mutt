@@ -595,7 +595,7 @@ int rfc1524_expand_filename (const char *nametemplate,
  * safe_fopen().
  */
 
-int mutt_rename_file (char *oldfile, char *newfile)
+int mutt_rename_file (const char *oldfile, const char *newfile)
 {
   FILE *ofp, *nfp;
 
