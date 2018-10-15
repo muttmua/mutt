@@ -55,6 +55,36 @@ BODY *mutt_new_body (void)
   return (p);
 }
 
+void mutt_buffer_adv_mktemp (BUFFER *buf)
+{
+  BUFFER *prefix = NULL;
+  char *suffix;
+  struct stat sb;
+
+  if (!(buf->data && buf->data[0]))
+  {
+    mutt_buffer_mktemp (buf);
+  }
+  else
+  {
+    prefix = mutt_buffer_pool_get ();
+    mutt_buffer_strcpy (prefix, buf->data);
+    mutt_sanitize_filename (prefix->data, 1);
+    mutt_buffer_printf (buf, "%s/%s", NONULL (Tempdir), mutt_b2s (prefix));
+    if (lstat (mutt_b2s (buf), &sb) == -1 && errno == ENOENT)
+      goto out;
+
+    if ((suffix = strrchr (prefix->data, '.')) != NULL)
+    {
+      *suffix = 0;
+      ++suffix;
+    }
+    mutt_buffer_mktemp_pfx_sfx (buf, mutt_b2s (prefix), suffix);
+
+out:
+    mutt_buffer_pool_release (&prefix);
+  }
+}
 
 /* Modified by blong to accept a "suggestion" for file name.  If
  * that file exists, then construct one with unique name but 

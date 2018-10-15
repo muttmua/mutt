@@ -159,6 +159,7 @@ REGEXP *mutt_compile_regexp (const char *, int);
 
 void mutt_account_hook (const char* url);
 void mutt_add_to_reference_headers (ENVELOPE *env, ENVELOPE *curenv, LIST ***pp, LIST ***qq);
+void mutt_buffer_adv_mktemp (BUFFER *);
 void mutt_adv_mktemp (char *, size_t);
 void mutt_alias_menu (char *, size_t, ALIAS *);
 void mutt_allow_interrupt (int);
