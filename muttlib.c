@@ -799,6 +799,19 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
   mutt_free_envelope(extra);
 }
 
+void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
+                          const char *src, int line)
+{
+  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%ld%ld%s%s",
+      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
+      (int) getuid (), (int) getpid (), random (), random (),
+      suffix ? "." : "", NONULL (suffix));
+  dprint (3, (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, mutt_b2s (buf)));
+  if (unlink (mutt_b2s (buf)) && errno != ENOENT)
+    dprint (1, (debugfile, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)\n",
+                src, line, mutt_b2s (buf), strerror (errno), errno));
+}
+
 void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                    const char *src, int line)
 {
