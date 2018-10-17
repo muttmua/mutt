@@ -1017,7 +1017,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
   if (!ascii_strcasecmp ("text/plain", type) ||
       !ascii_strcasecmp ("application/postscript", type))
   {
-    rc = (mutt_pipe_attachment (fp, a, NONULL(PrintCmd), NULL));
+    rc = mutt_pipe_attachment (fp, a, NONULL(PrintCmd), NULL);
     goto out;
   }
   else if (mutt_can_decode (a))
