@@ -62,8 +62,10 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
      * 2. attempt sasl_client_start with only "AUTH=ANONYMOUS" capability
      * 3. if sasl_client_start fails, fall through... */
 
-    if (mutt_account_getuser (&idata->conn->account))
+    if (mutt_account_getuser (&idata->conn->account)) {
+      sasl_dispose (&saslconn);
       return IMAP_AUTH_FAILURE;
+    }
 
     if (mutt_bit_isset (idata->capabilities, AUTH_ANON) &&
 	(!idata->conn->account.user[0] ||
@@ -71,9 +73,11 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen, 
                               &mech);
   } else if (!ascii_strcasecmp ("login", method) &&
-	!strstr (NONULL (idata->capstr), "AUTH=LOGIN"))
+	!strstr (NONULL (idata->capstr), "AUTH=LOGIN")) {
     /* do not use SASL login for regular IMAP login (#3556) */
+    sasl_dispose (&saslconn);
     return IMAP_AUTH_UNAVAIL;
+  }
   
   if (rc != SASL_OK && rc != SASL_CONTINUE)
     do
@@ -95,6 +99,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       dprint (1, (debugfile, "imap_auth_sasl: Failure starting authentication exchange. No shared mechanisms?\n"));
     /* SASL doesn't support LOGIN, so fall back */
 
+    sasl_dispose (&saslconn);
     return IMAP_AUTH_UNAVAIL;
   }
 

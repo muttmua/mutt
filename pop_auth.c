@@ -75,6 +75,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     dprint (1, (debugfile, "pop_auth_sasl: Failure starting authentication exchange. No shared mechanisms?\n"));
 
     /* SASL doesn't support suggested mechanisms, so fall back */
+    sasl_dispose (&saslconn);
     return POP_A_UNAVAIL;
   }
 

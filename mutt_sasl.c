@@ -239,6 +239,7 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
   if (sasl_setprop (*saslconn, SASL_SEC_PROPS, &secprops) != SASL_OK)
   {
     mutt_error (_("Error setting SASL security properties"));
+    sasl_dispose (saslconn);
     return -1;
   }
 
@@ -249,6 +250,7 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
     if (sasl_setprop (*saslconn, SASL_SSF_EXTERNAL, &(conn->ssf)) != SASL_OK)
     {
       mutt_error (_("Error setting SASL external security strength"));
+      sasl_dispose (saslconn);
       return -1;
     }
   }
@@ -258,6 +260,7 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
     if (sasl_setprop (*saslconn, SASL_AUTH_EXTERNAL, conn->account.user) != SASL_OK)
     {
       mutt_error (_("Error setting SASL external user name"));
+      sasl_dispose (saslconn);
       return -1;
     }
   }
