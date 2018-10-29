@@ -44,6 +44,7 @@ typedef struct hook
 } HOOK;
 
 static HOOK *Hooks = NULL;
+static HASH *IdxFmtHooks = NULL;
 
 static int current_hook_type = 0;
 
@@ -266,6 +267,119 @@ static void delete_hooks (int type)
   }
 }
 
+static void delete_idxfmt_hooklist (void *list)
+{
+  HOOK *h, *next;
+
+  h = (HOOK *)list;
+  while (h)
+  {
+    next = h->next;
+    delete_hook (h);
+    h = next;
+  }
+}
+
+static void delete_idxfmt_hooks (void)
+{
+  hash_destroy (&IdxFmtHooks, delete_idxfmt_hooklist);
+}
+
+int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  HOOK *hooks, *ptr;
+  BUFFER *name, *pattern, *fmtstring;
+  int rc = -1, not = 0;
+  pattern_t *pat = NULL;
+
+  name = mutt_buffer_pool_get ();
+  pattern = mutt_buffer_pool_get ();
+  fmtstring = mutt_buffer_pool_get ();
+
+  if (!IdxFmtHooks)
+    IdxFmtHooks = hash_create (30, MUTT_HASH_STRDUP_KEYS);
+
+  if (!MoreArgs (s))
+  {
+    strfcpy (err->data, _("not enough arguments"), err->dsize);
+    goto out;
+  }
+  mutt_extract_token (name, s, 0);
+  hooks = hash_find (IdxFmtHooks, mutt_b2s (name));
+
+  if (*s->dptr == '!')
+  {
+    s->dptr++;
+    SKIPWS (s->dptr);
+    not = 1;
+  }
+  mutt_extract_token (pattern, s, 0);
+
+  if (!MoreArgs (s))
+  {
+    strfcpy (err->data, _("too few arguments"), err->dsize);
+    goto out;
+  }
+  mutt_extract_token (fmtstring, s, 0);
+
+  if (MoreArgs (s))
+  {
+    strfcpy (err->data, _("too many arguments"), err->dsize);
+    goto out;
+  }
+
+  if (DefaultHook && *DefaultHook)
+  {
+    mutt_buffer_increase_size (pattern, HUGE_STRING);
+    mutt_check_simple (pattern->data, pattern->dsize, DefaultHook);
+    mutt_buffer_fix_dptr (pattern);  /* not necessary, but to be safe */
+  }
+
+  /* check to make sure that a matching hook doesn't already exist */
+  for (ptr = hooks; ptr; ptr = ptr->next)
+  {
+    if ((ptr->rx.not == not) &&
+        !mutt_strcmp (mutt_b2s (pattern), ptr->rx.pattern))
+    {
+      FREE (&ptr->command);
+      ptr->command = safe_strdup (mutt_b2s (fmtstring));
+      rc = 0;
+      goto out;
+    }
+    if (!ptr->next)
+      break;
+  }
+
+  if ((pat = mutt_pattern_comp (pattern->data, MUTT_FULL_MSG, err)) == NULL)
+      goto out;
+
+  if (ptr)
+  {
+    ptr->next = safe_calloc (1, sizeof (HOOK));
+    ptr = ptr->next;
+  }
+  else
+    ptr = safe_calloc (1, sizeof (HOOK));
+  ptr->type = data;
+  ptr->command = safe_strdup (mutt_b2s (fmtstring));
+  ptr->pattern = pat;
+  ptr->rx.pattern = safe_strdup (mutt_b2s (pattern));
+  ptr->rx.rx = NULL;
+  ptr->rx.not = not;
+
+  if (!hooks)
+    hash_insert (IdxFmtHooks, mutt_b2s (name), ptr);
+
+  rc = 0;
+
+out:
+  mutt_buffer_pool_release (&name);
+  mutt_buffer_pool_release (&pattern);
+  mutt_buffer_pool_release (&fmtstring);
+
+  return rc;
+}
+
 int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
   while (MoreArgs (s))
@@ -280,6 +394,7 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 	return -1;
       }
       delete_hooks (0);
+      delete_idxfmt_hooks ();
     }
     else
     {
@@ -298,7 +413,10 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 		  buf->data, buf->data);
 	return -1;
       }
-      delete_hooks (type);
+      if (type == MUTT_IDXFMTHOOK)
+        delete_idxfmt_hooks ();
+      else
+        delete_hooks (type);
     }
   }
   return 0;
@@ -563,3 +681,30 @@ void mutt_account_hook (const char* url)
   FREE (&err.data);
 }
 #endif
+
+const char *mutt_idxfmt_hook (const char *name, CONTEXT *ctx, HEADER *hdr)
+{
+  HOOK *hooklist, *hook;
+  pattern_cache_t cache;
+  const char *fmtstring = NULL;
+
+  if (!IdxFmtHooks)
+    return NULL;
+
+  current_hook_type = MUTT_IDXFMTHOOK;
+  hooklist = hash_find (IdxFmtHooks, name);
+  memset (&cache, 0, sizeof (cache));
+
+  for (hook = hooklist; hook; hook = hook->next)
+  {
+    if ((mutt_pattern_exec (hook->pattern, 0, ctx, hdr, &cache) > 0) ^ hook->rx.not)
+    {
+      fmtstring = hook->command;
+      break;
+    }
+  }
+
+  current_hook_type = 0;
+
+  return fmtstring;
+}

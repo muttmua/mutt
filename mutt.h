@@ -173,7 +173,8 @@ typedef enum
 #define MUTT_OPENHOOK    (1<<12)
 #define MUTT_APPENDHOOK  (1<<13)
 #define MUTT_CLOSEHOOK   (1<<14)
-#endif
+#endif /* USE_COMPRESSED */
+#define MUTT_IDXFMTHOOK  (1<<15)
 
 /* tree characters for linearize_tree and print_enriched_string */
 #define MUTT_TREE_LLCORNER      1

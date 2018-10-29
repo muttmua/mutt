@@ -1512,6 +1512,8 @@ struct option_t MuttVars[] = {
   **            the second is deleted or encryption flags (``D''/``d''/``S''/``P''/``s''/``K'').
   **            the third is either tagged/flagged (``\(as''/``!''), or one of the characters
   **            listed in $$to_chars.
+  ** .dt %@name@ .dd insert and evaluate format-string from the matching
+  **                 ``$index-format-hook'' command
   ** .dt %{fmt} .dd the date and time of the message is converted to sender's
   **                time zone, and ``fmt'' is expanded by the library function
   **                \fCstrftime(3)\fP; a leading bang disables locales
@@ -4238,6 +4240,7 @@ const struct command_t Commands[] = {
   { "iconv-hook",	mutt_parse_hook,	MUTT_ICONVHOOK },
 #endif
   { "ignore",		parse_ignore,		0 },
+  { "index-format-hook",mutt_parse_idxfmt_hook, MUTT_IDXFMTHOOK },
   { "lists",		parse_lists,		0 },
   { "macro",		mutt_parse_macro,	0 },
   { "mailboxes",	mutt_parse_mailboxes,	MUTT_MAILBOXES },

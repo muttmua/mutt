@@ -753,6 +753,29 @@ hdr_format_str (char *dest,
 
       break;
 
+    case '@':
+    {
+      const char *end = src;
+      static unsigned char recurse = 0;
+
+      while (*end && *end != '@')
+        end++;
+      if ((*end == '@') && (recurse < 20))
+      {
+        recurse++;
+        mutt_substrcpy (buf2, src, end, sizeof(buf2));
+        mutt_FormatString (buf2, sizeof(buf2), col, cols,
+                           NONULL (mutt_idxfmt_hook (buf2, ctx, hdr)),
+                           hdr_format_str, (unsigned long) hfi, flags);
+        mutt_format_s (dest, destlen, prefix, buf2);
+        recurse--;
+
+        src = end + 1;
+        break;
+      }
+      /* otherwise fall through */
+    }
+
     default:
       snprintf (dest, destlen, "%%%s%c", prefix, op);
       break;
