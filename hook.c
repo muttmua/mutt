@@ -350,7 +350,14 @@ int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
       break;
   }
 
-  if ((pat = mutt_pattern_comp (pattern->data, MUTT_FULL_MSG, err)) == NULL)
+  /* MUTT_PATTERN_DYNAMIC sets so that date ranges are regenerated during
+   * matching.  This of course is slower, but index-format-hook is commonly
+   * used for date ranges, and they need to be evaluated relative to "now", not
+   * the hook compilation time.
+   */
+  if ((pat = mutt_pattern_comp (pattern->data,
+                                MUTT_FULL_MSG | MUTT_PATTERN_DYNAMIC,
+                                err)) == NULL)
       goto out;
 
   if (ptr)
