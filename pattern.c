@@ -266,11 +266,13 @@ static int eat_regexp (pattern_t *pat, BUFFER *s, BUFFER *err)
       !buf.data)
   {
     snprintf (err->data, err->dsize, _("Error in expression: %s"), pexpr);
+    FREE (&buf.data);
     return (-1);
   }
   if (!*buf.data)
   {
     snprintf (err->data, err->dsize, "%s", _("Empty expression"));
+    FREE (&buf.data);
     return (-1);
   }
 
@@ -585,11 +587,13 @@ static int eat_date (pattern_t *pat, BUFFER *s, BUFFER *err)
   if (mutt_extract_token (&buffer, s, MUTT_TOKEN_COMMENT | MUTT_TOKEN_PATTERN) != 0
       || !buffer.data)
   {
+    FREE (&buffer.data);
     snprintf (err->data, err->dsize, _("Error in expression: %s"), pexpr);
     return (-1);
   }
   if (!*buffer.data)
   {
+    FREE (&buffer.data);
     snprintf (err->data, err->dsize, "%s", _("Empty expression"));
     return (-1);
   }
