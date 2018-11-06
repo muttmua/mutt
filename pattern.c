@@ -461,6 +461,15 @@ static const char *get_offset (struct tm *tm, const char *s, int sign)
     case 'd':
       tm->tm_mday += offset;
       break;
+    case 'H':
+      tm->tm_hour += offset;
+      break;
+    case 'M':
+      tm->tm_min += offset;
+      break;
+    case 'S':
+      tm->tm_sec += offset;
+      break;
     default:
       return s;
   }
@@ -579,6 +588,7 @@ static const char * parse_date_range (const char* pc, struct tm *min,
 static int eval_date_minmax (pattern_t *pat, const char *s, BUFFER *err)
 {
   struct tm min, max;
+  char *offset_type;
 
   memset (&min, 0, sizeof (min));
   /* the `0' time is Jan 1, 1970 UTC, so in order to prevent a negative time
@@ -622,8 +632,15 @@ static int eval_date_minmax (pattern_t *pat, const char *s, BUFFER *err)
       if (s[0] == '=')
 	exact++;
     }
-    tm->tm_hour = 23;
-    tm->tm_min = tm->tm_sec = 59;
+
+    /* Reset the HMS unless we are relative matching using one of those
+     * offsets. */
+    strtol (s + 1, &offset_type, 0);
+    if (!(*offset_type && strchr ("HMS", *offset_type)))
+    {
+      tm->tm_hour = 23;
+      tm->tm_min = tm->tm_sec = 59;
+    }
 
     /* force negative offset */
     get_offset (tm, s + 1, -1);

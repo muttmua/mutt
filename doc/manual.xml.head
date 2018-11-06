@@ -5673,8 +5673,26 @@ as:
 
 <para>
 <emphasis>offset</emphasis> is specified as a positive number with one
-of the units from <xref linkend="tab-date-units"/>.
+of the units from <xref linkend="tab-rel-date-units"/>.
 </para>
+
+<table id="tab-rel-date-units">
+<title>Relative date units</title>
+<tgroup cols="2">
+<thead>
+<row><entry>Unit</entry><entry>Description</entry></row>
+</thead>
+<tbody>
+<row><entry>y</entry><entry>Years</entry></row>
+<row><entry>m</entry><entry>Months</entry></row>
+<row><entry>w</entry><entry>Weeks</entry></row>
+<row><entry>d</entry><entry>Days</entry></row>
+<row><entry>H</entry><entry>Hours</entry></row>
+<row><entry>M</entry><entry>Minutes</entry></row>
+<row><entry>S</entry><entry>Seconds</entry></row>
+</tbody>
+</tgroup>
+</table>
 
 <para>
 Example: to select messages less than 1 month old, you would use
