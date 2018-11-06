@@ -2650,7 +2650,7 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
   const char *fqdn = mutt_fqdn (1);
   char resent_from[STRING];
   int ret;
-  char *err;
+  char *err = NULL;
 
   resent_from[0] = '\0';
   from = mutt_default_from ();
@@ -2673,6 +2673,7 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
   {
     mutt_error (_("Bad IDN %s while preparing resent-from."),
 		err);
+    FREE (&err);
     rfc822_free_address (&from);
     return -1;
   }
