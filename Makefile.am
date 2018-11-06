@@ -61,7 +61,7 @@ EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-c
 	mutt_tunnel.c pgp.c pgpinvoke.c pgpkey.c pgplib.c pgpmicalg.c \
 	pgppacket.c pop.c pop_auth.c pop_lib.c remailer.c resize.c sha1.c \
 	sidebar.c smime.c smtp.c utf8.c wcwidth.c \
-	bcache.h browser.h hcache.h mbyte.h mutt_idna.h remailer.h url.h
+	bcache.h browser.h hcache.h mbyte.h monitor.h mutt_idna.h remailer.h url.h
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	configure account.h \
