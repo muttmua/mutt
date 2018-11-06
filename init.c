@@ -1892,6 +1892,18 @@ static int check_charset (struct option_t *opt, const char *val)
   char *p, *q = NULL, *s = safe_strdup (val);
   int rc = 0, strict = strcmp (opt->option, "send_charset") == 0;
 
+  /* $charset should be nonempty, and a single value - not a colon
+   * delimited list */
+  if (mutt_strcmp (opt->option, "charset") == 0)
+  {
+    if (!s || (strchr (s, ':') != NULL))
+    {
+      FREE (&s);
+      return -1;
+    }
+  }
+
+  /* other values can be empty */
   if (!s)
     return rc;
 
@@ -2277,10 +2289,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
         }
         else if (DTYPE (MuttVars[idx].type) == DT_STR)
         {
-	  if ((strstr (MuttVars[idx].option, "charset") &&
-	       check_charset (&MuttVars[idx], tmp->data) < 0) |
-	      /* $charset can't be empty, others can */
-	      (strcmp(MuttVars[idx].option, "charset") == 0 && ! *tmp->data))
+	  if (strstr (MuttVars[idx].option, "charset") &&
+              check_charset (&MuttVars[idx], tmp->data) < 0)
 	  {
 	    snprintf (err->data, err->dsize, _("Invalid value for option %s: \"%s\""),
 		      MuttVars[idx].option, tmp->data);
