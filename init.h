@@ -1338,7 +1338,7 @@ struct option_t MuttVars[] = {
   ** The command to run to generate an OAUTH refresh token for
   ** authorizing your connection to your IMAP server.  This command will be
   ** run on every connection attempt that uses the OAUTHBEARER authentication
-  ** mechanism.
+  ** mechanism.  See ``$oauth'' for details.
   */
   { "imap_pass", 	DT_STR,  R_NONE, UL &ImapPass, UL 0 },
   /*
@@ -2424,7 +2424,7 @@ struct option_t MuttVars[] = {
   ** The command to run to generate an OAUTH refresh token for
   ** authorizing your connection to your POP server.  This command will be
   ** run on every connection attempt that uses the OAUTHBEARER authentication
-  ** mechanism.
+  ** mechanism.  See ``$oauth'' for details.
   */
   { "pop_pass",		DT_STR,	 R_NONE, UL &PopPass, UL "" },
   /*
@@ -3402,7 +3402,7 @@ struct option_t MuttVars[] = {
   ** The command to run to generate an OAUTH refresh token for
   ** authorizing your connection to your SMTP server.  This command will be
   ** run on every connection attempt that uses the OAUTHBEARER authentication
-  ** mechanism.
+  ** mechanism.  See ``$oauth'' for details.
   */
   { "smtp_pass", 	DT_STR,  R_NONE, UL &SmtpPass, UL 0 },
   /*
