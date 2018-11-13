@@ -8,6 +8,37 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.11.0 (2018-11-24):
+
+  + inotify is use for local mailbox monitoring on Linux.  Configuration flag
+    --disable-filemonitor turns this off.
+  + OAUTHBEARER support for IMAP, SMTP and POP via
+    $imap_oauth_refresh_command, $smtp_oauth_refresh_command, and
+    $pop_oauth_refresh_command.
+  ! $pgp_timeout and $smime_timeout support 32-bit numbers.
+  + <check-stats> manually updates mailbox statistics, the same way
+    $mail_check_stats does when set.
+  ! Thread limited views, e.g. ~(pattern), now show new mail as it arrives.
+  ! Command line argument -z and -Z options also work for IMAP mailboxes.
+  + $imap_condstore and $imap_qresync enable IMAP CONDSTORE and QRESYNC
+    support, respectively.  QRESYNC should provide much faster mailbox opening.
+  ! $abort_noattach skips quoted lines (as defined by $quote_regexp and
+    $smileys).
+  ! Initial IMAP header downloading can be aborted with ctrl-c.
+  + <compose-to-sender> composes a message to the sender of the selected
+    message, in the index or attachment menu.
+  ! Address book queries ($query_format) now support multibyte characters.
+  + Finnish translation.
+  ! pgpring has been renamed to mutt_pgpring.
+  ! Certificate prompts show sha-256 instead of md5 fingerprints.
+  ! Non-threaded $sort_aux "reverse-" settings now work properly.
+  + The manual can be generated and installed in GNU Info format.
+  + index-format-hook and the new %@name@ expando for $index_format enable
+    dynamic index formats using pattern matching against the current message.
+    This can be used, for example, for date format based on the age of
+    the message.
+  ! Relative date matching allows hour, minute, and second units: HMS.
+
 1.10.1 (2018-07-16):
 
   ! Bug fix release.
