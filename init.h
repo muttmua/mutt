@@ -1539,7 +1539,13 @@ struct option_t MuttVars[] = {
   ** rightward text.
   ** .pp
   ** Note that these expandos are supported in
-  ** ``$save-hook'', ``$fcc-hook'' and ``$fcc-save-hook'', too.
+  ** ``$save-hook'', ``$fcc-hook'', ``$fcc-save-hook'', and
+  ** ``$index-format-hook''.
+  ** .pp
+  ** They are also supported in the configuration variables $$attribution,
+  ** $$forward_attribution_intro, $$forward_attribution_trailer,
+  ** $$forward_format, $$indent_string, $$message_format, $$pager_format,
+  ** and $$post_indent_string.
   */
   { "ispell",		DT_PATH, R_NONE, UL &Ispell, UL ISPELL },
   /*
@@ -2455,6 +2461,8 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Similar to the $$attribution variable, Mutt will append this
   ** string after the inclusion of a message which is being replied to.
+  ** For a full listing of defined \fCprintf(3)\fP-like sequences see
+  ** the section on $$index_format.
   */
   { "post_indent_str",  DT_SYN,  R_NONE, UL "post_indent_string", 0 },
   /*
