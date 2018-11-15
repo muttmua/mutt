@@ -10,7 +10,7 @@ The keys used are:
 
 1.11.0 (2018-11-24):
 
-  + inotify is use for local mailbox monitoring on Linux.  Configuration flag
+  + inotify is used for local mailbox monitoring on Linux.  Configuration flag
     --disable-filemonitor turns this off.
   + OAUTHBEARER support for IMAP, SMTP and POP via
     $imap_oauth_refresh_command, $smtp_oauth_refresh_command, and
@@ -35,7 +35,7 @@ The keys used are:
   + The manual can be generated and installed in GNU Info format.
   + index-format-hook and the new %@name@ expando for $index_format enable
     dynamic index formats using pattern matching against the current message.
-    This can be used, for example, for date format based on the age of
+    This can be used, for example, to format dates based on the age of
     the message.
   ! Relative date matching allows hour, minute, and second units: HMS.
 
