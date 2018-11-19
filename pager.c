@@ -175,6 +175,19 @@ static int check_sig (const char *s, struct line_t *info, int n)
   return (0);
 }
 
+static int
+comp_syntax_t (const void *m1, const void *m2)
+{
+  const int *cnt = (const int *)m1;
+  const struct syntax_t *stx = (const struct syntax_t *)m2;
+
+  if (*cnt < stx->first)
+    return -1;
+  if (*cnt >= stx->last)
+    return 1;
+  return 0;
+}
+
 static void
 resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
     ansi_attr *a)
@@ -182,7 +195,8 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   int def_color;		/* color without syntax highlight */
   int color;			/* final color */
   static int last_color;	/* last color set */
-  int search = 0, i, m;
+  int search = 0, m;
+  struct syntax_t *matching_chunk;
 
   if (!cnt)
     last_color = -1;		/* force attrset() */
@@ -224,39 +238,26 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   }
 
   color = def_color;
-  if (flags & MUTT_SHOWCOLOR)
+  if ((flags & MUTT_SHOWCOLOR) && lineInfo[m].chunks)
   {
-    for (i = 0; i < lineInfo[m].chunks; i++)
-    {
-      /* we assume the chunks are sorted */
-      if (cnt > (lineInfo[m].syntax)[i].last)
-	continue;
-      if (cnt < (lineInfo[m].syntax)[i].first)
-	break;
-      if (cnt != (lineInfo[m].syntax)[i].last)
-      {
-	color = (lineInfo[m].syntax)[i].color;
-	break;
-      }
-      /* don't break here, as cnt might be 
-       * in the next chunk as well */
-    }
+    matching_chunk = bsearch (&cnt, lineInfo[m].syntax, lineInfo[m].chunks,
+                              sizeof(struct syntax_t), comp_syntax_t);
+    if (matching_chunk &&
+        (cnt >= matching_chunk->first) &&
+        (cnt < matching_chunk->last))
+      color = matching_chunk->color;
   }
 
-  if (flags & MUTT_SEARCH)
+  if ((flags & MUTT_SEARCH) && lineInfo[m].search_cnt)
   {
-    for (i = 0; i < lineInfo[m].search_cnt; i++)
+    matching_chunk = bsearch (&cnt, lineInfo[m].search, lineInfo[m].search_cnt,
+                              sizeof(struct syntax_t), comp_syntax_t);
+    if (matching_chunk &&
+        (cnt >= matching_chunk->first) &&
+        (cnt < matching_chunk->last))
     {
-      if (cnt > (lineInfo[m].search)[i].last)
-	continue;
-      if (cnt < (lineInfo[m].search)[i].first)
-	break;
-      if (cnt != (lineInfo[m].search)[i].last)
-      {
-	color = ColorDefs[MT_COLOR_SEARCH];
-	search = 1;
-	break;
-      }
+      color = ColorDefs[MT_COLOR_SEARCH];
+      search = 1;
     }
   }
 
