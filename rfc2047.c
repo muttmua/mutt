@@ -623,7 +623,7 @@ void rfc2047_encode_adrlist (ADDRESS *addr, const char *tag)
   }
 }
 
-static int rfc2047_decode_word (char *d, const char *s, size_t len)
+static int rfc2047_decode_word (BUFFER *d, const char *s)
 {
   const char *pp, *pp1;
   char *pd, *d0;
@@ -714,7 +714,7 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
   if (charset)
     mutt_convert_string (&d0, charset, Charset, MUTT_ICONV_HOOK_FROM);
   mutt_filter_unprintable (&d0);
-  strfcpy (d, d0, len);
+  mutt_buffer_addstr (d, d0);
   rv = 0;
 error_out_0:
   FREE (&charset);
@@ -798,110 +798,99 @@ static size_t lwsrlen (const char *s, size_t n)
   return len;
 }
 
+static void convert_and_add_text (BUFFER *d, const char *text, size_t len)
+{
+  char *t;
+
+  if (AssumedCharset && *AssumedCharset)
+  {
+    t = safe_malloc (len + 1);
+    strfcpy (t, text, len + 1);
+    convert_nonmime_string (&t);
+    mutt_buffer_addstr (d, t);
+    FREE (&t);
+  }
+  else
+    mutt_buffer_addstr_n (d, text, len);
+}
+
 /* try to decode anything that looks like a valid RFC2047 encoded
  * header field, ignoring RFC822 parsing rules
  */
 void rfc2047_decode (char **pd)
 {
-  const char *p, *q;
+  const char *s = *pd;
+  const char *word_begin, *word_end;
   size_t m, n;
   int found_encoded = 0;
-  char *d0, *d;
-  const char *s = *pd;
-  size_t dlen;
+  BUFFER *d;
 
   if (!s || !*s)
     return;
 
-  dlen = 4 * strlen (s); /* should be enough */
-  d = d0 = safe_malloc (dlen + 1);
+  dprint (1, (debugfile, "rfcdecode on *%s*\n", s));
 
-  while (*s && dlen > 0)
+  d = mutt_buffer_pool_get ();
+
+  while ((word_begin = find_encoded_word (s, &word_end)) != NULL)
   {
-    if (!(p = find_encoded_word (s, &q)))
+    /* If there is text before the encoded word */
+    if (word_begin != s)
     {
-      /* no encoded words */
-      if (option (OPTIGNORELWS))
-      {
-        n = mutt_strlen (s);
-        if (found_encoded && (m = lwslen (s, n)) != 0)
-        {
-          if (m != n)
-            *d = ' ', d++, dlen--;
-          s += m;
-        }
-      }
-      if (AssumedCharset && *AssumedCharset)
-      {
-	char *t;
-	size_t tlen;
+      n = (size_t) (word_begin - s);
 
-	n = mutt_strlen (s);
-	t = safe_malloc (n + 1);
-	strfcpy (t, s, n + 1);
-	convert_nonmime_string (&t);
-	tlen = mutt_strlen (t);
-	strncpy (d, t, tlen);
-	d += tlen;
-	FREE (&t);
-	break;
-      }
-      strncpy (d, s, dlen);
-      d += dlen;
-      break;
-    }
-
-    if (p != s)
-    {
-      n = (size_t) (p - s);
-      /* ignore spaces between encoded word
-       * and linear-white-space between encoded word and *text */
       if (option (OPTIGNORELWS))
       {
         if (found_encoded && (m = lwslen (s, n)) != 0)
         {
           if (m != n)
-            *d = ' ', d++, dlen--;
+            mutt_buffer_addch (d, ' ');
           n -= m, s += m;
         }
 
         if ((m = n - lwsrlen (s, n)) != 0)
         {
-          if (m > dlen)
-            m = dlen;
-          memcpy (d, s, m);
-          d += m;
-          dlen -= m;
+          convert_and_add_text (d, s, m);
           if (m != n)
-            *d = ' ', d++, dlen--;
+            mutt_buffer_addch (d, ' ');
         }
       }
+      /* If we haven't encountered an encoded word yet copy it all
+       * over.
+       *
+       * If we just finished an encoded word and the text is all
+       * spaces, we skip the spaces.
+       */
       else if (!found_encoded || strspn (s, " \t\r\n") != n)
-      {
-	if (n > dlen)
-	  n = dlen;
-	memcpy (d, s, n);
-	d += n;
-	dlen -= n;
-      }
+        convert_and_add_text (d, s, n);
     }
 
-    if (rfc2047_decode_word (d, p, dlen) == -1)
+    if (rfc2047_decode_word (d, word_begin) == -1)
     {
       /* could not decode word, fall back to displaying the raw string */
-      strfcpy(d, p, dlen);
+      mutt_buffer_addstr (d, word_begin);
     }
     found_encoded = 1;
-    s = q;
-    n = mutt_strlen (d);
-    dlen -= n;
-    d += n;
+    s = word_end;
   }
-  *d = 0;
 
-  FREE (pd);		/* __FREE_CHECKED__ */
-  *pd = d0;
-  mutt_str_adjust (pd);
+  if (*s)
+  {
+    if (found_encoded && option (OPTIGNORELWS))
+    {
+      n = mutt_strlen (s);
+      if ((m = lwslen (s, n)) != 0)
+      {
+        if (m != n)
+          mutt_buffer_addch (d, ' ');
+        s += m;
+      }
+    }
+    convert_and_add_text (d, s, mutt_strlen (s));
+  }
+
+  mutt_str_replace (pd, mutt_b2s (d));
+  mutt_buffer_pool_release (&d);
 }
 
 void rfc2047_decode_adrlist (ADDRESS *a)
