@@ -8,7 +8,7 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
-1.11.0 (2018-11-24):
+1.11.0 (2018-11-25):
 
   + inotify is used for local mailbox monitoring on Linux.  Configuration flag
     --disable-filemonitor turns this off.
