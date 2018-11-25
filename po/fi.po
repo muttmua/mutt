@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 17:35+0200\n"
+"POT-Creation-Date: 2018-11-25 09:46-0800\n"
 "PO-Revision-Date: 2018-08-28 17:38+0200\n"
 "Last-Translator: Flammie A Pirinen <flammie@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -36,24 +36,29 @@ msgstr "Käyttäjänimi kohteelle %s: "
 msgid "Password for %s@%s: "
 msgstr "Salasana kohteelle %s@%s: "
 
-#: account.c:279
+#. L10N: You will see this error message if (1) you have "oauthbearer" in
+#. one of your $*_authenticators and (2) you do not have the corresponding
+#. $*_oauth_refresh_command defined. So the message does not mean "None of
+#. your $*_oauth_refresh_command's are defined."
+#.
+#: account.c:284
 msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
 msgstr "mutt_account_getoauthbearer: OAUTH refresh komento puuttuu"
 
-#: account.c:285
+#: account.c:290
 msgid "mutt_account_getoauthbearer: Unable to run refresh command"
 msgstr "mutt_account_getoauthbearer: Refresh-komento ei toimi"
 
-#: account.c:296
+#: account.c:301
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: Komento palautti tyhjän merkkijonon"
 
-#: addrbook.c:37 browser.c:46 history.c:75 pager.c:1553 postpone.c:41
+#: addrbook.c:37 browser.c:46 history.c:75 pager.c:1546 postpone.c:41
 #: query.c:48 recvattach.c:57
 msgid "Exit"
 msgstr "Poistu"
 
-#: addrbook.c:38 curs_main.c:533 pager.c:1560 postpone.c:42
+#: addrbook.c:38 curs_main.c:533 pager.c:1553 postpone.c:42
 msgid "Del"
 msgstr "Poista"
 
@@ -65,8 +70,8 @@ msgstr "Palauta"
 msgid "Select"
 msgstr "Valitse"
 
-#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4100 curs_main.c:539
-#: history.c:78 mutt_ssl.c:1259 mutt_ssl_gnutls.c:1024 pager.c:1959
+#: addrbook.c:41 browser.c:49 compose.c:125 crypt-gpgme.c:4103 curs_main.c:539
+#: history.c:78 mutt_ssl.c:1264 mutt_ssl_gnutls.c:1012 pager.c:1952
 #: pgpkey.c:522 postpone.c:44 query.c:53 recvattach.c:61 smime.c:440
 msgid "Help"
 msgstr "Ohje"
@@ -101,116 +106,116 @@ msgstr "Osoite: "
 msgid "Error: '%s' is a bad IDN."
 msgstr "Virhe: %s ei ole kelvollinen IDN."
 
-#: alias.c:319
+#: alias.c:320
 msgid "Personal name: "
 msgstr "Henkilönnimi: "
 
-#: alias.c:328
+#: alias.c:329
 #, c-format
 msgid "[%s = %s] Accept?"
 msgstr "[%s = %s] Hyväksytäänkö?"
 
-#: alias.c:347 recvattach.c:435 recvattach.c:461 recvattach.c:474
+#: alias.c:348 recvattach.c:435 recvattach.c:461 recvattach.c:474
 #: recvattach.c:487 recvattach.c:522
 msgid "Save to file: "
 msgstr "Tallenna tiedostoon: "
 
-#: alias.c:361
+#: alias.c:362
 msgid "Error reading alias file"
 msgstr "Virhe luettaessa aliastiedostoa"
 
-#: alias.c:383
+#: alias.c:384
 msgid "Alias added."
 msgstr "Alias lisätty."
 
-#: alias.c:391
+#: alias.c:392
 msgid "Error seeking in alias file"
 msgstr "Virhe haettaessa aliastiedostosta"
 
-#: attach.c:113 attach.c:245 attach.c:400 attach.c:926
+#: attach.c:122 attach.c:257 attach.c:420 attach.c:957
 msgid "Can't match nametemplate, continue?"
 msgstr "Ei täsmää nimimallineeseen, jatketaanko?"
 
-#: attach.c:126
+#: attach.c:135
 #, c-format
 msgid "Mailcap compose entry requires %%s"
 msgstr "Mailcapin compose-tietueessa pitää olla %%s"
 
-#: attach.c:134 attach.c:266 commands.c:224 compose.c:1390 compress.c:444
+#: attach.c:143 attach.c:278 commands.c:224 compose.c:1390 compress.c:444
 #: curs_lib.c:269 curs_lib.c:943 sendlib.c:1372
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Virhe toiminnolla %s."
 
-#: attach.c:144
+#: attach.c:152
 msgid "Failure to open file to parse headers."
 msgstr "Ei voitu avata tiedostoa otsakkeiden jäsentämiseksi."
 
-#: attach.c:175
+#: attach.c:183
 msgid "Failure to open file to strip headers."
 msgstr "Ei voitu avata tiedostoa otsakkeiden poistamiseksi."
 
-#: attach.c:184
+#: attach.c:192
 msgid "Failure to rename file."
 msgstr "Virhe uudelleennimeämisessä."
 
-#: attach.c:197
+#: attach.c:204
 #, c-format
 msgid "No mailcap compose entry for %s, creating empty file."
 msgstr "Ei mailcapin compose-tietuetta kohteelle %s, luodaan tyhjä tiedosto. "
 
-#: attach.c:258
+#: attach.c:270
 #, c-format
 msgid "Mailcap Edit entry requires %%s"
 msgstr "Mailcapin edit-tietueessa pitää olla %%s"
 
-#: attach.c:280
+#: attach.c:291
 #, c-format
 msgid "No mailcap edit entry for %s"
 msgstr "Ei mailcapin edit-tietuetta kohteelle %s"
 
-#: attach.c:366
+#: attach.c:386
 msgid "No matching mailcap entry found.  Viewing as text."
 msgstr "Ei löytynyt sopivaa mailcap-tietueita, näytetään tekstinä."
 
-#: attach.c:379
+#: attach.c:399
 msgid "MIME type not defined.  Cannot view attachment."
 msgstr "MIME-tyyppiä ei ole määritelty, joten liitettä ei voi avata."
 
-#: attach.c:469
+#: attach.c:489
 msgid "Cannot create filter"
 msgstr "Ei voida luoda filtteriä"
 
-#: attach.c:477
+#: attach.c:497
 #, c-format
 msgid "---Command: %-20.20s Description: %s"
 msgstr "---Komento: %-20.20s Kuvaus: %s"
 
-#: attach.c:481
+#: attach.c:501
 #, c-format
 msgid "---Command: %-30.30s Attachment: %s"
 msgstr "---Komento: %-30.30s Liite: %s"
 
-#: attach.c:558
+#: attach.c:584
 #, c-format
 msgid "---Attachment: %s: %s"
 msgstr "---Liite: %s: %s"
 
-#: attach.c:561
+#: attach.c:587
 #, c-format
 msgid "---Attachment: %s"
 msgstr "---Liite: %s"
 
-#: attach.c:632 attach.c:664 attach.c:959 attach.c:1017 handler.c:1363
+#: attach.c:662 attach.c:694 attach.c:990 attach.c:1048 handler.c:1363
 #: pgpkey.c:572 pgpkey.c:760
 msgid "Can't create filter"
 msgstr "Ei voida luoda filtteriä"
 
-#: attach.c:798
+#: attach.c:828
 msgid "Write fault!"
 msgstr "Kirjoittamisvirhe"
 
-#: attach.c:1040
+#: attach.c:1070
 msgid "I don't know how to print that!"
 msgstr "Tätä ei voi tulostaa."
 
@@ -324,7 +329,7 @@ msgstr "Ei voida näyttää tiedostoa"
 msgid "Error trying to view file"
 msgstr "Virhe tiedostoa näytettäessä"
 
-#: buffy.c:652
+#: buffy.c:659
 msgid "New mail in "
 msgstr "Uutta postia kohteessa "
 
@@ -370,11 +375,12 @@ msgstr "mono: liian vähän argumentteja"
 msgid "%s: no such attribute"
 msgstr "%s: attribuuttia ei ole olemassa"
 
-#: color.c:770 hook.c:73 hook.c:81 init.c:1971 init.c:2046 keymap.c:958
+#: color.c:770 hook.c:74 hook.c:82 hook.c:320 init.c:1986 init.c:2061
+#: keymap.c:958
 msgid "too few arguments"
 msgstr "liian vähän argumentteja"
 
-#: color.c:779 hook.c:87
+#: color.c:779 hook.c:88 hook.c:327
 msgid "too many arguments"
 msgstr "liikaa argumentteja"
 
@@ -654,7 +660,7 @@ msgstr "Security: "
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:111 crypt-gpgme.c:4849 pgp.c:1849 smime.c:2238
+#: compose.c:111 crypt-gpgme.c:4852 pgp.c:1853 smime.c:2238
 msgid "Sign as: "
 msgstr "Sign as: "
 
@@ -952,7 +958,7 @@ msgstr "virhe CMS-protokollan käyttöönotossa: %s\n"
 msgid "error creating gpgme data object: %s\n"
 msgstr "virhe gpgpme-dataobjektin luonnissa: %s\n"
 
-#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1552 crypt-gpgme.c:2270
+#: crypt-gpgme.c:489 crypt-gpgme.c:507 crypt-gpgme.c:1555 crypt-gpgme.c:2273
 #, c-format
 msgid "error allocating data object: %s\n"
 msgstr "virhe data-objektin allokoinnissa: %s\n"
@@ -967,7 +973,7 @@ msgstr "virhe data-objektin takaisinkelauksessa: %s\n"
 msgid "error reading data object: %s\n"
 msgstr "virhe data-objketin lukemisessa: %s\n"
 
-#: crypt-gpgme.c:573 crypt-gpgme.c:3714 pgpkey.c:560 pgpkey.c:740
+#: crypt-gpgme.c:573 crypt-gpgme.c:3717 pgpkey.c:560 pgpkey.c:740
 msgid "Can't create temporary file"
 msgstr "Ei voitu luoda väliaikaistiedostoa"
 
@@ -1056,7 +1062,7 @@ msgstr "Varoitus: PKA-tietue ei täsmää allekirjoittajan osoitteeseen: "
 msgid "PKA verified signer's address is: "
 msgstr "PKA-varmistettu allekirjoitusosoite on: "
 
-#: crypt-gpgme.c:1269 crypt-gpgme.c:3407
+#: crypt-gpgme.c:1269 crypt-gpgme.c:3410
 msgid "Fingerprint: "
 msgstr "Sormenjälki: "
 
@@ -1076,65 +1082,68 @@ msgid ""
 "above\n"
 msgstr "Varoitus: Ei ole varmaa kuuluuko avain yllämainitulle henkilölle\n"
 
-#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3402
+#: crypt-gpgme.c:1370 crypt-gpgme.c:1375 crypt-gpgme.c:3405
 msgid "aka: "
 msgstr "alias: "
 
-#: crypt-gpgme.c:1386
+#. L10N: You will see this message in place of "KeyID "
+#. if the S/MIME key has no ID. This is quite an error.
+#.
+#: crypt-gpgme.c:1389
 msgid "no signature fingerprint available"
 msgstr "ei sormenjälkeä allekirjoitukselle"
 
-#: crypt-gpgme.c:1388
+#: crypt-gpgme.c:1391
 msgid "KeyID "
 msgstr "avain-ID "
 
-#: crypt-gpgme.c:1398 crypt-gpgme.c:1403
+#: crypt-gpgme.c:1401 crypt-gpgme.c:1406
 msgid "created: "
 msgstr "luotu: "
 
-#: crypt-gpgme.c:1476
+#: crypt-gpgme.c:1479
 #, c-format
 msgid "Error getting key information for KeyID %s: %s\n"
 msgstr "Virhe haettaessa avaimen tietoja avaimelle %s: %s\n"
 
-#: crypt-gpgme.c:1483 crypt-gpgme.c:1498
+#: crypt-gpgme.c:1486 crypt-gpgme.c:1501
 msgid "Good signature from:"
 msgstr "Hyvä allekirjoitus käyttäjälle:"
 
-#: crypt-gpgme.c:1490
+#: crypt-gpgme.c:1493
 msgid "*BAD* signature from:"
 msgstr "HUONO allekirjoitus käyttäjälle:"
 
-#: crypt-gpgme.c:1506
+#: crypt-gpgme.c:1509
 msgid "Problem signature from:"
 msgstr "Ongelmallinen allekirjoitus käyttäjälle:"
 
 #. L10N:
 #. This is trying to match the width of the
 #. "Problem signature from:" translation just above.
-#: crypt-gpgme.c:1513
+#: crypt-gpgme.c:1516
 msgid "               expires: "
 msgstr "                               vanhenee:"
 
-#: crypt-gpgme.c:1560 crypt-gpgme.c:1786 crypt-gpgme.c:2487
+#: crypt-gpgme.c:1563 crypt-gpgme.c:1789 crypt-gpgme.c:2490
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Allekirjoituksen tiedot --]\n"
 
-#: crypt-gpgme.c:1572
+#: crypt-gpgme.c:1575
 #, c-format
 msgid "Error: verification failed: %s\n"
 msgstr "Virhe: varmennus epäonnistui: %s\n"
 
-#: crypt-gpgme.c:1626
+#: crypt-gpgme.c:1629
 #, c-format
 msgid "*** Begin Notation (signature by: %s) ***\n"
 msgstr "*** Notaation alku (allekirjoittaja: %s) ***\n"
 
-#: crypt-gpgme.c:1648
+#: crypt-gpgme.c:1651
 msgid "*** End Notation ***\n"
 msgstr "*** Notaation loppu ***\n"
 
-#: crypt-gpgme.c:1656 crypt-gpgme.c:1799 crypt-gpgme.c:2500
+#: crypt-gpgme.c:1659 crypt-gpgme.c:1802 crypt-gpgme.c:2503
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1142,7 +1151,7 @@ msgstr ""
 "[-- Allekirjoitustietojen loppu --]\n"
 "\n"
 
-#: crypt-gpgme.c:1754
+#: crypt-gpgme.c:1757
 #, c-format
 msgid ""
 "[-- Error: decryption failed: %s --]\n"
@@ -1151,20 +1160,20 @@ msgstr ""
 "[-- Virhe: purku ei onnistunut: %s --]\n"
 "\n"
 
-#: crypt-gpgme.c:2277
+#: crypt-gpgme.c:2280
 msgid "Error extracting key data!\n"
 msgstr "Virhe avaindatan purkamisessa\n"
 
-#: crypt-gpgme.c:2463
+#: crypt-gpgme.c:2466
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Virhe: purku tai varmistus ei onnistunut: %s\n"
 
-#: crypt-gpgme.c:2508
+#: crypt-gpgme.c:2511
 msgid "Error: copy data failed\n"
 msgstr "Virhe: datan kopiointi ei onnistunut\n"
 
-#: crypt-gpgme.c:2529 pgp.c:617
+#: crypt-gpgme.c:2532 pgp.c:617
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1172,11 +1181,11 @@ msgstr ""
 "[-- PGP-VIESTIN ALKU --]\n"
 "\n"
 
-#: crypt-gpgme.c:2531 pgp.c:619
+#: crypt-gpgme.c:2534 pgp.c:619
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- JULKISEN PGP-AVAIMEN ALKU --]\n"
 
-#: crypt-gpgme.c:2534 pgp.c:621
+#: crypt-gpgme.c:2537 pgp.c:621
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1184,19 +1193,19 @@ msgstr ""
 "[-- PGP-ALLEKIRJOITETUN VIESTIN ALKU --]\n"
 "\n"
 
-#: crypt-gpgme.c:2561 pgp.c:661
+#: crypt-gpgme.c:2564 pgp.c:661
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- PGP-VIESTIN LOPPU --]\n"
 
-#: crypt-gpgme.c:2563 pgp.c:670
+#: crypt-gpgme.c:2566 pgp.c:674
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- JULKISEN PGP-AVAIMEN LOPPU --]\n"
 
-#: crypt-gpgme.c:2565 pgp.c:672
+#: crypt-gpgme.c:2568 pgp.c:676
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- PGP-ALLEKIRJOITETUN VIESTIN LOPPU --]\n"
 
-#: crypt-gpgme.c:2588 pgp.c:702
+#: crypt-gpgme.c:2591 pgp.c:706
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1204,11 +1213,11 @@ msgstr ""
 "[-- Virhe: PGP-viestin alkua ei löydy. --]\n"
 "\n"
 
-#: crypt-gpgme.c:2619 crypt-gpgme.c:2692 pgp.c:1122
+#: crypt-gpgme.c:2622 crypt-gpgme.c:2695 pgp.c:1126
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Virhe: ei voitu luoda väliaikaistiedostoa. --]\n"
 
-#: crypt-gpgme.c:2631
+#: crypt-gpgme.c:2634
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1216,7 +1225,7 @@ msgstr ""
 "[-- Seuraava data on PGP/MIME-allekirjoitettu ja salattu --]\n"
 "\n"
 
-#: crypt-gpgme.c:2632 pgp.c:1131
+#: crypt-gpgme.c:2635 pgp.c:1135
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1224,23 +1233,23 @@ msgstr ""
 "[-- Seuraava data on PGP/MIME-salattu --]\n"
 "\n"
 
-#: crypt-gpgme.c:2654
+#: crypt-gpgme.c:2657
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- PGP/MIME-allekirjoitetun ja salatun datan loppu --]\n"
 
-#: crypt-gpgme.c:2655 pgp.c:1151
+#: crypt-gpgme.c:2658 pgp.c:1155
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- PGP/MIME-salatun datan loppu --]\n"
 
-#: crypt-gpgme.c:2660 pgp.c:667 pgp.c:1156
+#: crypt-gpgme.c:2663 pgp.c:671 pgp.c:1160
 msgid "PGP message successfully decrypted."
 msgstr "PGP-viesti purettiin."
 
-#: crypt-gpgme.c:2664 pgp.c:603 pgp.c:663 pgp.c:1160
+#: crypt-gpgme.c:2667 pgp.c:603 pgp.c:663 pgp.c:1164
 msgid "Could not decrypt PGP message"
 msgstr "Ei voitu purkaa PGP-viestiä"
 
-#: crypt-gpgme.c:2704
+#: crypt-gpgme.c:2707
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1248,7 +1257,7 @@ msgstr ""
 "[-- Seuraava data on S/MIME-allekirjoitettu --]\n"
 "\n"
 
-#: crypt-gpgme.c:2705
+#: crypt-gpgme.c:2708
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1256,23 +1265,23 @@ msgstr ""
 "[-- Seuraava data on S/MIME-salattu --]\n"
 "\n"
 
-#: crypt-gpgme.c:2735
+#: crypt-gpgme.c:2738
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- S/MIME-allekirjoitetun datn loppu --]\n"
 
-#: crypt-gpgme.c:2736
+#: crypt-gpgme.c:2739
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- S/MIME-salatun datan loppu --]\n"
 
-#: crypt-gpgme.c:3320
+#: crypt-gpgme.c:3323
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Ei voida näyttää käyttäjätunnusta (tuntematon koodaus)]"
 
-#: crypt-gpgme.c:3322
+#: crypt-gpgme.c:3325
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Ei voida näyttää käyttäjätunnusta (huono koodaus)]"
 
-#: crypt-gpgme.c:3327
+#: crypt-gpgme.c:3330
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Ei voida näyttää käyttäjätunnusta (huono domain)]"
 
@@ -1280,150 +1289,150 @@ msgstr "[Ei voida näyttää käyttäjätunnusta (huono domain)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3401
+#: crypt-gpgme.c:3404
 msgid "Name: "
 msgstr "Nimi: "
 
-#: crypt-gpgme.c:3403
+#: crypt-gpgme.c:3406
 msgid "Valid From: "
 msgstr "Voimassa lähtien:"
 
-#: crypt-gpgme.c:3404
+#: crypt-gpgme.c:3407
 msgid "Valid To: "
 msgstr "Voimassa saakka:"
 
-#: crypt-gpgme.c:3405
+#: crypt-gpgme.c:3408
 msgid "Key Type: "
 msgstr "Avaintyyppi: "
 
-#: crypt-gpgme.c:3406
+#: crypt-gpgme.c:3409
 msgid "Key Usage: "
 msgstr "Avaimen käyttö: "
 
-#: crypt-gpgme.c:3408
+#: crypt-gpgme.c:3411
 msgid "Serial-No: "
 msgstr "Sarjanumero: "
 
-#: crypt-gpgme.c:3409
+#: crypt-gpgme.c:3412
 msgid "Issued By: "
 msgstr "Myöntäjä: "
 
-#: crypt-gpgme.c:3410
+#: crypt-gpgme.c:3413
 msgid "Subkey: "
 msgstr "Aliavain: "
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3461 crypt-gpgme.c:3616
+#: crypt-gpgme.c:3464 crypt-gpgme.c:3619
 msgid "[Invalid]"
 msgstr "[Kelvoton]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:3513 crypt-gpgme.c:3672
+#: crypt-gpgme.c:3516 crypt-gpgme.c:3675
 #, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "%s, %lu-bittinen %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3522 crypt-gpgme.c:3680
+#: crypt-gpgme.c:3525 crypt-gpgme.c:3683
 msgid "encryption"
 msgstr "salaus"
 
-#: crypt-gpgme.c:3523 crypt-gpgme.c:3529 crypt-gpgme.c:3535 crypt-gpgme.c:3681
-#: crypt-gpgme.c:3686 crypt-gpgme.c:3691
+#: crypt-gpgme.c:3526 crypt-gpgme.c:3532 crypt-gpgme.c:3538 crypt-gpgme.c:3684
+#: crypt-gpgme.c:3689 crypt-gpgme.c:3694
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3528 crypt-gpgme.c:3685
+#: crypt-gpgme.c:3531 crypt-gpgme.c:3688
 msgid "signing"
 msgstr "allekirjotus"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3534 crypt-gpgme.c:3690
+#: crypt-gpgme.c:3537 crypt-gpgme.c:3693
 msgid "certification"
 msgstr "sertifikaation"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3610
+#: crypt-gpgme.c:3613
 msgid "[Revoked]"
 msgstr "[Käytöstä poistettu]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3622
+#: crypt-gpgme.c:3625
 msgid "[Expired]"
 msgstr "[Vanhentunut]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3628
+#: crypt-gpgme.c:3631
 msgid "[Disabled]"
 msgstr "[Ei käytössä]"
 
-#: crypt-gpgme.c:3717
+#: crypt-gpgme.c:3720
 msgid "Collecting data..."
 msgstr "Haetaan dataa..."
 
-#: crypt-gpgme.c:3743
+#: crypt-gpgme.c:3746
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Ei löytynyt myöntäjän avainta: %s\n"
 
-#: crypt-gpgme.c:3753
+#: crypt-gpgme.c:3756
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Virhe: ylipitkä sertifikaattiketju, lopetettiin tähän\n"
 
-#: crypt-gpgme.c:3764 pgpkey.c:582
+#: crypt-gpgme.c:3767 pgpkey.c:582
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "Avaimen ID: 0x%s"
 
-#: crypt-gpgme.c:3847
+#: crypt-gpgme.c:3850
 #, c-format
 msgid "gpgme_new failed: %s"
 msgstr "gpgme_new-virhe: %s"
 
-#: crypt-gpgme.c:3886 crypt-gpgme.c:3961
+#: crypt-gpgme.c:3889 crypt-gpgme.c:3964
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "gpgme_op_keylist_stasrt-virhe: %s"
 
-#: crypt-gpgme.c:3948 crypt-gpgme.c:3992
+#: crypt-gpgme.c:3951 crypt-gpgme.c:3995
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "gpgme_op_keylist_next-virhe: %s"
 
-#: crypt-gpgme.c:4063
+#: crypt-gpgme.c:4066
 msgid "All matching keys are marked expired/revoked."
 msgstr ""
 "Kaikki täsmäävät avaimet on merkitty vanhenneiksi tai käytöstä poistetuiksi"
 
-#: crypt-gpgme.c:4092 mutt_ssl.c:1257 mutt_ssl_gnutls.c:1022 pgpkey.c:515
+#: crypt-gpgme.c:4095 mutt_ssl.c:1262 mutt_ssl_gnutls.c:1010 pgpkey.c:515
 #: smime.c:435
 msgid "Exit  "
 msgstr "Poistu  "
 
-#: crypt-gpgme.c:4094 pgpkey.c:517 smime.c:437
+#: crypt-gpgme.c:4097 pgpkey.c:517 smime.c:437
 msgid "Select  "
 msgstr "Valitse  "
 
-#: crypt-gpgme.c:4097 pgpkey.c:520
+#: crypt-gpgme.c:4100 pgpkey.c:520
 msgid "Check key  "
 msgstr "Tarkasta avain  "
 
-#: crypt-gpgme.c:4114
+#: crypt-gpgme.c:4117
 msgid "PGP and S/MIME keys matching"
 msgstr "PGP ja S/MIME täsmäävät"
 
-#: crypt-gpgme.c:4116
+#: crypt-gpgme.c:4119
 msgid "PGP keys matching"
 msgstr "PGP-avaimet täsmäävät"
 
-#: crypt-gpgme.c:4118
+#: crypt-gpgme.c:4121
 msgid "S/MIME keys matching"
 msgstr "S/MIME-avaimet täsmäävät"
 
-#: crypt-gpgme.c:4120
+#: crypt-gpgme.c:4123
 msgid "keys matching"
 msgstr "avaimet täsmäävät"
 
@@ -1431,65 +1440,65 @@ msgstr "avaimet täsmäävät"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4127
+#: crypt-gpgme.c:4130
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4131
+#: crypt-gpgme.c:4134
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s ”%s”"
 
-#: crypt-gpgme.c:4158 pgpkey.c:602
+#: crypt-gpgme.c:4161 pgpkey.c:602
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr ""
 "Tätä avainta ei voi käyttää, koska se on vanhentunut/pois käytöstä/poistettu "
 "käytöstä"
 
-#: crypt-gpgme.c:4172 pgpkey.c:614 smime.c:468
+#: crypt-gpgme.c:4175 pgpkey.c:614 smime.c:468
 msgid "ID is expired/disabled/revoked."
 msgstr "Tunnus on vanhentunt/pois käytöstä/käytöstä poistettu"
 
-#: crypt-gpgme.c:4180 pgpkey.c:618 smime.c:471
+#: crypt-gpgme.c:4183 pgpkey.c:618 smime.c:471
 msgid "ID has undefined validity."
 msgstr "Tunnuksen voimassaolo on määrittelemättä."
 
-#: crypt-gpgme.c:4183 pgpkey.c:621
+#: crypt-gpgme.c:4186 pgpkey.c:621
 msgid "ID is not valid."
 msgstr "Tunnus ei ole voimassa."
 
-#: crypt-gpgme.c:4186 pgpkey.c:624
+#: crypt-gpgme.c:4189 pgpkey.c:624
 msgid "ID is only marginally valid."
 msgstr "Tunnus on rajallisesti voimassa."
 
-#: crypt-gpgme.c:4195 pgpkey.c:628 smime.c:478
+#: crypt-gpgme.c:4198 pgpkey.c:628 smime.c:478
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%s Käytetäänkö siitä huolimatta?"
 
-#: crypt-gpgme.c:4250 crypt-gpgme.c:4366 pgpkey.c:838 pgpkey.c:965
+#: crypt-gpgme.c:4253 crypt-gpgme.c:4369 pgpkey.c:838 pgpkey.c:965
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "Etsitään täsmääviä avaimia %s..."
 
-#: crypt-gpgme.c:4521 pgp.c:1335
+#: crypt-gpgme.c:4524 pgp.c:1339
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "Käytetäänkö avainta keyID = ”%s” kohteelle %s?"
 
-#: crypt-gpgme.c:4579 pgp.c:1384 smime.c:797 smime.c:903
+#: crypt-gpgme.c:4582 pgp.c:1388 smime.c:797 smime.c:903
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "Anna keyID kohteelle %s: "
 
-#: crypt-gpgme.c:4656 pgpkey.c:725
+#: crypt-gpgme.c:4659 pgpkey.c:725
 msgid "Please enter the key ID: "
 msgstr "Anna avaimen tunnus: "
 
-#: crypt-gpgme.c:4669
+#: crypt-gpgme.c:4672
 #, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Virhe avainta vietäessä: %s\n"
@@ -1498,20 +1507,20 @@ msgstr "Virhe avainta vietäessä: %s\n"
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:4689
+#: crypt-gpgme.c:4692
 #, c-format
 msgid "PGP Key 0x%s."
 msgstr "PGP-avain 0x%s."
 
-#: crypt-gpgme.c:4731
+#: crypt-gpgme.c:4734
 msgid "GPGME: OpenPGP protocol not available"
 msgstr "GPGME: OpenPGP-protokolla puuttuu"
 
-#: crypt-gpgme.c:4739
+#: crypt-gpgme.c:4742
 msgid "GPGME: CMS protocol not available"
 msgstr "GPGME: CMS-protokolla puuttuu"
 
-#: crypt-gpgme.c:4776
+#: crypt-gpgme.c:4779
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr ""
 "S/MIME-(a)llekirjoita, -allekirjoita (n)imellä, (p)gp, (t)yhjennä tai poista "
@@ -1521,21 +1530,21 @@ msgstr ""
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:4781
+#: crypt-gpgme.c:4784
 msgid "sapfco"
 msgstr "anpfto"
 
-#: crypt-gpgme.c:4786
+#: crypt-gpgme.c:4789
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr ""
 "PGP-(a)llekirjoita, -allekirjoita (n)imellä, (s)/mime, (t)yhjennä tai poista "
 "(o)ppenc käytöstä?"
 
-#: crypt-gpgme.c:4787
+#: crypt-gpgme.c:4790
 msgid "samfco"
 msgstr "ansfto"
 
-#: crypt-gpgme.c:4799
+#: crypt-gpgme.c:4802
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
@@ -1543,11 +1552,11 @@ msgstr ""
 "S/MIME-sa(l)aa, -(a)llekirjoita, allekirjoita (n)imellä, (m)olemmat, (p)gp, "
 "(t)yhjennä, tai poista (o)ppenc käytöstä?"
 
-#: crypt-gpgme.c:4800
+#: crypt-gpgme.c:4803
 msgid "esabpfco"
 msgstr "lanmpfto"
 
-#: crypt-gpgme.c:4805
+#: crypt-gpgme.c:4808
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
@@ -1555,35 +1564,35 @@ msgstr ""
 "PGP-sa(l)aa, -(a)llekirjoita, allekirjoita (n)imellä, (m)olemmat, (s)/mime, "
 "(t)yhennä, tai poista (o)ppenc käytöstä?"
 
-#: crypt-gpgme.c:4806
+#: crypt-gpgme.c:4809
 msgid "esabmfco"
 msgstr "lanmsfto"
 
-#: crypt-gpgme.c:4817
+#: crypt-gpgme.c:4820
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr ""
 "S/MIME-sa(l)aa, -(a)llekirjoita, allekirjoita (n)imellä, (m)olemmat, (p)gp, "
 "(t)yhjennä, tai poista (o)ppenc käytöstä?"
 
-#: crypt-gpgme.c:4818
+#: crypt-gpgme.c:4821
 msgid "esabpfc"
 msgstr "lanmpfto"
 
-#: crypt-gpgme.c:4823
+#: crypt-gpgme.c:4826
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr ""
 "PGP-sa(l)aa, -(a)llekirjoita, -allekirjoita (n)imellä, (m)olemmat, (s)/mime, "
 "tai (t)yhjennä?"
 
-#: crypt-gpgme.c:4824
+#: crypt-gpgme.c:4827
 msgid "esabmfc"
 msgstr "lanmsft"
 
-#: crypt-gpgme.c:4983
+#: crypt-gpgme.c:4986
 msgid "Failed to verify sender"
 msgstr "Ei voitu varmistaa lähettäjää"
 
-#: crypt-gpgme.c:4986
+#: crypt-gpgme.c:4989
 msgid "Failed to figure out sender"
 msgstr "Ei voitu selvittää lähettäjää"
 
@@ -1790,7 +1799,7 @@ msgstr "Tallenna"
 msgid "Mail"
 msgstr "Posti"
 
-#: curs_main.c:537 pager.c:1561
+#: curs_main.c:537 pager.c:1554
 msgid "Reply"
 msgstr "Vastaa"
 
@@ -1835,7 +1844,7 @@ msgid "Invalid message number."
 msgstr "Viestinnumero ei kelpaa."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:958 curs_main.c:2130 pager.c:2532
+#: curs_main.c:958 curs_main.c:2130 pager.c:2525
 msgid "Cannot delete message(s)"
 msgstr "Ei voitu poistaa viestejä"
 
@@ -1861,7 +1870,7 @@ msgstr "Rajoita viestit täsmäämään: "
 msgid "To view all messages, limit to \"all\"."
 msgstr "Kaikkiin viesteihin täsmää rajoite \"all\""
 
-#: curs_main.c:1037 pager.c:2055
+#: curs_main.c:1037 pager.c:2048
 msgid "Quit Mutt?"
 msgstr "Lopetetaanko mutt?"
 
@@ -1870,7 +1879,7 @@ msgid "Tag messages matching: "
 msgstr "Merkitse täsmäävät viestit: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1137 curs_main.c:2481 pager.c:2786
+#: curs_main.c:1137 curs_main.c:2481 pager.c:2779
 msgid "Cannot undelete message(s)"
 msgstr "Ei voitu perua viestien poistoa"
 
@@ -1953,11 +1962,11 @@ msgstr "Ei poistetusta palautettuja viestejä."
 msgid "You are on the first message."
 msgstr "Ensimmäisessä viestissä."
 
-#: curs_main.c:1703 menu.c:874 pager.c:2173 pattern.c:1644
+#: curs_main.c:1703 menu.c:874 pager.c:2166 pattern.c:1693
 msgid "Search wrapped to top."
 msgstr "Haku jatkoi ylhäältä."
 
-#: curs_main.c:1712 pager.c:2195 pattern.c:1655
+#: curs_main.c:1712 pager.c:2188 pattern.c:1704
 msgid "Search wrapped to bottom."
 msgstr "Haku jatkoi alhaalta."
 
@@ -1983,7 +1992,7 @@ msgid "Cannot flag message"
 msgstr "Ei voitu merkitä viestejä"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1821 pager.c:2749
+#: curs_main.c:1821 pager.c:2742
 msgid "Cannot toggle new"
 msgstr "Ei voitu vaihtaa uudeksi"
 
@@ -2000,7 +2009,7 @@ msgid "Thread contains unread messages."
 msgstr "Ketjussa on lukemattomia viestejä."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2086 pager.c:2499
+#: curs_main.c:2086 pager.c:2492
 msgid "Cannot delete message"
 msgstr "Ei voitu poistaa viestejä"
 
@@ -2011,7 +2020,7 @@ msgstr "Ei voitu muokata viestiä"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2213 pager.c:2837
+#: curs_main.c:2213 pager.c:2830
 #, c-format
 msgid "%d labels changed."
 msgstr "%d merkintää muutettu."
@@ -2019,7 +2028,7 @@ msgstr "%d merkintää muutettu."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2219 pager.c:2840
+#: curs_main.c:2219 pager.c:2833
 msgid "No labels changed."
 msgstr "Ei muuttuneita merkintöjä."
 
@@ -2056,7 +2065,7 @@ msgid "No message ID to macro."
 msgstr "Ei viesti-ID:tä makrolle."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2451 pager.c:2769
+#: curs_main.c:2451 pager.c:2762
 msgid "Cannot undelete message"
 msgstr "Ei voitu perua viestin poistoa"
 
@@ -2352,33 +2361,37 @@ msgstr "Historiatiedoston muotovirhe (rivillä %d)"
 msgid "History '%s'"
 msgstr "Historia %s"
 
-#: hook.c:97
+#: hook.c:98
 msgid "current mailbox shortcut '^' is unset"
 msgstr "nykyisen postilaatikon oikopolku ^ on asettamatta"
 
-#: hook.c:108
+#: hook.c:109
 msgid "mailbox shortcut expanded to empty regexp"
 msgstr "postilaatikon oikopolku laventui tyhjäksi ilmaukseksi"
 
-#: hook.c:119
+#: hook.c:120
 msgid "badly formatted command string"
 msgstr "epäkelpo komentojono"
 
-#: hook.c:279
+#: hook.c:304 init.c:699 init.c:780 init.c:788 init.c:809
+msgid "not enough arguments"
+msgstr "ei tarpeeksi argumentteja"
+
+#: hook.c:400
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: unhook * ei toimi hookin sisältä."
 
-#: hook.c:291
+#: hook.c:413
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: tuntematon hook-tyyppi: %s"
 
-#: hook.c:297
+#: hook.c:419
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Ei voitu poistaa kohdetta %s kohteesta %s."
 
-#: imap/auth.c:109 pop_auth.c:492 smtp.c:571
+#: imap/auth.c:109 pop_auth.c:493 smtp.c:571
 msgid "No authenticators available"
 msgstr "Ei autentikoijia"
 
@@ -2410,24 +2423,24 @@ msgstr "GSSAPI-autentikointi epäonnistui."
 msgid "LOGIN disabled on this server."
 msgstr "LOGIN on poistettu käytöstä palvelimella."
 
-#: imap/auth_login.c:47 pop_auth.c:270
+#: imap/auth_login.c:47 pop_auth.c:271
 msgid "Logging in..."
 msgstr "Kirjaudutaan siäsään..."
 
-#: imap/auth_login.c:70 pop_auth.c:313
+#: imap/auth_login.c:70 pop_auth.c:314
 msgid "Login failed."
 msgstr "Kirjautuminen epäonnistui."
 
-#: imap/auth_sasl.c:101 smtp.c:609
+#: imap/auth_sasl.c:106 smtp.c:609
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Autentikoidaan (%s)..."
 
-#: imap/auth_sasl.c:228 pop_auth.c:184
+#: imap/auth_sasl.c:233 pop_auth.c:185
 msgid "SASL authentication failed."
 msgstr "SASL-autentikaatio epäonnistui."
 
-#: imap/browse.c:59 imap/imap.c:611
+#: imap/browse.c:59 imap/imap.c:621
 #, c-format
 msgid "%s is an invalid IMAP path"
 msgstr "%s ei ole toimiva IMAP-polku"
@@ -2485,101 +2498,101 @@ msgstr "Postilaatikko %s@%s on katkaistu"
 msgid "CREATE failed: %s"
 msgstr "CREATE epäonnistui: %s"
 
-#: imap/imap.c:189
+#: imap/imap.c:193
 #, c-format
 msgid "Closing connection to %s..."
 msgstr "Suljetaan yhteyttä %s..."
 
-#: imap/imap.c:338
+#: imap/imap.c:342
 msgid "This IMAP server is ancient. Mutt does not work with it."
 msgstr "IMAP-palvelin on niin vanha ettei mutt toimi sen kanssa."
 
-#: imap/imap.c:475 pop_lib.c:295 smtp.c:467
+#: imap/imap.c:485 pop_lib.c:295 smtp.c:467
 msgid "Secure connection with TLS?"
 msgstr "Salataanko yhteys TLS:llä?"
 
-#: imap/imap.c:484 pop_lib.c:315 smtp.c:479
+#: imap/imap.c:494 pop_lib.c:315 smtp.c:479
 msgid "Could not negotiate TLS connection"
 msgstr "Ei voitu neuvotella TLS-yhteyttä"
 
-#: imap/imap.c:500 pop_lib.c:336
+#: imap/imap.c:510 pop_lib.c:336
 msgid "Encrypted connection unavailable"
 msgstr "Salattu yhteys ei käytettävissä"
 
-#: imap/imap.c:645
+#: imap/imap.c:653
 #, c-format
 msgid "Selecting %s..."
 msgstr "Valitaan %s..."
 
-#: imap/imap.c:825
+#: imap/imap.c:833
 msgid "Error opening mailbox"
 msgstr "Virhe avattaessa postilaatikkoa"
 
-#: imap/imap.c:875 imap/imap.c:2267 imap/message.c:1351 muttlib.c:1687
+#: imap/imap.c:883 imap/imap.c:2274 imap/message.c:1351 muttlib.c:1730
 #, c-format
 msgid "Create %s?"
 msgstr "Luodaanko %s?"
 
-#: imap/imap.c:1275
+#: imap/imap.c:1283
 msgid "Expunge failed"
 msgstr "Poisto epäonnistui"
 
-#: imap/imap.c:1287
+#: imap/imap.c:1295
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Merkataan %d viestiä poistetuksi..."
 
-#: imap/imap.c:1319
+#: imap/imap.c:1327
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Tallennetaan muutettuja viestejä... [%d/%d]"
 
-#: imap/imap.c:1375
+#: imap/imap.c:1383
 msgid "Error saving flags. Close anyway?"
 msgstr "Virhe tallennettaessa lippuja, suljetaanko joka tapauksessa?"
 
-#: imap/imap.c:1383
+#: imap/imap.c:1391
 msgid "Error saving flags"
 msgstr "Virhe tallennettaessa lippuja."
 
-#: imap/imap.c:1406
+#: imap/imap.c:1414
 msgid "Expunging messages from server..."
 msgstr "Poistetaan viestejä palvelimelta..."
 
-#: imap/imap.c:1412
+#: imap/imap.c:1420
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox: EXPUNGE epäonnistui"
 
-#: imap/imap.c:1904
+#: imap/imap.c:1911
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Otsakehausta puuttuu otsakkeen nimi: %s"
 
-#: imap/imap.c:1976
+#: imap/imap.c:1983
 msgid "Bad mailbox name"
 msgstr "Postilaatikon nimi ei kelpaa"
 
-#: imap/imap.c:2002
+#: imap/imap.c:2009
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Tilataan hakemistoa %s..."
 
-#: imap/imap.c:2004
+#: imap/imap.c:2011
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Poistetaan hakemiston %s tilaus..."
 
-#: imap/imap.c:2014
+#: imap/imap.c:2021
 #, c-format
 msgid "Subscribed to %s"
 msgstr "%s tilattu"
 
-#: imap/imap.c:2016
+#: imap/imap.c:2023
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Kansion %s tilaus poistettu"
 
-#: imap/imap.c:2252 imap/message.c:1315
+#: imap/imap.c:2259 imap/message.c:1315
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Kopioidaan %d viestiä kansioon %s..."
@@ -2641,7 +2654,7 @@ msgstr "Kopioidaan viestiä %d kohteeseen %s..."
 msgid "Continue?"
 msgstr "Jatketaanko?"
 
-#: init.c:60 init.c:2127 pager.c:54
+#: init.c:60 init.c:2142 pager.c:54
 msgid "Not available in this menu."
 msgstr "Ei tässä valikossa."
 
@@ -2653,10 +2666,6 @@ msgstr "Viallinen regexp: %s"
 #: init.c:521
 msgid "Not enough subexpressions for template"
 msgstr "Ei tarpeeksi ali-ilmaisuja mallinetta varten"
-
-#: init.c:699 init.c:780 init.c:788 init.c:809
-msgid "not enough arguments"
-msgstr "ei tarpeeksi argumentteja"
 
 #: init.c:870
 msgid "spam: no matching pattern"
@@ -2676,161 +2685,161 @@ msgstr "%sryhmä: -rx tai -addr puuttuu."
 msgid "%sgroup: warning: bad IDN '%s'.\n"
 msgstr "%sryhmä: varoitus: huono IDN '%s'.\n"
 
-#: init.c:1296
+#: init.c:1298
 msgid "attachments: no disposition"
 msgstr "liitteet: dispositio puuttuu"
 
-#: init.c:1332
+#: init.c:1334
 msgid "attachments: invalid disposition"
 msgstr "liitteet: dispositio on väärä"
 
-#: init.c:1346
+#: init.c:1348
 msgid "unattachments: no disposition"
 msgstr "epäliitteet: dispositio puuttuu"
 
-#: init.c:1369
+#: init.c:1371
 msgid "unattachments: invalid disposition"
 msgstr "epäliitteet: viallinen dispositio"
 
-#: init.c:1496
+#: init.c:1498
 msgid "alias: no address"
 msgstr "alias: ei osoitetta"
 
-#: init.c:1544
+#: init.c:1546
 #, c-format
 msgid "Warning: Bad IDN '%s' in alias '%s'.\n"
 msgstr "Varoitus: Viallinen IDN %s aliaksessa %s.\n"
 
-#: init.c:1632
+#: init.c:1635
 msgid "invalid header field"
 msgstr "viallinen otsakekenttä"
 
-#: init.c:1685
+#: init.c:1688
 #, c-format
 msgid "%s: unknown sorting method"
 msgstr "%s: tuntematon järjestelymetodi"
 
-#: init.c:1799
+#: init.c:1802
 #, c-format
 msgid "mutt_restore_default(%s): error in regexp: %s\n"
 msgstr "mutt_restore_default(%s): virhe regexpissä: %s\n"
 
-#: init.c:2008 init.c:2174
+#: init.c:2023 init.c:2189
 #, c-format
 msgid "%s is unset"
 msgstr "%s on asettamatta"
 
-#: init.c:2104 init.c:2219
+#: init.c:2119 init.c:2234
 #, c-format
 msgid "%s: unknown variable"
 msgstr "%s: tuntematon muuttuja"
 
-#: init.c:2113
+#: init.c:2128
 msgid "prefix is illegal with reset"
 msgstr "prefiksi ei toimi resetin kanssa"
 
-#: init.c:2119
+#: init.c:2134
 msgid "value is illegal with reset"
 msgstr "arvo ei toimi resetin kanssa"
 
-#: init.c:2154 init.c:2166
+#: init.c:2169 init.c:2181
 msgid "Usage: set variable=yes|no"
 msgstr "Käyttö: set variable=yes|no"
 
-#: init.c:2174
+#: init.c:2189
 #, c-format
 msgid "%s is set"
 msgstr "%s on asetettu"
 
-#: init.c:2285
+#: init.c:2298
 #, c-format
 msgid "Invalid value for option %s: \"%s\""
 msgstr "Väärä arvo asetuksella %s: %s"
 
-#: init.c:2427
+#: init.c:2440
 #, c-format
 msgid "%s: invalid mailbox type"
 msgstr "%s: väärä postilaatikkotyyppi"
 
-#: init.c:2458 init.c:2522
+#: init.c:2471 init.c:2535
 #, c-format
 msgid "%s: invalid value (%s)"
 msgstr "%s: väärä arvo (%s)"
 
-#: init.c:2459 init.c:2523
+#: init.c:2472 init.c:2536
 msgid "format error"
 msgstr "muotovirhe"
 
-#: init.c:2459 init.c:2523
+#: init.c:2472 init.c:2536
 msgid "number overflow"
 msgstr "lukuarvoylivuoto"
 
-#: init.c:2557
+#: init.c:2570
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s: väärä arvo"
 
-#: init.c:2601
+#: init.c:2614
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s: Tuntematon tyyppi."
 
-#: init.c:2628
+#: init.c:2641
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s: tuntematon tyyppi"
 
-#: init.c:2703
+#: init.c:2716
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Virhe tiedostossa %s rivillä %d: %s"
 
-#: init.c:2726
+#: init.c:2739
 #, c-format
 msgid "source: errors in %s"
 msgstr "source: virheet kohteessa %s"
 
-#: init.c:2727
+#: init.c:2740
 #, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "source: lukeminen peruttu liian monen virheen takia kohteessa %s"
 
-#: init.c:2741
+#: init.c:2754
 #, c-format
 msgid "source: error at %s"
 msgstr "source: virhe kohteessa %s"
 
-#: init.c:2746
+#: init.c:2759
 msgid "source: too many arguments"
 msgstr "source: liikaa argumentteja"
 
-#: init.c:2800
+#: init.c:2813
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s: tuntematon komento"
 
-#: init.c:3299
+#: init.c:3312
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Virhe komentorivillä: %s\n"
 
-#: init.c:3420
+#: init.c:3434
 msgid "unable to determine home directory"
 msgstr "ei voitu ratkaista kotihakemistoa"
 
-#: init.c:3428
+#: init.c:3442
 msgid "unable to determine username"
 msgstr "ei voitu ratkaista käyttäjänimeä"
 
-#: init.c:3454
+#: init.c:3468
 msgid "unable to determine nodename via uname()"
 msgstr "ei voitu ratkaista laitenimeä uname()-funktiolla"
 
-#: init.c:3684
+#: init.c:3699
 msgid "-group: no group name"
 msgstr "-group: ei ryhmän nimeä"
 
-#: init.c:3694
+#: init.c:3709
 msgid "out of arguments"
 msgstr "argumentit loppuivat"
 
@@ -3087,46 +3096,46 @@ msgstr "Virheenjäljitystaso %d.\n"
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "makro DEBUG ei ollut määritelty käännösaikana, joten ohitetaan.\n"
 
-#: main.c:923
+#: main.c:929
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "%s puuttuu, luodaanko se?"
 
-#: main.c:927
+#: main.c:933
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Ei voitu luoda kohdetta %s: %s."
 
-#: main.c:968
+#: main.c:974
 msgid "Failed to parse mailto: link\n"
 msgstr "Virhe mailto:-linkin jäsennyksessä\n"
 
-#: main.c:983
+#: main.c:989
 msgid "No recipients specified.\n"
 msgstr "Ei vastaanottajia.\n"
 
-#: main.c:1009
+#: main.c:1015
 msgid "Cannot use -E flag with stdin\n"
 msgstr "Valitsin -E ei toimi yhdessä vakiosyötteen kanssa\n"
 
-#: main.c:1174
+#: main.c:1180
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: ei voitu liittää tiedostoa.\n"
 
-#: main.c:1260
+#: main.c:1266
 msgid "No mailbox with new mail."
 msgstr "Ei uutta postia postilaatikoissa."
 
-#: main.c:1274
+#: main.c:1280
 msgid "No incoming mailboxes defined."
 msgstr "Tulevien viestien postilaatikoita ei ole määritelty."
 
-#: main.c:1302
+#: main.c:1308
 msgid "Mailbox is empty."
 msgstr "Postilaatikko on tyhjä."
 
-#: mbox.c:131 mbox.c:293 mh.c:1261 mx.c:642
+#: mbox.c:131 mbox.c:293 mh.c:1294 mx.c:642
 #, c-format
 msgid "Reading %s..."
 msgstr "Luetaan kohdetta %s..."
@@ -3157,7 +3166,7 @@ msgid "sync: mbox modified, but no modified messages! (report this bug)"
 msgstr "sync: mbox muuttui, mutta viestit eivät (lähetä vikailmoitus)"
 
 #. L10N: Displayed before/as a mailbox is being synced
-#: mbox.c:941 mh.c:1895 mx.c:740
+#: mbox.c:941 mh.c:1995 mx.c:740
 #, c-format
 msgid "Writing %s..."
 msgstr "Kirjoitetaan kohdetta %s..."
@@ -3216,15 +3225,15 @@ msgstr "Viimeisessä tietueessa."
 msgid "You are on the first entry."
 msgstr "Ensimmäisessä tietueessa."
 
-#: menu.c:848 pager.c:2217 pattern.c:1582
+#: menu.c:848 pager.c:2210 pattern.c:1631
 msgid "Search for: "
 msgstr "Hae: "
 
-#: menu.c:848 pager.c:2217 pattern.c:1582
+#: menu.c:848 pager.c:2210 pattern.c:1631
 msgid "Reverse search for: "
 msgstr "Hae takaperin: "
 
-#: menu.c:892 pager.c:2170 pager.c:2192 pager.c:2312 pattern.c:1698
+#: menu.c:892 pager.c:2163 pager.c:2185 pager.c:2305 pattern.c:1747
 msgid "Not found."
 msgstr "Ei löytynyt."
 
@@ -3244,17 +3253,17 @@ msgstr "Siirtymistä ei ole toteutettu dialogeille."
 msgid "Tagging is not supported."
 msgstr "Merkitsemistä ei tueta."
 
-#: mh.c:1241
+#: mh.c:1274
 #, c-format
 msgid "Scanning %s..."
 msgstr "Skannataan kohdetta %s..."
 
 # not sure if user needs to know flush v. write? There's no good translation
-#: mh.c:1564 mh.c:1647
+#: mh.c:1619 mh.c:1712
 msgid "Could not flush message to disk"
 msgstr "Ei voitu kirjoittaa viestiä levylle"
 
-#: mh.c:1609
+#: mh.c:1666
 msgid "_maildir_commit_message(): unable to set time on file"
 msgstr "_maildir_commit_message(): tiedoston ajan asetus ei onnistunut"
 
@@ -3270,11 +3279,11 @@ msgstr "Virhe SASL-yhteyden allokoinnissa"
 msgid "Error setting SASL security properties"
 msgstr "Virhe SASL-turvallisuusasetusten määrittämisessä"
 
-#: mutt_sasl.c:251
+#: mutt_sasl.c:252
 msgid "Error setting SASL external security strength"
 msgstr "Virhe ulkoisen SASL-turvallisuusvahvuuden määrittämisessä"
 
-#: mutt_sasl.c:260
+#: mutt_sasl.c:262
 msgid "Error setting SASL external user name"
 msgstr "Virhe ulkoisen SASL-käyttäjänimen asetuksessa"
 
@@ -3354,7 +3363,7 @@ msgstr "Ei voitu yhdistää SSL-kontekstiin"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:562 mutt_ssl_gnutls.c:423
+#: mutt_ssl.c:562 mutt_ssl_gnutls.c:424
 msgid "Warning: unable to set TLS SNI host name"
 msgstr "Varoitus: Ei voitu asettaa TLS:n SNI-palvelinnimeä"
 
@@ -3380,12 +3389,12 @@ msgstr "%s-yhteys %s (%s)"
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: mutt_ssl.c:732 mutt_ssl_gnutls.c:605
+#: mutt_ssl.c:732 mutt_ssl_gnutls.c:606
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[ei voida laskea]"
 
-#: mutt_ssl.c:750 mutt_ssl_gnutls.c:628
+#: mutt_ssl.c:750 mutt_ssl_gnutls.c:629
 msgid "[invalid date]"
 msgstr "[viallinen päiväys]"
 
@@ -3415,40 +3424,40 @@ msgstr "sertifikaatin omistaja on eri kuin hostname %s"
 msgid "Certificate host check failed: %s"
 msgstr "Sertifikaatin palvelintesti epäonnistui: %s"
 
-#: mutt_ssl.c:1183 mutt_ssl_gnutls.c:869
+#: mutt_ssl.c:1183 mutt_ssl_gnutls.c:845
 msgid "This certificate belongs to:"
 msgstr "Sertifikaatin omistaja:"
 
-#: mutt_ssl.c:1191 mutt_ssl_gnutls.c:908
+#: mutt_ssl.c:1191 mutt_ssl_gnutls.c:884
 msgid "This certificate was issued by:"
 msgstr "Sertifikaatin myöntäjä:"
 
-#: mutt_ssl.c:1199 mutt_ssl_gnutls.c:947
+#: mutt_ssl.c:1199 mutt_ssl_gnutls.c:923
 #, c-format
 msgid "This certificate is valid"
 msgstr "Käypä sertifikaatti"
 
-#: mutt_ssl.c:1200 mutt_ssl_gnutls.c:950
+#: mutt_ssl.c:1200 mutt_ssl_gnutls.c:926
 #, c-format
 msgid "   from %s"
 msgstr "        %s"
 
-#: mutt_ssl.c:1202 mutt_ssl_gnutls.c:954
+#: mutt_ssl.c:1202 mutt_ssl_gnutls.c:930
 #, c-format
 msgid "     to %s"
 msgstr "     ...%s"
 
-#: mutt_ssl.c:1208 mutt_ssl_gnutls.c:959
+#: mutt_ssl.c:1208 mutt_ssl_gnutls.c:935
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "SHA1-sormenjälki: %s"
 
-#: mutt_ssl.c:1211 mutt_ssl_gnutls.c:962
-#, c-format
-msgid "MD5 Fingerprint: %s"
-msgstr "MD5-sormenjälki: %s"
+#: mutt_ssl.c:1214 mutt_ssl.c:1216 mutt_ssl_gnutls.c:941 mutt_ssl_gnutls.c:943
+#, fuzzy
+msgid "SHA256 Fingerprint: "
+msgstr "SHA1-sormenjälki: %s"
 
-#: mutt_ssl.c:1214 mutt_ssl_gnutls.c:991
+#: mutt_ssl.c:1219 mutt_ssl_gnutls.c:979
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "SSL-sertifikaatin tarkastus (sertifikaatti %d/%d ketjussa)"
@@ -3459,84 +3468,84 @@ msgstr "SSL-sertifikaatin tarkastus (sertifikaatti %d/%d ketjussa)"
 #. * These prompts are the interactive certificate confirmation prompts for
 #. * an OpenSSL connection.
 #.
-#: mutt_ssl.c:1240
+#: mutt_ssl.c:1245
 msgid "roas"
 msgstr "hkas"
 
-#: mutt_ssl.c:1244
+#: mutt_ssl.c:1249
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(h)ylkää, hyväksy (k)erran, hyväksy (a)ina, (s)kippaa"
 
-#: mutt_ssl.c:1246 mutt_ssl_gnutls.c:1000
+#: mutt_ssl.c:1251 mutt_ssl_gnutls.c:988
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(h)ylkää, hyväksy (k)erran, hyväksy (a)ina"
 
-#: mutt_ssl.c:1251
+#: mutt_ssl.c:1256
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(h)ylkää, hyväksy (k)erran, (s)kippaa"
 
-#: mutt_ssl.c:1253 mutt_ssl_gnutls.c:1011
+#: mutt_ssl.c:1258 mutt_ssl_gnutls.c:999
 msgid "(r)eject, accept (o)nce"
 msgstr "(h)ylkää, hyväksy (k)erran"
 
-#: mutt_ssl.c:1286 mutt_ssl_gnutls.c:1067
+#: mutt_ssl.c:1291 mutt_ssl_gnutls.c:1058
 msgid "Warning: Couldn't save certificate"
 msgstr "Varoitus: sertifikaatin tallennus epäonnistui"
 
-#: mutt_ssl.c:1291 mutt_ssl_gnutls.c:1072
+#: mutt_ssl.c:1296 mutt_ssl_gnutls.c:1063
 msgid "Certificate saved"
 msgstr "Sertifikaatti tallennettu"
 
-#: mutt_ssl_gnutls.c:137 mutt_ssl_gnutls.c:164
+#: mutt_ssl_gnutls.c:138 mutt_ssl_gnutls.c:165
 msgid "Error: no TLS socket open"
 msgstr "Virhe: Ei TLS-sokettia avoinna"
 
-#: mutt_ssl_gnutls.c:312 mutt_ssl_gnutls.c:351
+#: mutt_ssl_gnutls.c:313 mutt_ssl_gnutls.c:352
 msgid "All available protocols for TLS/SSL connection disabled"
 msgstr "Kaikki protokollat TLS/SSL-yhteyttä varten ovat pois käytöstä"
 
-#: mutt_ssl_gnutls.c:357
+#: mutt_ssl_gnutls.c:358
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
 msgstr "Salauksen valintaa $ssl_ciphers-muuttujalla ei tueta"
 
-#: mutt_ssl_gnutls.c:472
+#: mutt_ssl_gnutls.c:473
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "SSL/TLS-yhteys %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:696 mutt_ssl_gnutls.c:848
+#: mutt_ssl_gnutls.c:697 mutt_ssl_gnutls.c:824
 msgid "Error initialising gnutls certificate data"
 msgstr "Virhe alustettaessa gnutls-sertifikaattidataa"
 
-#: mutt_ssl_gnutls.c:703 mutt_ssl_gnutls.c:855
+#: mutt_ssl_gnutls.c:704 mutt_ssl_gnutls.c:831
 msgid "Error processing certificate data"
 msgstr "Virhe käsiteltäessä sertifikaattidataa"
 
-#: mutt_ssl_gnutls.c:839
+#: mutt_ssl_gnutls.c:948
+msgid "WARNING: Server certificate is not yet valid"
+msgstr "Varoitus: Palvelinsertifikaatti ei ole käypä vielä"
+
+#: mutt_ssl_gnutls.c:953
+msgid "WARNING: Server certificate has expired"
+msgstr "Varoitus: Palvelinsertifikaatti on vanhentunut"
+
+#: mutt_ssl_gnutls.c:958
+msgid "WARNING: Server certificate has been revoked"
+msgstr "Varoitus: Palvelinsertifikaatti on poistettu käytöstä"
+
+#: mutt_ssl_gnutls.c:963
+msgid "WARNING: Server hostname does not match certificate"
+msgstr "Varoitus: Palvelimen verkkonimi ei täsmää sertifikaattiin"
+
+#: mutt_ssl_gnutls.c:968
+msgid "WARNING: Signer of server certificate is not a CA"
+msgstr "Varoitus: Palvelinsertifikaatin allekirjoittaja ei ole CA"
+
+#: mutt_ssl_gnutls.c:974
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Varoitus: Palvelimen sertifikaatti on allekirjoitettu epäturvalliseslla "
 "algoritmilla"
-
-#: mutt_ssl_gnutls.c:967
-msgid "WARNING: Server certificate is not yet valid"
-msgstr "Varoitus: Palvelinsertifikaatti ei ole käypä vielä"
-
-#: mutt_ssl_gnutls.c:972
-msgid "WARNING: Server certificate has expired"
-msgstr "Varoitus: Palvelinsertifikaatti on vanhentunut"
-
-#: mutt_ssl_gnutls.c:977
-msgid "WARNING: Server certificate has been revoked"
-msgstr "Varoitus: Palvelinsertifikaatti on poistettu käytöstä"
-
-#: mutt_ssl_gnutls.c:982
-msgid "WARNING: Server hostname does not match certificate"
-msgstr "Varoitus: Palvelimen verkkonimi ei täsmää sertifikaattiin"
-
-#: mutt_ssl_gnutls.c:987
-msgid "WARNING: Signer of server certificate is not a CA"
-msgstr "Varoitus: Palvelinsertifikaatin allekirjoittaja ei ole CA"
 
 #. L10N:
 #. * These three letters correspond to the choices in the string:
@@ -3544,7 +3553,7 @@ msgstr "Varoitus: Palvelinsertifikaatin allekirjoittaja ei ole CA"
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1007
+#: mutt_ssl_gnutls.c:995
 msgid "roa"
 msgstr "hka"
 
@@ -3554,20 +3563,20 @@ msgstr "hka"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1018
+#: mutt_ssl_gnutls.c:1006
 msgid "ro"
 msgstr "hk"
 
-#: mutt_ssl_gnutls.c:1101 mutt_ssl_gnutls.c:1136 mutt_ssl_gnutls.c:1146
+#: mutt_ssl_gnutls.c:1092 mutt_ssl_gnutls.c:1127 mutt_ssl_gnutls.c:1137
 msgid "Unable to get certificate from peer"
 msgstr "Ei voitu hakea sertifikaattia vertaiselta"
 
-#: mutt_ssl_gnutls.c:1107
+#: mutt_ssl_gnutls.c:1098
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Sertifikaatin varmennusvirhe (%s)"
 
-#: mutt_ssl_gnutls.c:1116
+#: mutt_ssl_gnutls.c:1107
 msgid "Certificate is not X.509"
 msgstr "Sertifikaatti ei ole X.509"
 
@@ -3589,44 +3598,44 @@ msgstr "Tunnelivirhe yhteydessä kohteeseen %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1006
+#: muttlib.c:1049
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr ""
 "Tiedosto on hakemisto, tallennetaanko sen alle? [k(y)llä, (e)i, k(a)ikki]"
 
-#: muttlib.c:1006
+#: muttlib.c:1049
 msgid "yna"
 msgstr "yea"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1025
+#: muttlib.c:1068
 msgid "File is a directory, save under it?"
 msgstr "Tiedosto on hakemisto, tallennetaanko sen alle?"
 
-#: muttlib.c:1029
+#: muttlib.c:1072
 msgid "File under directory: "
 msgstr "Tiedosto hakemistossa: "
 
-#: muttlib.c:1038
+#: muttlib.c:1081
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Tiedosto on olemassa, k(o)rvaa, j(a)tka tai (p)eru?"
 
-#: muttlib.c:1038
+#: muttlib.c:1081
 msgid "oac"
 msgstr "oap"
 
-#: muttlib.c:1653
+#: muttlib.c:1696
 msgid "Can't save message to POP mailbox."
 msgstr "Ei voida tallentaa POP-laatikkoon."
 
-#: muttlib.c:1662
+#: muttlib.c:1705
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Lisätäänkö viestit kohteeseen %s?"
 
-#: muttlib.c:1674
+#: muttlib.c:1717
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s ei ole postilaatikko."
@@ -3725,39 +3734,39 @@ msgstr "Postilaatikko on merkitty kirjoitussuojatuksi. %s"
 msgid "Mailbox checkpointed."
 msgstr "Postilaatikon tila on tallennettu."
 
-#: pager.c:1554
+#: pager.c:1547
 msgid "PrevPg"
 msgstr "Ed.Siv."
 
-#: pager.c:1555
+#: pager.c:1548
 msgid "NextPg"
 msgstr "Seur.siv."
 
-#: pager.c:1559
+#: pager.c:1552
 msgid "View Attachm."
 msgstr "Näytä liite"
 
-#: pager.c:1562
+#: pager.c:1555
 msgid "Next"
 msgstr "Seuraava"
 
-#: pager.c:2071 pager.c:2102 pager.c:2134 pager.c:2426
+#: pager.c:2064 pager.c:2095 pager.c:2127 pager.c:2419
 msgid "Bottom of message is shown."
 msgstr "Viestin loppu näkyy."
 
-#: pager.c:2087 pager.c:2109 pager.c:2116 pager.c:2123
+#: pager.c:2080 pager.c:2102 pager.c:2109 pager.c:2116
 msgid "Top of message is shown."
 msgstr "Viestin alku näkyy."
 
-#: pager.c:2359
+#: pager.c:2352
 msgid "Help is currently being shown."
 msgstr "Ohje näkyy."
 
-#: pager.c:2393
+#: pager.c:2386
 msgid "No more quoted text."
 msgstr "Ei enää lainauksia."
 
-#: pager.c:2406
+#: pager.c:2399
 msgid "No more unquoted text after quoted text."
 msgstr "Ei enää lainaamatont tekstiä lainausten jälkeen."
 
@@ -3765,98 +3774,98 @@ msgstr "Ei enää lainaamatont tekstiä lainausten jälkeen."
 msgid "multipart message has no boundary parameter!"
 msgstr "multipart-viestillä ei ole rajoitinmerkkiparametriä."
 
-#: pattern.c:268 pattern.c:588
+#: pattern.c:268 pattern.c:725
 #, c-format
 msgid "Error in expression: %s"
 msgstr "Virhe ilmauksessa: %s"
 
-#: pattern.c:273 pattern.c:593
+#: pattern.c:274 pattern.c:730
 msgid "Empty expression"
 msgstr "Tyhjä ilmaus"
 
-#: pattern.c:406
+#: pattern.c:408
 #, c-format
 msgid "Invalid day of month: %s"
 msgstr "Virheellinen kuukaudenpäivä: %s"
 
-#: pattern.c:420
+#: pattern.c:422
 #, c-format
 msgid "Invalid month: %s"
 msgstr "Virheellinen kuukausi: %s"
 
-#: pattern.c:572
+#: pattern.c:583
 #, c-format
 msgid "Invalid relative date: %s"
 msgstr "Virheellinen suhteellinen päiväys: %s"
 
-#: pattern.c:821 pattern.c:989
+#: pattern.c:854 pattern.c:1022
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "virhe ilmauksen kohdassa: %s"
 
-#: pattern.c:848
+#: pattern.c:881
 #, c-format
 msgid "missing pattern: %s"
 msgstr "puuttuvua ilmaus: %s"
 
-#: pattern.c:867
+#: pattern.c:900
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "pariton sulje: %s"
 
-#: pattern.c:927
+#: pattern.c:960
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: viallinen ilmaus-parametri"
 
-#: pattern.c:933
+#: pattern.c:966
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c: ei tuettu tässä tilassa"
 
-#: pattern.c:946
+#: pattern.c:979
 msgid "missing parameter"
 msgstr "puuttuva parametri"
 
-#: pattern.c:962
+#: pattern.c:995
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "pariton sulje: %s"
 
-#: pattern.c:996
+#: pattern.c:1029
 msgid "empty pattern"
 msgstr "tyhjä kuvio"
 
-#: pattern.c:1372
+#: pattern.c:1421
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "virhe: tuntematon operaatio %d (ilmoita viasta)."
 
-#: pattern.c:1455 pattern.c:1603
+#: pattern.c:1504 pattern.c:1652
 msgid "Compiling search pattern..."
 msgstr "Käännetään hakuilmausta..."
 
-#: pattern.c:1474
+#: pattern.c:1523
 msgid "Executing command on matching messages..."
 msgstr "Suoritetaan viestintäsmäyskomentoa..."
 
-#: pattern.c:1544
+#: pattern.c:1593
 msgid "No messages matched criteria."
 msgstr "Ei täsmääviä viestejä."
 
-#: pattern.c:1634
+#: pattern.c:1683
 msgid "Searching..."
 msgstr "Haetaan..."
 
-#: pattern.c:1647
+#: pattern.c:1696
 msgid "Search hit bottom without finding match"
 msgstr "Haku eteni loppuun ilman täsmäyksiä"
 
-#: pattern.c:1658
+#: pattern.c:1707
 msgid "Search hit top without finding match"
 msgstr "Haku eteni alkuun ilman täsmäyksiä"
 
-#: pattern.c:1690
+#: pattern.c:1739
 msgid "Search interrupted."
 msgstr "Haku katkaistu."
 
@@ -3872,7 +3881,7 @@ msgstr "PGP-salasana unohdettu."
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
 msgstr "[-- Virhe: ei voitu luoda PGP-aliprosessia. --]\n"
 
-#: pgp.c:580 pgp.c:846 pgp.c:995
+#: pgp.c:580 pgp.c:850 pgp.c:999
 msgid ""
 "[-- End of PGP output --]\n"
 "\n"
@@ -3880,15 +3889,19 @@ msgstr ""
 "[-- PGP-tulosteen loppu --]\n"
 "\n"
 
-#: pgp.c:665
+#. L10N: You will see this error message if (1) you are decrypting
+#. (not encrypting) something and (2) it is a plaintext. So the
+#. message does not mean "You failed to encrypt the message."
+#.
+#: pgp.c:669
 msgid "PGP message was not encrypted."
 msgstr "PGP-viesti on salaamatta."
 
-#: pgp.c:891
+#: pgp.c:895
 msgid "Internal error.  Please submit a bug report."
 msgstr "Sisäinen virhe, lähetä vikailmoitus."
 
-#: pgp.c:952
+#: pgp.c:956
 msgid ""
 "[-- Error: could not create a PGP subprocess! --]\n"
 "\n"
@@ -3896,29 +3909,29 @@ msgstr ""
 "[-- Virhe: PGP-prosessin käynnistys ei onnistunut! --]\n"
 "\n"
 
-#: pgp.c:983 pgp.c:1007 smime.c:1937
+#: pgp.c:987 pgp.c:1011 smime.c:1937
 msgid "Decryption failed"
 msgstr "Purku epäonnistui"
 
-#: pgp.c:1213
+#: pgp.c:1217
 msgid "Can't open PGP subprocess!"
 msgstr "Ei voitu avata PGP-prosessia."
 
-#: pgp.c:1647
+#: pgp.c:1651
 msgid "Can't invoke PGP"
 msgstr "Ei voitu kutsua PGP:tä"
 
-#: pgp.c:1761
+#: pgp.c:1765
 #, c-format
 msgid "PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "
 msgstr ""
 "PGP-(a)llekirjoita, (n)imellä, %s-formaatti, (t)yhjennä, (o)ppenc pois?"
 
-#: pgp.c:1762 pgp.c:1792 pgp.c:1814
+#: pgp.c:1766 pgp.c:1796 pgp.c:1818
 msgid "PGP/M(i)ME"
 msgstr "PGP/M(I)ME"
 
-#: pgp.c:1762 pgp.c:1792 pgp.c:1814
+#: pgp.c:1766 pgp.c:1796 pgp.c:1818
 msgid "(i)nline"
 msgstr "(i)nline"
 
@@ -3926,19 +3939,19 @@ msgstr "(i)nline"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: pgp.c:1768
+#: pgp.c:1772
 msgid "safcoi"
 msgstr "anttoi"
 
-#: pgp.c:1773
+#: pgp.c:1777
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP-(a)llekirjoita, (n)imellä, (t)yhjennä, (o)ppenc pois?"
 
-#: pgp.c:1774
+#: pgp.c:1778
 msgid "safco"
 msgstr "antto"
 
-#: pgp.c:1791
+#: pgp.c:1795
 #, c-format
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc "
@@ -3947,34 +3960,34 @@ msgstr ""
 "PGP-(s)alaa, -(a)llekirjoita, (n)imellä, (m)olemmat, %s-formaatti, "
 "(t)yhjennä, tai (o)ppenc? "
 
-#: pgp.c:1794
+#: pgp.c:1798
 msgid "esabfcoi"
 msgstr "sanmttoi"
 
-#: pgp.c:1799
+#: pgp.c:1803
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr "PGP-(s)alaa, -(a)llekirjoita, (n)imellä, (t)yhjennä tai (o)ppenc?"
 
-#: pgp.c:1800
+#: pgp.c:1804
 msgid "esabfco"
 msgstr "sanmtto"
 
-#: pgp.c:1813
+#: pgp.c:1817
 #, c-format
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "
 msgstr ""
 "PGP-(s)alaa, -(a)llekirjoita, (n)imellä, (m)olemmat, %s-formaatti, tai "
 "(t)yhjennä?"
 
-#: pgp.c:1816
+#: pgp.c:1820
 msgid "esabfci"
 msgstr "sanmtti"
 
-#: pgp.c:1821
+#: pgp.c:1825
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (c)lear? "
 msgstr "PGP-(s)alaa, -(a)llekirjoita, (n)imellä, (m)olemmat tai (t)yhjennä"
 
-#: pgp.c:1822
+#: pgp.c:1826
 msgid "esabfc"
 msgstr "sanmtt"
 
@@ -4075,31 +4088,31 @@ msgstr "%s [%d/%d viestiä luettu]"
 msgid "Server closed connection!"
 msgstr "Palvelin katkaisi yhteyden."
 
-#: pop_auth.c:87
+#: pop_auth.c:88
 msgid "Authenticating (SASL)..."
 msgstr "Autentikoidaan (SASL)..."
 
-#: pop_auth.c:223
+#: pop_auth.c:224
 msgid "POP timestamp is invalid!"
 msgstr "POP-aikaleima on viallinen."
 
-#: pop_auth.c:228
+#: pop_auth.c:229
 msgid "Authenticating (APOP)..."
 msgstr "Autentikoidaan (APOP)..."
 
-#: pop_auth.c:251
+#: pop_auth.c:252
 msgid "APOP authentication failed."
 msgstr "APOP-autentilointi epäonnistui."
 
-#: pop_auth.c:290
+#: pop_auth.c:291
 msgid "Command USER is not supported by server."
 msgstr "Komento USER ei toimi tällä palvelimella."
 
-#: pop_auth.c:329 smtp.c:691
+#: pop_auth.c:330 smtp.c:691
 msgid "Authenticating (OAUTHBEARER)..."
 msgstr "Authentikoidaan (OAUTHBEARER)..."
 
-#: pop_auth.c:368
+#: pop_auth.c:369
 msgid "Authentication failed."
 msgstr "Autentikaatio epäonnistui."
 
@@ -4288,24 +4301,27 @@ msgstr "Ei voitu purkaa kaikkia liitteitä, lähetäänlkö eteenpäin MIMEnä?"
 msgid "Forward MIME encapsulated?"
 msgstr "Edelleenlähetetäänkö MIME-koodattuna?"
 
-#: recvcmd.c:626 recvcmd.c:918
+#: recvcmd.c:626 recvcmd.c:921
 #, c-format
 msgid "Can't create %s."
 msgstr "Ei voitu luoda kohdetta %s."
 
-#: recvcmd.c:717
+#. L10N: You will see this error message if you invoke <compose-to-sender>
+#. when you are on a normal attachment.
+#.
+#: recvcmd.c:720
 msgid "You may only compose to sender with message/rfc822 parts."
 msgstr "Vain message/rfc822-osia kirjoittaa lähettäjälle."
 
-#: recvcmd.c:791
+#: recvcmd.c:794
 msgid "Can't find any tagged messages."
 msgstr "Ei löytynyt merkittyjä viestejä."
 
-#: recvcmd.c:812 send.c:739
+#: recvcmd.c:815 send.c:739
 msgid "No mailing lists found!"
 msgstr "Ei löytynyt postituslistoja"
 
-#: recvcmd.c:897
+#: recvcmd.c:900
 msgid "Can't decode all tagged attachments.  MIME-encapsulate the others?"
 msgstr "Ei voitu purkaa kaikkia liitteitä, MIME-koodataanko muut?"
 
@@ -4373,16 +4389,16 @@ msgstr "Virhe viestin lähetyksessä, lapsiprosessi palautti arvon %d.\n"
 msgid "Error sending message."
 msgstr "Virhe viestin lähetyksessä."
 
-#: rfc1524.c:164
+#: rfc1524.c:176
 #, c-format
 msgid "Improperly formatted entry for type %s in \"%s\" line %d"
 msgstr "Väärin muodostettu tietue tyypille %s kohteessa %s rivillä %d"
 
-#: rfc1524.c:396
+#: rfc1524.c:408
 msgid "No mailcap path specified"
 msgstr "Mailcap-polkua ei ole määritelty"
 
-#: rfc1524.c:424
+#: rfc1524.c:436
 #, c-format
 msgid "mailcap entry for type %s not found"
 msgstr "Mailcap-tietue tyypille %s puuttuu"
@@ -4803,11 +4819,11 @@ msgstr "SMTP-autentikaatio vaatii SASLia"
 msgid "SASL authentication failed"
 msgstr "SASL-autentikointi epäonnistui"
 
-#: sort.c:297
+#: sort.c:299
 msgid "Sorting mailbox..."
 msgstr "Järjestellään postilaatikkoa..."
 
-#: sort.c:334
+#: sort.c:336
 msgid "Could not find sorting function! [report this bug]"
 msgstr "Ei voitu löytää järjestelyfunktiota. (ilmoita ohjelmistoviasta)"
 
@@ -6110,3 +6126,6 @@ msgstr "hae tuetut julkiset avaimet"
 #: ../keymap_alldefs.h:646
 msgid "show S/MIME options"
 msgstr "näytä S/MIME-asetukset"
+
+#~ msgid "MD5 Fingerprint: %s"
+#~ msgstr "MD5-sormenjälki: %s"
