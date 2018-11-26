@@ -153,6 +153,10 @@ typedef struct color_line
   short bg;
   int pair;
   struct color_line *next;
+
+  unsigned int stop_matching : 1; /* used by the pager for body patterns,
+                                     to prevent the color from being retried
+                                     once it fails. */
 } COLOR_LINE;
 
 #define MUTT_PROGRESS_SIZE      (1<<0)  /* traffic-based progress */

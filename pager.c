@@ -751,7 +751,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 		struct q_class_t **QuoteList, int *q_level, int *force_redraw,
 		int q_classify)
 {
-  COLOR_LINE *color_line;
+  COLOR_LINE *color_line, *color_list;
   regmatch_t pmatch[1];
   int found, offset, null_rx, i;
 
@@ -872,6 +872,16 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
     i = 0;
     offset = 0;
     lineInfo[n].chunks = 0;
+    if (lineInfo[n].type == MT_COLOR_HDEFAULT)
+      color_list = ColorHdrList;
+    else
+      color_list = ColorBodyList;
+    color_line = color_list;
+    while (color_line)
+    {
+      color_line->stop_matching = 0;
+      color_line = color_line->next;
+    }
     do
     {
       if (!buf[offset])
@@ -879,13 +889,11 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 
       found = 0;
       null_rx = 0;
-      if (lineInfo[n].type == MT_COLOR_HDEFAULT)
-        color_line = ColorHdrList;
-      else
-        color_line = ColorBodyList;
+      color_line = color_list;
       while (color_line)
       {
-	if (regexec (&color_line->rx, buf + offset, 1, pmatch,
+	if (!color_line->stop_matching &&
+            regexec (&color_line->rx, buf + offset, 1, pmatch,
 		     (offset ? REG_NOTBOL : 0)) == 0)
 	{
 	  if (pmatch[0].rm_eo != pmatch[0].rm_so)
@@ -921,6 +929,11 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 	  else
 	    null_rx = 1; /* empty regexp; don't add it, but keep looking */
 	}
+        /* Once a regexp fails to match, don't try matching it again.
+         * On very long lines this can cause a performance issue if there
+         * are other regexps that have many matches. */
+        else
+          color_line->stop_matching = 1;
 	color_line = color_line->next;
       }
 
