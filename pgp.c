@@ -666,7 +666,7 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
                (not encrypting) something and (2) it is a plaintext. So the
                message does not mean "You failed to encrypt the message."
             */
-	    mutt_error _("PGP message was not encrypted.");
+	    mutt_error _("PGP message is not encrypted.");
 	  else
 	    mutt_message _("PGP message successfully decrypted.");
         }
