@@ -1288,7 +1288,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** Mutt requests these header fields in addition to the default headers
-  ** (``Date:'', ``From:'', ``Subject:'', ``To:'', ``Cc:'', ``Message-Id:'',
+  ** (``Date:'', ``From:'', ``Sender:'', ``Subject:'', ``To:'', ``Cc:'', ``Message-Id:'',
   ** ``References:'', ``Content-Type:'', ``Content-Description:'', ``In-Reply-To:'',
   ** ``Reply-To:'', ``Lines:'', ``List-Post:'', ``X-Label:'') from IMAP
   ** servers before displaying the index menu. You may want to add more
