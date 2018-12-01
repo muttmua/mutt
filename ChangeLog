@@ -1,3 +1,75 @@
+2018-12-01 11:27:20 -0800  Kevin McCarthy  <kevin@8t8.us> (bf2f59d4)
+
+        * Document Sender header as a default in $imap_headers.
+
+M	init.h
+
+2018-11-29 12:36:08 -0800  Kevin McCarthy  <kevin@8t8.us> (42983686)
+
+        * Add SENDER to default list of IMAP headers.
+        
+        This header is matched by the ~e and ~L patterns.  Those patterns
+        should work without the user having to know to add Sender to the list
+        of $imap_headers.  This was probably just an oversight.
+
+M	imap/message.c
+
+2018-11-28 00:19:38 +0100  Adam Golebiowski  <adamg@agmk.net> (b4ade8a7)
+
+        * Updated Polish translation.
+
+M	po/pl.po
+
+2018-11-27 13:55:04 -0800  Kevin McCarthy  <kevin@8t8.us> (41816374)
+
+        * Fix QRESYNC crash after a large number of VANISHED messages.
+        
+        When handling QRESYNC vanished, imap_expunge_mailbox() was called to
+        empty out the messages.  Various counters, including vcount are
+        updated by the mx_update_tables() after the expunge.
+        
+        These counters need to be reset, because mx_update_context() will do
+        so once again at the end of reading new headers.  This can cause an
+        out of bounds access in v2r.
+
+M	imap/message.c
+
+2018-11-25 09:50:23 -0800  Kevin McCarthy  <kevin@8t8.us> (3b75515c)
+
+        * automatic post-release commit for mutt-1.11.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
 2018-11-25 09:33:53 -0800  Kevin McCarthy  <kevin@8t8.us> (6de8a20e)
 
         * Bump release date.
