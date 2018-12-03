@@ -2228,7 +2228,7 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   return *cur? 0:-1;
 }
 
-static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp, int dryrun)
+static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
 {
   /* Before gpgme 1.9.0 and gpg 2.1.14 there was no side-effect free
    * way to view key data in GPGME, so we import the key into a
@@ -2257,7 +2257,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp, int dryrun)
 
   tmpctx = create_gpgme_context (0);
 
-  if (dryrun && legacy_api)
+  if (legacy_api)
   {
     snprintf (tmpdir, sizeof(tmpdir), "%s/mutt-gpgme-XXXXXX", Tempdir);
     if (!mkdtemp (tmpdir))
@@ -2284,15 +2284,6 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp, int dryrun)
     }
   }
 
-  if (!dryrun || legacy_api)
-    {
-      if ((err = gpgme_op_import (tmpctx, keydata)) != GPG_ERR_NO_ERROR)
-        {
-          dprint (1, (debugfile, "Error importing key\n"));
-          goto err_tmpdir;
-        }
-    }
-
   mutt_mktemp (tmpfile, sizeof (tmpfile));
   *fp = safe_fopen (tmpfile, "w+");
   if (!*fp)
@@ -2303,7 +2294,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp, int dryrun)
   unlink (tmpfile);
 
 #if GPGME_VERSION_NUMBER >= 0x010900 /* 1.9.0 */
-  if (dryrun && !legacy_api)
+  if (!legacy_api)
     err = gpgme_op_keylist_from_data_start (tmpctx, keydata, 0);
   else
 #endif /* gpgme >= 1.9.0 */
@@ -2351,13 +2342,14 @@ err_fp:
   if (rc)
     safe_fclose (fp);
 err_tmpdir:
-  if (dryrun && legacy_api)
+  if (legacy_api)
     mutt_rmtree (tmpdir);
 err_ctx:
   gpgme_release (tmpctx);
 
   return rc;
 }
+
 
 /* Check that 'b' is a complete line containing 'a' followed by either LF or CRLF.
  *
@@ -2466,37 +2458,102 @@ int pgp_gpgme_check_traditional (FILE *fp, BODY *b, int just_one)
 
 void pgp_gpgme_invoke_import (const char *fname)
 {
-  gpgme_data_t keydata;
+  gpgme_ctx_t ctx;
+  gpgme_data_t keydata = NULL;
   gpgme_error_t err;
-  FILE* in;
-  FILE* out;
+  FILE *in = NULL;
+  gpgme_import_result_t impres;
+  gpgme_import_status_t st;
+  int any;
+
+  ctx = create_gpgme_context (0);
 
   if (!(in = safe_fopen (fname, "r")))
-    return;
-  /* Note that the stream, "in", needs to be kept open while the keydata
-   * is used.
-   */
-  if ((err = gpgme_data_new_from_stream (&keydata, in)) != GPG_ERR_NO_ERROR)
   {
-    safe_fclose (&in);
-    mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
-    mutt_sleep (1);
-    return;
+    mutt_perror (fname);
+    goto leave;
   }
 
-  if (pgp_gpgme_extract_keys (keydata, &out, 0))
+  /* Note that the stream, "in", needs to be kept open while the keydata
+   * is used.   */
+  if ((err = gpgme_data_new_from_stream (&keydata, in)) != GPG_ERR_NO_ERROR)
   {
-    mutt_error (_("Error extracting key data!\n"));
+    mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
     mutt_sleep (1);
+    goto leave;
   }
-  else
+
+  err = gpgme_op_import (ctx, keydata);
+  if (err)
   {
-    fseek (out, 0, SEEK_SET);
-    mutt_copy_stream (out, stdout);
+    mutt_error (_("error importing key: %s\n"), gpgme_strerror (err));
+    mutt_sleep (1);
+    goto leave;
   }
+
+  /* Print infos about the imported keys to stdout.  */
+  impres = gpgme_op_import_result (ctx);
+  if (!impres)
+  {
+    fputs ("oops: no import result returned\n", stdout);
+    goto leave;
+  }
+
+  for (st = impres->imports; st; st = st->next)
+  {
+    if (st->result)
+      continue;
+    printf ("key %s imported (", NONULL (st->fpr));
+    /* Note that we use the singular even if it is possible that
+     * several uids etc are new.  This simply looks better.  */
+    any = 0;
+    if (st->status & GPGME_IMPORT_SECRET)
+    {
+      printf ("secret parts");
+      any = 1;
+    }
+    if ((st->status & GPGME_IMPORT_NEW))
+    {
+      printf ("%snew key", any? ", ":"");
+      any = 1;
+    }
+    if ((st->status & GPGME_IMPORT_UID))
+    {
+      printf ("%snew uid", any? ", ":"");
+      any = 1;
+    }
+    if ((st->status & GPGME_IMPORT_SIG))
+    {
+      printf ("%snew sig", any? ", ":"");
+      any = 1;
+    }
+    if ((st->status & GPGME_IMPORT_SUBKEY))
+    {
+      printf ("%snew subkey", any? ", ":"");
+      any = 1;
+    }
+    printf ("%s)\n", any? "":"not changed");
+    /* Fixme: Should we lookup each imported key and print more infos? */
+  }
+  /* Now print keys which failed the import.  Unfortunately in most
+   * cases gpg will bail out early and not tell gpgme about.  */
+  /* FIXME: We could instead use the new GPGME_AUDITLOG_DIAG to show
+   * the actual gpg diagnostics.  But I fear that would clutter the
+   * output too much.  Maybe a dedicated prompt or option to do this
+   * would be helpful.  */
+  for (st = impres->imports; st; st = st->next)
+  {
+    if (!st->result)
+      continue;
+    printf ("key %s import failed: %s\n", NONULL (st->fpr),
+            gpgme_strerror (st->result));
+  }
+  fflush (stdout);
+
+ leave:
+  gpgme_release (ctx);
   gpgme_data_release (keydata);
   safe_fclose (&in);
-  safe_fclose (&out);
 }
 
 
@@ -2641,7 +2698,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
           /* Invoke PGP if needed */
           if (pgp_keyblock)
           {
-            pgp_gpgme_extract_keys (armored_data, &pgpout, 1);
+            pgp_gpgme_extract_keys (armored_data, &pgpout);
           }
           else if (!clearsign || (s->flags & MUTT_VERIFY))
             {
