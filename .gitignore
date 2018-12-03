@@ -21,6 +21,7 @@
 /po/POTFILES
 /config.guess
 /config.sub
+/configure.lineno
 /depcomp
 /install-sh
 /missing
