@@ -8,7 +8,7 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
-1.12.1
+1.12.0 (unreleased)
 
   ! $ssl_use_tlsv1 and ssl_use_tlsv1_1 now default to unset.
 
