@@ -129,11 +129,11 @@ AC_ARG_ENABLE(gpgme, AS_HELP_STRING([--enable-gpgme],[Enable GPGME support]),
 
 if test x"$enable_gpgme" = xyes; then
    AC_MSG_RESULT(yes)
-   AM_PATH_GPGME(1.2.0, AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
+   AM_PATH_GPGME(1.4.0, AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
 		 [Defined, if GPGME support is enabled]),
 		 [gpgme_found=no])
    if test x"$gpgme_found" = xno; then
-      AC_MSG_ERROR([*** GPGME not found or version is older than 1.2 ***])
+      AC_MSG_ERROR([*** GPGME not found or version is older than 1.4 ***])
    else
       MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS crypt-gpgme.o crypt-mod-pgp-gpgme.o crypt-mod-smime-gpgme.o"
    fi
