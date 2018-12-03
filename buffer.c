@@ -172,7 +172,7 @@ int mutt_buffer_add_printf (BUFFER* buf, const char* fmt, ...)
 /* Dynamically grows a BUFFER to accommodate s, in increments of 128 bytes.
  * Always one byte bigger than necessary for the null terminator, and
  * the buffer is always null-terminated */
-static void mutt_buffer_add (BUFFER* buf, const char* s, size_t len)
+void mutt_buffer_addstr_n (BUFFER* buf, const char* s, size_t len)
 {
   if (buf->dptr + len + 1 > buf->data + buf->dsize)
     mutt_buffer_increase_size (buf, buf->dsize + (len < 128 ? 128 : len + 1));
@@ -183,12 +183,12 @@ static void mutt_buffer_add (BUFFER* buf, const char* s, size_t len)
 
 void mutt_buffer_addstr (BUFFER* buf, const char* s)
 {
-  mutt_buffer_add (buf, s, mutt_strlen (s));
+  mutt_buffer_addstr_n (buf, s, mutt_strlen (s));
 }
 
 void mutt_buffer_addch (BUFFER* buf, char c)
 {
-  mutt_buffer_add (buf, &c, 1);
+  mutt_buffer_addstr_n (buf, &c, 1);
 }
 
 void mutt_buffer_strcpy (BUFFER *buf, const char *s)
