@@ -87,9 +87,11 @@ set pgp_export_command="gpg --no-verbose --export --armor %r"
 set pgp_verify_key_command="gpg --verbose --batch --fingerprint --check-sigs %r"
 
 # read in the public key ring
+# note: the second --with-fingerprint adds fingerprints to subkeys
 set pgp_list_pubring_command="gpg --no-verbose --batch --quiet --with-colons --with-fingerprint --with-fingerprint --list-keys %r"
 
 # read in the secret key ring
+# note: the second --with-fingerprint adds fingerprints to subkeys
 set pgp_list_secring_command="gpg --no-verbose --batch --quiet --with-colons --with-fingerprint --with-fingerprint --list-secret-keys %r"
 
 # fetch keys
