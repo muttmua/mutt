@@ -976,6 +976,41 @@ void mutt_parse_mime_message (CONTEXT *ctx, HEADER *cur)
   cur->attach_valid = 0;
 }
 
+void mutt_auto_subscribe (const char *mailto)
+{
+  ENVELOPE *lpenv;
+
+  if (!AutoSubscribeCache)
+    AutoSubscribeCache = hash_create (200, MUTT_HASH_STRCASECMP | MUTT_HASH_STRDUP_KEYS);
+
+  if (!mailto || hash_find (AutoSubscribeCache, mailto))
+    return;
+
+  hash_insert (AutoSubscribeCache, mailto, AutoSubscribeCache);
+
+  lpenv = mutt_new_envelope (); /* parsed envelope from the List-Post mailto: URL */
+
+  if ((url_parse_mailto (lpenv, NULL, mailto) != -1) &&
+      lpenv->to && lpenv->to->mailbox &&
+      !mutt_match_rx_list (lpenv->to->mailbox, SubscribedLists) &&
+      !mutt_match_rx_list (lpenv->to->mailbox, UnMailLists) &&
+      !mutt_match_rx_list (lpenv->to->mailbox, UnSubscribedLists))
+  {
+    BUFFER err;
+    char errbuf[STRING];
+
+    memset (&err, 0, sizeof(err));
+    err.data = errbuf;
+    err.dsize = sizeof(errbuf);
+
+    /* mutt_add_to_rx_list() detects duplicates, so it is safe to
+     * try to add here without any checks. */
+    mutt_add_to_rx_list (&MailLists, lpenv->to->mailbox, REG_ICASE, &err);
+    mutt_add_to_rx_list (&SubscribedLists, lpenv->to->mailbox, REG_ICASE, &err);
+  }
+  mutt_free_envelope (&lpenv);
+}
+
 int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short user_hdrs, short weed,
 			    short do_2047, LIST **lastp)
 {
@@ -1120,6 +1155,8 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 	  {
 	    FREE (&e->list_post);
 	    e->list_post = mutt_substrdup (beg, end);
+            if (option (OPTAUTOSUBSCRIBE))
+              mutt_auto_subscribe (e->list_post);
 	    break;
 	  }
 	}

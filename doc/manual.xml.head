@@ -6205,7 +6205,9 @@ not have to be a mailing list, but that is what it is most often used
 for), and what lists you are subscribed to.  This is accomplished
 through the use of the <link linkend="lists"><command>lists</command>
 and <command>subscribe</command></link> commands in your
-<literal>.muttrc</literal>.
+<literal>.muttrc</literal>.  Alternatively or additionally, you can set
+<link linkend="auto-subscribe">$auto_subscribe</link> to automatically
+subscribe addresses found in a <literal>List-Post</literal> header.
 </para>
 
 <para>

@@ -163,6 +163,7 @@ void mutt_buffer_adv_mktemp (BUFFER *);
 void mutt_adv_mktemp (char *, size_t);
 void mutt_alias_menu (char *, size_t, ALIAS *);
 void mutt_allow_interrupt (int);
+void mutt_auto_subscribe (const char *);
 void mutt_block_signals (void);
 void mutt_block_signals_system (void);
 int mutt_body_handler (BODY *, STATE *);

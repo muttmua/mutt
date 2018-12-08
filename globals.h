@@ -170,6 +170,7 @@ WHERE const char *ReleaseDate;
 
 WHERE HASH *Groups;
 WHERE HASH *ReverseAlias;
+WHERE HASH *AutoSubscribeCache;
 
 WHERE LIST *AutoViewList INITVAL(0);
 WHERE LIST *AlternativeOrderList INITVAL(0);

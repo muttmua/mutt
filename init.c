@@ -1377,6 +1377,7 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFF
 
 static int parse_unlists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
+  hash_destroy (&AutoSubscribeCache, NULL);
   do
   {
     mutt_extract_token (buf, s, 0);
@@ -1425,6 +1426,7 @@ static int parse_subscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
 
 static int parse_unsubscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
+  hash_destroy (&AutoSubscribeCache, NULL);
   do
   {
     mutt_extract_token (buf, s, 0);

@@ -552,6 +552,9 @@ restore_envelope(ENVELOPE * e, const unsigned char *d, int *off, int convert)
   restore_address(&e->mail_followup_to, d, off, convert);
 
   restore_char(&e->list_post, d, off, convert);
+  if (option (OPTAUTOSUBSCRIBE))
+    mutt_auto_subscribe (e->list_post);
+
   restore_char(&e->subject, d, off, convert);
   restore_int((unsigned int *) (&real_subj_off), d, off);
 
