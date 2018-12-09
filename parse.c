@@ -980,10 +980,6 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 			    short do_2047, LIST **lastp)
 {
   int matched = 0;
-  LIST *last = NULL;
-  
-  if (lastp)
-    last = *lastp;
   
   switch (ascii_tolower (line[0]))
   {
@@ -1279,9 +1275,14 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
   /* Keep track of the user-defined headers */
   if (!matched && user_hdrs)
   {
+    LIST *last = NULL;
+
+    if (lastp)
+      last = *lastp;
+
     /* restore the original line */
     line[strlen (line)] = ':';
-    
+
     if (weed && option (OPTWEED) && mutt_matches_ignore (line, Ignore)
 	&& !mutt_matches_ignore (line, UnIgnore))
       goto done;
@@ -1296,11 +1297,12 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
     last->data = safe_strdup (line);
     if (do_2047)
       rfc2047_decode (&last->data);
+
+    if (lastp)
+      *lastp = last;
   }
 
   done:
-  
-  *lastp = last;
   return matched;
 }
   
