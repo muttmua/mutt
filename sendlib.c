@@ -2574,13 +2574,7 @@ void mutt_unprepare_envelope (ENVELOPE *env)
   rfc822_free_address (&env->mail_followup_to);
 
   /* back conversions */
-  rfc2047_decode_adrlist (env->to);
-  rfc2047_decode_adrlist (env->cc);
-  rfc2047_decode_adrlist (env->bcc);
-  rfc2047_decode_adrlist (env->from);
-  rfc2047_decode_adrlist (env->reply_to);
-  rfc2047_decode (&env->subject);
-  rfc2047_decode (&env->x_label);
+  rfc2047_decode_envelope (env);
 }
 
 static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *resent_from,

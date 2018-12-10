@@ -948,3 +948,17 @@ void rfc2047_decode_adrlist (ADDRESS *a)
     a = a->next;
   }
 }
+
+void rfc2047_decode_envelope (ENVELOPE *e)
+{
+  rfc2047_decode_adrlist (e->from);
+  rfc2047_decode_adrlist (e->to);
+  rfc2047_decode_adrlist (e->cc);
+  rfc2047_decode_adrlist (e->bcc);
+  rfc2047_decode_adrlist (e->reply_to);
+  rfc2047_decode_adrlist (e->mail_followup_to);
+  rfc2047_decode_adrlist (e->return_path);
+  rfc2047_decode_adrlist (e->sender);
+  rfc2047_decode (&e->x_label);
+  rfc2047_decode (&e->subject);
+}

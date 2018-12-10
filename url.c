@@ -338,16 +338,7 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
   }
 
   /* RFC2047 decode after the RFC822 parsing */
-  rfc2047_decode_adrlist (e->from);
-  rfc2047_decode_adrlist (e->to);
-  rfc2047_decode_adrlist (e->cc);
-  rfc2047_decode_adrlist (e->bcc);
-  rfc2047_decode_adrlist (e->reply_to);
-  rfc2047_decode_adrlist (e->mail_followup_to);
-  rfc2047_decode_adrlist (e->return_path);
-  rfc2047_decode_adrlist (e->sender);
-  rfc2047_decode (&e->x_label);
-  rfc2047_decode (&e->subject);
+  rfc2047_decode_envelope (e);
 
   rc = 0;
 
