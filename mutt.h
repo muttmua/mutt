@@ -734,7 +734,9 @@ typedef struct body
   time_t stamp;			/* time stamp of last
 				 * encoding update.
 				 */
-  
+
+  struct envelope *mime_headers; /* memory hole protected headers */
+
   unsigned int type : 4;        /* content-type primary type */
   unsigned int encoding : 3;    /* content-transfer-encoding */
   unsigned int disposition : 2; /* content-disposition */

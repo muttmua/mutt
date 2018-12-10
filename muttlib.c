@@ -226,6 +226,8 @@ void mutt_free_body (BODY **p)
       mutt_free_header(&b->hdr);
     }
 
+    mutt_free_envelope (&b->mime_headers);
+
     if (b->parts)
       mutt_free_body (&b->parts);
 

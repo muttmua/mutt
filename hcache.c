@@ -468,6 +468,7 @@ dump_body(BODY * c, unsigned char *d, int *off, int convert)
   nb.parts = NULL;
   nb.hdr = NULL;
   nb.aptr = NULL;
+  nb.mime_headers = NULL;
 
   lazy_realloc(&d, *off + sizeof (BODY));
   memcpy(d + *off, &nb, sizeof (BODY));

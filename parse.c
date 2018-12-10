@@ -410,6 +410,7 @@ static void parse_content_disposition (const char *s, BODY *ct)
 BODY *mutt_read_mime_header (FILE *fp, int digest)
 {
   BODY *p = mutt_new_body();
+  ENVELOPE *e = mutt_new_envelope ();
   char *c;
   char *line = safe_malloc (LONG_STRING);
   size_t linelen = LONG_STRING;
@@ -469,6 +470,11 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
       }
     }
 #endif
+    else
+    {
+      if (mutt_parse_rfc822_line (e, NULL, line, c, 0, 0, 0, NULL))
+        p->mime_headers = e;
+    }
   }
   p->offset = ftello (fp); /* Mark the start of the real data */
   if (p->type == TYPETEXT && !p->subtype)
@@ -477,6 +483,11 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
     p->subtype = safe_strdup ("rfc822");
 
   FREE (&line);
+
+  if (p->mime_headers)
+    rfc2047_decode_envelope (p->mime_headers);
+  else
+    mutt_free_envelope (&e);
 
   return (p);
 }
