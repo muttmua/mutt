@@ -908,6 +908,22 @@ static void crypt_fetch_signatures (BODY ***signatures, BODY *a, int *n)
   }
 }
 
+int mutt_protected_headers_handler (BODY *a, STATE *s)
+{
+  if (option (OPTCRYPTPROTHDRSREAD) && a->mime_headers)
+  {
+    if (a->mime_headers->subject)
+    {
+      mutt_write_one_header (s->fpout, "Subject", a->mime_headers->subject,
+                             s->prefix,
+                             mutt_window_wrap_cols (MuttIndexWindow, Wrap),
+                             (s->flags & MUTT_DISPLAY) ? CH_DISPLAY : 0);
+      state_puts ("\n", s);
+    }
+  }
+
+  return 0;
+}
 
 /*
  * This routine verifies a  "multipart/signed"  body.
@@ -1022,6 +1038,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
       /* Now display the signed body */
       state_attach_puts (_("[-- The following data is signed --]\n\n"), s);
 
+      mutt_protected_headers_handler (a, s);
 
       FREE (&signatures);
     }

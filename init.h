@@ -588,6 +588,19 @@ struct option_t MuttVars[] = {
   ** be manually re-enabled in the pgp or smime menus.
   ** (Crypto only)
    */
+  { "crypt_protected_headers_read", DT_BOOL, R_NONE, OPTCRYPTPROTHDRSREAD, 1 },
+  /*
+  ** .pp
+  ** When set, Mutt will display protected headers ("Memory Hole") in the pager,
+  ** and will update the index and header cache with revised headers.
+  **
+  ** Protected headers are stored inside the encrypted or signed part of an
+  ** an email, to prevent disclosure or tampering.
+  ** For more information see https://github.com/autocrypt/memoryhole.
+  **
+  ** Currently Mutt only supports the Subject header.
+  ** (Crypto only)
+   */
   { "pgp_replyencrypt",		DT_SYN,  R_NONE, UL "crypt_replyencrypt", 1  },
   { "crypt_replyencrypt",	DT_BOOL, R_NONE, OPTCRYPTREPLYENCRYPT, 1 },
   /*

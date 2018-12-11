@@ -2901,16 +2901,40 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
       tattach->goodsig = is_signed > 0;
 
       if (s->flags & MUTT_DISPLAY)
+      {
         state_attach_puts (is_signed?
           _("[-- The following data is PGP/MIME signed and encrypted --]\n\n"):
           _("[-- The following data is PGP/MIME encrypted --]\n\n"),
                            s);
+
+        mutt_protected_headers_handler (tattach, s);
+      }
+
+      /* Store any protected headers in the parent so they can be
+       * accessed for index updates after the handler recursion is done.
+       * This is done before the handler to prevent a nested encrypted
+       * handler from freeing the headers. */
+      mutt_free_envelope (&a->mime_headers);
+      a->mime_headers = tattach->mime_headers;
+      tattach->mime_headers = NULL;
 
       {
         FILE *savefp = s->fpin;
         s->fpin = fpout;
         rc = mutt_body_handler (tattach, s);
         s->fpin = savefp;
+      }
+
+      /* Embedded multipart signed protected headers override the
+       * encrypted headers.  We need to do this after the handler so
+       * they can be printed in the pager. */
+      if (mutt_is_multipart_signed (tattach) &&
+          tattach->parts &&
+          tattach->parts->mime_headers)
+      {
+        mutt_free_envelope (&a->mime_headers);
+        a->mime_headers = tattach->parts->mime_headers;
+        tattach->parts->mime_headers = NULL;
       }
 
       /*
@@ -2958,6 +2982,10 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
 
   dprint (2, (debugfile, "Entering smime_encrypted handler\n"));
 
+  /* clear out any mime headers before the handler, so they can't be
+   * spoofed. */
+  mutt_free_envelope (&a->mime_headers);
+
   a->warnsig = 0;
   mutt_mktemp (tempfile, sizeof (tempfile));
   if (!(fpout = safe_fopen (tempfile, "w+")))
@@ -2974,16 +3002,40 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
       tattach->goodsig = is_signed > 0;
 
       if (s->flags & MUTT_DISPLAY)
+      {
         state_attach_puts (is_signed?
           _("[-- The following data is S/MIME signed --]\n\n"):
           _("[-- The following data is S/MIME encrypted --]\n\n"),
                            s);
+
+        mutt_protected_headers_handler (tattach, s);
+      }
+
+      /* Store any protected headers in the parent so they can be
+       * accessed for index updates after the handler recursion is done.
+       * This is done before the handler to prevent a nested encrypted
+       * handler from freeing the headers. */
+      mutt_free_envelope (&a->mime_headers);
+      a->mime_headers = tattach->mime_headers;
+      tattach->mime_headers = NULL;
 
       {
         FILE *savefp = s->fpin;
         s->fpin = fpout;
         rc = mutt_body_handler (tattach, s);
         s->fpin = savefp;
+      }
+
+      /* Embedded multipart signed protected headers override the
+       * encrypted headers.  We need to do this after the handler so
+       * they can be printed in the pager. */
+      if (mutt_is_multipart_signed (tattach) &&
+          tattach->parts &&
+          tattach->parts->mime_headers)
+      {
+        mutt_free_envelope (&a->mime_headers);
+        a->mime_headers = tattach->parts->mime_headers;
+        tattach->parts->mime_headers = NULL;
       }
 
       /*

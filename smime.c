@@ -1970,6 +1970,20 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
     p->length = info.st_size - p->offset;
 
     mutt_parse_part (fpout, p);
+
+    if (s->flags & MUTT_DISPLAY)
+    {
+      mutt_protected_headers_handler (p, s);
+    }
+
+    /* Store any protected headers in the parent so they can be
+     * accessed for index updates after the handler recursion is done.
+     * This is done before the handler to prevent a nested encrypted
+     * handler from freeing the headers. */
+    mutt_free_envelope (&m->mime_headers);
+    m->mime_headers = p->mime_headers;
+    p->mime_headers = NULL;
+
     if (s->fpout)
     {
       rewind (fpout);
@@ -1979,6 +1993,18 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
       s->fpin = tmpfp_buffer;
     }
 
+    /* Embedded multipart signed protected headers override the
+     * encrypted headers.  We need to do this after the handler so
+     * they can be printed in the pager. */
+    if (!(type & SMIMESIGN) &&
+        mutt_is_multipart_signed (p) &&
+        p->parts &&
+        p->parts->mime_headers)
+    {
+      mutt_free_envelope (&m->mime_headers);
+      m->mime_headers = p->parts->mime_headers;
+      p->parts->mime_headers = NULL;
+    }
   }
 
   safe_fclose (&smimeout);
@@ -2099,6 +2125,10 @@ int smime_application_smime_handler (BODY *m, STATE *s)
 {
   int rv = -1;
   BODY *tattach;
+
+  /* clear out any mime headers before the handler, so they can't be
+   * spoofed. */
+  mutt_free_envelope (&m->mime_headers);
 
   tattach = smime_handle_entity (m, s, NULL);
   if (tattach)
