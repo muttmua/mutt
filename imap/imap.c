@@ -1324,6 +1324,30 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
       if ((h->env && (h->env->refs_changed || h->env->irt_changed)) ||
 	  h->attach_del || h->xlabel_changed)
       {
+        /* NOTE and TODO:
+         *
+         * The mx_open_mailbox() in append mode below merely hijacks an existing
+         * idata; it doesn't reset idata->ctx.  imap_append_message() ends up
+         * using (borrowing) the same idata we are using.
+         *
+         * Right after the APPEND operation finishes, the server can send an
+         * EXISTS notifying of the new message.  Then, while still inside
+         * imap_append_message(), imap_cmd_step() -> imap_cmd_finish() will
+         * call imap_read_headers() to download those (because the idata's
+         * reopen_allow is set).
+         *
+         * The imap_read_headers() will open (and clobber) the idata->hcache we
+         * just opened above, then close it.
+         *
+         * The easy and less dangerous fix done here (for a stable branch bug
+         * fix) is to close and reopen the header cache around the operation.
+         *
+         * A better fix would be allowing idata->hcache reuse.  When that is
+         * done, the close/reopen in read_headers_condstore_qresync_updates()
+         * can also be removed. */
+#if USE_HCACHE
+        imap_hcache_close (idata);
+#endif
         mutt_message (_("Saving changed messages... [%d/%d]"), n+1,
                       ctx->msgcount);
 	if (!appendctx)
@@ -1333,6 +1357,9 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
 	else
 	  _mutt_save_message (h, appendctx, 1, 0, 0);
 	h->xlabel_changed = 0;
+#if USE_HCACHE
+        idata->hcache = imap_hcache_open (idata, NULL);
+#endif
       }
     }
   }
