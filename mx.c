@@ -1545,4 +1545,13 @@ int mx_msg_padding_size (CONTEXT *ctx)
   return ctx->mx_ops->msg_padding_size (ctx);
 }
 
+/* Writes a single header out to the header cache. */
+int mx_save_to_header_cache (CONTEXT *ctx, HEADER *h)
+{
+  if (!ctx->mx_ops || !ctx->mx_ops->save_to_header_cache)
+    return 0;
+
+  return ctx->mx_ops->save_to_header_cache (ctx, h);
+}
+
 /* vim: set sw=2: */

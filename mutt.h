@@ -981,6 +981,7 @@ struct mx_ops
   int (*commit_msg) (struct _context *, struct _message *);
   int (*open_new_msg) (struct _message *, struct _context *, HEADER *);
   int (*msg_padding_size) (struct _context *);
+  int (*save_to_header_cache) (struct _context *, struct header *);
 };
 
 typedef struct _context

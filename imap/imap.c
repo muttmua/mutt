@@ -1605,6 +1605,25 @@ static int imap_check_mailbox_reopen (CONTEXT *ctx, int *index_hint)
   return rc;
 }
 
+static int imap_save_to_header_cache (CONTEXT *ctx, HEADER *h)
+{
+  int rc = 0;
+#ifdef USE_HCACHE
+  int close_hc = 1;
+  IMAP_DATA* idata;
+
+  idata = (IMAP_DATA *)ctx->data;
+  if (idata->hcache)
+    close_hc = 0;
+  else
+    idata->hcache = imap_hcache_open (idata, NULL);
+  rc = imap_hcache_put (idata, h);
+  if (close_hc)
+    imap_hcache_close (idata);
+#endif
+  return rc;
+}
+
 /* split path into (idata,mailbox name) */
 static int imap_get_mailbox (const char* path, IMAP_DATA** hidata, char* buf, size_t blen)
 {
@@ -2336,4 +2355,5 @@ struct mx_ops mx_imap_ops = {
   .open_new_msg = imap_open_new_message,
   .check = imap_check_mailbox_reopen,
   .sync = NULL,      /* imap syncing is handled by imap_sync_mailbox */
+  .save_to_header_cache = imap_save_to_header_cache,
 };

@@ -1406,6 +1406,7 @@ struct mx_ops mx_mbox_ops = {
   .check = mbox_check_mailbox,
   .sync = mbox_sync_mailbox,
   .msg_padding_size = mbox_msg_padding_size,
+  .save_to_header_cache = NULL,
 };
 
 struct mx_ops mx_mmdf_ops = {
@@ -1419,4 +1420,5 @@ struct mx_ops mx_mmdf_ops = {
   .check = mbox_check_mailbox,
   .sync = mbox_sync_mailbox,
   .msg_padding_size = mmdf_msg_padding_size,
+  .save_to_header_cache = NULL,
 };

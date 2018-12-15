@@ -2508,6 +2508,33 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
 }
 
 
+static int maildir_save_to_header_cache (CONTEXT *ctx, HEADER *h)
+{
+  int rc = 0;
+#if USE_HCACHE
+  header_cache_t *hc;
+
+  hc = mutt_hcache_open (HeaderCache, ctx->path, NULL);
+  rc = mutt_hcache_store (hc, h->path + 3, h, 0, &maildir_hcache_keylen,
+                          MUTT_GENERATE_UIDVALIDITY);
+  mutt_hcache_close (hc);
+#endif
+  return rc;
+}
+
+
+static int mh_save_to_header_cache (CONTEXT *ctx, HEADER *h)
+{
+  int rc = 0;
+#if USE_HCACHE
+  header_cache_t *hc;
+
+  hc = mutt_hcache_open (HeaderCache, ctx->path, NULL);
+  rc = mutt_hcache_store (hc, h->path, h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
+  mutt_hcache_close (hc);
+#endif
+  return rc;
+}
 
 
 /*
@@ -2754,6 +2781,7 @@ struct mx_ops mx_maildir_ops = {
   .open_new_msg = maildir_open_new_message,
   .check = maildir_check_mailbox,
   .sync = mh_sync_mailbox,
+  .save_to_header_cache = maildir_save_to_header_cache,
 };
 
 struct mx_ops mx_mh_ops = {
@@ -2766,4 +2794,5 @@ struct mx_ops mx_mh_ops = {
   .open_new_msg = mh_open_new_message,
   .check = mh_check_mailbox,
   .sync = mh_sync_mailbox,
+  .save_to_header_cache = mh_save_to_header_cache,
 };

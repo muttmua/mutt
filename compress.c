@@ -981,5 +981,6 @@ struct mx_ops mx_comp_ops =
   .commit_msg   = commit_message,
   .open_new_msg = open_new_message,
   .msg_padding_size = compress_msg_padding_size,
+  .save_to_header_cache = NULL,  /* compressed doesn't support maildir/mh */
 };
 

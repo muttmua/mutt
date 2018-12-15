@@ -798,6 +798,22 @@ static int pop_check_mailbox (CONTEXT *ctx, int *index_hint)
   return 0;
 }
 
+static int pop_save_to_header_cache (CONTEXT *ctx, HEADER *h)
+{
+  int rc = 0;
+#ifdef USE_HCACHE
+  POP_DATA *pop_data;
+  header_cache_t *hc;
+
+  pop_data = (POP_DATA *)ctx->data;
+  hc = pop_hcache_open (pop_data, ctx->path);
+  rc = mutt_hcache_store (hc, h->data, h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
+  mutt_hcache_close (hc);
+#endif
+
+  return rc;
+}
+
 /* Fetch messages and save them in $spoolfile */
 void pop_fetch_mail (void)
 {
@@ -970,4 +986,5 @@ struct mx_ops mx_pop_ops = {
   .commit_msg = NULL,
   .open_new_msg = NULL,
   .sync = pop_sync_mailbox,
+  .save_to_header_cache = pop_save_to_header_cache,
 };
