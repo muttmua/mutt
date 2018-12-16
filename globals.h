@@ -117,6 +117,7 @@ WHERE char *Postponed;
 WHERE char *PostponeEncryptAs;
 WHERE char *Prefix;
 WHERE char *PrintCmd;
+WHERE char *ProtHdrSubject;
 WHERE char *NewMailCmd;
 WHERE char *QueryCmd;
 WHERE char *QueryFormat;

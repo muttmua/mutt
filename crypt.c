@@ -129,6 +129,7 @@ int mutt_protect (HEADER *msg, char *keylist)
   BODY *pbody = NULL, *tmp_pbody = NULL;
   BODY *tmp_smime_pbody = NULL;
   BODY *tmp_pgp_pbody = NULL;
+  ENVELOPE *protected_headers = NULL;
   int flags = (WithCrypto & APPLICATION_PGP)? msg->security: 0;
   int i;
 
@@ -204,13 +205,25 @@ int mutt_protect (HEADER *msg, char *keylist)
 	crypt_pgp_set_sender (msg->env->from->mailbox);
     }
 
+  if (option (OPTCRYPTPROTHDRSWRITE))
+  {
+    protected_headers = mutt_new_envelope ();
+    mutt_str_replace (&protected_headers->subject, msg->env->subject);
+    /* Note: if other headers get added, such as to, cc, then a call to
+     * mutt_env_to_intl() will need to be added here too. */
+    mutt_prepare_envelope (protected_headers, 0);
+
+    mutt_free_envelope (&msg->content->mime_headers);
+    msg->content->mime_headers = protected_headers;
+  }
+
   if (msg->security & SIGN)
   {
     if ((WithCrypto & APPLICATION_SMIME)
         && (msg->security & APPLICATION_SMIME))
     {
       if (!(tmp_pbody = crypt_smime_sign_message (msg->content)))
-	return -1;
+	goto bail;
       pbody = tmp_smime_pbody = tmp_pbody;
     }
 
@@ -219,7 +232,7 @@ int mutt_protect (HEADER *msg, char *keylist)
         && (!(flags & ENCRYPT) || option (OPTPGPRETAINABLESIG)))
     {
       if (!(tmp_pbody = crypt_pgp_sign_message (msg->content)))
-        return -1;
+        goto bail;
 
       flags &= ~SIGN;
       pbody = tmp_pgp_pbody = tmp_pbody;
@@ -243,7 +256,7 @@ int mutt_protect (HEADER *msg, char *keylist)
                                                         keylist)))
       {
 	/* signed ? free it! */
-	return (-1);
+	goto bail;
       }
       /* free tmp_body if messages was signed AND encrypted ... */
       if (tmp_smime_pbody != msg->content && tmp_smime_pbody != tmp_pbody)
@@ -273,7 +286,7 @@ int mutt_protect (HEADER *msg, char *keylist)
 	  mutt_free_body (&tmp_pgp_pbody->next);
 	}
 
-	return (-1);
+	goto bail;
       }
 
       /* destroy temporary signature envelope when doing retainable
@@ -288,10 +301,15 @@ int mutt_protect (HEADER *msg, char *keylist)
     }
   }
 
-  if(pbody)
-      msg->content = pbody;
+  if (pbody)
+  {
+    msg->content = pbody;
+    return 0;
+  }
 
-  return 0;
+bail:
+  mutt_free_envelope (&msg->content->mime_headers);
+  return -1;
 }
 
 
