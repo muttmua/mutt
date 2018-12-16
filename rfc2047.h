@@ -22,6 +22,7 @@ int convert_nonmime_string (char **);
 
 void _rfc2047_encode_string (char **, int, int);
 void rfc2047_encode_adrlist (ADDRESS *, const char *);
+void rfc2047_encode_envelope (ENVELOPE *);
 
 #define rfc2047_encode_string(a) _rfc2047_encode_string (a, 0, 32);
 

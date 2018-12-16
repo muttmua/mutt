@@ -623,6 +623,19 @@ void rfc2047_encode_adrlist (ADDRESS *addr, const char *tag)
   }
 }
 
+void rfc2047_encode_envelope (ENVELOPE *e)
+{
+  rfc2047_encode_adrlist (e->from, "From");
+  rfc2047_encode_adrlist (e->to, "To");
+  rfc2047_encode_adrlist (e->cc, "Cc");
+  rfc2047_encode_adrlist (e->bcc, "Bcc");
+  rfc2047_encode_adrlist (e->reply_to, "Reply-To");
+  rfc2047_encode_adrlist (e->mail_followup_to, "Mail-Followup-To");
+  rfc2047_encode_adrlist (e->sender, "Sender");
+  rfc2047_encode_string (&e->x_label);
+  rfc2047_encode_string (&e->subject);
+}
+
 static int rfc2047_decode_word (BUFFER *d, const char *s, char **charset)
 {
   const char *pp, *pp1;
