@@ -1043,6 +1043,115 @@ static int send_message (HEADER *msg)
   return (i);
 }
 
+static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
+                     BODY *clear_content, char *pgpkeylist,
+                     int flags)
+{
+  int rc = 0;
+  BODY *tmpbody = msg->content;
+  BODY *save_content = NULL;
+  BODY *save_sig = NULL;
+  BODY *save_parts = NULL;
+
+  mutt_expand_path (fcc, fcc_len);
+
+  /* Don't save a copy when we are in batch-mode, and the FCC
+   * folder is on an IMAP server: This would involve possibly lots
+   * of user interaction, which is not available in batch mode.
+   *
+   * Note: A patch to fix the problems with the use of IMAP servers
+   * from non-curses mode is available from Brendan Cully.  However,
+   * I'd like to think a bit more about this before including it.
+   */
+
+#ifdef USE_IMAP
+  if ((flags & SENDBATCH) && fcc[0] && mx_is_imap (fcc))
+  {
+    mutt_error _ ("Fcc to an IMAP mailbox is not supported in batch mode");
+    return rc;
+  }
+#endif
+
+  if (!(*fcc && mutt_strcmp ("/dev/null", fcc)))
+    return rc;
+
+  if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
+    msg->content = clear_content;
+
+  /* check to see if the user wants copies of all attachments */
+  if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
+      msg->content->type == TYPEMULTIPART)
+  {
+    if (WithCrypto
+        && (msg->security & (ENCRYPT | SIGN))
+        && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
+            mutt_strcmp (msg->content->subtype, "signed") == 0))
+    {
+      if (clear_content->type == TYPEMULTIPART)
+      {
+        if(!(msg->security & ENCRYPT) && (msg->security & SIGN))
+        {
+          /* save initial signature and attachments */
+          save_sig = msg->content->parts->next;
+          save_parts = clear_content->parts->next;
+        }
+
+        /* this means writing only the main part */
+        msg->content = clear_content->parts;
+
+        if (mutt_protect (msg, pgpkeylist) == -1)
+        {
+          /* we can't do much about it at this point, so
+           * fallback to saving the whole thing to fcc
+           */
+          msg->content = tmpbody;
+          save_sig = NULL;
+          goto full_fcc;
+        }
+
+        save_content = msg->content;
+      }
+    }
+    else
+      msg->content = msg->content->parts;
+  }
+
+full_fcc:
+  if (msg->content)
+  {
+    /* update received time so that when storing to a mbox-style folder
+     * the From_ line contains the current time instead of when the
+     * message was first postponed.
+     */
+    msg->received = time (NULL);
+    rc = mutt_write_fcc (fcc, msg, NULL, 0, NULL);
+  }
+
+  msg->content = tmpbody;
+
+  if (WithCrypto && save_sig)
+  {
+    /* cleanup the second signature structures */
+    if (save_content->parts)
+    {
+      mutt_free_body (&save_content->parts->next);
+      save_content->parts = NULL;
+    }
+    mutt_free_body (&save_content);
+
+    /* restore old signature and attachments */
+    msg->content->parts->next = save_sig;
+    msg->content->parts->parts->next = save_parts;
+  }
+  else if (WithCrypto && save_content)
+  {
+    /* destroy the new encrypted body. */
+    mutt_free_body (&save_content);
+  }
+
+  return rc;
+}
+
 /* rfc2047 encode the content-descriptions */
 void mutt_encode_descriptions (BODY *b, short recurse)
 {
@@ -1186,7 +1295,6 @@ ci_send_message (int flags,		/* send mode */
   int fcc_error = 0;
   int free_clear_content = 0;
 
-  BODY *save_content = NULL;
   BODY *clear_content = NULL;
   char *pgpkeylist = NULL;
   /* save current value of "pgp_sign_as"  and "smime_default_key" */
@@ -1828,112 +1936,8 @@ main_loop:
 
   mutt_prepare_envelope (msg->env, 1);
 
-  /* save a copy of the message, if necessary. */
 
-  mutt_expand_path (fcc, sizeof (fcc));
-
-  
-  /* Don't save a copy when we are in batch-mode, and the FCC
-   * folder is on an IMAP server: This would involve possibly lots
-   * of user interaction, which is not available in batch mode. 
-   * 
-   * Note: A patch to fix the problems with the use of IMAP servers
-   * from non-curses mode is available from Brendan Cully.  However, 
-   * I'd like to think a bit more about this before including it.
-   */
-
-#ifdef USE_IMAP
-  if ((flags & SENDBATCH) && fcc[0] && mx_is_imap (fcc))
-    fcc[0] = '\0';
-#endif
-
-  if (*fcc && mutt_strcmp ("/dev/null", fcc) != 0)
-  {
-    BODY *tmpbody = msg->content;
-    BODY *save_sig = NULL;
-    BODY *save_parts = NULL;
-
-    if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
-      msg->content = clear_content;
-
-    /* check to see if the user wants copies of all attachments */
-    if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
-	msg->content->type == TYPEMULTIPART)
-    {
-      if (WithCrypto
-          && (msg->security & (ENCRYPT | SIGN))
-          && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
-              mutt_strcmp (msg->content->subtype, "signed") == 0))
-      {
-	if (clear_content->type == TYPEMULTIPART)
-	{
-	  if(!(msg->security & ENCRYPT) && (msg->security & SIGN))
-	  {
-	    /* save initial signature and attachments */
-	    save_sig = msg->content->parts->next;
-	    save_parts = clear_content->parts->next;
-	  }
-
-	  /* this means writing only the main part */
-	  msg->content = clear_content->parts;
-
-	  if (mutt_protect (msg, pgpkeylist) == -1)
-	  {
-	    /* we can't do much about it at this point, so
-	     * fallback to saving the whole thing to fcc
-	     */
-	    msg->content = tmpbody;
-	    save_sig = NULL;
-	    goto full_fcc;
-	  }
-
-	  save_content = msg->content;
-	}
-      }
-      else
-	msg->content = msg->content->parts;
-    }
-
-full_fcc:
-    if (msg->content)
-    {
-      /* update received time so that when storing to a mbox-style folder
-       * the From_ line contains the current time instead of when the
-       * message was first postponed.
-       */
-      msg->received = time (NULL);
-      if (mutt_write_fcc (fcc, msg, NULL, 0, NULL) == -1)
-      {
-	/*
-	 * Error writing FCC, we should abort sending.
-	 */
-	fcc_error = 1;
-      }
-    }
-
-    msg->content = tmpbody;
-
-    if (WithCrypto && save_sig)
-    {
-      /* cleanup the second signature structures */
-      if (save_content->parts)
-      {
-	mutt_free_body (&save_content->parts->next);
-	save_content->parts = NULL;
-      }
-      mutt_free_body (&save_content);
-
-      /* restore old signature and attachments */
-      msg->content->parts->next = save_sig;
-      msg->content->parts->parts->next = save_parts;
-    }
-    else if (WithCrypto && save_content)
-    {
-      /* destroy the new encrypted body. */
-      mutt_free_body (&save_content);
-    }
-
-  }
+  fcc_error = save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
 
 
   /*
