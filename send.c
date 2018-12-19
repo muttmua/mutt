@@ -1052,6 +1052,7 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
   BODY *save_content = NULL;
   BODY *save_sig = NULL;
   BODY *save_parts = NULL;
+  int choice;
 
   mutt_expand_path (fcc, fcc_len);
 
@@ -1125,6 +1126,48 @@ full_fcc:
      */
     msg->received = time (NULL);
     rc = mutt_write_fcc (fcc, msg, NULL, 0, NULL);
+    while (rc && !(flags & SENDBATCH))
+    {
+      mutt_clear_error ();
+      choice = mutt_multi_choice (
+        /* L10N:
+           Called when saving to $record or Fcc failed after sending.
+           (r)etry tries the same mailbox again.
+           alternate (m)ailbox prompts for a different mailbox to try.
+           (s)kip aborts saving.
+        */
+        _("Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "),
+        /* L10N:
+           These correspond to the "Fcc failed" multi-choice prompt
+           (r)etry, alternate (m)ailbox, or (s)kip.
+           Any similarity to famous leaders of the FSF is coincidental.
+        */
+        _("rms"));
+      switch (choice)
+      {
+        case 2:   /* alternate (m)ailbox */
+          /* L10N:
+             This is the prompt to enter an "alternate (m)ailbox" when the
+             initial Fcc fails.
+          */
+          rc = mutt_enter_fname (_("Fcc mailbox"), fcc, fcc_len, 1);
+          if ((rc == -1) || !fcc[0])
+          {
+            rc = 0;
+            break;
+          }
+          /* fall through */
+
+        case 1:   /* (r)etry */
+          rc = mutt_write_fcc (fcc, msg, NULL, 0, NULL);
+          break;
+
+        case -1:  /* abort */
+        case 3:   /* (s)kip */
+          rc = 0;
+          break;
+      }
+    }
   }
 
   msg->content = tmpbody;
