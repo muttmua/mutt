@@ -1292,7 +1292,6 @@ ci_send_message (int flags,		/* send mode */
   FILE *tempfp = NULL;
   BODY *pbody;
   int i, killfrom = 0;
-  int fcc_error = 0;
   int free_clear_content = 0;
 
   BODY *clear_content = NULL;
@@ -1749,7 +1748,6 @@ ci_send_message (int flags,		/* send mode */
   {
 main_loop:
 
-    fcc_error = 0; /* reset value since we may have failed before */
     mutt_pretty_mailbox (fcc, sizeof (fcc));
     i = mutt_compose_menu (msg, fcc, sizeof (fcc), cur,
                            (flags & SENDNOFREEHEADER ? MUTT_COMPOSE_NOFREEHEADER : 0));
@@ -1936,16 +1934,7 @@ main_loop:
 
   mutt_prepare_envelope (msg->env, 1);
 
-
-  fcc_error = save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
-
-
-  /*
-   * Don't attempt to send the message if the FCC failed.  Just pretend
-   * the send failed as well so we give the user a chance to fix the
-   * error.
-   */
-  if (fcc_error || (i = send_message (msg)) < 0)
+  if ((i = send_message (msg)) < 0)
   {
     if (!(flags & SENDBATCH))
     {
@@ -1977,6 +1966,10 @@ main_loop:
   }
   else if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
     mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
+
+
+  save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+
 
   if (WithCrypto && (msg->security & ENCRYPT))
     FREE (&pgpkeylist);
