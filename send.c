@@ -1323,9 +1323,13 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
   char *pgpkeylist = NULL;
   char *encrypt_as = NULL;
   int is_signed;
+  BODY *clear_content = NULL;
 
-  if (!Postponed)
+  if (!(Postponed && *Postponed))
+  {
+    mutt_error _("Can not postpone.  $postponed is unset");
     return -1;
+  }
 
   if (msg->content->next)
     msg->content = mutt_make_multipart (msg->content);
@@ -1348,6 +1352,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
         msg->security &= ~SIGN;
 
       pgpkeylist = safe_strdup (encrypt_as);
+      clear_content = msg->content;
       if (mutt_protect (msg, pgpkeylist) == -1)
       {
         if (is_signed)
@@ -1379,12 +1384,21 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
                       (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL,
                       1, fcc) < 0)
   {
+    if (clear_content)
+    {
+      mutt_free_body (&msg->content);
+      msg->content = clear_content;
+    }
     msg->content = mutt_remove_multipart (msg->content);
     decode_descriptions (msg->content);
     mutt_unprepare_envelope (msg->env);
     return -1;
   }
+
   mutt_update_num_postponed ();
+
+  if (clear_content)
+    mutt_free_body (&clear_content);
 
   return 0;
 }
