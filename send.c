@@ -1318,6 +1318,74 @@ static int has_attach_keyword (char *filename)
   return match;
 }
 
+static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
+{
+  char *pgpkeylist = NULL;
+  char *encrypt_as = NULL;
+  int is_signed;
+
+  if (!Postponed)
+    return -1;
+
+  /* postpone the message until later. */
+  if (msg->content->next)
+    msg->content = mutt_make_multipart (msg->content);
+
+  if (WithCrypto && option (OPTPOSTPONEENCRYPT) && (msg->security & ENCRYPT))
+  {
+    if ((WithCrypto & APPLICATION_PGP) && (msg->security & APPLICATION_PGP))
+      encrypt_as = PgpDefaultKey;
+    else if ((WithCrypto & APPLICATION_SMIME) && (msg->security & APPLICATION_SMIME))
+      encrypt_as = SmimeDefaultKey;
+    if (!(encrypt_as && *encrypt_as))
+      encrypt_as = PostponeEncryptAs;
+
+    if (encrypt_as && *encrypt_as)
+    {
+      is_signed = msg->security & SIGN;
+      if (is_signed)
+        msg->security &= ~SIGN;
+
+      pgpkeylist = safe_strdup (encrypt_as);
+      if (mutt_protect (msg, pgpkeylist) == -1)
+      {
+        if (is_signed)
+          msg->security |= SIGN;
+        FREE (&pgpkeylist);
+        msg->content = mutt_remove_multipart (msg->content);
+        return -1;
+      }
+
+      if (is_signed)
+        msg->security |= SIGN;
+      FREE (&pgpkeylist);
+    }
+  }
+
+  /*
+   * make sure the message is written to the right part of a maildir
+   * postponed folder.
+   */
+  msg->read = 0; msg->old = 0;
+
+  mutt_encode_descriptions (msg->content, 1);
+  mutt_prepare_envelope (msg->env, 0);
+  mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
+
+  if (mutt_write_fcc (NONULL (Postponed), msg,
+                      (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL,
+                      1, fcc) < 0)
+  {
+    msg->content = mutt_remove_multipart (msg->content);
+    decode_descriptions (msg->content);
+    mutt_unprepare_envelope (msg->env);
+    return -1;
+  }
+  mutt_update_num_postponed ();
+
+  return 0;
+}
+
 /*
  * Returns 0 if the message was successfully sent
  *        -1 if the message was aborted or an error occurred
@@ -1802,61 +1870,8 @@ main_loop:
     }
     else if (i == 1)
     {
-      /* postpone the message until later. */
-      if (msg->content->next)
-	msg->content = mutt_make_multipart (msg->content);
-
-      if (WithCrypto && option (OPTPOSTPONEENCRYPT) && (msg->security & ENCRYPT))
-      {
-        char *encrypt_as = NULL;
-
-        if ((WithCrypto & APPLICATION_PGP) && (msg->security & APPLICATION_PGP))
-          encrypt_as = PgpDefaultKey;
-        else if ((WithCrypto & APPLICATION_SMIME) && (msg->security & APPLICATION_SMIME))
-          encrypt_as = SmimeDefaultKey;
-        if (!(encrypt_as && *encrypt_as))
-          encrypt_as = PostponeEncryptAs;
-
-        if (encrypt_as && *encrypt_as)
-        {
-          int is_signed = msg->security & SIGN;
-          if (is_signed)
-            msg->security &= ~SIGN;
-
-          pgpkeylist = safe_strdup (encrypt_as);
-          if (mutt_protect (msg, pgpkeylist) == -1)
-          {
-            if (is_signed)
-              msg->security |= SIGN;
-            FREE (&pgpkeylist);
-            msg->content = mutt_remove_multipart (msg->content);
-            goto main_loop;
-          }
-
-          if (is_signed)
-            msg->security |= SIGN;
-          FREE (&pgpkeylist);
-        }
-      }
-
-      /*
-       * make sure the message is written to the right part of a maildir 
-       * postponed folder.
-       */
-      msg->read = 0; msg->old = 0;
-
-      mutt_encode_descriptions (msg->content, 1);
-      mutt_prepare_envelope (msg->env, 0);
-      mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
-
-      if (!Postponed || mutt_write_fcc (NONULL (Postponed), msg, (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL, 1, fcc) < 0)
-      {
-	msg->content = mutt_remove_multipart (msg->content);
-	decode_descriptions (msg->content);
-	mutt_unprepare_envelope (msg->env);
-	goto main_loop;
-      }
-      mutt_update_num_postponed ();
+      if (postpone_message (msg, cur, fcc, flags) != 0)
+        goto main_loop;
       mutt_message _("Message postponed.");
       rv = 1;
       goto cleanup;
