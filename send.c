@@ -1327,9 +1327,10 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
   if (!Postponed)
     return -1;
 
-  /* postpone the message until later. */
   if (msg->content->next)
     msg->content = mutt_make_multipart (msg->content);
+
+  mutt_encode_descriptions (msg->content, 1);
 
   if (WithCrypto && option (OPTPOSTPONEENCRYPT) && (msg->security & ENCRYPT))
   {
@@ -1353,12 +1354,15 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
           msg->security |= SIGN;
         FREE (&pgpkeylist);
         msg->content = mutt_remove_multipart (msg->content);
+        decode_descriptions (msg->content);
         return -1;
       }
 
       if (is_signed)
         msg->security |= SIGN;
       FREE (&pgpkeylist);
+
+      mutt_encode_descriptions (msg->content, 0);
     }
   }
 
@@ -1368,7 +1372,6 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
    */
   msg->read = 0; msg->old = 0;
 
-  mutt_encode_descriptions (msg->content, 1);
   mutt_prepare_envelope (msg->env, 0);
   mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
 
