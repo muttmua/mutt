@@ -1466,7 +1466,10 @@ ci_send_message (int flags,		/* send mode */
     if (flags == SENDPOSTPONED)
     {
       if ((flags = mutt_get_postponed (ctx, msg, &cur, fcc, sizeof (fcc))) < 0)
+      {
+        flags = SENDPOSTPONED;
 	goto cleanup;
+      }
     }
 
     if (flags & (SENDPOSTPONED|SENDRESEND))
