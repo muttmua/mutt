@@ -1695,7 +1695,11 @@ static int valid_pgp_encrypted_handler (BODY *b, STATE *s)
   BODY *octetstream;
 
   octetstream = b->parts->next;
-  rc = crypt_pgp_encrypted_handler (octetstream, s);
+  /* Some clients improperly encode the octetstream part. */
+  if (octetstream->encoding != ENC7BIT)
+    rc = run_decode_and_handler (octetstream, s, crypt_pgp_encrypted_handler, 0);
+  else
+    rc = crypt_pgp_encrypted_handler (octetstream, s);
   b->goodsig |= octetstream->goodsig;
 
   return rc;
