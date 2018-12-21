@@ -1654,6 +1654,8 @@ main_loop:
     else if (i == 1)
     {
       /* postpone the message until later. */
+      clear_content = NULL;
+
       if (msg->content->next)
 	msg->content = mutt_make_multipart (msg->content);
 
@@ -1675,6 +1677,7 @@ main_loop:
             msg->security &= ~SIGN;
 
           pgpkeylist = safe_strdup (encrypt_as);
+          clear_content = msg->content;
           if (mutt_protect (msg, pgpkeylist) == -1)
           {
             if (is_signed)
@@ -1702,12 +1705,19 @@ main_loop:
 
       if (!Postponed || mutt_write_fcc (NONULL (Postponed), msg, (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL, 1, fcc) < 0)
       {
+        if (clear_content)
+        {
+          mutt_free_body (&msg->content);
+          msg->content = clear_content;
+        }
 	msg->content = mutt_remove_multipart (msg->content);
 	decode_descriptions (msg->content);
 	mutt_unprepare_envelope (msg->env);
 	goto main_loop;
       }
       mutt_update_num_postponed ();
+      if (clear_content)
+        mutt_free_body (&clear_content);
       mutt_message _("Message postponed.");
       rv = 1;
       goto cleanup;
