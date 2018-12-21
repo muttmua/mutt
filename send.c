@@ -2042,11 +2042,11 @@ main_loop:
       goto cleanup;
     }
   }
-  else if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
-    mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
-
 
   save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+
+  if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
+    mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
 
 
   if (WithCrypto && (msg->security & ENCRYPT))
