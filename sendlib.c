@@ -1956,9 +1956,10 @@ out:
  *
  * Likewise, all IDN processing should happen outside of this routine.
  *
- * mode == 1  => "lite" mode (used for edit_hdrs)
- * mode == 0  => normal mode.  write full header + MIME headers
- * mode == -1 => write just the envelope info (used for postponing messages)
+ * mode == MUTT_WRITE_HEADER_EDITHDRS  => "lite" mode (used for edit_hdrs)
+ * mode == MUTT_WRITE_HEADER_NORMAL    => normal mode.  write full header + MIME headers
+ * mode == MUTT_WRITE_HEADER_POSTPONE  => write just the envelope info
+ * mode == MUTT_WRITE_HEADER_MIME      => for writing protected headers
  *
  * privacy != 0 => will omit any headers which may identify the user.
  *               Output generated is suitable for being sent through
@@ -1969,14 +1970,14 @@ out:
 
 
 int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
-			      int mode, int privacy)
+			      mutt_write_header_mode mode, int privacy)
 {
   char buffer[LONG_STRING];
   char *p, *q;
   LIST *tmp = env->userhdrs;
   int has_agent = 0; /* user defined user-agent header field exists */
 
-  if (mode == 0 && !privacy)
+  if (mode == MUTT_WRITE_HEADER_NORMAL && !privacy)
     fputs (mutt_make_date (buffer, sizeof(buffer)), fp);
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
@@ -2001,7 +2002,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     fputs ("To: ", fp);
     mutt_write_address_list (env->to, fp, 4, 0);
   }
-  else if (mode > 0)
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("To: \n", fp);
 
   if (env->cc)
@@ -2009,23 +2010,25 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     fputs ("Cc: ", fp);
     mutt_write_address_list (env->cc, fp, 4, 0);
   }
-  else if (mode > 0)
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("Cc: \n", fp);
 
   if (env->bcc)
   {
-    if(mode != 0 || option(OPTWRITEBCC))
+    if (mode == MUTT_WRITE_HEADER_POSTPONE ||
+        mode == MUTT_WRITE_HEADER_EDITHDRS ||
+        (mode == MUTT_WRITE_HEADER_NORMAL && option(OPTWRITEBCC)))
     {
       fputs ("Bcc: ", fp);
       mutt_write_address_list (env->bcc, fp, 5, 0);
     }
   }
-  else if (mode > 0)
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("Bcc: \n", fp);
 
   if (env->subject)
     mutt_write_one_header (fp, "Subject", env->subject, NULL, 0, 0);
-  else if (mode == 1)
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("Subject: \n", fp);
 
   /* save message id if the user has set it */
@@ -2037,7 +2040,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     fputs ("Reply-To: ", fp);
     mutt_write_address_list (env->reply_to, fp, 10, 0);
   }
-  else if (mode > 0)
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("Reply-To: \n", fp);
 
   if (env->mail_followup_to)
@@ -2046,7 +2049,8 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     mutt_write_address_list (env->mail_followup_to, fp, 18, 0);
   }
 
-  if (mode <= 0)
+  if (mode == MUTT_WRITE_HEADER_NORMAL ||
+      mode == MUTT_WRITE_HEADER_POSTPONE)
   {
     if (env->references)
     {
@@ -2099,7 +2103,8 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     }
   }
 
-  if (mode == 0 && !privacy && option (OPTXMAILER) && !has_agent)
+  if (mode == MUTT_WRITE_HEADER_NORMAL && !privacy &&
+      option (OPTXMAILER) && !has_agent)
   {
     /* Add a vanity header */
     fprintf (fp, "User-Agent: Mutt/%s (%s)\n", MUTT_VERSION, ReleaseDate);
@@ -2785,10 +2790,12 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     return (-1);
   }
 
-  /* post == 1 => postpone message. Set mode = -1 in mutt_write_rfc822_header()
-   * post == 0 => Normal mode. Set mode = 0 in mutt_write_rfc822_header()
+  /* post == 1 => postpone message.
+   * post == 0 => Normal mode.
    * */
-  mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content, post ? -post : 0, 0);
+  mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content,
+                            post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_NORMAL,
+                            0);
 
   /* (postponment) if this was a reply of some sort, <msgid> contains the
    * Message-ID: of message replied to.  Save it using a special X-Mutt-

@@ -999,10 +999,12 @@ static int send_message (HEADER *msg)
     unset_option (OPTWRITEBCC);
 #endif
 #ifdef MIXMASTER
-  mutt_write_rfc822_header (tempfp, msg->env, msg->content, 0, msg->chain ? 1 : 0);
+  mutt_write_rfc822_header (tempfp, msg->env, msg->content,
+                            MUTT_WRITE_HEADER_NORMAL, msg->chain ? 1 : 0);
 #endif
 #ifndef MIXMASTER
-  mutt_write_rfc822_header (tempfp, msg->env, msg->content, 0, 0);
+  mutt_write_rfc822_header (tempfp, msg->env, msg->content,
+                            MUTT_WRITE_HEADER_NORMAL, 0);
 #endif
 #ifdef USE_SMTP
   if (old_write_bcc)

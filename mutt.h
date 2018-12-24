@@ -156,6 +156,15 @@ typedef enum
   MUTT_FORMAT_NOFILTER    = (1<<7)  /* do not allow filtering on this pass */
 } format_flag;
 
+/* mode for mutt_write_rfc822_header() */
+typedef enum
+{
+  MUTT_WRITE_HEADER_NORMAL,
+  MUTT_WRITE_HEADER_POSTPONE,
+  MUTT_WRITE_HEADER_EDITHDRS,
+  MUTT_WRITE_HEADER_MIME
+} mutt_write_header_mode;
+
 /* types for mutt_add_hook() */
 #define MUTT_FOLDERHOOK  1
 #define MUTT_MBOXHOOK    (1<<1)

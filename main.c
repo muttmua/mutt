@@ -1227,7 +1227,8 @@ int main (int argc, char **argv, char **environ)
           mutt_env_to_intl (msg->env, NULL, NULL);
         }
 
-        mutt_write_rfc822_header (fout, msg->env, msg->content, -1, 0);
+        mutt_write_rfc822_header (fout, msg->env, msg->content,
+                                  MUTT_WRITE_HEADER_POSTPONE, 0);
         if (option (OPTRESUMEEDITEDDRAFTFILES))
           fprintf (fout, "X-Mutt-Resume-Draft: 1\n");
         fputc ('\n', fout);
