@@ -122,6 +122,8 @@ int mutt_is_application_pgp (BODY *);
 
 int mutt_is_application_smime (BODY *);
 
+int mutt_should_hide_protected_subject (HEADER *);
+
 int mutt_protected_headers_handler (BODY *, STATE *);
 
 int mutt_signed_handler (BODY *, STATE *);

@@ -1000,11 +1000,13 @@ static int send_message (HEADER *msg)
 #endif
 #ifdef MIXMASTER
   mutt_write_rfc822_header (tempfp, msg->env, msg->content,
-                            MUTT_WRITE_HEADER_NORMAL, msg->chain ? 1 : 0);
+                            MUTT_WRITE_HEADER_NORMAL, msg->chain ? 1 : 0,
+                            mutt_should_hide_protected_subject (msg));
 #endif
 #ifndef MIXMASTER
   mutt_write_rfc822_header (tempfp, msg->env, msg->content,
-                            MUTT_WRITE_HEADER_NORMAL, 0);
+                            MUTT_WRITE_HEADER_NORMAL, 0,
+                            mutt_should_hide_protected_subject (msg));
 #endif
 #ifdef USE_SMTP
   if (old_write_bcc)
@@ -1079,7 +1081,11 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
     return rc;
 
   if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
+  {
     msg->content = clear_content;
+    msg->security &= ~(ENCRYPT | SIGN);
+    mutt_free_envelope (&msg->content->mime_headers);
+  }
 
   /* check to see if the user wants copies of all attachments */
   if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
@@ -1391,6 +1397,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
       mutt_free_body (&msg->content);
       msg->content = clear_content;
     }
+    mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
     msg->content = mutt_remove_multipart (msg->content);
     decode_descriptions (msg->content);
     mutt_unprepare_envelope (msg->env);
@@ -2033,6 +2040,7 @@ main_loop:
 	msg->content = mutt_remove_multipart (msg->content); 
       }
 
+      mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
       msg->content = mutt_remove_multipart (msg->content);
       decode_descriptions (msg->content);
       mutt_unprepare_envelope (msg->env);
@@ -2051,9 +2059,9 @@ main_loop:
     mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
 
 
-  if (WithCrypto && (msg->security & ENCRYPT))
+  if (WithCrypto)
     FREE (&pgpkeylist);
-  
+
   if (WithCrypto && free_clear_content)
     mutt_free_body (&clear_content);
 

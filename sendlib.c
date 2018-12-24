@@ -400,6 +400,9 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   if (a->encoding != ENC7BIT)
     fprintf(f, "Content-Transfer-Encoding: %s\n", ENCODING (a->encoding));
 
+  if (option (OPTCRYPTPROTHDRSWRITE) && a->mime_headers)
+    mutt_write_rfc822_header (f, a->mime_headers, NULL, MUTT_WRITE_HEADER_MIME, 0, 0);
+
   /* Do NOT add the terminator here!!! */
   return (ferror (f) ? -1 : 0);
 }
@@ -1965,12 +1968,13 @@ out:
  *               Output generated is suitable for being sent through
  * 		 anonymous remailer chains.
  *
+ * hide_protected_subject: replaces the Subject header with
+ * $crypt_protected_headers_subject in NORMAL or POSTPONE mode.
+ *
  */
-
-
-
 int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
-			      mutt_write_header_mode mode, int privacy)
+			      mutt_write_header_mode mode, int privacy,
+                              int hide_protected_subject)
 {
   char buffer[LONG_STRING];
   char *p, *q;
@@ -2027,7 +2031,14 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     fputs ("Bcc: \n", fp);
 
   if (env->subject)
-    mutt_write_one_header (fp, "Subject", env->subject, NULL, 0, 0);
+  {
+    if (hide_protected_subject &&
+        (mode == MUTT_WRITE_HEADER_NORMAL ||
+         mode == MUTT_WRITE_HEADER_POSTPONE))
+      mutt_write_one_header (fp, "Subject", ProtHdrSubject, NULL, 0, 0);
+    else
+      mutt_write_one_header (fp, "Subject", env->subject, NULL, 0, 0);
+  }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
     fputs ("Subject: \n", fp);
 
@@ -2795,7 +2806,9 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
    * */
   mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content,
                             post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_NORMAL,
-                            0);
+                            0,
+                            option (OPTCRYPTPROTHDRSREAD) &&
+                            mutt_should_hide_protected_subject (hdr));
 
   /* (postponment) if this was a reply of some sort, <msgid> contains the
    * Message-ID: of message replied to.  Save it using a special X-Mutt-

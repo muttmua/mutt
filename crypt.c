@@ -926,6 +926,17 @@ static void crypt_fetch_signatures (BODY ***signatures, BODY *a, int *n)
   }
 }
 
+int mutt_should_hide_protected_subject (HEADER *h)
+{
+  if (option (OPTCRYPTPROTHDRSWRITE) &&
+      (h->security & ENCRYPT) &&
+      !(h->security & INLINE) &&
+      ProtHdrSubject && *ProtHdrSubject)
+    return 1;
+
+  return 0;
+}
+
 int mutt_protected_headers_handler (BODY *a, STATE *s)
 {
   if (option (OPTCRYPTPROTHDRSREAD) && a->mime_headers)

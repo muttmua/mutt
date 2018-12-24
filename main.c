@@ -1228,7 +1228,9 @@ int main (int argc, char **argv, char **environ)
         }
 
         mutt_write_rfc822_header (fout, msg->env, msg->content,
-                                  MUTT_WRITE_HEADER_POSTPONE, 0);
+                                  MUTT_WRITE_HEADER_POSTPONE, 0,
+                                  option (OPTCRYPTPROTHDRSREAD) &&
+                                  mutt_should_hide_protected_subject (msg));
         if (option (OPTRESUMEEDITEDDRAFTFILES))
           fprintf (fout, "X-Mutt-Resume-Draft: 1\n");
         fputc ('\n', fout);
