@@ -556,6 +556,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
   int rv = -1;
   STATE s;
   int sec_type;
+  ENVELOPE *protected_headers = NULL;
 
   memset (&s, 0, sizeof (s));
 
@@ -605,6 +606,12 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     mutt_free_body (&newhdr->content);
     newhdr->content = b;
 
+    if (b->mime_headers)
+    {
+      protected_headers = b->mime_headers;
+      b->mime_headers = NULL;
+    }
+
     mutt_clear_error ();
   }
 
@@ -625,6 +632,13 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     /* destroy the signature */
     mutt_free_body (&newhdr->content->parts->next);
     newhdr->content = mutt_remove_multipart (newhdr->content);
+
+    if (newhdr->content->mime_headers)
+    {
+      mutt_free_envelope (&protected_headers);
+      protected_headers = newhdr->content->mime_headers;
+      newhdr->content->mime_headers = NULL;
+    }
   }
 
 
@@ -724,6 +738,12 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
         goto bail;
       }
 
+      if (b == newhdr->content && !protected_headers)
+      {
+        protected_headers = b->mime_headers;
+        b->mime_headers = NULL;
+      }
+
       newhdr->security |= sec_type;
       b->type = TYPETEXT;
       mutt_str_replace (&b->subtype, "plain");
@@ -742,6 +762,15 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     mutt_free_body (&b->parts);
     if (b->hdr) b->hdr->content = NULL; /* avoid dangling pointer */
   }
+
+  if (option (OPTCRYPTPROTHDRSREAD) &&
+      protected_headers &&
+      protected_headers->subject &&
+      mutt_strcmp (newhdr->env->subject, protected_headers->subject))
+  {
+    mutt_str_replace (&newhdr->env->subject, protected_headers->subject);
+  }
+  mutt_free_envelope (&protected_headers);
 
   /* Fix encryption flags. */
 
