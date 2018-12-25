@@ -2040,6 +2040,7 @@ main_loop:
 	msg->content = mutt_remove_multipart (msg->content); 
       }
 
+      FREE (&pgpkeylist);
       mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
       msg->content = mutt_remove_multipart (msg->content);
       decode_descriptions (msg->content);
