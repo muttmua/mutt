@@ -656,6 +656,9 @@ typedef struct alias
   short num;
 } ALIAS;
 
+#define MUTT_ENV_CHANGED_IRT   (1<<0)  /* In-Reply-To changed to link/break threads */
+#define MUTT_ENV_CHANGED_REFS  (1<<1)  /* References changed to break thread */
+
 typedef struct envelope
 {
   ADDRESS *return_path;
@@ -679,8 +682,8 @@ typedef struct envelope
   LIST *in_reply_to;		/* in-reply-to header content */
   LIST *userhdrs;		/* user defined headers */
 
-  unsigned int irt_changed : 1; /* In-Reply-To changed to link/break threads */
-  unsigned int refs_changed : 1; /* References changed to break thread */
+  unsigned char changed;       /* The MUTT_ENV_CHANGED_* flags specify which
+                                * fields are modified */
 } ENVELOPE;
 
 typedef struct parameter

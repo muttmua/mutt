@@ -1088,7 +1088,10 @@ void mx_update_tables(CONTEXT *ctx, int committing)
       }
 
       if (committing)
+      {
 	ctx->hdrs[j]->changed = 0;
+        ctx->hdrs[j]->env->changed = 0;
+      }
       else if (ctx->hdrs[j]->changed)
 	ctx->changed = 1;
       

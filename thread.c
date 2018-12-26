@@ -1396,7 +1396,8 @@ static void clean_references (THREAD *brk, THREAD *cur)
       /* clearing the References: header from obsolete Message-ID(s) */
       mutt_free_list (&ref->next);
 
-      h->env->refs_changed = h->changed = 1;
+      h->changed = 1;
+      h->env->changed |= MUTT_ENV_CHANGED_REFS;
     }
   }
 }
@@ -1405,7 +1406,8 @@ void mutt_break_thread (HEADER *hdr)
 {
   mutt_free_list (&hdr->env->in_reply_to);
   mutt_free_list (&hdr->env->references);
-  hdr->env->irt_changed = hdr->env->refs_changed = hdr->changed = 1;
+  hdr->changed = 1;
+  hdr->env->changed |= (MUTT_ENV_CHANGED_IRT | MUTT_ENV_CHANGED_REFS);
 
   clean_references (hdr->thread, hdr->thread->child);
 }
@@ -1419,10 +1421,11 @@ static int link_threads (HEADER *parent, HEADER *child, CONTEXT *ctx)
 
   child->env->in_reply_to = mutt_new_list ();
   child->env->in_reply_to->data = safe_strdup (parent->env->message_id);
-  
+
   mutt_set_flag (ctx, child, MUTT_TAG, 0);
-  
-  child->env->irt_changed = child->changed = 1;
+
+  child->changed = 1;
+  child->env->changed |= MUTT_ENV_CHANGED_IRT;
   return 1;
 }
 

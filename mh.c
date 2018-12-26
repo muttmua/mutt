@@ -1878,10 +1878,16 @@ static int mh_sync_message (CONTEXT * ctx, int msgno)
 {
   HEADER *h = ctx->hdrs[msgno];
 
+  /* TODO: why the h->env check? */
   if (h->attach_del || h->xlabel_changed ||
-      (h->env && (h->env->refs_changed || h->env->irt_changed)))
+      (h->env && h->env->changed))
+  {
     if (mh_rewrite_message (ctx, msgno) != 0)
       return -1;
+    /* TODO: why the env check? */
+    if (h->env)
+      h->env->changed = 0;
+  }
 
   return 0;
 }
@@ -1897,12 +1903,16 @@ static int maildir_sync_message (CONTEXT * ctx, int msgno)
   char *p;
   int rc = 0;
 
+  /* TODO: why the h->env check? */
   if (h->attach_del || h->xlabel_changed ||
-      (h->env && (h->env->refs_changed || h->env->irt_changed)))
+      (h->env && h->env->changed))
   {
     /* when doing attachment deletion/rethreading, fall back to the MH case. */
     if (mh_rewrite_message (ctx, msgno) != 0)
       return (-1);
+    /* TODO: why the env check? */
+    if (h->env)
+      h->env->changed = 0;
   }
   else
   {

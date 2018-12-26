@@ -801,11 +801,11 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
   MOVE_ELEM(supersedes);
   MOVE_ELEM(date);
   MOVE_ELEM(x_label);
-  if (!base->refs_changed)
+  if (!(base->changed & MUTT_ENV_CHANGED_REFS))
   {
     MOVE_ELEM(references);
   }
-  if (!base->irt_changed)
+  if (!(base->changed & MUTT_ENV_CHANGED_IRT))
   {
     MOVE_ELEM(in_reply_to);
   }

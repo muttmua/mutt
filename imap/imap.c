@@ -1321,7 +1321,7 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
       /* if the message has been rethreaded or attachments have been deleted
        * we delete the message and reupload it.
        * This works better if we're expunging, of course. */
-      if ((h->env && (h->env->refs_changed || h->env->irt_changed)) ||
+      if ((h->env && h->env->changed) ||
 	  h->attach_del || h->xlabel_changed)
       {
         /* NOTE and TODO:
@@ -1356,6 +1356,9 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
 	  dprint (1, (debugfile, "imap_sync_mailbox: Error opening mailbox in append mode\n"));
 	else
 	  _mutt_save_message (h, appendctx, 1, 0, 0);
+        /* TODO: why the check for h->env?  Is this possible? */
+        if (h->env)
+          h->env->changed = 0;
 	h->xlabel_changed = 0;
 #if USE_HCACHE
         idata->hcache = imap_hcache_open (idata, NULL);

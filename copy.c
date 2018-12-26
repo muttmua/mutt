@@ -354,9 +354,9 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
   char *temp_hdr = NULL;
 
   if (h->env)
-    flags |= (h->env->irt_changed ? CH_UPDATE_IRT : 0)
-      | (h->env->refs_changed ? CH_UPDATE_REFS : 0);
-  
+    flags |= ((h->env->changed & MUTT_ENV_CHANGED_IRT) ? CH_UPDATE_IRT : 0)
+      | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0);
+
   if (mutt_copy_hdr (in, out, h->offset, h->content->offset, flags, prefix) == -1)
     return -1;
 
