@@ -656,8 +656,9 @@ typedef struct alias
   short num;
 } ALIAS;
 
-#define MUTT_ENV_CHANGED_IRT   (1<<0)  /* In-Reply-To changed to link/break threads */
-#define MUTT_ENV_CHANGED_REFS  (1<<1)  /* References changed to break thread */
+#define MUTT_ENV_CHANGED_IRT     (1<<0)  /* In-Reply-To changed to link/break threads */
+#define MUTT_ENV_CHANGED_REFS    (1<<1)  /* References changed to break thread */
+#define MUTT_ENV_CHANGED_XLABEL  (1<<2)  /* X-Label edited */
 
 typedef struct envelope
 {
@@ -817,7 +818,6 @@ typedef struct header
 					 * This flag is used by the maildir_trash
 					 * option.
 					 */
-  unsigned int xlabel_changed : 1;	/* editable - used for syncing */
   
   /* timezone of the sender of this message */
   unsigned int zhours : 5;

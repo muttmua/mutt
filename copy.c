@@ -342,6 +342,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
 	CH_NOQFROM      ignore ">From " line
 	CH_UPDATE_IRT	update the In-Reply-To: header
 	CH_UPDATE_REFS	update the References: header
+        CH_UPDATE_LABEL update the X-Label: header
 
    prefix
    	string to use if CH_PREFIX is set
@@ -355,7 +356,8 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 
   if (h->env)
     flags |= ((h->env->changed & MUTT_ENV_CHANGED_IRT) ? CH_UPDATE_IRT : 0)
-      | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0);
+      | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0)
+      | ((h->env->changed & MUTT_ENV_CHANGED_XLABEL) ? CH_UPDATE_LABEL : 0);
 
   if (mutt_copy_hdr (in, out, h->offset, h->content->offset, flags, prefix) == -1)
     return -1;
@@ -424,7 +426,6 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 
   if ((flags & CH_UPDATE_LABEL) && h->env->x_label)
   {
-    h->xlabel_changed = 0;
     temp_hdr = h->env->x_label;
     /* env->x_label isn't currently stored with direct references
      * elsewhere.  Context->label_hash strdups the keys.  But to be
@@ -522,9 +523,6 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
     else
       _mutt_make_string (prefix, sizeof (prefix), NONULL (Prefix), Context, hdr, 0);
   }
-
-  if (hdr->xlabel_changed)
-    chflags |= CH_UPDATE_LABEL;
 
   if ((flags & MUTT_CM_NOHEADER) == 0)
   {

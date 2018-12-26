@@ -800,7 +800,10 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
   MOVE_ELEM(message_id);
   MOVE_ELEM(supersedes);
   MOVE_ELEM(date);
-  MOVE_ELEM(x_label);
+  if (!(base->changed & MUTT_ENV_CHANGED_XLABEL))
+  {
+    MOVE_ELEM(x_label);
+  }
   if (!(base->changed & MUTT_ENV_CHANGED_REFS))
   {
     MOVE_ELEM(references);

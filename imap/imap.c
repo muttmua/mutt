@@ -1321,8 +1321,8 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
       /* if the message has been rethreaded or attachments have been deleted
        * we delete the message and reupload it.
        * This works better if we're expunging, of course. */
-      if ((h->env && h->env->changed) ||
-	  h->attach_del || h->xlabel_changed)
+      /* TODO: why the h->env check? */
+      if ((h->env && h->env->changed) || h->attach_del)
       {
         /* NOTE and TODO:
          *
@@ -1359,7 +1359,6 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
         /* TODO: why the check for h->env?  Is this possible? */
         if (h->env)
           h->env->changed = 0;
-	h->xlabel_changed = 0;
 #if USE_HCACHE
         idata->hcache = imap_hcache_open (idata, NULL);
 #endif
