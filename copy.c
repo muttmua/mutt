@@ -111,6 +111,9 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
         if ((flags & CH_UPDATE_LABEL) &&
             ascii_strncasecmp ("X-Label:", buf, 8) == 0)
           continue;
+        if ((flags & CH_UPDATE_SUBJECT) &&
+            ascii_strncasecmp ("Subject:", buf, 8) == 0)
+          continue;
 
 	ignore = 0;
       }
@@ -220,6 +223,9 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
 	continue;
       if ((flags & CH_UPDATE_LABEL) &&
           ascii_strncasecmp ("X-Label:", buf, 8) == 0)
+        continue;
+      if ((flags & CH_UPDATE_SUBJECT) &&
+          ascii_strncasecmp ("Subject:", buf, 8) == 0)
         continue;
 
       /* Find x -- the array entry where this header is to be saved */
@@ -357,7 +363,8 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
   if (h->env)
     flags |= ((h->env->changed & MUTT_ENV_CHANGED_IRT) ? CH_UPDATE_IRT : 0)
       | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0)
-      | ((h->env->changed & MUTT_ENV_CHANGED_XLABEL) ? CH_UPDATE_LABEL : 0);
+      | ((h->env->changed & MUTT_ENV_CHANGED_XLABEL) ? CH_UPDATE_LABEL : 0)
+      | ((h->env->changed & MUTT_ENV_CHANGED_SUBJECT) ? CH_UPDATE_SUBJECT : 0);
 
   if (mutt_copy_hdr (in, out, h->offset, h->content->offset, flags, prefix) == -1)
     return -1;
@@ -436,6 +443,25 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
       rfc2047_encode_string (&temp_hdr);
     }
     if (mutt_write_one_header (out, "X-Label", temp_hdr,
+                               flags & CH_PREFIX ? prefix : 0,
+                               mutt_window_wrap_cols (MuttIndexWindow, Wrap),
+                               flags) == -1)
+      return -1;
+    if (!(flags & CH_DECODE))
+      FREE (&temp_hdr);
+  }
+
+  if ((flags & CH_UPDATE_SUBJECT) && h->env->subject)
+  {
+    temp_hdr = h->env->subject;
+    /* env->subject is directly referenced in Context->subj_hash, so we
+     * have to be careful not to encode (and thus free) that memory. */
+    if (!(flags & CH_DECODE))
+    {
+      temp_hdr = safe_strdup (temp_hdr);
+      rfc2047_encode_string (&temp_hdr);
+    }
+    if (mutt_write_one_header (out, "Subject", temp_hdr,
                                flags & CH_PREFIX ? prefix : 0,
                                mutt_window_wrap_cols (MuttIndexWindow, Wrap),
                                flags) == -1)

@@ -121,6 +121,14 @@ static void update_protected_headers (HEADER *cur)
       hash_insert (Context->subj_hash, cur->env->real_subj, cur);
 
     mx_save_to_header_cache (Context, cur);
+
+    /* Also persist back to the message headers if this is set */
+    if (option (OPTCRYPTPROTHDRSSAVE))
+    {
+      cur->env->changed |= MUTT_ENV_CHANGED_SUBJECT;
+      cur->changed = 1;
+      Context->changed = 1;
+    }
   }
 }
 

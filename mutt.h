@@ -542,6 +542,7 @@ enum
   OPTCRYPTCONFIRMHOOK,
   OPTCRYPTOPPORTUNISTICENCRYPT,
   OPTCRYPTPROTHDRSREAD,
+  OPTCRYPTPROTHDRSSAVE,
   OPTCRYPTPROTHDRSWRITE,
   OPTCRYPTREPLYENCRYPT,
   OPTCRYPTREPLYSIGN,
@@ -659,6 +660,7 @@ typedef struct alias
 #define MUTT_ENV_CHANGED_IRT     (1<<0)  /* In-Reply-To changed to link/break threads */
 #define MUTT_ENV_CHANGED_REFS    (1<<1)  /* References changed to break thread */
 #define MUTT_ENV_CHANGED_XLABEL  (1<<2)  /* X-Label edited */
+#define MUTT_ENV_CHANGED_SUBJECT (1<<3)  /* Protected header update */
 
 typedef struct envelope
 {
