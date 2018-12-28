@@ -423,6 +423,7 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 
   if ((flags & CH_UPDATE_LABEL) && h->env->x_label)
   {
+    h->xlabel_changed = 0;
     if (!(flags & CH_DECODE))
       rfc2047_encode_string (&h->env->x_label);
     if (mutt_write_one_header (out, "X-Label", h->env->x_label,
