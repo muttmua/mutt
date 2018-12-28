@@ -351,6 +351,7 @@ int
 mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 {
   char buffer[SHORT_STRING];
+  char *temp_hdr = NULL;
 
   if (h->env)
     flags |= (h->env->irt_changed ? CH_UPDATE_IRT : 0)
@@ -424,15 +425,22 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
   if ((flags & CH_UPDATE_LABEL) && h->env->x_label)
   {
     h->xlabel_changed = 0;
+    temp_hdr = h->env->x_label;
+    /* env->x_label isn't currently stored with direct references
+     * elsewhere.  Context->label_hash strdups the keys.  But to be
+     * safe, encode a copy */
     if (!(flags & CH_DECODE))
-      rfc2047_encode_string (&h->env->x_label);
-    if (mutt_write_one_header (out, "X-Label", h->env->x_label,
+    {
+      temp_hdr = safe_strdup (temp_hdr);
+      rfc2047_encode_string (&temp_hdr);
+    }
+    if (mutt_write_one_header (out, "X-Label", temp_hdr,
                                flags & CH_PREFIX ? prefix : 0,
                                mutt_window_wrap_cols (MuttIndexWindow, Wrap),
                                flags) == -1)
       return -1;
     if (!(flags & CH_DECODE))
-      rfc2047_decode (&h->env->x_label);
+      FREE (&temp_hdr);
   }
 
   if ((flags & CH_NONEWLINE) == 0)
