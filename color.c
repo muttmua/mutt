@@ -331,12 +331,17 @@ static int
 parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
 {
   char *eptr;
-  int is_bright = 0;
+  int is_bright = 0, is_light = 0;
 
   if (ascii_strncasecmp (s, "bright", 6) == 0)
   {
     is_bright = 1;
     s += 6;
+  }
+  else if (ascii_strncasecmp (s, "light", 5) == 0)
+  {
+    is_light = 1;
+    s += 5;
   }
 
   /* allow aliases for xterm color resources */
@@ -357,21 +362,33 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
     return (-1);
   }
 
-  if (is_bright)
+  if (is_bright || is_light)
   {
     if (is_fg)
     {
-      *attr |= A_BOLD;
-    }
-    else if (COLORS < 16)
-    {
-      /* A_BLINK turns the background color brite on some terms */
-      *attr |= A_BLINK;
+      if ((COLORS >= 16) && is_light)
+      {
+        if (*col < 8)
+        {
+          /* Advance the color 0-7 by 8 to get the light version */
+          *col += 8;
+        }
+      }
+      else
+      {
+        *attr |= A_BOLD;
+      }
     }
     else
     {
-      /* Advance the color by 8 to get the bright version */
-      *col += 8;
+      if (COLORS >= 16)
+      {
+        if (*col < 8)
+        {
+          /* Advance the color 0-7 by 8 to get the light version */
+          *col += 8;
+        }
+      }
     }
   }
 
