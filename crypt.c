@@ -943,6 +943,11 @@ int mutt_protected_headers_handler (BODY *a, STATE *s)
   {
     if (a->mime_headers->subject)
     {
+      if ((s->flags & MUTT_DISPLAY) && option (OPTWEED) &&
+          mutt_matches_ignore ("subject", Ignore) &&
+          !mutt_matches_ignore ("subject", UnIgnore))
+        return 0;
+
       state_mark_protected_header (s);
       mutt_write_one_header (s->fpout, "Subject", a->mime_headers->subject,
                              s->prefix,
