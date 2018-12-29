@@ -3409,7 +3409,9 @@ void mutt_init (int skip_sys_rc, LIST *commands)
    */
   snprintf (AttachmentMarker, sizeof (AttachmentMarker),
 	    "\033]9;%ld\a", (long) time (NULL));
-  
+  snprintf (ProtectedHeaderMarker, sizeof (ProtectedHeaderMarker),
+	    "\033]8;%ld\a", (long) time (NULL));
+
   /* on one of the systems I use, getcwd() does not return the same prefix
      as is listed in the passwd file */
   if ((p = getenv ("HOME")))

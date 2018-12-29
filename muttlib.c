@@ -1783,6 +1783,12 @@ void state_mark_attach (STATE *s)
     state_puts (AttachmentMarker, s);
 }
 
+void state_mark_protected_header (STATE *s)
+{
+  if ((s->flags & MUTT_DISPLAY) && !mutt_strcmp (Pager, "builtin"))
+    state_puts (ProtectedHeaderMarker, s);
+}
+
 void state_attach_puts (const char *t, STATE *s)
 {
   if (*t != '\n') state_mark_attach (s);

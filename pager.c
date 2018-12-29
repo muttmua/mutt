@@ -706,7 +706,8 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
 static int brailleLine = -1;
 static int brailleCol = -1;
 
-static int check_attachment_marker (char *);
+static int check_attachment_marker (const char *);
+static int check_protected_header_marker (const char *);
 
 /* Checks if buf matches the QuoteRegexp and doesn't match Smileys.
  * pmatch, if non-null, is populated with the regexec match against
@@ -755,7 +756,8 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
   regmatch_t pmatch[1];
   int found, offset, null_rx, i;
 
-  if (n == 0 || ISHEADER (lineInfo[n-1].type))
+  if (n == 0 || ISHEADER (lineInfo[n-1].type) ||
+      (check_protected_header_marker (raw) == 0))
   {
     if (buf[0] == '\n') /* end of header */
     {
@@ -954,13 +956,21 @@ static int is_ansi (unsigned char *buf)
   return (*buf == 'm');
 }
 
-static int check_attachment_marker (char *p)
+static int check_marker (const char *q, const char *p)
 {
-  char *q = AttachmentMarker;
-  
   for (;*p == *q && *q && *p && *q != '\a' && *p != '\a'; p++, q++)
     ;
   return (int) (*p - *q);
+}
+
+static int check_attachment_marker (const char *p)
+{
+  return check_marker (AttachmentMarker, p);
+}
+
+static int check_protected_header_marker (const char *p)
+{
+  return check_marker (ProtectedHeaderMarker, p);
 }
 
 static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
@@ -1092,7 +1102,9 @@ fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
 	while (*p++ != 'm')	/* skip ANSI sequence */
 	  ;
       }
-      else if (*p == '\033' && *(p+1) == ']' && check_attachment_marker ((char *) p) == 0)
+      else if (*p == '\033' && *(p+1) == ']' &&
+               ((check_attachment_marker ((char *) p) == 0) ||
+                (check_protected_header_marker ((char *) p) == 0)))
       {
 	dprint (2, (debugfile, "fill_buffer: Seen attachment marker.\n"));
 	while (*p++ != '\a')	/* skip pseudo-ANSI sequence */
@@ -1134,7 +1146,8 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
       ch = grok_ansi (buf, ch+2, pa) + 1;
 
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == ']' &&
-	   check_attachment_marker ((char *) buf+ch) == 0)
+	   ((check_attachment_marker ((char *) buf+ch) == 0) ||
+            (check_protected_header_marker ((char *) buf+ch) == 0)))
     {
       while (buf[ch++] != '\a')
 	if (ch >= cnt)

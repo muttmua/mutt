@@ -23,6 +23,7 @@ WHERE CONTEXT *Context;
 
 WHERE char Errorbuf[STRING];
 WHERE char AttachmentMarker[STRING];
+WHERE char ProtectedHeaderMarker[STRING];
 
 #if defined(DL_STANDALONE) && defined(USE_DOTLOCK)
 WHERE char *MuttDotlock;
