@@ -631,6 +631,17 @@ struct option_t MuttVars[] = {
   ** you enable this variable.
   ** (Crypto only)
    */
+  { "crypt_protected_headers_subject", DT_STR, R_NONE, UL &ProtHdrSubject, UL "Encrypted subject" },
+  /*
+  ** .pp
+  ** When $$crypt_protected_headers_write is set, and the message is marked
+  ** for encryption, this will be substituted into the Subject field in the
+  ** message headers.
+  **
+  ** To prevent a subject from being substituted, unset this variable, or set it
+  ** to the empty string.
+  ** (Crypto only)
+   */
   { "crypt_protected_headers_write", DT_BOOL, R_NONE, OPTCRYPTPROTHDRSWRITE, 0 },
   /*
   ** .pp
@@ -642,17 +653,6 @@ struct option_t MuttVars[] = {
   ** For more information see https://github.com/autocrypt/memoryhole.
   **
   ** Currently Mutt only supports the Subject header.
-  ** (Crypto only)
-   */
-  { "crypt_protected_headers_subject", DT_STR, R_NONE, UL &ProtHdrSubject, UL "Encrypted subject" },
-  /*
-  ** .pp
-  ** When $$crypt_protected_headers_write is set, and the message is marked
-  ** for encryption, this will be substituted into the Subject field in the
-  ** message headers.
-  **
-  ** To prevent a subject from being substituted, unset this variable, or set it
-  ** to the empty string.
   ** (Crypto only)
    */
   { "pgp_replyencrypt",		DT_SYN,  R_NONE, UL "crypt_replyencrypt", 1  },
