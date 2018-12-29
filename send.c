@@ -1335,7 +1335,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
 
   if (!(Postponed && *Postponed))
   {
-    mutt_error _("Can not postpone.  $postponed is unset");
+    mutt_error _("Cannot postpone.  $postponed is unset");
     return -1;
   }
 
