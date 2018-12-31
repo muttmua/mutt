@@ -148,12 +148,11 @@ typedef enum
 {
   MUTT_FORMAT_FORCESUBJ   = (1<<0), /* print the subject even if unchanged */
   MUTT_FORMAT_TREE        = (1<<1), /* draw the thread tree */
-  MUTT_FORMAT_MAKEPRINT   = (1<<2), /* make sure that all chars are printable */
-  MUTT_FORMAT_OPTIONAL    = (1<<3),
-  MUTT_FORMAT_STAT_FILE   = (1<<4), /* used by mutt_attach_fmt */
-  MUTT_FORMAT_ARROWCURSOR = (1<<5), /* reserve space for arrow_cursor */
-  MUTT_FORMAT_INDEX       = (1<<6), /* this is a main index entry */
-  MUTT_FORMAT_NOFILTER    = (1<<7)  /* do not allow filtering on this pass */
+  MUTT_FORMAT_OPTIONAL    = (1<<2),
+  MUTT_FORMAT_STAT_FILE   = (1<<3), /* used by mutt_attach_fmt */
+  MUTT_FORMAT_ARROWCURSOR = (1<<4), /* reserve space for arrow_cursor */
+  MUTT_FORMAT_INDEX       = (1<<5), /* this is a main index entry */
+  MUTT_FORMAT_NOFILTER    = (1<<6)  /* do not allow filtering on this pass */
 } format_flag;
 
 /* mode for mutt_write_rfc822_header() */

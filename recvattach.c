@@ -203,7 +203,7 @@ const char *mutt_attach_fmt (char *dest,
 	{
 	  char s[SHORT_STRING];
 	  _mutt_make_string (s, sizeof (s), MsgFmt, NULL, aptr->content->hdr,
-			     MUTT_FORMAT_FORCESUBJ | MUTT_FORMAT_MAKEPRINT | MUTT_FORMAT_ARROWCURSOR);
+			     MUTT_FORMAT_FORCESUBJ | MUTT_FORMAT_ARROWCURSOR);
 	  if (*s)
 	  {
 	    mutt_format_s (dest, destlen, prefix, s);

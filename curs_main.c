@@ -197,7 +197,7 @@ void mutt_ts_icon(char *str)
 
 void index_make_entry (char *s, size_t l, MUTTMENU *menu, int num)
 {
-  format_flag flag = MUTT_FORMAT_MAKEPRINT | MUTT_FORMAT_ARROWCURSOR | MUTT_FORMAT_INDEX;
+  format_flag flag = MUTT_FORMAT_ARROWCURSOR | MUTT_FORMAT_INDEX;
   int edgemsgno, reverse = Sort & SORT_REVERSE;
   HEADER *h = Context->hdrs[Context->v2r[num]];
   THREAD *tmp;
