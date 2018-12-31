@@ -917,10 +917,6 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
   }
   while (op != OP_NULL);
 
-#if 0
-  if (option (OPTWEED) != old_optweed)
-    toggle_option (OPTWEED);
-#endif
   return op;
 }
 
