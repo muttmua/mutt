@@ -205,4 +205,3 @@ int mutt_group_match (group_t *g, const char *s)
   }
   return 0;
 }
-

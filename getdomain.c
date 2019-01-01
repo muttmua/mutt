@@ -70,4 +70,3 @@ int getdnsdomainname (char *d, size_t len)
 
   return ret;
 }
-

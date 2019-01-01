@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 /**
  ** This program parses mutt's init.h and generates documentation in
@@ -22,7 +22,7 @@
  **
  ** -> a commented muttrc configuration file
  ** -> nroff, suitable for inclusion in a manual page
- ** -> docbook-xml, suitable for inclusion in the 
+ ** -> docbook-xml, suitable for inclusion in the
  **    SGML-based manual
  **
  **/
@@ -130,7 +130,7 @@ int main (int argc, char *argv[])
     Progname++;
   else
     Progname = argv[0];
-  
+
   while ((c = getopt (argc, argv, "cmsd")) != EOF)
   {
     switch (c)
@@ -139,7 +139,7 @@ int main (int argc, char *argv[])
       case 'm': OutputFormat = F_MAN; break;
       case 's': OutputFormat = F_SGML; break;
       case 'd': Debug++; break;
-      default: 
+      default:
       {
 	fprintf (stderr, "%s: bad command line parameter.\n", Progname);
 	exit (1);
@@ -156,13 +156,13 @@ int main (int argc, char *argv[])
       exit (1);
     }
   }
-  else 
+  else
     f = stdin;
 
   switch (OutputFormat)
   {
-    case F_CONF: 
-    case F_MAN:  
+    case F_CONF:
+    case F_MAN:
     case F_SGML: makedoc (f, stdout); break;
     default:
     {
@@ -171,7 +171,7 @@ int main (int argc, char *argv[])
       exit (1);
     }
   }
-  
+
   if (f != stdin)
     fclose (f);
 
@@ -208,7 +208,7 @@ static void makedoc (FILE *in, FILE *out)
       fprintf (stderr, "%s: line %d.  first token: \"%s\".\n",
 	       Progname, line, token);
     }
-    
+
     if (!strcmp (token, "/*++*/"))
       active = 1;
     else if (!strcmp (token, "/*--*/"))
@@ -251,7 +251,7 @@ static char *get_token (char *d, size_t l, char *s)
   if (Debug)
      fprintf (stderr, "%s: get_token called for `%s'.\n",
 	      Progname, s);
-  
+
   s = skip_ws (s);
 
   if (Debug > 1)
@@ -283,7 +283,7 @@ static char *get_token (char *d, size_t l, char *s)
     {
       fprintf (stderr, "%s: found quote character.\n", Progname);
     }
-      
+
     s++;
     is_quoted = 1;
   }
@@ -329,14 +329,14 @@ static char *get_token (char *d, size_t l, char *s)
     fprintf (stderr, "%s: Remainder: `%s'.\n",
 	     Progname, t);
   }
-  
+
   return t;
 }
 
 
 /**
  ** Configuration line parser
- ** 
+ **
  ** The following code parses a line from init.h which declares
  ** a configuration variable.
  **
@@ -346,7 +346,7 @@ static char *get_token (char *d, size_t l, char *s)
  * following string definitions!
  */
 
-enum 
+enum
 {
   DT_NONE = 0,
   DT_BOOL,
@@ -363,12 +363,12 @@ enum
   DT_MBCHARTBL
 };
 
-struct 
+struct
 {
   char *machine;
   char *human;
 }
-types[] = 
+types[] =
 {
   { "DT_NONE",	"-none-" 	},
   { "DT_BOOL",  "boolean"	},
@@ -385,12 +385,12 @@ types[] =
   { "DT_MBCHARTBL", "string"	},
   { NULL, NULL }
 };
-    
+
 
 static int buff2type (const char *s)
 {
   int type;
-  
+
   for (type = DT_NONE; types[type].machine; type++)
     if (!strcmp (types[type].machine, s))
 	return type;
@@ -410,17 +410,17 @@ static void handle_confline (char *s, FILE *out)
   char buff[BUFFSIZE];
   char tmp[BUFFSIZE];
   int type;
-  
+
   char val[BUFFSIZE];
 
   /* xxx - put this into an actual state machine? */
 
   /* variable name */
   if (!(s = get_token (varname, sizeof (varname), s))) return;
-  
+
   /* comma */
   if (!(s = get_token (buff, sizeof (buff), s))) return;
-    
+
   /* type */
   if (!(s = get_token (buff, sizeof (buff), s))) return;
 
@@ -438,7 +438,7 @@ static void handle_confline (char *s, FILE *out)
   }
 
   /* redraw, comma */
-  
+
   while (1)
   {
     if (!(s = get_token (buff, sizeof (buff), s))) return;
@@ -455,7 +455,7 @@ static void handle_confline (char *s, FILE *out)
   if (!(s = get_token (buff, sizeof (buff), s))) return;
 
   if (Debug) fprintf (stderr, "%s: Expecting default value.\n", Progname);
-  
+
   /* <default value> or UL <default value> */
   if (!(s = get_token (buff, sizeof (buff), s))) return;
   if (!strcmp (buff, "UL"))
@@ -466,7 +466,7 @@ static void handle_confline (char *s, FILE *out)
 
   memset (tmp, 0, sizeof (tmp));
 
-  do 
+  do
   {
     if (!strcmp (buff, "}"))
       break;
@@ -487,7 +487,7 @@ static void pretty_default (char *t, size_t l, const char *s, int type)
   switch (type)
   {
     case DT_QUAD:
-    {    
+    {
       if (!strcasecmp (s, "MUTT_YES")) strncpy (t, "yes", l);
       else if (!strcasecmp (s, "MUTT_NO")) strncpy (t, "no", l);
       else if (!strcasecmp (s, "MUTT_ASKYES")) strncpy (t, "ask-yes", l);
@@ -584,7 +584,7 @@ static void man_print_strval (const char *v, FILE *out)
       conf_char_to_escape ((unsigned int) *v, out);
       continue;
     }
-    
+
     if (*v == '"')
       fputs ("\\(rq", out);
     else if (*v == '\\')
@@ -659,7 +659,7 @@ static int sgml_id_fputs (const char *s, FILE* out)
 static void print_confline (const char *varname, int type, const char *val, FILE *out)
 {
   if (type == DT_SYN) return;
-  
+
   switch (OutputFormat)
   {
     /* configuration file */
@@ -674,7 +674,7 @@ static void print_confline (const char *varname, int type, const char *val, FILE
       }
       else if (type != DT_SYN)
 	fprintf (out, "\n# set %s=%s", varname, val);
-      
+
       fprintf (out, "\n#\n# Name: %s", varname);
       fprintf (out, "\n# Type: %s", type2human (type));
       if (type == DT_STR || type == DT_RX || type == DT_ADDR || type == DT_PATH ||
@@ -714,7 +714,7 @@ static void print_confline (const char *varname, int type, const char *val, FILE
 
       break;
     }
-    
+
     /* SGML based manual */
     case F_SGML:
     {
@@ -724,7 +724,7 @@ static void print_confline (const char *varname, int type, const char *val, FILE
       sgml_fputs (varname, out);
       fprintf (out, "</title>\n<literallayout>Type: %s", type2human (type));
 
-      
+
       if (type == DT_STR || type == DT_RX || type == DT_ADDR || type == DT_PATH ||
           type == DT_MBCHARTBL)
       {
@@ -753,11 +753,11 @@ static void print_confline (const char *varname, int type, const char *val, FILE
 /**
  ** Documentation line parser
  **
- ** The following code parses specially formatted documentation 
+ ** The following code parses specially formatted documentation
  ** comments in init.h.
  **
  ** The format is very remotely inspired by nroff. Most important, it's
- ** easy to parse and convert, and it was easy to generate from the SGML 
+ ** easy to parse and convert, and it was easy to generate from the SGML
  ** source of mutt's original manual.
  **
  ** - \fI switches to italics
@@ -819,7 +819,7 @@ static int flush_doc (int docstat, FILE *out)
 static int print_it (int special, char *str, FILE *out, int docstat)
 {
   int onl = docstat & (D_NL|D_NP);
-  
+
   docstat &= ~(D_NL|D_NP|D_INIT);
 
   switch (OutputFormat)
@@ -835,7 +835,7 @@ static int print_it (int special, char *str, FILE *out, int docstat)
 	case SP_START_BF: docstat |= D_BF; break;
 	case SP_START_EM: docstat |= D_EM; break;
         case SP_START_TT: docstat |= D_TT; break;
-	case SP_NEWLINE: 
+	case SP_NEWLINE:
 	{
 	  if (onl)
 	    docstat |= onl;
@@ -862,9 +862,9 @@ static int print_it (int special, char *str, FILE *out, int docstat)
 	  docstat |= D_NP;
 	  break;
 	}
-	case SP_START_TAB: 
+	case SP_START_TAB:
 	{
-	  if (!onl) 
+	  if (!onl)
 	    fputs ("\n# ", out);
 	  docstat |= D_TAB;
 	  break;
@@ -919,7 +919,7 @@ static int print_it (int special, char *str, FILE *out, int docstat)
 	  }
 	  fputs (str, out);
 	  if (docstat & D_DT)
-	  { 
+	  {
 	    int i;
 
 	    for (i = strlen (str) ; i < 8 ; i++)
@@ -938,13 +938,13 @@ static int print_it (int special, char *str, FILE *out, int docstat)
     {
       switch (special)
       {
-	case SP_END_FT: 
+	case SP_END_FT:
 	{
 	  fputs ("\\fP", out);
 	  docstat &= ~(D_EM|D_BF|D_TT);
 	  break;
 	}
-	case SP_START_BF: 
+	case SP_START_BF:
 	{
 	  fputs ("\\fB", out);
 	  docstat |= D_BF;
@@ -1078,7 +1078,7 @@ static int print_it (int special, char *str, FILE *out, int docstat)
     {
       switch (special)
       {
-	case SP_END_FT: 
+	case SP_END_FT:
 	{
 	  if (docstat & D_EM) fputs ("</emphasis>", out);
 	  if (docstat & D_BF) fputs ("</emphasis>", out);
@@ -1086,7 +1086,7 @@ static int print_it (int special, char *str, FILE *out, int docstat)
 	  docstat &= ~(D_EM|D_BF|D_TT);
 	  break;
 	}
-	case SP_START_BF: 
+	case SP_START_BF:
 	{
 	  fputs ("<emphasis role=\"bold\">", out);
 	  docstat |= D_BF;
@@ -1307,7 +1307,7 @@ static int handle_docline (char *l, FILE *out, int docstat)
 
   if (Debug)
     fprintf (stderr, "%s: handle_docline `%s'\n", Progname, l);
-  
+
   if (!strncmp (l, ".pp", 3))
     return print_it (SP_NEWPAR, NULL, out, docstat);
   else if (!strncmp (l, ".ts", 3))

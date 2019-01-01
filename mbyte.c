@@ -574,4 +574,3 @@ int mutt_filter_unprintable (char **s)
   FREE (&b);
   return 0;
 }
-

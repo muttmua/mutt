@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -69,7 +69,7 @@ struct history
   char **hist;
   short cur;
   short last;
-}; 
+};
 
 static const struct mapping_t HistoryHelp[] = {
   { N_("Exit"),   OP_EXIT },
@@ -99,10 +99,10 @@ static void init_history (struct history *h)
       FREE (&h->hist);
     }
   }
-  
+
   if (HistSize)
     h->hist = safe_calloc (HistSize + 1, sizeof (char *));
-  
+
   h->cur = 0;
   h->last = 0;
 }
@@ -370,16 +370,16 @@ static void remove_history_dups (history_class_t hclass, const char *s)
 void mutt_init_history(void)
 {
   history_class_t hclass;
-  
+
   if (HistSize == OldSize)
     return;
-  
+
   for(hclass = HC_FIRST; hclass < HC_LAST; hclass++)
     init_history(&History[hclass]);
 
   OldSize = HistSize;
 }
-  
+
 void mutt_history_add (history_class_t hclass, const char *s, int save)
 {
   int prev;
@@ -587,4 +587,3 @@ void mutt_history_complete (char *buf, size_t buflen, history_class_t hclass)
   }
   FREE(&matches);
 }
-

@@ -983,4 +983,3 @@ struct mx_ops mx_comp_ops =
   .msg_padding_size = compress_msg_padding_size,
   .save_to_header_cache = NULL,  /* compressed doesn't support maildir/mh */
 };
-

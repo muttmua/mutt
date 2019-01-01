@@ -1,24 +1,24 @@
 /*
  * Copyright (C) 1996-2002,2010,2013 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 2004 g10 Code GmbH
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #ifndef MUTT_H
-#define MUTT_H 
+#define MUTT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,11 +95,11 @@ struct timespec
 
 /* nifty trick I stole from ELM 2.5alpha. */
 #ifdef MAIN_C
-#define WHERE 
+#define WHERE
 #define INITVAL(x) = x
 #else
 #define WHERE extern
-#define INITVAL(x) 
+#define INITVAL(x)
 #endif
 
 #define WHERE_DEFINED 1
@@ -271,7 +271,7 @@ enum
   MUTT_XLABEL,
   MUTT_MIMEATTACH,
   MUTT_MIMETYPE,
-  
+
   /* Options for Mailcap lookup */
   MUTT_EDIT,
   MUTT_COMPOSE,
@@ -328,7 +328,7 @@ enum
 #endif
   OPT_SUBJECT,
   OPT_VERIFYSIG,      /* verify PGP signatures */
-    
+
   /* THIS MUST BE THE LAST VALUE. */
   OPT_MAX
 };
@@ -533,7 +533,7 @@ enum
   OPTCRYPTUSEPKA,
 
   /* PGP options */
-  
+
   OPTCRYPTAUTOSIGN,
   OPTCRYPTAUTOENCRYPT,
   OPTCRYPTAUTOPGP,
@@ -725,9 +725,9 @@ typedef struct body
   char *filename;               /* when sending a message, this is the file
 				 * to which this structure refers
 				 */
-  char *d_filename;		/* filename to be used for the 
+  char *d_filename;		/* filename to be used for the
 				 * content-disposition header.
-				 * If NULL, filename is used 
+				 * If NULL, filename is used
 				 * instead.
 				 */
   char *charset;                /* charset of attached file */
@@ -762,7 +762,7 @@ typedef struct body
   unsigned int deleted : 1;	/* attachment marked for deletion */
 
   unsigned int noconv : 1;	/* don't do character set conversion */
-  unsigned int force_charset : 1; 
+  unsigned int force_charset : 1;
   				/* send mode: don't adjust the character
 				 * set when in send-mode.
 				 */
@@ -816,7 +816,7 @@ typedef struct header
 					 * This flag is used by the maildir_trash
 					 * option.
 					 */
-  
+
   /* timezone of the sender of this message */
   unsigned int zhours : 5;
   unsigned int zminutes : 6;
@@ -835,7 +835,7 @@ typedef struct header
   size_t num_hidden;          	/* number of hidden messages in this view */
 
   short recipient;		/* user_is_recipient()'s return value, cached */
-  
+
   int pair; 			/* color-pair to use when displaying in the index */
 
   time_t date_sent;     	/* time when the message was sent (UTC) */
@@ -849,7 +849,7 @@ typedef struct header
   ENVELOPE *env;		/* envelope information */
   BODY *content;		/* list of MIME parts */
   char *path;
-  
+
   char *tree;           	/* character string to print thread tree */
   THREAD *thread;
 
@@ -867,7 +867,7 @@ typedef struct header
 #if defined USE_POP || defined USE_IMAP
   void *data;            	/* driver-specific data */
 #endif
-  
+
   char *maildir_flags;		/* unknown maildir flags */
 } HEADER;
 
@@ -925,7 +925,7 @@ typedef struct pattern_t
   int max;
   struct pattern_t *next;
   struct pattern_t *child;		/* arguments to logical op */
-  union 
+  union
   {
     regex_t *rx;
     group_t *g;

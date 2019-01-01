@@ -601,7 +601,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
   char* s;
   int ret, plen;
 #ifndef HAVE_ICONV
-  const char *chs = Charset && *Charset ? Charset : 
+  const char *chs = Charset && *Charset ? Charset :
 		    mutt_get_default_charset ();
 #endif
 
@@ -669,7 +669,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
 		   );
 #endif
   }
-  
+
   if (ret <= 0)
     return path;
 
@@ -800,7 +800,7 @@ mutt_hcache_fetch(header_cache_t *h, const char *filename,
     mutt_hcache_free (&data);
     return NULL;
   }
-  
+
   return data;
 }
 
@@ -849,7 +849,7 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
   strncpy(path, h->folder, sizeof (path));
   safe_strcat(path, sizeof (path), filename);
 
-  ksize = strlen (h->folder) + keylen (path + strlen (h->folder));  
+  ksize = strlen (h->folder) + keylen (path + strlen (h->folder));
 #endif
 
 #ifdef HAVE_QDBM
@@ -899,15 +899,15 @@ mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
   char* data;
   int dlen;
   int ret;
-  
+
   if (!h)
     return -1;
-  
+
   data = mutt_hcache_dump(h, header, &dlen, uidvalidity, flags);
   ret = mutt_hcache_store_raw (h, filename, data, dlen, keylen);
-  
+
   FREE(&data);
-  
+
   return ret;
 }
 

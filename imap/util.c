@@ -1067,4 +1067,3 @@ void mutt_seqset_iterator_free (SEQSET_ITERATOR **p_iter)
   FREE (&iter->full_seqset);
   FREE (p_iter);               /* __FREE_CHECKED__ */
 }
-

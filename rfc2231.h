@@ -21,4 +21,3 @@
 
 void rfc2231_decode_parameters (PARAMETER **);
 int rfc2231_encode_string (char **);
-

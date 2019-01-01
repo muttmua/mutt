@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 1996-2000,2002,2007,2010 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 1999-2006 Thomas Roessler <roessler@does-not-exist.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -143,7 +143,7 @@ void mutt_update_tree (ATTACH_CONTEXT *actx)
  * %M = MIME subtype
  * %n = attachment number
  * %s = size
- * %u = unlink 
+ * %u = unlink
  */
 const char *mutt_attach_fmt (char *dest,
     size_t destlen,
@@ -163,7 +163,7 @@ const char *mutt_attach_fmt (char *dest,
   ATTACHPTR *aptr = (ATTACHPTR *) data;
   int optional = (flags & MUTT_FORMAT_OPTIONAL);
   size_t l;
-  
+
   switch (op)
   {
     case 'C':
@@ -216,7 +216,7 @@ const char *mutt_attach_fmt (char *dest,
 	  break;
 	}
       }
-      else if(aptr->content->description || 
+      else if(aptr->content->description ||
 	      (mutt_is_message_type (aptr->content->type, aptr->content->subtype)
 	      && MsgFmt && aptr->content->hdr))
         break;
@@ -242,7 +242,7 @@ const char *mutt_attach_fmt (char *dest,
 	if (aptr->content->filename && *aptr->content->filename == '/')
 	{
 	  char path[_POSIX_PATH_MAX];
-	  
+
 	  strfcpy (path, aptr->content->filename, sizeof (path));
 	  mutt_pretty_mailbox (path, sizeof (path));
 	  mutt_format_s (dest, destlen, prefix, path);
@@ -314,7 +314,7 @@ const char *mutt_attach_fmt (char *dest,
       }
       else
         l = aptr->content->length;
-      
+
       if(!optional)
       {
 	mutt_pretty_size (tmp, sizeof(tmp), l);
@@ -354,7 +354,7 @@ const char *mutt_attach_fmt (char *dest,
     default:
       *dest = 0;
   }
-  
+
   if (optional)
     mutt_FormatString (dest, destlen, col, cols, ifstring, mutt_attach_fmt, data, 0);
   else if (flags & MUTT_FORMAT_OPTIONAL)
@@ -414,8 +414,8 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   int is_message;
   int append = 0;
   int rc;
-  
-  if (body->filename) 
+
+  if (body->filename)
   {
     if (directory && *directory)
       mutt_concat_path (buf, *directory, mutt_basename (body->filename), sizeof (buf));
@@ -441,26 +441,26 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
       mutt_clear_error ();
       return -1;
     }
-    
+
     prompt = NULL;
     mutt_expand_path (buf, sizeof (buf));
-    
-    is_message = (fp && 
-		  body->hdr && 
-		  body->encoding != ENCBASE64 && 
-		  body->encoding != ENCQUOTEDPRINTABLE && 
+
+    is_message = (fp &&
+		  body->hdr &&
+		  body->encoding != ENCBASE64 &&
+		  body->encoding != ENCQUOTEDPRINTABLE &&
 		  mutt_is_message_type (body->type, body->subtype));
-    
+
     if (is_message)
     {
       struct stat st;
-      
+
       /* check to make sure that this file is really the one the user wants */
       if ((rc = mutt_save_confirm (buf, &st)) == 1)
       {
 	prompt = _("Save to file: ");
 	continue;
-      } 
+      }
       else if (rc == -1)
 	return -1;
       strfcpy(tfile, buf, sizeof(tfile));
@@ -475,7 +475,7 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
 	continue;
       }
     }
-    
+
     mutt_message _("Saving...");
     if (mutt_save_attachment (fp, body, tfile, append, (hdr || !is_message) ? hdr : body->hdr) == 0)
     {
@@ -490,7 +490,7 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   }
   return 0;
 }
-    
+
 void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
 {
   char buf[_POSIX_PATH_MAX], tfile[_POSIX_PATH_MAX];
@@ -543,7 +543,7 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	  }
 	}
       }
-      else 
+      else
       {
 	if (tag && menu && top->aptr)
 	{
@@ -571,7 +571,7 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
     menu_check_recenter (menu);
     menu->redraw |= REDRAW_MOTION;
   }
-  
+
   if (!option (OPTATTACHSPLIT) && (rc == 0))
     mutt_message _("Attachment saved.");
 }
@@ -779,7 +779,7 @@ static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY
 void mutt_print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top)
 {
   STATE state;
-  
+
   pid_t thepid;
   if (query_quadoption (OPT_PRINT, tag ? _("Print tagged attachment(s)?") : _("Print attachment?")) != MUTT_YES)
     return;

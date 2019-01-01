@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1996-2000,2012-2013 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -48,7 +48,7 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
   FOREVER
   {
     if (fgets (buf, *linelen - offset, f) == NULL ||	/* end of file or */
-	(ISSPACE (*line) && !offset))			/* end of headers */ 
+	(ISSPACE (*line) && !offset))			/* end of headers */
     {
       *line = 0;
       return (line);
@@ -144,7 +144,7 @@ static PARAMETER *parse_parameters (const char *s)
   size_t i;
 
   dprint (2, (debugfile, "parse_parameters: `%s'\n", s));
-  
+
   while (*s)
   {
     if ((p = strpbrk (s, "=;")) == NULL)
@@ -252,7 +252,7 @@ static PARAMETER *parse_parameters (const char *s)
       s = skip_email_wsp(s + 1);
     }
     while (*s == ';'); /* skip empty parameters */
-  }    
+  }
 
 bail:
 
@@ -266,7 +266,7 @@ int mutt_check_mime_type (const char *s)
     return TYPETEXT;
   else if (ascii_strcasecmp ("multipart", s) == 0)
     return TYPEMULTIPART;
-#ifdef SUN_ATTACHMENT 
+#ifdef SUN_ATTACHMENT
   else if (ascii_strcasecmp ("x-sun-attachment", s) == 0)
     return TYPEMULTIPART;
 #endif
@@ -311,15 +311,15 @@ void mutt_parse_content_type (char *s, BODY *ct)
      * let that take precedence, and don't set it here */
     if ((pc = mutt_get_parameter( "name", ct->parameter)) && !ct->filename)
       ct->filename = safe_strdup(pc);
-    
+
 #ifdef SUN_ATTACHMENT
     /* this is deep and utter perversion */
     if ((pc = mutt_get_parameter ("conversions", ct->parameter)))
       ct->encoding = mutt_check_encoding (pc);
 #endif
-    
+
   }
-  
+
   /* Now get the subtype */
   if ((subtype = strchr(s, '/')))
   {
@@ -414,13 +414,13 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
   char *c;
   char *line = safe_malloc (LONG_STRING);
   size_t linelen = LONG_STRING;
-  
+
   p->hdr_offset  = ftello (fp);
 
   p->encoding    = ENC7BIT; /* default from RFC1521 */
   p->type        = digest ? TYPEMESSAGE : TYPETEXT;
   p->disposition = DISPINLINE;
-  
+
   while (*(line = mutt_read_rfc822_line (fp, line, &linelen)) != 0)
   {
     /* Find the value of the current header */
@@ -453,7 +453,7 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
 	mutt_str_replace (&p->description, c);
 	rfc2047_decode (&p->description);
       }
-    } 
+    }
 #ifdef SUN_ATTACHMENT
     else if (!ascii_strncasecmp ("x-sun-", line, 6))
     {
@@ -507,7 +507,7 @@ void mutt_parse_part (FILE *fp, BODY *b)
           bound = mutt_get_parameter ("boundary", b->parameter);
 
       fseeko (fp, b->offset, SEEK_SET);
-      b->parts =  mutt_parse_multipart (fp, bound, 
+      b->parts =  mutt_parse_multipart (fp, bound,
 					b->offset + b->length,
 					ascii_strcasecmp ("digest", b->subtype) == 0);
       break;
@@ -642,12 +642,12 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 	       break;
 	}
 #endif
-	
+
 	/*
 	 * Consistency checking - catch
 	 * bad attachment end boundaries
 	 */
-	
+
 	if(new->offset > end_off)
 	{
 	  mutt_free_body(&new);
@@ -671,7 +671,7 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
   /* parse recursive MIME parts */
   for(last = head; last; last = last->next)
     mutt_parse_part(fp, last);
-  
+
   return (head);
 }
 
@@ -775,11 +775,11 @@ time_t mutt_parse_date (const char *s, HEADER *h)
   char scratch[SHORT_STRING];
 
   /* Don't modify our argument. Fixed-size buffer is ok here since
-   * the date format imposes a natural limit. 
+   * the date format imposes a natural limit.
    */
 
   strfcpy (scratch, s, sizeof (scratch));
-  
+
   /* kill the day of the week, if it exists. */
   if ((t = strchr (scratch, ',')))
     t++;
@@ -921,7 +921,7 @@ char *mutt_extract_message_id (const char *s, const char **saveptr)
   {
     if (*p == '<')
     {
-      s = p; 
+      s = p;
       o = onull = NULL;
       continue;
     }
@@ -943,7 +943,7 @@ char *mutt_extract_message_id (const char *s, const char **saveptr)
     }
 
     /* some idiotic clients break their message-ids between lines */
-    if (s == p) 
+    if (s == p)
       /* step past another whitespace */
       s = p + 1;
     else if (o)
@@ -1026,7 +1026,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 			    short do_2047, LIST **lastp)
 {
   int matched = 0;
-  
+
   switch (ascii_tolower (line[0]))
   {
     case 'a':
@@ -1041,7 +1041,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'b':
     if (ascii_strcasecmp (line+1, "cc") == 0)
     {
@@ -1049,7 +1049,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'c':
     if (ascii_strcasecmp (line+1, "c") == 0)
     {
@@ -1096,7 +1096,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       }
     }
     break;
-    
+
     case 'd':
     if (!ascii_strcasecmp ("ate", line + 1))
     {
@@ -1106,13 +1106,13 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'e':
     if (!ascii_strcasecmp ("xpires", line + 1) &&
 	hdr && mutt_parse_date (p, NULL) < time (NULL))
       hdr->expired = 1;
     break;
-    
+
     case 'f':
     if (!ascii_strcasecmp ("rom", line + 1))
     {
@@ -1120,7 +1120,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'i':
     if (!ascii_strcasecmp (line+1, "n-reply-to"))
     {
@@ -1129,15 +1129,15 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'l':
     if (!ascii_strcasecmp (line + 1, "ines"))
     {
       if (hdr)
       {
-	/* 
+	/*
 	 * HACK - mutt has, for a very short time, produced negative
-	 * Lines header values.  Ignore them. 
+	 * Lines header values.  Ignore them.
 	 */
 	if (mutt_atoi (p, &hdr->lines) < 0 || hdr->lines < 0)
 	  hdr->lines = 0;
@@ -1156,7 +1156,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 	  ++beg;
 	  if (!(end = strchr (beg, '>')))
 	    break;
-	  
+
 	  /* Take the first mailto URL */
 	  if (url_check_scheme (beg) == U_MAILTO)
 	  {
@@ -1171,7 +1171,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'm':
     if (!ascii_strcasecmp (line + 1, "ime-version"))
     {
@@ -1202,7 +1202,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       }
     }
     break;
-    
+
     case 'r':
     if (!ascii_strcasecmp (line + 1, "eferences"))
     {
@@ -1225,13 +1225,13 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       if (hdr && !hdr->received)
       {
 	char *d = strrchr (p, ';');
-	
+
 	if (d)
 	  hdr->received = mutt_parse_date (d + 1, NULL);
       }
     }
     break;
-    
+
     case 's':
     if (!ascii_strcasecmp (line + 1, "ubject"))
     {
@@ -1274,7 +1274,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       e->supersedes = safe_strdup (p);
     }
     break;
-    
+
     case 't':
     if (ascii_strcasecmp (line+1, "o") == 0)
     {
@@ -1282,7 +1282,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       matched = 1;
     }
     break;
-    
+
     case 'x':
     if (ascii_strcasecmp (line+1, "-status") == 0)
     {
@@ -1315,11 +1315,11 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       e->x_label = safe_strdup(p);
       matched = 1;
     }
-    
+
     default:
     break;
   }
-  
+
   /* Keep track of the user-defined headers */
   if (!matched && user_hdrs)
   {
@@ -1353,8 +1353,8 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
   done:
   return matched;
 }
-  
-  
+
+
 /* mutt_read_rfc822_header() -- parses a RFC822 header
  *
  * Args:
@@ -1362,14 +1362,14 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
  * f		stream to read from
  *
  * hdr		header structure of current message (optional).
- * 
+ *
  * user_hdrs	If set, store user headers.  Used for recall-message and
  * 		postpone modes.
- * 
+ *
  * weed		If this parameter is set and the user has activated the
  * 		$weed option, honor the header weed list for user headers.
  * 	        Used for recall-message.
- * 
+ *
  * Returns:     newly allocated envelope structure.  You should free it by
  *              mutt_free_envelope() when envelope stay unneeded.
  */
@@ -1531,7 +1531,7 @@ ADDRESS *mutt_parse_adrlist (ADDRESS *p, const char *s)
   }
   else
     p = rfc822_parse_adrlist (p, s);
-  
+
   return p;
 }
 
@@ -1672,21 +1672,21 @@ int mutt_count_body_parts (CONTEXT *ctx, HEADER *hdr)
 
   if (hdr->attach_valid)
     return hdr->attach_total;
-  
+
   if (hdr->content->parts)
     keep_parts = 1;
   else
     mutt_parse_mime_message (ctx, hdr);
-  
+
   if (AttachAllow || AttachExclude || InlineAllow || InlineExclude)
     hdr->attach_total = count_body_parts(hdr->content, MUTT_PARTS_TOPLEVEL);
   else
     hdr->attach_total = 0;
 
   hdr->attach_valid = 1;
-  
+
   if (!keep_parts)
     mutt_free_body (&hdr->content->parts);
-  
+
   return hdr->attach_total;
 }

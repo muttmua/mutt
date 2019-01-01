@@ -2,21 +2,21 @@
  * Copyright (C) 1996-1998,2010,2012 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 1996-1999 Brandon Long <blong@fiction.net>
  * Copyright (C) 1999-2009,2011 Brendan Cully <brendan@kublai.com>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 /* command.c: routines for sending commands to an IMAP server and parsing
  *  responses */
@@ -60,7 +60,7 @@ static const char * const Capabilities[] = {
   "IMAP4",
   "IMAP4rev1",
   "STATUS",
-  "ACL", 
+  "ACL",
   "NAMESPACE",
   "AUTH=CRAM-MD5",
   "AUTH=GSSAPI",
@@ -195,7 +195,7 @@ int imap_cmd_step (IMAP_DATA* idata)
     dprint (3, (debugfile, "IMAP queue drained\n"));
     imap_cmd_finish (idata);
   }
-  
+
 
   return rc;
 }
@@ -301,7 +301,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
 
   if (!(idata->state >= IMAP_SELECTED) || idata->ctx->closing)
     return;
-  
+
   if (idata->reopen & IMAP_REOPEN_ALLOW)
   {
     unsigned int count = idata->newMailCount;
@@ -370,7 +370,7 @@ int imap_cmd_idle (IMAP_DATA* idata)
     dprint (1, (debugfile, "imap_cmd_idle: error starting IDLE\n"));
     return -1;
   }
-  
+
   return 0;
 }
 
@@ -465,7 +465,7 @@ static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags)
 static int cmd_status (const char *s)
 {
   s = imap_next_word((char*)s);
-  
+
   if (!ascii_strncasecmp("OK", s, 2))
     return IMAP_CMD_OK;
   if (!ascii_strncasecmp("NO", s, 2))
@@ -931,7 +931,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
     /* See draft-gahrns-imap-child-mailbox-?? */
     else if (!ascii_strncasecmp (s, "\\HasNoChildren", 14))
       list->noinferiors = 1;
-    
+
     s = imap_next_word (s);
     if (*(s - 2) == ')')
       break;
@@ -941,7 +941,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
   if (ascii_strncasecmp (s, "NIL", 3))
   {
     delimbuf[0] = '\0';
-    safe_strcat (delimbuf, 5, s); 
+    safe_strcat (delimbuf, 5, s);
     imap_unquote_string (delimbuf);
     list->delim = delimbuf[0];
   }
@@ -1032,7 +1032,7 @@ static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
 
   while (*s && !isspace((unsigned char) *s))
   {
-    switch (*s) 
+    switch (*s)
     {
       case 'l':
 	mutt_bit_set (idata->ctx->rights, MUTT_ACL_LOOKUP);
@@ -1207,14 +1207,14 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
   {
     if (inc->magic != MUTT_IMAP)
       continue;
-    
+
     if (imap_parse_path (inc->path, &mx) < 0)
     {
       dprint (1, (debugfile, "Error parsing mailbox %s, skipping\n", inc->path));
       continue;
     }
     /* dprint (2, (debugfile, "Buffy entry: [%s] mbox: [%s]\n", inc->path, NONULL(mx.mbox))); */
-    
+
     if (imap_account_match (&idata->conn->account, &mx.account))
     {
       if (mx.mbox)
@@ -1230,7 +1230,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
       {
         dprint (3, (debugfile, "Found %s in buffy list (OV: %u ON: %u U: %d)\n",
                     mailbox, olduv, oldun, status->unseen));
-        
+
 	if (option(OPTMAILCHECKRECENT))
 	{
 	  if (olduv && olduv == status->uidvalidity)

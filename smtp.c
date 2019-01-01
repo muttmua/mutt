@@ -526,7 +526,7 @@ static int smtp_auth (CONNECTION* conn)
       {
 	r = smtp_auth_oauth (conn);
       }
-      else 
+      else
       {
 #ifdef USE_SASL
 	r = smtp_auth_sasl (conn, method);
@@ -706,7 +706,7 @@ static int smtp_auth_oauth (CONNECTION* conn)
 
   if (rc == -1)
     return SMTP_AUTH_FAIL;
-  if (smtp_get_resp (conn) != 0) 
+  if (smtp_get_resp (conn) != 0)
     return SMTP_AUTH_FAIL;
 
   return SMTP_AUTH_SUCCESS;

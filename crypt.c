@@ -1186,5 +1186,3 @@ short crypt_is_numerical_keyid (const char *s)
 
   return 1;
 }
-
-
