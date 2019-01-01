@@ -2057,7 +2057,10 @@ main_loop:
   save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
 
   if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
+  {
     mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
+    mutt_sleep (0);
+  }
 
 
   if (WithCrypto)
