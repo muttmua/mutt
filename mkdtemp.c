@@ -28,7 +28,10 @@ char *mkdtemp (char *tmpl)
     {
         /* fill in the random bits */
         for (j = 0, v = value; j < 6; ++j)
-            tmpl[(len - 6) + j] = LETTERS[v % 62]; v /= 62;
+        {
+            tmpl[(len - 6) + j] = LETTERS[v % 62];
+            v /= 62;
+        }
 
         /* try to create the directory */
         if (mkdir (tmpl, 0700) == 0)
