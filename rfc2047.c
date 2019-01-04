@@ -119,13 +119,13 @@ int convert_nonmime_string (char **ps)
     }
   }
   mutt_convert_string (ps,
-      (const char *)mutt_get_default_charset (),
-      Charset, MUTT_ICONV_HOOK_FROM);
+                       (const char *)mutt_get_default_charset (),
+                       Charset, MUTT_ICONV_HOOK_FROM);
   return -1;
 }
 
 char *mutt_choose_charset (const char *fromcode, const char *charsets,
-		      char *u, size_t ulen, char **d, size_t *dlen)
+                           char *u, size_t ulen, char **d, size_t *dlen)
 {
   char canonical_buff[LONG_STRING];
   char *e = 0, *tocode = 0;
@@ -656,7 +656,7 @@ static int rfc2047_decode_word (BUFFER *d, const char *s, char **charset)
       while (pp1 && *(pp1 + 1) != '=')
 	pp1 = strchr(pp1 + 1, '?');
       if (!pp1)
-	  goto error_out_0;
+        goto error_out_0;
     }
 
     switch (count)

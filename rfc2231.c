@@ -49,8 +49,7 @@ struct rfc2231_parameter
   char *value;
   int  index;
   int  encoded;
-  struct rfc2231_parameter
-       *next;
+  struct rfc2231_parameter *next;
 };
 
 static char *rfc2231_get_charset (char *, char *, size_t);
@@ -333,7 +332,7 @@ int rfc2231_encode_string (char **pd)
 
   if (!Charset || !SendCharset ||
       !(charset = mutt_choose_charset (Charset, SendCharset,
-				  *pd, strlen (*pd), &d, &dlen)))
+                                       *pd, strlen (*pd), &d, &dlen)))
   {
     charset = safe_strdup (Charset ? Charset : "unknown-8bit");
     d = *pd;

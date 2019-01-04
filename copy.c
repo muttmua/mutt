@@ -88,8 +88,8 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
 	  from = 1;
 	}
 	else if (flags & (CH_NOQFROM) &&
-			ascii_strncasecmp (">From ", buf, 6) == 0)
-		continue;
+                 ascii_strncasecmp (">From ", buf, 6) == 0)
+          continue;
 
 	else if (buf[0] == '\n' || (buf[0] == '\r' && buf[1] == '\n'))
 	  break; /* end of header */
@@ -325,29 +325,29 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
   return (0);
 }
 
-/* flags
- 	CH_DECODE	RFC2047 header decoding
- 	CH_FROM		retain the "From " message separator
-        CH_FORCE_FROM	give CH_FROM precedence over CH_WEED
- 	CH_MIME		ignore MIME fields
-	CH_NOLEN	don't write Content-Length: and Lines:
- 	CH_NONEWLINE	don't output a newline after the header
- 	CH_NOSTATUS	ignore the Status: and X-Status:
- 	CH_PREFIX	quote header with $indent_str
- 	CH_REORDER	output header in order specified by `hdr_order'
-  	CH_TXTPLAIN	generate text/plain MIME headers [hack alert.]
- 	CH_UPDATE	write new Status: and X-Status:
- 	CH_UPDATE_LEN	write new Content-Length: and Lines:
- 	CH_XMIT		ignore Lines: and Content-Length:
- 	CH_WEED		do header weeding
-	CH_NOQFROM      ignore ">From " line
-	CH_UPDATE_IRT	update the In-Reply-To: header
-	CH_UPDATE_REFS	update the References: header
-        CH_UPDATE_LABEL update the X-Label: header
+/* flags:
+   CH_DECODE            RFC2047 header decoding
+   CH_FROM              retain the "From " message separator
+   CH_FORCE_FROM        give CH_FROM precedence over CH_WEED
+   CH_MIME              ignore MIME fields
+   CH_NOLEN             don't write Content-Length: and Lines:
+   CH_NONEWLINE         don't output a newline after the header
+   CH_NOSTATUS          ignore the Status: and X-Status:
+   CH_PREFIX            quote header with $indent_str
+   CH_REORDER           output header in order specified by `hdr_order'
+   CH_TXTPLAIN          generate text/plain MIME headers [hack alert.]
+   CH_UPDATE            write new Status: and X-Status:
+   CH_UPDATE_LEN        write new Content-Length: and Lines:
+   CH_XMIT              ignore Lines: and Content-Length:
+   CH_WEED              do header weeding
+   CH_NOQFROM           ignore ">From " line
+   CH_UPDATE_IRT        update the In-Reply-To: header
+   CH_UPDATE_REFS       update the References: header
+   CH_UPDATE_LABEL      update the X-Label: header
 
-   prefix
-   	string to use if CH_PREFIX is set
- */
+   prefix:
+   string to use if CH_PREFIX is set
+*/
 
 int
 mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
@@ -668,7 +668,7 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
     if ((WithCrypto & APPLICATION_SMIME)
         && (flags & MUTT_CM_DECODE_SMIME) && (hdr->security & APPLICATION_SMIME)
-	     && hdr->content->type == TYPEAPPLICATION)
+        && hdr->content->type == TYPEAPPLICATION)
     {
       if (crypt_smime_decrypt_mime (fpin, &fp, hdr->content, &cur))
 	return (-1);

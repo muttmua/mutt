@@ -361,7 +361,7 @@ static int socket_connect (int fd, struct sockaddr* sa)
   }
 
   if (ConnectTimeout > 0)
-      alarm (ConnectTimeout);
+    alarm (ConnectTimeout);
 
   mutt_allow_interrupt (1);
 
@@ -375,13 +375,13 @@ static int socket_connect (int fd, struct sockaddr* sa)
 
   if (connect (fd, sa, sa_size) < 0)
   {
-      save_errno = errno;
-      dprint (2, (debugfile, "Connection failed. errno: %d...\n", errno));
-      SigInt = 0;	/* reset in case we caught SIGINTR while in connect() */
+    save_errno = errno;
+    dprint (2, (debugfile, "Connection failed. errno: %d...\n", errno));
+    SigInt = 0;	/* reset in case we caught SIGINTR while in connect() */
   }
 
   if (ConnectTimeout > 0)
-      alarm (0);
+    alarm (0);
   mutt_allow_interrupt (0);
   sigprocmask (SIG_UNBLOCK, &set, NULL);
 
@@ -574,7 +574,7 @@ int raw_socket_open (CONNECTION* conn)
   he = gethostbyname (host_idna);
 
 # if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
-    FREE (&host_idna);
+  FREE (&host_idna);
 # endif
 
   if (! he) {
@@ -609,7 +609,7 @@ int raw_socket_open (CONNECTION* conn)
   if (rc)
   {
     mutt_error (_("Could not connect to %s (%s)."), conn->account.host,
-	    (rc > 0) ? strerror (rc) : _("unknown error"));
+                (rc > 0) ? strerror (rc) : _("unknown error"));
     mutt_sleep (2);
     return -1;
   }

@@ -194,7 +194,7 @@ static REMAILER **mix_type2_list (size_t *l)
     mix_add_entry (&type2_list, p, &slots, &used);
     continue;
 
-    problem:
+  problem:
     mix_free_remailer (&p);
   }
 
@@ -593,7 +593,7 @@ void mix_make_chain (LIST **chainp)
 	    (type2_list[chain->ch[chain->cl-1]]->caps & MIX_CAP_MIDDLEMAN))
 	{
 	  mutt_error ( _("Error: %s can't be used as the final remailer of a chain."),
-		    type2_list[chain->ch[chain->cl - 1]]->shortname);
+                       type2_list[chain->ch[chain->cl - 1]]->shortname);
 	}
 	else
 	{
@@ -623,7 +623,7 @@ void mix_make_chain (LIST **chainp)
 	}
 	else
 	  mutt_error ( _("Mixmaster chains are limited to %d elements."),
-		    MAXMIXES);
+                       MAXMIXES);
 
 	break;
       }

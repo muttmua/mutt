@@ -417,7 +417,7 @@ int safe_symlink(const char *oldpath, const char *newpath)
 
     if ((getcwd (abs_oldpath, sizeof abs_oldpath) == NULL) ||
 	(strlen (abs_oldpath) + 1 + strlen (oldpath) + 1 > sizeof abs_oldpath))
-    return -1;
+      return -1;
 
     strcat (abs_oldpath, "/");		/* __STRCAT_CHECKED__ */
     strcat (abs_oldpath, oldpath);	/* __STRCAT_CHECKED__ */
@@ -503,7 +503,7 @@ int safe_rename (const char *src, const char *target)
 #ifdef EOPNOTSUPP
 	|| errno == EOPNOTSUPP
 #endif
-	)
+      )
     {
       dprint (1, (debugfile, "safe_rename: trying rename...\n"));
       if (rename (src, target) == -1)
@@ -575,7 +575,7 @@ success:
 /* Create a temporary directory next to a file name */
 
 static int mutt_mkwrapdir (const char *path, char *newfile, size_t nflen,
-		    char *newdir, size_t ndlen)
+                           char *newdir, size_t ndlen)
 {
   const char *basename;
   char parent[_POSIX_PATH_MAX];
@@ -597,15 +597,15 @@ static int mutt_mkwrapdir (const char *path, char *newfile, size_t nflen,
   snprintf (newdir, ndlen, "%s/%s", parent, ".muttXXXXXX");
   if (mkdtemp(newdir) == NULL)
   {
-      dprint(1, (debugfile, "mutt_mkwrapdir: mkdtemp() failed\n"));
-      return -1;
+    dprint(1, (debugfile, "mutt_mkwrapdir: mkdtemp() failed\n"));
+    return -1;
   }
 
   if (snprintf (newfile, nflen, "%s/%s", newdir, NONULL(basename)) >= nflen)
   {
-      rmdir(newdir);
-      dprint(1, (debugfile, "mutt_mkwrapdir: string was truncated\n"));
-      return -1;
+    rmdir(newdir);
+    dprint(1, (debugfile, "mutt_mkwrapdir: string was truncated\n"));
+    return -1;
   }
   return 0;
 }
@@ -971,7 +971,7 @@ void mutt_remove_trailing_ws (char *s)
  * Returns NULL on error or a pointer to dst otherwise.
  */
 char *mutt_concatn_path (char *dst, size_t dstlen,
-    const char *dir, size_t dirlen, const char *fname, size_t fnamelen)
+                         const char *dir, size_t dirlen, const char *fname, size_t fnamelen)
 {
   size_t req;
   size_t offset = 0;

@@ -98,18 +98,20 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
     case 'f':
       snprintf (fmt, sizeof(fmt), "%%%ss", prefix);
 #ifdef USE_COMPRESSED
-      if (Context && Context->compress_info && Context->realpath) {
-	 strfcpy (tmp, Context->realpath, sizeof (tmp));
-	 mutt_pretty_mailbox (tmp, sizeof (tmp));
-      } else
-#endif
-      if (Context && Context->path)
+      if (Context && Context->compress_info && Context->realpath)
       {
-	strfcpy (tmp, Context->path, sizeof (tmp));
-	mutt_pretty_mailbox (tmp, sizeof (tmp));
+        strfcpy (tmp, Context->realpath, sizeof (tmp));
+        mutt_pretty_mailbox (tmp, sizeof (tmp));
       }
       else
-	strfcpy (tmp, _("(no mailbox)"), sizeof (tmp));
+#endif
+        if (Context && Context->path)
+        {
+          strfcpy (tmp, Context->path, sizeof (tmp));
+          mutt_pretty_mailbox (tmp, sizeof (tmp));
+        }
+        else
+          strfcpy (tmp, _("(no mailbox)"), sizeof (tmp));
       snprintf (buf, buflen, fmt, tmp);
       break;
 

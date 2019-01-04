@@ -223,7 +223,8 @@ int mutt_display_message (HEADER *cur)
   }
 
   res = mutt_copy_message (fpout, Context, cur, cmflags,
-       	(option (OPTWEED) ? (CH_WEED | CH_REORDER) : 0) | CH_DECODE | CH_FROM | CH_DISPLAY);
+                           (option (OPTWEED) ? (CH_WEED | CH_REORDER) : 0) |
+                           CH_DECODE | CH_FROM | CH_DISPLAY);
   if ((safe_fclose (&fpout) != 0 && errno != EPIPE) || res < 0)
   {
     mutt_error (_("Could not copy message"));
@@ -326,8 +327,8 @@ void ci_bounce_message (HEADER *h)
   char *err = NULL;
   int rc;
 
- /* RfC 5322 mandates a From: header, so warn before bouncing
-  * messages without one */
+  /* RfC 5322 mandates a From: header, so warn before bouncing
+   * messages without one */
   if (h)
   {
     if (!h->env->from)
@@ -379,7 +380,7 @@ void ci_bounce_message (HEADER *h)
 
 #define extra_space (15 + 7 + 2)
   snprintf (scratch, sizeof (scratch),
-           (h ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
+            (h ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
 
   if (mutt_strwidth (prompt) > MuttMessageWindow->cols - extra_space)
   {
@@ -591,7 +592,7 @@ void mutt_print_message (HEADER *h)
 
   if (query_quadoption (OPT_PRINT,
 			h ? _("Print message?") : _("Print tagged messages?"))
-		  	!= MUTT_YES)
+      != MUTT_YES)
     return;
 
   if (_mutt_pipe_message (h, PrintCmd,
@@ -620,52 +621,52 @@ int mutt_select_sort (int reverse)
 	_("Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "),
 	_("dfrsotuzcpl")))
   {
-  case -1: /* abort - don't resort */
-    return -1;
+    case -1: /* abort - don't resort */
+      return -1;
 
-  case 1: /* (d)ate */
-    Sort = SORT_DATE;
-    break;
+    case 1: /* (d)ate */
+      Sort = SORT_DATE;
+      break;
 
-  case 2: /* (f)rm */
-    Sort = SORT_FROM;
-    break;
+    case 2: /* (f)rm */
+      Sort = SORT_FROM;
+      break;
 
-  case 3: /* (r)ecv */
-    Sort = SORT_RECEIVED;
-    break;
+    case 3: /* (r)ecv */
+      Sort = SORT_RECEIVED;
+      break;
 
-  case 4: /* (s)ubj */
-    Sort = SORT_SUBJECT;
-    break;
+    case 4: /* (s)ubj */
+      Sort = SORT_SUBJECT;
+      break;
 
-  case 5: /* t(o) */
-    Sort = SORT_TO;
-    break;
+    case 5: /* t(o) */
+      Sort = SORT_TO;
+      break;
 
-  case 6: /* (t)hread */
-    Sort = SORT_THREADS;
-    break;
+    case 6: /* (t)hread */
+      Sort = SORT_THREADS;
+      break;
 
-  case 7: /* (u)nsort */
-    Sort = SORT_ORDER;
-    break;
+    case 7: /* (u)nsort */
+      Sort = SORT_ORDER;
+      break;
 
-  case 8: /* si(z)e */
-    Sort = SORT_SIZE;
-    break;
+    case 8: /* si(z)e */
+      Sort = SORT_SIZE;
+      break;
 
-  case 9: /* s(c)ore */
-    Sort = SORT_SCORE;
-    break;
+    case 9: /* s(c)ore */
+      Sort = SORT_SCORE;
+      break;
 
-  case 10: /* s(p)am */
-    Sort = SORT_SPAM;
-    break;
+    case 10: /* s(p)am */
+      Sort = SORT_SPAM;
+      break;
 
-  case 11: /* (l)abel */
-    Sort = SORT_LABEL;
-    break;
+    case 11: /* (l)abel */
+      Sort = SORT_LABEL;
+      break;
   }
   if (reverse)
     Sort |= SORT_REVERSE;
@@ -760,7 +761,7 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
       *cmflags = MUTT_CM_DECODE_PGP;
     }
     else if ((WithCrypto & APPLICATION_PGP)
-              && mutt_is_application_pgp (hdr->content) & ENCRYPT)
+             && mutt_is_application_pgp (hdr->content) & ENCRYPT)
       decode = 1;
     else if ((WithCrypto & APPLICATION_SMIME)
              && mutt_is_application_smime(hdr->content) & ENCRYPT)
@@ -928,7 +929,7 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 	{
 	  mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
 	  if (_mutt_save_message(Context->hdrs[Context->v2r[i]],
-			     &ctx, delete, decode, decrypt) != 0)
+                                 &ctx, delete, decode, decrypt) != 0)
           {
             mx_close_mailbox (&ctx, NULL);
             return -1;

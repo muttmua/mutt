@@ -136,7 +136,7 @@ smtp_get_resp (CONNECTION * conn)
     return 0;
 
   mutt_error (_("SMTP session failed: %s"), buf);
-    return -1;
+  return -1;
 }
 
 static int
@@ -435,9 +435,9 @@ static int smtp_helo (CONNECTION* conn)
 
   snprintf (buf, sizeof (buf), "%s %s\r\n", Esmtp ? "EHLO" : "HELO", fqdn);
   /* XXX there should probably be a wrapper in mutt_socket.c that
-    * repeatedly calls conn->write until all data is sent.  This
-    * currently doesn't check for a short write.
-    */
+   * repeatedly calls conn->write until all data is sent.  This
+   * currently doesn't check for a short write.
+   */
   if (mutt_socket_write (conn, buf) == -1)
     return smtp_err_write;
   return smtp_get_resp (conn);

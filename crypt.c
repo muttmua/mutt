@@ -194,16 +194,16 @@ int mutt_protect (HEADER *msg, char *keylist)
     tmp_pgp_pbody   = msg->content;
 
   if (option (OPTCRYPTUSEPKA) && (msg->security & SIGN))
-    {
-      /* Set sender (necessary for e.g. PKA).  */
+  {
+    /* Set sender (necessary for e.g. PKA).  */
 
-      if ((WithCrypto & APPLICATION_SMIME)
-	  && (msg->security & APPLICATION_SMIME))
-	crypt_smime_set_sender (msg->env->from->mailbox);
-      else if ((WithCrypto & APPLICATION_PGP)
-	  && (msg->security & APPLICATION_PGP))
-	crypt_pgp_set_sender (msg->env->from->mailbox);
-    }
+    if ((WithCrypto & APPLICATION_SMIME)
+        && (msg->security & APPLICATION_SMIME))
+      crypt_smime_set_sender (msg->env->from->mailbox);
+    else if ((WithCrypto & APPLICATION_PGP)
+             && (msg->security & APPLICATION_PGP))
+      crypt_pgp_set_sender (msg->env->from->mailbox);
+  }
 
   if (option (OPTCRYPTPROTHDRSWRITE))
   {
@@ -242,7 +242,7 @@ int mutt_protect (HEADER *msg, char *keylist)
         && (msg->security & APPLICATION_SMIME)
 	&& (msg->security & APPLICATION_PGP))
     {
-	/* here comes the draft ;-) */
+      /* here comes the draft ;-) */
     }
   }
 
@@ -403,7 +403,7 @@ int mutt_is_malformed_multipart_pgp_encrypted (BODY *b)
   b = b->parts;
   if (!b || b->type != TYPETEXT ||
       !b->subtype || ascii_strcasecmp (b->subtype, "plain") ||
-       b->length != 0)
+      b->length != 0)
     return 0;
 
   b = b->next;
@@ -455,7 +455,7 @@ int mutt_is_application_pgp (BODY *m)
     if (((p = mutt_get_parameter ("x-mutt-action", m->parameter))
 	 || (p = mutt_get_parameter ("x-action", m->parameter))
 	 || (p = mutt_get_parameter ("action", m->parameter)))
-	 && !ascii_strncasecmp ("pgp-sign", p, 8))
+        && !ascii_strncasecmp ("pgp-sign", p, 8))
       t |= PGPSIGN;
     else if (p && !ascii_strncasecmp ("pgp-encrypt", p, 11))
       t |= PGPENCRYPT;
@@ -519,9 +519,9 @@ int mutt_is_application_smime (BODY *m)
     {
       len++;
       if (!ascii_strcasecmp ((t+len), "p7m"))
-      /* Not sure if this is the correct thing to do, but
-         it's required for compatibility with Outlook */
-       return (SMIMESIGN|SMIMEOPAQUE);
+        /* Not sure if this is the correct thing to do, but
+           it's required for compatibility with Outlook */
+        return (SMIMESIGN|SMIMEOPAQUE);
       else if (!ascii_strcasecmp ((t+len), "p7s"))
 	return (SMIMESIGN|SMIMEOPAQUE);
     }
@@ -743,8 +743,7 @@ void crypt_extract_keys_from_messages (HEADER * h)
           if (Context->hdrs[Context->v2r[i]]->env->from)
 	    tmp = mutt_expand_aliases (Context->hdrs[Context->v2r[i]]->env->from);
 	  else if (Context->hdrs[Context->v2r[i]]->env->sender)
-	    tmp = mutt_expand_aliases (Context->hdrs[Context->v2r[i]]
-                                                    ->env->sender);
+	    tmp = mutt_expand_aliases (Context->hdrs[Context->v2r[i]]->env->sender);
           mbox = tmp ? tmp->mailbox : NULL;
 	  if (mbox)
 	  {
@@ -776,9 +775,9 @@ void crypt_extract_keys_from_messages (HEADER * h)
           && (h->security & APPLICATION_SMIME))
       {
 	if (h->security & ENCRYPT)
-	  mutt_copy_message (fpout, Context, h, MUTT_CM_NOHEADER
-                                                |MUTT_CM_DECODE_CRYPT
-                                                |MUTT_CM_DECODE_SMIME, 0);
+	  mutt_copy_message (fpout, Context, h,
+                             MUTT_CM_NOHEADER | MUTT_CM_DECODE_CRYPT | MUTT_CM_DECODE_SMIME,
+                             0);
 	else
 	  mutt_copy_message (fpout, Context, h, 0, 0);
 
@@ -836,29 +835,29 @@ int crypt_get_keys (HEADER *msg, char **keylist, int oppenc_mode)
 
   if (oppenc_mode || (msg->security & ENCRYPT))
   {
-     if ((WithCrypto & APPLICATION_PGP)
-         && (msg->security & APPLICATION_PGP))
-     {
-       if ((*keylist = crypt_pgp_findkeys (adrlist, oppenc_mode)) == NULL)
-       {
-           rfc822_free_address (&adrlist);
-           return (-1);
-       }
-       unset_option (OPTPGPCHECKTRUST);
-       if (option (OPTPGPSELFENCRYPT))
-         self_encrypt = PgpDefaultKey;
-     }
-     if ((WithCrypto & APPLICATION_SMIME)
-         && (msg->security & APPLICATION_SMIME))
-     {
-       if ((*keylist = crypt_smime_findkeys (adrlist, oppenc_mode)) == NULL)
-       {
-           rfc822_free_address (&adrlist);
-           return (-1);
-       }
-       if (option (OPTSMIMESELFENCRYPT))
-         self_encrypt = SmimeDefaultKey;
-     }
+    if ((WithCrypto & APPLICATION_PGP)
+        && (msg->security & APPLICATION_PGP))
+    {
+      if ((*keylist = crypt_pgp_findkeys (adrlist, oppenc_mode)) == NULL)
+      {
+        rfc822_free_address (&adrlist);
+        return (-1);
+      }
+      unset_option (OPTPGPCHECKTRUST);
+      if (option (OPTPGPSELFENCRYPT))
+        self_encrypt = PgpDefaultKey;
+    }
+    if ((WithCrypto & APPLICATION_SMIME)
+        && (msg->security & APPLICATION_SMIME))
+    {
+      if ((*keylist = crypt_smime_findkeys (adrlist, oppenc_mode)) == NULL)
+      {
+        rfc822_free_address (&adrlist);
+        return (-1);
+      }
+      if (option (OPTSMIMESELFENCRYPT))
+        self_encrypt = SmimeDefaultKey;
+    }
   }
 
   if (!oppenc_mode && self_encrypt && *self_encrypt)
@@ -1057,7 +1056,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
 
 	  state_printf (s, _("[-- Warning: "
                              "We can't verify %s/%s signatures. --]\n\n"),
-			  TYPE(signatures[i]), signatures[i]->subtype);
+                        TYPE(signatures[i]), signatures[i]->subtype);
 	}
       }
 
@@ -1090,7 +1089,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
  * See mutt_crypt.h for details.
  */
 const char* crypt_get_fingerprint_or_id (char *p, const char **pphint,
-    const char **ppl, const char **pps)
+                                         const char **ppl, const char **pps)
 {
   const char *ps, *pl, *phint;
   char *pfcopy, *pf, *s1, *s2;

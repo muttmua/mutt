@@ -180,7 +180,7 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
       }
 
       case 1:
-      bytes = 2;
+        bytes = 2;
 
       case 2:
       {
@@ -205,7 +205,7 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
       }
 
       default:
-      goto bail;
+        goto bail;
     }
 
     if (read_material (material, &used, fp) == -1)

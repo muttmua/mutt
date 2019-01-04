@@ -288,7 +288,7 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
 
       dprint (1, (debugfile, "pop_auth_user: unset USER capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
-              _("Command USER is not supported by server."));
+                _("Command USER is not supported by server."));
     }
   }
 
@@ -297,10 +297,10 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
     snprintf (buf, sizeof (buf), "PASS %s\r\n", pop_data->conn->account.pass);
     ret = pop_query_d (pop_data, buf, sizeof (buf),
 #ifdef DEBUG
-	/* don't print the password unless we're at the ungodly debugging level */
-	debuglevel < MUTT_SOCK_LOG_FULL ? "PASS *\r\n" :
+                       /* don't print the password unless we're at the ungodly debugging level */
+                       debuglevel < MUTT_SOCK_LOG_FULL ? "PASS *\r\n" :
 #endif
-	NULL);
+                       NULL);
   }
 
   switch (ret)
@@ -340,10 +340,10 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, const char *method)
 
   ret = pop_query_d (pop_data, auth_cmd, strlen (auth_cmd),
 #ifdef DEBUG
-	/* don't print the bearer token unless we're at the ungodly debugging level */
-	debuglevel < MUTT_SOCK_LOG_FULL ? "AUTH OAUTHBEARER *\r\n" :
+                     /* don't print the bearer token unless we're at the ungodly debugging level */
+                     debuglevel < MUTT_SOCK_LOG_FULL ? "AUTH OAUTHBEARER *\r\n" :
 #endif
-	NULL);
+                     NULL);
   FREE (&auth_cmd);
 
   switch (ret)
@@ -388,7 +388,7 @@ static const pop_auth_t pop_authenticators[] = {
  * -1 - connection lost,
  * -2 - login failed,
  * -3 - authentication canceled.
-*/
+ */
 int pop_authenticate (POP_DATA* pop_data)
 {
   ACCOUNT *acct = &pop_data->conn->account;

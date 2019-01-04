@@ -40,19 +40,19 @@
 #include "functions.h"
 
 const struct mapping_t Menus[] = {
- { "alias",	MENU_ALIAS },
- { "attach",	MENU_ATTACH },
- { "browser",	MENU_FOLDER },
- { "compose",	MENU_COMPOSE },
- { "editor",	MENU_EDITOR },
- { "index",	MENU_MAIN },
- { "pager",	MENU_PAGER },
- { "postpone",	MENU_POST },
- { "pgp",	MENU_PGP },
- { "smime",	MENU_SMIME },
+  { "alias",	MENU_ALIAS },
+  { "attach",	MENU_ATTACH },
+  { "browser",	MENU_FOLDER },
+  { "compose",	MENU_COMPOSE },
+  { "editor",	MENU_EDITOR },
+  { "index",	MENU_MAIN },
+  { "pager",	MENU_PAGER },
+  { "postpone",	MENU_POST },
+  { "pgp",	MENU_PGP },
+  { "smime",	MENU_SMIME },
 #ifdef CRYPT_BACKEND_GPGME
- { "key_select_pgp",	MENU_KEY_SELECT_PGP },
- { "key_select_smime",	MENU_KEY_SELECT_SMIME },
+  { "key_select_pgp",	MENU_KEY_SELECT_PGP },
+  { "key_select_smime",	MENU_KEY_SELECT_SMIME },
 #endif
 
 #ifdef MIXMASTER
@@ -60,9 +60,9 @@ const struct mapping_t Menus[] = {
 #endif
 
 
- { "query",	MENU_QUERY },
- { "generic",	MENU_GENERIC },
- { NULL,	0 }
+  { "query",	MENU_QUERY },
+  { "generic",	MENU_GENERIC },
+  { NULL,	0 }
 };
 
 #define mutt_check_menu(s) mutt_getvaluebyname(s, Menus)
@@ -933,8 +933,8 @@ static char *parse_keymap (int *menu, BUFFER *s, int maxmenus, int *nummenus, BU
 
       if ((menu[i] = mutt_check_menu (p)) == -1)
       {
-         snprintf (err->data, err->dsize, _("%s: no such menu"), p);
-         goto error;
+        snprintf (err->data, err->dsize, _("%s: no such menu"), p);
+        goto error;
       }
       ++i;
       if (q)
@@ -1051,7 +1051,7 @@ int mutt_parse_bind (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
     {
       /* First check the "generic" list of commands */
       if (menu[i] == MENU_PAGER || menu[i] == MENU_EDITOR ||
-      menu[i] == MENU_GENERIC ||
+          menu[i] == MENU_GENERIC ||
 	  try_bind (key, menu[i], buf->data, OpGeneric) != 0)
       {
         /* Now check the menu-specific list of commands (if they exist) */
@@ -1176,7 +1176,7 @@ void mutt_what_key (void)
     if (ch != ERR && ch != ctrl ('G'))
     {
       mutt_message(_("Char = %s, Octal = %o, Decimal = %d"),
-	       km_keyname(ch), ch, ch);
+                   km_keyname(ch), ch, ch);
     }
   }
   while (ch != ERR && ch != ctrl ('G'));

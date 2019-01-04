@@ -388,7 +388,7 @@ retry_name:
 
   return;
 
-  fseek_err:
+fseek_err:
   mutt_perror (_("Error seeking in alias file"));
   safe_fclose (&rc);
   return;
@@ -411,7 +411,7 @@ int mutt_check_alias_name (const char *s, char *dest, size_t destlen)
   if (!dry)
     destlen--;
   for (; s && *s && (dry || destlen) &&
-       (l = mbrtowc (&wc, s, MB_CUR_MAX, &mb)) != 0;
+         (l = mbrtowc (&wc, s, MB_CUR_MAX, &mb)) != 0;
        s += l, destlen -= l)
   {
     bad = l == (size_t)(-1) || l == (size_t)(-2); /* conversion error */
@@ -447,7 +447,7 @@ int mutt_check_alias_name (const char *s, char *dest, size_t destlen)
 ADDRESS *alias_reverse_lookup (ADDRESS *a)
 {
   if (!a || !a->mailbox)
-      return NULL;
+    return NULL;
 
   return hash_find (ReverseAlias, a->mailbox);
 }

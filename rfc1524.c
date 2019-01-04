@@ -68,7 +68,7 @@ int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const cha
  * and 1 if the command works on a pipe.
  */
 int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
-    char *command, int clen)
+                            char *command, int clen)
 {
   int x=0,y=0;
   int needspipe = TRUE;

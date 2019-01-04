@@ -602,7 +602,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
   int ret, plen;
 #ifndef HAVE_ICONV
   const char *chs = Charset && *Charset ? Charset :
-		    mutt_get_default_charset ();
+    mutt_get_default_charset ();
 #endif
 
   plen = mutt_strlen (path);
@@ -656,7 +656,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
                    md5sum[9], md5sum[10], md5sum[11], md5sum[12],
                    md5sum[13], md5sum[14], md5sum[15]
 		   ,chs
-		   );
+      );
 #else
     ret = snprintf(hcpath, _POSIX_PATH_MAX,
                    "%s/%02x%02x%02x%02x%02x%02x%02x%02x"
@@ -666,7 +666,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
                    md5sum[4], md5sum[5], md5sum[6], md5sum[7], md5sum[8],
                    md5sum[9], md5sum[10], md5sum[11], md5sum[12],
                    md5sum[13], md5sum[14], md5sum[15]
-		   );
+      );
 #endif
   }
 
@@ -1060,7 +1060,7 @@ hcache_open_tc (struct header_cache* h, const char* path)
 {
   h->db = tcbdbnew();
   if (!h->db)
-      return -1;
+    return -1;
   if (option(OPTHCACHECOMPRESS))
     tcbdbtune(h->db, 0, 0, 0, -1, -1, BDBTDEFLATE);
   if (tcbdbopen(h->db, path, BDBOWRITER | BDBOCREAT))
@@ -1129,7 +1129,7 @@ hcache_open_kc (struct header_cache* h, const char* path)
             option(OPTHCACHECOMPRESS) ? "#opts=c" : "");
   h->db = kcdbnew();
   if (!h->db)
-      return -1;
+    return -1;
   if (kcdbopen(h->db, fullpath, KCOWRITER | KCOCREATE))
     return 0;
   else
@@ -1267,7 +1267,7 @@ hcache_open_db4 (struct header_cache* h, const char* path)
     goto fail_unlock;
 
   ret = (*h->env->open)(h->env, NULL, DB_INIT_MPOOL | DB_CREATE | DB_PRIVATE,
-	0600);
+                        0600);
   if (ret)
     goto fail_env;
 
@@ -1288,13 +1288,13 @@ hcache_open_db4 (struct header_cache* h, const char* path)
 
   return 0;
 
-  fail_db:
+fail_db:
   h->db->close (h->db, 0);
-  fail_env:
+fail_env:
   h->env->close (h->env, 0);
-  fail_unlock:
+fail_unlock:
   mx_unlock_file (h->lockfile, h->fd, 0);
-  fail_close:
+fail_close:
   close (h->fd);
   unlink (h->lockfile);
 

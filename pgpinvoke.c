@@ -187,7 +187,7 @@ static pid_t pgp_invoke (FILE **pgpin, FILE **pgpout, FILE **pgperr,
   mutt_pgp_command (cmd, sizeof (cmd), &cctx, format);
 
   return mutt_create_filter_fd (cmd, pgpin, pgpout, pgperr,
-			       pgpinfd, pgpoutfd, pgperrfd);
+                                pgpinfd, pgpoutfd, pgperrfd);
 }
 
 
@@ -358,8 +358,8 @@ pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
 
   rc = pgp_invoke (pgpin, pgpout, pgperr, pgpinfd, pgpoutfd, pgperrfd,
                    0, NULL, NULL, mutt_b2s (uids),
-		     keyring == PGP_SECRING ? PgpListSecringCommand :
-		     PgpListPubringCommand);
+                   keyring == PGP_SECRING ? PgpListSecringCommand :
+                   PgpListPubringCommand);
 
   mutt_buffer_pool_release (&uids);
   return rc;

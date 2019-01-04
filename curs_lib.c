@@ -298,9 +298,9 @@ int mutt_yesorno (const char *msg, int def)
   answer[1] = 0;
 
   reyes_ok = (expr = nl_langinfo (YESEXPR)) && expr[0] == '^' &&
-	     !REGCOMP (&reyes, expr, REG_NOSUB);
+    !REGCOMP (&reyes, expr, REG_NOSUB);
   reno_ok = (expr = nl_langinfo (NOEXPR)) && expr[0] == '^' &&
-            !REGCOMP (&reno, expr, REG_NOSUB);
+    !REGCOMP (&reno, expr, REG_NOSUB);
 #endif
 
   /*
@@ -608,7 +608,7 @@ void mutt_progress_init (progress_t* progress, const char *msg,
   /* if timestamp is 0 no time-based suppression is done */
   if (TimeInc)
     progress->timestamp = ((unsigned int) tv.tv_sec * 1000)
-        + (unsigned int) (tv.tv_usec / 1000);
+      + (unsigned int) (tv.tv_usec / 1000);
   mutt_progress_update (progress, 0, 0);
 }
 
@@ -635,7 +635,7 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
   /* skip refresh if not enough time has passed */
   if (update && progress->timestamp && !gettimeofday (&tv, NULL)) {
     now = ((unsigned int) tv.tv_sec * 1000)
-          + (unsigned int) (tv.tv_usec / 1000);
+      + (unsigned int) (tv.tv_usec / 1000);
     if (now && now - progress->timestamp < TimeInc)
       update = 0;
   }
@@ -664,7 +664,7 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     {
       mutt_message ("%s %s/%s (%d%%)", progress->msg, posstr, progress->sizestr,
 		    percent > 0 ? percent :
-		   	(int) (100.0 * (double) progress->pos / progress->size));
+                    (int) (100.0 * (double) progress->pos / progress->size));
     }
     else
     {
@@ -891,7 +891,7 @@ void mutt_perror (const char *s)
   char *p = strerror (errno);
 
   dprint (1, (debugfile, "%s: %s (errno = %d)\n", s,
-      p ? p : "unknown error", errno));
+              p ? p : "unknown error", errno));
   mutt_error ("%s: %s (errno = %d)", s, p ? p : _("unknown error"), errno);
 }
 
@@ -1228,8 +1228,8 @@ void mutt_format_string (char *dest, size_t destlen,
 	wc = ' ';
       else
 #endif
-      if (!IsWPrint (wc))
-	wc = '?';
+        if (!IsWPrint (wc))
+          wc = '?';
       w = wcwidth (wc);
     }
     if (w >= 0)

@@ -68,7 +68,7 @@ static int msg_cache_commit (IMAP_DATA* idata, HEADER* h);
 
 static void flush_buffer(char* buf, size_t* len, CONNECTION* conn);
 static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf,
-  FILE* fp);
+                             FILE* fp);
 static int msg_parse_fetch (IMAP_HEADER* h, char* s);
 static char* msg_parse_flags (IMAP_HEADER* h, char* s);
 
@@ -695,12 +695,12 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   if (mutt_bit_isset (idata->capabilities,IMAP4REV1))
   {
     safe_asprintf (&hdrreq, "BODY.PEEK[HEADER.FIELDS (%s%s%s)]",
-                           want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
+                   want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
   }
   else if (mutt_bit_isset (idata->capabilities,IMAP4))
   {
     safe_asprintf (&hdrreq, "RFC822.HEADER.LINES (%s%s%s)",
-                           want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
+                   want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
   }
   else
   {	/* Unable to fetch headers for lower versions */
@@ -1027,7 +1027,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
 
   msg_cache_commit (idata, h);
 
-  parsemsg:
+parsemsg:
   /* Update the header information.  Previously, we only downloaded a
    * portion of the headers, those required for the main display.
    */
@@ -1228,7 +1228,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   FREE (&mx.mbox);
   return 0;
 
- fail:
+fail:
   FREE (&mx.mbox);
   return -1;
 }
@@ -1264,7 +1264,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
   if (!mutt_account_match (&(CTX_DATA->conn->account), &(mx.account)))
   {
     dprint (3, (debugfile, "imap_copy_messages: %s not same server as %s\n",
-      dest, ctx->path));
+                dest, ctx->path));
     return 1;
   }
 
@@ -1404,7 +1404,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
 
   rc = 0;
 
- out:
+out:
   if (cmd.data)
     FREE (&cmd.data);
   if (sync_cmd.data)
@@ -1755,7 +1755,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
         return -1;
     }
     else if (!ascii_strncasecmp ("BODY", s, 4) ||
-      !ascii_strncasecmp ("RFC822.HEADER", s, 13))
+             !ascii_strncasecmp ("RFC822.HEADER", s, 13))
     {
       /* handle above, in msg_fetch_header */
       return -2;
@@ -1804,7 +1804,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
   if (ascii_strncasecmp ("FLAGS", s, 5) != 0)
   {
     dprint (1, (debugfile, "msg_parse_flags: not a FLAGS response: %s\n",
-      s));
+                s));
     return NULL;
   }
   s += 5;
@@ -1812,7 +1812,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
   if (*s != '(')
   {
     dprint (1, (debugfile, "msg_parse_flags: bogus FLAGS response: %s\n",
-      s));
+                s));
     return NULL;
   }
   s++;
@@ -1875,7 +1875,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
   else
   {
     dprint (1, (debugfile,
-      "msg_parse_flags: Unterminated FLAGS response: %s\n", s));
+                "msg_parse_flags: Unterminated FLAGS response: %s\n", s));
     return NULL;
   }
 

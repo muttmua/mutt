@@ -46,7 +46,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
   if (mutt_sasl_client_new (idata->conn, &saslconn) < 0)
   {
     dprint (1, (debugfile,
-      "imap_auth_sasl: Error allocating SASL connection.\n"));
+                "imap_auth_sasl: Error allocating SASL connection.\n"));
     return IMAP_AUTH_FAILURE;
   }
 
@@ -73,7 +73,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
                               &mech);
   } else if (!ascii_strcasecmp ("login", method) &&
-	!strstr (NONULL (idata->capstr), "AUTH=LOGIN")) {
+             !strstr (NONULL (idata->capstr), "AUTH=LOGIN")) {
     /* do not use SASL login for regular IMAP login (#3556) */
     sasl_dispose (&saslconn);
     return IMAP_AUTH_UNAVAIL;
@@ -83,7 +83,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
     do
     {
       rc = sasl_client_start (saslconn, method, &interaction,
-        &pc, &olen, &mech);
+                              &pc, &olen, &mech);
       if (rc == SASL_INTERACT)
 	mutt_sasl_interact (interaction);
     }
@@ -220,7 +220,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
     return IMAP_AUTH_SUCCESS;
   }
 
- bail:
+bail:
   sasl_dispose (&saslconn);
   FREE (&buf);
 

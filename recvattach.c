@@ -44,12 +44,13 @@ static void mutt_update_recvattach_menu (ATTACH_CONTEXT *actx, MUTTMENU *menu, i
 
 static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
 
-#define CHECK_READONLY if (Context->readonly) \
-{\
-    mutt_flushinp (); \
-    mutt_error _(Mailbox_is_read_only); \
-    break; \
-}
+#define CHECK_READONLY                          \
+  if (Context->readonly)                        \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(Mailbox_is_read_only);         \
+    break;                                      \
+  }
 
 #define CURATTACH actx->idx[actx->v2r[menu->current]]
 
@@ -146,16 +147,16 @@ void mutt_update_tree (ATTACH_CONTEXT *actx)
  * %u = unlink
  */
 const char *mutt_attach_fmt (char *dest,
-    size_t destlen,
-    size_t col,
-    int cols,
-    char op,
-    const char *src,
-    const char *prefix,
-    const char *ifstring,
-    const char *elsestring,
-    unsigned long data,
-    format_flag flags)
+                             size_t destlen,
+                             size_t col,
+                             int cols,
+                             char op,
+                             const char *src,
+                             const char *prefix,
+                             const char *ifstring,
+                             const char *elsestring,
+                             unsigned long data,
+                             format_flag flags)
 {
   char fmt[16];
   char tmp[SHORT_STRING];
@@ -218,9 +219,9 @@ const char *mutt_attach_fmt (char *dest,
       }
       else if(aptr->content->description ||
 	      (mutt_is_message_type (aptr->content->type, aptr->content->subtype)
-	      && MsgFmt && aptr->content->hdr))
+               && MsgFmt && aptr->content->hdr))
         break;
-    /* FALLS THROUGH TO 'F' */
+      /* FALLS THROUGH TO 'F' */
     case 'F':
       if (!optional)
       {
@@ -235,7 +236,7 @@ const char *mutt_attach_fmt (char *dest,
         optional = 0;
         break;
       }
-    /* FALLS THROUGH TO 'f' */
+      /* FALLS THROUGH TO 'f' */
     case 'f':
       if(!optional)
       {
@@ -262,7 +263,7 @@ const char *mutt_attach_fmt (char *dest,
     case 'e':
       if(!optional)
 	mutt_format_s (dest, destlen, prefix,
-		      ENCODING (aptr->content->encoding));
+                       ENCODING (aptr->content->encoding));
       break;
     case 'I':
       if (!optional)
@@ -300,8 +301,9 @@ const char *mutt_attach_fmt (char *dest,
     case 'Q':
       if (optional)
         optional = aptr->content->attach_qualifies;
-      else {
-	    snprintf (fmt, sizeof (fmt), "%%%sc", prefix);
+      else
+      {
+        snprintf (fmt, sizeof (fmt), "%%%sc", prefix);
         mutt_format_s (dest, destlen, fmt, "Q");
       }
       break;
@@ -520,7 +522,7 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	  prepend_curdir (buf, sizeof (buf));
 
 	  if (mutt_get_field (_("Save to file: "), buf, sizeof (buf),
-				    MUTT_FILE | MUTT_CLEAR) != 0 || !buf[0])
+                              MUTT_FILE | MUTT_CLEAR) != 0 || !buf[0])
 	    return;
 	  mutt_expand_path (buf, sizeof (buf));
 	  if (mutt_check_overwrite (top->filename, buf, tfile,
@@ -678,7 +680,7 @@ void mutt_pipe_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
   state.flags = MUTT_CHARCONV;
 
   if (mutt_get_field ((filter ? _("Filter through: ") : _("Pipe to: ")),
-				  buf, sizeof (buf), MUTT_CMD) != 0 || !buf[0])
+                      buf, sizeof (buf), MUTT_CMD) != 0 || !buf[0])
     return;
 
   mutt_expand_path (buf, sizeof (buf));
@@ -960,7 +962,7 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
         new_fp = NULL;
 
         secured = !crypt_smime_decrypt_mime (outer_fp, &new_fp, outer_new_body,
-                                               &new_body);
+                                             &new_body);
 
         mutt_free_body (&outer_new_body);
         safe_fclose (&outer_fp);
@@ -1092,12 +1094,13 @@ static void attach_collapse (ATTACH_CONTEXT *actx, MUTTMENU *menu)
 
 static const char *Function_not_permitted = N_("Function not permitted in attach-message mode.");
 
-#define CHECK_ATTACH if(option(OPTATTACHMSG)) \
-		     {\
-			mutt_flushinp (); \
-			mutt_error _(Function_not_permitted); \
-			break; \
-		     }
+#define CHECK_ATTACH                            \
+  if (option(OPTATTACHMSG))                     \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(Function_not_permitted);       \
+    break;                                      \
+  }
 
 
 
@@ -1270,32 +1273,32 @@ void mutt_view_attachments (HEADER *hdr)
         break;
 
       case OP_UNDELETE:
-       CHECK_READONLY;
-       if (!menu->tagprefix)
-       {
-	 CURATTACH->content->deleted = 0;
-	 if (option (OPTRESOLVE) && menu->current < menu->max - 1)
-	 {
-	   menu->current++;
-	   menu->redraw = REDRAW_MOTION_RESYNCH;
-	 }
-	 else
-	   menu->redraw = REDRAW_CURRENT;
-       }
-       else
-       {
-	 int x;
+        CHECK_READONLY;
+        if (!menu->tagprefix)
+        {
+          CURATTACH->content->deleted = 0;
+          if (option (OPTRESOLVE) && menu->current < menu->max - 1)
+          {
+            menu->current++;
+            menu->redraw = REDRAW_MOTION_RESYNCH;
+          }
+          else
+            menu->redraw = REDRAW_CURRENT;
+        }
+        else
+        {
+          int x;
 
-	 for (x = 0; x < menu->max; x++)
-	 {
-	   if (actx->idx[x]->content->tagged)
-	   {
-	     actx->idx[x]->content->deleted = 0;
-	     menu->redraw = REDRAW_INDEX;
-	   }
-	 }
-       }
-       break;
+          for (x = 0; x < menu->max; x++)
+          {
+            if (actx->idx[x]->content->tagged)
+            {
+              actx->idx[x]->content->deleted = 0;
+              menu->redraw = REDRAW_INDEX;
+            }
+          }
+        }
+        break;
 
       case OP_RESEND:
         CHECK_ATTACH;

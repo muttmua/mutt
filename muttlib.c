@@ -81,7 +81,7 @@ void mutt_buffer_adv_mktemp (BUFFER *buf)
     }
     mutt_buffer_mktemp_pfx_sfx (buf, mutt_b2s (prefix), suffix);
 
-out:
+  out:
     mutt_buffer_pool_release (&prefix);
   }
 }
@@ -207,7 +207,7 @@ void mutt_free_body (BODY **p)
       if (b->unlink)
 	unlink (b->filename);
       dprint (1, (debugfile, "mutt_free_body: %sunlinking %s.\n",
-	    b->unlink ? "" : "not ", b->filename));
+                  b->unlink ? "" : "not ", b->filename));
     }
 
     FREE (&b->filename);
@@ -497,10 +497,10 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 	  strfcpy (p, NONULL (Maildir), sizeof (p));
 	else
 #endif
-	if (Maildir && *Maildir && Maildir[strlen (Maildir) - 1] == '/')
-	  strfcpy (p, NONULL (Maildir), sizeof (p));
-	else
-	  snprintf (p, sizeof (p), "%s/", NONULL (Maildir));
+          if (Maildir && *Maildir && Maildir[strlen (Maildir) - 1] == '/')
+            strfcpy (p, NONULL (Maildir), sizeof (p));
+          else
+            snprintf (p, sizeof (p), "%s/", NONULL (Maildir));
 
 	tail = s + 1;
       }
@@ -785,8 +785,8 @@ void mutt_free_envelope (ENVELOPE **p)
 void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
 {
   /* copies each existing element if necessary, and sets the element
-  * to NULL in the source so that mutt_free_envelope doesn't leave us
-  * with dangling pointers. */
+   * to NULL in the source so that mutt_free_envelope doesn't leave us
+   * with dangling pointers. */
 #define MOVE_ELEM(h) if (!base->h) { base->h = (*extra)->h; (*extra)->h = NULL; }
   MOVE_ELEM(return_path);
   MOVE_ELEM(from);
@@ -824,7 +824,7 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
     (*extra)->disp_subj = NULL;
   }
   /* spam and user headers should never be hashed, and the new envelope may
-    * have better values. Use new versions regardless. */
+   * have better values. Use new versions regardless. */
   mutt_buffer_free (&base->spam);
   mutt_free_list (&base->userhdrs);
   MOVE_ELEM(spam);
@@ -838,9 +838,9 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
                           const char *src, int line)
 {
   mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%ld%ld%s%s",
-      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-      (int) getuid (), (int) getpid (), random (), random (),
-      suffix ? "." : "", NONULL (suffix));
+                      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
+                      (int) getuid (), (int) getpid (), random (), random (),
+                      suffix ? "." : "", NONULL (suffix));
   dprint (3, (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, mutt_b2s (buf)));
   if (unlink (mutt_b2s (buf)) && errno != ENOENT)
     dprint (1, (debugfile, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)\n",
@@ -851,12 +851,12 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                    const char *src, int line)
 {
   size_t n = snprintf (s, slen, "%s/%s-%s-%d-%d-%ld%ld%s%s",
-      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-      (int) getuid (), (int) getpid (), random (), random (),
-      suffix ? "." : "", NONULL (suffix));
+                       NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
+                       (int) getuid (), (int) getpid (), random (), random (),
+                       suffix ? "." : "", NONULL (suffix));
   if (n >= slen)
     dprint (1, (debugfile, "%s:%d: ERROR: insufficient buffer space to hold temporary filename! slen=%zu but need %zu\n",
-	    src, line, slen, n));
+                src, line, slen, n));
   dprint (3, (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, s));
   if (unlink (s) && errno != ENOENT)
     dprint (1, (debugfile, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)\n", src, line, s, strerror (errno), errno));
@@ -1032,7 +1032,7 @@ void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt, const char *s
 
 /* return 0 on success, -1 on abort, 1 on error */
 int mutt_check_overwrite (const char *attname, const char *path,
-				char *fname, size_t flen, int *append, char **directory)
+                          char *fname, size_t flen, int *append, char **directory)
 {
   int rc = 0;
   char tmp[_POSIX_PATH_MAX];
@@ -1048,9 +1048,9 @@ int mutt_check_overwrite (const char *attname, const char *path,
     if (directory)
     {
       switch (mutt_multi_choice
-      /* L10N:
-         Means "The path you specified as the destination file is a directory."
-         See the msgid "Save to file: " (alias.c, recvattach.c) */
+              /* L10N:
+                 Means "The path you specified as the destination file is a directory."
+                 See the msgid "Save to file: " (alias.c, recvattach.c) */
 	      (_("File is a directory, save under it? [(y)es, (n)o, (a)ll]"), _("yna")))
       {
 	case 3:		/* all */
@@ -1075,7 +1075,7 @@ int mutt_check_overwrite (const char *attname, const char *path,
 
     strfcpy (tmp, mutt_basename (NONULL (attname)), sizeof (tmp));
     if (mutt_get_field (_("File under directory: "), tmp, sizeof (tmp),
-                                    MUTT_FILE | MUTT_CLEAR) != 0 || !tmp[0])
+                        MUTT_FILE | MUTT_CLEAR) != 0 || !tmp[0])
       return (-1);
     mutt_concat_path (fname, path, tmp, flen);
   }
@@ -1571,7 +1571,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	  char *p = buf;
 	  for (; *p; p++)
 	    if (*p == '.')
-		*p = '_';
+              *p = '_';
 	}
 
 	if ((len = mutt_strlen (buf)) + wlen > destlen)

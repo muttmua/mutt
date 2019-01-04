@@ -32,7 +32,7 @@
 
 /* forward declarations */
 static void hmac_md5 (const char* password, char* challenge,
-  unsigned char* response);
+                      unsigned char* response);
 
 /* imap_auth_cram_md5: AUTH=CRAM-MD5 support. */
 imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
@@ -94,12 +94,12 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
   hmac_md5 (idata->conn->account.pass, obuf, hmac_response);
   /* dubious optimisation I saw elsewhere: make the whole string in one call */
   snprintf (obuf, sizeof (obuf),
-    "%s %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-    idata->conn->account.user,
-    hmac_response[0], hmac_response[1], hmac_response[2], hmac_response[3],
-    hmac_response[4], hmac_response[5], hmac_response[6], hmac_response[7],
-    hmac_response[8], hmac_response[9], hmac_response[10], hmac_response[11],
-    hmac_response[12], hmac_response[13], hmac_response[14], hmac_response[15]);
+            "%s %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+            idata->conn->account.user,
+            hmac_response[0], hmac_response[1], hmac_response[2], hmac_response[3],
+            hmac_response[4], hmac_response[5], hmac_response[6], hmac_response[7],
+            hmac_response[8], hmac_response[9], hmac_response[10], hmac_response[11],
+            hmac_response[12], hmac_response[13], hmac_response[14], hmac_response[15]);
   dprint(2, (debugfile, "CRAM response: %s\n", obuf));
 
   /* XXX - ibuf must be long enough to store the base64 encoding of obuf,
@@ -124,7 +124,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
   if (imap_code (idata->buf))
     return IMAP_AUTH_SUCCESS;
 
- bail:
+bail:
   mutt_error _("CRAM-MD5 authentication failed.");
   mutt_sleep (2);
   return IMAP_AUTH_FAILURE;
@@ -132,7 +132,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
 
 /* hmac_md5: produce CRAM-MD5 challenge response. */
 static void hmac_md5 (const char* password, char* challenge,
-  unsigned char* response)
+                      unsigned char* response)
 {
   struct md5_ctx ctx;
   unsigned char ipad[MD5_BLOCK_LEN], opad[MD5_BLOCK_LEN];

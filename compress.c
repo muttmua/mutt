@@ -359,8 +359,8 @@ escape_path (char *src)
  */
 static const char *
 cb_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
-  const char *fmt, const char *ifstring, const char *elsestring,
-  unsigned long data, format_flag flags)
+               const char *fmt, const char *ifstring, const char *elsestring,
+               unsigned long data, format_flag flags)
 {
   if (!dest || (data == 0))
     return src;

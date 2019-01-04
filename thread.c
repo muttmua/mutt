@@ -261,7 +261,7 @@ void mutt_draw_tree (CONTEXT *ctx)
 	myarrow[0] = vtee;
       if (width == 2)
 	myarrow[1] = pseudo ?  MUTT_TREE_STAR
-	                     : (tree->duplicate_thread ? MUTT_TREE_EQUALS : MUTT_TREE_HLINE);
+          : (tree->duplicate_thread ? MUTT_TREE_EQUALS : MUTT_TREE_HLINE);
       if (tree->visible)
       {
 	myarrow[width] = MUTT_TREE_RARROW;
@@ -1131,7 +1131,7 @@ void mutt_set_virtual (CONTEXT *ctx)
       ctx->v2r[ctx->vcount] = i;
       ctx->vcount++;
       ctx->vsize += cur->content->length + cur->content->offset -
-                    cur->content->hdr_offset + padding;
+        cur->content->hdr_offset + padding;
       cur->num_hidden = mutt_get_hidden (ctx, cur);
     }
   }

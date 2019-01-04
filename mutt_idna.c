@@ -320,10 +320,10 @@ void mutt_env_to_local (ENVELOPE *e)
  * by preprocessor at the macro-expansion time.
  * Note that #a escapes and double quotes the argument.
  */
-#define H_TO_INTL(a)	\
-  if (mutt_addrlist_to_intl (env->a, err) && !e) \
-  { \
-     if (tag) *tag = #a; e = 1; err = NULL; \
+#define H_TO_INTL(a)                                    \
+  if (mutt_addrlist_to_intl (env->a, err) && !e)        \
+  {                                                     \
+    if (tag) *tag = #a; e = 1; err = NULL;              \
   }
 
 int mutt_env_to_intl (ENVELOPE *env, char **tag, char **err)

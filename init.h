@@ -1335,24 +1335,24 @@ struct option_t MuttVars[] = {
   */
   { "imap_check_subscribed",  DT_BOOL, R_NONE, OPTIMAPCHECKSUBSCRIBED, 0 },
   /*
-   ** .pp
-   ** When \fIset\fP, mutt will fetch the set of subscribed folders from
-   ** your server on connection, and add them to the set of mailboxes
-   ** it polls for new mail just as if you had issued individual ``$mailboxes''
-   ** commands.
-   */
+  ** .pp
+  ** When \fIset\fP, mutt will fetch the set of subscribed folders from
+  ** your server on connection, and add them to the set of mailboxes
+  ** it polls for new mail just as if you had issued individual ``$mailboxes''
+  ** commands.
+  */
   { "imap_condstore",  DT_BOOL, R_NONE, OPTIMAPCONDSTORE, 0 },
   /*
-   ** .pp
-   ** When \fIset\fP, mutt will use the CONDSTORE extension (RFC 7162)
-   ** if advertised by the server.  Mutt's current implementation is basic,
-   ** used only for initial message fetching and flag updates.
-   ** .pp
-   ** For some IMAP servers, enabling this will slightly speed up
-   ** downloading initial messages.  Unfortunately, Gmail is not one
-   ** those, and displays worse performance when enabled.  Your
-   ** mileage may vary.
-   */
+  ** .pp
+  ** When \fIset\fP, mutt will use the CONDSTORE extension (RFC 7162)
+  ** if advertised by the server.  Mutt's current implementation is basic,
+  ** used only for initial message fetching and flag updates.
+  ** .pp
+  ** For some IMAP servers, enabling this will slightly speed up
+  ** downloading initial messages.  Unfortunately, Gmail is not one
+  ** those, and displays worse performance when enabled.  Your
+  ** mileage may vary.
+  */
   { "imap_delim_chars",		DT_STR, R_NONE, UL &ImapDelimChars, UL "/." },
   /*
   ** .pp
@@ -1465,15 +1465,15 @@ struct option_t MuttVars[] = {
   */
   { "imap_qresync",  DT_BOOL, R_NONE, OPTIMAPQRESYNC, 0 },
   /*
-   ** .pp
-   ** When \fIset\fP, mutt will use the QRESYNC extension (RFC 7162)
-   ** if advertised by the server.  Mutt's current implementation is basic,
-   ** used only for initial message fetching and flag updates.
-   ** .pp
-   ** Note: this feature is currently experimental.  If you experience
-   ** strange behavior, such as duplicate or missing messages please
-   ** file a bug report to let us know.
-   */
+  ** .pp
+  ** When \fIset\fP, mutt will use the QRESYNC extension (RFC 7162)
+  ** if advertised by the server.  Mutt's current implementation is basic,
+  ** used only for initial message fetching and flag updates.
+  ** .pp
+  ** Note: this feature is currently experimental.  If you experience
+  ** strange behavior, such as duplicate or missing messages please
+  ** file a bug report to let us know.
+  */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
   ** .pp
@@ -1953,13 +1953,13 @@ struct option_t MuttVars[] = {
 #ifdef USE_SOCKET
   { "net_inc",	DT_NUM,	 R_NONE, UL &NetInc, 10 },
   /*
-   ** .pp
-   ** Operations that expect to transfer a large amount of data over the
-   ** network will update their progress every $$net_inc kilobytes.
-   ** If set to 0, no progress messages will be displayed.
-   ** .pp
-   ** See also $$read_inc, $$write_inc and $$net_inc.
-   */
+  ** .pp
+  ** Operations that expect to transfer a large amount of data over the
+  ** network will update their progress every $$net_inc kilobytes.
+  ** If set to 0, no progress messages will be displayed.
+  ** .pp
+  ** See also $$read_inc, $$write_inc and $$net_inc.
+  */
 #endif
   { "new_mail_command",	DT_PATH, R_NONE, UL &NewMailCmd, 0 },
   /*
@@ -3640,13 +3640,13 @@ struct option_t MuttVars[] = {
   */
   { "ssl_force_tls",		DT_BOOL, R_NONE, OPTSSLFORCETLS, 0 },
   /*
-   ** .pp
-   ** If this variable is \fIset\fP, Mutt will require that all connections
-   ** to remote servers be encrypted. Furthermore it will attempt to
-   ** negotiate TLS even if the server does not advertise the capability,
-   ** since it would otherwise have to abort the connection anyway. This
-   ** option supersedes $$ssl_starttls.
-   */
+  ** .pp
+  ** If this variable is \fIset\fP, Mutt will require that all connections
+  ** to remote servers be encrypted. Furthermore it will attempt to
+  ** negotiate TLS even if the server does not advertise the capability,
+  ** since it would otherwise have to abort the connection anyway. This
+  ** option supersedes $$ssl_starttls.
+  */
 # ifdef USE_SSL_GNUTLS
   { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
   /*
@@ -4037,17 +4037,17 @@ struct option_t MuttVars[] = {
   */
   { "use_envelope_from", 	DT_BOOL, R_NONE, OPTENVFROM, 0 },
   /*
-   ** .pp
-   ** When \fIset\fP, mutt will set the \fIenvelope\fP sender of the message.
-   ** If $$envelope_from_address is \fIset\fP, it will be used as the sender
-   ** address. If \fIunset\fP, mutt will attempt to derive the sender from the
-   ** ``From:'' header.
-   ** .pp
-   ** Note that this information is passed to sendmail command using the
-   ** \fC-f\fP command line switch. Therefore setting this option is not useful
-   ** if the $$sendmail variable already contains \fC-f\fP or if the
-   ** executable pointed to by $$sendmail doesn't support the \fC-f\fP switch.
-   */
+  ** .pp
+  ** When \fIset\fP, mutt will set the \fIenvelope\fP sender of the message.
+  ** If $$envelope_from_address is \fIset\fP, it will be used as the sender
+  ** address. If \fIunset\fP, mutt will attempt to derive the sender from the
+  ** ``From:'' header.
+  ** .pp
+  ** Note that this information is passed to sendmail command using the
+  ** \fC-f\fP command line switch. Therefore setting this option is not useful
+  ** if the $$sendmail variable already contains \fC-f\fP or if the
+  ** executable pointed to by $$sendmail doesn't support the \fC-f\fP switch.
+  */
   { "envelope_from",	DT_SYN,  R_NONE, UL "use_envelope_from", 0 },
   /*
   */

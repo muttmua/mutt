@@ -177,7 +177,7 @@ new_aliases:
   if ((SortAlias & SORT_MASK) != SORT_ORDER)
   {
     qsort (AliasTable, i, sizeof (ALIAS *),
-	 (SortAlias & SORT_MASK) == SORT_ADDRESS ? alias_SortAddress : alias_SortAlias);
+           (SortAlias & SORT_MASK) == SORT_ADDRESS ? alias_SortAddress : alias_SortAlias);
   }
 
   for (i=0; i<menu->max; i++) AliasTable[i]->num = i;

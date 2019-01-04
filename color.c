@@ -269,8 +269,8 @@ int mutt_alloc_color (int fg, int bg)
     SLtt_set_color (i, NULL, get_color_name (fgc, sizeof (fgc), fg), get_color_name (bgc, sizeof (bgc), bg));
   else
 #elif defined (HAVE_USE_DEFAULT_COLORS)
-  if (fg == COLOR_DEFAULT)
-    fg = -1;
+    if (fg == COLOR_DEFAULT)
+      fg = -1;
   if (bg == COLOR_DEFAULT)
     bg = -1;
 #endif
@@ -297,7 +297,7 @@ void mutt_free_color (int fg, int bg)
 
       UserColors--;
       dprint(1,(debugfile,"mutt_free_color(): Color pairs used so far: %d\n",
-                           UserColors));
+                UserColors));
 
       if (p == ColorList)
       {
@@ -404,7 +404,7 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
 
 static int
 _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err,
-			 short parse_uncolor);
+                     short parse_uncolor);
 
 
 #ifdef HAVE_COLOR
@@ -462,19 +462,19 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
     return (-1);
   }
 
-  if(
+  if (
 #ifdef HAVE_COLOR
-     /* we're running without curses */
-     option (OPTNOCURSES)
-     || /* we're parsing an uncolor command, and have no colors */
-     (parse_uncolor && !has_colors())
-     /* we're parsing an unmono command, and have colors */
-     || (!parse_uncolor && has_colors())
+    /* we're running without curses */
+    option (OPTNOCURSES)
+    || /* we're parsing an uncolor command, and have no colors */
+    (parse_uncolor && !has_colors())
+    /* we're parsing an unmono command, and have colors */
+    || (!parse_uncolor && has_colors())
 #else
-     /* We don't even have colors compiled in */
-     parse_uncolor
+    /* We don't even have colors compiled in */
+    parse_uncolor
 #endif
-     )
+    )
   {
     /* just eat the command, but don't do anything real about it */
     do
@@ -508,7 +508,7 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
           if (!do_cache)
 	    do_cache = 1;
 	  dprint(1,(debugfile,"Freeing pattern \"%s\" from color list\n",
-	                       tmp->pattern));
+                    tmp->pattern));
 	  if (last)
 	    last->next = tmp->next;
 	  else
@@ -805,9 +805,9 @@ _mutt_parse_color (BUFFER *buf, BUFFER *s, BUFFER *err,
 #ifdef HAVE_COLOR
 # ifdef HAVE_USE_DEFAULT_COLORS
   if (!option (OPTNOCURSES) && has_colors()
-    /* delay use_default_colors() until needed, since it initializes things */
-    && (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
-    && use_default_colors () != OK)
+      /* delay use_default_colors() until needed, since it initializes things */
+      && (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
+      && use_default_colors () != OK)
   {
     strfcpy (err->data, _("default colors not supported"), err->dsize);
     return (-1);

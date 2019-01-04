@@ -63,7 +63,7 @@ struct hash_elem *hash_find_bucket (const HASH *table, const char *key);
 void hash_delete (HASH * table, const char *key, const void *data,
                   void (*destroy) (void *));
 void int_hash_delete (HASH * table, unsigned int key, const void *data,
-                  void (*destroy) (void *));
+                      void (*destroy) (void *));
 
 void hash_destroy (HASH ** hash, void (*destroy) (void *));
 

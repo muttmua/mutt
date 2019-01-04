@@ -340,22 +340,22 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 	dprint (2, (debugfile, "capabilities info: %s\n", p));
 
 	while(*p)
-	  {
-	    switch(*p++)
-	      {
-	      case 'D':
-		flags |= KEYFLAG_DISABLED;
-		break;
+        {
+          switch(*p++)
+          {
+            case 'D':
+              flags |= KEYFLAG_DISABLED;
+              break;
 
-	      case 'e':
-		flags |= KEYFLAG_CANENCRYPT;
-		break;
+            case 'e':
+              flags |= KEYFLAG_CANENCRYPT;
+              break;
 
-	      case 's':
-		flags |= KEYFLAG_CANSIGN;
-		break;
-	      }
-	  }
+            case 's':
+              flags |= KEYFLAG_CANSIGN;
+              break;
+          }
+        }
 
         if (!is_uid &&
 	    (!*is_subkey || !option (OPTPGPIGNORESUB)

@@ -368,7 +368,7 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
   FOREVER
   {
     mutt_buffer_printf (path, "%s/.mutt-%s-%d-%d",
-	      dest->path, NONULL (Hostname), (int) getpid (), Counter++);
+                        dest->path, NONULL (Hostname), (int) getpid (), Counter++);
     if ((fd = open (mutt_b2s (path), O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
     {
       if (errno != EEXIST)
@@ -701,32 +701,32 @@ static void maildir_parse_flags (HEADER * h, const char *path)
     {
       switch (*p)
       {
-      case 'F':
+        case 'F':
 
-	h->flagged = 1;
-	break;
+          h->flagged = 1;
+          break;
 
-      case 'S':		/* seen */
+        case 'S':		/* seen */
 
-	h->read = 1;
-	break;
+          h->read = 1;
+          break;
 
-      case 'R':		/* replied */
+        case 'R':		/* replied */
 
-	h->replied = 1;
-	break;
+          h->replied = 1;
+          break;
 
-      case 'T':		/* trashed */
-	if (!h->flagged || !option(OPTFLAGSAFE))
-	{
-	  h->trash = 1;
-	  h->deleted = 1;
-	}
-	break;
+        case 'T':		/* trashed */
+          if (!h->flagged || !option(OPTFLAGSAFE))
+          {
+            h->trash = 1;
+            h->deleted = 1;
+          }
+          break;
 
-      default:
-	*q++ = *p;
-	break;
+        default:
+          *q++ = *p;
+          break;
       }
       p++;
     }
@@ -1133,7 +1133,7 @@ static struct maildir *skip_duplicates (struct maildir *p, struct maildir **last
  * This function does the second parsing pass
  */
 static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
-			      progress_t *progress)
+                                     progress_t *progress)
 {
   struct maildir *p, *last = NULL;
   BUFFER *fn = NULL;
@@ -1150,20 +1150,20 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 #endif
 
 #if HAVE_DIRENT_D_INO
-#define DO_SORT()	do { \
-  if (!sort) \
-  { \
-    dprint (4, (debugfile, "maildir: need to sort %s by inode\n", ctx->path)); \
-    p = maildir_sort (p, (size_t) -1, md_cmp_inode); \
-    if (!last) \
-      *md = p; \
-    else \
-      last->next = p; \
-    sort = 1; \
-    p = skip_duplicates (p, &last); \
-    mutt_buffer_printf (fn, "%s/%s", ctx->path, p->h->path); \
-  } \
-} while(0)
+#define DO_SORT()	do {                                            \
+    if (!sort)                                                          \
+    {                                                                   \
+      dprint (4, (debugfile, "maildir: need to sort %s by inode\n", ctx->path)); \
+      p = maildir_sort (p, (size_t) -1, md_cmp_inode);                  \
+      if (!last)                                                        \
+        *md = p;                                                        \
+      else                                                              \
+        last->next = p;                                                 \
+      sort = 1;                                                         \
+      p = skip_duplicates (p, &last);                                   \
+      mutt_buffer_printf (fn, "%s/%s", ctx->path, p->h->path);          \
+    }                                                                   \
+  } while(0)
 #else
 #define DO_SORT()	/* nothing */
 #endif
@@ -1175,9 +1175,9 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
   fn = mutt_buffer_pool_get ();
 
   for (p = *md, count = 0; p; p = p->next, count++)
-   {
+  {
     if (! (p && p->h && !p->header_parsed))
-     {
+    {
       last = p;
       continue;
     }
@@ -1216,23 +1216,24 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
     {
 #endif /* USE_HCACHE */
 
-    if (maildir_parse_message (ctx->magic, mutt_b2s (fn), p->h->old, p->h))
-    {
-      p->header_parsed = 1;
+      if (maildir_parse_message (ctx->magic, mutt_b2s (fn), p->h->old, p->h))
+      {
+        p->header_parsed = 1;
 #if USE_HCACHE
-      if (ctx->magic == MUTT_MH)
-	mutt_hcache_store (hc, p->h->path, p->h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
-      else
-	mutt_hcache_store (hc, p->h->path + 3, p->h, 0, &maildir_hcache_keylen, MUTT_GENERATE_UIDVALIDITY);
+        if (ctx->magic == MUTT_MH)
+          mutt_hcache_store (hc, p->h->path, p->h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
+        else
+          mutt_hcache_store (hc, p->h->path + 3, p->h, 0, &maildir_hcache_keylen, MUTT_GENERATE_UIDVALIDITY);
 #endif
-    } else
-      mutt_free_header (&p->h);
+      }
+      else
+        mutt_free_header (&p->h);
 #if USE_HCACHE
     }
     mutt_hcache_free (&data);
 #endif
     last = p;
-   }
+  }
 #if USE_HCACHE
   mutt_hcache_close (hc);
 #endif
@@ -1543,8 +1544,8 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
   FOREVER
   {
     mutt_buffer_printf (path, "%s/tmp/%s.%lld.%u_%d.%s%s",
-	      dest->path, subdir, (long long)time (NULL), (unsigned int)getpid (),
-	      Counter++, NONULL (Hostname), suffix);
+                        dest->path, subdir, (long long)time (NULL), (unsigned int)getpid (),
+                        Counter++, NONULL (Hostname), suffix);
 
     dprint (2, (debugfile, "maildir_open_new_message (): Trying %s.\n",
 		mutt_b2s (path)));
@@ -1636,8 +1637,8 @@ static int _maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
   FOREVER
   {
     mutt_buffer_printf (path, "%s/%lld.%u_%d.%s%s", subdir,
-	      (long long)time (NULL), (unsigned int)getpid (), Counter++,
-	      NONULL (Hostname), suffix);
+                        (long long)time (NULL), (unsigned int)getpid (), Counter++,
+                        NONULL (Hostname), suffix);
     mutt_buffer_printf (full, "%s/%s", ctx->path, mutt_b2s (path));
 
     dprint (2, (debugfile, "_maildir_commit_message (): renaming %s to %s.\n",
@@ -2033,7 +2034,7 @@ int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
 	if (*ctx->hdrs[i]->path != ',')
 	{
 	  mutt_buffer_printf (tmp, "%s/,%s", ctx->path,
-		    ctx->hdrs[i]->path);
+                              ctx->hdrs[i]->path);
 	  unlink (mutt_b2s (tmp));
 	  rename (mutt_b2s (path), mutt_b2s (tmp));
 	}
@@ -2551,7 +2552,7 @@ static int mh_save_to_header_cache (CONTEXT *ctx, HEADER *h)
  */
 
 static FILE *_maildir_open_find_message (const char *folder, const char *unique,
-				  const char *subfolder)
+                                         const char *subfolder)
 {
   BUFFER *dir = mutt_buffer_pool_get ();
   BUFFER *tunique = mutt_buffer_pool_get ();
@@ -2578,7 +2579,7 @@ static FILE *_maildir_open_find_message (const char *folder, const char *unique,
     if (!mutt_strcmp (mutt_b2s (tunique), unique))
     {
       mutt_buffer_printf (fname, "%s/%s/%s", folder, subfolder,
-		de->d_name);
+                          de->d_name);
       fp = fopen (mutt_b2s (fname), "r");	/* __FOPEN_CHECKED__ */
       oe = errno;
       break;
@@ -2607,10 +2608,8 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
   unique = mutt_buffer_pool_get ();
   maildir_canon_filename (unique, msg);
 
-  if (
-      (fp =
-       _maildir_open_find_message (folder, mutt_b2s (unique),
-				   new_hits > cur_hits ? "new" : "cur"))
+  if ((fp = _maildir_open_find_message (folder, mutt_b2s (unique),
+                                        new_hits > cur_hits ? "new" : "cur"))
       || errno != ENOENT)
   {
     if (new_hits < UINT_MAX && cur_hits < UINT_MAX)
@@ -2621,10 +2620,8 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
 
     goto cleanup;
   }
-  if (
-      (fp =
-       _maildir_open_find_message (folder, mutt_b2s (unique),
-				   new_hits > cur_hits ? "cur" : "new"))
+  if ((fp = _maildir_open_find_message (folder, mutt_b2s (unique),
+                                        new_hits > cur_hits ? "cur" : "new"))
       || errno != ENOENT)
   {
     if (new_hits < UINT_MAX && cur_hits < UINT_MAX)
@@ -2668,7 +2665,7 @@ int maildir_check_empty (const char *path)
      * find old messages without having to scan both subdirs
      */
     mutt_buffer_printf (realpath, "%s/%s", path,
-	      iter == 0 ? "cur" : "new");
+                        iter == 0 ? "cur" : "new");
     if ((dp = opendir (mutt_b2s (realpath))) == NULL)
     {
       r = -1;

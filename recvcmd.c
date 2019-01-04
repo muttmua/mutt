@@ -121,7 +121,7 @@ static short count_tagged_children (ATTACH_CONTEXT *actx, short i)
  **/
 
 void mutt_attach_bounce (FILE * fp, HEADER * hdr,
-	   ATTACH_CONTEXT *actx, BODY * cur)
+                         ATTACH_CONTEXT *actx, BODY * cur)
 {
   short i;
   char prompt[STRING];
@@ -199,7 +199,7 @@ void mutt_attach_bounce (FILE * fp, HEADER * hdr,
    * See commands.c.
    */
   snprintf (prompt, sizeof (prompt) - 4,
-   (p ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
+            (p ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
 
   if (mutt_strwidth (prompt) > MuttMessageWindow->cols - extra_space)
   {
@@ -489,7 +489,7 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
       && !check_can_decode (actx, cur))
   {
     if ((rc = query_quadoption (OPT_MIMEFWDREST,
-_("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
+                                _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
       goto bail;
     else if (rc == MUTT_NO)
       mime_fwd_any = 0;
@@ -557,7 +557,7 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
   ci_send_message (0, tmphdr, tmpbody, NULL, parent_hdr);
   return;
 
-  bail:
+bail:
 
   if (tmpfp)
   {
@@ -581,7 +581,7 @@ _("Can't decode all tagged attachments.  MIME-forward the others?"))) == -1)
  */
 
 static void attach_forward_msgs (FILE * fp, HEADER * hdr,
-	       ATTACH_CONTEXT *actx, BODY * cur)
+                                 ATTACH_CONTEXT *actx, BODY * cur)
 {
   HEADER *curhdr = NULL;
   HEADER *tmphdr;
@@ -615,7 +615,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
   tmpbody[0] = '\0';
 
   if ((rc = query_quadoption (OPT_MIMEFWD,
-		 _("Forward MIME encapsulated?"))) == MUTT_NO)
+                              _("Forward MIME encapsulated?"))) == MUTT_NO)
   {
 
     /* no MIME encapsulation */
@@ -716,7 +716,7 @@ void mutt_attach_mail_sender (FILE *fp, HEADER *hdr, ATTACH_CONTEXT *actx,
   {
     /* L10N: You will see this error message if you invoke <compose-to-sender>
        when you are on a normal attachment.
-     */
+    */
     mutt_error _("You may only compose to sender with message/rfc822 parts.");
     return;
   }
@@ -897,7 +897,7 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   if (nattach > 1 && !check_can_decode (actx, cur))
   {
     if ((rc = query_quadoption (OPT_MIMEFWDREST,
-      _("Can't decode all tagged attachments.  MIME-encapsulate the others?"))) == -1)
+                                _("Can't decode all tagged attachments.  MIME-encapsulate the others?"))) == -1)
       return;
     else if (rc == MUTT_YES)
       mime_reply_any = 1;
@@ -996,6 +996,6 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   safe_fclose (&tmpfp);
 
   if (ci_send_message (flags, tmphdr, tmpbody, NULL,
-			  parent_hdr ? parent_hdr : (cur ? cur->hdr : NULL)) == 0)
+                       parent_hdr ? parent_hdr : (cur ? cur->hdr : NULL)) == 0)
     mutt_set_flag (Context, hdr, MUTT_REPLIED, 1);
 }

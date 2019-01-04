@@ -480,7 +480,7 @@ static int tls_negotiate (CONNECTION * conn)
 
   return 0;
 
- fail:
+fail:
   gnutls_certificate_free_credentials (data->xcred);
   gnutls_deinit (data->state);
   FREE(&conn->sockdata);
@@ -815,7 +815,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   int i, row, done, ret;
 
   if (!tls_check_preauth (certdata, certstat, hostname, idx, &certerr,
-      &savedcert))
+                          &savedcert))
     return 1;
 
   /* interactive check from user */
@@ -980,29 +980,29 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
             len - idx, len);
   menu->title = title;
   /* certificates with bad dates, or that are revoked, must be
-   accepted manually each and every time */
+     accepted manually each and every time */
   if (SslCertFile && !savedcert
-        && !(certerr & (CERTERR_EXPIRED | CERTERR_NOTYETVALID
-                        | CERTERR_REVOKED)))
+      && !(certerr & (CERTERR_EXPIRED | CERTERR_NOTYETVALID
+                      | CERTERR_REVOKED)))
   {
     menu->prompt = _("(r)eject, accept (o)nce, (a)ccept always");
-  /* L10N:
-   * These three letters correspond to the choices in the string:
-   * (r)eject, accept (o)nce, (a)ccept always.
-   * This is an interactive certificate confirmation prompt for
-   * a GNUTLS connection.
-   */
+    /* L10N:
+     * These three letters correspond to the choices in the string:
+     * (r)eject, accept (o)nce, (a)ccept always.
+     * This is an interactive certificate confirmation prompt for
+     * a GNUTLS connection.
+     */
     menu->keys = _("roa");
   }
   else
   {
     menu->prompt = _("(r)eject, accept (o)nce");
-  /* L10N:
-   * These two letters correspond to the choices in the string:
-   * (r)eject, accept (o)nce.
-   * These is an interactive certificate confirmation prompt for
-   * a GNUTLS connection.
-   */
+    /* L10N:
+     * These two letters correspond to the choices in the string:
+     * (r)eject, accept (o)nce.
+     * These is an interactive certificate confirmation prompt for
+     * a GNUTLS connection.
+     */
     menu->keys = _("ro");
   }
 

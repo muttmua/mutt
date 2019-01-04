@@ -139,10 +139,10 @@ int smime_valid_passphrase (void)
   smime_void_passphrase();
 
   if (mutt_get_password (_("Enter S/MIME passphrase:"), SmimePass, sizeof (SmimePass)) == 0)
-    {
-      SmimeExptime = mutt_add_timeout (time (NULL), SmimeTimeout);
-      return (1);
-    }
+  {
+    SmimeExptime = mutt_add_timeout (time (NULL), SmimeTimeout);
+    return (1);
+  }
   else
     SmimeExptime = 0;
 
@@ -300,7 +300,7 @@ static void mutt_smime_command (char *d, size_t dlen,
 				struct smime_command_context *cctx, const char *fmt)
 {
   mutt_FormatString (d, dlen, 0, MuttIndexWindow->cols, NONULL(fmt), _mutt_fmt_smime_command,
-		    (unsigned long) cctx, 0);
+                     (unsigned long) cctx, 0);
   dprint (2,(debugfile, "mutt_smime_command: %s\n", d));
 }
 
@@ -428,14 +428,14 @@ static smime_key_t *smime_select_key (smime_key_t *keys, char *query)
   }
 
   snprintf(title, sizeof(title), _("S/MIME certificates matching \"%s\"."),
-    query);
+           query);
 
   /* Make Helpstring */
   helpstr[0] = 0;
   mutt_make_help (buf, sizeof (buf), _("Exit  "), MENU_SMIME, OP_EXIT);
   strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Select  "), MENU_SMIME,
-      OP_GENERIC_SELECT_ENTRY);
+                  OP_GENERIC_SELECT_ENTRY);
   strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof(buf), _("Help"), MENU_SMIME, OP_HELP);
   strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
@@ -593,7 +593,7 @@ static smime_key_t *smime_get_candidates(char *search, short public)
   results_end = &results;
 
   snprintf(index_file, sizeof (index_file), "%s/.index",
-    public ? NONULL(SmimeCertificates) : NONULL(SmimeKeys));
+           public ? NONULL(SmimeCertificates) : NONULL(SmimeKeys));
 
   if ((fp = safe_fopen (index_file, "r")) == NULL)
   {
@@ -780,8 +780,8 @@ smime_key_t *smime_ask_for_key(char *prompt, short abilities, short public)
 
 
 /*
-   This sets the '*ToUse' variables for an upcoming decryption, where
-   the required key is different from SmimeDefaultKey.
+  This sets the '*ToUse' variables for an upcoming decryption, where
+  the required key is different from SmimeDefaultKey.
 */
 
 void _smime_getkeys (char *mailbox)
@@ -929,7 +929,7 @@ char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode)
 
 
 static int smime_handle_cert_email (char *certificate, char *mailbox,
-				   int copy, char ***buffer, int *num)
+                                    int copy, char ***buffer, int *num)
 {
   FILE *fpout = NULL, *fperr = NULL;
   char tmpfname[_POSIX_PATH_MAX];
@@ -1311,18 +1311,18 @@ int smime_verify_sender(HEADER *h)
       if (smime_handle_cert_email (certfile, mbox, 0, NULL, NULL))
       {
 	if(isendwin())
-         mutt_any_key_to_continue(NULL);
+          mutt_any_key_to_continue(NULL);
       }
       else
 	retval = 0;
       mutt_unlink(certfile);
       FREE (&certfile);
     }
-  else
-	mutt_any_key_to_continue(_("no certfile"));
+    else
+      mutt_any_key_to_continue(_("no certfile"));
   }
   else
-	mutt_any_key_to_continue(_("no mbox"));
+    mutt_any_key_to_continue(_("no mbox"));
 
   mutt_unlink(tempfname);
   return retval;
@@ -1565,10 +1565,10 @@ BODY *smime_sign_message (BODY *a )
 
 
   snprintf (SmimeKeyToUse, sizeof (SmimeKeyToUse), "%s/%s",
-	   NONULL(SmimeKeys), signas);
+            NONULL(SmimeKeys), signas);
 
   snprintf (SmimeCertToUse, sizeof (SmimeCertToUse), "%s/%s",
-	   NONULL(SmimeCertificates), signas);
+            NONULL(SmimeCertificates), signas);
 
   signas_key = smime_get_key_by_hash (signas, 1);
   if ((! signas_key) ||
@@ -1578,14 +1578,14 @@ BODY *smime_sign_message (BODY *a )
     intermediates = signas_key->issuer;
 
   snprintf (SmimeIntermediateToUse, sizeof (SmimeIntermediateToUse), "%s/%s",
-	   NONULL(SmimeCertificates), intermediates);
+            NONULL(SmimeCertificates), intermediates);
 
   smime_free_key (&signas_key);
 
 
 
   if ((thepid = smime_invoke_sign (&smimein, NULL, &smimeerr,
-				 -1, fileno (smimeout), -1, filetosign)) == -1)
+                                   -1, fileno (smimeout), -1, filetosign)) == -1)
   {
     mutt_perror _("Can't open OpenSSL subprocess!");
     safe_fclose (&smimeout);
@@ -1644,7 +1644,7 @@ BODY *smime_sign_message (BODY *a )
   FREE (&micalg);
 
   mutt_set_parameter ("protocol", "application/x-pkcs7-signature",
-		     &t->parameter);
+                      &t->parameter);
 
   t->parts = a;
   a = t;
@@ -1763,8 +1763,8 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   crypt_current_time (s, "OpenSSL");
 
   if ((thepid = smime_invoke_verify (NULL, &smimeout, NULL,
-				   -1, -1, fileno (smimeerr),
-				   tempfile, signedfile, 0)) != -1)
+                                     -1, -1, fileno (smimeerr),
+                                     tempfile, signedfile, 0)) != -1)
   {
     fflush (smimeout);
     safe_fclose (&smimeout);
@@ -2191,124 +2191,124 @@ int smime_send_menu (HEADER *msg)
   {
     switch (choices[choice - 1])
     {
-    case 'e': /* (e)ncrypt */
-      msg->security |= ENCRYPT;
-      msg->security &= ~SIGN;
-      break;
+      case 'e': /* (e)ncrypt */
+        msg->security |= ENCRYPT;
+        msg->security &= ~SIGN;
+        break;
 
-    case 'w': /* encrypt (w)ith */
+      case 'w': /* encrypt (w)ith */
       {
         msg->security |= ENCRYPT;
         do
         {
           /* I use "dra" because "123" is recognized anyway */
           switch (mutt_multi_choice (_("Choose algorithm family:"
-                                      " 1: DES, 2: RC2, 3: AES,"
-                                      " or (c)lear? "),
-                                    _("drac")))
+                                       " 1: DES, 2: RC2, 3: AES,"
+                                       " or (c)lear? "),
+                                     _("drac")))
           {
-          case 1:
-            switch (choice = mutt_multi_choice (_("1: DES, 2: Triple-DES "),
-                                                _("dt")))
-            {
             case 1:
-              mutt_str_replace (&SmimeCryptAlg, "des");
+              switch (choice = mutt_multi_choice (_("1: DES, 2: Triple-DES "),
+                                                  _("dt")))
+              {
+                case 1:
+                  mutt_str_replace (&SmimeCryptAlg, "des");
+                  break;
+                case 2:
+                  mutt_str_replace (&SmimeCryptAlg, "des3");
+                  break;
+              }
               break;
-            case 2:
-              mutt_str_replace (&SmimeCryptAlg, "des3");
-              break;
-            }
-            break;
 
-          case 2:
-            switch (choice = mutt_multi_choice (_("1: RC2-40, 2: RC2-64, 3: RC2-128 "),
-                                                _("468")))
-            {
-            case 1:
-              mutt_str_replace (&SmimeCryptAlg, "rc2-40");
-              break;
             case 2:
-              mutt_str_replace (&SmimeCryptAlg, "rc2-64");
+              switch (choice = mutt_multi_choice (_("1: RC2-40, 2: RC2-64, 3: RC2-128 "),
+                                                  _("468")))
+              {
+                case 1:
+                  mutt_str_replace (&SmimeCryptAlg, "rc2-40");
+                  break;
+                case 2:
+                  mutt_str_replace (&SmimeCryptAlg, "rc2-64");
+                  break;
+                case 3:
+                  mutt_str_replace (&SmimeCryptAlg, "rc2-128");
+                  break;
+              }
               break;
+
             case 3:
-              mutt_str_replace (&SmimeCryptAlg, "rc2-128");
+              switch (choice = mutt_multi_choice (_("1: AES128, 2: AES192, 3: AES256 "),
+                                                  _("895")))
+              {
+                case 1:
+                  mutt_str_replace (&SmimeCryptAlg, "aes128");
+                  break;
+                case 2:
+                  mutt_str_replace (&SmimeCryptAlg, "aes192");
+                  break;
+                case 3:
+                  mutt_str_replace (&SmimeCryptAlg, "aes256");
+                  break;
+              }
               break;
-            }
-            break;
 
-          case 3:
-            switch (choice = mutt_multi_choice (_("1: AES128, 2: AES192, 3: AES256 "),
-                                                _("895")))
-            {
-            case 1:
-              mutt_str_replace (&SmimeCryptAlg, "aes128");
+            case 4: /* (c)lear */
+              FREE (&SmimeCryptAlg);
+              /* fallback */
+            case -1: /* Ctrl-G or Enter */
+              choice = 0;
               break;
-            case 2:
-              mutt_str_replace (&SmimeCryptAlg, "aes192");
-              break;
-            case 3:
-              mutt_str_replace (&SmimeCryptAlg, "aes256");
-              break;
-            }
-            break;
-
-          case 4: /* (c)lear */
-            FREE (&SmimeCryptAlg);
-            /* fallback */
-          case -1: /* Ctrl-G or Enter */
-            choice = 0;
-            break;
           }
         } while (choice == -1);
       }
       break;
 
-    case 's': /* (s)ign */
-      msg->security &= ~ENCRYPT;
-      msg->security |= SIGN;
-      break;
-
-    case 'S': /* (s)ign in oppenc mode */
-      msg->security |= SIGN;
-      break;
-
-    case 'a': /* sign (a)s */
-
-      if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0)))
-      {
-        mutt_str_replace (&SmimeSignAs, key->hash);
-        smime_free_key (&key);
-
+      case 's': /* (s)ign */
+        msg->security &= ~ENCRYPT;
         msg->security |= SIGN;
+        break;
 
-        /* probably need a different passphrase */
-        crypt_smime_void_passphrase ();
-      }
+      case 'S': /* (s)ign in oppenc mode */
+        msg->security |= SIGN;
+        break;
 
-      break;
+      case 'a': /* sign (a)s */
 
-    case 'b': /* (b)oth */
-      msg->security |= (ENCRYPT | SIGN);
-      break;
+        if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0)))
+        {
+          mutt_str_replace (&SmimeSignAs, key->hash);
+          smime_free_key (&key);
 
-    case 'f': /* (f)orget it: kept for backward compatibility. */
-    case 'c': /* (c)lear */
-      msg->security &= ~(ENCRYPT | SIGN);
-      break;
+          msg->security |= SIGN;
 
-    case 'F': /* (f)orget it or (c)lear in oppenc mode */
-    case 'C':
-      msg->security &= ~SIGN;
-      break;
+          /* probably need a different passphrase */
+          crypt_smime_void_passphrase ();
+        }
 
-    case 'O': /* oppenc mode on */
-      msg->security |= OPPENCRYPT;
-      crypt_opportunistic_encrypt (msg);
-      break;
+        break;
 
-    case 'o': /* oppenc mode off */
-      msg->security &= ~OPPENCRYPT;
-      break;
+      case 'b': /* (b)oth */
+        msg->security |= (ENCRYPT | SIGN);
+        break;
+
+      case 'f': /* (f)orget it: kept for backward compatibility. */
+      case 'c': /* (c)lear */
+        msg->security &= ~(ENCRYPT | SIGN);
+        break;
+
+      case 'F': /* (f)orget it or (c)lear in oppenc mode */
+      case 'C':
+        msg->security &= ~SIGN;
+        break;
+
+      case 'O': /* oppenc mode on */
+        msg->security |= OPPENCRYPT;
+        crypt_opportunistic_encrypt (msg);
+        break;
+
+      case 'o': /* oppenc mode off */
+        msg->security &= ~OPPENCRYPT;
+        break;
     }
   }
 

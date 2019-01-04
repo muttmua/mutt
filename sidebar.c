@@ -572,7 +572,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
     else if (b->msg_flagged > 0)
       SETCOLOR(MT_COLOR_FLAGGED);
     else if ((ColorDefs[MT_COLOR_SB_SPOOLFILE] != 0) &&
-               (mutt_strcmp (b->path, Spoolfile) == 0))
+             (mutt_strcmp (b->path, Spoolfile) == 0))
       SETCOLOR(MT_COLOR_SB_SPOOLFILE);
     else
       SETCOLOR(MT_COLOR_NORMAL);
@@ -641,7 +641,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         if (option (OPTSIDEBARSHORTPATH))
           tmp_folder_name += lastsep;  /* basename */
         int sfn_len = mutt_strlen (tmp_folder_name) +
-                      sidebar_folder_depth*mutt_strlen (SidebarIndentString) + 1;
+          sidebar_folder_depth*mutt_strlen (SidebarIndentString) + 1;
         sidebar_folder_name = safe_malloc (sfn_len);
         sidebar_folder_name[0]=0;
         for (i=0; i < sidebar_folder_depth; i++)

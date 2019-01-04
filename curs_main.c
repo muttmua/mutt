@@ -64,55 +64,61 @@ static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
 static const char *Function_not_permitted_in_attach_message_mode = N_("Function not permitted in attach-message mode.");
 static const char *No_visible = N_("No visible messages.");
 
-#define CHECK_IN_MAILBOX if (!Context) \
-	{ \
-		mutt_flushinp (); \
-		mutt_error _(No_mailbox_is_open); \
-		break; \
-	}
+#define CHECK_IN_MAILBOX                        \
+  if (!Context)                                 \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(No_mailbox_is_open);           \
+    break;                                      \
+  }
 
-#define CHECK_MSGCOUNT if (!Context) \
-	{ \
-	  	mutt_flushinp (); \
-		mutt_error _(No_mailbox_is_open); \
-		break; \
-	} \
-	else if (!Context->msgcount) \
-	{ \
-	  	mutt_flushinp (); \
-		mutt_error _(There_are_no_messages); \
-		break; \
-	}
+#define CHECK_MSGCOUNT                          \
+  if (!Context)                                 \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(No_mailbox_is_open);           \
+    break;                                      \
+  }                                             \
+  else if (!Context->msgcount)                  \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(There_are_no_messages);        \
+    break;                                      \
+  }
 
-#define CHECK_VISIBLE if (Context && menu->current >= Context->vcount) \
-  	{\
-	  	mutt_flushinp (); \
-	  	mutt_error _(No_visible); \
-	  	break; \
-	}
+#define CHECK_VISIBLE                                   \
+  if (Context && menu->current >= Context->vcount)      \
+  {                                                     \
+    mutt_flushinp ();                                   \
+    mutt_error _(No_visible);                           \
+    break;                                              \
+  }
 
 
-#define CHECK_READONLY if (Context->readonly) \
-			{ \
-			  	mutt_flushinp (); \
-				mutt_error _(Mailbox_is_read_only); \
-				break; \
-			}
+#define CHECK_READONLY                          \
+  if (Context->readonly)                        \
+  {                                             \
+    mutt_flushinp ();                           \
+    mutt_error _(Mailbox_is_read_only);         \
+    break;                                      \
+  }
 
-#define CHECK_ACL(aclbit,action) \
-		if (!mutt_bit_isset(Context->rights,aclbit)) { \
-			mutt_flushinp(); \
-        /* L10N: %s is one of the CHECK_ACL entries below. */ \
-			mutt_error (_("%s: Operation not permitted by ACL"), action); \
-			break; \
-		}
+#define CHECK_ACL(aclbit,action)                                        \
+  if (!mutt_bit_isset(Context->rights,aclbit))                          \
+  {                                                                     \
+    mutt_flushinp();                                                    \
+    /* L10N: %s is one of the CHECK_ACL entries below. */               \
+    mutt_error (_("%s: Operation not permitted by ACL"), action);       \
+    break;                                                              \
+  }
 
-#define CHECK_ATTACH if(option(OPTATTACHMSG)) \
-		     {\
-			mutt_flushinp (); \
-			mutt_error _(Function_not_permitted_in_attach_message_mode); \
-			break; \
-		     }
+#define CHECK_ATTACH                                                    \
+  if (option(OPTATTACHMSG))                                             \
+  {                                                                     \
+    mutt_flushinp ();                                                   \
+    mutt_error _(Function_not_permitted_in_attach_message_mode);        \
+    break;                                                              \
+  }
 
 #define CURHDR Context->hdrs[Context->v2r[menu->current]]
 #define OLDHDR Context->hdrs[Context->v2r[menu->oldcurrent]]
@@ -455,7 +461,7 @@ static void update_index_unthreaded (CONTEXT *ctx, int check, int oldcount)
 	ctx->hdrs[j]->limited = 1;
 	ctx->vcount++;
 	ctx->vsize += this_body->length + this_body->offset -
-                      this_body->hdr_offset + padding;
+          this_body->hdr_offset + padding;
       }
     }
   }
@@ -708,27 +714,27 @@ int mutt_index_menu (void)
 
     if (!attach_msg)
     {
-     /* check for new mail in the incoming folders */
-     oldcount = newcount;
-     if ((newcount = mutt_buffy_check (0)) != oldcount)
-       menu->redraw |= REDRAW_STATUS;
-     if (do_buffy_notify)
-     {
-       if (mutt_buffy_notify())
-       {
-         menu->redraw |= REDRAW_STATUS;
-         if (option (OPTBEEPNEW))
-           beep();
-	 if (NewMailCmd)
-	 {
-	   char cmd[LONG_STRING];
-	   menu_status_line(cmd, sizeof(cmd), menu, NONULL(NewMailCmd));
-	   mutt_system(cmd);
-	 }
-       }
-     }
-     else
-       do_buffy_notify = 1;
+      /* check for new mail in the incoming folders */
+      oldcount = newcount;
+      if ((newcount = mutt_buffy_check (0)) != oldcount)
+        menu->redraw |= REDRAW_STATUS;
+      if (do_buffy_notify)
+      {
+        if (mutt_buffy_notify())
+        {
+          menu->redraw |= REDRAW_STATUS;
+          if (option (OPTBEEPNEW))
+            beep();
+          if (NewMailCmd)
+          {
+            char cmd[LONG_STRING];
+            menu_status_line(cmd, sizeof(cmd), menu, NONULL(NewMailCmd));
+            mutt_system(cmd);
+          }
+        }
+      }
+      else
+        do_buffy_notify = 1;
     }
 
     if (op >= 0)
@@ -935,7 +941,7 @@ int mutt_index_menu (void)
 	      continue;
 	    }
 	    else
-	    menu->redraw = REDRAW_MOTION;
+              menu->redraw = REDRAW_MOTION;
 	  }
 	  else
 	    mutt_error _("That message is not visible.");
@@ -986,13 +992,13 @@ int mutt_index_menu (void)
       case OP_MAIN_SHOW_LIMIT:
 	CHECK_IN_MAILBOX;
 	if (!Context->pattern)
-	   mutt_message _("No limit pattern is in effect.");
+          mutt_message _("No limit pattern is in effect.");
 	else
 	{
-	   char buf[STRING];
-	   /* L10N: ask for a limit to apply */
-	   snprintf (buf, sizeof(buf), _("Limit: %s"),Context->pattern);
-           mutt_message ("%s", buf);
+          char buf[STRING];
+          /* L10N: ask for a limit to apply */
+          snprintf (buf, sizeof(buf), _("Limit: %s"),Context->pattern);
+          mutt_message ("%s", buf);
 	}
         break;
 
@@ -1000,7 +1006,7 @@ int mutt_index_menu (void)
 
 	CHECK_IN_MAILBOX;
 	menu->oldcurrent = (Context->vcount && menu->current >= 0 && menu->current < Context->vcount) ?
-		CURHDR->index : -1;
+          CURHDR->index : -1;
 	if (mutt_pattern_func (MUTT_LIMIT, _("Limit to messages matching: ")) == 0)
 	{
 	  if (menu->oldcurrent >= 0)
@@ -1030,8 +1036,8 @@ int mutt_index_menu (void)
 	close = op;
 	if (attach_msg)
 	{
-	 done = 1;
-	 break;
+          done = 1;
+          break;
 	}
 
 	if (query_quadoption (OPT_QUIT, _("Quit Mutt?")) == MUTT_YES)
@@ -1335,7 +1341,7 @@ int mutt_index_menu (void)
 	    new_last_folder = safe_strdup (Context->realpath);
 	  else
 #endif
-	  new_last_folder = safe_strdup (Context->path);
+            new_last_folder = safe_strdup (Context->path);
 	  oldcount = Context ? Context->msgcount : 0;
 
 	  if ((check = mx_close_mailbox (Context, &index_hint)) != 0)
@@ -1442,8 +1448,8 @@ int mutt_index_menu (void)
 	close = op;
 	if (menu->menu == MENU_MAIN && attach_msg)
 	{
-	 done = 1;
-	 break;
+          done = 1;
+          break;
 	}
 
 	if ((menu->menu == MENU_MAIN)
@@ -1655,8 +1661,8 @@ int mutt_index_menu (void)
 			       (op == OP_DECODE_SAVE) || (op == OP_DECODE_COPY),
 			       (op == OP_DECRYPT_SAVE) || (op == OP_DECRYPT_COPY) ||
 			       0) == 0 &&
-	     (op == OP_SAVE || op == OP_DECODE_SAVE || op == OP_DECRYPT_SAVE)
-	    )
+            (op == OP_SAVE || op == OP_DECODE_SAVE || op == OP_DECRYPT_SAVE)
+          )
 	{
           menu->redraw |= REDRAW_STATUS;
 	  if (tag)
@@ -1986,7 +1992,7 @@ int mutt_index_menu (void)
 
 	menu->redraw = REDRAW_INDEX | REDRAW_STATUS;
 
-       break;
+        break;
 
       case OP_MAIN_COLLAPSE_ALL:
         CHECK_MSGCOUNT;

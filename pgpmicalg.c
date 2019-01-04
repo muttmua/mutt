@@ -196,7 +196,7 @@ static short pgp_find_hash (const char *fname)
     dprint (1, (debugfile, "pgp_find_hash: No packet.\n"));
   }
 
-  bye:
+bye:
 
   safe_fclose (&in);
   safe_fclose (&out);

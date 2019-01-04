@@ -267,7 +267,7 @@ int imap_read_literal (FILE* fp, IMAP_DATA* idata, unsigned int bytes, progress_
 void imap_expunge_mailbox (IMAP_DATA* idata);
 void imap_logout (IMAP_DATA** idata);
 int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
-  int *err_continue);
+                                int *err_continue);
 int imap_has_flag (LIST* flag_list, const char* flag);
 
 /* auth.c */
@@ -312,7 +312,7 @@ void imap_error (const char* where, const char* msg);
 IMAP_DATA* imap_new_idata (void);
 void imap_free_idata (IMAP_DATA** idata);
 char* imap_fix_path (IMAP_DATA* idata, const char* mailbox, char* path,
-  size_t plen);
+                     size_t plen);
 void imap_cachepath(IMAP_DATA* idata, const char* mailbox, char* dest,
                     size_t dlen);
 int imap_get_literal_count (const char* buf, unsigned int* bytes);

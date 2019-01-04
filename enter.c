@@ -134,7 +134,7 @@ static size_t my_mbstowcs (wchar_t **pwbuf, size_t *pwbuflen, size_t i, char *bu
   {
     memset (&st, 0, sizeof (st));
     for (; (k = mbrtowc (&wc, buf, MB_LEN_MAX, &st)) &&
-	 k != (size_t)(-1) && k != (size_t)(-2); buf += k)
+           k != (size_t)(-1) && k != (size_t)(-2); buf += k)
     {
       if (i >= wbuflen)
       {
@@ -311,7 +311,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
       }
       mutt_window_clrtoeol (MuttMessageWindow);
       mutt_window_move (MuttMessageWindow, 0,
-          col + my_wcswidth (state->wbuf + state->begin, state->curpos - state->begin));
+                        col + my_wcswidth (state->wbuf + state->begin, state->curpos - state->begin));
     }
     mutt_refresh ();
 
@@ -579,8 +579,9 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  else if (flags & MUTT_ALIAS && ch == OP_EDITOR_COMPLETE)
 	  {
 	    /* invoke the alias-menu to get more addresses */
-	    for (i = state->curpos; i && state->wbuf[i-1] != ',' &&
-		 state->wbuf[i-1] != ':'; i--)
+	    for (i = state->curpos;
+                 i && state->wbuf[i-1] != ',' && state->wbuf[i-1] != ':';
+                 i--)
 	      ;
 	    for (; i < state->lastchar && state->wbuf[i] == ' '; i++)
 	      ;
@@ -596,8 +597,9 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  }
 	  else if (flags & MUTT_LABEL && ch == OP_EDITOR_COMPLETE)
 	  {
-	    for (i = state->curpos; i && state->wbuf[i-1] != ',' &&
-		 state->wbuf[i-1] != ':'; i--)
+	    for (i = state->curpos;
+                 i && state->wbuf[i-1] != ',' && state->wbuf[i-1] != ':';
+                 i--)
 	      ;
 	    for (; i < state->lastchar && state->wbuf[i] == ' '; i++)
 	      ;
@@ -665,8 +667,9 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    my_wcstombs (buf, buflen, state->wbuf, state->curpos);
 
 	    /* see if the path has changed from the last time */
-	    if ((!tempbuf && !state->lastchar) || (tempbuf && templen == state->lastchar &&
-		!memcmp (tempbuf, state->wbuf, state->lastchar * sizeof (wchar_t))))
+	    if ((!tempbuf && !state->lastchar) ||
+                (tempbuf && templen == state->lastchar &&
+                 !memcmp (tempbuf, state->wbuf, state->lastchar * sizeof (wchar_t))))
 	    {
 	      _mutt_select_file (buf, buflen,
 				 ((flags & MUTT_EFILE) ? MUTT_SEL_FOLDER : 0) | (multiple ? MUTT_SEL_MULTI : 0),
@@ -700,25 +703,25 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  break;
 
 	case OP_EDITOR_QUOTE_CHAR:
-	  {
-	    event_t event;
-	    /*ADDCH (LastKey);*/
-            do
-            {
-              event = mutt_getch ();
-            } while (event.ch == -2);
-	    if (event.ch >= 0)
-	    {
-	      LastKey = event.ch;
-	      goto self_insert;
-	    }
-	  }
+        {
+          event_t event;
+          /*ADDCH (LastKey);*/
+          do
+          {
+            event = mutt_getch ();
+          } while (event.ch == -2);
+          if (event.ch >= 0)
+          {
+            LastKey = event.ch;
+            goto self_insert;
+          }
+        }
 
 	case OP_EDITOR_TRANSPOSE_CHARS:
 	  if (state->lastchar < 2)
 	    BEEP ();
 	  else
-	{
+          {
 	    wchar_t t;
 
 	    if (state->curpos == 0)
@@ -816,7 +819,7 @@ self_insert:
     }
   }
 
-  bye:
+bye:
 
   mutt_reset_history_state (hclass);
   FREE (&tempbuf);

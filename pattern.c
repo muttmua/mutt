@@ -476,7 +476,7 @@ static void adjust_date_range (struct tm *min, struct tm *max)
   if (min->tm_year > max->tm_year
       || (min->tm_year == max->tm_year && min->tm_mon > max->tm_mon)
       || (min->tm_year == max->tm_year && min->tm_mon == max->tm_mon
-	&& min->tm_mday > max->tm_mday))
+          && min->tm_mday > max->tm_mday))
   {
     int tmp;
 
@@ -499,7 +499,8 @@ static void adjust_date_range (struct tm *min, struct tm *max)
 }
 
 static const char * parse_date_range (const char* pc, struct tm *min,
-    struct tm *max, int haveMin, struct tm *baseMin, BUFFER *err)
+                                      struct tm *max, int haveMin,
+                                      struct tm *baseMin, BUFFER *err)
 {
   int flag = MUTT_PDR_NONE;
   while (*pc && ((flag & MUTT_PDR_DONE) == 0))
@@ -743,7 +744,7 @@ static int patmatch (const pattern_t* pat, const char* buf)
 {
   if (pat->stringmatch)
     return pat->ign_case ? !strcasestr (buf, pat->p.str) :
-			   !strstr (buf, pat->p.str);
+      !strstr (buf, pat->p.str);
   else if (pat->groupmatch)
     return !mutt_group_match (pat->p.g, buf);
   else
@@ -1269,7 +1270,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ h->deleted);
     case MUTT_MESSAGE:
       return (pat->not ^ (h->msgno >= pat->min - 1 && (pat->max == MUTT_MAXRANGE ||
-						   h->msgno <= pat->max - 1)));
+                                                       h->msgno <= pat->max - 1)));
     case MUTT_DATE:
       if (pat->dynamic)
         match_update_dynamic_date (pat);
@@ -1287,7 +1288,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
        * This is also the case when message scoring.
        */
       if (!ctx)
-	      return 0;
+        return 0;
 #ifdef USE_IMAP
       /* IMAP search sets h->matched at search compile time */
       if (ctx->magic == MUTT_IMAP && pat->stringmatch)
@@ -1323,8 +1324,8 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
                                         h->env->from, h->env->sender,
                                         h->env->to, h->env->cc));
     case MUTT_RECIPIENT:
-           return (pat->not ^ match_adrlist (pat, flags & MUTT_MATCH_FULL_ADDRESS,
-                                             2, h->env->to, h->env->cc));
+      return (pat->not ^ match_adrlist (pat, flags & MUTT_MATCH_FULL_ADDRESS,
+                                        2, h->env->to, h->env->cc));
     case MUTT_LIST:	/* known list, subscribed or not */
       if (cache)
       {
@@ -1375,22 +1376,22 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ result);
     case MUTT_COLLAPSED:
       return (pat->not ^ (h->collapsed && h->num_hidden > 1));
-   case MUTT_CRYPT_SIGN:
-     if (!WithCrypto)
-       break;
-     return (pat->not ^ ((h->security & SIGN) ? 1 : 0));
-   case MUTT_CRYPT_VERIFIED:
-     if (!WithCrypto)
-       break;
-     return (pat->not ^ ((h->security & GOODSIGN) ? 1 : 0));
-   case MUTT_CRYPT_ENCRYPT:
-     if (!WithCrypto)
-       break;
-     return (pat->not ^ ((h->security & ENCRYPT) ? 1 : 0));
-   case MUTT_PGP_KEY:
-     if (!(WithCrypto & APPLICATION_PGP))
-       break;
-     return (pat->not ^ ((h->security & PGPKEY) == PGPKEY));
+    case MUTT_CRYPT_SIGN:
+      if (!WithCrypto)
+        break;
+      return (pat->not ^ ((h->security & SIGN) ? 1 : 0));
+    case MUTT_CRYPT_VERIFIED:
+      if (!WithCrypto)
+        break;
+      return (pat->not ^ ((h->security & GOODSIGN) ? 1 : 0));
+    case MUTT_CRYPT_ENCRYPT:
+      if (!WithCrypto)
+        break;
+      return (pat->not ^ ((h->security & ENCRYPT) ? 1 : 0));
+    case MUTT_PGP_KEY:
+      if (!(WithCrypto & APPLICATION_PGP))
+        break;
+      return (pat->not ^ ((h->security & PGPKEY) == PGPKEY));
     case MUTT_XLABEL:
       return (pat->not ^ (h->env->x_label && patmatch (pat, h->env->x_label) == 0));
     case MUTT_HORMEL:
@@ -1401,9 +1402,9 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       if (!ctx)
         return 0;
       {
-      int count = mutt_count_body_parts (ctx, h);
-      return (pat->not ^ (count >= pat->min && (pat->max == MUTT_MAXRANGE ||
-                                                count <= pat->max)));
+        int count = mutt_count_body_parts (ctx, h);
+        return (pat->not ^ (count >= pat->min && (pat->max == MUTT_MAXRANGE ||
+                                                  count <= pat->max)));
       }
     case MUTT_MIMETYPE:
       if (!ctx)
@@ -1542,7 +1543,7 @@ int mutt_pattern_func (int op, char *prompt)
 	Context->v2r[Context->vcount] = i;
 	Context->vcount++;
 	Context->vsize += this_body->length + this_body->offset -
-	                  this_body->hdr_offset + padding;
+          this_body->hdr_offset + padding;
       }
     }
   }
@@ -1560,7 +1561,7 @@ int mutt_pattern_func (int op, char *prompt)
                            0);
 	  case MUTT_DELETE:
 	    mutt_set_flag (Context, Context->hdrs[Context->v2r[i]], MUTT_DELETE,
-			  (op == MUTT_DELETE));
+                           (op == MUTT_DELETE));
 	    break;
 	  case MUTT_TAG:
 	  case MUTT_UNTAG:
@@ -1624,7 +1625,7 @@ int mutt_search_command (int cur, int op)
     if (mutt_get_field ((op == OP_SEARCH || op == OP_SEARCH_NEXT) ?
 			_("Search for: ") : _("Reverse search for: "),
 			buf, sizeof (buf),
-		      MUTT_CLEAR | MUTT_PATTERN) != 0 || !buf[0])
+                        MUTT_CLEAR | MUTT_PATTERN) != 0 || !buf[0])
       return (-1);
 
     if (op == OP_SEARCH || op == OP_SEARCH_NEXT)

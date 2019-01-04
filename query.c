@@ -197,31 +197,31 @@ static const char * query_format_str (char *dest, size_t destlen, size_t col, in
 
   switch (op)
   {
-  case 'a':
-    rfc822_write_address (buf2, sizeof (buf2), query->addr, 1);
-    mutt_format_s (dest, destlen, fmt, buf2);
-    break;
-  case 'c':
-    snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-    snprintf (dest, destlen, tmp, query->num + 1);
-    break;
-  case 'e':
-    if (!optional)
-      mutt_format_s (dest, destlen, fmt, NONULL (query->other));
-    else if (!query->other || !*query->other)
-      optional = 0;
-    break;
-  case 'n':
-    mutt_format_s (dest, destlen, fmt, NONULL (query->name));
-    break;
-  case 't':
-    snprintf (tmp, sizeof (tmp), "%%%sc", fmt);
-    snprintf (dest, destlen, tmp, entry->tagged ? '*' : ' ');
-    break;
-  default:
-    snprintf (tmp, sizeof (tmp), "%%%sc", fmt);
-    snprintf (dest, destlen, tmp, op);
-    break;
+    case 'a':
+      rfc822_write_address (buf2, sizeof (buf2), query->addr, 1);
+      mutt_format_s (dest, destlen, fmt, buf2);
+      break;
+    case 'c':
+      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+      snprintf (dest, destlen, tmp, query->num + 1);
+      break;
+    case 'e':
+      if (!optional)
+        mutt_format_s (dest, destlen, fmt, NONULL (query->other));
+      else if (!query->other || !*query->other)
+        optional = 0;
+      break;
+    case 'n':
+      mutt_format_s (dest, destlen, fmt, NONULL (query->name));
+      break;
+    case 't':
+      snprintf (tmp, sizeof (tmp), "%%%sc", fmt);
+      snprintf (dest, destlen, tmp, entry->tagged ? '*' : ' ');
+      break;
+    default:
+      snprintf (tmp, sizeof (tmp), "%%%sc", fmt);
+      snprintf (dest, destlen, tmp, op);
+      break;
   }
 
   if (optional)

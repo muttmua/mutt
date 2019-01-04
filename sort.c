@@ -34,15 +34,17 @@
 /* function to use as discriminator when normal sort method is equal */
 static sort_t *AuxSort = NULL;
 
-#define AUXSORT(code,a,b) if (!code && AuxSort && !option(OPTAUXSORT)) { \
-  set_option(OPTAUXSORT); \
-  code = AuxSort(a,b); \
-  unset_option(OPTAUXSORT); \
-  if (code) \
-    return (code); \
-} \
-if (!code) \
-  code = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+#define AUXSORT(code,a,b)                                       \
+  if (!code && AuxSort && !option(OPTAUXSORT))                  \
+  {                                                             \
+    set_option(OPTAUXSORT);                                     \
+    code = AuxSort(a,b);                                        \
+    unset_option(OPTAUXSORT);                                   \
+    if (code)                                                   \
+      return (code);                                            \
+  }                                                             \
+  if (!code)                                                    \
+    code = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
 
 static int compare_score (const void *a, const void *b)
 {

@@ -471,9 +471,9 @@ static int default_to (ADDRESS **to, ENVELOPE *env, int flags, int hmfupto)
     if ((mutt_addrcmp (env->from, env->reply_to) && !env->reply_to->next &&
          !env->reply_to->personal) ||
 	(option (OPTIGNORELISTREPLYTO) &&
-	mutt_is_mail_list (env->reply_to) &&
-	(mutt_addrsrc (env->reply_to, env->to) ||
-	mutt_addrsrc (env->reply_to, env->cc))))
+         mutt_is_mail_list (env->reply_to) &&
+         (mutt_addrsrc (env->reply_to, env->to) ||
+          mutt_addrsrc (env->reply_to, env->cc))))
     {
       /* If the Reply-To: address is a mailing list, assume that it was
        * put there by the mailing list, and use the From: address
@@ -502,16 +502,16 @@ static int default_to (ADDRESS **to, ENVELOPE *env, int flags, int hmfupto)
 		env->reply_to->next?",...":"");
       switch (query_quadoption (OPT_REPLYTO, prompt))
       {
-      case MUTT_YES:
-	rfc822_append (to, env->reply_to, 0);
-	break;
+        case MUTT_YES:
+          rfc822_append (to, env->reply_to, 0);
+          break;
 
-      case MUTT_NO:
-	rfc822_append (to, env->from, 0);
-	break;
+        case MUTT_NO:
+          rfc822_append (to, env->from, 0);
+          break;
 
-      default:
-	return (-1); /* abort */
+        default:
+          return (-1); /* abort */
       }
     }
     else
@@ -619,7 +619,7 @@ void mutt_make_forward_subject (ENVELOPE *env, CONTEXT *ctx, HEADER *cur)
 }
 
 void mutt_make_misc_reply_headers (ENVELOPE *env, CONTEXT *ctx,
-				    HEADER *cur, ENVELOPE *curenv)
+                                   HEADER *cur, ENVELOPE *curenv)
 {
   /* This takes precedence over a subject that might have
    * been taken from a List-Post header.  Is that correct?
@@ -1036,9 +1036,9 @@ static int send_message (HEADER *msg)
 
 #if USE_SMTP
   if (SmtpUrl)
-      return mutt_smtp_send (msg->env->from, msg->env->to, msg->env->cc,
-                             msg->env->bcc, tempfile,
-                             (msg->content->encoding == ENC8BIT));
+    return mutt_smtp_send (msg->env->from, msg->env->to, msg->env->cc,
+                           msg->env->bcc, tempfile,
+                           (msg->content->encoding == ENC8BIT));
 #endif /* USE_SMTP */
 
   i = mutt_invoke_sendmail (msg->env->from, msg->env->to, msg->env->cc,
@@ -1282,7 +1282,7 @@ int mutt_resend_message (FILE *fp, CONTEXT *ctx, HEADER *cur)
 static int is_reply (HEADER *reply, HEADER *orig)
 {
   return mutt_find_list (orig->env->references, reply->env->message_id) ||
-         mutt_find_list (orig->env->in_reply_to, reply->env->message_id);
+    mutt_find_list (orig->env->in_reply_to, reply->env->message_id);
 }
 
 static int has_recips (ADDRESS *a)
@@ -1643,7 +1643,7 @@ ci_send_message (int flags,		/* send mode */
       process_user_header (msg->env);
 
     if (flags & SENDBATCH)
-       mutt_copy_stream (stdin, tempfp);
+      mutt_copy_stream (stdin, tempfp);
 
     if (option (OPTSIGONTOP) && ! (flags & (SENDMAILX|SENDKEY|SENDBATCH))
 	&& Editor && mutt_strcmp (Editor, "builtin") != 0)
@@ -1810,7 +1810,7 @@ ci_send_message (int flags,		/* send mode */
 	    && (cur->security & APPLICATION_PGP))
 	  msg->security |= APPLICATION_PGP;
 	else if ((WithCrypto & APPLICATION_SMIME) && option (OPTCRYPTAUTOSMIME)
-	    && (cur->security & APPLICATION_SMIME))
+                 && (cur->security & APPLICATION_SMIME))
 	  msg->security |= APPLICATION_SMIME;
       }
 

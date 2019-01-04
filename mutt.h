@@ -762,10 +762,9 @@ typedef struct body
   unsigned int deleted : 1;	/* attachment marked for deletion */
 
   unsigned int noconv : 1;	/* don't do character set conversion */
-  unsigned int force_charset : 1;
-  				/* send mode: don't adjust the character
-				 * set when in send-mode.
-				 */
+  unsigned int force_charset : 1;  /* send mode: don't adjust the character
+                                    * set when in send-mode.
+                                    */
   unsigned int is_signed_data : 1; /* A lot of MUAs don't indicate
                                       S/MIME signed-data correctly,
                                       e.g. they use foo.p7m even for
@@ -793,7 +792,7 @@ typedef struct mutt_thread THREAD;
 typedef struct header
 {
   unsigned int security : 12;  /* bit 0-8: flags, bit 9,10: application.
-				 see: mutt_crypt.h pgplib.h, smime.h */
+                                  see: mutt_crypt.h pgplib.h, smime.h */
 
   unsigned int mime : 1;    		/* has a MIME-Version header? */
   unsigned int flagged : 1; 		/* marked important? */

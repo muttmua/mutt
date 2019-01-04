@@ -341,19 +341,19 @@ usage (const char *av0)
 {
   fprintf (stderr, "dotlock [Mutt %s (%s)]\n", MUTT_VERSION, ReleaseDate);
   fprintf (stderr, "usage: %s [-t|-f|-u|-d] [-p] [-r <retries>] file\n",
-	  av0);
+           av0);
 
   fputs ("\noptions:"
-	"\n  -t\t\ttry"
-	"\n  -f\t\tforce"
-	"\n  -u\t\tunlock"
-	"\n  -d\t\tunlink"
-	"\n  -p\t\tprivileged"
+         "\n  -t\t\ttry"
+         "\n  -f\t\tforce"
+         "\n  -u\t\tunlock"
+         "\n  -d\t\tunlink"
+         "\n  -p\t\tprivileged"
 #ifndef USE_SETGID
-	" (ignored)"
+         " (ignored)"
 #endif
-	"\n  -r <retries>\tRetry locking"
-	"\n", stderr);
+         "\n  -r <retries>\tRetry locking"
+         "\n", stderr);
 
   exit (DL_EX_ERROR);
 }
@@ -420,13 +420,13 @@ dotlock_check_stats (struct stat *fsb, struct stat *lsb)
     return -1;
 
   if ((lsb->st_dev != fsb->st_dev) ||
-     (lsb->st_ino != fsb->st_ino) ||
-     (lsb->st_mode != fsb->st_mode) ||
-     (lsb->st_nlink != fsb->st_nlink) ||
-     (lsb->st_uid != fsb->st_uid) ||
-     (lsb->st_gid != fsb->st_gid) ||
-     (lsb->st_rdev != fsb->st_rdev) ||
-     (lsb->st_size != fsb->st_size))
+      (lsb->st_ino != fsb->st_ino) ||
+      (lsb->st_mode != fsb->st_mode) ||
+      (lsb->st_nlink != fsb->st_nlink) ||
+      (lsb->st_uid != fsb->st_uid) ||
+      (lsb->st_gid != fsb->st_gid) ||
+      (lsb->st_rdev != fsb->st_rdev) ||
+      (lsb->st_size != fsb->st_size))
   {
     /* something's fishy */
     return -1;
@@ -596,7 +596,7 @@ dotlock_lock (const char *realpath)
   time_t t;
 
   snprintf (nfslockfile, sizeof (nfslockfile), "%s.%s.%d",
-	   realpath, Hostname, (int) getpid ());
+            realpath, Hostname, (int) getpid ());
   snprintf (lockfile, sizeof (lockfile), "%s.lock", realpath);
 
 
@@ -697,7 +697,7 @@ dotlock_unlock (const char *realpath)
   int i;
 
   snprintf (lockfile, sizeof (lockfile), "%s.lock",
-	   realpath);
+            realpath);
 
   BEGIN_PRIVILEGED ();
   i = unlink (lockfile);

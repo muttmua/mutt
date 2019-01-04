@@ -280,7 +280,7 @@ char* mutt_account_getoauthbearer (ACCOUNT* account)
        one of your $*_authenticators and (2) you do not have the corresponding
        $*_oauth_refresh_command defined. So the message does not mean "None of
        your $*_oauth_refresh_command's are defined."
-     */
+    */
     mutt_error (_("mutt_account_getoauthbearer: No OAUTH refresh command defined"));
     return NULL;
   }
@@ -310,8 +310,8 @@ char* mutt_account_getoauthbearer (ACCOUNT* account)
   oauthbearer = safe_malloc (oalen);
 
   snprintf (oauthbearer, oalen,
-    "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
-    account->login, account->host, account->port, token);
+            "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
+            account->login, account->host, account->port, token);
 
   FREE (&token);
 

@@ -124,7 +124,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 #endif
   else if (DefaultHook && !(data & (MUTT_CHARSETHOOK | MUTT_ICONVHOOK | MUTT_ACCOUNTHOOK))
            && (!WithCrypto || !(data & MUTT_CRYPTHOOK))
-      )
+    )
   {
     char tmp[HUGE_STRING];
 
@@ -187,7 +187,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   if (data & (MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_SAVEHOOK | MUTT_FCCHOOK | MUTT_MESSAGEHOOK | MUTT_REPLYHOOK))
   {
     if ((pat = mutt_pattern_comp (pattern.data,
-	   (data & (MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_FCCHOOK)) ? 0 : MUTT_FULL_MSG,
+                                  (data & (MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_FCCHOOK)) ? 0 : MUTT_FULL_MSG,
 				  err)) == NULL)
       goto error;
   }
@@ -198,13 +198,13 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 #ifdef MUTT_CRYPTHOOK
     if ((rc = REGCOMP (rx, NONULL(pattern.data), ((data & (MUTT_CRYPTHOOK|MUTT_CHARSETHOOK|MUTT_ICONVHOOK)) ? REG_ICASE : 0))) != 0)
 #else
-    if ((rc = REGCOMP (rx, NONULL(pattern.data), (data & (MUTT_CHARSETHOOK|MUTT_ICONVHOOK)) ? REG_ICASE : 0)) != 0)
+      if ((rc = REGCOMP (rx, NONULL(pattern.data), (data & (MUTT_CHARSETHOOK|MUTT_ICONVHOOK)) ? REG_ICASE : 0)) != 0)
 #endif /* MUTT_CRYPTHOOK */
-    {
-      regerror (rc, rx, err->data, err->dsize);
-      FREE (&rx);
-      goto error;
-    }
+      {
+        regerror (rc, rx, err->data, err->dsize);
+        FREE (&rx);
+        goto error;
+      }
   }
 
   if (ptr)
@@ -358,7 +358,7 @@ int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   if ((pat = mutt_pattern_comp (pattern->data,
                                 MUTT_FULL_MSG | MUTT_PATTERN_DYNAMIC,
                                 err)) == NULL)
-      goto out;
+    goto out;
 
   if (ptr)
   {
@@ -410,7 +410,7 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
       if (!type)
       {
 	snprintf (err->data, err->dsize,
-		 _("unhook: unknown hook type: %s"), buf->data);
+                  _("unhook: unknown hook type: %s"), buf->data);
 	return (-1);
       }
       if (current_hook_type == type)
@@ -604,8 +604,8 @@ static char *_mutt_string_hook (const char *match, int hook)
 
   for (; tmp; tmp = tmp->next)
   {
-    if ((tmp->type & hook) && ((match &&
-	 regexec (tmp->rx.rx, match, 0, NULL, 0) == 0) ^ tmp->rx.not))
+    if ((tmp->type & hook) &&
+        ((match && regexec (tmp->rx.rx, match, 0, NULL, 0) == 0) ^ tmp->rx.not))
       return (tmp->command);
   }
   return (NULL);

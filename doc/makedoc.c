@@ -194,7 +194,7 @@ static void makedoc (FILE *in, FILE *out)
     if ((p = strchr (buffer, '\n')) == NULL)
     {
       fprintf (stderr, "%s: Line %d too long.  Ask a wizard to enlarge\n"
-	               "%s: my buffer size.\n", Progname, line, Progname);
+               "%s: my buffer size.\n", Progname, line, Progname);
       exit (1);
     }
     else
@@ -249,8 +249,8 @@ static char *get_token (char *d, size_t l, char *s)
   char *dd = d;
 
   if (Debug)
-     fprintf (stderr, "%s: get_token called for `%s'.\n",
-	      Progname, s);
+    fprintf (stderr, "%s: get_token called for `%s'.\n",
+             Progname, s);
 
   s = skip_ws (s);
 
@@ -368,23 +368,23 @@ struct
   char *machine;
   char *human;
 }
-types[] =
-{
-  { "DT_NONE",	"-none-" 	},
-  { "DT_BOOL",  "boolean"	},
-  { "DT_NUM",   "number"	},
-  { "DT_LNUM",  "number (long)"	},
-  { "DT_STR",	"string"	},
-  { "DT_PATH",	"path"		},
-  { "DT_QUAD",	"quadoption"	},
-  { "DT_SORT",	"sort order"	},
-  { "DT_RX",	"regular expression" },
-  { "DT_MAGIC",	"folder magic" },
-  { "DT_SYN",	NULL },
-  { "DT_ADDR",	"e-mail address" },
-  { "DT_MBCHARTBL", "string"	},
-  { NULL, NULL }
-};
+  types[] =
+  {
+    { "DT_NONE",	"-none-" 	},
+    { "DT_BOOL",  "boolean"	},
+    { "DT_NUM",   "number"	},
+    { "DT_LNUM",  "number (long)"	},
+    { "DT_STR",	"string"	},
+    { "DT_PATH",	"path"		},
+    { "DT_QUAD",	"quadoption"	},
+    { "DT_SORT",	"sort order"	},
+    { "DT_RX",	"regular expression" },
+    { "DT_MAGIC",	"folder magic" },
+    { "DT_SYN",	NULL },
+    { "DT_ADDR",	"e-mail address" },
+    { "DT_MBCHARTBL", "string"	},
+    { NULL, NULL }
+  };
 
 
 static int buff2type (const char *s)
@@ -393,7 +393,7 @@ static int buff2type (const char *s)
 
   for (type = DT_NONE; types[type].machine; type++)
     if (!strcmp (types[type].machine, s))
-	return type;
+      return type;
 
   fprintf (stderr, "%s: Unknown type %s.  Please update makedoc.c\n",
            Progname, s);
@@ -1265,25 +1265,25 @@ void print_ref (FILE *out, int output_dollar, const char *ref)
 {
   switch (OutputFormat)
   {
-  case F_CONF:
-  case F_MAN:
-    if (output_dollar)
-      putc ('$', out);
-    fputs (ref, out);
-    break;
+    case F_CONF:
+    case F_MAN:
+      if (output_dollar)
+        putc ('$', out);
+      fputs (ref, out);
+      break;
 
-  case F_SGML:
-    fputs ("<link linkend=\"", out);
-    sgml_id_fputs (ref, out);
-    fputs ("\">", out);
-    if (output_dollar)
-      fputc ('$', out);
-    sgml_fputs (ref, out);
-    fputs ("</link>", out);
-    break;
+    case F_SGML:
+      fputs ("<link linkend=\"", out);
+      sgml_id_fputs (ref, out);
+      fputs ("\">", out);
+      if (output_dollar)
+        fputc ('$', out);
+      sgml_fputs (ref, out);
+      fputs ("</link>", out);
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 }
 

@@ -672,9 +672,9 @@ void mx_fastclose_mailbox (CONTEXT *ctx)
 {
   int i;
 #ifdef HAVE_UTIMENSAT
-    struct timespec ts[2];
+  struct timespec ts[2];
 #else
-    struct utimbuf ut;
+  struct utimbuf ut;
 #endif /* HAVE_UTIMENSAT */
 
   if(!ctx)
@@ -879,7 +879,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
   if (ctx->deleted && !(ctx->magic == MUTT_MAILDIR && option (OPTMAILDIRTRASH)))
   {
     snprintf (buf, sizeof (buf), ctx->deleted == 1
-	     ? _("Purge %d deleted message?") : _("Purge %d deleted messages?"),
+              ? _("Purge %d deleted message?") : _("Purge %d deleted messages?"),
 	      ctx->deleted);
     if ((purge = query_quadoption (OPT_DELETE, buf)) < 0)
     {
@@ -1015,10 +1015,10 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
   {
     if (move_messages)
       mutt_message (_("%d kept, %d moved, %d deleted."),
-	ctx->msgcount - ctx->deleted, read_msgs, ctx->deleted);
+                    ctx->msgcount - ctx->deleted, read_msgs, ctx->deleted);
     else
       mutt_message (_("%d kept, %d deleted."),
-	ctx->msgcount - ctx->deleted, ctx->deleted);
+                    ctx->msgcount - ctx->deleted, ctx->deleted);
   }
 
   if (ctx->msgcount == ctx->deleted &&
@@ -1084,7 +1084,7 @@ void mx_update_tables(CONTEXT *ctx, int committing)
 	ctx->v2r[ctx->vcount] = j;
 	ctx->hdrs[j]->virtual = ctx->vcount++;
 	ctx->vsize += this_body->length + this_body->offset -
-	              this_body->hdr_offset + padding;
+          this_body->hdr_offset + padding;
       }
 
       if (committing)
@@ -1183,7 +1183,7 @@ int mx_sync_mailbox (CONTEXT *ctx, int *index_hint)
     char buf[SHORT_STRING];
 
     snprintf (buf, sizeof (buf), ctx->deleted == 1
-	     ? _("Purge %d deleted message?") : _("Purge %d deleted messages?"),
+              ? _("Purge %d deleted message?") : _("Purge %d deleted messages?"),
 	      ctx->deleted);
     if ((purge = query_quadoption (OPT_DELETE, buf)) < 0)
       return (-1);
@@ -1283,9 +1283,9 @@ MESSAGE *mx_open_new_message (CONTEXT *dest, HEADER *hdr, int flags)
 
   if (!dest->mx_ops || !dest->mx_ops->open_new_msg)
   {
-      dprint (1, (debugfile, "mx_open_new_message(): function unimplemented for mailbox type %d.\n",
-              dest->magic));
-      return NULL;
+    dprint (1, (debugfile, "mx_open_new_message(): function unimplemented for mailbox type %d.\n",
+                dest->magic));
+    return NULL;
   }
 
   msg = safe_calloc (1, sizeof (MESSAGE));
@@ -1388,7 +1388,7 @@ int mx_close_message (CONTEXT *ctx, MESSAGE **msg)
   if ((*msg)->path)
   {
     dprint (1, (debugfile, "mx_close_message (): unlinking %s\n",
-            (*msg)->path));
+                (*msg)->path));
     unlink ((*msg)->path);
     FREE (&(*msg)->path);
   }

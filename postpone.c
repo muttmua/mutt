@@ -103,9 +103,9 @@ int mutt_num_postponed (int force)
 
   if (stat (Postponed, &st) == -1)
   {
-     PostCount = 0;
-     LastModify = 0;
-     return (0);
+    PostCount = 0;
+    LastModify = 0;
+    return (0);
   }
 
   if (S_ISDIR (st.st_mode))
@@ -333,17 +333,17 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, char *fcc, size
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
-     /* note that x-mutt-fcc was present.  we do this because we want to add a
-      * default fcc if the header was missing, but preserve the request of the
-      * user to not make a copy if the header field is present, but empty.
-      * see http://dev.mutt.org/trac/ticket/3653
-      */
+      /* note that x-mutt-fcc was present.  we do this because we want to add a
+       * default fcc if the header was missing, but preserve the request of the
+       * user to not make a copy if the header field is present, but empty.
+       * see http://dev.mutt.org/trac/ticket/3653
+       */
       code |= SENDPOSTPONEDFCC;
     }
     else if ((WithCrypto & APPLICATION_PGP)
              && (mutt_strncmp ("Pgp:", tmp->data, 4) == 0 /* this is generated
-						       * by old mutt versions
-						       */
+                                                           * by old mutt versions
+                                                           */
                  || mutt_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0))
     {
       hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
@@ -464,11 +464,11 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
         *q = '\0';
         break;
 
-      /* This used to be the micalg parameter.
-       *
-       * It's no longer needed, so we just skip the parameter in order
-       * to be able to recall old messages.
-       */
+        /* This used to be the micalg parameter.
+         *
+         * It's no longer needed, so we just skip the parameter in order
+         * to be able to recall old messages.
+         */
       case 'm':
       case 'M':
         if(*(p+1) == '<')
@@ -792,7 +792,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
   rv = 0;
 
-  bail:
+bail:
 
   /* that's it. */
   if (bfp != fp) safe_fclose (&bfp);

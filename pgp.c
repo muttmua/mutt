@@ -77,10 +77,10 @@ int pgp_valid_passphrase (void)
   time_t now = time (NULL);
 
   if (pgp_use_gpg_agent())
-    {
-      *PgpPass = 0;
-      return 1; /* handled by gpg-agent */
-    }
+  {
+    *PgpPass = 0;
+    return 1; /* handled by gpg-agent */
+  }
 
   if (now < PgpExptime)
     /* Use cached copy.  */
@@ -89,10 +89,10 @@ int pgp_valid_passphrase (void)
   pgp_void_passphrase ();
 
   if (mutt_get_password (_("Enter PGP passphrase:"), PgpPass, sizeof (PgpPass)) == 0)
-    {
-      PgpExptime = mutt_add_timeout (time (NULL), PgpTimeout);
-      return (1);
-    }
+  {
+    PgpExptime = mutt_add_timeout (time (NULL), PgpTimeout);
+    return (1);
+  }
   else
     PgpExptime = 0;
 
@@ -300,7 +300,7 @@ static int pgp_check_decryption_okay (FILE *fpin)
       continue;
     s = line + 9;
     dprint (2, (debugfile, "pgp_check_decryption_okay: checking \"%s\".\n",
-                  line));
+                line));
     if (mutt_strncmp (s, "BEGIN_DECRYPTION", 16) == 0)
       inside_decrypt = 1;
     else if (mutt_strncmp (s, "END_DECRYPTION", 14) == 0)
@@ -825,8 +825,8 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   crypt_current_time (s, "PGP");
 
   if((thepid = pgp_invoke_verify (NULL, &pgpout, NULL,
-				   -1, -1, fileno(pgperr),
-				   tempfile, sigfile)) != -1)
+                                  -1, -1, fileno(pgperr),
+                                  tempfile, sigfile)) != -1)
   {
     if (pgp_copy_checksig (pgpout, s->fpout) >= 0)
       badsig = 0;
@@ -842,7 +842,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
     if ((rv = mutt_wait_filter (thepid)))
       badsig = -1;
 
-     dprint (1, (debugfile, "pgp_verify_one: mutt_wait_filter returned %d.\n", rv));
+    dprint (1, (debugfile, "pgp_verify_one: mutt_wait_filter returned %d.\n", rv));
   }
 
   safe_fclose (&pgperr);
@@ -1251,7 +1251,7 @@ BODY *pgp_sign_message (BODY *a)
   }
 
   if (!pgp_use_gpg_agent())
-     fputs(PgpPass, pgpin);
+    fputs(PgpPass, pgpin);
   fputc('\n', pgpin);
   safe_fclose (&pgpin);
 
@@ -1416,7 +1416,7 @@ char *pgp_findKeys (ADDRESS *adrlist, int oppenc_mode)
       {
         snprintf (buf, sizeof (buf), _("Enter keyID for %s: "), q->mailbox);
         k_info = pgp_ask_for_key (buf, q->mailbox,
-                              KEYFLAG_CANENCRYPT, PGP_PUBRING);
+                                  KEYFLAG_CANENCRYPT, PGP_PUBRING);
       }
 
       if (k_info == NULL)
@@ -1433,7 +1433,7 @@ char *pgp_findKeys (ADDRESS *adrlist, int oppenc_mode)
       keylist_size += mutt_strlen (keyID) + 4;
       safe_realloc (&keylist, keylist_size);
       sprintf (keylist + keylist_used, "%s0x%s", keylist_used ? " " : "",	/* __SPRINTF_CHECKED__ */
-              keyID);
+               keyID);
       keylist_used = mutt_strlen (keylist);
 
       key_selected = 1;
@@ -1512,7 +1512,7 @@ BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
   if (sign)
   {
     if (!pgp_use_gpg_agent())
-       fputs (PgpPass, pgpin);
+      fputs (PgpPass, pgpin);
     fputc ('\n', pgpin);
   }
   safe_fclose (&pgpin);
@@ -1781,8 +1781,8 @@ int pgp_send_menu (HEADER *msg)
     if (msg->security & (ENCRYPT | SIGN))
     {
       snprintf (promptbuf, sizeof (promptbuf),
-          _("PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "),
-          (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
+                _("PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "),
+                (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
       prompt = promptbuf;
       /* L10N: The 'f' is from "forget it", an old undocumented synonym of
          'clear'.  Please use a corresponding letter in your language.
@@ -1805,14 +1805,14 @@ int pgp_send_menu (HEADER *msg)
   else if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
   {
     /* When the message is not selected for signing or encryption, the toggle
-    * between PGP/MIME and Traditional doesn't make sense.
-    */
+     * between PGP/MIME and Traditional doesn't make sense.
+     */
     if (msg->security & (ENCRYPT | SIGN))
     {
 
       snprintf (promptbuf, sizeof (promptbuf),
-          _("PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc mode? "),
-          (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
+                _("PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc mode? "),
+                (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
       prompt = promptbuf;
       letters = _("esabfcoi");
       choices = "esabfcOi";
@@ -1833,8 +1833,8 @@ int pgp_send_menu (HEADER *msg)
     {
 
       snprintf (promptbuf, sizeof (promptbuf),
-          _("PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "),
-          (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
+                _("PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "),
+                (msg->security & INLINE) ? _("PGP/M(i)ME") : _("(i)nline"));
       prompt = promptbuf;
       letters = _("esabfci");
       choices = "esabfci";
@@ -1852,62 +1852,62 @@ int pgp_send_menu (HEADER *msg)
   {
     switch (choices[choice - 1])
     {
-    case 'e': /* (e)ncrypt */
-      msg->security |= ENCRYPT;
-      msg->security &= ~SIGN;
-      break;
+      case 'e': /* (e)ncrypt */
+        msg->security |= ENCRYPT;
+        msg->security &= ~SIGN;
+        break;
 
-    case 's': /* (s)ign */
-      msg->security &= ~ENCRYPT;
-      msg->security |= SIGN;
-      break;
-
-    case 'S': /* (s)ign in oppenc mode */
-      msg->security |= SIGN;
-      break;
-
-    case 'a': /* sign (a)s */
-      unset_option(OPTPGPCHECKTRUST);
-
-      if ((p = pgp_ask_for_key (_("Sign as: "), NULL, 0, PGP_SECRING)))
-      {
-        snprintf (input_signas, sizeof (input_signas), "0x%s",
-            pgp_fpr_or_lkeyid (p));
-        mutt_str_replace (&PgpSignAs, input_signas);
-        pgp_free_key (&p);
-
+      case 's': /* (s)ign */
+        msg->security &= ~ENCRYPT;
         msg->security |= SIGN;
+        break;
 
-        crypt_pgp_void_passphrase ();  /* probably need a different passphrase */
-      }
-      break;
+      case 'S': /* (s)ign in oppenc mode */
+        msg->security |= SIGN;
+        break;
 
-    case 'b': /* (b)oth */
-      msg->security |= (ENCRYPT | SIGN);
-      break;
+      case 'a': /* sign (a)s */
+        unset_option(OPTPGPCHECKTRUST);
 
-    case 'f': /* (f)orget it: kept for backward compatibility. */
-    case 'c': /* (c)lear     */
-      msg->security &= ~(ENCRYPT | SIGN);
-      break;
+        if ((p = pgp_ask_for_key (_("Sign as: "), NULL, 0, PGP_SECRING)))
+        {
+          snprintf (input_signas, sizeof (input_signas), "0x%s",
+                    pgp_fpr_or_lkeyid (p));
+          mutt_str_replace (&PgpSignAs, input_signas);
+          pgp_free_key (&p);
 
-    case 'F': /* (f)orget it or (c)lear in oppenc mode */
-    case 'C':
-      msg->security &= ~SIGN;
-      break;
+          msg->security |= SIGN;
 
-    case 'O': /* oppenc mode on */
-      msg->security |= OPPENCRYPT;
-      crypt_opportunistic_encrypt (msg);
-      break;
+          crypt_pgp_void_passphrase ();  /* probably need a different passphrase */
+        }
+        break;
 
-    case 'o': /* oppenc mode off */
-      msg->security &= ~OPPENCRYPT;
-      break;
+      case 'b': /* (b)oth */
+        msg->security |= (ENCRYPT | SIGN);
+        break;
 
-    case 'i': /* toggle (i)nline */
-      msg->security ^= INLINE;
-      break;
+      case 'f': /* (f)orget it: kept for backward compatibility. */
+      case 'c': /* (c)lear     */
+        msg->security &= ~(ENCRYPT | SIGN);
+        break;
+
+      case 'F': /* (f)orget it or (c)lear in oppenc mode */
+      case 'C':
+        msg->security &= ~SIGN;
+        break;
+
+      case 'O': /* oppenc mode on */
+        msg->security |= OPPENCRYPT;
+        crypt_opportunistic_encrypt (msg);
+        break;
+
+      case 'o': /* oppenc mode off */
+        msg->security &= ~OPPENCRYPT;
+        break;
+
+      case 'i': /* toggle (i)nline */
+        msg->security ^= INLINE;
+        break;
     }
   }
 

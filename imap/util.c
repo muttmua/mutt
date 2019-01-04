@@ -243,8 +243,8 @@ int imap_hcache_store_uid_seqset (IMAP_DATA *idata)
     b->data[0] = '\0';
 
   rc = mutt_hcache_store_raw (idata->hcache, "/UIDSEQSET",
-                               b->data, seqset_size + 1,
-                               imap_hcache_keylen);
+                              b->data, seqset_size + 1,
+                              imap_hcache_keylen);
   dprint (5, (debugfile, "Stored /UIDSEQSET %s\n", b->data));
   mutt_buffer_free (&b);
   return rc;
@@ -516,7 +516,7 @@ void imap_free_idata (IMAP_DATA** idata)
  * Moreover, IMAP servers may dislike the path ending with the delimiter.
  */
 char *imap_fix_path (IMAP_DATA *idata, const char *mailbox, char *path,
-    size_t plen)
+                     size_t plen)
 {
   int i = 0;
   char delim = '\0';
@@ -695,9 +695,9 @@ void imap_make_date (char *buf, time_t timestamp)
   tz /= 60;
 
   snprintf (buf, IMAP_DATELEN, "%02d-%s-%d %02d:%02d:%02d %+03d%02d",
-      tm->tm_mday, Months[tm->tm_mon], tm->tm_year + 1900,
-      tm->tm_hour, tm->tm_min, tm->tm_sec,
-      (int) tz / 60, (int) abs ((int) tz) % 60);
+            tm->tm_mday, Months[tm->tm_mon], tm->tm_year + 1900,
+            tm->tm_hour, tm->tm_min, tm->tm_sec,
+            (int) tz / 60, (int) abs ((int) tz) % 60);
 }
 
 /* imap_qualify_path: make an absolute IMAP folder target, given IMAP_MBOX

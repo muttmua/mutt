@@ -204,7 +204,7 @@ void mutt_normalize_time (struct tm *tm)
     tm->tm_mday += DaysPerMonth[tm->tm_mon] + isLeapYearFeb (tm);
   }
   while (tm->tm_mday > (DaysPerMonth[tm->tm_mon] +
-	(nLeap = isLeapYearFeb (tm))))
+                        (nLeap = isLeapYearFeb (tm))))
   {
     tm->tm_mday -= DaysPerMonth[tm->tm_mon] + nLeap;
     if (tm->tm_mon < 11)

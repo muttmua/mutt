@@ -118,7 +118,7 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
 
 	dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
 	snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
-		_("Command TOP is not supported by server."));
+                  _("Command TOP is not supported by server."));
       }
     }
   }
@@ -166,9 +166,9 @@ static int fetch_uidl (char *line, void *data)
   errno = 0;
   index = strtol(line, &endp, 10);
   if (errno)
-      return -1;
+    return -1;
   while (*endp == ' ')
-      endp++;
+    endp++;
   memmove(line, endp, strlen(endp) + 1);
 
   /* uid must be at least be 1 byte */
@@ -296,7 +296,7 @@ static int pop_fetch_headers (CONTEXT *ctx)
 
       dprint (1, (debugfile, "pop_fetch_headers: unset UIDL capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
-	      _("Command UIDL is not supported by server."));
+                _("Command UIDL is not supported by server."));
     }
   }
 
@@ -351,13 +351,13 @@ static int pop_fetch_headers (CONTEXT *ctx)
       }
       else
 #endif
-      if ((ret = pop_read_header (pop_data, ctx->hdrs[i])) < 0)
-	break;
+        if ((ret = pop_read_header (pop_data, ctx->hdrs[i])) < 0)
+          break;
 #if USE_HCACHE
-      else
-      {
-	mutt_hcache_store (hc, ctx->hdrs[i]->data, ctx->hdrs[i], 0, strlen, MUTT_GENERATE_UIDVALIDITY);
-      }
+        else
+        {
+          mutt_hcache_store (hc, ctx->hdrs[i]->data, ctx->hdrs[i], 0, strlen, MUTT_GENERATE_UIDVALIDITY);
+        }
 
       mutt_hcache_free (&data);
 #endif
@@ -398,7 +398,7 @@ static int pop_fetch_headers (CONTEXT *ctx)
   }
 
 #if USE_HCACHE
-    mutt_hcache_close (hc);
+  mutt_hcache_close (hc);
 #endif
 
   if (ret < 0)

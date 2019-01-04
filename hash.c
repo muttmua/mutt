@@ -238,7 +238,7 @@ struct hash_elem *hash_find_bucket (const HASH *table, const char *strkey)
 }
 
 static void union_hash_delete (HASH *table, union hash_key key, const void *data,
-		       void (*destroy) (void *))
+                               void (*destroy) (void *))
 {
   int hash;
   struct hash_elem *ptr, **last;
@@ -281,7 +281,7 @@ void hash_delete (HASH *table, const char *strkey, const void *data,
 }
 
 void int_hash_delete (HASH *table, unsigned int intkey, const void *data,
-                  void (*destroy) (void *))
+                      void (*destroy) (void *))
 {
   union hash_key key;
   key.intkey = intkey;

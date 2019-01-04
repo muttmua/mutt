@@ -921,7 +921,7 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
     goto bail;
   }
 
-    /* save the index of the first changed/deleted message */
+  /* save the index of the first changed/deleted message */
   first = i;
   /* where to start overwriting */
   offset = ctx->hdrs[i]->offset;
@@ -1236,7 +1236,7 @@ int mutt_reopen_mailbox (CONTEXT *ctx, int *index_hint)
   }
   else
   {
-      /* save the old headers */
+    /* save the old headers */
     old_msgcount = ctx->msgcount;
     old_hdrs = ctx->hdrs;
     ctx->hdrs = NULL;
@@ -1265,8 +1265,8 @@ int mutt_reopen_mailbox (CONTEXT *ctx, int *index_hint)
       if (!(ctx->fp = safe_fopen (ctx->path, "r")))
 	rc = -1;
       else
-	rc = ((ctx->magic == MUTT_MBOX) ? mbox_parse_mailbox
-	                               : mmdf_parse_mailbox) (ctx);
+	rc = (ctx->magic == MUTT_MBOX) ? mbox_parse_mailbox (ctx) :
+          mmdf_parse_mailbox (ctx);
       break;
 
     default:

@@ -157,7 +157,7 @@ FILE* mutt_bcache_put(body_cache_t *bcache, const char *id, int tmp)
     s = strchr (s + 1, '/');
   }
 
-  out:
+out:
   dprint (3, (debugfile, "bcache: put: '%s'\n", path));
 
   return fp;

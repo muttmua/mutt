@@ -37,8 +37,14 @@
 
 #include "mutt_idna.h"
 
-#define terminate_string(a, b, c) do { if ((b) < (c)) a[(b)] = 0; else \
-	a[(c)] = 0; } while (0)
+#define terminate_string(a, b, c)               \
+  do                                            \
+  {                                             \
+    if ((b) < (c))                              \
+      a[(b)] = 0;                               \
+    else                                        \
+      a[(c)] = 0;                               \
+  } while (0)
 
 #define terminate_buffer(a, b) terminate_string(a, b, sizeof (a) - 1)
 

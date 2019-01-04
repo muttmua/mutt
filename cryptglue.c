@@ -18,9 +18,9 @@
  */
 
 /*
-   This file dispatches the generic crypto functions to the
-   implemented backend or provides dummy stubs.  Note, that some
-   generic functions are handled in crypt.c.
+  This file dispatches the generic crypto functions to the
+  implemented backend or provides dummy stubs.  Note, that some
+  generic functions are handled in crypt.c.
 */
 
 /* Note: This file has been changed to make use of the new module
@@ -39,7 +39,7 @@
 
 /*
 
-    Generic
+  Generic
 
 */
 
@@ -81,17 +81,17 @@ void crypt_init (void)
 #endif
 
   if (option (OPTCRYPTUSEGPGME))
-    {
+  {
 #ifdef CRYPT_BACKEND_GPGME
-      crypto_module_register (&crypt_mod_pgp_gpgme);
-      crypto_module_register (&crypt_mod_smime_gpgme);
+    crypto_module_register (&crypt_mod_pgp_gpgme);
+    crypto_module_register (&crypt_mod_smime_gpgme);
 #else
-      mutt_message (_("\"crypt_use_gpgme\" set"
-                      " but not built with GPGME support."));
-      if (mutt_any_key_to_continue (NULL) == -1)
-	mutt_exit(1);
+    mutt_message (_("\"crypt_use_gpgme\" set"
+                    " but not built with GPGME support."));
+    if (mutt_any_key_to_continue (NULL) == -1)
+      mutt_exit(1);
 #endif
-    }
+  }
 
 #if defined CRYPT_BACKEND_CLASSIC_PGP || defined CRYPT_BACKEND_CLASSIC_SMIME || defined CRYPT_BACKEND_GPGME
   if (CRYPT_MOD_CALL_CHECK (PGP, init))
@@ -132,7 +132,7 @@ int crypt_has_module_backend (int type)
 
 /*
 
-    PGP
+  PGP
 
 */
 
@@ -289,7 +289,7 @@ void crypt_pgp_set_sender (const char *sender)
 
 /*
 
-   S/MIME
+  S/MIME
 
 */
 

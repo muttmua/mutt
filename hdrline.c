@@ -339,97 +339,97 @@ hdr_format_str (char *dest,
     case '(':
     case '<':
 
-      /* preprocess $date_format to handle %Z */
+    /* preprocess $date_format to handle %Z */
+    {
+      const char *cp;
+      struct tm *tm;
+      time_t T;
+
+      p = dest;
+
+      cp = (op == 'd' || op == 'D') ? (NONULL (DateFmt)) : src;
+      if (*cp == '!')
       {
-	const char *cp;
-	struct tm *tm;
-	time_t T;
-
-	p = dest;
-
-	cp = (op == 'd' || op == 'D') ? (NONULL (DateFmt)) : src;
-	if (*cp == '!')
-	{
-	  do_locales = 0;
-	  cp++;
-	}
-	else
-	  do_locales = 1;
-
-	len = destlen - 1;
-	while (len > 0 && (((op == 'd' || op == 'D') && *cp) ||
-			   (op == '{' && *cp != '}') ||
-			   (op == '[' && *cp != ']') ||
-			   (op == '(' && *cp != ')') ||
-			   (op == '<' && *cp != '>')))
-	{
-	  if (*cp == '%')
-	  {
-	    cp++;
-	    if ((*cp == 'Z' || *cp == 'z') && (op == 'd' || op == '{'))
-	    {
-	      if (len >= 5)
-	      {
-		sprintf (p, "%c%02u%02u", hdr->zoccident ? '-' : '+',
-			 hdr->zhours, hdr->zminutes);
-		p += 5;
-		len -= 5;
-	      }
-	      else
-		break; /* not enough space left */
-	    }
-	    else
-	    {
-	      if (len >= 2)
-	      {
-		*p++ = '%';
-		*p++ = *cp;
-		len -= 2;
-	      }
-	      else
-		break; /* not enough space */
-	    }
-	    cp++;
-	  }
-	  else
-	  {
-	    *p++ = *cp++;
-	    len--;
-	  }
-	}
-	*p = 0;
-
-	if (op == '[' || op == 'D')
-	  tm = localtime (&hdr->date_sent);
-	else if (op == '(')
-	  tm = localtime (&hdr->received);
-	else if (op == '<')
-	{
-	  T = time (NULL);
-	  tm = localtime (&T);
-	}
-	else
-	{
-	  /* restore sender's time zone */
-	  T = hdr->date_sent;
-	  if (hdr->zoccident)
-	    T -= (hdr->zhours * 3600 + hdr->zminutes * 60);
-	  else
-	    T += (hdr->zhours * 3600 + hdr->zminutes * 60);
-	  tm = gmtime (&T);
-	}
-
-        if (!do_locales)
-          setlocale (LC_TIME, "C");
-        strftime (buf2, sizeof (buf2), dest, tm);
-        if (!do_locales)
-          setlocale (LC_TIME, "");
-
-	mutt_format_s (dest, destlen, prefix, buf2);
-	if (len > 0 && op != 'd' && op != 'D') /* Skip ending op */
-	  src = cp + 1;
+        do_locales = 0;
+        cp++;
       }
-      break;
+      else
+        do_locales = 1;
+
+      len = destlen - 1;
+      while (len > 0 && (((op == 'd' || op == 'D') && *cp) ||
+                         (op == '{' && *cp != '}') ||
+                         (op == '[' && *cp != ']') ||
+                         (op == '(' && *cp != ')') ||
+                         (op == '<' && *cp != '>')))
+      {
+        if (*cp == '%')
+        {
+          cp++;
+          if ((*cp == 'Z' || *cp == 'z') && (op == 'd' || op == '{'))
+          {
+            if (len >= 5)
+            {
+              sprintf (p, "%c%02u%02u", hdr->zoccident ? '-' : '+',
+                       hdr->zhours, hdr->zminutes);
+              p += 5;
+              len -= 5;
+            }
+            else
+              break; /* not enough space left */
+          }
+          else
+          {
+            if (len >= 2)
+            {
+              *p++ = '%';
+              *p++ = *cp;
+              len -= 2;
+            }
+            else
+              break; /* not enough space */
+          }
+          cp++;
+        }
+        else
+        {
+          *p++ = *cp++;
+          len--;
+        }
+      }
+      *p = 0;
+
+      if (op == '[' || op == 'D')
+        tm = localtime (&hdr->date_sent);
+      else if (op == '(')
+        tm = localtime (&hdr->received);
+      else if (op == '<')
+      {
+        T = time (NULL);
+        tm = localtime (&T);
+      }
+      else
+      {
+        /* restore sender's time zone */
+        T = hdr->date_sent;
+        if (hdr->zoccident)
+          T -= (hdr->zhours * 3600 + hdr->zminutes * 60);
+        else
+          T += (hdr->zhours * 3600 + hdr->zminutes * 60);
+        tm = gmtime (&T);
+      }
+
+      if (!do_locales)
+        setlocale (LC_TIME, "C");
+      strftime (buf2, sizeof (buf2), dest, tm);
+      if (!do_locales)
+        setlocale (LC_TIME, "");
+
+      mutt_format_s (dest, destlen, prefix, buf2);
+      if (len > 0 && op != 'd' && op != 'D') /* Skip ending op */
+        src = cp + 1;
+    }
+    break;
 
     case 'e':
       snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
@@ -465,12 +465,14 @@ hdr_format_str (char *dest,
     case 'H':
       /* (Hormel) spam score */
       if (optional)
+      {
 	optional = hdr->env->spam ? 1 : 0;
+      }
 
-       if (hdr->env->spam)
-         mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->spam->data));
-       else
-         mutt_format_s (dest, destlen, prefix, "");
+      if (hdr->env->spam)
+        mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->spam->data));
+      else
+        mutt_format_s (dest, destlen, prefix, "");
 
       break;
 
@@ -582,29 +584,29 @@ hdr_format_str (char *dest,
       break;
 
     case 's':
+    {
+      char *subj;
+      if (hdr->env->disp_subj)
+        subj = hdr->env->disp_subj;
+      else if (SubjectRxList)
+        subj = apply_subject_mods(hdr->env);
+      else
+        subj = hdr->env->subject;
+      if (flags & MUTT_FORMAT_TREE && !hdr->collapsed)
       {
-	char *subj;
-        if (hdr->env->disp_subj)
-	  subj = hdr->env->disp_subj;
-	else if (SubjectRxList)
-	  subj = apply_subject_mods(hdr->env);
-	else
-	  subj = hdr->env->subject;
-	if (flags & MUTT_FORMAT_TREE && !hdr->collapsed)
-	{
-	  if (flags & MUTT_FORMAT_FORCESUBJ)
-	  {
-	    mutt_format_s (dest, destlen, "", NONULL (subj));
-	    snprintf (buf2, sizeof (buf2), "%s%s", hdr->tree, dest);
-	    mutt_format_s_tree (dest, destlen, prefix, buf2);
-	  }
-	  else
-	    mutt_format_s_tree (dest, destlen, prefix, hdr->tree);
-	}
-	else
-	  mutt_format_s (dest, destlen, prefix, NONULL (subj));
+        if (flags & MUTT_FORMAT_FORCESUBJ)
+        {
+          mutt_format_s (dest, destlen, "", NONULL (subj));
+          snprintf (buf2, sizeof (buf2), "%s%s", hdr->tree, dest);
+          mutt_format_s_tree (dest, destlen, prefix, buf2);
+        }
+        else
+          mutt_format_s_tree (dest, destlen, prefix, hdr->tree);
       }
-      break;
+      else
+        mutt_format_s (dest, destlen, prefix, NONULL (subj));
+    }
+    break;
 
     case 'S':
       if (hdr->deleted)
@@ -704,24 +706,24 @@ hdr_format_str (char *dest,
       break;
 
     case 'X':
-      {
-	int count = mutt_count_body_parts (ctx, hdr);
+    {
+      int count = mutt_count_body_parts (ctx, hdr);
 
-	/* The recursion allows messages without depth to return 0. */
-	if (optional)
-          optional = count != 0;
+      /* The recursion allows messages without depth to return 0. */
+      if (optional)
+        optional = count != 0;
 
-        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-        snprintf (dest, destlen, fmt, count);
-      }
+      snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+      snprintf (dest, destlen, fmt, count);
+    }
+    break;
+
+    case 'y':
+      if (optional)
+        optional = hdr->env->x_label ? 1 : 0;
+
+      mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
       break;
-
-     case 'y':
-       if (optional)
-	 optional = hdr->env->x_label ? 1 : 0;
-
-       mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
-       break;
 
     case 'Y':
       if (hdr->env->x_label)

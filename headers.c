@@ -309,7 +309,7 @@ int mutt_label_message(HEADER *hdr)
         if (label_message(Context, HDR_OF(i), new)) {
           ++changed;
           mutt_set_flag(Context, HDR_OF(i),
-            MUTT_TAG, 0);
+                        MUTT_TAG, 0);
           /* mutt_set_flag re-evals the header color */
         }
     }

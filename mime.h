@@ -63,10 +63,10 @@ extern const char B64Chars[];
 #define hexval(c) Index_hex[(unsigned int)(c)]
 #define base64val(c) Index_64[(unsigned int)(c)]
 
-#define is_multipart(x) \
-    ((x)->type == TYPEMULTIPART \
-     || ((x)->type == TYPEMESSAGE && (!strcasecmp((x)->subtype, "rfc822") \
-				      || !strcasecmp((x)->subtype, "news"))))
+#define is_multipart(x)                                                 \
+  ((x)->type == TYPEMULTIPART                                           \
+    || ((x)->type == TYPEMESSAGE && (!strcasecmp((x)->subtype, "rfc822") \
+    || !strcasecmp((x)->subtype, "news"))))
 
 extern const char *BodyTypes[];
 extern const char *BodyEncodings[];

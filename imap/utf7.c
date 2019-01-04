@@ -25,14 +25,14 @@
 #include "imap_private.h"
 
 static const int Index_64[128] = {
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, 63,-1,-1,-1,
-    52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
-    -1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
-    15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
-    -1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
-    41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, 63,-1,-1,-1,
+  52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
+  -1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
+  15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
+  -1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
+  41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
 };
 
 static const char B64Chars[64] = {
@@ -54,7 +54,7 @@ static const char B64Chars[64] = {
  * of &AMAAwA-).
  */
 static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
-  size_t *u8len)
+                           size_t *u8len)
 {
   char *buf, *p;
   int b, ch, k;
@@ -134,7 +134,7 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
     *u8 = buf;
   return buf;
 
- bail:
+bail:
   FREE (&buf);
   return 0;
 }
@@ -147,7 +147,7 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
  * If input data is invalid, return 0 and don't store anything.
  */
 static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
-  size_t *u7len)
+                           size_t *u7len)
 {
   char *buf, *p;
   int ch;
@@ -247,7 +247,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
   if (u7)  *u7 = buf;
   return buf;
 
- bail:
+bail:
   FREE (&buf);
   return 0;
 }

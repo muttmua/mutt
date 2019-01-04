@@ -27,7 +27,7 @@
 
 #define mutt_make_string(A,B,C,D,E) _mutt_make_string(A,B,C,D,E,0)
 void _mutt_make_string (char *, size_t, const char *, CONTEXT *,
-	HEADER *, format_flag);
+                        HEADER *, format_flag);
 
 struct hdr_format_info
 {
@@ -123,17 +123,17 @@ int mutt_stat_compare (struct stat *sba, mutt_stat_type sba_type, struct stat *s
 
 
 const char *mutt_attach_fmt (
-	char *dest,
-	size_t destlen,
-	size_t col,
-        int cols,
-	char op,
-	const char *src,
-	const char *prefix,
-	const char *ifstring,
-	const char *elsestring,
-	unsigned long data,
-	format_flag flags);
+  char *dest,
+  size_t destlen,
+  size_t col,
+  int cols,
+  char op,
+  const char *src,
+  const char *prefix,
+  const char *ifstring,
+  const char *elsestring,
+  unsigned long data,
+  format_flag flags);
 
 
 char *mutt_charset_hook (const char *);
@@ -358,7 +358,7 @@ int mutt_parse_unmono (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_push (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_rc_line (/* const */ char *, BUFFER *, BUFFER *);
 int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p,
-  short user_hdrs, short weed, short do_2047, LIST **lastp);
+                            short user_hdrs, short weed, short do_2047, LIST **lastp);
 int mutt_parse_score (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_unscore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_unhook (BUFFER *, BUFFER *, unsigned long, BUFFER *);
@@ -411,15 +411,15 @@ int mutt_from_base64 (char*, const char*, size_t);
 int mutt_wctoutf8 (char *s, unsigned int c, size_t buflen);
 
 #ifdef LOCALES_HACK
-#define IsPrint(c) (isprint((unsigned char)(c)) || \
-	((unsigned char)(c) >= 0xa0))
+#define IsPrint(c) (isprint((unsigned char)(c)) ||      \
+                    ((unsigned char)(c) >= 0xa0))
 #define IsWPrint(wc) (iswprint(wc) || wc >= 0xa0)
 #else
-#define IsPrint(c) (isprint((unsigned char)(c)) || \
-	(option (OPTLOCALES) ? 0 : \
-	((unsigned char)(c) >= 0xa0)))
-#define IsWPrint(wc) (iswprint(wc) || \
-	(option (OPTLOCALES) ? 0 : (wc >= 0xa0)))
+#define IsPrint(c) (isprint((unsigned char)(c)) ||      \
+                    (option (OPTLOCALES) ? 0 :          \
+                     ((unsigned char)(c) >= 0xa0)))
+#define IsWPrint(wc) (iswprint(wc) ||                           \
+                      (option (OPTLOCALES) ? 0 : (wc >= 0xa0)))
 #endif
 
 #define new_pattern() safe_calloc(1, sizeof (pattern_t))

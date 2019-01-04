@@ -381,7 +381,7 @@ int mutt_builtin_editor (const char *path, HEADER *msg, HEADER *cur)
 	      /* include the current message */
 	      p = tmp + mutt_strlen (tmp) + 1;
 	      snprintf (tmp + mutt_strlen (tmp), sizeof (tmp) - mutt_strlen (tmp), " %d",
-								cur->msgno + 1);
+                        cur->msgno + 1);
 	    }
 	    buf = be_include_messages (p, buf, &bufmax, &buflen,
 				       (ascii_tolower (tmp[1]) == 'm'),

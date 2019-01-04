@@ -485,7 +485,7 @@ static void cmd_handle_fatal (IMAP_DATA* idata)
     mx_fastclose_mailbox (idata->ctx);
     mutt_socket_close (idata->conn);
     mutt_error (_("Mailbox %s@%s closed"),
-	idata->conn->account.login, idata->conn->account.host);
+                idata->conn->account.login, idata->conn->account.host);
     mutt_sleep (1);
     idata->state = IMAP_DISCONNECTED;
   }
@@ -531,14 +531,14 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
        * even when there is no new mail */
       else if (count == idata->max_msn)
 	dprint (3, (debugfile,
-          "cmd_handle_untagged: superfluous EXISTS message.\n"));
+                    "cmd_handle_untagged: superfluous EXISTS message.\n"));
       else
       {
 	if (!(idata->reopen & IMAP_EXPUNGE_PENDING))
         {
           dprint (2, (debugfile,
-            "cmd_handle_untagged: New mail in %s - %d messages total.\n",
-            idata->mailbox, count));
+                      "cmd_handle_untagged: New mail in %s - %d messages total.\n",
+                      idata->mailbox, count));
 	  idata->reopen |= IMAP_NEWMAIL_PENDING;
         }
 	idata->newMailCount = count;

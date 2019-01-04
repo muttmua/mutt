@@ -39,20 +39,20 @@ const char *pgp_pkalgbytype (unsigned char type)
 {
   switch (type)
   {
-  case 1:
-    return "RSA";
-  case 2:
-    return "RSA";
-  case 3:
-    return "RSA";
-  case 16:
-    return "ElG";
-  case 17:
-    return "DSA";
-  case 20:
-    return "ElG";
-  default:
-    return "unk";
+    case 1:
+      return "RSA";
+    case 2:
+      return "RSA";
+    case 3:
+      return "RSA";
+    case 16:
+      return "ElG";
+    case 17:
+      return "DSA";
+    case 20:
+      return "ElG";
+    default:
+      return "unk";
   }
 }
 
@@ -66,16 +66,16 @@ static const char *hashalgbytype (unsigned char type)
 {
   switch (type)
   {
-  case 1:
-    return "MD5";
-  case 2:
-    return "SHA1";
-  case 3:
-    return "RIPE-MD/160";
-  case 4:
-    return "HAVAL";
-  default:
-    return "unknown";
+    case 1:
+      return "MD5";
+    case 2:
+      return "SHA1";
+    case 3:
+      return "RIPE-MD/160";
+    case 4:
+      return "HAVAL";
+    default:
+      return "unknown";
   }
 }
 
@@ -85,13 +85,13 @@ short pgp_canencrypt (unsigned char type)
 {
   switch (type)
   {
-  case 1:
-  case 2:
-  case 16:
-  case 20:
-    return 1;
-  default:
-    return 0;
+    case 1:
+    case 2:
+    case 16:
+    case 20:
+      return 1;
+    default:
+      return 0;
   }
 }
 
@@ -99,13 +99,13 @@ short pgp_cansign (unsigned char type)
 {
   switch (type)
   {
-  case 1:
-  case 3:
-  case 17:
-  case 20:
-    return 1;
-  default:
-    return 0;
+    case 1:
+    case 3:
+    case 17:
+    case 20:
+      return 1;
+    default:
+      return 0;
   }
 }
 

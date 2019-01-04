@@ -32,9 +32,9 @@
 
 /* -- forward declarations -- */
 static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
-  struct browser_state* state, short isparent);
+                                   struct browser_state* state, short isparent);
 static void imap_add_folder (char delim, char *folder, int noselect,
-  int noinferiors, struct browser_state *state, short isparent);
+                             int noinferiors, struct browser_state *state, short isparent);
 static int compare_names(struct folder_file *a, struct folder_file *b);
 
 /* imap_browse: IMAP hook into the folder browser, fills out browser_state,
@@ -202,7 +202,7 @@ int imap_browse (char* path, struct browser_state* state)
   FREE (&mx.mbox);
   return 0;
 
- fail:
+fail:
   if (save_lsub)
     set_option (OPTIMAPCHECKSUBSCRIBED);
   FREE (&mx.mbox);
@@ -220,7 +220,7 @@ int imap_mailbox_create (const char* folder)
   if (imap_parse_path (folder, &mx) < 0)
   {
     dprint (1, (debugfile, "imap_mailbox_create: Bad starting path %s\n",
-      folder));
+                folder));
     return -1;
   }
 
@@ -259,7 +259,7 @@ int imap_mailbox_create (const char* folder)
   FREE (&mx.mbox);
   return 0;
 
- fail:
+fail:
   FREE (&mx.mbox);
   return -1;
 }
@@ -274,7 +274,7 @@ int imap_mailbox_rename(const char* mailbox)
   if (imap_parse_path (mailbox, &mx) < 0)
   {
     dprint (1, (debugfile, "imap_mailbox_rename: Bad source mailbox %s\n",
-      mailbox));
+                mailbox));
     return -1;
   }
 
@@ -293,7 +293,7 @@ int imap_mailbox_rename(const char* mailbox)
   snprintf(buf, sizeof (buf), _("Rename mailbox %s to: "), mx.mbox);
   strfcpy (newname, mx.mbox, sizeof (newname));
 
- if (mutt_get_field (buf, newname, sizeof (newname), MUTT_FILE) < 0)
+  if (mutt_get_field (buf, newname, sizeof (newname), MUTT_FILE) < 0)
     goto fail;
 
   if (!mutt_strlen (newname))
@@ -317,13 +317,13 @@ int imap_mailbox_rename(const char* mailbox)
   FREE (&mx.mbox);
   return 0;
 
- fail:
+fail:
   FREE (&mx.mbox);
   return -1;
 }
 
 static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
-  struct browser_state* state, short isparent)
+                                   struct browser_state* state, short isparent)
 {
   IMAP_LIST list;
   IMAP_MBOX mx;
@@ -332,7 +332,7 @@ static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
   if (imap_parse_path (state->folder, &mx))
   {
     dprint (2, (debugfile,
-      "browse_add_list_result: current folder %s makes no sense\n", state->folder));
+                "browse_add_list_result: current folder %s makes no sense\n", state->folder));
     return -1;
   }
 
@@ -369,7 +369,7 @@ static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
  * imap_unmunge_mbox_name().
  */
 static void imap_add_folder (char delim, char *folder, int noselect,
-  int noinferiors, struct browser_state *state, short isparent)
+                             int noinferiors, struct browser_state *state, short isparent)
 {
   char tmp[LONG_STRING];
   char relpath[LONG_STRING];
@@ -382,9 +382,9 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   if (state->entrylen + 1 == state->entrymax)
   {
     safe_realloc (&state->entry,
-      sizeof (struct folder_file) * (state->entrymax += 256));
+                  sizeof (struct folder_file) * (state->entrymax += 256));
     memset (state->entry + state->entrylen, 0,
-      (sizeof (struct folder_file) * (state->entrymax - state->entrylen)));
+            (sizeof (struct folder_file) * (state->entrymax - state->entrylen)));
   }
 
   /* render superiors as unix-standard ".." */

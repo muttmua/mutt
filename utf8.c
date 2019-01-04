@@ -22,7 +22,7 @@ int mutt_wctoutf8 (char *s, unsigned int c, size_t buflen)
   else if (c < (1 << 11))
   {
     if (s && buflen >= 2)
-     {
+    {
       *s++ = 0xc0 | (c >> 6);
       *s++ = 0x80 | (c & 0x3f);
     }

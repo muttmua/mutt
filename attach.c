@@ -202,7 +202,7 @@ int mutt_compose_attachment (BODY *a)
   else
   {
     mutt_message (_("No mailcap compose entry for %s, creating empty file."),
-		   type);
+                  type);
     rc = 1;
     goto bailout;
   }
@@ -295,7 +295,7 @@ int mutt_edit_attachment (BODY *a)
 
   rc = 1;
 
-  bailout:
+bailout:
 
   if(unlink_newfile)
     unlink(mutt_b2s (newfile));
@@ -313,32 +313,34 @@ void mutt_check_lookup_list (BODY *b, char *type, int len)
   LIST *t = MimeLookupList;
   int i;
 
-  for (; t; t = t->next) {
+  for (; t; t = t->next)
+  {
     i = mutt_strlen (t->data) - 1;
     if ((i > 0 && t->data[i-1] == '/' && t->data[i] == '*' &&
 	 ascii_strncasecmp (type, t->data, i) == 0) ||
-	ascii_strcasecmp (type, t->data) == 0) {
-
-    BODY tmp = {0};
-    int n;
-    if ((n = mutt_lookup_mime_type (&tmp, b->filename)) != TYPEOTHER) {
-      snprintf (type, len, "%s/%s",
-                n == TYPEAUDIO ? "audio" :
-                n == TYPEAPPLICATION ? "application" :
-                n == TYPEIMAGE ? "image" :
-                n == TYPEMESSAGE ? "message" :
-                n == TYPEMODEL ? "model" :
-                n == TYPEMULTIPART ? "multipart" :
-                n == TYPETEXT ? "text" :
-                n == TYPEVIDEO ? "video" : "other",
-                tmp.subtype);
-      dprint(1, (debugfile, "mutt_check_lookup_list: \"%s\" -> %s\n",
-        b->filename, type));
-    }
-    if (tmp.subtype)
-      FREE (&tmp.subtype);
-    if (tmp.xtype)
-      FREE (&tmp.xtype);
+	ascii_strcasecmp (type, t->data) == 0)
+    {
+      BODY tmp = {0};
+      int n;
+      if ((n = mutt_lookup_mime_type (&tmp, b->filename)) != TYPEOTHER)
+      {
+        snprintf (type, len, "%s/%s",
+                  n == TYPEAUDIO ? "audio" :
+                  n == TYPEAPPLICATION ? "application" :
+                  n == TYPEIMAGE ? "image" :
+                  n == TYPEMESSAGE ? "message" :
+                  n == TYPEMODEL ? "model" :
+                  n == TYPEMULTIPART ? "multipart" :
+                  n == TYPETEXT ? "text" :
+                  n == TYPEVIDEO ? "video" : "other",
+                  tmp.subtype);
+        dprint(1, (debugfile, "mutt_check_lookup_list: \"%s\" -> %s\n",
+                   b->filename, type));
+      }
+      if (tmp.subtype)
+        FREE (&tmp.subtype);
+      if (tmp.xtype)
+        FREE (&tmp.xtype);
     }
   }
 }
@@ -371,7 +373,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
   command = mutt_buffer_pool_get ();
 
   use_mailcap = (flag == MUTT_MAILCAP ||
-		(flag == MUTT_REGULAR && mutt_needs_mailcap (a)));
+                 (flag == MUTT_REGULAR && mutt_needs_mailcap (a)));
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
 
   if (use_mailcap)
@@ -582,7 +584,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
       strfcpy (descrip, a->description, sizeof (descrip));
     else if (a->filename)
       snprintf (descrip, sizeof (descrip), _("---Attachment: %s: %s"),
-	  a->filename, type);
+                a->filename, type);
     else
       snprintf (descrip, sizeof (descrip), _("---Attachment: %s"), type);
   }
@@ -607,7 +609,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
   else
     rc = 0;
 
-  return_error:
+return_error:
 
   if (entry)
     rfc1524_free_entry (&entry);
@@ -739,10 +741,10 @@ int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER
     /* recv mode */
 
     if(hdr &&
-	m->hdr &&
-	m->encoding != ENCBASE64 &&
-	m->encoding != ENCQUOTEDPRINTABLE &&
-	mutt_is_message_type(m->type, m->subtype))
+       m->hdr &&
+       m->encoding != ENCBASE64 &&
+       m->encoding != ENCQUOTEDPRINTABLE &&
+       mutt_is_message_type(m->type, m->subtype))
     {
       /* message type attachments are written to mail folders. */
 

@@ -44,25 +44,25 @@
 typedef int (*handler_t) (BODY *, STATE *);
 
 const int Index_hex[128] = {
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-     0, 1, 2, 3,  4, 5, 6, 7,  8, 9,-1,-1, -1,-1,-1,-1,
-    -1,10,11,12, 13,14,15,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,10,11,12, 13,14,15,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  0, 1, 2, 3,  4, 5, 6, 7,  8, 9,-1,-1, -1,-1,-1,-1,
+  -1,10,11,12, 13,14,15,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,10,11,12, 13,14,15,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1
 };
 
 const int Index_64[128] = {
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
-    -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
-    52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
-    -1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
-    15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
-    -1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
-    41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+  -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
+  52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
+  -1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
+  15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
+  -1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
+  41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
 };
 
 static void state_prefix_put (const char *d, size_t dlen, STATE *s)
@@ -269,7 +269,7 @@ static void mutt_decode_quoted (STATE *s, long len, int istext, iconv_t cd)
     if (last == '\n')
     {
       while (linelen > 0 && ISSPACE (line[linelen-1]))
-       linelen--;
+        linelen--;
       line[linelen]=0;
     }
 
@@ -309,7 +309,7 @@ void mutt_decode_base64 (STATE *s, long len, int istext, iconv_t cd)
       /* "i" may be zero if there is trailing whitespace, which is not an error */
       if (i != 0)
 	dprint (2, (debugfile, "%s:%d [mutt_decode_base64()]: "
-	      "didn't get a multiple of 4 chars.\n", __FILE__, __LINE__));
+                    "didn't get a multiple of 4 chars.\n", __FILE__, __LINE__));
       break;
     }
 
@@ -433,8 +433,8 @@ static void mutt_decode_uuencoded (STATE *s, long len, int istext, iconv_t cd)
 #define IndentSize (4)
 
 enum { RICH_PARAM=0, RICH_BOLD, RICH_UNDERLINE, RICH_ITALIC, RICH_NOFILL,
-  RICH_INDENT, RICH_INDENT_RIGHT, RICH_EXCERPT, RICH_CENTER, RICH_FLUSHLEFT,
-  RICH_FLUSHRIGHT, RICH_COLOR, RICH_LAST_TAG };
+       RICH_INDENT, RICH_INDENT_RIGHT, RICH_EXCERPT, RICH_CENTER, RICH_FLUSHLEFT,
+       RICH_FLUSHRIGHT, RICH_COLOR, RICH_LAST_TAG };
 
 static const struct {
   const wchar_t *tag_name;
@@ -562,7 +562,7 @@ static void enriched_wrap (struct enriched_state *stte)
       if (stte->s->prefix)
       {
 	state_puts (stte->s->prefix, stte->s);
-	    stte->indent_len += mutt_strlen (stte->s->prefix);
+        stte->indent_len += mutt_strlen (stte->s->prefix);
       }
       else
       {
@@ -974,7 +974,7 @@ static int mutt_is_autoview (BODY *b)
     for (; t; t = t->next) {
       int i = mutt_strlen (t->data) - 1;
       if ((i > 0 && t->data[i-1] == '/' && t->data[i] == '*' &&
-            ascii_strncasecmp (type, t->data, i) == 0) ||
+           ascii_strncasecmp (type, t->data, i) == 0) ||
           ascii_strcasecmp (type, t->data) == 0)
         is_autoview = 1;
     }
@@ -1014,8 +1014,9 @@ static int alternative_handler (BODY *a, STATE *s)
     b = mutt_new_body ();
     b->length = (long) st.st_size;
     b->parts = mutt_parse_multipart (s->fpin,
-		  mutt_get_parameter ("boundary", a->parameter),
-		  (long) st.st_size, ascii_strcasecmp ("digest", a->subtype) == 0);
+                                     mutt_get_parameter ("boundary", a->parameter),
+                                     (long) st.st_size,
+                                     ascii_strcasecmp ("digest", a->subtype) == 0);
   }
   else
     b = a;
@@ -1240,8 +1241,9 @@ static int multipart_handler (BODY *a, STATE *s)
     b = mutt_new_body ();
     b->length = (long) st.st_size;
     b->parts = mutt_parse_multipart (s->fpin,
-		  mutt_get_parameter ("boundary", a->parameter),
-		  (long) st.st_size, ascii_strcasecmp ("digest", a->subtype) == 0);
+                                     mutt_get_parameter ("boundary", a->parameter),
+                                     (long) st.st_size,
+                                     ascii_strcasecmp ("digest", a->subtype) == 0);
   }
   else
     b = a;
@@ -1465,7 +1467,7 @@ static int external_body_handler (BODY *b, STATE *s)
 
       state_mark_attach (s);
       state_printf (s, _("[-- This %s/%s attachment "),
-	       TYPE(b->parts), b->parts->subtype);
+                    TYPE(b->parts), b->parts->subtype);
       length = mutt_get_parameter ("length", b->parameter);
       if (length)
       {
@@ -1608,10 +1610,10 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
   if (b->encoding == ENCBASE64 || b->encoding == ENCQUOTEDPRINTABLE ||
       b->encoding == ENCUUENCODED || plaintext ||
       mutt_is_text_part (b))				/* text subtypes may
-                                                        * require character
-                                                        * set conversion even
-                                                        * with 8bit encoding.
-                                                        */
+                                                         * require character
+                                                         * set conversion even
+                                                         * with 8bit encoding.
+                                                         */
   {
     origType = b->type;
 
@@ -1627,14 +1629,14 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
         return -1;
       }
       /* decoding the attachment changes the size and offset, so save a copy
-        * of the "real" values now, and restore them after processing
-        */
+       * of the "real" values now, and restore them after processing
+       */
       tmplength = b->length;
       tmpoffset = b->offset;
 
       /* if we are decoding binary bodies, we don't want to prefix each
-        * line with the prefix or else the data will get corrupted.
-        */
+       * line with the prefix or else the data will get corrupted.
+       */
       savePrefix = s->prefix;
       s->prefix = NULL;
 
@@ -1836,16 +1838,16 @@ int mutt_body_handler (BODY *b, STATE *s)
      displaying from the attachment menu (i.e. pager) */
   if ((!option (OPTHONORDISP) || (b->disposition != DISPATTACH ||
 				  option(OPTVIEWATTACH))) &&
-       (plaintext || handler))
+      (plaintext || handler))
   {
     rc = run_decode_and_handler (b, s, handler, plaintext);
   }
   /* print hint to use attachment menu for disposition == attachment
      if we're not already being called from there */
   else if ((s->flags & MUTT_DISPLAY) || (b->disposition == DISPATTACH &&
-				      !option (OPTVIEWATTACH) &&
-				      option (OPTHONORDISP) &&
-				      (plaintext || handler)))
+                                         !option (OPTVIEWATTACH) &&
+                                         option (OPTHONORDISP) &&
+                                         (plaintext || handler)))
   {
     state_mark_attach (s);
     if (option (OPTHONORDISP) && b->disposition == DISPATTACH)
@@ -1857,7 +1859,7 @@ int mutt_body_handler (BODY *b, STATE *s)
       char keystroke[SHORT_STRING];
 
       if (km_expand_key (keystroke, sizeof(keystroke),
-			km_find_func (MENU_PAGER, OP_VIEW_ATTACHMENTS)))
+                         km_find_func (MENU_PAGER, OP_VIEW_ATTACHMENTS)))
 	fprintf (s->fpout, _("(use '%s' to view this part)"), keystroke);
       else
 	fputs (_("(need 'view-attachments' bound to key!)"), s->fpout);

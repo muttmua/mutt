@@ -269,15 +269,15 @@ void menu_redraw_index (MUTTMENU *menu)
 
       if (i == menu->current)
       {
-	  SETCOLOR(MT_COLOR_INDICATOR);
-	  if (option(OPTARROWCURSOR))
-	  {
-	    addstr ("->");
-	    ATTRSET(attr);
-	    addch (' ');
-	  }
-	  else
-	    do_color = 0;
+        SETCOLOR(MT_COLOR_INDICATOR);
+        if (option(OPTARROWCURSOR))
+        {
+          addstr ("->");
+          ATTRSET(attr);
+          addch (' ');
+        }
+        else
+          do_color = 0;
       }
       else if (option(OPTARROWCURSOR))
 	addstr("   ");
@@ -461,8 +461,9 @@ void menu_next_line (MUTTMENU *menu)
   {
     int c = MIN (MenuContext, menu->pagelen / 2);
 
-    if (menu->top + 1 < menu->max - c
-      && (option(OPTMENUMOVEOFF) || (menu->max > menu->pagelen && menu->top < menu->max - menu->pagelen)))
+    if ((menu->top + 1 < menu->max - c) &&
+        (option(OPTMENUMOVEOFF) ||
+         (menu->max > menu->pagelen && menu->top < menu->max - menu->pagelen)))
     {
       menu->top++;
       if (menu->current < menu->top + c && menu->current < menu->max - 1)
@@ -520,7 +521,7 @@ static void menu_length_jump (MUTTMENU *menu, int jumplen)
       if ((DIRECTION *
 	   (tmp = (menu->current -
 		   (menu->top + (neg ? (menu->pagelen - 1) - c : c))
-	  ))) < 0)
+             ))) < 0)
 	menu->current -= tmp;
 
       menu->redraw = REDRAW_INDEX;
@@ -532,7 +533,7 @@ static void menu_length_jump (MUTTMENU *menu, int jumplen)
     }
     else
       mutt_error (neg ? _("You are on the first page.")
-		      : _("You are on the last page."));
+                  : _("You are on the last page."));
 
     menu->current = MIN (menu->current, menu->max - 1);
     menu->current = MAX (menu->current, 0);
@@ -683,7 +684,7 @@ static void menu_prev_entry (MUTTMENU *menu)
 
 static int default_color (int i)
 {
-   return ColorDefs[MT_COLOR_NORMAL];
+  return ColorDefs[MT_COLOR_NORMAL];
 }
 
 static int menu_search_generic (MUTTMENU *m, regex_t *re, int n)
@@ -819,11 +820,11 @@ void mutt_current_menu_redraw ()
   if (current_menu)
   {
     if (menu_redraw (current_menu) == OP_REDRAW)
-    /* On a REDRAW_FULL with a non-customized redraw, menu_redraw()
-     * will return OP_REDRAW to give the calling menu-loop a chance to
-     * customize output.
-     */
-       menu_redraw (current_menu);
+      /* On a REDRAW_FULL with a non-customized redraw, menu_redraw()
+       * will return OP_REDRAW to give the calling menu-loop a chance to
+       * customize output.
+       */
+      menu_redraw (current_menu);
   }
 }
 
@@ -838,7 +839,7 @@ static int menu_search (MUTTMENU *menu, int op)
   regex_t re;
   char buf[SHORT_STRING];
   char* searchBuf = menu->menu >= 0 && menu->menu < MENU_MAX ?
-                    SearchBuffers[menu->menu] : NULL;
+    SearchBuffers[menu->menu] : NULL;
 
   if (!(searchBuf && *searchBuf) ||
       (op != OP_SEARCH_NEXT && op != OP_SEARCH_OPPOSITE))
@@ -854,7 +855,7 @@ static int menu_search (MUTTMENU *menu, int op)
       searchBuf = SearchBuffers[menu->menu];
     }
     menu->searchDir = (op == OP_SEARCH || op == OP_SEARCH_NEXT) ?
-		       MUTT_SEARCH_DOWN : MUTT_SEARCH_UP;
+      MUTT_SEARCH_DOWN : MUTT_SEARCH_UP;
   }
 
   searchDir = (menu->searchDir == MUTT_SEARCH_UP) ? -1 : 1;

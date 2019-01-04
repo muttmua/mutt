@@ -407,9 +407,9 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   return (ferror (f) ? -1 : 0);
 }
 
-# define write_as_text_part(a)  (mutt_is_text_part(a) \
-                                 || ((WithCrypto & APPLICATION_PGP)\
-                                      && mutt_is_application_pgp(a)))
+#define write_as_text_part(a)                                           \
+  (mutt_is_text_part(a) ||                                              \
+   ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp(a)))
 
 int mutt_write_mime_body (BODY *a, FILE *f)
 {
@@ -1032,7 +1032,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
     }
   }
 
- bye:
+bye:
 
   if (type != TYPEOTHER || *xtype != '\0')
   {
@@ -1090,7 +1090,7 @@ void mutt_message_to_7bit (BODY *a, FILE *fp)
   fputc ('\n', fpout);
   mutt_write_mime_body (a->parts, fpout);
 
- cleanup:
+cleanup:
   FREE (&line);
 
   if (fpin && fpin != fp)
@@ -1204,7 +1204,7 @@ static void mutt_set_encoding (BODY *b, CONTENT *info)
   {
     /* Determine which encoding is smaller  */
     if (1.33 * (float)(info->lobin+info->hibin+info->ascii) <
-	 3.0 * (float)(info->lobin + info->hibin) + (float)info->ascii)
+        3.0 * (float)(info->lobin + info->hibin) + (float)info->ascii)
       b->encoding = ENCBASE64;
     else
       b->encoding = ENCQUOTEDPRINTABLE;
@@ -1672,7 +1672,7 @@ static int print_val (FILE *fp, const char *pfx, const char *value,
 }
 
 static int fold_one_header (FILE *fp, const char *tag, const char *value,
-			      const char *pfx, int wraplen, int flags)
+                            const char *pfx, int wraplen, int flags)
 {
   const char *p = value, *next, *sp;
   char buf[HUGE_STRING] = "";
@@ -2324,7 +2324,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     else
     {
       st = (SendmailWait > 0 && errno == EINTR && SigAlrm) ?
-	      S_BKG : S_ERR;
+        S_BKG : S_ERR;
       if (SendmailWait > 0 && tempfile && *tempfile)
       {
 	unlink (*tempfile);
@@ -2385,9 +2385,9 @@ add_option (char **args, size_t *argslen, size_t *argsmax, char *s)
 
 int
 mutt_invoke_sendmail (ADDRESS *from,	/* the sender */
-		 ADDRESS *to, ADDRESS *cc, ADDRESS *bcc, /* recips */
-		 const char *msg, /* file containing message */
-		 int eightbit) /* message contains 8bit chars */
+                      ADDRESS *to, ADDRESS *cc, ADDRESS *bcc, /* recips */
+                      const char *msg, /* file containing message */
+                      int eightbit) /* message contains 8bit chars */
 {
   char *ps = NULL, *path = NULL, *s = safe_strdup (Sendmail), *childout = NULL;
   char **args = NULL;
@@ -2575,7 +2575,7 @@ void mutt_unprepare_envelope (ENVELOPE *env)
 }
 
 static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *resent_from,
-				  ADDRESS *env_from)
+                                 ADDRESS *env_from)
 {
   int i, ret = 0;
   FILE *f;
@@ -2584,7 +2584,7 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
 
   if (!h)
   {
-	  /* Try to bounce each message out, aborting if we get any failures. */
+    /* Try to bounce each message out, aborting if we get any failures. */
     for (i=0; i<Context->msgcount; i++)
       if (Context->hdrs[i]->tagged)
         ret |= _mutt_bounce_message (fp, Context->hdrs[i], to, resent_from, env_from);
@@ -2625,8 +2625,8 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
                             h->content->encoding == ENC8BIT);
     else
 #endif /* USE_SMTP */
-    ret = mutt_invoke_sendmail (env_from, to, NULL, NULL, tempfile,
-			  	h->content->encoding == ENC8BIT);
+      ret = mutt_invoke_sendmail (env_from, to, NULL, NULL, tempfile,
+                                  h->content->encoding == ENC8BIT);
   }
 
   if (msg)
@@ -2850,17 +2850,19 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
       && post && (hdr->security & APPLICATION_SMIME))
   {
     fputs ("X-Mutt-SMIME: ", msg->fp);
-    if (hdr->security & ENCRYPT) {
-	fputc ('E', msg->fp);
-	if (SmimeCryptAlg && *SmimeCryptAlg)
-	    fprintf (msg->fp, "C<%s>", SmimeCryptAlg);
+    if (hdr->security & ENCRYPT)
+    {
+      fputc ('E', msg->fp);
+      if (SmimeCryptAlg && *SmimeCryptAlg)
+        fprintf (msg->fp, "C<%s>", SmimeCryptAlg);
     }
     if (hdr->security & OPPENCRYPT)
       fputc ('O', msg->fp);
-    if (hdr->security & SIGN) {
-	fputc ('S', msg->fp);
-	if (SmimeSignAs && *SmimeSignAs)
-	    fprintf (msg->fp, "<%s>", SmimeSignAs);
+    if (hdr->security & SIGN)
+    {
+      fputc ('S', msg->fp);
+      if (SmimeSignAs && *SmimeSignAs)
+        fprintf (msg->fp, "<%s>", SmimeSignAs);
     }
     if (hdr->security & INLINE)
       fputc ('I', msg->fp);

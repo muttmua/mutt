@@ -378,13 +378,13 @@ static pgp_key_t pgp_parse_keyinfo (unsigned char *buff, size_t l)
 
   switch (buff[1])
   {
-  case 2:
-  case 3:
-    return pgp_parse_pgp2_key (buff, l);
-  case 4:
-    return pgp_parse_pgp3_key (buff, l);
-  default:
-    return NULL;
+    case 2:
+    case 3:
+      return pgp_parse_pgp2_key (buff, l);
+    case 4:
+      return pgp_parse_pgp3_key (buff, l);
+    default:
+      return NULL;
   }
 }
 
@@ -529,7 +529,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 	  break;
 	}
 	case 10:			/* CMR key */
-	break;
+          break;
 	case 4:				/* exportable */
 	case 5:				/* trust */
 	case 6:				/* regexp */
@@ -579,13 +579,13 @@ static int pgp_parse_sig (unsigned char *buff, size_t l,
 
   switch (buff[1])
   {
-  case 2:
-  case 3:
-    return pgp_parse_pgp2_sig (buff, l, p, sig);
-  case 4:
-    return pgp_parse_pgp3_sig (buff, l, p, sig);
-  default:
-    return -1;
+    case 2:
+    case 3:
+      return pgp_parse_pgp2_sig (buff, l, p, sig);
+    case 4:
+      return pgp_parse_pgp3_sig (buff, l, p, sig);
+    default:
+      return -1;
   }
 }
 

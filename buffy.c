@@ -586,16 +586,16 @@ int mutt_buffy_check (int force)
 	tmp->magic = MUTT_POP;
       else
 #endif
-      if (stat (tmp->path, &sb) != 0 || (S_ISREG(sb.st_mode) && sb.st_size == 0) ||
-	  (!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0))
-      {
-	/* if the mailbox still doesn't exist, set the newly created flag to
-	 * be ready for when it does. */
-	tmp->newly_created = 1;
-	tmp->magic = 0;
-	tmp->size = 0;
-	continue;
-      }
+        if (stat (tmp->path, &sb) != 0 || (S_ISREG(sb.st_mode) && sb.st_size == 0) ||
+            (!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0))
+        {
+          /* if the mailbox still doesn't exist, set the newly created flag to
+           * be ready for when it does. */
+          tmp->newly_created = 1;
+          tmp->magic = 0;
+          tmp->size = 0;
+          continue;
+        }
     }
 
     /* check to see if the folder is the currently selected folder

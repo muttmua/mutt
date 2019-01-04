@@ -79,8 +79,10 @@ int mutt_complete (char *s, size_t slen)
     if ((p = strrchr (s, '/')))
     {
       char buf[_POSIX_PATH_MAX];
-      if (mutt_concatn_path (buf, sizeof(buf), exp_dirpart, strlen(exp_dirpart), s + 1, (size_t)(p - s - 1)) == NULL) {
-	      return -1;
+      if (mutt_concatn_path (buf, sizeof(buf), exp_dirpart, strlen(exp_dirpart),
+                             s + 1, (size_t)(p - s - 1)) == NULL)
+      {
+        return -1;
       }
       strfcpy (exp_dirpart, buf, sizeof (exp_dirpart));
       mutt_substrcpy(dirpart, s, p+1, sizeof(dirpart));
