@@ -825,8 +825,8 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   crypt_current_time (s, "PGP");
 
   if ((thepid = pgp_invoke_verify (NULL, &pgpout, NULL,
-                                  -1, -1, fileno(pgperr),
-                                  tempfile, sigfile)) != -1)
+                                   -1, -1, fileno(pgperr),
+                                   tempfile, sigfile)) != -1)
   {
     if (pgp_copy_checksig (pgpout, s->fpout) >= 0)
       badsig = 0;

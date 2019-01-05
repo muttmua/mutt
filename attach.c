@@ -742,10 +742,10 @@ int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER
     /* recv mode */
 
     if (hdr &&
-       m->hdr &&
-       m->encoding != ENCBASE64 &&
-       m->encoding != ENCQUOTEDPRINTABLE &&
-       mutt_is_message_type(m->type, m->subtype))
+        m->hdr &&
+        m->encoding != ENCBASE64 &&
+        m->encoding != ENCQUOTEDPRINTABLE &&
+        mutt_is_message_type(m->type, m->subtype))
     {
       /* message type attachments are written to mail folders. */
 

@@ -76,7 +76,7 @@ static HEADER *OldHdr = NULL;
   }
 
 #define CHECK_ATTACH                                                    \
-  if (option(OPTATTACHMSG))                                              \
+  if (option(OPTATTACHMSG))                                             \
   {                                                                     \
     mutt_flushinp ();                                                   \
     mutt_error _(Function_not_permitted_in_attach_message_mode);        \

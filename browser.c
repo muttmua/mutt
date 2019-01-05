@@ -231,14 +231,14 @@ folder_format_str (char *dest, size_t destlen, size_t col, int cols, char op, co
 
       snprintf (fn, sizeof (fn), "%s%s", s,
 		folder->ff->local ?
-                  (S_ISLNK (folder->ff->mode) ?
-                     "@" :
-                     (S_ISDIR (folder->ff->mode) ?
-                        "/" :
-                        ((folder->ff->mode & S_IXUSR) != 0 ?
-                           "*" :
-                           ""))) :
-                  "");
+                (S_ISLNK (folder->ff->mode) ?
+                 "@" :
+                 (S_ISDIR (folder->ff->mode) ?
+                  "/" :
+                  ((folder->ff->mode & S_IXUSR) != 0 ?
+                   "*" :
+                   ""))) :
+                "");
 
       mutt_format_s (dest, destlen, fmt, fn);
       break;
