@@ -247,10 +247,13 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
     if (!ignore)
     {
       dprint (2, (debugfile, "Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
-      if (!this_one) {
+      if (!this_one)
+      {
 	this_one = safe_strdup (buf);
 	this_one_len = mutt_strlen (this_one);
-      } else {
+      }
+      else
+      {
 	int blen = mutt_strlen (buf);
 
 	safe_realloc (&this_one, this_one_len + blen + sizeof (char));
@@ -703,10 +706,10 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
       fputs(prefix, fpout);
 
-      while((c = fgetc(fpin)) != EOF && bytes--)
+      while ((c = fgetc(fpin)) != EOF && bytes--)
       {
 	fputc(c, fpout);
-	if(c == '\n')
+	if (c == '\n')
 	{
 	  fputs(prefix, fpout);
 	}

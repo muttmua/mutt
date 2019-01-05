@@ -135,7 +135,8 @@ int wcwidth_ucs(wchar_t ucs)
     return 1;
 
   /* binary search in table of non-spacing characters */
-  while (max >= min) {
+  while (max >= min)
+  {
     mid = (min + max) / 2;
     if (combining[mid].last < ucs)
       min = mid + 1;

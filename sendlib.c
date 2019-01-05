@@ -217,16 +217,16 @@ static void b64_flush(FILE *fout)
 {
   short i;
 
-  if(!b64_num)
+  if (!b64_num)
     return;
 
-  if(b64_linelen >= 72)
+  if (b64_linelen >= 72)
   {
     fputc('\n', fout);
     b64_linelen = 0;
   }
 
-  for(i = b64_num; i < 3; i++)
+  for (i = b64_num; i < 3; i++)
     b64_buffer[i] = '\0';
 
   fputc(B64Chars[(b64_buffer[0] >> 2) & 0x3f], fout);
@@ -234,18 +234,18 @@ static void b64_flush(FILE *fout)
   fputc(B64Chars[((b64_buffer[0] & 0x3) << 4) | ((b64_buffer[1] >> 4) & 0xf) ], fout);
   b64_linelen++;
 
-  if(b64_num > 1)
+  if (b64_num > 1)
   {
     fputc(B64Chars[((b64_buffer[1] & 0xf) << 2) | ((b64_buffer[2] >> 6) & 0x3) ], fout);
     b64_linelen++;
-    if(b64_num > 2)
+    if (b64_num > 2)
     {
       fputc(B64Chars[b64_buffer[2] & 0x3f], fout);
       b64_linelen++;
     }
   }
 
-  while(b64_linelen % 4)
+  while (b64_linelen % 4)
   {
     fputc('=', fout);
     b64_linelen++;
@@ -257,7 +257,7 @@ static void b64_flush(FILE *fout)
 
 static void b64_putc(char c, FILE *fout)
 {
-  if(b64_num == 3)
+  if (b64_num == 3)
     b64_flush(fout);
 
   b64_buffer[b64_num++] = c;
@@ -306,11 +306,11 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   {
     len = 25 + mutt_strlen (a->subtype); /* approximate len. of content-type */
 
-    for(p = a->parameter; p; p = p->next)
+    for (p = a->parameter; p; p = p->next)
     {
       char *tmp;
 
-      if(!p->value)
+      if (!p->value)
 	continue;
 
       fputc (';', f);
@@ -873,7 +873,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
 
   struct stat sb;
 
-  if(b && !fname) fname = b->filename;
+  if (b && !fname) fname = b->filename;
 
   if (stat (fname, &sb) == -1)
   {
@@ -1107,7 +1107,7 @@ cleanup:
     unlink (a->filename);
   a->filename = safe_strdup (temp);
   a->unlink = 1;
-  if(stat (a->filename, &sb) == -1)
+  if (stat (a->filename, &sb) == -1)
   {
     mutt_perror ("stat");
     return;
@@ -1165,7 +1165,7 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
       mutt_update_encoding (a);
       if (a->encoding == ENC8BIT)
 	a->encoding = ENCQUOTEDPRINTABLE;
-      else if(a->encoding == ENCBINARY)
+      else if (a->encoding == ENCBINARY)
 	a->encoding = ENCBASE64;
     }
   }
@@ -1272,7 +1272,8 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
   if (WithCrypto)
   {
     if ((option(OPTMIMEFORWDECODE) || option(OPTFORWDECRYPT)) &&
-        (hdr->security & ENCRYPT)) {
+        (hdr->security & ENCRYPT))
+    {
       if (!crypt_valid_passphrase(hdr->security))
         return (NULL);
     }
@@ -2147,20 +2148,20 @@ const char *mutt_fqdn(short may_hide_host)
 {
   char *p = NULL;
 
-  if(Fqdn && Fqdn[0] != '@')
+  if (Fqdn && Fqdn[0] != '@')
   {
     p = Fqdn;
 
-    if(may_hide_host && option(OPTHIDDENHOST))
+    if (may_hide_host && option(OPTHIDDENHOST))
     {
-      if((p = strchr(Fqdn, '.')))
+      if ((p = strchr(Fqdn, '.')))
 	p++;
 
       /* sanity check: don't hide the host if
        * the fqdn is something like detebe.org.
        */
 
-      if(!p || !strchr(p, '.'))
+      if (!p || !strchr(p, '.'))
 	p = Fqdn;
     }
   }
@@ -2177,7 +2178,7 @@ char *mutt_gen_msgid (void)
 
   now = time (NULL);
   tm = gmtime (&now);
-  if(!(fqdn = mutt_fqdn(0)))
+  if (!(fqdn = mutt_fqdn(0)))
     fqdn = NONULL(Hostname);
 
   snprintf (buf, sizeof (buf), "<%d%02d%02d%02d%02d%02d.G%c%u@%s>",
@@ -2731,7 +2732,7 @@ ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
 
 static void set_noconv_flags (BODY *b, short flag)
 {
-  for(; b; b = b->next)
+  for (; b; b = b->next)
   {
     if (b->type == TYPEMESSAGE || b->type == TYPEMULTIPART)
       set_noconv_flags (b->parts, flag);

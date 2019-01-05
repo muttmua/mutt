@@ -90,7 +90,7 @@ static void init_history (struct history *h)
 {
   int i;
 
-  if(OldSize)
+  if (OldSize)
   {
     if (h->hist)
     {
@@ -224,7 +224,7 @@ static void shrink_histfile (void)
   }
 
   if (!regen_file)
-    for(hclass = HC_FIRST; hclass < HC_LAST; hclass++)
+    for (hclass = HC_FIRST; hclass < HC_LAST; hclass++)
       if (n[hclass] > SaveHist)
       {
         regen_file = 1;
@@ -374,7 +374,7 @@ void mutt_init_history(void)
   if (HistSize == OldSize)
     return;
 
-  for(hclass = HC_FIRST; hclass < HC_LAST; hclass++)
+  for (hclass = HC_FIRST; hclass < HC_LAST; hclass++)
     init_history(&History[hclass]);
 
   OldSize = HistSize;

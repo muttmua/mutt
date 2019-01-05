@@ -201,7 +201,8 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
     case 'c':
     {           /* certificate (list) */
-      if (!optional) {
+      if (!optional)
+      {
 	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
 	snprintf (dest, destlen, fmt, NONULL(cctx->certificates));
       }
@@ -212,7 +213,8 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
     case 'i':
     {           /* intermediate certificates  */
-      if (!optional) {
+      if (!optional)
+      {
 	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
 	snprintf (dest, destlen, fmt, NONULL(cctx->intermediates));
       }
@@ -247,7 +249,8 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
     case 'a':
     {           /* algorithm for encryption */
-      if (!optional) {
+      if (!optional)
+      {
 	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
 	snprintf (dest, destlen, fmt, NONULL (cctx->cryptalg));
       }
@@ -270,7 +273,8 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
     case 'd':
     {           /* algorithm for the signature message digest */
-      if (!optional) {
+      if (!optional)
+      {
 	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
 	snprintf (dest, destlen, fmt, NONULL (cctx->digestalg));
       }
@@ -375,7 +379,8 @@ static void smime_entry (char *s, size_t l, MUTTMENU * menu, int num)
   smime_key_t **Table = (smime_key_t **) menu->data;
   smime_key_t *this = Table[num];
   char* truststate;
-  switch(this->trust) {
+  switch (this->trust)
+  {
     case 't':
       truststate = N_("Trusted   ");
       break;
@@ -979,7 +984,7 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
     len = mutt_strlen (email);
     if (len && (email[len - 1] == '\n'))
       email[len - 1] = '\0';
-    if(mutt_strncasecmp (email, mailbox, mutt_strlen (mailbox)) == 0)
+    if (mutt_strncasecmp (email, mailbox, mutt_strlen (mailbox)) == 0)
       ret=1;
 
     ret = ret < 0 ? 0 : ret;
@@ -997,7 +1002,7 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
     ret = 1;
   else ret = 0;
 
-  if(copy && buffer && num)
+  if (copy && buffer && num)
   {
     (*num) = count;
     *buffer =  safe_calloc(sizeof(char*), count);
@@ -1014,7 +1019,7 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
       count++;
     }
   }
-  else if(copy) ret = 2;
+  else if (copy) ret = 2;
 
   safe_fclose (&fpout);
   safe_fclose (&fperr);
@@ -1282,7 +1287,7 @@ int smime_verify_sender(HEADER *h)
     return 1;
   }
 
-  if(h->security & ENCRYPT)
+  if (h->security & ENCRYPT)
     mutt_copy_message (fpout, Context, h,
 		       MUTT_CM_DECODE_CRYPT & MUTT_CM_DECODE_SMIME,
 		       CH_MIME|CH_WEED|CH_NONEWLINE);
@@ -1310,7 +1315,7 @@ int smime_verify_sender(HEADER *h)
       mutt_unlink(tempfname);
       if (smime_handle_cert_email (certfile, mbox, 0, NULL, NULL))
       {
-	if(isendwin())
+	if (isendwin())
           mutt_any_key_to_continue(NULL);
       }
       else

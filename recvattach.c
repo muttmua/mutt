@@ -192,7 +192,7 @@ const char *mutt_attach_fmt (char *dest,
         optional = 0;
       break;
     case 'd':
-      if(!optional)
+      if (!optional)
       {
 	if (aptr->content->description)
 	{
@@ -217,9 +217,9 @@ const char *mutt_attach_fmt (char *dest,
 	  break;
 	}
       }
-      else if(aptr->content->description ||
-	      (mutt_is_message_type (aptr->content->type, aptr->content->subtype)
-               && MsgFmt && aptr->content->hdr))
+      else if (aptr->content->description ||
+               (mutt_is_message_type (aptr->content->type, aptr->content->subtype)
+                && MsgFmt && aptr->content->hdr))
         break;
       /* FALLS THROUGH TO 'F' */
     case 'F':
@@ -238,7 +238,7 @@ const char *mutt_attach_fmt (char *dest,
       }
       /* FALLS THROUGH TO 'f' */
     case 'f':
-      if(!optional)
+      if (!optional)
       {
 	if (aptr->content->filename && *aptr->content->filename == '/')
 	{
@@ -251,17 +251,17 @@ const char *mutt_attach_fmt (char *dest,
 	else
 	  mutt_format_s (dest, destlen, prefix, NONULL (aptr->content->filename));
       }
-      else if(!aptr->content->filename)
+      else if (!aptr->content->filename)
         optional = 0;
       break;
     case 'D':
-      if(!optional)
+      if (!optional)
 	snprintf (dest, destlen, "%c", aptr->content->deleted ? 'D' : ' ');
-      else if(!aptr->content->deleted)
+      else if (!aptr->content->deleted)
         optional = 0;
       break;
     case 'e':
-      if(!optional)
+      if (!optional)
 	mutt_format_s (dest, destlen, prefix,
                        ENCODING (aptr->content->encoding));
       break;
@@ -282,17 +282,17 @@ const char *mutt_attach_fmt (char *dest,
       }
       break;
     case 'm':
-      if(!optional)
+      if (!optional)
 	mutt_format_s (dest, destlen, prefix, TYPE (aptr->content));
       break;
     case 'M':
-      if(!optional)
+      if (!optional)
 	mutt_format_s (dest, destlen, prefix, aptr->content->subtype);
-      else if(!aptr->content->subtype)
+      else if (!aptr->content->subtype)
         optional = 0;
       break;
     case 'n':
-      if(!optional)
+      if (!optional)
       {
 	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
 	snprintf (dest, destlen, fmt, aptr->num + 1);
@@ -317,7 +317,7 @@ const char *mutt_attach_fmt (char *dest,
       else
         l = aptr->content->length;
 
-      if(!optional)
+      if (!optional)
       {
 	mutt_pretty_size (tmp, sizeof(tmp), l);
 	mutt_format_s (dest, destlen, prefix, tmp);
@@ -327,19 +327,19 @@ const char *mutt_attach_fmt (char *dest,
 
       break;
     case 't':
-      if(!optional)
+      if (!optional)
         snprintf (dest, destlen, "%c", aptr->content->tagged ? '*' : ' ');
-      else if(!aptr->content->tagged)
+      else if (!aptr->content->tagged)
         optional = 0;
       break;
     case 'T':
-      if(!optional)
+      if (!optional)
 	mutt_format_s_tree (dest, destlen, prefix, NONULL (aptr->tree));
       else if (!aptr->tree)
         optional = 0;
       break;
     case 'u':
-      if(!optional)
+      if (!optional)
         snprintf (dest, destlen, "%c", aptr->content->unlink ? '-' : ' ');
       else if (!aptr->content->unlink)
         optional = 0;
@@ -424,10 +424,10 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
     else
       strfcpy (buf, body->filename, sizeof (buf));
   }
-  else if(body->hdr &&
-	  body->encoding != ENCBASE64 &&
-	  body->encoding != ENCQUOTEDPRINTABLE &&
-	  mutt_is_message_type(body->type, body->subtype))
+  else if (body->hdr &&
+           body->encoding != ENCBASE64 &&
+           body->encoding != ENCQUOTEDPRINTABLE &&
+           mutt_is_message_type(body->type, body->subtype))
     mutt_default_save(buf, sizeof(buf), body->hdr);
   else
     buf[0] = 0;
@@ -589,7 +589,8 @@ mutt_query_pipe_attachment (char *command, FILE *fp, BODY *body, int filter)
     snprintf (warning, sizeof (warning),
 	      _("WARNING!  You are about to overwrite %s, continue?"),
 	      body->filename);
-    if (mutt_yesorno (warning, MUTT_NO) != MUTT_YES) {
+    if (mutt_yesorno (warning, MUTT_NO) != MUTT_YES)
+    {
       mutt_window_clearline (MuttMessageWindow, 0);
       return;
     }

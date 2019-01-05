@@ -1121,7 +1121,8 @@ static struct maildir *skip_duplicates (struct maildir *p, struct maildir **last
    * likely be at the head of the list.  but it is present for consistency with
    * the check at the top of the for() loop in maildir_delayed_parsing().
    */
-  while (!p->h || p->header_parsed) {
+  while (!p->h || p->header_parsed)
+  {
     *last = p;
     p = p->next;
   }
@@ -1150,7 +1151,9 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 #endif
 
 #if HAVE_DIRENT_D_INO
-#define DO_SORT()	do {                                            \
+#define DO_SORT()                                                       \
+  do                                                                    \
+  {                                                                     \
     if (!sort)                                                          \
     {                                                                   \
       dprint (4, (debugfile, "maildir: need to sort %s by inode\n", ctx->path)); \
@@ -1163,7 +1166,7 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
       p = skip_duplicates (p, &last);                                   \
       mutt_buffer_printf (fn, "%s/%s", ctx->path, p->h->path);          \
     }                                                                   \
-  } while(0)
+  } while (0)
 #else
 #define DO_SORT()	/* nothing */
 #endif
@@ -2660,7 +2663,8 @@ int maildir_check_empty (const char *path)
 
   realpath = mutt_buffer_pool_get ();
 
-  do {
+  do
+  {
     /* we do "cur" on the first iteration since its more likely that we'll
      * find old messages without having to scan both subdirs
      */

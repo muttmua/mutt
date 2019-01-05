@@ -243,8 +243,10 @@ int mutt_ssl_starttls (CONNECTION* conn)
 
   ssl_get_client_cert(ssldata, conn);
 
-  if (SslCiphers) {
-    if (!SSL_CTX_set_cipher_list (ssldata->ctx, SslCiphers)) {
+  if (SslCiphers)
+  {
+    if (!SSL_CTX_set_cipher_list (ssldata->ctx, SslCiphers))
+    {
       dprint (1, (debugfile, "mutt_ssl_starttls: Could not select preferred ciphers\n"));
       goto bail_ctx;
     }
@@ -503,7 +505,8 @@ static int ssl_socket_open (CONNECTION * conn)
 
   ssl_get_client_cert(data, conn);
 
-  if (SslCiphers) {
+  if (SslCiphers)
+  {
     SSL_CTX_set_cipher_list (data->ctx, SslCiphers);
   }
 
@@ -1012,7 +1015,8 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
     /* cast is safe since bufsize is incremented above, so bufsize-1 is always
      * zero or greater.
      */
-    if (mutt_strlen(buf) == (size_t)bufsize - 1) {
+    if (mutt_strlen(buf) == (size_t)bufsize - 1)
+    {
       match_found = hostname_match(hostname_ascii, buf);
     }
   }

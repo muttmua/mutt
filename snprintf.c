@@ -152,7 +152,7 @@ static int dopr (char *buffer, size_t maxlen, const char *format, va_list args)
     if (ch == '\0')
       state = DP_S_DONE;
 
-    switch(state)
+    switch (state)
     {
     case DP_S_DEFAULT:
       if (ch == '%')
@@ -456,9 +456,10 @@ static void fmtint (char *buffer, size_t *currlen, size_t maxlen,
 
   uvalue = value;
 
-  if(!(flags & DP_F_UNSIGNED))
+  if (!(flags & DP_F_UNSIGNED))
   {
-    if( value < 0 ) {
+    if ( value < 0 )
+    {
       signvalue = '-';
       uvalue = -value;
     }
@@ -472,12 +473,13 @@ static void fmtint (char *buffer, size_t *currlen, size_t maxlen,
 
   if (flags & DP_F_UP) caps = 1; /* Should characters be upper case? */
 
-  do {
+  do
+  {
     convert[place++] =
       (caps? "0123456789ABCDEF":"0123456789abcdef")
       [uvalue % (unsigned)base  ];
     uvalue = (uvalue / (unsigned)base );
-  } while(uvalue && (place < 20));
+  } while (uvalue && (place < 20));
   if (place == 20) place--;
   convert[place] = 0;
 
@@ -524,7 +526,8 @@ static void fmtint (char *buffer, size_t *currlen, size_t maxlen,
     dopr_outch (buffer, currlen, maxlen, convert[--place]);
 
   /* Left Justified spaces */
-  while (spadlen < 0) {
+  while (spadlen < 0)
+  {
     dopr_outch (buffer, currlen, maxlen, ' ');
     ++spadlen;
   }
@@ -627,20 +630,22 @@ static void fmtfp (char *buffer, size_t *currlen, size_t maxlen,
 #endif
 
   /* Convert integer part */
-  do {
+  do
+  {
     iconvert[iplace++] =
       (caps? "0123456789ABCDEF":"0123456789abcdef")[intpart % 10];
     intpart = (intpart / 10);
-  } while(intpart && (iplace < 20));
+  } while (intpart && (iplace < 20));
   if (iplace == 20) iplace--;
   iconvert[iplace] = 0;
 
   /* Convert fractional part */
-  do {
+  do
+  {
     fconvert[fplace++] =
       (caps? "0123456789ABCDEF":"0123456789abcdef")[fracpart % 10];
     fracpart = (fracpart / 10);
-  } while(fracpart && (fplace < 20));
+  } while (fracpart && (fplace < 20));
   if (fplace == 20) fplace--;
   fconvert[fplace] = 0;
 

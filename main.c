@@ -633,7 +633,7 @@ int main (int argc, char **argv, char **environ)
 
   /* sanity check against stupid administrators */
 
-  if(getegid() != getgid())
+  if (getegid() != getgid())
   {
     fprintf(stderr, "%s: I don't want to run with privileges!\n",
 	    argv[0]);
@@ -1315,8 +1315,8 @@ int main (int argc, char **argv, char **environ)
 
     mutt_folder_hook (folder);
 
-    if((Context = mx_open_mailbox (folder, ((flags & MUTT_RO) || option (OPTREADONLY)) ? MUTT_READONLY : 0, NULL))
-       || !explicit_folder)
+    if ((Context = mx_open_mailbox (folder, ((flags & MUTT_RO) || option (OPTREADONLY)) ? MUTT_READONLY : 0, NULL))
+        || !explicit_folder)
     {
 #ifdef USE_SIDEBAR
       mutt_sb_set_open_buffy ();

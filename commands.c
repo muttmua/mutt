@@ -155,7 +155,7 @@ int mutt_display_message (HEADER *cur)
     {
       if (cur->security & APPLICATION_SMIME)
 	crypt_smime_getkeys (cur->env);
-      if(!crypt_valid_passphrase(cur->security))
+      if (!crypt_valid_passphrase(cur->security))
 	return 0;
 
       cmflags |= MUTT_CM_VERIFY;
@@ -350,7 +350,7 @@ void ci_bounce_message (HEADER *h)
     }
   }
 
-  if(h)
+  if (h)
     strfcpy(prompt, _("Bounce message to: "), sizeof(prompt));
   else
     strfcpy(prompt, _("Bounce tagged messages to: "), sizeof(prompt));
@@ -437,7 +437,7 @@ static void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
 
   if (WithCrypto && decode && h->security & ENCRYPT)
   {
-    if(!crypt_valid_passphrase(h->security))
+    if (!crypt_valid_passphrase(h->security))
       return;
     endwin ();
   }
@@ -476,7 +476,7 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
     if (WithCrypto && decode)
     {
       mutt_parse_mime_message (Context, h);
-      if(h->security & ENCRYPT && !crypt_valid_passphrase(h->security))
+      if (h->security & ENCRYPT && !crypt_valid_passphrase(h->security))
 	return 1;
     }
     mutt_endwin (NULL);
@@ -499,7 +499,7 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
     if (WithCrypto && decode)
     {
       for (i = 0; i < Context->vcount; i++)
-	if(Context->hdrs[Context->v2r[i]]->tagged)
+	if (Context->hdrs[Context->v2r[i]]->tagged)
 	{
 	  mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
 	  mutt_parse_mime_message(Context, Context->hdrs[Context->v2r[i]]);
@@ -684,7 +684,7 @@ void mutt_shell_escape (void)
   {
     if (!buf[0] && Shell)
       strfcpy (buf, Shell, sizeof (buf));
-    if(buf[0])
+    if (buf[0])
     {
       mutt_window_clearline (MuttMessageWindow, 0);
       mutt_endwin (NULL);

@@ -149,16 +149,16 @@ static int parse_fkey(char *s)
   char *t;
   int n = 0;
 
-  if(s[0] != '<' || ascii_tolower(s[1]) != 'f')
+  if (s[0] != '<' || ascii_tolower(s[1]) != 'f')
     return -1;
 
-  for(t = s + 2; *t && isdigit((unsigned char) *t); t++)
+  for (t = s + 2; *t && isdigit((unsigned char) *t); t++)
   {
     n *= 10;
     n += *t - '0';
   }
 
-  if(*t != '>')
+  if (*t != '>')
     return -1;
   else
     return n;
@@ -176,7 +176,8 @@ static int parse_keycode (const char *s)
   while (ISSPACE(*endChar))
     ++endChar;
   /* negative keycodes don't make sense, also detect overflow */
-  if (*endChar != '>' || result < 0 || result == LONG_MAX) {
+  if (*endChar != '>' || result < 0 || result == LONG_MAX)
+  {
     return -1;
   }
 
@@ -196,7 +197,7 @@ static int parsekeys (const char *str, keycode_t *d, int max)
   while (*s && len)
   {
     *d = '\0';
-    if(*s == '<' && (t = strchr(s, '>')))
+    if (*s == '<' && (t = strchr(s, '>')))
     {
       t++; c = *t; *t = '\0';
 
@@ -219,7 +220,7 @@ static int parsekeys (const char *str, keycode_t *d, int max)
       *t = c;
     }
 
-    if(!*d)
+    if (!*d)
     {
       *d = (unsigned char)*s;
       s++;
@@ -1154,9 +1155,9 @@ int mutt_parse_exec (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
     }
     nops++;
   }
-  while(MoreArgs(s) && nops < sizeof(ops)/sizeof(ops[0]));
+  while (MoreArgs(s) && nops < sizeof(ops)/sizeof(ops[0]));
 
-  while(nops)
+  while (nops)
     mutt_push_macro_event (0, ops[--nops]);
 
   return 0;
@@ -1171,7 +1172,8 @@ void mutt_what_key (void)
   int ch;
 
   mutt_window_mvprintw (MuttMessageWindow, 0, 0, _("Enter keys (^G to abort): "));
-  do {
+  do
+  {
     ch = getch();
     if (ch != ERR && ch != ctrl ('G'))
     {

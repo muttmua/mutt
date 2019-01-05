@@ -260,7 +260,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
     mutt_extract_token (path, s, 0);
     strfcpy (buf, path->data, sizeof (buf));
 
-    if(data == MUTT_UNMAILBOXES && mutt_strcmp(buf,"*") == 0)
+    if (data == MUTT_UNMAILBOXES && mutt_strcmp(buf,"*") == 0)
     {
       for (tmp = &Incoming; *tmp;)
       {
@@ -280,7 +280,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
     mutt_expand_path (buf, sizeof (buf));
 
     /* Skip empty tokens. */
-    if(!*buf) continue;
+    if (!*buf) continue;
 
     /* avoid duplicates */
     p = realpath (buf, f1);
@@ -293,9 +293,9 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       }
     }
 
-    if(data == MUTT_UNMAILBOXES)
+    if (data == MUTT_UNMAILBOXES)
     {
-      if(*tmp)
+      if (*tmp)
       {
         tmp1=(*tmp)->next;
 #ifdef USE_SIDEBAR
@@ -310,7 +310,8 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       continue;
     }
 
-    if (!*tmp) {
+    if (!*tmp)
+    {
       *tmp = buffy_new (buf);
 #ifdef USE_SIDEBAR
       mutt_sb_notify_mailbox (*tmp, 1);

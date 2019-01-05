@@ -150,7 +150,7 @@ retry_lock:
 
       snprintf(msg, sizeof(msg), _("Lock count exceeded, remove lock for %s?"),
 	       path);
-      if(retry && mutt_yesorno(msg, MUTT_YES) == MUTT_YES)
+      if (retry && mutt_yesorno(msg, MUTT_YES) == MUTT_YES)
       {
 	flags |= DL_FL_FORCE;
 	retry--;
@@ -386,7 +386,7 @@ int mx_get_magic (const char *path)
   FILE *f;
 
 #ifdef USE_IMAP
-  if(mx_is_imap(path))
+  if (mx_is_imap(path))
     return MUTT_IMAP;
 #endif /* USE_IMAP */
 
@@ -677,7 +677,7 @@ void mx_fastclose_mailbox (CONTEXT *ctx)
   struct utimbuf ut;
 #endif /* HAVE_UTIMENSAT */
 
-  if(!ctx)
+  if (!ctx)
     return;
 
   /* fix up the times so buffy won't get confused */
@@ -1300,7 +1300,7 @@ MESSAGE *mx_open_new_message (CONTEXT *dest, HEADER *hdr, int flags)
     msg->received = hdr->received;
   }
 
-  if(msg->received == 0)
+  if (msg->received == 0)
     time(&msg->received);
 
   if (dest->mx_ops->open_new_msg (msg, dest, hdr) == 0)

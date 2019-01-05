@@ -231,7 +231,8 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
       int	line = 0;
 
       pc = tok->dptr;
-      do {
+      do
+      {
 	if ((pc = strpbrk (pc, "\\`")))
 	{
 	  /* skip any quoted chars */
@@ -790,7 +791,8 @@ static int parse_replace_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFE
   }
   mutt_extract_token(&templ, s, 0);
 
-  if (add_to_replace_list(list, buf->data, templ.data, err) != 0) {
+  if (add_to_replace_list(list, buf->data, templ.data, err) != 0)
+  {
     FREE(&templ.data);
     return -1;
   }
@@ -885,7 +887,8 @@ static int parse_spam_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
       mutt_extract_token (&templ, s, 0);
 
       /* Add to the spam list. */
-      if (add_to_replace_list (&SpamList, buf->data, templ.data, err) != 0) {
+      if (add_to_replace_list (&SpamList, buf->data, templ.data, err) != 0)
+      {
         FREE(&templ.data);
         return -1;
       }
@@ -1238,7 +1241,7 @@ static int parse_unattach_list (BUFFER *buf, BUFFER *s, LIST **ldata, BUFFER *er
     /* We must do our own walk here because remove_from_list() will only
      * remove the LIST->data, not anything pointed to by the LIST->data. */
     lastp = NULL;
-    for(lp = *ldata; lp; )
+    for (lp = *ldata; lp; )
     {
       a = (ATTACH_MATCH *)lp->data;
       dprint(5, (debugfile, "parse_unattach_list: check %s/%s [%d] : %s/%s [%d]\n",
@@ -1277,7 +1280,8 @@ static int parse_unattach_list (BUFFER *buf, BUFFER *s, LIST **ldata, BUFFER *er
 
 static int print_attach_list (LIST *lp, char op, char *name)
 {
-  while (lp) {
+  while (lp)
+  {
     printf("attachments %c%s %s/%s\n", op, name,
            ((ATTACH_MATCH *)lp->data)->major,
            ((ATTACH_MATCH *)lp->data)->minor);
@@ -1294,7 +1298,8 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
   LIST **listp;
 
   mutt_extract_token(buf, s, 0);
-  if (!buf->data || *buf->data == '\0') {
+  if (!buf->data || *buf->data == '\0')
+  {
     strfcpy(err->data, _("attachments: no disposition"), err->dsize);
     return -1;
   }
@@ -1302,7 +1307,8 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
   category = buf->data;
   op = *category++;
 
-  if (op == '?') {
+  if (op == '?')
+  {
     mutt_endwin (NULL);
     fflush (stdout);
     printf("\nCurrent attachments settings:\n\n");
@@ -1314,23 +1320,27 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
     return 0;
   }
 
-  if (op != '+' && op != '-') {
+  if (op != '+' && op != '-')
+  {
     op = '+';
     category--;
   }
-  if (!ascii_strncasecmp(category, "attachment", strlen(category))) {
+  if (!ascii_strncasecmp(category, "attachment", strlen(category)))
+  {
     if (op == '+')
       listp = &AttachAllow;
     else
       listp = &AttachExclude;
   }
-  else if (!ascii_strncasecmp(category, "inline", strlen(category))) {
+  else if (!ascii_strncasecmp(category, "inline", strlen(category)))
+  {
     if (op == '+')
       listp = &InlineAllow;
     else
       listp = &InlineExclude;
   }
-  else {
+  else
+  {
     strfcpy(err->data, _("attachments: invalid disposition"), err->dsize);
     return -1;
   }
@@ -1344,30 +1354,35 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFF
   LIST **listp;
 
   mutt_extract_token(buf, s, 0);
-  if (!buf->data || *buf->data == '\0') {
+  if (!buf->data || *buf->data == '\0')
+  {
     strfcpy(err->data, _("unattachments: no disposition"), err->dsize);
     return -1;
   }
 
   p = buf->data;
   op = *p++;
-  if (op != '+' && op != '-') {
+  if (op != '+' && op != '-')
+  {
     op = '+';
     p--;
   }
-  if (!ascii_strncasecmp(p, "attachment", strlen(p))) {
+  if (!ascii_strncasecmp(p, "attachment", strlen(p)))
+  {
     if (op == '+')
       listp = &AttachAllow;
     else
       listp = &AttachExclude;
   }
-  else if (!ascii_strncasecmp(p, "inline", strlen(p))) {
+  else if (!ascii_strncasecmp(p, "inline", strlen(p)))
+  {
     if (op == '+')
       listp = &InlineAllow;
     else
       listp = &InlineExclude;
   }
-  else {
+  else
+  {
     strfcpy(err->data, _("unattachments: invalid disposition"), err->dsize);
     return -1;
   }
@@ -1845,7 +1860,7 @@ static size_t escape_string (char *dst, size_t len, const char* src)
   if (!len)
     return 0;
   len--; /* save room for \0 */
-#define ESC_CHAR(C)	do { *p++ = '\\'; if (p - dst < len) *p++ = C; } while(0)
+#define ESC_CHAR(C)	do { *p++ = '\\'; if (p - dst < len) *p++ = C; } while (0)
   while (p - dst < len && src && *src)
   {
     switch (*src)

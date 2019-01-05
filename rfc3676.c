@@ -363,7 +363,8 @@ void rfc3676_space_stuff (HEADER* hdr)
 
   while (fgets (buf, sizeof (buf), in))
   {
-    if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ') {
+    if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ')
+    {
       fputc (' ', out);
 #if DEBUG
       lc++;

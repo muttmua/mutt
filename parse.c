@@ -183,7 +183,8 @@ static PARAMETER *parse_parameters (const char *s)
 	s++;
 	for (i=0; *s && i < sizeof (buffer) - 1; i++, s++)
 	{
-	  if (AssumedCharset && *AssumedCharset) {
+	  if (AssumedCharset && *AssumedCharset)
+          {
             /* As iso-2022-* has a character of '"' with non-ascii state,
 	     * ignore it. */
             if (*s == 0x1b && i < sizeof (buffer) - 2)
@@ -324,7 +325,7 @@ void mutt_parse_content_type (char *s, BODY *ct)
   if ((subtype = strchr(s, '/')))
   {
     *subtype++ = '\0';
-    for(pc = subtype; *pc && !ISSPACE(*pc) && *pc != ';'; pc++)
+    for (pc = subtype; *pc && !ISSPACE(*pc) && *pc != ';'; pc++)
       ;
     *pc = '\0';
     ct->subtype = safe_strdup (subtype);
@@ -635,7 +636,8 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 	new = mutt_read_mime_header (fp, digest);
 
 #ifdef SUN_ATTACHMENT
-        if (mutt_get_parameter ("content-lines", new->parameter)) {
+        if (mutt_get_parameter ("content-lines", new->parameter))
+        {
 	  mutt_atoi (mutt_get_parameter ("content-lines", new->parameter), &lines);
 	  for ( ; lines; lines-- )
             if (ftello (fp) >= end_off || fgets (buffer, LONG_STRING, fp) == NULL)
@@ -648,7 +650,7 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 	 * bad attachment end boundaries
 	 */
 
-	if(new->offset > end_off)
+	if (new->offset > end_off)
 	{
 	  mutt_free_body(&new);
 	  break;
@@ -669,7 +671,7 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
     last->length = end_off - last->offset;
 
   /* parse recursive MIME parts */
-  for(last = head; last; last = last->next)
+  for (last = head; last; last = last->next)
     mutt_parse_part(fp, last);
 
   return (head);
@@ -965,7 +967,8 @@ void mutt_parse_mime_message (CONTEXT *ctx, HEADER *cur)
 {
   MESSAGE *msg;
 
-  do {
+  do
+  {
     if (cur->content->type != TYPEMESSAGE &&
         cur->content->type != TYPEMULTIPART)
       break; /* nothing to do */
@@ -1250,7 +1253,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
         {
           while (*p)
           {
-            switch(*p)
+            switch (*p)
             {
               case 'r':
                 hdr->replied = 1;

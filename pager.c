@@ -76,7 +76,7 @@ static HEADER *OldHdr = NULL;
   }
 
 #define CHECK_ATTACH                                                    \
-  if(option(OPTATTACHMSG))                                              \
+  if (option(OPTATTACHMSG))                                              \
   {                                                                     \
     mutt_flushinp ();                                                   \
     mutt_error _(Function_not_permitted_in_attach_message_mode);        \
@@ -1996,12 +1996,15 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 
     pager_menu_redraw (pager_menu);
 
-    if (option(OPTBRAILLEFRIENDLY)) {
-      if (brailleLine!=-1) {
+    if (option(OPTBRAILLEFRIENDLY))
+    {
+      if (brailleLine!=-1)
+      {
         move(brailleLine+1, 0);
         brailleLine = -1;
       }
-    } else
+    }
+    else
       mutt_window_move (rd.pager_status_window, 0, rd.pager_status_window->cols-1);
 
     mutt_refresh ();
@@ -2851,12 +2854,14 @@ search_next:
       case OP_EDIT_LABEL:
         CHECK_MODE(IsHeader (extra));
         rc = mutt_label_message(extra->hdr);
-        if (rc > 0) {
+        if (rc > 0)
+        {
           Context->changed = 1;
           pager_menu->redraw = REDRAW_FULL;
           mutt_message (_("%d labels changed."), rc);
         }
-        else {
+        else
+        {
           mutt_message _("No labels changed.");
         }
         break;

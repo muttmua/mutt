@@ -627,7 +627,8 @@ int mutt_index_menu (void)
   menu->custom_menu_redraw = index_menu_redraw;
   mutt_push_current_menu (menu);
 
-  if (!attach_msg) {
+  if (!attach_msg)
+  {
     mutt_buffy_check(MUTT_BUFFY_CHECK_FORCE); /* force the buffy check after we
 						 enter the folder */
   }
@@ -699,7 +700,8 @@ int mutt_index_menu (void)
 	    menu_status_line(cmd, sizeof(cmd), menu, NONULL(NewMailCmd));
 	    mutt_system(cmd);
 	  }
-	} else if (check == MUTT_FLAGS)
+	}
+        else if (check == MUTT_FLAGS)
 	  mutt_message _("Mailbox was externally modified.");
 
 	/* avoid the message being overwritten by buffy */
@@ -2211,14 +2213,16 @@ int mutt_index_menu (void)
 	CHECK_MSGCOUNT;
 	CHECK_READONLY;
 	rc = mutt_label_message(tag ? NULL : CURHDR);
-	if (rc > 0) {
+	if (rc > 0)
+        {
 	  Context->changed = 1;
 	  menu->redraw = REDRAW_FULL;
           /* L10N: This is displayed when the x-label on one or more
            * messages is edited. */
 	  mutt_message (_("%d labels changed."), rc);
 	}
-	else {
+	else
+        {
           /* L10N: This is displayed when editing an x-label, but no messages
            * were updated.  Possibly due to canceling at the prompt or if the new
            * label is the same as the old label. */

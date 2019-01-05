@@ -115,8 +115,10 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
     pattern.data = safe_strdup (path);
   }
 #ifdef USE_COMPRESSED
-  else if (data & (MUTT_APPENDHOOK | MUTT_OPENHOOK | MUTT_CLOSEHOOK)) {
-    if (mutt_comp_valid_command (command.data) == 0) {
+  else if (data & (MUTT_APPENDHOOK | MUTT_OPENHOOK | MUTT_CLOSEHOOK))
+  {
+    if (mutt_comp_valid_command (command.data) == 0)
+    {
       strfcpy (err->data, _("badly formatted command string"), err->dsize);
       return -1;
     }
@@ -442,7 +444,7 @@ void mutt_folder_hook (char *path)
   mutt_buffer_init (&token);
   for (; tmp; tmp = tmp->next)
   {
-    if(!tmp->command)
+    if (!tmp->command)
       continue;
 
     if (tmp->type & MUTT_FOLDERHOOK)
@@ -496,7 +498,7 @@ void mutt_message_hook (CONTEXT *ctx, HEADER *hdr, int type)
   memset (&cache, 0, sizeof (cache));
   for (hook = Hooks; hook; hook = hook->next)
   {
-    if(!hook->command)
+    if (!hook->command)
       continue;
 
     if (hook->type & type)
@@ -533,7 +535,7 @@ mutt_addr_hook (char *path, size_t pathlen, int type, CONTEXT *ctx, HEADER *hdr)
   /* determine if a matching hook exists */
   for (hook = Hooks; hook; hook = hook->next)
   {
-    if(!hook->command)
+    if (!hook->command)
       continue;
 
     if (hook->type & type)

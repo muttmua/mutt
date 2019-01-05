@@ -452,7 +452,7 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
 
 static void strnfcpy(char *d, const char *s, size_t siz, size_t len)
 {
-  if(len > siz)
+  if (len > siz)
     len = siz - 1;
   strfcpy(d, s, len);
 }
@@ -509,9 +509,9 @@ int rfc1524_expand_filename (const char *nametemplate,
      */
 
     lmatch = 1; ps = 0;
-    for(i = 0; nametemplate[i]; i++)
+    for (i = 0; nametemplate[i]; i++)
     {
-      if(nametemplate[i] == '%' && nametemplate[i+1] == 's')
+      if (nametemplate[i] == '%' && nametemplate[i+1] == 's')
       {
 	ps = 1;
 	break;
@@ -519,11 +519,11 @@ int rfc1524_expand_filename (const char *nametemplate,
 
       /* note that the following will _not_ read beyond oldfile's end. */
 
-      if(lmatch && nametemplate[i] != oldfile[i])
+      if (lmatch && nametemplate[i] != oldfile[i])
 	lmatch = 0;
     }
 
-    if(ps)
+    if (ps)
     {
 
       /* If we had a "%s", check the rest. */
@@ -543,11 +543,11 @@ int rfc1524_expand_filename (const char *nametemplate,
 
       rmatch = 1;
 
-      for(j = mutt_strlen(oldfile) - 1, k = mutt_strlen(nametemplate) - 1 ;
-	  j >= (lmatch ? i : 0) && k >= i + 2;
-	  j--, k--)
+      for (j = mutt_strlen(oldfile) - 1, k = mutt_strlen(nametemplate) - 1 ;
+           j >= (lmatch ? i : 0) && k >= i + 2;
+           j--, k--)
       {
-	if(nametemplate[k] != oldfile[j])
+	if (nametemplate[k] != oldfile[j])
 	{
 	  rmatch = 0;
 	  break;
@@ -556,13 +556,13 @@ int rfc1524_expand_filename (const char *nametemplate,
 
       /* Now, check if we had a full match. */
 
-      if(k >= i + 2)
+      if (k >= i + 2)
 	rmatch = 0;
 
-      if(lmatch) *left = 0;
+      if (lmatch) *left = 0;
       else strnfcpy(left, nametemplate, sizeof(left), i);
 
-      if(rmatch) *right = 0;
+      if (rmatch) *right = 0;
       else strfcpy(right, nametemplate + i + 2, sizeof(right));
 
       snprintf(newfile, nflen, "%s%s%s", left, oldfile, right);
@@ -576,7 +576,7 @@ int rfc1524_expand_filename (const char *nametemplate,
 
   mutt_adv_mktemp(newfile, nflen);
 
-  if(rmatch && lmatch)
+  if (rmatch && lmatch)
     return 0;
   else
     return 1;

@@ -215,9 +215,11 @@ restore_int(unsigned int *i, const unsigned char *d, int *off)
   (*off) += sizeof (int);
 }
 
-static inline int is_ascii (const char *p, size_t len) {
+static inline int is_ascii (const char *p, size_t len)
+{
   register const char *s = p;
-  while (s && (unsigned) (s - p) < len) {
+  while (s && (unsigned) (s - p) < len)
+  {
     if ((*s & 0x80) != 0)
       return 0;
     s++;
@@ -237,9 +239,11 @@ dump_char_size(char *c, unsigned char *d, int *off, ssize_t size, int convert)
     return d;
   }
 
-  if (convert && !is_ascii (c, size)) {
+  if (convert && !is_ascii (c, size))
+  {
     p = mutt_substrdup (c, c + size);
-    if (mutt_convert_string (&p, Charset, "utf-8", 0) == 0) {
+    if (mutt_convert_string (&p, Charset, "utf-8", 0) == 0)
+    {
       c = p;
       size = mutt_strlen (c) + 1;
     }
@@ -276,11 +280,15 @@ restore_char(char **c, const unsigned char *d, int *off, int convert)
 
   *c = safe_malloc(size);
   memcpy(*c, d + *off, size);
-  if (convert && !is_ascii (*c, size)) {
+  if (convert && !is_ascii (*c, size))
+  {
     char *tmp = safe_strdup (*c);
-    if (mutt_convert_string (&tmp, "utf-8", Charset, 0) == 0) {
+    if (mutt_convert_string (&tmp, "utf-8", Charset, 0) == 0)
+    {
       mutt_str_replace (c, tmp);
-    } else {
+    }
+    else
+    {
       FREE(&tmp);
     }
   }
@@ -1003,7 +1011,8 @@ static char* get_foldername(const char *folder)
     p = safe_malloc (PATH_MAX+1);
     if (!realpath (path, p))
       mutt_str_replace (&p, path);
-  } else
+  }
+  else
     p = safe_strdup (path);
 
   return p;
@@ -1466,7 +1475,8 @@ mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
 #endif
 
   /* Calculate the current hcache version from dynamic configuration */
-  if (hcachever == 0x0) {
+  if (hcachever == 0x0)
+  {
     union {
       unsigned char charval[16];
       unsigned int intval;

@@ -471,11 +471,11 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
          */
       case 'm':
       case 'M':
-        if(*(p+1) == '<')
+        if (*(p+1) == '<')
         {
 	  for (p += 2; *p && *p != '>'; p++)
 	    ;
-	  if(*p != '>')
+	  if (*p != '>')
 	  {
 	    mutt_error _("Illegal crypto header");
 	    return 0;
@@ -489,13 +489,13 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
       case 'C':
    	q = smime_cryptalg;
 
-        if(*(p+1) == '<')
+        if (*(p+1) == '<')
 	{
-	  for(p += 2; *p && *p != '>' && q < smime_cryptalg + sizeof(smime_cryptalg) - 1;
-	      *q++ = *p++)
+	  for (p += 2; *p && *p != '>' && q < smime_cryptalg + sizeof(smime_cryptalg) - 1;
+               *q++ = *p++)
 	    ;
 
-	  if(*p != '>')
+	  if (*p != '>')
 	  {
 	    mutt_error _("Illegal S/MIME header");
 	    return 0;

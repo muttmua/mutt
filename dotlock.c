@@ -670,7 +670,8 @@ dotlock_lock (const char *realpath)
      */
 
     t = time (NULL);
-    do {
+    do
+    {
       sleep (1);
     } while (time (NULL) == t);
   }

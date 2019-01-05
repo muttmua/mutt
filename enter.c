@@ -93,7 +93,8 @@ static void my_wcstombs (char *dest, size_t dlen, const wchar_t *src, size_t sle
       break;
 
   /* If this works, we can stop now */
-  if (dlen >= MB_LEN_MAX) {
+  if (dlen >= MB_LEN_MAX)
+  {
     wcrtomb (dest, 0, &st);
     return;
   }
@@ -109,7 +110,8 @@ static void my_wcstombs (char *dest, size_t dlen, const wchar_t *src, size_t sle
     p += wcrtomb (p, 0, &st);
 
     /* If it fits into the destination buffer, we can stop now */
-    if (p - buf <= dlen) {
+    if (p - buf <= dlen)
+    {
       memcpy (dest, buf, p - buf);
       return;
     }

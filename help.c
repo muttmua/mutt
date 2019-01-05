@@ -351,7 +351,8 @@ void mutt_help (int menu)
   if (!desc)
     desc = _("<UNKNOWN>");
 
-  do {
+  do
+  {
     if ((f = safe_fopen (t, "w")) == NULL)
     {
       mutt_perror (t);

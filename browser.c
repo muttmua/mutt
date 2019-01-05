@@ -192,13 +192,17 @@ folder_format_str (char *dest, size_t destlen, size_t col, int cols, char op, co
       {
 	int do_locales = TRUE;
 
-	if (op == 'D') {
+	if (op == 'D')
+        {
 	  t_fmt = NONULL(DateFmt);
-	  if (*t_fmt == '!') {
+	  if (*t_fmt == '!')
+          {
 	    ++t_fmt;
 	    do_locales = FALSE;
 	  }
-	} else {
+	}
+        else
+        {
 	  tnow = time (NULL);
 	  t_fmt = tnow - folder->ff->mtime < 31536000 ? "%b %d %H:%M" : "%b %d  %Y";
 	}
@@ -596,7 +600,7 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
 
   menu->max = state->entrylen;
 
-  if(menu->current >= menu->max)
+  if (menu->current >= menu->max)
     menu->current = menu->max - 1;
   if (menu->current < 0)
     menu->current = 0;
@@ -947,7 +951,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	goto bail;
 
       case OP_BROWSER_TELL:
-        if(state.entrylen)
+        if (state.entrylen)
 	  mutt_message("%s", state.entry[menu->current].name);
         break;
 

@@ -317,7 +317,7 @@ check_attachments(ATTACH_CONTEXT *actx)
   for (i = 0; i < actx->idxlen; i++)
   {
     strfcpy(pretty, actx->idx[i]->content->filename, sizeof(pretty));
-    if(stat(actx->idx[i]->content->filename, &st) != 0)
+    if (stat(actx->idx[i]->content->filename, &st) != 0)
     {
       mutt_pretty_mailbox(pretty, sizeof (pretty));
       mutt_error(_("%s [#%d] no longer exists!"),
@@ -325,15 +325,15 @@ check_attachments(ATTACH_CONTEXT *actx)
       return -1;
     }
 
-    if(actx->idx[i]->content->stamp < st.st_mtime)
+    if (actx->idx[i]->content->stamp < st.st_mtime)
     {
       mutt_pretty_mailbox(pretty, sizeof (pretty));
       snprintf(msg, sizeof(msg), _("%s [#%d] modified. Update encoding?"),
 	       pretty, i+1);
 
-      if((r = mutt_yesorno(msg, MUTT_YES)) == MUTT_YES)
+      if ((r = mutt_yesorno(msg, MUTT_YES)) == MUTT_YES)
 	mutt_update_encoding(actx->idx[i]->content);
-      else if(r == -1)
+      else if (r == -1)
 	return -1;
     }
   }
@@ -1120,7 +1120,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	 * users an opportunity to change settings from the ":" prompt.
 	 */
 
-        if(check_attachments(actx) != 0)
+        if (check_attachments(actx) != 0)
         {
 	  menu->redraw = REDRAW_FULL;
 	  break;
@@ -1162,12 +1162,12 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
       case OP_COMPOSE_GET_ATTACHMENT:
         CHECK_COUNT;
-        if(menu->tagprefix)
+        if (menu->tagprefix)
         {
 	  BODY *top;
-	  for(top = msg->content; top; top = top->next)
+	  for (top = msg->content; top; top = top->next)
 	  {
-	    if(top->tagged)
+	    if (top->tagged)
 	      mutt_get_tmp_attachment(top);
 	  }
 	  menu->redraw = REDRAW_FULL;
@@ -1219,13 +1219,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  }
 
 	  mutt_expand_path (fname, sizeof (fname));
-	  if(mutt_rename_file (CURATTACH->content->filename, fname))
+	  if (mutt_rename_file (CURATTACH->content->filename, fname))
 	    break;
 
 	  mutt_str_replace (&CURATTACH->content->filename, fname);
 	  menu->redraw = REDRAW_CURRENT;
 
-	  if(CURATTACH->content->stamp >= st.st_mtime)
+	  if (CURATTACH->content->stamp >= st.st_mtime)
 	    mutt_stamp_attachment(CURATTACH->content);
 
 	}
@@ -1364,7 +1364,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
       case OP_COMPOSE_POSTPONE_MESSAGE:
 
-        if(check_attachments(actx) != 0)
+        if (check_attachments(actx) != 0)
         {
 	  menu->redraw = REDRAW_FULL;
 	  break;

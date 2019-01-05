@@ -587,7 +587,8 @@ void mutt_progress_init (progress_t* progress, const char *msg,
   progress->flags = flags;
   progress->msg = msg;
   progress->size = size;
-  if (progress->size) {
+  if (progress->size)
+  {
     if (progress->flags & MUTT_PROGRESS_SIZE)
       mutt_pretty_size (progress->sizestr, sizeof (progress->sizestr),
 			progress->size);
@@ -633,7 +634,8 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     update = 1;
 
   /* skip refresh if not enough time has passed */
-  if (update && progress->timestamp && !gettimeofday (&tv, NULL)) {
+  if (update && progress->timestamp && !gettimeofday (&tv, NULL))
+  {
     now = ((unsigned int) tv.tv_sec * 1000)
       + (unsigned int) (tv.tv_usec / 1000);
     if (now && now - progress->timestamp < TimeInc)
@@ -1079,7 +1081,8 @@ void mutt_curs_set (int cursor)
   else
     SavedCursor = cursor;
 
-  if (curs_set (cursor) == ERR) {
+  if (curs_set (cursor) == ERR)
+  {
     if (cursor == 1)	/* cnorm */
       curs_set (2);	/* cvvis */
   }

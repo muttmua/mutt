@@ -704,7 +704,8 @@ static void print_confline (const char *varname, int type, const char *val, FILE
 	man_print_strval (val, out);
 	fputs ("\\(rq\n", out);
       }
-      else {
+      else
+      {
 	fputs ("Default: ", out);
 	man_print_strval (val, out);
 	fputs ("\n", out);

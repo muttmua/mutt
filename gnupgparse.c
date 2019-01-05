@@ -339,9 +339,9 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       case 12:			/* key capabilities */
 	dprint (2, (debugfile, "capabilities info: %s\n", p));
 
-	while(*p)
+	while (*p)
         {
-          switch(*p++)
+          switch (*p++)
           {
             case 'D':
               flags |= KEYFLAG_DISABLED;

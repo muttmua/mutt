@@ -62,7 +62,8 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
      * 2. attempt sasl_client_start with only "AUTH=ANONYMOUS" capability
      * 3. if sasl_client_start fails, fall through... */
 
-    if (mutt_account_getuser (&idata->conn->account)) {
+    if (mutt_account_getuser (&idata->conn->account))
+    {
       sasl_dispose (&saslconn);
       return IMAP_AUTH_FAILURE;
     }
@@ -72,8 +73,10 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
 	 !ascii_strncmp (idata->conn->account.user, "anonymous", 9)))
       rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
                               &mech);
-  } else if (!ascii_strcasecmp ("login", method) &&
-             !strstr (NONULL (idata->capstr), "AUTH=LOGIN")) {
+  }
+  else if (!ascii_strcasecmp ("login", method) &&
+           !strstr (NONULL (idata->capstr), "AUTH=LOGIN"))
+  {
     /* do not use SASL login for regular IMAP login (#3556) */
     sasl_dispose (&saslconn);
     return IMAP_AUTH_UNAVAIL;

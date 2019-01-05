@@ -303,7 +303,8 @@ static void process_user_header (ENVELOPE *env)
       {
 	FREE(&env->message_id);
 	env->message_id = tmp;
-      } else
+      }
+      else
 	FREE(&tmp);
     }
     else if (ascii_strncasecmp ("to:", uh->data, 3) != 0 &&
@@ -558,7 +559,7 @@ int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
 
     if ((flags & SENDGROUPREPLY) && (!in->mail_followup_to || hmfupto != MUTT_YES))
     {
-      /* if(!mutt_addr_is_user(in->to)) */
+      /* if (!mutt_addr_is_user(in->to)) */
       rfc822_append (&out->cc, in->to, 1);
       rfc822_append (&out->cc, in->cc, 1);
     }
@@ -672,7 +673,7 @@ mutt_make_reference_headers (ENVELOPE *curenv, ENVELOPE *env, CONTEXT *ctx)
     LIST **p = NULL, **q = NULL;
     int i;
 
-    for(i = 0; i < ctx->vcount; i++)
+    for (i = 0; i < ctx->vcount; i++)
     {
       h = ctx->hdrs[ctx->v2r[i]];
       if (h->tagged)
@@ -1098,7 +1099,7 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
     {
       if (clear_content->type == TYPEMULTIPART)
       {
-        if(!(msg->security & ENCRYPT) && (msg->security & SIGN))
+        if (!(msg->security & ENCRYPT) && (msg->security & SIGN))
         {
           /* save initial signature and attachments */
           save_sig = msg->content->parts->next;
@@ -1450,7 +1451,7 @@ ci_send_message (int flags,		/* send mode */
     if ((i = query_quadoption (OPT_RECALL, _("Recall postponed message?"))) == -1)
       return rv;
 
-    if(i == MUTT_YES)
+    if (i == MUTT_YES)
       flags |= SENDPOSTPONED;
   }
 

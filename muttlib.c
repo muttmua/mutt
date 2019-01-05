@@ -377,7 +377,7 @@ HEADER *mutt_dup_header(HEADER *h)
 
 void mutt_free_header (HEADER **h)
 {
-  if(!h || !*h) return;
+  if (!h || !*h) return;
   mutt_free_envelope (&(*h)->env);
   mutt_free_body (&(*h)->content);
   FREE (&(*h)->maildir_flags);
@@ -669,7 +669,7 @@ void mutt_set_parameter (const char *attribute, const char *value, PARAMETER **p
     return;
   }
 
-  for(q = *p; q; q = q->next)
+  for (q = *p; q; q = q->next)
   {
     if (ascii_strcasecmp (attribute, q->attribute) == 0)
     {
@@ -712,9 +712,9 @@ int mutt_needs_mailcap (BODY *m)
       break;
 
     case TYPEAPPLICATION:
-      if((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp(m))
+      if ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp(m))
 	return 0;
-      if((WithCrypto & APPLICATION_SMIME) && mutt_is_application_smime(m))
+      if ((WithCrypto & APPLICATION_SMIME) && mutt_is_application_smime(m))
 	return 0;
       break;
 
@@ -1280,7 +1280,8 @@ void mutt_FormatString (char *dest,		/* output buffer */
       command = mutt_buffer_new ();
 
       /* Iterate expansions across successive arguments */
-      do {
+      do
+      {
         char *p;
 
         /* Extract the command name and copy to command line */
@@ -1321,7 +1322,8 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	rc = mutt_wait_filter(pid);
 	if (rc != 0)
 	  dprint(1, (debugfile, "format pipe command exited code %d\n", rc));
-	if (n > 0) {
+	if (n > 0)
+        {
 	  dest[n] = 0;
 	  while ((n > 0) && (dest[n-1] == '\n' || dest[n-1] == '\r'))
 	    dest[--n] = '\0';
@@ -2057,7 +2059,8 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
 	  /* Ensure that the integer conversion succeeded (e!=p) and bounds check.  The upper bound check
 	   * should not strictly be necessary since add_to_spam_list() finds the largest value, and
 	   * the static array above is always large enough based on that value. */
-	  if (e != p && n >= 0 && n <= l->nmatch && pmatch[n].rm_so != -1) {
+	  if (e != p && n >= 0 && n <= l->nmatch && pmatch[n].rm_so != -1)
+          {
 	    /* copy as much of the substring match as will fit in the output buffer, saving space for
 	     * the terminating nul char */
 	    int idx;
@@ -2076,7 +2079,8 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
        * terminal nul char.   This should avoid returning an unterminated
        * string to the caller.  When textsize<=0 we make no assumption about
        * the validity of the text pointer. */
-      if (tlen < textsize) {
+      if (tlen < textsize)
+      {
 	text[tlen] = '\0';
 	dprint (5, (debugfile, "mutt_match_spam_list: \"%s\"\n", text));
       }

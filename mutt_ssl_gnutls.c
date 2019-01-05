@@ -140,7 +140,8 @@ static int tls_socket_read (CONNECTION* conn, char* buf, size_t len)
     return -1;
   }
 
-  do {
+  do
+  {
     ret = gnutls_record_recv (data->state, buf, len);
     if (ret < 0 && gnutls_error_is_fatal(ret) == 1)
     {
@@ -425,7 +426,8 @@ static int tls_negotiate (CONNECTION * conn)
     mutt_sleep (1);
   }
 
-  if (tls_set_priority(data) < 0) {
+  if (tls_set_priority(data) < 0)
+  {
     goto fail;
   }
 
@@ -446,7 +448,8 @@ static int tls_negotiate (CONNECTION * conn)
   {
     err = gnutls_handshake(data->state);
   }
-  if (err < 0) {
+  if (err < 0)
+  {
     if (err == GNUTLS_E_FATAL_ALERT_RECEIVED)
     {
       mutt_error("gnutls_handshake: %s(%s)", gnutls_strerror(err),
@@ -469,7 +472,8 @@ static int tls_negotiate (CONNECTION * conn)
 
   tls_get_client_cert (conn);
 
-  if (!option(OPTNOCURSES)) {
+  if (!option(OPTNOCURSES))
+  {
     mutt_message (_("SSL/TLS connection using %s (%s/%s/%s)"),
                   gnutls_protocol_get_name (gnutls_protocol_get_version (data->state)),
                   gnutls_kx_get_name (gnutls_kx_get (data->state)),
@@ -544,14 +548,16 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
   b64_data.data = b64_data_data;
 
   fd1 = fopen(SslCertFile, "r");
-  if (fd1 == NULL) {
+  if (fd1 == NULL)
+  {
     return 0;
   }
 
   b64_data.size = fread(b64_data.data, 1, b64_data.size, fd1);
   safe_fclose (&fd1);
 
-  do {
+  do
+  {
     ret = gnutls_pem_base64_decode_alloc(NULL, &b64_data, &cert);
     if (ret != 0)
     {
@@ -656,7 +662,7 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
     tls_fingerprint (GNUTLS_DIG_MD5, buf, sizeof (buf), cert);
     while ((linestr = mutt_read_line(linestr, &linestrsize, fp, &linenum, 0)) != NULL)
     {
-      if(linestr[0] == '#' && linestr[1] == 'H')
+      if (linestr[0] == '#' && linestr[1] == 'H')
       {
         if (regexec(&preg, linestr, 3, pmatch, 0) == 0)
         {
@@ -1143,7 +1149,8 @@ static int tls_check_certificate (CONNECTION* conn)
    * from most specific to least checking these. If we see a saved certificate,
    * its status short-circuits the remaining checks. */
   preauthrc = 0;
-  for (i = 0; i < cert_list_size; i++) {
+  for (i = 0; i < cert_list_size; i++)
+  {
     rc = tls_check_preauth(&cert_list[i], certstat, conn->account.host, i,
                            &certerr, &savedcert);
     preauthrc += rc;
@@ -1171,7 +1178,8 @@ static int tls_check_certificate (CONNECTION* conn)
                                     i, cert_list_size);
 
     /* add signers to trust set, then reverify */
-    if (i && rc) {
+    if (i && rc)
+    {
       rc = gnutls_certificate_set_x509_trust_mem (data->xcred, &cert_list[i],
                                                   GNUTLS_X509_FMT_DER);
       if (rc != 1)

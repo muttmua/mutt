@@ -124,7 +124,7 @@ int pgp_use_gpg_agent (void)
 
 static pgp_key_t _pgp_parent(pgp_key_t k)
 {
-  if((k->flags & KEYFLAG_SUBKEY) && k->parent && option(OPTPGPIGNORESUB))
+  if ((k->flags & KEYFLAG_SUBKEY) && k->parent && option(OPTPGPIGNORESUB))
     k = k->parent;
 
   return k;
@@ -153,7 +153,7 @@ char *pgp_keyid(pgp_key_t k)
 
 char *_pgp_keyid(pgp_key_t k)
 {
-  if(option(OPTPGPLONGIDS))
+  if (option(OPTPGPLONGIDS))
     return k->keyid;
   else
     return (k->keyid + 8);
@@ -611,7 +611,7 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
        * Now, copy cleartext to the screen.
        */
 
-      if(s->flags & MUTT_DISPLAY)
+      if (s->flags & MUTT_DISPLAY)
       {
 	if (needpass)
 	  state_attach_puts (_("[-- BEGIN PGP MESSAGE --]\n\n"), s);
@@ -804,7 +804,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 
   snprintf (sigfile, sizeof (sigfile), "%s.asc", tempfile);
 
-  if(!(fp = safe_fopen (sigfile, "w")))
+  if (!(fp = safe_fopen (sigfile, "w")))
   {
     mutt_perror(sigfile);
     return -1;
@@ -815,7 +815,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   safe_fclose (&fp);
 
   mutt_mktemp (pgperrfile, sizeof (pgperrfile));
-  if(!(pgperr = safe_fopen(pgperrfile, "w+")))
+  if (!(pgperr = safe_fopen(pgperrfile, "w+")))
   {
     mutt_perror(pgperrfile);
     unlink(sigfile);
@@ -824,7 +824,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 
   crypt_current_time (s, "PGP");
 
-  if((thepid = pgp_invoke_verify (NULL, &pgpout, NULL,
+  if ((thepid = pgp_invoke_verify (NULL, &pgpout, NULL,
                                   -1, -1, fileno(pgperr),
                                   tempfile, sigfile)) != -1)
   {
@@ -890,7 +890,7 @@ static void pgp_extract_keys_from_attachment (FILE *fp, BODY *top)
 
 void pgp_extract_keys_from_attachment_list (FILE *fp, int tag, BODY *top)
 {
-  if(!fp)
+  if (!fp)
   {
     mutt_error _("Internal error.  Please submit a bug report.");
     return;
@@ -899,12 +899,12 @@ void pgp_extract_keys_from_attachment_list (FILE *fp, int tag, BODY *top)
   mutt_endwin (NULL);
   set_option(OPTDONTHANDLEPGPKEYS);
 
-  for(; top; top = top->next)
+  for (; top; top = top->next)
   {
-    if(!tag || top->tagged)
+    if (!tag || top->tagged)
       pgp_extract_keys_from_attachment (fp, top);
 
-    if(!tag)
+    if (!tag)
       break;
   }
 
@@ -932,7 +932,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   unlink (pgperrfile);
 
   mutt_mktemp (pgptmpfile, sizeof (pgptmpfile));
-  if((pgptmp = safe_fopen (pgptmpfile, "w")) == NULL)
+  if ((pgptmp = safe_fopen (pgptmpfile, "w")) == NULL)
   {
     mutt_perror (pgptmpfile);
     safe_fclose (&pgperr);
@@ -1278,7 +1278,7 @@ BODY *pgp_sign_message (BODY *a)
     fputs (buffer, stdout);
   }
 
-  if(mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
+  if (mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
     empty=1;
 
   safe_fclose (&pgperr);
@@ -1483,7 +1483,7 @@ BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
   unlink (pgperrfile);
 
   mutt_mktemp (pgpinfile, sizeof (pgpinfile));
-  if((fptmp = safe_fopen(pgpinfile, "w")) == NULL)
+  if ((fptmp = safe_fopen(pgpinfile, "w")) == NULL)
   {
     mutt_perror(pgpinfile);
     unlink(tempfile);
@@ -1517,14 +1517,14 @@ BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
   }
   safe_fclose (&pgpin);
 
-  if(mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
+  if (mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
     empty=1;
 
   unlink(pgpinfile);
 
   fflush (fpout);
   rewind (fpout);
-  if(!empty)
+  if (!empty)
     empty = (fgetc (fpout) == EOF);
   safe_fclose (&fpout);
 
@@ -1691,7 +1691,7 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
     fprintf (pgpin, "%s\n", PgpPass);
   safe_fclose (&pgpin);
 
-  if(mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
+  if (mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
     empty=1;
 
   mutt_unlink (pgpinfile);
@@ -1702,7 +1702,7 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
   rewind (pgpout);
   rewind (pgperr);
 
-  if(!empty)
+  if (!empty)
     empty = (fgetc (pgpout) == EOF);
   safe_fclose (&pgpout);
 

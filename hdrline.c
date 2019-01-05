@@ -173,7 +173,7 @@ int mutt_user_is_recipient (HEADER *h)
 {
   ENVELOPE *env = h->env;
 
-  if(!h->recip_valid)
+  if (!h->recip_valid)
   {
     h->recip_valid = 1;
 
@@ -280,7 +280,7 @@ hdr_format_str (char *dest,
   switch (op)
   {
     case 'A':
-      if(hdr->env->reply_to && hdr->env->reply_to->mailbox)
+      if (hdr->env->reply_to && hdr->env->reply_to->mailbox)
       {
 	mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->reply_to));
 	break;
@@ -288,7 +288,7 @@ hdr_format_str (char *dest,
       /* fall through if 'A' returns nothing */
 
     case 'a':
-      if(hdr->env->from && hdr->env->from->mailbox)
+      if (hdr->env->from && hdr->env->from->mailbox)
       {
 	mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->from));
       }
@@ -309,7 +309,7 @@ hdr_format_str (char *dest,
       /* fall through if 'B' returns nothing */
 
     case 'b':
-      if(ctx)
+      if (ctx)
       {
 	if ((p = strrchr (ctx->path, '/')))
 	  strfcpy (dest, p + 1, destlen);
@@ -504,7 +504,7 @@ hdr_format_str (char *dest,
       break;
 
     case 'm':
-      if(ctx)
+      if (ctx)
       {
 	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
 	snprintf (dest, destlen, fmt, ctx->msgcount);

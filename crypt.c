@@ -441,7 +441,7 @@ int mutt_is_application_pgp (BODY *m)
 	  !ascii_strcasecmp (p, "keys-only"))
 	t |= PGPKEY;
 
-      if(!t) t |= PGPENCRYPT;  /* not necessarily correct, but... */
+      if (!t) t |= PGPENCRYPT;  /* not necessarily correct, but... */
     }
 
     if (!ascii_strcasecmp (m->subtype, "pgp-signed"))
@@ -473,7 +473,7 @@ int mutt_is_application_smime (BODY *m)
   char *t=NULL;
   int len, complain=0;
 
-  if(!m)
+  if (!m)
     return 0;
 
   if ((m->type & TYPEAPPLICATION) && m->subtype)
@@ -665,7 +665,7 @@ void convert_to_7bit (BODY *a)
     else if (a->type == TYPEMESSAGE &&
 	     ascii_strcasecmp(a->subtype, "delivery-status"))
     {
-      if(a->encoding != ENC7BIT)
+      if (a->encoding != ENC7BIT)
 	mutt_message_to_7bit (a, NULL);
     }
     else if (a->encoding == ENC8BIT)
@@ -913,7 +913,7 @@ static void crypt_fetch_signatures (BODY ***signatures, BODY *a, int *n)
       crypt_fetch_signatures (signatures, a->parts, n);
     else
     {
-      if((*n % 5) == 0)
+      if ((*n % 5) == 0)
 	safe_realloc (signatures, (*n + 6) * sizeof (BODY **));
 
       (*signatures)[(*n)++] = a;

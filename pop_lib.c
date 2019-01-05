@@ -63,7 +63,8 @@ int pop_parse_path (const char* path, ACCOUNT* acct)
     acct->flags |= MUTT_ACCT_SSL;
 
   service = getservbyname (url.scheme == U_POP ? "pop3" : "pop3s", "tcp");
-  if (!acct->port) {
+  if (!acct->port)
+  {
     if (service)
       acct->port = ntohs (service->s_port);
     else

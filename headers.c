@@ -282,7 +282,8 @@ int mutt_label_message(HEADER *hdr)
     return 0;
 
   *buf = '\0';
-  if (hdr != NULL && hdr->env->x_label != NULL) {
+  if (hdr != NULL && hdr->env->x_label != NULL)
+  {
     strncpy(buf, hdr->env->x_label, LONG_STRING);
   }
 
@@ -302,11 +303,15 @@ int mutt_label_message(HEADER *hdr)
       ++changed;
       mutt_set_header_color (Context, hdr);
     }
-  } else {
+  }
+  else
+  {
 #define HDR_OF(index) Context->hdrs[Context->v2r[(index)]]
-    for (i = 0; i < Context->vcount; ++i) {
+    for (i = 0; i < Context->vcount; ++i)
+    {
       if (HDR_OF(i)->tagged)
-        if (label_message(Context, HDR_OF(i), new)) {
+        if (label_message(Context, HDR_OF(i), new))
+        {
           ++changed;
           mutt_set_flag(Context, HDR_OF(i),
                         MUTT_TAG, 0);

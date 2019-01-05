@@ -155,14 +155,17 @@ int imap_delete_mailbox (CONTEXT* ctx, IMAP_MBOX mx)
   char buf[LONG_STRING*2], mbox[LONG_STRING];
   IMAP_DATA *idata;
 
-  if (!ctx || !ctx->data) {
+  if (!ctx || !ctx->data)
+  {
     if (!(idata = imap_conn_find (&mx.account,
                                   option (OPTIMAPPASSIVE) ? MUTT_IMAP_CONN_NONEW : 0)))
     {
       FREE (&mx.mbox);
       return -1;
     }
-  } else {
+  }
+  else
+  {
     idata = ctx->data;
   }
 
@@ -484,7 +487,8 @@ int imap_open_connection (IMAP_DATA* idata)
       else if ((rc = query_quadoption (OPT_SSLSTARTTLS,
                                        _("Secure connection with TLS?"))) == -1)
 	goto err_close_conn;
-      if (rc == MUTT_YES) {
+      if (rc == MUTT_YES)
+      {
 	if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
 	  goto bail;
 	if (rc != -2)
@@ -1186,7 +1190,8 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     mutt_remove_trailing_ws (flags);
 
     mutt_buffer_addstr (cmd, " -FLAGS.SILENT (");
-  } else
+  }
+  else
     mutt_buffer_addstr (cmd, " FLAGS.SILENT (");
 
   mutt_buffer_addstr (cmd, flags);
@@ -2146,7 +2151,8 @@ imap_complete_hosts (char *dest, size_t len)
 
 /* imap_complete: given a partial IMAP folder path, return a string which
  *   adds as much to the path as is unique */
-int imap_complete(char* dest, size_t dlen, char* path) {
+int imap_complete(char* dest, size_t dlen, char* path)
+{
   IMAP_DATA* idata;
   char list[LONG_STRING];
   char buf[LONG_STRING*2];

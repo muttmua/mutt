@@ -852,7 +852,8 @@ static gpgme_key_t *create_recipient_set (const char *keylist,
 
   context = create_gpgme_context ((protocol == GPGME_PROTOCOL_CMS));
   s = keylist;
-  do {
+  do
+  {
     while (*s == ' ')
       s++;
     for (i=0; *s && *s != ' ' && i < sizeof(buf)-1;)
@@ -1056,7 +1057,9 @@ static int get_micalg (gpgme_ctx_t ctx, int use_smime, char *buf, size_t buflen)
         /* convert GPGME raw hash name to RFC 2633 format */
         snprintf (buf, buflen, "%s", algorithm_name);
         ascii_strlower (buf);
-      } else {
+      }
+      else
+      {
         /* convert GPGME raw hash name to RFC 3156 format */
         snprintf (buf, buflen, "pgp-%s", algorithm_name);
         ascii_strlower (buf + 4);
@@ -1582,7 +1585,8 @@ static void print_smime_keyinfo (const char* msg, gpgme_signature_t sig,
          if the S/MIME key has no ID. This is quite an error.
        */
       state_puts (_("no signature fingerprint available"), s);
-    else {
+    else
+    {
       state_puts (_("KeyID "), s);
       state_puts (sig->fpr, s);
     }
@@ -1977,13 +1981,13 @@ restart:
 
       if (maybe_signed)
         a->is_signed_data = 1;
-      if(r_is_signed)
+      if (r_is_signed)
         *r_is_signed = -1; /* A signature exists. */
 
       if ((s->flags & MUTT_DISPLAY))
         state_attach_puts (_("[-- Begin signature "
                              "information --]\n"), s);
-      for(idx = 0; (res = show_one_sig_status (ctx, idx, s)) != -1; idx++)
+      for (idx = 0; (res = show_one_sig_status (ctx, idx, s)) != -1; idx++)
         {
           if (res == 1)
             anybad = 1;
@@ -2766,7 +2770,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
                       state_attach_puts (_("[-- Begin signature "
                                            "information --]\n"), s);
                       have_any_sigs = 1;
-                      for(idx=0;
+                      for (idx=0;
                           (res = show_one_sig_status (ctx, idx, s)) != -1;
                           idx++)
                         {
@@ -2802,7 +2806,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
            * seems to be a reasonable guess.
            */
 
-          if(s->flags & MUTT_DISPLAY)
+          if (s->flags & MUTT_DISPLAY)
             {
               if (needpass)
             state_attach_puts (_("[-- BEGIN PGP MESSAGE --]\n\n"), s);
@@ -4104,9 +4108,9 @@ static char *list_to_pattern (LIST *list)
   size_t n;
 
   n = 0;
-  for(l=list; l; l = l->next)
+  for (l=list; l; l = l->next)
     {
-      for(s = l->data; *s; s++)
+      for (s = l->data; *s; s++)
         {
           if (*s == '%' || *s == '+')
             n += 2;
@@ -4116,14 +4120,14 @@ static char *list_to_pattern (LIST *list)
     }
   n++; /* make sure to allocate at least one byte */
   pattern = p = safe_calloc (1,n);
-  for(l=list; l; l = l->next)
+  for (l=list; l; l = l->next)
     {
       s = l->data;
       if (*s)
         {
           if (l != list)
             *p++ = ' ';
-          for(s = l->data; *s; s++)
+          for (s = l->data; *s; s++)
             {
               if (*s == '%')
                 {
@@ -4178,7 +4182,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app, int secret)
       size_t n;
       char **patarr;
 
-      for(l=hints, n=0; l; l = l->next)
+      for (l=hints, n=0; l; l = l->next)
         {
           if (l->data && *l->data)
             n++;
@@ -4187,7 +4191,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app, int secret)
         goto no_pgphints;
 
       patarr = safe_calloc (n+1, sizeof *patarr);
-      for(l=hints, n=0; l; l = l->next)
+      for (l=hints, n=0; l; l = l->next)
         {
           if (l->data && *l->data)
             patarr[n++] = safe_strdup (l->data);
@@ -4985,7 +4989,8 @@ static void init_common(void)
   /* this initialization should only run one time, but it may be called by
    * either pgp_gpgme_init or smime_gpgme_init */
   static bool has_run = 0;
-  if (!has_run) {
+  if (!has_run)
+  {
     gpgme_check_version(NULL);
     gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
 #ifdef ENABLE_NLS

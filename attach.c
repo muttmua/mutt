@@ -51,7 +51,7 @@ int mutt_get_tmp_attachment (BODY *a)
   FILE *fpin = NULL, *fpout = NULL;
   struct stat st;
 
-  if(a->unlink)
+  if (a->unlink)
     return 0;
 
   tempfile = mutt_buffer_pool_get ();
@@ -63,27 +63,27 @@ int mutt_get_tmp_attachment (BODY *a)
 
   rfc1524_free_entry(&entry);
 
-  if(stat(a->filename, &st) == -1)
+  if (stat(a->filename, &st) == -1)
   {
     mutt_buffer_pool_release (&tempfile);
     return -1;
   }
 
-  if((fpin = fopen(a->filename, "r")) &&              /* __FOPEN_CHECKED__ */
-     (fpout = safe_fopen(mutt_b2s (tempfile), "w")))
+  if ((fpin = fopen(a->filename, "r")) &&              /* __FOPEN_CHECKED__ */
+      (fpout = safe_fopen(mutt_b2s (tempfile), "w")))
   {
     mutt_copy_stream (fpin, fpout);
     mutt_str_replace (&a->filename, mutt_b2s (tempfile));
     a->unlink = 1;
 
-    if(a->stamp >= st.st_mtime)
+    if (a->stamp >= st.st_mtime)
       mutt_stamp_attachment(a);
   }
   else
     mutt_perror(fpin ? mutt_b2s (tempfile) : a->filename);
 
-  if(fpin)  safe_fclose (&fpin);
-  if(fpout) safe_fclose (&fpout);
+  if (fpin)  safe_fclose (&fpin);
+  if (fpout) safe_fclose (&fpout);
 
   mutt_buffer_pool_release (&tempfile);
 
@@ -162,7 +162,8 @@ int mutt_compose_attachment (BODY *a)
 	      a->parameter = b->parameter;
 	      b->parameter = NULL;
 	    }
-	    if (b->description) {
+	    if (b->description)
+            {
 	      FREE (&a->description);
 	      a->description = b->description;
 	      b->description = NULL;
@@ -211,7 +212,7 @@ int mutt_compose_attachment (BODY *a)
 
 bailout:
 
-  if(unlink_newfile)
+  if (unlink_newfile)
     unlink(mutt_b2s (newfile));
 
   mutt_buffer_pool_release (&command);
@@ -297,7 +298,7 @@ int mutt_edit_attachment (BODY *a)
 
 bailout:
 
-  if(unlink_newfile)
+  if (unlink_newfile)
     unlink(mutt_b2s (newfile));
 
   mutt_buffer_pool_release (&command);
@@ -473,7 +474,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
       }
       if (use_pipe && ((tempfd = open (mutt_b2s (tempfile), 0)) == -1))
       {
-	if(pagerfd != -1)
+	if (pagerfd != -1)
 	  close(pagerfd);
 	mutt_perror ("open");
 	goto return_error;
@@ -482,10 +483,10 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
       if ((thepid = mutt_create_filter_fd (mutt_b2s (command), NULL, NULL, NULL,
 					   use_pipe ? tempfd : -1, use_pager ? pagerfd : -1, -1)) == -1)
       {
-	if(pagerfd != -1)
+	if (pagerfd != -1)
 	  close(pagerfd);
 
-	if(tempfd != -1)
+	if (tempfd != -1)
 	  close(tempfd);
 
 	mutt_error _("Cannot create filter");
@@ -740,7 +741,7 @@ int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER
 
     /* recv mode */
 
-    if(hdr &&
+    if (hdr &&
        m->hdr &&
        m->encoding != ENCBASE64 &&
        m->encoding != ENCQUOTEDPRINTABLE &&

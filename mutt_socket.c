@@ -577,7 +577,8 @@ int raw_socket_open (CONNECTION* conn)
   FREE (&host_idna);
 # endif
 
-  if (! he) {
+  if (! he)
+  {
     mutt_error (_("Could not find the host \"%s\""), conn->account.host);
 
     return -1;

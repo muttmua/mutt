@@ -13,21 +13,25 @@
 #include <unistd.h>
 #include <string.h>
 
-void print_usage(const char *progname) {
+void print_usage(const char *progname)
+{
   fprintf(stderr, "Command line usage: %s [flags] -- prefix [recipients]\n", progname);
   exit(1);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   char **opts, **opt, *pfx;
   int i;
 
-  if (argc <= 1) {
+  if (argc <= 1)
+  {
     print_usage(argv[0]);
   }
 
   opts = malloc((2 * argc + 1) * sizeof (* opts));	/* __MEM_CHECKED__ */
-  if(!opts) {
+  if (!opts)
+  {
     perror(argv[0]);
     exit(2);
   }
@@ -44,15 +48,18 @@ int main(int argc, char **argv) {
   *opt++ = argv[1];
   pfx = NULL;
 
-  for(i = 2; i < argc; ) {
-    if(!strcmp(argv[i], "--")) {
+  for (i = 2; i < argc; )
+  {
+    if (!strcmp(argv[i], "--"))
+    {
       i += 2;
-      if(i > argc) {
+      if (i > argc)
+      {
         print_usage(argv[0]);
       }
       pfx = argv[i-1];
     }
-    if(pfx)
+    if (pfx)
       *opt++ = pfx;
     *opt++ = argv[i++];
   }

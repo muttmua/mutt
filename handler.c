@@ -125,9 +125,9 @@ static void mutt_decode_xbit (STATE *s, long len, int istext, iconv_t cd)
 
     while ((c = fgetc(s->fpin)) != EOF && len--)
     {
-      if(c == '\r' && len)
+      if (c == '\r' && len)
       {
-	if((ch = fgetc(s->fpin)) == '\n')
+	if ((ch = fgetc(s->fpin)) == '\n')
 	{
 	  c = ch;
 	  len--;
@@ -382,10 +382,10 @@ static void mutt_decode_uuencoded (STATE *s, long len, int istext, iconv_t cd)
   char bufi[BUFI_SIZE];
   size_t k = 0;
 
-  if(istext)
+  if (istext)
     state_set_prefix(s);
 
-  while(len > 0)
+  while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
       return;
@@ -393,7 +393,7 @@ static void mutt_decode_uuencoded (STATE *s, long len, int istext, iconv_t cd)
     if ((!mutt_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
       break;
   }
-  while(len > 0)
+  while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
       return;
@@ -971,7 +971,8 @@ static int mutt_is_autoview (BODY *b)
     LIST *t = AutoViewList;
 
     mutt_check_lookup_list (b, type, sizeof (type));
-    for (; t; t = t->next) {
+    for (; t; t = t->next)
+    {
       int i = mutt_strlen (t->data) - 1;
       if ((i > 0 && t->data[i-1] == '/' && t->data[i] == '*' &&
            ascii_strncasecmp (type, t->data, i) == 0) ||
@@ -1346,7 +1347,7 @@ static int autoview_handler (BODY *a, STATE *s)
 
     mutt_copy_bytes (s->fpin, fpin, a->length);
 
-    if(!piped)
+    if (!piped)
     {
       safe_fclose (&fpin);
       thepid = mutt_create_filter (command, NULL, &fpout, &fperr);
@@ -1493,7 +1494,7 @@ static int external_body_handler (BODY *b, STATE *s)
 		     CH_DECODE , NULL);
     }
   }
-  else if(expiration && expire < time(NULL))
+  else if (expiration && expire < time(NULL))
   {
     if (s->flags & MUTT_DISPLAY)
     {
@@ -1782,7 +1783,7 @@ int mutt_body_handler (BODY *b, STATE *s)
   }
   else if (b->type == TYPEMESSAGE)
   {
-    if(mutt_is_message_type(b->type, b->subtype))
+    if (mutt_is_message_type(b->type, b->subtype))
       handler = message_handler;
     else if (!ascii_strcasecmp ("delivery-status", b->subtype))
       plaintext = 1;

@@ -201,7 +201,8 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
       if (hdr->content->length < 0)
       {
 	lines = -1;
-	do {
+	do
+        {
 	  loc = ftello (ctx->fp);
 	  if (fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL)
 	    break;
@@ -997,10 +998,10 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
       newOffset[i - first].body = ftello (fp) - ctx->hdrs[i]->content->length + offset;
       mutt_free_body (&ctx->hdrs[i]->content->parts);
 
-      switch(ctx->magic)
+      switch (ctx->magic)
       {
 	case MUTT_MMDF:
-	  if(fputs(MMDF_SEP, fp) == EOF)
+	  if (fputs(MMDF_SEP, fp) == EOF)
 	  {
 	    mutt_perror (tempfile);
 	    mutt_sleep (5);
@@ -1009,7 +1010,7 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
 	  }
 	  break;
 	default:
-	  if(fputs("\n", fp) == EOF)
+	  if (fputs("\n", fp) == EOF)
 	  {
 	    mutt_perror (tempfile);
 	    mutt_sleep (5);

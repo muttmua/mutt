@@ -300,7 +300,7 @@ retry_name:
       return;
     }
 
-    if((new->addr = rfc822_parse_adrlist (new->addr, buf)) == NULL)
+    if ((new->addr = rfc822_parse_adrlist (new->addr, buf)) == NULL)
       BEEP ();
     if (mutt_addrlist_to_intl (new->addr, &err))
     {
@@ -310,7 +310,7 @@ retry_name:
       continue;
     }
   }
-  while(new->addr == NULL);
+  while (new->addr == NULL);
 
   if (adr && adr->personal && !mutt_is_mail_list (adr))
     strfcpy (buf, adr->personal, sizeof (buf));

@@ -169,7 +169,8 @@ int imap_cmd_step (IMAP_DATA* idata)
     cmd = &idata->cmds[c];
     if (cmd->state == IMAP_CMD_NEW)
     {
-      if (!ascii_strncmp (idata->buf, cmd->seq, SEQLEN)) {
+      if (!ascii_strncmp (idata->buf, cmd->seq, SEQLEN))
+      {
 	if (!stillrunning)
 	{
 	  /* first command in queue has finished - move queue pointer up */

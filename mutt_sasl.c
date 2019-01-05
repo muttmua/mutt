@@ -37,7 +37,7 @@ static int getnameinfo_err(int ret)
 {
   int err;
   dprint (1, (debugfile, "getnameinfo: "));
-  switch(ret)
+  switch (ret)
   {
     case EAI_AGAIN:
       dprint (1, (debugfile, "The name could not be resolved at this time.  Future attempts may succeed.\n"));
@@ -198,7 +198,8 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
   }
 
   size = sizeof (local);
-  if (!getsockname (conn->fd, (struct sockaddr *)&local, &size)) {
+  if (!getsockname (conn->fd, (struct sockaddr *)&local, &size))
+  {
     if (iptostring((struct sockaddr *)&local, size, iplocalport,
                    IP_PORT_BUFLEN) == SASL_OK)
       plp = iplocalport;
@@ -209,7 +210,8 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
     dprint (2, (debugfile, "SASL failed to get local IP address\n"));
 
   size = sizeof (remote);
-  if (!getpeername (conn->fd, (struct sockaddr *)&remote, &size)){
+  if (!getpeername (conn->fd, (struct sockaddr *)&remote, &size))
+  {
     if (iptostring((struct sockaddr *)&remote, size, ipremoteport,
                    IP_PORT_BUFLEN) == SASL_OK)
       prp = ipremoteport;

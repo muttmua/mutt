@@ -67,7 +67,8 @@ static int url_pct_decode (char *s)
       }
       else
 	return -1;
-    } else
+    }
+    else
       *d++ = *s;
   }
   *d ='\0';

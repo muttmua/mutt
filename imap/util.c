@@ -358,7 +358,8 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
       return -1;
     }
 
-    if (n > 1) {
+    if (n > 1)
+    {
       if (sscanf (tmp, ":%hu%127s", &(mx->account.port), tmp) >= 1)
 	mx->account.flags |= MUTT_ACCT_PORT;
       if (sscanf (tmp, "/%s", tmp) == 1)
@@ -441,7 +442,8 @@ void imap_pretty_mailbox (char* path)
   }
 
   /* do the '=' substitution */
-  if (home_match) {
+  if (home_match)
+  {
     *path++ = '=';
     /* copy remaining path, skipping delimiter */
     if (! hlen)
@@ -619,8 +621,10 @@ char *imap_next_word (char *s)
 {
   int quoted = 0;
 
-  while (*s) {
-    if (*s == '\\') {
+  while (*s)
+  {
+    if (*s == '\\')
+    {
       s++;
       if (*s)
 	s++;
@@ -844,7 +848,7 @@ int imap_wordcasecmp(const char *a, const char *b)
   int i;
 
   tmp[SHORT_STRING-1] = 0;
-  for(i=0;i < SHORT_STRING-2;i++,s++)
+  for (i=0;i < SHORT_STRING-2;i++,s++)
   {
     if (!*s || ISSPACE(*s))
     {

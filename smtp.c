@@ -105,9 +105,11 @@ smtp_get_resp (CONNECTION * conn)
   int n;
   char buf[1024];
 
-  do {
+  do
+  {
     n = mutt_socket_readln (buf, sizeof (buf), conn);
-    if (n < 4) {
+    if (n < 4)
+    {
       /* read error, or no response code */
       return smtp_err_read;
     }
@@ -266,7 +268,7 @@ static int addresses_use_unicode(const ADDRESS* a)
 {
   while (a)
   {
-    if(a->mailbox && !a->group && address_uses_unicode(a->mailbox))
+    if (a->mailbox && !a->group && address_uses_unicode(a->mailbox))
       return 1;
     a = a->next;
   }
@@ -430,7 +432,7 @@ static int smtp_helo (CONNECTION* conn)
 #endif
   }
 
-  if(!(fqdn = mutt_fqdn (0)))
+  if (!(fqdn = mutt_fqdn (0)))
     fqdn = NONULL (Hostname);
 
   snprintf (buf, sizeof (buf), "%s %s\r\n", Esmtp ? "EHLO" : "HELO", fqdn);
@@ -624,7 +626,8 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
   }
   safe_strcat (buf, bufsize, "\r\n");
 
-  do {
+  do
+  {
     if (mutt_socket_write (conn, buf) < 0)
       goto fail;
     if ((rc = mutt_socket_readln (buf, bufsize, conn)) < 0)

@@ -400,10 +400,10 @@ int safe_symlink(const char *oldpath, const char *newpath)
 {
   struct stat osb, nsb;
 
-  if(!oldpath || !newpath)
+  if (!oldpath || !newpath)
     return -1;
 
-  if(unlink(newpath) == -1 && errno != ENOENT)
+  if (unlink(newpath) == -1 && errno != ENOENT)
     return -1;
 
   if (oldpath[0] == '/')
@@ -425,8 +425,8 @@ int safe_symlink(const char *oldpath, const char *newpath)
       return -1;
   }
 
-  if(stat(oldpath, &osb) == -1 || stat(newpath, &nsb) == -1
-     || compare_stat(&osb, &nsb) == -1)
+  if (stat(oldpath, &osb) == -1 || stat(newpath, &nsb) == -1
+      || compare_stat(&osb, &nsb) == -1)
   {
     unlink(newpath);
     return -1;
@@ -866,7 +866,7 @@ size_t mutt_quote_filename (char *d, size_t l, const char *f)
 {
   size_t i, j = 0;
 
-  if(!f)
+  if (!f)
   {
     *d = '\0';
     return 0;
@@ -877,9 +877,9 @@ size_t mutt_quote_filename (char *d, size_t l, const char *f)
 
   d[j++] = '\'';
 
-  for(i = 0; j < l && f[i]; i++)
+  for (i = 0; j < l && f[i]; i++)
   {
-    if(f[i] == '\'' || f[i] == '`')
+    if (f[i] == '\'' || f[i] == '`')
     {
       d[j++] = '\'';
       d[j++] = '\\';
@@ -983,7 +983,8 @@ char *mutt_concatn_path (char *dst, size_t dstlen,
   req = dirlen + fnamelen + 1; /* +1 for the trailing nul */
   if (dirlen && fnamelen)
     req++; /* when both components are non-nul, we add a "/" in between */
-  if (req > dstlen) { /* check for condition where the dst length is too short */
+  if (req > dstlen) /* check for condition where the dst length is too short */
+  {
     /* Two options here:
      * 1) assert(0) or return NULL to signal error
      * 2) copy as much of the path as will fit
@@ -994,13 +995,15 @@ char *mutt_concatn_path (char *dst, size_t dstlen,
     return NULL;
   }
 
-  if (dirlen) { /* when dir is not empty */
+  if (dirlen) /* when dir is not empty */
+  {
     memcpy(dst, dir, dirlen);
     offset = dirlen;
     if (fnamelen)
       dst[offset++] = '/';
   }
-  if (fnamelen) { /* when fname is not empty */
+  if (fnamelen) /* when fname is not empty */
+  {
     memcpy(dst + offset, fname, fnamelen);
     offset += fnamelen;
   }
@@ -1033,9 +1036,9 @@ mutt_strsysexit(int e)
 {
   int i;
 
-  for(i = 0; sysexits_h[i].str; i++)
+  for (i = 0; sysexits_h[i].str; i++)
   {
-    if(e == sysexits_h[i].v)
+    if (e == sysexits_h[i].v)
       break;
   }
 

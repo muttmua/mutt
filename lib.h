@@ -150,7 +150,7 @@ MUTT_LIB_WHERE int debuglevel MUTT_LIB_INITVAL(0);
 
 void mutt_debug (FILE *, const char *, ...);
 
-#  define dprint(N,X) do { if(debuglevel>=N && debugfile) mutt_debug X; } while (0)
+#  define dprint(N,X) do { if (debuglevel>=N && debugfile) mutt_debug X; } while (0)
 
 # else
 

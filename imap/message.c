@@ -1136,7 +1136,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
    * Ideally we'd have a HEADER structure with flag info here... */
   for (last = EOF, len = 0; (c = fgetc(fp)) != EOF; last = c)
   {
-    if(c == '\n' && last != '\r')
+    if (c == '\n' && last != '\r')
       len++;
 
     len++;
