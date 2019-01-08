@@ -1,3 +1,165 @@
+2019-01-07 17:26:53 -0800  Kevin McCarthy  <kevin@8t8.us> (5f1f14e2)
+
+        * Add UPDATING notes for 1.11.2 release.
+
+M	UPDATING
+
+2019-01-05 13:25:38 -0800  Kevin McCarthy  <kevin@8t8.us> (ae3587cf)
+
+        * Update copyright for the next stable release.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+
+2019-01-04 11:20:05 -0800  Kevin McCarthy  <kevin@8t8.us> (853e48bf)
+
+        * Fix mkdtemp.c implementation.
+        
+        Two statements were indented on the same line under a for statement.
+        The second one would not be included in the loop, only being executed
+        after the loop finishes.
+        
+        This is obviously an error, as it modifies the LETTERS entry being
+        used.
+
+M	mkdtemp.c
+
+2018-12-28 15:43:51 -0800  Kevin McCarthy  <kevin@8t8.us> (63f05d96)
+
+        * Make a copy of x_label before encoding it for updates.
+        
+        This isn't actually a bug.  Context->label_hash strdups the keys, so
+        we are safe from dangling references.  However, the subj_hash uses
+        direct references, so to keep things consistent and safe, make a copy
+        and encode that.
+
+M	copy.c
+
+2018-12-27 16:24:27 -0800  Kevin McCarthy  <kevin@8t8.us> (8bb10956)
+
+        * Restore the xlabel_changed reset.
+        
+        The cherry pick accidentally obliterated the reset.  That flag is now
+        located in hdr->env->changed in the branch and is reset properly
+        elsewhere.  Keep it in place in the stable branch.
+
+M	copy.c
+
+2018-12-27 16:08:36 -0800  Kevin McCarthy  <kevin@8t8.us> (75f2445c)
+
+        * Rfc2047 encode and fold X-Label when writing updates.
+        
+        Also, add a missing "skip" in mutt_copy_hdr() for the non-simple case.
+        
+        These fixes were backported from the kevin/mutt_protected_header branch.
+
+M	copy.c
+
+2018-12-21 10:13:17 -0800  Kevin McCarthy  <kevin@8t8.us> (eb444e63)
+
+        * Handle improperly encoded pgp/mime octetstream part.
+        
+        Some clients (or even mail servers) improperly encode the octetstream
+        part.
+        
+        Thanks to Riccardo Schirone for the original merge request patch.
+        This commit also handles the attachment menu, and makes the decoding
+        conditional so it's not done if it isn't necessary.
+        
+        (cherry picked from commit 450de4637f6590487a073b250da342a1400a3ac3)
+
+M	crypt-gpgme.c
+M	handler.c
+M	pgp.c
+
+2018-12-20 19:39:39 -0800  Kevin McCarthy  <kevin@8t8.us> (e104135e)
+
+        * Backport postpone-encrypt cleanups from master.
+        
+        Free the clear content after successfully postponing.
+        
+        If the fcc fails, properly restore the clear content before returning
+        to the compose menu.
+
+M	send.c
+
+2018-12-02 16:46:28 -0800  Rosen Penev  <rosenp@gmail.com> (671417dd)
+
+        * Fix compilation without deprecated OpenSSL 1.1 APIs
+
+M	mutt_ssl.c
+
+2018-12-12 16:10:23 -0800  Kevin McCarthy  <kevin@8t8.us> (101e05d6)
+
+        * Fix imap_sync_mailbox() hcache leak.
+        
+        Uploading changed messages to the server ends up overwriting the
+        hcache.  Add a straightforward fix and a longish explanation comment
+        for the stable branch fix.
+        
+        Add a TODO noting a better fix should be done in the master branch in
+        the future.
+
+M	imap/imap.c
+
+2018-12-11 18:41:37 -0800  Kevin McCarthy  <kevin@8t8.us> (29da7c2a)
+
+        * Fix possible smime crash if the read mime header p is NULL.
+
+M	smime.c
+
+2018-12-11 15:29:57 -0800  Kevin McCarthy  <kevin@8t8.us> (74a09f41)
+
+        * Fix memory leak in smime.c.
+        
+        smime_application_smime_handler() was not freeing the BODY returned by
+        smime_handle_entity().
+
+M	smime.c
+
+2018-12-09 12:32:24 -0800  Kevin McCarthy  <kevin@8t8.us> (37320beb)
+
+        * Fix mutt_parse_rfc822_line() if lastp parameter is NULL.
+        
+        It checked at the beginning before dereferencing, but not at the end.
+        
+        Since lastp is only used for the user_hdrs case, move the local
+        variable and assignment inside that block to make it clear.
+
+M	parse.c
+
+2018-12-06 19:22:59 -0800  Kevin McCarthy  <kevin@8t8.us> (59625f54)
+
+        * Fix classic gpg date parsing in list-keys.
+        
+        GnuPG changed the format of their --with-colons output in 2.0.10.
+        Dates are now seconds since epoch.  Update the parse_pub_line() code
+        to detect the new format.
+        
+        The GnuPG changes also separated pub and the first uid.  Since mutt
+        allows an empty uid field, the output is a bit less friendly now, with
+        an initial key without an uid.  I think that's acceptable, but
+        eventually we'll want to change the parsing behavior.
+
+M	gnupgparse.c
+
+2018-12-03 07:30:34 -0800  Kevin McCarthy  <kevin@8t8.us> (2cb34544)
+
+        * Fix typo in Finnish translation.
+        
+        Thanks to @Petteri3 for the patch.
+
+M	po/fi.po
+
+2018-12-01 11:38:36 -0800  Kevin McCarthy  <kevin@8t8.us> (991c018e)
+
+        * automatic post-release commit for mutt-1.11.1
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
 2018-12-01 11:27:20 -0800  Kevin McCarthy  <kevin@8t8.us> (bf2f59d4)
 
         * Document Sender header as a default in $imap_headers.
