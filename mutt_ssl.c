@@ -28,7 +28,7 @@
 #include <openssl/rand.h>
 #include <openssl/evp.h>
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
 #define X509_get0_notBefore X509_get_notBefore
 #define X509_get0_notAfter X509_get_notAfter
 #define X509_getm_notBefore X509_get_notBefore
