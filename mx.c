@@ -573,6 +573,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
 {
   CONTEXT *ctx = pctx;
   int rc;
+  char realpathbuf[PATH_MAX];
 
   if (!ctx)
     ctx = safe_malloc (sizeof (CONTEXT));
@@ -585,8 +586,10 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
       FREE (&ctx);
     return NULL;
   }
-  if (! (ctx->realpath = realpath (ctx->path, NULL)) )
+  if (! realpath (ctx->path, realpathbuf) )
     ctx->realpath = safe_strdup (ctx->path);
+  else
+    ctx->realpath = safe_strdup (realpathbuf);
 
   ctx->msgnotreadyet = -1;
   ctx->collapsed = 0;
