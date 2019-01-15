@@ -221,8 +221,8 @@ This command binds the given \fIsequence\fP of keys to the given
 specify multiple maps, put only a comma between the maps.
 .PP
 .nf
-\fBcolor\fP \fIobject\fP \fIforeground\fP \fIbackground\fP [ \fIregexp\fP ]
-\fBcolor\fP index \fIforeground\fP \fIbackground\fP [ \fIpattern\fP ]
+\fBcolor\fP \fIobject\fP [ \fIattribute\fP ... ] \fIforeground\fP \fIbackground\fP [ \fIregexp\fP ]
+\fBcolor\fP index [ \fIattribute\fP ... ] \fIforeground\fP \fIbackground\fP [ \fIpattern\fP ]
 \fBuncolor\fP index \fIpattern\fP [ \fIpattern\fP ... ]
 .fi
 .IP
@@ -246,6 +246,10 @@ messages by pattern.
 Valid colors include:
 .BR white ", " black ", " green ", " magenta ", " blue ", "
 .BR cyan ", " yellow ", " red ", " default ", " color\fIN\fP .
+.IP
+Valid attributes include:
+.BR none ", " bold ", " underline ", "
+.BR reverse ", and " standout .
 .PP
 .nf
 \fBmono\fP \fIobject\fP \fIattribute\fP [ \fIregexp\fP ]
@@ -253,9 +257,7 @@ Valid colors include:
 .fi
 .IP
 For terminals which don't support color, you can still assign
-attributes to objects.  Valid attributes include:
-.BR none ", " bold ", " underline ", " 
-.BR reverse ", and " standout .
+attributes to objects.
 .TP
 [\fBun\fP]\fBignore\fP \fIpattern\fP [ \fIpattern\fP ... ]
 The \fBignore\fP command permits you to specify header fields which

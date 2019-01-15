@@ -2659,6 +2659,9 @@ silently truncated at the screen width, and are not wrapped.
 <arg choice="plain">
 <replaceable class="parameter">object</replaceable>
 </arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
+</arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
 </arg>
@@ -2675,6 +2678,9 @@ silently truncated at the screen width, and are not wrapped.
 <option>body</option>
 </arg>
 </group>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
+</arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
 </arg>
@@ -2688,6 +2694,9 @@ silently truncated at the screen width, and are not wrapped.
 <command>color</command>
 <arg choice="plain">
 <option>index</option>
+</arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
@@ -2705,6 +2714,9 @@ silently truncated at the screen width, and are not wrapped.
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
@@ -2794,6 +2806,18 @@ When set, color is applied only to the exact text matched by
 <listitem><para>security_sign</para></listitem>
 <listitem><para>security_both</para></listitem>
 <listitem><para>security_none</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>attribute</emphasis> can be one of the following:
+</para>
+
+<itemizedlist>
+<listitem><para>none</para></listitem>
+<listitem><para>bold</para></listitem>
+<listitem><para>underline</para></listitem>
+<listitem><para>reverse</para></listitem>
+<listitem><para>standout</para></listitem>
 </itemizedlist>
 
 <para>
@@ -2948,19 +2972,9 @@ command. Usage:
 </cmdsynopsis>
 
 <para>
-For <emphasis>object</emphasis> and <emphasis>composeobject</emphasis>,
-see the <command>color</command> command. <emphasis>attribute</emphasis>
-can be one of the following:
+For <emphasis>object</emphasis>, <emphasis>composeobject</emphasis>, and
+<emphasis>attribute</emphasis>, see the <command>color</command> command.
 </para>
-
-<itemizedlist>
-<listitem><para>none</para></listitem>
-<listitem><para>bold</para></listitem>
-<listitem><para>underline</para></listitem>
-<listitem><para>reverse</para></listitem>
-<listitem><para>standout</para></listitem>
-</itemizedlist>
-
 </sect1>
 
 <sect1 id="msg-hdr-display">
@@ -9799,6 +9813,9 @@ The following are the commands understood by Mutt:
 <arg choice="plain">
 <replaceable class="parameter">object</replaceable>
 </arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
+</arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
 </arg>
@@ -9815,6 +9832,9 @@ The following are the commands understood by Mutt:
 <option>body</option>
 </arg>
 </group>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
+</arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
 </arg>
@@ -9828,6 +9848,9 @@ The following are the commands understood by Mutt:
 <command><link linkend="color">color</link></command>
 <arg choice="plain">
 <option>index</option>
+</arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>
@@ -9845,6 +9868,9 @@ The following are the commands understood by Mutt:
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">composeobject</replaceable>
+</arg>
+<arg choice="opt" rep="repeat">
+<replaceable class="parameter">attribute</replaceable>
 </arg>
 <arg choice="plain">
 <replaceable class="parameter">foreground</replaceable>

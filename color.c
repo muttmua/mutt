@@ -688,16 +688,35 @@ typedef int (*parser_callback_t)(BUFFER *, BUFFER *, int *, int *, int *, BUFFER
 static int
 parse_color_pair(BUFFER *buf, BUFFER *s, int *fg, int *bg, int *attr, BUFFER *err)
 {
-  if (! MoreArgs (s))
+  FOREVER
   {
-    strfcpy (err->data, _("color: too few arguments"), err->dsize);
-    return (-1);
+    if (! MoreArgs (s))
+    {
+      strfcpy (err->data, _("color: too few arguments"), err->dsize);
+      return (-1);
+    }
+
+    mutt_extract_token (buf, s, 0);
+
+    if (ascii_strcasecmp ("bold", buf->data) == 0)
+      *attr |= A_BOLD;
+    else if (ascii_strcasecmp ("underline", buf->data) == 0)
+      *attr |= A_UNDERLINE;
+    else if (ascii_strcasecmp ("none", buf->data) == 0)
+      *attr = A_NORMAL;
+    else if (ascii_strcasecmp ("reverse", buf->data) == 0)
+      *attr |= A_REVERSE;
+    else if (ascii_strcasecmp ("standout", buf->data) == 0)
+      *attr |= A_STANDOUT;
+    else if (ascii_strcasecmp ("normal", buf->data) == 0)
+      *attr = A_NORMAL; /* needs use = instead of |= to clear other bits */
+    else
+    {
+      if (parse_color_name (buf->data, fg, attr, 1, err) != 0)
+        return (-1);
+      break;
+    }
   }
-
-  mutt_extract_token (buf, s, 0);
-
-  if (parse_color_name (buf->data, fg, attr, 1, err) != 0)
-    return (-1);
 
   if (! MoreArgs (s))
   {
