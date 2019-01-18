@@ -26,7 +26,7 @@
 .ft
 .fi
 ..
-.TH muttrc 5 "September 2002" Unix "User Manuals"
+.TH muttrc 5 "January 2019" Unix "User Manuals"
 .SH NAME
 muttrc \- Configuration file for the Mutt Mail User Agent
 .SH DESCRIPTION
