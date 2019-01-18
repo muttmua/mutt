@@ -17,7 +17,7 @@
 .\"     along with this program; if not, write to the Free Software
 .\"     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 .\"
-.TH mutt 1 "January 2009" Unix "User Manuals"
+.TH mutt 1 "January 2019" Unix "User Manuals"
 .SH NAME
 mutt \- The Mutt Mail User Agent
 .SH SYNOPSIS
