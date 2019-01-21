@@ -408,11 +408,17 @@ int raw_socket_read (CONNECTION* conn, char* buf, size_t len)
 {
   int rc;
 
-  if ((rc = read (conn->fd, buf, len)) == -1)
+  do
+  {
+    rc = read (conn->fd, buf, len);
+  } while (rc < 0 && errno == EINTR);
+
+  if (rc < 0)
   {
     mutt_error (_("Error talking to %s (%s)"), conn->account.host,
 		strerror (errno));
     mutt_sleep (2);
+    return -1;
   }
 
   return rc;
@@ -421,15 +427,27 @@ int raw_socket_read (CONNECTION* conn, char* buf, size_t len)
 int raw_socket_write (CONNECTION* conn, const char* buf, size_t count)
 {
   int rc;
+  size_t sent = 0;
 
-  if ((rc = write (conn->fd, buf, count)) == -1)
+  do
   {
-    mutt_error (_("Error talking to %s (%s)"), conn->account.host,
-		strerror (errno));
-    mutt_sleep (2);
-  }
+    do
+    {
+      rc = write (conn->fd, buf + sent, count - sent);
+    } while (rc < 0 && errno == EINTR);
 
-  return rc;
+    if (rc < 0)
+    {
+      mutt_error (_("Error talking to %s (%s)"), conn->account.host,
+                  strerror (errno));
+      mutt_sleep (2);
+      return -1;
+    }
+
+    sent += rc;
+  } while (sent < count);
+
+  return sent;
 }
 
 int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
