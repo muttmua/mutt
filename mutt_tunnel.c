@@ -161,12 +161,17 @@ static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len)
   TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
   int rc;
 
-  rc = read (tunnel->readfd, buf, len);
-  if (rc == -1)
+  do
+  {
+    rc = read (tunnel->readfd, buf, len);
+  } while (rc < 0 && errno == EINTR);
+
+  if (rc < 0)
   {
     mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
 		strerror (errno));
     mutt_sleep (1);
+    return -1;
   }
 
   return rc;
@@ -176,16 +181,27 @@ static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len)
 {
   TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
   int rc;
+  size_t sent = 0;
 
-  rc = write (tunnel->writefd, buf, len);
-  if (rc == -1)
+  do
   {
-    mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
-		strerror (errno));
-    mutt_sleep (1);
-  }
+    do
+    {
+      rc = write (tunnel->writefd, buf + sent, len - sent);
+    } while (rc < 0 && errno == EINTR);
 
-  return rc;
+    if (rc < 0)
+    {
+      mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
+                  strerror (errno));
+      mutt_sleep (1);
+      return -1;
+    }
+
+    sent += rc;
+  } while (sent < len);
+
+  return sent;
 }
 
 static int tunnel_socket_poll (CONNECTION* conn, time_t wait_secs)
