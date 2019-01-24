@@ -935,24 +935,38 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
   ATTACHPTR *new;
   BODY *new_body = NULL;
   FILE *new_fp = NULL;
-  int need_secured, secured;
+  int type, need_secured, secured;
 
   for (; m; m = m->next)
   {
     need_secured = secured = 0;
 
     if ((WithCrypto & APPLICATION_SMIME) &&
-        mutt_is_application_smime (m))
+        (type = mutt_is_application_smime (m)))
     {
       need_secured = 1;
 
-      if (!crypt_valid_passphrase (APPLICATION_SMIME))
-        goto decrypt_failed;
+      if (type & ENCRYPT)
+      {
+        if (!crypt_valid_passphrase (APPLICATION_SMIME))
+          goto decrypt_failed;
 
-      if (hdr->env)
-        crypt_smime_getkeys (hdr->env);
+        if (hdr->env)
+          crypt_smime_getkeys (hdr->env);
+      }
 
       secured = !crypt_smime_decrypt_mime (fp, &new_fp, m, &new_body);
+      /* If the decrypt/verify-opaque doesn't generate mime output, an
+       * empty "TEXT" type will still be returned by
+       * mutt_read_mime_header().  Since recursing over that type
+       * isn't interesting and loses information about the original
+       * attachment, just abort and view normally. */
+      if (secured && new_body->type == TYPETEXT)
+      {
+        mutt_free_body (&new_body);
+        safe_fclose (&new_fp);
+        goto decrypt_failed;
+      }
 
       /* S/MIME nesting */
       if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE) == SMIMEOPAQUE)
@@ -970,7 +984,7 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
         safe_fclose (&outer_fp);
       }
 
-      if (secured)
+      if (secured && (type & ENCRYPT))
         hdr->security |= SMIMEENCRYPT;
     }
 
