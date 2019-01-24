@@ -967,22 +967,6 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
         goto decrypt_failed;
       }
 
-      /* S/MIME nesting */
-      if ((mutt_is_application_smime (new_body) & SMIMEOPAQUE) == SMIMEOPAQUE)
-      {
-        BODY *outer_new_body = new_body;
-        FILE *outer_fp = new_fp;
-
-        new_body = NULL;
-        new_fp = NULL;
-
-        secured = !crypt_smime_decrypt_mime (outer_fp, &new_fp, outer_new_body,
-                                             &new_body);
-
-        mutt_free_body (&outer_new_body);
-        safe_fclose (&outer_fp);
-      }
-
       if (secured && (type & ENCRYPT))
         hdr->security |= SMIMEENCRYPT;
     }
