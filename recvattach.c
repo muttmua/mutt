@@ -925,18 +925,19 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
 
 static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
                                            HEADER *hdr,
-                                           BODY *m,
+                                           BODY *parts,
                                            FILE *fp,
                                            int parent_type,
                                            int level,
                                            int decrypted)
 {
   ATTACHPTR *new;
+  BODY *m;
   BODY *new_body = NULL;
   FILE *new_fp = NULL;
   int type, need_secured, secured;
 
-  for (; m; m = m->next)
+  for (m = parts; m; m = m->next)
   {
     need_secured = secured = 0;
 
@@ -956,11 +957,14 @@ static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
 
       secured = !crypt_smime_decrypt_mime (fp, &new_fp, m, &new_body);
       /* If the decrypt/verify-opaque doesn't generate mime output, an
-       * empty "TEXT" type will still be returned by
-       * mutt_read_mime_header().  Since recursing over that type
-       * isn't interesting and loses information about the original
-       * attachment, just abort and view normally. */
-      if (secured && new_body->type == TYPETEXT)
+       * empty text/plain type will still be returned by
+       * mutt_read_mime_header().  We can't distinguish an actual part
+       * from a failure, so only use a text/plain that results from a single
+       * top-level part. */
+      if (secured &&
+          new_body->type == TYPETEXT &&
+          !ascii_strcasecmp ("plain", new_body->subtype) &&
+          (parts != m || m->next))
       {
         mutt_free_body (&new_body);
         safe_fclose (&new_fp);
