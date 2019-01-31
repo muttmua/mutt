@@ -769,6 +769,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
   {
     switch (i = mutt_menuLoop (menu))
     {
+      case OP_DESCEND_DIRECTORY:
       case OP_GENERIC_SELECT_ENTRY:
 
 	if (!state.entrylen)
@@ -800,7 +801,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	  else
 	    mutt_concat_path (buf, LastDir, state.entry[menu->current].name, sizeof (buf));
 
-	  if ((mx_get_magic (buf) <= 0)
+	  if (i == OP_DESCEND_DIRECTORY || (mx_get_magic (buf) <= 0)
 #ifdef USE_IMAP
               || state.entry[menu->current].inferiors
 #endif

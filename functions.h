@@ -403,6 +403,7 @@ const struct binding_t OpAlias[] = { /* map: alias */
 /* The file browser */
 const struct binding_t OpBrowser[] = { /* map: browser */
   { "change-dir",	OP_CHANGE_DIRECTORY,	"c" },
+  { "descend-directory", OP_DESCEND_DIRECTORY,	NULL },
   { "display-filename",	OP_BROWSER_TELL,	"@" },
   { "enter-mask",	OP_ENTER_MASK,		"m" },
   { "sort",		OP_SORT,		"o" },
