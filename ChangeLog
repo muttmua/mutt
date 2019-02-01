@@ -1,3 +1,150 @@
+2019-02-01 12:34:19 -0800  Kevin McCarthy  <kevin@8t8.us> (cd5db026)
+
+        * Update UPDATING file for 1.11.3 release.
+
+M	UPDATING
+
+2019-01-24 18:28:27 -0800  Kevin McCarthy  <kevin@8t8.us> (1041fb4f)
+
+        * Show top-level decoded smime text/plain parts.
+        
+        Commit 331d9d5a attempted to fix a problem with an attachment having
+        extension .p7m.  The attachment menu tried to decode and failed, and
+        the part ended up being replaced by a bogus text/plain part.
+        
+        The problem is that crypt_smime_decrypt_mime() returns a text/plain
+        part if the decode fails, meaning we can't distinguish failure from
+        success in this case.
+        
+        As a compromise, only use a text/plain resulting from a single
+        top-level application_smime part.  This will allow for the case of an
+        text/plain encoded email, but won't end up hiding attachments that
+        were not decoded.
+
+M	recvattach.c
+
+2019-01-24 14:15:33 -0800  Kevin McCarthy  <kevin@8t8.us> (331d9d5a)
+
+        * Improve attachment menu for s/mime parts. (closes #113)
+        
+        Don't prompt for passphrase or getkeys, or set the ENCRYPT flag, for
+        OPAQUE types.
+        
+        Don't recurse on "text" output from decrypt_mime().  There is no
+        reason to recurse on a text type.  Additionally, the
+        mutt_read_mime_header() will return an empty text type even if the
+        decode doesn't generate mime output.  In those cases, we want to show
+        the original attachment.
+
+M	recvattach.c
+
+2019-01-21 19:43:08 -0800  Kevin McCarthy  <kevin@8t8.us> (caf5db85)
+
+        * Fix tunnels to also retry and write full buffer.
+        
+        Change the tunnel_socket_read() and tunnel_socket_write() as the raw
+        sockets were adjusted in the previous commit.  Retry on EINTR, and
+        complete a full write so all the implementations have the same behavior.
+
+M	mutt_tunnel.c
+
+2019-01-21 15:19:08 -0800  Kevin McCarthy  <kevin@8t8.us> (688e27a9)
+
+        * Fix raw socket read/write to follow expected behavior.
+        
+        The mutt_sasl.c code expects conn_write() to write the entire buffer.
+        This is inconsistent with mutt_socket.c, but since other conn_write()
+        implementations guarantee this, change raw_socket_write() to do so too
+        for now.
+        
+        Also, update reading and writing to loop on EINTR, as gnutls does.
+        They won't return EAGAIN or EWOULDBLOCK because we don't mark sockets
+        as non-blocking.
+
+M	mutt_socket.c
+
+2018-11-30 15:12:47 -0800  Kevin McCarthy  <kevin@8t8.us> (ae8bb261)
+
+        * Convert to use gitlab registry image ubuntu:18.04.
+        
+        The gitlab registry image is built using the Dockerfile in
+        muttmua/docker-images/tree/master/ubuntu/18.04/
+        
+        Turn off the scan-build-5.0.  I never look at those reports and they
+        run very slowly.
+        
+        Also, for now just compile for gnutls, to speed up the check further.
+        
+        (cherry picked from commit f34cb1fb8468f74894818343dd8d95da5c0c640d)
+
+M	.gitlab-ci.yml
+
+2019-01-21 11:56:04 -0800  Kevin McCarthy  <kevin@8t8.us> (73b3151e)
+
+        * Fix gnutls tls_socket_write() to properly retry.
+        
+        Retry on GNUTLS_E_AGAIN and GNUTLS_E_INTERRUPTED.  This prevents an
+        aborted send due to a SIGWINCH, for instance.
+        
+        Change tls_socket_read() to follow the same flow.  Don't bother
+        checking gnutls_error_is_fatal() because return codes besides AGAIN
+        and INTERRUPTED end up closing the connection regardless.  (We don't
+        handle handshakes and negotations during send/receive).
+
+M	mutt_ssl_gnutls.c
+
+2019-01-18 20:46:07 -0800  Kevin McCarthy  <kevin@8t8.us> (1b2dcb31)
+
+        * Update the muttrc man page with added commands.
+        
+        Add the "color compose", index-format-hook, and echo commands.
+        
+        Add the HMS relative date units.
+
+M	doc/muttrc.man.head
+
+2019-01-10 09:56:41 -0800  Kevin McCarthy  <kevin@8t8.us> (78ea05f7)
+
+        * Wrap ssl init calls for LibreSSL too.
+        
+        It looks like LibreSSL does not perform automatic initialization of
+        the library and error strings.
+        
+        Since LibreSSL defines OPENSSL_VERSION_NUMBER as a "version 2",
+        add a check if LIBRESSL_VERSION_NUMBER is defined and call the
+        initialization functions for that case.
+
+M	mutt_ssl.c
+
+2019-01-10 16:03:02 +0100  Fabian Groffen  <grobian@gentoo.org> (42101583)
+
+        * mx_open_mailbox: provide output buffer to realpath(3)
+        
+        Starting with POSIX.1.2008 resolved_path can be NULL.
+        Systems implementing a standard before that crash.  Example of such
+        system is Mac OS X 10.5, the last version running on PowerPC hardware.
+        
+        Since this is the only occurrance of the realpath(3) function in Mutt,
+        instead of wrapping it, just adjust this invocation.
+        
+        Signed-off-by: Fabian Groffen <grobian@gentoo.org>
+
+M	mx.c
+
+2019-01-08 21:18:38 +0200  Stefan Strogin  <stefan.strogin@gmail.com> (83585f9b)
+
+        * Fix compilation with LibreSSL <2.7.0. (closes #112)
+        
+        (cherry picked from commit 9c9bea5e04e2a562017af0ac7a27b1b0e00e8907)
+
+M	mutt_ssl.c
+
+2019-01-07 17:39:19 -0800  Kevin McCarthy  <kevin@8t8.us> (df3f2aee)
+
+        * automatic post-release commit for mutt-1.11.2
+
+M	ChangeLog
+M	VERSION
 2019-01-07 17:26:53 -0800  Kevin McCarthy  <kevin@8t8.us> (5f1f14e2)
 
         * Add UPDATING notes for 1.11.2 release.
