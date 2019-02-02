@@ -652,7 +652,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
   struct browser_state state;
   MUTTMENU *menu = NULL;
   struct stat st;
-  int i, killPrefix = 0;
+  int op, killPrefix = 0;
+  int i, j;
   int multiple = (flags & MUTT_SEL_MULTI)  ? 1 : 0;
   int folder   = (flags & MUTT_SEL_FOLDER) ? 1 : 0;
   int buffy    = (flags & MUTT_SEL_BUFFY)  ? 1 : 0;
@@ -767,7 +768,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 
   FOREVER
   {
-    switch (i = mutt_menuLoop (menu))
+    switch (op = mutt_menuLoop (menu))
     {
       case OP_DESCEND_DIRECTORY:
       case OP_GENERIC_SELECT_ENTRY:
@@ -801,7 +802,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	  else
 	    mutt_concat_path (buf, LastDir, state.entry[menu->current].name, sizeof (buf));
 
-	  if (i == OP_DESCEND_DIRECTORY || (mx_get_magic (buf) <= 0)
+	  if (op == OP_DESCEND_DIRECTORY || (mx_get_magic (buf) <= 0)
 #ifdef USE_IMAP
               || state.entry[menu->current].inferiors
 #endif
@@ -919,7 +920,6 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	if (multiple)
 	{
 	  char **tfiles;
-	  int i, j;
 
 	  if (menu->tagged)
 	  {
@@ -1205,7 +1205,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 
       {
         int resort = 1;
-        int reverse = (i == OP_SORT_REVERSE);
+        int reverse = (op == OP_SORT_REVERSE);
 
         switch (mutt_multi_choice ((reverse) ?
             _("Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? ") :
