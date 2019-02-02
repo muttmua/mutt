@@ -900,6 +900,11 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	    break;
 	  }
 	}
+        else if (op == OP_DESCEND_DIRECTORY)
+        {
+          mutt_error (_("%s is not a directory."), state.entry[menu->current].name);
+          break;
+        }
 
 	if (buffy)
 	{
