@@ -1333,12 +1333,14 @@ void mutt_view_attachments (HEADER *hdr)
 
       case OP_REPLY:
       case OP_GROUP_REPLY:
+      case OP_GROUP_CHAT_REPLY:
       case OP_LIST_REPLY:
 
         CHECK_ATTACH;
 
         flags = SENDREPLY |
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
+	  (op == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
         mutt_attach_reply (CURATTACH->fp, hdr, actx,
 			   menu->tagprefix ? NULL : CURATTACH->content, flags);

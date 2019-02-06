@@ -106,6 +106,7 @@ const struct binding_t OpMain[] = { /* map: index */
   { "edit-type",		OP_EDIT_TYPE,			"\005" },
   { "forward-message",		OP_FORWARD_MESSAGE,		"f" },
   { "flag-message",		OP_FLAG_MESSAGE,		"F" },
+  { "group-chat-reply",		OP_GROUP_CHAT_REPLY,		NULL },
   { "group-reply",		OP_GROUP_REPLY,			"g" },
 #ifdef USE_POP
   { "fetch-mail",		OP_MAIN_FETCH_MAIL,		"G" },
@@ -209,6 +210,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "edit-type",	OP_EDIT_TYPE,			"\005" },
   { "forward-message",	OP_FORWARD_MESSAGE,		"f" },
   { "flag-message",	OP_FLAG_MESSAGE,		"F" },
+  { "group-chat-reply",	OP_GROUP_CHAT_REPLY,		NULL },
   { "group-reply",	OP_GROUP_REPLY,			"g" },
 #ifdef USE_IMAP
   { "imap-fetch-mail",  OP_MAIN_IMAP_FETCH,		NULL },
@@ -320,6 +322,7 @@ const struct binding_t OpAttach[] = { /* map: attachment */
   { "view-mailcap",	OP_ATTACH_VIEW_MAILCAP,		"m" },
   { "reply",		OP_REPLY,			"r" },
   { "resend-message",	OP_RESEND,			"\033e" },
+  { "group-chat-reply",	OP_GROUP_CHAT_REPLY,		NULL },
   { "group-reply",	OP_GROUP_REPLY,			"g" },
   { "list-reply",	OP_LIST_REPLY,			"L" },
   { "forward-message",	OP_FORWARD_MESSAGE,		"f" },

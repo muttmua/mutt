@@ -2197,17 +2197,6 @@ int mutt_index_menu (void)
 	crypt_forget_passphrase ();
 	break;
 
-      case OP_GROUP_REPLY:
-
-	CHECK_MSGCOUNT;
-        CHECK_VISIBLE;
-	CHECK_ATTACH;
-	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
-	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	ci_send_message (SENDREPLY|SENDGROUPREPLY, NULL, NULL, Context, tag ? NULL : CURHDR);
-	menu->redraw = REDRAW_FULL;
-	break;
-
       case OP_EDIT_LABEL:
 
 	CHECK_MSGCOUNT;
@@ -2228,17 +2217,6 @@ int mutt_index_menu (void)
            * label is the same as the old label. */
 	  mutt_message _("No labels changed.");
 	}
-	break;
-
-      case OP_LIST_REPLY:
-
-	CHECK_ATTACH;
-	CHECK_MSGCOUNT;
-        CHECK_VISIBLE;
-	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
-	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	ci_send_message (SENDREPLY|SENDLISTREPLY, NULL, NULL, Context, tag ? NULL : CURHDR);
-	menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_MAIL:
@@ -2413,15 +2391,27 @@ int mutt_index_menu (void)
         break;
 
       case OP_REPLY:
+      case OP_GROUP_REPLY:
+      case OP_GROUP_CHAT_REPLY:
+      case OP_LIST_REPLY:
+      {
+        int replyflags;
 
 	CHECK_ATTACH;
 	CHECK_MSGCOUNT;
         CHECK_VISIBLE;
+
+        replyflags = SENDREPLY |
+	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
+	  (op == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
+	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);
+
 	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	ci_send_message (SENDREPLY, NULL, NULL, Context, tag ? NULL : CURHDR);
+	ci_send_message (replyflags, NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
+      }
 
       case OP_SHELL_ESCAPE:
 

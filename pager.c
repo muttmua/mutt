@@ -2652,42 +2652,33 @@ search_next:
 	break;
 
       case OP_REPLY:
+      case OP_GROUP_REPLY:
+      case OP_GROUP_CHAT_REPLY:
+      case OP_LIST_REPLY:
+      {
+        int replyflags;
+
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
+
+        replyflags = SENDREPLY |
+	  (ch == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
+	  (ch == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
+	  (ch == OP_LIST_REPLY ? SENDLISTREPLY : 0);
+
         if (IsMsgAttach (extra))
 	  mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
-			     extra->bdy, SENDREPLY);
+			     extra->bdy, replyflags);
 	else
-	  ci_send_message (SENDREPLY, NULL, NULL, extra->ctx, extra->hdr);
+	  ci_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
+      }
 
       case OP_RECALL_MESSAGE:
 	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
 	ci_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
-	pager_menu->redraw = REDRAW_FULL;
-	break;
-
-      case OP_GROUP_REPLY:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
-        CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-	  mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
-			     extra->bdy, SENDREPLY|SENDGROUPREPLY);
-        else
-	  ci_send_message (SENDREPLY | SENDGROUPREPLY, NULL, NULL, extra->ctx, extra->hdr);
-	pager_menu->redraw = REDRAW_FULL;
-	break;
-
-      case OP_LIST_REPLY:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
-        CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-	  mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
-			     extra->bdy, SENDREPLY|SENDLISTREPLY);
-        else
-	  ci_send_message (SENDREPLY | SENDLISTREPLY, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 

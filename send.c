@@ -530,7 +530,8 @@ int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
   ADDRESS *tmp;
   int hmfupto = -1;
 
-  if ((flags & (SENDLISTREPLY|SENDGROUPREPLY)) && in->mail_followup_to)
+  if ((flags & (SENDLISTREPLY|SENDGROUPREPLY|SENDGROUPCHATREPLY)) &&
+      in->mail_followup_to)
   {
     snprintf (prompt, sizeof (prompt), _("Follow-up to %s%s?"),
 	      in->mail_followup_to->mailbox,
@@ -554,13 +555,18 @@ int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
     rfc822_append (&out->to, in->from, 0);
   else
   {
-    if (default_to (&out->to, in, flags & SENDGROUPREPLY, hmfupto) == -1)
+    if (default_to (&out->to, in, flags & (SENDGROUPREPLY|SENDGROUPCHATREPLY),
+                    hmfupto) == -1)
       return (-1); /* abort */
 
-    if ((flags & SENDGROUPREPLY) && (!in->mail_followup_to || hmfupto != MUTT_YES))
+    if ((flags & (SENDGROUPREPLY|SENDGROUPCHATREPLY)) &&
+        (!in->mail_followup_to || hmfupto != MUTT_YES))
     {
       /* if (!mutt_addr_is_user(in->to)) */
-      rfc822_append (&out->cc, in->to, 1);
+      if (flags & SENDGROUPREPLY)
+        rfc822_append (&out->cc, in->to, 1);
+      else
+        rfc822_append (&out->to, in->to, 1);
       rfc822_append (&out->cc, in->cc, 1);
     }
   }
