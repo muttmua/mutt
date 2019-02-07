@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.11.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-06 13:52+0100\n"
-"PO-Revision-Date: 2019-02-06 13:57+0100\n"
+"POT-Creation-Date: 2019-02-07 23:41+0100\n"
+"PO-Revision-Date: 2019-02-07 23:47+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -792,7 +792,7 @@ msgstr "Attention : '%s' est un mauvais IDN."
 msgid "You may not delete the only attachment."
 msgstr "Vous ne pouvez pas supprimer l'unique attachement."
 
-#: compose.c:822 send.c:1928
+#: compose.c:822 send.c:1934
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Mauvais IDN dans « %s » : '%s'"
@@ -1681,7 +1681,7 @@ msgstr "Appel de PGP..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Le message ne peut pas être envoyé en ligne. Utiliser PGP/MIME ?"
 
-#: crypt.c:181 send.c:1898
+#: crypt.c:181 send.c:1904
 msgid "Mail not sent."
 msgstr "Message non envoyé."
 
@@ -1927,7 +1927,7 @@ msgid "Tag messages matching: "
 msgstr "Marquer les messages correspondant à : "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1145 curs_main.c:2491 pager.c:2809
+#: curs_main.c:1145 curs_main.c:2481 pager.c:2800
 msgid "Cannot undelete message(s)"
 msgstr "Impossible de récupérer le(s) message(s)"
 
@@ -2043,7 +2043,7 @@ msgid "Cannot flag message"
 msgstr "Impossible de marquer le message"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1829 pager.c:2772
+#: curs_main.c:1829 pager.c:2763
 msgid "Cannot toggle new"
 msgstr "Impossible d'inverser l'indic. 'nouveau'"
 
@@ -2071,7 +2071,7 @@ msgstr "Impossible d'éditer le message"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2222 pager.c:2861
+#: curs_main.c:2211 pager.c:2852
 #, c-format
 msgid "%d labels changed."
 msgstr "%d labels ont changé."
@@ -2079,12 +2079,12 @@ msgstr "%d labels ont changé."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2229 pager.c:2865
+#: curs_main.c:2218 pager.c:2856
 msgid "No labels changed."
 msgstr "Aucun label n'a changé."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2328
+#: curs_main.c:2306
 msgid "Cannot mark message(s) as read"
 msgstr "Impossible de marquer le(s) message(s) comme lu(s)"
 
@@ -2092,32 +2092,32 @@ msgstr "Impossible de marquer le(s) message(s) comme lu(s)"
 #. L10N: This is the prompt for <mark-message>.  Whatever they
 #. enter will be prefixed by $mark_macro_prefix and will become
 #. a macro hotkey to jump to the currently selected message.
-#: curs_main.c:2364
+#: curs_main.c:2342
 msgid "Enter macro stroke: "
 msgstr "Entrez les touches de la macro : "
 
 #. L10N: "message hotkey" is the key bindings menu description of a
 #. macro created by <mark-message>.
-#: curs_main.c:2372
+#: curs_main.c:2350
 msgid "message hotkey"
 msgstr "hotkey (marque-page)"
 
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
-#: curs_main.c:2377
+#: curs_main.c:2355
 #, c-format
 msgid "Message bound to %s."
 msgstr "Message lié à %s."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
-#: curs_main.c:2385
+#: curs_main.c:2363
 msgid "No message ID to macro."
 msgstr "Pas de Message-ID pour la macro."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2461 pager.c:2792
+#: curs_main.c:2451 pager.c:2783
 msgid "Cannot undelete message"
 msgstr "Impossible de récupérer le message"
 
@@ -4492,7 +4492,7 @@ msgstr ""
 msgid "Can't find any tagged messages."
 msgstr "Aucun message marqué n'a pu être trouvé."
 
-#: recvcmd.c:815 send.c:740
+#: recvcmd.c:815 send.c:746
 msgid "No mailing lists found!"
 msgstr "Pas de liste de diffusion trouvée !"
 
@@ -4614,41 +4614,41 @@ msgid "Reply to %s%s?"
 msgstr "Répondre à %s%s ?"
 
 # , c-format
-#: send.c:535
+#: send.c:536
 #, c-format
 msgid "Follow-up to %s%s?"
 msgstr "Suivi de la discussion à %s%s ?"
 
-#: send.c:715
+#: send.c:721
 msgid "No tagged messages are visible!"
 msgstr "Pas de messages marqués visibles !"
 
-#: send.c:769
+#: send.c:775
 msgid "Include message in reply?"
 msgstr "Inclure le message dans la réponse ?"
 
-#: send.c:774
+#: send.c:780
 msgid "Including quoted message..."
 msgstr "Inclusion du message cité..."
 
-#: send.c:784
+#: send.c:790
 msgid "Could not include all requested messages!"
 msgstr "Tous les messages demandés n'ont pas pu être inclus !"
 
-#: send.c:798
+#: send.c:804
 msgid "Forward as attachment?"
 msgstr "Faire suivre sous forme d'attachement ?"
 
-#: send.c:802
+#: send.c:808
 msgid "Preparing forwarded message..."
 msgstr "Préparation du message à faire suivre..."
 
 # , c-format
-#: send.c:1076
+#: send.c:1082
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Fcc vers une boîte aux lettres IMAP n'est pas supporté en mode batch"
 
-#: send.c:1092
+#: send.c:1098
 msgid "Save attachments in Fcc?"
 msgstr "Sauver les attachements dans Fcc ?"
 
@@ -4658,7 +4658,7 @@ msgstr "Sauver les attachements dans Fcc ?"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1148
+#: send.c:1154
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr "Fcc a échoué. (r)éessayer, autre (b)oîte aux lettres, ou (s)auter ? "
 
@@ -4667,7 +4667,7 @@ msgstr "Fcc a échoué. (r)éessayer, autre (b)oîte aux lettres, ou (s)auter ?
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1154
+#: send.c:1160
 msgid "rms"
 msgstr "rbs"
 
@@ -4675,76 +4675,76 @@ msgstr "rbs"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1162
+#: send.c:1168
 msgid "Fcc mailbox"
 msgstr "Boîte aux lettres Fcc"
 
-#: send.c:1339
+#: send.c:1345
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Impossible d'ajourner. $postponed est non renseigné"
 
-#: send.c:1451
+#: send.c:1457
 msgid "Recall postponed message?"
 msgstr "Rappeler un message ajourné ?"
 
-#: send.c:1704
+#: send.c:1710
 msgid "Edit forwarded message?"
 msgstr "Éditer le message à faire suivre ?"
 
-#: send.c:1753
+#: send.c:1759
 msgid "Abort unmodified message?"
 msgstr "Message non modifié. Abandonner ?"
 
-#: send.c:1755
+#: send.c:1761
 msgid "Aborted unmodified message."
 msgstr "Message non modifié. Abandon."
 
-#: send.c:1860
+#: send.c:1866
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Pas de backend crypto configuré. Désactivation de la sécurité du message."
 
-#: send.c:1905
+#: send.c:1911
 msgid "Message postponed."
 msgstr "Message ajourné."
 
-#: send.c:1916
+#: send.c:1922
 msgid "No recipients are specified!"
 msgstr "Aucun destinataire spécifié !"
 
-#: send.c:1921
+#: send.c:1927
 msgid "No recipients were specified."
 msgstr "Aucun destinataire spécifié."
 
-#: send.c:1937
+#: send.c:1943
 msgid "No subject, abort sending?"
 msgstr "Pas d'objet (Subject), abandonner l'envoi ?"
 
-#: send.c:1941
+#: send.c:1947
 msgid "No subject specified."
 msgstr "Pas d'objet (Subject) spécifié."
 
-#: send.c:1955
+#: send.c:1961
 msgid "No attachments, abort sending?"
 msgstr "Pas d'attachements, abandonner l'envoi ?"
 
-#: send.c:1958
+#: send.c:1964
 msgid "Attachment referenced in message is missing"
 msgstr "L'attachement référencé dans le message est manquant"
 
-#: send.c:2021 smtp.c:191
+#: send.c:2027 smtp.c:191
 msgid "Sending message..."
 msgstr "Envoi du message..."
 
-#: send.c:2053
+#: send.c:2059
 msgid "Could not send the message."
 msgstr "Impossible d'envoyer le message."
 
-#: send.c:2062
+#: send.c:2068
 msgid "Mail sent."
 msgstr "Message envoyé."
 
-#: send.c:2062
+#: send.c:2068
 msgid "Sending in background."
 msgstr "Envoi en tâche de fond."
 
@@ -5639,729 +5639,735 @@ msgstr "sélectionner l'entrée courante"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:289
+msgid "reply to all recipients preserving To/Cc"
+msgstr "répondre à tous les destinataires en préservant À/Cc (To/Cc)"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:292
 msgid "reply to all recipients"
 msgstr "répondre à tous les destinataires"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:292
+#: ../keymap_alldefs.h:295
 msgid "scroll down 1/2 page"
 msgstr "descendre d'1/2 page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:295
+#: ../keymap_alldefs.h:298
 msgid "scroll up 1/2 page"
 msgstr "remonter d'1/2 page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:298
+#: ../keymap_alldefs.h:301
 msgid "this screen"
 msgstr "cet écran"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:301
+#: ../keymap_alldefs.h:304
 msgid "jump to an index number"
 msgstr "aller à un numéro d'index"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:304
+#: ../keymap_alldefs.h:307
 msgid "move to the last entry"
 msgstr "aller à la dernière entrée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:307
+#: ../keymap_alldefs.h:310
 msgid "reply to specified mailing list"
 msgstr "répondre à la liste spécifiée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:310
+#: ../keymap_alldefs.h:313
 msgid "execute a macro"
 msgstr "exécuter une macro"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:313
+#: ../keymap_alldefs.h:316
 msgid "compose a new mail message"
 msgstr "composer un nouveau message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:316
+#: ../keymap_alldefs.h:319
 msgid "break the thread in two"
 msgstr "casser la discussion en deux"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:319
+#: ../keymap_alldefs.h:322
 msgid "open a different folder"
 msgstr "ouvrir un dossier différent"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:322
+#: ../keymap_alldefs.h:325
 msgid "open a different folder in read only mode"
 msgstr "ouvrir un dossier différent en lecture seule"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:325
+#: ../keymap_alldefs.h:328
 msgid "clear a status flag from a message"
 msgstr "effacer un indicateur de statut d'un message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:328
+#: ../keymap_alldefs.h:331
 msgid "delete messages matching a pattern"
 msgstr "effacer les messages correspondant à un motif"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:331
+#: ../keymap_alldefs.h:334
 msgid "force retrieval of mail from IMAP server"
 msgstr "forcer la récupération du courrier depuis un serveur IMAP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:334
+#: ../keymap_alldefs.h:337
 msgid "logout from all IMAP servers"
 msgstr "se déconnecter de tous les serveurs IMAP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:337
+#: ../keymap_alldefs.h:340
 msgid "retrieve mail from POP server"
 msgstr "récupérer le courrier depuis un serveur POP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:340
+#: ../keymap_alldefs.h:343
 msgid "show only messages matching a pattern"
 msgstr "afficher seulement les messages correspondant à un motif"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:343
+#: ../keymap_alldefs.h:346
 msgid "link tagged message to the current one"
 msgstr "lier le message marqué au message courant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:346
+#: ../keymap_alldefs.h:349
 msgid "open next mailbox with new mail"
 msgstr "ouvrir la boîte aux lettres avec de nouveaux messages suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:349
+#: ../keymap_alldefs.h:352
 msgid "jump to the next new message"
 msgstr "aller au nouveau message suivant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:352
+#: ../keymap_alldefs.h:355
 msgid "jump to the next new or unread message"
 msgstr "aller au message nouveau ou non lu suivant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:355
+#: ../keymap_alldefs.h:358
 msgid "jump to the next subthread"
 msgstr "aller à la sous-discussion suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:358
+#: ../keymap_alldefs.h:361
 msgid "jump to the next thread"
 msgstr "aller à la discussion suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:361
+#: ../keymap_alldefs.h:364
 msgid "move to the next undeleted message"
 msgstr "aller au message non effacé suivant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:364
+#: ../keymap_alldefs.h:367
 msgid "jump to the next unread message"
 msgstr "aller au message non lu suivant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:367
+#: ../keymap_alldefs.h:370
 msgid "jump to parent message in thread"
 msgstr "aller au message père dans la discussion"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:370
+#: ../keymap_alldefs.h:373
 msgid "jump to previous thread"
 msgstr "aller à la discussion précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:373
+#: ../keymap_alldefs.h:376
 msgid "jump to previous subthread"
 msgstr "aller à la sous-discussion précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:376
+#: ../keymap_alldefs.h:379
 msgid "move to the previous undeleted message"
 msgstr "aller au message non effacé précédent"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:379
+#: ../keymap_alldefs.h:382
 msgid "jump to the previous new message"
 msgstr "aller au nouveau message précédent"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:382
+#: ../keymap_alldefs.h:385
 msgid "jump to the previous new or unread message"
 msgstr "aller au message nouveau ou non lu précédent"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:385
+#: ../keymap_alldefs.h:388
 msgid "jump to the previous unread message"
 msgstr "aller au message non lu précédent"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:388
+#: ../keymap_alldefs.h:391
 msgid "mark the current thread as read"
 msgstr "marquer la discussion courante comme lue"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:391
+#: ../keymap_alldefs.h:394
 msgid "mark the current subthread as read"
 msgstr "marquer la sous-discussion courante comme lue"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:394
+#: ../keymap_alldefs.h:397
 msgid "jump to root message in thread"
 msgstr "aller au message racine dans la discussion"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:397
+#: ../keymap_alldefs.h:400
 msgid "set a status flag on a message"
 msgstr "mettre un indicateur d'état sur un message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:400
+#: ../keymap_alldefs.h:403
 msgid "save changes to mailbox"
 msgstr "sauver les modifications de la boîte aux lettres"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:403
+#: ../keymap_alldefs.h:406
 msgid "tag messages matching a pattern"
 msgstr "marquer les messages correspondant à un motif"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:406
+#: ../keymap_alldefs.h:409
 msgid "undelete messages matching a pattern"
 msgstr "récupérer les messages correspondant à un motif"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:409
+#: ../keymap_alldefs.h:412
 msgid "untag messages matching a pattern"
 msgstr "démarquer les messages correspondant à un motif"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:412
+#: ../keymap_alldefs.h:415
 msgid "create a hotkey macro for the current message"
 msgstr "créer une macro hotkey (marque-page) pour le message courant"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:415
+#: ../keymap_alldefs.h:418
 msgid "move to the middle of the page"
 msgstr "aller au milieu de la page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:418
+#: ../keymap_alldefs.h:421
 msgid "move to the next entry"
 msgstr "aller à l'entrée suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:421
+#: ../keymap_alldefs.h:424
 msgid "scroll down one line"
 msgstr "descendre d'une ligne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:424
+#: ../keymap_alldefs.h:427
 msgid "move to the next page"
 msgstr "aller à la page suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:427
+#: ../keymap_alldefs.h:430
 msgid "jump to the bottom of the message"
 msgstr "aller à la fin du message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:430
+#: ../keymap_alldefs.h:433
 msgid "toggle display of quoted text"
 msgstr "inverser l'affichage du texte cité"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:433
+#: ../keymap_alldefs.h:436
 msgid "skip beyond quoted text"
 msgstr "sauter le texte cité"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:436
+#: ../keymap_alldefs.h:439
 msgid "jump to the top of the message"
 msgstr "aller au début du message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:439
+#: ../keymap_alldefs.h:442
 msgid "pipe message/attachment to a shell command"
 msgstr "passer le message/l'attachement à une commande shell"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:442
+#: ../keymap_alldefs.h:445
 msgid "move to the previous entry"
 msgstr "aller à l'entrée précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:445
+#: ../keymap_alldefs.h:448
 msgid "scroll up one line"
 msgstr "remonter d'une ligne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:448
+#: ../keymap_alldefs.h:451
 msgid "move to the previous page"
 msgstr "aller à la page précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:451
+#: ../keymap_alldefs.h:454
 msgid "print the current entry"
 msgstr "imprimer l'entrée courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:454
+#: ../keymap_alldefs.h:457
 msgid "delete the current entry, bypassing the trash folder"
 msgstr "supprimer l'entrée courante, sans utiliser la corbeille"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:457
+#: ../keymap_alldefs.h:460
 msgid "query external program for addresses"
 msgstr "demander des adresses à un programme externe"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:460
+#: ../keymap_alldefs.h:463
 msgid "append new query results to current results"
 msgstr "ajouter les nouveaux résultats de la requête aux résultats courants"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:463
+#: ../keymap_alldefs.h:466
 msgid "save changes to mailbox and quit"
 msgstr "sauver les modifications de la boîte aux lettres et quitter"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:466
+#: ../keymap_alldefs.h:469
 msgid "recall a postponed message"
 msgstr "rappeler un message ajourné"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:469
+#: ../keymap_alldefs.h:472
 msgid "clear and redraw the screen"
 msgstr "effacer l'écran et réafficher"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:472
+#: ../keymap_alldefs.h:475
 msgid "{internal}"
 msgstr "{interne}"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:475
+#: ../keymap_alldefs.h:478
 msgid "rename the current mailbox (IMAP only)"
 msgstr "renommer la BAL courante (IMAP seulement)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:478
+#: ../keymap_alldefs.h:481
 msgid "reply to a message"
 msgstr "répondre à un message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:481
+#: ../keymap_alldefs.h:484
 msgid "use the current message as a template for a new one"
 msgstr "utiliser le message courant comme modèle pour un nouveau message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:484
+#: ../keymap_alldefs.h:487
 msgid "save message/attachment to a mailbox/file"
 msgstr ""
 "sauver le message/l'attachement dans une boîte aux lettres ou un fichier"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:487
+#: ../keymap_alldefs.h:490
 msgid "search for a regular expression"
 msgstr "rechercher une expression rationnelle"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:490
+#: ../keymap_alldefs.h:493
 msgid "search backwards for a regular expression"
 msgstr "rechercher en arrière une expression rationnelle"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:493
+#: ../keymap_alldefs.h:496
 msgid "search for next match"
 msgstr "rechercher la prochaine occurrence"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:496
+#: ../keymap_alldefs.h:499
 msgid "search for next match in opposite direction"
 msgstr "rechercher la prochaine occurrence dans la direction opposée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:499
+#: ../keymap_alldefs.h:502
 msgid "toggle search pattern coloring"
 msgstr "inverser la coloration du motif de recherche"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:502
+#: ../keymap_alldefs.h:505
 msgid "invoke a command in a subshell"
 msgstr "exécuter une commande dans un sous-shell"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:505
+#: ../keymap_alldefs.h:508
 msgid "sort messages"
 msgstr "trier les messages"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:508
+#: ../keymap_alldefs.h:511
 msgid "sort messages in reverse order"
 msgstr "trier les messages dans l'ordre inverse"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:511
+#: ../keymap_alldefs.h:514
 msgid "tag the current entry"
 msgstr "marquer l'entrée courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:514
+#: ../keymap_alldefs.h:517
 msgid "apply next function to tagged messages"
 msgstr "appliquer la prochaine fonction aux messages marqués"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:517
+#: ../keymap_alldefs.h:520
 msgid "apply next function ONLY to tagged messages"
 msgstr "appliquer la prochaine fonction SEULEMENT aux messages marqués"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:520
+#: ../keymap_alldefs.h:523
 msgid "tag the current subthread"
 msgstr "marquer la sous-discussion courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:523
+#: ../keymap_alldefs.h:526
 msgid "tag the current thread"
 msgstr "marquer la discussion courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:526
+#: ../keymap_alldefs.h:529
 msgid "toggle a message's 'new' flag"
 msgstr "inverser l'indicateur 'nouveau' d'un message"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:529
+#: ../keymap_alldefs.h:532
 msgid "toggle whether the mailbox will be rewritten"
 msgstr "changer l'option de mise à jour de la boîte aux lettres"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:532
+#: ../keymap_alldefs.h:535
 msgid "toggle whether to browse mailboxes or all files"
 msgstr "changer entre l'affichage des BAL et celui de tous les fichiers"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:535
+#: ../keymap_alldefs.h:538
 msgid "move to the top of the page"
 msgstr "aller en haut de la page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:538
+#: ../keymap_alldefs.h:541
 msgid "undelete the current entry"
 msgstr "récupérer l'entrée courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:541
+#: ../keymap_alldefs.h:544
 msgid "undelete all messages in thread"
 msgstr "récupérer tous les messages de la discussion"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:544
+#: ../keymap_alldefs.h:547
 msgid "undelete all messages in subthread"
 msgstr "récupérer tous les messages de la sous-discussion"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:547
+#: ../keymap_alldefs.h:550
 msgid "show the Mutt version number and date"
 msgstr "afficher la version de Mutt (numéro et date)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:550
+#: ../keymap_alldefs.h:553
 msgid "view attachment using mailcap entry if necessary"
 msgstr "visualiser l'attachement en utilisant l'entrée mailcap si nécessaire"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:553
+#: ../keymap_alldefs.h:556
 msgid "show MIME attachments"
 msgstr "afficher les attachements MIME"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:556
+#: ../keymap_alldefs.h:559
 msgid "display the keycode for a key press"
 msgstr "afficher le code d'une touche enfoncée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:559
+#: ../keymap_alldefs.h:562
 msgid "calculate message statistics for all mailboxes"
 msgstr ""
 "calculer les statistiques des messages pour toutes les boîtes aux lettres"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:562
+#: ../keymap_alldefs.h:565
 msgid "show currently active limit pattern"
 msgstr "afficher le motif de limitation actuel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:565
+#: ../keymap_alldefs.h:568
 msgid "collapse/uncollapse current thread"
 msgstr "comprimer/décomprimer la discussion courante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:568
+#: ../keymap_alldefs.h:571
 msgid "collapse/uncollapse all threads"
 msgstr "comprimer/décomprimer toutes les discussions"
 
 # , c-format
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:571
+#: ../keymap_alldefs.h:574
 msgid "descend into a directory"
 msgstr "descendre dans un répertoire"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:574
+#: ../keymap_alldefs.h:577
 msgid "move the highlight to next mailbox"
 msgstr "déplacer la marque vers la boîte aux lettres suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:577
+#: ../keymap_alldefs.h:580
 msgid "move the highlight to next mailbox with new mail"
 msgstr "déplacer la marque vers la BAL avec de nouveaux messages suivante"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:580
+#: ../keymap_alldefs.h:583
 msgid "open highlighted mailbox"
 msgstr "ouvrir la boîte aux lettres marquée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:583
+#: ../keymap_alldefs.h:586
 msgid "scroll the sidebar down 1 page"
 msgstr "descendre la barre latérale d'une page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:586
+#: ../keymap_alldefs.h:589
 msgid "scroll the sidebar up 1 page"
 msgstr "remonter la barre latérale d'une page"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:589
+#: ../keymap_alldefs.h:592
 msgid "move the highlight to previous mailbox"
 msgstr "déplacer la marque vers la boîte aux lettres précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:592
+#: ../keymap_alldefs.h:595
 msgid "move the highlight to previous mailbox with new mail"
 msgstr "déplacer la marque vers la BAL avec de nouveaux messages précédente"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:595
+#: ../keymap_alldefs.h:598
 msgid "make the sidebar (in)visible"
 msgstr "rendre la barre latérale (in)visible"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:598
+#: ../keymap_alldefs.h:601
 msgid "attach a PGP public key"
 msgstr "attacher une clé publique PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:601
+#: ../keymap_alldefs.h:604
 msgid "show PGP options"
 msgstr "afficher les options PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:604
+#: ../keymap_alldefs.h:607
 msgid "mail a PGP public key"
 msgstr "envoyer une clé publique PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:607
+#: ../keymap_alldefs.h:610
 msgid "verify a PGP public key"
 msgstr "vérifier une clé publique PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:610
+#: ../keymap_alldefs.h:613
 msgid "view the key's user id"
 msgstr "afficher le numéro d'utilisateur de la clé"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:613
+#: ../keymap_alldefs.h:616
 msgid "check for classic PGP"
 msgstr "reconnaissance PGP classique"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:616
+#: ../keymap_alldefs.h:619
 msgid "accept the chain constructed"
 msgstr "accepter la chaîne construite"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:619
+#: ../keymap_alldefs.h:622
 msgid "append a remailer to the chain"
 msgstr "ajouter un redistributeur de courrier à la fin de la chaîne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:622
+#: ../keymap_alldefs.h:625
 msgid "insert a remailer into the chain"
 msgstr "insérer un redistributeur de courrier dans la chaîne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:625
+#: ../keymap_alldefs.h:628
 msgid "delete a remailer from the chain"
 msgstr "retirer un redistributeur de courrier de la chaîne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:628
+#: ../keymap_alldefs.h:631
 msgid "select the previous element of the chain"
 msgstr "sélectionner l'élément précédent de la chaîne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:631
+#: ../keymap_alldefs.h:634
 msgid "select the next element of the chain"
 msgstr "sélectionner l'élément suivant de la chaîne"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:634
+#: ../keymap_alldefs.h:637
 msgid "send the message through a mixmaster remailer chain"
 msgstr ""
 "envoyer le message dans une chaîne de redistributeurs de courrier mixmaster"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:637
+#: ../keymap_alldefs.h:640
 msgid "make decrypted copy and delete"
 msgstr "faire une copie déchiffrée et effacer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:640
+#: ../keymap_alldefs.h:643
 msgid "make decrypted copy"
 msgstr "faire une copie déchiffrée"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:643
+#: ../keymap_alldefs.h:646
 msgid "wipe passphrase(s) from memory"
 msgstr "effacer les phrases de passe de la mémoire"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:646
+#: ../keymap_alldefs.h:649
 msgid "extract supported public keys"
 msgstr "extraire les clés publiques supportées"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:649
+#: ../keymap_alldefs.h:652
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
