@@ -48,6 +48,14 @@
 
 #define BAD     -1
 
+void mutt_buffer_to_base64 (BUFFER *out, const unsigned char *in, size_t len)
+{
+  mutt_buffer_increase_size (out,
+                             ((len * 2) > LONG_STRING) ? (len * 2) : LONG_STRING);
+  mutt_to_base64 ((unsigned char *)out->data, in, len, out->dsize);
+  mutt_buffer_fix_dptr (out);
+}
+
 /* raw bytes to null-terminated base 64 string */
 void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
 		     size_t olen)
@@ -77,6 +85,20 @@ void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
     *out++ = '=';
   }
   *out = '\0';
+}
+
+int mutt_buffer_from_base64 (BUFFER *out, const char *in)
+{
+  int olen;
+
+  mutt_buffer_increase_size (out, mutt_strlen (in));
+  olen = mutt_from_base64 (out->data, in, out->dsize);
+  if (olen > 0)
+    out->dptr = out->data + olen;
+  else
+    out->dptr = out->data;
+
+  return olen;
 }
 
 /* Convert '\0'-terminated base 64 string to raw bytes.

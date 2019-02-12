@@ -406,6 +406,8 @@ ADDRESS *alias_reverse_lookup (ADDRESS *);
 /* base64.c */
 void mutt_to_base64 (unsigned char*, const unsigned char*, size_t, size_t);
 int mutt_from_base64 (char*, const char*, size_t);
+void mutt_buffer_to_base64 (BUFFER *, const unsigned char *, size_t);
+int mutt_buffer_from_base64 (BUFFER *, const char *);
 
 /* utf8.c */
 int mutt_wctoutf8 (char *s, unsigned int c, size_t buflen);
