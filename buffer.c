@@ -82,6 +82,11 @@ BUFFER *mutt_buffer_from (char *seed)
   return b;
 }
 
+size_t mutt_buffer_len (BUFFER *buf)
+{
+  return buf->dptr - buf->data;
+}
+
 /* Increases the allocated size of the buffer */
 void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
 {
