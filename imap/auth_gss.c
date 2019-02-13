@@ -199,8 +199,14 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method)
       goto bail;
     }
 
-    request_buf.length = mutt_buffer_from_base64 (buf2, idata->buf + 2);
+    if (mutt_buffer_from_base64 (buf2, idata->buf + 2) < 0)
+    {
+      dprint (1, (debugfile, "Invalid base64 server response.\n"));
+      gss_release_name (&min_stat, &target_name);
+      goto err_abort_cmd;
+    }
     request_buf.value = buf2->data;
+    request_buf.length = mutt_buffer_len (buf2);
     sec_token = &request_buf;
 
     /* Write client data */
@@ -234,8 +240,13 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method)
     dprint (1, (debugfile, "Error receiving server response.\n"));
     goto bail;
   }
-  request_buf.length = mutt_buffer_from_base64 (buf2, idata->buf + 2);
+  if (mutt_buffer_from_base64 (buf2, idata->buf + 2) < 0)
+  {
+    dprint (1, (debugfile, "Invalid base64 server response.\n"));
+    goto err_abort_cmd;
+  }
   request_buf.value = buf2->data;
+  request_buf.length = mutt_buffer_len (buf2);
 
   maj_stat = gss_unwrap (&min_stat, context, &request_buf, &send_token,
                          &cflags, &quality);
