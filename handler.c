@@ -1750,7 +1750,7 @@ static int malformed_pgp_encrypted_handler (BODY *b, STATE *s)
 int mutt_body_handler (BODY *b, STATE *s)
 {
   int plaintext = 0;
-  handler_t handler = NULL;
+  handler_t handler = NULL, encrypted_handler = NULL;
   int rc = 0;
 
   int oflags = s->flags;
@@ -1770,7 +1770,7 @@ int mutt_body_handler (BODY *b, STATE *s)
        * the only operation needed.
        */
       if ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp (b))
-	handler = crypt_pgp_application_pgp_handler;
+	encrypted_handler = handler = crypt_pgp_application_pgp_handler;
       else if (option(OPTREFLOWTEXT) && ascii_strcasecmp ("flowed", mutt_get_parameter ("format", b->parameter)) == 0)
 	handler = rfc3676_handler;
       else
@@ -1806,9 +1806,9 @@ int mutt_body_handler (BODY *b, STATE *s)
 	handler = mutt_signed_handler;
     }
     else if (mutt_is_valid_multipart_pgp_encrypted (b))
-      handler = valid_pgp_encrypted_handler;
+      encrypted_handler = handler = valid_pgp_encrypted_handler;
     else if (mutt_is_malformed_multipart_pgp_encrypted (b))
-      handler = malformed_pgp_encrypted_handler;
+      encrypted_handler = handler = malformed_pgp_encrypted_handler;
 
     if (!handler)
       handler = multipart_handler;
@@ -1830,9 +1830,9 @@ int mutt_body_handler (BODY *b, STATE *s)
       plaintext = 1;
     }
     else if ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp (b))
-      handler = crypt_pgp_application_pgp_handler;
+      encrypted_handler = handler = crypt_pgp_application_pgp_handler;
     else if ((WithCrypto & APPLICATION_SMIME) && mutt_is_application_smime(b))
-      handler = crypt_smime_application_smime_handler;
+      encrypted_handler = handler = crypt_smime_application_smime_handler;
   }
 
   /* only respect disposition == attachment if we're not
@@ -1841,6 +1841,14 @@ int mutt_body_handler (BODY *b, STATE *s)
 				  option(OPTVIEWATTACH))) &&
       (plaintext || handler))
   {
+    /* Prevent encrypted attachments from being included in replies
+     * unless $include_encrypted is set. */
+    if ((s->flags & MUTT_REPLYING) &&
+        (s->flags & MUTT_FIRSTDONE) &&
+        encrypted_handler &&
+        !option (OPTINCLUDEENCRYPTED))
+      goto cleanup;
+
     rc = run_decode_and_handler (b, s, handler, plaintext);
   }
   /* print hint to use attachment menu for disposition == attachment
@@ -1868,6 +1876,7 @@ int mutt_body_handler (BODY *b, STATE *s)
     fputs (" --]\n", s->fpout);
   }
 
+cleanup:
   s->flags = oflags | (s->flags & MUTT_FIRSTDONE);
   if (rc)
   {
