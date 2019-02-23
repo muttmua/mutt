@@ -161,14 +161,14 @@ manual.tex: stamp-doc-xml
 	fi
 
 mutt.texi: stamp-doc-xml
-	docbook2x-texi --encoding=utf-8 \
+	$(DB2XTEXI) --encoding=utf-8 \
 	    --string-param output-file=mutt \
 	    --string-param 'directory-category=Email-software' \
 	    --string-param 'directory-description=Text based mail reader' \
 	    manual.xml
 
 mutt.info: mutt.texi
-	makeinfo --no-split -o mutt.info mutt.texi
+	$(MAKEINFO) --no-split -o mutt.info mutt.texi
 
 validate: stamp-doc-xml
 	xmllint --noout --noblanks --postvalid manual.xml

@@ -1562,14 +1562,16 @@ then
 fi
 AC_SUBST(DSLROOT)
 
-AC_PATH_PROG([db2x], [docbook2x-texi], [none])
-if test "$db2x" != "none"; then
-   AC_PATH_PROG([makeinfo], [makeinfo], [none])
-   if test "$makeinfo" != "none"; then
+AC_PATH_PROGS([DB2XTEXI], [docbook2x-texi docbook2texi], [none])
+if test "$DB2XTEXI" != "none"; then
+   AC_PATH_PROG([MAKEINFO], [makeinfo], [none])
+   if test "$MAKEINFO" != "none"; then
       do_build_info=yes
    fi
 fi
 AM_CONDITIONAL(BUILD_INFO, test x$do_build_info = xyes)
+AC_SUBST(DB2XTEXI)
+AC_SUBST(MAKEINFO)
 
 AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc],[Do not build the documentation]),
 [       if test x$enableval = xno ; then
