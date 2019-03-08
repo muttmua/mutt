@@ -104,7 +104,7 @@ int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
 
         /* In send mode, use the current charset, since the message hasn't
          * been converted yet. */
-        if ((ascii_strcasecmp (param, "charset") == 0) && a->charset)
+        if ((ascii_strcasecmp (param, "charset") == 0) && a->charset && !a->noconv)
           _pvalue = a->charset;
         else
           _pvalue = mutt_get_parameter (param, a->parameter);
