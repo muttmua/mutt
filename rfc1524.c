@@ -102,7 +102,12 @@ int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
 	  param[z++] = command[x++];
 	param[z] = '\0';
 
-	_pvalue = mutt_get_parameter (param, a->parameter);
+        /* In send mode, use the current charset, since the message hasn't
+         * been converted yet. */
+        if ((ascii_strcasecmp (param, "charset") == 0) && a->charset)
+          _pvalue = a->charset;
+        else
+          _pvalue = mutt_get_parameter (param, a->parameter);
 	strfcpy (pvalue, NONULL(_pvalue), sizeof (pvalue));
 	if (option (OPTMAILCAPSANITIZE))
 	  mutt_sanitize_filename (pvalue, 0);
