@@ -138,6 +138,7 @@ const char *mutt_attach_fmt (
 
 char *mutt_charset_hook (const char *);
 char *mutt_iconv_hook (const char *);
+void mutt_buffer_expand_path (BUFFER *, int);
 char *mutt_expand_path (char *, size_t);
 char *_mutt_expand_path (char *, size_t, int);
 char *mutt_find_hook (int, const char *);
@@ -253,7 +254,7 @@ void mutt_print_patchlist (void);
 void mutt_query_exit (void);
 void mutt_query_menu (char *, size_t);
 void mutt_safe_path (char *s, size_t l, ADDRESS *a);
-int mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src);
+int mutt_rx_sanitize_string (BUFFER *dest, const char *src);
 void mutt_save_path (char *s, size_t l, ADDRESS *a);
 void mutt_score_message (CONTEXT *, HEADER *, int);
 void mutt_select_fcc (char *, size_t, HEADER *);

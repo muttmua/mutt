@@ -214,21 +214,34 @@ static void url_pct_encode (char *dst, size_t l, const char *src)
   *dst = 0;
 }
 
-/* url_ciss_tostring: output the URL string for a given CISS object. */
 int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
 {
-  long l;
+  BUFFER *dest_buf;
+  int retval;
 
+  dest_buf = mutt_buffer_pool_get ();
+
+  retval = url_ciss_tobuffer (ciss, dest_buf, flags);
+  if (!retval)
+    strfcpy (dest, mutt_b2s (dest_buf), len);
+
+  mutt_buffer_pool_release (&dest_buf);
+
+  return retval;
+}
+
+/* url_ciss_tobuffer: output the URL string for a given CISS object. */
+int url_ciss_tobuffer (ciss_url_t* ciss, BUFFER* dest, int flags)
+{
   if (ciss->scheme == U_UNKNOWN)
     return -1;
 
-  snprintf (dest, len, "%s:", mutt_getnamebyvalue (ciss->scheme, UrlMap));
+  mutt_buffer_printf (dest, "%s:", mutt_getnamebyvalue (ciss->scheme, UrlMap));
 
   if (ciss->host)
   {
     if (!(flags & U_PATH))
-      safe_strcat (dest, len, "//");
-    len -= (l = strlen (dest)); dest += l;
+      mutt_buffer_addstr (dest, "//");
 
     if (ciss->user)
     {
@@ -239,29 +252,25 @@ int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
       {
 	char p[STRING];
 	url_pct_encode (p, sizeof (p), ciss->pass);
-	snprintf (dest, len, "%s:%s@", u, p);
+	mutt_buffer_add_printf (dest, "%s:%s@", u, p);
       }
       else
-	snprintf (dest, len, "%s@", u);
-
-      len -= (l = strlen (dest)); dest += l;
+	mutt_buffer_add_printf (dest, "%s@", u);
     }
 
     if (strchr (ciss->host, ':'))
-      snprintf (dest, len, "[%s]", ciss->host);
+      mutt_buffer_add_printf (dest, "[%s]", ciss->host);
     else
-      snprintf (dest, len, "%s", ciss->host);
-
-    len -= (l = strlen (dest)); dest += l;
+      mutt_buffer_add_printf (dest, "%s", ciss->host);
 
     if (ciss->port)
-      snprintf (dest, len, ":%hu/", ciss->port);
+      mutt_buffer_add_printf (dest, ":%hu/", ciss->port);
     else
-      snprintf (dest, len, "/");
+      mutt_buffer_addstr (dest, "/");
   }
 
   if (ciss->path)
-    safe_strcat (dest, len, ciss->path);
+    mutt_buffer_addstr (dest, ciss->path);
 
   return 0;
 }

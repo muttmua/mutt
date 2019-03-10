@@ -435,18 +435,34 @@ char *mutt_expand_path (char *s, size_t slen)
 
 char *_mutt_expand_path (char *s, size_t slen, int rx)
 {
-  char p[_POSIX_PATH_MAX] = "";
-  char q[_POSIX_PATH_MAX] = "";
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *s_buf;
+
+  s_buf = mutt_buffer_pool_get ();
+
+  mutt_buffer_addstr (s_buf, s);
+  mutt_buffer_expand_path (s_buf, rx);
+  strfcpy (s, mutt_b2s (s_buf), slen);
+
+  mutt_buffer_pool_release (&s_buf);
+
+  return s;
+}
+
+void mutt_buffer_expand_path (BUFFER *src, int rx)
+{
+  BUFFER *p, *q, *tmp;
+  const char *s, *tail = "";
   char *t;
-
-  char *tail = "";
-
   int recurse = 0;
+
+  p = mutt_buffer_pool_get ();
+  q = mutt_buffer_pool_get ();
+  tmp = mutt_buffer_pool_get ();
 
   do
   {
     recurse = 0;
+    s = src->data;
 
     switch (*s)
     {
@@ -454,7 +470,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
       {
 	if (*(s + 1) == '/' || *(s + 1) == 0)
 	{
-	  strfcpy (p, NONULL(Homedir), sizeof (p));
+	  mutt_buffer_strcpy (p, NONULL(Homedir));
 	  tail = s + 1;
 	}
 	else
@@ -465,7 +481,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 
 	  if ((pw = getpwnam (s + 1)))
 	  {
-	    strfcpy (p, pw->pw_dir, sizeof (p));
+	    mutt_buffer_strcpy (p, pw->pw_dir);
 	    if (t)
 	    {
 	      *t = '/';
@@ -479,7 +495,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 	    /* user not found! */
 	    if (t)
 	      *t = '/';
-	    *p = '\0';
+            mutt_buffer_clear (p);
 	    tail = s;
 	  }
 	}
@@ -494,13 +510,13 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 	if (mx_is_imap (NONULL (Maildir)) &&
 	    (Maildir[strlen (Maildir) - 1] == '}' ||
 	     Maildir[strlen (Maildir) - 1] == '/'))
-	  strfcpy (p, NONULL (Maildir), sizeof (p));
+	  mutt_buffer_strcpy (p, NONULL (Maildir));
 	else
 #endif
           if (Maildir && *Maildir && Maildir[strlen (Maildir) - 1] == '/')
-            strfcpy (p, NONULL (Maildir), sizeof (p));
+            mutt_buffer_strcpy (p, NONULL (Maildir));
           else
-            snprintf (p, sizeof (p), "%s/", NONULL (Maildir));
+            mutt_buffer_printf (p, "%s/", NONULL (Maildir));
 
 	tail = s + 1;
       }
@@ -518,11 +534,16 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 	  h = mutt_new_header();
 	  h->env = mutt_new_envelope();
 	  h->env->from = h->env->to = alias;
-	  mutt_default_save (p, sizeof (p), h);
+
+          /* TODO: fix mutt_default_save() to use BUFFER */
+          mutt_buffer_increase_size (p, _POSIX_PATH_MAX);
+	  mutt_default_save (p->data, p->dsize, h);
+          mutt_buffer_fix_dptr (p);
+
 	  h->env->from = h->env->to = NULL;
 	  mutt_free_header (&h);
 	  /* Avoid infinite recursion if the resulting folder starts with '@' */
-	  if (*p != '@')
+	  if (*(p->data) != '@')
 	    recurse = 1;
 
 	  tail = "";
@@ -532,14 +553,14 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 
       case '>':
       {
-	strfcpy (p, NONULL(Inbox), sizeof (p));
+	mutt_buffer_strcpy (p, NONULL(Inbox));
 	tail = s + 1;
       }
       break;
 
       case '<':
       {
-	strfcpy (p, NONULL(Outbox), sizeof (p));
+	mutt_buffer_strcpy (p, NONULL(Outbox));
 	tail = s + 1;
       }
       break;
@@ -548,12 +569,12 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
       {
 	if (*(s+1) == '!')
 	{
-	  strfcpy (p, NONULL(LastFolder), sizeof (p));
+	  mutt_buffer_strcpy (p, NONULL(LastFolder));
 	  tail = s + 2;
 	}
 	else
 	{
-	  strfcpy (p, NONULL(Spoolfile), sizeof (p));
+	  mutt_buffer_strcpy (p, NONULL(Spoolfile));
 	  tail = s + 1;
 	}
       }
@@ -561,45 +582,47 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 
       case '-':
       {
-	strfcpy (p, NONULL(LastFolder), sizeof (p));
+	mutt_buffer_strcpy (p, NONULL(LastFolder));
 	tail = s + 1;
       }
       break;
 
       case '^':
       {
-	strfcpy (p, NONULL(CurrentFolder), sizeof (p));
+	mutt_buffer_strcpy (p, NONULL(CurrentFolder));
 	tail = s + 1;
       }
       break;
 
       default:
       {
-	*p = '\0';
+	mutt_buffer_clear (p);
 	tail = s;
       }
     }
 
-    if (rx && *p && !recurse)
+    if (rx && *(p->data) && !recurse)
     {
-      mutt_rx_sanitize_string (q, sizeof (q), p);
-      snprintf (tmp, sizeof (tmp), "%s%s", q, tail);
+      mutt_rx_sanitize_string (q, mutt_b2s (p));
+      mutt_buffer_printf (tmp, "%s%s", mutt_b2s (q), tail);
     }
     else
-      snprintf (tmp, sizeof (tmp), "%s%s", p, tail);
+      mutt_buffer_printf (tmp, "%s%s", mutt_b2s (p), tail);
 
-    strfcpy (s, tmp, slen);
+    mutt_buffer_strcpy (src, mutt_b2s (tmp));
   }
   while (recurse);
+
+  mutt_buffer_pool_release (&p);
+  mutt_buffer_pool_release (&q);
+  mutt_buffer_pool_release (&tmp);
 
 #ifdef USE_IMAP
   /* Rewrite IMAP path in canonical form - aids in string comparisons of
    * folders. May possibly fail, in which case s should be the same. */
-  if (mx_is_imap (s))
-    imap_expand_path (s, slen);
+  if (mx_is_imap (mutt_b2s (src)))
+    imap_expand_path (src);
 #endif
-
-  return (s);
 }
 
 /* Extract the real name from /etc/passwd's GECOS field.
@@ -866,24 +889,16 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
 
 static const char rx_special_chars[] = "^.[$()|*+?{\\";
 
-int mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src)
+int mutt_rx_sanitize_string (BUFFER *dest, const char *src)
 {
-  while (*src && --destlen > 2)
+  mutt_buffer_clear (dest);
+  while (*src)
   {
     if (strchr (rx_special_chars, *src))
-    {
-      *dest++ = '\\';
-      destlen--;
-    }
-    *dest++ = *src++;
+      mutt_buffer_addch (dest, '\\');
+    mutt_buffer_addch (dest, *src++);
   }
-
-  *dest = '\0';
-
-  if (*src)
-    return -1;
-  else
-    return 0;
+  return 0;
 }
 
 void mutt_free_alias (ALIAS **p)

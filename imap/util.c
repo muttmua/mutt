@@ -45,12 +45,11 @@
 
 /* imap_expand_path: IMAP implementation of mutt_expand_path. Rewrite
  *   an IMAP path in canonical and absolute form.
- * Inputs: a buffer containing an IMAP path, and the number of bytes in
- *   that buffer.
+ * Inputs: a buffer containing an IMAP path.
  * Outputs: The buffer is rewritten in place with the canonical IMAP path.
- * Returns 0 on success, or -1 if imap_parse_path chokes or url_ciss_tostring
+ * Returns 0 on success, or -1 if imap_parse_path chokes or url_ciss_tobuffer
  *   fails, which it might if there isn't enough room in the buffer. */
-int imap_expand_path (char* path, size_t len)
+int imap_expand_path (BUFFER* path)
 {
   IMAP_MBOX mx;
   IMAP_DATA* idata;
@@ -58,7 +57,7 @@ int imap_expand_path (char* path, size_t len)
   char fixedpath[LONG_STRING];
   int rc;
 
-  if (imap_parse_path (path, &mx) < 0)
+  if (imap_parse_path (mutt_b2s (path), &mx) < 0)
     return -1;
 
   idata = imap_conn_find (&mx.account, MUTT_IMAP_CONN_NONEW);
@@ -66,7 +65,7 @@ int imap_expand_path (char* path, size_t len)
   imap_fix_path (idata, mx.mbox, fixedpath, sizeof (fixedpath));
   url.path = fixedpath;
 
-  rc = url_ciss_tostring (&url, path, len, U_DECODE_PASSWD);
+  rc = url_ciss_tobuffer (&url, path, U_DECODE_PASSWD);
   FREE (&mx.mbox);
 
   return rc;

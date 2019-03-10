@@ -62,7 +62,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete);
 void imap_logout_all (void);
 
 /* util.c */
-int imap_expand_path (char* path, size_t len);
+int imap_expand_path (BUFFER* path);
 int imap_parse_path (const char* path, IMAP_MBOX* mx);
 void imap_pretty_mailbox (char* path, size_t pathlen);
 
