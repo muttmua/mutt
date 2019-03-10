@@ -406,7 +406,7 @@ int imap_mxcmp (const char* mx1, const char* mx2)
 
 /* imap_pretty_mailbox: called by mutt_pretty_mailbox to make IMAP paths
  *   look nice. */
-void imap_pretty_mailbox (char* path)
+void imap_pretty_mailbox (char* path, size_t pathlen)
 {
   IMAP_MBOX home, target;
   ciss_url_t url;
@@ -450,10 +450,7 @@ void imap_pretty_mailbox (char* path)
   {
     mutt_account_tourl (&target.account, &url);
     url.path = target.mbox;
-    /* FIXME: That hard-coded constant is bogus. But we need the actual
-     *   size of the buffer from mutt_pretty_mailbox. And these pretty
-     *   operations usually shrink the result. Still... */
-    url_ciss_tostring (&url, path, 1024, 0);
+    url_ciss_tostring (&url, path, pathlen, 0);
   }
 
   FREE (&target.mbox);
