@@ -253,6 +253,7 @@ void mutt_print_patchlist (void);
 void mutt_query_exit (void);
 void mutt_query_menu (char *, size_t);
 void mutt_safe_path (char *s, size_t l, ADDRESS *a);
+int mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src);
 void mutt_save_path (char *s, size_t l, ADDRESS *a);
 void mutt_score_message (CONTEXT *, HEADER *, int);
 void mutt_select_fcc (char *, size_t, HEADER *);

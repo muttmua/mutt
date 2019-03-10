@@ -862,6 +862,30 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
     dprint (1, (debugfile, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)\n", src, line, s, strerror (errno), errno));
 }
 
+/* these characters must be escaped in regular expressions */
+
+static const char rx_special_chars[] = "^.[$()|*+?{\\";
+
+int mutt_rx_sanitize_string (char *dest, size_t destlen, const char *src)
+{
+  while (*src && --destlen > 2)
+  {
+    if (strchr (rx_special_chars, *src))
+    {
+      *dest++ = '\\';
+      destlen--;
+    }
+    *dest++ = *src++;
+  }
+
+  *dest = '\0';
+
+  if (*src)
+    return -1;
+  else
+    return 0;
+}
+
 void mutt_free_alias (ALIAS **p)
 {
   ALIAS *t;

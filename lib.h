@@ -201,7 +201,6 @@ const char *mutt_basename (const char *);
 int compare_stat (struct stat *, struct stat *);
 int mutt_copy_stream (FILE *, FILE *);
 int mutt_copy_bytes (FILE *, FILE *, size_t);
-int mutt_rx_sanitize_string (char *, size_t, const char *);
 int mutt_strcasecmp (const char *, const char *);
 int mutt_strcmp (const char *, const char *);
 int mutt_strncasecmp (const char *, const char *, size_t);
