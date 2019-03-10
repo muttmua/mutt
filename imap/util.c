@@ -227,7 +227,6 @@ int imap_hcache_del (IMAP_DATA* idata, unsigned int uid)
 int imap_hcache_store_uid_seqset (IMAP_DATA *idata)
 {
   BUFFER *b;
-  size_t seqset_size;
   int rc;
 
   if (!idata->hcache)
@@ -238,12 +237,8 @@ int imap_hcache_store_uid_seqset (IMAP_DATA *idata)
   mutt_buffer_increase_size (b, HUGE_STRING);
   imap_msn_index_to_uid_seqset (b, idata);
 
-  seqset_size = b->dptr - b->data;
-  if (seqset_size == 0)
-    b->data[0] = '\0';
-
   rc = mutt_hcache_store_raw (idata->hcache, "/UIDSEQSET",
-                              b->data, seqset_size + 1,
+                              b->data, mutt_buffer_len (b) + 1,
                               imap_hcache_keylen);
   dprint (5, (debugfile, "Stored /UIDSEQSET %s\n", b->data));
   mutt_buffer_free (&b);
