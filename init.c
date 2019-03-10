@@ -140,8 +140,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
   char		qc = 0; /* quote char */
   char		*pc;
 
-  /* reset the destination pointer to the beginning of the buffer */
-  dest->dptr = dest->data;
+  mutt_buffer_clear (dest);
 
   SKIPWS (tok->dptr);
   while ((ch = *tok->dptr))
@@ -3406,9 +3405,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   BUFFER err;
 
   mutt_buffer_init (&err);
-  err.dsize = STRING;
-  err.data = safe_malloc(err.dsize);
-  err.dptr = err.data;
+  mutt_buffer_increase_size (&err, STRING);
 
   Groups = hash_create (1031, 0);
   /* reverse alias keys need to be strdup'ed because of idna conversions */

@@ -185,7 +185,7 @@ static void imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, unsigned int msn
   /* Too big.  Just query the whole range then. */
   if (chunks == 150 || mutt_strlen (b->data) > 500)
   {
-    b->dptr = b->data;
+    mutt_buffer_clear (b);
     mutt_buffer_add_printf (b, "%u:%u", msn_begin, msn_end);
   }
 }

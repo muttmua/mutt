@@ -448,12 +448,12 @@ static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags)
   if (flags & IMAP_CMD_QUEUE)
     return 0;
 
-  if (idata->cmdbuf->dptr == idata->cmdbuf->data)
+  if (mutt_buffer_len (idata->cmdbuf) == 0)
     return IMAP_CMD_BAD;
 
   rc = mutt_socket_write_d (idata->conn, idata->cmdbuf->data, -1,
                             flags & IMAP_CMD_PASS ? IMAP_LOG_PASS : IMAP_LOG_CMD);
-  idata->cmdbuf->dptr = idata->cmdbuf->data;
+  mutt_buffer_clear (idata->cmdbuf);
 
   /* unidle when command queue is flushed */
   if (idata->state == IMAP_IDLE)

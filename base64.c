@@ -93,6 +93,7 @@ int mutt_buffer_from_base64 (BUFFER *out, const char *in)
 
   mutt_buffer_increase_size (out, mutt_strlen (in));
   olen = mutt_from_base64 (out->data, in, out->dsize);
+  /* mutt_from_base64 returns raw bytes, so don't terminate the buffer either */
   if (olen > 0)
     out->dptr = out->data + olen;
   else

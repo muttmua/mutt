@@ -1447,8 +1447,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
 	  /* else overwrite */
 	  else
 	  {
-	    e->spam->dptr = e->spam->data;
-	    *e->spam->dptr = '\0';
+            mutt_buffer_clear (e->spam);
 	    mutt_buffer_addstr(e->spam, buf);
 	  }
 	}

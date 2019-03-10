@@ -973,7 +973,7 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
   hdrs = idata->ctx->hdrs;
 
   for (n = *pos;
-       n < idata->ctx->msgcount && buf->dptr - buf->data < IMAP_MAX_CMDLEN;
+       (n < idata->ctx->msgcount) && (mutt_buffer_len (buf) < IMAP_MAX_CMDLEN);
        n++)
   {
     match = 0;
@@ -1086,7 +1086,7 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
 
   do
   {
-    cmd->dptr = cmd->data;
+    mutt_buffer_clear (cmd);
     mutt_buffer_add_printf (cmd, "%s ", pre);
     rc = imap_make_msg_set (idata, cmd, flag, changed, invert, &pos);
     if (rc > 0)
@@ -1153,7 +1153,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   }
 
   snprintf (uid, sizeof (uid), "%u", HEADER_DATA(hdr)->uid);
-  cmd->dptr = cmd->data;
+  mutt_buffer_clear (cmd);
   mutt_buffer_addstr (cmd, "UID STORE ");
   mutt_buffer_addstr (cmd, uid);
 
