@@ -45,6 +45,7 @@ void mutt_buffer_fix_dptr (BUFFER *);
 /* These two replace the buffer contents. */
 int mutt_buffer_printf (BUFFER*, const char*, ...);
 void mutt_buffer_strcpy (BUFFER *, const char *);
+void mutt_buffer_strcpy_n (BUFFER *, const char *, size_t);
 
 /* These append to the buffer. */
 int mutt_buffer_add_printf (BUFFER*, const char*, ...);
