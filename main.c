@@ -1338,6 +1338,7 @@ cleanup_and_exit:
 #ifdef USE_SASL
   mutt_sasl_done ();
 #endif
+  mutt_browser_cleanup ();
   mutt_free_opts ();
   mutt_free_windows ();
   mutt_buffer_pool_free ();

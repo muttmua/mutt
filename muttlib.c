@@ -1173,6 +1173,16 @@ void mutt_safe_path (char *s, size_t l, ADDRESS *a)
       *p = '_';
 }
 
+void mutt_buffer_concat_path (BUFFER *d, const char *dir, const char *fname)
+{
+  const char *fmt = "%s/%s";
+
+  if (!*fname || (*dir && dir[strlen(dir)-1] == '/'))
+    fmt = "%s%s";
+
+  mutt_buffer_printf (d, fmt, dir, fname);
+}
+
 void mutt_getcwd (BUFFER *cwd)
 {
   char *retval;

@@ -171,6 +171,8 @@ void mutt_block_signals_system (void);
 int mutt_body_handler (BODY *, STATE *);
 int  mutt_bounce_message (FILE *fp, HEADER *, ADDRESS *);
 void mutt_break_thread (HEADER *);
+void mutt_browser_cleanup (void);
+void mutt_buffer_concat_path (BUFFER *, const char *, const char *);
 void mutt_buffy (char *, size_t);
 int  mutt_buffy_list (void);
 void mutt_canonical_charset (char *, size_t, const char *);

@@ -39,7 +39,7 @@ static int compare_names(struct folder_file *a, struct folder_file *b);
 
 /* imap_browse: IMAP hook into the folder browser, fills out browser_state,
  *   given a current folder to browse */
-int imap_browse (char* path, struct browser_state* state)
+int imap_browse (const char* path, struct browser_state* state)
 {
   IMAP_DATA* idata;
   IMAP_LIST list;
