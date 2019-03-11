@@ -439,8 +439,8 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 
   s_buf = mutt_buffer_pool_get ();
 
-  mutt_buffer_addstr (s_buf, s);
-  mutt_buffer_expand_path (s_buf, rx);
+  mutt_buffer_addstr (s_buf, NONULL (s));
+  _mutt_buffer_expand_path (s_buf, rx);
   strfcpy (s, mutt_b2s (s_buf), slen);
 
   mutt_buffer_pool_release (&s_buf);
@@ -448,7 +448,12 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
   return s;
 }
 
-void mutt_buffer_expand_path (BUFFER *src, int rx)
+void mutt_buffer_expand_path (BUFFER *src)
+{
+  _mutt_buffer_expand_path (src, 0);
+}
+
+void _mutt_buffer_expand_path (BUFFER *src, int rx)
 {
   BUFFER *p, *q, *tmp;
   const char *s, *tail = "";
@@ -462,7 +467,7 @@ void mutt_buffer_expand_path (BUFFER *src, int rx)
   do
   {
     recurse = 0;
-    s = src->data;
+    s = mutt_b2s (src);
 
     switch (*s)
     {
@@ -543,7 +548,7 @@ void mutt_buffer_expand_path (BUFFER *src, int rx)
 	  h->env->from = h->env->to = NULL;
 	  mutt_free_header (&h);
 	  /* Avoid infinite recursion if the resulting folder starts with '@' */
-	  if (*(p->data) != '@')
+	  if (*(mutt_b2s (p)) != '@')
 	    recurse = 1;
 
 	  tail = "";
@@ -601,7 +606,7 @@ void mutt_buffer_expand_path (BUFFER *src, int rx)
       }
     }
 
-    if (rx && *(p->data) && !recurse)
+    if (rx && *(mutt_b2s (p)) && !recurse)
     {
       mutt_rx_sanitize_string (q, mutt_b2s (p));
       mutt_buffer_printf (tmp, "%s%s", mutt_b2s (q), tail);

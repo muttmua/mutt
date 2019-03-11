@@ -138,7 +138,8 @@ const char *mutt_attach_fmt (
 
 char *mutt_charset_hook (const char *);
 char *mutt_iconv_hook (const char *);
-void mutt_buffer_expand_path (BUFFER *, int);
+void mutt_buffer_expand_path (BUFFER *);
+void _mutt_buffer_expand_path (BUFFER *, int);
 char *mutt_expand_path (char *, size_t);
 char *_mutt_expand_path (char *, size_t, int);
 char *mutt_find_hook (int, const char *);
