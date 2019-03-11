@@ -223,6 +223,7 @@ void mutt_free_header (HEADER **);
 void mutt_free_parameter (PARAMETER **);
 void mutt_free_regexp (REGEXP **);
 void mutt_generate_header (char *, size_t, HEADER *, int);
+void mutt_getcwd (BUFFER *);
 void mutt_help (int);
 const char *mutt_idxfmt_hook (const char *, CONTEXT *, HEADER *);
 void mutt_draw_tree (CONTEXT *);

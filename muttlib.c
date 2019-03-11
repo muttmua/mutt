@@ -1173,6 +1173,23 @@ void mutt_safe_path (char *s, size_t l, ADDRESS *a)
       *p = '_';
 }
 
+void mutt_getcwd (BUFFER *cwd)
+{
+  char *retval;
+
+  mutt_buffer_increase_size (cwd, _POSIX_PATH_MAX);
+  retval = getcwd (cwd->data, cwd->dsize);
+  while (!retval && errno == ERANGE)
+  {
+    mutt_buffer_increase_size (cwd, cwd->dsize + STRING);
+    retval = getcwd (cwd->data, cwd->dsize);
+  }
+  if (retval)
+    mutt_buffer_fix_dptr (cwd);
+  else
+    mutt_buffer_clear (cwd);
+}
+
 /* Note this function uses a fixed size buffer of LONG_STRING and so
  * should only be used for visual modifications, such as disp_subj. */
 char *mutt_apply_replace (char *dbuf, size_t dlen, char *sbuf, REPLACE_LIST *rlist)
