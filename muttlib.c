@@ -921,6 +921,15 @@ void mutt_free_alias (ALIAS **p)
   }
 }
 
+void mutt_buffer_pretty_mailbox (BUFFER *s)
+{
+  /* This reduces the size of the BUFFER, so we can pass it through.
+   * We adjust the size just to make sure s->data is not NULL though */
+  mutt_buffer_increase_size (s, _POSIX_PATH_MAX);
+  mutt_pretty_mailbox (s->data, s->dsize);
+  mutt_buffer_fix_dptr (s);
+}
+
 /* collapse the pathname using ~ or = when possible */
 void mutt_pretty_mailbox (char *s, size_t buflen)
 {
