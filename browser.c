@@ -667,6 +667,19 @@ static int file_tag (MUTTMENU *menu, int n, int m)
 
 void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *numfiles)
 {
+  BUFFER *f_buf = NULL;
+
+  f_buf = mutt_buffer_pool_get ();
+
+  mutt_buffer_strcpy (f_buf, NONULL (f));
+  _mutt_buffer_select_file (f_buf, flags, files, numfiles);
+  strfcpy (f, mutt_b2s (f_buf), flen);
+
+  mutt_buffer_pool_release (&f_buf);
+}
+
+void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfiles)
+{
   BUFFER *buf = NULL;
   BUFFER *prefix = NULL;
   BUFFER *tmp = NULL;
@@ -702,44 +715,46 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
   if (!folder)
     mutt_buffer_strcpy (LastDirBackup, mutt_b2s (LastDir));
 
-  if (*f)
+  if (*(mutt_b2s (f)))
   {
-    mutt_expand_path (f, flen);
+    mutt_buffer_expand_path (f);
 #ifdef USE_IMAP
-    if (mx_is_imap (f))
+    if (mx_is_imap (mutt_b2s (f)))
     {
       init_state (&state, NULL);
       state.imap_browse = 1;
-      if (!imap_browse (f, &state))
+      if (!imap_browse (mutt_b2s (f), &state))
         mutt_buffer_strcpy (LastDir, state.folder);
     }
     else
     {
 #endif
-      for (i = mutt_strlen (f) - 1; i > 0 && f[i] != '/' ; i--);
+      for (i = mutt_buffer_len (f) - 1;
+           i > 0 && (mutt_b2s (f))[i] != '/' ;
+           i--);
       if (i > 0)
       {
-        if (f[0] == '/')
-          mutt_buffer_strcpy_n (LastDir, f, i);
+        if ((mutt_b2s (f))[0] == '/')
+          mutt_buffer_strcpy_n (LastDir, mutt_b2s (f), i);
         else
         {
           mutt_getcwd (LastDir);
           mutt_buffer_addch (LastDir, '/');
-          mutt_buffer_addstr_n (LastDir, f, i);
+          mutt_buffer_addstr_n (LastDir, mutt_b2s (f), i);
         }
       }
       else
       {
-        if (f[0] == '/')
+        if ((mutt_b2s (f))[0] == '/')
           mutt_buffer_strcpy (LastDir, "/");
         else
           mutt_getcwd (LastDir);
       }
 
-      if (i <= 0 && f[0] != '/')
-        mutt_buffer_strcpy (prefix, f);
+      if (i <= 0 && (mutt_b2s (f))[0] != '/')
+        mutt_buffer_strcpy (prefix, mutt_b2s (f));
       else
-        mutt_buffer_strcpy (prefix, f + i + 1);
+        mutt_buffer_strcpy (prefix, mutt_b2s (f) + i + 1);
       killPrefix = 1;
 #ifdef USE_IMAP
     }
@@ -772,7 +787,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
     }
   }
 
-  *f = 0;
+  mutt_buffer_clear (f);
 
   if (buffy)
   {
@@ -944,15 +959,15 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 
 	if (buffy)
 	{
-	  strfcpy (f, state.entry[menu->current].name, flen);
-	  mutt_expand_path (f, flen);
+	  mutt_buffer_strcpy (f, state.entry[menu->current].name);
+	  mutt_buffer_expand_path (f);
 	}
 #ifdef USE_IMAP
 	else if (state.imap_browse)
-          strfcpy (f, state.entry[menu->current].name, flen);
+          mutt_buffer_strcpy (f, state.entry[menu->current].name);
 #endif
 	else
-	  mutt_concat_path (f, mutt_b2s (LastDir), state.entry[menu->current].name, flen);
+	  mutt_buffer_concat_path (f, mutt_b2s (LastDir), state.entry[menu->current].name);
 
 	/* Fall through to OP_EXIT */
 
@@ -978,12 +993,12 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	    }
 	    *files = tfiles;
 	  }
-	  else if (f[0]) /* no tagged entries. return selected entry */
+	  else if ((mutt_b2s (f))[0]) /* no tagged entries. return selected entry */
 	  {
 	    *numfiles = 1;
 	    tfiles = safe_calloc (*numfiles, sizeof (char *));
-	    mutt_expand_path (f, flen);
-	    tfiles[0] = safe_strdup (f);
+	    mutt_buffer_expand_path (f);
+	    tfiles[0] = safe_strdup (mutt_b2s (f));
 	    *files = tfiles;
 	  }
 	}
@@ -1334,7 +1349,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	if (mutt_get_field (_("New file name: "), buf->data, buf->dsize, MUTT_FILE) == 0)
 	{
           /* we're about to bail, so no need to fix buf->dptr */
-	  strfcpy (f, mutt_b2s (buf), flen);
+	  mutt_buffer_strcpy (f, mutt_b2s (buf));
 	  destroy_state (&state);
 	  goto bail;
 	}
@@ -1350,7 +1365,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 #ifdef USE_IMAP
 	if (state.entry[menu->current].selectable)
 	{
-	  strfcpy (f, state.entry[menu->current].name, flen);
+	  mutt_buffer_strcpy (f, state.entry[menu->current].name);
 	  destroy_state (&state);
 	  goto bail;
 	}

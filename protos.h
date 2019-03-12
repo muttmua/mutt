@@ -265,6 +265,8 @@ void mutt_score_message (CONTEXT *, HEADER *, int);
 void mutt_select_fcc (char *, size_t, HEADER *);
 #define mutt_select_file(A,B,C) _mutt_select_file(A,B,C,NULL,NULL)
 void _mutt_select_file (char *, size_t, int, char ***, int *);
+#define mutt_buffer_select_file(A,B) _mutt_select_file(A,B,NULL,NULL)
+void _mutt_buffer_select_file (BUFFER *, int, char ***, int *);
 void mutt_message_hook (CONTEXT *, HEADER *, int);
 void _mutt_set_flag (CONTEXT *, HEADER *, int, int, int);
 #define mutt_set_flag(a,b,c,d) _mutt_set_flag(a,b,c,d,1)
