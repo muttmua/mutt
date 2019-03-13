@@ -973,8 +973,11 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
        n++)
   {
     match = 0;
-    /* don't include pending expunged messages */
-    if (hdrs[n]->active)
+    /* don't include pending expunged messages.
+     *
+     * TODO: can we unset active in cmd_parse_expunge() and
+     * cmd_parse_vanished() instead of checking for index != INT_MAX. */
+    if (hdrs[n]->active && (hdrs[n]->index != INT_MAX))
       switch (flag)
       {
         case MUTT_DELETED:
