@@ -1,3 +1,48 @@
+2019-03-13 12:06:11 +0800  Kevin McCarthy  <kevin@8t8.us> (fedb91e2)
+
+        * Fix incorrect IMAP message purging bug.
+        
+        Thanks to Ivan Middleton @imiddle for the awesome bug report and
+        suggested fix.
+        
+        The bug is most easily generated using Gmail with the $trash variable
+        set.
+        
+        Deleted messages are first copied to the $trash folder.  If this is
+        set to "[Gmail]/Trash", then Gmail inteprets the copy as a "delete"
+        and sends EXPUNGE messages back for the messages.
+        
+        cmd_parse_expunge() and cmd_parse_vanished() set the hdr->index to
+        INT_MAX, which subsequently an imap_expunge_mailbox() will use to
+        remove the messages from the local mailbox.
+        
+        If we close the mailbox instead of sync it, Mutt will end up executing
+        the 'Deleted' flag setting before processing the expunge (because
+        "imap_check_mailbox() -> imap_cmd_finish()' doesn't set check_status
+        when we are closing).  The expunged messages will then be included in
+        the set of 'Deleted' flags.
+        
+        Unfortunately, because the messages are sorted by *index* before
+        msgset generation, an incorrect range of UIDs will be sent, which
+        could easily include messages that should not be deleted.
+        
+        This fix is a minimal fix for a stable bug fix  excluding
+        messages with the index set to INT_MAX from all msg sets.  Other
+        things that should be investigated in master are:
+        
+        - sorting by UID instead of index before msgset generation
+        - unsetting the 'active' flag in cmd_parse_expunge() and
+          cmd_parse_vanished() instead of waiting until imap_expunge_mailbox()
+          to do so.
+
+M	imap/imap.c
+
+2019-02-01 12:41:23 -0800  Kevin McCarthy  <kevin@8t8.us> (eeed901d)
+
+        * automatic post-release commit for mutt-1.11.3
+
+M	ChangeLog
+M	VERSION
 2019-02-01 12:34:19 -0800  Kevin McCarthy  <kevin@8t8.us> (cd5db026)
 
         * Update UPDATING file for 1.11.3 release.
