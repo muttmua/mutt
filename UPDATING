@@ -12,6 +12,10 @@ The keys used are:
 
   ! $ssl_use_tlsv1 and ssl_use_tlsv1_1 now default to unset.
 
+1.11.4 (2019-03-13):
+
+  ! Bug fix release.
+
 1.11.3 (2019-02-01):
 
   ! Bug fix release.
