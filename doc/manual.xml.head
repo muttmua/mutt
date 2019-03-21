@@ -963,7 +963,7 @@ Special characters will be added to the thread tree as detailed in
       </row>
       <row>
         <entry>*</entry>
-        <entry>psuedo thread</entry>
+        <entry>pseudo thread</entry>
         <entry>see <link linkend="strict-threads">$strict_threads</link>;
         not displayed when
         <link linkend="narrow-tree">$narrow_tree</link> is set</entry>
