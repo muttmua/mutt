@@ -327,6 +327,10 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, const char *method)
   size_t auth_cmd_len;
   int ret, len;
 
+  /* If they did not explicitly request or configure oauth then fail quietly */
+  if (!(method || (PopOauthRefreshCmd && *PopOauthRefreshCmd)))
+      return POP_A_UNAVAIL;
+
   mutt_message _("Authenticating (OAUTHBEARER)...");
 
   oauthbearer = mutt_account_getoauthbearer (&pop_data->conn->account);
@@ -459,13 +463,13 @@ int pop_authenticate (POP_DATA* pop_data)
 
     while (authenticator->authenticate)
     {
-      ret = authenticator->authenticate (pop_data, authenticator->method);
+      ret = authenticator->authenticate (pop_data, NULL);
       if (ret == POP_A_SOCKET)
 	switch (pop_connect (pop_data))
 	{
 	  case 0:
 	  {
-	    ret = authenticator->authenticate (pop_data, authenticator->method);
+	    ret = authenticator->authenticate (pop_data, NULL);
 	    break;
 	  }
 	  case -2:
