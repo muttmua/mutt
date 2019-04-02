@@ -1200,9 +1200,6 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   mutt_buffer_addstr (cmd, flags);
   mutt_buffer_addstr (cmd, ")");
 
-  /* dumb hack for bad UW-IMAP 4.7 servers spurious FLAGS updates */
-  hdr->active = 0;
-
   /* after all this it's still possible to have no flags, if you
    * have no ACL rights */
   if (*flags && (imap_exec (idata, cmd->data, 0) != 0) &&
@@ -1211,13 +1208,9 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     *err_continue = imap_continue ("imap_sync_message: STORE failed",
 				   idata->buf);
     if (*err_continue != MUTT_YES)
-    {
-      hdr->active = 1;
       return -1;
-    }
   }
 
-  hdr->active = 1;
   if (hdr->deleted == HEADER_DATA(hdr)->deleted)
     hdr->changed = 0;
 
