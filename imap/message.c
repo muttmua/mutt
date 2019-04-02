@@ -1071,6 +1071,7 @@ parsemsg:
   return 0;
 
 bail:
+  h->active = 1;
   safe_fclose (&msg->fp);
   imap_cache_del (idata, h);
   if (cache->path)
