@@ -726,18 +726,31 @@ int mutt_buffy_notify (void)
   return (0);
 }
 
+void mutt_buffy (char *s, size_t slen)
+{
+  BUFFER *s_buf;
+
+  s_buf = mutt_buffer_pool_get ();
+
+  mutt_buffer_addstr (s_buf, NONULL (s));
+  mutt_buffer_buffy (s_buf);
+  strfcpy (s, mutt_b2s (s_buf), slen);
+
+  mutt_buffer_pool_release (&s_buf);
+}
+
 /*
  * mutt_buffy() -- incoming folders completion routine
  *
  * given a folder name, this routine gives the next incoming folder with new
  * mail.
  */
-void mutt_buffy (char *s, size_t slen)
+void mutt_buffer_buffy (BUFFER *s)
 {
   BUFFY *tmp = Incoming;
   int pass, found = 0;
 
-  mutt_expand_path (s, slen);
+  mutt_buffer_expand_path (s);
 
   if (mutt_buffy_check (0))
   {
@@ -747,11 +760,11 @@ void mutt_buffy (char *s, size_t slen)
 	mutt_expand_path (tmp->path, sizeof (tmp->path));
 	if ((found || pass) && tmp->new)
 	{
-	  strfcpy (s, tmp->path, slen);
-	  mutt_pretty_mailbox (s, slen);
+	  mutt_buffer_strcpy (s, tmp->path);
+	  mutt_buffer_pretty_mailbox (s);
 	  return;
 	}
-	if (mutt_strcmp (s, tmp->path) == 0)
+	if (mutt_strcmp (mutt_b2s (s), tmp->path) == 0)
 	  found = 1;
       }
 
@@ -760,7 +773,7 @@ void mutt_buffy (char *s, size_t slen)
   }
 
   /* no folders with new mail */
-  *s = '\0';
+  mutt_buffer_clear (s);
 }
 
 /* fetch buffy object for given path, if present */

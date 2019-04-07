@@ -26,6 +26,7 @@
 #include "mutt_curses.h"
 #include "keymap.h"
 #include "history.h"
+#include "buffy.h"
 
 #include <string.h>
 
