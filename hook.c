@@ -431,7 +431,7 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
-void mutt_folder_hook (char *path)
+void mutt_folder_hook (const char *path)
 {
   HOOK *tmp = Hooks;
   BUFFER err, token;
