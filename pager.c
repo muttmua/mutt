@@ -30,6 +30,7 @@
 #include "attach.h"
 #include "mbyte.h"
 #include "sort.h"
+#include "buffy.h"
 #ifdef USE_SIDEBAR
 #include "sidebar.h"
 #endif

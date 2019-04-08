@@ -26,6 +26,7 @@
 #include "sort.h"
 #include "mapping.h"
 #include "mx.h"
+#include "buffy.h"
 
 #include <string.h>
 #include <ctype.h>
