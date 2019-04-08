@@ -1306,8 +1306,8 @@ static int autoview_handler (BODY *a, STATE *s)
   rfc1524_entry *entry = rfc1524_new_entry ();
   char buffer[LONG_STRING];
   char type[STRING];
-  char command[LONG_STRING];
-  char tempfile[_POSIX_PATH_MAX] = "";
+  BUFFER *command = NULL;
+  BUFFER *tempfile = NULL;
   char *fname;
   FILE *fpin = NULL;
   FILE *fpout = NULL;
@@ -1316,33 +1316,36 @@ static int autoview_handler (BODY *a, STATE *s)
   pid_t thepid;
   int rc = 0;
 
+  command = mutt_buffer_pool_get ();
+  tempfile = mutt_buffer_pool_get ();
+
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
   rfc1524_mailcap_lookup (a, type, entry, MUTT_AUTOVIEW);
 
   fname = safe_strdup (a->filename);
   mutt_sanitize_filename (fname, 1);
-  rfc1524_expand_filename (entry->nametemplate, fname, tempfile, sizeof (tempfile));
+  mutt_buffer_rfc1524_expand_filename (entry->nametemplate, fname, tempfile);
   FREE (&fname);
 
   if (entry->command)
   {
-    strfcpy (command, entry->command, sizeof (command));
+    mutt_buffer_strcpy (command, entry->command);
 
     /* rfc1524_expand_command returns 0 if the file is required */
-    piped = rfc1524_expand_command (a, tempfile, type, command, sizeof (command));
+    piped = mutt_buffer_rfc1524_expand_command (a, mutt_b2s (tempfile), type, command);
 
     if (s->flags & MUTT_DISPLAY)
     {
       state_mark_attach (s);
-      state_printf (s, _("[-- Autoview using %s --]\n"), command);
-      mutt_message(_("Invoking autoview command: %s"),command);
+      state_printf (s, _("[-- Autoview using %s --]\n"), mutt_b2s (command));
+      mutt_message(_("Invoking autoview command: %s"), mutt_b2s (command));
     }
 
-    if ((fpin = safe_fopen (tempfile, "w+")) == NULL)
+    if ((fpin = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
     {
       mutt_perror ("fopen");
-      rfc1524_free_entry (&entry);
-      return -1;
+      rc = -1;
+      goto cleanup;
     }
 
     mutt_copy_bytes (s->fpin, fpin, a->length);
@@ -1350,14 +1353,14 @@ static int autoview_handler (BODY *a, STATE *s)
     if (!piped)
     {
       safe_fclose (&fpin);
-      thepid = mutt_create_filter (command, NULL, &fpout, &fperr);
+      thepid = mutt_create_filter (mutt_b2s (command), NULL, &fpout, &fperr);
     }
     else
     {
-      unlink (tempfile);
+      unlink (mutt_b2s (tempfile));
       fflush (fpin);
       rewind (fpin);
-      thepid = mutt_create_filter_fd (command, NULL, &fpout, &fperr,
+      thepid = mutt_create_filter_fd (mutt_b2s (command), NULL, &fpout, &fperr,
 				      fileno(fpin), -1, -1);
     }
 
@@ -1367,7 +1370,7 @@ static int autoview_handler (BODY *a, STATE *s)
       if (s->flags & MUTT_DISPLAY)
       {
 	state_mark_attach (s);
-	state_printf (s, _("[-- Can't run %s. --]\n"), command);
+	state_printf (s, _("[-- Can't run %s. --]\n"), mutt_b2s (command));
       }
       rc = -1;
       goto bail;
@@ -1386,7 +1389,7 @@ static int autoview_handler (BODY *a, STATE *s)
 	if (s->flags & MUTT_DISPLAY)
 	{
 	  state_mark_attach (s);
-	  state_printf (s, _("[-- Autoview stderr of %s --]\n"), command);
+	  state_printf (s, _("[-- Autoview stderr of %s --]\n"), mutt_b2s (command));
 	}
 
 	state_puts (s->prefix, s);
@@ -1408,7 +1411,7 @@ static int autoview_handler (BODY *a, STATE *s)
 	{
 	  state_mark_attach (s);
 	  state_printf (s, _("[-- Autoview stderr of %s --]\n"),
-			command);
+			mutt_b2s (command));
 	}
 
 	state_puts (buffer, s);
@@ -1424,12 +1427,17 @@ static int autoview_handler (BODY *a, STATE *s)
     if (piped)
       safe_fclose (&fpin);
     else
-      mutt_unlink (tempfile);
+      mutt_unlink (mutt_b2s (tempfile));
 
     if (s->flags & MUTT_DISPLAY)
       mutt_clear_error ();
   }
+
+cleanup:
   rfc1524_free_entry (&entry);
+
+  mutt_buffer_pool_release (&command);
+  mutt_buffer_pool_release (&tempfile);
 
   return rc;
 }
