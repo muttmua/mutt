@@ -608,7 +608,7 @@ static void start_curses (void)
 
 int main (int argc, char **argv, char **environ)
 {
-  char folder[_POSIX_PATH_MAX] = "";
+  BUFFER *folder = NULL;
   char *subject = NULL;
   char *includeFile = NULL;
   char *draftFile = NULL;
@@ -711,7 +711,9 @@ int main (int argc, char **argv, char **environ)
           break;
 
         case 'f':
-          strfcpy (folder, optarg, sizeof (folder));
+          if (!folder)
+            folder = mutt_buffer_new ();
+          mutt_buffer_strcpy (folder, optarg);
           explicit_folder = 1;
           break;
 
@@ -830,6 +832,7 @@ int main (int argc, char **argv, char **environ)
       puts (_(Licence));
       puts (_(Obtaining));
       puts (_(ReachingUs));
+      mutt_buffer_free (&folder);
       exit (0);
   }
 
@@ -1257,6 +1260,9 @@ int main (int argc, char **argv, char **environ)
   }
   else
   {
+    if (!folder)
+      folder = mutt_buffer_new ();
+
     if (flags & MUTT_BUFFY)
     {
 #ifdef USE_IMAP
@@ -1269,8 +1275,8 @@ int main (int argc, char **argv, char **environ)
         exit_endwin_msg = _("No mailbox with new mail.");
         goto cleanup_and_exit;
       }
-      folder[0] = 0;
-      mutt_buffy (folder, sizeof (folder));
+      mutt_buffer_clear (folder);
+      mutt_buffer_buffy (folder);
 #ifdef USE_IMAP
       if (passive)
         set_option (OPTIMAPPASSIVE);
@@ -1283,26 +1289,26 @@ int main (int argc, char **argv, char **environ)
         exit_endwin_msg = _("No incoming mailboxes defined.");
 	goto cleanup_and_exit;
       }
-      folder[0] = 0;
-      mutt_select_file (folder, sizeof (folder), MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
-      if (!folder[0])
+      mutt_buffer_clear (folder);
+      mutt_buffer_select_file (folder, MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
+      if (!mutt_buffer_len (folder))
       {
         exit_code = 0;
 	goto cleanup_and_exit;
       }
     }
 
-    if (!folder[0])
-      strfcpy (folder, NONULL(Spoolfile), sizeof (folder));
-    mutt_expand_path (folder, sizeof (folder));
+    if (!mutt_buffer_len (folder))
+      mutt_buffer_strcpy (folder, NONULL(Spoolfile));
+    mutt_buffer_expand_path (folder);
 
-    mutt_str_replace (&CurrentFolder, folder);
-    mutt_str_replace (&LastFolder, folder);
+    mutt_str_replace (&CurrentFolder, mutt_b2s (folder));
+    mutt_str_replace (&LastFolder, mutt_b2s (folder));
 
     if (flags & MUTT_IGNORE)
     {
       /* check to see if there are any messages in the folder */
-      switch (mx_check_empty (folder))
+      switch (mx_check_empty (mutt_b2s (folder)))
       {
 	case -1:
           exit_endwin_msg = strerror (errno);
@@ -1313,10 +1319,14 @@ int main (int argc, char **argv, char **environ)
       }
     }
 
-    mutt_folder_hook (folder);
+    mutt_folder_hook (mutt_b2s (folder));
 
-    if ((Context = mx_open_mailbox (folder, ((flags & MUTT_RO) || option (OPTREADONLY)) ? MUTT_READONLY : 0, NULL))
-        || !explicit_folder)
+    Context = mx_open_mailbox (mutt_b2s (folder),
+                               ((flags & MUTT_RO) || option (OPTREADONLY)) ? MUTT_READONLY : 0,
+                               NULL);
+    mutt_buffer_free (&folder);
+
+    if (Context || !explicit_folder)
     {
 #ifdef USE_SIDEBAR
       mutt_sb_set_open_buffy ();
@@ -1332,6 +1342,7 @@ int main (int argc, char **argv, char **environ)
   exit_code = 0;
 
 cleanup_and_exit:
+  mutt_buffer_free (&folder);
 #ifdef USE_IMAP
   imap_logout_all ();
 #endif
