@@ -70,22 +70,26 @@ int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const cha
 int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
                             char *command, int clen)
 {
-  int x=0,y=0;
+  int x=0;
   int needspipe = TRUE;
-  char buf[LONG_STRING];
+  BUFFER *buf = NULL;
+  BUFFER *quoted = NULL;
   char type[LONG_STRING];
+
+  buf = mutt_buffer_pool_get ();
+  quoted = mutt_buffer_pool_get ();
 
   strfcpy (type, _type, sizeof (type));
 
   if (option (OPTMAILCAPSANITIZE))
     mutt_sanitize_filename (type, 0);
 
-  while (x < clen - 1 && command[x] && y < sizeof (buf) - 1)
+  while (x < clen - 1 && command[x])
   {
     if (command[x] == '\\')
     {
       x++;
-      buf[y++] = command[x++];
+      mutt_buffer_addch (buf, command[x++]);
     }
     else if (command[x] == '%')
     {
@@ -113,24 +117,29 @@ int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
 	if (option (OPTMAILCAPSANITIZE))
 	  mutt_sanitize_filename (pvalue, 0);
 
-	y += mutt_quote_filename (buf + y, sizeof (buf) - y, pvalue);
+	mutt_buffer_quote_filename (quoted, pvalue);
+        mutt_buffer_addstr (buf, mutt_b2s (quoted));
       }
       else if (command[x] == 's' && filename != NULL)
       {
-	y += mutt_quote_filename (buf + y, sizeof (buf) - y, filename);
+	mutt_buffer_quote_filename (quoted, filename);
+        mutt_buffer_addstr (buf, mutt_b2s (quoted));
 	needspipe = FALSE;
       }
       else if (command[x] == 't')
       {
-	y += mutt_quote_filename (buf + y, sizeof (buf) - y, type);
+	mutt_buffer_quote_filename (quoted, type);
+        mutt_buffer_addstr (buf, mutt_b2s (quoted));
       }
       x++;
     }
     else
-      buf[y++] = command[x++];
+      mutt_buffer_addch (buf, command[x++]);
   }
-  buf[y] = '\0';
-  strfcpy (command, buf, clen);
+  strfcpy (command, mutt_b2s (buf), clen);
+
+  mutt_buffer_pool_release (&buf);
+  mutt_buffer_pool_release (&quoted);
 
   return needspipe;
 }

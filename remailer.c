@@ -745,17 +745,19 @@ int mix_check_message (HEADER *msg)
 int mix_send_message (LIST *chain, const char *tempfile)
 {
   BUFFER *cmd;
-  char cd_quoted[STRING];
+  BUFFER *cd_quoted;
   int i;
 
   cmd = mutt_buffer_pool_get ();
+  cd_quoted = mutt_buffer_pool_get ();
+
   mutt_buffer_printf (cmd, "cat %s | %s -m ", tempfile, Mixmaster);
 
   for (i = 0; chain; chain = chain->next, i = 1)
   {
     mutt_buffer_addstr (cmd, i ? "," : " -l ");
-    mutt_quote_filename (cd_quoted, sizeof (cd_quoted), (char *) chain->data);
-    mutt_buffer_addstr (cmd, cd_quoted);
+    mutt_buffer_quote_filename (cd_quoted, (char *) chain->data);
+    mutt_buffer_addstr (cmd, mutt_b2s (cd_quoted));
   }
 
   if (!option (OPTNOCURSES))
@@ -772,6 +774,7 @@ int mix_send_message (LIST *chain, const char *tempfile)
   }
 
   mutt_buffer_pool_release (&cmd);
+  mutt_buffer_pool_release (&cd_quoted);
   unlink (tempfile);
   return i;
 }

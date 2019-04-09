@@ -1025,6 +1025,31 @@ void mutt_pretty_size (char *s, size_t len, LOFF_T n)
   }
 }
 
+void mutt_buffer_quote_filename (BUFFER *d, const char *f)
+{
+  mutt_buffer_clear (d);
+
+  if (!f)
+    return;
+
+  mutt_buffer_addch (d, '\'');
+
+  for (; *f; f++)
+  {
+    if (*f == '\'' || *f == '`')
+    {
+      mutt_buffer_addch (d, '\'');
+      mutt_buffer_addch (d, '\\');
+      mutt_buffer_addch (d, *f);
+      mutt_buffer_addch (d, '\'');
+    }
+    else
+      mutt_buffer_addch (d, *f);
+  }
+
+  mutt_buffer_addch (d, '\'');
+}
+
 void mutt_expand_file_fmt (char *dest, size_t destlen, const char *fmt, const char *src)
 {
   char tmp[LONG_STRING];

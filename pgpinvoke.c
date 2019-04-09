@@ -263,14 +263,16 @@ pid_t pgp_invoke_traditional (FILE **pgpin, FILE **pgpout, FILE **pgperr,
 
 void pgp_invoke_import (const char *fname)
 {
-  char _fname[_POSIX_PATH_MAX + SHORT_STRING];
+  BUFFER *fnamebuf = NULL;
   char cmd[HUGE_STRING];
   struct pgp_command_context cctx;
 
+  fnamebuf = mutt_buffer_pool_get ();
+
   memset (&cctx, 0, sizeof (cctx));
 
-  mutt_quote_filename (_fname, sizeof (_fname), fname);
-  cctx.fname = _fname;
+  mutt_buffer_quote_filename (fnamebuf, fname);
+  cctx.fname = mutt_b2s (fnamebuf);
   if (PgpSignAs && *PgpSignAs)
     cctx.signas	       = PgpSignAs;
   else
@@ -278,11 +280,13 @@ void pgp_invoke_import (const char *fname)
 
   mutt_pgp_command (cmd, sizeof (cmd), &cctx, PgpImportCommand);
   mutt_system (cmd);
+
+  mutt_buffer_pool_release (&fnamebuf);
 }
 
 void pgp_invoke_getkeys (ADDRESS *addr)
 {
-  char buff[LONG_STRING];
+  BUFFER *buff = NULL;
   char tmp[LONG_STRING];
   char cmd[HUGE_STRING];
   int devnull;
@@ -293,6 +297,7 @@ void pgp_invoke_getkeys (ADDRESS *addr)
 
   if (!PgpGetkeysCommand) return;
 
+  buff = mutt_buffer_pool_get ();
   memset (&cctx, 0, sizeof (cctx));
 
   personal = addr->personal;
@@ -301,11 +306,11 @@ void pgp_invoke_getkeys (ADDRESS *addr)
   *tmp = '\0';
   mutt_addrlist_to_local (addr);
   rfc822_write_address_single (tmp, sizeof (tmp), addr, 0);
-  mutt_quote_filename (buff, sizeof (buff), tmp);
+  mutt_buffer_quote_filename (buff, tmp);
 
   addr->personal = personal;
 
-  cctx.ids = buff;
+  cctx.ids = mutt_b2s (buff);
 
   mutt_pgp_command (cmd, sizeof (cmd), &cctx, PgpGetkeysCommand);
 
@@ -318,6 +323,8 @@ void pgp_invoke_getkeys (ADDRESS *addr)
   if (!isendwin ()) mutt_clear_error ();
 
   close (devnull);
+
+  mutt_buffer_pool_release (&buff);
 }
 
 pid_t pgp_invoke_export (FILE **pgpin, FILE **pgpout, FILE **pgperr,
@@ -343,15 +350,16 @@ pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
 			    pgp_ring_t keyring, LIST *hints)
 {
   BUFFER *uids;
-  char quoted[HUGE_STRING];
+  BUFFER *quoted;
   pid_t rc;
 
   uids = mutt_buffer_pool_get ();
+  quoted = mutt_buffer_pool_get ();
 
   for (; hints; hints = hints->next)
   {
-    mutt_quote_filename (quoted, sizeof (quoted), (char *) hints->data);
-    mutt_buffer_addstr (uids, quoted);
+    mutt_buffer_quote_filename (quoted, (char *) hints->data);
+    mutt_buffer_addstr (uids, mutt_b2s (quoted));
     if (hints->next)
       mutt_buffer_addch (uids, ' ');
   }
@@ -362,5 +370,6 @@ pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
                    PgpListPubringCommand);
 
   mutt_buffer_pool_release (&uids);
+  mutt_buffer_pool_release (&quoted);
   return rc;
 }

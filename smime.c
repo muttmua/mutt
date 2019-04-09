@@ -178,21 +178,29 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {
       if (!optional)
       {
-	char path[_POSIX_PATH_MAX];
-	char buf1[LONG_STRING], buf2[LONG_STRING];
+	BUFFER *path, *buf1, *buf2;
 	struct stat sb;
 
-	strfcpy (path, NONULL (SmimeCALocation), sizeof (path));
-	mutt_expand_path (path, sizeof (path));
-	mutt_quote_filename (buf1, sizeof (buf1), path);
+        path = mutt_buffer_pool_get ();
+        buf1 = mutt_buffer_pool_get ();
+        buf2 = mutt_buffer_pool_get ();
 
-	if (stat (path, &sb) != 0 || !S_ISDIR (sb.st_mode))
-	  snprintf (buf2, sizeof (buf2), "-CAfile %s", buf1);
+	mutt_buffer_strcpy (path, NONULL (SmimeCALocation));
+	mutt_buffer_expand_path (path);
+	mutt_buffer_quote_filename (buf1, mutt_b2s (path));
+
+	if (stat (mutt_b2s (path), &sb) != 0 ||
+            !S_ISDIR (sb.st_mode))
+	  mutt_buffer_printf (buf2, "-CAfile %s", mutt_b2s (buf1));
 	else
-	  snprintf (buf2, sizeof (buf2), "-CApath %s", buf1);
+	  mutt_buffer_printf (buf2, "-CApath %s", mutt_b2s (buf1));
 
 	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, buf2);
+	snprintf (dest, destlen, fmt, mutt_b2s (buf2));
+
+        mutt_buffer_pool_release (&path);
+        mutt_buffer_pool_release (&buf1);
+        mutt_buffer_pool_release (&buf2);
       }
       else if (!SmimeCALocation)
 	optional = 0;
