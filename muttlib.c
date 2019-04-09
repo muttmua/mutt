@@ -1050,12 +1050,14 @@ void mutt_buffer_quote_filename (BUFFER *d, const char *f)
   mutt_buffer_addch (d, '\'');
 }
 
-void mutt_expand_file_fmt (char *dest, size_t destlen, const char *fmt, const char *src)
+void mutt_expand_file_fmt (BUFFER *dest, const char *fmt, const char *src)
 {
   char tmp[LONG_STRING];
 
   mutt_quote_filename (tmp, sizeof (tmp), src);
-  mutt_expand_fmt (dest, destlen, fmt, tmp);
+  /* TODO: this will be fixed in the next commit */
+  mutt_expand_fmt (dest->data, dest->dsize, fmt, tmp);
+  mutt_buffer_fix_dptr (dest);
 }
 
 void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt, const char *src)

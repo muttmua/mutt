@@ -1355,19 +1355,22 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
 static void run_mime_type_query (BODY *att)
 {
   FILE *fp, *fperr;
-  char cmd[HUGE_STRING];
+  BUFFER *cmd = NULL;
   char *buf = NULL;
   size_t buflen;
   int dummy = 0;
   pid_t thepid;
 
-  mutt_expand_file_fmt (cmd, sizeof(cmd), MimeTypeQueryCmd, att->filename);
+  cmd = mutt_buffer_pool_get ();
+  mutt_expand_file_fmt (cmd, MimeTypeQueryCmd, att->filename);
 
-  if ((thepid = mutt_create_filter (cmd, NULL, &fp, &fperr)) < 0)
+  if ((thepid = mutt_create_filter (mutt_b2s (cmd), NULL, &fp, &fperr)) < 0)
   {
-    mutt_error (_("Error running \"%s\"!"), cmd);
+    mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
+    mutt_buffer_pool_release (&cmd);
     return;
   }
+  mutt_buffer_pool_release (&cmd);
 
   if ((buf = mutt_read_line (buf, &buflen, fp, &dummy, 0)) != NULL)
   {

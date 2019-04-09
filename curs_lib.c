@@ -260,13 +260,15 @@ void mutt_clear_error (void)
 
 void mutt_edit_file (const char *editor, const char *data)
 {
-  char cmd[LONG_STRING];
+  BUFFER *cmd;
+
+  cmd = mutt_buffer_pool_get ();
 
   mutt_endwin (NULL);
-  mutt_expand_file_fmt (cmd, sizeof (cmd), editor, data);
-  if (mutt_system (cmd))
+  mutt_expand_file_fmt (cmd, editor, data);
+  if (mutt_system (mutt_b2s (cmd)))
   {
-    mutt_error (_("Error running \"%s\"!"), cmd);
+    mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
     mutt_sleep (2);
   }
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
@@ -275,6 +277,8 @@ void mutt_edit_file (const char *editor, const char *data)
 #endif
   keypad (stdscr, TRUE);
   clearok (stdscr, TRUE);
+
+  mutt_buffer_pool_release (&cmd);
 }
 
 int mutt_yesorno (const char *msg, int def)
@@ -936,18 +940,20 @@ int mutt_do_pager (const char *banner,
     rc = mutt_pager (banner, tempfile, do_color, info);
   else
   {
-    char cmd[STRING];
+    BUFFER *cmd = NULL;
 
+    cmd = mutt_buffer_pool_get ();
     mutt_endwin (NULL);
-    mutt_expand_file_fmt (cmd, sizeof(cmd), Pager, tempfile);
-    if (mutt_system (cmd) == -1)
+    mutt_expand_file_fmt (cmd, Pager, tempfile);
+    if (mutt_system (mutt_b2s (cmd)) == -1)
     {
-      mutt_error (_("Error running \"%s\"!"), cmd);
+      mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
       rc = -1;
     }
     else
       rc = 0;
     mutt_unlink (tempfile);
+    mutt_buffer_pool_release (&cmd);
   }
 
   return rc;

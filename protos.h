@@ -205,7 +205,7 @@ void mutt_enter_command (void);
 void mutt_error_history_display (void);
 void mutt_error_history_init (void);
 void mutt_expand_aliases_env (ENVELOPE *);
-void mutt_expand_file_fmt (char *, size_t, const char *, const char *);
+void mutt_expand_file_fmt (BUFFER *, const char *, const char *);
 void mutt_expand_fmt (char *, size_t, const char *, const char *);
 void mutt_expand_link (char *, const char *, const char *);
 void mutt_fix_reply_recipients (ENVELOPE *env);

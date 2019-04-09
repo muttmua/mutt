@@ -94,7 +94,7 @@ static QUERY *run_query (char *s, int quiet)
   FILE *fp;
   QUERY *first = NULL;
   QUERY *cur = NULL;
-  char cmd[_POSIX_PATH_MAX];
+  BUFFER *cmd = NULL;
   char *buf = NULL;
   size_t buflen;
   int dummy = 0;
@@ -102,14 +102,17 @@ static QUERY *run_query (char *s, int quiet)
   char *p;
   pid_t thepid;
 
+  cmd = mutt_buffer_pool_get ();
+  mutt_expand_file_fmt (cmd, QueryCmd, s);
 
-  mutt_expand_file_fmt (cmd, sizeof(cmd), QueryCmd, s);
-
-  if ((thepid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0)
+  if ((thepid = mutt_create_filter (mutt_b2s (cmd), NULL, &fp, NULL)) < 0)
   {
-    dprint (1, (debugfile, "unable to fork command: %s", cmd));
+    dprint (1, (debugfile, "unable to fork command: %s", mutt_b2s (cmd)));
+    mutt_buffer_pool_release (&cmd);
     return 0;
   }
+  mutt_buffer_pool_release (&cmd);
+
   if (!quiet)
     mutt_message _("Waiting for response...");
   fgets (msg, sizeof (msg), fp);
