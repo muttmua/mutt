@@ -582,14 +582,17 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
   else
   {
     int r;
-    char buf[LONG_STRING];
+    BUFFER *buf = NULL;
 
     tmp = mutt_new_color_line ();
     if (is_index)
     {
-      strfcpy(buf, NONULL(s), sizeof(buf));
-      mutt_check_simple (buf, sizeof (buf), NONULL(SimpleSearch));
-      if ((tmp->color_pattern = mutt_pattern_comp (buf, MUTT_FULL_MSG, err)) == NULL)
+      buf = mutt_buffer_pool_get ();
+      mutt_buffer_strcpy(buf, NONULL(s));
+      mutt_check_simple (buf, NONULL(SimpleSearch));
+      tmp->color_pattern = mutt_pattern_comp (buf->data, MUTT_FULL_MSG, err);
+      mutt_buffer_pool_release (&buf);
+      if (tmp->color_pattern == NULL)
       {
 	mutt_free_color_line(&tmp, 1);
 	return -1;

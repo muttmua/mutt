@@ -128,17 +128,19 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
            && (!WithCrypto || !(data & MUTT_CRYPTHOOK))
     )
   {
-    char tmp[HUGE_STRING];
+    BUFFER *tmp = NULL;
 
     /* At this stage remain only message-hooks, reply-hooks, send-hooks,
      * send2-hooks, save-hooks, and fcc-hooks: All those allowing full
      * patterns. If given a simple regexp, we expand $default_hook.
      */
-    strfcpy (tmp, pattern.data, sizeof (tmp));
-    mutt_check_simple (tmp, sizeof (tmp), DefaultHook);
+    tmp = mutt_buffer_pool_get ();
+    mutt_buffer_strcpy (tmp, pattern.data);
+    mutt_check_simple (tmp, DefaultHook);
     FREE (&pattern.data);
     memset (&pattern, 0, sizeof (pattern));
-    pattern.data = safe_strdup (tmp);
+    pattern.data = safe_strdup (mutt_b2s (tmp));
+    mutt_buffer_pool_release (&tmp);
   }
 
   if (data & (MUTT_MBOXHOOK | MUTT_SAVEHOOK | MUTT_FCCHOOK))
@@ -331,11 +333,7 @@ int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   }
 
   if (DefaultHook && *DefaultHook)
-  {
-    mutt_buffer_increase_size (pattern, HUGE_STRING);
-    mutt_check_simple (pattern->data, pattern->dsize, DefaultHook);
-    mutt_buffer_fix_dptr (pattern);  /* not necessary, but to be safe */
-  }
+    mutt_check_simple (pattern, DefaultHook);
 
   /* check to make sure that a matching hook doesn't already exist */
   for (ptr = hooks; ptr; ptr = ptr->next)
