@@ -464,39 +464,17 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
  * Returns 0 if oldfile is fine as is.
  * Returns 1 if newfile specified
  */
-
-static void strnfcpy(char *d, const char *s, size_t siz, size_t len)
-{
-  if (len > siz)
-    len = siz - 1;
-  strfcpy(d, s, len);
-}
-
 int mutt_buffer_rfc1524_expand_filename (const char *nametemplate,
                                          const char *oldfile,
                                          BUFFER *newfile)
 {
-  int rc;
-
-  mutt_buffer_increase_size (newfile, LONG_STRING);
-  rc = rfc1524_expand_filename (nametemplate, oldfile, newfile->data, newfile->dsize);
-  mutt_buffer_fix_dptr (newfile);
-
-  return rc;
-}
-
-int rfc1524_expand_filename (const char *nametemplate,
-			     const char *oldfile,
-			     char *newfile,
-			     size_t nflen)
-{
   int i, j, k, ps;
   char *s;
   short lmatch = 0, rmatch = 0;
-  char left[_POSIX_PATH_MAX];
-  char right[_POSIX_PATH_MAX];
+  BUFFER *left = NULL;
+  BUFFER *right = NULL;
 
-  newfile[0] = 0;
+  mutt_buffer_clear (newfile);
 
   /* first, ignore leading path components.
    */
@@ -510,11 +488,11 @@ int rfc1524_expand_filename (const char *nametemplate,
   if (!nametemplate)
   {
     if (oldfile)
-      strfcpy (newfile, oldfile, nflen);
+      mutt_buffer_strcpy (newfile, oldfile);
   }
   else if (!oldfile)
   {
-    mutt_expand_fmt (newfile, nflen, nametemplate, "mutt");
+    mutt_expand_fmt (newfile, nametemplate, "mutt");
   }
   else /* oldfile && nametemplate */
   {
@@ -574,22 +552,26 @@ int rfc1524_expand_filename (const char *nametemplate,
       if (k >= i + 2)
 	rmatch = 0;
 
-      if (lmatch) *left = 0;
-      else strnfcpy(left, nametemplate, sizeof(left), i);
+      left = mutt_buffer_pool_get ();
+      right = mutt_buffer_pool_get ();
 
-      if (rmatch) *right = 0;
-      else strfcpy(right, nametemplate + i + 2, sizeof(right));
+      if (!lmatch)
+        mutt_buffer_strcpy_n (left, nametemplate, i);
+      if (!rmatch)
+        mutt_buffer_strcpy (right, nametemplate + i + 2);
+      mutt_buffer_printf (newfile, "%s%s%s", mutt_b2s (left), oldfile, mutt_b2s (right));
 
-      snprintf(newfile, nflen, "%s%s%s", left, oldfile, right);
+      mutt_buffer_pool_release (&left);
+      mutt_buffer_pool_release (&right);
     }
     else
     {
       /* no "%s" in the name template. */
-      strfcpy(newfile, nametemplate, nflen);
+      mutt_buffer_strcpy (newfile, nametemplate);
     }
   }
 
-  mutt_adv_mktemp(newfile, nflen);
+  mutt_buffer_adv_mktemp (newfile);
 
   if (rmatch && lmatch)
     return 0;

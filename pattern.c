@@ -1479,9 +1479,7 @@ void mutt_check_simple (BUFFER *s, const char *simple)
     {
       tmp = mutt_buffer_pool_get ();
       quote_simple (tmp, mutt_b2s (s));
-      /* TODO: this will be fixed in the set of commits. */
-      mutt_expand_fmt (s->data, s->dsize, simple, mutt_b2s (tmp));
-      mutt_buffer_fix_dptr (s);
+      mutt_expand_fmt (s, simple, mutt_b2s (tmp));
       mutt_buffer_pool_release (&tmp);
     }
   }

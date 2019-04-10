@@ -1052,62 +1052,51 @@ void mutt_buffer_quote_filename (BUFFER *d, const char *f)
 
 void mutt_expand_file_fmt (BUFFER *dest, const char *fmt, const char *src)
 {
-  char tmp[LONG_STRING];
+  BUFFER *tmp;
 
-  mutt_quote_filename (tmp, sizeof (tmp), src);
-  /* TODO: this will be fixed in the next commit */
-  mutt_expand_fmt (dest->data, dest->dsize, fmt, tmp);
-  mutt_buffer_fix_dptr (dest);
+  tmp = mutt_buffer_pool_get ();
+  mutt_buffer_quote_filename (tmp, src);
+  mutt_expand_fmt (dest, fmt, mutt_b2s (tmp));
+  mutt_buffer_pool_release (&tmp);
 }
 
-void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt, const char *src)
+void mutt_expand_fmt (BUFFER *dest, const char *fmt, const char *src)
 {
   const char *p;
-  char *d;
-  size_t slen;
   int found = 0;
 
-  slen = mutt_strlen (src);
-  destlen--;
+  mutt_buffer_clear (dest);
 
-  for (p = fmt, d = dest; destlen && *p; p++)
+  for (p = fmt; *p; p++)
   {
     if (*p == '%')
     {
       switch (p[1])
       {
 	case '%':
-	  *d++ = *p++;
-	  destlen--;
+          mutt_buffer_addch (dest, *p++);
 	  break;
 	case 's':
 	  found = 1;
-	  strfcpy (d, src, destlen + 1);
-	  d       += destlen > slen ? slen : destlen;
-	  destlen -= destlen > slen ? slen : destlen;
+	  mutt_buffer_addstr (dest, src);
 	  p++;
 	  break;
 	default:
-	  *d++ = *p;
-	  destlen--;
+	  mutt_buffer_addch (dest, *p);
 	  break;
       }
     }
     else
     {
-      *d++ = *p;
-      destlen--;
+      mutt_buffer_addch (dest, *p);
     }
   }
 
-  *d = '\0';
-
-  if (!found && destlen > 0)
+  if (!found)
   {
-    safe_strcat (dest, destlen, " ");
-    safe_strcat (dest, destlen, src);
+    mutt_buffer_addch (dest, ' ');
+    mutt_buffer_addstr (dest, src);
   }
-
 }
 
 /* return 0 on success, -1 on abort, 1 on error */
