@@ -21,6 +21,7 @@
 # include "config.h"
 #endif
 
+#include "version.h"
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mime.h"

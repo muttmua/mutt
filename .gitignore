@@ -45,6 +45,7 @@
 /smime_keys
 /txt2c
 /stamp-doc-rc
+/version.h
 /doc/instdoc
 /doc/manual.txt
 /doc/manual.xml

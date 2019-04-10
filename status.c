@@ -20,6 +20,7 @@
 # include "config.h"
 #endif
 
+#include "version.h"
 #include "mutt.h"
 #include "mutt_menu.h"
 #include "mutt_curses.h"

@@ -10,9 +10,6 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
 
-MUTT_VERSION=`env sh "$srcdir/version.sh"`
-AC_DEFINE_UNQUOTED(MUTT_VERSION,"$MUTT_VERSION", [Full textual version string.])
-
 AC_USE_SYSTEM_EXTENSIONS
 
 ALL_LINGUAS="de eu ru it es uk fr pl nl cs id sk ko el zh_TW zh_CN pt_BR eo gl sv da lt tr ja hu et ca bg ga fi"

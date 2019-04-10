@@ -46,6 +46,7 @@
 #include <limits.h>
 #endif
 
+#include "version.h"
 #include "dotlock.h"
 
 #ifdef HAVE_GETOPT_H

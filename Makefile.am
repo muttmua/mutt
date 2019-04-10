@@ -22,7 +22,7 @@ if BUILD_HCACHE
 HCVERSION = hcversion.h
 endif
 
-BUILT_SOURCES = keymap_defs.h patchlist.c reldate.h conststrings.c $(HCVERSION)
+BUILT_SOURCES = keymap_defs.h patchlist.c reldate.h conststrings.c version.h $(HCVERSION)
 
 bin_PROGRAMS = mutt $(DOTLOCK_TARGET) $(PGPAUX_TARGET)
 mutt_SOURCES = \
@@ -139,6 +139,11 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP $(srcdir
 	$(srcdir)/gen_defs $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP \
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
+
+version.h: FORCE
+	echo '#define MUTT_VERSION "'`sh "$(srcdir)/version.sh"`'"' > $@.tmp
+	cmp -s $@ $@.tmp && rm -f $@.tmp || mv $@.tmp $@
+FORCE:
 
 reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
 	echo 'const char *ReleaseDate = "'`(cd $(srcdir) && ./mkreldate.sh)`'";' > reldate.h
