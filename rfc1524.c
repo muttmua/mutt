@@ -464,9 +464,9 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
  * Returns 0 if oldfile is fine as is.
  * Returns 1 if newfile specified
  */
-int mutt_buffer_rfc1524_expand_filename (const char *nametemplate,
-                                         const char *oldfile,
-                                         BUFFER *newfile)
+int mutt_rfc1524_expand_filename (const char *nametemplate,
+                                  const char *oldfile,
+                                  BUFFER *newfile)
 {
   int i, j, k, ps;
   char *s;

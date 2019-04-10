@@ -59,7 +59,7 @@ int mutt_get_tmp_attachment (BODY *a)
 
   snprintf(type, sizeof(type), "%s/%s", TYPE(a), a->subtype);
   rfc1524_mailcap_lookup(a, type, entry, 0);
-  mutt_buffer_rfc1524_expand_filename (entry->nametemplate, a->filename, tempfile);
+  mutt_rfc1524_expand_filename (entry->nametemplate, a->filename, tempfile);
 
   rfc1524_free_entry(&entry);
 
@@ -112,8 +112,8 @@ int mutt_compose_attachment (BODY *a)
       else
 	mutt_buffer_strcpy (command, entry->composecommand);
 
-      if (mutt_buffer_rfc1524_expand_filename (entry->nametemplate,
-                                               a->filename, newfile))
+      if (mutt_rfc1524_expand_filename (entry->nametemplate,
+                                        a->filename, newfile))
       {
 	dprint(1, (debugfile, "oldfile: %s\t newfile: %s\n",
                    a->filename, mutt_b2s (newfile)));
@@ -248,8 +248,8 @@ int mutt_edit_attachment (BODY *a)
     {
 
       mutt_buffer_strcpy (command, entry->editcommand);
-      if (mutt_buffer_rfc1524_expand_filename (entry->nametemplate,
-                                               a->filename, newfile))
+      if (mutt_rfc1524_expand_filename (entry->nametemplate,
+                                        a->filename, newfile))
       {
 	dprint(1, (debugfile, "oldfile: %s\t newfile: %s\n",
                    a->filename, mutt_b2s (newfile)));
@@ -412,8 +412,8 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     else
       fname = a->filename;
 
-    if (mutt_buffer_rfc1524_expand_filename (entry->nametemplate, fname,
-                                             tempfile))
+    if (mutt_rfc1524_expand_filename (entry->nametemplate, fname,
+                                      tempfile))
     {
       if (fp == NULL && mutt_strcmp(mutt_b2s (tempfile), a->filename))
       {
@@ -950,8 +950,8 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 
     entry = rfc1524_new_entry ();
     rfc1524_mailcap_lookup (a, type, entry, MUTT_PRINT);
-    if (mutt_buffer_rfc1524_expand_filename (entry->nametemplate, a->filename,
-                                             newfile))
+    if (mutt_rfc1524_expand_filename (entry->nametemplate, a->filename,
+                                      newfile))
     {
       if (!fp)
       {

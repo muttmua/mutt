@@ -1324,7 +1324,7 @@ static int autoview_handler (BODY *a, STATE *s)
 
   fname = safe_strdup (a->filename);
   mutt_sanitize_filename (fname, 1);
-  mutt_buffer_rfc1524_expand_filename (entry->nametemplate, fname, tempfile);
+  mutt_rfc1524_expand_filename (entry->nametemplate, fname, tempfile);
   FREE (&fname);
 
   if (entry->command)
