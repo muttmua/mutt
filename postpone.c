@@ -550,7 +550,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
                            short resend)
 {
   MESSAGE *msg = NULL;
-  char file[_POSIX_PATH_MAX];
+  BUFFER *file = NULL;
   BODY *b;
   FILE *bfp;
   int rv = -1;
@@ -657,6 +657,8 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
   s.fpin = bfp;
 
+  file = mutt_buffer_pool_get ();
+
   /* create temporary files for all attachments */
   for (b = newhdr->content; b; b = b->next)
   {
@@ -665,10 +667,10 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
      * mutt_get_tmp_attachment () from muttlib.c
      */
 
-    file[0] = '\0';
+    mutt_buffer_clear (file);
     if (b->filename)
     {
-      strfcpy (file, b->filename, sizeof (file));
+      mutt_buffer_strcpy (file, b->filename);
       b->d_filename = safe_strdup (b->filename);
     }
     else
@@ -694,8 +696,8 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
       mutt_delete_parameter ("x-mutt-noconv", &b->parameter);
     }
 
-    mutt_adv_mktemp (file, sizeof(file));
-    if ((s.fpout = safe_fopen (file, "w")) == NULL)
+    mutt_buffer_adv_mktemp (file);
+    if ((s.fpout = safe_fopen (mutt_b2s (file), "w")) == NULL)
       goto bail;
 
 
@@ -754,7 +756,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     if (safe_fclose (&s.fpout) != 0)
       goto bail;
 
-    mutt_str_replace (&b->filename, file);
+    mutt_str_replace (&b->filename, mutt_b2s (file));
     b->unlink = 1;
 
     mutt_stamp_attachment (b);
@@ -795,6 +797,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 bail:
 
   /* that's it. */
+  mutt_buffer_pool_release (&file);
   if (bfp != fp) safe_fclose (&bfp);
   if (msg) mx_close_message (ctx, &msg);
 

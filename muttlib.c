@@ -124,27 +124,29 @@ void mutt_adv_mktemp (char *s, size_t l)
 
 int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   BODY *b;
-
   PARAMETER *par, **ppar;
-
   short use_disp;
+
+  tmp = mutt_buffer_pool_get ();
 
   if (src->filename)
   {
     use_disp = 1;
-    strfcpy (tmp, src->filename, sizeof (tmp));
+    mutt_buffer_strcpy (tmp, src->filename);
   }
   else
   {
     use_disp = 0;
-    tmp[0] = '\0';
   }
 
-  mutt_adv_mktemp (tmp, sizeof (tmp));
-  if (mutt_save_attachment (fp, src, tmp, 0, NULL) == -1)
+  mutt_buffer_adv_mktemp (tmp);
+  if (mutt_save_attachment (fp, src, mutt_b2s (tmp), 0, NULL) == -1)
+  {
+    mutt_buffer_pool_release (&tmp);
     return -1;
+  }
 
   *tgt = mutt_new_body ();
   b = *tgt;
@@ -153,7 +155,7 @@ int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
   b->parts = NULL;
   b->next  = NULL;
 
-  b->filename = safe_strdup (tmp);
+  b->filename = safe_strdup (mutt_b2s (tmp));
   b->use_disp = use_disp;
   b->unlink = 1;
 
@@ -187,6 +189,7 @@ int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
 
   mutt_stamp_attachment (b);
 
+  mutt_buffer_pool_release (&tmp);
   return 0;
 }
 
