@@ -128,8 +128,7 @@ int mutt_compose_attachment (BODY *a)
       else
 	mutt_buffer_strcpy (newfile, a->filename);
 
-      if (mutt_buffer_rfc1524_expand_command (a, mutt_b2s (newfile), type,
-                                              command))
+      if (mutt_rfc1524_expand_command (a, mutt_b2s (newfile), type, command))
       {
 	/* For now, editing requires a file, no piping */
 	mutt_error _("Mailcap compose entry requires %%s");
@@ -264,8 +263,7 @@ int mutt_edit_attachment (BODY *a)
       else
 	mutt_buffer_strcpy (newfile, a->filename);
 
-      if (mutt_buffer_rfc1524_expand_command (a, mutt_b2s (newfile), type,
-                                              command))
+      if (mutt_rfc1524_expand_command (a, mutt_b2s (newfile), type, command))
       {
 	/* For now, editing requires a file, no piping */
 	mutt_error _("Mailcap Edit entry requires %%s");
@@ -440,8 +438,8 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	goto return_error;
     }
 
-    use_pipe = mutt_buffer_rfc1524_expand_command (a, mutt_b2s (tempfile), type,
-                                                   command);
+    use_pipe = mutt_rfc1524_expand_command (a, mutt_b2s (tempfile), type,
+                                            command);
     use_pager = entry->copiousoutput;
   }
 
@@ -974,7 +972,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
       mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL);
 
     mutt_buffer_strcpy (command, entry->printcommand);
-    piped = mutt_buffer_rfc1524_expand_command (a, mutt_b2s (newfile), type, command);
+    piped = mutt_rfc1524_expand_command (a, mutt_b2s (newfile), type, command);
 
     mutt_endwin (NULL);
 

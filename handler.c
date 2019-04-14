@@ -1332,7 +1332,7 @@ static int autoview_handler (BODY *a, STATE *s)
     mutt_buffer_strcpy (command, entry->command);
 
     /* rfc1524_expand_command returns 0 if the file is required */
-    piped = mutt_buffer_rfc1524_expand_command (a, mutt_b2s (tempfile), type, command);
+    piped = mutt_rfc1524_expand_command (a, mutt_b2s (tempfile), type, command);
 
     if (s->flags & MUTT_DISPLAY)
     {

@@ -55,8 +55,8 @@
  * In addition, this function returns a 0 if the command works on a file,
  * and 1 if the command works on a pipe.
  */
-int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
-                                        BUFFER *command)
+int mutt_rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
+                                 BUFFER *command)
 {
   const char *cptr;
   int needspipe = TRUE;
@@ -328,7 +328,7 @@ static int rfc1524_mailcap_parse (BODY *a,
 	  {
             command = mutt_buffer_pool_get ();
             mutt_buffer_strcpy (command, test_command);
-	    mutt_buffer_rfc1524_expand_command (a, a->filename, type, command);
+	    mutt_rfc1524_expand_command (a, a->filename, type, command);
 	    if (mutt_system (mutt_b2s (command)))
 	    {
 	      /* a non-zero exit code means test failed */
