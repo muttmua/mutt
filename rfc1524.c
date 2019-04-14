@@ -42,18 +42,6 @@
 #include <errno.h>
 #include <unistd.h>
 
-int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
-                                        BUFFER *command)
-{
-  int rc;
-
-  mutt_buffer_increase_size (command, LONG_STRING);
-  rc = rfc1524_expand_command (a, filename, _type, command->data, command->dsize);
-  mutt_buffer_fix_dptr (command);
-
-  return rc;
-}
-
 /* The command semantics include the following:
  * %s is the filename that contains the mail body data
  * %t is the content type, like text/plain
@@ -67,79 +55,94 @@ int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const cha
  * In addition, this function returns a 0 if the command works on a file,
  * and 1 if the command works on a pipe.
  */
-int rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
-                            char *command, int clen)
+int mutt_buffer_rfc1524_expand_command (BODY *a, const char *filename, const char *_type,
+                                        BUFFER *command)
 {
-  int x=0;
+  const char *cptr;
   int needspipe = TRUE;
   BUFFER *buf = NULL;
   BUFFER *quoted = NULL;
-  char type[LONG_STRING];
+  BUFFER *param = NULL;
+  BUFFER *type = NULL;
 
   buf = mutt_buffer_pool_get ();
   quoted = mutt_buffer_pool_get ();
 
-  strfcpy (type, _type, sizeof (type));
-
-  if (option (OPTMAILCAPSANITIZE))
-    mutt_sanitize_filename (type, 0);
-
-  while (x < clen - 1 && command[x])
+  cptr = mutt_b2s (command);
+  while (*cptr)
   {
-    if (command[x] == '\\')
+    if (*cptr == '\\')
     {
-      x++;
-      mutt_buffer_addch (buf, command[x++]);
+      cptr++;
+      if (*cptr)
+        mutt_buffer_addch (buf, *cptr++);
     }
-    else if (command[x] == '%')
+    else if (*cptr == '%')
     {
-      x++;
-      if (command[x] == '{')
+      cptr++;
+      if (*cptr == '{')
       {
-	char param[STRING];
-	char pvalue[STRING];
-	char *_pvalue;
-	int z = 0;
+	const char *_pvalue;
 
-	x++;
-	while (command[x] && command[x] != '}' && z < sizeof (param) - 1)
-	  param[z++] = command[x++];
-	param[z] = '\0';
+        if (!param)
+          param = mutt_buffer_pool_get ();
+        else
+          mutt_buffer_clear (param);
+
+        /* Copy parameter name into param buffer */
+	cptr++;
+	while (*cptr && *cptr != '}')
+          mutt_buffer_addch (param, *cptr++);
 
         /* In send mode, use the current charset, since the message hasn't
          * been converted yet.   If noconv is set, then we assume the
          * charset parameter has the correct value instead. */
-        if ((ascii_strcasecmp (param, "charset") == 0) && a->charset && !a->noconv)
+        if ((ascii_strcasecmp (mutt_b2s (param), "charset") == 0) && a->charset && !a->noconv)
           _pvalue = a->charset;
         else
-          _pvalue = mutt_get_parameter (param, a->parameter);
-	strfcpy (pvalue, NONULL(_pvalue), sizeof (pvalue));
-	if (option (OPTMAILCAPSANITIZE))
-	  mutt_sanitize_filename (pvalue, 0);
+          _pvalue = mutt_get_parameter (mutt_b2s (param), a->parameter);
 
-	mutt_buffer_quote_filename (quoted, pvalue);
+        /* Now copy the parameter value into param buffer */
+	if (option (OPTMAILCAPSANITIZE))
+	  mutt_buffer_sanitize_filename (param, NONULL(_pvalue), 0);
+        else
+          mutt_buffer_strcpy (param, NONULL(_pvalue));
+
+	mutt_buffer_quote_filename (quoted, mutt_b2s (param));
         mutt_buffer_addstr (buf, mutt_b2s (quoted));
       }
-      else if (command[x] == 's' && filename != NULL)
+      else if (*cptr == 's' && filename != NULL)
       {
 	mutt_buffer_quote_filename (quoted, filename);
         mutt_buffer_addstr (buf, mutt_b2s (quoted));
 	needspipe = FALSE;
       }
-      else if (command[x] == 't')
+      else if (*cptr == 't')
       {
-	mutt_buffer_quote_filename (quoted, type);
+        if (!type)
+        {
+          type = mutt_buffer_pool_get ();
+          if (option (OPTMAILCAPSANITIZE))
+            mutt_buffer_sanitize_filename (type, _type, 0);
+          else
+            mutt_buffer_strcpy (type, _type);
+        }
+	mutt_buffer_quote_filename (quoted, mutt_b2s (type));
         mutt_buffer_addstr (buf, mutt_b2s (quoted));
       }
-      x++;
+
+      if (*cptr)
+        cptr++;
     }
     else
-      mutt_buffer_addch (buf, command[x++]);
+      mutt_buffer_addch (buf, *cptr++);
   }
-  strfcpy (command, mutt_b2s (buf), clen);
+  mutt_buffer_strcpy (command, mutt_b2s (buf));
 
   mutt_buffer_pool_release (&buf);
   mutt_buffer_pool_release (&quoted);
+  mutt_buffer_pool_release (&param);
+  mutt_buffer_pool_release (&type);
 
   return needspipe;
 }

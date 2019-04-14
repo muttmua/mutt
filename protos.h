@@ -173,6 +173,7 @@ void mutt_break_thread (HEADER *);
 void mutt_browser_cleanup (void);
 void mutt_buffer_concat_path (BUFFER *, const char *, const char *);
 void mutt_buffer_quote_filename (BUFFER *, const char *);
+void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash);
 void mutt_canonical_charset (char *, size_t, const char *);
 void mutt_check_stats(void);
 int mutt_count_body_parts (CONTEXT *, HEADER *);

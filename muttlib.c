@@ -1027,6 +1027,24 @@ void mutt_buffer_quote_filename (BUFFER *d, const char *f)
   mutt_buffer_addch (d, '\'');
 }
 
+static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%/";
+
+void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash)
+{
+  mutt_buffer_clear (d);
+
+  if (!f)
+    return;
+
+  for (; *f; f++)
+  {
+    if ((slash && *f == '/') || !strchr (safe_chars, *f))
+      mutt_buffer_addch (d, '_');
+    else
+      mutt_buffer_addch (d, *f);
+  }
+}
+
 void mutt_expand_file_fmt (BUFFER *dest, const char *fmt, const char *src)
 {
   BUFFER *tmp;
