@@ -318,20 +318,21 @@ static int rfc1524_mailcap_parse (BODY *a,
 	   * if this is the right entry.
 	   */
 	  char *test_command = NULL;
-	  size_t len;
+          BUFFER *command = NULL;
 
 	  if (get_field_text (field + 4, &test_command, type, filename, line)
 	      && test_command)
 	  {
-	    len = mutt_strlen (test_command) + STRING;
-	    safe_realloc (&test_command, len);
-	    rfc1524_expand_command (a, a->filename, type, test_command, len);
-	    if (mutt_system (test_command))
+            command = mutt_buffer_pool_get ();
+            mutt_buffer_strcpy (command, test_command);
+	    mutt_buffer_rfc1524_expand_command (a, a->filename, type, command);
+	    if (mutt_system (mutt_b2s (command)))
 	    {
 	      /* a non-zero exit code means test failed */
 	      found = FALSE;
 	    }
 	    FREE (&test_command);
+            mutt_buffer_pool_release (&command);
 	  }
 	}
       } /* while (ch) */
