@@ -451,7 +451,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     {
       /* recv case */
       mutt_buffer_strcpy (pagerfile, a->filename);
-      mutt_buffer_adv_mktemp (pagerfile);
+      mutt_adv_mktemp (pagerfile);
     }
     else
       mutt_buffer_mktemp (pagerfile);

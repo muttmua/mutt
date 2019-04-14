@@ -571,7 +571,7 @@ int mutt_rfc1524_expand_filename (const char *nametemplate,
     }
   }
 
-  mutt_buffer_adv_mktemp (newfile);
+  mutt_adv_mktemp (newfile);
 
   if (rmatch && lmatch)
     return 0;

@@ -56,7 +56,13 @@ BODY *mutt_new_body (void)
   return (p);
 }
 
-void mutt_buffer_adv_mktemp (BUFFER *buf)
+/* Modified by blong to accept a "suggestion" for file name.  If
+ * that file exists, then construct one with unique name but
+ * keep any extension.  This might fail, I guess.
+ * Renamed to mutt_adv_mktemp so I only have to change where it's
+ * called, and not all possible cases.
+ */
+void mutt_adv_mktemp (BUFFER *buf)
 {
   BUFFER *prefix = NULL;
   char *suffix;
@@ -87,39 +93,6 @@ void mutt_buffer_adv_mktemp (BUFFER *buf)
   }
 }
 
-/* Modified by blong to accept a "suggestion" for file name.  If
- * that file exists, then construct one with unique name but
- * keep any extension.  This might fail, I guess.
- * Renamed to mutt_adv_mktemp so I only have to change where it's
- * called, and not all possible cases.
- */
-void mutt_adv_mktemp (char *s, size_t l)
-{
-  char prefix[_POSIX_PATH_MAX];
-  char *suffix;
-  struct stat sb;
-
-  if (s[0] == '\0')
-  {
-    mutt_mktemp (s, l);
-  }
-  else
-  {
-    strfcpy (prefix, s, sizeof (prefix));
-    mutt_sanitize_filename (prefix, 1);
-    snprintf (s, l, "%s/%s", NONULL (Tempdir), prefix);
-    if (lstat (s, &sb) == -1 && errno == ENOENT)
-      return;
-
-    if ((suffix = strrchr (prefix, '.')) != NULL)
-    {
-      *suffix = 0;
-      ++suffix;
-    }
-    mutt_mktemp_pfx_sfx (s, l, prefix, suffix);
-  }
-}
-
 /* create a send-mode duplicate from a receive-mode body */
 
 int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
@@ -141,7 +114,7 @@ int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
     use_disp = 0;
   }
 
-  mutt_buffer_adv_mktemp (tmp);
+  mutt_adv_mktemp (tmp);
   if (mutt_save_attachment (fp, src, mutt_b2s (tmp), 0, NULL) == -1)
   {
     mutt_buffer_pool_release (&tmp);
