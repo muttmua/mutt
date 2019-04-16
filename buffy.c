@@ -235,7 +235,7 @@ static BUFFY *buffy_new (const char *path)
   buffy = (BUFFY *) safe_calloc (1, sizeof (BUFFY));
   strfcpy (buffy->path, path, sizeof (buffy->path));
   r = realpath (path, rp);
-  strfcpy (buffy->realpath, r ? rp : path, sizeof (buffy->realpath));
+  buffy->realpath = safe_strdup (r ? rp : path);
   buffy->next = NULL;
   buffy->magic = 0;
 
@@ -244,6 +244,10 @@ static BUFFY *buffy_new (const char *path)
 
 static void buffy_free (BUFFY **mailbox)
 {
+  if (!(mailbox && *mailbox))
+    return;
+
+  FREE (&((*mailbox)->realpath));
   FREE (mailbox); /* __FREE_CHECKED__ */
 }
 

@@ -26,8 +26,8 @@
 typedef struct buffy_t
 {
   char path[_POSIX_PATH_MAX];
-  char realpath[_POSIX_PATH_MAX]; /* used for duplicate detection, context comparison,
-                                     and the sidebar */
+  const char *realpath; /* used for duplicate detection, context comparison,
+                           and the sidebar */
   off_t size;
   struct buffy_t *next;
   short new;			/* mailbox has new mail */
