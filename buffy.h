@@ -25,7 +25,7 @@
 
 typedef struct buffy_t
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *pathbuf;
   const char *realpath; /* used for duplicate detection, context comparison,
                            and the sidebar */
   off_t size;

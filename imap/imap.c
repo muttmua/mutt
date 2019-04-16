@@ -1669,14 +1669,14 @@ int imap_buffy_check (int force, int check_stats)
     /* Init newly-added mailboxes */
     if (! mailbox->magic)
     {
-      if (mx_is_imap (mailbox->path))
+      if (mx_is_imap (mutt_b2s (mailbox->pathbuf)))
         mailbox->magic = MUTT_IMAP;
     }
 
     if (mailbox->magic != MUTT_IMAP)
       continue;
 
-    if (imap_get_mailbox (mailbox->path, &idata, name, sizeof (name)) < 0)
+    if (imap_get_mailbox (mutt_b2s (mailbox->pathbuf), &idata, name, sizeof (name)) < 0)
     {
       mailbox->new = 0;
       continue;
@@ -2105,15 +2105,15 @@ imap_complete_hosts (char *dest, size_t len)
   matchlen = mutt_strlen (dest);
   for (mailbox = Incoming; mailbox; mailbox = mailbox->next)
   {
-    if (!mutt_strncmp (dest, mailbox->path, matchlen))
+    if (!mutt_strncmp (dest, mutt_b2s (mailbox->pathbuf), matchlen))
     {
       if (rc)
       {
-        strfcpy (dest, mailbox->path, len);
+        strfcpy (dest, mutt_b2s (mailbox->pathbuf), len);
         rc = 0;
       }
       else
-        longest_common_prefix (dest, mailbox->path, matchlen, len);
+        longest_common_prefix (dest, mutt_b2s (mailbox->pathbuf), matchlen, len);
     }
   }
 

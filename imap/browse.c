@@ -427,7 +427,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   (state->entry)[state->entrylen].inferiors = !noinferiors;
 
   b = Incoming;
-  while (b && mutt_strcmp (tmp, b->path))
+  while (b && mutt_strcmp (tmp, mutt_b2s (b->pathbuf)))
     b = b->next;
   if (b)
   {

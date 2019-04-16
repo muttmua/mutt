@@ -248,7 +248,7 @@ static int mh_sequences_changed(BUFFY *b)
   int rc = -1;
 
   path = mutt_buffer_pool_get ();
-  mutt_buffer_printf (path, "%s/.mh_sequences", b->path);
+  mutt_buffer_printf (path, "%s/.mh_sequences", mutt_b2s (b->pathbuf));
   if (stat (mutt_b2s (path), &sb) == 0)
     rc = (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) > 0);
   mutt_buffer_pool_release (&path);
@@ -267,7 +267,7 @@ static int mh_already_notified(BUFFY *b, int msgno)
   int rc = -1;
 
   path = mutt_buffer_pool_get ();
-  mutt_buffer_printf (path, "%s/%d", b->path, msgno);
+  mutt_buffer_printf (path, "%s/%d", mutt_b2s (b->pathbuf), msgno);
   if (stat (mutt_b2s (path), &sb) == 0)
     rc = (mutt_stat_timespec_compare (&sb, MUTT_STAT_MTIME, &b->last_visited) <= 0);
   mutt_buffer_pool_release (&path);
@@ -299,7 +299,7 @@ int mh_buffy (BUFFY *mailbox, int check_stats)
     return rc;
 
   memset (&mhs, 0, sizeof (mhs));
-  if (mh_read_sequences (&mhs, mailbox->path) < 0)
+  if (mh_read_sequences (&mhs, mutt_b2s (mailbox->pathbuf)) < 0)
     return 0;
 
   if (check_stats)
@@ -340,7 +340,7 @@ int mh_buffy (BUFFY *mailbox, int check_stats)
 
   if (check_stats)
   {
-    if ((dirp = opendir (mailbox->path)) != NULL)
+    if ((dirp = opendir (mutt_b2s (mailbox->pathbuf))) != NULL)
     {
       while ((de = readdir (dirp)) != NULL)
       {

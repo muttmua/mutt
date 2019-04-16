@@ -1209,9 +1209,9 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
     if (inc->magic != MUTT_IMAP)
       continue;
 
-    if (imap_parse_path (inc->path, &mx) < 0)
+    if (imap_parse_path (mutt_b2s (inc->pathbuf), &mx) < 0)
     {
-      dprint (1, (debugfile, "Error parsing mailbox %s, skipping\n", inc->path));
+      dprint (1, (debugfile, "Error parsing mailbox %s, skipping\n", mutt_b2s (inc->pathbuf)));
       continue;
     }
     /* dprint (2, (debugfile, "Buffy entry: [%s] mbox: [%s]\n", inc->path, NONULL(mx.mbox))); */

@@ -506,7 +506,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
       continue;
 
     tmp = Incoming;
-    while (tmp && mutt_strcmp (mutt_b2s (buffer), tmp->path))
+    while (tmp && mutt_strcmp (mutt_b2s (buffer), mutt_b2s (tmp->pathbuf)))
       tmp = tmp->next;
     if (tmp && Context &&
         !mutt_strcmp (tmp->realpath, Context->realpath))
@@ -546,39 +546,39 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
       tmp->msg_unread = Context->unread;
     }
 
-    strfcpy (buffer, NONULL (tmp->path), sizeof (buffer));
+    strfcpy (buffer, mutt_b2s (tmp->pathbuf), sizeof (buffer));
     if (option (OPTBROWSERABBRMAILBOXES))
       mutt_pretty_mailbox (buffer, sizeof (buffer));
 
 #ifdef USE_IMAP
-    if (mx_is_imap (tmp->path))
+    if (mx_is_imap (mutt_b2s (tmp->pathbuf)))
     {
       add_folder (menu, state, buffer, NULL, tmp);
       continue;
     }
 #endif
 #ifdef USE_POP
-    if (mx_is_pop (tmp->path))
+    if (mx_is_pop (mutt_b2s (tmp->pathbuf)))
     {
       add_folder (menu, state, buffer, NULL, tmp);
       continue;
     }
 #endif
-    if (lstat (tmp->path, &s) == -1)
+    if (lstat (mutt_b2s (tmp->pathbuf), &s) == -1)
       continue;
 
     if ((! S_ISREG (s.st_mode)) && (! S_ISDIR (s.st_mode)) &&
 	(! S_ISLNK (s.st_mode)))
       continue;
 
-    if (mx_is_maildir (tmp->path))
+    if (mx_is_maildir (mutt_b2s (tmp->pathbuf)))
     {
       struct stat st2;
 
-      mutt_buffer_printf (md, "%s/new", tmp->path);
+      mutt_buffer_printf (md, "%s/new", mutt_b2s (tmp->pathbuf));
       if (stat (mutt_b2s (md), &s) < 0)
 	s.st_mtime = 0;
-      mutt_buffer_printf (md, "%s/cur", tmp->path);
+      mutt_buffer_printf (md, "%s/cur", mutt_b2s (tmp->pathbuf));
       if (stat (mutt_b2s (md), &st2) < 0)
 	st2.st_mtime = 0;
       if (st2.st_mtime > s.st_mtime)

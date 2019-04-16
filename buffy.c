@@ -205,7 +205,7 @@ BUFFY *mutt_find_mailbox (const char *path)
 
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
-    if (stat (tmp->path,&tmp_sb) ==0 &&
+    if (stat (mutt_b2s (tmp->pathbuf), &tmp_sb) ==0 &&
 	sb.st_dev == tmp_sb.st_dev && sb.st_ino == tmp_sb.st_ino)
       break;
   }
@@ -219,7 +219,7 @@ void mutt_update_mailbox (BUFFY * b)
   if (!b)
     return;
 
-  if (stat (b->path, &sb) == 0)
+  if (stat (mutt_b2s (b->pathbuf), &sb) == 0)
     b->size = (off_t) sb.st_size;
   else
     b->size = 0;
@@ -233,7 +233,8 @@ static BUFFY *buffy_new (const char *path)
   char *r = NULL;
 
   buffy = (BUFFY *) safe_calloc (1, sizeof (BUFFY));
-  strfcpy (buffy->path, path, sizeof (buffy->path));
+  buffy->pathbuf = mutt_buffer_new ();
+  mutt_buffer_strcpy (buffy->pathbuf, path);
   r = realpath (path, rp);
   buffy->realpath = safe_strdup (r ? rp : path);
   buffy->next = NULL;
@@ -247,6 +248,7 @@ static void buffy_free (BUFFY **mailbox)
   if (!(mailbox && *mailbox))
     return;
 
+  mutt_buffer_free (&((*mailbox)->pathbuf));
   FREE (&((*mailbox)->realpath));
   FREE (mailbox); /* __FREE_CHECKED__ */
 }
@@ -292,7 +294,8 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
     {
       if (mutt_strcmp (p ? p : buf, (*tmp)->realpath) == 0)
       {
-	dprint(3,(debugfile,"mailbox '%s' already registered as '%s'\n", buf, (*tmp)->path));
+	dprint(3,(debugfile,"mailbox '%s' already registered as '%s'\n", buf,
+                  mutt_b2s ((*tmp)->pathbuf)));
 	break;
       }
     }
@@ -321,7 +324,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       mutt_sb_notify_mailbox (*tmp, 1);
 #endif
 #ifdef USE_INOTIFY
-      (*tmp)->magic = mx_get_magic ((*tmp)->path);
+      (*tmp)->magic = mx_get_magic (mutt_b2s ((*tmp)->pathbuf));
       mutt_monitor_add (*tmp);
 #endif
     }
@@ -335,7 +338,8 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
      * that it increased .  without check_mbox_size we probably don't care.
      */
     if (option(OPTCHECKMBOXSIZE) &&
-	stat ((*tmp)->path, &sb) == 0 && !test_new_folder ((*tmp)->path))
+	stat (mutt_b2s ((*tmp)->pathbuf), &sb) == 0 &&
+        !test_new_folder (mutt_b2s ((*tmp)->pathbuf)))
     {
       /* some systems out there don't have an off_t type */
       (*tmp)->size = (off_t) sb.st_size;
@@ -364,7 +368,7 @@ static int buffy_maildir_check_dir (BUFFY* mailbox, const char *dir_name, int ch
 
   path = mutt_buffer_pool_get ();
   msgpath = mutt_buffer_pool_get ();
-  mutt_buffer_printf (path, "%s/%s", mailbox->path, dir_name);
+  mutt_buffer_printf (path, "%s/%s", mutt_b2s (mailbox->pathbuf), dir_name);
 
   /* when $mail_check_recent is set, if the new/ directory hasn't been modified since
    * the user last exited the mailbox, then we know there is no recent mail.
@@ -501,7 +505,7 @@ static int buffy_mbox_check (BUFFY* mailbox, struct stat *sb, int check_stats)
   if (check_stats &&
       (mutt_stat_timespec_compare (sb, MUTT_STAT_MTIME, &mailbox->stats_last_checked) > 0))
   {
-    if (mx_open_mailbox (mailbox->path,
+    if (mx_open_mailbox (mutt_b2s (mailbox->pathbuf),
                          MUTT_READONLY | MUTT_QUIET | MUTT_NOSORT | MUTT_PEEK,
                          &ctx) != NULL)
     {
@@ -587,12 +591,14 @@ int mutt_buffy_check (int force)
     {
       tmp->new = 0;
 #ifdef USE_POP
-      if (mx_is_pop (tmp->path))
+      if (mx_is_pop (mutt_b2s (tmp->pathbuf)))
 	tmp->magic = MUTT_POP;
       else
 #endif
-        if (stat (tmp->path, &sb) != 0 || (S_ISREG(sb.st_mode) && sb.st_size == 0) ||
-            (!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0))
+        if (stat (mutt_b2s (tmp->pathbuf), &sb) != 0 ||
+            (S_ISREG(sb.st_mode) && sb.st_size == 0) ||
+            (!tmp->magic &&
+             (tmp->magic = mx_get_magic (mutt_b2s (tmp->pathbuf))) <= 0))
         {
           /* if the mailbox still doesn't exist, set the newly created flag to
            * be ready for when it does. */
@@ -607,7 +613,7 @@ int mutt_buffy_check (int force)
      * before polling */
     if (!Context || !Context->path ||
 	(( tmp->magic == MUTT_IMAP || tmp->magic == MUTT_POP )
-	    ? mutt_strcmp (tmp->path, Context->path) :
+            ? mutt_strcmp (mutt_b2s (tmp->pathbuf), Context->path) :
 	      (sb.st_dev != contex_sb.st_dev || sb.st_ino != contex_sb.st_ino)))
     {
       switch (tmp->magic)
@@ -668,7 +674,7 @@ int mutt_buffy_list (void)
     if (!tmp->new || (have_unnotified && tmp->notified))
       continue;
 
-    strfcpy (path, tmp->path, sizeof (path));
+    strfcpy (path, mutt_b2s (tmp->pathbuf), sizeof (path));
     mutt_pretty_mailbox (path, sizeof (path));
 
     if (!first && (MuttMessageWindow->cols >= 7) &&
@@ -761,14 +767,14 @@ void mutt_buffer_buffy (BUFFER *s)
     for (pass = 0; pass < 2; pass++)
       for (tmp = Incoming; tmp; tmp = tmp->next)
       {
-	mutt_expand_path (tmp->path, sizeof (tmp->path));
+	mutt_buffer_expand_path (tmp->pathbuf);
 	if ((found || pass) && tmp->new)
 	{
-	  mutt_buffer_strcpy (s, tmp->path);
+	  mutt_buffer_strcpy (s, mutt_b2s (tmp->pathbuf));
 	  mutt_buffer_pretty_mailbox (s);
 	  return;
 	}
-	if (mutt_strcmp (mutt_b2s (s), tmp->path) == 0)
+	if (mutt_strcmp (mutt_b2s (s), mutt_b2s (tmp->pathbuf)) == 0)
 	  found = 1;
       }
 
@@ -795,8 +801,8 @@ static BUFFY* buffy_get (const char *path)
   for (cur = Incoming; cur; cur = cur->next)
   {
     /* must be done late because e.g. IMAP delimiter may change */
-    mutt_expand_path (cur->path, sizeof (cur->path));
-    if (!mutt_strcmp(cur->path, path))
+    mutt_buffer_expand_path (cur->pathbuf);
+    if (!mutt_strcmp (mutt_b2s (cur->pathbuf), path))
     {
       FREE (&epath);
       return cur;
