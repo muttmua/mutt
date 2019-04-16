@@ -1991,6 +1991,9 @@ struct option_t MuttVars[] = {
   ** keystrokes are necessary because you can't call mutt functions
   ** directly from the pager, and screen resizes cause lines longer than
   ** the screen width to be badly formatted in the help menu.
+  ** .pp
+  ** When using an external pager, also see $$prompt_after which defaults
+  ** \fIset\fP.
   */
   { "pager_context",	DT_NUM,	 R_NONE, UL &PagerContext, 0 },
   /*
