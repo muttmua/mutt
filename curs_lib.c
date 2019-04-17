@@ -959,7 +959,24 @@ int mutt_do_pager (const char *banner,
   return rc;
 }
 
-int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy, int multiple, char ***files, int *numfiles)
+int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy,
+                       int multiple, char ***files, int *numfiles)
+{
+  BUFFER *fname;
+  int rc;
+
+  fname = mutt_buffer_pool_get ();
+
+  mutt_buffer_addstr (fname, NONULL (buf));
+  rc = _mutt_buffer_enter_fname (prompt, fname, buffy, multiple, files, numfiles);
+  strfcpy (buf, mutt_b2s (fname), blen);
+
+  mutt_buffer_pool_release (&fname);
+  return rc;
+}
+
+int _mutt_buffer_enter_fname (const char *prompt, BUFFER *fname, int buffy,
+                              int multiple, char ***files, int *numfiles)
 {
   event_t ch;
 
@@ -967,8 +984,8 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy, in
   mutt_window_mvaddstr (MuttMessageWindow, 0, 0, (char *) prompt);
   addstr (_(" ('?' for list): "));
   NORMAL_COLOR;
-  if (buf[0])
-    addstr (buf);
+  if (mutt_buffer_len (fname))
+    addstr (mutt_b2s (fname));
   mutt_window_clrtoeol (MuttMessageWindow);
   mutt_refresh ();
 
@@ -984,9 +1001,10 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy, in
   else if (ch.ch == '?')
   {
     mutt_refresh ();
-    buf[0] = 0;
-    _mutt_select_file (buf, blen, MUTT_SEL_FOLDER | (multiple ? MUTT_SEL_MULTI : 0),
-		       files, numfiles);
+    mutt_buffer_clear (fname);
+    _mutt_buffer_select_file (fname,
+                              MUTT_SEL_FOLDER | (multiple ? MUTT_SEL_MULTI : 0),
+                              files, numfiles);
   }
   else
   {
@@ -994,9 +1012,14 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy, in
 
     sprintf (pc, "%s: ", prompt);	/* __SPRINTF_CHECKED__ */
     mutt_unget_event (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
-    if (_mutt_get_field (pc, buf, blen, (buffy ? MUTT_EFILE : MUTT_FILE) | MUTT_CLEAR, multiple, files, numfiles)
-	!= 0)
-      buf[0] = 0;
+
+    mutt_buffer_increase_size (fname, LONG_STRING);
+    if (_mutt_get_field (pc, fname->data, fname->dsize,
+                         (buffy ? MUTT_EFILE : MUTT_FILE) | MUTT_CLEAR,
+                         multiple, files, numfiles) != 0)
+      mutt_buffer_clear (fname);
+    else
+      mutt_buffer_fix_dptr (fname);
     FREE (&pc);
   }
 
