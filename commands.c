@@ -321,7 +321,7 @@ int mutt_display_message (HEADER *cur)
 
 void ci_bounce_message (HEADER *h)
 {
-  char prompt[SHORT_STRING];
+  char prompt[SHORT_STRING+1];
   char scratch[SHORT_STRING];
   char buf[HUGE_STRING] = { 0 };
   ADDRESS *adr = NULL;
