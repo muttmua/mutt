@@ -1265,22 +1265,26 @@ int mutt_index_menu (void)
 	/* fallback to the readonly case */
 
       case OP_MAIN_CHANGE_FOLDER_READONLY:
+      {
+        BUFFER *folderbuf;
+        int cont = 0;  /* Set if we want to continue instead of break */
+
+        folderbuf = mutt_buffer_pool_get ();
 
         if ((op == OP_MAIN_CHANGE_FOLDER_READONLY) || option (OPTREADONLY))
           cp = _("Open mailbox in read-only mode");
         else
           cp = _("Open mailbox");
 
-	buf[0] = '\0';
 	if ((op == OP_MAIN_NEXT_UNREAD_MAILBOX) && Context && Context->path)
 	{
-	  strfcpy (buf, Context->path, sizeof (buf));
-	  mutt_pretty_mailbox (buf, sizeof (buf));
-	  mutt_buffy (buf, sizeof (buf));
-	  if (!buf[0])
+	  mutt_buffer_strcpy (folderbuf, Context->path);
+	  mutt_buffer_pretty_mailbox (folderbuf);
+	  mutt_buffer_buffy (folderbuf);
+	  if (!mutt_buffer_len (folderbuf))
 	  {
 	    mutt_error _("No mailboxes have new mail");
-	    break;
+	    goto changefoldercleanup;
 	  }
 	}
 #ifdef USE_SIDEBAR
@@ -1288,41 +1292,40 @@ int mutt_index_menu (void)
         {
           const char *path = mutt_sb_get_highlight();
           if (!path || !*path)
-            break;
-          strncpy (buf, path, sizeof (buf));
+            goto changefoldercleanup;
+          mutt_buffer_strcpy (folderbuf, path);
         }
 #endif
 	else
 	{
           if (option (OPTCHANGEFOLDERNEXT) && Context && Context->path)
           {
-            strfcpy (buf, Context->path, sizeof (buf));
-            mutt_pretty_mailbox (buf, sizeof (buf));
+            mutt_buffer_strcpy (folderbuf, Context->path);
+            mutt_buffer_pretty_mailbox (folderbuf);
           }
-	  mutt_buffy (buf, sizeof (buf));
+	  mutt_buffer_buffy (folderbuf);
 
-          if (mutt_enter_fname (cp, buf, sizeof (buf), 1) == -1)
+          if (mutt_buffer_enter_fname (cp, folderbuf, 1) == -1)
           {
             if (menu->menu == MENU_PAGER)
             {
               op = OP_DISPLAY_MESSAGE;
-              continue;
+              cont = 1;
             }
-            else
-              break;
+            goto changefoldercleanup;
           }
-	  if (!buf[0])
+	  if (!mutt_buffer_len (folderbuf))
 	  {
             mutt_window_clearline (MuttMessageWindow, 0);
-	    break;
+	    goto changefoldercleanup;
 	  }
 	}
 
-	mutt_expand_path (buf, sizeof (buf));
-	if (mx_get_magic (buf) <= 0)
+	mutt_buffer_expand_path (folderbuf);
+        if (mx_get_magic (mutt_b2s (folderbuf)) <= 0)
 	{
-	  mutt_error (_("%s is not a mailbox."), buf);
-	  break;
+	  mutt_error (_("%s is not a mailbox."), mutt_b2s (folderbuf));
+	  goto changefoldercleanup;
 	}
 
 	/* keepalive failure in mutt_enter_fname may kill connection. #3028 */
@@ -1358,13 +1361,13 @@ int mutt_index_menu (void)
             FREE (&new_last_folder);
 	    set_option (OPTSEARCHINVALID);
 	    menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
-	    break;
+	    goto changefoldercleanup;
 	  }
 	  FREE (&Context);
           FREE (&LastFolder);
           LastFolder = new_last_folder;
 	}
-	mutt_str_replace (&CurrentFolder, buf);
+	mutt_str_replace (&CurrentFolder, mutt_b2s (folderbuf));
 
         mutt_sleep (0);
 
@@ -1376,9 +1379,9 @@ int mutt_index_menu (void)
          * mutt_push/pop_current_menu() functions.  If that changes, the menu
          * would need to be reset here, and the pager cleanup code after the
          * switch statement would need to be run. */
-	mutt_folder_hook (buf);
+	mutt_folder_hook (mutt_b2s (folderbuf));
 
-	if ((Context = mx_open_mailbox (buf,
+	if ((Context = mx_open_mailbox (mutt_b2s (folderbuf),
 					(option (OPTREADONLY) || op == OP_MAIN_CHANGE_FOLDER_READONLY) ?
 					MUTT_READONLY : 0, NULL)) != NULL)
 	{
@@ -1400,7 +1403,14 @@ int mutt_index_menu (void)
 						     folder */
 	menu->redraw = REDRAW_FULL;
 	set_option (OPTSEARCHINVALID);
-	break;
+
+      changefoldercleanup:
+        mutt_buffer_pool_release (&folderbuf);
+        if (cont)
+          continue;
+        else
+          break;
+      }
 
       case OP_DISPLAY_MESSAGE:
       case OP_DISPLAY_HEADERS: /* don't weed the headers */
