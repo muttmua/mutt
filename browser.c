@@ -526,14 +526,15 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
 static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 {
   struct stat s;
-  char buffer[LONG_STRING];
   BUFFY *tmp = Incoming;
+  BUFFER *mailbox = NULL;
   BUFFER *md = NULL;
 
   if (!Incoming)
     return (-1);
   mutt_buffy_check (0);
 
+  mailbox = mutt_buffer_pool_get ();
   md = mutt_buffer_pool_get ();
   init_state (state, menu);
 
@@ -546,21 +547,21 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
       tmp->msg_unread = Context->unread;
     }
 
-    strfcpy (buffer, mutt_b2s (tmp->pathbuf), sizeof (buffer));
+    mutt_buffer_strcpy (mailbox, mutt_b2s (tmp->pathbuf));
     if (option (OPTBROWSERABBRMAILBOXES))
-      mutt_pretty_mailbox (buffer, sizeof (buffer));
+      mutt_buffer_pretty_mailbox (mailbox);
 
 #ifdef USE_IMAP
     if (mx_is_imap (mutt_b2s (tmp->pathbuf)))
     {
-      add_folder (menu, state, buffer, NULL, tmp);
+      add_folder (menu, state, mutt_b2s (mailbox), NULL, tmp);
       continue;
     }
 #endif
 #ifdef USE_POP
     if (mx_is_pop (mutt_b2s (tmp->pathbuf)))
     {
-      add_folder (menu, state, buffer, NULL, tmp);
+      add_folder (menu, state, mutt_b2s (mailbox), NULL, tmp);
       continue;
     }
 #endif
@@ -585,11 +586,12 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 	s.st_mtime = st2.st_mtime;
     }
 
-    add_folder (menu, state, buffer, &s, tmp);
+    add_folder (menu, state, mutt_b2s (mailbox), &s, tmp);
   }
   while ((tmp = tmp->next));
   browser_sort (state);
 
+  mutt_buffer_pool_release (&mailbox);
   mutt_buffer_pool_release (&md);
   return 0;
 }

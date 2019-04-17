@@ -659,12 +659,14 @@ int mutt_buffy_check (int force)
 int mutt_buffy_list (void)
 {
   BUFFY *tmp;
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   char buffylist[2*STRING];
   size_t pos = 0;
   int first = 1;
 
   int have_unnotified = BuffyNotify;
+
+  path = mutt_buffer_pool_get ();
 
   buffylist[0] = 0;
   pos += strlen (strncat (buffylist, _("New mail in "), sizeof (buffylist) - 1 - pos)); /* __STRNCAT_CHECKED__ */
@@ -674,11 +676,11 @@ int mutt_buffy_list (void)
     if (!tmp->new || (have_unnotified && tmp->notified))
       continue;
 
-    strfcpy (path, mutt_b2s (tmp->pathbuf), sizeof (path));
-    mutt_pretty_mailbox (path, sizeof (path));
+    mutt_buffer_strcpy (path, mutt_b2s (tmp->pathbuf));
+    mutt_buffer_pretty_mailbox (path);
 
     if (!first && (MuttMessageWindow->cols >= 7) &&
-        (pos + strlen (path) >= (size_t)MuttMessageWindow->cols - 7))
+        (pos + mutt_buffer_len (path) >= (size_t)MuttMessageWindow->cols - 7))
       break;
 
     if (!first)
@@ -691,23 +693,29 @@ int mutt_buffy_list (void)
       tmp->notified = 1;
       BuffyNotify--;
     }
-    pos += strlen (strncat(buffylist + pos, path, sizeof(buffylist)-1-pos)); /* __STRNCAT_CHECKED__ */
+    pos += strlen (strncat(buffylist + pos, mutt_b2s (path), sizeof(buffylist)-1-pos)); /* __STRNCAT_CHECKED__ */
     first = 0;
   }
   if (!first && tmp)
   {
     strncat (buffylist + pos, ", ...", sizeof (buffylist) - 1 - pos); /* __STRNCAT_CHECKED__ */
   }
+
+  mutt_buffer_pool_release (&path);
+
   if (!first)
   {
     mutt_message ("%s", buffylist);
     return (1);
   }
-  /* there were no mailboxes needing to be notified, so clean up since
-   * BuffyNotify has somehow gotten out of sync
-   */
-  BuffyNotify = 0;
-  return (0);
+  else
+  {
+    /* there were no mailboxes needing to be notified, so clean up since
+     * BuffyNotify has somehow gotten out of sync
+     */
+    BuffyNotify = 0;
+    return (0);
+  }
 }
 
 void mutt_buffy_setnotified (const char *path)
@@ -790,25 +798,26 @@ void mutt_buffer_buffy (BUFFER *s)
 static BUFFY* buffy_get (const char *path)
 {
   BUFFY *cur;
-  char *epath;
+  BUFFER *epath;
 
   if (!path)
     return NULL;
 
-  epath = safe_strdup(path);
-  mutt_expand_path(epath, mutt_strlen(epath));
+  epath = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (epath, NONULL (path));
+  mutt_buffer_expand_path (epath);
 
   for (cur = Incoming; cur; cur = cur->next)
   {
     /* must be done late because e.g. IMAP delimiter may change */
     mutt_buffer_expand_path (cur->pathbuf);
-    if (!mutt_strcmp (mutt_b2s (cur->pathbuf), path))
+    if (!mutt_strcmp (mutt_b2s (cur->pathbuf), mutt_b2s (epath)))
     {
-      FREE (&epath);
+      mutt_buffer_pool_release (&epath);
       return cur;
     }
   }
 
-  FREE (&epath);
+  mutt_buffer_pool_release (&epath);
   return NULL;
 }

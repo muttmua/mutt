@@ -62,7 +62,7 @@ typedef struct monitorinfo_t
   dev_t st_dev;
   ino_t st_ino;
   MONITOR *monitor;
-  char _pathbuf[_POSIX_PATH_MAX]; /* access via path only (maybe not initialized) */
+  BUFFER *_pathbuf; /* access via path only (maybe not initialized) */
 }
 MONITORINFO;
 
@@ -143,6 +143,16 @@ static MONITOR *monitor_create (MONITORINFO *info, int descriptor)
   Monitor = monitor;
 
   return monitor;
+}
+
+static void monitor_info_init (MONITORINFO *info)
+{
+  memset (info, 0, sizeof (MONITORINFO));
+}
+
+static void monitor_info_free (MONITORINFO *info)
+{
+  mutt_buffer_free (&info->_pathbuf);
 }
 
 static void monitor_delete (MONITOR *monitor)
@@ -350,8 +360,10 @@ static int monitor_resolve (MONITORINFO *info, BUFFY *buffy)
 
   if (fmt)
   {
-    snprintf (info->_pathbuf, sizeof(info->_pathbuf), fmt, info->path);
-    info->path = info->_pathbuf;
+    if (!info->_pathbuf)
+      info->_pathbuf = mutt_buffer_new ();
+    mutt_buffer_printf (info->_pathbuf, fmt, info->path);
+    info->path = mutt_b2s (info->_pathbuf);
   }
   if (stat (info->path, &sb) != 0)
     return RESOLVERES_FAIL_STAT;
@@ -377,14 +389,17 @@ int mutt_monitor_add (BUFFY *buffy)
 {
   MONITORINFO info;
   uint32_t mask;
-  int descr;
+  int descr, rc = 0;
+
+  monitor_info_init (&info);
 
   descr = monitor_resolve (&info, buffy);
   if (descr != RESOLVERES_OK_NOTEXISTING)
   {
     if (!buffy && (descr == RESOLVERES_OK_EXISTING))
       MonitorContextDescriptor = info.monitor->descr;
-    return descr == RESOLVERES_OK_EXISTING ? 0 : -1;
+    rc = descr == RESOLVERES_OK_EXISTING ? 0 : -1;
+    goto cleanup;
   }
 
   mask = info.isdir ? INOTIFY_MASK_DIR : INOTIFY_MASK_FILE;
@@ -392,7 +407,8 @@ int mutt_monitor_add (BUFFY *buffy)
       || (descr = inotify_add_watch (INotifyFd, info.path, mask)) == -1)
   {
     dprint (2, (debugfile, "monitor: inotify_add_watch failed for '%s', errno=%d %s\n", info.path, errno, strerror(errno)));
-    return -1;
+    rc = -1;
+    goto cleanup;
   }
 
   dprint (3, (debugfile, "monitor: inotify_add_watch descriptor=%d for '%s'\n", descr, info.path));
@@ -400,7 +416,10 @@ int mutt_monitor_add (BUFFY *buffy)
     MonitorContextDescriptor = descr;
 
   monitor_create (&info, descr);
-  return 0;
+
+cleanup:
+  monitor_info_free (&info);
+  return rc;
 }
 
 /* mutt_monitor_remove: remove file monitor from BUFFY, or - if NULL - from Context.
@@ -413,6 +432,10 @@ int mutt_monitor_add (BUFFY *buffy)
 int mutt_monitor_remove (BUFFY *buffy)
 {
   MONITORINFO info, info2;
+  int rc = 0;
+
+  monitor_info_init (&info);
+  monitor_info_init (&info2);
 
   if (!buffy)
   {
@@ -421,7 +444,10 @@ int mutt_monitor_remove (BUFFY *buffy)
   }
 
   if (monitor_resolve (&info, buffy) != RESOLVERES_OK_EXISTING)
-    return 2;
+  {
+    rc = 2;
+    goto cleanup;
+  }
 
   if (Context)
   {
@@ -429,12 +455,18 @@ int mutt_monitor_remove (BUFFY *buffy)
     {
       if (monitor_resolve (&info2, NULL) == RESOLVERES_OK_EXISTING
           && info.st_ino == info2.st_ino && info.st_dev == info2.st_dev)
-        return 1;
+      {
+        rc = 1;
+        goto cleanup;
+      }
     }
     else
     {
       if (mutt_find_mailbox (Context->realpath))
-        return 1;
+      {
+        rc = 1;
+        goto cleanup;
+      }
     }
   }
 
@@ -443,5 +475,9 @@ int mutt_monitor_remove (BUFFY *buffy)
 
   monitor_delete (info.monitor);
   monitor_check_free ();
-  return 0;
+
+cleanup:
+  monitor_info_free (&info);
+  monitor_info_free (&info2);
+  return rc;
 }
