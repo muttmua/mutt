@@ -169,8 +169,6 @@ void mutt_debug (FILE *, const char *, ...);
 
 /* The actual library functions. */
 
-FILE *safe_fopen (const char *, const char *);
-
 char *mutt_concatn_path (char *, size_t, const char *, size_t, const char *, size_t);
 char *mutt_concat_path (char *, const char *, const char *, size_t);
 char *mutt_read_line (char *, size_t *, FILE *, int *, int);
@@ -207,12 +205,9 @@ int mutt_strncasecmp (const char *, const char *, size_t);
 int mutt_strncmp (const char *, const char *, size_t);
 int mutt_strcoll (const char *, const char *);
 int safe_asprintf (char **, const char *, ...);
-int safe_open (const char *, int);
 int safe_rename (const char *, const char *);
-int safe_symlink (const char *, const char *);
 int safe_fclose (FILE **);
 int safe_fsync_close (FILE **);
-int mutt_rmtree (const char *);
 
 size_t mutt_quote_filename (char *, size_t, const char *);
 size_t mutt_strlen (const char *);

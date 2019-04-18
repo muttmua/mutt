@@ -411,6 +411,12 @@ pid_t mutt_create_filter_fd (const char *, FILE **, FILE **, FILE **, int, int, 
 
 ADDRESS *alias_reverse_lookup (ADDRESS *);
 
+/* lib.c files transplanted to muttlib.c */
+int mutt_rmtree (const char *);
+FILE *safe_fopen (const char *, const char *);
+int safe_open (const char *, int);
+int safe_symlink (const char *, const char *);
+
 /* base64.c */
 void mutt_to_base64 (unsigned char*, const unsigned char*, size_t, size_t);
 int mutt_from_base64 (char*, const char*, size_t);
