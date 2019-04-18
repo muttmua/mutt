@@ -940,6 +940,7 @@ static int set_signer (gpgme_ctx_t ctx, int for_smime)
   gpgme_error_t err;
   gpgme_ctx_t listctx;
   gpgme_key_t key, key2;
+  char *fpr, *fpr2;
 
   if (for_smime)
     signid = (SmimeSignAs && *SmimeSignAs) ? SmimeSignAs : SmimeDefaultKey;
@@ -960,15 +961,25 @@ static int set_signer (gpgme_ctx_t ctx, int for_smime)
                   signid, gpgme_strerror (err));
       return -1;
     }
-  err = gpgme_op_keylist_next (listctx, &key2);
-  if (!err)
+  fpr = "fpr1";
+  if (key->subkeys)
+    fpr = key->subkeys->fpr ? key->subkeys->fpr : key->subkeys->keyid;
+  while (! gpgme_op_keylist_next (listctx, &key2))
     {
-      gpgme_key_unref (key);
-      gpgme_key_unref (key2);
-      gpgme_release (listctx);
-      mutt_error (_("ambiguous specification of secret key `%s'\n"),
-                  signid);
-      return -1;
+      fpr2 = "fpr2";
+      if (key2->subkeys)
+        fpr2 = key2->subkeys->fpr ? key2->subkeys->fpr : key2->subkeys->keyid;
+      if (mutt_strcmp(fpr, fpr2))
+        {
+          gpgme_key_unref (key);
+          gpgme_key_unref (key2);
+          gpgme_release (listctx);
+          mutt_error (_("ambiguous specification of secret key `%s'\n"),
+                      signid);
+          return -1;
+        } else {
+          gpgme_key_unref (key2);
+        }
     }
   gpgme_op_keylist_end (listctx);
   gpgme_release (listctx);
