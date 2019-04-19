@@ -1619,7 +1619,7 @@ typedef struct
   int SearchFlag;
   int SearchBack;
   const char *banner;
-  char *helpstr;
+  const char *helpstr;
   char *searchbuf;
   struct line_t *lineInfo;
   FILE *fp;
@@ -1910,8 +1910,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 {
   static char searchbuf[STRING] = "";
   char buffer[LONG_STRING];
-  char helpstr[SHORT_STRING*2];
-  char tmphelp[SHORT_STRING*2];
+  BUFFER *helpstr = NULL;
   int i, ch = 0, rc = -1;
   int err, first = 1;
   int r = -1, wrapped = 0, searchctx = 0;
@@ -1931,7 +1930,6 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
   rd.extra = extra;
   rd.indexlen = PagerIndexLines;
   rd.indicator = rd.indexlen / 3;
-  rd.helpstr = helpstr;
   rd.searchbuf = searchbuf;
   rd.has_types = (IsHeader(extra) || (flags & MUTT_SHOWCOLOR)) ? MUTT_TYPES : 0; /* main message or rfc822 attachment */
 
@@ -1967,19 +1965,22 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     (rd.lineInfo[i].syntax)[0].first = (rd.lineInfo[i].syntax)[0].last = -1;
   }
 
-  mutt_compile_help (helpstr, sizeof (helpstr), MENU_PAGER, PagerHelp);
+  helpstr = mutt_buffer_new ();
+  mutt_compile_help (buffer, sizeof (buffer), MENU_PAGER, PagerHelp);
+  mutt_buffer_strcpy (helpstr, buffer);
   if (IsHeader (extra))
   {
-    strfcpy (tmphelp, helpstr, sizeof (tmphelp));
     mutt_compile_help (buffer, sizeof (buffer), MENU_PAGER, PagerHelpExtra);
-    snprintf (helpstr, sizeof (helpstr), "%s %s", tmphelp, buffer);
+    mutt_buffer_addch (helpstr, ' ');
+    mutt_buffer_addstr (helpstr, buffer);
   }
   if (!InHelp)
   {
-    strfcpy (tmphelp, helpstr, sizeof (tmphelp));
     mutt_make_help (buffer, sizeof (buffer), _("Help"), MENU_PAGER, OP_HELP);
-    snprintf (helpstr, sizeof (helpstr), "%s %s", tmphelp, buffer);
+    mutt_buffer_addch (helpstr, ' ');
+    mutt_buffer_addstr (helpstr, buffer);
   }
+  rd.helpstr = mutt_b2s (helpstr);
 
   rd.index_status_window = safe_calloc (sizeof (mutt_window_t), 1);
   rd.index_window        = safe_calloc (sizeof (mutt_window_t), 1);
@@ -2952,6 +2953,7 @@ search_next:
   if (rd.index)
     mutt_menuDestroy(&rd.index);
 
+  mutt_buffer_free (&helpstr);
   FREE (&rd.index_status_window);
   FREE (&rd.index_window);
   FREE (&rd.pager_status_window);
