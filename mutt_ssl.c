@@ -1190,53 +1190,56 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   char buf[STRING];
   char title[STRING];
   MUTTMENU *menu = mutt_new_menu (MENU_GENERIC);
-  int done, row, i;
+  int done;
+  BUFFER *drow = NULL;
   unsigned u;
   FILE *fp;
   int allow_skip = 0;
 
   mutt_push_current_menu (menu);
 
-  menu->max = mutt_array_size (part) * 2 + 11;
-  menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
-  for (i = 0; i < menu->max; i++)
-    menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
+  drow = mutt_buffer_pool_get ();
 
-  row = 0;
-  strfcpy (menu->dialog[row], _("This certificate belongs to:"), SHORT_STRING);
-  row++;
+  mutt_menu_add_dialog_row (menu, _("This certificate belongs to:"));
   x509_subject = X509_get_subject_name (cert);
   for (u = 0; u < mutt_array_size (part); u++)
-    snprintf (menu->dialog[row++], SHORT_STRING, "   %s",
-              x509_get_part (x509_subject, part[u]));
+  {
+    mutt_buffer_printf (drow, "   %s", x509_get_part (x509_subject, part[u]));
+    mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
+  }
 
-  row++;
-  strfcpy (menu->dialog[row], _("This certificate was issued by:"), SHORT_STRING);
-  row++;
+  mutt_menu_add_dialog_row (menu, "");
+  mutt_menu_add_dialog_row (menu, _("This certificate was issued by:"));
   x509_issuer = X509_get_issuer_name (cert);
   for (u = 0; u < mutt_array_size (part); u++)
-    snprintf (menu->dialog[row++], SHORT_STRING, "   %s",
-              x509_get_part (x509_issuer, part[u]));
+  {
+    mutt_buffer_printf (drow, "   %s", x509_get_part (x509_issuer, part[u]));
+    mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
+  }
 
-  row++;
-  snprintf (menu->dialog[row++], SHORT_STRING, "%s", _("This certificate is valid"));
-  snprintf (menu->dialog[row++], SHORT_STRING, _("   from %s"),
+  mutt_menu_add_dialog_row (menu, "");
+  mutt_menu_add_dialog_row (menu, _("This certificate is valid"));
+  mutt_buffer_printf (drow, _("   from %s"),
             asn1time_to_string (X509_getm_notBefore (cert)));
-  snprintf (menu->dialog[row++], SHORT_STRING, _("     to %s"),
+  mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
+  mutt_buffer_printf (drow, _("     to %s"),
             asn1time_to_string (X509_getm_notAfter (cert)));
+  mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
 
-  row++;
+  mutt_menu_add_dialog_row (menu, "");
   buf[0] = '\0';
   x509_fingerprint (buf, sizeof (buf), cert, EVP_sha1);
-  snprintf (menu->dialog[row++], SHORT_STRING, _("SHA1 Fingerprint: %s"), buf);
+  mutt_buffer_printf (drow, _("SHA1 Fingerprint: %s"), buf);
+  mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
   buf[0] = '\0';
   buf[40] = '\0';  /* Ensure the second printed line is null terminated */
   x509_fingerprint (buf, sizeof (buf), cert, EVP_sha256);
   buf[39] = '\0';  /* Divide into two lines of output */
-  snprintf (menu->dialog[row++], SHORT_STRING, "%s%s",
-            _("SHA256 Fingerprint: "), buf);
-  snprintf (menu->dialog[row++], SHORT_STRING, "%*s%s",
+  mutt_buffer_printf (drow, "%s%s", _("SHA256 Fingerprint: "), buf);
+  mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
+  mutt_buffer_printf (drow, "%*s%s",
             (int)mutt_strlen (_("SHA256 Fingerprint: ")), "", buf + 40);
+  mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
 
   snprintf (title, sizeof (title),
 	    _("SSL Certificate check (certificate %d of %d in chain)"),
@@ -1334,6 +1337,8 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
     }
   }
   unset_option(OPTIGNOREMACROEVENTS);
+
+  mutt_buffer_pool_release (&drow);
   mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);
   dprint (2, (debugfile, "ssl interactive_check_cert: done=%d\n", done));
