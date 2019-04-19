@@ -181,7 +181,7 @@ static void menu_make_entry (char *s, int l, MUTTMENU *menu, int i)
 {
   if (menu->dialog)
   {
-    strncpy (s, menu->dialog[i], l);
+    strncpy (s, NONULL (menu->dialog[i]), l);
     menu->current = -1; /* hide menubar */
   }
   else
@@ -739,6 +739,16 @@ void mutt_menuDestroy (MUTTMENU **p)
   }
 
   FREE (p);		/* __FREE_CHECKED__ */
+}
+
+void mutt_menu_add_dialog_row (MUTTMENU *m, const char *row)
+{
+  if (m->dsize <= m->max)
+  {
+    m->dsize += 10;
+    safe_realloc (&m->dialog, m->dsize * sizeof (char *));
+  }
+  m->dialog[m->max++] = safe_strdup (row);
 }
 
 static MUTTMENU *get_current_menu (void)

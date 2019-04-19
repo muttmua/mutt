@@ -64,6 +64,7 @@ typedef struct menu_t
    * prompt keys override movement keys.
    */
   char **dialog;	/* dialog lines themselves */
+  int dsize;            /* number of allocated dialog lines */
   char *prompt;		/* prompt for user, similar to mutt_multi_choice */
   char *keys;		/* keys used in the prompt */
 
@@ -124,6 +125,7 @@ void mutt_ts_icon (char *);
 
 MUTTMENU *mutt_new_menu (int);
 void mutt_menuDestroy (MUTTMENU **);
+void mutt_menu_add_dialog_row (MUTTMENU *, const char *);
 void mutt_push_current_menu (MUTTMENU *);
 void mutt_pop_current_menu (MUTTMENU *);
 void mutt_set_current_menu_redraw (int);
