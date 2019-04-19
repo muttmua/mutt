@@ -1204,7 +1204,7 @@ void mutt_buffer_concat_path (BUFFER *d, const char *dir, const char *fname)
   mutt_buffer_printf (d, fmt, dir, fname);
 }
 
-void mutt_getcwd (BUFFER *cwd)
+const char *mutt_getcwd (BUFFER *cwd)
 {
   char *retval;
 
@@ -1219,6 +1219,8 @@ void mutt_getcwd (BUFFER *cwd)
     mutt_buffer_fix_dptr (cwd);
   else
     mutt_buffer_clear (cwd);
+
+  return retval;
 }
 
 /* Note this function uses a fixed size buffer of LONG_STRING and so
@@ -2205,7 +2207,7 @@ int mutt_rmtree (const char* path)
 {
   DIR* dirp;
   struct dirent* de;
-  char cur[_POSIX_PATH_MAX];
+  BUFFER *cur = NULL;
   struct stat statbuf;
   int rc = 0;
 
@@ -2214,68 +2216,75 @@ int mutt_rmtree (const char* path)
     dprint (1, (debugfile, "mutt_rmtree: error opening directory %s\n", path));
     return -1;
   }
+
+  /* We avoid using the buffer pool for this function, because it
+   * invokes recursively to an unknown depth. */
+  cur = mutt_buffer_new ();
+  mutt_buffer_increase_size (cur, _POSIX_PATH_MAX);
+
   while ((de = readdir (dirp)))
   {
     if (!strcmp (".", de->d_name) || !strcmp ("..", de->d_name))
       continue;
 
-    snprintf (cur, sizeof (cur), "%s/%s", path, de->d_name);
+    mutt_buffer_printf (cur, "%s/%s", path, de->d_name);
     /* XXX make nonrecursive version */
 
-    if (stat(cur, &statbuf) == -1)
+    if (stat(mutt_b2s (cur), &statbuf) == -1)
     {
       rc = 1;
       continue;
     }
 
     if (S_ISDIR (statbuf.st_mode))
-      rc |= mutt_rmtree (cur);
+      rc |= mutt_rmtree (mutt_b2s (cur));
     else
-      rc |= unlink (cur);
+      rc |= unlink (mutt_b2s (cur));
   }
   closedir (dirp);
 
   rc |= rmdir (path);
 
+  mutt_buffer_free (&cur);
   return rc;
 }
 
 /* Create a temporary directory next to a file name */
 
-static int mutt_mkwrapdir (const char *path, char *newfile, size_t nflen,
-                           char *newdir, size_t ndlen)
+static int mutt_mkwrapdir (const char *path, BUFFER *newfile, BUFFER *newdir)
 {
   const char *basename;
-  char parent[_POSIX_PATH_MAX];
+  BUFFER *parent = NULL;
   char *p;
+  int rc = 0;
 
-  strfcpy (parent, NONULL (path), sizeof (parent));
+  parent = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (parent, NONULL (path));
 
-  if ((p = strrchr (parent, '/')))
+  if ((p = strrchr (parent->data, '/')))
   {
     *p = '\0';
     basename = p + 1;
   }
   else
   {
-    strfcpy (parent, ".", sizeof (parent));
+    mutt_buffer_strcpy (parent, ".");
     basename = path;
   }
 
-  snprintf (newdir, ndlen, "%s/%s", parent, ".muttXXXXXX");
-  if (mkdtemp(newdir) == NULL)
+  mutt_buffer_printf (newdir, "%s/%s", mutt_b2s (parent), ".muttXXXXXX");
+  if (mkdtemp(newdir->data) == NULL)
   {
     dprint(1, (debugfile, "mutt_mkwrapdir: mkdtemp() failed\n"));
-    return -1;
+    rc = -1;
+    goto cleanup;
   }
 
-  if (snprintf (newfile, nflen, "%s/%s", newdir, NONULL(basename)) >= nflen)
-  {
-    rmdir(newdir);
-    dprint(1, (debugfile, "mutt_mkwrapdir: string was truncated\n"));
-    return -1;
-  }
-  return 0;
+  mutt_buffer_printf (newfile, "%s/%s", mutt_b2s (newdir), NONULL(basename));
+
+cleanup:
+  mutt_buffer_pool_release (&parent);
+  return rc;
 }
 
 static int mutt_put_file_in_place (const char *path, const char *safe_file, const char *safe_dir)
@@ -2292,30 +2301,37 @@ int safe_open (const char *path, int flags)
 {
   struct stat osb, nsb;
   int fd;
+  BUFFER *safe_file = NULL;
+  BUFFER *safe_dir = NULL;
 
   if (flags & O_EXCL)
   {
-    char safe_file[_POSIX_PATH_MAX];
-    char safe_dir[_POSIX_PATH_MAX];
+    safe_file = mutt_buffer_pool_get ();
+    safe_dir = mutt_buffer_pool_get ();
 
-    if (mutt_mkwrapdir (path, safe_file, sizeof (safe_file),
-			safe_dir, sizeof (safe_dir)) == -1)
-      return -1;
-
-    if ((fd = open (safe_file, flags, 0600)) < 0)
+    if (mutt_mkwrapdir (path, safe_file, safe_dir) == -1)
     {
-      rmdir (safe_dir);
-      return fd;
+      fd = -1;
+      goto cleanup;
+    }
+
+    if ((fd = open (mutt_b2s (safe_file), flags, 0600)) < 0)
+    {
+      rmdir (mutt_b2s (safe_dir));
+      goto cleanup;
     }
 
     /* NFS and I believe cygwin do not handle movement of open files well */
     close (fd);
-    if (mutt_put_file_in_place (path, safe_file, safe_dir) == -1)
-      return -1;
+    if (mutt_put_file_in_place (path, mutt_b2s (safe_file), mutt_b2s (safe_dir)) == -1)
+    {
+      fd = -1;
+      goto cleanup;
+    }
   }
 
   if ((fd = open (path, flags & ~O_EXCL, 0600)) < 0)
-    return fd;
+    goto cleanup;
 
   /* make sure the file is not symlink */
   if (lstat (path, &osb) < 0 || fstat (fd, &nsb) < 0 ||
@@ -2323,8 +2339,13 @@ int safe_open (const char *path, int flags)
   {
 /*    dprint (1, (debugfile, "safe_open(): %s is a symlink!\n", path)); */
     close (fd);
-    return (-1);
+    fd = -1;
+    goto cleanup;
   }
+
+cleanup:
+  mutt_buffer_pool_release (&safe_file);
+  mutt_buffer_pool_release (&safe_dir);
 
   return (fd);
 }
@@ -2374,16 +2395,25 @@ int safe_symlink(const char *oldpath, const char *newpath)
   }
   else
   {
-    char abs_oldpath[_POSIX_PATH_MAX];
+    BUFFER *abs_oldpath = NULL;
 
-    if ((getcwd (abs_oldpath, sizeof abs_oldpath) == NULL) ||
-	(strlen (abs_oldpath) + 1 + strlen (oldpath) + 1 > sizeof abs_oldpath))
-      return -1;
+    abs_oldpath = mutt_buffer_pool_get ();
 
-    strcat (abs_oldpath, "/");		/* __STRCAT_CHECKED__ */
-    strcat (abs_oldpath, oldpath);	/* __STRCAT_CHECKED__ */
-    if (symlink (abs_oldpath, newpath) == -1)
+    if (mutt_getcwd (abs_oldpath) == NULL)
+    {
+      mutt_buffer_pool_release (&abs_oldpath);
       return -1;
+    }
+
+    mutt_buffer_addch (abs_oldpath, '/');
+    mutt_buffer_addstr (abs_oldpath, oldpath);
+    if (symlink (mutt_b2s (abs_oldpath), newpath) == -1)
+    {
+      mutt_buffer_pool_release (&abs_oldpath);
+      return -1;
+    }
+
+    mutt_buffer_pool_release (&abs_oldpath);
   }
 
   if (stat(oldpath, &osb) == -1 || stat(newpath, &nsb) == -1
