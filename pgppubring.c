@@ -86,7 +86,7 @@ int main (int argc, char * const argv[])
   char *env_pgppath, *env_home;
 
   char pgppath[_POSIX_PATH_MAX];
-  char kring[_POSIX_PATH_MAX];
+  char kring[_POSIX_PATH_MAX+12];
 
   while ((c = getopt (argc, argv, "f25sk:S")) != EOF)
   {
