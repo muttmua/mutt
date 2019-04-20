@@ -296,49 +296,6 @@ mutt_free_compress_info (CONTEXT *ctx)
 }
 
 /**
- * escape_path - Escapes single quotes in a path for a command string.
- * @src - the path to escape.
- *
- * Returns: a pointer to the escaped string.
- */
-static char *
-escape_path (char *src)
-{
-  static char dest[HUGE_STRING];
-  char *destp = dest;
-  int destsize = 0;
-
-  if (!src)
-    return NULL;
-
-  while (*src && (destsize < sizeof(dest) - 1))
-  {
-    if (*src != '\'')
-    {
-      *destp++ = *src++;
-      destsize++;
-    }
-    else
-    {
-      /* convert ' into '\'' */
-      if (destsize + 4 < sizeof(dest))
-      {
-        *destp++ = *src++;
-        *destp++ = '\\';
-        *destp++ = '\'';
-        *destp++ = '\'';
-        destsize += 4;
-      }
-      else
-        break;
-    }
-  }
-  *destp = '\0';
-
-  return dest;
-}
-
-/**
  * cb_format_str - Expand the filenames in the command string
  * @dest:        Buffer in which to save string
  * @destlen:     Buffer length
@@ -362,22 +319,33 @@ cb_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const 
                const char *fmt, const char *ifstring, const char *elsestring,
                unsigned long data, format_flag flags)
 {
+  CONTEXT *ctx = (CONTEXT *) data;
+  BUFFER *quoted = NULL;
+
   if (!dest || (data == 0))
     return src;
 
-  CONTEXT *ctx = (CONTEXT *) data;
+  /* NOTE the compressed file config vars expect %f and %t to be
+   * surrounded by '' (unlike other Mutt config vars, which add the
+   * outer quotes for the user).  This is why we use the
+   * _mutt_buffer_quote_filename() form with add_outer of 0. */
+  quoted = mutt_buffer_pool_get ();
 
   switch (op)
   {
     case 'f':
       /* Compressed file */
-      snprintf (dest, destlen, "%s", NONULL (escape_path (ctx->realpath)));
+      _mutt_buffer_quote_filename (quoted, ctx->realpath, 0);
+      snprintf (dest, destlen, "%s", mutt_b2s (quoted));
       break;
     case 't':
       /* Plaintext, temporary file */
-      snprintf (dest, destlen, "%s", NONULL (escape_path (ctx->path)));
+      _mutt_buffer_quote_filename (quoted, ctx->path, 0);
+      snprintf (dest, destlen, "%s", mutt_b2s (quoted));
       break;
   }
+
+  mutt_buffer_pool_release (&quoted);
   return src;
 }
 

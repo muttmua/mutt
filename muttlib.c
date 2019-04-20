@@ -1003,14 +1003,15 @@ void mutt_pretty_size (char *s, size_t len, LOFF_T n)
   }
 }
 
-void mutt_buffer_quote_filename (BUFFER *d, const char *f)
+void _mutt_buffer_quote_filename (BUFFER *d, const char *f, int add_outer)
 {
   mutt_buffer_clear (d);
 
   if (!f)
     return;
 
-  mutt_buffer_addch (d, '\'');
+  if (add_outer)
+    mutt_buffer_addch (d, '\'');
 
   for (; *f; f++)
   {
@@ -1025,7 +1026,8 @@ void mutt_buffer_quote_filename (BUFFER *d, const char *f)
       mutt_buffer_addch (d, *f);
   }
 
-  mutt_buffer_addch (d, '\'');
+  if (add_outer)
+    mutt_buffer_addch (d, '\'');
 }
 
 static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%/";
