@@ -294,7 +294,7 @@ static void encode_8bit (FGETCONV *fc, FILE *fout, int istext)
 int mutt_write_mime_header (BODY *a, FILE *f)
 {
   PARAMETER *p;
-  char buffer[HUGE_STRING];
+  char buffer[STRING];
   char *t;
   char *fn;
   int len;
