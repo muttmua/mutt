@@ -5,7 +5,7 @@
 # 2007-2018 Adam Gołębiowski <adamg@pld-linux.org>
 msgid ""
 msgstr ""
-"Project-Id-Version: mutt-1.5.17\n"
+"Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-25 09:46-0800\n"
 "PO-Revision-Date: 2018-11-28 07:19+0100\n"

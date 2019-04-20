@@ -5,7 +5,7 @@
 # Ronny Haryanto <ronny-mutt-po-file@haryan.to>, 1999-2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.5.17\n"
+"Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-25 09:46-0800\n"
 "PO-Revision-Date: 2007-11-07 10:39+1100\n"

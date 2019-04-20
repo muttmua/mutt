@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.95.6i\n"
+"Project-Id-Version: Mutt 0.95.6i\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-25 09:46-0800\n"
 "PO-Revision-Date: 1999-07-29 00:00+0100\n"
