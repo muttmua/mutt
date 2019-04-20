@@ -137,7 +137,7 @@ static REMAILER **mix_type2_list (size_t *l)
   pid_t mm_pid;
   int devnull;
 
-  char cmd[HUGE_STRING + _POSIX_PATH_MAX];
+  BUFFER *cmd = NULL;
   char line[HUGE_STRING];
   char *t;
 
@@ -150,13 +150,18 @@ static REMAILER **mix_type2_list (size_t *l)
   if ((devnull = open ("/dev/null", O_RDWR)) == -1)
     return NULL;
 
-  snprintf (cmd, sizeof (cmd), "%s -T", Mixmaster);
+  cmd = mutt_buffer_pool_get ();
+  mutt_buffer_printf (cmd, "%s -T", Mixmaster);
 
-  if ((mm_pid = mutt_create_filter_fd (cmd, NULL, &fp, NULL, devnull, -1, devnull)) == -1)
+  if ((mm_pid = mutt_create_filter_fd (mutt_b2s (cmd), NULL, &fp, NULL, devnull,
+                                       -1, devnull)) == -1)
   {
+    mutt_buffer_pool_release (&cmd);
     close (devnull);
     return NULL;
   }
+
+  mutt_buffer_pool_release (&cmd);
 
   /* first, generate the "random" remailer */
 
