@@ -256,7 +256,6 @@ static void buffy_free (BUFFY **mailbox)
 int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *err)
 {
   BUFFY **tmp,*tmp1;
-  char buf[_POSIX_PATH_MAX];
   struct stat sb;
   char f1[PATH_MAX];
   char *p;
@@ -264,9 +263,8 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
   while (MoreArgs (s))
   {
     mutt_extract_token (path, s, 0);
-    strfcpy (buf, path->data, sizeof (buf));
 
-    if (data == MUTT_UNMAILBOXES && mutt_strcmp(buf,"*") == 0)
+    if (data == MUTT_UNMAILBOXES && mutt_strcmp(mutt_b2s (path),"*") == 0)
     {
       for (tmp = &Incoming; *tmp;)
       {
@@ -283,18 +281,18 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       return 0;
     }
 
-    mutt_expand_path (buf, sizeof (buf));
+    mutt_buffer_expand_path (path);
 
     /* Skip empty tokens. */
-    if (!*buf) continue;
+    if (!mutt_buffer_len (path)) continue;
 
     /* avoid duplicates */
-    p = realpath (buf, f1);
+    p = realpath (mutt_b2s (path), f1);
     for (tmp = &Incoming; *tmp; tmp = &((*tmp)->next))
     {
-      if (mutt_strcmp (p ? p : buf, (*tmp)->realpath) == 0)
+      if (mutt_strcmp (p ? p : mutt_b2s (path), (*tmp)->realpath) == 0)
       {
-	dprint(3,(debugfile,"mailbox '%s' already registered as '%s'\n", buf,
+	dprint(3,(debugfile,"mailbox '%s' already registered as '%s'\n", mutt_b2s (path),
                   mutt_b2s ((*tmp)->pathbuf)));
 	break;
       }
@@ -319,7 +317,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
 
     if (!*tmp)
     {
-      *tmp = buffy_new (buf);
+      *tmp = buffy_new (mutt_b2s (path));
 #ifdef USE_SIDEBAR
       mutt_sb_notify_mailbox (*tmp, 1);
 #endif
