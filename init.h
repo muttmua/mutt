@@ -1687,7 +1687,8 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** This variable specifies which files to consult when attempting to
-  ** display MIME bodies not directly supported by Mutt.
+  ** display MIME bodies not directly supported by Mutt.  The default value
+  ** is generated during startup: see the ``$mailcap'' section of the manual.
   */
   { "mailcap_sanitize",	DT_BOOL, R_NONE, OPTMAILCAPSANITIZE, 1 },
   /*
