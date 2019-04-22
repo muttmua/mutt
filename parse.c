@@ -1520,16 +1520,18 @@ ADDRESS *mutt_parse_adrlist (ADDRESS *p, const char *s)
   /* check for a simple whitespace separated list of addresses */
   if ((q = strpbrk (s, "\"<>():;,\\")) == NULL)
   {
-    char tmp[HUGE_STRING];
+    BUFFER *tmp;
     char *r;
 
-    strfcpy (tmp, s, sizeof (tmp));
-    r = tmp;
+    tmp = mutt_buffer_pool_get ();
+    mutt_buffer_strcpy (tmp, s);
+    r = tmp->data;
     while ((r = strtok (r, " \t")) != NULL)
     {
       p = rfc822_parse_adrlist (p, r);
       r = NULL;
     }
+    mutt_buffer_pool_release (&tmp);
   }
   else
     p = rfc822_parse_adrlist (p, s);
