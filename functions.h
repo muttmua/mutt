@@ -226,6 +226,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "redraw-screen",	OP_REDRAW,			"\014" },
   { "mail",		OP_MAIL,			"m" },
   { "mark-as-new",	OP_TOGGLE_NEW,			"N" },
+  { "toggle-write",	OP_TOGGLE_WRITE,		"%" },
   { "search-next",	OP_SEARCH_NEXT,			"n" },
   { "next-thread",	OP_MAIN_NEXT_THREAD,		"\016" },
   { "next-subthread",	OP_MAIN_NEXT_SUBTHREAD,		"\033n" },

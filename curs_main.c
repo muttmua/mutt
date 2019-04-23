@@ -1880,7 +1880,15 @@ int mutt_index_menu (void)
 
 	CHECK_IN_MAILBOX;
 	if (mx_toggle_write (Context) == 0)
-	  menu->redraw |= REDRAW_STATUS;
+        {
+	  if (menu->menu == MENU_PAGER)
+          {
+            op = OP_DISPLAY_MESSAGE;
+            continue;
+          }
+          else
+            menu->redraw |= REDRAW_STATUS;
+        }
 	break;
 
       case OP_MAIN_NEXT_THREAD:
