@@ -46,7 +46,8 @@ int imap_browse (const char* path, struct browser_state* state)
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char munged_mbox[LONG_STRING];
-  char list_cmd[5];
+  char list_cmd[18];
+  int len;
   int n;
   int nsup;
   char ctmp;
@@ -62,10 +63,25 @@ int imap_browse (const char* path, struct browser_state* state)
 
   save_lsub = option (OPTIMAPCHECKSUBSCRIBED);
   unset_option (OPTIMAPCHECKSUBSCRIBED);
-  strfcpy (list_cmd, option (OPTIMAPLSUB) ? "LSUB" : "LIST", sizeof (list_cmd));
 
   if (!(idata = imap_conn_find (&(mx.account), 0)))
     goto fail;
+
+  if (option (OPTIMAPLSUB))
+  {
+    const char *lsub_cmd = "LSUB";
+
+    /* RFC3348 section 3 states LSUB is unreliable for hierarchy information.
+     * The newer LIST extensions are designed for this.
+     */
+    if (mutt_bit_isset (idata->capabilities, LIST_EXTENDED))
+      lsub_cmd = "LIST (SUBSCRIBED)";
+    strfcpy (list_cmd, lsub_cmd, sizeof (list_cmd));
+  }
+  else
+  {
+    strfcpy (list_cmd, "LIST", sizeof (list_cmd));
+  }
 
   mutt_message _("Getting folder list...");
 
@@ -89,7 +105,9 @@ int imap_browse (const char* path, struct browser_state* state)
     /* if our target exists and has inferiors, enter it if we
      * aren't already going to */
     imap_munge_mbox_name (idata, munged_mbox, sizeof (munged_mbox), mbox);
-    snprintf (buf, sizeof (buf), "%s \"\" %s", list_cmd, munged_mbox);
+    len = snprintf (buf, sizeof (buf), "%s \"\" %s", list_cmd, munged_mbox);
+    if (mutt_bit_isset (idata->capabilities, LIST_EXTENDED))
+      snprintf (buf + len, sizeof(buf) - len, " RETURN (CHILDREN)");
     imap_cmd_start (idata, buf);
     idata->cmdtype = IMAP_CT_LIST;
     idata->cmddata = &list;
@@ -181,7 +199,9 @@ int imap_browse (const char* path, struct browser_state* state)
   snprintf (buf, sizeof (buf), "%s%%", mbox);
   imap_munge_mbox_name (idata, munged_mbox, sizeof (munged_mbox), buf);
   dprint (3, (debugfile, "%s\n", munged_mbox));
-  snprintf (buf, sizeof (buf), "%s \"\" %s", list_cmd, munged_mbox);
+  len = snprintf (buf, sizeof (buf), "%s \"\" %s", list_cmd, munged_mbox);
+  if (mutt_bit_isset (idata->capabilities, LIST_EXTENDED))
+    snprintf (buf + len, sizeof(buf) - len, " RETURN (CHILDREN)");
   if (browse_add_list_result (idata, buf, state, 0))
     goto fail;
 

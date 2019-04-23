@@ -120,6 +120,7 @@ enum
   ENABLE,                       /* RFC 5161 */
   CONDSTORE,                    /* RFC 7162 */
   QRESYNC,                      /* RFC 7162 */
+  LIST_EXTENDED,                /* RFC 5258: IMAP4 - LIST Command Extensions */
 
   CAPMAX
 };

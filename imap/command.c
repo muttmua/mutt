@@ -73,6 +73,7 @@ static const char * const Capabilities[] = {
   "ENABLE",
   "CONDSTORE",
   "QRESYNC",
+  "LIST-EXTENDED",
 
   NULL
 };
