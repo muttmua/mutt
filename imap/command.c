@@ -928,10 +928,11 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
   {
     if (!ascii_strncasecmp (s, "\\NoSelect", 9))
       list->noselect = 1;
+    else if (!ascii_strncasecmp (s, "\\NonExistent", 12)) /* rfc5258 */
+      list->noselect = 1;
     else if (!ascii_strncasecmp (s, "\\NoInferiors", 12))
       list->noinferiors = 1;
-    /* See draft-gahrns-imap-child-mailbox-?? */
-    else if (!ascii_strncasecmp (s, "\\HasNoChildren", 14))
+    else if (!ascii_strncasecmp (s, "\\HasNoChildren", 14)) /* rfc5258*/
       list->noinferiors = 1;
 
     s = imap_next_word (s);
@@ -958,12 +959,30 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
       idata->status = IMAP_FATAL;
       return;
     }
+
+    if (strlen(idata->buf) < litlen)
+    {
+      dprint (1, (debugfile, "Error parsing LIST mailbox\n"));
+      return;
+    }
+
     list->name = idata->buf;
+    s = list->name + litlen;
+    if (*s)
+    {
+      *s = '\0';
+      s++;
+      SKIPWS(s);
+    }
   }
   else
   {
-    imap_unmunge_mbox_name (idata, s);
     list->name = s;
+    /* Exclude rfc5258 RECURSIVEMATCH CHILDINFO suffix */
+    s = imap_next_word (s);
+    if (*s)
+      *(s - 1) = '\0';
+    imap_unmunge_mbox_name (idata, list->name);
   }
 
   if (list->name[0] == '\0')

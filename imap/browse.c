@@ -46,7 +46,7 @@ int imap_browse (const char* path, struct browser_state* state)
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char munged_mbox[LONG_STRING];
-  char list_cmd[18];
+  const char *list_cmd;
   int len;
   int n;
   int nsup;
@@ -69,18 +69,17 @@ int imap_browse (const char* path, struct browser_state* state)
 
   if (option (OPTIMAPLSUB))
   {
-    const char *lsub_cmd = "LSUB";
-
     /* RFC3348 section 3 states LSUB is unreliable for hierarchy information.
      * The newer LIST extensions are designed for this.
      */
     if (mutt_bit_isset (idata->capabilities, LIST_EXTENDED))
-      lsub_cmd = "LIST (SUBSCRIBED)";
-    strfcpy (list_cmd, lsub_cmd, sizeof (list_cmd));
+      list_cmd = "LIST (SUBSCRIBED RECURSIVEMATCH)";
+    else
+      list_cmd = "LSUB";
   }
   else
   {
-    strfcpy (list_cmd, "LIST", sizeof (list_cmd));
+    list_cmd = "LIST";
   }
 
   mutt_message _("Getting folder list...");
