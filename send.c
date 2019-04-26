@@ -31,6 +31,7 @@
 #include "mutt_idna.h"
 #include "url.h"
 #include "rfc3676.h"
+#include "attach.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -390,6 +391,112 @@ static int include_forward (CONTEXT *ctx, HEADER *cur, FILE *out)
   mutt_forward_trailer (ctx, cur, out);
   return 0;
 }
+
+static int inline_forward_attachments (CONTEXT *ctx, HEADER *cur,
+                                       BODY ***plast, int *forwardq)
+{
+  BODY **last = *plast, *body;
+  MESSAGE *msg = NULL;
+  ATTACH_CONTEXT *actx = NULL;
+  int rc = 0, i;
+
+  mutt_parse_mime_message (ctx, cur);
+  mutt_message_hook (ctx, cur, MUTT_MESSAGEHOOK);
+
+  if ((msg = mx_open_message (ctx, cur->msgno)) == NULL)
+    return -1;
+
+  actx = safe_calloc (sizeof(ATTACH_CONTEXT), 1);
+  actx->hdr = cur;
+  actx->root_fp = msg->fp;
+
+  mutt_generate_recvattach_list (actx, actx->hdr, actx->hdr->content,
+                                 actx->root_fp, -1, 0, 0);
+
+  for (i = 0; i < actx->idxlen; i++)
+  {
+    body = actx->idx[i]->content;
+    if ((body->type != TYPEMULTIPART) &&
+	!mutt_can_decode (body) &&
+        !(body->type == TYPEAPPLICATION &&
+          (!ascii_strcasecmp (body->subtype, "pgp-signature") ||
+           !ascii_strcasecmp (body->subtype, "x-pkcs7-signature") ||
+           !ascii_strcasecmp (body->subtype, "pkcs7-signature"))))
+    {
+      /* Ask the quadoption only once */
+      if (*forwardq == -1)
+      {
+        *forwardq = query_quadoption (OPT_FORWATTS,
+        /* L10N:
+           This is the prompt for $forward_attachments.
+           When inline forwarding ($mime_forward answered "no"), this prompts
+           whether to add non-decodable attachments from the original email.
+           Text/plain parts and the like will be already be included in the
+           message contents, but other attachment, such as PDF files, will also
+           be added as attachments to the new mail, is this is answered yes.
+        */
+                                      _("Forward attachments?"));
+        if (*forwardq != MUTT_YES)
+        {
+          if (*forwardq == -1)
+            rc = -1;
+          goto cleanup;
+        }
+      }
+      if (mutt_copy_body (actx->idx[i]->fp, last, body) == -1)
+      {
+        rc = -1;
+	goto cleanup;
+      }
+      last = &((*last)->next);
+    }
+  }
+
+cleanup:
+  *plast = last;
+  mx_close_message (ctx, &msg);
+  mutt_free_attach_context (&actx);
+  return rc;
+}
+
+int mutt_inline_forward (CONTEXT *ctx, HEADER *msg, HEADER *cur, FILE *out)
+{
+  int i, forwardq = -1;
+  BODY **last;
+
+  if (cur)
+    include_forward (ctx, cur, out);
+  else
+    for (i = 0; i < ctx->vcount; i++)
+      if (ctx->hdrs[ctx->v2r[i]]->tagged)
+        include_forward (ctx, ctx->hdrs[ctx->v2r[i]], out);
+
+  if (option (OPTFORWDECODE) && (quadoption (OPT_FORWATTS) != MUTT_NO))
+  {
+    last = &msg->content;
+    while (*last)
+      last = &((*last)->next);
+
+    if (cur)
+    {
+      if (inline_forward_attachments (ctx, cur, &last, &forwardq) != 0)
+        return -1;
+    }
+    else
+      for (i = 0; i < ctx->vcount; i++)
+        if (ctx->hdrs[ctx->v2r[i]]->tagged)
+        {
+          if (inline_forward_attachments (ctx, ctx->hdrs[ctx->v2r[i]],
+                                          &last, &forwardq) != 0)
+            return -1;
+          if (forwardq == MUTT_NO)
+            break;
+        }
+  }
+
+  return 0;
+}
+
 
 void mutt_make_attribution (CONTEXT *ctx, HEADER *cur, FILE *out)
 {
@@ -838,12 +945,8 @@ generate_body (FILE *tempfp,	/* stream for outgoing message */
     }
     else if (i != -1)
     {
-      if (cur)
-	include_forward (ctx, cur, tempfp);
-      else
-	for (i=0; i < ctx->vcount; i++)
-	  if (ctx->hdrs[ctx->v2r[i]]->tagged)
-	    include_forward (ctx, ctx->hdrs[ctx->v2r[i]], tempfp);
+      if (mutt_inline_forward (ctx, msg, cur, tempfp) != 0)
+        return -1;
     }
     else if (i == -1)
       return -1;

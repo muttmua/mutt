@@ -1013,6 +1013,15 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see the $$record variable.
   */
+  { "forward_attachments", DT_QUAD, R_NONE, OPT_FORWATTS, MUTT_ASKYES },
+  /*
+  ** .pp
+  ** When forwarding inline (i.e. $$mime_forward \fIunset\fP or
+  ** answered with ``no'' and $$forward_decode \fIset\fP), attachments
+  ** which cannot be decoded in a reasonable manner will be attached
+  ** to the newly composed message if this quadoption is \fIset\fP or
+  ** answered with ``yes''.
+  */
   { "forward_attribution_intro", DT_STR, R_NONE, UL &ForwardAttrIntro, UL "----- Forwarded message from %f -----" },
   /*
   ** .pp

@@ -923,13 +923,13 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
   return op;
 }
 
-static void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
-                                           HEADER *hdr,
-                                           BODY *parts,
-                                           FILE *fp,
-                                           int parent_type,
-                                           int level,
-                                           int decrypted)
+void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx,
+                                    HEADER *hdr,
+                                    BODY *parts,
+                                    FILE *fp,
+                                    int parent_type,
+                                    int level,
+                                    int decrypted)
 {
   ATTACHPTR *new;
   BODY *m;

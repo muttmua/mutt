@@ -81,4 +81,8 @@ void mutt_actx_add_body (ATTACH_CONTEXT *actx, BODY *new_body);
 void mutt_actx_free_entries (ATTACH_CONTEXT *actx);
 void mutt_free_attach_context (ATTACH_CONTEXT **pactx);
 
+/* This function is also used in send.c for inline-forwarding attachments */
+void mutt_generate_recvattach_list (ATTACH_CONTEXT *actx, HEADER *hdr, BODY *parts,
+                                    FILE *fp, int parent_type, int level, int decrypted);
+
 #endif /* _ATTACH_H_ */
