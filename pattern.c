@@ -1656,6 +1656,7 @@ int mutt_search_command (int cur, int op)
       mutt_buffer_init (&err);
       set_option (OPTSEARCHINVALID);
       strfcpy (LastSearch, buf, sizeof (LastSearch));
+      strfcpy (LastSearchExpn, mutt_b2s (temp), sizeof (LastSearchExpn));
       mutt_message _("Compiling search pattern...");
       mutt_pattern_free (&SearchPattern);
       err.dsize = STRING;
@@ -1666,6 +1667,7 @@ int mutt_search_command (int cur, int op)
 	mutt_error ("%s", err.data);
 	FREE (&err.data);
 	LastSearch[0] = '\0';
+	LastSearchExpn[0] = '\0';
 	return (-1);
       }
       FREE (&err.data);
