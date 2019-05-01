@@ -11,6 +11,32 @@ The keys used are:
 1.12.0 (unreleased)
 
   ! $ssl_use_tlsv1 and ssl_use_tlsv1_1 now default to unset.
+  + $auto_subscribe, when set, automatically adds an email with the List-Post
+    header to the subscribe list.
+  ! Fcc now occurs after sending a message instead of just before sending.
+    If the fcc fails, mutt will prompt to try again, or to try another mailbox.
+  + Basic protected header ("memory hole") support added for the Subject header.
+    See the config vars: $crypt_protected_headers_read,
+    $crypt_protected_headers_save, $crypt_protected_headers_subject,
+    and $crypt_protected_headers_write.
+  ! Color names can be prefixed with "light" in addition to "bright".  "bright"
+    colors are bold face, while "light" are non-bold.
+  ! Color lines can include an attribute (e.g. bold, underline).
+  ! $pgp_use_gpg_agent defaults set.
+  + <descend-directory> in the browser menu allows entering nested maildir
+    directories.
+  + <group-chat-reply> replies to all, but preserves To recipients in the reply.
+  + $include_encrypted, default set, prevents separately encrypted contents
+    from being included in a reply.
+  ! With gpgme >= 1.11, recipient keys with a trailing '!' now force subkey use,
+    as with classic gpg.
+  ! In send mode, %{charset} mailcap expansion uses the current charset of the
+    file.
+  + $imap_fetch_chunk_size allows fetching new headers in groups of this size.
+    This might help with timeouts during opening of huge mailboxes.
+  ! <toggle-write> can be invoked from the pager too.
+  + The $forward_attachments quadoption allows including attachments in
+    inline-replies.
 
 1.11.4 (2019-03-13):
 
