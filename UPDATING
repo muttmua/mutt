@@ -10,7 +10,7 @@ The keys used are:
 
 1.12.0 (unreleased)
 
-  ! $ssl_use_tlsv1 and ssl_use_tlsv1_1 now default to unset.
+  ! $ssl_use_tlsv1 and $ssl_use_tlsv1_1 now default to unset.
   + $auto_subscribe, when set, automatically adds an email with the List-Post
     header to the subscribe list.
   ! Fcc now occurs after sending a message.  If the fcc fails, mutt will prompt
