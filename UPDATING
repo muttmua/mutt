@@ -27,7 +27,8 @@ The keys used are:
     directories.
   + <group-chat-reply> replies to all, but preserves To recipients in the reply.
   + $include_encrypted, default unset, prevents separately encrypted contents
-    from being included in a reply.  This helps prevent a decryption oracle attack.
+    from being included in a reply.  This helps to prevent a decryption oracle
+    attack.
   ! With gpgme >= 1.11, recipient keys with a trailing '!' now force subkey use,
     as with classic gpg.
   ! In send mode, %{charset} mailcap expansion uses the current charset of the
