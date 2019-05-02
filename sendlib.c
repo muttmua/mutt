@@ -294,12 +294,12 @@ static void encode_8bit (FGETCONV *fc, FILE *fout, int istext)
 int mutt_write_mime_header (BODY *a, FILE *f)
 {
   PARAMETER *p;
+  PARAMETER *param_conts, *cont;
   char buffer[STRING];
   char *t;
   char *fn;
   int len;
   int tmplen;
-  int encode;
 
   fprintf (f, "Content-Type: %s/%s", TYPE (a), a->subtype);
 
@@ -309,43 +309,41 @@ int mutt_write_mime_header (BODY *a, FILE *f)
 
     for (p = a->parameter; p; p = p->next)
     {
-      char *tmp;
-
       if (!p->value)
 	continue;
 
-      fputc (';', f);
-
-      buffer[0] = 0;
-      tmp = safe_strdup (p->value);
-      encode = rfc2231_encode_string (&tmp);
-      rfc822_cat (buffer, sizeof (buffer), tmp, MimeSpecials);
-
-      /* Dirty hack to make messages readable by Outlook Express
-       * for the Mac: force quotes around the boundary parameter
-       * even when they aren't needed.
-       */
-
-      if (!ascii_strcasecmp (p->attribute, "boundary") && !strcmp (buffer, tmp))
-	snprintf (buffer, sizeof (buffer), "\"%s\"", tmp);
-
-      FREE (&tmp);
-
-      tmplen = mutt_strlen (buffer) + mutt_strlen (p->attribute) + 1;
-
-      if (len + tmplen + 2 > 76)
+      param_conts = rfc2231_encode_string (p->attribute, p->value);
+      for (cont = param_conts; cont; cont = cont->next)
       {
-	fputs ("\n\t", f);
-	len = tmplen + 8;
-      }
-      else
-      {
-	fputc (' ', f);
-	len += tmplen + 1;
+        fputc (';', f);
+
+        buffer[0] = 0;
+        rfc822_cat (buffer, sizeof (buffer), cont->value, MimeSpecials);
+
+        /* Dirty hack to make messages readable by Outlook Express
+         * for the Mac: force quotes around the boundary parameter
+         * even when they aren't needed.
+         */
+        if (!ascii_strcasecmp (cont->attribute, "boundary") &&
+            !mutt_strcmp (buffer, cont->value))
+          snprintf (buffer, sizeof (buffer), "\"%s\"", cont->value);
+
+        tmplen = mutt_strlen (buffer) + mutt_strlen (cont->attribute) + 1;
+        if (len + tmplen + 2 > 76)
+        {
+          fputs ("\n\t", f);
+          len = tmplen + 1;
+        }
+        else
+        {
+          fputc (' ', f);
+          len += tmplen + 1;
+        }
+
+        fprintf (f, "%s=%s", cont->attribute, buffer);
       }
 
-      fprintf (f, "%s%s=%s", p->attribute, encode ? "*" : "", buffer);
-
+      mutt_free_parameter (&param_conts);
     }
   }
 
@@ -365,6 +363,7 @@ int mutt_write_mime_header (BODY *a, FILE *f)
     if (a->disposition < sizeof(dispstr)/sizeof(char*))
     {
       fprintf (f, "Content-Disposition: %s", dispstr[a->disposition]);
+      len = 21 + mutt_strlen (dispstr[a->disposition]);
 
       if (a->use_disp)
       {
@@ -373,20 +372,35 @@ int mutt_write_mime_header (BODY *a, FILE *f)
 
 	if (fn)
 	{
-	  char *tmp;
-
 	  /* Strip off the leading path... */
 	  if ((t = strrchr (fn, '/')))
 	    t++;
 	  else
 	    t = fn;
 
-	  buffer[0] = 0;
-	  tmp = safe_strdup (t);
-	  encode = rfc2231_encode_string (&tmp);
-	  rfc822_cat (buffer, sizeof (buffer), tmp, MimeSpecials);
-	  FREE (&tmp);
-	  fprintf (f, "; filename%s=%s", encode ? "*" : "", buffer);
+          param_conts = rfc2231_encode_string ("filename", t);
+          for (cont = param_conts; cont; cont = cont->next)
+          {
+            fputc (';', f);
+            buffer[0] = 0;
+            rfc822_cat (buffer, sizeof (buffer), cont->value, MimeSpecials);
+
+            tmplen = mutt_strlen (buffer) + mutt_strlen (cont->attribute) + 1;
+            if (len + tmplen + 2 > 76)
+            {
+              fputs ("\n\t", f);
+              len = tmplen + 1;
+            }
+            else
+            {
+              fputc (' ', f);
+              len += tmplen + 1;
+            }
+
+            fprintf (f, "%s=%s", cont->attribute, buffer);
+          }
+
+          mutt_free_parameter (&param_conts);
 	}
       }
 
