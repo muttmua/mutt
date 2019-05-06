@@ -309,7 +309,7 @@ int mutt_write_mime_header (BODY *a, FILE *f)
 
     for (p = a->parameter; p; p = p->next)
     {
-      if (!p->value)
+      if (!(p->attribute && p->value))
 	continue;
 
       param_conts = rfc2231_encode_string (p->attribute, p->value);
