@@ -9807,7 +9807,7 @@ set from = "user@example.com"
 # Some people use mbsync or getmail to retrieve their mail locally.
 # $spoolfile will need to be adjusted to where your INBOX is.
 #
-set folder = ~/Mail                # This has the shorcut '+' or '='
+set folder = ~/Mail                # This has the shortcut '+' or '='
 set spoolfile = /var/mail/user     # This has the shortcut '!'
 set record = "+sent"
 set trash = "+trash"
