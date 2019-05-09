@@ -2283,6 +2283,8 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This is a format string, see the $$pgp_decode_command command for
   ** possible \fCprintf(3)\fP-like sequences.
+  ** Note that in this case, %r expands to the search string, which is a list of
+  ** one or more quoted values such as email address, name, or keyid.
   ** (PGP only)
   */
   { "pgp_list_secring_command",	DT_STR, R_NONE, UL &PgpListSecringCommand, 0},
@@ -2303,6 +2305,8 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This is a format string, see the $$pgp_decode_command command for
   ** possible \fCprintf(3)\fP-like sequences.
+  ** Note that in this case, %r expands to the search string, which is a list of
+  ** one or more quoted values such as email address, name, or keyid.
   ** (PGP only)
   */
   { "pgp_long_ids",	DT_BOOL, R_NONE, OPTPGPLONGIDS, 1 },
