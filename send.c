@@ -70,6 +70,8 @@ static void append_signature (FILE *f)
 /* compare two e-mail addresses and return 1 if they are equivalent */
 static int mutt_addrcmp (ADDRESS *a, ADDRESS *b)
 {
+  if (!a || !b)
+    return 0;
   if (!a->mailbox || !b->mailbox)
     return 0;
   if (ascii_strcasecmp (a->mailbox, b->mailbox))
