@@ -17,10 +17,10 @@
 # , fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 1.11.4\n"
+"Project-Id-Version: Mutt 1.12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-29 12:54+0200\n"
-"PO-Revision-Date: 2019-04-29 12:55+0200\n"
+"POT-Creation-Date: 2019-05-13 12:51+0200\n"
+"PO-Revision-Date: 2019-05-13 12:52+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -107,7 +107,7 @@ msgstr "Attention : ce nom d'alias peut ne pas fonctionner. Corriger ?"
 msgid "Address: "
 msgstr "Adresse : "
 
-#: alias.c:307 send.c:208
+#: alias.c:307 send.c:210
 #, c-format
 msgid "Error: '%s' is a bad IDN."
 msgstr "Erreur : '%s' est un mauvais IDN."
@@ -149,7 +149,7 @@ msgid "Mailcap compose entry requires %%s"
 msgstr "L'entrée compose du fichier mailcap nécessite %%s"
 
 #: attach.c:142 attach.c:277 commands.c:304 compose.c:1382 compress.c:412
-#: curs_lib.c:271 curs_lib.c:950 sendlib.c:1370
+#: curs_lib.c:271 curs_lib.c:950 sendlib.c:1384
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Erreur en exécutant \"%s\" !"
@@ -640,22 +640,22 @@ msgid "From: "
 msgstr "De : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:86 send.c:223
+#: compose.c:86 send.c:225
 msgid "To: "
 msgstr "À : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:88 send.c:225
+#: compose.c:88 send.c:227
 msgid "Cc: "
 msgstr "Cc : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:90 send.c:227
+#: compose.c:90 send.c:229
 msgid "Bcc: "
 msgstr "Cci : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:92 compose.c:775 send.c:252
+#: compose.c:92 compose.c:775 send.c:254
 msgid "Subject: "
 msgstr "Objet : "
 
@@ -792,7 +792,7 @@ msgstr "Attention : '%s' est un mauvais IDN."
 msgid "You may not delete the only attachment."
 msgstr "Vous ne pouvez pas supprimer l'unique attachement."
 
-#: compose.c:823 send.c:2037
+#: compose.c:823 send.c:2039
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Mauvais IDN dans « %s » : '%s'"
@@ -858,7 +858,7 @@ msgstr "Renommer en : "
 # , c-format
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1218 editmsg.c:96 editmsg.c:121 sendlib.c:881
+#: compose.c:1218 editmsg.c:96 editmsg.c:121 sendlib.c:895
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Impossible d'obtenir le statut de %s : %s"
@@ -1681,7 +1681,7 @@ msgstr "Appel de PGP..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Le message ne peut pas être envoyé en ligne. Utiliser PGP/MIME ?"
 
-#: crypt.c:181 send.c:2007
+#: crypt.c:181 send.c:2009
 msgid "Mail not sent."
 msgstr "Message non envoyé."
 
@@ -4491,7 +4491,7 @@ msgstr ""
 msgid "Can't find any tagged messages."
 msgstr "Aucun message marqué n'a pu être trouvé."
 
-#: recvcmd.c:815 send.c:853
+#: recvcmd.c:815 send.c:855
 msgid "No mailing lists found!"
 msgstr "Pas de liste de diffusion trouvée !"
 
@@ -4595,11 +4595,11 @@ msgstr "score : trop d'arguments"
 msgid "Error: score: invalid number"
 msgstr "Erreur : score : nombre invalide"
 
-#: send.c:253
+#: send.c:255
 msgid "No subject, abort?"
 msgstr "Pas d'objet (Subject), abandonner ?"
 
-#: send.c:255
+#: send.c:257
 msgid "No subject, aborting."
 msgstr "Pas d'objet (Subject), abandon."
 
@@ -4611,7 +4611,7 @@ msgstr "Pas d'objet (Subject), abandon."
 #. message contents, but other attachment, such as PDF files, will also
 #. be added as attachments to the new mail, if this is answered yes.
 #.
-#: send.c:438
+#: send.c:440
 msgid "Forward attachments?"
 msgstr "Faire suivre les attachements ?"
 
@@ -4619,47 +4619,47 @@ msgstr "Faire suivre les attachements ?"
 #. L10N:
 #. Asks whether the user respects the reply-to header.
 #. If she says no, mutt will reply to the from header's address instead.
-#: send.c:608
+#: send.c:610
 #, c-format
 msgid "Reply to %s%s?"
 msgstr "Répondre à %s%s ?"
 
 # , c-format
-#: send.c:643
+#: send.c:645
 #, c-format
 msgid "Follow-up to %s%s?"
 msgstr "Suivi de la discussion à %s%s ?"
 
-#: send.c:828
+#: send.c:830
 msgid "No tagged messages are visible!"
 msgstr "Pas de messages marqués visibles !"
 
-#: send.c:882
+#: send.c:884
 msgid "Include message in reply?"
 msgstr "Inclure le message dans la réponse ?"
 
-#: send.c:887
+#: send.c:889
 msgid "Including quoted message..."
 msgstr "Inclusion du message cité..."
 
-#: send.c:897
+#: send.c:899
 msgid "Could not include all requested messages!"
 msgstr "Tous les messages demandés n'ont pas pu être inclus !"
 
-#: send.c:911
+#: send.c:913
 msgid "Forward as attachment?"
 msgstr "Faire suivre sous forme d'attachement ?"
 
-#: send.c:915
+#: send.c:917
 msgid "Preparing forwarded message..."
 msgstr "Préparation du message à faire suivre..."
 
 # , c-format
-#: send.c:1185
+#: send.c:1187
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Fcc vers une boîte aux lettres IMAP n'est pas supporté en mode batch"
 
-#: send.c:1201
+#: send.c:1203
 msgid "Save attachments in Fcc?"
 msgstr "Sauver les attachements dans Fcc ?"
 
@@ -4669,7 +4669,7 @@ msgstr "Sauver les attachements dans Fcc ?"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1257
+#: send.c:1259
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr "Fcc a échoué. (r)éessayer, autre (b)oîte aux lettres, ou (s)auter ? "
 
@@ -4678,7 +4678,7 @@ msgstr "Fcc a échoué. (r)éessayer, autre (b)oîte aux lettres, ou (s)auter ?
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1263
+#: send.c:1265
 msgid "rms"
 msgstr "rbs"
 
@@ -4686,116 +4686,116 @@ msgstr "rbs"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1271
+#: send.c:1273
 msgid "Fcc mailbox"
 msgstr "Boîte aux lettres Fcc"
 
-#: send.c:1448
+#: send.c:1450
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Impossible d'ajourner. $postponed est non renseigné"
 
-#: send.c:1560
+#: send.c:1562
 msgid "Recall postponed message?"
 msgstr "Rappeler un message ajourné ?"
 
-#: send.c:1813
+#: send.c:1815
 msgid "Edit forwarded message?"
 msgstr "Éditer le message à faire suivre ?"
 
-#: send.c:1862
+#: send.c:1864
 msgid "Abort unmodified message?"
 msgstr "Message non modifié. Abandonner ?"
 
-#: send.c:1864
+#: send.c:1866
 msgid "Aborted unmodified message."
 msgstr "Message non modifié. Abandon."
 
-#: send.c:1969
+#: send.c:1971
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Pas de backend crypto configuré. Désactivation de la sécurité du message."
 
-#: send.c:2014
+#: send.c:2016
 msgid "Message postponed."
 msgstr "Message ajourné."
 
-#: send.c:2025
+#: send.c:2027
 msgid "No recipients are specified!"
 msgstr "Aucun destinataire spécifié !"
 
-#: send.c:2030
+#: send.c:2032
 msgid "No recipients were specified."
 msgstr "Aucun destinataire spécifié."
 
-#: send.c:2046
+#: send.c:2048
 msgid "No subject, abort sending?"
 msgstr "Pas d'objet (Subject), abandonner l'envoi ?"
 
-#: send.c:2050
+#: send.c:2052
 msgid "No subject specified."
 msgstr "Pas d'objet (Subject) spécifié."
 
-#: send.c:2064
+#: send.c:2066
 msgid "No attachments, abort sending?"
 msgstr "Pas d'attachements, abandonner l'envoi ?"
 
-#: send.c:2067
+#: send.c:2069
 msgid "Attachment referenced in message is missing"
 msgstr "L'attachement référencé dans le message est manquant"
 
-#: send.c:2130 smtp.c:191
+#: send.c:2132 smtp.c:191
 msgid "Sending message..."
 msgstr "Envoi du message..."
 
-#: send.c:2162
+#: send.c:2164
 msgid "Could not send the message."
 msgstr "Impossible d'envoyer le message."
 
-#: send.c:2171
+#: send.c:2173
 msgid "Mail sent."
 msgstr "Message envoyé."
 
-#: send.c:2171
+#: send.c:2173
 msgid "Sending in background."
 msgstr "Envoi en tâche de fond."
 
-#: sendlib.c:429
+#: sendlib.c:443
 msgid "No boundary parameter found! [report this error]"
 msgstr "Pas de paramètre boundary trouvé !  [signalez cette erreur]"
 
 # , c-format
-#: sendlib.c:459
+#: sendlib.c:473
 #, c-format
 msgid "%s no longer exists!"
 msgstr "%s n'existe plus !"
 
 # , c-format
-#: sendlib.c:887
+#: sendlib.c:901
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s n'est pas un fichier ordinaire."
 
 # , c-format
-#: sendlib.c:1060
+#: sendlib.c:1074
 #, c-format
 msgid "Could not open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: sendlib.c:2407
+#: sendlib.c:2421
 msgid "$sendmail must be set in order to send mail."
 msgstr "$sendmail doit avoir une valeur pour pouvoir envoyer du courrier."
 
 # , c-format
-#: sendlib.c:2506
+#: sendlib.c:2520
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "Erreur en envoyant le message, fils terminé avec le code %d (%s)."
 
-#: sendlib.c:2512
+#: sendlib.c:2526
 msgid "Output of the delivery process"
 msgstr "Sortie du processus de livraison"
 
-#: sendlib.c:2670
+#: sendlib.c:2684
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "Mauvais IDN %s lors de la préparation du resent-from."
