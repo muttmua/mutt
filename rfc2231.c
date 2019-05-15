@@ -146,7 +146,12 @@ void rfc2231_decode_parameters (PARAMETER **headp)
       encoded = (*t == '*');
       *t = '\0';
 
-      index = atoi (s);
+      /* RFC 2231 says that the index starts at 0 and increments by 1,
+         thus an overflow should never occur in a valid message, thus
+         the value INT_MAX in case of overflow does not really matter
+         (the goal is just to avoid undefined behavior). */
+      if (mutt_atoi (s, &index))
+        index = INT_MAX;
 
       conttmp = rfc2231_new_parameter ();
       conttmp->attribute = p->attribute;
