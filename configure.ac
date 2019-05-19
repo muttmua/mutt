@@ -133,6 +133,7 @@ if test x"$enable_gpgme" = xyes; then
       AC_MSG_ERROR([*** GPGME not found or version is older than 1.4 ***])
    else
       MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS crypt-gpgme.o crypt-mod-pgp-gpgme.o crypt-mod-smime-gpgme.o"
+      AM_PATH_GPG_ERROR(1.33)
    fi
 else
    AC_MSG_RESULT([no])
