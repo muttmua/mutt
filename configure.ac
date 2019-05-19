@@ -1566,7 +1566,7 @@ then
 fi
 AC_SUBST(DSLROOT)
 
-AC_PATH_PROGS([DB2XTEXI], [docbook2x-texi docbook2texi], [none])
+AC_PATH_PROGS([DB2XTEXI], [docbook2x-texi db2x_docbook2texi docbook2texi], [none])
 if test "$DB2XTEXI" != "none"; then
    AC_PATH_PROG([MAKEINFO], [makeinfo], [none])
    if test "$MAKEINFO" != "none"; then
