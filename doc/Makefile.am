@@ -161,14 +161,21 @@ manual.tex: stamp-doc-xml
 	fi
 
 mutt.texi: stamp-doc-xml
-	$(DB2XTEXI) --encoding=utf-8 \
+	-$(DB2XTEXI) --encoding=utf-8 \
 	    --string-param output-file=mutt \
 	    --string-param 'directory-category=Email-software' \
 	    --string-param 'directory-description=Text based mail reader' \
 	    manual.xml
+	@-if test ! -f mutt.texi; then \
+	  echo "WARNING: mutt.texi generation failed!"; \
+	  echo "To generate Gnu Info documentation, install docbook2x."; \
+	  echo "On Debian based systems, this is the 'docbook2x' package."; \
+	  echo "On Red Hat/Fedora systems, this is the 'docbook2X' package."; \
+	  echo "After installing the package, please re-run configure."; \
+	fi
 
 mutt.info: mutt.texi
-	$(MAKEINFO) --no-split -o mutt.info mutt.texi
+	-$(MAKEINFO) --no-split -o mutt.info mutt.texi
 
 validate: stamp-doc-xml
 	xmllint --noout --noblanks --postvalid manual.xml
