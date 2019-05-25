@@ -1861,10 +1861,7 @@ int mutt_body_handler (BODY *b, STATE *s)
   }
   /* print hint to use attachment menu for disposition == attachment
      if we're not already being called from there */
-  else if ((s->flags & MUTT_DISPLAY) || (b->disposition == DISPATTACH &&
-                                         !option (OPTVIEWATTACH) &&
-                                         option (OPTHONORDISP) &&
-                                         (plaintext || handler)))
+  else if (s->flags & MUTT_DISPLAY)
   {
     state_mark_attach (s);
     if (option (OPTHONORDISP) && b->disposition == DISPATTACH)
