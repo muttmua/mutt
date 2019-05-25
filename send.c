@@ -419,7 +419,8 @@ static int inline_forward_attachments (CONTEXT *ctx, HEADER *cur,
   {
     body = actx->idx[i]->content;
     if ((body->type != TYPEMULTIPART) &&
-	!mutt_can_decode (body) &&
+	(!mutt_can_decode (body) ||
+         (option (OPTHONORDISP) && body->disposition == DISPATTACH)) &&
         !(body->type == TYPEAPPLICATION &&
           (!ascii_strcasecmp (body->subtype, "pgp-signature") ||
            !ascii_strcasecmp (body->subtype, "x-pkcs7-signature") ||
