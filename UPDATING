@@ -8,7 +8,7 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
-1.12.0 (unreleased)
+1.12.0 (2019-05-25)
 
   ! $ssl_use_tlsv1 and $ssl_use_tlsv1_1 now default to unset.
   + $auto_subscribe, when set, automatically adds an email with the List-Post
