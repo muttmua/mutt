@@ -555,10 +555,7 @@ extract_number (dest, source)
   *dest = b1 | (b2 << 8) | mask;
 }
 
-#ifndef EXTRACT_MACROS /* To debug the macros.  */
-#undef EXTRACT_NUMBER
 #define EXTRACT_NUMBER(dest, src) extract_number ((unsigned int *)&dest, src)
-#endif /* not EXTRACT_MACROS */
 
 /* Same as EXTRACT_NUMBER, except increment SOURCE to after the number.
    SOURCE must be an lvalue.  */
