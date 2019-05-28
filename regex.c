@@ -217,6 +217,8 @@ init_syntax_once ()
 /* isalpha etc. are used for the character classes.  */
 #include <ctype.h>
 
+#include <limits.h>
+
 /* Jim Meyering writes:
 
    "... Some ctype macros are valid only for character codes that
@@ -260,17 +262,6 @@ init_syntax_once ()
 #define NULL (void *)0
 #endif
 
-/* We remove any previous definition of `SIGN_EXTEND_CHAR',
-   since ours (we hope) works properly with all combinations of
-   machines, compilers, `char' and `unsigned char' argument types.
-   (Per Bothner suggested the basic approach.)  */
-#undef SIGN_EXTEND_CHAR
-#if __STDC__
-#define SIGN_EXTEND_CHAR(c) ((signed char) (c))
-#else  /* not __STDC__ */
-/* As in Harbison and Steele.  */
-#define SIGN_EXTEND_CHAR(c) ((((unsigned char) (c)) ^ 128) - 128)
-#endif
 
 /* Should we use malloc or alloca?  If REGEX_MALLOC is not defined, we
    use `alloca' instead of `malloc'.  This is because using malloc in
@@ -546,31 +537,28 @@ typedef enum
 
 /* Put into DESTINATION a number stored in two contiguous bytes starting
    at SOURCE.  */
-
-#define EXTRACT_NUMBER(destination, source)				\
-  do {									\
-    (destination) = *(source) & 0377;					\
-    (destination) += SIGN_EXTEND_CHAR (*((source) + 1)) << 8;		\
-  } while (0)
-
-#ifdef DEBUG
-static void extract_number _RE_ARGS ((int *dest, unsigned char *source));
+static void extract_number _RE_ARGS ((unsigned int *dest, unsigned char *source));
 static void
 extract_number (dest, source)
-    int *dest;
+    unsigned int *dest;
     unsigned char *source;
 {
-  int temp = SIGN_EXTEND_CHAR (*(source + 1));
-  *dest = *source & 0377;
-  *dest += temp << 8;
+  unsigned int b1, b2, mask;
+
+  b1 = source[0];
+  b2 = source[1];
+  if (b2 & 0x80)
+    mask = UINT_MAX ^ 0xFFFF;
+  else
+    mask = 0;
+
+  *dest = b1 | (b2 << 8) | mask;
 }
 
 #ifndef EXTRACT_MACROS /* To debug the macros.  */
 #undef EXTRACT_NUMBER
-#define EXTRACT_NUMBER(dest, src) extract_number (&dest, src)
+#define EXTRACT_NUMBER(dest, src) extract_number ((unsigned int *)&dest, src)
 #endif /* not EXTRACT_MACROS */
-
-#endif /* DEBUG */
 
 /* Same as EXTRACT_NUMBER, except increment SOURCE to after the number.
    SOURCE must be an lvalue.  */
@@ -589,7 +577,7 @@ extract_number_and_incr (destination, source)
     int *destination;
     unsigned char **source;
 {
-  extract_number (destination, *source);
+  extract_number ((unsigned int *)destination, *source);
   *source += 2;
 }
 
