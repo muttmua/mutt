@@ -7053,7 +7053,7 @@ macro index ,a "&lt;save-message&gt;=archive&lt;enter&gt;&lt;enter-command&gt;ec
       <para>
         Fcc saving.  Note: prior to version 1.12, the Fcc was saved
         before sending the message.  It is now saved afterwards, but
-        the if saving fails, the user is prompted.
+        if the saving fails, the user is prompted.
       </para>
     </listitem>
   </itemizedlist>
