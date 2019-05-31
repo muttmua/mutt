@@ -140,10 +140,8 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP $(srcdir
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
 
-version.h: FORCE
-	echo '#define MUTT_VERSION "'`sh "$(srcdir)/version.sh"`'"' > $@.tmp
-	cmp -s $@ $@.tmp && rm -f $@.tmp || mv $@.tmp $@
-FORCE:
+version.h: $(srcdir)/version.sh
+	echo '#define MUTT_VERSION "'`sh "$(srcdir)/version.sh"`'"' > version.h
 
 reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
 	echo 'const char *ReleaseDate = "'`(cd $(srcdir) && ./mkreldate.sh)`'";' > reldate.h
