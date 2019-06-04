@@ -8,6 +8,9 @@ subdir = doc
 if BUILD_INFO
 INFO_DOCFILES = mutt.info
 endif
+if BUILD_DOC
+BUILD_DOC_TARGETS = stamp-doc-chunked manual.html manual.txt $(INFO_DOCFILES)
+endif
 
 DEFS = -DSYSCONFDIR=\"$(sysconfdir)\" -DBINDIR=\"$(bindir)\" -DHAVE_CONFIG_H=1
 AM_CPPFLAGS = -I. -I.. -I$(includedir) -I$(top_srcdir)
@@ -54,7 +57,7 @@ topsrcdir_DOCFILES = COPYRIGHT GPL INSTALL ChangeLog	\
 
 all: makedoc-all
 
-makedoc-all: mutt.1 smime_keys.1 muttrc.man manual.html stamp-doc-rc stamp-doc-chunked manual.txt pgpewrap.1 mutt_pgpring.1 $(INFO_DOCFILES)
+makedoc-all: mutt.1 smime_keys.1 muttrc.man stamp-doc-rc pgpewrap.1 mutt_pgpring.1 $(BUILD_DOC_TARGETS)
 
 install-data-local: makedoc-all instdoc
 	$(MKDIR_P) $(DESTDIR)$(mandir)/man1
@@ -76,9 +79,13 @@ install-data-local: makedoc-all instdoc
 	for f in $(srcdir_DOCFILES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	done
-	-$(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir)
+	-if [ -f manual.txt ] ; then \
+	  $(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) ; \
+	fi
 	-for f in $(HTML_DOCFILES) ; do \
-		$(INSTALL) -m 644 $$f $(DESTDIR)$(docdir) ; \
+	  if [ -f $$f ] ; then \
+	    $(INSTALL) -m 644 $$f $(DESTDIR)$(docdir) ; \
+	  fi \
 	done
 	$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir)/Muttrc.dist
 	-if [ -f $(DESTDIR)$(pkgdatadir)/Muttrc ] ; then \
@@ -202,7 +209,7 @@ instdoc: instdoc.sh
 	cat instdoc.sh > instdoc
 	chmod a+x instdoc
 
-update-doc: stamp-doc-xml stamp-doc-chunked stamp-doc-rc manual.txt manual.html
+update-doc: stamp-doc-rc $(BUILD_DOC_TARGETS)
 
 muttrc.man: makedoc$(EXEEXT) $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
 	$(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -m | 	    \
