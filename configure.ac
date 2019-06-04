@@ -37,6 +37,14 @@ AC_PROG_MKDIR_P
 AC_PROG_RANLIB
 AC_CHECK_TOOL(AR, ar, ar)
 
+AC_CACHE_CHECK([for GNU make],
+        [mutt_cv_gnu_make_command],
+        [mutt_cv_gnu_make_command="no"
+  if ${MAKE:-make} --version 2> /dev/null | grep "GNU Make" 2>&1 > /dev/null ; then
+          mutt_cv_gnu_make_command="yes"
+  fi])
+AM_CONDITIONAL(GNU_MAKE, test x$mutt_cv_gnu_make_command = xyes)
+
 AC_C_INLINE
 AC_C_CONST
 AC_C_BIGENDIAN
