@@ -327,8 +327,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
       if ((idata->reopen & IMAP_EXPUNGE_PENDING) &&
 	  !(idata->reopen & IMAP_EXPUNGE_EXPECTED))
 	idata->check_status = IMAP_EXPUNGE_PENDING;
-      idata->reopen &= ~(IMAP_EXPUNGE_PENDING | IMAP_NEWMAIL_PENDING |
-			 IMAP_EXPUNGE_EXPECTED);
+      idata->reopen &= ~(IMAP_EXPUNGE_PENDING | IMAP_EXPUNGE_EXPECTED);
     }
   }
 
@@ -521,8 +520,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
       /* new mail arrived */
       mutt_atoui (pn, &count);
 
-      if ( !(idata->reopen & IMAP_EXPUNGE_PENDING) &&
-	   count < idata->max_msn)
+      if (count < idata->max_msn)
       {
         /* Notes 6.0.3 has a tendency to report fewer messages exist than
          * it should. */
@@ -536,13 +534,10 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
                     "cmd_handle_untagged: superfluous EXISTS message.\n"));
       else
       {
-	if (!(idata->reopen & IMAP_EXPUNGE_PENDING))
-        {
-          dprint (2, (debugfile,
-                      "cmd_handle_untagged: New mail in %s - %d messages total.\n",
-                      idata->mailbox, count));
-	  idata->reopen |= IMAP_NEWMAIL_PENDING;
-        }
+        dprint (2, (debugfile,
+                    "cmd_handle_untagged: New mail in %s - %d messages total.\n",
+                    idata->mailbox, count));
+        idata->reopen |= IMAP_NEWMAIL_PENDING;
 	idata->newMailCount = count;
       }
     }
