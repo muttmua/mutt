@@ -316,7 +316,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
       dprint (2, (debugfile, "imap_cmd_finish: Fetching new mail\n"));
       /* check_status: curs_main uses imap_check_mailbox to detect
        *   whether the index needs updating */
-      idata->check_status = IMAP_NEWMAIL_PENDING;
+      idata->check_status |= IMAP_NEWMAIL_PENDING;
       imap_read_headers (idata, idata->max_msn+1, count, 0);
     }
     else if (idata->reopen & IMAP_EXPUNGE_PENDING)
@@ -326,7 +326,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
       /* Detect whether we've gotten unexpected EXPUNGE messages */
       if ((idata->reopen & IMAP_EXPUNGE_PENDING) &&
 	  !(idata->reopen & IMAP_EXPUNGE_EXPECTED))
-	idata->check_status = IMAP_EXPUNGE_PENDING;
+	idata->check_status |= IMAP_EXPUNGE_PENDING;
       idata->reopen &= ~(IMAP_EXPUNGE_PENDING | IMAP_EXPUNGE_EXPECTED);
     }
   }
@@ -892,7 +892,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
       if (h->changed)
         idata->reopen |= IMAP_EXPUNGE_PENDING;
       else
-        idata->check_status = IMAP_FLAGS_PENDING;
+        idata->check_status |= IMAP_FLAGS_PENDING;
     }
   }
 }
