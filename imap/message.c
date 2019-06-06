@@ -67,7 +67,7 @@ static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h);
 static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h);
 static int msg_cache_commit (IMAP_DATA* idata, HEADER* h);
 
-static void flush_buffer(char* buf, size_t* len, CONNECTION* conn);
+static int flush_buffer (char* buf, size_t* len, CONNECTION* conn);
 static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf,
                              FILE* fp);
 static int msg_parse_fetch (IMAP_HEADER* h, char* s);
@@ -1130,7 +1130,7 @@ int imap_commit_message (CONTEXT *ctx, MESSAGE *msg)
 int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 {
   IMAP_DATA* idata;
-  FILE *fp;
+  FILE *fp = NULL;
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char mailbox[LONG_STRING];
@@ -1212,7 +1212,6 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
     pc = imap_next_word (pc);
     mutt_error ("%s", pc);
     mutt_sleep (1);
-    safe_fclose (&fp);
     goto fail;
   }
 
@@ -1226,22 +1225,25 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
     if (len > sizeof(buf) - 3)
     {
       sent += len;
-      flush_buffer(buf, &len, idata->conn);
+      if (flush_buffer (buf, &len, idata->conn) < 0)
+        goto fail;
       mutt_progress_update (&progressbar, sent, -1);
     }
   }
 
   if (len)
-    flush_buffer(buf, &len, idata->conn);
+    if (flush_buffer (buf, &len, idata->conn) < 0)
+      goto fail;
 
-  mutt_socket_write (idata->conn, "\r\n");
+  if (mutt_socket_write (idata->conn, "\r\n") < 0)
+    goto fail;
   safe_fclose (&fp);
 
   do
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
 
-  if (!imap_code (idata->buf))
+  if (rc != IMAP_CMD_OK)
   {
     char *pc;
 
@@ -1259,6 +1261,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   return 0;
 
 fail:
+  safe_fclose (&fp);
   FREE (&mx.mbox);
   return -1;
 }
@@ -1912,9 +1915,13 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
   return s;
 }
 
-static void flush_buffer(char *buf, size_t *len, CONNECTION *conn)
+static int flush_buffer (char *buf, size_t *len, CONNECTION *conn)
 {
+  int rc;
+
   buf[*len] = '\0';
-  mutt_socket_write_n(conn, buf, *len);
+  rc = mutt_socket_write_n(conn, buf, *len);
   *len = 0;
+
+  return rc;
 }
