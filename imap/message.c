@@ -1201,19 +1201,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_RESPOND)
-  {
-    char *pc;
-
-    dprint (1, (debugfile, "imap_append_message(): command failed: %s\n",
-		idata->buf));
-
-    pc = idata->buf + SEQLEN;
-    SKIPWS (pc);
-    pc = imap_next_word (pc);
-    mutt_error ("%s", pc);
-    mutt_sleep (1);
-    goto fail;
-  }
+    goto cmd_step_fail;
 
   for (last = EOF, sent = len = 0; (c = fgetc(fp)) != EOF; last = c)
   {
@@ -1244,21 +1232,26 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_OK)
-  {
-    char *pc;
-
-    dprint (1, (debugfile, "imap_append_message(): command failed: %s\n",
-		idata->buf));
-    pc = idata->buf + SEQLEN;
-    SKIPWS (pc);
-    pc = imap_next_word (pc);
-    mutt_error ("%s", pc);
-    mutt_sleep (1);
-    goto fail;
-  }
+    goto cmd_step_fail;
 
   FREE (&mx.mbox);
   return 0;
+
+cmd_step_fail:
+  dprint (1, (debugfile, "imap_append_message(): command failed: %s\n",
+              idata->buf));
+  if (rc != IMAP_CMD_BAD)
+  {
+    char *pc;
+
+    pc = imap_next_word (idata->buf);  /* skip sequence number or token */
+    pc = imap_next_word (pc);          /* skip response code */
+    if (*pc)
+    {
+      mutt_error ("%s", pc);
+      mutt_sleep (1);
+    }
+  }
 
 fail:
   safe_fclose (&fp);
