@@ -5543,8 +5543,14 @@ shows several ways to select messages.
 <row><entry>~n [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with a score in the range <emphasis>MIN</emphasis> to <emphasis>MAX</emphasis> *)</entry></row>
 <row><entry>~N</entry><entry>new messages</entry></row>
 <row><entry>~O</entry><entry>old messages</entry></row>
-<row><entry>~p</entry><entry>messages addressed to you (consults <command>alternates</command>)</entry></row>
-<row><entry>~P</entry><entry>messages from you (consults <command>alternates</command>)</entry></row>
+<row>
+<entry>~p</entry>
+<entry>messages addressed to you (consults <link linkend="from">$from</link>, <command>alternates</command>, and local account/hostname information)</entry>
+</row>
+<row>
+<entry>~P</entry>
+<entry>messages from you (consults <link linkend="from">$from</link>, <command>alternates</command>, and local account/hostname information)</entry>
+</row>
 <row><entry>~Q</entry><entry>messages which have been replied to</entry></row>
 <row><entry>~r [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with <quote>date-received</quote> in a Date range</entry></row>
 <row><entry>~R</entry><entry>read messages</entry></row>

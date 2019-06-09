@@ -616,10 +616,10 @@ new messages
 old messages
 .TP
 ~p
-messages addressed to you (as defined by \fBalternates\fP)
+messages addressed to you (consults $from, \fBalternates\fP, and local account/hostname information)
 .TP
 ~P
-messages from you (as defined by \fBalternates\fP)
+messages from you (consults $from, \fBalternates\fP, and local account/hostname information)
 .TP
 ~Q
 messages which have been replied to
