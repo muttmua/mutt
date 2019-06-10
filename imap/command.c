@@ -289,10 +289,15 @@ int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
   return 0;
 }
 
-/* imap_cmd_finish: Attempts to perform cleanup (eg fetch new mail if
- *   detected, do expunge). Called automatically by imap_cmd_step, but
- *   may be called at any time. Called by imap_check_mailbox just before
- *   the index is refreshed, for instance. */
+/* imap_cmd_finish
+ *
+ * If a reopen is allowed, it attempts to perform cleanup (eg fetch new
+ * mail if detected, do expunge). Called automatically by
+ * imap_cmd_step(), but may be called at any time.
+ *
+ * idata->check_status is set and will be used later by
+ * imap_check_mailbox().
+ */
 void imap_cmd_finish (IMAP_DATA* idata)
 {
   if (idata->status == IMAP_FATAL)
@@ -306,28 +311,20 @@ void imap_cmd_finish (IMAP_DATA* idata)
 
   if (idata->reopen & IMAP_REOPEN_ALLOW)
   {
-    unsigned int count = idata->newMailCount;
-
-    if (!(idata->reopen & IMAP_EXPUNGE_PENDING) &&
-	(idata->reopen & IMAP_NEWMAIL_PENDING)
-	&& count > idata->max_msn)
-    {
-      /* read new mail messages */
-      dprint (2, (debugfile, "imap_cmd_finish: Fetching new mail\n"));
-      /* check_status: curs_main uses imap_check_mailbox to detect
-       *   whether the index needs updating */
-      idata->check_status |= IMAP_NEWMAIL_PENDING;
-      imap_read_headers (idata, idata->max_msn+1, count, 0);
-    }
-    else if (idata->reopen & IMAP_EXPUNGE_PENDING)
+    if (idata->reopen & IMAP_EXPUNGE_PENDING)
     {
       dprint (2, (debugfile, "imap_cmd_finish: Expunging mailbox\n"));
       imap_expunge_mailbox (idata);
       /* Detect whether we've gotten unexpected EXPUNGE messages */
-      if ((idata->reopen & IMAP_EXPUNGE_PENDING) &&
-	  !(idata->reopen & IMAP_EXPUNGE_EXPECTED))
+      if (!(idata->reopen & IMAP_EXPUNGE_EXPECTED))
 	idata->check_status |= IMAP_EXPUNGE_PENDING;
       idata->reopen &= ~(IMAP_EXPUNGE_PENDING | IMAP_EXPUNGE_EXPECTED);
+    }
+    if (idata->reopen & IMAP_NEWMAIL_PENDING)
+    {
+      dprint (2, (debugfile, "imap_cmd_finish: Fetching new mail\n"));
+      imap_read_headers (idata, idata->max_msn+1, idata->newMailCount, 0);
+      idata->check_status |= IMAP_NEWMAIL_PENDING;
     }
   }
 
