@@ -1193,49 +1193,55 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
   if (!(*fcc && mutt_strcmp ("/dev/null", fcc)))
     return rc;
 
-  if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
+  /* Before sending, we don't allow message manipulation because it
+   * will break message signatures.  This is especially complicated by
+   * Protected Headers. */
+  if (!option (OPTFCCBEFORESEND))
   {
-    msg->content = clear_content;
-    msg->security &= ~(ENCRYPT | SIGN);
-    mutt_free_envelope (&msg->content->mime_headers);
-  }
-
-  /* check to see if the user wants copies of all attachments */
-  if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
-      msg->content->type == TYPEMULTIPART)
-  {
-    if (WithCrypto
-        && (msg->security & (ENCRYPT | SIGN))
-        && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
-            mutt_strcmp (msg->content->subtype, "signed") == 0))
+    if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
     {
-      if (clear_content->type == TYPEMULTIPART)
-      {
-        if (!(msg->security & ENCRYPT) && (msg->security & SIGN))
-        {
-          /* save initial signature and attachments */
-          save_sig = msg->content->parts->next;
-          save_parts = clear_content->parts->next;
-        }
-
-        /* this means writing only the main part */
-        msg->content = clear_content->parts;
-
-        if (mutt_protect (msg, pgpkeylist) == -1)
-        {
-          /* we can't do much about it at this point, so
-           * fallback to saving the whole thing to fcc
-           */
-          msg->content = tmpbody;
-          save_sig = NULL;
-          goto full_fcc;
-        }
-
-        save_content = msg->content;
-      }
+      msg->content = clear_content;
+      msg->security &= ~(ENCRYPT | SIGN);
+      mutt_free_envelope (&msg->content->mime_headers);
     }
-    else
-      msg->content = msg->content->parts;
+
+    /* check to see if the user wants copies of all attachments */
+    if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
+        msg->content->type == TYPEMULTIPART)
+    {
+      if (WithCrypto
+          && (msg->security & (ENCRYPT | SIGN))
+          && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
+              mutt_strcmp (msg->content->subtype, "signed") == 0))
+      {
+        if (clear_content->type == TYPEMULTIPART)
+        {
+          if (!(msg->security & ENCRYPT) && (msg->security & SIGN))
+          {
+            /* save initial signature and attachments */
+            save_sig = msg->content->parts->next;
+            save_parts = clear_content->parts->next;
+          }
+
+          /* this means writing only the main part */
+          msg->content = clear_content->parts;
+
+          if (mutt_protect (msg, pgpkeylist) == -1)
+          {
+            /* we can't do much about it at this point, so
+             * fallback to saving the whole thing to fcc
+             */
+            msg->content = tmpbody;
+            save_sig = NULL;
+            goto full_fcc;
+          }
+
+          save_content = msg->content;
+        }
+      }
+      else
+        msg->content = msg->content->parts;
+    }
   }
 
 full_fcc:
@@ -1291,26 +1297,29 @@ full_fcc:
     }
   }
 
-  msg->content = tmpbody;
-
-  if (WithCrypto && save_sig)
+  if (!option (OPTFCCBEFORESEND))
   {
-    /* cleanup the second signature structures */
-    if (save_content->parts)
+    msg->content = tmpbody;
+
+    if (WithCrypto && save_sig)
     {
-      mutt_free_body (&save_content->parts->next);
-      save_content->parts = NULL;
-    }
-    mutt_free_body (&save_content);
+      /* cleanup the second signature structures */
+      if (save_content->parts)
+      {
+        mutt_free_body (&save_content->parts->next);
+        save_content->parts = NULL;
+      }
+      mutt_free_body (&save_content);
 
-    /* restore old signature and attachments */
-    msg->content->parts->next = save_sig;
-    msg->content->parts->parts->next = save_parts;
-  }
-  else if (WithCrypto && save_content)
-  {
-    /* destroy the new encrypted body. */
-    mutt_free_body (&save_content);
+      /* restore old signature and attachments */
+      msg->content->parts->next = save_sig;
+      msg->content->parts->parts->next = save_parts;
+    }
+    else if (WithCrypto && save_content)
+    {
+      /* destroy the new encrypted body. */
+      mutt_free_body (&save_content);
+    }
   }
 
   return rc;
@@ -2134,6 +2143,9 @@ main_loop:
 
   mutt_prepare_envelope (msg->env, 1);
 
+  if (option (OPTFCCBEFORESEND))
+    save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+
   if ((i = send_message (msg)) < 0)
   {
     if (!(flags & SENDBATCH))
@@ -2167,7 +2179,8 @@ main_loop:
     }
   }
 
-  save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+  if (!option (OPTFCCBEFORESEND))
+    save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
 
   if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
   {
