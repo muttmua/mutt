@@ -925,6 +925,20 @@ struct option_t MuttVars[] = {
   ** This variable controls whether or not attachments on outgoing messages
   ** are saved along with the main body of your message.
   */
+  { "fcc_before_send",	DT_BOOL, R_NONE, OPTFCCBEFORESEND, 0 },
+  /*
+  ** .pp
+  ** When this variable is \fIset\fP, FCCs will occur before sending
+  ** the message.  Before sending, the message cannot be manipulated,
+  ** so it will be stored the exact same as sent:
+  ** $$fcc_attach and $$fcc_clear will be ignored (using their default
+  ** values).
+  ** .pp
+  ** When \fIunset\fP, the default, FCCs will occur after sending.
+  ** Variables $$fcc_attach and $$fcc_clear will be respected, allowing
+  ** it to be stored without attachments or encryption/signing if
+  ** desired.
+  */
   { "fcc_clear",	DT_BOOL, R_NONE, OPTFCCCLEAR, 0 },
   /*
   ** .pp
