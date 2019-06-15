@@ -8,6 +8,13 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.12.1 (2019-06-15):
+
+  ! Bug fix release.
+  + $fcc_before_send, when set, causes Fcc to occur before sending instead of
+    afterwards.  When set, the message is saved as-sent; please see the
+    documentation for details.
+
 1.12.0 (2019-05-25)
 
   ! $ssl_use_tlsv1 and $ssl_use_tlsv1_1 now default to unset.

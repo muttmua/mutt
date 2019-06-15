@@ -1,3 +1,228 @@
+2019-06-15 09:02:36 -0700  Kevin McCarthy  <kevin@8t8.us> (e299de25)
+
+        * Update UPDATING file for 1.12.1 release.
+
+M	UPDATING
+
+2019-06-11 13:15:22 -0700  Kevin McCarthy  <kevin@8t8.us> (dc662474)
+
+        * Add $fcc_before_send, defaulting unset.
+        
+        When set, the message will be Fcc'ed the same as sent.  $fcc_clear and
+        $fcc_attach will be ignored.  This is because of the difficulty of
+        unwinding changes, notably Protected Headers, without potentially
+        breaking signatures.
+
+M	doc/manual.xml.head
+M	init.h
+M	mutt.h
+M	send.c
+
+2019-06-13 17:56:38 -0700  Kevin McCarthy  <kevin@8t8.us> (81fb9dd8)
+
+        * Improve $reverse_realname documentation.
+        
+        Make it clear that, even if set, a missing realname part of the
+        matching address will be filled in by $realname.
+
+M	init.h
+
+2019-06-09 11:07:16 -0700  Kevin McCarthy  <kevin@8t8.us> (0727d324)
+
+        * Mention sources for ~p and ~P patterns.
+        
+        The manual only mentioned alternates.  Add $from and local
+        account/hostname to the list.
+        
+        The man page implied the only source was alternates.  Change to the
+        same wording as the manual.
+        
+        Thanks to @rear1019 for pointing out the misleading man page.
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+
+2019-06-07 13:43:36 -0700  Kevin McCarthy  <kevin@8t8.us> (6f5e6bbb)
+
+        * Improve imap_append_message() error message handling.
+        
+        If the rc is IMAP_CMD_BAD, then either idata->buf is stale or an error
+        message has already been printed (in cmd_handle_untagged()).
+        
+        Use imap_next_word() to skip over the next two words instead of
+        directly skipping over SEQLEN, in case the buffer is in a different
+        format.  We don't want to jump over the end of string.
+        
+        Skip the mutt_error() if there is nothing to print.
+
+M	imap/message.c
+
+2019-06-06 16:03:42 -0700  Kevin McCarthy  <kevin@8t8.us> (dd327606)
+
+        * Enable the idata->check_status using bit operations.
+        
+        Commit e3f66d7e fixed dropped new mail notications, removing the
+        unsetting of idata->reopen IMAP_NEWMAIL_PENDING in imap_cmd_finish()
+        when an EXPUNGE was processed.
+        
+        However, imap_cmd_finish() can be called twice by
+        imap_check_mailbox().  First as part of the imap_exec(), and manually
+        again just below.
+        
+        Now that the IMAP_NEWMAIL_PENDING still exists, a second call could
+        overwrite idata->check_status if both reopen flags were set.
+        
+        This unfortunately affects update_index(), which behaves differently
+        for MUTT_REOPENED.
+        
+        I need to change the return value of mx_check_mailbox() in master to
+        preserve all the bits, so the index can both notify of new mail and
+        update_index() properly.
+        
+        For stable, the best fix is to use bit operators to enable the
+        check_status flags in imap_cmd_finish() (and cmd_parse_fetch for
+        flags), and keep the imap_check_mailbox() priority of setting its
+        return value (it prioritizes IMAP_EXCHANGE_PENDING).
+
+M	imap/command.c
+
+2019-06-06 13:38:03 -0700  Kevin McCarthy  <kevin@8t8.us> (4d95b2cf)
+
+        * Improve robustness of imap_append_message().
+        
+        First, check the imap_cmd_step() return value instead of looking at
+        idata->buf for "OK".  If the connection bombed and imap_cmd_step()
+        returned IMAP_CMD_BAD, the value of idata->buf is stale.
+        
+        If the server returned "+ OK" for the command continuation request
+        response, the call to imap_code(idata->buf) would even end up
+        returning true, despite that the append failed!  (See #110, although
+        at the time of commit I can only hypothesize this is what is
+        happening.)
+        
+        Second, check the status of the writes.  flush_buffer() was not
+        passing the rc from mutt_socket_write_n(), which was further making
+        the above disaster scenerio possible.
+
+M	imap/message.c
+
+2019-06-05 14:04:55 -0700  Kevin McCarthy  <kevin@8t8.us> (e3f66d7e)
+
+        * Fix dropped new mail notifications when an EXPUNGE_PENDING is set.
+        
+        Prior to the fetch_headers rework and introduction of
+        idata->max_msn (starting around e0376c75), cmd_handle_untagged() was
+        looking directly at ctx->msgcount, which isn't fixed up until
+        imap_expunge_mailbox().  At that time, more care had to be taken
+        inbetween handling the EXPUNGE message and the actual expunge of the
+        mailbox because of the discrepency between server state and mailbox
+        context state.
+        
+        idata->max_msn is now decremented during the processing of EXPUNGE and
+        VANISHED notices from the server, so reflect "current" state.  So,
+        when we receive an EXISTS notice, we no longer need the checks for
+        expunge state and can always set the NEWMAIL_PENDING flag.
+        
+        Additionally, fix imap_cmd_finish() to retain the IMAP_NEWMAIL_PENDING
+        flag after handling an expunge.  The expunge does not grab new
+        messages so dropping the flag would cause mutt to forget the new mail
+        status until another EXISTS command.
+        
+        Since this is a stable branch fix, I'm leaving the either/or
+        processing of expunge versus new mail in imap_cmd_finish().  However,
+        I don't see why this has to be done in two calls.  I may rework that
+        in master to process an expunge and then the new mail one after the
+        other.
+
+M	imap/command.c
+
+2019-05-31 09:37:38 -0700  Kevin McCarthy  <kevin@8t8.us> (22c6df82)
+
+        * Remove FORCE prerequisite on version.h.
+        
+        This is causing package build issues on OpenBSD because of a
+        difference in make behavior.
+        
+        In GNU make, it always invoke the 'version.h' target, but then checks
+        to see if version.h changed before retriggering targets with that
+        prerequisite.  On OpenBSD, invoking the version.h target always
+        retriggers targets with that prerequisite.
+        
+        This means that updating the version information now requires a 'make
+        clean' or manual removal of version.h.
+
+M	Makefile.am
+
+2019-05-30 09:27:15 -0700  Kevin McCarthy  <kevin@8t8.us> (dd1601a1)
+
+        * Minor documentation correction.
+
+M	doc/manual.xml.head
+
+2019-05-25 14:26:08 -0700  Kevin McCarthy  <kevin@8t8.us> (8ae8394f)
+
+        * Disable state messages for attachments when forwarding.
+        
+        First, option(OPTVIEWATTACH) is only set for (s->flags & DISPLAY), so that
+        check can be ignored.
+        
+        With that removed, all this is doing is printing
+          [-- This is an attachment ...]
+        with no context in the middle of non-display rendering for the case
+        $honor_disposition is set with a handler.
+        
+        This makes no sense and I believe is a logic error.  Perhaps this
+        never took effect, but with $forward_attachments it now affects
+        forwarding in that case.
+
+M	handler.c
+
+2019-05-25 13:12:04 -0700  Kevin McCarthy  <kevin@8t8.us> (b00a06e5)
+
+        * Have $forward_attachments look at attachment disposition.
+        
+        If $honor_disposition is set, an "attachment" disposition decodable
+        attachment won't be included in the body, so we want it to be added as
+        an attachment to the forwarded email.
+
+M	send.c
+
+2019-05-25 09:18:22 -0700  Kevin McCarthy  <kevin@8t8.us> (ee9983f0)
+
+        * automatic post-release commit for mutt-1.12.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
 2019-05-25 09:08:33 -0700  Kevin McCarthy  <kevin@8t8.us> (7d8db3e2)
 
         * Set UPDATING file release date for 1.12.0.
