@@ -145,8 +145,8 @@ void mutt_exit (int);
 
 # ifdef DEBUG
 
-MUTT_LIB_WHERE FILE *debugfile MUTT_LIB_INITVAL(0);
-MUTT_LIB_WHERE int debuglevel MUTT_LIB_INITVAL(0);
+MUTT_LIB_WHERE FILE *debugfile;
+MUTT_LIB_WHERE int debuglevel;
 
 void mutt_debug (FILE *, const char *, ...);
 

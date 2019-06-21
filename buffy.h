@@ -45,7 +45,7 @@ typedef struct buffy_t
 }
 BUFFY;
 
-WHERE BUFFY *Incoming INITVAL (0);
+WHERE BUFFY *Incoming;
 WHERE short BuffyTimeout INITVAL (3);
 WHERE short BuffyCheckStatsInterval INITVAL (60);
 

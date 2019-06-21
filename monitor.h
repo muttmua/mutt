@@ -19,8 +19,8 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 
-WHERE int MonitorFilesChanged INITVAL (0);
-WHERE int MonitorContextChanged INITVAL (0);
+WHERE int MonitorFilesChanged;
+WHERE int MonitorContextChanged;
 
 #ifdef _BUFFY_H
 int mutt_monitor_add (BUFFY *b);
