@@ -1716,16 +1716,9 @@ static void mutt_set_default (struct option_t *p)
   switch (p->type & DT_MASK)
   {
     case DT_STR:
-      if (!p->init && *((char **) p->data))
-        p->init = (unsigned long) safe_strdup (* ((char **) p->data));
-      break;
     case DT_PATH:
       if (!p->init && *((char **) p->data))
-      {
-	char *cp = safe_strdup (*((char **) p->data));
-	/* mutt_pretty_mailbox (cp); */
-        p->init = (unsigned long) cp;
-      }
+        p->init = (unsigned long) safe_strdup (* ((char **) p->data));
       break;
     case DT_ADDR:
       if (!p->init && *((ADDRESS **) p->data))
