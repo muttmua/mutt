@@ -290,7 +290,7 @@ struct option_t MuttVars[] = {
   ** in a reply.  For a full listing of defined \fCprintf(3)\fP-like sequences see
   ** the section on $$index_format.
   */
-  { "attribution_locale", DT_STR, R_NONE, UL &AttributionLocale, UL "" },
+  { "attribution_locale", DT_STR, R_NONE, UL &AttributionLocale, UL 0 },
   /*
   ** .pp
   ** The locale used by \fCstrftime(3)\fP to format dates in the
@@ -774,7 +774,7 @@ struct option_t MuttVars[] = {
   ** If this option is \fIset\fP, mutt's received-attachments menu will not show the subparts of
   ** individual messages in a multipart/digest.  To see these subparts, press ``v'' on that menu.
   */
-  { "display_filter",	DT_PATH, R_PAGER, UL &DisplayFilter, UL "" },
+  { "display_filter",	DT_PATH, R_PAGER, UL &DisplayFilter, UL 0 },
   /*
   ** .pp
   ** When set, specifies a command used to filter messages.  When a message
@@ -789,7 +789,7 @@ struct option_t MuttVars[] = {
   ** mutt.
   */
 #endif
-  { "dsn_notify",	DT_STR,	 R_NONE, UL &DsnNotify, UL "" },
+  { "dsn_notify",	DT_STR,	 R_NONE, UL &DsnNotify, UL 0 },
   /*
   ** .pp
   ** This variable sets the request for when notification is returned.  The
@@ -810,7 +810,7 @@ struct option_t MuttVars[] = {
   ** for DSN. For SMTP delivery, DSN support is auto-detected so that it
   ** depends on the server whether DSN will be used or not.
   */
-  { "dsn_return",	DT_STR,	 R_NONE, UL &DsnReturn, UL "" },
+  { "dsn_return",	DT_STR,	 R_NONE, UL &DsnReturn, UL 0 },
   /*
   ** .pp
   ** This variable controls how much of your message is returned in DSN
@@ -1440,7 +1440,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This variable defaults to the value of $$imap_user.
   */
-  { "imap_oauth_refresh_command", DT_STR, R_NONE, UL &ImapOauthRefreshCmd, UL "" },
+  { "imap_oauth_refresh_command", DT_STR, R_NONE, UL &ImapOauthRefreshCmd, UL 0 },
   /*
   ** .pp
   ** The command to run to generate an OAUTH refresh token for
@@ -1932,7 +1932,7 @@ struct option_t MuttVars[] = {
   ** menu, attachments which cannot be decoded in a reasonable manner will
   ** be attached to the newly composed message if this option is \fIset\fP.
   */
-  { "mime_type_query_command", DT_STR, R_NONE, UL &MimeTypeQueryCmd, UL "" },
+  { "mime_type_query_command", DT_STR, R_NONE, UL &MimeTypeQueryCmd, UL 0 },
   /*
   ** .pp
   ** This specifies a command to run, to determine the mime type of a
@@ -2545,7 +2545,7 @@ struct option_t MuttVars[] = {
   ** server when using the \fC$<fetch-mail>\fP function.  When \fIunset\fP, Mutt will
   ** download messages but also leave them on the POP server.
   */
-  { "pop_host",		DT_STR,	 R_NONE, UL &PopHost, UL "" },
+  { "pop_host",		DT_STR,	 R_NONE, UL &PopHost, UL 0 },
   /*
   ** .pp
   ** The name of your POP server for the \fC$<fetch-mail>\fP function.  You
@@ -2563,7 +2563,7 @@ struct option_t MuttVars[] = {
   ** for retrieving only unread messages from the POP server when using
   ** the \fC$<fetch-mail>\fP function.
   */
-  { "pop_oauth_refresh_command", DT_STR, R_NONE, UL &PopOauthRefreshCmd, UL "" },
+  { "pop_oauth_refresh_command", DT_STR, R_NONE, UL &PopOauthRefreshCmd, UL 0 },
   /*
   ** .pp
   ** The command to run to generate an OAUTH refresh token for
@@ -2571,7 +2571,7 @@ struct option_t MuttVars[] = {
   ** run on every connection attempt that uses the OAUTHBEARER authentication
   ** mechanism.  See ``$oauth'' for details.
   */
-  { "pop_pass",		DT_STR,	 R_NONE, UL &PopPass, UL "" },
+  { "pop_pass",		DT_STR,	 R_NONE, UL &PopPass, UL 0 },
   /*
   ** .pp
   ** Specifies the password for your POP account.  If \fIunset\fP, Mutt will
@@ -2595,7 +2595,7 @@ struct option_t MuttVars[] = {
   ** This variable defaults to your user name on the local machine.
   */
 #endif /* USE_POP */
-  { "post_indent_string",DT_STR, R_NONE, UL &PostIndentString, UL "" },
+  { "post_indent_string",DT_STR, R_NONE, UL &PostIndentString, UL 0 },
   /*
   ** .pp
   ** Similar to the $$attribution variable, Mutt will append this
@@ -2706,7 +2706,7 @@ struct option_t MuttVars[] = {
   ** than returning to the index menu.  If \fIunset\fP, Mutt will return to the
   ** index menu when the external pager exits.
   */
-  { "query_command",	DT_PATH, R_NONE, UL &QueryCmd, UL "" },
+  { "query_command",	DT_PATH, R_NONE, UL &QueryCmd, UL 0 },
   /*
   ** .pp
   ** This specifies the command Mutt will use to make external address
@@ -3550,7 +3550,7 @@ struct option_t MuttVars[] = {
   ** set smtp_authenticators="digest-md5:cram-md5"
   ** .te
   */
-  { "smtp_oauth_refresh_command", DT_STR, R_NONE, UL &SmtpOauthRefreshCmd, UL "" },
+  { "smtp_oauth_refresh_command", DT_STR, R_NONE, UL &SmtpOauthRefreshCmd, UL 0 },
   /*
   ** .pp
   ** The command to run to generate an OAUTH refresh token for
