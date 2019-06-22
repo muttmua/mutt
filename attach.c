@@ -932,7 +932,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 
   if (rfc1524_mailcap_lookup (a, type, NULL, MUTT_PRINT))
   {
-    rfc1524_entry *entry;
+    rfc1524_entry *entry = NULL;
     int piped = FALSE;
 
     dprint (2, (debugfile, "Using mailcap...\n"));
@@ -948,10 +948,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
       if (safe_symlink (a->filename, mutt_b2s (newfile)) == -1)
       {
         if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
-        {
-          rfc1524_free_entry (&entry);
-          goto out;
-        }
+          goto mailcap_cleanup;
         mutt_buffer_strcpy (newfile, a->filename);
       }
       else
@@ -959,7 +956,10 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     }
     /* in recv mode, save file to newfile first */
     else
-      mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL);
+    {
+      if (mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL) == -1)
+        goto mailcap_cleanup;
+    }
 
     mutt_buffer_strcpy (command, entry->printcommand);
     piped = mutt_rfc1524_expand_command (a, mutt_b2s (newfile), type, command);
@@ -972,16 +972,14 @@ int mutt_print_attachment (FILE *fp, BODY *a)
       if ((ifp = fopen (mutt_b2s (newfile), "r")) == NULL)
       {
 	mutt_perror ("fopen");
-	rfc1524_free_entry (&entry);
-	goto out;
+	goto mailcap_cleanup;
       }
 
       if ((thepid = mutt_create_filter (mutt_b2s (command), &fpout, NULL, NULL)) < 0)
       {
 	mutt_perror _("Can't create filter");
-	rfc1524_free_entry (&entry);
 	safe_fclose (&ifp);
-	goto out;
+	goto mailcap_cleanup;
       }
       mutt_copy_stream (ifp, fpout);
       safe_fclose (&fpout);
@@ -995,13 +993,15 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 	mutt_any_key_to_continue (NULL);
     }
 
+    rc = 1;
+
+  mailcap_cleanup:
     if (fp)
       mutt_unlink (mutt_b2s (newfile));
     else if (unlink_newfile)
       unlink(mutt_b2s (newfile));
 
     rfc1524_free_entry (&entry);
-    rc = 1;
     goto out;
   }
 
@@ -1028,7 +1028,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
       if ((ifp = fopen (mutt_b2s (newfile), "r")) == NULL)
       {
 	mutt_perror ("fopen");
-	goto bail0;
+	goto decode_cleanup;
       }
 
       dprint (2, (debugfile, "successfully opened %s read-only\n", mutt_b2s (newfile)));
@@ -1037,7 +1037,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
       if ((thepid = mutt_create_filter (NONULL(PrintCmd), &fpout, NULL, NULL)) < 0)
       {
 	mutt_perror _("Can't create filter");
-	goto bail0;
+	goto decode_cleanup;
       }
 
       dprint (2, (debugfile, "Filter created.\n"));
@@ -1051,7 +1051,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 	mutt_any_key_to_continue (NULL);
       rc = 1;
     }
-  bail0:
+  decode_cleanup:
     safe_fclose (&ifp);
     safe_fclose (&fpout);
     mutt_unlink (mutt_b2s (newfile));
