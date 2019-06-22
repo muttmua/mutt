@@ -121,6 +121,7 @@ int mutt_compose_attachment (BODY *a)
 	{
 	  if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
 	    goto bailout;
+          mutt_buffer_strcpy (newfile, a->filename);
 	}
 	else
 	  unlink_newfile = 1;
@@ -256,6 +257,7 @@ int mutt_edit_attachment (BODY *a)
 	{
 	  if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
 	    goto bailout;
+          mutt_buffer_strcpy (newfile, a->filename);
 	}
 	else
 	  unlink_newfile = 1;
@@ -418,10 +420,9 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	/* send case: the file is already there */
 	if (safe_symlink (a->filename, mutt_b2s (tempfile)) == -1)
 	{
-	  if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) == MUTT_YES)
-	    mutt_buffer_strcpy (tempfile, a->filename);
-	  else
+	  if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
 	    goto return_error;
+          mutt_buffer_strcpy (tempfile, a->filename);
 	}
 	else
 	  unlink_tempfile = 1;
