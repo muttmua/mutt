@@ -458,19 +458,16 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
 }
 
 
-/* This routine will create a _temporary_ filename matching the
- * name template given if this needs to be done.
+/* This routine will create a _temporary_ filename, matching the
+ * name template if given.
  *
  * Please note that only the last path element of the
  * template and/or the old file name will be used for the
  * comparison and the temporary file name.
- *
- * Returns 0 if oldfile is fine as is.
- * Returns 1 if newfile specified
  */
-int mutt_rfc1524_expand_filename (const char *nametemplate,
-                                  const char *oldfile,
-                                  BUFFER *newfile)
+void mutt_rfc1524_expand_filename (const char *nametemplate,
+                                   const char *oldfile,
+                                   BUFFER *newfile)
 {
   int i, j, k, ps;
   char *s;
@@ -576,12 +573,6 @@ int mutt_rfc1524_expand_filename (const char *nametemplate,
   }
 
   mutt_adv_mktemp (newfile);
-
-  if (rmatch && lmatch)
-    return 0;
-  else
-    return 1;
-
 }
 
 /* If rfc1524_expand_command() is used on a recv'd message, then
