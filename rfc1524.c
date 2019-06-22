@@ -322,13 +322,19 @@ static int rfc1524_mailcap_parse (BODY *a,
 	   */
 	  char *test_command = NULL;
           BUFFER *command = NULL;
+          BUFFER *afilename = NULL;
 
 	  if (get_field_text (field + 4, &test_command, type, filename, line)
 	      && test_command)
 	  {
             command = mutt_buffer_pool_get ();
+            afilename = mutt_buffer_pool_get ();
             mutt_buffer_strcpy (command, test_command);
-	    mutt_rfc1524_expand_command (a, a->filename, type, command);
+            if (option (OPTMAILCAPSANITIZE))
+              mutt_buffer_sanitize_filename (afilename, NONULL(a->filename), 1);
+            else
+              mutt_buffer_strcpy (afilename, NONULL(a->filename));
+	    mutt_rfc1524_expand_command (a, mutt_b2s (afilename), type, command);
 	    if (mutt_system (mutt_b2s (command)))
 	    {
 	      /* a non-zero exit code means test failed */
@@ -336,6 +342,7 @@ static int rfc1524_mailcap_parse (BODY *a,
 	    }
 	    FREE (&test_command);
             mutt_buffer_pool_release (&command);
+            mutt_buffer_pool_release (&afilename);
 	  }
 	}
       } /* while (ch) */
