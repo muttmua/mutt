@@ -415,7 +415,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     if (mutt_rfc1524_expand_filename (entry->nametemplate, fname,
                                       tempfile))
     {
-      if (fp == NULL && mutt_strcmp(mutt_b2s (tempfile), a->filename))
+      if (fp == NULL)
       {
 	/* send case: the file is already there */
 	if (safe_symlink (a->filename, mutt_b2s (tempfile)) == -1)
