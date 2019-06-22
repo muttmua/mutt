@@ -398,8 +398,12 @@ rfc1524_entry *rfc1524_new_entry(void)
 
 void rfc1524_free_entry(rfc1524_entry **entry)
 {
-  rfc1524_entry *p = *entry;
+  rfc1524_entry *p;
 
+  if (!entry || !*entry)
+    return;
+
+  p = *entry;
   FREE (&p->command);
   FREE (&p->testcommand);
   FREE (&p->composecommand);

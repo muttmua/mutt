@@ -601,8 +601,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 
 return_error:
 
-  if (entry)
-    rfc1524_free_entry (&entry);
+  rfc1524_free_entry (&entry);
   if (fp && (mutt_b2s (tempfile))[0])
     mutt_unlink (mutt_b2s (tempfile));
   else if (unlink_tempfile)
