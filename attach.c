@@ -966,6 +966,8 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 	  unlink_newfile = 1;
       }
     }
+    else if (!fp) /* send case */
+      mutt_buffer_strcpy (newfile, a->filename);
 
     /* in recv mode, save file to newfile first */
     if (fp)
