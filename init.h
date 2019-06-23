@@ -1599,8 +1599,8 @@ struct option_t MuttVars[] = {
   ** .dt %F .dd author name, or recipient name if the message is from you
   ** .dt %H .dd spam attribute(s) of this message
   ** .dt %i .dd message-id of the current message
-  ** .dt %l .dd number of lines in the message (does not work with maildir,
-  **            mh, and possibly IMAP folders)
+  ** .dt %l .dd number of lines in the unprocessed message (may not work with
+  **            maildir, mh, and IMAP folders)
   ** .dt %L .dd If an address in the ``To:'' or ``Cc:'' header field matches an address
   **            defined by the users ``$subscribe'' command, this displays
   **            "To <list-name>", otherwise the same as %F.
@@ -1648,6 +1648,12 @@ struct option_t MuttVars[] = {
   ** .dt %|X    .dd pad to the end of the line with character ``X''
   ** .dt %*X    .dd soft-fill with character ``X'' as pad
   ** .de
+  ** .pp
+  ** Note that for mbox/mmdf, ``%l'' applies to the unprocessed message, and
+  ** for maildir/mh, the value comes from the ``Lines:'' header field when
+  ** present (the meaning is normally the same). Thus the value depends on
+  ** the encodings used in the different parts of the message and has little
+  ** meaning in practice.
   ** .pp
   ** ``Soft-fill'' deserves some explanation: Normal right-justification
   ** will print everything to the left of the ``%>'', displaying padding and
