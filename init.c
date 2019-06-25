@@ -131,7 +131,7 @@ static int mutt_option_index (char *s)
 
   for (i = 0; MuttVars[i].option; i++)
     if (mutt_strcmp (s, MuttVars[i].option) == 0)
-      return (MuttVars[i].type == DT_SYN ?  mutt_option_index ((char *) MuttVars[i].data) : i);
+      return (MuttVars[i].type == DT_SYN ?  mutt_option_index ((char *) MuttVars[i].data.p) : i);
   return (-1);
 }
 
@@ -339,10 +339,10 @@ static void mutt_free_opt (struct option_t* p)
   switch (p->type & DT_MASK)
   {
     case DT_ADDR:
-      rfc822_free_address ((ADDRESS**)p->data);
+      rfc822_free_address ((ADDRESS**)p->data.p);
       break;
     case DT_RX:
-      pp = (REGEXP*)p->data;
+      pp = (REGEXP*)p->data.p;
       FREE (&pp->pattern);
       if (pp->rx)
       {
@@ -352,7 +352,7 @@ static void mutt_free_opt (struct option_t* p)
       break;
     case DT_PATH:
     case DT_STR:
-      FREE ((char**)p->data);		/* __FREE_CHECKED__ */
+      FREE ((char**)p->data.p);		/* __FREE_CHECKED__ */
       break;
   }
 }
@@ -1717,23 +1717,23 @@ static void mutt_set_default (struct option_t *p)
   {
     case DT_STR:
     case DT_PATH:
-      if (!p->init && *((char **) p->data))
-        p->init = (unsigned long) safe_strdup (* ((char **) p->data));
+      if (!p->init.p && *((char **) p->data.p))
+        p->init.p = safe_strdup (* ((char **) p->data.p));
       break;
     case DT_ADDR:
-      if (!p->init && *((ADDRESS **) p->data))
+      if (!p->init.p && *((ADDRESS **) p->data.p))
       {
 	char tmp[HUGE_STRING];
 	*tmp = '\0';
-	rfc822_write_address (tmp, sizeof (tmp), *((ADDRESS **) p->data), 0);
-	p->init = (unsigned long) safe_strdup (tmp);
+	rfc822_write_address (tmp, sizeof (tmp), *((ADDRESS **) p->data.p), 0);
+	p->init.p = safe_strdup (tmp);
       }
       break;
     case DT_RX:
     {
-      REGEXP *pp = (REGEXP *) p->data;
-      if (!p->init && pp->pattern)
-	p->init = (unsigned long) safe_strdup (pp->pattern);
+      REGEXP *pp = (REGEXP *) p->data.p;
+      if (!p->init.p && pp->pattern)
+	p->init.p = safe_strdup (pp->pattern);
       break;
     }
   }
@@ -1744,47 +1744,47 @@ static void mutt_restore_default (struct option_t *p)
   switch (p->type & DT_MASK)
   {
     case DT_STR:
-      mutt_str_replace ((char **) p->data, (char *) p->init);
+      mutt_str_replace ((char **) p->data.p, (char *) p->init.p);
       break;
     case DT_MBCHARTBL:
-      free_mbchar_table ((mbchar_table **)p->data);
-      *((mbchar_table **) p->data) = parse_mbchar_table ((char *) p->init);
+      free_mbchar_table ((mbchar_table **)p->data.p);
+      *((mbchar_table **) p->data.p) = parse_mbchar_table ((char *) p->init.p);
       break;
     case DT_PATH:
-      FREE((char **) p->data);		/* __FREE_CHECKED__ */
-      if (p->init)
+      FREE((char **) p->data.p);		/* __FREE_CHECKED__ */
+      if (p->init.p)
       {
 	char path[_POSIX_PATH_MAX];
-	strfcpy (path, (char *) p->init, sizeof (path));
+	strfcpy (path, (char *) p->init.p, sizeof (path));
 	mutt_expand_path (path, sizeof (path));
-	*((char **) p->data) = safe_strdup (path);
+	*((char **) p->data.p) = safe_strdup (path);
       }
       break;
     case DT_ADDR:
-      rfc822_free_address ((ADDRESS **) p->data);
-      if (p->init)
-	*((ADDRESS **) p->data) = rfc822_parse_adrlist (NULL, (char *) p->init);
+      rfc822_free_address ((ADDRESS **) p->data.p);
+      if (p->init.p)
+	*((ADDRESS **) p->data.p) = rfc822_parse_adrlist (NULL, (char *) p->init.p);
       break;
     case DT_BOOL:
-      if (p->init)
-	set_option (p->data);
+      if (p->init.l)
+	set_option (p->data.l);
       else
-	unset_option (p->data);
+	unset_option (p->data.l);
       break;
     case DT_QUAD:
-      set_quadoption (p->data, p->init);
+      set_quadoption (p->data.l, p->init.l);
       break;
     case DT_NUM:
     case DT_SORT:
     case DT_MAGIC:
-      *((short *) p->data) = p->init;
+      *((short *) p->data.p) = p->init.l;
       break;
     case DT_LNUM:
-      *((long *) p->data) = p->init;
+      *((long *) p->data.p) = p->init.l;
       break;
     case DT_RX:
     {
-      REGEXP *pp = (REGEXP *) p->data;
+      REGEXP *pp = (REGEXP *) p->data.p;
       int flags = 0;
 
       FREE (&pp->pattern);
@@ -1794,14 +1794,14 @@ static void mutt_restore_default (struct option_t *p)
         FREE (&pp->rx);
       }
 
-      if (p->init)
+      if (p->init.p)
       {
-        char *s = (char *) p->init;
+        char *s = (char *) p->init.p;
 
         pp->rx = safe_calloc (1, sizeof (regex_t));
-        pp->pattern = safe_strdup ((char *) p->init);
+        pp->pattern = safe_strdup ((char *) p->init.p);
         if (mutt_strcmp (p->option, "mask") != 0)
-          flags |= mutt_which_case ((const char *) p->init);
+          flags |= mutt_which_case ((const char *) p->init.p);
         if (mutt_strcmp (p->option, "mask") == 0 && *s == '!')
         {
           s++;
@@ -2195,18 +2195,18 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 
       if (query)
       {
-	snprintf (err->data, err->dsize, option (MuttVars[idx].data)
+	snprintf (err->data, err->dsize, option (MuttVars[idx].data.l)
                   ? _("%s is set") : _("%s is unset"), tmp->data);
 	return 0;
       }
 
       CHECK_PAGER;
       if (unset)
-	unset_option (MuttVars[idx].data);
+	unset_option (MuttVars[idx].data.l);
       else if (inv)
-	toggle_option (MuttVars[idx].data);
+	toggle_option (MuttVars[idx].data.l);
       else
-	set_option (MuttVars[idx].data);
+	set_option (MuttVars[idx].data.l);
     }
     else if (myvar || DTYPE (MuttVars[idx].type) == DT_STR ||
 	     DTYPE (MuttVars[idx].type) == DT_PATH ||
@@ -2219,13 +2219,13 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
         if (myvar)
           myvar_del (myvar);
 	else if (DTYPE (MuttVars[idx].type) == DT_ADDR)
-	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
+	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data.p);
 	else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
-          free_mbchar_table ((mbchar_table **) MuttVars[idx].data);
+          free_mbchar_table ((mbchar_table **) MuttVars[idx].data.p);
 	else
-	  /* MuttVars[idx].data is already 'char**' (or some 'void**') or...
+	  /* MuttVars[idx].data.p is already 'char**' (or some 'void**') or...
 	   * so cast to 'void*' is okay */
-	  FREE ((void *) MuttVars[idx].data);		/* __FREE_CHECKED__ */
+	  FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
       }
       else if (query || *s->dptr != '=')
       {
@@ -2248,23 +2248,23 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	else if (DTYPE (MuttVars[idx].type) == DT_ADDR)
 	{
 	  _tmp[0] = '\0';
-	  rfc822_write_address (_tmp, sizeof (_tmp), *((ADDRESS **) MuttVars[idx].data), 0);
+	  rfc822_write_address (_tmp, sizeof (_tmp), *((ADDRESS **) MuttVars[idx].data.p), 0);
 	  val = _tmp;
 	}
 	else if (DTYPE (MuttVars[idx].type) == DT_PATH)
 	{
 	  _tmp[0] = '\0';
-	  strfcpy (_tmp, NONULL(*((char **) MuttVars[idx].data)), sizeof (_tmp));
+	  strfcpy (_tmp, NONULL(*((char **) MuttVars[idx].data.p)), sizeof (_tmp));
 	  mutt_pretty_mailbox (_tmp, sizeof (_tmp));
 	  val = _tmp;
 	}
 	else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
         {
-          mbchar_table *mbt = (*((mbchar_table **) MuttVars[idx].data));
+          mbchar_table *mbt = (*((mbchar_table **) MuttVars[idx].data.p));
           val = mbt ? NONULL (mbt->orig_str) : "";
         }
 	else
-	  val = *((char **) MuttVars[idx].data);
+	  val = *((char **) MuttVars[idx].data.p);
 
 	/* user requested the value of this variable */
 	pretty_var (err->data, err->dsize, MuttVars[idx].option, NONULL(val));
@@ -2294,11 +2294,11 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
         {
 	  /* MuttVars[idx].data is already 'char**' (or some 'void**') or...
 	   * so cast to 'void*' is okay */
-	  FREE ((void *) MuttVars[idx].data);		/* __FREE_CHECKED__ */
+	  FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
 
 	  strfcpy (scratch, tmp->data, sizeof (scratch));
 	  mutt_expand_path (scratch, sizeof (scratch));
-	  *((char **) MuttVars[idx].data) = safe_strdup (scratch);
+	  *((char **) MuttVars[idx].data.p) = safe_strdup (scratch);
         }
         else if (DTYPE (MuttVars[idx].type) == DT_STR)
         {
@@ -2310,26 +2310,26 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	    return (-1);
 	  }
 
-	  FREE ((void *) MuttVars[idx].data);		/* __FREE_CHECKED__ */
-	  *((char **) MuttVars[idx].data) = safe_strdup (tmp->data);
+	  FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
+	  *((char **) MuttVars[idx].data.p) = safe_strdup (tmp->data);
 	  if (mutt_strcmp (MuttVars[idx].option, "charset") == 0)
 	    mutt_set_charset (Charset);
         }
         else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
         {
-          free_mbchar_table ((mbchar_table **) MuttVars[idx].data);
-          *((mbchar_table **) MuttVars[idx].data) = parse_mbchar_table (tmp->data);
+          free_mbchar_table ((mbchar_table **) MuttVars[idx].data.p);
+          *((mbchar_table **) MuttVars[idx].data.p) = parse_mbchar_table (tmp->data);
         }
         else
         {
-	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
-	  *((ADDRESS **) MuttVars[idx].data) = rfc822_parse_adrlist (NULL, tmp->data);
+	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data.p);
+	  *((ADDRESS **) MuttVars[idx].data.p) = rfc822_parse_adrlist (NULL, tmp->data);
         }
       }
     }
     else if (DTYPE(MuttVars[idx].type) == DT_RX)
     {
-      REGEXP *ptr = (REGEXP *) MuttVars[idx].data;
+      REGEXP *ptr = (REGEXP *) MuttVars[idx].data.p;
       regex_t *rx;
       int e, flags = 0;
 
@@ -2454,7 +2454,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
     }
     else if (DTYPE(MuttVars[idx].type) == DT_NUM)
     {
-      short *ptr = (short *) MuttVars[idx].data;
+      short *ptr = (short *) MuttVars[idx].data.p;
       short val;
       int rc;
 
@@ -2521,7 +2521,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
     }
     else if (DTYPE(MuttVars[idx].type) == DT_LNUM)
     {
-      long *ptr = (long *) MuttVars[idx].data;
+      long *ptr = (long *) MuttVars[idx].data.p;
       long val;
       int rc;
 
@@ -2558,7 +2558,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	static const char * const vals[] = { "no", "yes", "ask-no", "ask-yes" };
 
 	snprintf (err->data, err->dsize, "%s=%s", MuttVars[idx].option,
-		  vals [ quadoption (MuttVars[idx].data) ]);
+		  vals [ quadoption (MuttVars[idx].data.l) ]);
 	break;
       }
 
@@ -2568,13 +2568,13 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	s->dptr++;
 	mutt_extract_token (tmp, s, 0);
 	if (ascii_strcasecmp ("yes", tmp->data) == 0)
-	  set_quadoption (MuttVars[idx].data, MUTT_YES);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_YES);
 	else if (ascii_strcasecmp ("no", tmp->data) == 0)
-	  set_quadoption (MuttVars[idx].data, MUTT_NO);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_NO);
 	else if (ascii_strcasecmp ("ask-yes", tmp->data) == 0)
-	  set_quadoption (MuttVars[idx].data, MUTT_ASKYES);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_ASKYES);
 	else if (ascii_strcasecmp ("ask-no", tmp->data) == 0)
-	  set_quadoption (MuttVars[idx].data, MUTT_ASKNO);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_ASKNO);
 	else
 	{
 	  snprintf (err->data, err->dsize, _("%s: invalid value"), tmp->data);
@@ -2585,11 +2585,11 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
       else
       {
 	if (inv)
-	  toggle_quadoption (MuttVars[idx].data);
+	  toggle_quadoption (MuttVars[idx].data.l);
 	else if (unset)
-	  set_quadoption (MuttVars[idx].data, MUTT_NO);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_NO);
 	else
-	  set_quadoption (MuttVars[idx].data, MUTT_YES);
+	  set_quadoption (MuttVars[idx].data.l, MUTT_YES);
       }
     }
     else if (DTYPE (MuttVars[idx].type) == DT_SORT)
@@ -2628,11 +2628,11 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 
       if (query || *s->dptr != '=')
       {
-	p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data) & SORT_MASK, map);
+	p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data.p) & SORT_MASK, map);
 
 	snprintf (err->data, err->dsize, "%s=%s%s%s", MuttVars[idx].option,
-		  (*((short *) MuttVars[idx].data) & SORT_REVERSE) ? "reverse-" : "",
-		  (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" : "",
+		  (*((short *) MuttVars[idx].data.p) & SORT_REVERSE) ? "reverse-" : "",
+		  (*((short *) MuttVars[idx].data.p) & SORT_LAST) ? "last-" : "",
 		  p);
 	return 0;
       }
@@ -2640,7 +2640,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
       s->dptr++;
       mutt_extract_token (tmp, s , 0);
 
-      if (parse_sort ((short *) MuttVars[idx].data, tmp->data, map, err) == -1)
+      if (parse_sort ((short *) MuttVars[idx].data.p, tmp->data, map, err) == -1)
       {
 	r = -1;
 	break;
@@ -3098,24 +3098,24 @@ static int var_to_string (int idx, char* val, size_t len)
       (DTYPE(MuttVars[idx].type) == DT_PATH) ||
       (DTYPE(MuttVars[idx].type) == DT_RX))
   {
-    strfcpy (tmp, NONULL (*((char **) MuttVars[idx].data)), sizeof (tmp));
+    strfcpy (tmp, NONULL (*((char **) MuttVars[idx].data.p)), sizeof (tmp));
     if (DTYPE (MuttVars[idx].type) == DT_PATH)
       mutt_pretty_mailbox (tmp, sizeof (tmp));
   }
   else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
   {
-    mbchar_table *mbt = (*((mbchar_table **) MuttVars[idx].data));
+    mbchar_table *mbt = (*((mbchar_table **) MuttVars[idx].data.p));
     strfcpy (tmp, mbt ? NONULL (mbt->orig_str) : "", sizeof (tmp));
   }
   else if (DTYPE (MuttVars[idx].type) == DT_ADDR)
   {
-    rfc822_write_address (tmp, sizeof (tmp), *((ADDRESS **) MuttVars[idx].data), 0);
+    rfc822_write_address (tmp, sizeof (tmp), *((ADDRESS **) MuttVars[idx].data.p), 0);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_QUAD)
-    strfcpy (tmp, vals[quadoption (MuttVars[idx].data)], sizeof (tmp));
+    strfcpy (tmp, vals[quadoption (MuttVars[idx].data.l)], sizeof (tmp));
   else if (DTYPE (MuttVars[idx].type) == DT_NUM)
   {
-    short sval = *((short *) MuttVars[idx].data);
+    short sval = *((short *) MuttVars[idx].data.p);
 
     /* avert your eyes, gentle reader */
     if (mutt_strcmp (MuttVars[idx].option, "wrapmargin") == 0)
@@ -3125,7 +3125,7 @@ static int var_to_string (int idx, char* val, size_t len)
   }
   else if (DTYPE (MuttVars[idx].type) == DT_LNUM)
   {
-    long sval = *((long *) MuttVars[idx].data);
+    long sval = *((long *) MuttVars[idx].data.p);
 
     snprintf (tmp, sizeof (tmp), "%ld", sval);
   }
@@ -3152,10 +3152,10 @@ static int var_to_string (int idx, char* val, size_t len)
         map = SortMethods;
         break;
     }
-    p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data) & SORT_MASK, map);
+    p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data.p) & SORT_MASK, map);
     snprintf (tmp, sizeof (tmp), "%s%s%s",
-              (*((short *) MuttVars[idx].data) & SORT_REVERSE) ? "reverse-" : "",
-              (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" : "",
+              (*((short *) MuttVars[idx].data.p) & SORT_REVERSE) ? "reverse-" : "",
+              (*((short *) MuttVars[idx].data.p) & SORT_LAST) ? "last-" : "",
               p);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_MAGIC)
@@ -3182,7 +3182,7 @@ static int var_to_string (int idx, char* val, size_t len)
     strfcpy (tmp, p, sizeof (tmp));
   }
   else if (DTYPE (MuttVars[idx].type) == DT_BOOL)
-    strfcpy (tmp, option (MuttVars[idx].data) ? "yes" : "no", sizeof (tmp));
+    strfcpy (tmp, option (MuttVars[idx].data.l) ? "yes" : "no", sizeof (tmp));
   else
     return 0;
 
