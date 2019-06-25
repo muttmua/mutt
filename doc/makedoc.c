@@ -240,7 +240,7 @@ static char *skip_ws (char *s)
 
 /* isolate a token */
 
-static char single_char_tokens[] = "[]{},;|";
+static char single_char_tokens[] = "[]{},;|=";
 
 static char *get_token (char *d, size_t l, char *s)
 {
@@ -446,23 +446,25 @@ static void handle_confline (char *s, FILE *out)
       break;
   }
 
-  /* option name or UL &address */
-  if (!(s = get_token (buff, sizeof (buff), s))) return;
-  if (!strcmp (buff, "UL"))
-    if (!(s = get_token (buff, sizeof (buff), s))) return;
+  /* "{.l=" or "{.p=" + option name or &address + "}" */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* { */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* .l or .p */
+  if (strcmp (buff, ".l") && (strcmp (buff, ".p"))) return;
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* = */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* option name */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* } */
 
   /* comma */
   if (!(s = get_token (buff, sizeof (buff), s))) return;
 
   if (Debug) fprintf (stderr, "%s: Expecting default value.\n", Progname);
 
-  /* <default value> or UL <default value> */
-  if (!(s = get_token (buff, sizeof (buff), s))) return;
-  if (!strcmp (buff, "UL"))
-  {
-    if (Debug) fprintf (stderr, "%s: Skipping UL.\n", Progname);
-    if (!(s = get_token (buff, sizeof (buff), s))) return;
-  }
+  /* "{.l=" or "{.p=" + <default value> + "}" */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* { */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* .l or .p */
+  if (strcmp (buff, ".l") && (strcmp (buff, ".p"))) return;
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* = */
+  if (!(s = get_token (buff, sizeof (buff), s))) return;  /* default value */
 
   memset (tmp, 0, sizeof (tmp));
 
