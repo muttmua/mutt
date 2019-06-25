@@ -289,7 +289,14 @@ enum
   MUTT_SAVE_OVERWRITE
 };
 
+/* used by init.h MuttVars and Commands dispatch functions */
 /* possible arguments to set_quadoption() */
+union pointer_long_t
+{
+  void *p;
+  long l;
+};
+
 enum
 {
   MUTT_NO,

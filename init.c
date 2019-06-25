@@ -651,7 +651,7 @@ static mbchar_table *parse_mbchar_table (const char *s)
   return t;
 }
 
-static int parse_unignore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unignore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   do
   {
@@ -668,7 +668,7 @@ static int parse_unignore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *e
   return 0;
 }
 
-static int parse_ignore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_ignore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   do
   {
@@ -681,19 +681,20 @@ static int parse_ignore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err
   return 0;
 }
 
-static int parse_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
+  LIST **data = udata.p;
   do
   {
     mutt_extract_token (buf, s, 0);
-    add_to_list ((LIST **) data, buf->data);
+    add_to_list (data, buf->data);
   }
   while (MoreArgs (s));
 
   return 0;
 }
 
-static int parse_echo (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_echo (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   if (!MoreArgs (s))
   {
@@ -719,7 +720,7 @@ static void _alternates_clean (void)
   }
 }
 
-static int parse_alternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_alternates (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   group_context_t *gc = NULL;
 
@@ -729,7 +730,7 @@ static int parse_alternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER 
   {
     mutt_extract_token (buf, s, 0);
 
-    if (parse_group_context (&gc, buf, s, data, err) == -1)
+    if (parse_group_context (&gc, buf, s, err) == -1)
       goto bail;
 
     mutt_remove_from_rx_list (&UnAlternates, buf->data);
@@ -750,7 +751,7 @@ bail:
   return -1;
 }
 
-static int parse_unalternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unalternates (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   _alternates_clean();
   do
@@ -768,9 +769,9 @@ static int parse_unalternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFE
   return 0;
 }
 
-static int parse_replace_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_replace_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  REPLACE_LIST **list = (REPLACE_LIST **)data;
+  REPLACE_LIST **list = (REPLACE_LIST **)udata.p;
   BUFFER templ;
 
   memset(&templ, 0, sizeof(templ));
@@ -801,9 +802,9 @@ static int parse_replace_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFE
   return 0;
 }
 
-static int parse_unreplace_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unreplace_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  REPLACE_LIST **list = (REPLACE_LIST **)data;
+  REPLACE_LIST **list = (REPLACE_LIST **)udata.p;
 
   /* First token is a regexp. */
   if (!MoreArgs(s))
@@ -837,31 +838,32 @@ static void clear_subject_mods (void)
 }
 
 
-static int parse_subjectrx_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_subjectrx_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int rc;
 
-  rc = parse_replace_list(buf, s, data, err);
+  rc = parse_replace_list(buf, s, udata, err);
   if (rc == 0)
     clear_subject_mods();
   return rc;
 }
 
 
-static int parse_unsubjectrx_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unsubjectrx_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int rc;
 
-  rc = parse_unreplace_list(buf, s, data, err);
+  rc = parse_unreplace_list(buf, s, udata, err);
   if (rc == 0)
     clear_subject_mods();
   return rc;
 }
 
 
-static int parse_spam_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_spam_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   BUFFER templ;
+  long data = udata.l;
 
   mutt_buffer_init (&templ);
 
@@ -934,8 +936,9 @@ static int parse_spam_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
 }
 
 
-static int parse_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unlist (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
+  LIST **data = udata.p;
   do
   {
     mutt_extract_token (buf, s, 0);
@@ -944,10 +947,10 @@ static int parse_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err
      */
     if (mutt_strcmp (buf->data, "*") == 0)
     {
-      mutt_free_list ((LIST **) data);
+      mutt_free_list (data);
       break;
     }
-    remove_from_list ((LIST **) data, buf->data);
+    remove_from_list (data, buf->data);
   }
   while (MoreArgs (s));
 
@@ -960,25 +963,27 @@ static int parse_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err
  * is disabled.
  */
 #ifdef USE_SIDEBAR
-static int parse_path_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_path_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char path[_POSIX_PATH_MAX];
+  LIST **data = udata.p;
 
   do
   {
     mutt_extract_token (buf, s, 0);
     strfcpy (path, buf->data, sizeof (path));
     mutt_expand_path (path, sizeof (path));
-    add_to_list ((LIST **) data, path);
+    add_to_list (data, path);
   }
   while (MoreArgs (s));
 
   return 0;
 }
 
-static int parse_path_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_path_unlist (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char path[_POSIX_PATH_MAX];
+  LIST **data = udata.p;
 
   do
   {
@@ -988,12 +993,12 @@ static int parse_path_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
      */
     if (mutt_strcmp (buf->data, "*") == 0)
     {
-      mutt_free_list ((LIST **) data);
+      mutt_free_list (data);
       break;
     }
     strfcpy (path, buf->data, sizeof (path));
     mutt_expand_path (path, sizeof (path));
-    remove_from_list ((LIST **) data, path);
+    remove_from_list (data, path);
   }
   while (MoreArgs (s));
 
@@ -1001,7 +1006,7 @@ static int parse_path_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
 }
 #endif /* USE_SIDEBAR */
 
-static int parse_lists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_lists (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   group_context_t *gc = NULL;
 
@@ -1009,7 +1014,7 @@ static int parse_lists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   {
     mutt_extract_token (buf, s, 0);
 
-    if (parse_group_context (&gc, buf, s, data, err) == -1)
+    if (parse_group_context (&gc, buf, s, err) == -1)
       goto bail;
 
     mutt_remove_from_rx_list (&UnMailLists, buf->data);
@@ -1034,17 +1039,18 @@ typedef enum group_state_t {
   NONE, RX, ADDR
 } group_state_t;
 
-static int parse_group (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_group (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   group_context_t *gc = NULL;
   group_state_t state = NONE;
   ADDRESS *addr = NULL;
   char *estr = NULL;
+  long data = udata.l;
 
   do
   {
     mutt_extract_token (buf, s, 0);
-    if (parse_group_context (&gc, buf, s, data, err) == -1)
+    if (parse_group_context (&gc, buf, s, err) == -1)
       goto bail;
 
     if (data == MUTT_UNGROUP && !mutt_strcasecmp (buf->data, "*"))
@@ -1082,7 +1088,7 @@ static int parse_group (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 	  if (mutt_addrlist_to_intl (addr, &estr))
 	  {
 	    snprintf (err->data, err->dsize, _("%sgroup: warning: bad IDN '%s'.\n"),
-		      data == 1 ? "un" : "", estr);
+		      data == MUTT_UNGROUP ? "un" : "", estr);
             FREE (&estr);
             rfc822_free_address (&addr);
 	    goto bail;
@@ -1292,7 +1298,7 @@ static int print_attach_list (LIST *lp, char op, char *name)
 }
 
 
-static int parse_attachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_attachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char op, *category;
   LIST **listp;
@@ -1348,7 +1354,7 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
   return parse_attach_list(buf, s, listp, err);
 }
 
-static int parse_unattachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unattachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char op, *p;
   LIST **listp;
@@ -1390,7 +1396,7 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, unsigned long data, BUFF
   return parse_unattach_list(buf, s, listp, err);
 }
 
-static int parse_unlists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unlists (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   hash_destroy (&AutoSubscribeCache, NULL);
   do
@@ -1408,7 +1414,7 @@ static int parse_unlists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *er
   return 0;
 }
 
-static int parse_subscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_subscribe (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   group_context_t *gc = NULL;
 
@@ -1416,7 +1422,7 @@ static int parse_subscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   {
     mutt_extract_token (buf, s, 0);
 
-    if (parse_group_context (&gc, buf, s, data, err) == -1)
+    if (parse_group_context (&gc, buf, s, err) == -1)
       goto bail;
 
     mutt_remove_from_rx_list (&UnMailLists, buf->data);
@@ -1439,7 +1445,7 @@ bail:
   return -1;
 }
 
-static int parse_unsubscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unsubscribe (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   hash_destroy (&AutoSubscribeCache, NULL);
   do
@@ -1456,7 +1462,7 @@ static int parse_unsubscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER
   return 0;
 }
 
-static int parse_unalias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_unalias (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   ALIAS *tmp, *last = NULL;
 
@@ -1503,7 +1509,7 @@ static int parse_unalias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *er
   return 0;
 }
 
-static int parse_alias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_alias (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   ALIAS *tmp = Aliases;
   ALIAS *last = NULL;
@@ -1518,7 +1524,7 @@ static int parse_alias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 
   mutt_extract_token (buf, s, 0);
 
-  if (parse_group_context (&gc, buf, s, data, err) == -1)
+  if (parse_group_context (&gc, buf, s, err) == -1)
     return -1;
 
   /* check to see if an alias with this name already exists */
@@ -1594,7 +1600,7 @@ bail:
 }
 
 static int
-parse_unmy_hdr (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+parse_unmy_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   LIST *last = NULL;
   LIST *tmp = UserHeader;
@@ -1640,7 +1646,7 @@ parse_unmy_hdr (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
-static int parse_my_hdr (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   LIST *tmp;
   size_t keylen;
@@ -1982,11 +1988,12 @@ void mutt_envlist_set (const char *name, const char *value, int overwrite)
   }
 }
 
-static int parse_setenv(BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_setenv(BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int query, unset, len;
   char *name, **save, **envp = envlist;
   int count = 0;
+  long data = udata.l;
 
   query = 0;
   unset = data & MUTT_SET_UNSET;
@@ -2080,13 +2087,14 @@ static int parse_setenv(BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
-static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int query, unset, inv, reset, r = 0;
   int idx = -1;
   const char *p;
   char scratch[_POSIX_PATH_MAX];
   char* myvar;
+  long data = udata.l;
 
   while (MoreArgs (s))
   {
@@ -2755,7 +2763,7 @@ static int source_rc (const char *rcfile, BUFFER *err)
 
 #undef MAXERRS
 
-static int parse_source (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char path[_POSIX_PATH_MAX];
 
@@ -3547,6 +3555,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   if ((p = getenv ("REPLYTO")) != NULL)
   {
     BUFFER buf, token;
+    union pointer_long_t udata = {.l=0};
 
     snprintf (buffer, sizeof (buffer), "Reply-To: %s", p);
 
@@ -3555,7 +3564,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     buf.dsize = mutt_strlen (buffer);
 
     mutt_buffer_init (&token);
-    parse_my_hdr (&token, &buf, 0, &err);
+    parse_my_hdr (&token, &buf, udata, &err);
     FREE (&token.data);
   }
 
@@ -3692,11 +3701,11 @@ int mutt_get_hook_type (const char *name)
   for (c = Commands ; c->name ; c++)
     if ((c->func == mutt_parse_hook || c->func == mutt_parse_idxfmt_hook) &&
         ascii_strcasecmp (c->name, name) == 0)
-      return c->data;
+      return c->data.l;
   return 0;
 }
 
-static int parse_group_context (group_context_t **ctx, BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+static int parse_group_context (group_context_t **ctx, BUFFER *buf, BUFFER *s, BUFFER *err)
 {
   while (!mutt_strcasecmp (buf->data, "-group"))
   {

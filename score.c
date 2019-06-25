@@ -64,7 +64,7 @@ void mutt_check_rescore (CONTEXT *ctx)
   unset_option (OPTNEEDRESCORE);
 }
 
-int mutt_parse_score (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_score (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   SCORE *ptr, *last;
   char *pattern, *pc;
@@ -158,7 +158,7 @@ void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
     _mutt_set_flag (ctx, hdr, MUTT_FLAG, 1, upd_ctx);
 }
 
-int mutt_parse_unscore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_unscore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   SCORE *tmp, *last = NULL;
 

@@ -48,7 +48,7 @@ static HASH *IdxFmtHooks = NULL;
 
 static int current_hook_type = 0;
 
-int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   HOOK *ptr;
   BUFFER command, pattern;
@@ -56,6 +56,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   regex_t *rx = NULL;
   pattern_t *pat = NULL;
   char path[_POSIX_PATH_MAX];
+  long data = udata.l;
 
   mutt_buffer_init (&pattern);
   mutt_buffer_init (&command);
@@ -289,12 +290,13 @@ static void delete_idxfmt_hooks (void)
   hash_destroy (&IdxFmtHooks, delete_idxfmt_hooklist);
 }
 
-int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   HOOK *hooks, *ptr;
   BUFFER *name, *pattern, *fmtstring;
   int rc = -1, not = 0;
   pattern_t *pat = NULL;
+  long data = udata.l;
 
   name = mutt_buffer_pool_get ();
   pattern = mutt_buffer_pool_get ();
@@ -387,7 +389,7 @@ out:
   return rc;
 }
 
-int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_unhook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   while (MoreArgs (s))
   {

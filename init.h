@@ -72,12 +72,6 @@
 #define R_BOTH		(R_INDEX | R_PAGER)
 #define R_RESORT_BOTH	(R_RESORT | R_RESORT_SUB)
 
-union pointer_long_t
-{
-  void *p;
-  long l;
-};
-
 struct option_t
 {
   char *option;
@@ -86,8 +80,6 @@ struct option_t
   union pointer_long_t data;
   union pointer_long_t init; /* initial value */
 };
-
-#define UL (unsigned long)
 #endif /* _MAKEDOC */
 
 #ifndef ISPELL
@@ -4328,133 +4320,133 @@ const struct mapping_t SortSidebarMethods[] = {
 
 /* functions used to parse commands in a rc file */
 
-static int parse_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_spam_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_spam_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unlist (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 #ifdef USE_SIDEBAR
-static int parse_path_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_path_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_path_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_path_unlist (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 #endif /* USE_SIDEBAR */
 
-static int parse_group (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_group (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
-static int parse_lists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unlists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_alias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unalias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_echo (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_ignore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unignore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_source (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_set (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_setenv (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_my_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unmy_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_subscribe (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unsubscribe (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_attachments (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unattachments (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_lists (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unlists (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_alias (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unalias (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_echo (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_ignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_source (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_set (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_setenv (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_my_hdr (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unmy_hdr (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_subscribe (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unsubscribe (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_attachments (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unattachments (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
 
-static int parse_replace_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unreplace_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_subjectrx_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unsubjectrx_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_alternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_unalternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_replace_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unreplace_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_subjectrx_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unsubjectrx_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_alternates (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unalternates (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
 /* Parse -group arguments */
-static int parse_group_context (group_context_t **ctx, BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err);
+static int parse_group_context (group_context_t **ctx, BUFFER *buf, BUFFER *s, BUFFER *err);
 
 
 struct command_t
 {
   char *name;
-  int (*func) (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-  unsigned long data;
+  int (*func) (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+  union pointer_long_t data;
 };
 
 const struct command_t Commands[] = {
-  { "alternates",	parse_alternates,	0 },
-  { "unalternates",	parse_unalternates,	0 },
+  { "alternates",	parse_alternates,	{.l=0} },
+  { "unalternates",	parse_unalternates,	{.l=0} },
 #ifdef USE_SOCKET
-  { "account-hook",     mutt_parse_hook,        MUTT_ACCOUNTHOOK },
+  { "account-hook",     mutt_parse_hook,        {.l=MUTT_ACCOUNTHOOK} },
 #endif
-  { "alias",		parse_alias,		0 },
-  { "attachments",	parse_attachments,	0 },
-  { "unattachments",parse_unattachments,0 },
-  { "auto_view",	parse_list,		UL &AutoViewList },
-  { "alternative_order",	parse_list,	UL &AlternativeOrderList},
-  { "bind",		mutt_parse_bind,	0 },
-  { "charset-hook",	mutt_parse_hook,	MUTT_CHARSETHOOK },
+  { "alias",		parse_alias,		{.l=0} },
+  { "attachments",	parse_attachments,	{.l=0} },
+  { "unattachments",	parse_unattachments,	{.l=0} },
+  { "auto_view",	parse_list,		{.p=&AutoViewList} },
+  { "alternative_order",	parse_list,	{.p=&AlternativeOrderList} },
+  { "bind",		mutt_parse_bind,	{.l=0} },
+  { "charset-hook",	mutt_parse_hook,	{.l=MUTT_CHARSETHOOK} },
 #ifdef HAVE_COLOR
-  { "color",		mutt_parse_color,	0 },
-  { "uncolor",		mutt_parse_uncolor,	0 },
+  { "color",		mutt_parse_color,	{.l=0} },
+  { "uncolor",		mutt_parse_uncolor,	{.l=0} },
 #endif
-  { "echo",		parse_echo,		0 },
-  { "exec",		mutt_parse_exec,	0 },
-  { "fcc-hook",		mutt_parse_hook,	MUTT_FCCHOOK },
-  { "fcc-save-hook",	mutt_parse_hook,	MUTT_FCCHOOK | MUTT_SAVEHOOK },
-  { "folder-hook",	mutt_parse_hook,	MUTT_FOLDERHOOK },
+  { "echo",		parse_echo,		{.l=0} },
+  { "exec",		mutt_parse_exec,	{.l=0} },
+  { "fcc-hook",		mutt_parse_hook,	{.l=MUTT_FCCHOOK} },
+  { "fcc-save-hook",	mutt_parse_hook,	{.l=MUTT_FCCHOOK | MUTT_SAVEHOOK} },
+  { "folder-hook",	mutt_parse_hook,	{.l=MUTT_FOLDERHOOK} },
 #ifdef USE_COMPRESSED
-  { "open-hook",	mutt_parse_hook,	MUTT_OPENHOOK },
-  { "close-hook",	mutt_parse_hook,	MUTT_CLOSEHOOK },
-  { "append-hook",	mutt_parse_hook,	MUTT_APPENDHOOK },
+  { "open-hook",	mutt_parse_hook,	{.l=MUTT_OPENHOOK} },
+  { "close-hook",	mutt_parse_hook,	{.l=MUTT_CLOSEHOOK} },
+  { "append-hook",	mutt_parse_hook,	{.l=MUTT_APPENDHOOK} },
 #endif
-  { "group",		parse_group,		MUTT_GROUP },
-  { "ungroup",		parse_group,		MUTT_UNGROUP },
-  { "hdr_order",	parse_list,		UL &HeaderOrderList },
+  { "group",		parse_group,		{.l=MUTT_GROUP} },
+  { "ungroup",		parse_group,		{.l=MUTT_UNGROUP} },
+  { "hdr_order",	parse_list,		{.p=&HeaderOrderList} },
 #ifdef HAVE_ICONV
-  { "iconv-hook",	mutt_parse_hook,	MUTT_ICONVHOOK },
+  { "iconv-hook",	mutt_parse_hook,	{.l=MUTT_ICONVHOOK} },
 #endif
-  { "ignore",		parse_ignore,		0 },
-  { "index-format-hook",mutt_parse_idxfmt_hook, MUTT_IDXFMTHOOK },
-  { "lists",		parse_lists,		0 },
-  { "macro",		mutt_parse_macro,	0 },
-  { "mailboxes",	mutt_parse_mailboxes,	MUTT_MAILBOXES },
-  { "unmailboxes",	mutt_parse_mailboxes,	MUTT_UNMAILBOXES },
-  { "mailto_allow",	parse_list,		UL &MailtoAllow },
-  { "unmailto_allow",	parse_unlist,		UL &MailtoAllow },
-  { "message-hook",	mutt_parse_hook,	MUTT_MESSAGEHOOK },
-  { "mbox-hook",	mutt_parse_hook,	MUTT_MBOXHOOK },
-  { "mime_lookup",	parse_list,	UL &MimeLookupList },
-  { "unmime_lookup",	parse_unlist,	UL &MimeLookupList },
-  { "mono",		mutt_parse_mono,	0 },
-  { "my_hdr",		parse_my_hdr,		0 },
-  { "pgp-hook",		mutt_parse_hook,	MUTT_CRYPTHOOK },
-  { "crypt-hook",	mutt_parse_hook,	MUTT_CRYPTHOOK },
-  { "push",		mutt_parse_push,	0 },
-  { "reply-hook",	mutt_parse_hook,	MUTT_REPLYHOOK },
-  { "reset",		parse_set,		MUTT_SET_RESET },
-  { "save-hook",	mutt_parse_hook,	MUTT_SAVEHOOK },
-  { "score",		mutt_parse_score,	0 },
-  { "send-hook",	mutt_parse_hook,	MUTT_SENDHOOK },
-  { "send2-hook",	mutt_parse_hook,	MUTT_SEND2HOOK },
-  { "set",		parse_set,		0 },
-  { "setenv",		parse_setenv,		0 },
+  { "ignore",		parse_ignore,		{.l=0} },
+  { "index-format-hook",mutt_parse_idxfmt_hook, {.l=MUTT_IDXFMTHOOK} },
+  { "lists",		parse_lists,		{.l=0} },
+  { "macro",		mutt_parse_macro,	{.l=0} },
+  { "mailboxes",	mutt_parse_mailboxes,	{.l=MUTT_MAILBOXES} },
+  { "unmailboxes",	mutt_parse_mailboxes,	{.l=MUTT_UNMAILBOXES} },
+  { "mailto_allow",	parse_list,		{.p=&MailtoAllow} },
+  { "unmailto_allow",	parse_unlist,		{.p=&MailtoAllow} },
+  { "message-hook",	mutt_parse_hook,	{.l=MUTT_MESSAGEHOOK} },
+  { "mbox-hook",	mutt_parse_hook,	{.l=MUTT_MBOXHOOK} },
+  { "mime_lookup",	parse_list,		{.p=&MimeLookupList} },
+  { "unmime_lookup",	parse_unlist,		{.p=&MimeLookupList} },
+  { "mono",		mutt_parse_mono,	{.l=0} },
+  { "my_hdr",		parse_my_hdr,		{.l=0} },
+  { "pgp-hook",		mutt_parse_hook,	{.l=MUTT_CRYPTHOOK} },
+  { "crypt-hook",	mutt_parse_hook,	{.l=MUTT_CRYPTHOOK} },
+  { "push",		mutt_parse_push,	{.l=0} },
+  { "reply-hook",	mutt_parse_hook,	{.l=MUTT_REPLYHOOK} },
+  { "reset",		parse_set,		{.l=MUTT_SET_RESET} },
+  { "save-hook",	mutt_parse_hook,	{.l=MUTT_SAVEHOOK} },
+  { "score",		mutt_parse_score,	{.l=0} },
+  { "send-hook",	mutt_parse_hook,	{.l=MUTT_SENDHOOK} },
+  { "send2-hook",	mutt_parse_hook,	{.l=MUTT_SEND2HOOK} },
+  { "set",		parse_set,		{.l=0} },
+  { "setenv",		parse_setenv,		{.l=0} },
 #ifdef USE_SIDEBAR
-  { "sidebar_whitelist",parse_path_list,	UL &SidebarWhitelist },
-  { "unsidebar_whitelist",parse_path_unlist,	UL &SidebarWhitelist },
+  { "sidebar_whitelist",parse_path_list,	{.p=&SidebarWhitelist} },
+  { "unsidebar_whitelist",parse_path_unlist,	{.p=&SidebarWhitelist} },
 #endif
-  { "source",		parse_source,		0 },
-  { "spam",		parse_spam_list,	MUTT_SPAM },
-  { "nospam",		parse_spam_list,	MUTT_NOSPAM },
-  { "subscribe",	parse_subscribe,	0 },
-  { "subjectrx",    parse_subjectrx_list, UL &SubjectRxList },
-  { "unsubjectrx",  parse_unsubjectrx_list, UL &SubjectRxList },
-  { "toggle",		parse_set,		MUTT_SET_INV },
-  { "unalias",		parse_unalias,		0 },
-  { "unalternative_order",parse_unlist,		UL &AlternativeOrderList },
-  { "unauto_view",	parse_unlist,		UL &AutoViewList },
-  { "unhdr_order",	parse_unlist,		UL &HeaderOrderList },
-  { "unhook",		mutt_parse_unhook,	0 },
-  { "unignore",		parse_unignore,		0 },
-  { "unlists",		parse_unlists,		0 },
-  { "unmono",		mutt_parse_unmono,	0 },
-  { "unmy_hdr",		parse_unmy_hdr,		0 },
-  { "unscore",		mutt_parse_unscore,	0 },
-  { "unset",		parse_set,		MUTT_SET_UNSET },
-  { "unsetenv",		parse_setenv,		MUTT_SET_UNSET },
-  { "unsubscribe",	parse_unsubscribe,	0 },
-  { NULL,		NULL,			0 }
+  { "source",		parse_source,		{.l=0} },
+  { "spam",		parse_spam_list,	{.l=MUTT_SPAM} },
+  { "nospam",		parse_spam_list,	{.l=MUTT_NOSPAM} },
+  { "subscribe",	parse_subscribe,	{.l=0} },
+  { "subjectrx",    parse_subjectrx_list, 	{.p=&SubjectRxList} },
+  { "unsubjectrx",  parse_unsubjectrx_list,	{.p=&SubjectRxList} },
+  { "toggle",		parse_set,		{.l=MUTT_SET_INV} },
+  { "unalias",		parse_unalias,		{.l=0} },
+  { "unalternative_order",parse_unlist,		{.p=&AlternativeOrderList} },
+  { "unauto_view",	parse_unlist,		{.p=&AutoViewList} },
+  { "unhdr_order",	parse_unlist,		{.p=&HeaderOrderList} },
+  { "unhook",		mutt_parse_unhook,	{.l=0} },
+  { "unignore",		parse_unignore,		{.l=0} },
+  { "unlists",		parse_unlists,		{.l=0} },
+  { "unmono",		mutt_parse_unmono,	{.l=0} },
+  { "unmy_hdr",		parse_unmy_hdr,		{.l=0} },
+  { "unscore",		mutt_parse_unscore,	{.l=0} },
+  { "unset",		parse_set,		{.l=MUTT_SET_UNSET} },
+  { "unsetenv",		parse_setenv,		{.l=MUTT_SET_UNSET} },
+  { "unsubscribe",	parse_unsubscribe,	{.l=0} },
+  { NULL,		NULL,			{.l=0} }
 };

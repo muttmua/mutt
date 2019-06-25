@@ -253,12 +253,13 @@ static void buffy_free (BUFFY **mailbox)
   FREE (mailbox); /* __FREE_CHECKED__ */
 }
 
-int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   BUFFY **tmp,*tmp1;
   struct stat sb;
   char f1[PATH_MAX];
   char *p;
+  long data = udata.l;
 
   while (MoreArgs (s))
   {

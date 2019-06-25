@@ -403,28 +403,26 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
  */
 
 static int
-_mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err,
-                     short parse_uncolor);
+_mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse_uncolor);
 
 
 #ifdef HAVE_COLOR
 
-int mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
+int mutt_parse_uncolor (BUFFER *buf, BUFFER *s, union pointer_long_t udata,
 			BUFFER *err)
 {
-  return _mutt_parse_uncolor(buf, s, data, err, 1);
+  return _mutt_parse_uncolor(buf, s, err, 1);
 }
 
 #endif
 
-int mutt_parse_unmono (BUFFER *buf, BUFFER *s, unsigned long data,
+int mutt_parse_unmono (BUFFER *buf, BUFFER *s, union pointer_long_t udata,
 		       BUFFER *err)
 {
-  return _mutt_parse_uncolor(buf, s, data, err, 0);
+  return _mutt_parse_uncolor(buf, s, err, 0);
 }
 
-static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, unsigned long data,
-				BUFFER *err, short parse_uncolor)
+static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse_uncolor)
 {
   int object = 0, is_index = 0, do_cache = 0;
   COLOR_LINE *tmp, *last = NULL;
@@ -878,7 +876,7 @@ _mutt_parse_color (BUFFER *buf, BUFFER *s, BUFFER *err,
 
 #ifdef HAVE_COLOR
 
-int mutt_parse_color(BUFFER *buff, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_color(BUFFER *buff, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int dry_run = 0;
 
@@ -890,7 +888,7 @@ int mutt_parse_color(BUFFER *buff, BUFFER *s, unsigned long data, BUFFER *err)
 
 #endif
 
-int mutt_parse_mono(BUFFER *buff, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_mono(BUFFER *buff, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   int dry_run = 0;
 
