@@ -183,7 +183,7 @@ static PARAMETER *parse_parameters (const char *s)
 	s++;
 	for (i=0; *s && i < sizeof (buffer) - 1; i++, s++)
 	{
-	  if (AssumedCharset && *AssumedCharset)
+	  if (AssumedCharset)
           {
             /* As iso-2022-* has a character of '"' with non-ascii state,
 	     * ignore it. */
@@ -371,7 +371,7 @@ void mutt_parse_content_type (char *s, BODY *ct)
   if (ct->type == TYPETEXT)
   {
     if (!(pc = mutt_get_parameter ("charset", ct->parameter)))
-      mutt_set_parameter ("charset", (AssumedCharset && *AssumedCharset) ?
+      mutt_set_parameter ("charset", AssumedCharset ?
                           (const char *) mutt_get_default_charset ()
                           : "us-ascii", &ct->parameter);
   }

@@ -508,7 +508,7 @@ static int smtp_auth (CONNECTION* conn)
 {
   int r = SMTP_AUTH_UNAVAIL;
 
-  if (SmtpAuthenticators && *SmtpAuthenticators)
+  if (SmtpAuthenticators)
   {
     char* methods = safe_strdup (SmtpAuthenticators);
     char* method;

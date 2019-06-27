@@ -334,7 +334,7 @@ int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, 
     goto out;
   }
 
-  if (DefaultHook && *DefaultHook)
+  if (DefaultHook)
     mutt_check_simple (pattern, DefaultHook);
 
   /* check to make sure that a matching hook doesn't already exist */

@@ -1455,7 +1455,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
   int is_signed;
   BODY *clear_content = NULL;
 
-  if (!(Postponed && *Postponed))
+  if (!Postponed)
   {
     mutt_error _("Cannot postpone.  $postponed is unset");
     return -1;
@@ -1472,10 +1472,10 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
       encrypt_as = PgpDefaultKey;
     else if ((WithCrypto & APPLICATION_SMIME) && (msg->security & APPLICATION_SMIME))
       encrypt_as = SmimeDefaultKey;
-    if (!(encrypt_as && *encrypt_as))
+    if (!encrypt_as)
       encrypt_as = PostponeEncryptAs;
 
-    if (encrypt_as && *encrypt_as)
+    if (encrypt_as)
     {
       is_signed = msg->security & SIGN;
       if (is_signed)

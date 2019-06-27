@@ -2719,7 +2719,7 @@ static int source_rc (const char *rcfile, BUFFER *err)
   mutt_buffer_init (&token);
   while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line, MUTT_CONT)) != NULL)
   {
-    conv=ConfigCharset && (*ConfigCharset) && Charset;
+    conv=ConfigCharset && Charset;
     if (conv)
     {
       currentline=safe_strdup(linebuf);

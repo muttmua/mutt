@@ -260,8 +260,7 @@ static void redraw_crypt_lines (HEADER *msg)
   if ((WithCrypto & APPLICATION_SMIME)
       && (msg->security & APPLICATION_SMIME)
       && (msg->security & ENCRYPT)
-      && SmimeCryptAlg
-      && *SmimeCryptAlg)
+      && SmimeCryptAlg)
   {
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPTINFO, 40, "%s", _("Encrypt with: "));

@@ -57,7 +57,7 @@ int imap_authenticate (IMAP_DATA* idata)
   char* delim;
   int r = -1;
 
-  if (ImapAuthenticators && *ImapAuthenticators)
+  if (ImapAuthenticators)
   {
     /* Try user-specified list of authentication methods */
     methods = safe_strdup (ImapAuthenticators);

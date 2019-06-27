@@ -265,7 +265,7 @@ CONNECTION* mutt_conn_find (const CONNECTION* start, const ACCOUNT* account)
   conn->next = Connections;
   Connections = conn;
 
-  if (Tunnel && *Tunnel)
+  if (Tunnel)
     mutt_tunnel_socket_setup (conn);
   else if (account->flags & MUTT_ACCT_SSL)
   {

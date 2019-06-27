@@ -2360,7 +2360,7 @@ int mutt_index_menu (void)
 	  if (!mutt_get_field (_("Enter macro stroke: "), buf, sizeof(buf),
 	  		       MUTT_CLEAR) && buf[0])
 	  {
-	    snprintf(str, sizeof(str), "%s%s", MarkMacroPrefix, buf);
+	    snprintf(str, sizeof(str), "%s%s", NONULL (MarkMacroPrefix), buf);
 	    snprintf(macro, sizeof(macro),
 		     "<search>~i \"%s\"\n", CURHDR->env->message_id);
             /* L10N: "message hotkey" is the key bindings menu description of a

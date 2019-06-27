@@ -609,8 +609,7 @@ mutt_hcache_per_folder(const char *path, const char *folder,
   char* s;
   int ret, plen;
 #ifndef HAVE_ICONV
-  const char *chs = Charset && *Charset ? Charset :
-    mutt_get_default_charset ();
+  const char *chs = Charset ? Charset : mutt_get_default_charset ();
 #endif
 
   plen = mutt_strlen (path);

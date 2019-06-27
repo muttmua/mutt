@@ -328,7 +328,7 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, const char *method)
   int ret, len;
 
   /* If they did not explicitly request or configure oauth then fail quietly */
-  if (!(method || (PopOauthRefreshCmd && *PopOauthRefreshCmd)))
+  if (!(method || PopOauthRefreshCmd))
       return POP_A_UNAVAIL;
 
   mutt_message _("Authenticating (OAUTHBEARER)...");
@@ -406,7 +406,7 @@ int pop_authenticate (POP_DATA* pop_data)
   if (mutt_account_getuser (acct) || !acct->user[0])
     return -3;
 
-  if (PopAuthenticators && *PopAuthenticators)
+  if (PopAuthenticators)
   {
     /* Try user-specified list of authentication methods */
     methods = safe_strdup (PopAuthenticators);

@@ -116,7 +116,7 @@ void rfc2231_decode_parameters (PARAMETER **headp)
 
       if (option (OPTRFC2047PARAMS) && p->value && strstr (p->value, "=?"))
 	rfc2047_decode (&p->value);
-      else if (AssumedCharset && *AssumedCharset)
+      else if (AssumedCharset)
         convert_nonmime_string (&p->value);
 
       *last = p;

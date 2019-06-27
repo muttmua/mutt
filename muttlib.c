@@ -496,7 +496,7 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx)
 	  mutt_buffer_strcpy (p, NONULL (Maildir));
 	else
 #endif
-          if (Maildir && *Maildir && Maildir[strlen (Maildir) - 1] == '/')
+          if (Maildir && Maildir[strlen (Maildir) - 1] == '/')
             mutt_buffer_strcpy (p, NONULL (Maildir));
           else
             mutt_buffer_printf (p, "%s/", NONULL (Maildir));

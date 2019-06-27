@@ -860,7 +860,7 @@ int crypt_get_keys (HEADER *msg, char **keylist, int oppenc_mode)
     }
   }
 
-  if (!oppenc_mode && self_encrypt && *self_encrypt)
+  if (!oppenc_mode && self_encrypt)
   {
     keylist_size = mutt_strlen (*keylist);
     safe_realloc (keylist, keylist_size + mutt_strlen (self_encrypt) + 2);
@@ -926,7 +926,7 @@ int mutt_should_hide_protected_subject (HEADER *h)
   if (option (OPTCRYPTPROTHDRSWRITE) &&
       (h->security & ENCRYPT) &&
       !(h->security & INLINE) &&
-      ProtHdrSubject && *ProtHdrSubject)
+      ProtHdrSubject)
     return 1;
 
   return 0;

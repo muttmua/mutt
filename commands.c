@@ -194,7 +194,7 @@ int mutt_display_message (HEADER *cur)
     return (0);
   }
 
-  if (DisplayFilter && *DisplayFilter)
+  if (DisplayFilter)
   {
     fpfilterout = fpout;
     fpout = NULL;
@@ -585,7 +585,7 @@ void mutt_pipe_message (HEADER *h)
 void mutt_print_message (HEADER *h)
 {
 
-  if (quadoption (OPT_PRINT) && (!PrintCmd || !*PrintCmd))
+  if (quadoption (OPT_PRINT) && !PrintCmd)
   {
     mutt_message (_("No printing command has been defined."));
     return;

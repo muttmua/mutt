@@ -859,7 +859,7 @@ void smime_getkeys (ENVELOPE *env)
   ADDRESS *t;
   int found = 0;
 
-  if (option (OPTSDEFAULTDECRYPTKEY) && SmimeDefaultKey && *SmimeDefaultKey)
+  if (option (OPTSDEFAULTDECRYPTKEY) && SmimeDefaultKey)
   {
     snprintf (SmimeKeyToUse, sizeof (SmimeKeyToUse), "%s/%s",
 	      NONULL (SmimeKeys), SmimeDefaultKey);
@@ -1545,8 +1545,8 @@ BODY *smime_sign_message (BODY *a )
   char *intermediates;
   char *micalg;
 
-  signas = (SmimeSignAs && *SmimeSignAs) ? SmimeSignAs : SmimeDefaultKey;
-  if (!signas || !*signas)
+  signas = SmimeSignAs ? SmimeSignAs : SmimeDefaultKey;
+  if (!signas)
   {
     mutt_error _("Can't sign: No key specified. Use Sign As.");
     return NULL;

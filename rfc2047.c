@@ -593,7 +593,7 @@ void _rfc2047_encode_string (char **pd, int encode_specials, int col)
     return;
 
   charsets = SendCharset;
-  if (!charsets || !*charsets)
+  if (!charsets)
     charsets = "utf-8";
 
   rfc2047_encode (*pd, strlen (*pd), col,
@@ -810,7 +810,7 @@ static void convert_and_add_text (BUFFER *d, const char *text, size_t len)
 {
   char *t;
 
-  if (AssumedCharset && *AssumedCharset)
+  if (AssumedCharset)
   {
     t = safe_malloc (len + 1);
     strfcpy (t, text, len + 1);
@@ -950,7 +950,7 @@ void rfc2047_decode_adrlist (ADDRESS *a)
   while (a)
   {
     if (a->personal && ((strstr (a->personal, "=?") != NULL) ||
-			(AssumedCharset && *AssumedCharset)))
+			AssumedCharset))
       rfc2047_decode (&a->personal);
     else if (a->group && a->mailbox && (strstr (a->mailbox, "=?") != NULL))
       rfc2047_decode (&a->mailbox);

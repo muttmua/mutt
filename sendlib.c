@@ -915,8 +915,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
   if (b != NULL && b->type == TYPETEXT && (!b->noconv && !b->force_charset))
   {
     char *chs = mutt_get_parameter ("charset", b->parameter);
-    char *fchs = b->use_disp ? ((AttachCharset && *AttachCharset) ?
-                                AttachCharset : Charset) : Charset;
+    char *fchs = b->use_disp ? (AttachCharset ? AttachCharset : Charset) : Charset;
     if (Charset && (chs || SendCharset) &&
         convert_file_from_to (fp, fchs, chs ? chs : SendCharset,
                               &fromcode, &tocode, info) != (size_t)(-1))
@@ -1407,8 +1406,7 @@ BODY *mutt_make_file_attach (const char *path)
   att = mutt_new_body ();
   att->filename = safe_strdup (path);
 
-  if (MimeTypeQueryCmd && *MimeTypeQueryCmd &&
-      option (OPTMIMETYPEQUERYFIRST))
+  if (MimeTypeQueryCmd && option (OPTMIMETYPEQUERYFIRST))
     run_mime_type_query (att);
 
   /* Attempt to determine the appropriate content-type based on the filename
@@ -1418,7 +1416,7 @@ BODY *mutt_make_file_attach (const char *path)
     mutt_lookup_mime_type (att, path);
 
   if (!att->subtype &&
-      MimeTypeQueryCmd && *MimeTypeQueryCmd &&
+      MimeTypeQueryCmd &&
       !option (OPTMIMETYPEQUERYFIRST))
     run_mime_type_query (att);
 
@@ -2856,7 +2854,7 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     if (hdr->security & SIGN)
     {
       fputc ('S', msg->fp);
-      if (PgpSignAs && *PgpSignAs)
+      if (PgpSignAs)
         fprintf (msg->fp, "<%s>", PgpSignAs);
     }
     if (hdr->security & INLINE)
@@ -2872,7 +2870,7 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     if (hdr->security & ENCRYPT)
     {
       fputc ('E', msg->fp);
-      if (SmimeCryptAlg && *SmimeCryptAlg)
+      if (SmimeCryptAlg)
         fprintf (msg->fp, "C<%s>", SmimeCryptAlg);
     }
     if (hdr->security & OPPENCRYPT)
@@ -2880,7 +2878,7 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     if (hdr->security & SIGN)
     {
       fputc ('S', msg->fp);
-      if (SmimeSignAs && *SmimeSignAs)
+      if (SmimeSignAs)
         fprintf (msg->fp, "<%s>", SmimeSignAs);
     }
     if (hdr->security & INLINE)

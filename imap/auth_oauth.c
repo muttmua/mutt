@@ -42,7 +42,7 @@ imap_auth_res_t imap_auth_oauth (IMAP_DATA* idata, const char* method)
     return IMAP_AUTH_UNAVAIL;
 
   /* If they did not explicitly request or configure oauth then fail quietly */
-  if (!(method || (ImapOauthRefreshCmd && *ImapOauthRefreshCmd)))
+  if (!(method || ImapOauthRefreshCmd))
       return IMAP_AUTH_UNAVAIL;
 
   mutt_message _("Authenticating (OAUTHBEARER)...");

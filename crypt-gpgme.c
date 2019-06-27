@@ -943,11 +943,11 @@ static int set_signer (gpgme_ctx_t ctx, int for_smime)
   char *fpr, *fpr2;
 
   if (for_smime)
-    signid = (SmimeSignAs && *SmimeSignAs) ? SmimeSignAs : SmimeDefaultKey;
+    signid = SmimeSignAs ? SmimeSignAs : SmimeDefaultKey;
   else
-    signid = (PgpSignAs && *PgpSignAs) ? PgpSignAs : PgpDefaultKey;
+    signid = PgpSignAs ? PgpSignAs : PgpDefaultKey;
 
-  if (!signid || !*signid)
+  if (!signid)
     return 0;
 
   listctx = create_gpgme_context (for_smime);
@@ -2319,7 +2319,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
 
   if (legacy_api)
   {
-    snprintf (tmpdir, sizeof(tmpdir), "%s/mutt-gpgme-XXXXXX", Tempdir);
+    snprintf (tmpdir, sizeof(tmpdir), "%s/mutt-gpgme-XXXXXX", NONULL (Tempdir));
     if (!mkdtemp (tmpdir))
     {
       dprint (1, (debugfile, "Error creating temporary GPGME home\n"));

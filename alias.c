@@ -215,7 +215,7 @@ static void recode_buf (char *buf, size_t buflen)
 {
   char *s;
 
-  if (!ConfigCharset || !*ConfigCharset || !Charset)
+  if (!ConfigCharset || !Charset)
     return;
   s = safe_strdup (buf);
   if (!s)
