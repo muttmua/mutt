@@ -1167,7 +1167,7 @@ struct option_t MuttVars[] = {
   */
 #endif /* HAVE_QDBM */
 #if defined(HAVE_GDBM) || defined(HAVE_DB4)
-  { "header_cache_pagesize", DT_STR, R_NONE, {.p=&HeaderCachePageSize}, {.p="16384"} },
+  { "header_cache_pagesize", DT_LNUM, R_NONE, {.p=&HeaderCachePageSize}, {.l=16384} },
   /*
   ** .pp
   ** When mutt is compiled with either gdbm or bdb4 as the header cache backend,
