@@ -253,7 +253,7 @@ struct option_t MuttVars[] = {
   ** .dt %M  .dd MIME subtype
   ** .dt %n  .dd attachment number
   ** .dt %Q  .dd ``Q'', if MIME part qualifies for attachment counting
-  ** .dt %s  .dd size
+  ** .dt %s  .dd size (see $formatstrings-size)
   ** .dt %t  .dd tagged flag
   ** .dt %T  .dd graphic tree characters
   ** .dt %u  .dd unlink (=to delete) flag
@@ -505,7 +505,7 @@ struct option_t MuttVars[] = {
   ** .dl
   ** .dt %a .dd total number of attachments
   ** .dt %h .dd local hostname
-  ** .dt %l .dd approximate size (in bytes) of the current message
+  ** .dt %l .dd approximate size (in bytes) of the current message (see $formatstrings-size)
   ** .dt %v .dd Mutt version string
   ** .de
   ** .pp
@@ -1020,7 +1020,7 @@ struct option_t MuttVars[] = {
   ** .dt %m  .dd number of messages in the mailbox *
   ** .dt %n  .dd number of unread messages in the mailbox *
   ** .dt %N  .dd N if mailbox has new mail, blank otherwise
-  ** .dt %s  .dd size in bytes
+  ** .dt %s  .dd size in bytes (see $formatstrings-size)
   ** .dt %t  .dd ``*'' if the file is tagged, blank otherwise
   ** .dt %u  .dd owner name (or numeric uid, if missing)
   ** .dt %>X .dd right justify the rest of the string and pad with character ``X''
@@ -1626,7 +1626,7 @@ struct option_t MuttVars[] = {
   ** .dt %A .dd reply-to address (if present; otherwise: address of author)
   ** .dt %b .dd filename of the original message folder (think mailbox)
   ** .dt %B .dd the list to which the letter was sent, or else the folder name (%b).
-  ** .dt %c .dd number of characters (bytes) in the message
+  ** .dt %c .dd number of characters (bytes) in the message (see $formatstrings-size)
   ** .dt %C .dd current message number
   ** .dt %d .dd date and time of the message in the format specified by
   **            $$date_format converted to sender's time zone
@@ -3315,6 +3315,31 @@ struct option_t MuttVars[] = {
   ** replacing ``%s'' with the supplied string.
   ** For the default value, ``joe'' would be expanded to: ``~f joe | ~s joe''.
   */
+  { "size_show_bytes",	DT_BOOL, R_MENU, {.l=OPTSIZESHOWBYTES}, {.l=0} },
+  /*
+  ** .pp
+  ** If \fIset\fP, message sizes will display bytes for values less than
+  ** 1 kilobyte.  See $formatstrings-size.
+  */
+  { "size_show_fractions", DT_BOOL, R_MENU, {.l=OPTSIZESHOWFRACTIONS}, {.l=1} },
+  /*
+  ** .pp
+  ** If \fIset\fP, message sizes will be displayed with a single decimal value
+  ** for sizes from 0 to 10 kilobytes and 1 to 10 megabytes.
+  ** See $formatstrings-size.
+  */
+  { "size_show_mb",	DT_BOOL, R_MENU, {.l=OPTSIZESHOWMB}, {.l=1} },
+  /*
+  ** .pp
+  ** If \fIset\fP, message sizes will display megabytes for values greater than
+  ** or equal to 1 megabyte.  See $formatstrings-size.
+  */
+  { "size_units_on_left", DT_BOOL, R_MENU, {.l=OPTSIZEUNITSONLEFT}, {.l=0} },
+  /*
+  ** .pp
+  ** If \fIset\fP, message sizes units will be displayed to the left of the number.
+  ** See $formatstrings-size.
+  */
   { "sleep_time",	DT_NUM, R_NONE, {.p=&SleepTime}, {.l=1} },
   /*
   ** .pp
@@ -3896,9 +3921,9 @@ struct option_t MuttVars[] = {
   ** .dt %f  .dd the full pathname of the current mailbox
   ** .dt %F  .dd number of flagged messages *
   ** .dt %h  .dd local hostname
-  ** .dt %l  .dd size (in bytes) of the current mailbox *
+  ** .dt %l  .dd size (in bytes) of the current mailbox (see $formatstrings-size) *
   ** .dt %L  .dd size (in bytes) of the messages shown
-  **             (i.e., which match the current limit) *
+  **             (i.e., which match the current limit) (see $formatstrings-size) *
   ** .dt %m  .dd the number of messages in the mailbox *
   ** .dt %M  .dd the number of messages shown (i.e., which match the current limit) *
   ** .dt %n  .dd number of new messages in the mailbox *
