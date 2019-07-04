@@ -1,5 +1,6 @@
 # autoconf products
 /aclocal.m4
+/autocrypt/Makefile.in
 /autom4te.cache
 /compile
 /Makefile.in

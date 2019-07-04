@@ -10,7 +10,12 @@ IMAP_SUBDIR = imap
 IMAP_INCLUDES = -I$(top_srcdir)/imap
 endif
 
-SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
+if BUILD_AUTOCRYPT
+AUTOCRYPT_SUBDIR = autocrypt
+AUTOCRYPT_INCLUDES = -I$(top_srcdir)/autocrypt
+endif
+
+SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR) $(AUTOCRYPT_SUBDIR)
 
 bin_SCRIPTS = muttbug flea $(SMIMEAUX_TARGET)
 
@@ -39,16 +44,17 @@ mutt_SOURCES = \
 nodist_mutt_SOURCES = $(BUILT_SOURCES)
 
 mutt_LDADD = $(MUTT_LIB_OBJECTS) $(LIBOBJS) $(LIBIMAP) $(MUTTLIBS) \
-	$(INTLLIBS) $(LIBICONV)  $(GPGME_LIBS) $(GPG_ERROR_LIBS)
+	$(INTLLIBS) $(LIBICONV)  $(GPGME_LIBS) $(GPG_ERROR_LIBS) \
+	$(LIBAUTOCRYPT)
 
 mutt_DEPENDENCIES = $(MUTT_LIB_OBJECTS) $(LIBOBJS) $(LIBIMAPDEPS) \
-	$(INTLDEPS)
+	$(INTLDEPS) $(LIBAUTOCRYPTDEPS)
 
 DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
 	-DHAVE_CONFIG_H=1
 
-AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(GPGME_CFLAGS) -Iintl
+AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS) -Iintl
 
 EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-classic.c \
 	crypt-mod-pgp-gpgme.c crypt-mod-smime-classic.c \

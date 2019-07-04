@@ -51,6 +51,10 @@
 #include "monitor.h"
 #endif
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt/autocrypt.h"
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -863,6 +867,9 @@ int main (int argc, char **argv, char **environ)
 
   /* Initialize crypto backends.  */
   crypt_init ();
+#ifdef USE_AUTOCRYPT
+  mutt_autocrypt_init ();
+#endif
 
   if (newMagic)
     mx_set_magic (newMagic);
@@ -1348,6 +1355,9 @@ cleanup_and_exit:
 #endif
 #ifdef USE_SASL
   mutt_sasl_done ();
+#endif
+#ifdef USE_AUTOCRYPT
+  mutt_autocrypt_cleanup ();
 #endif
   mutt_browser_cleanup ();
   mutt_free_opts ();

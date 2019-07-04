@@ -125,13 +125,52 @@ AC_DEFINE_UNQUOTED(SENDMAIL,"$ac_cv_path_SENDMAIL", [Where to find sendmail on y
 
 OPS='$(srcdir)/OPS'
 
-AC_MSG_CHECKING([whether to build with GPGME support])
-AC_ARG_ENABLE(gpgme, AS_HELP_STRING([--enable-gpgme],[Enable GPGME support]),
-[       if test x$enableval = xyes; then
-		enable_gpgme=yes
-	fi
-])
+AC_ARG_WITH(sqlite3,
+        AS_HELP_STRING([--with-sqlite3@<:@=PFX@:>@],
+                [Enable sqlite3 support. Required by autocrypt.]),
+        [],
+        [with_sqlite3=no])
+if test x$with_sqlite3 != xno; then
+  if test x$with_sqlite3 != xyes; then
+    LDFLAGS="$LDFLAGS -L$with_sqlite3/lib"
+    CPPFLAGS="$CPPFLAGS -I$with_sqlite3/include"
+  fi
+  saved_LIBS="$LIBS"
 
+  AC_CHECK_LIB(sqlite3, sqlite3_open, [],
+    AC_MSG_ERROR([Unable to find sqlite3 library]))
+
+  LIBS="$saved_LIBS"
+  MUTTLIBS="$MUTTLIBS -lsqlite3"
+fi
+
+AC_ARG_ENABLE(autocrypt,
+        AS_HELP_STRING([--enable-autocrypt],[Enable autocrypt support]),
+        [],
+        [enable_autocrypt=no])
+if test x$enable_autocrypt = xyes; then
+  if test x$with_sqlite3 != xyes; then
+    AC_MSG_ERROR([autocrypt requires --with-sqlite3])
+  fi
+  AC_DEFINE(USE_AUTOCRYPT,1,[ Define if you want support for autocrypt. ])
+  LIBAUTOCRYPT="-Lautocrypt -lautocrypt"
+  LIBAUTOCRYPTDEPS="\$(top_srcdir)/autocrypt/autocrypt.h autocrypt/libautocrypt.a"
+  enable_gpgme=yes
+fi
+AM_CONDITIONAL(BUILD_AUTOCRYPT, test x$enable_autocrypt = xyes)
+AC_SUBST(LIBAUTOCRYPT)
+AC_SUBST(LIBAUTOCRYPTDEPS)
+
+
+if test x"$enable_gpgme" != xyes; then
+  AC_ARG_ENABLE(gpgme, AS_HELP_STRING([--enable-gpgme],[Enable GPGME support]),
+  [       if test x$enableval = xyes; then
+            enable_gpgme=yes
+          fi
+  ])
+fi
+
+AC_MSG_CHECKING([whether to build with GPGME support])
 if test x"$enable_gpgme" = xyes; then
    AC_MSG_RESULT(yes)
    AM_PATH_GPGME(1.4.0, AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
@@ -1604,6 +1643,6 @@ if test x$full_doc != xno ; then
 fi
 
 AC_CONFIG_FILES(Makefile contrib/Makefile doc/Makefile imap/Makefile
-        intl/Makefile m4/Makefile po/Makefile.in
+        intl/Makefile m4/Makefile po/Makefile.in autocrypt/Makefile
         hcachever.sh doc/instdoc.sh)
 AC_OUTPUT
