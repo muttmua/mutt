@@ -8145,7 +8145,12 @@ The syntax is:
 
 <command>attachments</command>
 <arg choice="plain">
-<replaceable>?</replaceable>
+<option>?</option>
+</arg>
+
+<command>unattachments</command>
+<arg choice="plain">
+<option>*</option>
 </arg>
 </cmdsynopsis>
 
@@ -8254,6 +8259,10 @@ a command will list your current settings in Muttrc format, so that it
 can be pasted elsewhere.
 </para>
 
+<para>
+Entering the command <quote><command>unattachments</command> *</quote> as
+a command will Clear all attachment settings.
+</para>
 </sect1>
 
 <sect1 id="mime-lookup">
@@ -10108,6 +10117,13 @@ The following are the commands understood by Mutt:
 <arg choice="plain">
 <replaceable>mime-type</replaceable>
 </arg>
+
+<command><link linkend="attachments">attachments</link></command>
+<arg choice="plain"><option>?</option></arg>
+
+<command><link linkend="attachments">unattachments</link></command>
+<arg choice="plain"><option>*</option></arg>
+
 </cmdsynopsis>
 </listitem>
 

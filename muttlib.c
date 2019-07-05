@@ -324,6 +324,27 @@ void mutt_free_list (LIST **list)
   }
 }
 
+void mutt_free_list_generic(LIST **list, void (*data_free)(char **))
+{
+  LIST *p;
+
+  /* wrap mutt_free_list if no data_free function was provided */
+  if (data_free == NULL)
+  {
+    mutt_free_list(list);
+    return;
+  }
+
+  if (!list) return;
+  while (*list)
+  {
+    p = *list;
+    *list = (*list)->next;
+    data_free(&p->data);
+    FREE (&p);
+  }
+}
+
 LIST *mutt_copy_list (LIST *p)
 {
   LIST *t, *r=NULL, *l=NULL;

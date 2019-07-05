@@ -1354,6 +1354,18 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata
   return parse_attach_list(buf, s, listp, err);
 }
 
+/*
+ * Cleanup a single LIST item who's data is an ATTACH_MATCH
+ */
+static void free_attachments_data (char **data)
+{
+   if (data == NULL ||  *data == NULL) return;
+   ATTACH_MATCH *a = (ATTACH_MATCH *) *data;
+   regfree(&a->minor_rx);
+   FREE (&a->major);
+   FREE (data); /*__FREE_CHECKED__*/
+}
+
 static int parse_unattachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   char op, *p;
@@ -1368,6 +1380,17 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, union pointer_long_t uda
 
   p = buf->data;
   op = *p++;
+
+  if (op == '*')
+  {
+      mutt_free_list_generic(&AttachAllow, free_attachments_data);
+      mutt_free_list_generic(&AttachExclude, free_attachments_data);
+      mutt_free_list_generic(&InlineAllow, free_attachments_data);
+      mutt_free_list_generic(&InlineExclude, free_attachments_data);
+      _attachments_clean();
+      return 0;
+  }
+
   if (op != '+' && op != '-')
   {
     op = '+';

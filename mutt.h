@@ -640,6 +640,7 @@ typedef struct replace_list_t
 #define mutt_new_rx_list() safe_calloc (1, sizeof (RX_LIST))
 #define mutt_new_replace_list() safe_calloc (1, sizeof (REPLACE_LIST))
 void mutt_free_list (LIST **);
+void mutt_free_list_generic (LIST **list, void (*data_free)(char **));
 void mutt_free_rx_list (RX_LIST **);
 void mutt_free_replace_list (REPLACE_LIST **);
 LIST *mutt_copy_list (LIST *);
