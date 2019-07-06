@@ -16,14 +16,14 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _AUTOCRYPT_H
-#define _AUTOCRYPT_H 1
+#ifndef _AUTOCRYPT_PRIVATE_H
+#define _AUTOCRYPT_PRIVATE_H 1
 
-#include <sqlite3.h>
+int mutt_autocrypt_db_init (int can_create);
+void mutt_autocrypt_db_close (void);
 
-WHERE sqlite3 *AutocryptDB;
+int mutt_autocrypt_schema_init (void);
+int mutt_autocrypt_schema_update (void);
 
-int mutt_autocrypt_init (int);
-void mutt_autocrypt_cleanup (void);
 
 #endif

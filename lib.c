@@ -307,6 +307,41 @@ char *mutt_strlower (char *s)
   return (s);
 }
 
+int mutt_mkdir (char *path, mode_t mode)
+{
+  struct stat sb;
+  char *s;
+  int rv = -1;
+
+  if (stat (path, &sb) >= 0)
+    return 0;
+
+  s = path;
+  do
+  {
+    s = strchr (s + 1, '/');
+    if (s)
+      *s = '\0';
+    if (stat (path, &sb) < 0)
+    {
+      if (errno != ENOENT)
+        goto cleanup;
+      if (mkdir (path, mode) < 0)
+        goto cleanup;
+    }
+    if (s)
+      *s = '/';
+  } while (s);
+
+  rv = 0;
+
+cleanup:
+  if (s)
+    *s = '/';
+
+  return rv;
+}
+
 void mutt_unlink (const char *s)
 {
   int fd;

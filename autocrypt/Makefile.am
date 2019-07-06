@@ -7,4 +7,5 @@ AM_CPPFLAGS = -I$(top_srcdir) -I../intl
 
 noinst_LIBRARIES = libautocrypt.a
 
-libautocrypt_a_SOURCES = autocrypt.c autocrypt.h
+libautocrypt_a_SOURCES = autocrypt.c autocrypt.h autocrypt_db.c autocrypt_private.h \
+	autocrypt_schema.c

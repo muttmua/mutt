@@ -218,6 +218,7 @@ void mutt_nocurses_error (const char *, ...);
 void mutt_remove_trailing_ws (char *);
 void mutt_sanitize_filename (char *, short);
 void mutt_str_replace (char **p, const char *s);
+int mutt_mkdir (char *path, mode_t mode);
 void mutt_str_adjust (char **p);
 void mutt_unlink (const char *);
 void safe_free (void *);

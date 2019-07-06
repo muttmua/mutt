@@ -868,7 +868,8 @@ int main (int argc, char **argv, char **environ)
   /* Initialize crypto backends.  */
   crypt_init ();
 #ifdef USE_AUTOCRYPT
-  mutt_autocrypt_init ();
+  if (option (OPTAUTOCRYPT))
+    mutt_autocrypt_init (!(sendflags & SENDBATCH));
 #endif
 
   if (newMagic)

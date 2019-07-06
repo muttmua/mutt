@@ -22,13 +22,68 @@
 
 #include "mutt.h"
 #include "autocrypt.h"
+#include "autocrypt_private.h"
 
-void mutt_autocrypt_init (void)
+#include <errno.h>
+
+static int autocrypt_dir_init (int can_create)
 {
+  int rv = 0;
+  struct stat sb;
+  BUFFER *prompt = NULL;
+
+  if (!stat (AutocryptDir, &sb))
+    return 0;
+
+  if (!can_create)
+    return -1;
+
+  prompt = mutt_buffer_pool_get ();
+  mutt_buffer_printf (prompt, _("%s does not exist. Create it?"), AutocryptDir);
+  if (mutt_yesorno (mutt_b2s (prompt), MUTT_YES) == MUTT_YES)
+  {
+    if (mutt_mkdir (AutocryptDir, 0700) < 0)
+    {
+      mutt_error ( _("Can't create %s: %s."), AutocryptDir, strerror (errno));
+      mutt_sleep (0);
+      rv = -1;
+    }
+  }
+
+  mutt_buffer_pool_release (&prompt);
+  return rv;
+}
+
+int mutt_autocrypt_init (int can_create)
+{
+  if (AutocryptDB)
+    return 0;
+
+  if (!option (OPTAUTOCRYPT) || !AutocryptDir)
+    return -1;
+
+  if (autocrypt_dir_init (can_create))
+    goto bail;
+
+  if (mutt_autocrypt_db_init (can_create))
+    goto bail;
+
+  /* mutt_autocrypt_gpgme_init()
+   *   - init gpgme
+   *   - create key if doesn't exist
+   *     - perhaps should query account table and if empty do that?
+   */
   dprint (1, (debugfile, "In mutt_autocrypt_init()\n"));
+  return 0;
+
+bail:
+  unset_option (OPTAUTOCRYPT);
+  mutt_autocrypt_db_close ();
+  return -1;
 }
 
 void mutt_autocrypt_cleanup (void)
 {
+  mutt_autocrypt_db_close ();
   dprint (1, (debugfile, "In mutt_autocrypt_cleanup()\n"));
 }
