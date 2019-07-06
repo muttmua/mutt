@@ -40,6 +40,9 @@ WHERE char *Attribution;
 WHERE char *AttributionLocale;
 WHERE char *AttachCharset;
 WHERE char *AttachFormat;
+#ifdef USE_AUTOCRYPT
+WHERE char *AutocryptDir;
+#endif
 WHERE char *Charset;
 WHERE char *ComposeFormat;
 WHERE char *ConfigCharset;

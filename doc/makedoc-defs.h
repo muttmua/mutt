@@ -67,4 +67,7 @@
 # ifndef USE_COMPRESSED
 #  define USE_COMPRESSED
 # endif
+# ifndef USE_AUTOCRYPT
+#  define USE_AUTOCRYPT
+# endif
 #endif
