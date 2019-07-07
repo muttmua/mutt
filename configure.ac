@@ -155,29 +155,32 @@ if test x$enable_autocrypt = xyes; then
   AC_DEFINE(USE_AUTOCRYPT,1,[ Define if you want support for autocrypt. ])
   LIBAUTOCRYPT="-Lautocrypt -lautocrypt"
   LIBAUTOCRYPTDEPS="\$(top_srcdir)/autocrypt/autocrypt.h autocrypt/libautocrypt.a"
-  enable_gpgme=yes
+  mutt_enable_gpgme=yes
+  echo "enabling autocrypt..."
+  mutt_gpgme_version="1.8.0"
+  echo "Note: autocrypt requires GPGME version $mutt_gpgme_version or greater"
 fi
 AM_CONDITIONAL(BUILD_AUTOCRYPT, test x$enable_autocrypt = xyes)
 AC_SUBST(LIBAUTOCRYPT)
 AC_SUBST(LIBAUTOCRYPTDEPS)
 
-
-if test x"$enable_gpgme" != xyes; then
+if test x$mutt_enable_gpgme != xyes; then
   AC_ARG_ENABLE(gpgme, AS_HELP_STRING([--enable-gpgme],[Enable GPGME support]),
   [       if test x$enableval = xyes; then
-            enable_gpgme=yes
+            mutt_enable_gpgme=yes
+            mutt_gpgme_version="1.4.0"
           fi
   ])
 fi
 
 AC_MSG_CHECKING([whether to build with GPGME support])
-if test x"$enable_gpgme" = xyes; then
+if test x"$mutt_enable_gpgme" = xyes; then
    AC_MSG_RESULT(yes)
-   AM_PATH_GPGME(1.4.0, AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
+   AM_PATH_GPGME([$mutt_gpgme_version], AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
 		 [Defined, if GPGME support is enabled]),
 		 [gpgme_found=no])
    if test x"$gpgme_found" = xno; then
-      AC_MSG_ERROR([*** GPGME not found or version is older than 1.4 ***])
+      AC_MSG_ERROR([*** GPGME not found or version is older than $mutt_gpgme_version ***])
    else
       MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS crypt-gpgme.o crypt-mod-pgp-gpgme.o crypt-mod-smime-gpgme.o"
       AM_PATH_GPG_ERROR(1.33)

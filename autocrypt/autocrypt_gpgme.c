@@ -16,15 +16,17 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _AUTOCRYPT_PRIVATE_H
-#define _AUTOCRYPT_PRIVATE_H 1
-
-int mutt_autocrypt_db_init (int can_create);
-void mutt_autocrypt_db_close (void);
-
-int mutt_autocrypt_schema_init (void);
-int mutt_autocrypt_schema_update (void);
-
-int mutt_autocrypt_gpgme_init (void);
-
+#if HAVE_CONFIG_H
+# include "config.h"
 #endif
+
+#include "mutt.h"
+#include "crypt-gpgme.h"
+#include "autocrypt.h"
+#include "autocrypt_private.h"
+
+int mutt_autocrypt_gpgme_init (void)
+{
+  pgp_gpgme_init ();
+  return 0;
+}
