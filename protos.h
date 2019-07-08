@@ -315,6 +315,7 @@ int mutt_decode_save_attachment (FILE *, BODY *, const char *, int, int);
 int mutt_display_message (HEADER *h);
 int mutt_dump_variables (void);
 int mutt_edit_attachment(BODY *);
+int mutt_edit_address (ADDRESS **, const char *, int);
 int mutt_edit_message (CONTEXT *, HEADER *);
 int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags);
 int mutt_chscmp (const char *s, const char *chs);

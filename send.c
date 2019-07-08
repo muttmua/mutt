@@ -190,7 +190,7 @@ static ADDRESS *find_mailing_lists (ADDRESS *t, ADDRESS *c)
   return top;
 }
 
-static int edit_address (ADDRESS **a, /* const */ char *field)
+int mutt_edit_address (ADDRESS **a, const char *field, int expand_aliases)
 {
   char buf[HUGE_STRING];
   char *err = NULL;
@@ -204,7 +204,9 @@ static int edit_address (ADDRESS **a, /* const */ char *field)
     if (mutt_get_field (field, buf, sizeof (buf), MUTT_ALIAS) != 0)
       return (-1);
     rfc822_free_address (a);
-    *a = mutt_expand_aliases (mutt_parse_adrlist (NULL, buf));
+    *a = mutt_parse_adrlist (NULL, buf);
+    if (expand_aliases)
+      *a = mutt_expand_aliases (*a);
     if ((idna_ok = mutt_addrlist_to_intl (*a, &err)) != 0)
     {
       mutt_error (_("Error: '%s' is a bad IDN."), err);
@@ -222,11 +224,11 @@ static int edit_envelope (ENVELOPE *en)
   char buf[HUGE_STRING];
   LIST *uh = UserHeader;
 
-  if (edit_address (&en->to, _("To: ")) == -1 || en->to == NULL)
+  if (mutt_edit_address (&en->to, _("To: "), 1) == -1 || en->to == NULL)
     return (-1);
-  if (option (OPTASKCC) && edit_address (&en->cc, _("Cc: ")) == -1)
+  if (option (OPTASKCC) && mutt_edit_address (&en->cc, _("Cc: "), 1) == -1)
     return (-1);
-  if (option (OPTASKBCC) && edit_address (&en->bcc, _("Bcc: ")) == -1)
+  if (option (OPTASKBCC) && mutt_edit_address (&en->bcc, _("Bcc: "), 1) == -1)
     return (-1);
 
   if (en->subject)
