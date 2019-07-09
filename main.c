@@ -867,10 +867,6 @@ int main (int argc, char **argv, char **environ)
 
   /* Initialize crypto backends.  */
   crypt_init ();
-#ifdef USE_AUTOCRYPT
-  if (option (OPTAUTOCRYPT))
-    mutt_autocrypt_init (!(sendflags & SENDBATCH));
-#endif
 
   if (newMagic)
     mx_set_magic (newMagic);
@@ -921,6 +917,13 @@ int main (int argc, char **argv, char **environ)
     mutt_error = mutt_curses_error;
     mutt_message = mutt_curses_message;
   }
+
+  /* Initialize autocrypt after curses messages are working,
+   * because of the initial account setup screens. */
+#ifdef USE_AUTOCRYPT
+  if (option (OPTAUTOCRYPT))
+    mutt_autocrypt_init (!(sendflags & SENDBATCH));
+#endif
 
   /* Create the Maildir directory if it doesn't exist. */
   if (!option (OPTNOCURSES) && Maildir)

@@ -21,6 +21,7 @@
 #endif
 
 #include "mutt.h"
+#include "mutt_curses.h"
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
@@ -82,4 +83,76 @@ bail:
 void mutt_autocrypt_cleanup (void)
 {
   mutt_autocrypt_db_close ();
+}
+
+/* Creates a brand new account the first time autocrypt is initialized */
+int mutt_autocrypt_account_init (void)
+{
+  ADDRESS *addr = NULL;
+  BUFFER *keyid = NULL, *keydata = NULL;
+  AUTOCRYPT_ACCOUNT *account = NULL;
+  int done = 0, rv = -1;
+
+  dprint (1, (debugfile, "In mutt_autocrypt_account_init\n"));
+  if (mutt_yesorno (_("Create an initial autocrypt account?"),
+                      MUTT_YES) != MUTT_YES)
+    return 0;
+
+  keyid = mutt_buffer_pool_get ();
+  keydata = mutt_buffer_pool_get ();
+
+  if (From)
+  {
+    addr = rfc822_cpy_adr_real (From);
+    if (!addr->personal && Realname)
+      addr->personal = safe_strdup (Realname);
+  }
+
+  do
+  {
+    if (mutt_edit_address (&addr, _("Autocrypt account address: "), 0))
+      goto cleanup;
+    if (!addr || !addr->mailbox || addr->next)
+    {
+      /* L10N:
+         Autocrypt prompts for an account email address, and requires
+         a single address.
+      */
+      mutt_error (_("Please enter a single email address"));
+      mutt_sleep (2);
+      done = 0;
+    }
+    else
+      done = 1;
+  } while (!done);
+
+  if (mutt_autocrypt_db_account_get (addr, &account) < 0)
+    goto cleanup;
+  if (account)
+  {
+    mutt_error _("That email address already has an autocrypt account");
+    goto cleanup;
+  }
+
+  if (mutt_autocrypt_gpgme_create_key (addr, keyid, keydata))
+    goto cleanup;
+
+  /* TODO: prompt for prefer_encrypt value? */
+  if (mutt_autocrypt_db_account_insert (addr, mutt_b2s (keyid), mutt_b2s (keydata), 0))
+    goto cleanup;
+
+  rv = 0;
+
+cleanup:
+  if (rv)
+    mutt_error _("Autocrypt account creation aborted.");
+  else
+    mutt_message _("Autocrypt account creation succeeded");
+  mutt_sleep (1);
+
+  mutt_autocrypt_db_account_free (&account);
+  rfc822_free_address (&addr);
+  mutt_buffer_pool_release (&keyid);
+  mutt_buffer_pool_release (&keydata);
+  return rv;
 }
