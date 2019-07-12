@@ -22,9 +22,13 @@
 
 #include "mutt.h"
 #include "mutt_curses.h"
+#include "mime.h"
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
 #include <errno.h>
 
 static int autocrypt_dir_init (int can_create)
@@ -154,5 +158,147 @@ cleanup:
   rfc822_free_address (&addr);
   mutt_buffer_pool_release (&keyid);
   mutt_buffer_pool_release (&keydata);
+  return rv;
+}
+
+int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env)
+{
+  AUTOCRYPTHDR *ac_hdr, *valid_ac_hdr = NULL;
+  struct timeval now;
+  AUTOCRYPT_PEER *peer = NULL;
+  AUTOCRYPT_PEER_HISTORY *peerhist = NULL;
+  BUFFER *keyid = NULL;
+  int update_db = 0, insert_db = 0, insert_db_history = 0, import_gpg = 0;
+  int rv = -1;
+
+  if (!option (OPTAUTOCRYPT))
+    return 0;
+
+  if (mutt_autocrypt_init (0))
+    return -1;
+
+  if (!hdr || !hdr->content || !env)
+    return 0;
+
+  /* 1.1 spec says to skip emails with more than one From header */
+  if (!env->from || env->from->next)
+    return 0;
+
+  /* 1.1 spec also says to skip multipart/report emails */
+  if (hdr->content->type == TYPEMULTIPART &&
+      !(ascii_strcasecmp (hdr->content->subtype, "report")))
+    return 0;
+
+  /* Ignore emails that appear to be more than a week in the future,
+   * since they can block all future updates during that time. */
+  gettimeofday (&now, NULL);
+  if (hdr->date_sent > (now.tv_sec + 7 * 24 * 60 * 60))
+    return 0;
+
+  for (ac_hdr = env->autocrypt; ac_hdr; ac_hdr = ac_hdr->next)
+  {
+    if (ac_hdr->invalid)
+      continue;
+
+    /* NOTE: this assumes the processing is occurring right after
+     * mutt_parse_rfc822_line() and the from ADDR is still in the same
+     * form (intl) as the autocrypt header addr field */
+    if (ascii_strcasecmp (env->from->mailbox, ac_hdr->addr))
+      continue;
+
+    /* 1.1 spec says ignore all, if more than one valid header is found. */
+    if (valid_ac_hdr)
+    {
+      valid_ac_hdr = NULL;
+      break;
+    }
+    valid_ac_hdr = ac_hdr;
+  }
+
+  if (mutt_autocrypt_db_peer_get (env->from, &peer) < 0)
+    goto cleanup;
+
+  if (peer)
+  {
+    if (hdr->date_sent <= peer->autocrypt_timestamp)
+    {
+      rv = 0;
+      goto cleanup;
+    }
+
+    if (hdr->date_sent > peer->last_seen)
+    {
+      update_db = 1;
+      peer->last_seen = hdr->date_sent;
+    }
+
+    if (valid_ac_hdr)
+    {
+      update_db = 1;
+      peer->autocrypt_timestamp = hdr->date_sent;
+      peer->prefer_encrypt = valid_ac_hdr->prefer_encrypt;
+      if (mutt_strcmp (peer->keydata, valid_ac_hdr->keydata))
+      {
+        import_gpg = 1;
+        insert_db_history = 1;
+        mutt_str_replace (&peer->keydata, valid_ac_hdr->keydata);
+      }
+    }
+  }
+  else if (valid_ac_hdr)
+  {
+    import_gpg = 1;
+    insert_db = 1;
+    insert_db_history = 1;
+  }
+
+  if (!(import_gpg || insert_db || update_db))
+  {
+    rv = 0;
+    goto cleanup;
+  }
+
+  if (!peer)
+  {
+    peer = mutt_autocrypt_db_peer_new ();
+    peer->last_seen = hdr->date_sent;
+    peer->autocrypt_timestamp = hdr->date_sent;
+    peer->keydata = safe_strdup (valid_ac_hdr->keydata);
+    peer->prefer_encrypt = valid_ac_hdr->prefer_encrypt;
+  }
+
+  if (import_gpg)
+  {
+    keyid = mutt_buffer_pool_get ();
+    if (mutt_autocrypt_gpgme_import_key (peer->keydata, keyid))
+      goto cleanup;
+    mutt_str_replace (&peer->keyid, mutt_b2s (keyid));
+  }
+
+  if (insert_db &&
+      mutt_autocrypt_db_peer_insert (env->from, peer))
+    goto cleanup;
+
+  if (update_db &&
+      mutt_autocrypt_db_peer_update (env->from, peer))
+    goto cleanup;
+
+  if (insert_db_history)
+  {
+    peerhist = mutt_autocrypt_db_peer_history_new ();
+    peerhist->email_msgid = safe_strdup (env->message_id);
+    peerhist->timestamp = hdr->date_sent;
+    peerhist->keydata = safe_strdup (peer->keydata);
+    if (mutt_autocrypt_db_peer_history_insert (env->from, peerhist))
+      goto cleanup;
+  }
+
+  rv = 0;
+
+cleanup:
+  mutt_autocrypt_db_peer_free (&peer);
+  mutt_autocrypt_db_peer_history_free (&peerhist);
+  mutt_buffer_pool_release (&keyid);
+
   return rv;
 }

@@ -32,7 +32,29 @@ typedef struct
   int enabled;
 } AUTOCRYPT_ACCOUNT;
 
+typedef struct
+{
+  char *email_addr;
+  sqlite3_int64 last_seen;
+  sqlite3_int64 autocrypt_timestamp;
+  char *keyid;
+  char *keydata;
+  int prefer_encrypt;    /* 0 = nopref, 1 = mutual */
+  sqlite3_int64 gossip_timestamp;
+  char *gossip_keyid;
+  char *gossip_keydata;
+} AUTOCRYPT_PEER;
+
+typedef struct
+{
+  char *peer_email_addr;
+  char *email_msgid;
+  sqlite3_int64 timestamp;
+  char *keydata;
+} AUTOCRYPT_PEER_HISTORY;
+
 int mutt_autocrypt_init (int);
 void mutt_autocrypt_cleanup (void);
+int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env);
 
 #endif

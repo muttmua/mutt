@@ -32,14 +32,21 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account);
 int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
                                       const char *keydata, int prefer_encrypt);
 
+AUTOCRYPT_PEER *mutt_autocrypt_db_peer_new (void);
+void mutt_autocrypt_db_peer_free (AUTOCRYPT_PEER **peer);
+int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer);
+int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer);
+int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer);
+
+AUTOCRYPT_PEER_HISTORY *mutt_autocrypt_db_peer_history_new (void);
+void mutt_autocrypt_db_peer_history_free (AUTOCRYPT_PEER_HISTORY **peerhist);
+int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY *peerhist);
+
 int mutt_autocrypt_schema_init (void);
 int mutt_autocrypt_schema_update (void);
 
 int mutt_autocrypt_gpgme_init (void);
 int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keydata);
-
-/* Prepared statements */
-sqlite3_stmt *AccountGetStmt;
-sqlite3_stmt *AccountInsertStmt;
+int mutt_autocrypt_gpgme_import_key (const char *keydata, BUFFER *keyid);
 
 #endif

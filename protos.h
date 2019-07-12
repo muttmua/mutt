@@ -220,6 +220,9 @@ void mutt_format_s_tree (char *, size_t, const char *, const char *);
 void mutt_forward_intro (CONTEXT *ctx, HEADER *cur, FILE *fp);
 void mutt_forward_trailer (CONTEXT *ctx, HEADER *cur, FILE *fp);
 void mutt_free_alias (ALIAS **);
+#ifdef USE_AUTOCRYPT
+void mutt_free_autocrypthdr (AUTOCRYPTHDR **p);
+#endif
 void mutt_free_body (BODY **);
 void mutt_free_color (int fg, int bg);
 void mutt_free_enter_state (ENTER_STATE **);

@@ -680,7 +680,7 @@ typedef struct autocrypt
   char *keydata;
   unsigned int prefer_encrypt : 1;
   unsigned int invalid : 1;
-  struct autocrypt *next;           /* used by gossip headers */
+  struct autocrypt *next;
 } AUTOCRYPTHDR;
 #endif
 

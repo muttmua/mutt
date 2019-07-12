@@ -29,6 +29,10 @@
 #include "mutt_crypt.h"
 #include "url.h"
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt/autocrypt.h"
+#endif
+
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
@@ -1131,8 +1135,11 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 #ifdef USE_AUTOCRYPT
       else if (ascii_strcasecmp (line+1, "utocrypt") == 0)
       {
-        e->autocrypt = parse_autocrypt (e->autocrypt, p);
-        matched = 1;
+        if (option (OPTAUTOCRYPT))
+        {
+          e->autocrypt = parse_autocrypt (e->autocrypt, p);
+          matched = 1;
+        }
       }
 #endif
       break;
@@ -1600,6 +1607,15 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
       dprint(1,(debugfile,"read_rfc822_header(): no date found, using received time from msg separator\n"));
       hdr->date_sent = hdr->received;
     }
+
+#ifdef USE_AUTOCRYPT
+    if (option (OPTAUTOCRYPT))
+    {
+      mutt_autocrypt_process_autocrypt_header (hdr, e);
+      /* No sense in taking up memory after the header is processed */
+      mutt_free_autocrypthdr (&e->autocrypt);
+    }
+#endif
   }
 
   return (e);
