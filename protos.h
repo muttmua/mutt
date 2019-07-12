@@ -61,6 +61,9 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *hdr, int flag);
 #define mutt_new_parameter() safe_calloc (1, sizeof (PARAMETER))
 #define mutt_new_header() safe_calloc (1, sizeof (HEADER))
 #define mutt_new_envelope() safe_calloc (1, sizeof (ENVELOPE))
+#ifdef USE_AUTOCRYPT
+#define mutt_new_autocrypthdr() safe_calloc (1, sizeof (AUTOCRYPTHDR))
+#endif
 #define mutt_new_enter_state() safe_calloc (1, sizeof (ENTER_STATE))
 
 typedef const char * format_t (char *, size_t, size_t, int, char, const char *, const char *, const char *, const char *, unsigned long, format_flag);

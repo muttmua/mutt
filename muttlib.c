@@ -779,6 +779,25 @@ int mutt_is_text_part (BODY *b)
   return 0;
 }
 
+#ifdef USE_AUTOCRYPT
+void mutt_free_autocrypthdr (AUTOCRYPTHDR **p)
+{
+  AUTOCRYPTHDR *cur;
+
+  if (!p)
+    return;
+
+  while (*p)
+  {
+    cur = *p;
+    *p = (*p)->next;
+    FREE (&cur->addr);
+    FREE (&cur->keydata);
+    FREE (&cur);
+  }
+}
+#endif
+
 void mutt_free_envelope (ENVELOPE **p)
 {
   if (!*p) return;
@@ -805,6 +824,11 @@ void mutt_free_envelope (ENVELOPE **p)
   mutt_free_list (&(*p)->references);
   mutt_free_list (&(*p)->in_reply_to);
   mutt_free_list (&(*p)->userhdrs);
+
+#ifdef USE_AUTOCRYPT
+  mutt_free_autocrypthdr (&(*p)->autocrypt);
+#endif
+
   FREE (p);		/* __FREE_CHECKED__ */
 }
 

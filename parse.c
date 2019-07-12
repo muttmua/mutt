@@ -136,17 +136,33 @@ int mutt_check_encoding (const char *c)
     return (ENCOTHER);
 }
 
-static PARAMETER *parse_parameters (const char *s)
+/* Performs rfc2231 parameter parsing on s.
+ *
+ * Autocrypt defines an irregular parameter format that doesn't follow the
+ * rfc.  It splits keydata across multiple lines without parameter continuations.
+ * The allow_value_spaces parameter allows parsing those values which
+ * are split by spaces when unfolded.
+ */
+static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
 {
   PARAMETER *head = 0, *cur = 0, *new;
-  char buffer[LONG_STRING];
+  BUFFER *buffer = NULL;
   const char *p;
   size_t i;
+
+  buffer = mutt_buffer_pool_get ();
+  /* allow_value_spaces, especially with autocrypt keydata, can result
+   * in quite large parameter values.  avoid frequent reallocs by
+   * pre-sizing */
+  if (allow_value_spaces)
+    mutt_buffer_increase_size (buffer, mutt_strlen (s));
 
   dprint (2, (debugfile, "parse_parameters: `%s'\n", s));
 
   while (*s)
   {
+    mutt_buffer_clear (buffer);
+
     if ((p = strpbrk (s, "=;")) == NULL)
     {
       dprint(1, (debugfile, "parse_parameters: malformed parameter: %s\n", s));
@@ -175,53 +191,58 @@ static PARAMETER *parse_parameters (const char *s)
 	new->attribute = mutt_substrdup(s, s + i);
       }
 
-      s = skip_email_wsp(p + 1); /* skip over the = */
+      do
+      {
+        s = skip_email_wsp(p + 1); /* skip over the =, or space if we loop */
 
-      if (*s == '"')
-      {
-        int state_ascii = 1;
-	s++;
-	for (i=0; *s && i < sizeof (buffer) - 1; i++, s++)
-	{
-	  if (AssumedCharset)
+        if (*s == '"')
+        {
+          int state_ascii = 1;
+          s++;
+          for (; *s; s++)
           {
-            /* As iso-2022-* has a character of '"' with non-ascii state,
-	     * ignore it. */
-            if (*s == 0x1b && i < sizeof (buffer) - 2)
+            if (AssumedCharset)
             {
-              if (s[1] == '(' && (s[2] == 'B' || s[2] == 'J'))
-                state_ascii = 1;
-              else
-                state_ascii = 0;
+              /* As iso-2022-* has a character of '"' with non-ascii state,
+               * ignore it. */
+              if (*s == 0x1b)
+              {
+                if (s[1] == '(' && (s[2] == 'B' || s[2] == 'J'))
+                  state_ascii = 1;
+                else
+                  state_ascii = 0;
+              }
             }
+            if (state_ascii && *s == '"')
+              break;
+            if (*s == '\\')
+            {
+              if (s[1])
+              {
+                s++;
+                /* Quote the next character */
+                mutt_buffer_addch (buffer, *s);
+              }
+            }
+            else
+              mutt_buffer_addch (buffer, *s);
           }
-          if (state_ascii && *s == '"')
-            break;
-	  if (*s == '\\')
-	  {
-	    /* Quote the next character */
-	    buffer[i] = s[1];
-	    if (!*++s)
-	      break;
-	  }
-	  else
-	    buffer[i] = *s;
-	}
-	buffer[i] = 0;
-	if (*s)
-	  s++; /* skip over the " */
-      }
-      else
-      {
-	for (i=0; *s && *s != ' ' && *s != ';' && i < sizeof (buffer) - 1; i++, s++)
-	  buffer[i] = *s;
-	buffer[i] = 0;
-      }
+          if (*s)
+            s++; /* skip over the " */
+        }
+        else
+        {
+          for (; *s && *s != ' ' && *s != ';'; s++)
+            mutt_buffer_addch (buffer, *s);
+        }
+
+        p = s;
+      } while (allow_value_spaces && (*s == ' '));
 
       /* if the attribute token was missing, 'new' will be NULL */
       if (new)
       {
-	new->value = safe_strdup (buffer);
+	new->value = safe_strdup (mutt_b2s (buffer));
 
 	dprint (2, (debugfile, "parse_parameter: `%s' = `%s'\n",
                     new->attribute ? new->attribute : "",
@@ -258,6 +279,7 @@ static PARAMETER *parse_parameters (const char *s)
 bail:
 
   rfc2231_decode_parameters (&head);
+  mutt_buffer_pool_release (&buffer);
   return (head);
 }
 
@@ -305,7 +327,7 @@ void mutt_parse_content_type (char *s, BODY *ct)
     *pc++ = 0;
     while (*pc && ISSPACE (*pc))
       pc++;
-    ct->parameter = parse_parameters(pc);
+    ct->parameter = parse_parameters(pc, 0);
 
     /* Some pre-RFC1521 gateways still use the "name=filename" convention,
      * but if a filename has already been set in the content-disposition,
@@ -393,13 +415,76 @@ static void parse_content_disposition (const char *s, BODY *ct)
   if ((s = strchr (s, ';')) != NULL)
   {
     s = skip_email_wsp(s + 1);
-    if ((s = mutt_get_parameter ("filename", (parms = parse_parameters (s)))))
+    if ((s = mutt_get_parameter ("filename", (parms = parse_parameters (s, 0)))))
       mutt_str_replace (&ct->filename, s);
     if ((s = mutt_get_parameter ("name", parms)))
       ct->form_name = safe_strdup (s);
     mutt_free_parameter (&parms);
   }
 }
+
+#ifdef USE_AUTOCRYPT
+static AUTOCRYPTHDR *parse_autocrypt (AUTOCRYPTHDR *head, const char *s)
+{
+  AUTOCRYPTHDR *autocrypt;
+  PARAMETER *params = NULL, *param;
+
+  autocrypt = mutt_new_autocrypthdr ();
+  autocrypt->next = head;
+
+  param = params = parse_parameters (s, 1);
+  if (!params)
+  {
+    autocrypt->invalid = 1;
+    goto cleanup;
+  }
+
+  while (param)
+  {
+    if (!ascii_strcasecmp (param->attribute, "addr"))
+    {
+      if (autocrypt->addr)
+      {
+        autocrypt->invalid = 1;
+        goto cleanup;
+      }
+      autocrypt->addr = param->value;
+      param->value = NULL;
+    }
+    else if (!ascii_strcasecmp (param->attribute, "prefer-encrypt"))
+    {
+      if (!ascii_strcasecmp (param->value, "mutual"))
+        autocrypt->prefer_encrypt = 1;
+    }
+    else if (!ascii_strcasecmp (param->attribute, "keydata"))
+    {
+      if (autocrypt->keydata)
+      {
+        autocrypt->invalid = 1;
+        goto cleanup;
+      }
+      autocrypt->keydata = param->value;
+      param->value = NULL;
+    }
+    else if (param->attribute && (param->attribute[0] != '_'))
+    {
+      autocrypt->invalid = 1;
+      goto cleanup;
+    }
+
+    param = param->next;
+  }
+
+  /* Checking the addr against From, and for multiple valid headers
+   * occurs later, after all the headers are parsed. */
+  if (!autocrypt->addr || !autocrypt->keydata)
+    autocrypt->invalid = 1;
+
+cleanup:
+  mutt_free_parameter (&params);
+  return autocrypt;
+}
+#endif
 
 /* args:
  *	fp	stream to read from
@@ -1043,6 +1128,13 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
         e->from = rfc822_parse_adrlist (e->from, p);
         matched = 1;
       }
+#ifdef USE_AUTOCRYPT
+      else if (ascii_strcasecmp (line+1, "utocrypt") == 0)
+      {
+        e->autocrypt = parse_autocrypt (e->autocrypt, p);
+        matched = 1;
+      }
+#endif
       break;
 
     case 'b':

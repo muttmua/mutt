@@ -673,6 +673,17 @@ typedef struct alias
 #define MUTT_ENV_CHANGED_XLABEL  (1<<2)  /* X-Label edited */
 #define MUTT_ENV_CHANGED_SUBJECT (1<<3)  /* Protected header update */
 
+#ifdef USE_AUTOCRYPT
+typedef struct autocrypt
+{
+  char *addr;
+  char *keydata;
+  unsigned int prefer_encrypt : 1;
+  unsigned int invalid : 1;
+  struct autocrypt *next;           /* used by gossip headers */
+} AUTOCRYPTHDR;
+#endif
+
 typedef struct envelope
 {
   ADDRESS *return_path;
@@ -695,7 +706,9 @@ typedef struct envelope
   LIST *references;		/* message references (in reverse order) */
   LIST *in_reply_to;		/* in-reply-to header content */
   LIST *userhdrs;		/* user defined headers */
-
+#ifdef USE_AUTOCRYPT
+  AUTOCRYPTHDR *autocrypt;
+#endif
   unsigned char changed;       /* The MUTT_ENV_CHANGED_* flags specify which
                                 * fields are modified */
 } ENVELOPE;
