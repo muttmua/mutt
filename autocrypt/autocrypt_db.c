@@ -173,7 +173,7 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
 
   if (!AccountGetStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "SELECT "
           "email_addr, "
@@ -184,6 +184,7 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
           "FROM account "
           "WHERE email_addr = ?",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &AccountGetStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
@@ -229,7 +230,7 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
 
   if (!AccountInsertStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "INSERT INTO account "
           "(email_addr, "
@@ -239,6 +240,7 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
           "enabled) "
           "VALUES (?, ?, ?, ?, ?);",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &AccountInsertStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
@@ -309,7 +311,7 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
 
   if (!PeerGetStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "SELECT "
           "email_addr, "
@@ -324,6 +326,7 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
           "FROM peer "
           "WHERE email_addr = ?",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &PeerGetStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
@@ -372,7 +375,7 @@ int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
 
   if (!PeerInsertStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "INSERT INTO peer "
           "(email_addr, "
@@ -386,6 +389,7 @@ int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
           "gossip_keydata) "
           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &PeerInsertStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
@@ -458,7 +462,7 @@ int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer)
 
   if (!PeerUpdateStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "UPDATE peer SET "
           "last_seen = ?, "
@@ -471,6 +475,7 @@ int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer)
           "gossip_keydata = ? "
           "WHERE email_addr = ?;",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &PeerUpdateStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
@@ -558,7 +563,7 @@ int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY
 
   if (!PeerHistoryInsertStmt)
   {
-    if (sqlite3_prepare_v2 (
+    if (sqlite3_prepare_v3 (
           AutocryptDB,
           "INSERT INTO peer_history "
           "(peer_email_addr, "
@@ -567,6 +572,7 @@ int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY
           "keydata) "
           "VALUES (?, ?, ?, ?);",
           -1,
+          SQLITE_PREPARE_PERSISTENT,
           &PeerHistoryInsertStmt,
           NULL) != SQLITE_OK)
       goto cleanup;
