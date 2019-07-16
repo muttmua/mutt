@@ -41,6 +41,10 @@
 #include "imap.h"
 #endif
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt/autocrypt.h"
+#endif
+
 #include "buffy.h"
 
 #include <errno.h>
@@ -57,12 +61,16 @@ static const char *ExtPagerProgress = "all";
 /* The folder the user last saved to.  Used by ci_save_message() */
 static char LastSaveFolder[_POSIX_PATH_MAX] = "";
 
-static void update_protected_headers (HEADER *cur)
+static void process_protected_headers (HEADER *cur)
 {
   ENVELOPE *prot_headers = NULL;
   regmatch_t pmatch[1];
 
-  if (!option (OPTCRYPTPROTHDRSREAD))
+  if (!option (OPTCRYPTPROTHDRSREAD)
+#ifdef USE_AUTOCRYPT
+      && !option (OPTAUTOCRYPT)
+#endif
+    )
     return;
 
   /* Grab protected headers to update in the index */
@@ -104,7 +112,8 @@ static void update_protected_headers (HEADER *cur)
   }
 
   /* Update protected headers in the index and header cache. */
-  if (prot_headers &&
+  if (option (OPTCRYPTPROTHDRSREAD) &&
+      prot_headers &&
       prot_headers->subject &&
       mutt_strcmp (cur->env->subject, prot_headers->subject))
   {
@@ -131,6 +140,16 @@ static void update_protected_headers (HEADER *cur)
       Context->changed = 1;
     }
   }
+
+#ifdef USE_AUTOCRYPT
+  if (option (OPTAUTOCRYPT) &&
+      (cur->security & ENCRYPT) &&
+      prot_headers &&
+      prot_headers->autocrypt_gossip)
+  {
+    mutt_autocrypt_process_gossip_header (cur, cur->env);
+  }
+#endif
 }
 
 int mutt_display_message (HEADER *cur)
@@ -253,8 +272,8 @@ int mutt_display_message (HEADER *cur)
        are color patterns for both ~g and ~V */
     cur->pair = 0;
 
-    /* Grab protected headers and update the header and index */
-    update_protected_headers (cur);
+    /* Process protected headers and autocrypt gossip headers */
+    process_protected_headers (cur);
   }
 
   if (builtin)

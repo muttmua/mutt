@@ -1141,6 +1141,14 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
           matched = 1;
         }
       }
+      else if (ascii_strcasecmp (line+1, "utocrypt-gossip") == 0)
+      {
+        if (option (OPTAUTOCRYPT))
+        {
+          e->autocrypt_gossip = parse_autocrypt (e->autocrypt_gossip, p);
+          matched = 1;
+        }
+      }
 #endif
       break;
 

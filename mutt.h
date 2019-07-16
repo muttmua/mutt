@@ -708,6 +708,7 @@ typedef struct envelope
   LIST *userhdrs;		/* user defined headers */
 #ifdef USE_AUTOCRYPT
   AUTOCRYPTHDR *autocrypt;
+  AUTOCRYPTHDR *autocrypt_gossip;
 #endif
   unsigned char changed;       /* The MUTT_ENV_CHANGED_* flags specify which
                                 * fields are modified */

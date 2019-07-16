@@ -42,6 +42,10 @@ AUTOCRYPT_PEER_HISTORY *mutt_autocrypt_db_peer_history_new (void);
 void mutt_autocrypt_db_peer_history_free (AUTOCRYPT_PEER_HISTORY **peerhist);
 int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY *peerhist);
 
+AUTOCRYPT_GOSSIP_HISTORY *mutt_autocrypt_db_gossip_history_new (void);
+void mutt_autocrypt_db_gossip_history_free (AUTOCRYPT_GOSSIP_HISTORY **gossip_hist);
+int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HISTORY *gossip_hist);
+
 int mutt_autocrypt_schema_init (void);
 int mutt_autocrypt_schema_update (void);
 

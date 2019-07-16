@@ -23,6 +23,7 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mime.h"
+#include "mutt_idna.h"
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
@@ -298,6 +299,144 @@ int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env)
 cleanup:
   mutt_autocrypt_db_peer_free (&peer);
   mutt_autocrypt_db_peer_history_free (&peerhist);
+  mutt_buffer_pool_release (&keyid);
+
+  return rv;
+}
+
+static ADDRESS *matching_gossip_address (ENVELOPE *env, const char *addr)
+{
+  ADDRESS *cur;
+
+  for (cur = env->to; cur; cur = cur->next)
+    if (!ascii_strcasecmp (cur->mailbox, addr))
+      return cur;
+
+  for (cur = env->cc; cur; cur = cur->next)
+    if (!ascii_strcasecmp (cur->mailbox, addr))
+      return cur;
+
+  for (cur = env->reply_to; cur; cur = cur->next)
+    if (!ascii_strcasecmp (cur->mailbox, addr))
+      return cur;
+
+  return NULL;
+}
+
+int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
+{
+  AUTOCRYPTHDR *ac_hdr;
+  struct timeval now;
+  AUTOCRYPT_PEER *peer = NULL;
+  AUTOCRYPT_GOSSIP_HISTORY *gossip_hist = NULL;
+  ADDRESS *peer_addr;
+  BUFFER *keyid = NULL;
+  int update_db = 0, insert_db = 0, insert_db_history = 0, import_gpg = 0;
+  int rv = -1;
+
+  if (!option (OPTAUTOCRYPT))
+    return 0;
+
+  if (mutt_autocrypt_init (0))
+    return -1;
+
+  if (!hdr || !hdr->content || !env)
+    return 0;
+
+  if (!env->from)
+    return 0;
+
+  /* Ignore emails that appear to be more than a week in the future,
+   * since they can block all future updates during that time. */
+  gettimeofday (&now, NULL);
+  if (hdr->date_sent > (now.tv_sec + 7 * 24 * 60 * 60))
+    return 0;
+
+  keyid = mutt_buffer_pool_get ();
+
+  /* To ensure the address headers match the gossip header format */
+  mutt_env_to_intl (env, NULL, NULL);
+
+  for (ac_hdr = env->autocrypt_gossip; ac_hdr; ac_hdr = ac_hdr->next)
+  {
+    if (ac_hdr->invalid)
+      continue;
+
+    peer_addr = matching_gossip_address (env, ac_hdr->addr);
+    if (!peer_addr)
+      continue;
+
+    if (mutt_autocrypt_db_peer_get (env->from, &peer) < 0)
+      goto cleanup;
+
+    if (peer)
+    {
+      if (hdr->date_sent <= peer->gossip_timestamp)
+      {
+        mutt_autocrypt_db_peer_free (&peer);
+        continue;
+      }
+
+      update_db = 1;
+      peer->gossip_timestamp = hdr->date_sent;
+      if (mutt_strcmp (peer->gossip_keydata, ac_hdr->keydata))
+      {
+        import_gpg = 1;
+        insert_db_history = 1;
+        mutt_str_replace (&peer->gossip_keydata, ac_hdr->keydata);
+      }
+    }
+    else
+    {
+      import_gpg = 1;
+      insert_db = 1;
+      insert_db_history = 1;
+    }
+
+    if (!peer)
+    {
+      peer = mutt_autocrypt_db_peer_new ();
+      peer->gossip_timestamp = hdr->date_sent;
+      peer->gossip_keydata = safe_strdup (ac_hdr->keydata);
+    }
+
+    if (import_gpg)
+    {
+      if (mutt_autocrypt_gpgme_import_key (peer->gossip_keydata, keyid))
+        goto cleanup;
+      mutt_str_replace (&peer->gossip_keyid, mutt_b2s (keyid));
+    }
+
+    if (insert_db &&
+        mutt_autocrypt_db_peer_insert (peer_addr, peer))
+      goto cleanup;
+
+    if (update_db &&
+        mutt_autocrypt_db_peer_update (peer_addr, peer))
+      goto cleanup;
+
+    if (insert_db_history)
+    {
+      gossip_hist = mutt_autocrypt_db_gossip_history_new ();
+      gossip_hist->sender_email_addr = safe_strdup (env->from->mailbox);
+      gossip_hist->email_msgid = safe_strdup (env->message_id);
+      gossip_hist->timestamp = hdr->date_sent;
+      gossip_hist->gossip_keydata = safe_strdup (peer->gossip_keydata);
+      if (mutt_autocrypt_db_gossip_history_insert (peer_addr, gossip_hist))
+        goto cleanup;
+    }
+
+    mutt_autocrypt_db_peer_free (&peer);
+    mutt_autocrypt_db_gossip_history_free (&gossip_hist);
+    mutt_buffer_clear (keyid);
+    update_db = insert_db = insert_db_history = import_gpg = 0;
+  }
+
+  rv = 0;
+
+cleanup:
+  mutt_autocrypt_db_peer_free (&peer);
+  mutt_autocrypt_db_gossip_history_free (&gossip_hist);
   mutt_buffer_pool_release (&keyid);
 
   return rv;

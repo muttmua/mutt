@@ -53,8 +53,18 @@ typedef struct
   char *keydata;
 } AUTOCRYPT_PEER_HISTORY;
 
+typedef struct
+{
+  char *peer_email_addr;
+  char *sender_email_addr;
+  char *email_msgid;
+  sqlite3_int64 timestamp;
+  char *gossip_keydata;
+} AUTOCRYPT_GOSSIP_HISTORY;
+
 int mutt_autocrypt_init (int);
 void mutt_autocrypt_cleanup (void);
 int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env);
+int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env);
 
 #endif

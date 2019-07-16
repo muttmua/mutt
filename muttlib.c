@@ -827,6 +827,7 @@ void mutt_free_envelope (ENVELOPE **p)
 
 #ifdef USE_AUTOCRYPT
   mutt_free_autocrypthdr (&(*p)->autocrypt);
+  mutt_free_autocrypthdr (&(*p)->autocrypt_gossip);
 #endif
 
   FREE (p);		/* __FREE_CHECKED__ */
