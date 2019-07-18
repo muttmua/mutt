@@ -1259,7 +1259,8 @@ hcache_open_db4 (struct header_cache* h, const char* path)
   u_int32_t createflags = DB_CREATE;
   int pagesize;
 
-  if (mutt_atoi (HeaderCachePageSize, &pagesize) < 0 || pagesize <= 0)
+  pagesize = HeaderCachePageSize;
+  if (pagesize <= 0)
     pagesize = 16384;
 
   snprintf (h->lockfile, _POSIX_PATH_MAX, "%s-lock-hack", path);
