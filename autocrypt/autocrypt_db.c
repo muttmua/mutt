@@ -122,6 +122,16 @@ void mutt_autocrypt_db_close (void)
   AutocryptDB = NULL;
 }
 
+void mutt_autocrypt_db_normalize_addrlist (ADDRESS *addrlist)
+{
+  ADDRESS *addr;
+
+  mutt_addrlist_to_local (addrlist);
+  for (addr = addrlist; addr; addr = addr->next)
+    ascii_strlower (addr->mailbox);
+  mutt_addrlist_to_intl (addrlist, NULL);
+}
+
 /* The autocrypt spec says email addresses should be
  * normalized to lower case and stored in idna form.
  *
@@ -130,19 +140,24 @@ void mutt_autocrypt_db_close (void)
  *
  * The return value must be freed.
  */
-static char *normalize_email_addr (ADDRESS *addr)
+static ADDRESS *copy_normalize_addr (ADDRESS *addr)
 {
-  ADDRESS norm_addr = {0};
+  ADDRESS *norm_addr;
 
-  norm_addr.mailbox = safe_strdup (addr->mailbox);
-  norm_addr.is_intl = addr->is_intl;
-  norm_addr.intl_checked = addr->intl_checked;
+  /* NOTE: the db functions expect a single address, so in
+   * this function we copy only the address passed in.
+   *
+   * The normalize_addrlist above is extended to work on a list
+   * because of requirements in autocrypt.c
+   */
 
-  mutt_addrlist_to_local (&norm_addr);
-  ascii_strlower (norm_addr.mailbox);
-  mutt_addrlist_to_intl (&norm_addr, NULL);
+  norm_addr = rfc822_new_address ();
+  norm_addr->mailbox = safe_strdup (addr->mailbox);
+  norm_addr->is_intl = addr->is_intl;
+  norm_addr->intl_checked = addr->intl_checked;
 
-  return norm_addr.mailbox;
+  mutt_autocrypt_db_normalize_addrlist (norm_addr);
+  return norm_addr;
 }
 
 /* Helper that converts to char * and safe_strdups the result */
@@ -170,9 +185,9 @@ void mutt_autocrypt_db_account_free (AUTOCRYPT_ACCOUNT **account)
 int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
 {
   int rv = -1, result;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
   *account = NULL;
 
   if (!AccountGetStmt)
@@ -196,7 +211,7 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
 
   if (sqlite3_bind_text (AccountGetStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -219,7 +234,7 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
   rv = 1;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (AccountGetStmt);
   return rv;
 }
@@ -228,9 +243,9 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
                                       const char *keydata, int prefer_encrypt)
 {
   int rv = -1;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
 
   if (!AccountInsertStmt)
   {
@@ -252,7 +267,7 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
 
   if (sqlite3_bind_text (AccountInsertStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -283,7 +298,7 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
   rv = 0;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (AccountInsertStmt);
   return rv;
 }
@@ -308,9 +323,9 @@ void mutt_autocrypt_db_peer_free (AUTOCRYPT_PEER **peer)
 int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
 {
   int rv = -1, result;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
   *peer = NULL;
 
   if (!PeerGetStmt)
@@ -338,7 +353,7 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
 
   if (sqlite3_bind_text (PeerGetStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -365,7 +380,7 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
   rv = 1;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (PeerGetStmt);
   return rv;
 }
@@ -373,9 +388,9 @@ cleanup:
 int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
 {
   int rv = -1;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
 
   if (!PeerInsertStmt)
   {
@@ -401,7 +416,7 @@ int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
 
   if (sqlite3_bind_text (PeerInsertStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -452,7 +467,7 @@ int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
   rv = 0;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (PeerInsertStmt);
   return rv;
 }
@@ -460,9 +475,9 @@ cleanup:
 int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer)
 {
   int rv = -1;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
 
   if (!PeerUpdateStmt)
   {
@@ -527,7 +542,7 @@ int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer)
     goto cleanup;
   if (sqlite3_bind_text (PeerUpdateStmt,
                          9,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -538,7 +553,7 @@ int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer)
   rv = 0;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (PeerUpdateStmt);
   return rv;
 }
@@ -561,9 +576,9 @@ void mutt_autocrypt_db_peer_history_free (AUTOCRYPT_PEER_HISTORY **peerhist)
 int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY *peerhist)
 {
   int rv = -1;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
 
   if (!PeerHistoryInsertStmt)
   {
@@ -584,7 +599,7 @@ int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY
 
   if (sqlite3_bind_text (PeerHistoryInsertStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -611,7 +626,7 @@ int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY
   rv = 0;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (PeerHistoryInsertStmt);
   return rv;
 }
@@ -635,9 +650,9 @@ void mutt_autocrypt_db_gossip_history_free (AUTOCRYPT_GOSSIP_HISTORY **gossip_hi
 int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HISTORY *gossip_hist)
 {
   int rv = -1;
-  char *email = NULL;
+  ADDRESS *norm_addr = NULL;
 
-  email = normalize_email_addr (addr);
+  norm_addr = copy_normalize_addr (addr);
 
   if (!GossipHistoryInsertStmt)
   {
@@ -659,7 +674,7 @@ int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HIS
 
   if (sqlite3_bind_text (GossipHistoryInsertStmt,
                          1,
-                         email,
+                         norm_addr->mailbox,
                          -1,
                          SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
@@ -691,7 +706,7 @@ int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HIS
   rv = 0;
 
 cleanup:
-  FREE (&email);
+  rfc822_free_address (&norm_addr);
   sqlite3_reset (GossipHistoryInsertStmt);
   return rv;
 }

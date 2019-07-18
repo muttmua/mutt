@@ -26,6 +26,8 @@ int mutt_autocrypt_account_init (void);
 int mutt_autocrypt_db_init (int can_create);
 void mutt_autocrypt_db_close (void);
 
+void mutt_autocrypt_db_normalize_addrlist (ADDRESS *addrlist);
+
 AUTOCRYPT_ACCOUNT *mutt_autocrypt_db_account_new (void);
 void mutt_autocrypt_db_account_free (AUTOCRYPT_ACCOUNT **account);
 int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account);
