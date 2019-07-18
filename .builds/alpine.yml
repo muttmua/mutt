@@ -1,0 +1,34 @@
+image: alpine/edge
+packages:
+- autoconf
+- automake
+- cyrus-sasl-dev
+- gdbm-dev
+- gettext-dev
+- gpgme-dev
+- libidn2-dev
+- ncurses-dev
+- openssl-dev
+- perl
+sources:
+- https://git.sr.ht/~kevin8t8/mutt
+tasks:
+- configure: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --enable-gpgme \
+        --enable-pop \
+        --enable-imap \
+        --enable-smtp \
+        --enable-hcache \
+        --enable-sidebar \
+        --without-included-gettext \
+        --with-mailpath=/var/spool/mail \
+        --with-curses \
+        --with-ssl \
+        --with-sasl \
+        --with-idn2
+- build: |
+    cd mutt
+    make

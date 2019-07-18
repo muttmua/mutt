@@ -1,0 +1,37 @@
+image: freebsd/latest
+packages:
+- automake
+- autoconf
+- mime-support
+- urlview
+- indexinfo
+- gpgme
+- libgpg-error
+- libassuan
+- libidn2
+- libunistring
+- db5
+- libiconv
+- gettext-runtime
+sources:
+- https://git.sr.ht/~kevin8t8/mutt
+tasks:
+- configure: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --enable-gpgme \
+        --enable-pop \
+        --enable-imap \
+        --enable-smtp \
+        --enable-hcache \
+        --enable-sidebar \
+        --with-mailpath=/var/spool/mail \
+        --with-curses \
+        --with-ssl \
+        --without-sasl \
+        --with-libiconv-prefix=/usr/local \
+        --with-libintl-prefix=/usr/local
+- build: |
+    cd mutt
+    make
