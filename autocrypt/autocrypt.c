@@ -304,32 +304,13 @@ cleanup:
   return rv;
 }
 
-static ADDRESS *matching_gossip_address (ENVELOPE *env, const char *addr)
-{
-  ADDRESS *cur;
-
-  for (cur = env->to; cur; cur = cur->next)
-    if (!ascii_strcasecmp (cur->mailbox, addr))
-      return cur;
-
-  for (cur = env->cc; cur; cur = cur->next)
-    if (!ascii_strcasecmp (cur->mailbox, addr))
-      return cur;
-
-  for (cur = env->reply_to; cur; cur = cur->next)
-    if (!ascii_strcasecmp (cur->mailbox, addr))
-      return cur;
-
-  return NULL;
-}
-
 int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
 {
   AUTOCRYPTHDR *ac_hdr;
   struct timeval now;
   AUTOCRYPT_PEER *peer = NULL;
   AUTOCRYPT_GOSSIP_HISTORY *gossip_hist = NULL;
-  ADDRESS *peer_addr;
+  ADDRESS *peer_addr, *recips = NULL, *last = NULL, ac_hdr_addr = {0};
   BUFFER *keyid = NULL;
   int update_db = 0, insert_db = 0, insert_db_history = 0, import_gpg = 0;
   int rv = -1;
@@ -354,19 +335,32 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
 
   keyid = mutt_buffer_pool_get ();
 
-  /* To ensure the address headers match the gossip header format */
-  mutt_env_to_intl (env, NULL, NULL);
+  /* Normalize the recipient list for comparison */
+  last = rfc822_append (&recips, env->to, 0);
+  last = rfc822_append (last ? &last : &recips, env->cc, 0);
+  rfc822_append (last ? &last : &recips, env->reply_to, 0);
+  mutt_autocrypt_db_normalize_addrlist (recips);
 
   for (ac_hdr = env->autocrypt_gossip; ac_hdr; ac_hdr = ac_hdr->next)
   {
     if (ac_hdr->invalid)
       continue;
 
-    peer_addr = matching_gossip_address (env, ac_hdr->addr);
+    /* normalize for comparison against recipient list */
+    mutt_str_replace (&ac_hdr_addr.mailbox, ac_hdr->addr);
+    ac_hdr_addr.is_intl = 1;
+    ac_hdr_addr.intl_checked = 1;
+    mutt_autocrypt_db_normalize_addrlist (&ac_hdr_addr);
+
+    /* Check to make sure the address is in the recipient list.  Since the
+     * addresses are normalized we use strcmp, not ascii_strcasecmp. */
+    for (peer_addr = recips; peer_addr; peer_addr = peer_addr->next)
+      if (!mutt_strcmp (peer_addr->mailbox, ac_hdr_addr.mailbox))
+        break;
     if (!peer_addr)
       continue;
 
-    if (mutt_autocrypt_db_peer_get (env->from, &peer) < 0)
+    if (mutt_autocrypt_db_peer_get (peer_addr, &peer) < 0)
       goto cleanup;
 
     if (peer)
@@ -435,6 +429,8 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
   rv = 0;
 
 cleanup:
+  FREE (&ac_hdr_addr.mailbox);
+  rfc822_free_address (&recips);
   mutt_autocrypt_db_peer_free (&peer);
   mutt_autocrypt_db_gossip_history_free (&gossip_hist);
   mutt_buffer_pool_release (&keyid);
