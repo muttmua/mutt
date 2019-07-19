@@ -22,6 +22,7 @@
 
 #include "mutt.h"
 #include "mutt_curses.h"
+#include "mutt_crypt.h"
 #include "mime.h"
 #include "mutt_idna.h"
 #include "autocrypt.h"
@@ -435,5 +436,76 @@ cleanup:
   mutt_autocrypt_db_gossip_history_free (&gossip_hist);
   mutt_buffer_pool_release (&keyid);
 
+  return rv;
+}
+
+autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
+{
+  autocrypt_rec_t rv = AUTOCRYPT_REC_OFF;
+  AUTOCRYPT_ACCOUNT *account = NULL;
+  AUTOCRYPT_PEER *peer = NULL;
+  ADDRESS *recip, *recips = NULL, *last = NULL;
+  int all_encrypt = 1, has_discourage = 0;
+
+  if (!option (OPTAUTOCRYPT) ||
+      mutt_autocrypt_init (0) ||
+      !hdr ||
+      !hdr->env->from ||
+      hdr->env->from->next)
+    return AUTOCRYPT_REC_OFF;
+
+  if (hdr->security & APPLICATION_SMIME)
+    return AUTOCRYPT_REC_OFF;
+
+  if (mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0)
+    goto cleanup;
+
+  last = rfc822_append (&recips, hdr->env->to, 0);
+  last = rfc822_append (last ? &last : &recips, hdr->env->cc, 0);
+  rfc822_append (last ? &last : &recips, hdr->env->bcc, 0);
+
+  rv = AUTOCRYPT_REC_NO;
+  if (!recips)
+    goto cleanup;
+
+  for (recip = recips; recip; recip = recip->next)
+  {
+    if (mutt_autocrypt_db_peer_get (recip, &peer) <= 0)
+      goto cleanup;
+
+    if (mutt_autocrypt_gpgme_is_valid_key (peer->keyid))
+    {
+      if (!(peer->last_seen && peer->autocrypt_timestamp) ||
+          (peer->last_seen - peer->autocrypt_timestamp > 35 * 24 * 60 * 60))
+      {
+        has_discourage = 1;
+        all_encrypt = 0;
+      }
+
+      if (!account->prefer_encrypt || !peer->prefer_encrypt)
+        all_encrypt = 0;
+    }
+    else if (mutt_autocrypt_gpgme_is_valid_key (peer->gossip_keyid))
+    {
+      has_discourage = 1;
+      all_encrypt = 0;
+    }
+    else
+      goto cleanup;
+
+    mutt_autocrypt_db_peer_free (&peer);
+  }
+
+  if (all_encrypt)
+    rv = AUTOCRYPT_REC_YES;
+  else if (has_discourage)
+    rv = AUTOCRYPT_REC_DISCOURAGE;
+  else
+    rv = AUTOCRYPT_REC_AVAILABLE;
+
+cleanup:
+  mutt_autocrypt_db_account_free (&account);
+  rfc822_free_address (&recips);
+  mutt_autocrypt_db_peer_free (&peer);
   return rv;
 }

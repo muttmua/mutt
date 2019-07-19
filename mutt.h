@@ -822,9 +822,9 @@ typedef struct mutt_thread THREAD;
 
 typedef struct header
 {
-  unsigned int security : 13;  /* bit 0-9:   flags
-                                  bit 10-11: application.
-                                  bit 12:    traditional pgp.
+  unsigned int security : 14;  /* bit 0-10:   flags
+                                  bit 11-12: application.
+                                  bit 13:    traditional pgp.
                                   see: mutt_crypt.h pgplib.h, smime.h */
 
   unsigned int mime : 1;    		/* has a MIME-Version header? */

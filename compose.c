@@ -26,6 +26,7 @@
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 #include "mutt_menu.h"
+#include "mutt_crypt.h"
 #include "rfc1524.h"
 #include "mime.h"
 #include "attach.h"
@@ -36,6 +37,10 @@
 
 #ifdef MIXMASTER
 #include "remailer.h"
+#endif
+
+#ifdef USE_AUTOCRYPT
+#include "autocrypt/autocrypt.h"
 #endif
 
 #include <errno.h>
@@ -68,11 +73,15 @@ enum
 
   HDR_CRYPT,
   HDR_CRYPTINFO,
+#ifdef USE_AUTOCRYPT
+  HDR_AUTOCRYPT,
+#endif
 
-  HDR_ATTACH  = (HDR_FCC + 5) /* where to start printing the attachments */
+  HDR_ATTACH_TITLE,     /* the "-- Attachments" line */
+  HDR_ATTACH            /* where to start printing the attachments */
 };
 
-int HeaderPadding[HDR_CRYPTINFO + 1] = {0};
+int HeaderPadding[HDR_ATTACH_TITLE] = {0};
 int MaxHeaderWidth = 0;
 
 #define HDR_XOFFSET MaxHeaderWidth
@@ -109,7 +118,13 @@ static const char * const Prompts[] =
    * Since it shares the row with "Encrypt with:", it should not be longer
    * than 15-20 character cells.
    */
-  N_("Sign as: ")
+  N_("Sign as: "),
+#ifdef USE_AUTOCRYPT
+  /* L10N:
+     The compose menu autocrypt line
+   */
+  N_("Autocrypt: ")
+#endif
 };
 
 static const struct mapping_t ComposeHelp[] = {
@@ -126,6 +141,41 @@ static const struct mapping_t ComposeHelp[] = {
   { N_("Help"),    OP_HELP },
   { NULL,	0 }
 };
+
+#ifdef USE_AUTOCRYPT
+static const char *AutocryptRecUiFlags[] = {
+  /* L10N: Autocrypt recommendation flag: off.
+   * This is displayed when Autocrypt is turned off. */
+  N_("Off"),
+  /* L10N: Autocrypt recommendation flag: no.
+   * This is displayed when Autocrypt cannot encrypt to the recipients. */
+  N_("No"),
+  /* L10N: Autocrypt recommendation flag: discouraged.
+   * This is displayed when Autocrypt believes encryption should not be used.
+   * This might occur if one of the recipient Autocrypt Keys has not been
+   * used recently, or if the only key available is a Gossip Header key. */
+  N_("Discouraged"),
+  /* L10N: Autocrypt recommendation flag: available.
+   * This is displayed when Autocrypt believes encryption is possible, but
+   * leaves enabling it up to the sender.  Probably because "prefer encrypt"
+   * is not set in both the sender and recipient keys. */
+  N_("Available"),
+  /* L10N: Autocrypt recommendation flag: yes.
+   * This is displayed when Autocrypt would normally enable encryption
+   * automatically. */
+  N_("Yes"),
+};
+#endif
+
+typedef struct
+{
+  HEADER *msg;
+  char *fcc;
+#ifdef USE_AUTOCRYPT
+  autocrypt_rec_t autocrypt_rec;
+  int autocrypt_rec_override;
+#endif
+} compose_redraw_data_t;
 
 static void calc_header_width_padding (int idx, const char *header, int calc_max)
 {
@@ -154,15 +204,19 @@ static void init_header_padding (void)
     return;
   done = 1;
 
-  for (i = 0; i <= HDR_CRYPT; i++)
+  for (i = 0; i < HDR_ATTACH_TITLE; i++)
+  {
+    if (i == HDR_CRYPTINFO)
+      continue;
     calc_header_width_padding (i, _(Prompts[i]), 1);
+  }
 
   /* Don't include "Sign as: " in the MaxHeaderWidth calculation.  It
    * doesn't show up by default, and so can make the indentation of
    * the other fields look funny. */
   calc_header_width_padding (HDR_CRYPTINFO, _(Prompts[HDR_CRYPTINFO]), 0);
 
-  for (i = 0; i <= HDR_CRYPTINFO; i++)
+  for (i = 0; i < HDR_ATTACH_TITLE; i++)
   {
     HeaderPadding[i] += MaxHeaderWidth;
     if (HeaderPadding[i] < 0)
@@ -179,12 +233,50 @@ static void snd_entry (char *b, size_t blen, MUTTMENU *menu, int num)
                      MUTT_FORMAT_STAT_FILE | MUTT_FORMAT_ARROWCURSOR);
 }
 
-
-
-#include "mutt_crypt.h"
-
-static void redraw_crypt_lines (HEADER *msg)
+#ifdef USE_AUTOCRYPT
+static void autocrypt_compose_menu (HEADER *msg)
 {
+  char *prompt, *letters;
+  int choice;
+
+  /* L10N:
+     The compose menu autocrypt prompt.
+     (e)ncrypt enables encryption via autocrypt.
+     (c)lear sets cleartext.
+     (a)utomatic defers to the recommendation.
+  */
+  prompt = _("Autocrypt: (e)ncrypt, (c)lear, (a)utomatic? ");
+
+  /* L10N:
+     The letter corresponding to the compose menu autocrypt prompt
+     (e)ncrypt, (c)lear, (a)utomatic
+   */
+  letters = "eca";
+
+  choice = mutt_multi_choice (prompt, letters);
+  switch (choice)
+  {
+    case 1:
+      msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE);
+      msg->security &= ~(ENCRYPT | SIGN | OPPENCRYPT);
+      break;
+    case 2:
+      msg->security &= ~AUTOCRYPT;
+      msg->security |= AUTOCRYPT_OVERRIDE;
+      break;
+    case 3:
+      msg->security &= ~AUTOCRYPT_OVERRIDE;
+      if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
+        msg->security |= OPPENCRYPT;
+      break;
+  }
+}
+#endif
+
+static void redraw_crypt_lines (compose_redraw_data_t *rd)
+{
+  HEADER *msg = rd->msg;
+
   SETCOLOR (MT_COLOR_COMPOSE_HEADER);
   mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPT, 0,
                         "%*s", HeaderPadding[HDR_CRYPT], _(Prompts[HDR_CRYPT]));
@@ -267,6 +359,65 @@ static void redraw_crypt_lines (HEADER *msg)
     NORMAL_COLOR;
     printw ("%s", NONULL(SmimeCryptAlg));
   }
+
+#ifdef USE_AUTOCRYPT
+  mutt_window_move (MuttIndexWindow, HDR_AUTOCRYPT, 0);
+  mutt_window_clrtoeol (MuttIndexWindow);
+  SETCOLOR (MT_COLOR_COMPOSE_HEADER);
+  printw ("%*s", HeaderPadding[HDR_AUTOCRYPT], _(Prompts[HDR_AUTOCRYPT]));
+  NORMAL_COLOR;
+  if (option (OPTAUTOCRYPT) && (msg->security & AUTOCRYPT))
+  {
+    SETCOLOR (MT_COLOR_COMPOSE_SECURITY_ENCRYPT);
+    addstr (_("Encrypt"));
+  }
+  else
+  {
+    SETCOLOR (MT_COLOR_COMPOSE_SECURITY_NONE);
+    addstr (_("Off"));
+  }
+
+  SETCOLOR (MT_COLOR_COMPOSE_HEADER);
+  mutt_window_mvprintw (MuttIndexWindow, HDR_AUTOCRYPT, 40, "%s",
+                        _("Recommendation: "));
+  NORMAL_COLOR;
+  printw ("%s", _(AutocryptRecUiFlags[rd->autocrypt_rec]));
+#endif
+}
+
+static void update_crypt_info (compose_redraw_data_t *rd)
+{
+  HEADER *msg = rd->msg;
+
+  if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
+    crypt_opportunistic_encrypt (msg);
+
+#ifdef USE_AUTOCRYPT
+  rd->autocrypt_rec = mutt_autocrypt_ui_recommendation (msg);
+
+  /* Anything that enables ENCRYPT or SIGN, or turns on SMIME
+   * overrides autocrypt, be it oppenc or the user having turned on
+   * those flags manually. */
+  if (msg->security & (ENCRYPT | SIGN | APPLICATION_SMIME))
+    msg->security &= ~(AUTOCRYPT | AUTOCRYPT_OVERRIDE);
+  else
+  {
+    if (!(msg->security & AUTOCRYPT_OVERRIDE))
+    {
+      if (rd->autocrypt_rec == AUTOCRYPT_REC_YES)
+        msg->security |= AUTOCRYPT;
+      else
+        msg->security &= ~AUTOCRYPT;
+    }
+  }
+  /* TODO:
+   * - autocrypt menu for manually enabling/disabling (turns on override)
+   * - deal with pgp and smime menu and their effects on security->AUTOCRYPT
+   *   when encryption or signing is enabled or if switch to smime mode
+   */
+#endif
+
+  redraw_crypt_lines (rd);
 }
 
 
@@ -354,8 +505,11 @@ static void draw_envelope_addr (int line, ADDRESS *addr)
   mutt_paddstr (W, buf);
 }
 
-static void draw_envelope (HEADER *msg, char *fcc)
+static void draw_envelope (compose_redraw_data_t *rd)
 {
+  HEADER *msg = rd->msg;
+  char *fcc = rd->fcc;
+
   draw_envelope_addr (HDR_FROM, msg->env->from);
   draw_envelope_addr (HDR_TO, msg->env->to);
   draw_envelope_addr (HDR_CC, msg->env->cc);
@@ -376,14 +530,14 @@ static void draw_envelope (HEADER *msg, char *fcc)
   mutt_paddstr (W, fcc);
 
   if (WithCrypto)
-    redraw_crypt_lines (msg);
+    redraw_crypt_lines (rd);
 
 #ifdef MIXMASTER
   redraw_mix_line (msg->chain);
 #endif
 
   SETCOLOR (MT_COLOR_STATUS);
-  mutt_window_mvaddstr (MuttIndexWindow, HDR_ATTACH - 1, 0, _("-- Attachments"));
+  mutt_window_mvaddstr (MuttIndexWindow, HDR_ATTACH_TITLE, 0, _("-- Attachments"));
   mutt_window_clrtoeol (MuttIndexWindow);
 
   NORMAL_COLOR;
@@ -635,12 +789,6 @@ static void compose_status_line (char *buf, size_t buflen, size_t col, int cols,
                      (unsigned long) menu, 0);
 }
 
-typedef struct
-{
-  HEADER *msg;
-  char *fcc;
-} compose_redraw_data_t;
-
 static void compose_menu_redraw (MUTTMENU *menu)
 {
   char buf[LONG_STRING];
@@ -653,7 +801,7 @@ static void compose_menu_redraw (MUTTMENU *menu)
   {
     menu_redraw_full (menu);
 
-    draw_envelope (rd->msg, rd->fcc);
+    draw_envelope (rd);
     menu->offset = HDR_ATTACH;
     menu->pagelen = MuttIndexWindow->rows - HDR_ATTACH;
   }
@@ -711,7 +859,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   /* Sort, SortAux could be changed in mutt_index_menu() */
   int oldSort, oldSortAux;
   struct stat st;
-  compose_redraw_data_t rd;
+  compose_redraw_data_t rd = {0};
 
   init_header_padding ();
 
@@ -731,39 +879,30 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   actx->hdr = msg;
   mutt_update_compose_menu (actx, menu, 1);
 
+  update_crypt_info (&rd);
+
   while (loop)
   {
     switch (op = mutt_menuLoop (menu))
     {
       case OP_COMPOSE_EDIT_FROM:
 	edit_address_list (HDR_FROM, &msg->env->from);
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_TO:
 	edit_address_list (HDR_TO, &msg->env->to);
-	if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
-	{
-	  crypt_opportunistic_encrypt (msg);
-	  redraw_crypt_lines (msg);
-	}
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_BCC:
 	edit_address_list (HDR_BCC, &msg->env->bcc);
-	if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
-	{
-	  crypt_opportunistic_encrypt (msg);
-	  redraw_crypt_lines (msg);
-	}
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_CC:
 	edit_address_list (HDR_CC, &msg->env->cc);
-	if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
-	{
-	  crypt_opportunistic_encrypt (msg);
-	  redraw_crypt_lines (msg);
-	}
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_SUBJECT:
@@ -822,8 +961,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
 	    FREE (&err);
 	  }
-	  if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
-	    crypt_opportunistic_encrypt (msg);
+          update_crypt_info (&rd);
 	}
 	else
 	{
@@ -1437,11 +1575,10 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           }
 	  msg->security &= ~APPLICATION_SMIME;
 	  msg->security |= APPLICATION_PGP;
-          crypt_opportunistic_encrypt (msg);
-          redraw_crypt_lines (msg);
+          update_crypt_info (&rd);
 	}
 	msg->security = crypt_pgp_send_menu (msg);
-	redraw_crypt_lines (msg);
+	update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1475,11 +1612,10 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           }
 	  msg->security &= ~APPLICATION_PGP;
 	  msg->security |= APPLICATION_SMIME;
-          crypt_opportunistic_encrypt (msg);
-          redraw_crypt_lines (msg);
+          update_crypt_info (&rd);
 	}
 	msg->security = crypt_smime_send_menu(msg);
-	redraw_crypt_lines (msg);
+	update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1492,6 +1628,30 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         break;
 #endif
 
+#ifdef USE_AUTOCRYPT
+      case OP_COMPOSE_AUTOCRYPT_MENU:
+	if ((WithCrypto & APPLICATION_SMIME)
+            && (msg->security & APPLICATION_SMIME))
+	{
+          if (msg->security & (ENCRYPT | SIGN))
+          {
+            if (mutt_yesorno (_("S/MIME already selected. Clear & continue ? "),
+                              MUTT_YES) != MUTT_YES)
+            {
+              mutt_clear_error ();
+              break;
+            }
+            msg->security &= ~(ENCRYPT | SIGN);
+          }
+	  msg->security &= ~APPLICATION_SMIME;
+	  msg->security |= APPLICATION_PGP;
+          update_crypt_info (&rd);
+	}
+	autocrypt_compose_menu (msg);
+	update_crypt_info (&rd);
+        mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
+        break;
+#endif
     }
   }
 

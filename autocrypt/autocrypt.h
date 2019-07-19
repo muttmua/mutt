@@ -62,9 +62,19 @@ typedef struct
   char *gossip_keydata;
 } AUTOCRYPT_GOSSIP_HISTORY;
 
+typedef enum
+{
+  AUTOCRYPT_REC_OFF,
+  AUTOCRYPT_REC_NO,
+  AUTOCRYPT_REC_DISCOURAGE,
+  AUTOCRYPT_REC_AVAILABLE,
+  AUTOCRYPT_REC_YES
+} autocrypt_rec_t;
+
 int mutt_autocrypt_init (int);
 void mutt_autocrypt_cleanup (void);
 int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env);
 int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env);
+autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr);
 
 #endif

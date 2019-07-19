@@ -54,5 +54,6 @@ int mutt_autocrypt_schema_update (void);
 int mutt_autocrypt_gpgme_init (void);
 int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keydata);
 int mutt_autocrypt_gpgme_import_key (const char *keydata, BUFFER *keyid);
+int mutt_autocrypt_gpgme_is_valid_key (const char *keyid);
 
 #endif

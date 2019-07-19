@@ -362,6 +362,9 @@ const struct binding_t OpCompose[] = { /* map: compose */
   { "print-entry",	OP_PRINT,			"l" },
   { "edit-mime",	OP_COMPOSE_EDIT_MIME,		"m" },
   { "new-mime",		OP_COMPOSE_NEW_MIME,		"n" },
+#ifdef USE_AUTOCRYPT
+  { "autocrypt-menu",   OP_COMPOSE_AUTOCRYPT_MENU,      "o" },
+#endif
   { "postpone-message",	OP_COMPOSE_POSTPONE_MESSAGE,	"P" },
   { "edit-reply-to",	OP_COMPOSE_EDIT_REPLY_TO,	"r" },
   { "rename-attachment",OP_COMPOSE_RENAME_ATTACHMENT,	"\017" },

@@ -40,12 +40,14 @@
 #define KEYBLOCK   (1 << 6) /* KEY too generic? */
 #define INLINE     (1 << 7)
 #define OPPENCRYPT (1 << 8) /* Opportunistic encrypt mode */
-#define AUTOCRYPT  (1 << 9) /* TODO: should this include the ENCRYPT and SIGN flags */
+#define AUTOCRYPT  (1 << 9) /* Message will be, or was Autocrypt encrypt+signed */
 
-#define APPLICATION_PGP    (1 << 10)
-#define APPLICATION_SMIME  (1 << 11)
+#define AUTOCRYPT_OVERRIDE (1 << 10)  /* Indicates manual set/unset of encryption */
 
-#define PGP_TRADITIONAL_CHECKED (1 << 12)
+#define APPLICATION_PGP    (1 << 11)
+#define APPLICATION_SMIME  (1 << 12)
+
+#define PGP_TRADITIONAL_CHECKED (1 << 13)
 
 #define PGPENCRYPT  (APPLICATION_PGP | ENCRYPT)
 #define PGPSIGN     (APPLICATION_PGP | SIGN)
