@@ -37,6 +37,10 @@
 
 #include "crypt-mod.h"
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt.h"
+#endif
+
 /*
 
   Generic
@@ -52,6 +56,7 @@ extern struct crypt_module_specs crypt_mod_smime_classic;
 #endif
 
 #ifdef CRYPT_BACKEND_GPGME
+#include "crypt-gpgme.h"
 extern struct crypt_module_specs crypt_mod_pgp_gpgme;
 extern struct crypt_module_specs crypt_mod_smime_gpgme;
 #endif
@@ -237,8 +242,24 @@ BODY *crypt_pgp_sign_message (BODY *a)
 
 /* Warning: A is no longer freed in this routine, you need to free it
    later.  This is necessary for $fcc_attach. */
-BODY *crypt_pgp_encrypt_message (BODY *a, char *keylist, int sign)
+BODY *crypt_pgp_encrypt_message (HEADER *msg, BODY *a, char *keylist, int sign)
 {
+#ifdef USE_AUTOCRYPT
+  BODY *result;
+
+  if (msg->security & AUTOCRYPT)
+  {
+    if (mutt_autocrypt_set_sign_as_default_key (msg))
+      return NULL;
+
+    set_option (OPTAUTOCRYPTGPGME);
+    result = pgp_gpgme_encrypt_message (a, keylist, sign);
+    unset_option (OPTAUTOCRYPTGPGME);
+
+    return result;
+  }
+#endif
+
   if (CRYPT_MOD_CALL_CHECK (PGP, pgp_encrypt_message))
     return (CRYPT_MOD_CALL (PGP, pgp_encrypt_message)) (a, keylist, sign);
 

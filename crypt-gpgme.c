@@ -564,6 +564,13 @@ static gpgme_ctx_t create_gpgme_context (int for_smime)
   gpgme_ctx_t ctx;
 
   err = gpgme_new (&ctx);
+
+#ifdef USE_AUTOCRYPT
+  if (!err && option (OPTAUTOCRYPTGPGME))
+    err = gpgme_ctx_set_engine_info (ctx, GPGME_PROTOCOL_OpenPGP, NULL,
+                                     AutocryptDir);
+#endif
+
   if (err)
     {
       mutt_error (_("error creating gpgme context: %s\n"), gpgme_strerror (err));
@@ -944,6 +951,10 @@ static int set_signer (gpgme_ctx_t ctx, int for_smime)
 
   if (for_smime)
     signid = SmimeSignAs ? SmimeSignAs : SmimeDefaultKey;
+#ifdef USE_AUTOCRYPT
+  else if (option (OPTAUTOCRYPTGPGME))
+    signid = AutocryptSignAs;
+#endif
   else
     signid = PgpSignAs ? PgpSignAs : PgpDefaultKey;
 

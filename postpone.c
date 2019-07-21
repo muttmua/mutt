@@ -442,6 +442,20 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
         flags |= OPPENCRYPT;
         break;
 
+      case 'a':
+      case 'A':
+#ifdef USE_AUTOCRYPT
+        flags |= AUTOCRYPT;
+#endif
+        break;
+
+      case 'z':
+      case 'Z':
+#ifdef USE_AUTOCRYPT
+        flags |= AUTOCRYPT_OVERRIDE;
+#endif
+        break;
+
       case 's':
       case 'S':
         flags |= SIGN;

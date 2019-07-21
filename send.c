@@ -33,6 +33,10 @@
 #include "rfc3676.h"
 #include "attach.h"
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt.h"
+#endif
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -1200,10 +1204,12 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
    * Protected Headers. */
   if (!option (OPTFCCBEFORESEND))
   {
-    if (WithCrypto && (msg->security & (ENCRYPT | SIGN)) && option (OPTFCCCLEAR))
+    if (WithCrypto &&
+        (msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
+        && option (OPTFCCCLEAR))
     {
       msg->content = clear_content;
-      msg->security &= ~(ENCRYPT | SIGN);
+      msg->security &= ~(ENCRYPT | SIGN | AUTOCRYPT);
       mutt_free_envelope (&msg->content->mime_headers);
     }
 
@@ -1212,7 +1218,7 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
         msg->content->type == TYPEMULTIPART)
     {
       if (WithCrypto
-          && (msg->security & (ENCRYPT | SIGN))
+          && (msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
           && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
               mutt_strcmp (msg->content->subtype, "signed") == 0))
       {
@@ -1228,7 +1234,7 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
           /* this means writing only the main part */
           msg->content = clear_content->parts;
 
-          if (mutt_protect (msg, pgpkeylist) == -1)
+          if (mutt_protect (msg, pgpkeylist, 0) == -1)
           {
             /* we can't do much about it at this point, so
              * fallback to saving the whole thing to fcc
@@ -1454,7 +1460,6 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
 {
   char *pgpkeylist = NULL;
   char *encrypt_as = NULL;
-  int is_signed;
   BODY *clear_content = NULL;
 
   if (!Postponed)
@@ -1468,7 +1473,8 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
 
   mutt_encode_descriptions (msg->content, 1);
 
-  if (WithCrypto && option (OPTPOSTPONEENCRYPT) && (msg->security & ENCRYPT))
+  if (WithCrypto && option (OPTPOSTPONEENCRYPT) &&
+      (msg->security & (ENCRYPT | AUTOCRYPT)))
   {
     if ((WithCrypto & APPLICATION_PGP) && (msg->security & APPLICATION_PGP))
       encrypt_as = PgpDefaultKey;
@@ -1477,28 +1483,28 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
     if (!encrypt_as)
       encrypt_as = PostponeEncryptAs;
 
+#ifdef USE_AUTOCRYPT
+    if (msg->security & AUTOCRYPT)
+    {
+      if (mutt_autocrypt_set_sign_as_default_key (msg))
+        return -1;
+      encrypt_as = AutocryptDefaultKey;
+    }
+#endif
+
     if (encrypt_as)
     {
-      is_signed = msg->security & SIGN;
-      if (is_signed)
-        msg->security &= ~SIGN;
-
       pgpkeylist = safe_strdup (encrypt_as);
       clear_content = msg->content;
-      if (mutt_protect (msg, pgpkeylist) == -1)
+      if (mutt_protect (msg, pgpkeylist, 1) == -1)
       {
-        if (is_signed)
-          msg->security |= SIGN;
         FREE (&pgpkeylist);
         msg->content = mutt_remove_multipart (msg->content);
         decode_descriptions (msg->content);
         return -1;
       }
 
-      if (is_signed)
-        msg->security |= SIGN;
       FREE (&pgpkeylist);
-
       mutt_encode_descriptions (msg->content, 0);
     }
   }
@@ -1898,23 +1904,36 @@ ci_send_message (int flags,		/* send mode */
    */
   if (WithCrypto && (msg->security == 0) && !(flags & (SENDBATCH | SENDMAILX | SENDPOSTPONED | SENDRESEND)))
   {
-    if (option (OPTCRYPTAUTOSIGN))
-      msg->security |= SIGN;
-    if (option (OPTCRYPTAUTOENCRYPT))
-      msg->security |= ENCRYPT;
-    if (option (OPTCRYPTREPLYENCRYPT) && cur && (cur->security & ENCRYPT))
-      msg->security |= ENCRYPT;
-    if (option (OPTCRYPTREPLYSIGN) && cur && (cur->security & SIGN))
-      msg->security |= SIGN;
-    if (option (OPTCRYPTREPLYSIGNENCRYPTED) && cur && (cur->security & ENCRYPT))
-      msg->security |= SIGN;
-    if ((WithCrypto & APPLICATION_PGP) &&
-        ((msg->security & (ENCRYPT | SIGN)) || option (OPTCRYPTOPPORTUNISTICENCRYPT)))
+    if (
+#ifdef USE_AUTOCRYPT
+      option (OPTAUTOCRYPT)
+#else
+      0
+#endif
+      && cur && (cur->security & AUTOCRYPT))
     {
-      if (option (OPTPGPAUTOINLINE))
-	msg->security |= INLINE;
-      if (option (OPTPGPREPLYINLINE) && cur && (cur->security & INLINE))
-	msg->security |= INLINE;
+      msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE);
+    }
+    else
+    {
+      if (option (OPTCRYPTAUTOSIGN))
+        msg->security |= SIGN;
+      if (option (OPTCRYPTAUTOENCRYPT))
+        msg->security |= ENCRYPT;
+      if (option (OPTCRYPTREPLYENCRYPT) && cur && (cur->security & ENCRYPT))
+        msg->security |= ENCRYPT;
+      if (option (OPTCRYPTREPLYSIGN) && cur && (cur->security & SIGN))
+        msg->security |= SIGN;
+      if (option (OPTCRYPTREPLYSIGNENCRYPTED) && cur && (cur->security & ENCRYPT))
+        msg->security |= SIGN;
+      if ((WithCrypto & APPLICATION_PGP) &&
+          ((msg->security & (ENCRYPT | SIGN)) || option (OPTCRYPTOPPORTUNISTICENCRYPT)))
+      {
+        if (option (OPTPGPAUTOINLINE))
+          msg->security |= INLINE;
+        if (option (OPTPGPREPLYINLINE) && cur && (cur->security & INLINE))
+          msg->security |= INLINE;
+      }
     }
 
     if (msg->security || option (OPTCRYPTOPPORTUNISTICENCRYPT))
@@ -1961,7 +1980,7 @@ ci_send_message (int flags,		/* send mode */
        * or OPTCRYPTREPLYENCRYPT, then don't enable opportunistic encrypt for
        * the message.
        */
-      if (! (msg->security & ENCRYPT))
+      if (! (msg->security & (ENCRYPT|AUTOCRYPT)))
       {
         msg->security |= OPPENCRYPT;
         crypt_opportunistic_encrypt(msg);
@@ -2106,13 +2125,13 @@ main_loop:
 
   if (WithCrypto)
   {
-    if (msg->security & (ENCRYPT | SIGN))
+    if (msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
     {
       /* save the decrypted attachments */
       clear_content = msg->content;
 
       if ((crypt_get_keys (msg, &pgpkeylist, 0) == -1) ||
-          mutt_protect (msg, pgpkeylist) == -1)
+          mutt_protect (msg, pgpkeylist, 0) == -1)
       {
         msg->content = mutt_remove_multipart (msg->content);
 
@@ -2154,7 +2173,7 @@ main_loop:
     {
       if (!WithCrypto)
         ;
-      else if ((msg->security & ENCRYPT) ||
+      else if ((msg->security & (ENCRYPT | AUTOCRYPT)) ||
                ((msg->security & SIGN)
                 && msg->content->type == TYPEAPPLICATION))
       {

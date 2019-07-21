@@ -111,7 +111,7 @@ typedef struct pgp_keyinfo *pgp_key_t;
 
 /* Some prototypes -- old crypt.h. */
 
-int mutt_protect (HEADER *, char *);
+int mutt_protect (HEADER *, char *, int);
 
 int mutt_is_multipart_encrypted (BODY *);
 
@@ -244,7 +244,7 @@ BODY *crypt_pgp_sign_message (BODY *a);
 
 /* Warning: A is no longer freed in this routine, you need to free it
    later.  This is necessary for $fcc_attach. */
-BODY *crypt_pgp_encrypt_message (BODY *a, char *keylist, int sign);
+BODY *crypt_pgp_encrypt_message (HEADER *msg, BODY *a, char *keylist, int sign);
 
 /* Invoke the PGP command to import a key. */
 void crypt_pgp_invoke_import (const char *fname);

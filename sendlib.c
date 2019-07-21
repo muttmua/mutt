@@ -37,6 +37,10 @@
 #include "mutt_idna.h"
 #include "buffy.h"
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt.h"
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -415,8 +419,15 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   if (a->encoding != ENC7BIT)
     fprintf(f, "Content-Transfer-Encoding: %s\n", ENCODING (a->encoding));
 
-  if (option (OPTCRYPTPROTHDRSWRITE) && a->mime_headers)
+  if ((option (OPTCRYPTPROTHDRSWRITE)
+#ifdef USE_AUTOCRYPT
+       || option (OPTAUTOCRYPT)
+#endif
+        ) &&
+      a->mime_headers)
+  {
     mutt_write_rfc822_header (f, a->mime_headers, NULL, MUTT_WRITE_HEADER_MIME, 0, 0);
+  }
 
   /* Do NOT add the terminator here!!! */
   return (ferror (f) ? -1 : 0);
@@ -2091,6 +2102,16 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     fputc ('\n', fp);
   }
 
+#ifdef USE_AUTOCRYPT
+  if (option (OPTAUTOCRYPT))
+  {
+    if (mode == MUTT_WRITE_HEADER_NORMAL)
+      mutt_autocrypt_write_autocrypt_header (env, fp);
+    if (mode == MUTT_WRITE_HEADER_MIME)
+      mutt_autocrypt_write_gossip_headers (env, fp);
+  }
+#endif
+
   /* Add any user defined headers */
   for (; tmp; tmp = tmp->next)
   {
@@ -2859,6 +2880,12 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     }
     if (hdr->security & INLINE)
       fputc ('I', msg->fp);
+#ifdef USE_AUTOCRYPT
+    if (hdr->security & AUTOCRYPT)
+      fputc ('A', msg->fp);
+    if (hdr->security & AUTOCRYPT_OVERRIDE)
+      fputc ('Z', msg->fp);
+#endif
     fputc ('\n', msg->fp);
   }
 

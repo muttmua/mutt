@@ -439,13 +439,19 @@ cleanup:
   return rv;
 }
 
-autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
+/* Returns the recommendation.  If the recommendataion is > NO and
+ * keylist is not NULL, keylist will be populated with the autocrypt
+ * keyids
+ */
+autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr, char **keylist)
 {
   autocrypt_rec_t rv = AUTOCRYPT_REC_OFF;
   AUTOCRYPT_ACCOUNT *account = NULL;
   AUTOCRYPT_PEER *peer = NULL;
   ADDRESS *recip, *recips = NULL, *last = NULL;
   int all_encrypt = 1, has_discourage = 0;
+  BUFFER *keylist_buf = NULL;
+  const char *matching_key;
 
   if (!option (OPTAUTOCRYPT) ||
       mutt_autocrypt_init (0) ||
@@ -459,6 +465,9 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
 
   if (mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0)
     goto cleanup;
+
+  keylist_buf = mutt_buffer_pool_get ();
+  mutt_buffer_addstr (keylist_buf, account->keyid);
 
   last = rfc822_append (&recips, hdr->env->to, 0);
   last = rfc822_append (last ? &last : &recips, hdr->env->cc, 0);
@@ -475,6 +484,8 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
 
     if (mutt_autocrypt_gpgme_is_valid_key (peer->keyid))
     {
+      matching_key = peer->keyid;
+
       if (!(peer->last_seen && peer->autocrypt_timestamp) ||
           (peer->last_seen - peer->autocrypt_timestamp > 35 * 24 * 60 * 60))
       {
@@ -487,11 +498,17 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
     }
     else if (mutt_autocrypt_gpgme_is_valid_key (peer->gossip_keyid))
     {
+      matching_key = peer->gossip_keyid;
+
       has_discourage = 1;
       all_encrypt = 0;
     }
     else
       goto cleanup;
+
+    if (mutt_buffer_len (keylist_buf))
+      mutt_buffer_addch (keylist_buf, ' ');
+    mutt_buffer_addstr (keylist_buf, matching_key);
 
     mutt_autocrypt_db_peer_free (&peer);
   }
@@ -503,9 +520,195 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr)
   else
     rv = AUTOCRYPT_REC_AVAILABLE;
 
+  if (keylist)
+    mutt_str_replace (keylist, mutt_b2s (keylist_buf));
+
 cleanup:
   mutt_autocrypt_db_account_free (&account);
   rfc822_free_address (&recips);
+  mutt_autocrypt_db_peer_free (&peer);
+  mutt_buffer_pool_release (&keylist_buf);
+  return rv;
+}
+
+int mutt_autocrypt_set_sign_as_default_key (HEADER *hdr)
+{
+  int rv = -1;
+  AUTOCRYPT_ACCOUNT *account = NULL;
+
+  if (!option (OPTAUTOCRYPT) ||
+      mutt_autocrypt_init (0) ||
+      !hdr ||
+      !hdr->env->from ||
+      hdr->env->from->next)
+    return -1;
+
+  if (mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0)
+    goto cleanup;
+  if (!account->keyid)
+    goto cleanup;
+
+  mutt_str_replace (&AutocryptSignAs, account->keyid);
+  mutt_str_replace (&AutocryptDefaultKey, account->keyid);
+
+  rv = 0;
+
+cleanup:
+  mutt_autocrypt_db_account_free (&account);
+  return rv;
+}
+
+
+static void write_autocrypt_header_line (FILE *fp, const char *addr,
+                                         int prefer_encrypt,
+                                         const char *keydata)
+{
+  int count = 0;
+
+  fprintf (fp, "addr=%s; ", addr);
+  if (prefer_encrypt)
+    fputs ("prefer-encrypt=mutual; ", fp);
+  fputs ("keydata=\n", fp);
+
+  while (*keydata)
+  {
+    count = 0;
+    fputs ("\t", fp);
+    while (*keydata && count < 75)
+    {
+      fputc (*keydata, fp);
+      count++;
+      keydata++;
+    }
+    fputs ("\n", fp);
+  }
+}
+
+int mutt_autocrypt_write_autocrypt_header (ENVELOPE *env, FILE *fp)
+{
+  int rv = -1;
+  AUTOCRYPT_ACCOUNT *account = NULL;
+
+  if (!option (OPTAUTOCRYPT) ||
+      mutt_autocrypt_init (0) ||
+      !env ||
+      !env->from ||
+      env->from->next)
+    return -1;
+
+  if (mutt_autocrypt_db_account_get (env->from, &account) <= 0)
+    goto cleanup;
+  if (!account->keydata)
+    goto cleanup;
+
+  fputs ("Autocrypt: ", fp);
+  write_autocrypt_header_line (fp, account->email_addr, account->prefer_encrypt,
+                               account->keydata);
+
+  rv = 0;
+
+cleanup:
+  mutt_autocrypt_db_account_free (&account);
+  return rv;
+}
+
+int mutt_autocrypt_write_gossip_headers (ENVELOPE *env, FILE *fp)
+{
+  AUTOCRYPTHDR *gossip;
+
+  if (!option (OPTAUTOCRYPT) ||
+      mutt_autocrypt_init (0) ||
+      !env)
+    return -1;
+
+  for (gossip = env->autocrypt_gossip; gossip; gossip = gossip->next)
+  {
+    fputs ("Autocrypt-Gossip: ", fp);
+    write_autocrypt_header_line (fp, gossip->addr, 0, gossip->keydata);
+  }
+
+  return 0;
+}
+
+int mutt_autocrypt_generate_gossip_list (HEADER *hdr)
+{
+  int rv = -1;
+  AUTOCRYPT_PEER *peer = NULL;
+  AUTOCRYPT_ACCOUNT *account = NULL;
+  ADDRESS *recip, *recips = NULL, *last = NULL;
+  AUTOCRYPTHDR *gossip;
+  const char *keydata, *addr;
+  ENVELOPE *mime_headers;
+
+  if (!option (OPTAUTOCRYPT) ||
+      mutt_autocrypt_init (0) ||
+      !hdr)
+    return -1;
+
+  mime_headers = hdr->content->mime_headers;
+  if (!mime_headers)
+    mime_headers = hdr->content->mime_headers = mutt_new_envelope ();
+  mutt_free_autocrypthdr (&mime_headers->autocrypt_gossip);
+
+  last = rfc822_append (&recips, hdr->env->to, 0);
+  last = rfc822_append (last ? &last : &recips, hdr->env->cc, 0);
+
+  for (recip = recips; recip; recip = recip->next)
+  {
+    /* At this point, we just accept missing keys and include what
+     * we can. */
+    if (mutt_autocrypt_db_peer_get (recip, &peer) <= 0)
+      continue;
+
+    keydata = NULL;
+    if (mutt_autocrypt_gpgme_is_valid_key (peer->keyid))
+      keydata = peer->keydata;
+    else if (mutt_autocrypt_gpgme_is_valid_key (peer->gossip_keyid))
+      keydata = peer->gossip_keydata;
+
+    if (keydata)
+    {
+      gossip = mutt_new_autocrypthdr ();
+      gossip->addr = safe_strdup (peer->email_addr);
+      gossip->keydata = safe_strdup (keydata);
+      gossip->next = mime_headers->autocrypt_gossip;
+      mime_headers->autocrypt_gossip = gossip;
+    }
+
+    mutt_autocrypt_db_peer_free (&peer);
+  }
+
+  for (recip = hdr->env->reply_to; recip; recip = recip->next)
+  {
+    addr = keydata = NULL;
+    if (mutt_autocrypt_db_account_get (recip, &account) > 0)
+    {
+      addr = account->email_addr;
+      keydata = account->keydata;
+    }
+    else if (mutt_autocrypt_db_peer_get (recip, &peer) > 0)
+    {
+      addr = peer->email_addr;
+      if (mutt_autocrypt_gpgme_is_valid_key (peer->keyid))
+        keydata = peer->keydata;
+      else if (mutt_autocrypt_gpgme_is_valid_key (peer->gossip_keyid))
+        keydata = peer->gossip_keydata;
+    }
+
+    if (keydata)
+    {
+      gossip = mutt_new_autocrypthdr ();
+      gossip->addr = safe_strdup (addr);
+      gossip->keydata = safe_strdup (keydata);
+      gossip->next = mime_headers->autocrypt_gossip;
+      mime_headers->autocrypt_gossip = gossip;
+    }
+    mutt_autocrypt_db_account_free (&account);
+    mutt_autocrypt_db_peer_free (&peer);
+  }
+
+  rfc822_free_address (&recips);
+  mutt_autocrypt_db_account_free (&account);
   mutt_autocrypt_db_peer_free (&peer);
   return rv;
 }

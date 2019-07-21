@@ -258,7 +258,7 @@ static void autocrypt_compose_menu (HEADER *msg)
   {
     case 1:
       msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE);
-      msg->security &= ~(ENCRYPT | SIGN | OPPENCRYPT);
+      msg->security &= ~(ENCRYPT | SIGN | OPPENCRYPT | INLINE);
       break;
     case 2:
       msg->security &= ~AUTOCRYPT;
@@ -363,25 +363,28 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
 #ifdef USE_AUTOCRYPT
   mutt_window_move (MuttIndexWindow, HDR_AUTOCRYPT, 0);
   mutt_window_clrtoeol (MuttIndexWindow);
-  SETCOLOR (MT_COLOR_COMPOSE_HEADER);
-  printw ("%*s", HeaderPadding[HDR_AUTOCRYPT], _(Prompts[HDR_AUTOCRYPT]));
-  NORMAL_COLOR;
-  if (option (OPTAUTOCRYPT) && (msg->security & AUTOCRYPT))
+  if (option (OPTAUTOCRYPT))
   {
-    SETCOLOR (MT_COLOR_COMPOSE_SECURITY_ENCRYPT);
-    addstr (_("Encrypt"));
-  }
-  else
-  {
-    SETCOLOR (MT_COLOR_COMPOSE_SECURITY_NONE);
-    addstr (_("Off"));
-  }
+    SETCOLOR (MT_COLOR_COMPOSE_HEADER);
+    printw ("%*s", HeaderPadding[HDR_AUTOCRYPT], _(Prompts[HDR_AUTOCRYPT]));
+    NORMAL_COLOR;
+    if (msg->security & AUTOCRYPT)
+    {
+      SETCOLOR (MT_COLOR_COMPOSE_SECURITY_ENCRYPT);
+      addstr (_("Encrypt"));
+    }
+    else
+    {
+      SETCOLOR (MT_COLOR_COMPOSE_SECURITY_NONE);
+      addstr (_("Off"));
+    }
 
-  SETCOLOR (MT_COLOR_COMPOSE_HEADER);
-  mutt_window_mvprintw (MuttIndexWindow, HDR_AUTOCRYPT, 40, "%s",
-                        _("Recommendation: "));
-  NORMAL_COLOR;
-  printw ("%s", _(AutocryptRecUiFlags[rd->autocrypt_rec]));
+    SETCOLOR (MT_COLOR_COMPOSE_HEADER);
+    mutt_window_mvprintw (MuttIndexWindow, HDR_AUTOCRYPT, 40, "%s",
+                          _("Recommendation: "));
+    NORMAL_COLOR;
+    printw ("%s", _(AutocryptRecUiFlags[rd->autocrypt_rec]));
+  }
 #endif
 }
 
@@ -393,28 +396,29 @@ static void update_crypt_info (compose_redraw_data_t *rd)
     crypt_opportunistic_encrypt (msg);
 
 #ifdef USE_AUTOCRYPT
-  rd->autocrypt_rec = mutt_autocrypt_ui_recommendation (msg);
-
-  /* Anything that enables ENCRYPT or SIGN, or turns on SMIME
-   * overrides autocrypt, be it oppenc or the user having turned on
-   * those flags manually. */
-  if (msg->security & (ENCRYPT | SIGN | APPLICATION_SMIME))
-    msg->security &= ~(AUTOCRYPT | AUTOCRYPT_OVERRIDE);
-  else
+  if (option (OPTAUTOCRYPT))
   {
-    if (!(msg->security & AUTOCRYPT_OVERRIDE))
+    rd->autocrypt_rec = mutt_autocrypt_ui_recommendation (msg, NULL);
+
+    /* Anything that enables ENCRYPT or SIGN, or turns on SMIME
+     * overrides autocrypt, be it oppenc or the user having turned on
+     * those flags manually. */
+    if (msg->security & (ENCRYPT | SIGN | APPLICATION_SMIME))
+      msg->security &= ~(AUTOCRYPT | AUTOCRYPT_OVERRIDE);
+    else
     {
-      if (rd->autocrypt_rec == AUTOCRYPT_REC_YES)
-        msg->security |= AUTOCRYPT;
-      else
-        msg->security &= ~AUTOCRYPT;
+      if (!(msg->security & AUTOCRYPT_OVERRIDE))
+      {
+        if (rd->autocrypt_rec == AUTOCRYPT_REC_YES)
+        {
+          msg->security |= AUTOCRYPT;
+          msg->security &= ~INLINE;
+        }
+        else
+          msg->security &= ~AUTOCRYPT;
+      }
     }
   }
-  /* TODO:
-   * - autocrypt menu for manually enabling/disabling (turns on override)
-   * - deal with pgp and smime menu and their effects on security->AUTOCRYPT
-   *   when encryption or signing is enabled or if switch to smime mode
-   */
 #endif
 
   redraw_crypt_lines (rd);
@@ -1630,6 +1634,9 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
 #ifdef USE_AUTOCRYPT
       case OP_COMPOSE_AUTOCRYPT_MENU:
+        if (!option (OPTAUTOCRYPT))
+          break;
+
 	if ((WithCrypto & APPLICATION_SMIME)
             && (msg->security & APPLICATION_SMIME))
 	{
@@ -1654,6 +1661,15 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 #endif
     }
   }
+
+#ifdef USE_AUTOCRYPT
+  /* This is a fail-safe to make sure the bit isn't somehow turned
+   * on.  The user could have disabled the option after setting AUTOCRYPT,
+   * or perhaps resuming or replying to an autocrypt message.
+   */
+  if (!option (OPTAUTOCRYPT))
+    msg->security &= ~AUTOCRYPT;
+#endif
 
   mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);

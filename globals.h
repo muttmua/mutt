@@ -42,6 +42,8 @@ WHERE char *AttachCharset;
 WHERE char *AttachFormat;
 #ifdef USE_AUTOCRYPT
 WHERE char *AutocryptDir;
+WHERE char *AutocryptSignAs;  /* This is used in crypt-gpgme.c */
+WHERE char *AutocryptDefaultKey;  /* Used for postponing messages */
 #endif
 WHERE char *Charset;
 WHERE char *ComposeFormat;
