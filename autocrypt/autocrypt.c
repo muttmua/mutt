@@ -305,8 +305,9 @@ cleanup:
   return rv;
 }
 
-int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
+int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *prot_headers)
 {
+  ENVELOPE *env;
   AUTOCRYPTHDR *ac_hdr;
   struct timeval now;
   AUTOCRYPT_PEER *peer = NULL;
@@ -322,8 +323,10 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
   if (mutt_autocrypt_init (0))
     return -1;
 
-  if (!hdr || !hdr->content || !env)
+  if (!hdr || !hdr->env || !prot_headers)
     return 0;
+
+  env = hdr->env;
 
   if (!env->from)
     return 0;
@@ -342,7 +345,7 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *env)
   rfc822_append (last ? &last : &recips, env->reply_to, 0);
   mutt_autocrypt_db_normalize_addrlist (recips);
 
-  for (ac_hdr = env->autocrypt_gossip; ac_hdr; ac_hdr = ac_hdr->next)
+  for (ac_hdr = prot_headers->autocrypt_gossip; ac_hdr; ac_hdr = ac_hdr->next)
   {
     if (ac_hdr->invalid)
       continue;

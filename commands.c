@@ -147,7 +147,7 @@ static void process_protected_headers (HEADER *cur)
       prot_headers &&
       prot_headers->autocrypt_gossip)
   {
-    mutt_autocrypt_process_gossip_header (cur, cur->env);
+    mutt_autocrypt_process_gossip_header (cur, prot_headers);
   }
 #endif
 }
