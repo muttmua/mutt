@@ -544,8 +544,7 @@ int km_dokey (int menu)
 
       if (option (OPTIGNOREMACROEVENTS))
       {
-	mutt_error _("Macros are currently disabled.");
-	return -1;
+	return OP_NULL;
       }
 
       if (n++ == 10)
