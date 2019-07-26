@@ -812,6 +812,10 @@ typedef struct body
   unsigned int goodsig : 1;	/* good cryptographic signature */
   unsigned int warnsig : 1;     /* maybe good signature */
   unsigned int badsig : 1;	/* bad cryptographic signature (needed to check encrypted s/mime-signatures) */
+#ifdef USE_AUTOCRYPT
+  unsigned int is_autocrypt : 1;  /* used to flag autocrypt-decrypted messages
+                                   * for replying */
+#endif
 
   unsigned int collapsed : 1;	/* used by recvattach */
   unsigned int attach_qualifies : 1;

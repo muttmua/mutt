@@ -161,6 +161,19 @@ int crypt_pgp_valid_passphrase (void)
 /* Decrypt a PGP/MIME message. */
 int crypt_pgp_decrypt_mime (FILE *a, FILE **b, BODY *c, BODY **d)
 {
+#ifdef USE_AUTOCRYPT
+  int result;
+
+  set_option (OPTAUTOCRYPTGPGME);
+  result = pgp_gpgme_decrypt_mime (a, b, c, d);
+  unset_option (OPTAUTOCRYPTGPGME);
+  if (result == 0)
+  {
+    c->is_autocrypt = 1;
+    return result;
+  }
+#endif
+
   if (CRYPT_MOD_CALL_CHECK (PGP, decrypt_mime))
     return (CRYPT_MOD_CALL (PGP, decrypt_mime)) (a, b, c, d);
 
@@ -179,6 +192,19 @@ int crypt_pgp_application_pgp_handler (BODY *m, STATE *s)
 /* MIME handler for an PGP/MIME encrypted message. */
 int crypt_pgp_encrypted_handler (BODY *a, STATE *s)
 {
+#ifdef USE_AUTOCRYPT
+  int result;
+
+  set_option (OPTAUTOCRYPTGPGME);
+  result = pgp_gpgme_encrypted_handler (a, s);
+  unset_option (OPTAUTOCRYPTGPGME);
+  if (result == 0)
+  {
+    a->is_autocrypt = 1;
+    return result;
+  }
+#endif
+
   if (CRYPT_MOD_CALL_CHECK (PGP, encrypted_handler))
     return (CRYPT_MOD_CALL (PGP, encrypted_handler)) (a, s);
 

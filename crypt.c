@@ -609,6 +609,10 @@ int crypt_query (BODY *m)
 
     if (t && m->goodsig)
       t |= GOODSIGN;
+#ifdef USE_AUTOCRYPT
+    if (t && m->is_autocrypt)
+      t |= AUTOCRYPT;
+#endif
   }
 
   if (m->type == TYPEMULTIPART || m->type == TYPEMESSAGE)
