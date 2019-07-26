@@ -2,6 +2,10 @@ account.c
 addrbook.c
 alias.c
 attach.c
+autocrypt/autocrypt.c
+autocrypt/autocrypt_db.c
+autocrypt/autocrypt_gpgme.c
+autocrypt/autocrypt_schema.c
 browser.c
 buffy.c
 charset.c
