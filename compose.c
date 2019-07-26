@@ -251,7 +251,7 @@ static void autocrypt_compose_menu (HEADER *msg)
      The letter corresponding to the compose menu autocrypt prompt
      (e)ncrypt, (c)lear, (a)utomatic
    */
-  letters = "eca";
+  letters = _("eca");
 
   choice = mutt_multi_choice (prompt, letters);
   switch (choice)

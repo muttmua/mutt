@@ -137,6 +137,10 @@ int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keyda
                             GPGME_CREATE_NOPASSWD | GPGME_CREATE_FORCE | GPGME_CREATE_NOEXPIRE);
   if (err)
   {
+    /* L10N:
+       GPGME was unable to generate a key for some reason.
+       %s is the error message returned by GPGME.
+    */
     mutt_error (_("Error creating autocrypt key: %s\n"), gpgme_strerror (err));
     sleep (2);
     goto cleanup;

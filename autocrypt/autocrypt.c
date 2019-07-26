@@ -46,11 +46,20 @@ static int autocrypt_dir_init (int can_create)
     return -1;
 
   prompt = mutt_buffer_pool_get ();
+  /* L10N:
+     %s is a directory.  Mutt is looking for a directory it needs
+     for some reason (e.g. autocrypt, header cache, bcache), but it
+     doesn't exist.  The prompt is asking whether to create the directory
+  */
   mutt_buffer_printf (prompt, _("%s does not exist. Create it?"), AutocryptDir);
   if (mutt_yesorno (mutt_b2s (prompt), MUTT_YES) == MUTT_YES)
   {
     if (mutt_mkdir (AutocryptDir, 0700) < 0)
     {
+      /* L10N:
+         mkdir() on the directory %s failed.  The second %s is the
+         error message returned by libc
+      */
       mutt_error ( _("Can't create %s: %s."), AutocryptDir, strerror (errno));
       mutt_sleep (0);
       rv = -1;
@@ -116,13 +125,19 @@ int mutt_autocrypt_account_init (void)
 
   do
   {
+    /* L10N:
+       Autocrypt is asking for the email address to use for the
+       autocrypt account.  This will generate a key and add a record
+       to the database for use in autocrypt operations.
+    */
     if (mutt_edit_address (&addr, _("Autocrypt account address: "), 0))
       goto cleanup;
     if (!addr || !addr->mailbox || addr->next)
     {
       /* L10N:
          Autocrypt prompts for an account email address, and requires
-         a single address.
+         a single address.  This is shown if they entered something invalid,
+         nothing, or more than one address for some reason.
       */
       mutt_error (_("Please enter a single email address"));
       mutt_sleep (2);
