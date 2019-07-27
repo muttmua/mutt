@@ -106,7 +106,7 @@ int mutt_autocrypt_account_init (void)
   ADDRESS *addr = NULL;
   BUFFER *keyid = NULL, *keydata = NULL;
   AUTOCRYPT_ACCOUNT *account = NULL;
-  int done = 0, rv = -1;
+  int done = 0, rv = -1, prefer_encrypt = 0;
 
   dprint (1, (debugfile, "In mutt_autocrypt_account_init\n"));
   if (mutt_yesorno (_("Create an initial autocrypt account?"),
@@ -158,8 +158,19 @@ int mutt_autocrypt_account_init (void)
   if (mutt_autocrypt_gpgme_create_key (addr, keyid, keydata))
     goto cleanup;
 
-  /* TODO: prompt for prefer_encrypt value? */
-  if (mutt_autocrypt_db_account_insert (addr, mutt_b2s (keyid), mutt_b2s (keydata), 0))
+  /* L10N:
+     Autocrypt has a setting "prefer-encrypt".
+     When the recommendation algorithm returns "available" and BOTH
+     sender and recipient choose "prefer-encrypt", encryption will be
+     automatically enabled.
+     Otherwise the UI will show encryption is "available" but the user
+     will be required to enable encryption manually.
+  */
+  if (mutt_yesorno (_("Prefer encryption?"), MUTT_NO) == MUTT_YES)
+    prefer_encrypt = 1;
+
+  if (mutt_autocrypt_db_account_insert (addr, mutt_b2s (keyid), mutt_b2s (keydata),
+                                        prefer_encrypt))
     goto cleanup;
 
   rv = 0;
