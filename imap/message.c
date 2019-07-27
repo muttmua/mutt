@@ -708,21 +708,36 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   char tempfile[_POSIX_PATH_MAX];
   FILE *fp = NULL;
   IMAP_HEADER h;
-  BUFFER *b = NULL;
+  BUFFER *b = NULL, *hdr_list = NULL;
   static const char * const want_headers = "DATE FROM SENDER SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES LIST-POST X-LABEL";
 
   ctx = idata->ctx;
   idx = ctx->msgcount;
 
+  hdr_list = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (hdr_list, want_headers);
+  if (ImapHeaders)
+  {
+    mutt_buffer_addch (hdr_list, ' ');
+    mutt_buffer_addstr (hdr_list, ImapHeaders);
+  }
+#ifdef USE_AUTOCRYPT
+  if (option (OPTAUTOCRYPT))
+  {
+    mutt_buffer_addch (hdr_list, ' ');
+    mutt_buffer_addstr (hdr_list, "AUTOCRYPT");
+  }
+#endif
+
   if (mutt_bit_isset (idata->capabilities,IMAP4REV1))
   {
-    safe_asprintf (&hdrreq, "BODY.PEEK[HEADER.FIELDS (%s%s%s)]",
-                   want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
+    safe_asprintf (&hdrreq, "BODY.PEEK[HEADER.FIELDS (%s)]",
+                   mutt_b2s (hdr_list));
   }
   else if (mutt_bit_isset (idata->capabilities,IMAP4))
   {
-    safe_asprintf (&hdrreq, "RFC822.HEADER.LINES (%s%s%s)",
-                   want_headers, ImapHeaders ? " " : "", NONULL (ImapHeaders));
+    safe_asprintf (&hdrreq, "RFC822.HEADER.LINES (%s)",
+                   mutt_b2s (hdr_list));
   }
   else
   {	/* Unable to fetch headers for lower versions */
@@ -730,6 +745,8 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
     mutt_sleep (2);	/* pause a moment to let the user see the error */
     goto bail;
   }
+
+  mutt_buffer_pool_release (&hdr_list);
 
   /* instead of downloading all headers and then parsing them, we parse them
    * as they come in. */
@@ -891,6 +908,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   retval = 0;
 
 bail:
+  mutt_buffer_pool_release (&hdr_list);
   mutt_buffer_pool_release (&b);
   safe_fclose (&fp);
   FREE (&hdrreq);
