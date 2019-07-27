@@ -499,6 +499,9 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr, char **keylist)
   if (mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0)
     goto cleanup;
 
+  if (!account->enabled)
+    goto cleanup;
+
   keylist_buf = mutt_buffer_pool_get ();
   mutt_buffer_addstr (keylist_buf, account->keyid);
 
@@ -593,6 +596,8 @@ int mutt_autocrypt_set_sign_as_default_key (HEADER *hdr)
     goto cleanup;
   if (!account->keyid)
     goto cleanup;
+  if (!account->enabled)
+    goto cleanup;
 
   mutt_str_replace (&AutocryptSignAs, account->keyid);
   mutt_str_replace (&AutocryptDefaultKey, account->keyid);
@@ -645,6 +650,8 @@ int mutt_autocrypt_write_autocrypt_header (ENVELOPE *env, FILE *fp)
   if (mutt_autocrypt_db_account_get (env->from, &account) <= 0)
     goto cleanup;
   if (!account->keydata)
+    goto cleanup;
+  if (!account->enabled)
     goto cleanup;
 
   fputs ("Autocrypt: ", fp);
