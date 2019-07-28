@@ -85,6 +85,7 @@ tlssockdata;
 /* local prototypes */
 static int tls_socket_read (CONNECTION* conn, char* buf, size_t len);
 static int tls_socket_write (CONNECTION* conn, const char* buf, size_t len);
+static int tls_socket_poll (CONNECTION* conn, time_t wait_secs);
 static int tls_socket_open (CONNECTION* conn);
 static int tls_socket_close (CONNECTION* conn);
 static int tls_starttls_close (CONNECTION* conn);
@@ -123,7 +124,7 @@ int mutt_ssl_socket_setup (CONNECTION* conn)
   conn->conn_read	= tls_socket_read;
   conn->conn_write	= tls_socket_write;
   conn->conn_close	= tls_socket_close;
-  conn->conn_poll       = raw_socket_poll;
+  conn->conn_poll       = tls_socket_poll;
 
   return 0;
 }
@@ -188,6 +189,16 @@ static int tls_socket_write (CONNECTION* conn, const char* buf, size_t len)
   return sent;
 }
 
+static int tls_socket_poll (CONNECTION* conn, time_t wait_secs)
+{
+  tlssockdata *data = conn->sockdata;
+
+  if (gnutls_record_check_pending (data->state))
+    return 1;
+  else
+    return raw_socket_poll (conn, wait_secs);
+}
+
 static int tls_socket_open (CONNECTION* conn)
 {
   if (raw_socket_open (conn) < 0)
@@ -213,6 +224,7 @@ int mutt_ssl_starttls (CONNECTION* conn)
   conn->conn_read	= tls_socket_read;
   conn->conn_write	= tls_socket_write;
   conn->conn_close	= tls_starttls_close;
+  conn->conn_poll       = tls_socket_poll;
 
   return 0;
 }
@@ -523,6 +535,7 @@ static int tls_starttls_close (CONNECTION* conn)
   conn->conn_read = raw_socket_read;
   conn->conn_write = raw_socket_write;
   conn->conn_close = raw_socket_close;
+  conn->conn_poll = raw_socket_poll;
 
   return rc;
 }

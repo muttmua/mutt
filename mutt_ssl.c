@@ -38,6 +38,7 @@
 #define X509_getm_notBefore X509_get_notBefore
 #define X509_getm_notAfter X509_get_notAfter
 #define X509_STORE_CTX_get0_chain X509_STORE_CTX_get_chain
+#define SSL_has_pending SSL_pending
 #endif
 
 #undef _
@@ -94,6 +95,7 @@ static int ssl_init (void);
 static int add_entropy (const char *file);
 static int ssl_socket_read (CONNECTION* conn, char* buf, size_t len);
 static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len);
+static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs);
 static int ssl_socket_open (CONNECTION * conn);
 static int ssl_socket_close (CONNECTION * conn);
 static int tls_close (CONNECTION* conn);
@@ -284,6 +286,7 @@ int mutt_ssl_starttls (CONNECTION* conn)
   conn->conn_read = ssl_socket_read;
   conn->conn_write = ssl_socket_write;
   conn->conn_close = tls_close;
+  conn->conn_poll = ssl_socket_poll;
 
   conn->ssf = SSL_CIPHER_get_bits (SSL_get_current_cipher (ssldata->ssl),
                                    &maxbits);
@@ -413,7 +416,7 @@ int mutt_ssl_socket_setup (CONNECTION * conn)
   conn->conn_read	= ssl_socket_read;
   conn->conn_write	= ssl_socket_write;
   conn->conn_close	= ssl_socket_close;
-  conn->conn_poll       = raw_socket_poll;
+  conn->conn_poll       = ssl_socket_poll;
 
   return 0;
 }
@@ -443,6 +446,16 @@ static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len)
     ssl_err (data, rc);
 
   return rc;
+}
+
+static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs)
+{
+  sslsockdata *data = conn->sockdata;
+
+  if (SSL_has_pending (data->ssl))
+    return 1;
+  else
+    return raw_socket_poll (conn, wait_secs);
 }
 
 static int ssl_socket_open (CONNECTION * conn)
@@ -647,6 +660,7 @@ static int tls_close (CONNECTION* conn)
   conn->conn_read = raw_socket_read;
   conn->conn_write = raw_socket_write;
   conn->conn_close = raw_socket_close;
+  conn->conn_poll = raw_socket_poll;
 
   return rc;
 }
