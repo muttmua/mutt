@@ -21,7 +21,7 @@
 
 #include <sqlite3.h>
 
-int mutt_autocrypt_account_init (void);
+int mutt_autocrypt_account_init (int prompt);
 
 int mutt_autocrypt_db_init (int can_create);
 void mutt_autocrypt_db_close (void);
@@ -33,6 +33,9 @@ void mutt_autocrypt_db_account_free (AUTOCRYPT_ACCOUNT **account);
 int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account);
 int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
                                       const char *keydata, int prefer_encrypt);
+int mutt_autocrypt_db_account_update (AUTOCRYPT_ACCOUNT *acct);
+int mutt_autocrypt_db_account_delete (AUTOCRYPT_ACCOUNT *acct);
+int mutt_autocrypt_db_account_get_all (AUTOCRYPT_ACCOUNT ***accounts, int *num_accounts);
 
 AUTOCRYPT_PEER *mutt_autocrypt_db_peer_new (void);
 void mutt_autocrypt_db_peer_free (AUTOCRYPT_PEER **peer);

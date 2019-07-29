@@ -80,5 +80,6 @@ int mutt_autocrypt_set_sign_as_default_key (HEADER *hdr);
 int mutt_autocrypt_write_autocrypt_header (ENVELOPE *env, FILE *fp);
 int mutt_autocrypt_write_gossip_headers (ENVELOPE *env, FILE *fp);
 int mutt_autocrypt_generate_gossip_list (HEADER *hdr);
+void mutt_autocrypt_account_menu (void);
 
 #endif

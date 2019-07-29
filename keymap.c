@@ -770,6 +770,10 @@ void km_init (void)
   km_bindkey ("l", MENU_MIX, OP_MIX_CHAIN_NEXT);
 #endif
 
+#ifdef USE_AUTOCRYPT
+  create_bindings (OpAutocryptAcct, MENU_AUTOCRYPT_ACCT);
+#endif
+
   /* bindings for the line editor */
   create_bindings (OpEditor, MENU_EDITOR);
 
@@ -1025,6 +1029,11 @@ const struct binding_t *km_get_table (int menu)
 #ifdef MIXMASTER
     case MENU_MIX:
       return OpMix;
+#endif
+
+#ifdef USE_AUTOCRYPT
+    case MENU_AUTOCRYPT_ACCT:
+      return OpAutocryptAcct;
 #endif
 
   }

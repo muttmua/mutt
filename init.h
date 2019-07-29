@@ -325,6 +325,20 @@ struct option_t MuttVars[] = {
   ** passive encryption protection with keys exchanged via headers.
   ** TODO: add a section in the manual describing this is more detail.
   */
+  { "autocrypt_acct_format", DT_STR, R_MENU, {.p=&AutocryptAcctFormat}, {.p="%4n %-30a %20p %10s"} },
+  /*
+  ** .pp
+  ** This variable describes the format of the ``autocrypt account'' menu.
+  ** The following \fCprintf(3)\fP-style sequences are understood
+  ** .dl
+  ** .dt %a  .dd email address
+  ** .dt %k  .dd gpg keyid
+  ** .dt %n  .dd current entry number
+  ** .dt %p  .dd prefer-encrypt flag
+  ** .dt %s  .dd status flag (active/inactive)
+  ** .de
+  ** .pp
+  */
   { "autocrypt_dir",	DT_PATH, R_NONE, {.p=&AutocryptDir}, {.p="~/.mutt/autocrypt"} },
   /*
   ** .pp

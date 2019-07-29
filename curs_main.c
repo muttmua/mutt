@@ -45,6 +45,10 @@
 #include "monitor.h"
 #endif
 
+#ifdef USE_AUTOCRYPT
+#include "autocrypt.h"
+#endif
+
 #include "mutt_crypt.h"
 
 
@@ -2562,6 +2566,13 @@ int mutt_index_menu (void)
         mutt_reflow_windows();
 	break;
 #endif
+
+#ifdef USE_AUTOCRYPT
+      case OP_AUTOCRYPT_ACCT_MENU:
+        mutt_autocrypt_account_menu ();
+        break;
+#endif
+
       default:
 	if (menu->menu == MENU_MAIN)
 	  km_error_key (MENU_MAIN);

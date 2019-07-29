@@ -77,6 +77,9 @@ enum
   MENU_MIX,
 #endif
 
+#ifdef USE_AUTOCRYPT
+  MENU_AUTOCRYPT_ACCT,
+#endif
 
 
   MENU_MAX
@@ -116,6 +119,10 @@ extern const struct binding_t OpSmime[];
 
 #ifdef MIXMASTER
 extern const struct binding_t OpMix[];
+#endif
+
+#ifdef USE_AUTOCRYPT
+extern const struct binding_t OpAutocryptAcct[];
 #endif
 
 #include "keymap_defs.h"

@@ -86,6 +86,9 @@ const struct binding_t OpGeneric[] = { /* map: generic */
 
 const struct binding_t OpMain[] = { /* map: index */
   { "create-alias",		OP_CREATE_ALIAS,		"a" },
+#ifdef USE_AUTOCRYPT
+  { "autocrypt-acct-menu",	OP_AUTOCRYPT_ACCT_MENU,		"A" },
+#endif
   { "bounce-message",		OP_BOUNCE_MESSAGE,		"b" },
   { "break-thread",		OP_MAIN_BREAK_THREAD,		"#" },
   { "change-folder",		OP_MAIN_CHANGE_FOLDER,		"c" },
@@ -500,3 +503,13 @@ const struct binding_t OpMix[] = { /* map: mixmaster */
   { NULL, 		0, 		NULL }
 };
 #endif /* MIXMASTER */
+
+#ifdef USE_AUTOCRYPT
+const struct binding_t OpAutocryptAcct[] = { /* map: autocrypt account */
+  { "create-account",        OP_AUTOCRYPT_CREATE_ACCT,    "c" },
+  { "delete-account",        OP_AUTOCRYPT_DELETE_ACCT,    "D" },
+  { "toggle-active",         OP_AUTOCRYPT_TOGGLE_ACTIVE,  "a" },
+  { "toggle-prefer-encrypt", OP_AUTOCRYPT_TOGGLE_PREFER,  "p" },
+  { NULL,                    0,                            NULL }
+};
+#endif

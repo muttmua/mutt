@@ -100,18 +100,22 @@ void mutt_autocrypt_cleanup (void)
   mutt_autocrypt_db_close ();
 }
 
-/* Creates a brand new account the first time autocrypt is initialized */
-int mutt_autocrypt_account_init (void)
+/* Creates a brand new account.
+ * This is used the first time autocrypt is initialized, and
+ * in the account menu. */
+int mutt_autocrypt_account_init (int prompt)
 {
   ADDRESS *addr = NULL;
   BUFFER *keyid = NULL, *keydata = NULL;
   AUTOCRYPT_ACCOUNT *account = NULL;
   int done = 0, rv = -1, prefer_encrypt = 0;
 
-  dprint (1, (debugfile, "In mutt_autocrypt_account_init\n"));
-  if (mutt_yesorno (_("Create an initial autocrypt account?"),
+  if (prompt)
+  {
+    if (mutt_yesorno (_("Create an initial autocrypt account?"),
                       MUTT_YES) != MUTT_YES)
-    return 0;
+      return 0;
+  }
 
   keyid = mutt_buffer_pool_get ();
   keydata = mutt_buffer_pool_get ();
@@ -152,6 +156,7 @@ int mutt_autocrypt_account_init (void)
   if (account)
   {
     mutt_error _("That email address already has an autocrypt account");
+    mutt_sleep (1);
     goto cleanup;
   }
 
