@@ -129,6 +129,10 @@ int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keyda
   if (create_gpgme_context (&ctx))
     goto cleanup;
 
+  /* L10N:
+     Message displayed just before a GPG key is generated for a created
+     autocrypt account.
+  */
   mutt_message _("Generating autocrypt key...");
 
   /* Primary key */

@@ -381,6 +381,11 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
 
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     mutt_window_mvprintw (MuttIndexWindow, HDR_AUTOCRYPT, 40, "%s",
+                          /* L10N:
+                             The autocrypt compose menu Recommendation field.
+                             Displays the output of the recommendation engine
+                             (Off, No, Discouraged, Available, Yes)
+                          */
                           _("Recommendation: "));
     NORMAL_COLOR;
     printw ("%s", _(AutocryptRecUiFlags[rd->autocrypt_rec]));
