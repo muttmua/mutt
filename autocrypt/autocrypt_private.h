@@ -38,7 +38,7 @@ AUTOCRYPT_PEER *mutt_autocrypt_db_peer_new (void);
 void mutt_autocrypt_db_peer_free (AUTOCRYPT_PEER **peer);
 int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer);
 int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer);
-int mutt_autocrypt_db_peer_update (ADDRESS *addr, AUTOCRYPT_PEER *peer);
+int mutt_autocrypt_db_peer_update (AUTOCRYPT_PEER *peer);
 
 AUTOCRYPT_PEER_HISTORY *mutt_autocrypt_db_peer_history_new (void);
 void mutt_autocrypt_db_peer_history_free (AUTOCRYPT_PEER_HISTORY **peerhist);

@@ -308,7 +308,7 @@ int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env)
     goto cleanup;
 
   if (update_db &&
-      mutt_autocrypt_db_peer_update (env->from, peer))
+      mutt_autocrypt_db_peer_update (peer))
     goto cleanup;
 
   if (insert_db_history)
@@ -440,7 +440,7 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *prot_headers)
       goto cleanup;
 
     if (update_db &&
-        mutt_autocrypt_db_peer_update (peer_addr, peer))
+        mutt_autocrypt_db_peer_update (peer))
       goto cleanup;
 
     if (insert_db_history)
