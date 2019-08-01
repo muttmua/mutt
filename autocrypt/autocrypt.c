@@ -25,6 +25,7 @@
 #include "mutt_crypt.h"
 #include "mime.h"
 #include "mutt_idna.h"
+#include "mailbox.h"
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
@@ -786,4 +787,75 @@ int mutt_autocrypt_generate_gossip_list (HEADER *hdr)
   mutt_autocrypt_db_account_free (&account);
   mutt_autocrypt_db_peer_free (&peer);
   return rv;
+}
+
+/* This is invoked during the first autocrypt initialization,
+ * to scan one or more mailboxes for autocrypt headers.
+ *
+ * Due to the implementation, header-cached headers are not scanned,
+ * so this routine just opens up the mailboxes with $header_cache
+ * temporarily disabled.
+ */
+void mutt_autocrypt_scan_mailboxes (void)
+{
+  int scan;
+  BUFFER *folderbuf = NULL;
+  CONTEXT *ctx = NULL;
+
+#ifdef USE_HCACHE
+  char *old_hdrcache = HeaderCache;
+  HeaderCache = NULL;
+#endif
+
+  folderbuf = mutt_buffer_pool_get ();
+
+  /* L10N:
+     The first time autocrypt is enabled, Mutt will ask to scan
+     through one or more mailboxes for Autocrypt: headers.
+     Those headers are then captured in the database as peer records
+     and used for encryption.
+     If this is answered yes, they will be prompted for a mailbox.
+  */
+  scan = mutt_yesorno (_("Scan a mailbox for autocrypt headers?"),
+                       MUTT_YES);
+  while (scan == MUTT_YES)
+  {
+    /* L10N:
+       The prompt for a mailbox to scan for Autocrypt: headers
+    */
+    if ((!mutt_buffer_enter_fname (_("Scan mailbox"), folderbuf, 1)) &&
+        mutt_buffer_len (folderbuf))
+    {
+      mutt_buffer_expand_path (folderbuf);
+      /* NOTE: I am purposely *not* executing folder hooks here,
+       * as they can do all sorts of things like push into the getch() buffer.
+       * Authentication should be in account-hooks. */
+      ctx = mx_open_mailbox (mutt_b2s (folderbuf), MUTT_READONLY, NULL);
+      mutt_sleep (1);
+      mx_close_mailbox (ctx, NULL);
+
+      FREE (&ctx);
+      mutt_buffer_clear (folderbuf);
+    }
+
+    /* outside of the MUTTMENU system, we have to deal with issues
+     * like the file browser not being cleared from the screen... */
+    move (0, 0);
+    clrtobot ();
+
+    /* L10N:
+       This is the second prompt to see if the user would like
+       to scan more than one mailbox for Autocrypt headers.
+       I'm purposely being extra verbose; asking first then prompting
+       for a mailbox.  This is because this is a one-time operation
+       and I don't want them to accidentally ctrl-g and abort it.
+    */
+    scan = mutt_yesorno (_("Scan another mailbox for autocrypt headers?"),
+                         MUTT_YES);
+  }
+
+#ifdef USE_HCACHE
+  HeaderCache = old_hdrcache;
+#endif
+  mutt_buffer_pool_release (&folderbuf);
 }
