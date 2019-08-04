@@ -9689,7 +9689,7 @@ please have a look at the mixmaster documentation.
       scan mailboxes for Autocrypt headers.  This step occurs because
       header cached messages are not re-scanned for Autocrypt headers.
       Scanning during this step will temporarily disable the header
-      cache will opening each mailbox.  If you wish to do this
+      cache while opening each mailbox.  If you wish to do this
       manually later, you can simulate the same thing by unsetting
       <link linkend="header-cache">$header_cache</link> and opening a
       mailbox.
