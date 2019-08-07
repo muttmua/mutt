@@ -1906,7 +1906,7 @@ ci_send_message (int flags,		/* send mode */
   {
     if (
 #ifdef USE_AUTOCRYPT
-      option (OPTAUTOCRYPT)
+      option (OPTAUTOCRYPT) && option (OPTAUTOCRYPTREPLY)
 #else
       0
 #endif
