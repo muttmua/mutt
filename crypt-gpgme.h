@@ -55,4 +55,7 @@ int smime_gpgme_verify_sender (HEADER *h);
 
 void mutt_gpgme_set_sender (const char *sender);
 
+int mutt_gpgme_select_secret_key (BUFFER *keyid);
+
+
 #endif

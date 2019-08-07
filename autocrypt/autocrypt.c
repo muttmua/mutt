@@ -171,7 +171,7 @@ int mutt_autocrypt_account_init (int prompt)
     goto cleanup;
   }
 
-  if (mutt_autocrypt_gpgme_create_key (addr, keyid, keydata))
+  if (mutt_autocrypt_gpgme_select_or_create_key (addr, keyid, keydata))
     goto cleanup;
 
   /* L10N:

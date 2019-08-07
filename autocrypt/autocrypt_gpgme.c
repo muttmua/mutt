@@ -185,6 +185,91 @@ cleanup:
   return rv;
 }
 
+int mutt_autocrypt_gpgme_select_key (BUFFER *keyid, BUFFER *keydata)
+{
+  int rv = -1;
+  gpgme_ctx_t ctx = NULL;
+  gpgme_key_t key = NULL;
+
+  set_option (OPTAUTOCRYPTGPGME);
+  if (mutt_gpgme_select_secret_key (keyid))
+    goto cleanup;
+
+  if (create_gpgme_context (&ctx))
+    goto cleanup;
+
+  if (gpgme_get_key (ctx, mutt_b2s (keyid), &key, 0))
+    goto cleanup;
+
+  if (key->revoked || key->expired || key->disabled || key->invalid ||
+      !key->can_encrypt || !key->can_sign)
+  {
+    /* L10N:
+       After selecting a key for an autocrypt account,
+       this is displayed if the key was revoked/expired/disabled/invalid
+       or can't be used for both signing and encryption.
+       %s is the key fingerprint.
+    */
+    mutt_error (_("The key %s is not usable for autocrypt"), mutt_b2s (keyid));
+    mutt_sleep (1);
+    goto cleanup;
+  }
+
+  if (export_keydata (ctx, key, keydata))
+    goto cleanup;
+
+  rv = 0;
+
+cleanup:
+  unset_option (OPTAUTOCRYPTGPGME);
+  gpgme_key_unref (key);
+  gpgme_release (ctx);
+  return rv;
+}
+
+int mutt_autocrypt_gpgme_select_or_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keydata)
+{
+  int rv = -1;
+  char *prompt, *letters;
+  int choice;
+
+  /* L10N:
+     During autocrypt account creation, this prompt asks the
+     user whether they want to create a new GPG key for the account,
+     or select an existing account from the keyring.
+  */
+  prompt = _("(c)reate new, or (s)elect existing GPG key? ");
+  /* L10N:
+     The letters corresponding to the
+     "(c)reate new, or (s)elect existing GPG key?" prompt.
+  */
+  letters = _("cs");
+
+  choice = mutt_multi_choice (prompt, letters);
+  switch (choice)
+  {
+    case 2:   /* select existing */
+      rv = mutt_autocrypt_gpgme_select_key (keyid, keydata);
+      if (rv == 0)
+        break;
+
+      /* L10N:
+         During autocrypt account creation, if selecting an existing key fails
+         for some reason, we prompt to see if they want to create a key instead.
+      */
+      if (mutt_yesorno (_("Create a new gpg key for this account, instead?"),
+                        MUTT_YES) == MUTT_NO)
+        break;
+
+      /* otherwise fall through to create new key */
+
+    case 1:  /* create new */
+      rv = mutt_autocrypt_gpgme_create_key (addr, keyid, keydata);
+  }
+
+  return rv;
+}
+
 int mutt_autocrypt_gpgme_import_key (const char *keydata, BUFFER *keyid)
 {
   int rv = -1;
