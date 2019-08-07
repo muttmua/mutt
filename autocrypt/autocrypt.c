@@ -838,11 +838,6 @@ void mutt_autocrypt_scan_mailboxes (void)
       mutt_buffer_clear (folderbuf);
     }
 
-    /* outside of the MUTTMENU system, we have to deal with issues
-     * like the file browser not being cleared from the screen... */
-    move (0, 0);
-    clrtobot ();
-
     /* L10N:
        This is the second prompt to see if the user would like
        to scan more than one mailbox for Autocrypt headers.

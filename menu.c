@@ -789,6 +789,8 @@ void mutt_pop_current_menu (MUTTMENU *menu)
   else
   {
     CurrentMenu = MENU_MAIN;
+    move (0, 0);
+    clrtobot ();
   }
 }
 
