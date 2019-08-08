@@ -79,6 +79,8 @@ int mutt_autocrypt_init (int can_create)
   if (!option (OPTAUTOCRYPT) || !AutocryptDir)
     return -1;
 
+  set_option (OPTIGNOREMACROEVENTS);
+
   if (autocrypt_dir_init (can_create))
     goto bail;
 
@@ -88,9 +90,12 @@ int mutt_autocrypt_init (int can_create)
   if (mutt_autocrypt_db_init (can_create))
     goto bail;
 
+  unset_option (OPTIGNOREMACROEVENTS);
+
   return 0;
 
 bail:
+  unset_option (OPTIGNOREMACROEVENTS);
   unset_option (OPTAUTOCRYPT);
   mutt_autocrypt_db_close ();
   return -1;
