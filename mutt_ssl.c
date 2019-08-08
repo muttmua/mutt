@@ -1194,7 +1194,7 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   BUFFER *drow = NULL;
   unsigned u;
   FILE *fp;
-  int allow_skip = 0;
+  int allow_skip = 0, reset_ignoremacro = 0;
 
   mutt_push_current_menu (menu);
 
@@ -1292,7 +1292,12 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   menu->help = helpstr;
 
   done = 0;
-  set_option(OPTIGNOREMACROEVENTS);
+
+  if (!option (OPTIGNOREMACROEVENTS))
+  {
+    set_option (OPTIGNOREMACROEVENTS);
+    reset_ignoremacro = 1;
+  }
   while (!done)
   {
     switch (mutt_menuLoop (menu))
@@ -1336,7 +1341,8 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
         break;
     }
   }
-  unset_option(OPTIGNOREMACROEVENTS);
+  if (reset_ignoremacro)
+    unset_option (OPTIGNOREMACROEVENTS);
 
   mutt_buffer_pool_release (&drow);
   mutt_pop_current_menu (menu);

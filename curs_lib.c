@@ -242,11 +242,16 @@ int _mutt_get_field (const char *field, char *buf, size_t buflen, int complete, 
 
 int mutt_get_field_unbuffered (char *msg, char *buf, size_t buflen, int flags)
 {
-  int rc;
+  int rc, reset_ignoremacro = 0;
 
-  set_option (OPTIGNOREMACROEVENTS);
+  if (!option (OPTIGNOREMACROEVENTS))
+  {
+    set_option (OPTIGNOREMACROEVENTS);
+    reset_ignoremacro = 1;
+  }
   rc = mutt_get_field (msg, buf, buflen, flags);
-  unset_option (OPTIGNOREMACROEVENTS);
+  if (reset_ignoremacro)
+    unset_option (OPTIGNOREMACROEVENTS);
 
   return (rc);
 }

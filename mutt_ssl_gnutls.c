@@ -820,7 +820,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   BUFFER *drow = NULL;
   FILE *fp;
   gnutls_datum_t pemdata;
-  int done, ret;
+  int done, ret, reset_ignoremacro = 0;
 
   if (!tls_check_preauth (certdata, certstat, hostname, idx, &certerr,
                           &savedcert))
@@ -1015,7 +1015,11 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   menu->help = helpstr;
 
   done = 0;
-  set_option (OPTIGNOREMACROEVENTS);
+  if (!option (OPTIGNOREMACROEVENTS))
+  {
+    set_option (OPTIGNOREMACROEVENTS);
+    reset_ignoremacro = 1;
+  }
   while (!done)
   {
     switch (mutt_menuLoop (menu))
@@ -1070,7 +1074,8 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
         break;
     }
   }
-  unset_option (OPTIGNOREMACROEVENTS);
+  if (reset_ignoremacro)
+    unset_option (OPTIGNOREMACROEVENTS);
 
   mutt_buffer_pool_release (&drow);
   mutt_pop_current_menu (menu);
