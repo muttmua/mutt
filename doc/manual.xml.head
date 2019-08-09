@@ -9584,8 +9584,8 @@ please have a look at the mixmaster documentation.
 
   <para>
     Mutt can be compiled with Autocrypt support by running
-    <emphasis>configure</emphasis> with the
-    <emphasis>--enable-autocrypt</emphasis> flag.  Autocrypt provides
+    <literal>configure</literal> with the
+    <literal>--enable-autocrypt</literal> flag.  Autocrypt provides
     easy to use, passive protection against data collection.  Keys are
     distributed via an <literal>Autocrypt:</literal> header added to
     emails.  It does <emphasis>not</emphasis> protect against active
@@ -9614,8 +9614,8 @@ please have a look at the mixmaster documentation.
     </para>
     <para>
       It is highly recommended Mutt be configured
-      <emphasis>--with-idn</emphasis> or
-      <emphasis>--with-idn2</emphasis> so that Autocrypt can properly
+      <literal>--with-idn</literal> or
+      <literal>--with-idn2</literal> so that Autocrypt can properly
       deal with international domain names.
     </para>
     <para>
@@ -9650,11 +9650,11 @@ please have a look at the mixmaster documentation.
       differently from your GnuPG keyring directory
       (e.g. <literal>~/.gnupg</literal>).  Keys are automatically
       imported into the keyring from <literal>Autocrypt:</literal>
-      headers.  Compared to standard WOT keys, Autocrypt keys are
-      somewhat ephemeral, and the autocrypt database is used to track
-      when keys change or fall out of use.  Having these keys mixed in
-      with your normal keyring will make it more difficult to use
-      features such as <link
+      headers.  Compared to standard <quote>web of trust</quote> keys,
+      Autocrypt keys are somewhat ephemeral, and the autocrypt
+      database is used to track when keys change or fall out of use.
+      Having these keys mixed in with your normal keyring will make it
+      more difficult to use features such as <link
       linkend="crypt-opportunistic-encrypt">$crypt_opportunistic_encrypt</link>
       and Autocrypt at the same time.
     </para>
@@ -9676,9 +9676,13 @@ please have a look at the mixmaster documentation.
       function in the index, by default bound to <literal>A</literal>.
     </para>
     <para>
-      Creating an account requires specifying an email address, and
-      then deciding whether this address should prefer encryption or
-      not.  Autocrypt 1.1 allows automatically enabling encryption if
+      Account creation will first ask you for an email address.  Next,
+      it will ask whether you want to create a new key or select an
+      existing key.  (Note key selection takes place from the <link
+      linkend="autocrypt-dir">$autocrypt_dir</link> keyring, which
+      will normally be empty during first run).  Finally, it will ask
+      whether this address should prefer encryption or not.  Autocrypt
+      1.1 allows automatically enabling encryption if
       <emphasis>both</emphasis> sender and receiver have set
       <quote>prefer encryption</quote>.  Otherwise, you will need to
       manually enable autocrypt encryption in the compose menu.  For
@@ -9781,14 +9785,18 @@ please have a look at the mixmaster documentation.
       either of these are chosen, the field will remain in that state
       despite what the <literal>Recommendation:</literal> field shows.
       Lastly, <literal>(a)utomatic</literal> will set the value based
-      on the recommendataion engine's output.
+      on the recommendation engine's output.
     </para>
     <para>
       Autocrypt encryption defers to normal encryption or signing.
       <emphasis>Anything</emphasis> that enables normal encryption or
-      signing will cause autocrypt encryption to turn off.  The only exception is
-      when replying to an autocrypt-encrypted email.  In those cases, autocrypt
-      will override settings
+      signing will cause autocrypt encryption to turn off.  The only
+      exception is when replying to an autocrypt-encrypted email
+      (i.e. an email decrypted from the <link
+      linkend="autocrypt-dir">$autocrypt_dir</link> keyring).  Then,
+      if <link linkend="autocrypt-reply">$autocrypt_reply</link> is
+      <emphasis>set</emphasis>, autocrypt mode will be forced on,
+      overriding the settings
       <link linkend="crypt-autosign">$crypt_autosign</link>,
       <link linkend="crypt-autoencrypt">$crypt_autoencrypt</link>,
       <link linkend="crypt-replyencrypt">$crypt_replyencrypt</link>,
