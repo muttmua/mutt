@@ -7,7 +7,7 @@ stages:
 build:
   stage: build
   script:
-    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --with-gnutls
+    - ./prepare --disable-dependency-tracking --enable-gpgme --enable-sidebar --enable-compressed --enable-pop --enable-imap --enable-smtp --enable-debug --enable-hcache --enable-autocrypt --with-sqlite3 --with-gnutls
     - make -j
 
 pages:
