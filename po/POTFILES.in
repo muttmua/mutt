@@ -3,8 +3,8 @@ addrbook.c
 alias.c
 attach.c
 autocrypt/autocrypt.c
-autocrypt/autocrypt_db.c
 autocrypt/autocrypt_acct_menu.c
+autocrypt/autocrypt_db.c
 autocrypt/autocrypt_gpgme.c
 autocrypt/autocrypt_schema.c
 browser.c
@@ -14,9 +14,10 @@ color.c
 commands.c
 compose.c
 compress.c
-crypt-gpgme.c
+copy.c
 crypt.c
 cryptglue.c
+crypt-gpgme.c
 curs_lib.c
 curs_main.c
 edit.c
@@ -32,6 +33,7 @@ imap/auth_anon.c
 imap/auth_cram.c
 imap/auth_gss.c
 imap/auth_login.c
+imap/auth_oauth.c
 imap/auth_sasl.c
 imap/browse.c
 imap/command.c
@@ -67,6 +69,7 @@ recvattach.c
 recvcmd.c
 remailer.c
 rfc1524.c
+safe_asprintf.c
 score.c
 send.c
 sendlib.c
