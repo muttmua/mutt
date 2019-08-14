@@ -41,6 +41,11 @@
 #define SSL_has_pending SSL_pending
 #endif
 
+/* Unimplemented OpenSSL 1.1 api calls */
+#if (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
+#define SSL_has_pending SSL_pending
+#endif
+
 #undef _
 
 #include <string.h>
