@@ -215,6 +215,10 @@ int mutt_ssl_starttls (CONNECTION* conn)
     dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL_CTX\n"));
     goto bail_ssldata;
   }
+#ifdef SSL_OP_NO_TLSv1_3
+  if (!option(OPTTLSV1_3))
+    ssl_options |= SSL_OP_NO_TLSv1_3;
+#endif
 #ifdef SSL_OP_NO_TLSv1_2
   if (!option(OPTTLSV1_2))
     ssl_options |= SSL_OP_NO_TLSv1_2;
@@ -504,6 +508,12 @@ static int ssl_socket_open (CONNECTION * conn)
   if (!option(OPTTLSV1_2))
   {
     SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1_2);
+  }
+#endif
+#ifdef SSL_OP_NO_TLSv1_3
+  if (!option(OPTTLSV1_3))
+  {
+    SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1_3);
   }
 #endif
   if (!option(OPTSSLV2))

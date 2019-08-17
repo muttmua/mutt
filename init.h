@@ -3840,6 +3840,12 @@ struct option_t MuttVars[] = {
   ** If \fIset\fP , Mutt will use TLSv1.2 when communicating with servers that
   ** request it.
   */
+  { "ssl_use_tlsv1_3", DT_BOOL, R_NONE, {.l=OPTTLSV1_3}, {.l=1} },
+  /*
+  ** .pp
+  ** If \fIset\fP , Mutt will use TLSv1.3 when communicating with servers that
+  ** request it.
+  */
 #ifdef USE_SSL_OPENSSL
   { "ssl_usesystemcerts", DT_BOOL, R_NONE, {.l=OPTSSLSYSTEMCERTS}, {.l=1} },
   /*
