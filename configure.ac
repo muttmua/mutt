@@ -149,7 +149,7 @@ AC_ARG_ENABLE(autocrypt,
         [],
         [enable_autocrypt=no])
 if test x$enable_autocrypt = xyes; then
-  if test x$with_sqlite3 != xyes; then
+  if test x$with_sqlite3 = xno; then
     AC_MSG_ERROR([autocrypt requires --with-sqlite3])
   fi
   AC_DEFINE(USE_AUTOCRYPT,1,[ Define if you want support for autocrypt. ])
