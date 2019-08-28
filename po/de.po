@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-25 09:15-0700\n"
-"PO-Revision-Date: 2019-05-10 09:33+0200\n"
+"PO-Revision-Date: 2019-08-27 15:16+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: account.c:163
 #, c-format
@@ -6007,13 +6007,13 @@ msgstr "Zeige derzeit aktives Begrenzungsmuster"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:568
 msgid "collapse/uncollapse current thread"
-msgstr "Kollabiere/expandiere aktuellen Diskussionsfaden"
+msgstr "Auf- und Zuklappen des aktuellen Diskussionsfadens"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:571
 msgid "collapse/uncollapse all threads"
-msgstr "Kollabiere/expandiere alle Diskussionsfäden"
+msgstr "Auf- und Zuklappen aller Diskussionsfäden"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
