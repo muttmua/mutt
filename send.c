@@ -1487,7 +1487,11 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
     if (msg->security & AUTOCRYPT)
     {
       if (mutt_autocrypt_set_sign_as_default_key (msg))
+      {
+        msg->content = mutt_remove_multipart (msg->content);
+        decode_descriptions (msg->content);
         return -1;
+      }
       encrypt_as = AutocryptDefaultKey;
     }
 #endif
