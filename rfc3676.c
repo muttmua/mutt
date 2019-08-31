@@ -37,6 +37,7 @@
 #include "mutt_curses.h"
 #include "ascii.h"
 #include "lib.h"
+#include "mime.h"
 
 #define FLOWED_MAX 72
 
@@ -327,64 +328,145 @@ int rfc3676_handler (BODY * a, STATE * s)
  * certain lines:
  *   - lines starting with a space
  *   - lines starting with 'From '
- * This routine is only called once right after editing the
- * initial message so it's up to the user to take care of stuffing
- * when editing the message several times before actually sending it
  *
- * This is more or less a hack as it replaces the message's content with
- * a freshly created copy in a tempfile and modifies the file's mtime
- * so we don't trigger code paths watching for mtime changes
+ * Care is taken to preserve the hdr->content->filename, as
+ * mutt -i -E can directly edit a passed in filename.
  */
-void rfc3676_space_stuff (HEADER* hdr)
+static void rfc3676_space_stuff (HEADER* hdr)
 {
-#if DEBUG
-  int lc = 0;
-  size_t len = 0;
-  unsigned char c = '\0';
-#endif
   FILE *in = NULL, *out = NULL;
-  char buf[LONG_STRING];
-  char tmpfile[_POSIX_PATH_MAX];
+  char *buf = NULL;
+  size_t blen = 0;
+  BUFFER *tmpfile = NULL;
+
+  tmpfile = mutt_buffer_pool_get ();
+
+  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
+    goto bail;
+
+  mutt_buffer_mktemp (tmpfile);
+  if ((out = safe_fopen (mutt_b2s (tmpfile), "w+")) == NULL)
+    goto bail;
+
+  while ((buf = mutt_read_line (buf, &blen, in, NULL, 0)) != NULL)
+  {
+    if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ')
+      fputc (' ', out);
+    fputs (buf, out);
+    fputc ('\n', out);
+  }
+  FREE (&buf);
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_set_mtime (hdr->content->filename, mutt_b2s (tmpfile));
+
+  if ((in = safe_fopen (mutt_b2s (tmpfile), "r")) == NULL)
+    goto bail;
+
+  if ((truncate (hdr->content->filename, 0) == -1) ||
+      ((out = safe_fopen (hdr->content->filename, "a")) == NULL))
+  {
+    goto bail;
+  }
+
+  mutt_copy_stream (in, out);
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_set_mtime (mutt_b2s (tmpfile), hdr->content->filename);
+  unlink (mutt_b2s (tmpfile));
+  mutt_buffer_pool_release (&tmpfile);
+  return;
+
+bail:
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_buffer_pool_release (&tmpfile);
+}
+
+static void rfc3676_space_unstuff (HEADER* hdr)
+{
+  FILE *in = NULL, *out = NULL;
+  char *buf = NULL;
+  size_t blen = 0;
+  BUFFER *tmpfile = NULL;
+
+  tmpfile = mutt_buffer_pool_get ();
+
+  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
+    goto bail;
+
+  mutt_buffer_mktemp (tmpfile);
+  if ((out = safe_fopen (mutt_b2s (tmpfile), "w+")) == NULL)
+    goto bail;
+
+  while ((buf = mutt_read_line (buf, &blen, in, NULL, 0)) != NULL)
+  {
+    if (buf[0] == ' ')
+      fputs (buf + 1, out);
+    else
+      fputs (buf, out);
+    fputc ('\n', out);
+  }
+  FREE (&buf);
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_set_mtime (hdr->content->filename, mutt_b2s (tmpfile));
+
+  if ((in = safe_fopen (mutt_b2s (tmpfile), "r")) == NULL)
+    goto bail;
+
+  if ((truncate (hdr->content->filename, 0) == -1) ||
+      ((out = safe_fopen (hdr->content->filename, "a")) == NULL))
+  {
+    goto bail;
+  }
+
+  mutt_copy_stream (in, out);
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_set_mtime (mutt_b2s (tmpfile), hdr->content->filename);
+  unlink (mutt_b2s (tmpfile));
+  mutt_buffer_pool_release (&tmpfile);
+  return;
+
+bail:
+  safe_fclose (&in);
+  safe_fclose (&out);
+  mutt_buffer_pool_release (&tmpfile);
+}
+
+/* Note: we don't check the option OPTTEXTFLOWED because we want to
+ * stuff based the actual content type.  The option only decides
+ * whether to *set* format=flowed on new messages.
+ */
+void mutt_rfc3676_space_stuff (HEADER *hdr)
+{
+  const char *format;
 
   if (!hdr || !hdr->content || !hdr->content->filename)
     return;
 
-  dprint (2, (debugfile, "f=f: postprocess %s\n", hdr->content->filename));
+  if (hdr->content->type == TYPETEXT &&
+      !ascii_strcasecmp ("plain", hdr->content->subtype))
+  {
+    format = mutt_get_parameter ("format", hdr->content->parameter);
+    if (!ascii_strcasecmp ("flowed", format))
+      rfc3676_space_stuff (hdr);
+  }
+}
 
-  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
+void mutt_rfc3676_space_unstuff (HEADER *hdr)
+{
+  const char *format;
+
+  if (!hdr || !hdr->content || !hdr->content->filename)
     return;
 
-  mutt_mktemp (tmpfile, sizeof (tmpfile));
-  if ((out = safe_fopen (tmpfile, "w+")) == NULL)
+  if (hdr->content->type == TYPETEXT &&
+      !ascii_strcasecmp ("plain", hdr->content->subtype))
   {
-    safe_fclose (&in);
-    return;
+    format = mutt_get_parameter ("format", hdr->content->parameter);
+    if (!ascii_strcasecmp ("flowed", format))
+      rfc3676_space_unstuff (hdr);
   }
-
-  while (fgets (buf, sizeof (buf), in))
-  {
-    if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ')
-    {
-      fputc (' ', out);
-#if DEBUG
-      lc++;
-      len = mutt_strlen (buf);
-      if (len > 0)
-      {
-        c = buf[len-1];
-        buf[len-1] = '\0';
-      }
-      dprint (4, (debugfile, "f=f: line %d needs space-stuffing: '%s'\n",
-                  lc, buf));
-      if (len > 0)
-        buf[len-1] = c;
-#endif
-    }
-    fputs (buf, out);
-  }
-  safe_fclose (&in);
-  safe_fclose (&out);
-  mutt_set_mtime (hdr->content->filename, tmpfile);
-  unlink (hdr->content->filename);
-  mutt_str_replace (&hdr->content->filename, tmpfile);
 }

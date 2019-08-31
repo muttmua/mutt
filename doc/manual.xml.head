@@ -1660,8 +1660,7 @@ it does not add the trailing spaces.
 </para>
 
 <para>
-After editing the initial message text and before entering the compose
-menu, Mutt properly space-stuffs the message.
+After editing, Mutt properly space-stuffs the message.
 <emphasis>Space-stuffing</emphasis> is required by RfC3676 defining
 <literal>format=flowed</literal> and means to prepend a space to:
 </para>
@@ -1701,12 +1700,6 @@ As Mutt provides no additional features to compose
 <literal>f=f</literal> messages, it's completely up to the user and his
 editor to produce proper messages. Please consider your editor's
 documentation if you intend to send <literal>f=f</literal> messages.
-</para>
-
-<para>
-Please note that when editing messages from the compose menu several
-times before really sending a mail, it's up to the user to ensure that
-the message is properly space-stuffed.
 </para>
 
 <para>

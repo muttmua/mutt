@@ -29,7 +29,7 @@
 /* body handler implementing RfC 3676 for format=flowed */
 int rfc3676_handler (BODY *a, STATE *s);
 
-/* this does the space-stuffing for RfC3676 style messages */
-void rfc3676_space_stuff (HEADER *hdr);
+void mutt_rfc3676_space_stuff (HEADER *hdr);
+void mutt_rfc3676_space_unstuff (HEADER *hdr);
 
 #endif /* !_MUTT_RFC3676_H */

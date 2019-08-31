@@ -34,6 +34,7 @@
 #include "mailbox.h"
 #include "sort.h"
 #include "charset.h"
+#include "rfc3676.h"
 
 #ifdef MIXMASTER
 #include "remailer.h"
@@ -949,7 +950,9 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
       case OP_COMPOSE_EDIT_MESSAGE:
 	if (Editor && (mutt_strcmp ("builtin", Editor) != 0) && !option (OPTEDITHDRS))
 	{
+          mutt_rfc3676_space_unstuff (msg);
 	  mutt_edit_file (Editor, msg->content->filename);
+          mutt_rfc3676_space_stuff (msg);
 	  mutt_update_encoding (msg->content);
 	  menu->redraw = REDRAW_FULL;
 	  mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
@@ -957,6 +960,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	}
 	/* fall through */
       case OP_COMPOSE_EDIT_HEADERS:
+        mutt_rfc3676_space_unstuff (msg);
+
 	if (mutt_strcmp ("builtin", Editor) != 0 &&
 	    (op == OP_COMPOSE_EDIT_HEADERS ||
              (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS))))
@@ -980,6 +985,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	     code below to regenerate the index array */
 	  mutt_builtin_editor (msg->content->filename, msg, cur);
 	}
+
+        mutt_rfc3676_space_stuff (msg);
 	mutt_update_encoding (msg->content);
 
 	/* attachments may have been added */

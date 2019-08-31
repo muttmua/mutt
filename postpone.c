@@ -31,6 +31,7 @@
 #include "imap.h"
 #endif
 #include "mutt_crypt.h"
+#include "rfc3676.h"
 
 #include <ctype.h>
 #include <unistd.h>
@@ -805,6 +806,8 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     else
       newhdr->security &= ~APPLICATION_SMIME;
   }
+
+  mutt_rfc3676_space_unstuff (newhdr);
 
   rv = 0;
 

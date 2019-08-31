@@ -1758,12 +1758,6 @@ ci_send_message (int flags,		/* send mode */
      */
     msg->replied = 0;
 
-    if (! (flags & SENDKEY))
-    {
-      if (option (OPTTEXTFLOWED) && msg->content->type == TYPETEXT && !ascii_strcasecmp (msg->content->subtype, "plain"))
-        mutt_set_parameter ("format", "flowed", &msg->content->parameter);
-    }
-
     /* $use_from and/or $from might have changed in a send-hook */
     if (killfrom)
     {
@@ -1791,6 +1785,19 @@ ci_send_message (int flags,		/* send mode */
     if (!option (OPTSIGONTOP) && ! (flags & (SENDMAILX|SENDKEY|SENDBATCH))
 	&& Editor && mutt_strcmp (Editor, "builtin") != 0)
       append_signature (tempfp);
+  }
+
+  /* Only set format=flowed for new messages.  Postponed/resent/draftfiles
+   * should respect the original email.
+   *
+   * This is set here so that send-hook can be used to turn the option on.
+   */
+  if (!(flags & (SENDKEY | SENDPOSTPONED | SENDRESEND | SENDDRAFTFILE)))
+  {
+    if (option (OPTTEXTFLOWED) &&
+        msg->content->type == TYPETEXT &&
+        !ascii_strcasecmp (msg->content->subtype, "plain"))
+      mutt_set_parameter ("format", "flowed", &msg->content->parameter);
   }
 
   /*
@@ -1860,18 +1867,6 @@ ci_send_message (int flags,		/* send mode */
 	}
 	else
 	  mutt_perror (msg->content->filename);
-      }
-
-      /* If using format=flowed, perform space stuffing.  Avoid stuffing when
-       * recalling a postponed message where the stuffing was already
-       * performed.  If it has already been performed, the format=flowed
-       * parameter will be present.
-       */
-      if (option (OPTTEXTFLOWED) && msg->content->type == TYPETEXT && !ascii_strcasecmp("plain", msg->content->subtype))
-      {
-	char *p = mutt_get_parameter("format", msg->content->parameter);
-	if (ascii_strcasecmp("flowed", NONULL(p)))
-	  rfc3676_space_stuff (msg);
       }
 
       mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
@@ -2028,6 +2023,8 @@ ci_send_message (int flags,		/* send mode */
     }
   }
 
+
+  mutt_rfc3676_space_stuff (msg);
 
   mutt_update_encoding (msg->content);
 
