@@ -332,7 +332,7 @@ int rfc3676_handler (BODY * a, STATE * s)
  * Care is taken to preserve the hdr->content->filename, as
  * mutt -i -E can directly edit a passed in filename.
  */
-static void rfc3676_space_stuff (HEADER* hdr)
+static void rfc3676_space_stuff (HEADER* hdr, int unstuff)
 {
   FILE *in = NULL, *out = NULL;
   char *buf = NULL;
@@ -350,61 +350,19 @@ static void rfc3676_space_stuff (HEADER* hdr)
 
   while ((buf = mutt_read_line (buf, &blen, in, NULL, 0)) != NULL)
   {
-    if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ')
-      fputc (' ', out);
-    fputs (buf, out);
-    fputc ('\n', out);
-  }
-  FREE (&buf);
-  safe_fclose (&in);
-  safe_fclose (&out);
-  mutt_set_mtime (hdr->content->filename, mutt_b2s (tmpfile));
-
-  if ((in = safe_fopen (mutt_b2s (tmpfile), "r")) == NULL)
-    goto bail;
-
-  if ((truncate (hdr->content->filename, 0) == -1) ||
-      ((out = safe_fopen (hdr->content->filename, "a")) == NULL))
-  {
-    goto bail;
-  }
-
-  mutt_copy_stream (in, out);
-  safe_fclose (&in);
-  safe_fclose (&out);
-  mutt_set_mtime (mutt_b2s (tmpfile), hdr->content->filename);
-  unlink (mutt_b2s (tmpfile));
-  mutt_buffer_pool_release (&tmpfile);
-  return;
-
-bail:
-  safe_fclose (&in);
-  safe_fclose (&out);
-  mutt_buffer_pool_release (&tmpfile);
-}
-
-static void rfc3676_space_unstuff (HEADER* hdr)
-{
-  FILE *in = NULL, *out = NULL;
-  char *buf = NULL;
-  size_t blen = 0;
-  BUFFER *tmpfile = NULL;
-
-  tmpfile = mutt_buffer_pool_get ();
-
-  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
-    goto bail;
-
-  mutt_buffer_mktemp (tmpfile);
-  if ((out = safe_fopen (mutt_b2s (tmpfile), "w+")) == NULL)
-    goto bail;
-
-  while ((buf = mutt_read_line (buf, &blen, in, NULL, 0)) != NULL)
-  {
-    if (buf[0] == ' ')
-      fputs (buf + 1, out);
+    if (unstuff)
+    {
+      if (buf[0] == ' ')
+        fputs (buf + 1, out);
+      else
+        fputs (buf, out);
+    }
     else
+    {
+      if (ascii_strncmp ("From ", buf, 5) == 0 || buf[0] == ' ')
+        fputc (' ', out);
       fputs (buf, out);
+    }
     fputc ('\n', out);
   }
   FREE (&buf);
@@ -418,6 +376,7 @@ static void rfc3676_space_unstuff (HEADER* hdr)
   if ((truncate (hdr->content->filename, 0) == -1) ||
       ((out = safe_fopen (hdr->content->filename, "a")) == NULL))
   {
+    mutt_perror (hdr->content->filename);
     goto bail;
   }
 
@@ -451,7 +410,7 @@ void mutt_rfc3676_space_stuff (HEADER *hdr)
   {
     format = mutt_get_parameter ("format", hdr->content->parameter);
     if (!ascii_strcasecmp ("flowed", format))
-      rfc3676_space_stuff (hdr);
+      rfc3676_space_stuff (hdr, 0);
   }
 }
 
@@ -467,6 +426,6 @@ void mutt_rfc3676_space_unstuff (HEADER *hdr)
   {
     format = mutt_get_parameter ("format", hdr->content->parameter);
     if (!ascii_strcasecmp ("flowed", format))
-      rfc3676_space_unstuff (hdr);
+      rfc3676_space_stuff (hdr, 1);
   }
 }
