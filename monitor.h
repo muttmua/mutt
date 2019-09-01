@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Gero Treuer <gero@70t.de>
+ * Copyright (C) 2018 Gero Treuner <gero@70t.de>
  *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
