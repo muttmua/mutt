@@ -34,19 +34,16 @@
 #include "lib.h"
 
 struct body_cache {
-  char path[_POSIX_PATH_MAX];
-  size_t pathlen;
+  char *path;
 };
 
-static int bcache_path(ACCOUNT *account, const char *mailbox,
-		       char *dst, size_t dstlen)
+static int bcache_path(ACCOUNT *account, const char *mailbox, body_cache_t *bcache)
 {
   char host[STRING];
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path, *dst;
   ciss_url_t url;
-  int len;
 
-  if (!account || !MessageCachedir || !dst || !dstlen)
+  if (!account || !MessageCachedir || !bcache)
     return -1;
 
   /* make up a ciss_url_t we can turn into a string */
@@ -63,19 +60,19 @@ static int bcache_path(ACCOUNT *account, const char *mailbox,
     return -1;
   }
 
-  mutt_encode_path (path, sizeof (path), NONULL (mailbox));
+  path = mutt_buffer_pool_get ();
+  dst = mutt_buffer_pool_get ();
+  mutt_buffer_encode_path (path, NONULL (mailbox));
 
-  len = snprintf (dst, dstlen-1, "%s/%s%s%s", MessageCachedir,
-		  host, path,
-		  (*path && path[mutt_strlen (path) - 1] == '/') ? "" : "/");
+  mutt_buffer_printf (dst, "%s/%s%s", MessageCachedir, host, mutt_b2s (path));
+  if (*(dst->dptr - 1) != '/')
+    mutt_buffer_addch (dst, '/');
 
-  dprint (3, (debugfile, "bcache_path: rc: %d, path: '%s'\n", len, dst));
+  dprint (3, (debugfile, "bcache_path: path: '%s'\n", mutt_b2s (dst)));
+  bcache->path = safe_strdup (mutt_b2s (dst));
 
-  if (len < 0 || (size_t)len >= dstlen-1)
-    return -1;
-
-  dprint (3, (debugfile, "bcache_path: directory: '%s'\n", dst));
-
+  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release (&dst);
   return 0;
 }
 
@@ -87,16 +84,13 @@ body_cache_t *mutt_bcache_open (ACCOUNT *account, const char *mailbox)
     goto bail;
 
   bcache = safe_calloc (1, sizeof (struct body_cache));
-  if (bcache_path (account, mailbox, bcache->path,
-		   sizeof (bcache->path)) < 0)
+  if (bcache_path (account, mailbox, bcache) < 0)
     goto bail;
-  bcache->pathlen = mutt_strlen (bcache->path);
 
   return bcache;
 
 bail:
-  if (bcache)
-    FREE(&bcache);
+  mutt_bcache_close (&bcache);
   return NULL;
 }
 
@@ -104,126 +98,151 @@ void mutt_bcache_close (body_cache_t **bcache)
 {
   if (!bcache || !*bcache)
     return;
+  FREE (&(*bcache)->path);
   FREE(bcache);			/* __FREE_CHECKED__ */
 }
 
 FILE* mutt_bcache_get(body_cache_t *bcache, const char *id)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
   FILE* fp = NULL;
 
   if (!id || !*id || !bcache)
     return NULL;
 
-  path[0] = '\0';
-  safe_strncat (path, sizeof (path), bcache->path, bcache->pathlen);
-  safe_strncat (path, sizeof (path), id, mutt_strlen (id));
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_addstr (path, bcache->path);
+  mutt_buffer_addstr (path, id);
 
-  fp = safe_fopen (path, "r");
+  fp = safe_fopen (mutt_b2s (path), "r");
 
-  dprint (3, (debugfile, "bcache: get: '%s': %s\n", path, fp == NULL ? "no" : "yes"));
+  dprint (3, (debugfile, "bcache: get: '%s': %s\n", mutt_b2s (path),
+              fp == NULL ? "no" : "yes"));
 
+  mutt_buffer_pool_release (&path);
   return fp;
 }
 
 FILE* mutt_bcache_put(body_cache_t *bcache, const char *id, int tmp)
 {
-  char path[_POSIX_PATH_MAX];
-  FILE* fp;
-  char* s;
+  BUFFER *path = NULL;
+  FILE* fp = NULL;
+  char* s = NULL;
   struct stat sb;
 
   if (!id || !*id || !bcache)
     return NULL;
 
-  snprintf (path, sizeof (path), "%s%s%s", bcache->path, id,
-            tmp ? ".tmp" : "");
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_printf (path, "%s%s%s", bcache->path, id,
+                      tmp ? ".tmp" : "");
 
-  if ((fp = safe_fopen (path, "w+")))
+  if ((fp = safe_fopen (mutt_b2s (path), "w+")))
     goto out;
 
   if (errno == EEXIST)
     /* clean up leftover tmp file */
-    mutt_unlink (path);
+    mutt_unlink (mutt_b2s (path));
 
-  s = strchr (path + 1, '/');
-  while (!(fp = safe_fopen (path, "w+")) && errno == ENOENT && s)
+  if (mutt_buffer_len (path))
+    s = strchr (path->data + 1, '/');
+  while (!(fp = safe_fopen (mutt_b2s (path), "w+")) && errno == ENOENT && s)
   {
     /* create missing path components */
     *s = '\0';
-    if (stat (path, &sb) < 0 && (errno != ENOENT || mkdir (path, 0777) < 0))
-      return NULL;
+    if (stat (mutt_b2s (path), &sb) < 0 &&
+        (errno != ENOENT || mkdir (mutt_b2s (path), 0777) < 0))
+      goto out;
     *s = '/';
     s = strchr (s + 1, '/');
   }
 
 out:
-  dprint (3, (debugfile, "bcache: put: '%s'\n", path));
-
+  dprint (3, (debugfile, "bcache: put: '%s'\n", mutt_b2s (path)));
+  mutt_buffer_pool_release (&path);
   return fp;
 }
 
 int mutt_bcache_commit(body_cache_t* bcache, const char* id)
 {
-  char tmpid[_POSIX_PATH_MAX];
+  BUFFER *tmpid;
+  int rv;
 
-  snprintf (tmpid, sizeof (tmpid), "%s.tmp", id);
+  tmpid = mutt_buffer_pool_get ();
+  mutt_buffer_printf (tmpid, "%s.tmp", id);
 
-  return mutt_bcache_move (bcache, tmpid, id);
+  rv = mutt_bcache_move (bcache, mutt_b2s (tmpid), id);
+
+  mutt_buffer_pool_release (&tmpid);
+  return rv;
 }
 
 int mutt_bcache_move(body_cache_t* bcache, const char* id, const char* newid)
 {
-  char path[_POSIX_PATH_MAX];
-  char newpath[_POSIX_PATH_MAX];
+  BUFFER *path, *newpath;
+  int rv;
 
   if (!bcache || !id || !*id || !newid || !*newid)
     return -1;
 
-  snprintf (path, sizeof (path), "%s%s", bcache->path, id);
-  snprintf (newpath, sizeof (newpath), "%s%s", bcache->path, newid);
+  path = mutt_buffer_pool_get ();
+  newpath = mutt_buffer_pool_get ();
 
-  dprint (3, (debugfile, "bcache: mv: '%s' '%s'\n", path, newpath));
+  mutt_buffer_printf (path, "%s%s", bcache->path, id);
+  mutt_buffer_printf (newpath, "%s%s", bcache->path, newid);
 
-  return rename (path, newpath);
+  dprint (3, (debugfile, "bcache: mv: '%s' '%s'\n",
+              mutt_b2s (path), mutt_b2s (newpath)));
+
+  rv = rename (mutt_b2s (path), mutt_b2s (newpath));
+
+  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release (&newpath);
+  return rv;
 }
 
 int mutt_bcache_del(body_cache_t *bcache, const char *id)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
+  int rv;
 
   if (!id || !*id || !bcache)
     return -1;
 
-  path[0] = '\0';
-  safe_strncat (path, sizeof (path), bcache->path, bcache->pathlen);
-  safe_strncat (path, sizeof (path), id, mutt_strlen (id));
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_addstr (path, bcache->path);
+  mutt_buffer_addstr (path, id);
 
-  dprint (3, (debugfile, "bcache: del: '%s'\n", path));
+  dprint (3, (debugfile, "bcache: del: '%s'\n", mutt_b2s (path)));
 
-  return unlink (path);
+  rv = unlink (mutt_b2s (path));
+
+  mutt_buffer_pool_release (&path);
+  return rv;
 }
 
 int mutt_bcache_exists(body_cache_t *bcache, const char *id)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
   struct stat st;
   int rc = 0;
 
   if (!id || !*id || !bcache)
     return -1;
 
-  path[0] = '\0';
-  safe_strncat (path, sizeof (path), bcache->path, bcache->pathlen);
-  safe_strncat (path, sizeof (path), id, mutt_strlen (id));
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_addstr (path, bcache->path);
+  mutt_buffer_addstr (path, id);
 
-  if (stat (path, &st) < 0)
+  if (stat (mutt_b2s (path), &st) < 0)
     rc = -1;
   else
     rc = S_ISREG(st.st_mode) && st.st_size != 0 ? 0 : -1;
 
-  dprint (3, (debugfile, "bcache: exists: '%s': %s\n", path, rc == 0 ? "yes" : "no"));
+  dprint (3, (debugfile, "bcache: exists: '%s': %s\n",
+              mutt_b2s (path), rc == 0 ? "yes" : "no"));
 
+  mutt_buffer_pool_release (&path);
   return rc;
 }
 

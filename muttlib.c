@@ -2256,6 +2256,18 @@ void mutt_encode_path (char *dest, size_t dlen, const char *src)
   FREE (&p);
 }
 
+void mutt_buffer_encode_path (BUFFER *dest, const char *src)
+{
+  char *p;
+  int rc;
+
+  p = safe_strdup (src);
+  rc = mutt_convert_string (&p, Charset, "utf-8", 0);
+  /* `src' may be NULL, such as when called from the pop3 driver. */
+  mutt_buffer_strcpy (dest, (rc == 0) ? NONULL(p) : NONULL(src));
+  FREE (&p);
+}
+
 
 /************************************************************************
  * These functions are transplanted from lib.c, in order to modify them *

@@ -205,6 +205,7 @@ void mutt_curses_error (const char *, ...);
 void mutt_curses_message (const char *, ...);
 void mutt_encode_descriptions (BODY *, short);
 void mutt_encode_path (char *, size_t, const char *);
+void mutt_buffer_encode_path (BUFFER *, const char *);
 void mutt_enter_command (void);
 void mutt_error_history_display (void);
 void mutt_error_history_init (void);
