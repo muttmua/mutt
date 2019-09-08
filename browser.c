@@ -601,9 +601,10 @@ static void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
 }
 
 static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
-		       size_t titlelen, int buffy)
+		       size_t titlelen, int buffy, const char *defaultsel)
 {
   BUFFER *path = NULL;
+  int i;
 
   path = mutt_buffer_pool_get ();
 
@@ -634,6 +635,18 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
                 mutt_b2s (path), NONULL(Mask.pattern));
   }
   menu->redraw = REDRAW_FULL;
+
+  if (option (OPTBROWSERSTICKYCURSOR) && defaultsel && *defaultsel)
+  {
+    for (i = 0; i < menu->max; i++)
+    {
+      if (!mutt_strcmp (defaultsel, state->entry[i].full_path))
+      {
+        menu->current = i;
+        break;
+      }
+    }
+  }
 
   mutt_buffer_pool_release (&path);
 }
@@ -674,6 +687,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
   BUFFER *prefix = NULL;
   BUFFER *tmp = NULL;
   BUFFER *OldLastDir = NULL;
+  BUFFER *defaultsel = NULL;
   char helpstr[LONG_STRING];
   char title[STRING];
   struct browser_state state;
@@ -691,6 +705,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
   prefix     = mutt_buffer_pool_get ();
   tmp        = mutt_buffer_pool_get ();
   OldLastDir = mutt_buffer_pool_get ();
+  defaultsel  = mutt_buffer_pool_get ();
 
   memset (&state, 0, sizeof (struct browser_state));
 
@@ -757,6 +772,9 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
     else if (!*(mutt_b2s (LastDir)))
       mutt_buffer_strcpy (LastDir, NONULL(Maildir));
 
+    if (Context)
+      mutt_buffer_strcpy (defaultsel, NONULL (Context->path));
+
 #ifdef USE_IMAP
     if (!buffy && mx_is_imap (mutt_b2s (LastDir)))
     {
@@ -803,11 +821,16 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
                                   FolderHelp);
   mutt_push_current_menu (menu);
 
-  init_menu (&state, menu, title, sizeof (title), buffy);
+  init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 
   FOREVER
   {
-    switch (op = mutt_menuLoop (menu))
+    op = mutt_menuLoop (menu);
+
+    if (state.entrylen)
+      mutt_buffer_strcpy (defaultsel, state.entry[menu->current].full_path);
+
+    switch (op)
     {
       case OP_DESCEND_DIRECTORY:
       case OP_GENERIC_SELECT_ENTRY:
@@ -835,6 +858,13 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  {
 	    /* save the old directory */
 	    mutt_buffer_strcpy (OldLastDir, mutt_b2s (LastDir));
+
+            mutt_buffer_strcpy (defaultsel, mutt_b2s (OldLastDir));
+            if (mutt_buffer_len (defaultsel) && (*(defaultsel->dptr - 1) == '/'))
+            {
+              defaultsel->dptr--;
+              *(defaultsel->dptr) = '\0';
+            }
 
 	    if (mutt_strcmp (state.entry[menu->current].display_name, "..") == 0)
 	    {
@@ -921,7 +951,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
               }
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy);
+	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	    break;
 	  }
 	}
@@ -992,7 +1022,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  break;
 	}
 
-	if (!imap_mailbox_create (mutt_b2s (LastDir)))
+	if (!imap_mailbox_create (mutt_b2s (LastDir), defaultsel))
 	{
 	  /* TODO: find a way to detect if the new folder would appear in
 	   *   this window, and insert it without starting over. */
@@ -1004,7 +1034,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  menu->data = state.entry;
 	  menu->current = 0;
 	  menu->top = 0;
-	  init_menu (&state, menu, title, sizeof (title), buffy);
+	  init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	}
 	/* else leave error on screen */
 	break;
@@ -1016,7 +1046,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	{
 	  int nentry = menu->current;
 
-	  if (imap_mailbox_rename (state.entry[nentry].full_path) >= 0)
+	  if (imap_mailbox_rename (state.entry[nentry].full_path, defaultsel) >= 0)
 	  {
 	    destroy_state (&state);
 	    init_state (&state, NULL);
@@ -1026,7 +1056,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    menu->data = state.entry;
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy);
+	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	  }
 	}
 	break;
@@ -1063,7 +1093,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
                       sizeof (struct folder_file));
 	      state.entrylen--;
 	      mutt_message _("Mailbox deleted.");
-	      init_menu (&state, menu, title, sizeof (title), buffy);
+              mutt_buffer_clear (defaultsel);
+	      init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	    }
             else
               mutt_error _("Mailbox deletion failed.");
@@ -1078,6 +1109,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
       case OP_CHANGE_DIRECTORY:
 
 	mutt_buffer_strcpy (buf, mutt_b2s (LastDir));
+        mutt_buffer_clear (defaultsel);
 #ifdef USE_IMAP
 	if (!state.imap_browse)
 #endif
@@ -1107,7 +1139,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    menu->data = state.entry;
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy);
+	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	  }
 	  else
 #endif
@@ -1136,7 +1168,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 		}
 		menu->current = 0;
 		menu->top = 0;
-		init_menu (&state, menu, title, sizeof (title), buffy);
+		init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	      }
 	      else
 		mutt_error (_("%s is not a directory."), mutt_b2s (buf));
@@ -1195,12 +1227,12 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	      imap_browse (mutt_b2s (LastDir), &state);
 	      browser_sort (&state);
 	      menu->data = state.entry;
-	      init_menu (&state, menu, title, sizeof (title), buffy);
+	      init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	    }
 	    else
 #endif
               if (examine_directory (menu, &state, mutt_b2s (LastDir), NULL) == 0)
-                init_menu (&state, menu, title, sizeof (title), buffy);
+                init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
               else
               {
                 mutt_error _("Error scanning directory.");
@@ -1268,6 +1300,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
       case OP_TOGGLE_MAILBOXES:
 	buffy = 1 - buffy;
+        menu->current = 0;
+        /* fall through */
 
       case OP_CHECK_NEW:
 	destroy_state (&state);
@@ -1291,7 +1325,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #endif
 	else if (examine_directory (menu, &state, mutt_b2s (LastDir), mutt_b2s (prefix)) == -1)
 	  goto bail;
-	init_menu (&state, menu, title, sizeof (title), buffy);
+	init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
 	break;
 
       case OP_BUFFY_LIST:
@@ -1356,6 +1390,7 @@ bail:
   mutt_buffer_pool_release (&prefix);
   mutt_buffer_pool_release (&tmp);
   mutt_buffer_pool_release (&OldLastDir);
+  mutt_buffer_pool_release (&defaultsel);
 
   if (menu)
   {

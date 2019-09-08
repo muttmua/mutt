@@ -229,7 +229,7 @@ fail:
 }
 
 /* imap_mailbox_create: Prompt for a new mailbox name, and try to create it */
-int imap_mailbox_create (const char* folder)
+int imap_mailbox_create (const char* folder, BUFFER *result)
 {
   IMAP_DATA* idata;
   IMAP_MBOX mx;
@@ -272,6 +272,8 @@ int imap_mailbox_create (const char* folder)
   if (imap_create_mailbox (idata, buf) < 0)
     goto fail;
 
+  imap_buffer_qualify_path (result, &mx, buf);
+
   mutt_message _("Mailbox created.");
   mutt_sleep (0);
 
@@ -283,7 +285,7 @@ fail:
   return -1;
 }
 
-int imap_mailbox_rename(const char* mailbox)
+int imap_mailbox_rename(const char* mailbox, BUFFER *result)
 {
   IMAP_DATA* idata;
   IMAP_MBOX mx;
@@ -330,6 +332,8 @@ int imap_mailbox_rename(const char* mailbox)
     mutt_sleep (1);
     goto fail;
   }
+
+  imap_buffer_qualify_path (result, &mx, buf);
 
   mutt_message (_("Mailbox renamed."));
   mutt_sleep (0);

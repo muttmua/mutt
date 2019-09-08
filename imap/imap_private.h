@@ -323,6 +323,7 @@ char* imap_next_word (char* s);
 time_t imap_parse_date (char* s);
 void imap_make_date (char* buf, time_t timestamp);
 void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path);
+void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char* path);
 void imap_quote_string (char* dest, size_t dlen, const char* src);
 void imap_quote_string_and_backquotes (char *dest, size_t dlen, const char *src);
 void imap_unquote_string (char* s);

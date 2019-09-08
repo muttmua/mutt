@@ -422,6 +422,15 @@ struct option_t MuttVars[] = {
   ** doesn't make intuitive sense.  In those cases, it may be
   ** desirable to \fIunset\fP this variable.
   */
+  { "browser_sticky_cursor", DT_BOOL, R_NONE, {.l=OPTBROWSERSTICKYCURSOR}, {.l=1} },
+  /*
+  ** .pp
+  ** When this variable is \fIset\fP, the browser will attempt to keep
+  ** the cursor on the same mailbox when performing various functions.
+  ** These include moving up a directory, toggling between mailboxes
+  ** and directory listing, creating/renaming a mailbox, toggling
+  ** subscribed mailboxes, and entering a new mask.
+  */
 #if defined(USE_SSL)
   { "certificate_file",	DT_PATH, R_NONE, {.p=&SslCertFile}, {.p="~/.mutt_certificates"} },
   /*
