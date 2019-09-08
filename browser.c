@@ -72,8 +72,8 @@ static void destroy_state (struct browser_state *state)
 
   for (c = 0; c < state->entrylen; c++)
   {
-    FREE (&((state->entry)[c].name));
-    FREE (&((state->entry)[c].desc));
+    FREE (&((state->entry)[c].display_name));
+    FREE (&((state->entry)[c].full_path));
   }
 #ifdef USE_IMAP
   FREE (&state->folder);
@@ -86,7 +86,7 @@ static int browser_compare_subject (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = mutt_strcoll (pa->name, pb->name);
+  int r = mutt_strcoll (pa->display_name, pb->display_name);
 
   return ((BrowserSort & SORT_REVERSE) ? -r : r);
 }
@@ -159,20 +159,13 @@ static void browser_sort (struct browser_state *state)
   qsort (state->entry, state->entrylen, sizeof (struct folder_file), f);
 }
 
-static int link_is_dir (const char *folder, const char *path)
+static int link_is_dir (const char *full_path)
 {
   struct stat st;
-  BUFFER *fullpath = NULL;
   int retval = 0;
 
-  fullpath = mutt_buffer_pool_get ();
-
-  mutt_buffer_concat_path (fullpath, folder, path);
-
-  if (stat (mutt_b2s (fullpath), &st) == 0)
+  if (stat (full_path, &st) == 0)
     retval = S_ISDIR (st.st_mode);
-
-  mutt_buffer_pool_release (&fullpath);
 
   return retval;
 }
@@ -232,13 +225,7 @@ folder_format_str (char *dest, size_t destlen, size_t col, int cols, char op, co
 
     case 'f':
     {
-      char *s;
-#ifdef USE_IMAP
-      if (folder->ff->imap)
-	s = NONULL (folder->ff->desc);
-      else
-#endif
-	s = NONULL (folder->ff->name);
+      char *s = NONULL (folder->ff->display_name);
 
       snprintf (fn, sizeof (fn), "%s%s", s,
 		folder->ff->local ?
@@ -389,7 +376,8 @@ folder_format_str (char *dest, size_t destlen, size_t col, int cols, char op, co
 }
 
 static void add_folder (MUTTMENU *m, struct browser_state *state,
-			const char *name, const struct stat *s, BUFFY *b)
+			const char *display_name, const char *full_path,
+                        const struct stat *s, BUFFY *b)
 {
   if (state->entrylen == state->entrymax)
   {
@@ -422,8 +410,8 @@ static void add_folder (MUTTMENU *m, struct browser_state *state,
     (state->entry)[state->entrylen].msg_unread = b->msg_unread;
   }
 
-  (state->entry)[state->entrylen].name = safe_strdup (name);
-  (state->entry)[state->entrylen].desc = safe_strdup (name);
+  (state->entry)[state->entrylen].display_name = safe_strdup (display_name);
+  (state->entry)[state->entrylen].full_path = safe_strdup (full_path);
 #ifdef USE_IMAP
   (state->entry)[state->entrylen].imap = 0;
 #endif
@@ -448,7 +436,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
   struct stat s;
   DIR *dp;
   struct dirent *de;
-  BUFFER *buffer = NULL;
+  BUFFER *full_path = NULL;
   BUFFY *tmp;
 
   while (stat (d, &s) == -1)
@@ -482,7 +470,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
     return (-1);
   }
 
-  buffer = mutt_buffer_pool_get ();
+  full_path = mutt_buffer_pool_get ();
   init_state (state, menu);
 
   while ((de = readdir (dp)) != NULL)
@@ -495,8 +483,8 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
     if (!((regexec (Mask.rx, de->d_name, 0, NULL, 0) == 0) ^ Mask.not))
       continue;
 
-    mutt_buffer_concat_path (buffer, d, de->d_name);
-    if (lstat (mutt_b2s (buffer), &s) == -1)
+    mutt_buffer_concat_path (full_path, d, de->d_name);
+    if (lstat (mutt_b2s (full_path), &s) == -1)
       continue;
 
     /* No size for directories or symlinks */
@@ -506,7 +494,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
       continue;
 
     tmp = Incoming;
-    while (tmp && mutt_strcmp (mutt_b2s (buffer), mutt_b2s (tmp->pathbuf)))
+    while (tmp && mutt_strcmp (mutt_b2s (full_path), mutt_b2s (tmp->pathbuf)))
       tmp = tmp->next;
     if (tmp && Context &&
         !mutt_strcmp (tmp->realpath, Context->realpath))
@@ -514,12 +502,12 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
       tmp->msg_count = Context->msgcount;
       tmp->msg_unread = Context->unread;
     }
-    add_folder (menu, state, de->d_name, &s, tmp);
+    add_folder (menu, state, de->d_name, mutt_b2s (full_path), &s, tmp);
   }
   closedir (dp);
   browser_sort (state);
 
-  mutt_buffer_pool_release (&buffer);
+  mutt_buffer_pool_release (&full_path);
   return 0;
 }
 
@@ -554,14 +542,14 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 #ifdef USE_IMAP
     if (mx_is_imap (mutt_b2s (tmp->pathbuf)))
     {
-      add_folder (menu, state, mutt_b2s (mailbox), NULL, tmp);
+      add_folder (menu, state, mutt_b2s (mailbox), mutt_b2s (tmp->pathbuf), NULL, tmp);
       continue;
     }
 #endif
 #ifdef USE_POP
     if (mx_is_pop (mutt_b2s (tmp->pathbuf)))
     {
-      add_folder (menu, state, mutt_b2s (mailbox), NULL, tmp);
+      add_folder (menu, state, mutt_b2s (mailbox), mutt_b2s (tmp->pathbuf), NULL, tmp);
       continue;
     }
 #endif
@@ -586,7 +574,7 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 	s.st_mtime = st2.st_mtime;
     }
 
-    add_folder (menu, state, mutt_b2s (mailbox), &s, tmp);
+    add_folder (menu, state, mutt_b2s (mailbox), mutt_b2s (tmp->pathbuf), &s, tmp);
   }
   while ((tmp = tmp->next));
   browser_sort (state);
@@ -598,7 +586,7 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 
 static int select_file_search (MUTTMENU *menu, regex_t *re, int n)
 {
-  return (regexec (re, ((struct folder_file *) menu->data)[n].name, 0, NULL, 0));
+  return (regexec (re, ((struct folder_file *) menu->data)[n].display_name, 0, NULL, 0));
 }
 
 static void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
@@ -655,7 +643,7 @@ static int file_tag (MUTTMENU *menu, int n, int m)
   struct folder_file *ff = &(((struct folder_file *)menu->data)[n]);
   int ot;
   if (S_ISDIR (ff->mode) ||
-      (S_ISLNK (ff->mode) && link_is_dir (mutt_b2s (LastDir), ff->name)))
+      (S_ISLNK (ff->mode) && link_is_dir (ff->full_path)))
   {
     mutt_error _("Can't attach a directory!");
     return 0;
@@ -832,28 +820,14 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
         if (S_ISDIR (state.entry[menu->current].mode) ||
 	    (S_ISLNK (state.entry[menu->current].mode) &&
-             link_is_dir (mutt_b2s (LastDir), state.entry[menu->current].name))
+             link_is_dir (state.entry[menu->current].full_path))
 #ifdef USE_IMAP
 	    || state.entry[menu->current].inferiors
 #endif
           )
 	{
-	  /* make sure this isn't a MH or maildir mailbox */
-	  if (buffy)
-	  {
-	    mutt_buffer_strcpy (buf, state.entry[menu->current].name);
-	    mutt_buffer_expand_path (buf);
-	  }
-#ifdef USE_IMAP
-	  else if (state.imap_browse)
-	  {
-            mutt_buffer_strcpy (buf, state.entry[menu->current].name);
-	  }
-#endif
-	  else
-	    mutt_buffer_concat_path (buf, mutt_b2s (LastDir), state.entry[menu->current].name);
-
-	  if (op == OP_DESCEND_DIRECTORY || (mx_get_magic (mutt_b2s (buf)) <= 0)
+	  if (op == OP_DESCEND_DIRECTORY
+              || (mx_get_magic (state.entry[menu->current].full_path) <= 0)
 #ifdef USE_IMAP
               || state.entry[menu->current].inferiors
 #endif
@@ -862,7 +836,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    /* save the old directory */
 	    mutt_buffer_strcpy (OldLastDir, mutt_b2s (LastDir));
 
-	    if (mutt_strcmp (state.entry[menu->current].name, "..") == 0)
+	    if (mutt_strcmp (state.entry[menu->current].display_name, "..") == 0)
 	    {
               size_t lastdirlen = mutt_buffer_len (LastDir);
 
@@ -893,19 +867,18 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    }
 	    else if (buffy)
 	    {
-	      mutt_buffer_strcpy (LastDir, state.entry[menu->current].name);
-	      mutt_buffer_expand_path (LastDir);
+	      mutt_buffer_strcpy (LastDir, state.entry[menu->current].full_path);
 	    }
 #ifdef USE_IMAP
 	    else if (state.imap_browse)
 	    {
 	      ciss_url_t url;
 
-              mutt_buffer_strcpy (LastDir, state.entry[menu->current].name);
+              mutt_buffer_strcpy (LastDir, state.entry[menu->current].full_path);
 	      /* tack on delimiter here */
 
 	      /* special case "" needs no delimiter */
-	      url_parse_ciss (&url, state.entry[menu->current].name);
+	      url_parse_ciss (&url, state.entry[menu->current].full_path);
 	      if (url.path &&
 		  (state.entry[menu->current].delim != '\0'))
 	      {
@@ -915,8 +888,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #endif
 	    else
 	    {
-	      mutt_buffer_concat_path (tmp, mutt_b2s (LastDir), state.entry[menu->current].name);
-	      mutt_buffer_strcpy (LastDir, mutt_b2s (tmp));
+	      mutt_buffer_strcpy (LastDir, state.entry[menu->current].full_path);
 	    }
 
 	    destroy_state (&state);
@@ -955,21 +927,11 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	}
         else if (op == OP_DESCEND_DIRECTORY)
         {
-          mutt_error (_("%s is not a directory."), state.entry[menu->current].name);
+          mutt_error (_("%s is not a directory."), state.entry[menu->current].display_name);
           break;
         }
 
-	if (buffy)
-	{
-	  mutt_buffer_strcpy (f, state.entry[menu->current].name);
-	  mutt_buffer_expand_path (f);
-	}
-#ifdef USE_IMAP
-	else if (state.imap_browse)
-          mutt_buffer_strcpy (f, state.entry[menu->current].name);
-#endif
-	else
-	  mutt_buffer_concat_path (f, mutt_b2s (LastDir), state.entry[menu->current].name);
+        mutt_buffer_strcpy (f, state.entry[menu->current].full_path);
 
 	/* Fall through to OP_EXIT */
 
@@ -984,22 +946,14 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    *numfiles = menu->tagged;
 	    tfiles = safe_calloc (*numfiles, sizeof (char *));
 	    for (i = 0, j = 0; i < state.entrylen; i++)
-	    {
-	      struct folder_file ff = state.entry[i];
-	      if (ff.tagged)
-	      {
-		mutt_buffer_concat_path (tmp, mutt_b2s (LastDir), ff.name);
-		mutt_buffer_expand_path (tmp);
-		tfiles[j++] = safe_strdup (mutt_b2s (tmp));
-	      }
-	    }
+	      if (state.entry[i].tagged)
+		tfiles[j++] = safe_strdup (state.entry[i].full_path);
 	    *files = tfiles;
 	  }
 	  else if ((mutt_b2s (f))[0]) /* no tagged entries. return selected entry */
 	  {
 	    *numfiles = 1;
 	    tfiles = safe_calloc (*numfiles, sizeof (char *));
-	    mutt_buffer_expand_path (f);
 	    tfiles[0] = safe_strdup (mutt_b2s (f));
 	    *files = tfiles;
 	  }
@@ -1010,16 +964,16 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
       case OP_BROWSER_TELL:
         if (state.entrylen)
-	  mutt_message("%s", state.entry[menu->current].name);
+	  mutt_message("%s", state.entry[menu->current].display_name);
         break;
 
 #ifdef USE_IMAP
       case OP_BROWSER_SUBSCRIBE:
-	imap_subscribe (state.entry[menu->current].name, 1);
+	imap_subscribe (state.entry[menu->current].full_path, 1);
 	break;
 
       case OP_BROWSER_UNSUBSCRIBE:
-	imap_subscribe (state.entry[menu->current].name, 0);
+	imap_subscribe (state.entry[menu->current].full_path, 0);
 	break;
 
       case OP_BROWSER_TOGGLE_LSUB:
@@ -1062,7 +1016,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	{
 	  int nentry = menu->current;
 
-	  if (imap_mailbox_rename (state.entry[nentry].name) >= 0)
+	  if (imap_mailbox_rename (state.entry[nentry].full_path) >= 0)
 	  {
 	    destroy_state (&state);
 	    init_state (&state, NULL);
@@ -1086,7 +1040,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  IMAP_MBOX mx;
 	  int nentry = menu->current;
 
-	  imap_parse_path (state.entry[nentry].name, &mx);
+	  imap_parse_path (state.entry[nentry].full_path, &mx);
 	  if (!mx.mbox)
 	  {
 	    mutt_error _("Cannot delete root folder");
@@ -1099,8 +1053,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    if (!imap_delete_mailbox (Context, mx))
             {
 	      /* free the mailbox from the browser */
-	      FREE (&((state.entry)[nentry].name));
-	      FREE (&((state.entry)[nentry].desc));
+	      FREE (&((state.entry)[nentry].display_name));
+	      FREE (&((state.entry)[nentry].full_path));
 	      /* and move all other entries up */
 	      if (nentry+1 < state.entrylen)
 		memmove (state.entry + nentry, state.entry + nentry + 1,
@@ -1367,7 +1321,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #ifdef USE_IMAP
 	if (state.entry[menu->current].selectable)
 	{
-	  mutt_buffer_strcpy (f, state.entry[menu->current].name);
+	  mutt_buffer_strcpy (f, state.entry[menu->current].full_path);
 	  destroy_state (&state);
 	  goto bail;
 	}
@@ -1375,7 +1329,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #endif
           if (S_ISDIR (state.entry[menu->current].mode) ||
               (S_ISLNK (state.entry[menu->current].mode) &&
-               link_is_dir (mutt_b2s (LastDir), state.entry[menu->current].name)))
+               link_is_dir (state.entry[menu->current].full_path)))
           {
             mutt_error _("Can't view a directory");
             break;
@@ -1384,8 +1338,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
           {
             BODY *b;
 
-            mutt_buffer_concat_path (buf, mutt_b2s (LastDir), state.entry[menu->current].name);
-            b = mutt_make_file_attach (mutt_b2s (buf));
+            b = mutt_make_file_attach (state.entry[menu->current].full_path);
             if (b != NULL)
             {
               mutt_view_attachment (NULL, b, MUTT_REGULAR, NULL, NULL);

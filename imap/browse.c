@@ -426,7 +426,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   }
 
   imap_qualify_path (tmp, sizeof (tmp), &mx, folder);
-  (state->entry)[state->entrylen].name = safe_strdup (tmp);
+  (state->entry)[state->entrylen].full_path = safe_strdup (tmp);
 
   /* mark desc with delim in browser if it can have subfolders */
   if (!isparent && !noinferiors && strlen (relpath) < sizeof (relpath) - 1)
@@ -435,7 +435,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
     relpath[strlen (relpath)] = delim;
   }
 
-  (state->entry)[state->entrylen].desc = safe_strdup (relpath);
+  (state->entry)[state->entrylen].display_name = safe_strdup (relpath);
 
   (state->entry)[state->entrylen].imap = 1;
   /* delimiter at the root is useless. */
@@ -469,5 +469,5 @@ static void imap_add_folder (char delim, char *folder, int noselect,
 
 static int compare_names(struct folder_file *a, struct folder_file *b)
 {
-  return mutt_strcmp(a->name, b->name);
+  return mutt_strcmp(a->full_path, b->full_path);
 }

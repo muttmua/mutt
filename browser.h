@@ -28,8 +28,8 @@ struct folder_file
   gid_t gid;
   nlink_t nlink;
 
-  char *name;
-  char *desc;
+  char *display_name;
+  char *full_path;
 
   short new;               /* true if mailbox has "new mail" */
   int msg_count;           /* total number of messages */
