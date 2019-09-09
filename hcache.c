@@ -995,25 +995,27 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
 #endif
 }
 
-static char* get_foldername(const char *folder)
+static char* get_foldername (const char *folder)
 {
   char *p = NULL;
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
   struct stat st;
 
-  mutt_encode_path (path, sizeof (path), folder);
+  path = mutt_buffer_pool_get ();
+  mutt_encode_path (path, folder);
 
   /* if the folder is local, canonify the path to avoid
    * to ensure equivalent paths share the hcache */
-  if (stat (path, &st) == 0)
+  if (stat (mutt_b2s (path), &st) == 0)
   {
     p = safe_malloc (PATH_MAX+1);
-    if (!realpath (path, p))
-      mutt_str_replace (&p, path);
+    if (!realpath (mutt_b2s (path), p))
+      mutt_str_replace (&p, mutt_b2s (path));
   }
   else
-    p = safe_strdup (path);
+    p = safe_strdup (mutt_b2s (path));
 
+  mutt_buffer_pool_release (&path);
   return p;
 }
 

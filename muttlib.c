@@ -2247,16 +2247,7 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
   return 0;
 }
 
-void mutt_encode_path (char *dest, size_t dlen, const char *src)
-{
-  char *p = safe_strdup (src);
-  int rc = mutt_convert_string (&p, Charset, "utf-8", 0);
-  /* `src' may be NULL, such as when called from the pop3 driver. */
-  strfcpy (dest, (rc == 0) ? NONULL(p) : NONULL(src), dlen);
-  FREE (&p);
-}
-
-void mutt_buffer_encode_path (BUFFER *dest, const char *src)
+void mutt_encode_path (BUFFER *dest, const char *src)
 {
   char *p;
   int rc;
