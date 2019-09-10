@@ -994,7 +994,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
       case OP_BROWSER_TELL:
         if (state.entrylen)
-	  mutt_message("%s", state.entry[menu->current].display_name);
+	  mutt_message("%s", state.entry[menu->current].full_path);
         break;
 
 #ifdef USE_IMAP
