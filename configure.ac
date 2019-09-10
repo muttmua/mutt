@@ -905,10 +905,11 @@ AC_ARG_ENABLE(filemonitor, AS_HELP_STRING([--disable-filemonitor],[Disable file 
 ])
 
 if test x$have_filemonitor != xno ; then
-        AC_CHECK_FUNCS(inotify_init1 inotify_add_watch inotify_rm_watch,
+        AC_CHECK_FUNCS(inotify_init inotify_add_watch inotify_rm_watch,
                        [], [have_filemonitor=no])
         if test x$have_filemonitor != xno ; then
                 AC_DEFINE(USE_INOTIFY,1,[ Define if want to use inotify for filesystem monitoring (available in Linux only). ])
+                AC_CHECK_FUNCS_ONCE(inotify_init1)
                 AC_CHECK_HEADERS(sys/inotify.h)
                 MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS monitor.o"
         fi

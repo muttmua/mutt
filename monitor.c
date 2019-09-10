@@ -25,6 +25,9 @@
 # include <unistd.h>
 # include <poll.h>
 #endif
+#ifndef HAVE_INOTIFY_INIT1
+# include <fcntl.h>
+#endif
 
 #include "mutt.h"
 #include "buffy.h"
@@ -106,12 +109,23 @@ static int monitor_init ()
 {
   if (INotifyFd == -1)
   {
+#if HAVE_INOTIFY_INIT1
     INotifyFd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
     if (INotifyFd == -1)
     {
       dprint (2, (debugfile, "monitor: inotify_init1 failed, errno=%d %s\n", errno, strerror(errno)));
       return -1;
     }
+#else
+    INotifyFd = inotify_init();
+    if (INotifyFd == -1)
+    {
+      dprint (2, (debugfile, "monitor: inotify_init failed, errno=%d %s\n", errno, strerror(errno)));
+      return -1;
+    }
+    fcntl(INotifyFd, F_SETFL, O_NONBLOCK);
+    fcntl(INotifyFd, F_SETFD, FD_CLOEXEC);
+#endif
     mutt_poll_fd_add(0, POLLIN);
     mutt_poll_fd_add(INotifyFd, POLLIN);
   }
