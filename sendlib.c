@@ -472,7 +472,8 @@ int mutt_write_mime_body (BODY *a, FILE *f)
   /* This is pretty gross, but it's the best solution for now... */
   if ((WithCrypto & APPLICATION_PGP)
       && a->type == TYPEAPPLICATION
-      && mutt_strcmp (a->subtype, "pgp-encrypted") == 0)
+      && mutt_strcmp (a->subtype, "pgp-encrypted") == 0
+      && !a->filename)
   {
     fputs ("Version: 1\n", f);
     return 0;
