@@ -154,16 +154,13 @@ static void process_protected_headers (HEADER *cur)
 
 int mutt_display_message (HEADER *cur)
 {
-  char tempfile[_POSIX_PATH_MAX], buf[LONG_STRING];
+  BUFFER *tempfile = NULL;
   int rc = 0, builtin = 0;
   int cmflags = MUTT_CM_DECODE | MUTT_CM_DISPLAY | MUTT_CM_CHARCONV;
   FILE *fpout = NULL;
   FILE *fpfilterout = NULL;
   pid_t filterpid = -1;
   int res;
-
-  snprintf (buf, sizeof (buf), "%s/%s", TYPE (cur->content),
-	    cur->content->subtype);
 
   mutt_parse_mime_message (Context, cur);
   mutt_message_hook (Context, cur, MUTT_MESSAGEHOOK);
@@ -176,7 +173,7 @@ int mutt_display_message (HEADER *cur)
       if (cur->security & APPLICATION_SMIME)
 	crypt_smime_getkeys (cur->env);
       if (!crypt_valid_passphrase(cur->security))
-	return 0;
+	goto cleanup;
 
       cmflags |= MUTT_CM_VERIFY;
     }
@@ -206,11 +203,12 @@ int mutt_display_message (HEADER *cur)
   }
 
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((fpout = safe_fopen (tempfile, "w")) == NULL)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if ((fpout = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
   {
     mutt_error _("Could not create temporary file!");
-    return (0);
+    goto cleanup;
   }
 
   if (DisplayFilter)
@@ -224,8 +222,8 @@ int mutt_display_message (HEADER *cur)
     {
       mutt_error (_("Cannot create display filter"));
       safe_fclose (&fpfilterout);
-      unlink (tempfile);
-      return 0;
+      unlink (mutt_b2s (tempfile));
+      goto cleanup;
     }
   }
 
@@ -233,7 +231,9 @@ int mutt_display_message (HEADER *cur)
     builtin = 1;
   else
   {
+    char buf[LONG_STRING];
     struct hdr_format_info hfi;
+
     hfi.ctx = Context;
     hfi.pager_progress = ExtPagerProgress;
     hfi.hdr = cur;
@@ -253,8 +253,8 @@ int mutt_display_message (HEADER *cur)
       mutt_wait_filter (filterpid);
       safe_fclose (&fpfilterout);
     }
-    mutt_unlink (tempfile);
-    return 0;
+    mutt_unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
   if (fpfilterout != NULL && mutt_wait_filter (filterpid) != 0)
@@ -311,17 +311,22 @@ int mutt_display_message (HEADER *cur)
     memset (&info, 0, sizeof (pager_t));
     info.hdr = cur;
     info.ctx = Context;
-    rc = mutt_pager (NULL, tempfile, MUTT_PAGER_MESSAGE, &info);
+    rc = mutt_pager (NULL, mutt_b2s (tempfile), MUTT_PAGER_MESSAGE, &info);
   }
   else
   {
     int r;
+    BUFFER *cmd = NULL;
 
     mutt_endwin (NULL);
-    snprintf (buf, sizeof (buf), "%s %s", NONULL(Pager), tempfile);
-    if ((r = mutt_system (buf)) == -1)
-      mutt_error (_("Error running \"%s\"!"), buf);
-    unlink (tempfile);
+
+    cmd = mutt_buffer_pool_get ();
+    mutt_buffer_printf (cmd, "%s %s", NONULL(Pager), mutt_b2s (tempfile));
+    if ((r = mutt_system (mutt_b2s (cmd))) == -1)
+      mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
+    unlink (mutt_b2s (tempfile));
+    mutt_buffer_pool_release (&cmd);
+
     if (!option (OPTNOCURSES))
       keypad (stdscr, TRUE);
     if (r != -1)
@@ -335,6 +340,8 @@ int mutt_display_message (HEADER *cur)
       rc = 0;
   }
 
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
   return rc;
 }
 
