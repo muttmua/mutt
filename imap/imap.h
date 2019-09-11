@@ -56,7 +56,7 @@ int imap_mailbox_rename (const char* mailbox, BUFFER *result);
 
 /* message.c */
 int imap_append_message (CONTEXT* ctx, MESSAGE* msg);
-int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete);
+int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete);
 
 /* socket.c */
 void imap_logout_all (void);

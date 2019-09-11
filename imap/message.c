@@ -1283,7 +1283,7 @@ fail:
  *      -1: error
  *       0: success
  *       1: non-fatal error - try fetch/append */
-int imap_copy_messages (CONTEXT* ctx, HEADER* h, char* dest, int delete)
+int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
 {
   IMAP_DATA* idata;
   BUFFER cmd, sync_cmd;

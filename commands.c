@@ -845,9 +845,13 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 {
   int i, need_buffy_cleanup;
   int need_passphrase = 0, app=0;
-  char prompt[SHORT_STRING], buf[_POSIX_PATH_MAX];
+  int rc = -1;
+  char prompt[SHORT_STRING];
+  BUFFER *buf = NULL;
   CONTEXT ctx;
   struct stat st;
+
+  buf = mutt_buffer_pool_get ();
 
   snprintf (prompt, sizeof (prompt),
 	    decode  ? (delete ? _("Decode-save%s to mailbox") :
@@ -866,7 +870,8 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
       app = h->security;
     }
     mutt_message_hook (Context, h, MUTT_MESSAGEHOOK);
-    mutt_default_save (buf, sizeof (buf), h);
+    mutt_default_save (buf->data, buf->dsize, h);
+    mutt_buffer_fix_dptr (buf);
   }
   else
   {
@@ -885,7 +890,8 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
     if (h)
     {
       mutt_message_hook (Context, h, MUTT_MESSAGEHOOK);
-      mutt_default_save (buf, sizeof (buf), h);
+      mutt_default_save (buf->data, buf->dsize, h);
+      mutt_buffer_fix_dptr (buf);
       if (WithCrypto)
       {
         need_passphrase = h->security & ENCRYPT;
@@ -895,57 +901,63 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
     }
   }
 
-  mutt_pretty_mailbox (buf, sizeof (buf));
-  if (mutt_enter_fname (prompt, buf, sizeof (buf), 0) == -1)
-    return (-1);
+  mutt_buffer_pretty_mailbox (buf);
+  if (mutt_enter_fname (prompt, buf->data, buf->dsize, 0) == -1)
+    goto cleanup;
+  mutt_buffer_fix_dptr (buf);
 
-  if (!buf[0])
-    return (-1);
+  if (!mutt_buffer_len (buf))
+    goto cleanup;
 
   /* This is an undocumented feature of ELM pointed out to me by Felix von
    * Leitner <leitner@prz.fu-berlin.de>
    */
-  if (mutt_strcmp (buf, ".") == 0)
-    strfcpy (buf, LastSaveFolder, sizeof (buf));
+  if (mutt_strcmp (mutt_b2s (buf), ".") == 0)
+    mutt_buffer_strcpy (buf, LastSaveFolder);
   else
-    strfcpy (LastSaveFolder, buf, sizeof (LastSaveFolder));
+    strfcpy (LastSaveFolder, mutt_b2s (buf), sizeof (LastSaveFolder));
 
-  mutt_expand_path (buf, sizeof (buf));
+  mutt_buffer_expand_path (buf);
 
   /* check to make sure that this file is really the one the user wants */
-  if (mutt_save_confirm (buf, &st) != 0)
-    return -1;
+  if (mutt_save_confirm (mutt_b2s (buf), &st) != 0)
+    goto cleanup;
 
   if (WithCrypto && need_passphrase && (decode || decrypt)
       && !crypt_valid_passphrase(app))
-    return -1;
+    goto cleanup;
 
-  mutt_message (_("Copying to %s..."), buf);
+  mutt_message (_("Copying to %s..."), mutt_b2s (buf));
 
 #ifdef USE_IMAP
   if (Context->magic == MUTT_IMAP &&
-      !(decode || decrypt) && mx_is_imap (buf))
+      !(decode || decrypt) && mx_is_imap (mutt_b2s (buf)))
   {
-    switch (imap_copy_messages (Context, h, buf, delete))
+    switch (imap_copy_messages (Context, h, mutt_b2s (buf), delete))
     {
       /* success */
-      case 0: mutt_clear_error (); return 0;
+      case 0:
+        mutt_clear_error ();
+        rc = 0;
+        goto cleanup;
       /* non-fatal error: fall through to fetch/append */
-      case 1: break;
+      case 1:
+        break;
       /* fatal error, abort */
-      case -1: return -1;
+      case -1:
+        goto cleanup;
     }
   }
 #endif
 
-  if (mx_open_mailbox (buf, MUTT_APPEND, &ctx) != NULL)
+  if (mx_open_mailbox (mutt_b2s (buf), MUTT_APPEND, &ctx) != NULL)
   {
     if (h)
     {
       if (_mutt_save_message(h, &ctx, delete, decode, decrypt) != 0)
       {
         mx_close_mailbox (&ctx, NULL);
-        return -1;
+        goto cleanup;
       }
     }
     else
@@ -959,7 +971,7 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
                                  &ctx, delete, decode, decrypt) != 0)
           {
             mx_close_mailbox (&ctx, NULL);
-            return -1;
+            goto cleanup;
           }
 	}
       }
@@ -970,13 +982,15 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
     mx_close_mailbox (&ctx, NULL);
 
     if (need_buffy_cleanup)
-      mutt_buffy_cleanup (buf, &st);
+      mutt_buffy_cleanup (mutt_b2s (buf), &st);
 
     mutt_clear_error ();
-    return (0);
+    rc = 0;
   }
 
-  return -1;
+cleanup:
+  mutt_buffer_pool_release (&buf);
+  return rc;
 }
 
 
