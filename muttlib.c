@@ -1157,16 +1157,16 @@ void mutt_expand_fmt (BUFFER *dest, const char *fmt, const char *src)
 
 /* return 0 on success, -1 on abort, 1 on error */
 int mutt_check_overwrite (const char *attname, const char *path,
-                          char *fname, size_t flen, int *append, char **directory)
+                          BUFFER *fname, int *append, char **directory)
 {
   int rc = 0;
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   struct stat st;
 
-  strfcpy (fname, path, flen);
-  if (access (fname, F_OK) != 0)
+  mutt_buffer_strcpy (fname, path);
+  if (access (mutt_b2s (fname), F_OK) != 0)
     return 0;
-  if (stat (fname, &st) != 0)
+  if (stat (mutt_b2s (fname), &st) != 0)
     return -1;
   if (S_ISDIR (st.st_mode))
   {
@@ -1179,7 +1179,7 @@ int mutt_check_overwrite (const char *attname, const char *path,
 	      (_("File is a directory, save under it? [(y)es, (n)o, (a)ll]"), _("yna")))
       {
 	case 3:		/* all */
-	  mutt_str_replace (directory, fname);
+	  mutt_str_replace (directory, mutt_b2s (fname));
 	  break;
 	case 1:		/* yes */
 	  FREE (directory);		/* __FREE_CHECKED__ */
@@ -1198,14 +1198,25 @@ int mutt_check_overwrite (const char *attname, const char *path,
     else if ((rc = mutt_yesorno (_("File is a directory, save under it?"), MUTT_YES)) != MUTT_YES)
       return (rc == MUTT_NO) ? 1 : -1;
 
-    strfcpy (tmp, mutt_basename (NONULL (attname)), sizeof (tmp));
-    if (mutt_get_field (_("File under directory: "), tmp, sizeof (tmp),
-                        MUTT_FILE | MUTT_CLEAR) != 0 || !tmp[0])
+    tmp = mutt_buffer_pool_get ();
+    mutt_buffer_strcpy (tmp, mutt_basename (NONULL (attname)));
+    if (mutt_get_field (_("File under directory: "), tmp->data, tmp->dsize,
+                        MUTT_FILE | MUTT_CLEAR) != 0)
+    {
+      mutt_buffer_pool_release (&tmp);
+      return -1;
+    }
+    mutt_buffer_fix_dptr (tmp);
+    if (!mutt_buffer_len (tmp))
+    {
+      mutt_buffer_pool_release (&tmp);
       return (-1);
-    mutt_concat_path (fname, path, tmp, flen);
+    }
+    mutt_buffer_concat_path (fname, path, mutt_b2s (tmp));
+    mutt_buffer_pool_release (&tmp);
   }
 
-  if (*append == 0 && access (fname, F_OK) == 0)
+  if (*append == 0 && access (mutt_b2s (fname), F_OK) == 0)
   {
     switch (mutt_multi_choice
 	    (_("File exists, (o)verwrite, (a)ppend, or (c)ancel?"), _("oac")))
