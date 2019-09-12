@@ -789,13 +789,15 @@ static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY
 	{
 	  /* decode and print */
 
-	  char newfile[_POSIX_PATH_MAX] = "";
+	  BUFFER *newfile = NULL;
 	  FILE *ifp;
 
-	  mutt_mktemp (newfile, sizeof (newfile));
-	  if (mutt_decode_save_attachment (fp, top, newfile, MUTT_PRINTING, 0) == 0)
+          newfile = mutt_buffer_pool_get ();
+	  mutt_buffer_mktemp (newfile);
+	  if (mutt_decode_save_attachment (fp, top, mutt_b2s (newfile),
+                                           MUTT_PRINTING, 0) == 0)
 	  {
-	    if ((ifp = fopen (newfile, "r")) != NULL)
+	    if ((ifp = fopen (mutt_b2s (newfile), "r")) != NULL)
 	    {
 	      mutt_copy_stream (ifp, state->fpout);
 	      safe_fclose (&ifp);
@@ -803,7 +805,8 @@ static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY
 		state_puts (AttachSep, state);
 	    }
 	  }
-	  mutt_unlink (newfile);
+	  mutt_unlink (mutt_b2s (newfile));
+          mutt_buffer_pool_release (&newfile);
 	}
       }
       else
