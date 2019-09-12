@@ -612,39 +612,43 @@ cleanup:
 static void
 mutt_query_pipe_attachment (char *command, FILE *fp, BODY *body, int filter)
 {
-  char tfile[_POSIX_PATH_MAX];
-  char warning[STRING+_POSIX_PATH_MAX];
+  BUFFER *tfile = NULL, *warning = NULL;
+
+  tfile = mutt_buffer_pool_get ();
+  warning = mutt_buffer_pool_get ();
 
   if (filter)
   {
-    snprintf (warning, sizeof (warning),
+    mutt_buffer_printf (warning,
 	      _("WARNING!  You are about to overwrite %s, continue?"),
 	      body->filename);
-    if (mutt_yesorno (warning, MUTT_NO) != MUTT_YES)
+    if (mutt_yesorno (mutt_b2s (warning), MUTT_NO) != MUTT_YES)
     {
       mutt_window_clearline (MuttMessageWindow, 0);
-      return;
+      goto cleanup;
     }
-    mutt_mktemp (tfile, sizeof (tfile));
+    mutt_buffer_mktemp (tfile);
   }
-  else
-    tfile[0] = 0;
 
-  if (mutt_pipe_attachment (fp, body, command, tfile))
+  if (mutt_pipe_attachment (fp, body, command, mutt_b2s (tfile)))
   {
     if (filter)
     {
       mutt_unlink (body->filename);
-      mutt_rename_file (tfile, body->filename);
+      mutt_rename_file (mutt_b2s (tfile), body->filename);
       mutt_update_encoding (body);
       mutt_message _("Attachment filtered.");
     }
   }
   else
   {
-    if (filter && tfile[0])
-      mutt_unlink (tfile);
+    if (filter && mutt_buffer_len (tfile))
+      mutt_unlink (mutt_b2s (tfile));
   }
+
+cleanup:
+  mutt_buffer_pool_release (&tfile);
+  mutt_buffer_pool_release (&warning);
 }
 
 static void pipe_attachment (FILE *fp, BODY *b, STATE *state)

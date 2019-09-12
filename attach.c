@@ -618,7 +618,7 @@ return_error:
 }
 
 /* returns 1 on success, 0 on error */
-int mutt_pipe_attachment (FILE *fp, BODY *b, const char *path, char *outfile)
+int mutt_pipe_attachment (FILE *fp, BODY *b, const char *path, const char *outfile)
 {
   pid_t thepid;
   int out = -1;
