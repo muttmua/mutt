@@ -521,6 +521,79 @@ static void fill_empty_space (int first_row, int num_rows, int width)
 }
 
 /**
+ * calculate_depth - Calculate depth of path based on SidebarDelimChars.
+ *
+ * If lastpath is not NULL, common_depth is also calculated.  These
+ * are used for indentation and short_path calculation.
+ */
+static void calculate_depth (const char *path, const char *lastpath,
+                             int *depth, int *common_depth)
+{
+  int i, has_trailing_delim = 0;
+
+  *depth = *common_depth = 0;
+  if (!SidebarDelimChars || !path)
+    return;
+
+  for (i = 0; path[i]; i++)
+  {
+    if (strchr (SidebarDelimChars, path[i]))
+    {
+      (*depth)++;
+
+      /* /a/b/c and /a/b/c/ both are a depth of 3.
+       * Only count the final '\0' if the last character wasn't a separator.
+       */
+      if (!path[i+1])
+        has_trailing_delim = 1;
+    }
+
+    if (lastpath)
+    {
+      /* path     /a/b/c/d
+       * lastpath /a/b
+       * lastpath /a/
+       * lastpath /a
+       *            ^
+       */
+      if (strchr (SidebarDelimChars, path[i]) &&
+          (strchr (SidebarDelimChars, lastpath[i]) || !lastpath[i]))
+      {
+        (*common_depth)++;
+        if (!lastpath[i])
+          lastpath = NULL;
+      }
+
+      /* path     /abc
+       * lastpath /ad
+       * lastpath /a/
+       * lastpath /a
+       *            ^
+       */
+      else if (!lastpath[i] || path[i] != lastpath[i])
+        lastpath = NULL;
+    }
+  }
+
+  if (!has_trailing_delim)
+  {
+    (*depth)++;
+
+    /* path     /a
+     * lastpath /a/b/c
+     * lastpath /a/
+     * lastpath /a
+     *            ^
+     */
+    if (lastpath &&
+        (strchr (SidebarDelimChars, lastpath[i]) || !lastpath[i]))
+      (*common_depth)++;
+  }
+}
+
+#define SIDEBAR_MAX_INDENT 32
+
+/**
  * draw_sidebar - Write out a list of mailboxes, on the left
  * @num_rows:   Height of the Sidebar
  * @num_cols:   Width of the Sidebar
@@ -546,8 +619,17 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
   int entryidx;
   SBENTRY *entry;
   BUFFY *b;
+  int indent_width = -1;
+  int indent_depths[SIDEBAR_MAX_INDENT];
+  const char *sidebar_folder_name;
+  BUFFER *pretty_folder_name, *last_folder_name, *indent_folder_name;
+
   if (TopIndex < 0)
     return;
+
+  pretty_folder_name = mutt_buffer_pool_get ();
+  last_folder_name = mutt_buffer_pool_get ();
+  indent_folder_name = mutt_buffer_pool_get ();
 
   int w = MIN(num_cols, (SidebarWidth - div_width));
   int row = 0;
@@ -586,74 +668,78 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
       b->msg_flagged = Context->flagged;
     }
 
-    /* compute length of Maildir without trailing separator */
-    size_t maildirlen = mutt_strlen (Maildir);
-    if (maildirlen &&
-        SidebarDelimChars &&
-        strchr (SidebarDelimChars, Maildir[maildirlen - 1]))
-      maildirlen--;
+    mutt_buffer_strcpy (pretty_folder_name, mutt_b2s (b->pathbuf));
+    mutt_buffer_pretty_mailbox (pretty_folder_name);
+    sidebar_folder_name = mutt_b2s (pretty_folder_name);
 
-    /* check whether Maildir is a prefix of the current folder's path */
-    short maildir_is_prefix = 0;
-    if ((mutt_buffer_len (b->pathbuf) > maildirlen) &&
-        (mutt_strncmp (Maildir, mutt_b2s (b->pathbuf), maildirlen) == 0) &&
-        SidebarDelimChars &&
-        strchr (SidebarDelimChars, mutt_b2s (b->pathbuf)[maildirlen]))
-      maildir_is_prefix = 1;
-
-    /* calculate depth of current folder and generate its display name with indented spaces */
-    int sidebar_folder_depth = 0;
-    const char *sidebar_folder_name;
-    BUFFER *short_folder_name = NULL;
-    int i;
-    if (option (OPTSIDEBARSHORTPATH))
+    if (SidebarDelimChars)
     {
-      /* disregard a trailing separator, so strlen() - 2 */
-      sidebar_folder_name = mutt_b2s (b->pathbuf);
-      for (i = mutt_strlen (sidebar_folder_name) - 2; i >= 0; i--)
+      int parent_depth = 0;
+      int i;
+
+      if (option (OPTSIDEBARSHORTPATH) || option (OPTSIDEBARFOLDERINDENT))
       {
-        if (SidebarDelimChars &&
-            strchr (SidebarDelimChars, sidebar_folder_name[i]))
-        {
-          sidebar_folder_name += (i + 1);
-          break;
-        }
+        int depth = 0, common_depth = 0;
+
+        calculate_depth (sidebar_folder_name, mutt_b2s (last_folder_name),
+                         &depth, &common_depth);
+        mutt_buffer_strcpy (last_folder_name, sidebar_folder_name);
+
+        if (indent_width < SIDEBAR_MAX_INDENT)
+          indent_width++;
+
+        /* indent_depths[] hold the path depths at each level of indentation.
+         * Indent based off the longest path that we share in common.
+         *
+         * The 'indent_depths[] >= depth' test below is for a corner case:
+         *
+         * path       depth    common_depth    indent_width
+         * /a           2            0              0
+         * /a/b         3            2              1
+         * /a/b/        3            3              1
+         *
+         * Because the common_depth of /a/b/ matches the depth of
+         * /a/b, we need the additional test to continue popping the
+         * indent_depths[] stack.
+         */
+        while (indent_width &&
+               ((indent_depths[indent_width - 1] > common_depth) ||
+                (indent_depths[indent_width - 1] >= depth)))
+          indent_width--;
+
+        if (indent_width < SIDEBAR_MAX_INDENT)
+          indent_depths[indent_width] = depth;
+        if (indent_width)
+          parent_depth = indent_depths[indent_width - 1];
+      }
+
+      if (option (OPTSIDEBARSHORTPATH) && parent_depth)
+      {
+        for (i = 0; parent_depth && sidebar_folder_name[i]; i++)
+          if (strchr (SidebarDelimChars, sidebar_folder_name[i]))
+            parent_depth--;
+        sidebar_folder_name += i;
+      }
+
+      if (option (OPTSIDEBARFOLDERINDENT) && indent_width)
+      {
+        mutt_buffer_clear (indent_folder_name);
+        for (i = 0; i < indent_width; i++)
+          mutt_buffer_addstr (indent_folder_name, NONULL(SidebarIndentString));
+        mutt_buffer_addstr (indent_folder_name, sidebar_folder_name);
+        sidebar_folder_name = mutt_b2s (indent_folder_name);
       }
     }
-    else
-      sidebar_folder_name = mutt_b2s (b->pathbuf) + maildir_is_prefix * (maildirlen + 1);
 
-    if (maildir_is_prefix && option (OPTSIDEBARFOLDERINDENT))
-    {
-      const char *tmp_folder_name;
-      int lastsep = 0;
-      tmp_folder_name = mutt_b2s (b->pathbuf) + maildirlen + 1;
-      int tmplen = (int) mutt_strlen (tmp_folder_name) - 1;
-      for (i = 0; i < tmplen; i++)
-      {
-        if (SidebarDelimChars && strchr (SidebarDelimChars, tmp_folder_name[i]))
-        {
-          sidebar_folder_depth++;
-          lastsep = i + 1;
-        }
-      }
-      if (sidebar_folder_depth > 0)
-      {
-        if (option (OPTSIDEBARSHORTPATH))
-          tmp_folder_name += lastsep;  /* basename */
-        short_folder_name = mutt_buffer_pool_get ();
-        for (i=0; i < sidebar_folder_depth; i++)
-          mutt_buffer_addstr (short_folder_name, NONULL(SidebarIndentString));
-        mutt_buffer_addstr (short_folder_name, tmp_folder_name);
-        sidebar_folder_name = mutt_b2s (short_folder_name);
-      }
-    }
     char str[STRING];
     make_sidebar_entry (str, sizeof (str), w, sidebar_folder_name, entry);
     printw ("%s", str);
-    mutt_buffer_pool_release (&short_folder_name);
     row++;
   }
+
+  mutt_buffer_pool_release (&pretty_folder_name);
+  mutt_buffer_pool_release (&last_folder_name);
+  mutt_buffer_pool_release (&indent_folder_name);
 
   fill_empty_space (row, num_rows - row, w);
 }
