@@ -169,7 +169,6 @@ void mutt_debug (FILE *, const char *, ...);
 
 /* The actual library functions. */
 
-char *mutt_concatn_path (char *, size_t, const char *, size_t, const char *, size_t);
 char *mutt_concat_path (char *, const char *, const char *, size_t);
 char *mutt_read_line (char *, size_t *, FILE *, int *, int);
 char *mutt_skip_whitespace (char *);

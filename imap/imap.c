@@ -2147,7 +2147,7 @@ imap_complete_hosts (char *dest, size_t len)
 
 /* imap_complete: given a partial IMAP folder path, return a string which
  *   adds as much to the path as is unique */
-int imap_complete(char* dest, size_t dlen, char* path)
+int imap_complete(char* dest, size_t dlen, const char* path)
 {
   IMAP_DATA* idata;
   char list[LONG_STRING];

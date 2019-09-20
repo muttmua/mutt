@@ -175,6 +175,8 @@ int  mutt_bounce_message (FILE *fp, HEADER *, ADDRESS *);
 void mutt_break_thread (HEADER *);
 void mutt_browser_cleanup (void);
 void mutt_buffer_concat_path (BUFFER *, const char *, const char *);
+void mutt_buffer_concatn_path (BUFFER *dst, const char *dir, size_t dirlen,
+                               const char *fname, size_t fnamelen);
 #define mutt_buffer_quote_filename(a,b) _mutt_buffer_quote_filename (a, b, 1);
 void _mutt_buffer_quote_filename (BUFFER *, const char *, int);
 void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash);

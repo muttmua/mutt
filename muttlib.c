@@ -1275,6 +1275,22 @@ void mutt_buffer_concat_path (BUFFER *d, const char *dir, const char *fname)
   mutt_buffer_printf (d, fmt, dir, fname);
 }
 
+/*
+ * Write the concatened pathname (dir + "/" + fname) into dst.
+ * The slash is omitted when dir or fname is of 0 length.
+ */
+void mutt_buffer_concatn_path (BUFFER *dst, const char *dir, size_t dirlen,
+                               const char *fname, size_t fnamelen)
+{
+  mutt_buffer_clear (dst);
+  if (dirlen)
+    mutt_buffer_addstr_n (dst, dir, dirlen);
+  if (dirlen && fnamelen)
+    mutt_buffer_addch (dst, '/');
+  if (fnamelen)
+    mutt_buffer_addstr_n (dst, fname, fnamelen);
+}
+
 const char *mutt_getcwd (BUFFER *cwd)
 {
   char *retval;

@@ -208,6 +208,12 @@ void mutt_buffer_strcpy_n (BUFFER *buf, const char *s, size_t len)
   mutt_buffer_addstr_n (buf, s, len);
 }
 
+void mutt_buffer_substrcpy (BUFFER *buf, const char *beg, const char *end)
+{
+  mutt_buffer_clear (buf);
+  if (end > beg)
+    mutt_buffer_strcpy_n (buf, beg, end - beg);
+}
 
 static void increase_buffer_pool (void)
 {

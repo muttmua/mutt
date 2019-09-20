@@ -46,6 +46,7 @@ void mutt_buffer_fix_dptr (BUFFER *);
 int mutt_buffer_printf (BUFFER*, const char*, ...);
 void mutt_buffer_strcpy (BUFFER *, const char *);
 void mutt_buffer_strcpy_n (BUFFER *, const char *, size_t);
+void mutt_buffer_substrcpy (BUFFER *buf, const char *beg, const char *end);
 
 /* These append to the buffer. */
 int mutt_buffer_add_printf (BUFFER*, const char*, ...);
