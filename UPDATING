@@ -8,6 +8,10 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.12.2 (2019-09-21):
+
+  ! Bug fix release.
+
 1.12.1 (2019-06-15):
 
   ! Bug fix release.
