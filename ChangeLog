@@ -1,3 +1,105 @@
+2019-09-21 12:27:57 -0700  Kevin McCarthy  <kevin@8t8.us> (6931c1ad)
+
+        * Update UPDATING file for 1.12.2 release.
+
+M	UPDATING
+
+2019-09-09 18:32:59 -0700  Kevin McCarthy  <kevin@8t8.us> (c65c12be)
+
+        * Fix mutt_write_mime_body() application/pgp-encrypted handling.
+        
+        It would blindly overwrite any attachment with that type, as if it
+        were the version label part of a multipart/encrypted message.
+        
+        However attachments with extenstion .gpg are labeled that type if
+        $mime_type_query_command is set to "xdg-mime query filetype".  This
+        would cause the attachment to be overwritten too.
+        
+        Add a check for a missing body->filename, which should only be the
+        case for the manually constructed part.
+
+M	sendlib.c
+
+2019-09-01 16:58:46 +0200  Gero Treuner  <gero@70t.de> (472324f8)
+
+        * add fallback for inotify_init1
+
+M	configure.ac
+M	monitor.c
+M	monitor.h
+
+2019-08-28 14:41:26 -0700  Kevin McCarthy  <kevin@8t8.us> (4c2f7c70)
+
+        * Fix inotify configure test.
+        
+        AC_CHECK_FUNCS executes "action-if-found" or "action-if-not-found" for
+        each function in the list.  If a system has some but not all of the
+        functions, both will end up being executed.
+        
+        This caused a build failure on an older system with exactly that
+        situation.
+        
+        Change to only define USE_INOTIFY if all functions exist.
+
+M	configure.ac
+
+2019-07-25 18:18:08 -0700  Kevin McCarthy  <kevin@8t8.us> (588f8d69)
+
+        * Fix accidental fall-through for <quote-char> if aborted.
+        
+        If <quote-char> was aborted, it was falling through to the
+        <transpose-chars> function.
+        
+        This problem was introduced 19 years when the <transpose-chars> case
+        was moved below <quote-char>.  Previously it fell through to the
+        default case which beeped.
+
+M	enter.c
+
+2019-06-28 12:57:24 -0700  Kevin McCarthy  <kevin@8t8.us> (f3ec740d)
+
+        * Don't read or save history if $history_file isn't set.
+
+M	history.c
+
+2019-06-22 14:57:36 -0700  Kevin McCarthy  <kevin@8t8.us> (840b813f)
+
+        * Make sure mailcap test %s is sanitized.
+        
+        It's not clear to me if %s is allowed as part of a test field.
+        However since we are passing the attachment filename, we should
+        sanitize it first.
+
+M	rfc1524.c
+
+2019-06-22 12:35:58 -0700  Kevin McCarthy  <kevin@8t8.us> (a99a75b7)
+
+        * Fix compose and edit attachment symlink failure code.
+        
+        In the case where safe_symlink() fail, mutt prompts to continue, but
+        did not properly reset the filename to be operated on.
+        
+        Fix up mutt_view_attachment() to use the same flow as the others, to
+        allow for easier comparison.
+
+M	attach.c
+
+2019-06-22 10:09:02 -0700  Kevin McCarthy  <kevin@8t8.us> (2fd320a8)
+
+        * Fix send-mode printing when expand_filename() returns 1.
+        
+        It will return this when a nametemplate entry already matched the
+        passed in filename.  So this bug required both a print entry and an
+        already matching nametemplate entry to trigger.
+
+M	attach.c
+
+2019-06-15 09:12:15 -0700  Kevin McCarthy  <kevin@8t8.us> (38e7c257)
+
+        * automatic post-release commit for mutt-1.12.1
+
+M	ChangeLog
+M	VERSION
 2019-06-15 09:02:36 -0700  Kevin McCarthy  <kevin@8t8.us> (e299de25)
 
         * Update UPDATING file for 1.12.1 release.
