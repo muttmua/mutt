@@ -144,19 +144,21 @@ unlock_realpath (CONTEXT *ctx)
 static int
 setup_paths (CONTEXT *ctx)
 {
+  BUFFER *tmppath;
+  FILE *tmpfp;
+
   if (!ctx)
     return -1;
-
-  char tmppath[_POSIX_PATH_MAX];
-  FILE *tmpfp;
 
   /* Setup the right paths */
   FREE(&ctx->realpath);
   ctx->realpath = ctx->path;
 
   /* We will uncompress to /tmp */
-  mutt_mktemp (tmppath, sizeof (tmppath));
-  ctx->path = safe_strdup (tmppath);
+  tmppath = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmppath);
+  ctx->path = safe_strdup (mutt_b2s (tmppath));
+  mutt_buffer_pool_release (&tmppath);
 
   if ((tmpfp = safe_fopen (ctx->path, "w")) == NULL)
     return -1;
