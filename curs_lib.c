@@ -993,7 +993,7 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy,
 
   fname = mutt_buffer_pool_get ();
 
-  mutt_buffer_addstr (fname, NONULL (buf));
+  mutt_buffer_addstr (fname, buf);
   rc = _mutt_buffer_enter_fname (prompt, fname, buffy, multiple, files, numfiles);
   strfcpy (buf, mutt_b2s (fname), blen);
 
