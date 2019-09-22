@@ -898,7 +898,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 {
   char helpstr[LONG_STRING];
   char buf[LONG_STRING];
-  char fname[_POSIX_PATH_MAX];
+  BUFFER *fname = NULL;
   MUTTMENU *menu;
   ATTACH_CONTEXT *actx;
   ATTACHPTR *new;
@@ -932,6 +932,10 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   mutt_update_compose_menu (actx, menu, 1);
 
   update_crypt_info (&rd);
+
+  /* Since this is rather long lived, we don't use the pool */
+  fname = mutt_buffer_new ();
+  mutt_buffer_increase_size (fname, LONG_STRING);
 
   while (loop)
   {
@@ -1068,13 +1072,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         char *prompt, **files;
         int error, numfiles;
 
-        fname[0] = 0;
+        mutt_buffer_clear (fname);
         prompt = _("Attach file");
         numfiles = 0;
         files = NULL;
 
-        if (_mutt_enter_fname (prompt, fname, sizeof (fname), 0, 1, &files, &numfiles) == -1 ||
-            *fname == '\0')
+        if ((_mutt_buffer_enter_fname (prompt, fname, 0, 1, &files, &numfiles) == -1) ||
+            !mutt_buffer_len (fname))
           break;
 
         error = 0;
@@ -1110,38 +1114,39 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         char *prompt;
         HEADER *h;
 
-        fname[0] = 0;
+        mutt_buffer_clear (fname);
         prompt = _("Open mailbox to attach message from");
 
         if (Context)
         {
-          strfcpy (fname, NONULL (Context->path), sizeof (fname));
-          mutt_pretty_mailbox (fname, sizeof (fname));
+          mutt_buffer_strcpy (fname, NONULL (Context->path));
+          mutt_buffer_pretty_mailbox (fname);
         }
 
-        if (mutt_enter_fname (prompt, fname, sizeof (fname), 1) == -1 || !fname[0])
+        if ((mutt_buffer_enter_fname (prompt, fname, 1) == -1) ||
+            !mutt_buffer_len (fname))
           break;
 
-        mutt_expand_path (fname, sizeof (fname));
+        mutt_buffer_expand_path (fname);
 #ifdef USE_IMAP
-        if (!mx_is_imap (fname))
+        if (!mx_is_imap (mutt_b2s (fname)))
 #endif
 #ifdef USE_POP
-          if (!mx_is_pop (fname))
+          if (!mx_is_pop (mutt_b2s (fname)))
 #endif
             /* check to make sure the file exists and is readable */
-            if (access (fname, R_OK) == -1)
+            if (access (mutt_b2s (fname), R_OK) == -1)
             {
-              mutt_perror (fname);
+              mutt_perror (mutt_b2s (fname));
               break;
             }
 
         menu->redraw = REDRAW_FULL;
 
-        ctx = mx_open_mailbox (fname, MUTT_READONLY, NULL);
+        ctx = mx_open_mailbox (mutt_b2s (fname), MUTT_READONLY, NULL);
         if (ctx == NULL)
         {
-          mutt_error (_("Unable to open mailbox %s"), fname);
+          mutt_error (_("Unable to open mailbox %s"), mutt_b2s (fname));
           break;
         }
 
@@ -1384,16 +1389,16 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           src = CURATTACH->content->d_filename;
         else
           src = CURATTACH->content->filename;
-        strfcpy (fname, mutt_basename (NONULL (src)), sizeof (fname));
-        ret = mutt_get_field (_("Send attachment with name: "),
-                              fname, sizeof (fname), MUTT_FILE);
+        mutt_buffer_strcpy (fname, mutt_basename (NONULL (src)));
+        ret = mutt_buffer_get_field (_("Send attachment with name: "),
+                                     fname, MUTT_FILE);
         if (ret == 0)
         {
           /*
            * As opposed to RENAME_FILE, we don't check fname[0] because it's
            * valid to set an empty string here, to erase what was set
            */
-          mutt_str_replace (&CURATTACH->content->d_filename, fname);
+          mutt_str_replace (&CURATTACH->content->d_filename, mutt_b2s (fname));
           menu->redraw = REDRAW_CURRENT;
         }
       }
@@ -1401,30 +1406,31 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
       case OP_COMPOSE_RENAME_FILE:
 	CHECK_COUNT;
-	strfcpy (fname, CURATTACH->content->filename, sizeof (fname));
-	mutt_pretty_mailbox (fname, sizeof (fname));
-	if ((mutt_get_field (_("Rename to: "), fname, sizeof (fname), MUTT_FILE) == 0)
-            && fname[0])
-	{
-	  if (stat(CURATTACH->content->filename, &st) == -1)
-	  {
+	mutt_buffer_strcpy (fname, CURATTACH->content->filename);
+	mutt_buffer_pretty_mailbox (fname);
+
+	if ((mutt_buffer_get_field (_("Rename to: "), fname, MUTT_FILE) == 0) &&
+            mutt_buffer_len (fname))
+        {
+          if (stat(CURATTACH->content->filename, &st) == -1)
+          {
             /* L10N:
                "stat" is a system call. Do "man 2 stat" for more information. */
-	    mutt_error (_("Can't stat %s: %s"), fname, strerror (errno));
-	    break;
-	  }
+            mutt_error (_("Can't stat %s: %s"), mutt_b2s (fname), strerror (errno));
+            break;
+          }
 
-	  mutt_expand_path (fname, sizeof (fname));
-	  if (mutt_rename_file (CURATTACH->content->filename, fname))
-	    break;
+          mutt_buffer_expand_path (fname);
+          if (mutt_rename_file (CURATTACH->content->filename, mutt_b2s (fname)))
+            break;
 
-	  mutt_str_replace (&CURATTACH->content->filename, fname);
-	  menu->redraw = REDRAW_CURRENT;
+          mutt_str_replace (&CURATTACH->content->filename, mutt_b2s (fname));
+          menu->redraw = REDRAW_CURRENT;
 
-	  if (CURATTACH->content->stamp >= st.st_mtime)
-	    mutt_stamp_attachment(CURATTACH->content);
+          if (CURATTACH->content->stamp >= st.st_mtime)
+            mutt_stamp_attachment(CURATTACH->content);
+        }
 
-	}
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1436,11 +1442,11 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         FILE *fp;
 
         mutt_window_clearline (MuttMessageWindow, 0);
-        fname[0] = 0;
-        if (mutt_get_field (_("New file: "), fname, sizeof (fname), MUTT_FILE)
-            != 0 || !fname[0])
+        mutt_buffer_clear (fname);
+        if ((mutt_buffer_get_field (_("New file: "), fname, MUTT_FILE) != 0) ||
+            !mutt_buffer_len (fname))
           continue;
-        mutt_expand_path (fname, sizeof (fname));
+        mutt_buffer_expand_path (fname);
 
         /* Call to lookup_mime_type () ?  maybe later */
         type[0] = 0;
@@ -1462,15 +1468,15 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
         new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
         /* Touch the file */
-        if (!(fp = safe_fopen (fname, "w")))
+        if (!(fp = safe_fopen (mutt_b2s (fname), "w")))
         {
-          mutt_error (_("Can't create file %s"), fname);
+          mutt_error (_("Can't create file %s"), mutt_b2s (fname));
           FREE (&new);
           continue;
         }
         safe_fclose (&fp);
 
-        if ((new->content = mutt_make_file_attach (fname)) == NULL)
+        if ((new->content = mutt_make_file_attach (mutt_b2s (fname))) == NULL)
         {
           mutt_error _("What we have here is a failure to make an attachment");
           FREE (&new);
@@ -1586,24 +1592,25 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
       case OP_COMPOSE_WRITE_MESSAGE:
 
-        fname[0] = '\0';
+        mutt_buffer_clear (fname);
         if (Context)
         {
-          strfcpy (fname, NONULL (Context->path), sizeof (fname));
-          mutt_pretty_mailbox (fname, sizeof (fname));
+          mutt_buffer_strcpy (fname, NONULL (Context->path));
+          mutt_buffer_pretty_mailbox (fname);
         }
         if (actx->idxlen)
           msg->content = actx->idx[0]->content;
-        if (mutt_enter_fname (_("Write message to mailbox"), fname, sizeof (fname),
-                              1) != -1 && fname[0])
+        if ((mutt_buffer_enter_fname (_("Write message to mailbox"), fname,
+                                      1) != -1) &&
+            mutt_buffer_len (fname))
         {
-          mutt_message (_("Writing message to %s ..."), fname);
-          mutt_expand_path (fname, sizeof (fname));
+          mutt_message (_("Writing message to %s ..."), mutt_b2s (fname));
+          mutt_buffer_expand_path (fname);
 
           if (msg->content->next)
             msg->content = mutt_make_multipart (msg->content);
 
-          if (mutt_write_fcc (fname, msg, NULL, 0, NULL) < 0)
+          if (mutt_write_fcc (mutt_b2s (fname), msg, NULL, 0, NULL) < 0)
             msg->content = mutt_remove_multipart (msg->content);
           else
             mutt_message _("Message written.");
@@ -1717,6 +1724,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 #endif
     }
   }
+
+  mutt_buffer_free (&fname);
 
 #ifdef USE_AUTOCRYPT
   /* This is a fail-safe to make sure the bit isn't somehow turned
