@@ -1497,13 +1497,12 @@ int mutt_pattern_func (int op, char *prompt)
   buf = mutt_buffer_pool_get ();
 
   mutt_buffer_strcpy (buf, NONULL (Context->pattern));
-  if (mutt_get_field (prompt, buf->data, buf->dsize, MUTT_PATTERN | MUTT_CLEAR) != 0 ||
-      !(mutt_b2s (buf)[0]))
+  if ((mutt_buffer_get_field (prompt, buf, MUTT_PATTERN | MUTT_CLEAR) != 0) ||
+      !mutt_buffer_len (buf))
   {
     mutt_buffer_pool_release (&buf);
     return (-1);
   }
-  mutt_buffer_fix_dptr (buf);
 
   mutt_message _("Compiling search pattern...");
 

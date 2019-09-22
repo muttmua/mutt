@@ -447,13 +447,8 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   prompt = _("Save to file: ");
   while (prompt)
   {
-    if (mutt_get_field (prompt, buf->data, buf->dsize, MUTT_FILE | MUTT_CLEAR) != 0)
-    {
-      mutt_clear_error ();
-      goto cleanup;
-    }
-    mutt_buffer_fix_dptr (buf);
-    if (!mutt_buffer_len (buf))
+    if ((mutt_buffer_get_field (prompt, buf, MUTT_FILE | MUTT_CLEAR) != 0) ||
+        !mutt_buffer_len (buf))
       goto cleanup;
 
     prompt = NULL;
@@ -541,12 +536,10 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	  mutt_buffer_strcpy (buf, mutt_basename (NONULL (top->filename)));
 	  prepend_curdir (buf);
 
-	  if (mutt_get_field (_("Save to file: "), buf->data, buf->dsize,
-                              MUTT_FILE | MUTT_CLEAR) != 0)
-	    goto cleanup;
-          mutt_buffer_fix_dptr (buf);
-          if (!mutt_buffer_len (buf))
-              goto cleanup;
+	  if ((mutt_buffer_get_field (_("Save to file: "), buf,
+                                     MUTT_FILE | MUTT_CLEAR) != 0) ||
+              !mutt_buffer_len (buf))
+            goto cleanup;
 	  mutt_buffer_expand_path (buf);
 	  if (mutt_check_overwrite (top->filename, mutt_b2s (buf), tfile,
 				    &append, NULL))

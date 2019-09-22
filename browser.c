@@ -1121,10 +1121,9 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	}
 
         /* buf comes from the buffer pool, so defaults to size LONG_STRING */
-	if (mutt_get_field (_("Chdir to: "), buf->data, buf->dsize, MUTT_FILE) == 0 &&
-	    mutt_b2s (buf)[0])
+	if ((mutt_buffer_get_field (_("Chdir to: "), buf, MUTT_FILE) == 0) &&
+	    mutt_buffer_len (buf))
 	{
-          mutt_buffer_fix_dptr (buf);
 	  buffy = 0;
 	  mutt_buffer_expand_path (buf);
 #ifdef USE_IMAP
@@ -1183,17 +1182,15 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
 	mutt_buffer_strcpy (buf, NONULL(Mask.pattern));
         /* buf comes from the buffer pool, so defaults to size LONG_STRING */
-	if (mutt_get_field (_("File Mask: "), buf->data, buf->dsize, 0) == 0)
+	if (mutt_buffer_get_field (_("File Mask: "), buf, 0) == 0)
 	{
 	  regex_t *rx = (regex_t *) safe_malloc (sizeof (regex_t));
 	  const char *s = mutt_b2s (buf);
 	  int not = 0, err;
 
-          mutt_buffer_fix_dptr (buf);
-
 	  buffy = 0;
 	  /* assume that the user wants to see everything */
-	  if (!(mutt_b2s (buf)[0]))
+	  if (!(mutt_buffer_len (buf)))
 	    mutt_buffer_strcpy (buf, ".");
 	  SKIPWS (s);
 	  if (*s == '!')
@@ -1336,9 +1333,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
 	mutt_buffer_printf (buf, "%s/", mutt_b2s (LastDir));
         /* buf comes from the buffer pool, so defaults to size LONG_STRING */
-	if (mutt_get_field (_("New file name: "), buf->data, buf->dsize, MUTT_FILE) == 0)
+	if (mutt_buffer_get_field (_("New file name: "), buf, MUTT_FILE) == 0)
 	{
-          /* we're about to bail, so no need to fix buf->dptr */
 	  mutt_buffer_strcpy (f, mutt_b2s (buf));
 	  destroy_state (&state);
 	  goto bail;

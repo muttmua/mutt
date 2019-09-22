@@ -1040,12 +1040,10 @@ int _mutt_buffer_enter_fname (const char *prompt, BUFFER *fname, int buffy,
     mutt_unget_event (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
 
     mutt_buffer_increase_size (fname, LONG_STRING);
-    if (_mutt_get_field (pc, fname->data, fname->dsize,
-                         (buffy ? MUTT_EFILE : MUTT_FILE) | MUTT_CLEAR,
-                         multiple, files, numfiles) != 0)
+    if (_mutt_buffer_get_field (pc, fname,
+                                (buffy ? MUTT_EFILE : MUTT_FILE) | MUTT_CLEAR,
+                                multiple, files, numfiles) != 0)
       mutt_buffer_clear (fname);
-    else
-      mutt_buffer_fix_dptr (fname);
     FREE (&pc);
   }
 
