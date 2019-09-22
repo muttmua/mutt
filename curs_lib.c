@@ -209,6 +209,21 @@ event_t mutt_getch (void)
 
 int _mutt_get_field (const char *field, char *buf, size_t buflen, int complete, int multiple, char ***files, int *numfiles)
 {
+  BUFFER *buffer;
+  int rc;
+
+  buffer = mutt_buffer_pool_get ();
+
+  mutt_buffer_addstr (buffer, buf);
+  rc = _mutt_buffer_get_field (field, buffer, complete, multiple, files, numfiles);
+  strfcpy (buf, mutt_b2s (buffer), buflen);
+
+  mutt_buffer_pool_release (&buffer);
+  return rc;
+}
+
+int _mutt_buffer_get_field (const char *field, BUFFER *buffer, int complete, int multiple, char ***files, int *numfiles)
+{
   int ret;
   int x;
 
@@ -231,9 +246,15 @@ int _mutt_get_field (const char *field, char *buf, size_t buflen, int complete, 
     NORMAL_COLOR;
     mutt_refresh ();
     mutt_window_getyx (MuttMessageWindow, NULL, &x);
-    ret = _mutt_enter_string (buf, buflen, x, complete, multiple, files, numfiles, es);
+    ret = _mutt_enter_string (buffer->data, buffer->dsize, x, complete, multiple, files, numfiles, es);
   }
   while (ret == 1);
+
+  if (ret != 0)
+    mutt_buffer_clear (buffer);
+  else
+    mutt_buffer_fix_dptr (buffer);
+
   mutt_window_clearline (MuttMessageWindow, 0);
   mutt_free_enter_state (&es);
 
