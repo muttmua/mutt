@@ -646,17 +646,18 @@ static int have_gpg_version (const char *version)
    Return NULL on error or the gpgme_data_t object on success. */
 static gpgme_data_t body_to_data_object (BODY *a, int convert)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *fptmp;
-  int err = 0;
-  gpgme_data_t data;
+  int err;
+  gpgme_data_t data = NULL;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  fptmp = safe_fopen (tempfile, "w+");
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  fptmp = safe_fopen (mutt_b2s (tempfile), "w+");
   if (!fptmp)
     {
-      mutt_perror (tempfile);
-      return NULL;
+      mutt_perror (mutt_b2s (tempfile));
+      goto cleanup;
     }
 
   mutt_write_mime_header (a, fptmp);
@@ -694,15 +695,19 @@ static gpgme_data_t body_to_data_object (BODY *a, int convert)
   else
     {
       safe_fclose (&fptmp);
-      err = gpgme_data_new_from_file (&data, tempfile, 1);
+      err = gpgme_data_new_from_file (&data, mutt_b2s (tempfile), 1);
+      if (err)
+        {
+          mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
+          gpgme_data_release (data);
+          data = NULL;
+          /* fall through to unlink the tempfile */
+        }
     }
-  unlink (tempfile);
-  if (err)
-    {
-      mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
-      return NULL;
-    }
+  unlink (mutt_b2s (tempfile));
 
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
   return data;
 }
 
@@ -769,22 +774,24 @@ static int data_object_to_stream (gpgme_data_t data, FILE *fp)
  * via that parameter.
  * The tempfile name is returned, and must be freed.
  */
-static char *data_object_to_tempfile (gpgme_data_t data, char *tempf, FILE **ret_fp)
+static char *data_object_to_tempfile (gpgme_data_t data, const char *tempf, FILE **ret_fp)
 {
   int err;
-  char tempfb[_POSIX_PATH_MAX];
+  BUFFER *tempfb = NULL;
+  char *rv = NULL;
   FILE *fp;
   size_t nread = 0;
 
   if (!tempf)
     {
-      mutt_mktemp (tempfb, sizeof (tempfb));
-      tempf = tempfb;
+      tempfb = mutt_buffer_pool_get ();
+      mutt_buffer_mktemp (tempfb);
+      tempf = mutt_b2s (tempfb);
     }
-  if ((fp = safe_fopen (tempf, tempf == tempfb ? "w+" : "a+")) == NULL)
+  if ((fp = safe_fopen (tempf, tempf == mutt_b2s (tempfb) ? "w+" : "a+")) == NULL)
     {
       mutt_perror _("Can't create temporary file");
-      return NULL;
+      goto cleanup;
     }
 
   err = ((gpgme_data_seek (data, 0, SEEK_SET) == -1)
@@ -800,7 +807,7 @@ static char *data_object_to_tempfile (gpgme_data_t data, char *tempf, FILE **ret
               mutt_perror (tempf);
               safe_fclose (&fp);
               unlink (tempf);
-              return NULL;
+              goto cleanup;
             }
         }
     }
@@ -813,11 +820,15 @@ static char *data_object_to_tempfile (gpgme_data_t data, char *tempf, FILE **ret
       mutt_error (_("error reading data object: %s\n"), gpgme_strerror (err));
       unlink (tempf);
       safe_fclose (&fp);
-      return NULL;
+      goto cleanup;
     }
   if (ret_fp)
     *ret_fp = fp;
-  return safe_strdup (tempf);
+  rv = safe_strdup (tempf);
+
+cleanup:
+  mutt_buffer_pool_release (&tempfb);
+  return rv;
 }
 
 
@@ -2099,7 +2110,7 @@ cleanup:
    the stream in CUR and FPOUT.  Returns 0 on success. */
 int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   STATE s;
   BODY *first_part = b;
   int is_signed = 0;
@@ -2128,6 +2139,8 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   else
     return -1;
 
+  tempfile = mutt_buffer_pool_get ();
+
   memset (&s, 0, sizeof (s));
   s.fpin = fpin;
 
@@ -2137,13 +2150,14 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
     saved_offset = b->offset;
     saved_length = b->length;
 
-    mutt_mktemp (tempfile, sizeof (tempfile));
-    if ((decoded_fp = safe_fopen (tempfile, "w+")) == NULL)
+    mutt_buffer_mktemp (tempfile);
+    if ((decoded_fp = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
     {
-      mutt_perror (tempfile);
-      return (-1);
+      mutt_perror (mutt_b2s (tempfile));
+      rv = -1;
+      goto bail;
     }
-    unlink (tempfile);
+    unlink (mutt_b2s (tempfile));
 
     fseeko (s.fpin, b->offset, 0);
     s.fpout = decoded_fp;
@@ -2158,14 +2172,14 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
     s.fpout = 0;
   }
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(*fpout = safe_fopen (tempfile, "w+")))
+  mutt_buffer_mktemp (tempfile);
+  if (!(*fpout = safe_fopen (mutt_b2s (tempfile), "w+")))
   {
-    mutt_perror (tempfile);
+    mutt_perror (mutt_b2s (tempfile));
     rv = -1;
     goto bail;
   }
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
 
   if ((*cur = decrypt_part (b, &s, *fpout, 0, &is_signed)) == NULL)
   {
@@ -2180,6 +2194,8 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   }
 
 bail:
+  mutt_buffer_pool_release (&tempfile);
+
   if (need_decode)
   {
     b->type = saved_type;
@@ -2196,7 +2212,7 @@ bail:
    the stream in CUR and FPOUT.  Returns 0 on success. */
 int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   STATE s;
   FILE *tmpfp=NULL;
   int is_signed;
@@ -2210,6 +2226,9 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   if (b->parts)
     return -1;
 
+  *cur = NULL;
+  tempfile = mutt_buffer_pool_get ();
+
   /* Decode the body - we need to pass binary CMS to the
      backend.  The backend allows for Base64 encoded data but it does
      not allow for QP which I have seen in some messages.  So better
@@ -2220,13 +2239,13 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   memset (&s, 0, sizeof (s));
   s.fpin = fpin;
   fseeko (s.fpin, b->offset, 0);
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(tmpfp = safe_fopen (tempfile, "w+")))
+  mutt_buffer_mktemp (tempfile);
+  if (!(tmpfp = safe_fopen (mutt_b2s (tempfile), "w+")))
     {
-      mutt_perror (tempfile);
-      return -1;
+      mutt_perror (mutt_b2s (tempfile));
+      goto bail;
     }
-  mutt_unlink (tempfile);
+  mutt_unlink (mutt_b2s (tempfile));
 
   s.fpout = tmpfp;
   mutt_decode_attachment (b, &s);
@@ -2238,13 +2257,13 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   memset (&s, 0, sizeof (s));
   s.fpin = tmpfp;
   s.fpout = 0;
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(*fpout = safe_fopen (tempfile, "w+")))
+  mutt_buffer_mktemp (tempfile);
+  if (!(*fpout = safe_fopen (mutt_b2s (tempfile), "w+")))
     {
-      mutt_perror (tempfile);
-      return -1;
+      mutt_perror (mutt_b2s (tempfile));
+      goto bail;
     }
-  mutt_unlink (tempfile);
+  mutt_unlink (mutt_b2s (tempfile));
 
   *cur = decrypt_part (b, &s, *fpout, 1, &is_signed);
   if (*cur)
@@ -2274,13 +2293,13 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
       memset (&s, 0, sizeof (s));
       s.fpin = *fpout;
       fseeko (s.fpin, bb->offset, 0);
-      mutt_mktemp (tempfile, sizeof (tempfile));
-      if (!(tmpfp = safe_fopen (tempfile, "w+")))
+      mutt_buffer_mktemp (tempfile);
+      if (!(tmpfp = safe_fopen (mutt_b2s (tempfile), "w+")))
         {
-          mutt_perror (tempfile);
-          return -1;
+          mutt_perror (mutt_b2s (tempfile));
+          goto bail;
         }
-      mutt_unlink (tempfile);
+      mutt_unlink (mutt_b2s (tempfile));
 
       s.fpout = tmpfp;
       mutt_decode_attachment (bb, &s);
@@ -2293,13 +2312,13 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
       memset (&s, 0, sizeof (s));
       s.fpin = tmpfp;
       s.fpout = 0;
-      mutt_mktemp (tempfile, sizeof (tempfile));
-      if (!(*fpout = safe_fopen (tempfile, "w+")))
+      mutt_buffer_mktemp (tempfile);
+      if (!(*fpout = safe_fopen (mutt_b2s (tempfile), "w+")))
         {
-          mutt_perror (tempfile);
-          return -1;
+          mutt_perror (mutt_b2s (tempfile));
+          goto bail;
         }
-      mutt_unlink (tempfile);
+      mutt_unlink (mutt_b2s (tempfile));
 
       tmp_b = decrypt_part (bb, &s, *fpout, 1, &is_signed);
       if (tmp_b)
@@ -2312,7 +2331,14 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
       mutt_free_body (cur);
       *cur = tmp_b;
     }
+
+  mutt_buffer_pool_release (&tempfile);
   return *cur? 0:-1;
+
+bail:
+  mutt_buffer_pool_release (&tempfile);
+  mutt_free_body (cur);
+  return -1;
 }
 
 static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
@@ -2321,8 +2347,8 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
    * way to view key data in GPGME, so we import the key into a
    * temporary keyring if we detect an older system.  */
   int legacy_api;
-  char tmpdir[_POSIX_PATH_MAX];
-  char tmpfile[_POSIX_PATH_MAX];
+  BUFFER *tmpdir = NULL;
+  BUFFER *tmpfile = NULL;
   gpgme_ctx_t tmpctx;
   gpgme_error_t err;
   gpgme_engine_info_t engineinfo;
@@ -2346,8 +2372,9 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
 
   if (legacy_api)
   {
-    snprintf (tmpdir, sizeof(tmpdir), "%s/mutt-gpgme-XXXXXX", NONULL (Tempdir));
-    if (!mkdtemp (tmpdir))
+    tmpdir = mutt_buffer_pool_get ();
+    mutt_buffer_printf (tmpdir, "%s/mutt-gpgme-XXXXXX", NONULL (Tempdir));
+    if (!mkdtemp (tmpdir->data))
     {
       dprint (1, (debugfile, "Error creating temporary GPGME home\n"));
       goto err_ctx;
@@ -2363,7 +2390,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
     }
 
     err = gpgme_ctx_set_engine_info (tmpctx, GPGME_PROTOCOL_OpenPGP,
-                                     engineinfo->file_name, tmpdir);
+                                     engineinfo->file_name, mutt_b2s (tmpdir));
     if (err != GPG_ERR_NO_ERROR)
     {
       dprint (1, (debugfile, "Error setting GPGME context home\n"));
@@ -2371,14 +2398,15 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
     }
   }
 
-  mutt_mktemp (tmpfile, sizeof (tmpfile));
-  *fp = safe_fopen (tmpfile, "w+");
+  tmpfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmpfile);
+  *fp = safe_fopen (mutt_b2s (tmpfile), "w+");
   if (!*fp)
   {
-    mutt_perror (tmpfile);
+    mutt_perror (mutt_b2s (tmpfile));
     goto err_tmpdir;
   }
-  unlink (tmpfile);
+  unlink (mutt_b2s (tmpfile));
 
 #if GPGME_VERSION_NUMBER >= 0x010900 /* 1.9.0 */
   if (!legacy_api)
@@ -2430,9 +2458,12 @@ err_fp:
     safe_fclose (fp);
 err_tmpdir:
   if (legacy_api)
-    mutt_rmtree (tmpdir);
+    mutt_rmtree (mutt_b2s (tmpdir));
 err_ctx:
   gpgme_release (tmpctx);
+
+  mutt_buffer_pool_release (&tmpdir);
+  mutt_buffer_pool_release (&tmpfile);
 
   return rc;
 }
@@ -2467,9 +2498,10 @@ static int line_compare(const char *a, size_t n, const char *b)
 
 static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   char buf[HUGE_STRING];
   FILE *tfp;
+  int rv = 0;
 
   short sgn = 0;
   short enc = 0;
@@ -2477,17 +2509,18 @@ static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
   if (b->type != TYPETEXT)
     return 0;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (mutt_decode_save_attachment (fp, b, tempfile, 0, 0) != 0)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if (mutt_decode_save_attachment (fp, b, mutt_b2s (tempfile), 0, 0) != 0)
   {
-    unlink (tempfile);
-    return 0;
+    unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
-  if ((tfp = fopen (tempfile, "r")) == NULL)
+  if ((tfp = fopen (mutt_b2s (tempfile), "r")) == NULL)
   {
-    unlink (tempfile);
-    return 0;
+    unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
   while (fgets (buf, sizeof (buf), tfp))
@@ -2507,10 +2540,10 @@ static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
     }
   }
   safe_fclose (&tfp);
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
 
   if (!enc && !sgn)
-    return 0;
+    goto cleanup;
 
   /* fix the content type */
 
@@ -2518,7 +2551,11 @@ static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
   mutt_set_parameter ("x-action", enc ? "pgp-encrypted" : "pgp-signed",
                       &b->parameter);
 
-  return 1;
+  rv = 1;
+
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
+  return rv;
 }
 
 int pgp_gpgme_check_traditional (FILE *fp, BODY *b, int just_one)
@@ -2965,7 +3002,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
  */
 int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *fpout;
   BODY *tattach;
   int is_signed;
@@ -2973,13 +3010,17 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
 
   dprint (2, (debugfile, "Entering pgp_encrypted handler\n"));
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(fpout = safe_fopen (tempfile, "w+")))
+  /* Note: the handler calls mutt_body_handler()
+   * so we don't use the pool for this operation. */
+  tempfile = mutt_buffer_new ();
+  mutt_buffer_mktemp (tempfile);
+  if (!(fpout = safe_fopen (mutt_b2s (tempfile), "w+")))
     {
       if (s->flags & MUTT_DISPLAY)
         state_attach_puts (_("[-- Error: could not create temporary file! "
                              "--]\n"), s);
-      return -1;
+      rc = -1;
+      goto cleanup;
     }
 
   tattach = decrypt_part (a, s, fpout, 0, &is_signed);
@@ -3055,16 +3096,18 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
     }
 
   safe_fclose (&fpout);
-  mutt_unlink(tempfile);
+  mutt_unlink(mutt_b2s (tempfile));
   dprint (2, (debugfile, "Leaving pgp_encrypted handler\n"));
 
+cleanup:
+  mutt_buffer_free (&tempfile);
   return rc;
 }
 
 /* Support for application/smime */
 int smime_gpgme_application_handler (BODY *a, STATE *s)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *fpout;
   BODY *tattach;
   int is_signed;
@@ -3077,13 +3120,18 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
   mutt_free_envelope (&a->mime_headers);
 
   a->warnsig = 0;
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(fpout = safe_fopen (tempfile, "w+")))
+
+  /* Note: the handler calls mutt_body_handler()
+   * so we don't use the pool for this operation. */
+  tempfile = mutt_buffer_new ();
+  mutt_buffer_mktemp (tempfile);
+  if (!(fpout = safe_fopen (mutt_b2s (tempfile), "w+")))
     {
       if (s->flags & MUTT_DISPLAY)
         state_attach_puts (_("[-- Error: could not create temporary file! "
                              "--]\n"), s);
-      return -1;
+      rc = -1;
+      goto cleanup;
     }
 
   tattach = decrypt_part (a, s, fpout, 1, &is_signed);
@@ -3157,9 +3205,11 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
     }
 
   safe_fclose (&fpout);
-  mutt_unlink(tempfile);
+  mutt_unlink(mutt_b2s (tempfile));
   dprint (2, (debugfile, "Leaving smime_encrypted handler\n"));
 
+cleanup:
+  mutt_buffer_free (&tempfile);
   return rc;
 }
 
@@ -4117,18 +4167,21 @@ static void
 verify_key (crypt_key_t *key)
 {
   FILE *fp;
-  char cmd[LONG_STRING], tempfile[_POSIX_PATH_MAX];
+  char cmd[LONG_STRING];
+  BUFFER *tempfile = NULL;
   const char *s;
   gpgme_ctx_t listctx = NULL;
   gpgme_error_t err;
   gpgme_key_t k = NULL;
   int maxdepth = 100;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(fp = safe_fopen (tempfile, "w")))
+  /* because of the do_pager() call below, we avoid using the buffer pool */
+  tempfile = mutt_buffer_new ();
+  mutt_buffer_mktemp (tempfile);
+  if (!(fp = safe_fopen (mutt_b2s (tempfile), "w")))
     {
       mutt_perror _("Can't create temporary file");
-      return;
+      goto cleanup;
     }
   mutt_message _("Collecting data...");
 
@@ -4170,7 +4223,10 @@ verify_key (crypt_key_t *key)
   safe_fclose (&fp);
   mutt_clear_error ();
   snprintf (cmd, sizeof (cmd), _("Key ID: 0x%s"),  crypt_keyid (key));
-  mutt_do_pager (cmd, tempfile, 0, NULL);
+  mutt_do_pager (cmd, mutt_b2s (tempfile), 0, NULL);
+
+cleanup:
+  mutt_buffer_free (&tempfile);
 }
 
 /*
