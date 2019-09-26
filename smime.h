@@ -61,7 +61,7 @@ smime_key_t *smime_ask_for_key(char *, short, short);
 
 char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode);
 
-void  smime_invoke_import (char *, char *);
+void  smime_invoke_import (const char *, const char *);
 
 int smime_send_menu (HEADER *msg);
 

@@ -434,7 +434,7 @@ BODY *crypt_smime_build_smime_entity (BODY *a, char *certlist)
 }
 
 /* Add a certificate and update index file (externally). */
-void crypt_smime_invoke_import (char *infile, char *mailbox)
+void crypt_smime_invoke_import (const char *infile, const char *mailbox)
 {
   if (CRYPT_MOD_CALL_CHECK (SMIME, smime_invoke_import))
     (CRYPT_MOD_CALL (SMIME, smime_invoke_import)) (infile, mailbox);

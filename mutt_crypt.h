@@ -297,7 +297,7 @@ BODY *crypt_smime_sign_message (BODY *a);
 BODY *crypt_smime_build_smime_entity (BODY *a, char *certlist);
 
 /* Add a certificate and update index file (externally). */
-void crypt_smime_invoke_import (char *infile, char *mailbox);
+void crypt_smime_invoke_import (const char *infile, const char *mailbox);
 
 int crypt_smime_send_menu (HEADER *msg);
 

@@ -1037,7 +1037,7 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
 
 
-static char *smime_extract_certificate (char *infile)
+static char *smime_extract_certificate (const char *infile)
 {
   FILE *fpout = NULL, *fperr = NULL;
   char pk7out[_POSIX_PATH_MAX], certfile[_POSIX_PATH_MAX];
@@ -1216,7 +1216,7 @@ static char *smime_extract_signer_certificate (char *infile)
 
 /* Add a certificate and update index file (externally). */
 
-void smime_invoke_import (char *infile, char *mailbox)
+void smime_invoke_import (const char *infile, const char *mailbox)
 {
   char tmpfname[_POSIX_PATH_MAX], *certfile = NULL, buf[STRING];
   FILE *smimein=NULL, *fpout = NULL, *fperr = NULL;

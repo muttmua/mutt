@@ -727,18 +727,20 @@ void convert_to_7bit (BODY *a)
 void crypt_extract_keys_from_messages (HEADER * h)
 {
   int i;
-  char tempfname[_POSIX_PATH_MAX], *mbox;
+  BUFFER *tempfname = NULL;
+  char *mbox;
   ADDRESS *tmp = NULL;
   FILE *fpout;
 
   if (!WithCrypto)
     return;
 
-  mutt_mktemp (tempfname, sizeof (tempfname));
-  if (!(fpout = safe_fopen (tempfname, "w")))
+  tempfname = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfname);
+  if (!(fpout = safe_fopen (mutt_b2s (tempfname), "w")))
   {
-    mutt_perror (tempfname);
-    return;
+    mutt_perror (mutt_b2s (tempfname));
+    goto cleanup;
   }
 
   if ((WithCrypto & APPLICATION_PGP))
@@ -766,7 +768,7 @@ void crypt_extract_keys_from_messages (HEADER * h)
 	  fflush(fpout);
 
 	  mutt_endwin (_("Trying to extract PGP keys...\n"));
-	  crypt_pgp_invoke_import (tempfname);
+	  crypt_pgp_invoke_import (mutt_b2s (tempfname));
 	}
 
 	if ((WithCrypto & APPLICATION_SMIME)
@@ -789,7 +791,7 @@ void crypt_extract_keys_from_messages (HEADER * h)
 	  if (mbox)
 	  {
 	    mutt_endwin (_("Trying to extract S/MIME certificates...\n"));
-	    crypt_smime_invoke_import (tempfname, mbox);
+	    crypt_smime_invoke_import (mutt_b2s (tempfname), mbox);
 	    tmp = NULL;
 	  }
 	}
@@ -809,7 +811,7 @@ void crypt_extract_keys_from_messages (HEADER * h)
 	mutt_copy_message (fpout, Context, h, MUTT_CM_DECODE|MUTT_CM_CHARCONV, 0);
 	fflush(fpout);
 	mutt_endwin (_("Trying to extract PGP keys...\n"));
-	crypt_pgp_invoke_import (tempfname);
+	crypt_pgp_invoke_import (mutt_b2s (tempfname));
       }
 
       if ((WithCrypto & APPLICATION_SMIME)
@@ -829,7 +831,7 @@ void crypt_extract_keys_from_messages (HEADER * h)
 	if (mbox) /* else ? */
 	{
 	  mutt_message (_("Trying to extract S/MIME certificates...\n"));
-	  crypt_smime_invoke_import (tempfname, mbox);
+	  crypt_smime_invoke_import (mutt_b2s (tempfname), mbox);
 	}
       }
     }
@@ -839,10 +841,13 @@ void crypt_extract_keys_from_messages (HEADER * h)
   if (isendwin())
     mutt_any_key_to_continue (NULL);
 
-  mutt_unlink (tempfname);
+  mutt_unlink (mutt_b2s (tempfname));
 
   if ((WithCrypto & APPLICATION_PGP))
     unset_option (OPTDONTHANDLEPGPKEYS);
+
+cleanup:
+  mutt_buffer_pool_release (&tempfname);
 }
 
 
@@ -1011,7 +1016,7 @@ int mutt_protected_headers_handler (BODY *a, STATE *s)
 
 int mutt_signed_handler (BODY *a, STATE *s)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   int signed_type;
   int inconsistent = 0;
 
@@ -1078,8 +1083,9 @@ int mutt_signed_handler (BODY *a, STATE *s)
 
     if (sigcnt)
     {
-      mutt_mktemp (tempfile, sizeof (tempfile));
-      if (crypt_write_signed (a, s, tempfile) == 0)
+      tempfile = mutt_buffer_pool_get ();
+      mutt_buffer_mktemp (tempfile);
+      if (crypt_write_signed (a, s, mutt_b2s (tempfile)) == 0)
       {
 	for (i = 0; i < sigcnt; i++)
 	{
@@ -1087,7 +1093,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
               && signatures[i]->type == TYPEAPPLICATION
 	      && !ascii_strcasecmp (signatures[i]->subtype, "pgp-signature"))
 	  {
-	    if (crypt_pgp_verify_one (signatures[i], s, tempfile) != 0)
+	    if (crypt_pgp_verify_one (signatures[i], s, mutt_b2s (tempfile)) != 0)
 	      goodsig = 0;
 
 	    continue;
@@ -1098,7 +1104,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
 	      && (!ascii_strcasecmp(signatures[i]->subtype, "x-pkcs7-signature")
 		  || !ascii_strcasecmp(signatures[i]->subtype, "pkcs7-signature")))
 	  {
-	    if (crypt_smime_verify_one (signatures[i], s, tempfile) != 0)
+	    if (crypt_smime_verify_one (signatures[i], s, mutt_b2s (tempfile)) != 0)
 	      goodsig = 0;
 
 	    continue;
@@ -1110,7 +1116,8 @@ int mutt_signed_handler (BODY *a, STATE *s)
 	}
       }
 
-      mutt_unlink (tempfile);
+      mutt_unlink (mutt_b2s (tempfile));
+      mutt_buffer_pool_release (&tempfile);
 
       b->goodsig = goodsig;
       b->badsig  = !goodsig;

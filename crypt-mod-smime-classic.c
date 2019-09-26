@@ -81,7 +81,7 @@ static BODY *crypt_mod_smime_build_smime_entity (BODY *a, char *certlist)
   return smime_build_smime_entity (a, certlist);
 }
 
-static void crypt_mod_smime_invoke_import (char *infile, char *mailbox)
+static void crypt_mod_smime_invoke_import (const char *infile, const char *mailbox)
 {
   smime_invoke_import (infile, mailbox);
 }

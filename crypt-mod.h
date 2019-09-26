@@ -62,7 +62,7 @@ typedef int (*crypt_func_smime_verify_sender_t) (HEADER *h);
 typedef BODY *(*crypt_func_smime_build_smime_entity_t) (BODY *a,
                                                         char *certlist);
 
-typedef void (*crypt_func_smime_invoke_import_t) (char *infile, char *mailbox);
+typedef void (*crypt_func_smime_invoke_import_t) (const char *infile, const char *mailbox);
 
 typedef void (*crypt_func_init_t) (void);
 
