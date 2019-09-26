@@ -526,7 +526,7 @@ static void error_history_dump (FILE *f)
 void mutt_error_history_display ()
 {
   static int in_process = 0;
-  char t[_POSIX_PATH_MAX];
+  BUFFER *t = NULL;
   FILE *f;
 
   if (!ErrorHistSize)
@@ -541,18 +541,22 @@ void mutt_error_history_display ()
     return;
   }
 
-  mutt_mktemp (t, sizeof (t));
-  if ((f = safe_fopen (t, "w")) == NULL)
+  t = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (t);
+  if ((f = safe_fopen (mutt_b2s (t), "w")) == NULL)
   {
-    mutt_perror (t);
-    return;
+    mutt_perror (mutt_b2s (t));
+    goto cleanup;
   }
   error_history_dump (f);
   safe_fclose (&f);
 
   in_process = 1;
-  mutt_do_pager (_("Error History"), t, 0, NULL);
+  mutt_do_pager (_("Error History"), mutt_b2s (t), 0, NULL);
   in_process = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&t);
 }
 
 static void curses_message (int error, const char *fmt, va_list ap)
