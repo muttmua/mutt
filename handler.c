@@ -1607,7 +1607,7 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
   int origType;
   char *savePrefix = NULL;
   FILE *fp = NULL;
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   size_t tmplength = 0;
   LOFF_T tmpoffset = 0;
   int decode = 0;
@@ -1630,11 +1630,13 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
     {
       /* decode to a tempfile, saving the original destination */
       fp = s->fpout;
-      mutt_mktemp (tempfile, sizeof (tempfile));
-      if ((s->fpout = safe_fopen (tempfile, "w")) == NULL)
+      tempfile = mutt_buffer_pool_get ();
+      mutt_buffer_mktemp (tempfile);
+      if ((s->fpout = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
       {
         mutt_error _("Unable to open temporary file!");
-        dprint (1, (debugfile, "Can't open %s.\n", tempfile));
+        dprint (1, (debugfile, "Can't open %s.\n", mutt_b2s (tempfile)));
+        mutt_buffer_pool_release (&tempfile);
         return -1;
       }
       /* decoding the attachment changes the size and offset, so save a copy
@@ -1665,8 +1667,9 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
       /* restore final destination and substitute the tempfile for input */
       s->fpout = fp;
       fp = s->fpin;
-      s->fpin = fopen (tempfile, "r");
-      unlink (tempfile);
+      s->fpin = fopen (mutt_b2s (tempfile), "r");
+      unlink (mutt_b2s (tempfile));
+      mutt_buffer_pool_release (&tempfile);
 
       /* restore the prefix */
       s->prefix = savePrefix;
