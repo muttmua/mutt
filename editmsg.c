@@ -45,7 +45,7 @@
 
 static int edit_one_message (CONTEXT *ctx, HEADER *cur)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   char buff[STRING];
   int omagic;
   int oerrno;
@@ -64,18 +64,20 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
   struct stat sb;
   time_t mtime = 0;
 
-  mutt_mktemp (tmp, sizeof (tmp));
+  tmp = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmp);
 
   omagic = DefaultMagic;
   DefaultMagic = MUTT_MBOX;
 
-  rc = (mx_open_mailbox (tmp, MUTT_NEWFOLDER, &tmpctx) == NULL) ? -1 : 0;
+  rc = (mx_open_mailbox (mutt_b2s (tmp), MUTT_NEWFOLDER, &tmpctx) == NULL) ? -1 : 0;
 
   DefaultMagic = omagic;
 
   if (rc == -1)
   {
     mutt_error (_("could not create temporary folder: %s"), strerror (errno));
+    mutt_buffer_pool_release (&tmp);
     return -1;
   }
 
@@ -91,9 +93,9 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
     goto bail;
   }
 
-  if ((rc = stat (tmp, &sb)) == -1)
+  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), tmp, strerror (errno));
+    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
     goto bail;
   }
 
@@ -105,20 +107,21 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
    * remove it, the message will grow by one line each time the user edits
    * the message.
    */
-  if (sb.st_size != 0 && truncate (tmp, sb.st_size - 1) == -1)
+  if (sb.st_size != 0 &&
+      truncate (mutt_b2s (tmp), sb.st_size - 1) == -1)
   {
     mutt_error (_("could not truncate temporary mail folder: %s"),
 		strerror (errno));
     goto bail;
   }
 
-  mtime = mutt_decrease_mtime (tmp, &sb);
+  mtime = mutt_decrease_mtime (mutt_b2s (tmp), &sb);
 
-  mutt_edit_file (NONULL(Editor), tmp);
+  mutt_edit_file (NONULL(Editor), mutt_b2s (tmp));
 
-  if ((rc = stat (tmp, &sb)) == -1)
+  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), tmp, strerror (errno));
+    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
     goto bail;
   }
 
@@ -136,7 +139,7 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
     goto bail;
   }
 
-  if ((fp = fopen (tmp, "r")) == NULL)
+  if ((fp = fopen (mutt_b2s (tmp), "r")) == NULL)
   {
     rc = -1;
     mutt_error (_("Can't open message file: %s"), strerror (errno));
@@ -195,7 +198,7 @@ bail:
   if (fp) safe_fclose (&fp);
 
   if (rc >= 0)
-    unlink (tmp);
+    unlink (mutt_b2s (tmp));
 
   if (rc == 0)
   {
@@ -207,8 +210,9 @@ bail:
       mutt_set_flag (Context, cur, MUTT_TAG, 0);
   }
   else if (rc == -1)
-    mutt_message (_("Error. Preserving temporary file: %s"), tmp);
+    mutt_message (_("Error. Preserving temporary file: %s"), mutt_b2s (tmp));
 
+  mutt_buffer_pool_release (&tmp);
 
   return rc;
 }
