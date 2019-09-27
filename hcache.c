@@ -93,7 +93,7 @@ struct header_cache
   char *folder;
   unsigned int crc;
   int fd;
-  char lockfile[_POSIX_PATH_MAX];
+  BUFFER *lockfile;
 };
 
 static void mutt_hcache_dbt_init(DBT * dbt, void *data, size_t len);
@@ -1265,13 +1265,14 @@ hcache_open_db4 (struct header_cache* h, const char* path)
   if (pagesize <= 0)
     pagesize = 16384;
 
-  snprintf (h->lockfile, _POSIX_PATH_MAX, "%s-lock-hack", path);
+  h->lockfile = mutt_buffer_new ();
+  mutt_buffer_printf (h->lockfile, "%s-lock-hack", path);
 
-  h->fd = open (h->lockfile, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+  h->fd = open (mutt_b2s (h->lockfile), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
   if (h->fd < 0)
     return -1;
 
-  if (mx_lock_file (h->lockfile, h->fd, 1, 0, 5))
+  if (mx_lock_file (mutt_b2s (h->lockfile), h->fd, 1, 0, 5))
     goto fail_close;
 
   ret = db_env_create (&h->env, 0);
@@ -1305,10 +1306,11 @@ fail_db:
 fail_env:
   h->env->close (h->env, 0);
 fail_unlock:
-  mx_unlock_file (h->lockfile, h->fd, 0);
+  mx_unlock_file (mutt_b2s (h->lockfile), h->fd, 0);
 fail_close:
   close (h->fd);
-  unlink (h->lockfile);
+  unlink (mutt_b2s (h->lockfile));
+  mutt_buffer_free (&h->lockfile);
 
   return -1;
 }
@@ -1321,9 +1323,10 @@ mutt_hcache_close(header_cache_t *h)
 
   h->db->close (h->db, 0);
   h->env->close (h->env, 0);
-  mx_unlock_file (h->lockfile, h->fd, 0);
+  mx_unlock_file (mutt_b2s (h->lockfile), h->fd, 0);
   close (h->fd);
-  unlink (h->lockfile);
+  unlink (mutt_b2s (h->lockfile));
+  mutt_buffer_free (&h->lockfile);
   FREE (&h->folder);
   FREE (&h);
 }
