@@ -798,16 +798,13 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
                        size_t(*keylen) (const char *fn))
 {
 #ifndef HAVE_DB4
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   int ksize;
+  void *rv = NULL;
 #endif
-#ifdef HAVE_QDBM
-  char *data = NULL;
-#elif HAVE_TC
-  void *data;
+#if HAVE_TC
   int sp;
 #elif HAVE_KC
-  void *data;
   size_t sp;
 #elif HAVE_GDBM
   datum key;
@@ -834,42 +831,39 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
   h->db->get(h->db, NULL, &key, &data, 0);
 
   return data.data;
-#else
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
 
-  ksize = strlen (h->folder) + keylen (path + strlen (h->folder));
-#endif
+#else
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
+
+  ksize = strlen (h->folder) + keylen (filename);
 
 #ifdef HAVE_QDBM
-  data = vlget(h->db, path, ksize, NULL);
-
-  return data;
+  rv = vlget(h->db, mutt_b2s (path), ksize, NULL);
 #elif HAVE_TC
-  data = tcbdbget(h->db, path, ksize, &sp);
-
-  return data;
+  rv = tcbdbget(h->db, mutt_b2s (path), ksize, &sp);
 #elif HAVE_KC
-  data = kcdbget(h->db, path, ksize, &sp);
-
-  return data;
+  rv = kcdbget(h->db, mutt_b2s (path), ksize, &sp);
 #elif HAVE_GDBM
-  key.dptr = path;
+  key.dptr = path->data;
   key.dsize = ksize;
 
   data = gdbm_fetch(h->db, key);
 
-  return data.dptr;
+  rv = data.dptr;
 #elif HAVE_LMDB
-  key.mv_data = path;
+  key.mv_data = path->data;
   key.mv_size = ksize;
-  if ((mdb_get_r_txn (h) != MDB_SUCCESS) ||
-      (mdb_get (h->txn, h->db, &key, &data) != MDB_SUCCESS))
-    return NULL;
-
   /* LMDB claims ownership of the returned data, so this will not be
    * freed in mutt_hcache_free(). */
-  return data.mv_data;
+  if ((mdb_get_r_txn (h) == MDB_SUCCESS) &&
+      (mdb_get (h->txn, h->db, &key, &data) == MDB_SUCCESS))
+    rv = data.mv_data;
+#endif
+
+  mutt_buffer_pool_release (&path);
+  return rv;
 #endif
 }
 
@@ -905,8 +899,9 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
                        size_t dlen, size_t(*keylen) (const char* fn))
 {
 #ifndef HAVE_DB4
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   int ksize;
+  int rv = 0;
 #endif
 #if HAVE_GDBM
   datum key;
@@ -917,7 +912,6 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
 #elif HAVE_LMDB
   MDB_val key;
   MDB_val databuf;
-  int rc;
 #endif
 
   if (!h)
@@ -936,44 +930,48 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
   databuf.ulen = dlen;
 
   return h->db->put(h->db, NULL, &key, &databuf, 0);
-#else
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
 
-  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
-#endif
+#else
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
+
+  ksize = strlen(h->folder) + keylen(filename);
 
 #if HAVE_QDBM
-  return vlput(h->db, path, ksize, data, dlen, VL_DOVER);
+  rv = vlput(h->db, mutt_b2s (path), ksize, data, dlen, VL_DOVER);
 #elif HAVE_TC
-  return tcbdbput(h->db, path, ksize, data, dlen);
+  rv = tcbdbput(h->db, mutt_b2s (path), ksize, data, dlen);
 #elif HAVE_KC
-  return kcdbset(h->db, path, ksize, data, dlen);
+  rv = kcdbset(h->db, mutt_b2s (path), ksize, data, dlen);
 #elif HAVE_GDBM
-  key.dptr = path;
+  key.dptr = path->data;
   key.dsize = ksize;
 
   databuf.dsize = dlen;
   databuf.dptr = data;
 
-  return gdbm_store(h->db, key, databuf, GDBM_REPLACE);
+  rv = gdbm_store(h->db, key, databuf, GDBM_REPLACE);
 #elif HAVE_LMDB
-  key.mv_data = path;
+  key.mv_data = path->data;
   key.mv_size = ksize;
   databuf.mv_data = data;
   databuf.mv_size = dlen;
-  if ((rc = mdb_get_w_txn (h)) != MDB_SUCCESS)
-    return rc;
-
-  if ((rc = mdb_put (h->txn, h->db, &key, &databuf, 0)) != MDB_SUCCESS)
+  if ((rv = mdb_get_w_txn (h)) == MDB_SUCCESS)
   {
-    dprint (2, (debugfile, "mutt_hcache_store_raw: mdb_put: %s\n",
-                mdb_strerror(rc)));
-    mdb_txn_abort (h->txn);
-    h->txn_mode = txn_uninitialized;
-    h->txn = NULL;
+    if ((rv = mdb_put (h->txn, h->db, &key, &databuf, 0)) != MDB_SUCCESS)
+    {
+      dprint (2, (debugfile, "mutt_hcache_store_raw: mdb_put: %s\n",
+                  mdb_strerror(rv)));
+      mdb_txn_abort (h->txn);
+      h->txn_mode = txn_uninitialized;
+      h->txn = NULL;
+    }
   }
-  return rc;
+#endif
+
+  mutt_buffer_pool_release (&path);
+  return rv;
 #endif
 }
 
