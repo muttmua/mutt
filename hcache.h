@@ -24,7 +24,7 @@
 struct header_cache;
 typedef struct header_cache header_cache_t;
 
-typedef int (*hcache_namer_t)(const char* path, char* dest, size_t dlen);
+typedef void (*hcache_namer_t)(const char *path, BUFFER *dest);
 
 header_cache_t *mutt_hcache_open(const char *path, const char *folder,
                                  hcache_namer_t namer);

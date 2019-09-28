@@ -599,11 +599,11 @@ crc_matches(const char *d, unsigned int crc)
 }
 
 /* Append md5sumed folder to path if path is a directory. */
-static const char *
-mutt_hcache_per_folder(const char *path, const char *folder,
+void
+mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
                        hcache_namer_t namer)
 {
-  static char hcpath[_POSIX_PATH_MAX];
+  BUFFER *hcfile = NULL;
   struct stat sb;
   unsigned char md5sum[16];
   char* s;
@@ -618,83 +618,65 @@ mutt_hcache_per_folder(const char *path, const char *folder,
   if (ret < 0 && path[plen-1] != '/')
   {
 #ifdef HAVE_ICONV
-    return path;
+    mutt_buffer_strcpy (hcpath, path);
 #else
-    snprintf (hcpath, _POSIX_PATH_MAX, "%s-%s", path, chs);
-    return hcpath;
+    mutt_buffer_printf (hcpath, "%s-%s", path, chs);
 #endif
+    return;
   }
 
   if (ret >= 0 && !S_ISDIR(sb.st_mode))
   {
 #ifdef HAVE_ICONV
-    return path;
+    mutt_buffer_strcpy (hcpath, path);
 #else
-    snprintf (hcpath, _POSIX_PATH_MAX, "%s-%s", path, chs);
-    return hcpath;
+    mutt_buffer_printf (hcpath, "%s-%s", path, chs);
 #endif
+    return;
   }
+
+  hcfile = mutt_buffer_pool_get ();
 
   if (namer)
   {
-    snprintf (hcpath, sizeof (hcpath), "%s%s", path,
-              path[plen-1] == '/' ? "" : "/");
-    if (path[plen-1] != '/')
-      plen++;
-
-    ret = namer (folder, hcpath + plen, sizeof (hcpath) - plen);
+    namer (folder, hcfile);
   }
   else
   {
     md5_buffer (folder, strlen (folder), &md5sum);
-
-    /* On some systems (e.g. OS X), snprintf is defined as a macro.
-     * Embedding directives inside macros is undefined, so we have to duplicate
-     * the whole call:
-     */
+    mutt_buffer_printf(hcfile,
+                       "%02x%02x%02x%02x%02x%02x%02x%02x"
+                       "%02x%02x%02x%02x%02x%02x%02x%02x",
+                       md5sum[0], md5sum[1], md5sum[2], md5sum[3],
+                       md5sum[4], md5sum[5], md5sum[6], md5sum[7],
+                       md5sum[8], md5sum[9], md5sum[10], md5sum[11],
+                       md5sum[12], md5sum[13], md5sum[14], md5sum[15]);
 #ifndef HAVE_ICONV
-    ret = snprintf(hcpath, _POSIX_PATH_MAX,
-                   "%s/%02x%02x%02x%02x%02x%02x%02x%02x"
-                   "%02x%02x%02x%02x%02x%02x%02x%02x"
-		   "-%s"
-		   ,
-		   path, md5sum[0], md5sum[1], md5sum[2], md5sum[3],
-                   md5sum[4], md5sum[5], md5sum[6], md5sum[7], md5sum[8],
-                   md5sum[9], md5sum[10], md5sum[11], md5sum[12],
-                   md5sum[13], md5sum[14], md5sum[15]
-		   ,chs
-      );
-#else
-    ret = snprintf(hcpath, _POSIX_PATH_MAX,
-                   "%s/%02x%02x%02x%02x%02x%02x%02x%02x"
-                   "%02x%02x%02x%02x%02x%02x%02x%02x"
-		   ,
-		   path, md5sum[0], md5sum[1], md5sum[2], md5sum[3],
-                   md5sum[4], md5sum[5], md5sum[6], md5sum[7], md5sum[8],
-                   md5sum[9], md5sum[10], md5sum[11], md5sum[12],
-                   md5sum[13], md5sum[14], md5sum[15]
-      );
+    mutt_buffer_addch (hcfile, '-');
+    mutt_buffer_addstr (hcfile, chs);
 #endif
   }
 
-  if (ret <= 0)
-    return path;
+  mutt_buffer_concat_path (hcpath, path, mutt_b2s (hcfile));
+  mutt_buffer_pool_release (&hcfile);
 
-  if (stat (hcpath, &sb) >= 0)
-    return hcpath;
+  if (stat (mutt_b2s (hcpath), &sb) >= 0)
+    return;
 
-  s = strchr (hcpath + 1, '/');
+  s = strchr (hcpath->data + 1, '/');
   while (s)
   {
     /* create missing path components */
     *s = '\0';
-    if (stat (hcpath, &sb) < 0 && (errno != ENOENT || mkdir (hcpath, 0777) < 0))
-      return path;
+    if (stat (mutt_b2s (hcpath), &sb) < 0 &&
+        (errno != ENOENT || mkdir (mutt_b2s (hcpath), 0777) < 0))
+    {
+      mutt_buffer_strcpy (hcpath, path);
+      break;
+    }
     *s = '/';
     s = strchr (s + 1, '/');
   }
-
-  return hcpath;
 }
 
 /* This function transforms a header into a char so that it is usable by
@@ -1465,6 +1447,7 @@ mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
   struct header_cache *h = safe_calloc(1, sizeof (struct header_cache));
   int (*hcache_open) (struct header_cache* h, const char* path);
   struct stat sb;
+  BUFFER *hcpath = NULL;
 
 #if HAVE_QDBM
   hcache_open = hcache_open_qdbm;
@@ -1531,23 +1514,23 @@ mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
     return NULL;
   }
 
-  path = mutt_hcache_per_folder(path, h->folder, namer);
+  hcpath = mutt_buffer_pool_get ();
+  mutt_hcache_per_folder(hcpath, path, h->folder, namer);
 
-  if (!hcache_open (h, path))
-    return h;
-  else
+  if (hcache_open (h, mutt_b2s (hcpath)))
   {
     /* remove a possibly incompatible version */
-    if (!stat (path, &sb) && !unlink (path))
+    if (stat (mutt_b2s (hcpath), &sb) ||
+        unlink (mutt_b2s (hcpath)) ||
+        hcache_open (h, mutt_b2s (hcpath)))
     {
-      if (!hcache_open (h, path))
-        return h;
+      FREE(&h->folder);
+      FREE(&h);
     }
-    FREE(&h->folder);
-    FREE(&h);
-
-    return NULL;
   }
+
+  mutt_buffer_pool_release (&hcpath);
+  return h;
 }
 
 void mutt_hcache_free (void **data)

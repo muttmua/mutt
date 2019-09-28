@@ -130,9 +130,9 @@ static void imap_msn_index_to_uid_seqset (BUFFER *b, IMAP_DATA *idata)
   }
 }
 
-static int imap_hcache_namer (const char* path, char* dest, size_t dlen)
+static void imap_hcache_namer (const char *path, BUFFER *dest)
 {
-  return snprintf (dest, dlen, "%s.hcache", path);
+  mutt_buffer_printf (dest, "%s.hcache", path);
 }
 
 header_cache_t* imap_hcache_open (IMAP_DATA* idata, const char* path)
