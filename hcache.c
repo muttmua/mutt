@@ -1030,18 +1030,22 @@ int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
 		   size_t(*keylen) (const char *fn))
 {
-  char path[_POSIX_PATH_MAX];
-  int ksize;
+  BUFFER *path = NULL;
+  int ksize, rc;
 
   if (!h)
     return -1;
 
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
 
-  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+  ksize = strlen(h->folder) + keylen(filename);
 
-  return vlout(h->db, path, ksize);
+  rc = vlout(h->db, mutt_b2s (path), ksize);
+
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 #elif HAVE_TC
@@ -1088,25 +1092,32 @@ int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
 		   size_t(*keylen) (const char *fn))
 {
-  char path[_POSIX_PATH_MAX];
-  int ksize;
+  BUFFER *path = NULL;
+  int ksize, rc;
 
   if (!h)
     return -1;
 
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
 
-  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+  ksize = strlen(h->folder) + keylen(filename);
 
-  return tcbdbout(h->db, path, ksize);
+  rc = tcbdbout(h->db, mutt_b2s (path), ksize);
+
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 #elif HAVE_KC
 static int
 hcache_open_kc (struct header_cache* h, const char* path)
 {
-  char fullpath[_POSIX_PATH_MAX];
+  BUFFER *fullpath = NULL;
+  int rc = -1;
+
+  fullpath = mutt_buffer_pool_get ();
 
   /* Kyoto cabinet options are discussed at
    * http://fallabs.com/kyotocabinet/spex.html
@@ -1115,20 +1126,25 @@ hcache_open_kc (struct header_cache* h, const char* path)
    *   this isn't suggested unless you are tuning the number of buckets.
    * - opts=c enables compression
    */
-  snprintf (fullpath, sizeof(fullpath), "%s#type=kct%s", path,
-            option(OPTHCACHECOMPRESS) ? "#opts=c" : "");
+  mutt_buffer_printf (fullpath, "%s#type=kct%s", path,
+                      option(OPTHCACHECOMPRESS) ? "#opts=c" : "");
   h->db = kcdbnew();
   if (!h->db)
-    return -1;
-  if (kcdbopen(h->db, fullpath, KCOWRITER | KCOCREATE))
-    return 0;
-  else
+    goto cleanup;
+  if (!kcdbopen(h->db, mutt_b2s (fullpath), KCOWRITER | KCOCREATE))
   {
-    dprint (2, (debugfile, "kcdbopen failed for %s: %s (ecode %d)\n", fullpath,
+    dprint (2, (debugfile, "kcdbopen failed for %s: %s (ecode %d)\n",
+                mutt_b2s (fullpath),
                 kcdbemsg (h->db), kcdbecode (h->db)));
     kcdbdel(h->db);
-    return -1;
+    goto cleanup;
   }
+
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&fullpath);
+  return rc;
 }
 
 void
@@ -1149,18 +1165,22 @@ int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
 		   size_t(*keylen) (const char *fn))
 {
-  char path[_POSIX_PATH_MAX];
-  int ksize;
+  BUFFER *path = NULL;
+  int ksize, rc;
 
   if (!h)
     return -1;
 
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
 
-  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+  ksize = strlen(h->folder) + keylen(filename);
 
-  return kcdbremove(h->db, path, ksize);
+  rc = kcdbremove(h->db, mutt_b2s (path), ksize);
+
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 #elif HAVE_GDBM
@@ -1201,18 +1221,23 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 		   size_t(*keylen) (const char *fn))
 {
   datum key;
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
+  int rc;
 
   if (!h)
     return -1;
 
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
 
-  key.dptr = path;
-  key.dsize = strlen(h->folder) + keylen(path + strlen(h->folder));
+  key.dptr = path->data;
+  key.dsize = strlen(h->folder) + keylen(filename);
 
-  return gdbm_delete(h->db, key);
+  rc = gdbm_delete(h->db, key);
+
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 #elif HAVE_DB4
 
@@ -1408,22 +1433,23 @@ int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
 		   size_t(*keylen) (const char *fn))
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   int ksize;
   MDB_val key;
-  int rc;
+  int rc = -1;
 
   if (!h)
     return -1;
 
-  strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
-  ksize = strlen (h->folder) + keylen (path + strlen (h->folder));
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_strcpy (path, h->folder);
+  mutt_buffer_addstr (path, filename);
+  ksize = strlen (h->folder) + keylen (filename);
 
-  key.mv_data = path;
+  key.mv_data = path->data;
   key.mv_size = ksize;
   if (mdb_get_w_txn(h) != MDB_SUCCESS)
-    return -1;
+    goto cleanup;
   rc = mdb_del(h->txn, h->db, &key, NULL);
   if (rc != MDB_SUCCESS && rc != MDB_NOTFOUND)
   {
@@ -1432,10 +1458,14 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
     mdb_txn_abort(h->txn);
     h->txn_mode = txn_uninitialized;
     h->txn = NULL;
-    return -1;
+    goto cleanup;
   }
 
-  return 0;
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 #endif
 
