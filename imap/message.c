@@ -228,14 +228,15 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
   int evalhc = 0;
 
 #if USE_HCACHE
-  unsigned int *uid_validity = NULL;
-  unsigned int *puidnext = NULL;
+  void *puid_validity = NULL;
+  unsigned int uid_validity = 0;
+  void *puidnext = NULL;
   unsigned int uidnext = 0;
   int has_condstore = 0;
   int has_qresync = 0;
   int eval_condstore = 0;
   int eval_qresync = 0;
-  unsigned long long *pmodseq = NULL;
+  void *pmodseq = NULL;
   unsigned long long hc_modseq = 0;
   char *uid_seqset = NULL;
 #endif /* USE_HCACHE */
@@ -257,11 +258,13 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
 
   if (idata->hcache && initial_download)
   {
-    uid_validity = mutt_hcache_fetch_raw (idata->hcache, "/UIDVALIDITY", imap_hcache_keylen);
+    puid_validity = mutt_hcache_fetch_raw (idata->hcache, "/UIDVALIDITY", imap_hcache_keylen);
+    if (puid_validity)
+      memcpy (&uid_validity, puid_validity, sizeof(unsigned int));
     puidnext = mutt_hcache_fetch_raw (idata->hcache, "/UIDNEXT", imap_hcache_keylen);
     if (puidnext)
     {
-      uidnext = *puidnext;
+      memcpy (&uidnext, puidnext, sizeof(unsigned int));;
       mutt_hcache_free ((void **)&puidnext);
     }
 
@@ -278,13 +281,13 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
         has_qresync = 1;
     }
 
-    if (uid_validity && uidnext && *uid_validity == idata->uid_validity)
+    if (puid_validity && uidnext && (uid_validity == idata->uid_validity))
     {
       evalhc = 1;
       pmodseq = mutt_hcache_fetch_raw (idata->hcache, "/MODSEQ", imap_hcache_keylen);
       if (pmodseq)
       {
-        hc_modseq = *pmodseq;
+        memcpy (&hc_modseq, pmodseq, sizeof(unsigned long long));;
         mutt_hcache_free ((void **)&pmodseq);
       }
       if (hc_modseq)
@@ -300,7 +303,7 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
           eval_condstore = 1;
       }
     }
-    mutt_hcache_free ((void **)&uid_validity);
+    mutt_hcache_free ((void **)&puid_validity);
   }
   if (evalhc)
   {

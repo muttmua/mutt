@@ -1800,9 +1800,9 @@ IMAP_STATUS* imap_mboxcache_get (IMAP_DATA* idata, const char* mbox, int create)
   IMAP_STATUS scache;
 #ifdef USE_HCACHE
   header_cache_t *hc = NULL;
-  unsigned int *uidvalidity = NULL;
-  unsigned int *uidnext = NULL;
-  unsigned long long *modseq = NULL;
+  void *puidvalidity = NULL;
+  void *puidnext = NULL;
+  void *pmodseq = NULL;
 #endif
 
   for (cur = idata->mboxcache; cur; cur = cur->next)
@@ -1829,28 +1829,36 @@ IMAP_STATUS* imap_mboxcache_get (IMAP_DATA* idata, const char* mbox, int create)
   hc = imap_hcache_open (idata, mbox);
   if (hc)
   {
-    uidvalidity = mutt_hcache_fetch_raw (hc, "/UIDVALIDITY", imap_hcache_keylen);
-    uidnext = mutt_hcache_fetch_raw (hc, "/UIDNEXT", imap_hcache_keylen);
-    modseq = mutt_hcache_fetch_raw (hc, "/MODSEQ", imap_hcache_keylen);
-    if (uidvalidity)
+    puidvalidity = mutt_hcache_fetch_raw (hc, "/UIDVALIDITY", imap_hcache_keylen);
+    puidnext = mutt_hcache_fetch_raw (hc, "/UIDNEXT", imap_hcache_keylen);
+    pmodseq = mutt_hcache_fetch_raw (hc, "/MODSEQ", imap_hcache_keylen);
+    if (puidvalidity)
     {
       if (!status)
       {
-        mutt_hcache_free ((void **)&uidvalidity);
-        mutt_hcache_free ((void **)&uidnext);
-        mutt_hcache_free ((void **)&modseq);
+        mutt_hcache_free ((void **)&puidvalidity);
+        mutt_hcache_free ((void **)&puidnext);
+        mutt_hcache_free ((void **)&pmodseq);
         mutt_hcache_close (hc);
         return imap_mboxcache_get (idata, mbox, 1);
       }
-      status->uidvalidity = *uidvalidity;
-      status->uidnext = uidnext ? *uidnext: 0;
-      status->modseq = modseq ? *modseq: 0;
+      memcpy (&status->uidvalidity, puidvalidity, sizeof(unsigned int));
+
+      if (puidnext)
+        memcpy (&status->uidnext, puidnext, sizeof(unsigned int));
+      else
+        status->uidnext = 0;
+
+      if (pmodseq)
+        memcpy (&status->modseq, pmodseq, sizeof(unsigned long long));
+      else
+        status->modseq = 0;
       dprint (3, (debugfile, "mboxcache: hcache uidvalidity %u, uidnext %u, modseq %llu\n",
                   status->uidvalidity, status->uidnext, status->modseq));
     }
-    mutt_hcache_free ((void **)&uidvalidity);
-    mutt_hcache_free ((void **)&uidnext);
-    mutt_hcache_free ((void **)&modseq);
+    mutt_hcache_free ((void **)&puidvalidity);
+    mutt_hcache_free ((void **)&puidnext);
+    mutt_hcache_free ((void **)&pmodseq);
     mutt_hcache_close (hc);
   }
 #endif

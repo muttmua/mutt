@@ -1145,7 +1145,7 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
 #if USE_HCACHE
   header_cache_t *hc = NULL;
   void *data;
-  struct timeval *when = NULL;
+  struct timeval when;
   struct stat lastchanged;
   int ret;
 #endif
@@ -1207,9 +1207,10 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
       data = mutt_hcache_fetch (hc, p->h->path, strlen);
     else
       data = mutt_hcache_fetch (hc, p->h->path + 3, &maildir_hcache_keylen);
-    when = (struct timeval *) data;
+    if (data)
+      memcpy (&when, data, sizeof(struct timeval));
 
-    if (data != NULL && !ret && lastchanged.st_mtime <= when->tv_sec)
+    if (data != NULL && !ret && lastchanged.st_mtime <= when.tv_sec)
     {
       p->h = mutt_hcache_restore ((unsigned char *)data, &p->h);
       if (ctx->magic == MUTT_MAILDIR)
