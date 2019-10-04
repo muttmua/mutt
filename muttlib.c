@@ -1947,13 +1947,15 @@ int state_printf (STATE *s, const char *fmt, ...)
 
 void state_mark_attach (STATE *s)
 {
-  if ((s->flags & MUTT_DISPLAY) && !mutt_strcmp (Pager, "builtin"))
+  if ((s->flags & MUTT_DISPLAY) &&
+      (!Pager || !mutt_strcmp (Pager, "builtin")))
     state_puts (AttachmentMarker, s);
 }
 
 void state_mark_protected_header (STATE *s)
 {
-  if ((s->flags & MUTT_DISPLAY) && !mutt_strcmp (Pager, "builtin"))
+  if ((s->flags & MUTT_DISPLAY) &&
+      (!Pager || !mutt_strcmp (Pager, "builtin")))
     state_puts (ProtectedHeaderMarker, s);
 }
 

@@ -224,7 +224,7 @@ static void format_line (FILE *f, int ismacro,
 
   if (ismacro > 0)
   {
-    if (!mutt_strcmp (Pager, "builtin"))
+    if (!Pager || !mutt_strcmp (Pager, "builtin"))
       fputs ("_\010", f);
     fputs ("M ", f);
     col += 2;
@@ -264,7 +264,7 @@ static void format_line (FILE *f, int ismacro,
 
       if (*t3)
       {
-        if (mutt_strcmp (Pager, "builtin"))
+        if (Pager && mutt_strcmp (Pager, "builtin"))
 	{
 	  fputc ('\n', f);
 	  n = 0;
