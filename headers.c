@@ -35,7 +35,7 @@ void mutt_edit_headers (const char *editor,
 			char *fcc,
 			size_t fcclen)
 {
-  char path[_POSIX_PATH_MAX];	/* tempfile used to edit headers + body */
+  BUFFER *path = NULL;	/* tempfile used to edit headers + body */
   char buffer[LONG_STRING];
   const char *p;
   FILE *ifp, *ofp;
@@ -45,11 +45,12 @@ void mutt_edit_headers (const char *editor,
   struct stat st;
   LIST *cur, **last = NULL, *tmp;
 
-  mutt_mktemp (path, sizeof (path));
-  if ((ofp = safe_fopen (path, "w")) == NULL)
+  path = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (path);
+  if ((ofp = safe_fopen (mutt_b2s (path), "w")) == NULL)
   {
-    mutt_perror (path);
-    return;
+    mutt_perror (mutt_b2s (path));
+    goto cleanup;
   }
 
   mutt_env_to_local (msg->env);
@@ -60,7 +61,7 @@ void mutt_edit_headers (const char *editor,
   if ((ifp = fopen (body, "r")) == NULL)
   {
     mutt_perror (body);
-    return;
+    goto cleanup;
   }
 
   mutt_copy_stream (ifp, ofp);
@@ -68,32 +69,32 @@ void mutt_edit_headers (const char *editor,
   safe_fclose (&ifp);
   safe_fclose (&ofp);
 
-  if (stat (path, &st) == -1)
+  if (stat (mutt_b2s (path), &st) == -1)
   {
-    mutt_perror (path);
-    return;
+    mutt_perror (mutt_b2s (path));
+    goto cleanup;
   }
 
-  mtime = mutt_decrease_mtime (path, &st);
+  mtime = mutt_decrease_mtime (mutt_b2s (path), &st);
 
-  mutt_edit_file (editor, path);
-  stat (path, &st);
+  mutt_edit_file (editor, mutt_b2s (path));
+  stat (mutt_b2s (path), &st);
   if (mtime == st.st_mtime)
   {
     dprint (1, (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
     /* the file has not changed! */
-    mutt_unlink (path);
-    return;
+    mutt_unlink (mutt_b2s (path));
+    goto cleanup;
   }
 
   mutt_unlink (body);
   mutt_free_list (&msg->env->userhdrs);
 
   /* Read the temp file back in */
-  if ((ifp = fopen (path, "r")) == NULL)
+  if ((ifp = fopen (mutt_b2s (path), "r")) == NULL)
   {
-    mutt_perror (path);
-    return;
+    mutt_perror (mutt_b2s (path));
+    goto cleanup;
   }
 
   if ((ofp = safe_fopen (body, "w")) == NULL)
@@ -101,7 +102,7 @@ void mutt_edit_headers (const char *editor,
     /* intentionally leak a possible temporary file here */
     safe_fclose (&ifp);
     mutt_perror (body);
-    return;
+    goto cleanup;
   }
 
   n = mutt_read_rfc822_header (ifp, NULL, 1, 0);
@@ -109,7 +110,7 @@ void mutt_edit_headers (const char *editor,
     fwrite (buffer, 1, i, ofp);
   safe_fclose (&ofp);
   safe_fclose (&ifp);
-  mutt_unlink (path);
+  mutt_unlink (mutt_b2s (path));
 
   /* in case the user modifies/removes the In-Reply-To header with
      $edit_headers set, we remove References: as they're likely invalid;
@@ -154,11 +155,11 @@ void mutt_edit_headers (const char *editor,
     {
       BODY *body;
       BODY *parts;
-      size_t l = 0;
 
       p = skip_email_wsp(cur->data + 7);
       if (*p)
       {
+        mutt_buffer_clear (path);
 	for ( ; *p && *p != ' ' && *p != '\t'; p++)
 	{
 	  if (*p == '\\')
@@ -167,14 +168,12 @@ void mutt_edit_headers (const char *editor,
 	      break;
 	    p++;
 	  }
-	  if (l < sizeof (path) - 1)
-	    path[l++] = *p;
+          mutt_buffer_addch (path, *p);
 	}
 	p = skip_email_wsp(p);
-	path[l] = 0;
 
-	mutt_expand_path (path, sizeof (path));
-	if ((body = mutt_make_file_attach (path)))
+	mutt_buffer_expand_path (path);
+	if ((body = mutt_make_file_attach (mutt_b2s (path))))
 	{
 	  body->description = safe_strdup (p);
 	  for (parts = msg->content; parts->next; parts = parts->next) ;
@@ -182,8 +181,8 @@ void mutt_edit_headers (const char *editor,
 	}
 	else
 	{
-	  mutt_pretty_mailbox (path, sizeof (path));
-	  mutt_error (_("%s: unable to attach file"), path);
+	  mutt_buffer_pretty_mailbox (path);
+	  mutt_error (_("%s: unable to attach file"), mutt_b2s (path));
 	}
       }
       keep = 0;
@@ -211,6 +210,9 @@ void mutt_edit_headers (const char *editor,
       mutt_free_list (&tmp);
     }
   }
+
+cleanup:
+  mutt_buffer_pool_release (&path);
 }
 
 static void label_ref_dec(CONTEXT *ctx, char *label)
