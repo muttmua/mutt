@@ -188,7 +188,7 @@ static int dup_hash_inc (HASH *dup_hash, char *s)
 
 static void shrink_histfile (void)
 {
-  char tmpfname[_POSIX_PATH_MAX];
+  BUFFER *tmpfname = NULL;
   FILE *f, *tmp = NULL;
   int n[HC_LAST] = { 0 };
   int line, hclass, read;
@@ -236,10 +236,11 @@ static void shrink_histfile (void)
 
   if (regen_file)
   {
-    mutt_mktemp (tmpfname, sizeof (tmpfname));
-    if ((tmp = safe_fopen (tmpfname, "w+")) == NULL)
+    tmpfname = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (tmpfname);
+    if ((tmp = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
     {
-      mutt_perror (tmpfname);
+      mutt_perror (mutt_b2s (tmpfname));
       goto cleanup;
     }
     rewind (f);
@@ -277,8 +278,9 @@ cleanup:
       safe_fclose (&f);
     }
     safe_fclose (&tmp);
-    unlink (tmpfname);
+    unlink (mutt_b2s (tmpfname));
   }
+  mutt_buffer_pool_release (&tmpfname);
   if (option (OPTHISTREMOVEDUPS))
     for (hclass = 0; hclass < HC_LAST; hclass++)
       hash_destroy (&dup_hashes[hclass], NULL);
