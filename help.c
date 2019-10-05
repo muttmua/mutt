@@ -338,13 +338,15 @@ static void dump_unbound (FILE *f,
 
 void mutt_help (int menu)
 {
-  char t[_POSIX_PATH_MAX];
+  BUFFER *t = NULL;
   char buf[SHORT_STRING];
   const char *desc;
   FILE *f;
   const struct binding_t *funcs;
 
-  mutt_mktemp (t, sizeof (t));
+  /* We don't use the buffer pool because of the extended lifetime of t */
+  t = mutt_buffer_new ();
+  mutt_buffer_mktemp (t);
 
   funcs = km_get_table (menu);
   desc = mutt_getnamebyvalue (menu, Menus);
@@ -353,10 +355,10 @@ void mutt_help (int menu)
 
   do
   {
-    if ((f = safe_fopen (t, "w")) == NULL)
+    if ((f = safe_fopen (mutt_b2s (t), "w")) == NULL)
     {
-      mutt_perror (t);
-      return;
+      mutt_perror (mutt_b2s (t));
+      goto cleanup;
     }
 
     dump_menu (f, menu);
@@ -377,8 +379,11 @@ void mutt_help (int menu)
     snprintf (buf, sizeof (buf), _("Help for %s"), desc);
   }
   while
-    (mutt_do_pager (buf, t,
+    (mutt_do_pager (buf, mutt_b2s (t),
 		    MUTT_PAGER_RETWINCH | MUTT_PAGER_MARKER | MUTT_PAGER_NSKIP | MUTT_PAGER_NOWRAP,
 		    NULL)
      == OP_REFORMAT_WINCH);
+
+cleanup:
+  mutt_buffer_free (&t);
 }
