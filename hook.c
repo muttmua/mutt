@@ -545,7 +545,7 @@ void mutt_default_save (char *path, size_t pathlen, HEADER *hdr)
   *path = 0;
   if (mutt_addr_hook (path, pathlen, MUTT_SAVEHOOK, Context, hdr) != 0)
   {
-    char tmp[_POSIX_PATH_MAX];
+    BUFFER *tmp = NULL;
     ADDRESS *adr;
     ENVELOPE *env = hdr->env;
     int fromMe = mutt_addr_is_user (env->from);
@@ -562,8 +562,10 @@ void mutt_default_save (char *path, size_t pathlen, HEADER *hdr)
       adr = NULL;
     if (adr)
     {
-      mutt_safe_path (tmp, sizeof (tmp), adr);
-      snprintf (path, pathlen, "=%s", tmp);
+      tmp = mutt_buffer_pool_get ();
+      mutt_safe_path (tmp, adr);
+      snprintf (path, pathlen, "=%s", mutt_b2s (tmp));
+      mutt_buffer_pool_release (&tmp);
     }
   }
 }
@@ -571,7 +573,7 @@ void mutt_default_save (char *path, size_t pathlen, HEADER *hdr)
 void mutt_select_fcc (char *path, size_t pathlen, HEADER *hdr)
 {
   ADDRESS *adr;
-  char buf[_POSIX_PATH_MAX];
+  BUFFER *buf = NULL;
   ENVELOPE *env = hdr->env;
 
   if (mutt_addr_hook (path, pathlen, MUTT_FCCHOOK, NULL, hdr) != 0)
@@ -580,8 +582,10 @@ void mutt_select_fcc (char *path, size_t pathlen, HEADER *hdr)
 	(env->to || env->cc || env->bcc))
     {
       adr = env->to ? env->to : (env->cc ? env->cc : env->bcc);
-      mutt_safe_path (buf, sizeof (buf), adr);
-      mutt_concat_path (path, NONULL(Maildir), buf, pathlen);
+      buf = mutt_buffer_pool_get ();
+      mutt_safe_path (buf, adr);
+      mutt_concat_path (path, NONULL(Maildir), mutt_b2s (buf), pathlen);
+      mutt_buffer_pool_release (&buf);
       if (!option (OPTFORCENAME) && mx_access (path, W_OK) != 0)
 	strfcpy (path, NONULL (Outbox), pathlen);
     }

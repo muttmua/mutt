@@ -1250,12 +1250,33 @@ void mutt_save_path (char *d, size_t dsize, ADDRESS *a)
     *d = 0;
 }
 
-void mutt_safe_path (char *s, size_t l, ADDRESS *a)
+void mutt_buffer_save_path (BUFFER *dest, ADDRESS *a)
+{
+  if (a && a->mailbox)
+  {
+    mutt_buffer_strcpy (dest, a->mailbox);
+    if (!option (OPTSAVEADDRESS))
+    {
+      char *p;
+
+      if ((p = strpbrk (dest->data, "%@")))
+      {
+	*p = 0;
+        mutt_buffer_fix_dptr (dest);
+      }
+    }
+    mutt_strlower (dest->data);
+  }
+  else
+    mutt_buffer_clear (dest);
+}
+
+void mutt_safe_path (BUFFER *dest, ADDRESS *a)
 {
   char *p;
 
-  mutt_save_path (s, l, a);
-  for (p = s; *p; p++)
+  mutt_buffer_save_path (dest, a);
+  for (p = dest->data; *p; p++)
     if (*p == '/' || ISSPACE (*p) || !IsPrint ((unsigned char) *p))
       *p = '_';
 }
