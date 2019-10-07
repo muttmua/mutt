@@ -914,16 +914,23 @@ void imap_logout (IMAP_DATA** idata)
 
 static int imap_open_new_message (MESSAGE *msg, CONTEXT *dest, HEADER *hdr)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
+  int rc = -1;
 
-  mutt_mktemp (tmp, sizeof (tmp));
-  if ((msg->fp = safe_fopen (tmp, "w")) == NULL)
+  tmp = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmp);
+  if ((msg->fp = safe_fopen (mutt_b2s (tmp), "w")) == NULL)
   {
-    mutt_perror (tmp);
-    return (-1);
+    mutt_perror (mutt_b2s (tmp));
+    goto cleanup;
   }
-  msg->path = safe_strdup(tmp);
-  return 0;
+
+  msg->path = safe_strdup (mutt_b2s (tmp));
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&tmp);
+  return rc;
 }
 
 /* imap_set_flag: append str to flags if we currently have permission
