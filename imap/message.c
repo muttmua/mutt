@@ -708,7 +708,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   unsigned int fetch_msn_end = 0;
   progress_t progress;
   char *hdrreq = NULL, *cmd;
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *fp = NULL;
   IMAP_HEADER h;
   BUFFER *b = NULL, *hdr_list = NULL;
@@ -753,14 +753,16 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
 
   /* instead of downloading all headers and then parsing them, we parse them
    * as they come in. */
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(fp = safe_fopen (tempfile, "w+")))
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if (!(fp = safe_fopen (mutt_b2s (tempfile), "w+")))
   {
-    mutt_error (_("Could not create temporary file %s"), tempfile);
+    mutt_error (_("Could not create temporary file %s"), mutt_b2s (tempfile));
     mutt_sleep (2);
     goto bail;
   }
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
+  mutt_buffer_pool_release (&tempfile);
 
   mutt_progress_init (&progress, _("Fetching message headers..."),
 		      MUTT_PROGRESS_MSG, ReadInc, msn_end);
@@ -913,6 +915,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
 bail:
   mutt_buffer_pool_release (&hdr_list);
   mutt_buffer_pool_release (&b);
+  mutt_buffer_pool_release (&tempfile);
   safe_fclose (&fp);
   FREE (&hdrreq);
 
@@ -925,7 +928,6 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   HEADER* h;
   ENVELOPE* newenv;
   char buf[LONG_STRING];
-  char path[_POSIX_PATH_MAX];
   char *pc;
   unsigned int bytes;
   progress_t progressbar;
@@ -976,10 +978,16 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
 
   if (!(msg->fp = msg_cache_put (idata, h)))
   {
+    BUFFER *path;
+
     cache->uid = HEADER_DATA(h)->uid;
-    mutt_mktemp (path, sizeof (path));
-    cache->path = safe_strdup (path);
-    if (!(msg->fp = safe_fopen (path, "w+")))
+
+    path = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (path);
+    cache->path = safe_strdup (mutt_b2s (path));
+    mutt_buffer_pool_release (&path);
+
+    if (!(msg->fp = safe_fopen (cache->path, "w+")))
     {
       FREE (&cache->path);
       return -1;
