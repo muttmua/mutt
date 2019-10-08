@@ -1471,14 +1471,18 @@ out:
 
 static body_cache_t *msg_cache_open (IMAP_DATA *idata)
 {
-  char mailbox[_POSIX_PATH_MAX];
+  BUFFER *mailbox;
+  body_cache_t *rv;
 
   if (idata->bcache)
     return idata->bcache;
 
-  imap_cachepath (idata, idata->mailbox, mailbox, sizeof (mailbox));
+  mailbox = mutt_buffer_pool_get ();
+  imap_cachepath (idata, idata->mailbox, mailbox);
+  rv = mutt_bcache_open (&idata->conn->account, mutt_b2s (mailbox));
+  mutt_buffer_pool_release (&mailbox);
 
-  return mutt_bcache_open (&idata->conn->account, mailbox);
+  return rv;
 }
 
 static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h)
