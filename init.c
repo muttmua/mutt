@@ -965,42 +965,44 @@ static int parse_unlist (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUF
 #ifdef USE_SIDEBAR
 static int parse_path_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
   LIST **data = udata.p;
 
+  path = mutt_buffer_pool_get ();
   do
   {
-    mutt_extract_token (buf, s, 0);
-    strfcpy (path, buf->data, sizeof (path));
-    mutt_expand_path (path, sizeof (path));
-    add_to_list (data, path);
+    mutt_extract_token (path, s, 0);
+    mutt_buffer_expand_path (path);
+    add_to_list (data, mutt_b2s (path));
   }
   while (MoreArgs (s));
+  mutt_buffer_pool_release (&path);
 
   return 0;
 }
 
 static int parse_path_unlist (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
   LIST **data = udata.p;
 
+  path = mutt_buffer_pool_get ();
   do
   {
-    mutt_extract_token (buf, s, 0);
+    mutt_extract_token (path, s, 0);
     /*
      * Check for deletion of entire list
      */
-    if (mutt_strcmp (buf->data, "*") == 0)
+    if (mutt_strcmp (mutt_b2s (path), "*") == 0)
     {
       mutt_free_list (data);
       break;
     }
-    strfcpy (path, buf->data, sizeof (path));
-    mutt_expand_path (path, sizeof (path));
-    remove_from_list (data, path);
+    mutt_buffer_expand_path (path);
+    remove_from_list (data, mutt_b2s (path));
   }
   while (MoreArgs (s));
+  mutt_buffer_pool_release (&path);
 
   return 0;
 }
