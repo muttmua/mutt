@@ -1487,7 +1487,7 @@ static body_cache_t *msg_cache_open (IMAP_DATA *idata)
 
 static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h)
 {
-  char id[_POSIX_PATH_MAX];
+  char id[SHORT_STRING];
 
   if (!idata || !h)
     return NULL;
@@ -1499,7 +1499,7 @@ static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h)
 
 static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h)
 {
-  char id[_POSIX_PATH_MAX];
+  char id[SHORT_STRING];
 
   if (!idata || !h)
     return NULL;
@@ -1511,7 +1511,7 @@ static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h)
 
 static int msg_cache_commit (IMAP_DATA* idata, HEADER* h)
 {
-  char id[_POSIX_PATH_MAX];
+  char id[SHORT_STRING];
 
   if (!idata || !h)
     return -1;
@@ -1524,7 +1524,7 @@ static int msg_cache_commit (IMAP_DATA* idata, HEADER* h)
 
 int imap_cache_del (IMAP_DATA* idata, HEADER* h)
 {
-  char id[_POSIX_PATH_MAX];
+  char id[SHORT_STRING];
 
   if (!idata || !h)
     return -1;
