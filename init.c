@@ -1785,10 +1785,12 @@ static void mutt_restore_default (struct option_t *p)
       FREE((char **) p->data.p);		/* __FREE_CHECKED__ */
       if (p->init.p)
       {
-	char path[_POSIX_PATH_MAX];
-	strfcpy (path, (char *) p->init.p, sizeof (path));
-	mutt_expand_path (path, sizeof (path));
-	*((char **) p->data.p) = safe_strdup (path);
+	BUFFER *path;
+        path = mutt_buffer_pool_get ();
+	mutt_buffer_strcpy (path, (char *) p->init.p);
+	mutt_buffer_expand_path (path);
+	*((char **) p->data.p) = safe_strdup (mutt_b2s (path));
+        mutt_buffer_pool_release (&path);
       }
       break;
     case DT_ADDR:
@@ -2117,7 +2119,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
   int query, unset, inv, reset, r = 0;
   int idx = -1;
   const char *p;
-  char scratch[_POSIX_PATH_MAX];
+  BUFFER *scratch = NULL;
   char* myvar;
   long data = udata.l;
 
@@ -2329,9 +2331,11 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	   * so cast to 'void*' is okay */
 	  FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
 
-	  strfcpy (scratch, tmp->data, sizeof (scratch));
-	  mutt_expand_path (scratch, sizeof (scratch));
-	  *((char **) MuttVars[idx].data.p) = safe_strdup (scratch);
+          scratch = mutt_buffer_pool_get ();
+	  mutt_buffer_strcpy (scratch, tmp->data);
+	  mutt_buffer_expand_path (scratch);
+	  *((char **) MuttVars[idx].data.p) = safe_strdup (mutt_b2s (scratch));
+          mutt_buffer_pool_release (&scratch);
         }
         else if (DTYPE (MuttVars[idx].type) == DT_STR)
         {
@@ -2790,7 +2794,8 @@ static int source_rc (const char *rcfile, BUFFER *err)
 
 static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path;
+  int rc;
 
   if (mutt_extract_token (tmp, s, 0) != 0)
   {
@@ -2802,9 +2807,14 @@ static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUF
     strfcpy (err->data, _("source: too many arguments"), err->dsize);
     return (-1);
   }
-  strfcpy (path, tmp->data, sizeof (path));
-  mutt_expand_path (path, sizeof (path));
-  return (source_rc (path, err));
+
+  path = mutt_buffer_new ();
+  mutt_buffer_strcpy (path, tmp->data);
+  mutt_buffer_expand_path (path);
+  rc = source_rc (mutt_b2s (path), err);
+  mutt_buffer_free (&path);
+
+  return rc;
 }
 
 /* line		command to execute
