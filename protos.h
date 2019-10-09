@@ -578,7 +578,7 @@ int ioctl (int, int, ...);
 
 /* unsorted */
 void ci_bounce_message (HEADER *);
-int ci_send_message (int, HEADER *, char *, CONTEXT *, HEADER *);
+int ci_send_message (int, HEADER *, const char *, CONTEXT *, HEADER *);
 
 /* prototypes for compatibility functions */
 

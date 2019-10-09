@@ -1554,7 +1554,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
 int
 ci_send_message (int flags,		/* send mode */
 		 HEADER *msg,		/* template to use for new message */
-		 char *tempfile,	/* file specified by -i or -H */
+		 const char *tempfile,	/* file specified by -i or -H */
 		 CONTEXT *ctx,		/* current mailbox */
 		 HEADER *cur)		/* current message */
 {
