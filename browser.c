@@ -600,11 +600,27 @@ static void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
                      (unsigned long) &folder, MUTT_FORMAT_ARROWCURSOR);
 }
 
+static void set_sticky_cursor (struct browser_state *state, MUTTMENU *menu, const char *defaultsel)
+{
+  int i;
+
+  if (option (OPTBROWSERSTICKYCURSOR) && defaultsel && *defaultsel)
+  {
+    for (i = 0; i < menu->max; i++)
+    {
+      if (!mutt_strcmp (defaultsel, state->entry[i].full_path))
+      {
+        menu->current = i;
+        break;
+      }
+    }
+  }
+}
+
 static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
 		       size_t titlelen, int buffy, const char *defaultsel)
 {
   BUFFER *path = NULL;
-  int i;
 
   path = mutt_buffer_pool_get ();
 
@@ -636,17 +652,7 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
   }
   menu->redraw = REDRAW_FULL;
 
-  if (option (OPTBROWSERSTICKYCURSOR) && defaultsel && *defaultsel)
-  {
-    for (i = 0; i < menu->max; i++)
-    {
-      if (!mutt_strcmp (defaultsel, state->entry[i].full_path))
-      {
-        menu->current = i;
-        break;
-      }
-    }
-  }
+  set_sticky_cursor (state, menu, defaultsel);
 
   mutt_buffer_pool_release (&path);
 }
@@ -1290,6 +1296,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
         {
           BrowserSort |= reverse ? SORT_REVERSE : 0;
           browser_sort (&state);
+          set_sticky_cursor (&state, menu, mutt_b2s (defaultsel));
           menu->redraw = REDRAW_FULL;
         }
         break;
