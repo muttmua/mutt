@@ -91,6 +91,8 @@ const struct binding_t OpMain[] = { /* map: index */
 #endif
   { "bounce-message",		OP_BOUNCE_MESSAGE,		"b" },
   { "break-thread",		OP_MAIN_BREAK_THREAD,		"#" },
+  { "browse-mailboxes",		OP_MAIN_BROWSE_MAILBOXES,	"y" },
+  { "browse-mailboxes-readonly", OP_MAIN_BROWSE_MAILBOXES_READONLY, NULL },
   { "change-folder",		OP_MAIN_CHANGE_FOLDER,		"c" },
   { "change-folder-readonly",	OP_MAIN_CHANGE_FOLDER_READONLY,	"\033c" },
   { "next-unread-mailbox",	OP_MAIN_NEXT_UNREAD_MAILBOX,    NULL },
@@ -195,6 +197,8 @@ const struct binding_t OpMain[] = { /* map: index */
 
 const struct binding_t OpPager[] = { /* map: pager */
   { "break-thread",	OP_MAIN_BREAK_THREAD,		"#" },
+  { "browse-mailboxes",	OP_MAIN_BROWSE_MAILBOXES,	"y" },
+  { "browse-mailboxes-readonly", OP_MAIN_BROWSE_MAILBOXES_READONLY, NULL },
   { "create-alias",	OP_CREATE_ALIAS,		"a" },
   { "bounce-message",	OP_BOUNCE_MESSAGE,		"b" },
   { "change-folder",	OP_MAIN_CHANGE_FOLDER,		"c" },

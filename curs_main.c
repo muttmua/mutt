@@ -1266,8 +1266,13 @@ int mutt_index_menu (void)
 	if (attach_msg)
 	  op = OP_MAIN_CHANGE_FOLDER_READONLY;
 
+      case OP_MAIN_BROWSE_MAILBOXES:
+        if (attach_msg && (op != OP_MAIN_CHANGE_FOLDER_READONLY))
+          op = OP_MAIN_BROWSE_MAILBOXES_READONLY;
+
 	/* fallback to the readonly case */
 
+      case OP_MAIN_BROWSE_MAILBOXES_READONLY:
       case OP_MAIN_CHANGE_FOLDER_READONLY:
       {
         BUFFER *folderbuf;
@@ -1293,13 +1298,13 @@ int mutt_index_menu (void)
 	}
 #ifdef USE_SIDEBAR
         else if (op == OP_SIDEBAR_OPEN)
-        {
-          const char *path = mutt_sb_get_highlight();
-          if (!path || !*path)
-            goto changefoldercleanup;
-          mutt_buffer_strcpy (folderbuf, path);
-        }
+          mutt_buffer_strcpy (folderbuf, NONULL (mutt_sb_get_highlight()));
 #endif
+
+        else if ((op == OP_MAIN_BROWSE_MAILBOXES) ||
+                 (op == OP_MAIN_BROWSE_MAILBOXES_READONLY))
+          mutt_buffer_select_file (folderbuf, MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
+
 	else
 	{
           if (option (OPTCHANGEFOLDERNEXT) && Context && Context->path)
@@ -1318,13 +1323,13 @@ int mutt_index_menu (void)
             }
             goto changefoldercleanup;
           }
-	  if (!mutt_buffer_len (folderbuf))
-	  {
-            mutt_window_clearline (MuttMessageWindow, 0);
-	    goto changefoldercleanup;
-	  }
 	}
 
+        if (!mutt_buffer_len (folderbuf))
+        {
+          mutt_window_clearline (MuttMessageWindow, 0);
+          goto changefoldercleanup;
+        }
 	mutt_buffer_expand_path (folderbuf);
         if (mx_get_magic (mutt_b2s (folderbuf)) <= 0)
 	{
@@ -1386,7 +1391,9 @@ int mutt_index_menu (void)
 	mutt_folder_hook (mutt_b2s (folderbuf));
 
 	if ((Context = mx_open_mailbox (mutt_b2s (folderbuf),
-					(option (OPTREADONLY) || op == OP_MAIN_CHANGE_FOLDER_READONLY) ?
+					(option (OPTREADONLY) ||
+                                         op == OP_MAIN_CHANGE_FOLDER_READONLY ||
+                                         op == OP_MAIN_BROWSE_MAILBOXES_READONLY) ?
 					MUTT_READONLY : 0, NULL)) != NULL)
 	{
 	  menu->current = ci_first_message ();
