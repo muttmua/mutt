@@ -84,6 +84,8 @@ int mutt_socket_close (CONNECTION* conn)
 
   conn->fd = -1;
   conn->ssf = 0;
+  conn->bufpos = 0;
+  conn->available = 0;
 
   return rc;
 }
