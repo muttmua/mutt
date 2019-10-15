@@ -1852,7 +1852,7 @@ FILE *mutt_open_read (const char *path, pid_t *thepid)
 /* returns 0 if OK to proceed, -1 to abort, 1 to retry */
 int mutt_save_confirm (const char *s, struct stat *st)
 {
-  char tmp[_POSIX_PATH_MAX];
+  BUFFER *tmp = NULL;
   int ret = 0;
   int rc;
   int magic = 0;
@@ -1871,11 +1871,13 @@ int mutt_save_confirm (const char *s, struct stat *st)
   {
     if (option (OPTCONFIRMAPPEND))
     {
-      snprintf (tmp, sizeof (tmp), _("Append messages to %s?"), s);
-      if ((rc = mutt_yesorno (tmp, MUTT_YES)) == MUTT_NO)
+      tmp = mutt_buffer_pool_get ();
+      mutt_buffer_printf (tmp, _("Append messages to %s?"), s);
+      if ((rc = mutt_yesorno (mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
 	ret = 1;
       else if (rc == -1)
 	ret = -1;
+      mutt_buffer_pool_release (&tmp);
     }
   }
 
@@ -1896,11 +1898,13 @@ int mutt_save_confirm (const char *s, struct stat *st)
     {
       if (option (OPTCONFIRMCREATE))
       {
-	snprintf (tmp, sizeof (tmp), _("Create %s?"), s);
-	if ((rc = mutt_yesorno (tmp, MUTT_YES)) == MUTT_NO)
+        tmp = mutt_buffer_pool_get ();
+	mutt_buffer_printf (tmp, _("Create %s?"), s);
+	if ((rc = mutt_yesorno (mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
 	  ret = 1;
 	else if (rc == -1)
 	  ret = -1;
+        mutt_buffer_pool_release (&tmp);
       }
     }
     else
