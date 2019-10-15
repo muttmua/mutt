@@ -326,7 +326,7 @@ bail:
  */
 static int ssl_init (void)
 {
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   static unsigned char init_complete = 0;
 
   if (init_complete)
@@ -336,18 +336,22 @@ static int ssl_init (void)
   {
     /* load entropy from files */
     add_entropy (SslEntropyFile);
-    add_entropy (RAND_file_name (path, sizeof (path)));
+
+    path = mutt_buffer_pool_get ();
+    add_entropy (RAND_file_name (path->data, path->dsize));
 
     /* load entropy from egd sockets */
 #ifdef HAVE_RAND_EGD
     add_entropy (getenv ("EGDSOCKET"));
-    snprintf (path, sizeof(path), "%s/.entropy", NONULL(Homedir));
-    add_entropy (path);
+    mutt_buffer_printf (path, "%s/.entropy", NONULL(Homedir));
+    add_entropy (mutt_b2s (path));
     add_entropy ("/tmp/entropy");
 #endif
 
     /* shuffle $RANDFILE (or ~/.rnd if unset) */
-    RAND_write_file (RAND_file_name (path, sizeof (path)));
+    RAND_write_file (RAND_file_name (path->data, path->dsize));
+    mutt_buffer_pool_release (&path);
+
     mutt_clear_error ();
     if (! HAVE_ENTROPY())
     {
