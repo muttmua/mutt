@@ -402,31 +402,6 @@ int mutt_matches_ignore (const char *s, LIST *t)
   return 0;
 }
 
-/* prepend the path part of *path to *link */
-void mutt_expand_link (char *newpath, const char *path, const char *link)
-{
-  const char *lb = NULL;
-  size_t len;
-
-  /* link is full path */
-  if (*link == '/')
-  {
-    strfcpy (newpath, link, _POSIX_PATH_MAX);
-    return;
-  }
-
-  if ((lb = strrchr (path, '/')) == NULL)
-  {
-    /* no path in link */
-    strfcpy (newpath, link, _POSIX_PATH_MAX);
-    return;
-  }
-
-  len = lb - path + 1;
-  memcpy (newpath, path, len);
-  strfcpy (newpath + len, link, _POSIX_PATH_MAX - len);
-}
-
 char *mutt_expand_path (char *s, size_t slen)
 {
   return _mutt_expand_path (s, slen, 0);
