@@ -391,7 +391,6 @@ int mx_get_magic (const char *path)
 {
   struct stat st;
   int magic = 0;
-  char tmp[_POSIX_PATH_MAX];
   FILE *f;
 
 #ifdef USE_IMAP
@@ -437,6 +436,7 @@ int mx_get_magic (const char *path)
     struct utimbuf times;
 #endif /* HAVE_UTIMENSAT */
     int ch;
+    char tmp[10];
 
     /* Some mailbox creation tools erroneously append a blank line to
      * a file before appending a mail message.  This allows mutt to
