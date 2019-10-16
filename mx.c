@@ -833,10 +833,11 @@ static int trash_append (CONTEXT *ctx)
 int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 {
   int i, move_messages = 0, purge = 1, read_msgs = 0;
+  int rc = -1;
   int check;
   int isSpool = 0;
   CONTEXT f;
-  char mbox[_POSIX_PATH_MAX];
+  BUFFER *mbox = NULL;
   char buf[SHORT_STRING];
 
   if (!ctx) return 0;
@@ -860,26 +861,28 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
   {
     char *p;
 
+    mbox = mutt_buffer_pool_get ();
+
     if ((p = mutt_find_hook (MUTT_MBOXHOOK, ctx->path)))
     {
       isSpool = 1;
-      strfcpy (mbox, p, sizeof (mbox));
+      mutt_buffer_strcpy (mbox, p);
     }
     else
     {
-      strfcpy (mbox, NONULL(Inbox), sizeof (mbox));
-      isSpool = mutt_is_spool (ctx->path) && !mutt_is_spool (mbox);
+      mutt_buffer_strcpy (mbox, NONULL(Inbox));
+      isSpool = mutt_is_spool (ctx->path) && !mutt_is_spool (mutt_b2s (mbox));
     }
 
-    if (isSpool && *mbox)
+    if (isSpool && mutt_buffer_len (mbox))
     {
-      mutt_expand_path (mbox, sizeof (mbox));
+      mutt_buffer_expand_path (mbox);
       snprintf (buf, sizeof (buf), _("Move %d read messages to %s?"),
-                read_msgs, mbox);
+                read_msgs, mutt_b2s (mbox));
       if ((move_messages = query_quadoption (OPT_MOVE, buf)) == -1)
       {
 	ctx->closing = 0;
-	return (-1);
+	goto cleanup;
       }
     }
   }
@@ -896,7 +899,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     if ((purge = query_quadoption (OPT_DELETE, buf)) < 0)
     {
       ctx->closing = 0;
-      return (-1);
+      goto cleanup;
     }
   }
 
@@ -912,13 +915,13 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
   if (move_messages)
   {
     if (!ctx->quiet)
-      mutt_message (_("Moving read messages to %s..."), mbox);
+      mutt_message (_("Moving read messages to %s..."), mutt_b2s (mbox));
 
 #ifdef USE_IMAP
     /* try to use server-side copy first */
     i = 1;
 
-    if (ctx->magic == MUTT_IMAP && mx_is_imap (mbox))
+    if (ctx->magic == MUTT_IMAP && mx_is_imap (mutt_b2s (mbox)))
     {
       /* tag messages for moving, and clear old tags, if any */
       for (i = 0; i < ctx->msgcount; i++)
@@ -928,7 +931,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 	else
 	  ctx->hdrs[i]->tagged = 0;
 
-      i = imap_copy_messages (ctx, NULL, mbox, 1);
+      i = imap_copy_messages (ctx, NULL, mutt_b2s (mbox), 1);
     }
 
     if (i == 0) /* success */
@@ -936,15 +939,15 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     else if (i == -1) /* horrible error, bail */
     {
       ctx->closing=0;
-      return -1;
+      goto cleanup;
     }
     else /* use regular append-copy mode */
 #endif
     {
-      if (mx_open_mailbox (mbox, MUTT_APPEND, &f) == NULL)
+      if (mx_open_mailbox (mutt_b2s (mbox), MUTT_APPEND, &f) == NULL)
       {
 	ctx->closing = 0;
-	return -1;
+	goto cleanup;
       }
 
       for (i = 0; i < ctx->msgcount; i++)
@@ -961,7 +964,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 	  {
 	    mx_close_mailbox (&f, NULL);
 	    ctx->closing = 0;
-	    return -1;
+	    goto cleanup;
 	  }
 	}
       }
@@ -977,7 +980,8 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     if (ctx->magic == MUTT_MBOX || ctx->magic == MUTT_MMDF)
       mbox_reset_atime (ctx, NULL);
     mx_fastclose_mailbox (ctx);
-    return 0;
+    rc = 0;
+    goto cleanup;
   }
 
   /* copy mails to the trash before expunging */
@@ -986,7 +990,7 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     if (trash_append (ctx) != 0)
     {
       ctx->closing = 0;
-      return -1;
+      goto cleanup;
     }
   }
 
@@ -997,7 +1001,8 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     if ((check = imap_sync_mailbox (ctx, purge, index_hint)) != 0)
     {
       ctx->closing = 0;
-      return check;
+      rc = check;
+      goto cleanup;
     }
   }
   else
@@ -1018,7 +1023,8 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
       if ((check = sync_mailbox (ctx, index_hint)) != 0)
       {
 	ctx->closing = 0;
-	return check;
+	rc = check;
+        goto cleanup;
       }
     }
   }
@@ -1058,7 +1064,11 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 
   mx_fastclose_mailbox (ctx);
 
-  return 0;
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&mbox);
+  return rc;
 }
 
 
