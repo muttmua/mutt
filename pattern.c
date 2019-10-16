@@ -146,7 +146,7 @@ int mutt_which_case (const char *s)
 static int
 msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   MESSAGE *msg = NULL;
   STATE s;
   struct stat st;
@@ -165,11 +165,13 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
       memset (&s, 0, sizeof (s));
       s.fpin = msg->fp;
       s.flags = MUTT_CHARCONV;
-      mutt_mktemp (tempfile, sizeof (tempfile));
-      if ((s.fpout = safe_fopen (tempfile, "w+")) == NULL)
+
+      tempfile = mutt_buffer_new ();
+      mutt_buffer_mktemp (tempfile);
+      if ((s.fpout = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
       {
-	mutt_perror (tempfile);
-	return (0);
+	mutt_perror (mutt_b2s (tempfile));
+	goto cleanup;
       }
 
       if (pat->op != MUTT_BODY)
@@ -186,9 +188,9 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
 	  if (s.fpout)
 	  {
 	    safe_fclose (&s.fpout);
-	    unlink (tempfile);
+	    unlink (mutt_b2s (tempfile));
 	  }
-	  return (0);
+	  goto cleanup;
 	}
 
 	fseeko (msg->fp, h->offset, 0);
@@ -246,10 +248,12 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
     if (option (OPTTHOROUGHSRC))
     {
       safe_fclose (&fp);
-      unlink (tempfile);
+      unlink (mutt_b2s (tempfile));
     }
   }
 
+cleanup:
+  mutt_buffer_free (&tempfile);
   return match;
 }
 
