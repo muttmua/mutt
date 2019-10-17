@@ -622,6 +622,7 @@ int mutt_index_menu (void)
   int do_buffy_notify = 1;
   int close = 0; /* did we OP_QUIT or OP_EXIT out of this menu? */
   int attach_msg = option(OPTATTACHMSG);
+  int in_pager = 0;  /* set when pager redirects a function through the index */
 
   menu = mutt_new_menu (MENU_MAIN);
   menu->make_entry = index_make_entry;
@@ -746,7 +747,7 @@ int mutt_index_menu (void)
     if (op >= 0)
       mutt_curs_set (0);
 
-    if (menu->menu == MENU_MAIN)
+    if (!in_pager)
     {
       index_menu_redraw (menu);
 
@@ -908,7 +909,7 @@ int mutt_index_menu (void)
 	if (mutt_get_field (_("Jump to message: "), buf, sizeof (buf), 0) != 0
 	    || !buf[0])
         {
-          if (menu->menu == MENU_PAGER)
+          if (in_pager)
           {
             op = OP_DISPLAY_MESSAGE;
             continue;
@@ -941,7 +942,7 @@ int mutt_index_menu (void)
 	  if (j >= 0)
 	  {
 	    menu->current = Context->hdrs[j]->virtual;
-	    if (menu->menu == MENU_PAGER)
+	    if (in_pager)
 	    {
 	      op = OP_DISPLAY_MESSAGE;
 	      continue;
@@ -1094,7 +1095,7 @@ int mutt_index_menu (void)
 	    resort_index (menu);
 	    set_option (OPTSEARCHINVALID);
 	  }
-	  if (menu->menu == MENU_PAGER)
+	  if (in_pager)
 	  {
 	    op = OP_DISPLAY_MESSAGE;
 	    continue;
@@ -1248,7 +1249,7 @@ int mutt_index_menu (void)
 	  FREE (&Context);
 
 	/* if we were in the pager, redisplay the message */
-	if (menu->menu == MENU_PAGER)
+	if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1316,7 +1317,7 @@ int mutt_index_menu (void)
 
           if (mutt_buffer_enter_fname (cp, folderbuf, 1) == -1)
           {
-            if (menu->menu == MENU_PAGER)
+            if (in_pager)
             {
               op = OP_DISPLAY_MESSAGE;
               cont = 1;
@@ -1380,17 +1381,6 @@ int mutt_index_menu (void)
 
         mutt_sleep (0);
 
-        /* XXX: quick fix in stable branch.  Better fix will be in master */
-        CurrentMenu = MENU_MAIN;
-
-        /* Note that menu->menu may be MENU_PAGER if the change folder
-         * operation originated from the pager.
-         *
-         * However, exec commands currently use CurrentMenu to determine what
-         * functions are available, which is automatically set by the
-         * mutt_push/pop_current_menu() functions.  If that changes, the menu
-         * would need to be reset here, and the pager cleanup code after the
-         * switch statement would need to be run. */
 	mutt_folder_hook (mutt_b2s (folderbuf));
 
 	if ((Context = mx_open_mailbox (mutt_b2s (folderbuf),
@@ -1451,11 +1441,6 @@ int mutt_index_menu (void)
 	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
 
-        /* If we are returning to the pager via an index menu redirection, we
-         * need to reset the menu->menu.  Otherwise mutt_pop_current_menu() will
-         * set CurrentMenu incorrectly when we return back to the index menu. */
-        menu->menu = MENU_MAIN;
-
         if ((op = mutt_display_message (CURHDR)) < 0)
 	{
 	  unset_option (OPTNEEDRESORT);
@@ -1463,22 +1448,22 @@ int mutt_index_menu (void)
 	}
 
         /* This is used to redirect a single operation back here afterwards.  If
-         * mutt_display_message() returns 0, then the menu and pager state will
+         * mutt_display_message() returns 0, then this flag and pager state will
          * be cleaned up after this switch statement. */
-	menu->menu = MENU_PAGER;
+	in_pager = 1;
  	menu->oldcurrent = menu->current;
 	continue;
 
       case OP_EXIT:
 
 	close = op;
-	if (menu->menu == MENU_MAIN && attach_msg)
+	if (!in_pager && attach_msg)
 	{
           done = 1;
           break;
 	}
 
-	if ((menu->menu == MENU_MAIN)
+	if ((!in_pager)
 	    && (query_quadoption (OPT_QUIT,
 				  _("Exit Mutt without saving?")) == MUTT_YES))
 	{
@@ -1512,7 +1497,7 @@ int mutt_index_menu (void)
 	  Context->changed = 1;
 	  mutt_message _("Thread broken");
 
-	  if (menu->menu == MENU_PAGER)
+	  if (in_pager)
 	  {
 	    op = OP_DISPLAY_MESSAGE;
 	    continue;
@@ -1556,7 +1541,7 @@ int mutt_index_menu (void)
 	    mutt_error _("No thread linked");
 	}
 
-	if (menu->menu == MENU_PAGER)
+	if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1573,7 +1558,7 @@ int mutt_index_menu (void)
 	CHECK_ATTACH;
 	mutt_edit_content_type (CURHDR, CURHDR->content, NULL);
 	/* if we were in the pager, redisplay the message */
-	if (menu->menu == MENU_PAGER)
+	if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1588,17 +1573,17 @@ int mutt_index_menu (void)
         CHECK_VISIBLE;
 	if (menu->current >= Context->vcount - 1)
 	{
-	  if (menu->menu == MENU_MAIN)
+	  if (!in_pager)
 	    mutt_error _("You are on the last message.");
 	  break;
 	}
 	if ((menu->current = ci_next_undeleted (menu->current)) == -1)
 	{
 	  menu->current = menu->oldcurrent;
-	  if (menu->menu == MENU_MAIN)
+	  if (!in_pager)
 	    mutt_error _("No undeleted messages.");
 	}
-	else if (menu->menu == MENU_PAGER)
+	else if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1613,12 +1598,12 @@ int mutt_index_menu (void)
         CHECK_VISIBLE;
 	if (menu->current >= Context->vcount - 1)
 	{
-	  if (menu->menu == MENU_MAIN)
+	  if (!in_pager)
 	    mutt_error _("You are on the last message.");
 	  break;
 	}
 	menu->current++;
-	if (menu->menu == MENU_PAGER)
+	if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1639,10 +1624,10 @@ int mutt_index_menu (void)
 	if ((menu->current = ci_previous_undeleted (menu->current)) == -1)
 	{
 	  menu->current = menu->oldcurrent;
-	  if (menu->menu == MENU_MAIN)
+	  if (!in_pager)
 	    mutt_error _("No undeleted messages.");
 	}
-	else if (menu->menu == MENU_PAGER)
+	else if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1657,11 +1642,11 @@ int mutt_index_menu (void)
         CHECK_VISIBLE;
 	if (menu->current < 1)
 	{
-	  if (menu->menu == MENU_MAIN) mutt_error _("You are on the first message.");
+	  if (!in_pager) mutt_error _("You are on the first message.");
 	  break;
 	}
 	menu->current--;
-	if (menu->menu == MENU_PAGER)
+	if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1797,7 +1782,7 @@ int mutt_index_menu (void)
               mutt_error (_("No unread messages."));
           }
 	}
-	else if (menu->menu == MENU_PAGER)
+	else if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1895,7 +1880,7 @@ int mutt_index_menu (void)
 	CHECK_IN_MAILBOX;
 	if (mx_toggle_write (Context) == 0)
         {
-	  if (menu->menu == MENU_PAGER)
+	  if (in_pager)
           {
             op = OP_DISPLAY_MESSAGE;
             continue;
@@ -1939,7 +1924,7 @@ int mutt_index_menu (void)
 	  else
 	    mutt_error _("You are on the first thread.");
 	}
-	else if (menu->menu == MENU_PAGER)
+	else if (in_pager)
 	{
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -1959,7 +1944,7 @@ int mutt_index_menu (void)
 	{
 	  menu->current = menu->oldcurrent;
 	}
-	else if (menu->menu == MENU_PAGER)
+	else if (in_pager)
         {
           op = OP_DISPLAY_MESSAGE;
           continue;
@@ -2146,7 +2131,7 @@ int mutt_index_menu (void)
 	      menu->current = menu->oldcurrent;
 	      menu->redraw |= REDRAW_CURRENT;
 	    }
-	    else if (menu->menu == MENU_PAGER)
+	    else if (in_pager)
 	    {
 	      op = OP_DISPLAY_MESSAGE;
 	      continue;
@@ -2285,7 +2270,7 @@ int mutt_index_menu (void)
         if (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
 
-        if (menu->menu == MENU_PAGER)
+        if (in_pager)
         {
 	  op = OP_DISPLAY_MESSAGE;
 	  continue;
@@ -2347,7 +2332,7 @@ int mutt_index_menu (void)
 	    if ((menu->current = (op == OP_MAIN_READ_THREAD ?
 				  mutt_next_thread (CURHDR) : mutt_next_subthread (CURHDR))) == -1)
 	      menu->current = menu->oldcurrent;
-	    else if (menu->menu == MENU_PAGER)
+	    else if (in_pager)
 	    {
 	      op = OP_DISPLAY_MESSAGE;
 	      continue;
@@ -2584,14 +2569,14 @@ int mutt_index_menu (void)
 #endif
 
       default:
-	if (menu->menu == MENU_MAIN)
+	if (!in_pager)
 	  km_error_key (MENU_MAIN);
     }
 
-    if (menu->menu == MENU_PAGER)
+    if (in_pager)
     {
       mutt_clear_pager_position ();
-      menu->menu = MENU_MAIN;
+      in_pager = 0;
       menu->redraw = REDRAW_FULL;
     }
 
