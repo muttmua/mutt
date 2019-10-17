@@ -1371,6 +1371,9 @@ int mutt_index_menu (void)
 
         mutt_sleep (0);
 
+        /* XXX: quick fix in stable branch.  Better fix will be in master */
+        CurrentMenu = MENU_MAIN;
+
         /* Note that menu->menu may be MENU_PAGER if the change folder
          * operation originated from the pager.
          *
