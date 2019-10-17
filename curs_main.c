@@ -1277,7 +1277,7 @@ int mutt_index_menu (void)
       case OP_MAIN_CHANGE_FOLDER_READONLY:
       {
         BUFFER *folderbuf;
-        int cont = 0;  /* Set if we want to continue instead of break */
+        int pager_return = 1;  /* return to display message in pager */
 
         folderbuf = mutt_buffer_pool_get ();
 
@@ -1316,14 +1316,7 @@ int mutt_index_menu (void)
 	  mutt_buffer_buffy (folderbuf);
 
           if (mutt_buffer_enter_fname (cp, folderbuf, 1) == -1)
-          {
-            if (in_pager)
-            {
-              op = OP_DISPLAY_MESSAGE;
-              cont = 1;
-            }
             goto changefoldercleanup;
-          }
 	}
 
         if (!mutt_buffer_len (folderbuf))
@@ -1337,6 +1330,9 @@ int mutt_index_menu (void)
 	  mutt_error (_("%s is not a mailbox."), mutt_b2s (folderbuf));
 	  goto changefoldercleanup;
 	}
+
+        /* past this point, we don't return to the pager on error */
+        pager_return = 0;
 
 	/* keepalive failure in mutt_enter_fname may kill connection. #3028 */
 	if (Context && !Context->path)
@@ -1410,10 +1406,12 @@ int mutt_index_menu (void)
 
       changefoldercleanup:
         mutt_buffer_pool_release (&folderbuf);
-        if (cont)
+        if (in_pager && pager_return)
+        {
+          op = OP_DISPLAY_MESSAGE;
           continue;
-        else
-          break;
+        }
+        break;
       }
 
       case OP_DISPLAY_MESSAGE:
