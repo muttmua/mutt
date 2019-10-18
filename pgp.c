@@ -721,28 +721,30 @@ out:
 
 static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   char buf[HUGE_STRING];
   FILE *tfp;
+  int rc = 0;
 
   short sgn = 0;
   short enc = 0;
   short key = 0;
 
   if (b->type != TYPETEXT)
-    return 0;
+    goto cleanup;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (mutt_decode_save_attachment (fp, b, tempfile, 0, 0) != 0)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if (mutt_decode_save_attachment (fp, b, mutt_b2s (tempfile), 0, 0) != 0)
   {
-    unlink (tempfile);
-    return 0;
+    unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
-  if ((tfp = fopen (tempfile, "r")) == NULL)
+  if ((tfp = fopen (mutt_b2s (tempfile), "r")) == NULL)
   {
-    unlink (tempfile);
-    return 0;
+    unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
   while (fgets (buf, sizeof (buf), tfp))
@@ -758,10 +760,10 @@ static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
     }
   }
   safe_fclose (&tfp);
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
 
   if (!enc && !sgn && !key)
-    return 0;
+    goto cleanup;
 
   /* fix the content type */
 
@@ -773,7 +775,11 @@ static int pgp_check_traditional_one_body (FILE *fp, BODY *b)
   else if (key)
     mutt_set_parameter ("x-action", "pgp-keys", &b->parameter);
 
-  return 1;
+  rc = 1;
+
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
+  return rc;
 }
 
 int pgp_check_traditional (FILE *fp, BODY *b, int just_one)
