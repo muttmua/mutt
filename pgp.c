@@ -884,13 +884,14 @@ static void pgp_extract_keys_from_attachment (FILE *fp, BODY *top)
 {
   STATE s;
   FILE *tempfp;
-  char tempfname[_POSIX_PATH_MAX];
+  BUFFER *tempfname = NULL;
 
-  mutt_mktemp (tempfname, sizeof (tempfname));
-  if (!(tempfp = safe_fopen (tempfname, "w")))
+  tempfname = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfname);
+  if (!(tempfp = safe_fopen (mutt_b2s (tempfname), "w")))
   {
-    mutt_perror (tempfname);
-    return;
+    mutt_perror (mutt_b2s (tempfname));
+    goto cleanup;
   }
 
   memset (&s, 0, sizeof (STATE));
@@ -902,10 +903,13 @@ static void pgp_extract_keys_from_attachment (FILE *fp, BODY *top)
 
   safe_fclose (&tempfp);
 
-  pgp_invoke_import (tempfname);
+  pgp_invoke_import (mutt_b2s (tempfname));
   mutt_any_key_to_continue (NULL);
 
-  mutt_unlink (tempfname);
+  mutt_unlink (mutt_b2s (tempfname));
+
+cleanup:
+  mutt_buffer_pool_release (&tempfname);
 }
 
 void pgp_extract_keys_from_attachment_list (FILE *fp, int tag, BODY *top)
