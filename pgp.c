@@ -1062,7 +1062,7 @@ cleanup:
 
 int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   STATE s;
   BODY *p = b;
   int need_decode = 0;
@@ -1070,7 +1070,7 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   LOFF_T saved_offset;
   size_t saved_length;
   FILE *decoded_fp = NULL;
-  int rv = 0;
+  int rv = -1;
 
   if (mutt_is_valid_multipart_pgp_encrypted (b))
   {
@@ -1087,6 +1087,8 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   else
     return -1;
 
+  tempfile = mutt_buffer_pool_get ();
+
   memset (&s, 0, sizeof (s));
   s.fpin = fpin;
 
@@ -1096,13 +1098,13 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
     saved_offset = b->offset;
     saved_length = b->length;
 
-    mutt_mktemp (tempfile, sizeof (tempfile));
-    if ((decoded_fp = safe_fopen (tempfile, "w+")) == NULL)
+    mutt_buffer_mktemp (tempfile);
+    if ((decoded_fp = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
     {
-      mutt_perror (tempfile);
-      return (-1);
+      mutt_perror (mutt_b2s (tempfile));
+      goto bail;
     }
-    unlink (tempfile);
+    unlink (mutt_b2s (tempfile));
 
     fseeko (s.fpin, b->offset, 0);
     s.fpout = decoded_fp;
@@ -1117,17 +1119,16 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
     s.fpout = 0;
   }
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((*fpout = safe_fopen (tempfile, "w+")) == NULL)
+  mutt_buffer_mktemp (tempfile);
+  if ((*fpout = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
   {
-    mutt_perror (tempfile);
-    rv = -1;
+    mutt_perror (mutt_b2s (tempfile));
     goto bail;
   }
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
 
-  if ((*cur = pgp_decrypt_part (b, &s, *fpout, p)) == NULL)
-    rv = -1;
+  if ((*cur = pgp_decrypt_part (b, &s, *fpout, p)) != NULL)
+    rv = 0;
   rewind (*fpout);
 
 bail:
@@ -1139,6 +1140,7 @@ bail:
     safe_fclose (&decoded_fp);
   }
 
+  mutt_buffer_pool_release (&tempfile);
   return rv;
 }
 
