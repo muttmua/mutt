@@ -940,27 +940,29 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   char buf[LONG_STRING];
   FILE *pgpin, *pgpout, *pgperr, *pgptmp;
   struct stat info;
-  BODY *tattach;
+  BODY *tattach = NULL;
   int len;
-  char pgperrfile[_POSIX_PATH_MAX];
-  char pgptmpfile[_POSIX_PATH_MAX];
+  BUFFER *pgperrfile = NULL, *pgptmpfile = NULL;
   pid_t thepid;
   int rv;
 
-  mutt_mktemp (pgperrfile, sizeof (pgperrfile));
-  if ((pgperr = safe_fopen (pgperrfile, "w+")) == NULL)
-  {
-    mutt_perror (pgperrfile);
-    return NULL;
-  }
-  unlink (pgperrfile);
+  pgperrfile = mutt_buffer_pool_get ();
+  pgptmpfile = mutt_buffer_pool_get ();
 
-  mutt_mktemp (pgptmpfile, sizeof (pgptmpfile));
-  if ((pgptmp = safe_fopen (pgptmpfile, "w")) == NULL)
+  mutt_buffer_mktemp (pgperrfile);
+  if ((pgperr = safe_fopen (mutt_b2s (pgperrfile), "w+")) == NULL)
   {
-    mutt_perror (pgptmpfile);
+    mutt_perror (mutt_b2s (pgperrfile));
+    goto cleanup;
+  }
+  unlink (mutt_b2s (pgperrfile));
+
+  mutt_buffer_mktemp (pgptmpfile);
+  if ((pgptmp = safe_fopen (mutt_b2s (pgptmpfile), "w")) == NULL)
+  {
+    mutt_perror (mutt_b2s (pgptmpfile));
     safe_fclose (&pgperr);
-    return NULL;
+    goto cleanup;
   }
 
   /* Position the stream at the beginning of the body, and send the data to
@@ -972,13 +974,13 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   safe_fclose (&pgptmp);
 
   if ((thepid = pgp_invoke_decrypt (&pgpin, &pgpout, NULL, -1, -1,
-				    fileno (pgperr), pgptmpfile)) == -1)
+				    fileno (pgperr), mutt_b2s (pgptmpfile))) == -1)
   {
     safe_fclose (&pgperr);
-    unlink (pgptmpfile);
+    unlink (mutt_b2s (pgptmpfile));
     if (s->flags & MUTT_DISPLAY)
       state_attach_puts (_("[-- Error: could not create a PGP subprocess! --]\n\n"), s);
-    return (NULL);
+    goto cleanup;
   }
 
   /* send the PGP passphrase to the subprocess.  Never do this if the
@@ -1002,7 +1004,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
 
   safe_fclose (&pgpout);
   rv = mutt_wait_filter (thepid);
-  mutt_unlink(pgptmpfile);
+  mutt_unlink (mutt_b2s (pgptmpfile));
 
   fflush (pgperr);
   rewind (pgperr);
@@ -1010,7 +1012,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   {
     mutt_error _("Decryption failed");
     pgp_void_passphrase ();
-    return NULL;
+    goto cleanup;
   }
 
   if (s->flags & MUTT_DISPLAY)
@@ -1034,7 +1036,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   {
     mutt_error _("Decryption failed");
     pgp_void_passphrase ();
-    return NULL;
+    goto cleanup;
   }
 
   rewind (fpout);
@@ -1052,6 +1054,9 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
     mutt_parse_part (fpout, tattach);
   }
 
+cleanup:
+  mutt_buffer_pool_release (&pgperrfile);
+  mutt_buffer_pool_release (&pgptmpfile);
   return (tattach);
 }
 
