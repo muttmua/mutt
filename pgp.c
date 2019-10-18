@@ -811,37 +811,39 @@ int pgp_check_traditional (FILE *fp, BODY *b, int just_one)
 
 int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 {
-  char sigfile[_POSIX_PATH_MAX], pgperrfile[_POSIX_PATH_MAX];
+  BUFFER *sigfile = NULL, *pgperrfile = NULL;
   FILE *fp, *pgpout, *pgperr;
   pid_t thepid;
   int badsig = -1;
   int rv;
 
-  snprintf (sigfile, sizeof (sigfile), "%s.asc", tempfile);
+  sigfile = mutt_buffer_pool_get ();
+  pgperrfile = mutt_buffer_pool_get ();
 
-  if (!(fp = safe_fopen (sigfile, "w")))
+  mutt_buffer_printf (sigfile, "%s.asc", tempfile);
+  if (!(fp = safe_fopen (mutt_b2s (sigfile), "w")))
   {
-    mutt_perror(sigfile);
-    return -1;
+    mutt_perror (mutt_b2s (sigfile));
+    goto cleanup;
   }
 
   fseeko (s->fpin, sigbdy->offset, 0);
   mutt_copy_bytes (s->fpin, fp, sigbdy->length);
   safe_fclose (&fp);
 
-  mutt_mktemp (pgperrfile, sizeof (pgperrfile));
-  if (!(pgperr = safe_fopen(pgperrfile, "w+")))
+  mutt_buffer_mktemp (pgperrfile);
+  if (!(pgperr = safe_fopen (mutt_b2s (pgperrfile), "w+")))
   {
-    mutt_perror(pgperrfile);
-    unlink(sigfile);
-    return -1;
+    mutt_perror (mutt_b2s (pgperrfile));
+    unlink (mutt_b2s (sigfile));
+    goto cleanup;
   }
 
   crypt_current_time (s, "PGP");
 
   if ((thepid = pgp_invoke_verify (NULL, &pgpout, NULL,
                                    -1, -1, fileno(pgperr),
-                                   tempfile, sigfile)) != -1)
+                                   tempfile, mutt_b2s (sigfile))) != -1)
   {
     if (pgp_copy_checksig (pgpout, s->fpout) >= 0)
       badsig = 0;
@@ -851,7 +853,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
     fflush (pgperr);
     rewind (pgperr);
 
-    if (pgp_copy_checksig  (pgperr, s->fpout) >= 0)
+    if (pgp_copy_checksig (pgperr, s->fpout) >= 0)
       badsig = 0;
 
     if ((rv = mutt_wait_filter (thepid)))
@@ -864,11 +866,14 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 
   state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
 
-  mutt_unlink (sigfile);
-  mutt_unlink (pgperrfile);
+  mutt_unlink (mutt_b2s (sigfile));
+  mutt_unlink (mutt_b2s (pgperrfile));
+
+cleanup:
+  mutt_buffer_pool_release (&sigfile);
+  mutt_buffer_pool_release (&pgperrfile);
 
   dprint (1, (debugfile, "pgp_verify_one: returning %d.\n", badsig));
-
   return badsig;
 }
 
