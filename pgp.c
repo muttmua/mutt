@@ -1243,29 +1243,32 @@ cleanup:
 
 BODY *pgp_sign_message (BODY *a)
 {
-  BODY *t;
+  BODY *t, *rv = NULL;
   char buffer[LONG_STRING];
-  char sigfile[_POSIX_PATH_MAX], signedfile[_POSIX_PATH_MAX];
+  BUFFER *sigfile, *signedfile;
   FILE *pgpin, *pgpout, *pgperr, *fp, *sfp;
   int err = 0;
   int empty = 1;
   pid_t thepid;
 
+  sigfile = mutt_buffer_pool_get ();
+  signedfile = mutt_buffer_pool_get ();
+
   convert_to_7bit (a); /* Signed data _must_ be in 7-bit format. */
 
-  mutt_mktemp (sigfile, sizeof (sigfile));
-  if ((fp = safe_fopen (sigfile, "w")) == NULL)
+  mutt_buffer_mktemp (sigfile);
+  if ((fp = safe_fopen (mutt_b2s (sigfile), "w")) == NULL)
   {
-    return (NULL);
+    goto cleanup;
   }
 
-  mutt_mktemp (signedfile, sizeof (signedfile));
-  if ((sfp = safe_fopen(signedfile, "w")) == NULL)
+  mutt_buffer_mktemp (signedfile);
+  if ((sfp = safe_fopen (mutt_b2s (signedfile), "w")) == NULL)
   {
-    mutt_perror(signedfile);
+    mutt_perror (mutt_b2s (signedfile));
     safe_fclose (&fp);
-    unlink(sigfile);
-    return NULL;
+    unlink (mutt_b2s (sigfile));
+    goto cleanup;
   }
 
   mutt_write_mime_header (a, sfp);
@@ -1274,13 +1277,13 @@ BODY *pgp_sign_message (BODY *a)
   safe_fclose (&sfp);
 
   if ((thepid = pgp_invoke_sign (&pgpin, &pgpout, &pgperr,
-				 -1, -1, -1, signedfile)) == -1)
+				 -1, -1, -1, mutt_b2s (signedfile))) == -1)
   {
     mutt_perror _("Can't open PGP subprocess!");
     safe_fclose (&fp);
-    unlink(sigfile);
-    unlink(signedfile);
-    return NULL;
+    unlink (mutt_b2s (sigfile));
+    unlink (mutt_b2s (signedfile));
+    goto cleanup;
   }
 
   if (!pgp_use_gpg_agent())
@@ -1316,26 +1319,26 @@ BODY *pgp_sign_message (BODY *a)
 
   safe_fclose (&pgperr);
   safe_fclose (&pgpout);
-  unlink (signedfile);
+  unlink (mutt_b2s (signedfile));
 
   if (fclose (fp) != 0)
   {
     mutt_perror ("fclose");
-    unlink (sigfile);
-    return (NULL);
+    unlink (mutt_b2s (sigfile));
+    goto cleanup;
   }
 
   if (err)
     mutt_any_key_to_continue (NULL);
   if (empty)
   {
-    unlink (sigfile);
+    unlink (mutt_b2s (sigfile));
     /* most likely error is a bad passphrase, so automatically forget it */
     pgp_void_passphrase ();
-    return (NULL); /* fatal error while signing */
+    goto cleanup; /* fatal error while signing */
   }
 
-  t = mutt_new_body ();
+  rv = t = mutt_new_body ();
   t->type = TYPEMULTIPART;
   t->subtype = safe_strdup ("signed");
   t->encoding = ENC7BIT;
@@ -1344,23 +1347,25 @@ BODY *pgp_sign_message (BODY *a)
 
   mutt_generate_boundary (&t->parameter);
   mutt_set_parameter ("protocol", "application/pgp-signature", &t->parameter);
-  mutt_set_parameter ("micalg", pgp_micalg (sigfile), &t->parameter);
+  mutt_set_parameter ("micalg", pgp_micalg (mutt_b2s (sigfile)), &t->parameter);
 
   t->parts = a;
-  a = t;
 
   t->parts->next = mutt_new_body ();
   t = t->parts->next;
   t->type = TYPEAPPLICATION;
   t->subtype = safe_strdup ("pgp-signature");
-  t->filename = safe_strdup (sigfile);
+  t->filename = safe_strdup (mutt_b2s (sigfile));
   t->use_disp = 0;
   t->disposition = DISPNONE;
   t->encoding = ENC7BIT;
   t->unlink = 1; /* ok to remove this file after sending. */
   mutt_set_parameter ("name", "signature.asc", &t->parameter);
 
-  return (a);
+cleanup:
+  mutt_buffer_pool_release (&sigfile);
+  mutt_buffer_pool_release (&signedfile);
+  return (rv);
 }
 
 /* This routine attempts to find the keyids of the recipients of a message.
