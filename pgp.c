@@ -1150,17 +1150,18 @@ bail:
  */
 int pgp_encrypted_handler (BODY *a, STATE *s)
 {
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *fpout, *fpin;
   BODY *tattach;
-  int rc = 0;
+  int rc = -1;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((fpout = safe_fopen (tempfile, "w+")) == NULL)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if ((fpout = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
   {
     if (s->flags & MUTT_DISPLAY)
       state_attach_puts (_("[-- Error: could not create temporary file! --]\n"), s);
-    return -1;
+    goto cleanup;
   }
 
   if (s->flags & MUTT_DISPLAY) crypt_current_time (s, "PGP");
@@ -1225,12 +1226,13 @@ int pgp_encrypted_handler (BODY *a, STATE *s)
     mutt_sleep (2);
     /* void the passphrase, even if it's not necessarily the problem */
     pgp_void_passphrase ();
-    rc = -1;
   }
 
   safe_fclose (&fpout);
-  mutt_unlink(tempfile);
+  mutt_unlink (mutt_b2s (tempfile));
 
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
   return rc;
 }
 
