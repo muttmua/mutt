@@ -162,21 +162,19 @@ static short pgp_find_hash (const char *fname)
 {
   FILE *in = NULL;
   FILE *out = NULL;
-
-  char tempfile[_POSIX_PATH_MAX];
-
+  BUFFER *tempfile = NULL;
   unsigned char *p;
   size_t l;
-
   short rv = -1;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((out = safe_fopen (tempfile, "w+")) == NULL)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if ((out = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
   {
-    mutt_perror (tempfile);
+    mutt_perror (mutt_b2s (tempfile));
     goto bye;
   }
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
 
   if ((in = fopen (fname, "r")) == NULL)
   {
@@ -197,7 +195,7 @@ static short pgp_find_hash (const char *fname)
   }
 
 bye:
-
+  mutt_buffer_pool_release (&tempfile);
   safe_fclose (&in);
   safe_fclose (&out);
   pgp_release_packet ();
