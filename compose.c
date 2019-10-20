@@ -1053,7 +1053,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           break;
 
 	new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-	if ((new->content = crypt_pgp_make_key_attachment(NULL)) != NULL)
+	if ((new->content = crypt_pgp_make_key_attachment()) != NULL)
 	{
 	  update_idx (menu, actx, new);
 	  menu->redraw |= REDRAW_INDEX;

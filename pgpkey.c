@@ -716,7 +716,7 @@ pgp_key_t pgp_ask_for_key (char *tag, char *whatfor,
 
 /* generate a public key attachment */
 
-BODY *pgp_make_key_attachment (char *tempf)
+BODY *pgp_make_key_attachment (void)
 {
   BODY *att;
   char buff[LONG_STRING];
@@ -727,6 +727,7 @@ BODY *pgp_make_key_attachment (char *tempf)
   pid_t thepid;
   pgp_key_t key;
   unset_option (OPTPGPCHECKTRUST);
+  const char *tempf = NULL;
 
   key = pgp_ask_for_key (_("Please enter the key ID: "), NULL, 0, PGP_PUBRING);
 

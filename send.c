@@ -966,7 +966,7 @@ generate_body (FILE *tempfp,	/* stream for outgoing message */
     BODY *tmp;
 
     if ((WithCrypto & APPLICATION_PGP)
-        && (tmp = crypt_pgp_make_key_attachment (NULL)) == NULL)
+        && (tmp = crypt_pgp_make_key_attachment ()) == NULL)
       return -1;
 
     tmp->next = msg->content;

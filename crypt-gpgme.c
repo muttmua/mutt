@@ -5157,7 +5157,7 @@ cleanup:
   return rv;
 }
 
-BODY *pgp_gpgme_make_key_attachment (char *tempf)
+BODY *pgp_gpgme_make_key_attachment (void)
 {
   crypt_key_t *key = NULL;
   gpgme_ctx_t context = NULL;
@@ -5166,6 +5166,7 @@ BODY *pgp_gpgme_make_key_attachment (char *tempf)
   gpgme_error_t err;
   BODY *att = NULL;
   char buff[LONG_STRING];
+  char *attfilename;
   struct stat sb;
 
   unset_option (OPTPGPCHECKTRUST);
@@ -5188,13 +5189,13 @@ BODY *pgp_gpgme_make_key_attachment (char *tempf)
     goto bail;
   }
 
-  tempf = data_object_to_tempfile (keydata, tempf, NULL);
-  if (!tempf)
+  attfilename = data_object_to_tempfile (keydata, NULL, NULL);
+  if (!attfilename)
     goto bail;
 
   att = mutt_new_body ();
-  /* tempf is a newly allocated string, so this is correct: */
-  att->filename = tempf;
+  /* attfilename is a newly allocated string, so this is correct: */
+  att->filename = attfilename;
   att->unlink = 1;
   att->use_disp = 0;
   att->type = TYPEAPPLICATION;
@@ -5207,7 +5208,7 @@ BODY *pgp_gpgme_make_key_attachment (char *tempf)
   att->description = safe_strdup (buff);
   mutt_update_encoding (att);
 
-  stat (tempf, &sb);
+  stat (attfilename, &sb);
   att->length = sb.st_size;
 
 bail:

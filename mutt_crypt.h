@@ -231,7 +231,7 @@ BODY *crypt_pgp_traditional_encryptsign (BODY *a, int flags, char *keylist);
 void crypt_pgp_free_key (pgp_key_t *kpp);
 
 /* Generate a PGP public key attachment. */
-BODY *crypt_pgp_make_key_attachment (char *tempf);
+BODY *crypt_pgp_make_key_attachment (void);
 
 /* This routine attempts to find the keyids of the recipients of a
    message.  It returns NULL if any of the keys can not be found.

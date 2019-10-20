@@ -95,9 +95,9 @@ static BODY *crypt_mod_pgp_encrypt_message (BODY *a, char *keylist, int sign)
   return pgp_gpgme_encrypt_message (a, keylist, sign);
 }
 
-static BODY *crypt_mod_pgp_make_key_attachment (char *tempf)
+static BODY *crypt_mod_pgp_make_key_attachment (void)
 {
-  return pgp_gpgme_make_key_attachment (tempf);
+  return pgp_gpgme_make_key_attachment ();
 }
 
 static void crypt_mod_pgp_set_sender (const char *sender)

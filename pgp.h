@@ -30,7 +30,7 @@ int pgp_use_gpg_agent(void);
 
 int pgp_check_traditional (FILE *, BODY *, int);
 BODY *pgp_decrypt_part (BODY *, STATE *, FILE *, BODY *);
-BODY *pgp_make_key_attachment (char *);
+BODY *pgp_make_key_attachment (void);
 const char *pgp_micalg (const char *fname);
 
 char *_pgp_keyid (pgp_key_t);

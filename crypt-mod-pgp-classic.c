@@ -71,9 +71,9 @@ static BODY *crypt_mod_pgp_encrypt_message (BODY *a, char *keylist, int sign)
   return pgp_encrypt_message (a, keylist, sign);
 }
 
-static BODY *crypt_mod_pgp_make_key_attachment (char *tempf)
+static BODY *crypt_mod_pgp_make_key_attachment (void)
 {
-  return pgp_make_key_attachment (tempf);
+  return pgp_make_key_attachment ();
 }
 
 static int crypt_mod_pgp_check_traditional (FILE *fp, BODY *b, int just_one)
