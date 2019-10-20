@@ -718,43 +718,37 @@ pgp_key_t pgp_ask_for_key (char *tag, char *whatfor,
 
 BODY *pgp_make_key_attachment (void)
 {
-  BODY *att;
-  char buff[LONG_STRING];
-  char tempfb[_POSIX_PATH_MAX], tmp[STRING];
+  BODY *att = NULL;
+  char buff[LONG_STRING], tmp[STRING];
+  BUFFER *tempf = NULL;
   FILE *tempfp;
   FILE *devnull;
   struct stat sb;
   pid_t thepid;
   pgp_key_t key;
   unset_option (OPTPGPCHECKTRUST);
-  const char *tempf = NULL;
 
   key = pgp_ask_for_key (_("Please enter the key ID: "), NULL, 0, PGP_PUBRING);
-
-  if (!key)    return NULL;
+  if (!key)
+    return NULL;
 
   snprintf (tmp, sizeof (tmp), "0x%s", pgp_fpr_or_lkeyid (pgp_principal_key (key)));
   pgp_free_key (&key);
 
-  if (!tempf)
-  {
-    mutt_mktemp (tempfb, sizeof (tempfb));
-    tempf = tempfb;
-  }
-
-  if ((tempfp = safe_fopen (tempf, tempf == tempfb ? "w" : "a")) == NULL)
+  tempf = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempf);
+  if ((tempfp = safe_fopen (mutt_b2s (tempf), "w")) == NULL)
   {
     mutt_perror _("Can't create temporary file");
-    return NULL;
+    goto cleanup;
   }
 
   if ((devnull = fopen ("/dev/null", "w")) == NULL)	/* __FOPEN_CHECKED__ */
   {
     mutt_perror _("Can't open /dev/null");
     safe_fclose (&tempfp);
-    if (tempf == tempfb)
-      unlink (tempf);
-    return NULL;
+    unlink (mutt_b2s (tempf));
+    goto cleanup;
   }
 
   mutt_message _("Invoking PGP...");
@@ -765,10 +759,10 @@ BODY *pgp_make_key_attachment (void)
                           fileno (tempfp), fileno (devnull), tmp)) == -1)
   {
     mutt_perror _("Can't create filter");
-    unlink (tempf);
     safe_fclose (&tempfp);
+    unlink (mutt_b2s (tempf));
     safe_fclose (&devnull);
-    return NULL;
+    goto cleanup;
   }
 
   mutt_wait_filter (thepid);
@@ -777,7 +771,7 @@ BODY *pgp_make_key_attachment (void)
   safe_fclose (&devnull);
 
   att = mutt_new_body ();
-  att->filename = safe_strdup (tempf);
+  att->filename = safe_strdup (mutt_b2s (tempf));
   att->unlink = 1;
   att->use_disp = 0;
   att->type = TYPEAPPLICATION;
@@ -786,9 +780,11 @@ BODY *pgp_make_key_attachment (void)
   att->description = safe_strdup (buff);
   mutt_update_encoding (att);
 
-  stat (tempf, &sb);
+  stat (mutt_b2s (tempf), &sb);
   att->length = sb.st_size;
 
+cleanup:
+  mutt_buffer_pool_release (&tempf);
   return att;
 }
 
