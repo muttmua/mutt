@@ -113,15 +113,19 @@ int mutt_num_postponed (int force)
   {
     /* if we have a maildir mailbox, we need to stat the "new" dir */
 
-    char buf[_POSIX_PATH_MAX];
+    BUFFER *buf;
 
-    snprintf (buf, sizeof (buf), "%s/new", Postponed);
-    if (access (buf, F_OK) == 0 && stat (buf, &st) == -1)
+    buf = mutt_buffer_pool_get ();
+    mutt_buffer_printf (buf, "%s/new", Postponed);
+    if (access (mutt_b2s (buf), F_OK) == 0 &&
+        stat (mutt_b2s (buf), &st) == -1)
     {
       PostCount = 0;
       LastModify = 0;
+      mutt_buffer_pool_release (&buf);
       return 0;
     }
+    mutt_buffer_pool_release (&buf);
   }
 
   if (LastModify < st.st_mtime)
