@@ -85,13 +85,15 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
   int ret, index;
   long length;
   char buf[LONG_STRING];
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if (!(f = safe_fopen (tempfile, "w+")))
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if (!(f = safe_fopen (mutt_b2s (tempfile), "w+")))
   {
-    mutt_perror (tempfile);
-    return -3;
+    mutt_perror (mutt_b2s (tempfile));
+    ret = -3;
+    goto cleanup;
   }
 
   snprintf (buf, sizeof (buf), "LIST %d\r\n", h->refno);
@@ -151,7 +153,10 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
   }
 
   safe_fclose (&f);
-  unlink (tempfile);
+  unlink (mutt_b2s (tempfile));
+
+cleanup:
+  mutt_buffer_pool_release (&tempfile);
   return ret;
 }
 
