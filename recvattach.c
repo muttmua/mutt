@@ -741,7 +741,7 @@ static int can_print (ATTACH_CONTEXT *actx, BODY *top, int tag)
     snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
     if (!tag || top->tagged)
     {
-      if (!rfc1524_mailcap_lookup (top, type, NULL, MUTT_PRINT))
+      if (!rfc1524_mailcap_lookup (top, type, sizeof(type), NULL, MUTT_PRINT))
       {
 	if (ascii_strcasecmp ("text/plain", top->subtype) &&
 	    ascii_strcasecmp ("application/postscript", top->subtype))
@@ -775,7 +775,8 @@ static void print_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY
     if (!tag || top->tagged)
     {
       snprintf (type, sizeof (type), "%s/%s", TYPE (top), top->subtype);
-      if (!option (OPTATTACHSPLIT) && !rfc1524_mailcap_lookup (top, type, NULL, MUTT_PRINT))
+      if (!option (OPTATTACHSPLIT) &&
+          !rfc1524_mailcap_lookup (top, type, sizeof(type), NULL, MUTT_PRINT))
       {
 	if (!ascii_strcasecmp ("text/plain", top->subtype) ||
 	    !ascii_strcasecmp ("application/postscript", top->subtype))

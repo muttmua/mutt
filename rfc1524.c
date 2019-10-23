@@ -420,7 +420,7 @@ void rfc1524_free_entry(rfc1524_entry **entry)
  * in *entry, and returns 1.  On failure (not found), returns 0.
  * If entry == NULL just return 1 if the given type is found.
  */
-int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
+int rfc1524_mailcap_lookup (BODY *a, char *type, size_t typelen, rfc1524_entry *entry, int opt)
 {
   BUFFER *path = NULL;
   int found = FALSE;
@@ -438,8 +438,7 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
     return 0;
   }
 
-  /* FIXME: sizeof type should be passed to rfc1524_mailcap_lookup() */
-  mutt_check_lookup_list (a, type, SHORT_STRING);
+  mutt_check_lookup_list (a, type, typelen);
 
   path = mutt_buffer_pool_get ();
 

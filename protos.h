@@ -236,7 +236,7 @@ const char *mutt_getcwd (BUFFER *);
 void mutt_help (int);
 const char *mutt_idxfmt_hook (const char *, CONTEXT *, HEADER *);
 void mutt_draw_tree (CONTEXT *);
-void mutt_check_lookup_list (BODY *, char *, int);
+void mutt_check_lookup_list (BODY *, char *, size_t);
 void mutt_make_attribution (CONTEXT *ctx, HEADER *cur, FILE *out);
 void mutt_make_forward_subject (ENVELOPE *env, CONTEXT *ctx, HEADER *cur);
 void mutt_make_help (char *, size_t, const char *, int, int);

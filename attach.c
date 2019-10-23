@@ -58,7 +58,7 @@ int mutt_get_tmp_attachment (BODY *a)
   entry = rfc1524_new_entry();
 
   snprintf(type, sizeof(type), "%s/%s", TYPE(a), a->subtype);
-  rfc1524_mailcap_lookup(a, type, entry, 0);
+  rfc1524_mailcap_lookup(a, type, sizeof(type), entry, 0);
   mutt_rfc1524_expand_filename (entry->nametemplate, a->filename, tempfile);
 
   rfc1524_free_entry(&entry);
@@ -103,7 +103,7 @@ int mutt_compose_attachment (BODY *a)
   int rc = 0;
 
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
-  if (rfc1524_mailcap_lookup (a, type, entry, MUTT_COMPOSE))
+  if (rfc1524_mailcap_lookup (a, type, sizeof(type), entry, MUTT_COMPOSE))
   {
     if (entry->composecommand || entry->composetypecommand)
     {
@@ -239,7 +239,7 @@ int mutt_edit_attachment (BODY *a)
   int rc = 0;
 
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
-  if (rfc1524_mailcap_lookup (a, type, entry, MUTT_EDIT))
+  if (rfc1524_mailcap_lookup (a, type, sizeof(type), entry, MUTT_EDIT))
   {
     if (entry->editcommand)
     {
@@ -303,7 +303,7 @@ bailout:
 }
 
 
-void mutt_check_lookup_list (BODY *b, char *type, int len)
+void mutt_check_lookup_list (BODY *b, char *type, size_t len)
 {
   LIST *t = MimeLookupList;
   int i;
@@ -374,7 +374,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
   if (use_mailcap)
   {
     entry = rfc1524_new_entry ();
-    if (!rfc1524_mailcap_lookup (a, type, entry, 0))
+    if (!rfc1524_mailcap_lookup (a, type, sizeof(type), entry, 0))
     {
       if (flag == MUTT_REGULAR)
       {
@@ -929,7 +929,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
 
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
 
-  if (rfc1524_mailcap_lookup (a, type, NULL, MUTT_PRINT))
+  if (rfc1524_mailcap_lookup (a, type, sizeof(type), NULL, MUTT_PRINT))
   {
     rfc1524_entry *entry = NULL;
     int piped = FALSE;
@@ -937,7 +937,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     dprint (2, (debugfile, "Using mailcap...\n"));
 
     entry = rfc1524_new_entry ();
-    rfc1524_mailcap_lookup (a, type, entry, MUTT_PRINT);
+    rfc1524_mailcap_lookup (a, type, sizeof(type), entry, MUTT_PRINT);
     mutt_rfc1524_expand_filename (entry->nametemplate, a->filename,
                                   newfile);
 

@@ -955,7 +955,7 @@ static int is_mmnoask (const char *buf)
  */
 static int mutt_is_autoview (BODY *b)
 {
-  char type[SHORT_STRING];
+  char type[STRING];
   int is_autoview = 0;
 
   snprintf (type, sizeof (type), "%s/%s", TYPE (b), b->subtype);
@@ -988,7 +988,7 @@ static int mutt_is_autoview (BODY *b)
    *
    * WARNING: type is altered by this call as a result of `mime_lookup' support */
   if (is_autoview)
-    return rfc1524_mailcap_lookup(b, type, NULL, MUTT_AUTOVIEW);
+    return rfc1524_mailcap_lookup(b, type, sizeof(type), NULL, MUTT_AUTOVIEW);
 
   return 0;
 }
@@ -1320,7 +1320,7 @@ static int autoview_handler (BODY *a, STATE *s)
   tempfile = mutt_buffer_pool_get ();
 
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
-  rfc1524_mailcap_lookup (a, type, entry, MUTT_AUTOVIEW);
+  rfc1524_mailcap_lookup (a, type, sizeof(type), entry, MUTT_AUTOVIEW);
 
   fname = safe_strdup (a->filename);
   mutt_sanitize_filename (fname, 1);
