@@ -544,10 +544,10 @@ int pop_close_mailbox (CONTEXT *ctx)
 /* fetch message from POP server */
 static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
 {
-  int ret;
+  int ret, rc = -1;
   void *uidl;
   char buf[LONG_STRING];
-  char path[_POSIX_PATH_MAX];
+  BUFFER *path = NULL;
   progress_t progressbar;
   POP_DATA *pop_data = (POP_DATA *)ctx->data;
   POP_CACHE *cache;
@@ -585,17 +585,19 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
     }
   }
 
+  path = mutt_buffer_pool_get ();
+
   FOREVER
   {
     if (pop_reconnect (ctx) < 0)
-      return -1;
+      goto cleanup;
 
     /* verify that massage index is correct */
     if (h->refno < 0)
     {
       mutt_error _("The message index is incorrect. Try reopening the mailbox.");
       mutt_sleep (2);
-      return -1;
+      goto cleanup;
     }
 
     mutt_progress_init (&progressbar, _("Fetching message..."),
@@ -606,12 +608,12 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
     {
       /* no */
       bcache = 0;
-      mutt_mktemp (path, sizeof (path));
-      if (!(msg->fp = safe_fopen (path, "w+")))
+      mutt_buffer_mktemp (path);
+      if (!(msg->fp = safe_fopen (mutt_b2s (path), "w+")))
       {
-	mutt_perror (path);
+	mutt_perror (mutt_b2s (path));
 	mutt_sleep (2);
-	return -1;
+	goto cleanup;
       }
     }
 
@@ -627,20 +629,20 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
      * the file in bcache or from POP's own cache since the next iteration
      * of the loop will re-attempt to put() the message */
     if (!bcache)
-      unlink (path);
+      unlink (mutt_b2s (path));
 
     if (ret == -2)
     {
       mutt_error ("%s", pop_data->err_msg);
       mutt_sleep (2);
-      return -1;
+      goto cleanup;
     }
 
     if (ret == -3)
     {
       mutt_error _("Can't write message to temporary file!");
       mutt_sleep (2);
-      return -1;
+      goto cleanup;
     }
   }
 
@@ -652,7 +654,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
   else
   {
     cache->index = h->index;
-    cache->path = safe_strdup (path);
+    cache->path = safe_strdup (mutt_b2s (path));
   }
   rewind (msg->fp);
   uidl = h->data;
@@ -685,7 +687,11 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
   mutt_clear_error();
   rewind (msg->fp);
 
-  return 0;
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&path);
+  return rc;
 }
 
 static int pop_close_message (CONTEXT *ctx, MESSAGE *msg)
