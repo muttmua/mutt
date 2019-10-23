@@ -408,7 +408,7 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   FILE *parent_fp;
   HEADER *tmphdr = NULL;
   BODY **last;
-  char tmpbody[_POSIX_PATH_MAX];
+  BUFFER *tmpbody = NULL;
   FILE *tmpfp = NULL;
 
   char prefix[STRING];
@@ -441,11 +441,12 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   tmphdr->env = mutt_new_envelope ();
   mutt_make_forward_subject (tmphdr->env, Context, parent_hdr);
 
-  mutt_mktemp (tmpbody, sizeof (tmpbody));
-  if ((tmpfp = safe_fopen (tmpbody, "w")) == NULL)
+  tmpbody = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmpbody);
+  if ((tmpfp = safe_fopen (mutt_b2s (tmpbody), "w")) == NULL)
   {
-    mutt_error (_("Can't open temporary file %s."), tmpbody);
-    return;
+    mutt_error (_("Can't open temporary file %s."), mutt_b2s (tmpbody));
+    goto bail;
   }
 
   mutt_forward_intro (Context, parent_hdr, tmpfp);
@@ -554,16 +555,18 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   tmpfp = NULL;
 
   /* now that we have the template, send it. */
-  ci_send_message (0, tmphdr, tmpbody, NULL, parent_hdr);
+  ci_send_message (0, tmphdr, mutt_b2s (tmpbody), NULL, parent_hdr);
+
+  mutt_buffer_pool_release (&tmpbody);
   return;
 
 bail:
-
   if (tmpfp)
   {
     safe_fclose (&tmpfp);
-    mutt_unlink (tmpbody);
+    mutt_unlink (mutt_b2s (tmpbody));
   }
+  mutt_buffer_pool_release (&tmpbody);
 
   mutt_free_header (&tmphdr);
 }
