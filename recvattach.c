@@ -242,11 +242,13 @@ const char *mutt_attach_fmt (char *dest,
       {
 	if (aptr->content->filename && *aptr->content->filename == '/')
 	{
-	  char path[_POSIX_PATH_MAX];
+	  BUFFER *path;
 
-	  strfcpy (path, aptr->content->filename, sizeof (path));
-	  mutt_pretty_mailbox (path, sizeof (path));
-	  mutt_format_s (dest, destlen, prefix, path);
+          path = mutt_buffer_pool_get ();
+	  mutt_buffer_strcpy (path, aptr->content->filename);
+	  mutt_buffer_pretty_mailbox (path);
+	  mutt_format_s (dest, destlen, prefix, mutt_b2s (path));
+          mutt_buffer_pool_release (&path);
 	}
 	else
 	  mutt_format_s (dest, destlen, prefix, NONULL (aptr->content->filename));
