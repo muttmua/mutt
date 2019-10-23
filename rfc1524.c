@@ -176,7 +176,7 @@ static char *get_field (char *s)
 }
 
 static int get_field_text (char *field, char **entry,
-			   char *type, char *filename, int line)
+			   const char *type, const char *filename, int line)
 {
   field = mutt_skip_whitespace (field);
   if (*field == '=')
@@ -198,8 +198,8 @@ static int get_field_text (char *field, char **entry,
 }
 
 static int rfc1524_mailcap_parse (BODY *a,
-				  char *filename,
-				  char *type,
+				  const char *filename,
+				  const char *type,
 				  rfc1524_entry *entry,
 				  int opt)
 {
@@ -422,8 +422,7 @@ void rfc1524_free_entry(rfc1524_entry **entry)
  */
 int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
 {
-  char path[_POSIX_PATH_MAX];
-  int x;
+  BUFFER *path = NULL;
   int found = FALSE;
   char *curr = MailcapPath;
 
@@ -439,28 +438,32 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, rfc1524_entry *entry, int opt)
     return 0;
   }
 
+  /* FIXME: sizeof type should be passed to rfc1524_mailcap_lookup() */
   mutt_check_lookup_list (a, type, SHORT_STRING);
+
+  path = mutt_buffer_pool_get ();
 
   while (!found && *curr)
   {
-    x = 0;
-    while (*curr && *curr != ':' && x < sizeof (path) - 1)
+    mutt_buffer_clear (path);
+    while (*curr && *curr != ':')
     {
-      path[x++] = *curr;
+      mutt_buffer_addch (path, *curr);
       curr++;
     }
     if (*curr)
       curr++;
 
-    if (!x)
+    if (!mutt_buffer_len (path))
       continue;
 
-    path[x] = '\0';
-    mutt_expand_path (path, sizeof (path));
+    mutt_buffer_expand_path (path);
 
-    dprint(2,(debugfile,"Checking mailcap file: %s\n",path));
-    found = rfc1524_mailcap_parse (a, path, type, entry, opt);
+    dprint(2,(debugfile,"Checking mailcap file: %s\n",mutt_b2s (path)));
+    found = rfc1524_mailcap_parse (a, mutt_b2s (path), type, entry, opt);
   }
+
+  mutt_buffer_pool_release (&path);
 
   if (entry && !found)
     mutt_error (_("mailcap entry for type %s not found"), type);
