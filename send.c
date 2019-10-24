@@ -1100,17 +1100,18 @@ ADDRESS *mutt_default_from (void)
 
 static int send_message (HEADER *msg)
 {
-  char tempfile[_POSIX_PATH_MAX];
-  FILE *tempfp;
-  int i;
+  BUFFER *tempfile = NULL;
+  FILE *tempfp = NULL;
+  int i = -1;
 #ifdef USE_SMTP
   short old_write_bcc;
 #endif
 
   /* Write out the message in MIME form. */
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((tempfp = safe_fopen (tempfile, "w")) == NULL)
-    return (-1);
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if ((tempfp = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
+    goto cleanup;
 
 #ifdef USE_SMTP
   old_write_bcc = option (OPTWRITEBCC);
@@ -1135,34 +1136,40 @@ static int send_message (HEADER *msg)
   fputc ('\n', tempfp); /* tie off the header. */
 
   if ((mutt_write_mime_body (msg->content, tempfp) == -1))
-  {
-    safe_fclose (&tempfp);
-    unlink (tempfile);
-    return (-1);
-  }
+    goto cleanup;
 
-  if (fclose (tempfp) != 0)
+  if (safe_fclose (&tempfp) != 0)
   {
-    mutt_perror (tempfile);
-    unlink (tempfile);
-    return (-1);
+    mutt_perror (mutt_b2s (tempfile));
+    unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
 #ifdef MIXMASTER
   if (msg->chain)
-    return mix_send_message (msg->chain, tempfile);
+    i = mix_send_message (msg->chain, mutt_b2s (tempfile));
+  else
 #endif
 
 #if USE_SMTP
   if (SmtpUrl)
-    return mutt_smtp_send (msg->env->from, msg->env->to, msg->env->cc,
-                           msg->env->bcc, tempfile,
-                           (msg->content->encoding == ENC8BIT));
+    i = mutt_smtp_send (msg->env->from, msg->env->to, msg->env->cc,
+                        msg->env->bcc, mutt_b2s (tempfile),
+                        (msg->content->encoding == ENC8BIT));
+  else
 #endif /* USE_SMTP */
 
   i = mutt_invoke_sendmail (msg->env->from, msg->env->to, msg->env->cc,
-			    msg->env->bcc, tempfile,
+			    msg->env->bcc, mutt_b2s (tempfile),
                             (msg->content->encoding == ENC8BIT));
+
+cleanup:
+  if (tempfp)
+  {
+    safe_fclose (&tempfp);
+    unlink (mutt_b2s (tempfile));
+  }
+  mutt_buffer_pool_release (&tempfile);
   return (i);
 }
 
