@@ -171,7 +171,7 @@ static const char *AutocryptRecUiFlags[] = {
 typedef struct
 {
   HEADER *msg;
-  char *fcc;
+  BUFFER *fcc;
 #ifdef USE_AUTOCRYPT
   autocrypt_rec_t autocrypt_rec;
   int autocrypt_rec_override;
@@ -545,7 +545,7 @@ static void draw_envelope_addr (int line, ADDRESS *addr)
 static void draw_envelope (compose_redraw_data_t *rd)
 {
   HEADER *msg = rd->msg;
-  char *fcc = rd->fcc;
+  const char *fcc = mutt_b2s (rd->fcc);
 
   draw_envelope_addr (HDR_FROM, msg->env->from);
   draw_envelope_addr (HDR_TO, msg->env->to);
@@ -891,8 +891,7 @@ static void compose_menu_redraw (MUTTMENU *menu)
  * -1	abort message
  */
 int mutt_compose_menu (HEADER *msg,   /* structure for new message */
-                       char *fcc,     /* where to save a copy of the message */
-                       size_t fcclen,
+                       BUFFER *fcc,     /* where to save a copy of the message */
                        HEADER *cur,   /* current message */
                        int flags)
 {
@@ -982,13 +981,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_FCC:
-	strfcpy (buf, fcc, sizeof (buf));
-	if (mutt_get_field (_("Fcc: "), buf, sizeof (buf), MUTT_FILE | MUTT_CLEAR) == 0)
+	mutt_buffer_strcpy (fname, mutt_b2s (fcc));
+	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_FILE | MUTT_CLEAR) == 0)
 	{
-	  strfcpy (fcc, buf, fcclen);
-	  mutt_pretty_mailbox (fcc, fcclen);
+	  mutt_buffer_strcpy (fcc, mutt_b2s (fname));
+	  mutt_buffer_pretty_mailbox (fcc);
 	  mutt_window_move (MuttIndexWindow, HDR_FCC, HDR_XOFFSET);
-	  mutt_paddstr (W, fcc);
+	  mutt_paddstr (W, mutt_b2s (fcc));
 	  fccSet = 1;
 	}
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
@@ -1015,7 +1014,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  char *tag = NULL, *err = NULL;
 	  mutt_env_to_local (msg->env);
 	  mutt_edit_headers (NONULL (Editor), msg->content->filename, msg,
-			     fcc, fcclen);
+			     fcc);
 	  if (mutt_env_to_intl (msg->env, &tag, &err))
 	  {
 	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
@@ -1333,13 +1332,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  break;
 #endif
 
-	if (!fccSet && *fcc)
+	if (!fccSet && mutt_buffer_len (fcc))
 	{
 	  if ((i = query_quadoption (OPT_COPY,
                                      _("Save a copy of this message?"))) == -1)
 	    break;
 	  else if (i == MUTT_NO)
-	    *fcc = 0;
+	    mutt_buffer_clear (fcc);
 	}
 
 	loop = 0;

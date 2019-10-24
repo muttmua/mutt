@@ -570,13 +570,15 @@ void mutt_default_save (char *path, size_t pathlen, HEADER *hdr)
   }
 }
 
-void mutt_select_fcc (char *path, size_t pathlen, HEADER *hdr)
+void mutt_select_fcc (BUFFER *path, HEADER *hdr)
 {
   ADDRESS *adr;
   BUFFER *buf = NULL;
   ENVELOPE *env = hdr->env;
 
-  if (mutt_addr_hook (path, pathlen, MUTT_FCCHOOK, NULL, hdr) != 0)
+  mutt_buffer_increase_size (path, _POSIX_PATH_MAX);
+
+  if (mutt_addr_hook (path->data, path->dsize, MUTT_FCCHOOK, NULL, hdr) != 0)
   {
     if ((option (OPTSAVENAME) || option (OPTFORCENAME)) &&
 	(env->to || env->cc || env->bcc))
@@ -584,15 +586,18 @@ void mutt_select_fcc (char *path, size_t pathlen, HEADER *hdr)
       adr = env->to ? env->to : (env->cc ? env->cc : env->bcc);
       buf = mutt_buffer_pool_get ();
       mutt_safe_path (buf, adr);
-      mutt_concat_path (path, NONULL(Maildir), mutt_b2s (buf), pathlen);
+      mutt_buffer_concat_path (path, NONULL(Maildir), mutt_b2s (buf));
       mutt_buffer_pool_release (&buf);
-      if (!option (OPTFORCENAME) && mx_access (path, W_OK) != 0)
-	strfcpy (path, NONULL (Outbox), pathlen);
+      if (!option (OPTFORCENAME) && mx_access (mutt_b2s (path), W_OK) != 0)
+	mutt_buffer_strcpy (path, NONULL (Outbox));
     }
     else
-      strfcpy (path, NONULL (Outbox), pathlen);
+      mutt_buffer_strcpy (path, NONULL (Outbox));
   }
-  mutt_pretty_mailbox (path, pathlen);
+  else
+    mutt_buffer_fix_dptr (path);
+
+  mutt_buffer_pretty_mailbox (path);
 }
 
 static char *_mutt_string_hook (const char *match, int hook)

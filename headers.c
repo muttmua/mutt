@@ -32,8 +32,7 @@
 void mutt_edit_headers (const char *editor,
 			const char *body,
 			HEADER *msg,
-			char *fcc,
-			size_t fcclen)
+			BUFFER *fcc)
 {
   BUFFER *path = NULL;	/* tempfile used to edit headers + body */
   char buffer[LONG_STRING];
@@ -146,8 +145,8 @@ void mutt_edit_headers (const char *editor,
       p = skip_email_wsp(cur->data + 4);
       if (*p)
       {
-	strfcpy (fcc, p, fcclen);
-	mutt_pretty_mailbox (fcc, fcclen);
+	mutt_buffer_strcpy (fcc, p);
+	mutt_buffer_pretty_mailbox (fcc);
       }
       keep = 0;
     }

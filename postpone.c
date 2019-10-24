@@ -227,14 +227,13 @@ static HEADER *select_msg (void)
  *	cur	if message was a reply, `cur' is set to the message which
  *		`hdr' is in reply to
  *	fcc	fcc for the recalled message
- *	fcclen	max length of fcc
  *
  * return vals:
  *	-1		error/no messages
  *	0		normal exit
  *	SENDREPLY	recalled message is a reply
  */
-int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, char *fcc, size_t fcclen)
+int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
 {
   HEADER *h;
   int code = SENDPOSTPONED;
@@ -326,8 +325,8 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, char *fcc, size
     else if (ascii_strncasecmp ("X-Mutt-Fcc:", tmp->data, 11) == 0)
     {
       p = skip_email_wsp(tmp->data + 11);
-      strfcpy (fcc, p, fcclen);
-      mutt_pretty_mailbox (fcc, fcclen);
+      mutt_buffer_strcpy (fcc, p);
+      mutt_buffer_pretty_mailbox (fcc);
 
       /* remove the X-Mutt-Fcc: header field */
       next = tmp->next;

@@ -194,7 +194,7 @@ void mutt_display_address (ENVELOPE *);
 void mutt_display_sanitize (char *);
 int mutt_edit_content_type (HEADER *, BODY *, FILE *);
 void mutt_edit_file (const char *, const char *);
-void mutt_edit_headers (const char *, const char *, HEADER *, char *, size_t);
+void mutt_edit_headers (const char *, const char *, HEADER *, BUFFER *);
 char **mutt_envlist (void);
 void mutt_envlist_set (const char *name, const char *value, int overwrite);
 int mutt_filter_unprintable (char **);
@@ -270,7 +270,7 @@ int mutt_rx_sanitize_string (BUFFER *dest, const char *src);
 void mutt_save_path (char *s, size_t l, ADDRESS *a);
 void mutt_buffer_save_path (BUFFER *dest, ADDRESS *a);
 void mutt_score_message (CONTEXT *, HEADER *, int);
-void mutt_select_fcc (char *, size_t, HEADER *);
+void mutt_select_fcc (BUFFER *, HEADER *);
 #define mutt_select_file(A,B,C) _mutt_select_file(A,B,C,NULL,NULL)
 void _mutt_select_file (char *, size_t, int, char ***, int *);
 #define mutt_buffer_select_file(A,B) _mutt_buffer_select_file(A,B,NULL,NULL)
@@ -345,7 +345,7 @@ int _mutt_buffer_get_field (const char *, BUFFER *, int, int, char ***, int *);
 int mutt_get_hook_type (const char *);
 int mutt_get_field_unbuffered (char *, char *, size_t, int);
 #define mutt_get_password(A,B,C) mutt_get_field_unbuffered(A,B,C,MUTT_PASS)
-int mutt_get_postponed (CONTEXT *, HEADER *, HEADER **, char *, size_t);
+int mutt_get_postponed (CONTEXT *, HEADER *, HEADER **, BUFFER *);
 int mutt_get_tmp_attachment (BODY *);
 int mutt_index_menu (void);
 int mutt_invoke_sendmail (ADDRESS *, ADDRESS *, ADDRESS *, ADDRESS *, const char *, int);
@@ -398,14 +398,14 @@ int mutt_smtp_send (const ADDRESS *, const ADDRESS *, const ADDRESS *,
 size_t mutt_wstr_trunc (const char *, size_t, size_t, size_t *);
 int mutt_charlen (const char *s, int *);
 int mutt_strwidth (const char *);
-int mutt_compose_menu (HEADER *, char *, size_t, HEADER *, int);
+int mutt_compose_menu (HEADER *, BUFFER *, HEADER *, int);
 int mutt_thread_set_flag (HEADER *, int, int, int);
 int mutt_user_is_recipient (HEADER *);
 void mutt_update_num_postponed (void);
 int mutt_wait_filter (pid_t);
 int mutt_wait_interactive_filter (pid_t);
 int mutt_which_case (const char *);
-int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int, char *);
+int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int, const char *);
 int mutt_write_mime_body (BODY *, FILE *);
 int mutt_write_mime_header (BODY *, FILE *);
 int mutt_write_one_header (FILE *fp, const char *tag, const char *value, const char *pfx, int wraplen, int flags);

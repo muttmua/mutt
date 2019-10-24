@@ -2784,7 +2784,7 @@ static void set_noconv_flags (BODY *b, short flag)
   }
 }
 
-int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, char *fcc)
+int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, const char *fcc)
 {
   CONTEXT f;
   MESSAGE *msg;

@@ -1173,7 +1173,7 @@ cleanup:
   return (i);
 }
 
-static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
+static int save_fcc (HEADER *msg, BUFFER *fcc,
                      BODY *clear_content, char *pgpkeylist,
                      int flags)
 {
@@ -1184,7 +1184,7 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
   BODY *save_parts = NULL;
   int choice;
 
-  mutt_expand_path (fcc, fcc_len);
+  mutt_buffer_expand_path (fcc);
 
   /* Don't save a copy when we are in batch-mode, and the FCC
    * folder is on an IMAP server: This would involve possibly lots
@@ -1196,14 +1196,17 @@ static int save_fcc (HEADER *msg, char *fcc, size_t fcc_len,
    */
 
 #ifdef USE_IMAP
-  if ((flags & SENDBATCH) && fcc[0] && mx_is_imap (fcc))
+  if ((flags & SENDBATCH) &&
+      mutt_buffer_len (fcc) &&
+      mx_is_imap (mutt_b2s (fcc)))
   {
     mutt_error _ ("Fcc to an IMAP mailbox is not supported in batch mode");
     return rc;
   }
 #endif
 
-  if (!(*fcc && mutt_strcmp ("/dev/null", fcc)))
+  if (!(mutt_buffer_len (fcc) &&
+        mutt_strcmp ("/dev/null", mutt_b2s (fcc))))
     return rc;
 
   /* Before sending, we don't allow message manipulation because it
@@ -1267,7 +1270,7 @@ full_fcc:
      * message was first postponed.
      */
     msg->received = time (NULL);
-    rc = mutt_write_fcc (fcc, msg, NULL, 0, NULL);
+    rc = mutt_write_fcc (mutt_b2s (fcc), msg, NULL, 0, NULL);
     while (rc && !(flags & SENDBATCH))
     {
       mutt_clear_error ();
@@ -1292,8 +1295,8 @@ full_fcc:
              This is the prompt to enter an "alternate (m)ailbox" when the
              initial Fcc fails.
           */
-          rc = mutt_enter_fname (_("Fcc mailbox"), fcc, fcc_len, 1);
-          if ((rc == -1) || !fcc[0])
+          rc = mutt_buffer_enter_fname (_("Fcc mailbox"), fcc, 1);
+          if ((rc == -1) || !mutt_buffer_len (fcc))
           {
             rc = 0;
             break;
@@ -1301,7 +1304,7 @@ full_fcc:
           /* fall through */
 
         case 1:   /* (r)etry */
-          rc = mutt_write_fcc (fcc, msg, NULL, 0, NULL);
+          rc = mutt_write_fcc (mutt_b2s (fcc), msg, NULL, 0, NULL);
           break;
 
         case -1:  /* abort */
@@ -1463,7 +1466,7 @@ static int has_attach_keyword (char *filename)
   return match;
 }
 
-static int postpone_message (HEADER *msg, HEADER *cur, char *fcc, int flags)
+static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flags)
 {
   char *pgpkeylist = NULL;
   char *encrypt_as = NULL;
@@ -1566,7 +1569,7 @@ ci_send_message (int flags,		/* send mode */
 		 HEADER *cur)		/* current message */
 {
   char buffer[LONG_STRING];
-  char fcc[_POSIX_PATH_MAX] = ""; /* where to copy this message */
+  BUFFER *fcc; /* where to copy this message */
   FILE *tempfp = NULL;
   BODY *pbody;
   int i, killfrom = 0;
@@ -1595,6 +1598,10 @@ ci_send_message (int flags,		/* send mode */
       flags |= SENDPOSTPONED;
   }
 
+  /* Allocate the buffer due to the long lifetime, but
+   * pre-resize it to ensure there are no NULL data field issues */
+  fcc = mutt_buffer_new ();
+  mutt_buffer_increase_size (fcc, LONG_STRING);
 
   if (flags & SENDPOSTPONED)
   {
@@ -1615,7 +1622,7 @@ ci_send_message (int flags,		/* send mode */
 
     if (flags == SENDPOSTPONED)
     {
-      if ((flags = mutt_get_postponed (ctx, msg, &cur, fcc, sizeof (fcc))) < 0)
+      if ((flags = mutt_get_postponed (ctx, msg, &cur, fcc)) < 0)
       {
         flags = SENDPOSTPONED;
 	goto cleanup;
@@ -1861,7 +1868,7 @@ ci_send_message (int flags,		/* send mode */
       else if (option (OPTEDITHDRS))
       {
 	mutt_env_to_local (msg->env);
-	mutt_edit_headers (Editor, msg->content->filename, msg, fcc, sizeof (fcc));
+	mutt_edit_headers (Editor, msg->content->filename, msg, fcc);
 	mutt_env_to_intl (msg->env, NULL, NULL);
       }
       else
@@ -2013,7 +2020,9 @@ ci_send_message (int flags,		/* send mode */
   /* specify a default fcc.  if we are in batchmode, only save a copy of
    * the message if the value of $copy is yes or ask-yes */
 
-  if (!fcc[0] && !(flags & (SENDPOSTPONEDFCC)) && (!(flags & SENDBATCH) || (quadoption (OPT_COPY) & 0x1)))
+  if (!mutt_buffer_len (fcc) &&
+      !(flags & (SENDPOSTPONEDFCC)) &&
+      (!(flags & SENDBATCH) || (quadoption (OPT_COPY) & 0x1)))
   {
     /* set the default FCC */
     if (!msg->env->from)
@@ -2022,7 +2031,7 @@ ci_send_message (int flags,		/* send mode */
       killfrom = 1; /* no need to check $use_from because if the user specified
 		       a from address it would have already been set by now */
     }
-    mutt_select_fcc (fcc, sizeof (fcc), msg);
+    mutt_select_fcc (fcc, msg);
     if (killfrom)
     {
       rfc822_free_address (&msg->env->from);
@@ -2039,8 +2048,8 @@ ci_send_message (int flags,		/* send mode */
   {
 main_loop:
 
-    mutt_pretty_mailbox (fcc, sizeof (fcc));
-    i = mutt_compose_menu (msg, fcc, sizeof (fcc), cur,
+    mutt_buffer_pretty_mailbox (fcc);
+    i = mutt_compose_menu (msg, fcc, cur,
                            (flags & SENDNOFREEHEADER ? MUTT_COMPOSE_NOFREEHEADER : 0));
     if (i == -1)
     {
@@ -2050,7 +2059,7 @@ main_loop:
     }
     else if (i == 1)
     {
-      if (postpone_message (msg, cur, fcc, flags) != 0)
+      if (postpone_message (msg, cur, mutt_b2s (fcc), flags) != 0)
         goto main_loop;
       mutt_message _("Message postponed.");
       rv = 1;
@@ -2173,7 +2182,7 @@ main_loop:
   mutt_prepare_envelope (msg->env, 1);
 
   if (option (OPTFCCBEFORESEND))
-    save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+    save_fcc (msg, fcc, clear_content, pgpkeylist, flags);
 
   if ((i = send_message (msg)) < 0)
   {
@@ -2209,7 +2218,7 @@ main_loop:
   }
 
   if (!option (OPTFCCBEFORESEND))
-    save_fcc (msg, fcc, sizeof(fcc), clear_content, pgpkeylist, flags);
+    save_fcc (msg, fcc, clear_content, pgpkeylist, flags);
 
   if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
   {
@@ -2243,6 +2252,7 @@ main_loop:
   rv = 0;
 
 cleanup:
+  mutt_buffer_free (&fcc);
 
   if (flags & SENDPOSTPONED)
   {
