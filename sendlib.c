@@ -1072,8 +1072,7 @@ bye:
 
 void mutt_message_to_7bit (BODY *a, FILE *fp)
 {
-  char temp[_POSIX_PATH_MAX];
-  char *line = NULL;
+  BUFFER *temp = NULL;
   FILE *fpin = NULL;
   FILE *fpout = NULL;
   struct stat sb;
@@ -1092,12 +1091,15 @@ void mutt_message_to_7bit (BODY *a, FILE *fp)
     {
       mutt_perror ("stat");
       safe_fclose (&fpin);
+      goto cleanup;
     }
     a->length = sb.st_size;
   }
 
-  mutt_mktemp (temp, sizeof (temp));
-  if (!(fpout = safe_fopen (temp, "w+")))
+  /* Avoid buffer pool due to recursion */
+  temp = mutt_buffer_new ();
+  mutt_buffer_mktemp (temp);
+  if (!(fpout = safe_fopen (mutt_b2s (temp), "w+")))
   {
     mutt_perror ("fopen");
     goto cleanup;
@@ -1116,31 +1118,37 @@ void mutt_message_to_7bit (BODY *a, FILE *fp)
   fputc ('\n', fpout);
   mutt_write_mime_body (a->parts, fpout);
 
-cleanup:
-  FREE (&line);
-
-  if (fpin && fpin != fp)
+  if (fpin != fp)
     safe_fclose (&fpin);
-  if (fpout)
-    safe_fclose (&fpout);
-  else
-    return;
+  safe_fclose (&fpout);
 
   a->encoding = ENC7BIT;
   FREE (&a->d_filename);
   a->d_filename = a->filename;
   if (a->filename && a->unlink)
     unlink (a->filename);
-  a->filename = safe_strdup (temp);
+  a->filename = safe_strdup (mutt_b2s (temp));
   a->unlink = 1;
   if (stat (a->filename, &sb) == -1)
   {
     mutt_perror ("stat");
-    return;
+    goto cleanup;
   }
   a->length = sb.st_size;
   mutt_free_body (&a->parts);
   a->hdr->content = NULL;
+
+cleanup:
+  if (fpin && fpin != fp)
+    safe_fclose (&fpin);
+
+  if (fpout)
+  {
+    safe_fclose (&fpout);
+    mutt_unlink (mutt_b2s (temp));
+  }
+
+  mutt_buffer_free (&temp);
 }
 
 static void transform_to_7bit (BODY *a, FILE *fpin)
