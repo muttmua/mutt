@@ -2633,7 +2633,8 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
 {
   int i, ret = 0;
   FILE *f;
-  char date[SHORT_STRING], tempfile[_POSIX_PATH_MAX];
+  char date[SHORT_STRING];
+  BUFFER *tempfile;
   MESSAGE *msg = NULL;
 
   if (!h)
@@ -2651,8 +2652,9 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
 
   if (!fp) fp = msg->fp;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((f = safe_fopen (tempfile, "w")) != NULL)
+  tempfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfile);
+  if ((f = safe_fopen (mutt_b2s (tempfile), "w")) != NULL)
   {
     int ch_flags = CH_XMIT | CH_NONEWLINE | CH_NOQFROM;
     char* msgid_str;
@@ -2675,13 +2677,15 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
 
 #if USE_SMTP
     if (SmtpUrl)
-      ret = mutt_smtp_send (env_from, to, NULL, NULL, tempfile,
+      ret = mutt_smtp_send (env_from, to, NULL, NULL, mutt_b2s (tempfile),
                             h->content->encoding == ENC8BIT);
     else
 #endif /* USE_SMTP */
-      ret = mutt_invoke_sendmail (env_from, to, NULL, NULL, tempfile,
+      ret = mutt_invoke_sendmail (env_from, to, NULL, NULL, mutt_b2s (tempfile),
                                   h->content->encoding == ENC8BIT);
   }
+
+  mutt_buffer_pool_release (&tempfile);
 
   if (msg)
     mx_close_message (Context, &msg);
