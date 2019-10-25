@@ -2268,10 +2268,12 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
 
   if (SendmailWait >= 0 && tempfile)
   {
-    char tmp[_POSIX_PATH_MAX];
+    BUFFER *tmp;
 
-    mutt_mktemp (tmp, sizeof (tmp));
-    *tempfile = safe_strdup (tmp);
+    tmp = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (tmp);
+    *tempfile = safe_strdup (mutt_b2s (tmp));
+    mutt_buffer_pool_release (&tmp);
   }
 
   if ((pid = fork ()) == 0)
