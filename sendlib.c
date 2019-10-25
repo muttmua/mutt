@@ -1153,7 +1153,7 @@ cleanup:
 
 static void transform_to_7bit (BODY *a, FILE *fpin)
 {
-  char buff[_POSIX_PATH_MAX];
+  BUFFER *buff;
   STATE s;
   struct stat sb;
 
@@ -1176,10 +1176,14 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
       a->noconv = 1;
       a->force_charset = 1;
 
-      mutt_mktemp (buff, sizeof (buff));
-      if ((s.fpout = safe_fopen (buff, "w")) == NULL)
+      /* Because of the potential recursion in message types, we
+       * restrict the lifetime of the buffer tightly */
+      buff = mutt_buffer_pool_get ();
+      mutt_buffer_mktemp (buff);
+      if ((s.fpout = safe_fopen (mutt_b2s (buff), "w")) == NULL)
       {
 	mutt_perror ("fopen");
+        mutt_buffer_pool_release (&buff);
 	return;
       }
       s.fpin = fpin;
@@ -1187,7 +1191,8 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
       safe_fclose (&s.fpout);
       FREE (&a->d_filename);
       a->d_filename = a->filename;
-      a->filename = safe_strdup (buff);
+      a->filename = safe_strdup (mutt_b2s (buff));
+      mutt_buffer_pool_release (&buff);
       a->unlink = 1;
       if (stat (a->filename, &sb) == -1)
       {
