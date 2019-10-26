@@ -2807,9 +2807,9 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
 {
   CONTEXT f;
   MESSAGE *msg;
-  char tempfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL;
   FILE *tempfp = NULL;
-  int r, need_buffy_cleanup = 0;
+  int r = -1, need_buffy_cleanup = 0;
   struct stat st;
   char buf[SHORT_STRING];
   int onm_flags;
@@ -2821,7 +2821,7 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
   {
     dprint (1, (debugfile, "mutt_write_fcc(): unable to open mailbox %s in append-mode, aborting.\n",
 		path));
-    return (-1);
+    goto cleanup;
   }
 
   /* We need to add a Content-Length field to avoid problems where a line in
@@ -2829,12 +2829,13 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
    */
   if (f.magic == MUTT_MMDF || f.magic == MUTT_MBOX)
   {
-    mutt_mktemp (tempfile, sizeof (tempfile));
-    if ((tempfp = safe_fopen (tempfile, "w+")) == NULL)
+    tempfile = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (tempfile);
+    if ((tempfp = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
     {
-      mutt_perror (tempfile);
+      mutt_perror (mutt_b2s (tempfile));
       mx_close_mailbox (&f, NULL);
-      return (-1);
+      goto cleanup;
     }
     /* remember new mail status before appending message */
     need_buffy_cleanup = 1;
@@ -2848,7 +2849,7 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
   if ((msg = mx_open_new_message (&f, hdr, onm_flags)) == NULL)
   {
     mx_close_mailbox (&f, NULL);
-    return (-1);
+    goto cleanup;
   }
 
   /* post == 1 => postpone message.
@@ -2971,13 +2972,13 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     fflush (tempfp);
     if (ferror (tempfp))
     {
-      dprint (1, (debugfile, "mutt_write_fcc(): %s: write failed.\n", tempfile));
+      dprint (1, (debugfile, "mutt_write_fcc(): %s: write failed.\n", mutt_b2s (tempfile)));
       safe_fclose (&tempfp);
-      unlink (tempfile);
+      unlink (mutt_b2s (tempfile));
       mx_commit_message (msg, &f);	/* XXX - really? */
       mx_close_message (&f, &msg);
       mx_close_mailbox (&f, NULL);
-      return -1;
+      goto cleanup;
     }
 
     /* count the number of lines */
@@ -2990,11 +2991,11 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     /* copy the body and clean up */
     rewind (tempfp);
     r = mutt_copy_stream (tempfp, msg->fp);
-    if (fclose (tempfp) != 0)
+    if (safe_fclose (&tempfp) != 0)
       r = -1;
     /* if there was an error, leave the temp version */
     if (!r)
-      unlink (tempfile);
+      unlink (mutt_b2s (tempfile));
   }
   else
   {
@@ -3012,6 +3013,14 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
 
   if (post)
     set_noconv_flags (hdr->content, 0);
+
+cleanup:
+  if (tempfp)
+  {
+    safe_fclose (&tempfp);
+    unlink (mutt_b2s (tempfile));
+  }
+  mutt_buffer_pool_release (&tempfile);
 
   return r;
 }
