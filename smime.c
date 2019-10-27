@@ -948,28 +948,32 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
                                     int copy, char ***buffer, int *num)
 {
   FILE *fpout = NULL, *fperr = NULL;
-  char tmpfname[_POSIX_PATH_MAX];
+  BUFFER *tmpfname;
   char email[STRING];
   int ret = -1, count = 0;
   pid_t thepid;
   size_t len = 0;
 
-  mutt_mktemp (tmpfname, sizeof (tmpfname));
-  if ((fperr = safe_fopen (tmpfname, "w+")) == NULL)
+  tmpfname = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmpfname);
+  if ((fperr = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
   {
-    mutt_perror (tmpfname);
+    mutt_perror (mutt_b2s (tmpfname));
+    mutt_buffer_pool_release (&tmpfname);
     return 1;
   }
-  mutt_unlink (tmpfname);
+  mutt_unlink (mutt_b2s (tmpfname));
 
-  mutt_mktemp (tmpfname, sizeof (tmpfname));
-  if ((fpout = safe_fopen (tmpfname, "w+")) == NULL)
+  mutt_buffer_mktemp (tmpfname);
+  if ((fpout = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
   {
     safe_fclose (&fperr);
-    mutt_perror (tmpfname);
+    mutt_perror (mutt_b2s (tmpfname));
+    mutt_buffer_pool_release (&tmpfname);
     return 1;
   }
-  mutt_unlink (tmpfname);
+  mutt_unlink (mutt_b2s (tmpfname));
+  mutt_buffer_pool_release (&tmpfname);
 
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
 			       -1, fileno (fpout), fileno (fperr),
@@ -1149,45 +1153,42 @@ static char *smime_extract_certificate (const char *infile)
   return safe_strdup (certfile);
 }
 
-static char *smime_extract_signer_certificate (char *infile)
+static char *smime_extract_signer_certificate (const char *infile)
 {
   FILE *fpout = NULL, *fperr = NULL;
-  char pk7out[_POSIX_PATH_MAX], certfile[_POSIX_PATH_MAX];
-  char tmpfname[_POSIX_PATH_MAX];
+  char *retval = NULL;
+  BUFFER *tmpfname = NULL, *certfile = NULL;
   pid_t thepid;
   int empty;
 
-
-  mutt_mktemp (tmpfname, sizeof (tmpfname));
-  if ((fperr = safe_fopen (tmpfname, "w+")) == NULL)
+  tmpfname = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tmpfname);
+  if ((fperr = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
   {
-    mutt_perror (tmpfname);
-    return NULL;
+    mutt_perror (mutt_b2s (tmpfname));
+    goto cleanup;
   }
-  mutt_unlink (tmpfname);
+  mutt_unlink (mutt_b2s (tmpfname));
+  mutt_buffer_pool_release (&tmpfname);
 
-
-  mutt_mktemp (certfile, sizeof (certfile));
-  if ((fpout = safe_fopen (certfile, "w+")) == NULL)
+  certfile = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (certfile);
+  if ((fpout = safe_fopen (mutt_b2s (certfile), "w+")) == NULL)
   {
-    safe_fclose (&fperr);
-    mutt_perror (certfile);
-    return NULL;
+    mutt_perror (mutt_b2s (certfile));
+    goto cleanup;
   }
 
   /* Extract signer's certificate
    */
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
 			       -1, -1, fileno (fperr),
-			       infile, NULL, NULL, NULL, NULL, certfile, NULL,
+			       infile, NULL, NULL, NULL, NULL,
+                               mutt_b2s (certfile), NULL,
 			       SmimeGetSignerCertCommand))== -1)
   {
     mutt_any_key_to_continue (_("Error: unable to create OpenSSL subprocess!"));
-    safe_fclose (&fperr);
-    safe_fclose (&fpout);
-    mutt_unlink (pk7out);
-    mutt_unlink (certfile);
-    return NULL;
+    goto cleanup;
   }
 
   mutt_wait_filter (thepid);
@@ -1202,16 +1203,22 @@ static char *smime_extract_signer_certificate (char *infile)
     mutt_endwin (NULL);
     mutt_copy_stream (fperr, stdout);
     mutt_any_key_to_continue (NULL);
-    safe_fclose (&fpout);
-    safe_fclose (&fperr);
-    mutt_unlink (certfile);
-    return NULL;
+    goto cleanup;
   }
 
   safe_fclose (&fpout);
-  safe_fclose (&fperr);
+  retval = safe_strdup (mutt_b2s (certfile));
 
-  return safe_strdup (certfile);
+cleanup:
+  safe_fclose (&fperr);
+  if (fpout)
+  {
+    safe_fclose (&fpout);
+    mutt_unlink (mutt_b2s (certfile));
+  }
+  mutt_buffer_pool_release (&tmpfname);
+  mutt_buffer_pool_release (&certfile);
+  return retval;
 }
 
 
@@ -1287,15 +1294,17 @@ void smime_invoke_import (const char *infile, const char *mailbox)
 
 int smime_verify_sender(HEADER *h)
 {
-  char *mbox = NULL, *certfile, tempfname[_POSIX_PATH_MAX];
+  char *mbox = NULL, *certfile;
+  BUFFER *tempfname;
   FILE *fpout;
   int retval=1;
 
-  mutt_mktemp (tempfname, sizeof (tempfname));
-  if (!(fpout = safe_fopen (tempfname, "w")))
+  tempfname = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (tempfname);
+  if (!(fpout = safe_fopen (mutt_b2s (tempfname), "w")))
   {
-    mutt_perror (tempfname);
-    return 1;
+    mutt_perror (mutt_b2s (tempfname));
+    goto cleanup;
   }
 
   if (h->security & ENCRYPT)
@@ -1321,9 +1330,9 @@ int smime_verify_sender(HEADER *h)
 
   if (mbox)
   {
-    if ((certfile = smime_extract_signer_certificate(tempfname)))
+    if ((certfile = smime_extract_signer_certificate (mutt_b2s (tempfname))))
     {
-      mutt_unlink(tempfname);
+      mutt_unlink(mutt_b2s (tempfname));
       if (smime_handle_cert_email (certfile, mbox, 0, NULL, NULL))
       {
 	if (isendwin())
@@ -1340,7 +1349,10 @@ int smime_verify_sender(HEADER *h)
   else
     mutt_any_key_to_continue(_("no mbox"));
 
-  mutt_unlink(tempfname);
+  mutt_unlink(mutt_b2s (tempfname));
+
+cleanup:
+  mutt_buffer_pool_release (&tempfname);
   return retval;
 }
 
