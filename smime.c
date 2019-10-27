@@ -597,7 +597,7 @@ static smime_key_t *smime_parse_key(char *buf)
 
 static smime_key_t *smime_get_candidates(char *search, short public)
 {
-  char index_file[_POSIX_PATH_MAX];
+  BUFFER *index_file;
   FILE *fp;
   char buf[LONG_STRING];
   smime_key_t *key, *results, **results_end;
@@ -605,14 +605,17 @@ static smime_key_t *smime_get_candidates(char *search, short public)
   results = NULL;
   results_end = &results;
 
-  snprintf(index_file, sizeof (index_file), "%s/.index",
-           public ? NONULL(SmimeCertificates) : NONULL(SmimeKeys));
+  index_file = mutt_buffer_pool_get ();
+  mutt_buffer_printf (index_file, "%s/.index",
+                      public ? NONULL(SmimeCertificates) : NONULL(SmimeKeys));
 
-  if ((fp = safe_fopen (index_file, "r")) == NULL)
+  if ((fp = safe_fopen (mutt_b2s (index_file), "r")) == NULL)
   {
-    mutt_perror (index_file);
+    mutt_perror (mutt_b2s (index_file));
+    mutt_buffer_pool_release (&index_file);
     return NULL;
   }
+  mutt_buffer_pool_release (&index_file);
 
   while (fgets (buf, sizeof (buf), fp))
   {
