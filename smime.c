@@ -1409,39 +1409,37 @@ pid_t smime_invoke_sign (FILE **smimein, FILE **smimeout, FILE **smimeerr,
 BODY *smime_build_smime_entity (BODY *a, char *certlist)
 {
   char buf[LONG_STRING], certfile[LONG_STRING];
-  char tempfile[_POSIX_PATH_MAX], smimeerrfile[_POSIX_PATH_MAX];
-  char smimeinfile[_POSIX_PATH_MAX];
+  BUFFER *tempfile = NULL, *smimeerrfile = NULL, *smimeinfile = NULL;
   char *cert_start, *cert_end;
   FILE *smimein = NULL, *smimeerr = NULL, *fpout = NULL, *fptmp = NULL;
-  BODY *t;
+  BODY *t = NULL;
   int err = 0, empty, off;
   pid_t thepid;
 
-  mutt_mktemp (tempfile, sizeof (tempfile));
-  if ((fpout = safe_fopen (tempfile, "w+")) == NULL)
+  tempfile = mutt_buffer_pool_get ();
+  smimeerrfile = mutt_buffer_pool_get ();
+  smimeinfile = mutt_buffer_pool_get ();
+
+  mutt_buffer_mktemp (tempfile);
+  if ((fpout = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
   {
-    mutt_perror (tempfile);
-    return (NULL);
+    mutt_perror (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
-  mutt_mktemp (smimeerrfile, sizeof (smimeerrfile));
-  if ((smimeerr = safe_fopen (smimeerrfile, "w+")) == NULL)
+  mutt_buffer_mktemp (smimeerrfile);
+  if ((smimeerr = safe_fopen (mutt_b2s (smimeerrfile), "w+")) == NULL)
   {
-    mutt_perror (smimeerrfile);
-    mutt_unlink (tempfile);
-    safe_fclose (&fpout);
-    return NULL;
+    mutt_perror (mutt_b2s (smimeerrfile));
+    goto cleanup;
   }
-  mutt_unlink (smimeerrfile);
+  mutt_unlink (mutt_b2s (smimeerrfile));
 
-  mutt_mktemp (smimeinfile, sizeof (smimeinfile));
-  if ((fptmp = safe_fopen (smimeinfile, "w+")) == NULL)
+  mutt_buffer_mktemp (smimeinfile);
+  if ((fptmp = safe_fopen (mutt_b2s (smimeinfile), "w+")) == NULL)
   {
-    mutt_perror (smimeinfile);
-    mutt_unlink (tempfile);
-    safe_fclose (&fpout);
-    safe_fclose (&smimeerr);
-    return NULL;
+    mutt_perror (mutt_b2s (smimeinfile));
+    goto cleanup;
   }
 
   *certfile = '\0';
@@ -1468,19 +1466,16 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   if ((thepid =
        smime_invoke_encrypt (&smimein, NULL, NULL, -1,
 			     fileno (fpout), fileno (smimeerr),
-			     smimeinfile, certfile)) == -1)
+			     mutt_b2s (smimeinfile), certfile)) == -1)
   {
-    mutt_unlink (tempfile);
-    safe_fclose (&fpout);
-    safe_fclose (&smimeerr);
-    mutt_unlink (smimeinfile);
-    return (NULL);
+    mutt_unlink (mutt_b2s (smimeinfile));
+    goto cleanup;
   }
 
   safe_fclose (&smimein);
 
   mutt_wait_filter (thepid);
-  mutt_unlink (smimeinfile);
+  mutt_unlink (mutt_b2s (smimeinfile));
 
   fflush (fpout);
   rewind (fpout);
@@ -1504,8 +1499,8 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   {
     /* fatal error while trying to encrypt message */
     if (!err) mutt_any_key_to_continue _("No output from OpenSSL...");
-    mutt_unlink (tempfile);
-    return (NULL);
+    mutt_unlink (mutt_b2s (tempfile));
+    goto cleanup;
   }
 
   t = mutt_new_body ();
@@ -1517,10 +1512,26 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   t->use_disp = 1;
   t->disposition = DISPATTACH;
   t->d_filename = safe_strdup ("smime.p7m");
-  t->filename = safe_strdup (tempfile);
+  t->filename = safe_strdup (mutt_b2s (tempfile));
   t->unlink = 1; /*delete after sending the message */
   t->parts=0;
   t->next=0;
+
+cleanup:
+  if (fpout)
+  {
+    safe_fclose (&fpout);
+    mutt_unlink (mutt_b2s (tempfile));
+  }
+  safe_fclose (&smimeerr);
+  if (fptmp)
+  {
+    safe_fclose (&fptmp);
+    mutt_unlink (mutt_b2s (smimeinfile));
+  }
+  mutt_buffer_pool_release (&tempfile);
+  mutt_buffer_pool_release (&smimeerrfile);
+  mutt_buffer_pool_release (&smimeinfile);
 
   return (t);
 }
