@@ -1762,7 +1762,7 @@ pid_t smime_invoke_decrypt (FILE **smimein, FILE **smimeout, FILE **smimeerr,
 
 int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 {
-  char signedfile[_POSIX_PATH_MAX], smimeerrfile[_POSIX_PATH_MAX];
+  BUFFER *signedfile = NULL, *smimeerrfile = NULL;
   FILE *fp=NULL, *smimeout=NULL, *smimeerr=NULL;
   pid_t thepid;
   int badsig = -1;
@@ -1772,15 +1772,17 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   int origType = sigbdy->type;
   char *savePrefix = NULL;
 
+  signedfile = mutt_buffer_pool_get ();
+  smimeerrfile = mutt_buffer_pool_get ();
 
-  snprintf (signedfile, sizeof (signedfile), "%s.sig", tempfile);
+  mutt_buffer_printf (signedfile, "%s.sig", tempfile);
 
   /* decode to a tempfile, saving the original destination */
   fp = s->fpout;
-  if ((s->fpout = safe_fopen (signedfile, "w")) == NULL)
+  if ((s->fpout = safe_fopen (mutt_b2s (signedfile), "w")) == NULL)
   {
-    mutt_perror (signedfile);
-    return -1;
+    mutt_perror (mutt_b2s (signedfile));
+    goto cleanup;
   }
   /* decoding the attachment changes the size and offset, so save a copy
    * of the "real" values now, and restore them after processing
@@ -1803,7 +1805,7 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   /* restore final destination and substitute the tempfile for input */
   s->fpout = fp;
   fp = s->fpin;
-  s->fpin = fopen (signedfile, "r");
+  s->fpin = fopen (mutt_b2s (signedfile), "r");
 
   /* restore the prefix */
   s->prefix = savePrefix;
@@ -1811,19 +1813,19 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   sigbdy->type = origType;
 
 
-  mutt_mktemp (smimeerrfile, sizeof (smimeerrfile));
-  if (!(smimeerr = safe_fopen (smimeerrfile, "w+")))
+  mutt_buffer_mktemp (smimeerrfile);
+  if (!(smimeerr = safe_fopen (mutt_b2s (smimeerrfile), "w+")))
   {
-    mutt_perror (smimeerrfile);
-    mutt_unlink (signedfile);
-    return -1;
+    mutt_perror (mutt_b2s (smimeerrfile));
+    mutt_unlink (mutt_b2s (signedfile));
+    goto cleanup;
   }
 
   crypt_current_time (s, "OpenSSL");
 
   if ((thepid = smime_invoke_verify (NULL, &smimeout, NULL,
                                      -1, -1, fileno (smimeerr),
-                                     tempfile, signedfile, 0)) != -1)
+                                     tempfile, mutt_b2s (signedfile), 0)) != -1)
   {
     fflush (smimeout);
     safe_fclose (&smimeout);
@@ -1854,8 +1856,8 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 
   state_attach_puts (_("[-- End of OpenSSL output --]\n\n"), s);
 
-  mutt_unlink (signedfile);
-  mutt_unlink (smimeerrfile);
+  mutt_unlink (mutt_b2s (signedfile));
+  mutt_unlink (mutt_b2s (smimeerrfile));
 
   sigbdy->length = tmplength;
   sigbdy->offset = tmpoffset;
@@ -1864,7 +1866,9 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
   safe_fclose (&s->fpin);
   s->fpin = fp;
 
-
+cleanup:
+  mutt_buffer_pool_release (&signedfile);
+  mutt_buffer_pool_release (&smimeerrfile);
   return badsig;
 }
 
