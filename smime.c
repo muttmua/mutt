@@ -1886,9 +1886,8 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   int len=0;
   int c;
   char buf[HUGE_STRING];
-  char outfile[_POSIX_PATH_MAX], errfile[_POSIX_PATH_MAX];
-  char tmpfname[_POSIX_PATH_MAX];
-  char tmptmpfname[_POSIX_PATH_MAX];
+  BUFFER *outfile = NULL, *errfile = NULL, *tmpfname = NULL;
+  BUFFER *tmptmpfname = NULL;
   FILE *smimeout = NULL, *smimein=NULL, *smimeerr=NULL;
   FILE *tmpfp=NULL, *tmpfp_buffer=NULL, *fpout=NULL;
   struct stat info;
@@ -1898,30 +1897,31 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
 
   if (!(type & APPLICATION_SMIME)) return NULL;
 
-  mutt_mktemp (outfile, sizeof (outfile));
-  if ((smimeout = safe_fopen (outfile, "w+")) == NULL)
+  /* Because of the mutt_body_handler() we avoid the buffer pool. */
+  outfile = mutt_buffer_new ();
+  errfile = mutt_buffer_new ();
+  tmpfname = mutt_buffer_new ();
+
+  mutt_buffer_mktemp (outfile);
+  if ((smimeout = safe_fopen (mutt_b2s (outfile), "w+")) == NULL)
   {
-    mutt_perror (outfile);
-    return NULL;
+    mutt_perror (mutt_b2s (outfile));
+    goto cleanup;
   }
 
-  mutt_mktemp (errfile, sizeof (errfile));
-  if ((smimeerr = safe_fopen (errfile, "w+")) == NULL)
+  mutt_buffer_mktemp (errfile);
+  if ((smimeerr = safe_fopen (mutt_b2s (errfile), "w+")) == NULL)
   {
-    mutt_perror (errfile);
-    safe_fclose (&smimeout);
-    return NULL;
+    mutt_perror (mutt_b2s (errfile));
+    goto cleanup;
   }
-  mutt_unlink (errfile);
+  mutt_unlink (mutt_b2s (errfile));
 
-
-  mutt_mktemp (tmpfname, sizeof (tmpfname));
-  if ((tmpfp = safe_fopen (tmpfname, "w+")) == NULL)
+  mutt_buffer_mktemp (tmpfname);
+  if ((tmpfp = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
   {
-    mutt_perror (tmpfname);
-    safe_fclose (&smimeout);
-    safe_fclose (&smimeerr);
-    return NULL;
+    mutt_perror (mutt_b2s (tmpfname));
+    goto cleanup;
   }
 
   fseeko (s->fpin, m->offset, 0);
@@ -1933,24 +1933,23 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
 
   if ((type & ENCRYPT) &&
       (thepid = smime_invoke_decrypt (&smimein, NULL, NULL, -1,
-				      fileno (smimeout),  fileno (smimeerr), tmpfname)) == -1)
+				      fileno (smimeout),  fileno (smimeerr),
+                                      mutt_b2s (tmpfname))) == -1)
   {
-    safe_fclose (&smimeout);
-    mutt_unlink (tmpfname);
+    mutt_unlink (mutt_b2s (tmpfname));
     if (s->flags & MUTT_DISPLAY)
       state_attach_puts (_("[-- Error: unable to create OpenSSL subprocess! --]\n"), s);
-    return NULL;
+    goto cleanup;
   }
   else if ((type & SIGNOPAQUE) &&
 	   (thepid = smime_invoke_verify (&smimein, NULL, NULL, -1,
 					  fileno (smimeout), fileno (smimeerr), NULL,
-					  tmpfname, SIGNOPAQUE)) == -1)
+					  mutt_b2s (tmpfname), SIGNOPAQUE)) == -1)
   {
-    safe_fclose (&smimeout);
-    mutt_unlink (tmpfname);
+    mutt_unlink (mutt_b2s (tmpfname));
     if (s->flags & MUTT_DISPLAY)
       state_attach_puts (_("[-- Error: unable to create OpenSSL subprocess! --]\n"), s);
-    return NULL;
+    goto cleanup;
   }
 
 
@@ -1965,7 +1964,7 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   safe_fclose (&smimein);
 
   mutt_wait_filter (thepid);
-  mutt_unlink (tmpfname);
+  mutt_unlink (mutt_b2s (tmpfname));
 
 
   if (s->flags & MUTT_DISPLAY)
@@ -2006,12 +2005,12 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   if (outFile) fpout = outFile;
   else
   {
-    mutt_mktemp (tmptmpfname, sizeof (tmptmpfname));
-    if ((fpout = safe_fopen (tmptmpfname, "w+")) == NULL)
+    tmptmpfname = mutt_buffer_new ();
+    mutt_buffer_mktemp (tmptmpfname);
+    if ((fpout = safe_fopen (mutt_b2s (tmptmpfname), "w+")) == NULL)
     {
-      mutt_perror(tmptmpfname);
-      safe_fclose (&smimeout);
-      return NULL;
+      mutt_perror (mutt_b2s (tmptmpfname));
+      goto cleanup;
     }
   }
   while (fgets (buf, sizeof (buf) - 1, smimeout) != NULL)
@@ -2071,12 +2070,12 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   }
 
   safe_fclose (&smimeout);
-  mutt_unlink (outfile);
+  mutt_unlink (mutt_b2s (outfile));
 
   if (!outFile)
   {
     safe_fclose (&fpout);
-    mutt_unlink (tmptmpfname);
+    mutt_unlink (mutt_b2s (tmptmpfname));
   }
   fpout = NULL;
 
@@ -2108,6 +2107,23 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
   }
   safe_fclose (&smimeerr);
 
+cleanup:
+  if (smimeout)
+  {
+    safe_fclose (&smimeout);
+    mutt_unlink (mutt_b2s (outfile));
+  }
+  safe_fclose (&smimeerr);
+  safe_fclose (&tmpfp);
+  if (!outFile && fpout)
+  {
+    safe_fclose (&fpout);
+    mutt_unlink (mutt_b2s (tmptmpfname));
+  }
+  mutt_buffer_free (&outfile);
+  mutt_buffer_free (&errfile);
+  mutt_buffer_free (&tmpfname);
+  mutt_buffer_free (&tmptmpfname);
   return (p);
 }
 
