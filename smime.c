@@ -1568,9 +1568,9 @@ static char *openssl_md_to_smime_micalg(char *md)
 
 BODY *smime_sign_message (BODY *a )
 {
-  BODY *t;
+  BODY *t, *retval = NULL;
   char buffer[LONG_STRING];
-  char signedfile[_POSIX_PATH_MAX], filetosign[_POSIX_PATH_MAX];
+  BUFFER *filetosign = NULL, *signedfile = NULL;
   FILE *smimein = NULL, *smimeout = NULL, *smimeerr = NULL, *sfp = NULL;
   int err = 0;
   int empty = 0;
@@ -1589,20 +1589,21 @@ BODY *smime_sign_message (BODY *a )
 
   convert_to_7bit (a); /* Signed data _must_ be in 7-bit format. */
 
-  mutt_mktemp (filetosign, sizeof (filetosign));
-  if ((sfp = safe_fopen (filetosign, "w+")) == NULL)
+  filetosign = mutt_buffer_pool_get ();
+  signedfile = mutt_buffer_pool_get ();
+
+  mutt_buffer_mktemp (filetosign);
+  if ((sfp = safe_fopen (mutt_b2s (filetosign), "w+")) == NULL)
   {
-    mutt_perror (filetosign);
-    return NULL;
+    mutt_perror (mutt_b2s (filetosign));
+    goto cleanup;
   }
 
-  mutt_mktemp (signedfile, sizeof (signedfile));
-  if ((smimeout = safe_fopen (signedfile, "w+")) == NULL)
+  mutt_buffer_mktemp (signedfile);
+  if ((smimeout = safe_fopen (mutt_b2s (signedfile), "w+")) == NULL)
   {
-    mutt_perror (signedfile);
-    safe_fclose (&sfp);
-    mutt_unlink (filetosign);
-    return NULL;
+    mutt_perror (mutt_b2s (signedfile));
+    goto cleanup;
   }
 
   mutt_write_mime_header (a, sfp);
@@ -1633,13 +1634,11 @@ BODY *smime_sign_message (BODY *a )
 
 
   if ((thepid = smime_invoke_sign (&smimein, NULL, &smimeerr,
-                                   -1, fileno (smimeout), -1, filetosign)) == -1)
+                                   -1, fileno (smimeout), -1, mutt_b2s (filetosign))) == -1)
   {
     mutt_perror _("Can't open OpenSSL subprocess!");
-    safe_fclose (&smimeout);
-    mutt_unlink (signedfile);
-    mutt_unlink (filetosign);
-    return NULL;
+    mutt_unlink (mutt_b2s (filetosign));
+    goto cleanup;
   }
   fputs (SmimePass, smimein);
   fputc ('\n', smimein);
@@ -1665,7 +1664,7 @@ BODY *smime_sign_message (BODY *a )
   empty = (fgetc (smimeout) == EOF);
   safe_fclose (&smimeout);
 
-  mutt_unlink (filetosign);
+  mutt_unlink (mutt_b2s (filetosign));
 
 
   if (err)
@@ -1674,8 +1673,8 @@ BODY *smime_sign_message (BODY *a )
   if (empty)
   {
     mutt_any_key_to_continue _("No output from OpenSSL...");
-    mutt_unlink (signedfile);
-    return (NULL); /* fatal error while signing */
+    mutt_unlink (mutt_b2s (signedfile));
+    goto cleanup;
   }
 
   t = mutt_new_body ();
@@ -1695,21 +1694,33 @@ BODY *smime_sign_message (BODY *a )
                       &t->parameter);
 
   t->parts = a;
-  a = t;
+  retval = t;
 
   t->parts->next = mutt_new_body ();
   t = t->parts->next;
   t->type = TYPEAPPLICATION;
   t->subtype = safe_strdup ("x-pkcs7-signature");
-  t->filename = safe_strdup (signedfile);
+  t->filename = safe_strdup (mutt_b2s (signedfile));
   t->d_filename = safe_strdup ("smime.p7s");
   t->use_disp = 1;
   t->disposition = DISPATTACH;
   t->encoding = ENCBASE64;
   t->unlink = 1; /* ok to remove this file after sending. */
 
-  return (a);
-
+cleanup:
+  if (sfp)
+  {
+    safe_fclose (&sfp);
+    mutt_unlink (mutt_b2s (filetosign));
+  }
+  if (smimeout)
+  {
+    safe_fclose (&smimeout);
+    mutt_unlink (mutt_b2s (signedfile));
+  }
+  mutt_buffer_pool_release (&filetosign);
+  mutt_buffer_pool_release (&signedfile);
+  return (retval);
 }
 
 
