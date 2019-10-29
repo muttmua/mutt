@@ -1479,7 +1479,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
   }
 
   if (msg->content->next)
-    msg->content = mutt_make_multipart (msg->content);
+    msg->content = mutt_make_multipart_mixed (msg->content);
 
   mutt_encode_descriptions (msg->content, 1);
 
@@ -1498,7 +1498,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
     {
       if (mutt_autocrypt_set_sign_as_default_key (msg))
       {
-        msg->content = mutt_remove_multipart (msg->content);
+        msg->content = mutt_remove_multipart_mixed (msg->content);
         decode_descriptions (msg->content);
         return -1;
       }
@@ -1513,7 +1513,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
       if (mutt_protect (msg, pgpkeylist, 1) == -1)
       {
         FREE (&pgpkeylist);
-        msg->content = mutt_remove_multipart (msg->content);
+        msg->content = mutt_remove_multipart_mixed (msg->content);
         decode_descriptions (msg->content);
         return -1;
       }
@@ -1542,7 +1542,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
       msg->content = clear_content;
     }
     mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
-    msg->content = mutt_remove_multipart (msg->content);
+    msg->content = mutt_remove_multipart_mixed (msg->content);
     decode_descriptions (msg->content);
     mutt_unprepare_envelope (msg->env);
     return -1;
@@ -2119,8 +2119,10 @@ main_loop:
     }
   }
 
+  /* multipart/alternative generation does here */
+
   if (msg->content->next)
-    msg->content = mutt_make_multipart (msg->content);
+    msg->content = mutt_make_multipart_mixed (msg->content);
 
   /*
    * Ok, we need to do it this way instead of handling all fcc stuff in
@@ -2150,7 +2152,7 @@ main_loop:
       if ((crypt_get_keys (msg, &pgpkeylist, 0) == -1) ||
           mutt_protect (msg, pgpkeylist, 0) == -1)
       {
-        msg->content = mutt_remove_multipart (msg->content);
+        msg->content = mutt_remove_multipart_mixed (msg->content);
 
 	FREE (&pgpkeylist);
 
@@ -2197,7 +2199,9 @@ main_loop:
 	mutt_free_body (&msg->content); /* destroy PGP data */
 	msg->content = clear_content;	/* restore clear text. */
       }
-      else if ((msg->security & SIGN) && msg->content->type == TYPEMULTIPART)
+      else if ((msg->security & SIGN) &&
+               msg->content->type == TYPEMULTIPART &&
+               !ascii_strcasecmp (msg->content->subtype, "signed"))
       {
 	mutt_free_body (&msg->content->parts->next);	     /* destroy sig */
 	msg->content = mutt_remove_multipart (msg->content);
@@ -2205,7 +2209,7 @@ main_loop:
 
       FREE (&pgpkeylist);
       mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
-      msg->content = mutt_remove_multipart (msg->content);
+      msg->content = mutt_remove_multipart_mixed (msg->content);
       decode_descriptions (msg->content);
       mutt_unprepare_envelope (msg->env);
       goto main_loop;

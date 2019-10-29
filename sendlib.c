@@ -1507,13 +1507,13 @@ static int mutt_check_boundary (const char* boundary, BODY *b)
   return 0;
 }
 
-BODY *mutt_make_multipart (BODY *b)
+static BODY *mutt_make_multipart (BODY *b, const char *subtype)
 {
   BODY *new;
 
   new = mutt_new_body ();
   new->type = TYPEMULTIPART;
-  new->subtype = safe_strdup ("mixed");
+  new->subtype = safe_strdup (subtype);
   new->encoding = get_toplevel_encoding (b);
   do
   {
@@ -1542,6 +1542,21 @@ BODY *mutt_remove_multipart (BODY *b)
     t->parts = NULL;
     mutt_free_body (&t);
   }
+  return b;
+}
+
+BODY *mutt_make_multipart_mixed (BODY *b)
+{
+  return mutt_make_multipart (b, "mixed");
+}
+
+/* remove the multipart/mixed body if it exists */
+BODY *mutt_remove_multipart_mixed (BODY *b)
+{
+  if ((b->type == TYPEMULTIPART) &&
+      !ascii_strcasecmp (b->subtype, "mixed"))
+    return mutt_remove_multipart (b);
+
   return b;
 }
 

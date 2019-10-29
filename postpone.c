@@ -671,7 +671,9 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
    */
 
   if (newhdr->content->type == TYPEMULTIPART)
-    newhdr->content = mutt_remove_multipart (newhdr->content);
+    newhdr->content = mutt_remove_multipart_mixed (newhdr->content);
+
+  /* TODO: deal with multipart/alternative here */
 
   s.fpin = bfp;
 

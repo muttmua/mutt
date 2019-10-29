@@ -1607,12 +1607,12 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           mutt_buffer_expand_path (fname);
 
           if (msg->content->next)
-            msg->content = mutt_make_multipart (msg->content);
+            msg->content = mutt_make_multipart_mixed (msg->content);
 
           if (mutt_write_fcc (mutt_b2s (fname), msg, NULL, 0, NULL) == 0)
             mutt_message _("Message written.");
 
-          msg->content = mutt_remove_multipart (msg->content);
+          msg->content = mutt_remove_multipart_mixed (msg->content);
         }
         break;
 
