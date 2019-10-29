@@ -131,6 +131,7 @@ WHERE char *QueryFormat;
 WHERE char *Realname;
 WHERE short SearchContext;
 WHERE char *SendCharset;
+WHERE char *SendMultipartAltFilter;
 WHERE char *Sendmail;
 WHERE char *Shell;
 #ifdef USE_SIDEBAR

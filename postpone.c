@@ -663,17 +663,17 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
   /*
    * We don't need no primary multipart.
    * Note: We _do_ preserve messages!
-   *
-   * XXX - we don't handle multipart/alternative in any
-   * smart way when sending messages.  However, one may
-   * consider this a feature.
-   *
    */
-
   if (newhdr->content->type == TYPEMULTIPART)
     newhdr->content = mutt_remove_multipart_mixed (newhdr->content);
 
-  /* TODO: deal with multipart/alternative here */
+  /* Note: this just uses the *first* alternative and strips the rest.
+   * It might be better to scan for text/plain.  On the other hand,
+   * mutt's alternative generation filter in theory allows composing
+   * text/html and generating the text/plain from that.  This way will
+   * preserve the alternative originally composed by the user.
+   */
+  newhdr->content = mutt_remove_multipart_alternative (newhdr->content);
 
   s.fpin = bfp;
 

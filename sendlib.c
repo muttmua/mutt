@@ -1391,6 +1391,109 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
   return (body);
 }
 
+BODY *mutt_run_send_alternative_filter (BODY *b)
+{
+  BUFFER *alt_file = NULL;
+  FILE *b_fp = NULL, *alt_fp = NULL;
+  FILE *filter_in = NULL, *filter_out = NULL, *filter_err = NULL;
+  BODY *alternative = NULL;
+  pid_t thepid = 0;
+  char *mime = NULL;
+  char *buf = NULL;
+  size_t buflen;
+
+  if (!SendMultipartAltFilter)
+    return NULL;
+
+  if ((b_fp = safe_fopen (b->filename, "r")) == NULL)
+  {
+    mutt_perror (b->filename);
+    goto cleanup;
+  }
+
+  alt_file = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (alt_file);
+  if ((alt_fp = safe_fopen (mutt_b2s (alt_file), "w")) == NULL)
+  {
+    mutt_perror (mutt_b2s (alt_file));
+    goto cleanup;
+  }
+
+  if ((thepid = mutt_create_filter (SendMultipartAltFilter, &filter_in, &filter_out, &filter_err)) < 0)
+  {
+    mutt_error (_("Error running \"%s\"!"), SendMultipartAltFilter);
+    goto cleanup;
+  }
+
+  mutt_copy_stream (b_fp, filter_in);
+  safe_fclose (&b_fp);
+  safe_fclose (&filter_in);
+
+  mime = mutt_read_line (NULL, &buflen, filter_out, NULL, 0);
+  if (!mime || !strchr (mime, '/'))
+  {
+    /* L10N:
+       The first line of output from $send_multipart_alternative_filter
+       should be a mime type, e.g. text/html.  This error is generated
+       if that is missing.
+    */
+    mutt_error (_("Missing mime type from output of \"%s\"!"), SendMultipartAltFilter);
+    goto cleanup;
+  }
+
+  buf = mutt_read_line (NULL, &buflen, filter_out, NULL, 0);
+  if (!buf || mutt_strlen (buf))
+  {
+    /* L10N:
+       The second line of output from $send_multipart_alternative_filter
+       should be a blank line.  This error is generated if the blank line
+       is missing.
+    */
+    mutt_error (_("Missing blank line separator from output of \"%s\"!"), SendMultipartAltFilter);
+    goto cleanup;
+  }
+
+  mutt_copy_stream (filter_out, alt_fp);
+  safe_fclose (&filter_out);
+  safe_fclose (&filter_err);
+
+  if (mutt_wait_filter (thepid) != 0)
+  {
+    mutt_error (_("Error running \"%s\"!"), SendMultipartAltFilter);
+    thepid = 0;
+    goto cleanup;
+  }
+  thepid = 0;
+  safe_fclose (&alt_fp);
+
+  alternative = mutt_new_body ();
+  alternative->filename = safe_strdup (mutt_b2s (alt_file));
+  alternative->unlink = 1;
+  alternative->use_disp = 0;
+  alternative->disposition = DISPINLINE;
+
+  mutt_parse_content_type (mime, alternative);
+  mutt_update_encoding (alternative);
+
+cleanup:
+  safe_fclose (&b_fp);
+  if (alt_fp)
+  {
+    safe_fclose (&alt_fp);
+    mutt_unlink (mutt_b2s (alt_file));
+  }
+  mutt_buffer_pool_release (&alt_file);
+  safe_fclose (&filter_in);
+  safe_fclose (&filter_out);
+  safe_fclose (&filter_err);
+  if (thepid > 0)
+    mutt_wait_filter (thepid);
+  FREE (&buf);
+  FREE (&mime);
+
+  return alternative;
+}
+
 static void run_mime_type_query (BODY *att)
 {
   FILE *fp, *fperr;
@@ -1556,6 +1659,39 @@ BODY *mutt_remove_multipart_mixed (BODY *b)
   if ((b->type == TYPEMULTIPART) &&
       !ascii_strcasecmp (b->subtype, "mixed"))
     return mutt_remove_multipart (b);
+
+  return b;
+}
+
+BODY *mutt_make_multipart_alternative (BODY *b, BODY *alternative)
+{
+  BODY *attachments, *mp;
+
+  attachments = b->next;
+
+  b->next = alternative;
+  mp = mutt_make_multipart (b, "alternative");
+
+  mp->next = attachments;
+
+  return mp;
+}
+
+BODY *mutt_remove_multipart_alternative (BODY *b)
+{
+  BODY *attachments;
+
+  if ((b->type != TYPEMULTIPART) ||
+      ascii_strcasecmp (b->subtype, "alternative"))
+    return b;
+
+  attachments = b->next;
+  b->next = NULL;
+
+  b = mutt_remove_multipart (b);
+
+  mutt_free_body (&b->next);
+  b->next = attachments;
 
   return b;
 }

@@ -3114,6 +3114,27 @@ struct option_t MuttVars[] = {
   ** In case the text cannot be converted into one of these exactly,
   ** mutt uses $$charset as a fallback.
   */
+  { "send_multipart_alternative", DT_QUAD, R_NONE, {.l=OPT_SENDMULTIPARTALT}, {.l=MUTT_NO} },
+  /*
+  ** .pp
+  ** If \fIset\fP, Mutt will generate a multipart/alternative
+  ** container and an alternative part using the filter script specified in
+  ** $$send_multipart_alternative_filter.
+  ** See the section ``MIME Multipart/Alternative'' ($alternative-order).
+  ** .pp
+  ** Note that enabling multipart/alternative is not compatible with inline
+  ** PGP encryption.  Mutt will prompt to use PGP/MIME in that case.
+  */
+  { "send_multipart_alternative_filter", DT_PATH, R_NONE, {.p=&SendMultipartAltFilter}, {.p=0} },
+  /*
+  ** .pp
+  ** This specifies a filter script, which will convert the main
+  ** (composed) message of the email to an alternative format.  The
+  ** message will be piped to the filter's stdin.  The expected output
+  ** of the filter is the generated mime type, e.g. text/html,
+  ** followed by a blank line, and then the converted content.
+  ** See the section ``MIME Multipart/Alternative'' ($alternative-order).
+  */
   { "sendmail",		DT_PATH, R_NONE, {.p=&Sendmail}, {.p=SENDMAIL " -oem -oi"} },
   /*
   ** .pp

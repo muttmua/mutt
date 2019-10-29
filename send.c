@@ -1098,6 +1098,30 @@ ADDRESS *mutt_default_from (void)
   return (adr);
 }
 
+static int generate_multipart_alternative (HEADER *msg)
+{
+  BODY *alternative;
+
+  if (!SendMultipartAltFilter)
+    return 0;
+  if (query_quadoption (OPT_SENDMULTIPARTALT,
+                        /* L10N:
+                           This is the query for the $send_multipart_alternative quadoption.
+                           Answering yes generates an alternative content using
+                           $send_multipart_alternative_filter
+                        */
+                        _("Generate multipart/alternative content?")) != MUTT_YES)
+    return 0;
+
+  alternative = mutt_run_send_alternative_filter (msg->content);
+  if (!alternative)
+    return -1;
+
+  msg->content = mutt_make_multipart_alternative (msg->content, alternative);
+
+  return 0;
+}
+
 static int send_message (HEADER *msg)
 {
   BUFFER *tempfile = NULL;
@@ -1232,7 +1256,8 @@ static int save_fcc (HEADER *msg, BUFFER *fcc,
           && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
               mutt_strcmp (msg->content->subtype, "signed") == 0))
       {
-        if (clear_content->type == TYPEMULTIPART)
+        if ((clear_content->type == TYPEMULTIPART) &&
+            !ascii_strcasecmp (clear_content->subtype, "mixed"))
         {
           if (!(msg->security & ENCRYPT) && (msg->security & SIGN))
           {
@@ -1257,7 +1282,7 @@ static int save_fcc (HEADER *msg, BUFFER *fcc,
           save_content = msg->content;
         }
       }
-      else
+      else if (!ascii_strcasecmp (msg->content->subtype, "mixed"))
         msg->content = msg->content->parts;
     }
   }
@@ -2119,7 +2144,17 @@ main_loop:
     }
   }
 
-  /* multipart/alternative generation does here */
+  if (!(flags & SENDBATCH) ||
+      quadoption (OPT_SENDMULTIPARTALT) == MUTT_YES)
+  {
+    if (generate_multipart_alternative (msg))
+    {
+      if (!(flags & SENDBATCH))
+        goto main_loop;
+      else
+        goto cleanup;
+    }
+  }
 
   if (msg->content->next)
     msg->content = mutt_make_multipart_mixed (msg->content);
@@ -2153,6 +2188,7 @@ main_loop:
           mutt_protect (msg, pgpkeylist, 0) == -1)
       {
         msg->content = mutt_remove_multipart_mixed (msg->content);
+        msg->content = mutt_remove_multipart_alternative (msg->content);
 
 	FREE (&pgpkeylist);
 
@@ -2210,6 +2246,7 @@ main_loop:
       FREE (&pgpkeylist);
       mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
       msg->content = mutt_remove_multipart_mixed (msg->content);
+      msg->content = mutt_remove_multipart_alternative (msg->content);
       decode_descriptions (msg->content);
       mutt_unprepare_envelope (msg->env);
       goto main_loop;

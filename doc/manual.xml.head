@@ -8135,6 +8135,34 @@ To remove a MIME type from the <command>alternative_order</command>
 list, use the <command>unalternative_order</command> command.
 </para>
 
+<para>
+Generating <literal>multipart/alternative</literal> content is supported
+via the
+<link linkend="send-multipart-alternative">$send_multipart_alternative</link>
+quadoption and
+<link linkend="send-multipart-alternative-filter">$send_multipart_alternative_filter</link>
+filter script.  The composed <literal>text/plain</literal> content
+will be piped to the filter script's stdin.  The output from the
+filter script should be the generated mime/type of the content, a
+blank line, and the content.  For example:
+</para>
+<screen>
+text/html
+
+&lt;html&gt;
+&lt;body&gt;
+Content in html format
+&lt;/body&gt;
+&lt;/html&gt;
+</screen>
+
+<para>
+A preview of the alternative can be viewed in the compose menu
+using the functions <literal>&lt;view-alt-text&gt;</literal> and
+<literal>&lt;view-alt-mailcap&gt;</literal>, bound to &quot;v&quot;
+and &quot;V&quot; by default.
+</para>
+
 </sect1>
 
 <sect1 id="attachments">

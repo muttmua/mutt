@@ -1507,6 +1507,26 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
+      case OP_COMPOSE_VIEW_ALT_TEXT:
+      case OP_COMPOSE_VIEW_ALT_MAILCAP:
+      {
+        BODY *alternative;
+
+        if (!SendMultipartAltFilter)
+        {
+          mutt_error _("$send_multipart_alternative_filter is not set");
+          break;
+        }
+        alternative = mutt_run_send_alternative_filter (msg->content);
+        if (!alternative)
+          break;
+        mutt_view_attachment (NULL, alternative,
+                              op == OP_COMPOSE_VIEW_ALT_TEXT ? MUTT_AS_TEXT : MUTT_MAILCAP,
+                              NULL, actx);
+        mutt_free_body (&alternative);
+        break;
+      }
+
       case OP_VIEW_ATTACH:
       case OP_DISPLAY_HEADERS:
 	CHECK_COUNT;
