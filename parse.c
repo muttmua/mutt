@@ -400,6 +400,14 @@ void mutt_parse_content_type (char *s, BODY *ct)
       mutt_set_parameter ("charset", AssumedCharset ?
                           (const char *) mutt_get_default_charset ()
                           : "us-ascii", &ct->parameter);
+    else
+    {
+      /* Microsoft Outlook seems to think it is necessary to repeat
+       * charset=, strip it off not to confuse ourselves */
+      if (ascii_strncasecmp (pc, "charset=", sizeof ("charset=") - 1) == 0)
+	mutt_set_parameter ("charset", pc + (sizeof ("charset=") - 1),
+			    &ct->parameter);
+    }
   }
 
 }
