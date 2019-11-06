@@ -240,6 +240,8 @@ static void autocrypt_compose_menu (HEADER *msg)
   char *prompt, *letters;
   int choice;
 
+  msg->security |= APPLICATION_PGP;
+
   /* L10N:
      The compose menu autocrypt prompt.
      (e)ncrypt enables encryption via autocrypt.
@@ -417,8 +419,8 @@ static void update_crypt_info (compose_redraw_data_t *rd)
       {
         if (rd->autocrypt_rec == AUTOCRYPT_REC_YES)
         {
-          msg->security |= AUTOCRYPT;
-          msg->security &= ~INLINE;
+          msg->security |= (AUTOCRYPT | APPLICATION_PGP);
+          msg->security &= ~(INLINE | APPLICATION_SMIME);
         }
         else
           msg->security &= ~AUTOCRYPT;

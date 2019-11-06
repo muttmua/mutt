@@ -1950,7 +1950,7 @@ ci_send_message (int flags,		/* send mode */
 #endif
       && cur && (cur->security & AUTOCRYPT))
     {
-      msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE);
+      msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE | APPLICATION_PGP);
     }
     else
     {
