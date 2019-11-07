@@ -1473,6 +1473,20 @@ BODY *mutt_run_send_alternative_filter (BODY *b)
   alternative->disposition = DISPINLINE;
 
   mutt_parse_content_type (mime, alternative);
+  if (alternative->type == TYPEMULTIPART)
+  {
+    /* L10N:
+       Some clever people may try to generate a multipart/mixed
+       "alternative" using $send_multipart_alternative_filter.  The
+       actual sending for this will not work, because the data
+       structures will not be properly generated.  To preempt bug
+       reports, this error is displayed, and the generation is blocked
+       at the filter level.
+     */
+    mutt_error _("$send_multipart_alternative_filter does not support multipart type generation.");
+    mutt_free_body (&alternative);
+    goto cleanup;
+  }
   mutt_update_encoding (alternative);
 
 cleanup:
