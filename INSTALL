@@ -26,7 +26,7 @@ systems:
 	Ultrix
 	UnixWare
 
-- If you are building from Mercurial, or if you are changing parts of mutt,
+- If you are building from Git, or if you are changing parts of mutt,
   particularly the build system, do read doc/devel-notes.txt.
 
 - A C99 compiler (such as GCC) is required.
@@ -55,10 +55,10 @@ Installation
 Installing Mutt is rather painless through the use of the GNU
 autoconf package.  Simply untar the Mutt distribution, and run the
 ``configure'' script.  If you have obtained the distribution from
-the Mercurial repository, run the ``prepare'' script with the same command
+the Git repository, run the ``prepare'' script with the same command
 line parameters you would pass to configure.  It will set up mutt's
 build environment and add the files which are present in the tar
-balls, but not in the Mercurial repository.
+balls, but not in the Git repository.
 
 In most cases, configure will automatically determine everything it
 needs to know in order to compile.  However, there are a few options
