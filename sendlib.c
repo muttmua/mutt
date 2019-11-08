@@ -2160,6 +2160,7 @@ out:
  *
  * mode == MUTT_WRITE_HEADER_EDITHDRS  => "lite" mode (used for edit_hdrs)
  * mode == MUTT_WRITE_HEADER_NORMAL    => normal mode.  write full header + MIME headers
+ * mode == MUTT_WRITE_HEADER_FCC       => fcc mode, like normal mode but for Bcc header
  * mode == MUTT_WRITE_HEADER_POSTPONE  => write just the envelope info
  * mode == MUTT_WRITE_HEADER_MIME      => for writing protected headers
  *
@@ -2180,7 +2181,8 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
   LIST *tmp = env->userhdrs;
   int has_agent = 0; /* user defined user-agent header field exists */
 
-  if (mode == MUTT_WRITE_HEADER_NORMAL && !privacy)
+  if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC) &&
+      !privacy)
     fputs (mutt_make_date (buffer, sizeof(buffer)), fp);
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
@@ -2220,6 +2222,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
   {
     if (mode == MUTT_WRITE_HEADER_POSTPONE ||
         mode == MUTT_WRITE_HEADER_EDITHDRS ||
+        mode == MUTT_WRITE_HEADER_FCC ||
         (mode == MUTT_WRITE_HEADER_NORMAL && option(OPTWRITEBCC)))
     {
       fputs ("Bcc: ", fp);
@@ -2233,6 +2236,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
   {
     if (hide_protected_subject &&
         (mode == MUTT_WRITE_HEADER_NORMAL ||
+         mode == MUTT_WRITE_HEADER_FCC ||
          mode == MUTT_WRITE_HEADER_POSTPONE))
       mutt_write_one_header (fp, "Subject", ProtHdrSubject, NULL, 0, 0);
     else
@@ -2260,6 +2264,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
   }
 
   if (mode == MUTT_WRITE_HEADER_NORMAL ||
+      mode == MUTT_WRITE_HEADER_FCC ||
       mode == MUTT_WRITE_HEADER_POSTPONE)
   {
     if (env->references)
@@ -2284,7 +2289,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
 #ifdef USE_AUTOCRYPT
   if (option (OPTAUTOCRYPT))
   {
-    if (mode == MUTT_WRITE_HEADER_NORMAL)
+    if (mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC)
       mutt_autocrypt_write_autocrypt_header (env, fp);
     if (mode == MUTT_WRITE_HEADER_MIME)
       mutt_autocrypt_write_gossip_headers (env, fp);
@@ -2323,7 +2328,8 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     }
   }
 
-  if (mode == MUTT_WRITE_HEADER_NORMAL && !privacy &&
+  if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC) &&
+      !privacy &&
       option (OPTXMAILER) && !has_agent)
   {
     /* Add a vanity header */
@@ -3018,10 +3024,10 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
   }
 
   /* post == 1 => postpone message.
-   * post == 0 => Normal mode.
+   * post == 0 => fcc mode.
    * */
   mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content,
-                            post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_NORMAL,
+                            post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_FCC,
                             0,
                             option (OPTCRYPTPROTHDRSREAD) &&
                             mutt_should_hide_protected_subject (hdr));

@@ -4316,14 +4316,21 @@ struct option_t MuttVars[] = {
   ** .pp
   ** (DEPRECATED) Equivalent to setting $$wrap with a negative value.
   */
-  { "write_bcc",	DT_BOOL, R_NONE, {.l=OPTWRITEBCC}, {.l=1} },
+  { "write_bcc",	DT_BOOL, R_NONE, {.l=OPTWRITEBCC}, {.l=0} },
   /*
   ** .pp
-  ** Controls whether mutt writes out the ``Bcc:'' header when preparing
-  ** messages to be sent.  Exim users may wish to unset this. If mutt
-  ** is set to deliver directly via SMTP (see $$smtp_url), this
-  ** option does nothing: mutt will never write out the ``Bcc:'' header
-  ** in this case.
+  ** Controls whether mutt writes out the ``Bcc:'' header when
+  ** preparing messages to be sent.  Some MTAs, such as Exim and
+  ** Courier, do not strip the ``Bcc:'' header; so it is advisable to
+  ** leave this unset unless you have a particular need for the header
+  ** to be in the sent message.
+  ** .pp
+  ** If mutt is set to deliver directly via SMTP (see $$smtp_url),
+  ** this option does nothing: mutt will never write out the ``Bcc:''
+  ** header in this case.
+  ** .pp
+  ** Note this option only affects the sending of messages.  Fcc'ed
+  ** messages will always write the ``Bcc:'' header if one exists.
   */
   { "write_inc",	DT_NUM,	 R_NONE, {.p=&WriteInc}, {.l=10} },
   /*
