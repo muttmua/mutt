@@ -1075,8 +1075,8 @@ int mutt_menuLoop (MUTTMENU *menu)
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
     if (SigWinch)
     {
-      mutt_resize_screen ();
       SigWinch = 0;
+      mutt_resize_screen ();
       clearok(stdscr,TRUE);/*force complete redraw*/
     }
 #endif
