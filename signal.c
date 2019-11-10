@@ -27,6 +27,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <unistd.h>
 
 static sigset_t Sigset;
 static sigset_t SigsetSys;
@@ -34,24 +35,62 @@ static struct sigaction SysOldInt;
 static struct sigaction SysOldQuit;
 static int IsEndwin = 0;
 
+static void exit_print_int_recursive (int n)
+{
+  char digit;
+
+  if (n > 9)
+    exit_print_int_recursive (n / 10);
+
+  digit = '0' + (n % 10);
+  write (1, &digit, 1);
+}
+
+static void exit_print_int (int n)
+{
+  if (n < 0)
+  {
+    write (1, "-", 1);
+    n = -n;
+  }
+  exit_print_int_recursive (n);
+}
+
+static void exit_print_string (const char *str)
+{
+  size_t len = 0;
+
+  if (!str)
+    return;
+
+  while (str[len])
+    len++;
+
+  if (len > 0)
+    write (1, str, len);
+}
+
 /* Attempt to catch "ordinary" signals and shut down gracefully. */
 static void exit_handler (int sig)
 {
   curs_set (1);
   endwin (); /* just to be safe */
+
+  exit_print_string ("Caught signal ");
 #if SYS_SIGLIST_DECLARED
-  printf(_("%s...  Exiting.\n"), sys_siglist[sig]);
+  exit_print_string (sys_siglist[sig]);
 #else
 #if (__sun__ && __svr4__)
-  printf(_("Caught %s...  Exiting.\n"), _sys_siglist[sig]);
+  exit_print_string (_sys_siglist[sig]);
 #else
 #if (__alpha && __osf__)
-  printf(_("Caught %s...  Exiting.\n"), __sys_siglist[sig]);
+  exit_print_string (__sys_siglist[sig]);
 #else
-  printf(_("Caught signal %d...  Exiting.\n"), sig);
+  exit_print_int (sig);
 #endif
 #endif
 #endif
+  exit_print_string ("...  Exiting.\n");
   exit (0);
 }
 
