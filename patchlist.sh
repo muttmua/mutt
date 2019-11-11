@@ -8,8 +8,14 @@ list_patches_mq () {
 	hg qapplied | sed -e 's/^/mq-/'
 }
 
+list_patches_guilt () {
+	guilt applied | sed -e 's/^/guilt-/'
+}
+
 list_patches () {
-	if [ -f .hg/patches/series ]; then
+	if [ -d .git/patches ]; then
+		list_patches_guilt
+	elif [ -f .hg/patches/series ]; then
 		list_patches_mq
 	else
 		list_patches_PATCHES
