@@ -969,7 +969,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
         mutt_buffer_strcpy (f, state.entry[menu->current].full_path);
 
-	/* Fall through to OP_EXIT */
+	/* fall through */
 
       case OP_EXIT:
 

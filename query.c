@@ -456,7 +456,7 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
 	    done = 2;
 	    break;
 	  }
-	  /* fall through to OP_MAIL */
+	  /* fall through */
 
 	case OP_MAIL:
 	  msg = mutt_new_header ();

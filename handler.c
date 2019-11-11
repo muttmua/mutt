@@ -854,7 +854,8 @@ static int text_enriched_handler (BODY *a, STATE *s)
 	  tag_len = 0;
 	  state = TAG;
 	}
-	/* Yes, fall through (it wasn't a <<, so this char is first in TAG) */
+        /* fall through */
+	/* it wasn't a <<, so this char is first in TAG */
       case TAG :
 	if (wc == (wchar_t) '>')
 	{

@@ -2234,6 +2234,7 @@ search_next:
 
 	  break;
 	}
+        /* fall through */
 	/* no previous search pattern, so fall through to search */
 
       case OP_SEARCH:

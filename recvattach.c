@@ -221,7 +221,7 @@ const char *mutt_attach_fmt (char *dest,
                (mutt_is_message_type (aptr->content->type, aptr->content->subtype)
                 && MsgFmt && aptr->content->hdr))
         break;
-      /* FALLS THROUGH TO 'F' */
+      /* fall through */
     case 'F':
       if (!optional)
       {
@@ -236,7 +236,7 @@ const char *mutt_attach_fmt (char *dest,
         optional = 0;
         break;
       }
-      /* FALLS THROUGH TO 'f' */
+      /* fall through */
     case 'f':
       if (!optional)
       {
@@ -948,6 +948,7 @@ mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
       case OP_ATTACH_COLLAPSE:
         if (recv)
           return op;
+        /* fall through */
       default:
 	op = OP_NULL;
     }

@@ -2335,7 +2335,7 @@ int smime_send_menu (HEADER *msg)
 
             case 4: /* (c)lear */
               FREE (&SmimeCryptAlg);
-              /* fallback */
+              /* fall through */
             case -1: /* Ctrl-G or Enter */
               choice = 0;
               break;

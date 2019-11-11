@@ -261,7 +261,8 @@ int mutt_autocrypt_gpgme_select_or_create_key (ADDRESS *addr, BUFFER *keyid, BUF
                         MUTT_YES) == MUTT_NO)
         break;
 
-      /* otherwise fall through to create new key */
+      /* fall through */
+      /* create new key */
 
     case 1:  /* create new */
       rv = mutt_autocrypt_gpgme_create_key (addr, keyid, keydata);

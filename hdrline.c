@@ -285,7 +285,7 @@ hdr_format_str (char *dest,
 	mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->reply_to));
 	break;
       }
-      /* fall through if 'A' returns nothing */
+      /* fall through */
 
     case 'a':
       if (hdr->env->from && hdr->env->from->mailbox)
@@ -306,7 +306,7 @@ hdr_format_str (char *dest,
 	mutt_format_s (dest, destlen, prefix, buf2);
 	break;
       }
-      /* fall through if 'B' returns nothing */
+      /* fall through */
 
     case 'b':
       if (ctx)
@@ -775,8 +775,8 @@ hdr_format_str (char *dest,
         src = end + 1;
         break;
       }
-      /* otherwise fall through */
     }
+    /* else fall through */
 
     default:
       snprintf (dest, destlen, "%%%s%c", prefix, op);

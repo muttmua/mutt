@@ -550,7 +550,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  }
 	  else if (!(flags & MUTT_FILE))
 	    goto self_insert;
-	  /* fall through to completion routine (MUTT_FILE) */
+          /* else fall through */
 
 	case OP_EDITOR_COMPLETE:
 	case OP_EDITOR_COMPLETE_QUERY:

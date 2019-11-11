@@ -1265,11 +1265,13 @@ int mutt_index_menu (void)
 
 	if (attach_msg)
 	  op = OP_MAIN_CHANGE_FOLDER_READONLY;
+        /* fall through */
 
       case OP_MAIN_BROWSE_MAILBOXES:
         if (attach_msg && (op != OP_MAIN_CHANGE_FOLDER_READONLY))
           op = OP_MAIN_BROWSE_MAILBOXES_READONLY;
 
+        /* fall through */
 	/* fallback to the readonly case */
 
       case OP_MAIN_BROWSE_MAILBOXES_READONLY:

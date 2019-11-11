@@ -113,6 +113,7 @@ static void sighandler (int sig)
       if (!IsEndwin)
 	endwin ();
       kill (0, SIGSTOP);
+      /* fall through */
 
     case SIGCONT:
       if (!IsEndwin)
