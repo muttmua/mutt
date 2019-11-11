@@ -566,6 +566,19 @@ struct option_t MuttVars[] = {
   ** will be saved for later references.  Also see $$record,
   ** $$save_name, $$force_name and ``$fcc-hook''.
   */
+  { "count_alternatives", DT_BOOL, R_NONE, {.l=OPTCOUNTALTERNATIVES}, {.l=0} },
+  /*
+  ** .pp
+  ** When \fIset\fP, Mutt will recurse inside multipart/alternatives while
+  ** performing attachment searching and counting (see $attachments).
+  ** .pp
+  ** Traditionally, multipart/alternative parts have simply represented
+  ** different encodings of the main content of the email.  Unfortunately,
+  ** some mail clients have started to place email attachments inside
+  ** one of alternatives.  Setting this will allow Mutt to find
+  ** and count matching attachments hidden there, and include them
+  ** in the index via %X or through ~X pattern matching.
+  */
   { "pgp_autoencrypt",		DT_SYN,  R_NONE, {.p="crypt_autoencrypt"}, {.p=0} },
   { "crypt_autoencrypt",	DT_BOOL, R_NONE, {.l=OPTCRYPTAUTOENCRYPT}, {.l=0} },
   /*
