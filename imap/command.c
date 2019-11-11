@@ -74,6 +74,7 @@ static const char * const Capabilities[] = {
   "CONDSTORE",
   "QRESYNC",
   "LIST-EXTENDED",
+  "COMPRESS=DEFLATE",
 
   NULL
 };

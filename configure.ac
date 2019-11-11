@@ -756,6 +756,44 @@ then
 fi
 AM_CONDITIONAL(USE_GSS, test x$need_gss = xyes)
 
+# if zlib
+AC_ARG_WITH(zlib, AS_HELP_STRING([--with-zlib@<:@=PFX@:>@],[Enable DEFLATE support for IMAP using libz]),
+    zlib_prefix="$withval", zlib_prefix="auto")
+if test "$zlib_prefix" != "no"
+then
+  if test "$need_imap" = "yes"
+  then
+	have_zlib=
+	saved_LDFLAGS="$LDFLAGS"
+	saved_CPPFLAGS="$CPPFLAGS"
+	if test "$zlib_prefix" != "yes"
+	then
+	  LDFLAGS="$LDFLAGS -L$zlib_prefix/lib"
+      CPPFLAGS="$CPPFLAGS -I$zlib_prefix/include"
+	fi
+	AC_CHECK_HEADERS([zlib.h], [AC_CHECK_LIB([z], [deflate],
+					 [have_zlib=yes])])
+	if test "x$have_zlib" = "x"
+	then
+	  if test "x$zlib_prefix" != "xauto"
+	  then
+		AC_MSG_ERROR([ZLIB requested, but library or headers not found])
+	  fi
+	  zlib_prefix=no
+	else
+	  MUTTLIBS="$MUTTLIBS -lz"
+	  AC_DEFINE(USE_ZLIB, 1, [Define if you have libz available])
+	  MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_zstrm.o"
+	  zlib_prefix=yes
+	fi
+	LDFLAGS="$saved_LDFLAGS"
+	CPPFLAGS="$saved_CPPFLAGS"
+  else
+    AC_MSG_WARN([ZLIB was requested but IMAP is not enabled])
+  fi
+fi
+AM_CONDITIONAL(USE_ZLIB, test x$zlib_prefix = xyes)
+
 dnl -- end imap dependencies --
 
 AC_ARG_WITH(ssl, AS_HELP_STRING([--with-ssl@<:@=PFX@:>@],[Enable TLS support using OpenSSL]),

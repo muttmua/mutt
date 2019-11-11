@@ -34,6 +34,9 @@
 #if defined(USE_SSL)
 # include "mutt_ssl.h"
 #endif
+#if defined(USE_ZLIB)
+# include "mutt_zstrm.h"
+#endif
 #include "buffy.h"
 #if USE_HCACHE
 #include "hcache.h"
@@ -425,6 +428,17 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
   {
     /* capabilities may have changed */
     imap_exec (idata, "CAPABILITY", IMAP_CMD_QUEUE);
+
+#if defined(USE_ZLIB)
+    /* RFC 4978 */
+    if (mutt_bit_isset (idata->capabilities, COMPRESS_DEFLATE))
+    {
+      if (query_quadoption (OPT_IMAPDEFLATE,
+	      _("Use deflate compression on connection?")) == MUTT_YES &&
+	  imap_exec (idata, "COMPRESS DEFLATE", IMAP_CMD_FAIL_OK) != -2)
+	mutt_zstrm_wrap_conn (idata->conn);
+    }
+#endif
 
     /* enable RFC6855, if the server supports that */
     if (mutt_bit_isset (idata->capabilities, ENABLE))
