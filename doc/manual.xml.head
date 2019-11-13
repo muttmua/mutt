@@ -8157,10 +8157,11 @@ Content in html format
 </screen>
 
 <para>
-A preview of the alternative can be viewed in the compose menu
-using the functions <literal>&lt;view-alt-text&gt;</literal> and
-<literal>&lt;view-alt-mailcap&gt;</literal>, bound to &quot;v&quot;
-and &quot;V&quot; by default.
+A preview of the alternative can be viewed in the compose menu using the functions
+<literal>&lt;view-alt&gt;</literal>,
+<literal>&lt;view-alt-text&gt;</literal> and
+<literal>&lt;view-alt-mailcap&gt;</literal>, bound to
+&quot;v&quot;, &quot;Esc v&quot; and &quot;V&quot; by default.
 </para>
 
 </sect1>

@@ -1509,6 +1509,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
+      case OP_COMPOSE_VIEW_ALT:
       case OP_COMPOSE_VIEW_ALT_TEXT:
       case OP_COMPOSE_VIEW_ALT_MAILCAP:
       {
@@ -1522,9 +1523,19 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         alternative = mutt_run_send_alternative_filter (msg->content);
         if (!alternative)
           break;
-        mutt_view_attachment (NULL, alternative,
-                              op == OP_COMPOSE_VIEW_ALT_TEXT ? MUTT_AS_TEXT : MUTT_MAILCAP,
-                              NULL, actx);
+	switch (op)
+	{
+	  case OP_COMPOSE_VIEW_ALT_TEXT:
+	    op = MUTT_AS_TEXT;
+	    break;
+	  case OP_COMPOSE_VIEW_ALT_MAILCAP:
+	    op = MUTT_MAILCAP;
+	    break;
+	  default:
+	    op = MUTT_REGULAR;
+	    break;
+	}
+        mutt_view_attachment (NULL, alternative, op, NULL, actx);
         mutt_free_body (&alternative);
         break;
       }
