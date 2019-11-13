@@ -595,6 +595,7 @@ dotlock_lock (const char *realpath)
   int hard_count = 0;
   struct stat sb;
   time_t t;
+  int rc;
 
   snprintf (nfslockfile, sizeof (nfslockfile), "%s.%s.%d",
             realpath, Hostname, (int) getpid ());
@@ -629,10 +630,10 @@ dotlock_lock (const char *realpath)
   {
 
     BEGIN_PRIVILEGED ();
-    link (nfslockfile, lockfile);
+    rc = link (nfslockfile, lockfile);
     END_PRIVILEGED ();
 
-    if (stat (nfslockfile, &sb) != 0)
+    if (rc != 0 || stat (nfslockfile, &sb) != 0)
     {
       /* perror ("stat"); */
       return DL_EX_ERROR;
