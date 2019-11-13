@@ -98,7 +98,8 @@ static QUERY *run_query (char *s, int quiet)
   char *buf = NULL;
   size_t buflen;
   int dummy = 0;
-  char msg[STRING];
+  char *msg = NULL;
+  size_t msglen;
   char *p;
   pid_t thepid;
 
@@ -115,9 +116,10 @@ static QUERY *run_query (char *s, int quiet)
 
   if (!quiet)
     mutt_message _("Waiting for response...");
-  fgets (msg, sizeof (msg), fp);
-  if ((p = strrchr (msg, '\n')))
-    *p = '\0';
+
+  /* The query protocol first reads one NL-terminated line. If an error
+   * occurs, this is assumed to be an error message. Otherwise it's ignored. */
+  msg = mutt_read_line (msg, &msglen, fp, &dummy, 0);
   while ((buf = mutt_read_line (buf, &buflen, fp, &dummy, 0)) != NULL)
   {
     if ((p = strtok(buf, "\t\n")))
@@ -156,6 +158,7 @@ static QUERY *run_query (char *s, int quiet)
     if (!quiet)
       mutt_message ("%s", msg);
   }
+  FREE (&msg);
 
   return first;
 }
