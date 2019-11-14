@@ -1098,20 +1098,31 @@ ADDRESS *mutt_default_from (void)
   return (adr);
 }
 
-static int generate_multipart_alternative (HEADER *msg)
+static int generate_multipart_alternative (HEADER *msg, int flags)
 {
   BODY *alternative;
 
   if (!SendMultipartAltFilter)
     return 0;
-  if (query_quadoption (OPT_SENDMULTIPARTALT,
-                        /* L10N:
-                           This is the query for the $send_multipart_alternative quadoption.
-                           Answering yes generates an alternative content using
-                           $send_multipart_alternative_filter
-                        */
-                        _("Generate multipart/alternative content?")) != MUTT_YES)
-    return 0;
+
+  /* In batch mode, only run if the quadoption is yes or ask-yes */
+  if (flags & SENDBATCH)
+  {
+    if (!(quadoption (OPT_SENDMULTIPARTALT) & 0x1))
+      return 0;
+  }
+  else
+  {
+    if (query_quadoption (OPT_SENDMULTIPARTALT,
+                          /* L10N:
+                             This is the query for the $send_multipart_alternative quadoption.
+                             Answering yes generates an alternative content using
+                             $send_multipart_alternative_filter
+                          */
+                          _("Generate multipart/alternative content?")) != MUTT_YES)
+      return 0;
+  }
+
 
   alternative = mutt_run_send_alternative_filter (msg->content);
   if (!alternative)
@@ -2144,16 +2155,12 @@ main_loop:
     }
   }
 
-  if (!(flags & SENDBATCH) ||
-      quadoption (OPT_SENDMULTIPARTALT) == MUTT_YES)
+  if (generate_multipart_alternative (msg, flags))
   {
-    if (generate_multipart_alternative (msg))
-    {
-      if (!(flags & SENDBATCH))
-        goto main_loop;
-      else
-        goto cleanup;
-    }
+    if (!(flags & SENDBATCH))
+      goto main_loop;
+    else
+      goto cleanup;
   }
 
   if (msg->content->next)
