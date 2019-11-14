@@ -1217,7 +1217,7 @@ static int save_fcc (HEADER *msg, BUFFER *fcc,
   BODY *save_content = NULL;
   BODY *save_sig = NULL;
   BODY *save_parts = NULL;
-  int choice;
+  int choice, save_atts;
 
   mutt_buffer_expand_path (fcc);
 
@@ -1259,8 +1259,19 @@ static int save_fcc (HEADER *msg, BUFFER *fcc,
     }
 
     /* check to see if the user wants copies of all attachments */
-    if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES &&
-        msg->content->type == TYPEMULTIPART)
+    save_atts = 1;
+    if (msg->content->type == TYPEMULTIPART)
+    {
+      /* In batch mode, save attachments if the quadoption is yes or ask-yes */
+      if (flags & SENDBATCH)
+      {
+        if (!(quadoption (OPT_FCCATTACH) & 0x1))
+          save_atts = 0;
+      }
+      else if (query_quadoption (OPT_FCCATTACH, _("Save attachments in Fcc?")) != MUTT_YES)
+        save_atts = 0;
+    }
+    if (!save_atts)
     {
       if (WithCrypto
           && (msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
