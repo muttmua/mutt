@@ -8,6 +8,50 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.13.0 (Not yet released)
+
+  ! <half-up> and <half-down> in the pager are now symmetric.
+  ! $ssl_force_tls is now set by default.
+  ! Configure option --with-regex is renamed to --with-bundled-regex.
+    Most modern OS should be fine to use their own regex library.  The
+    rename is to clarify the intention of the option.
+  ! Configure option --disable-doc now only disables the manual generation.
+    Other parts of the doc directory (man pages, Muttrc file) are generated.
+  ! $user_agent is now unset by default.
+  ! unattachments now has a '*' parameter to remove all attachment counting.
+  + Autocrypt support.  Enabled via configure option --enable-autocrypt.
+    Please see the manual for details on how to enable and use this properly.
+  + Byte size displays can be customized via new variables $size_show_bytes,
+    $size_show_mb, $size_show_fractions, $size_units_on_left.
+  + $ssl_use_tlsv1_3, default set, allows TLS1.3 connections if supported
+    by the server.
+  ! format-flowed space stuffing works again, and is performed after every
+    edit, not just the first time.
+  + $browser_sticky_cursor, default set, attempts to keep the cursor on the
+    same mailbox when performing operations in the browser.
+  ! <display-filename> in the browser shows the full path for local and IMAP
+    mailboxes.
+  ! $sidebar_folder_indent and $sidebar_short_path are now based on previous
+    entries in the sidebar, allowing them to work on mailboxes outside $folder.
+  ! Sidebar entries are now prefixed with mailbox shortcuts '~' and '='.  This
+    uses the same code as other parts of mutt, for more consistent display.
+  + <browse-mailboxes> allows direct access to the mailboxes list from index
+    and pager, without having to use a macro.  This improves
+    $browser_sticky_cursor selection of the initial mailbox.
+  ! <pipe-message> with $pipe_decode set will update MIME headers to decoded
+    text/plain values.
+  + $send_multipart_alternative and $send_multipart_alternative_filter allow
+    the generation of a multipart/alternative when composing a message.  See
+    their documentation in the manual for more details.  Also see
+    contrib/markdown2html for a sample filter.
+  + In the compose menu <view-alt>, <view-alt-text>, <view-alt-mailcap> allow
+    previewing the output of the $send_multipart_alternative_filter.
+  ! $write_bcc now defaults unset.  It no longer affects the Fcc copy, which
+    will always include the Bcc header.
+  + When $count_alternatives is set, Mutt will recurse inside
+    multipart/alternatives while performing attachment searching and counting.
+    This affects %X in the index and ~X pattern matching.
+
 1.12.2 (2019-09-21):
 
   ! Bug fix release.
