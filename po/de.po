@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-25 09:15-0700\n"
-"PO-Revision-Date: 2019-08-27 15:16+0200\n"
+"PO-Revision-Date: 2019-11-16 21:38+0100\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -1152,9 +1152,9 @@ msgstr ""
 "\n"
 
 #: crypt-gpgme.c:2549
-#, fuzzy, c-format
+#, c-format
 msgid "error importing key: %s\n"
-msgstr "Fehler beim exportieren des Schlüssels: %s\n"
+msgstr "Fehler beim importieren des Schlüssels: %s\n"
 
 #: crypt-gpgme.c:2797
 #, c-format
@@ -3876,9 +3876,8 @@ msgstr ""
 #. message does not mean "You failed to encrypt the message."
 #.
 #: pgp.c:669
-#, fuzzy
 msgid "PGP message is not encrypted."
-msgstr "PGP-Nachricht ist nicht entschlüsselt."
+msgstr "PGP-Nachricht ist nicht verschlüsselt."
 
 #: pgp.c:895
 msgid "Internal error.  Please submit a bug report."
@@ -4420,9 +4419,8 @@ msgstr "Kein Betreff, breche ab."
 #. be added as attachments to the new mail, if this is answered yes.
 #.
 #: send.c:440
-#, fuzzy
 msgid "Forward attachments?"
-msgstr "Als Anhänge weiterleiten?"
+msgstr "Anhänge weiterleiten?"
 
 #. L10N:
 #. Asks whether the user respects the reply-to header.
@@ -4462,9 +4460,8 @@ msgid "Preparing forwarded message..."
 msgstr "Bereite Nachricht zum Weiterleiten vor..."
 
 #: send.c:1187
-#, fuzzy
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "%c: Wird in diesem Modus nicht unterstützt"
+msgstr "Fcc in eine IMAP Mailbox funktioniert nicht im Batch-Modus"
 
 #: send.c:1203
 msgid "Save attachments in Fcc?"
@@ -4479,6 +4476,8 @@ msgstr "Anhänge in Fcc-Mailbox speichern?"
 #: send.c:1259
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
+"Fcc fehlgeschlagen. E(r)neut versuchen, andere (M)ailbox, oder "
+"über(s)pringen?"
 
 #. L10N:
 #. These correspond to the "Fcc failed" multi-choice prompt
@@ -4487,16 +4486,15 @@ msgstr ""
 #.
 #: send.c:1265
 msgid "rms"
-msgstr ""
+msgstr "rms"
 
 #. L10N:
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
 #: send.c:1273
-#, fuzzy
 msgid "Fcc mailbox"
-msgstr "Öffne Mailbox"
+msgstr "Fcc Mailbox"
 
 #: send.c:1450
 msgid "Cannot postpone.  $postponed is unset"
@@ -5447,9 +5445,8 @@ msgstr "Wähle den aktuellen Eintrag aus"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:289
-#, fuzzy
 msgid "reply to all recipients preserving To/Cc"
-msgstr "Antworte an alle Empfänger"
+msgstr "Antworte an alle Empfänger, dabei To/Cc beibehalten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6018,9 +6015,8 @@ msgstr "Auf- und Zuklappen aller Diskussionsfäden"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:574
-#, fuzzy
 msgid "descend into a directory"
-msgstr "%s ist kein Verzeichnis."
+msgstr "Verzeichnis öffnen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
