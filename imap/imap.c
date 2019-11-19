@@ -427,15 +427,14 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
   if (new && idata->state == IMAP_AUTHENTICATED)
   {
     /* capabilities may have changed */
-    imap_exec (idata, "CAPABILITY", IMAP_CMD_QUEUE);
+    imap_exec (idata, "CAPABILITY", IMAP_CMD_FAIL_OK);
 
 #if defined(USE_ZLIB)
     /* RFC 4978 */
     if (mutt_bit_isset (idata->capabilities, COMPRESS_DEFLATE))
     {
-      if (query_quadoption (OPT_IMAPDEFLATE,
-	      _("Use deflate compression on connection?")) == MUTT_YES &&
-	  imap_exec (idata, "COMPRESS DEFLATE", IMAP_CMD_FAIL_OK) != -2)
+      if (option (OPTIMAPDEFLATE) &&
+	  imap_exec (idata, "COMPRESS DEFLATE", IMAP_CMD_FAIL_OK) == 0)
 	mutt_zstrm_wrap_conn (idata->conn);
     }
 #endif

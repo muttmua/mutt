@@ -1438,7 +1438,7 @@ struct option_t MuttVars[] = {
   ** mileage may vary.
   */
 #ifdef USE_ZLIB
-  { "imap_deflate",		DT_QUAD, R_NONE, {.l=OPT_IMAPDEFLATE}, {.l=MUTT_YES} },
+  { "imap_deflate",		DT_BOOL, R_NONE, {.l=OPTIMAPDEFLATE}, {.l=0} },
   /*
   ** .pp
   ** When \fIset\fP, mutt will use the COMPRESS=DEFLATE extension (RFC

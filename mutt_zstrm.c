@@ -34,8 +34,8 @@ typedef struct
     char *buf;
     unsigned int len;
     unsigned int pos;
-    unsigned char has_pending:1;
-    unsigned char is_eof:1;
+    unsigned int conn_eof : 1;
+    unsigned int stream_eof : 1;
   } read, write;
 
   /* underlying stream */
@@ -47,15 +47,11 @@ zstrmctx;
  * malloc/free */
 static void *mutt_zstrm_malloc (void* op, unsigned int sze, unsigned int v)
 {
-  (void) op;
-
   return safe_calloc (sze, v);
 }
 
 static void mutt_zstrm_free (void* op, void* ptr)
 {
-  (void) op;
-
   FREE (&ptr);
 }
 
@@ -91,30 +87,25 @@ static int mutt_zstrm_read (CONNECTION* conn, char* buf, size_t len)
   zstrmctx* zctx = conn->sockdata;
   int rc = 0;
   int zrc;
-  int inflatemode = Z_SYNC_FLUSH;
 
-  /* shortcut end of stream call */
-  if (zctx->read.has_pending == 1 && zctx->read.is_eof == 1)
-  {
-    /* next read will yield an error */
-    zctx->read.has_pending = 0;
-    zctx->read.is_eof = 0;
+retry:
+  if (zctx->read.stream_eof)
     return 0;
-  }
 
   /* when avail_out was 0 on last call, we need to call inflate again,
    * because more data might be available using the current input, so
    * avoid callling read on the underlying stream in that case (for it
    * might block) */
-  if (zctx->read.has_pending == 0 && zctx->read.pos == 0)
+  if (zctx->read.pos == 0 && !zctx->read.conn_eof)
   {
     rc = zctx->next_conn.conn_read (&zctx->next_conn,
 	zctx->read.buf, zctx->read.len);
     dprint (4, (debugfile, "zstrm_read: consuming data from next "
 	"stream: %d bytes\n", rc));
-    /* error or end of stream? ensure zlib flushes whatever it can */
-    if (rc <= 0)
-      inflatemode = Z_FINISH;
+    if (rc < 0)
+      return rc;
+    else if (rc == 0)
+      zctx->read.conn_eof = 1;
     else
       zctx->read.pos += rc;
   }
@@ -124,7 +115,7 @@ static int mutt_zstrm_read (CONNECTION* conn, char* buf, size_t len)
   zctx->read.z.avail_out = (uInt) len;
   zctx->read.z.next_out = (Bytef*) buf;
 
-  zrc = inflate (&zctx->read.z, inflatemode);
+  zrc = inflate (&zctx->read.z, Z_SYNC_FLUSH);
   dprint (4, (debugfile, "zstrm_read: rc=%d, "
 	"consumed %u/%u bytes, produced %u/%u bytes\n", zrc,
 	zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
@@ -145,29 +136,27 @@ static int mutt_zstrm_read (CONNECTION* conn, char* buf, size_t len)
       {
 	/* there was progress, so must have been reading input */
 	dprint (4, (debugfile, "zstrm_read: inflate just consumed\n"));
-	/* re-call ourselves to read more bytes */
-	zctx->read.has_pending = 0;  /* trigger a read */
-	return mutt_zstrm_read (conn, buf, len);
+        goto retry;
       }
       break;
     case Z_STREAM_END:  /* everything flushed, nothing remaining */
+      dprint (4, (debugfile, "zstrm_read: inflate returned Z_STREAM_END.\n"));
       zrc = len - zctx->read.z.avail_out;  /* "returned" bytes */
-      zctx->read.has_pending = 1;
-      zctx->read.is_eof = 1;
+      zctx->read.stream_eof = 1;
       break;
-    case Z_DATA_ERROR:  /* corrupt input */
-      /* zlib can inflateSync here, but do we really want to skip bytes
-       * at this point? it may horribly mess up a protocol flow, so
-       * throw an error instead */
-      return -1;
-    case Z_MEM_ERROR:  /* out of memory -- shouldn't happen with safe_malloc */
-      errno = ENOMEM;
-      return -1;
-    case Z_BUF_ERROR:  /* output buffer full or nothing to read */
-      /* since every call has an empty output buffer, this scenario
-       * means we read nothing, so retry reading */
-      zctx->read.has_pending = 0;  /* trigger a read */
-      return mutt_zstrm_read (conn, buf, len);
+    case Z_BUF_ERROR:  /* no progress was possible */
+      if (!zctx->read.conn_eof)
+      {
+	dprint (5, (debugfile, "zstrm_read: inflate returned Z_BUF_ERROR. retrying.\n"));
+        goto retry;
+      }
+      zrc = 0;
+      break;
+    default:
+      /* bail on other rcs, such as Z_DATA_ERROR, or Z_MEM_ERROR */
+      dprint (4, (debugfile, "zstrm_read: inflate returned %d. aborting.\n", zrc));
+      zrc = -1;
+      break;
   }
 
   return zrc;
