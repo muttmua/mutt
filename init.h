@@ -2879,7 +2879,8 @@ struct option_t MuttVars[] = {
   ** command to create a ``Bcc:'' field with your email address in it.)
   ** .pp
   ** The value of \fI$$record\fP is overridden by the $$force_name and
-  ** $$save_name variables, and the ``$fcc-hook'' command.  Also see $$copy.
+  ** $$save_name variables, and the ``$fcc-hook'' command.  Also see $$copy
+  ** and $$write_bcc.
   */
   { "reflow_space_quotes",	DT_BOOL, R_NONE, {.l=OPTREFLOWSPACEQUOTES}, {.l=1} },
   /*
@@ -3157,6 +3158,8 @@ struct option_t MuttVars[] = {
   ** adding a \fC--\fP delimiter (if not already present).  Additional
   ** flags, such as for $$use_8bitmime, $$use_envelope_from,
   ** $$dsn_notify, or $$dsn_return will be added before the delimiter.
+  ** .pp
+  ** \fBSee also:\fP $$write_bcc.
   */
   { "sendmail_wait",	DT_NUM,  R_NONE, {.p=&SendmailWait}, {.l=0} },
   /*
@@ -3694,6 +3697,8 @@ struct option_t MuttVars[] = {
   ** where ``[...]'' denotes an optional part.
   ** Setting this variable overrides the value of the $$sendmail
   ** variable.
+  ** .pp
+  ** Also see $$write_bcc.
   */
 #endif /* USE_SMTP */
   { "sort",		DT_SORT, R_INDEX|R_RESORT, {.p=&Sort}, {.l=SORT_DATE} },
