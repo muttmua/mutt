@@ -13,7 +13,7 @@ The keys used are:
   ! <half-up> and <half-down> in the pager are now symmetric.
   ! $ssl_force_tls is now set by default.
   ! Configure option --with-regex is renamed to --with-bundled-regex.
-    Most modern OS should be fine to use their own regex library.  The
+    Most modern OS should be fine using their own regex library.  The
     rename is to clarify the intention of the option.
   ! Configure option --disable-doc now only disables the manual generation.
     Other parts of the doc directory (man pages, Muttrc file) are generated.
@@ -25,19 +25,19 @@ The keys used are:
     $size_show_mb, $size_show_fractions, $size_units_on_left.
   + $ssl_use_tlsv1_3, default set, allows TLS1.3 connections if supported
     by the server.
-  ! format-flowed space stuffing works again, and is performed after every
+  ! format=flowed space stuffing works again, and is performed after every
     edit, not just the first time.
   + $browser_sticky_cursor, default set, attempts to keep the cursor on the
     same mailbox when performing operations in the browser.
-  ! <display-filename> in the browser shows the full path for local and IMAP
-    mailboxes.
+  ! <display-filename> in the browser menu shows the full path for local and
+    IMAP mailboxes.
   ! $sidebar_folder_indent and $sidebar_short_path are now based on previous
     entries in the sidebar, allowing them to work on mailboxes outside $folder.
   ! Sidebar entries are now prefixed with mailbox shortcuts '~' and '='.  This
     uses the same code as other parts of mutt, for more consistent display.
-  + <browse-mailboxes> allows direct access to the mailboxes list from index
-    and pager, without having to use a macro.  This improves
-    $browser_sticky_cursor selection of the initial mailbox.
+  + <browse-mailboxes> allows direct access to the mailboxes list from the
+    index and pager, without having to use a macro.  This improves
+    $browser_sticky_cursor initial selection of the current mailbox.
   ! <pipe-message> with $pipe_decode set will update MIME headers to decoded
     text/plain values.
   + $send_multipart_alternative and $send_multipart_alternative_filter allow
