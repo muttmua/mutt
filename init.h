@@ -4348,7 +4348,8 @@ struct option_t MuttVars[] = {
   ** header in this case.
   ** .pp
   ** Note this option only affects the sending of messages.  Fcc'ed
-  ** messages will always write the ``Bcc:'' header if one exists.
+  ** copies of a message will always contain the ``Bcc:'' header if
+  ** one exists.
   */
   { "write_inc",	DT_NUM,	 R_NONE, {.p=&WriteInc}, {.l=10} },
   /*
