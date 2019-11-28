@@ -1,9 +1,9 @@
 # Japanese messages for Mutt.
-# Copyright (C) 2002, 2003, 2004, 2005, 2007, 2008, 2011, 2013, 2015, 2016, 2017, 2018 mutt-j ML members.
+# Copyright (C) 2002, 2003, 2004, 2005, 2007, 2008, 2011, 2013, 2015, 2016, 2017, 2018, 2019 mutt-j ML members.
 # This file is distributed under the same license as the Mutt package.
 # FIRST AUTHOR Kikutani Makoto <kikutani@Galaxy.net>, 1999.
 # 2nd AUTHOR OOTA,Toshiya <ribbon@users.sourceforge.net>, 2002.
-#  (with TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>, 2003, 2004, 2005, 2007, 2008, 2009, 2011, 2013, 2015, 2016, 2017, 2018).
+#  (with TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>, 2003, 2004, 2005, 2007, 2008, 2009, 2011, 2013, 2015, 2016, 2017, 2018, 2019).
 # oota toshiya <ribbon@users.sourceforge.net>, 2008, 2011, 2017, 2018.
 #
 msgid ""
