@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 09:15-0700\n"
+"POT-Creation-Date: 2019-11-30 10:17-0800\n"
 "PO-Revision-Date: 2017-02-22 20:12+0100\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -47,16 +47,16 @@ msgstr ""
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr ""
 
-#: addrbook.c:37 browser.c:46 history.c:75 pager.c:1574 postpone.c:41
-#: query.c:48 recvattach.c:58
+#: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 browser.c:46 history.c:75
+#: pager.c:1574 postpone.c:42 query.c:48 recvattach.c:58
 msgid "Exit"
 msgstr "Afsluiten"
 
-#: addrbook.c:38 curs_main.c:539 pager.c:1581 postpone.c:42
+#: addrbook.c:38 curs_main.c:543 pager.c:1581 postpone.c:43
 msgid "Del"
 msgstr "Wis"
 
-#: addrbook.c:39 curs_main.c:540 postpone.c:43
+#: addrbook.c:39 curs_main.c:544 postpone.c:44
 msgid "Undel"
 msgstr "Herstel"
 
@@ -64,9 +64,10 @@ msgstr "Herstel"
 msgid "Select"
 msgstr "Selecteren"
 
-#: addrbook.c:41 browser.c:49 compose.c:126 crypt-gpgme.c:4449 curs_main.c:545
-#: history.c:78 mutt_ssl.c:1290 mutt_ssl_gnutls.c:1013 pager.c:1979
-#: pgpkey.c:522 postpone.c:44 query.c:53 recvattach.c:62 smime.c:453
+#: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 browser.c:49 compose.c:142
+#: crypt-gpgme.c:4535 curs_main.c:549 history.c:78 mutt_ssl.c:1323
+#: mutt_ssl_gnutls.c:1033 pager.c:1979 pgpkey.c:523 postpone.c:45 query.c:53
+#: recvattach.c:62 smime.c:453
 msgid "Help"
 msgstr "Hulp"
 
@@ -95,7 +96,7 @@ msgstr "Waarschuwing: deze afkorting kan niet werken.  Verbeteren?"
 msgid "Address: "
 msgstr "Adres: "
 
-#: alias.c:307 send.c:210
+#: alias.c:307 send.c:216
 #, c-format
 msgid "Error: '%s' is a bad IDN."
 msgstr "Fout: '%s' is een ongeldige IDN."
@@ -109,8 +110,8 @@ msgstr "Naam: "
 msgid "[%s = %s] Accept?"
 msgstr "[%s = %s] Accepteren?"
 
-#: alias.c:348 recvattach.c:437 recvattach.c:463 recvattach.c:476
-#: recvattach.c:489 recvattach.c:524
+#: alias.c:348 recvattach.c:449 recvattach.c:472 recvattach.c:486
+#: recvattach.c:501 recvattach.c:541
 msgid "Save to file: "
 msgstr "Opslaan als: "
 
@@ -126,92 +127,387 @@ msgstr "Adres toegevoegd."
 msgid "Error seeking in alias file"
 msgstr "Fout tijdens doorzoeken adresbestand"
 
-#: attach.c:122 attach.c:257 attach.c:421 attach.c:958
+#: attach.c:122 attach.c:255 attach.c:417 attach.c:949
 msgid "Can't match nametemplate, continue?"
 msgstr "Naamsjabloon kan niet worden ingevuld.  Doorgaan?"
 
-#: attach.c:134
+#: attach.c:132
 #, c-format
 msgid "Mailcap compose entry requires %%s"
 msgstr "\"compose\"-entry in mailcap vereist %%s."
 
-#: attach.c:142 attach.c:277 commands.c:304 compose.c:1382 compress.c:412
-#: curs_lib.c:271 curs_lib.c:950 sendlib.c:1384
+#: attach.c:140 attach.c:273 commands.c:326 compose.c:1617 compress.c:414
+#: curs_lib.c:297 curs_lib.c:980 sendlib.c:1424 sendlib.c:1462 sendlib.c:1525
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Fout opgetreden bij het uitvoeren van \"%s\"!"
 
-#: attach.c:151
+#: attach.c:149
 msgid "Failure to open file to parse headers."
 msgstr "Kan bestand niet openen om header te lezen."
 
-#: attach.c:183
+#: attach.c:181
 msgid "Failure to open file to strip headers."
 msgstr "Kan bestand niet openen om header te verwijderen."
 
-#: attach.c:192
+#: attach.c:190
 msgid "Failure to rename file."
 msgstr "Kan bestand niet hernoemen."
 
-#: attach.c:204
+#: attach.c:202
 #, c-format
 msgid "No mailcap compose entry for %s, creating empty file."
 msgstr "Geen \"compose\"-entry voor %s, een leeg bestand wordt aangemaakt."
 
-#: attach.c:269
+#: attach.c:265
 #, c-format
 msgid "Mailcap Edit entry requires %%s"
 msgstr "\"edit\"-entry in mailcap vereist %%s."
 
-#: attach.c:290
+#: attach.c:286
 #, c-format
 msgid "No mailcap edit entry for %s"
 msgstr "Geen \"edit\"-entry voor %s in mailcap"
 
-#: attach.c:387
+#: attach.c:383
 msgid "No matching mailcap entry found.  Viewing as text."
 msgstr "Geen geschikte mailcap-entry gevonden.  Weergave als normale tekst."
 
-#: attach.c:400
+#: attach.c:396
 msgid "MIME type not defined.  Cannot view attachment."
 msgstr "MIME-type is niet gedefinieerd.  Kan bijlage niet weergeven."
 
-#: attach.c:490
+#: attach.c:481
 msgid "Cannot create filter"
 msgstr "Filter kan niet worden aangemaakt"
 
-#: attach.c:498
+#: attach.c:489
 #, c-format
 msgid "---Command: %-20.20s Description: %s"
 msgstr "---Commando: %-20.20s Omschrijving: %s"
 
-#: attach.c:502
+#: attach.c:493
 #, c-format
 msgid "---Command: %-30.30s Attachment: %s"
 msgstr "---Commando: %-30.30s Bijlage: %s"
 
-#: attach.c:585
+#: attach.c:576
 #, c-format
 msgid "---Attachment: %s: %s"
 msgstr "---Bijlage: %s: %s"
 
-#: attach.c:588
+#: attach.c:579
 #, c-format
 msgid "---Attachment: %s"
 msgstr "---Bijlage: %s"
 
-#: attach.c:663 attach.c:695 attach.c:991 attach.c:1049 handler.c:1369
-#: pgpkey.c:572 pgpkey.c:760
+#: attach.c:653 attach.c:685 attach.c:979 attach.c:1038 handler.c:1370
+#: pgpkey.c:575 pgpkey.c:761
 msgid "Can't create filter"
 msgstr "Kan filter niet aanmaken"
 
-#: attach.c:829
+#: attach.c:819
 msgid "Write fault!"
 msgstr "Fout bij schrijven!"
 
-#: attach.c:1071
+#: attach.c:1060
 msgid "I don't know how to print that!"
 msgstr "Ik weet niet hoe dit afgedrukt moet worden!"
+
+#. L10N:
+#. %s is a directory.  Mutt is looking for a directory it needs
+#. for some reason (e.g. autocrypt, header cache, bcache), but it
+#. doesn't exist.  The prompt is asking whether to create the directory
+#.
+#: autocrypt/autocrypt.c:55 main.c:946
+#, c-format
+msgid "%s does not exist. Create it?"
+msgstr "%s bestaat niet. Aanmaken?"
+
+#. L10N:
+#. mkdir() on the directory %s failed.  The second %s is the
+#. error message returned by libc
+#.
+#: autocrypt/autocrypt.c:64 main.c:950
+#, c-format
+msgid "Can't create %s: %s."
+msgstr "Kan bestand %s niet aanmaken: %s"
+
+#. L10N:
+#. The first time mutt is started with $autocrypt set, it will
+#. create $autocrypt_dir and then prompt to create an autocrypt
+#. account with this message.
+#.
+#: autocrypt/autocrypt.c:126
+msgid "Create an initial autocrypt account?"
+msgstr ""
+
+#. L10N:
+#. Autocrypt is asking for the email address to use for the
+#. autocrypt account.  This will generate a key and add a record
+#. to the database for use in autocrypt operations.
+#.
+#: autocrypt/autocrypt.c:148
+msgid "Autocrypt account address: "
+msgstr ""
+
+#. L10N:
+#. Autocrypt prompts for an account email address, and requires
+#. a single address.  This is shown if they entered something invalid,
+#. nothing, or more than one address for some reason.
+#.
+#: autocrypt/autocrypt.c:157
+msgid "Please enter a single email address"
+msgstr ""
+
+#. L10N:
+#. When creating an autocrypt account, this message will be displayed
+#. if there is already an account in the database with the email address
+#. they just entered.
+#.
+#: autocrypt/autocrypt.c:174
+msgid "That email address already has an autocrypt account"
+msgstr ""
+
+#. L10N:
+#. Autocrypt has a setting "prefer-encrypt".
+#. When the recommendation algorithm returns "available" and BOTH
+#. sender and recipient choose "prefer-encrypt", encryption will be
+#. automatically enabled.
+#. Otherwise the UI will show encryption is "available" but the user
+#. will be required to enable encryption manually.
+#.
+#: autocrypt/autocrypt.c:190
+#, fuzzy
+msgid "Prefer encryption?"
+msgstr "versleuteling "
+
+#. L10N:
+#. Error message displayed if creating an autocrypt account failed
+#. or was aborted by the user.
+#.
+#: autocrypt/autocrypt.c:205
+msgid "Autocrypt account creation aborted."
+msgstr ""
+
+#. L10N:
+#. Message displayed after an autocrypt account is successfully created.
+#.
+#: autocrypt/autocrypt.c:210
+msgid "Autocrypt account creation succeeded"
+msgstr ""
+
+#. L10N:
+#. %s is an email address.  Autocrypt is scanning for the keyids
+#. to use to encrypt, but it can't find a valid keyid for this address.
+#. The message is printed and they are returned to the compose menu.
+#.
+#: autocrypt/autocrypt.c:554 autocrypt/autocrypt.c:582
+#, fuzzy, c-format
+msgid "No (valid) autocrypt key found for %s."
+msgstr "Geen (geldig) certificaat gevonden voor %s."
+
+#. L10N:
+#. The first time autocrypt is enabled, Mutt will ask to scan
+#. through one or more mailboxes for Autocrypt: headers.
+#. Those headers are then captured in the database as peer records
+#. and used for encryption.
+#. If this is answered yes, they will be prompted for a mailbox.
+#.
+#: autocrypt/autocrypt.c:824
+msgid "Scan a mailbox for autocrypt headers?"
+msgstr ""
+
+#. L10N:
+#. The prompt for a mailbox to scan for Autocrypt: headers
+#.
+#: autocrypt/autocrypt.c:831
+#, fuzzy
+msgid "Scan mailbox"
+msgstr "Open postvak"
+
+#. L10N:
+#. This is the second prompt to see if the user would like
+#. to scan more than one mailbox for Autocrypt headers.
+#. I'm purposely being extra verbose; asking first then prompting
+#. for a mailbox.  This is because this is a one-time operation
+#. and I don't want them to accidentally ctrl-g and abort it.
+#.
+#: autocrypt/autocrypt.c:853
+msgid "Scan another mailbox for autocrypt headers?"
+msgstr ""
+
+#. L10N: Autocrypt Account Menu Help line:
+#. create new account
+#.
+#: autocrypt/autocrypt_acct_menu.c:43
+#, fuzzy
+msgid "Create"
+msgstr "%s aanmaken?"
+
+#. L10N: Autocrypt Account Menu Help line:
+#. delete account
+#.
+#: autocrypt/autocrypt_acct_menu.c:47 remailer.c:488
+msgid "Delete"
+msgstr "Verwijderen"
+
+#. L10N: Autocrypt Account Menu Help line:
+#. toggle an account active/inactive
+#. The words here are abbreviated to keep the help line compact.
+#. It currently has the content:
+#. q:Exit  c:Create  D:Delete  a:Tgl Active  p:Prf Encr  ?:Help
+#.
+#: autocrypt/autocrypt_acct_menu.c:54
+msgid "Tgl Active"
+msgstr ""
+
+#. L10N: Autocrypt Account Menu Help line:
+#. toggle "prefer-encrypt" on an account
+#. The words here are abbreviated to keep the help line compact.
+#. It currently has the content:
+#. q:Exit  c:Create  D:Delete  a:Tgl Active  p:Prf Encr  ?:Help
+#.
+#: autocrypt/autocrypt_acct_menu.c:61
+msgid "Prf Encr"
+msgstr ""
+
+#. L10N:
+#. Autocrypt Account menu.
+#. flag that an account has prefer-encrypt set
+#.
+#: autocrypt/autocrypt_acct_menu.c:93
+msgid "prefer encrypt"
+msgstr ""
+
+#. L10N:
+#. Autocrypt Account menu.
+#. flag that an account has prefer-encrypt unset;
+#. thus encryption will need to be manually enabled.
+#.
+#: autocrypt/autocrypt_acct_menu.c:100
+msgid "manual encrypt"
+msgstr ""
+
+#. L10N:
+#. Autocrypt Account menu.
+#. flag that an account is enabled/active
+#.
+#: autocrypt/autocrypt_acct_menu.c:108
+msgid "active"
+msgstr ""
+
+#. L10N:
+#. Autocrypt Account menu.
+#. flag that an account is disabled/inactive
+#.
+#: autocrypt/autocrypt_acct_menu.c:114
+msgid "inactive"
+msgstr ""
+
+#. L10N:
+#. Autocrypt Account Management Menu title
+#.
+#: autocrypt/autocrypt_acct_menu.c:147
+msgid "Autocrypt Accounts"
+msgstr ""
+
+#. L10N:
+#. This error message is displayed if a database update of an
+#. account record fails for some odd reason.
+#.
+#: autocrypt/autocrypt_acct_menu.c:203 autocrypt/autocrypt_acct_menu.c:213
+msgid "Error updating account record"
+msgstr ""
+
+#. L10N:
+#. Confirmation message when deleting an autocrypt account
+#.
+#: autocrypt/autocrypt_acct_menu.c:258
+#, fuzzy, c-format
+msgid "Really delete account \"%s\"?"
+msgstr "Postvak \"%s\" echt verwijderen?"
+
+#. L10N:
+#. %s is the path to the database.  For some reason sqlite3 failed
+#. to open that database file.
+#.
+#. L10N:
+#. Error message if autocrypt couldn't open the sqlite database
+#. for some reason.  The %s is the full path of the database file.
+#.
+#: autocrypt/autocrypt_db.c:50 autocrypt/autocrypt_db.c:93
+#, fuzzy, c-format
+msgid "Unable to open autocrypt database %s"
+msgstr "Kan postvak %s niet openen"
+
+#: autocrypt/autocrypt_gpgme.c:41 crypt-gpgme.c:576
+#, c-format
+msgid "error creating gpgme context: %s\n"
+msgstr "fout bij het creëren van GPGME-context: %s\n"
+
+#. L10N:
+#. Message displayed just before a GPG key is generated for a created
+#. autocrypt account.
+#.
+#: autocrypt/autocrypt_gpgme.c:136
+msgid "Generating autocrypt key..."
+msgstr ""
+
+#. L10N:
+#. GPGME was unable to generate a key for some reason.
+#. %s is the error message returned by GPGME.
+#.
+#: autocrypt/autocrypt_gpgme.c:148 autocrypt/autocrypt_gpgme.c:169
+#, fuzzy, c-format
+msgid "Error creating autocrypt key: %s\n"
+msgstr "Fout bij exporteren van sleutel: %s\n"
+
+#. L10N:
+#. After selecting a key for an autocrypt account,
+#. this is displayed if the key was revoked/expired/disabled/invalid
+#. or can't be used for both signing and encryption.
+#. %s is the key fingerprint.
+#.
+#: autocrypt/autocrypt_gpgme.c:213
+#, c-format
+msgid "The key %s is not usable for autocrypt"
+msgstr ""
+
+#. L10N:
+#. During autocrypt account creation, this prompt asks the
+#. user whether they want to create a new GPG key for the account,
+#. or select an existing account from the keyring.
+#.
+#: autocrypt/autocrypt_gpgme.c:241
+msgid "(c)reate new, or (s)elect existing GPG key? "
+msgstr ""
+
+#. L10N:
+#. The letters corresponding to the
+#. "(c)reate new, or (s)elect existing GPG key?" prompt.
+#.
+#: autocrypt/autocrypt_gpgme.c:246
+msgid "cs"
+msgstr ""
+
+#. L10N:
+#. During autocrypt account creation, if selecting an existing key fails
+#. for some reason, we prompt to see if they want to create a key instead.
+#.
+#: autocrypt/autocrypt_gpgme.c:260
+msgid "Create a new gpg key for this account, instead?"
+msgstr ""
+
+#. L10N:
+#. The autocrypt database keeps track of schema version numbers.
+#. This error occurs if the version number is too high.
+#. Presumably because this is an old version of mutt and the
+#. database was upgraded by a future version.
+#.
+#: autocrypt/autocrypt_schema.c:116
+msgid "Autocrypt database version is too new"
+msgstr ""
 
 #: browser.c:47
 msgid "Chdir"
@@ -221,109 +517,109 @@ msgstr "Andere map"
 msgid "Mask"
 msgstr "Masker"
 
-#: browser.c:473 browser.c:958 browser.c:1188
+#: browser.c:461 browser.c:966 browser.c:1179
 #, c-format
 msgid "%s is not a directory."
 msgstr "%s is geen map."
 
-#: browser.c:634
+#: browser.c:639
 #, c-format
 msgid "Mailboxes [%d]"
 msgstr "Postvakken [%d]"
 
-#: browser.c:641
+#: browser.c:646
 #, c-format
 msgid "Subscribed [%s], File mask: %s"
 msgstr "Geselecteerd [%s], Bestandsmasker: %s"
 
-#: browser.c:645
+#: browser.c:650
 #, c-format
 msgid "Directory [%s], File mask: %s"
 msgstr "Map [%s], Bestandsmasker: %s"
 
-#: browser.c:660
+#: browser.c:667
 msgid "Can't attach a directory!"
 msgstr "Kan geen map bijvoegen!"
 
-#: browser.c:829 browser.c:1258 browser.c:1363
+#: browser.c:846 browser.c:1247 browser.c:1354
 msgid "No files match the file mask"
 msgstr "Geen bestanden waarop het masker past gevonden."
 
-#: browser.c:1037
+#: browser.c:1027
 msgid "Create is only supported for IMAP mailboxes"
 msgstr "Alleen IMAP-postvakken kunnen aangemaakt worden"
 
-#: browser.c:1060
+#: browser.c:1050
 msgid "Rename is only supported for IMAP mailboxes"
 msgstr "Alleen IMAP-postvakken kunnen hernoemd worden"
 
-#: browser.c:1082
+#: browser.c:1072
 msgid "Delete is only supported for IMAP mailboxes"
 msgstr "Alleen IMAP-postvakken kunnen verwijderd worden"
 
-#: browser.c:1092
+#: browser.c:1082
 msgid "Cannot delete root folder"
 msgstr "Kan de basismap niet verwijderen"
 
-#: browser.c:1095
+#: browser.c:1085
 #, c-format
 msgid "Really delete mailbox \"%s\"?"
 msgstr "Postvak \"%s\" echt verwijderen?"
 
-#: browser.c:1111
+#: browser.c:1101
 msgid "Mailbox deleted."
 msgstr "Postvak is verwijderd."
 
-#: browser.c:1115
+#: browser.c:1106
 #, fuzzy
 msgid "Mailbox deletion failed."
 msgstr "Postvak is verwijderd."
 
-#: browser.c:1118
+#: browser.c:1109
 msgid "Mailbox not deleted."
 msgstr "Postvak is niet verwijderd."
 
-#: browser.c:1138
+#: browser.c:1130
 msgid "Chdir to: "
 msgstr "Wisselen naar map: "
 
-#: browser.c:1177 browser.c:1252
+#: browser.c:1168 browser.c:1241
 msgid "Error scanning directory."
 msgstr "Er is een fout opgetreden tijdens het analyseren van de map."
 
-#: browser.c:1200
+#: browser.c:1191
 msgid "File Mask: "
 msgstr "Bestandsmasker: "
 
-#: browser.c:1273
+#: browser.c:1262
 #, fuzzy
 msgid ""
 "Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
 msgstr ""
 "Achteruit sorteren op (d)atum, bestands(g)rootte, (a)lfabet of (n)iet? "
 
-#: browser.c:1274
+#: browser.c:1263
 #, fuzzy
 msgid "Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
 msgstr "Sorteren op (d)atum, bestands(g)rootte, (a)lfabet of helemaal (n)iet?"
 
-#: browser.c:1275
+#: browser.c:1264
 msgid "dazcun"
 msgstr ""
 
-#: browser.c:1351
+#: browser.c:1343
 msgid "New file name: "
 msgstr "Nieuwe bestandsnaam: "
 
-#: browser.c:1380
+#: browser.c:1371
 msgid "Can't view a directory"
 msgstr "Map kan niet worden getoond."
 
-#: browser.c:1396
+#: browser.c:1386
 msgid "Error trying to view file"
 msgstr "Er is een fout opgetreden tijdens het weergeven van bestand"
 
-#: buffy.c:670
+#: buffy.c:671
 msgid "New mail in "
 msgstr "Nieuw bericht in "
 
@@ -337,177 +633,177 @@ msgstr "%s: terminal ondersteunt geen kleur"
 msgid "%s: no such color"
 msgstr "%s: onbekende kleur"
 
-#: color.c:437 color.c:653 color.c:674 color.c:680
+#: color.c:435 color.c:651 color.c:672 color.c:678
 #, c-format
 msgid "%s: no such object"
 msgstr "%s: onbekend object"
 
-#: color.c:453
+#: color.c:451
 #, c-format
 msgid "%s: command valid only for index, body, header objects"
 msgstr "%s: commando is alleen geldig voor index, body en headerobjecten"
 
-#: color.c:461
+#: color.c:459
 #, c-format
 msgid "%s: too few arguments"
 msgstr "%s: te weinig argumenten"
 
-#: color.c:641 color.c:666
+#: color.c:639 color.c:664
 msgid "Missing arguments."
 msgstr "Ontbrekende argumenten."
 
-#: color.c:698 color.c:726
+#: color.c:696 color.c:724
 msgid "color: too few arguments"
 msgstr "color: te weinig argumenten"
 
-#: color.c:749
+#: color.c:747
 msgid "mono: too few arguments"
 msgstr "mono: te weinig argumenten"
 
-#: color.c:769
+#: color.c:767
 #, c-format
 msgid "%s: no such attribute"
 msgstr "%s: onbekend attribuut"
 
-#: color.c:809 hook.c:74 hook.c:82 hook.c:324 init.c:2003 init.c:2078
-#: keymap.c:959
+#: color.c:807 hook.c:74 hook.c:82 hook.c:317 init.c:2030 init.c:2105
+#: keymap.c:973
 msgid "too few arguments"
 msgstr "te weinig argumenten"
 
-#: color.c:818 hook.c:88 hook.c:331
+#: color.c:816 hook.c:88 hook.c:324
 msgid "too many arguments"
 msgstr "te veel argumenten"
 
-#: color.c:834
+#: color.c:832
 msgid "default colors not supported"
 msgstr "standaardkleuren worden niet ondersteund"
 
 #. L10N: Used for the $crypt_verify_sig prompt
-#: commands.c:168
+#: commands.c:184
 #, fuzzy
 msgid "Verify signature?"
 msgstr "PGP-handtekening controleren?"
 
-#: commands.c:193 mbox.c:901
+#: commands.c:210 mbox.c:902
 msgid "Could not create temporary file!"
 msgstr "Tijdelijk bestand kon niet worden aangemaakt!"
 
-#: commands.c:206
+#: commands.c:223
 msgid "Cannot create display filter"
 msgstr "Weergavefilter kan niet worden aangemaakt."
 
-#: commands.c:231
+#: commands.c:250
 msgid "Could not copy message"
 msgstr "Bericht kon niet gekopieerd worden."
 
-#: commands.c:270
+#: commands.c:289
 msgid "S/MIME signature successfully verified."
 msgstr "S/MIME-handtekening is correct bevonden."
 
-#: commands.c:272
+#: commands.c:291
 msgid "S/MIME certificate owner does not match sender."
 msgstr "S/MIME-certificaateigenaar komt niet overeen met afzender."
 
-#: commands.c:275 commands.c:286
+#: commands.c:294 commands.c:305
 msgid "Warning: Part of this message has not been signed."
 msgstr "Waarschuwing: een deel van dit bericht is niet ondertekend."
 
-#: commands.c:277
+#: commands.c:296
 msgid "S/MIME signature could NOT be verified."
 msgstr "S/MIME-handtekening kon NIET worden geverifieerd."
 
-#: commands.c:284
+#: commands.c:303
 msgid "PGP signature successfully verified."
 msgstr "PGP-handtekening is correct bevonden."
 
-#: commands.c:288
+#: commands.c:307
 msgid "PGP signature could NOT be verified."
 msgstr "PGP-handtekening kon NIET worden geverifieerd."
 
-#: commands.c:312
+#: commands.c:336
 msgid "Command: "
 msgstr "Commando: "
 
-#: commands.c:337 commands.c:347 recvcmd.c:146 recvcmd.c:159
+#: commands.c:363 commands.c:373 recvcmd.c:146 recvcmd.c:159
 msgid "Warning: message contains no From: header"
 msgstr "Waarschuwing: bericht bevat geen 'From:'-kopregel"
 
-#: commands.c:355 recvcmd.c:169
+#: commands.c:381 recvcmd.c:169
 msgid "Bounce message to: "
 msgstr "Bericht doorsturen naar: "
 
-#: commands.c:357 recvcmd.c:171
+#: commands.c:383 recvcmd.c:171
 msgid "Bounce tagged messages to: "
 msgstr "Gemarkeerde berichten doorsturen naar: "
 
-#: commands.c:365 recvcmd.c:180
+#: commands.c:391 recvcmd.c:180
 msgid "Error parsing address!"
 msgstr "Ongeldig adres!"
 
-#: commands.c:373 recvcmd.c:188
+#: commands.c:399 recvcmd.c:188
 #, c-format
 msgid "Bad IDN: '%s'"
 msgstr "Ongeldig IDN: '%s'"
 
-#: commands.c:384 recvcmd.c:202
+#: commands.c:410 recvcmd.c:202
 #, c-format
 msgid "Bounce message to %s"
 msgstr "Bericht doorsturen aan %s"
 
-#: commands.c:384 recvcmd.c:202
+#: commands.c:410 recvcmd.c:202
 #, c-format
 msgid "Bounce messages to %s"
 msgstr "Berichten doorsturen aan %s"
 
-#: commands.c:400 recvcmd.c:218
+#: commands.c:426 recvcmd.c:218
 msgid "Message not bounced."
 msgstr "Bericht niet doorgestuurd."
 
-#: commands.c:400 recvcmd.c:218
+#: commands.c:426 recvcmd.c:218
 msgid "Messages not bounced."
 msgstr "Berichten niet doorgestuurd."
 
-#: commands.c:410 recvcmd.c:237
+#: commands.c:436 recvcmd.c:237
 msgid "Message bounced."
 msgstr "Bericht doorgestuurd."
 
-#: commands.c:410 recvcmd.c:237
+#: commands.c:436 recvcmd.c:237
 msgid "Messages bounced."
 msgstr "Berichten doorgestuurd."
 
-#: commands.c:487 commands.c:523 commands.c:542
+#: commands.c:520 commands.c:556 commands.c:575
 msgid "Can't create filter process"
 msgstr "Kan filterproces niet aanmaken"
 
-#: commands.c:573
+#: commands.c:606
 msgid "Pipe to command: "
 msgstr "Doorsluizen naar commando: "
 
-#: commands.c:590
+#: commands.c:623
 msgid "No printing command has been defined."
 msgstr "Er is geen printcommando gedefinieerd."
 
-#: commands.c:595
+#: commands.c:628
 msgid "Print message?"
 msgstr "Bericht afdrukken?"
 
-#: commands.c:595
+#: commands.c:628
 msgid "Print tagged messages?"
 msgstr "Geselecteerde berichten afdrukken?"
 
-#: commands.c:604
+#: commands.c:637
 msgid "Message printed"
 msgstr "Bericht is afgedrukt"
 
-#: commands.c:604
+#: commands.c:637
 msgid "Messages printed"
 msgstr "Berichten zijn afgedrukt"
 
-#: commands.c:606
+#: commands.c:639
 msgid "Message could not be printed"
 msgstr "Bericht kon niet worden afgedrukt"
 
-#: commands.c:607
+#: commands.c:640
 msgid "Messages could not be printed"
 msgstr "Berichten konden niet worden afgedrukt"
 
@@ -516,133 +812,133 @@ msgstr "Berichten konden niet worden afgedrukt"
 #. * string.  Note that mutt now supports multiline prompts, so
 #. * it's okay for the translation to take up to three lines.
 #.
-#: commands.c:621
+#: commands.c:654
 msgid "Rev-Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
 msgstr ""
 "Omgekeerd op Datum/Van/oNtv/Ondw/Aan/Thread/nIet/Grt/Score/sPam/Label?: "
 
-#: commands.c:622
+#: commands.c:655
 msgid "Sort Date/Frm/Recv/Subj/tO/Thread/Unsort/siZe/sCore/sPam/Label?: "
 msgstr ""
 "Sorteren op Datum/Van/oNtv/Ondw/Aan/Thread/nIet/Grt/Score/sPam/Label?: "
 
-#: commands.c:623
+#: commands.c:656
 msgid "dfrsotuzcpl"
 msgstr "dvnoatigspl"
 
-#: commands.c:684
+#: commands.c:717
 msgid "Shell command: "
 msgstr "Shell-commando: "
 
-#: commands.c:827
+#: commands.c:864
 #, c-format
 msgid "Decode-save%s to mailbox"
 msgstr "Decoderen-opslaan%s in postvak"
 
-#: commands.c:828
+#: commands.c:865
 #, c-format
 msgid "Decode-copy%s to mailbox"
 msgstr "Decoderen-kopiëren%s naar postvak"
 
-#: commands.c:829
+#: commands.c:866
 #, c-format
 msgid "Decrypt-save%s to mailbox"
 msgstr "Ontsleutelen-opslaan%s in postvak"
 
-#: commands.c:830
+#: commands.c:867
 #, c-format
 msgid "Decrypt-copy%s to mailbox"
 msgstr "Ontsleutelen-kopiëren%s naar postvak"
 
-#: commands.c:831
+#: commands.c:868
 #, c-format
 msgid "Save%s to mailbox"
 msgstr "Opslaan%s in postvak"
 
-#: commands.c:831
+#: commands.c:868
 #, c-format
 msgid "Copy%s to mailbox"
 msgstr "Kopiëren%s naar postvak"
 
-#: commands.c:832
+#: commands.c:869
 msgid " tagged"
 msgstr " gemarkeerd"
 
-#: commands.c:897
+#: commands.c:935
 #, c-format
 msgid "Copying to %s..."
 msgstr "Kopiëren naar %s..."
 
-#: commands.c:1020
+#: commands.c:1065
 #, c-format
 msgid "Convert to %s upon sending?"
 msgstr "Converteren naar %s bij versturen?"
 
-#: commands.c:1030
+#: commands.c:1075
 #, c-format
 msgid "Content-Type changed to %s."
 msgstr "Content-Type is veranderd naar %s."
 
-#: commands.c:1035
+#: commands.c:1080
 #, c-format
 msgid "Character set changed to %s; %s."
 msgstr "Tekenset is veranderd naar %s; %s."
 
-#: commands.c:1037
+#: commands.c:1082
 msgid "not converting"
 msgstr "niet converteren"
 
-#: commands.c:1037
+#: commands.c:1082
 msgid "converting"
 msgstr "converteren"
 
-#: compose.c:48
+#: compose.c:54
 msgid "There are no attachments."
 msgstr "Bericht bevat geen bijlage."
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:84
+#: compose.c:94
 msgid "From: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:86 send.c:225
+#: compose.c:96 send.c:231
 msgid "To: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:88 send.c:227
+#: compose.c:98 send.c:233
 msgid "Cc: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:90 send.c:229
+#: compose.c:100 send.c:235
 msgid "Bcc: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:92 compose.c:775 send.c:254
+#: compose.c:102 compose.c:970 send.c:260
 msgid "Subject: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:94
+#: compose.c:104
 #, fuzzy
 msgid "Reply-To: "
 msgstr "Antw."
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:96 compose.c:792
+#: compose.c:106 compose.c:987
 msgid "Fcc: "
 msgstr ""
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
-#: compose.c:99
+#: compose.c:109
 msgid "Mix: "
 msgstr "Mix: "
 
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
-#: compose.c:102
+#: compose.c:112
 msgid "Security: "
 msgstr ""
 
@@ -655,413 +951,617 @@ msgstr ""
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:112 crypt-gpgme.c:5189 pgp.c:1872 smime.c:2290
+#: compose.c:122 crypt-gpgme.c:5367 pgp.c:1917 smime.c:2358
 msgid "Sign as: "
 msgstr "Ondertekenen als: "
 
-#: compose.c:116
+#. L10N:
+#. The compose menu autocrypt line
+#.
+#: compose.c:127
+msgid "Autocrypt: "
+msgstr ""
+
+#: compose.c:132
 msgid "Send"
 msgstr "Versturen"
 
-#: compose.c:117 remailer.c:489
+#: compose.c:133 remailer.c:489
 msgid "Abort"
 msgstr "Afbreken"
 
 #. L10N: compose menu help line entry
-#: compose.c:119
+#: compose.c:135
 msgid "To"
 msgstr ""
 
 #. L10N: compose menu help line entry
-#: compose.c:121
+#: compose.c:137
 msgid "CC"
 msgstr ""
 
 #. L10N: compose menu help line entry
-#: compose.c:123
+#: compose.c:139
 msgid "Subj"
 msgstr ""
 
-#: compose.c:124 compose.c:877
+#: compose.c:140 compose.c:1077
 msgid "Attach file"
 msgstr "Bijvoegen"
 
-#: compose.c:125
+#: compose.c:141
 msgid "Descrip"
 msgstr "Omschrijving"
 
-#: compose.c:195
+#. L10N: Autocrypt recommendation flag: off.
+#. * This is displayed when Autocrypt is turned off.
+#: compose.c:150 compose.c:382
+msgid "Off"
+msgstr ""
+
+#. L10N: Autocrypt recommendation flag: no.
+#. * This is displayed when Autocrypt cannot encrypt to the recipients.
+#: compose.c:153
+#, fuzzy
+msgid "No"
+msgstr "Geen"
+
+#. L10N: Autocrypt recommendation flag: discouraged.
+#. * This is displayed when Autocrypt believes encryption should not be used.
+#. * This might occur if one of the recipient Autocrypt Keys has not been
+#. * used recently, or if the only key available is a Gossip Header key.
+#: compose.c:158
+msgid "Discouraged"
+msgstr ""
+
+#. L10N: Autocrypt recommendation flag: available.
+#. * This is displayed when Autocrypt believes encryption is possible, but
+#. * leaves enabling it up to the sender.  Probably because "prefer encrypt"
+#. * is not set in both the sender and recipient keys.
+#: compose.c:163
+msgid "Available"
+msgstr ""
+
+#. L10N: Autocrypt recommendation flag: yes.
+#. * This is displayed when Autocrypt would normally enable encryption
+#. * automatically.
+#: compose.c:167
+#, fuzzy
+msgid "Yes"
+msgstr "ja"
+
+#. L10N:
+#. The compose menu autocrypt prompt.
+#. (e)ncrypt enables encryption via autocrypt.
+#. (c)lear sets cleartext.
+#. (a)utomatic defers to the recommendation.
+#.
+#: compose.c:251
+msgid "Autocrypt: (e)ncrypt, (c)lear, (a)utomatic? "
+msgstr ""
+
+#. L10N:
+#. The letter corresponding to the compose menu autocrypt prompt
+#. (e)ncrypt, (c)lear, (a)utomatic
+#.
+#: compose.c:257
+msgid "eca"
+msgstr ""
+
+#: compose.c:290
 msgid "Not supported"
 msgstr "Niet ondersteund"
 
-#: compose.c:202
+#: compose.c:297
 msgid "Sign, Encrypt"
 msgstr "Ondertekenen, Versleutelen"
 
-#: compose.c:207
+#: compose.c:302 compose.c:377
 msgid "Encrypt"
 msgstr "Versleutelen"
 
-#: compose.c:212
+#: compose.c:307
 msgid "Sign"
 msgstr "Ondertekenen"
 
-#: compose.c:217
+#: compose.c:312
 msgid "None"
 msgstr "Geen"
 
-#: compose.c:226
+#: compose.c:321
 msgid " (inline PGP)"
 msgstr " (inline-PGP)"
 
-#: compose.c:228
+#: compose.c:323
 msgid " (PGP/MIME)"
 msgstr " (PGP/MIME)"
 
-#: compose.c:232
+#: compose.c:327
 msgid " (S/MIME)"
 msgstr " (S/MIME)"
 
-#: compose.c:236
+#: compose.c:331
 msgid " (OppEnc mode)"
 msgstr " (OppEnc-modus)"
 
-#: compose.c:248 compose.c:257
+#: compose.c:343 compose.c:352
 msgid "<default>"
 msgstr "<standaard>"
 
-#: compose.c:267
+#: compose.c:361
 msgid "Encrypt with: "
 msgstr "Versleutelen met: "
 
-#: compose.c:324
-#, c-format
-msgid "%s [#%d] no longer exists!"
+#. L10N:
+#. The autocrypt compose menu Recommendation field.
+#. Displays the output of the recommendation engine
+#. (Off, No, Discouraged, Available, Yes)
+#.
+#: compose.c:392
+msgid "Recommendation: "
+msgstr ""
+
+#. L10N:
+#. This message is displayed in the compose menu when an attachment
+#. doesn't stat.  %d is the attachment number and %s is the
+#. attachment filename.
+#. The filename is located last to avoid a long path hiding the
+#. error message.
+#.
+#: compose.c:495
+#, fuzzy, c-format
+msgid "Attachment #%d no longer exists: %s"
 msgstr "%s [#%d] bestaat niet meer!"
 
-#: compose.c:332
-#, c-format
-msgid "%s [#%d] modified. Update encoding?"
+#. L10N:
+#. This message is displayed in the compose menu when an attachment
+#. is modified behind the scenes.  %d is the attachment number
+#. and %s is the attachment filename.
+#. The filename is located last to avoid a long path hiding the
+#. prompt question.
+#.
+#: compose.c:516
+#, fuzzy, c-format
+msgid "Attachment #%d modified. Update encoding for %s?"
 msgstr "%s [#%d] werd veranderd. Codering aanpassen?"
 
-#: compose.c:387
+#: compose.c:579
 msgid "-- Attachments"
 msgstr "-- Bijlagen"
 
-#: compose.c:409
+#: compose.c:601
 #, c-format
 msgid "Warning: '%s' is a bad IDN."
 msgstr "Waarschuwing: '%s' is een ongeldige IDN."
 
-#: compose.c:429
+#: compose.c:621
 msgid "You may not delete the only attachment."
 msgstr "Een bericht bestaat uit minimaal één gedeelte."
 
-#: compose.c:823 send.c:2039
+#: compose.c:1022 send.c:2134
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Ongeldige IDN in \"%s\": '%s'"
 
-#: compose.c:887
+#: compose.c:1087
 msgid "Attaching selected files..."
 msgstr "Opgegeven bestanden worden bijgevoegd..."
 
-#: compose.c:899
+#: compose.c:1099
 #, c-format
 msgid "Unable to attach %s!"
 msgstr "Kan %s niet bijvoegen!"
 
-#: compose.c:919
+#: compose.c:1119
 msgid "Open mailbox to attach message from"
 msgstr "Open postvak waaruit een bericht bijgevoegd moet worden"
 
-#: compose.c:949
+#: compose.c:1150
 #, c-format
 msgid "Unable to open mailbox %s"
 msgstr "Kan postvak %s niet openen"
 
-#: compose.c:957
+#: compose.c:1158
 msgid "No messages in that folder."
 msgstr "Geen berichten in dit postvak."
 
-#: compose.c:966
+#: compose.c:1167
 msgid "Tag the messages you want to attach!"
 msgstr "Selecteer de berichten die u wilt bijvoegen!"
 
-#: compose.c:992
+#: compose.c:1193
 msgid "Unable to attach!"
 msgstr "Kan niet bijvoegen!"
 
-#: compose.c:1032
+#: compose.c:1233
 msgid "Recoding only affects text attachments."
 msgstr "Codering wijzigen is alleen van toepassing op bijlagen."
 
-#: compose.c:1037
+#: compose.c:1238
 msgid "The current attachment won't be converted."
 msgstr "Deze bijlage zal niet geconverteerd worden."
 
-#: compose.c:1039
+#: compose.c:1240
 msgid "The current attachment will be converted."
 msgstr "Deze bijlage zal geconverteerd worden."
 
-#: compose.c:1113
+#: compose.c:1314
 msgid "Invalid encoding."
 msgstr "Ongeldige codering."
 
-#: compose.c:1139
+#: compose.c:1340
 msgid "Save a copy of this message?"
 msgstr "Een kopie van dit bericht maken?"
 
-#: compose.c:1193
+#: compose.c:1394
 msgid "Send attachment with name: "
 msgstr "Bijlage versturen met naam: "
 
-#: compose.c:1211
+#: compose.c:1413
 msgid "Rename to: "
 msgstr "Hernoemen naar: "
 
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1218 editmsg.c:96 editmsg.c:121 sendlib.c:895
+#: compose.c:1420 editmsg.c:98 editmsg.c:124 sendlib.c:907
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Kan status van %s niet opvragen: %s"
 
-#: compose.c:1245
+#: compose.c:1447
 msgid "New file: "
 msgstr "Nieuw bestand: "
 
-#: compose.c:1258
+#: compose.c:1460
 msgid "Content-Type is of the form base/sub"
 msgstr "Content-Type is van de vorm basis/subtype"
 
-#: compose.c:1264
+#: compose.c:1466
 #, c-format
 msgid "Unknown Content-Type %s"
 msgstr "Onbekend Content-Type %s"
 
-#: compose.c:1272
+#: compose.c:1474
 #, c-format
 msgid "Can't create file %s"
 msgstr "Kan bestand %s niet aanmaken"
 
-#: compose.c:1280
+#: compose.c:1482
 msgid "What we have here is a failure to make an attachment"
 msgstr "De bijlage kan niet worden aangemaakt"
 
-#: compose.c:1341
+#: compose.c:1520
+msgid "$send_multipart_alternative_filter is not set"
+msgstr ""
+
+#: compose.c:1574
 msgid "Postpone this message?"
 msgstr "Bericht uitstellen?"
 
-#: compose.c:1400
+#: compose.c:1635
 msgid "Write message to mailbox"
 msgstr "Sla bericht op in postvak"
 
-#: compose.c:1403
+#: compose.c:1639
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "Bericht wordt opgeslagen in %s ..."
 
-#: compose.c:1412
+#: compose.c:1646
 msgid "Message written."
 msgstr "Bericht opgeslagen."
 
-#: compose.c:1423
+#: compose.c:1659
 msgid "No PGP backend configured"
 msgstr ""
 
-#: compose.c:1431
+#: compose.c:1667 compose.c:1740
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME is al geselecteerd.  Wissen & doorgaan? "
 
-#: compose.c:1460
+#: compose.c:1695
 msgid "No S/MIME backend configured"
 msgstr ""
 
-#: compose.c:1469
+#: compose.c:1704
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP is al geselecteerd.  Wissen & doorgaan? "
 
-#: compress.c:449 compress.c:519 compress.c:674 compress.c:863 mbox.c:876
+#: compress.c:451 compress.c:521 compress.c:676 compress.c:865 mbox.c:877
 msgid "Unable to lock mailbox!"
 msgstr "Kan postvak niet claimen!"
 
-#: compress.c:453 compress.c:526 compress.c:678
+#: compress.c:455 compress.c:528 compress.c:680
 #, c-format
 msgid "Decompressing %s"
 msgstr "Decomprimeren van %s"
 
-#: compress.c:462
+#: compress.c:464
 msgid "Can't identify the contents of the compressed file"
 msgstr "Kan de inhoud van gedecomprimeerd bestand niet identificeren"
 
-#: compress.c:469 compress.c:547
+#: compress.c:471 compress.c:549
 #, c-format
 msgid "Can't find mailbox ops for mailbox type %d"
 msgstr "Kan geen mailboxbewerkingen vinden voor mailboxtype %d"
 
-#: compress.c:508 compress.c:802
+#: compress.c:510 compress.c:804
 #, c-format
 msgid "Cannot append without an append-hook or close-hook : %s"
 msgstr "Kan niet toevoegen zonder append-hook of close-hook: %s"
 
-#: compress.c:529
+#: compress.c:531
 #, c-format
 msgid "Compress command failed: %s"
 msgstr "Compressiecommando is mislukt: %s"
 
-#: compress.c:540
+#: compress.c:542
 msgid "Unsupported mailbox type for appending."
 msgstr "Niet-ondersteund mailboxtype voor toevoegen."
 
-#: compress.c:616
+#: compress.c:618
 #, c-format
 msgid "Compressed-appending to %s..."
 msgstr "Gecomprimeerd toevoegen aan %s..."
 
-#: compress.c:621
+#: compress.c:623
 #, c-format
 msgid "Compressing %s..."
 msgstr "Comprimeren van %s..."
 
-#: compress.c:628 editmsg.c:210
+#: compress.c:630 editmsg.c:213
 #, c-format
 msgid "Error. Preserving temporary file: %s"
 msgstr "Er is een fout opgetreden.  Tijdelijk bestand is opgeslagen als: %s"
 
-#: compress.c:853
+#: compress.c:855
 msgid "Can't sync a compressed file without a close-hook"
 msgstr "Kan gecomprimeerd bestand niet synchroniseren zonder close-hook"
 
-#: compress.c:875
+#: compress.c:877
 #, c-format
 msgid "Compressing %s"
 msgstr "Comprimeren van %s"
 
-#: crypt-gpgme.c:569
-#, c-format
-msgid "error creating gpgme context: %s\n"
-msgstr "fout bij het creëren van GPGME-context: %s\n"
+#: copy.c:682
+msgid "No decryption engine available for message"
+msgstr ""
 
-#: crypt-gpgme.c:579
+#: crypt.c:71
+#, c-format
+msgid " (current time: %c)"
+msgstr " (huidige tijd: %c)"
+
+#: crypt.c:76
+#, c-format
+msgid "[-- %s output follows%s --]\n"
+msgstr "[-- %s uitvoer volgt%s --]\n"
+
+#: crypt.c:91
+msgid "Passphrase(s) forgotten."
+msgstr "Wachtwoord(en) zijn vergeten."
+
+#: crypt.c:167
+msgid "Inline PGP can't be used with attachments.  Revert to PGP/MIME?"
+msgstr "Inline PGP is niet mogelijk met bijlagen.  PGP/MIME gebruiken?"
+
+#: crypt.c:169
+msgid "Mail not sent: inline PGP can't be used with attachments."
+msgstr "Bericht is niet verzonden: inline PGP gaat niet met bijlagen."
+
+#: crypt.c:177
+#, fuzzy
+msgid "Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"
+msgstr "Inline PGP is niet mogelijk met bijlagen.  PGP/MIME gebruiken?"
+
+#: crypt.c:179
+#, fuzzy
+msgid "Mail not sent: inline PGP can't be used with format=flowed."
+msgstr "Bericht is niet verzonden: inline PGP gaat niet met bijlagen."
+
+#: crypt.c:186 cryptglue.c:115 pgpkey.c:567 pgpkey.c:754
+msgid "Invoking PGP..."
+msgstr "PGP wordt aangeroepen..."
+
+#: crypt.c:195
+msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
+msgstr "Bericht kan niet inline verzonden worden.  PGP/MIME gebruiken?"
+
+#: crypt.c:197 send.c:2104
+msgid "Mail not sent."
+msgstr "Bericht niet verstuurd."
+
+#: crypt.c:548
+msgid "S/MIME messages with no hints on content are unsupported."
+msgstr ""
+"S/MIME-berichten zonder aanwijzingen over inhoud zijn niet ondersteund."
+
+#: crypt.c:770 crypt.c:813
+msgid "Trying to extract PGP keys...\n"
+msgstr "PGP-sleutels onttrekken...\n"
+
+#: crypt.c:793 crypt.c:833
+msgid "Trying to extract S/MIME certificates...\n"
+msgstr "S/MIME-certificaten onttrekken...\n"
+
+#: crypt.c:1038
+#, c-format
+msgid ""
+"[-- Error: Unknown multipart/signed protocol %s! --]\n"
+"\n"
+msgstr ""
+"[-- Fout: Onbekend multipart/signed-protocol: %s! --]\n"
+"\n"
+
+#: crypt.c:1072
+#, fuzzy
+msgid ""
+"[-- Error: Missing or bad-format multipart/signed signature! --]\n"
+"\n"
+msgstr ""
+"[-- Fout: Inconsistente multipart/signed-structuur! --]\n"
+"\n"
+
+#: crypt.c:1113
+#, c-format
+msgid ""
+"[-- Warning: We can't verify %s/%s signatures. --]\n"
+"\n"
+msgstr ""
+"[-- Waarschuwing: %s/%s-handtekeningen kunnen niet gecontroleerd worden --]\n"
+"\n"
+
+#: crypt.c:1126
+msgid ""
+"[-- The following data is signed --]\n"
+"\n"
+msgstr ""
+"[-- De volgende gegevens zijn ondertekend --]\n"
+"\n"
+
+#: crypt.c:1133
+msgid ""
+"[-- Warning: Can't find any signatures. --]\n"
+"\n"
+msgstr ""
+"[-- Waarschuwing: kan geen enkele handtekening vinden --]\n"
+"\n"
+
+#: crypt.c:1139
+msgid ""
+"\n"
+"[-- End of signed data --]\n"
+msgstr ""
+"\n"
+"[-- Einde van ondertekende gegevens --]\n"
+
+#: cryptglue.c:94
+msgid "\"crypt_use_gpgme\" set but not built with GPGME support."
+msgstr "\"crypt_use_gpgme\" aan, maar niet gebouwd met GPGME-ondersteuning."
+
+#: cryptglue.c:117
+msgid "Invoking S/MIME..."
+msgstr "S/MIME wordt aangeroepen..."
+
+#: crypt-gpgme.c:586
 #, c-format
 msgid "error enabling CMS protocol: %s\n"
 msgstr "fout bij het inschakelen van CMS-protocol: %s\n"
 
-#: crypt-gpgme.c:600
+#: crypt-gpgme.c:607
 #, c-format
 msgid "error creating gpgme data object: %s\n"
 msgstr "fout bij het creëren van GPGME-gegevensobject: %s\n"
 
-#: crypt-gpgme.c:695 crypt-gpgme.c:713 crypt-gpgme.c:1805 crypt-gpgme.c:2541
+#: crypt-gpgme.c:701 crypt-gpgme.c:725 crypt-gpgme.c:1827 crypt-gpgme.c:2605
 #, c-format
 msgid "error allocating data object: %s\n"
 msgstr "fout bij het alloceren van gegevensobject: %s\n"
 
-#: crypt-gpgme.c:731
+#: crypt-gpgme.c:743
 #, c-format
 msgid "error rewinding data object: %s\n"
 msgstr "fout bij het terugwinden van het gegevensobject: %s\n"
 
-#: crypt-gpgme.c:753 crypt-gpgme.c:806
+#: crypt-gpgme.c:765 crypt-gpgme.c:820
 #, c-format
 msgid "error reading data object: %s\n"
 msgstr "fout bij het lezen van het gegevensobject: %s\n"
 
-#: crypt-gpgme.c:779 crypt-gpgme.c:4100 pgpkey.c:560 pgpkey.c:740
+#: crypt-gpgme.c:793 crypt-gpgme.c:4183 pgpkey.c:561 pgpkey.c:742
 msgid "Can't create temporary file"
 msgstr "Kan tijdelijk bestand niet aanmaken"
 
-#: crypt-gpgme.c:914
+#: crypt-gpgme.c:932
 #, c-format
 msgid "error adding recipient `%s': %s\n"
 msgstr "fout bij het toevoegen van ontvanger '%s': %s\n"
 
-#: crypt-gpgme.c:960
+#: crypt-gpgme.c:982
 #, c-format
 msgid "secret key `%s' not found: %s\n"
 msgstr "geheime sleutel '%s' niet gevonden: %s\n"
 
-#: crypt-gpgme.c:977
+#: crypt-gpgme.c:999
 #, c-format
 msgid "ambiguous specification of secret key `%s'\n"
 msgstr "dubbelzinnige specificatie van geheime sleutel '%s'\n"
 
-#: crypt-gpgme.c:992
+#: crypt-gpgme.c:1014
 #, c-format
 msgid "error setting secret key `%s': %s\n"
 msgstr "fout bij het instellen van geheime sleutel '%s': %s\n"
 
-#: crypt-gpgme.c:1009
+#: crypt-gpgme.c:1031
 #, c-format
 msgid "error setting PKA signature notation: %s\n"
 msgstr "fout bij het instellen van PKA-ondertekening: %s\n"
 
-#: crypt-gpgme.c:1086
+#: crypt-gpgme.c:1108
 #, c-format
 msgid "error encrypting data: %s\n"
 msgstr "fout bij het versleutelen van gegevens: %s\n"
 
-#: crypt-gpgme.c:1209
+#: crypt-gpgme.c:1231
 #, c-format
 msgid "error signing data: %s\n"
 msgstr "fout bij het ondertekenen van gegevens: %s\n"
 
-#: crypt-gpgme.c:1220
+#: crypt-gpgme.c:1242
 msgid "$pgp_sign_as unset and no default key specified in ~/.gnupg/gpg.conf"
 msgstr ""
 "$pgp_sign_as is niet gezet en er is geen standaard sleutel ingesteld in ~/."
 "gnupg/gpg.conf"
 
-#: crypt-gpgme.c:1402
+#: crypt-gpgme.c:1424
 msgid "Warning: One of the keys has been revoked\n"
 msgstr "Waarschuwing: één van de sleutels is herroepen\n"
 
-#: crypt-gpgme.c:1411
+#: crypt-gpgme.c:1433
 msgid "Warning: The key used to create the signature expired at: "
 msgstr "Waarschuwing: de sleutel waarmee is ondertekend is verlopen op: "
 
-#: crypt-gpgme.c:1417
+#: crypt-gpgme.c:1439
 msgid "Warning: At least one certification key has expired\n"
 msgstr "Waarschuwing: minstens één certificeringssleutel is verlopen\n"
 
-#: crypt-gpgme.c:1433
+#: crypt-gpgme.c:1455
 msgid "Warning: The signature expired at: "
 msgstr "Waarschuwing: de ondertekening is verlopen op: "
 
-#: crypt-gpgme.c:1439
+#: crypt-gpgme.c:1461
 msgid "Can't verify due to a missing key or certificate\n"
 msgstr "Kan niet verifiëren vanwege ontbrekende sleutel of certificaat\n"
 
-#: crypt-gpgme.c:1444
+#: crypt-gpgme.c:1466
 msgid "The CRL is not available\n"
 msgstr "De CRL is niet beschikbaar\n"
 
-#: crypt-gpgme.c:1450
+#: crypt-gpgme.c:1472
 msgid "Available CRL is too old\n"
 msgstr "De beschikbare CRL is te oud\n"
 
-#: crypt-gpgme.c:1455
+#: crypt-gpgme.c:1477
 msgid "A policy requirement was not met\n"
 msgstr "Aan een beleidsvereiste is niet voldaan\n"
 
-#: crypt-gpgme.c:1464
+#: crypt-gpgme.c:1486
 msgid "A system error occurred"
 msgstr "Er is een systeemfout opgetreden"
 
-#: crypt-gpgme.c:1496
+#: crypt-gpgme.c:1518
 msgid "WARNING: PKA entry does not match signer's address: "
 msgstr "WAARSCHUWING: PKA-item komt niet overeen met adres van ondertekenaar: "
 
-#: crypt-gpgme.c:1503
+#: crypt-gpgme.c:1525
 msgid "PKA verified signer's address is: "
 msgstr "Adres van PKA-geverifieerde ondertekenaar is: "
 
-#: crypt-gpgme.c:1518 crypt-gpgme.c:3793
+#: crypt-gpgme.c:1540 crypt-gpgme.c:3873
 msgid "Fingerprint: "
 msgstr "Vingerafdruk: "
 
-#: crypt-gpgme.c:1578
+#: crypt-gpgme.c:1600
 msgid ""
 "WARNING: We have NO indication whether the key belongs to the person named "
 "as shown above\n"
@@ -1069,11 +1569,11 @@ msgstr ""
 "WAARSCHUWING: We hebben GEEN indicatie of de sleutel toebehoort aan de "
 "persoon zoals hierboven aangegeven\n"
 
-#: crypt-gpgme.c:1585
+#: crypt-gpgme.c:1607
 msgid "WARNING: The key does NOT BELONG to the person named as shown above\n"
 msgstr "WAARSCHUWING: De sleutel BEHOORT NIET TOE aan bovengenoemde persoon\n"
 
-#: crypt-gpgme.c:1589
+#: crypt-gpgme.c:1611
 msgid ""
 "WARNING: It is NOT certain that the key belongs to the person named as shown "
 "above\n"
@@ -1081,68 +1581,68 @@ msgstr ""
 "WAARSCHUWING: Het is NIET zeker dat de sleutel toebehoort aan de persoon "
 "zoals hierboven aangegeven\n"
 
-#: crypt-gpgme.c:1619 crypt-gpgme.c:1624 crypt-gpgme.c:3788
+#: crypt-gpgme.c:1641 crypt-gpgme.c:1646 crypt-gpgme.c:3868
 msgid "aka: "
 msgstr "ook bekend als: "
 
 #. L10N: You will see this message in place of "KeyID "
 #. if the S/MIME key has no ID. This is quite an error.
 #.
-#: crypt-gpgme.c:1638
+#: crypt-gpgme.c:1660
 msgid "no signature fingerprint available"
 msgstr ""
 
-#: crypt-gpgme.c:1641
+#: crypt-gpgme.c:1663
 msgid "KeyID "
 msgstr "Sleutel-ID "
 
-#: crypt-gpgme.c:1651 crypt-gpgme.c:1656
+#: crypt-gpgme.c:1673 crypt-gpgme.c:1678
 msgid "created: "
 msgstr "aangemaakt: "
 
-#: crypt-gpgme.c:1729
+#: crypt-gpgme.c:1751
 #, c-format
 msgid "Error getting key information for KeyID %s: %s\n"
 msgstr "Fout bij het ophalen van sleutelinformatie voor sleutel-ID %s: %s\n"
 
-#: crypt-gpgme.c:1736 crypt-gpgme.c:1751
+#: crypt-gpgme.c:1758 crypt-gpgme.c:1773
 msgid "Good signature from:"
 msgstr "Goede handtekening van: "
 
-#: crypt-gpgme.c:1743
+#: crypt-gpgme.c:1765
 msgid "*BAD* signature from:"
 msgstr "*SLECHTE* handtekening van: "
 
-#: crypt-gpgme.c:1759
+#: crypt-gpgme.c:1781
 msgid "Problem signature from:"
 msgstr "Problematische handtekening van: "
 
 #. L10N:
 #. This is trying to match the width of the
 #. "Problem signature from:" translation just above.
-#: crypt-gpgme.c:1766
+#: crypt-gpgme.c:1788
 msgid "               expires: "
 msgstr "               verloopt op: "
 
-#: crypt-gpgme.c:1813 crypt-gpgme.c:2039 crypt-gpgme.c:2821
+#: crypt-gpgme.c:1835 crypt-gpgme.c:2065 crypt-gpgme.c:2885
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Begin handtekeninginformatie --]\n"
 
-#: crypt-gpgme.c:1825
+#: crypt-gpgme.c:1847
 #, c-format
 msgid "Error: verification failed: %s\n"
 msgstr "Fout: verificatie is mislukt: %s\n"
 
-#: crypt-gpgme.c:1879
+#: crypt-gpgme.c:1901
 #, c-format
 msgid "*** Begin Notation (signature by: %s) ***\n"
 msgstr "*** Begin Notatie (ondertekening van: %s) ***\n"
 
-#: crypt-gpgme.c:1901
+#: crypt-gpgme.c:1923
 msgid "*** End Notation ***\n"
 msgstr "*** Einde Notatie ***\n"
 
-#: crypt-gpgme.c:1909 crypt-gpgme.c:2052 crypt-gpgme.c:2834
+#: crypt-gpgme.c:1931 crypt-gpgme.c:2078 crypt-gpgme.c:2898
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1150,28 +1650,28 @@ msgstr ""
 "[-- Einde van ondertekende gegevens --]\n"
 "\n"
 
-#: crypt-gpgme.c:2007
+#: crypt-gpgme.c:2036
 #, c-format
 msgid ""
 "[-- Error: decryption failed: %s --]\n"
 "\n"
 msgstr "[-- Fout: ontsleuteling is mislukt: %s --]\n"
 
-#: crypt-gpgme.c:2549
+#: crypt-gpgme.c:2613
 #, fuzzy, c-format
 msgid "error importing key: %s\n"
 msgstr "Fout bij exporteren van sleutel: %s\n"
 
-#: crypt-gpgme.c:2797
+#: crypt-gpgme.c:2861
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Fout: ontsleuteling/verificatie is mislukt: %s\n"
 
-#: crypt-gpgme.c:2842
+#: crypt-gpgme.c:2906
 msgid "Error: copy data failed\n"
 msgstr "Fout: kopiëren van gegevens is mislukt\n"
 
-#: crypt-gpgme.c:2863 pgp.c:617
+#: crypt-gpgme.c:2927 pgp.c:622
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1179,11 +1679,11 @@ msgstr ""
 "[-- BEGIN PGP-BERICHT --]\n"
 "\n"
 
-#: crypt-gpgme.c:2865 pgp.c:619
+#: crypt-gpgme.c:2929 pgp.c:624
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- BEGIN PGP PUBLIC KEY BLOK --]\n"
 
-#: crypt-gpgme.c:2868 pgp.c:621
+#: crypt-gpgme.c:2932 pgp.c:626
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1191,19 +1691,19 @@ msgstr ""
 "[-- BEGIN PGP-ONDERTEKEND BERICHT --]\n"
 "\n"
 
-#: crypt-gpgme.c:2895 pgp.c:661
+#: crypt-gpgme.c:2959 pgp.c:666
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- EINDE PGP-BERICHT --]\n"
 
-#: crypt-gpgme.c:2897 pgp.c:674
+#: crypt-gpgme.c:2961 pgp.c:679
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- EINDE PGP-PUBLIEKESLEUTELBLOK --]\n"
 
-#: crypt-gpgme.c:2899 pgp.c:676
+#: crypt-gpgme.c:2963 pgp.c:681
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- EINDE PGP-ONDERTEKEND BERICHT --]\n"
 
-#: crypt-gpgme.c:2922 pgp.c:706
+#: crypt-gpgme.c:2986 pgp.c:715
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1211,11 +1711,11 @@ msgstr ""
 "[-- Fout: Kon begin van PGP-bericht niet vinden! --]\n"
 "\n"
 
-#: crypt-gpgme.c:2953 crypt-gpgme.c:3054 pgp.c:1131
+#: crypt-gpgme.c:3020 crypt-gpgme.c:3131 pgp.c:1163
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Fout: Kon geen tijdelijk bestand aanmaken! --]\n"
 
-#: crypt-gpgme.c:2966
+#: crypt-gpgme.c:3034
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1223,7 +1723,7 @@ msgstr ""
 "[-- De volgende gegevens zijn PGP/MIME-ondertekend en -versleuteld --]\n"
 "\n"
 
-#: crypt-gpgme.c:2967 pgp.c:1141
+#: crypt-gpgme.c:3035 pgp.c:1173
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1231,23 +1731,23 @@ msgstr ""
 "[-- De volgende gegevens zijn PGP/MIME-versleuteld --]\n"
 "\n"
 
-#: crypt-gpgme.c:3012
+#: crypt-gpgme.c:3080
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- Einde van PGP/MIME-ondertekende en -versleutelde data --]\n"
 
-#: crypt-gpgme.c:3013 pgp.c:1184
+#: crypt-gpgme.c:3081 pgp.c:1216
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- Einde van PGP/MIME-versleutelde data --]\n"
 
-#: crypt-gpgme.c:3018 pgp.c:671 pgp.c:1189
+#: crypt-gpgme.c:3086 pgp.c:676 pgp.c:1221
 msgid "PGP message successfully decrypted."
 msgstr "PGP-bericht succesvol ontsleuteld."
 
-#: crypt-gpgme.c:3022 pgp.c:603 pgp.c:663 pgp.c:1193
+#: crypt-gpgme.c:3092 pgp.c:609 pgp.c:668 pgp.c:1225
 msgid "Could not decrypt PGP message"
 msgstr "Kon PGP-gericht niet ontsleutelen"
 
-#: crypt-gpgme.c:3067
+#: crypt-gpgme.c:3145
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1255,7 +1755,7 @@ msgstr ""
 "[-- De volgende gegevens zijn S/MIME-ondertekend --]\n"
 "\n"
 
-#: crypt-gpgme.c:3068
+#: crypt-gpgme.c:3146
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1263,23 +1763,23 @@ msgstr ""
 "[-- De volgende gegevens zijn S/MIME-versleuteld --]\n"
 "\n"
 
-#: crypt-gpgme.c:3121
+#: crypt-gpgme.c:3199
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- Einde van S/MIME-ondertekende gegevens --]\n"
 
-#: crypt-gpgme.c:3122
+#: crypt-gpgme.c:3200
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- Einde van S/MIME-versleutelde data --]\n"
 
-#: crypt-gpgme.c:3706
+#: crypt-gpgme.c:3786
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Kan dit gebruikers-ID niet weergeven (onbekende codering)]"
 
-#: crypt-gpgme.c:3708
+#: crypt-gpgme.c:3788
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Kan dit gebruikers-ID niet weergeven (ongeldige codering)]"
 
-#: crypt-gpgme.c:3713
+#: crypt-gpgme.c:3793
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Kan dit gebruikers-ID niet weergeven (ongeldige DN)]"
 
@@ -1287,152 +1787,152 @@ msgstr "[Kan dit gebruikers-ID niet weergeven (ongeldige DN)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3787
+#: crypt-gpgme.c:3867
 #, fuzzy
 msgid "Name: "
 msgstr "Naam ......: "
 
-#: crypt-gpgme.c:3789
+#: crypt-gpgme.c:3869
 #, fuzzy
 msgid "Valid From: "
 msgstr "Geldig van : %s\n"
 
-#: crypt-gpgme.c:3790
+#: crypt-gpgme.c:3870
 #, fuzzy
 msgid "Valid To: "
 msgstr "Geldig tot : %s\n"
 
-#: crypt-gpgme.c:3791
+#: crypt-gpgme.c:3871
 #, fuzzy
 msgid "Key Type: "
 msgstr "Slt.gebruik: "
 
-#: crypt-gpgme.c:3792
+#: crypt-gpgme.c:3872
 #, fuzzy
 msgid "Key Usage: "
 msgstr "Slt.gebruik: "
 
-#: crypt-gpgme.c:3794
+#: crypt-gpgme.c:3874
 #, fuzzy
 msgid "Serial-No: "
 msgstr "Serienummer: 0x%s\n"
 
-#: crypt-gpgme.c:3795
+#: crypt-gpgme.c:3875
 #, fuzzy
 msgid "Issued By: "
 msgstr "Uitg. door : "
 
-#: crypt-gpgme.c:3796
+#: crypt-gpgme.c:3876
 #, fuzzy
 msgid "Subkey: "
 msgstr "Subsleutel : 0x%s"
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3847 crypt-gpgme.c:4002
+#: crypt-gpgme.c:3927 crypt-gpgme.c:4082
 msgid "[Invalid]"
 msgstr "[Ongeldig]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:3899 crypt-gpgme.c:4058
+#: crypt-gpgme.c:3979 crypt-gpgme.c:4138
 #, fuzzy, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "Sltl.type .: %s, %lu bit %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3908 crypt-gpgme.c:4066
+#: crypt-gpgme.c:3988 crypt-gpgme.c:4146
 msgid "encryption"
 msgstr "versleuteling "
 
-#: crypt-gpgme.c:3909 crypt-gpgme.c:3915 crypt-gpgme.c:3921 crypt-gpgme.c:4067
-#: crypt-gpgme.c:4072 crypt-gpgme.c:4077
+#: crypt-gpgme.c:3989 crypt-gpgme.c:3995 crypt-gpgme.c:4001 crypt-gpgme.c:4147
+#: crypt-gpgme.c:4152 crypt-gpgme.c:4157
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3914 crypt-gpgme.c:4071
+#: crypt-gpgme.c:3994 crypt-gpgme.c:4151
 msgid "signing"
 msgstr "ondertekening"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3920 crypt-gpgme.c:4076
+#: crypt-gpgme.c:4000 crypt-gpgme.c:4156
 msgid "certification"
 msgstr "certificering"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3996
+#: crypt-gpgme.c:4076
 msgid "[Revoked]"
 msgstr "[Herroepen]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4008
+#: crypt-gpgme.c:4088
 msgid "[Expired]"
 msgstr "[Verlopen]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4014
+#: crypt-gpgme.c:4094
 msgid "[Disabled]"
 msgstr "[Uitgeschakeld]"
 
-#: crypt-gpgme.c:4103
+#: crypt-gpgme.c:4186
 msgid "Collecting data..."
 msgstr "Data aan het vergaren..."
 
-#: crypt-gpgme.c:4121
+#: crypt-gpgme.c:4204
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Fout bij het vinden van uitgever van sleutel: %s\n"
 
-#: crypt-gpgme.c:4131
+#: crypt-gpgme.c:4214
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Fout: certificeringsketen is te lang -- gestopt\n"
 
-#: crypt-gpgme.c:4142 pgpkey.c:582
+#: crypt-gpgme.c:4225 pgpkey.c:587
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "Sleutel-ID: 0x%s"
 
-#: crypt-gpgme.c:4257 crypt-gpgme.c:4310
+#: crypt-gpgme.c:4343 crypt-gpgme.c:4396
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "gpgme_op_keylist_start() is mislukt: %s"
 
-#: crypt-gpgme.c:4297 crypt-gpgme.c:4341
+#: crypt-gpgme.c:4383 crypt-gpgme.c:4427 crypt-gpgme.c:5131
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "gpgme_op_keylist_next() is mislukt: %s"
 
-#: crypt-gpgme.c:4412
+#: crypt-gpgme.c:4498
 msgid "All matching keys are marked expired/revoked."
 msgstr "Alle overeenkomende sleutels zijn verlopen/ingetrokken."
 
-#: crypt-gpgme.c:4441 mutt_ssl.c:1288 mutt_ssl_gnutls.c:1011 pgpkey.c:515
+#: crypt-gpgme.c:4527 mutt_ssl.c:1321 mutt_ssl_gnutls.c:1031 pgpkey.c:516
 #: smime.c:448
 msgid "Exit  "
 msgstr "Einde "
 
-#: crypt-gpgme.c:4443 pgpkey.c:517 smime.c:450
+#: crypt-gpgme.c:4529 pgpkey.c:518 smime.c:450
 msgid "Select  "
 msgstr "Selecteer  "
 
-#: crypt-gpgme.c:4446 pgpkey.c:520
+#: crypt-gpgme.c:4532 pgpkey.c:521
 msgid "Check key  "
 msgstr "Controleer sleutel  "
 
-#: crypt-gpgme.c:4463
+#: crypt-gpgme.c:4549
 msgid "PGP and S/MIME keys matching"
 msgstr "PGP- en S/MIME-sleutels voor"
 
-#: crypt-gpgme.c:4465
+#: crypt-gpgme.c:4551
 msgid "PGP keys matching"
 msgstr "PGP-sleutels voor"
 
-#: crypt-gpgme.c:4467
+#: crypt-gpgme.c:4553
 msgid "S/MIME keys matching"
 msgstr "S/MIME-certficaten voor"
 
-#: crypt-gpgme.c:4469
+#: crypt-gpgme.c:4555
 msgid "keys matching"
 msgstr "sleutels voor"
 
@@ -1440,63 +1940,72 @@ msgstr "sleutels voor"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4476
+#: crypt-gpgme.c:4562
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4480
+#: crypt-gpgme.c:4566
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s \"%s\"."
 
-#: crypt-gpgme.c:4507 pgpkey.c:602
+#: crypt-gpgme.c:4593 pgpkey.c:608
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr "Deze sleutel is onbruikbaar: verlopen/ingetrokken."
 
-#: crypt-gpgme.c:4521 pgpkey.c:614 smime.c:481
+#: crypt-gpgme.c:4607 pgpkey.c:620 smime.c:481
 msgid "ID is expired/disabled/revoked."
 msgstr "Dit ID is verlopen/uitgeschakeld/ingetrokken."
 
-#: crypt-gpgme.c:4529 pgpkey.c:618 smime.c:484
+#: crypt-gpgme.c:4615 pgpkey.c:624 smime.c:484
 msgid "ID has undefined validity."
 msgstr "Dit ID heeft een ongedefinieerde geldigheid."
 
-#: crypt-gpgme.c:4532 pgpkey.c:621
+#: crypt-gpgme.c:4618 pgpkey.c:627
 msgid "ID is not valid."
 msgstr "Dit ID is niet geldig."
 
-#: crypt-gpgme.c:4535 pgpkey.c:624
+#: crypt-gpgme.c:4621 pgpkey.c:630
 msgid "ID is only marginally valid."
 msgstr "Dit ID is slechts marginaal vertrouwd."
 
-#: crypt-gpgme.c:4544 pgpkey.c:628 smime.c:491
+#: crypt-gpgme.c:4630 pgpkey.c:634 smime.c:491
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%s Wilt U deze sleutel gebruiken?"
 
-#: crypt-gpgme.c:4611 crypt-gpgme.c:4727 pgpkey.c:838 pgpkey.c:965
+#: crypt-gpgme.c:4697 crypt-gpgme.c:4813 pgpkey.c:841 pgpkey.c:968
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "Zoeken naar sleutels voor \"%s\"..."
 
-#: crypt-gpgme.c:4878 pgp.c:1368
+#: crypt-gpgme.c:4964 pgp.c:1406
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "Sleutel-ID = \"%s\" gebruiken voor %s?"
 
-#: crypt-gpgme.c:4931 pgp.c:1417 smime.c:810 smime.c:916
+#: crypt-gpgme.c:5017 pgp.c:1455 smime.c:813 smime.c:919
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "Sleutel-ID voor %s: "
 
-#: crypt-gpgme.c:4996 pgpkey.c:725
+#. L10N:
+#. mutt_gpgme_select_secret_key() tries to list all secret keys to choose
+#. from.  This error is displayed if no results were found.
+#.
+#: crypt-gpgme.c:5140
+#, fuzzy
+msgid "No secret keys found"
+msgstr "geheime sleutel '%s' niet gevonden: %s\n"
+
+#: crypt-gpgme.c:5174 pgpkey.c:731
 msgid "Please enter the key ID: "
 msgstr "Geef Key-ID in: "
 
-#: crypt-gpgme.c:5009
+#: crypt-gpgme.c:5187
 #, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Fout bij exporteren van sleutel: %s\n"
@@ -1505,20 +2014,20 @@ msgstr "Fout bij exporteren van sleutel: %s\n"
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:5029
+#: crypt-gpgme.c:5207
 #, c-format
 msgid "PGP Key 0x%s."
 msgstr "PGP-sleutel 0x%s."
 
-#: crypt-gpgme.c:5071
+#: crypt-gpgme.c:5249
 msgid "GPGME: OpenPGP protocol not available"
 msgstr "GPGME: OpenPGP-protocol is niet beschikbaar"
 
-#: crypt-gpgme.c:5079
+#: crypt-gpgme.c:5257
 msgid "GPGME: CMS protocol not available"
 msgstr "GPGME: CMS-protocol is niet beschikbaar"
 
-#: crypt-gpgme.c:5116
+#: crypt-gpgme.c:5294
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr "S/MIME (o)nderteken, ondert. (a)ls, (p)gp, (g)een, of oppenc (u)it? "
 
@@ -1528,19 +2037,19 @@ msgstr "S/MIME (o)nderteken, ondert. (a)ls, (p)gp, (g)een, of oppenc (u)it? "
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:5121
+#: crypt-gpgme.c:5299
 msgid "sapfco"
 msgstr "oapngu"
 
-#: crypt-gpgme.c:5126
+#: crypt-gpgme.c:5304
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (o)nderteken, ondert. (a)ls, s/(m)ime, (g)een, of oppenc (u)it? "
 
-#: crypt-gpgme.c:5127
+#: crypt-gpgme.c:5305
 msgid "samfco"
 msgstr "oamngu"
 
-#: crypt-gpgme.c:5139
+#: crypt-gpgme.c:5317
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
@@ -1548,11 +2057,11 @@ msgstr ""
 "S/MIME (v)ersleutel, (o)ndert., ond. (a)ls, (b)eiden, (p)gp, (g)een, "
 "opp(e)nc? "
 
-#: crypt-gpgme.c:5140
+#: crypt-gpgme.c:5318
 msgid "esabpfco"
 msgstr "voabpnge"
 
-#: crypt-gpgme.c:5145
+#: crypt-gpgme.c:5323
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
@@ -1560,462 +2069,346 @@ msgstr ""
 "PGP (v)ersleutel, (o)ndert., ond. (a)ls, (b)eiden, s/(m)ime, (g)een, "
 "opp(e)nc? "
 
-#: crypt-gpgme.c:5146
+#: crypt-gpgme.c:5324
 msgid "esabmfco"
 msgstr "voabmnge"
 
-#: crypt-gpgme.c:5157
+#: crypt-gpgme.c:5335
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr ""
 "S/MIME (v)ersleutel, (o)nderteken, ond. (a)ls, (b)eiden, (p)gp, of (g)een? "
 
-#: crypt-gpgme.c:5158
+#: crypt-gpgme.c:5336
 msgid "esabpfc"
 msgstr "voabpng"
 
-#: crypt-gpgme.c:5163
+#: crypt-gpgme.c:5341
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr ""
 "PGP (v)ersleutel, (o)nderteken, ond. (a)ls, (b)eiden, s/(m)ime, of (g)een? "
 
-#: crypt-gpgme.c:5164
+#: crypt-gpgme.c:5342
 msgid "esabmfc"
 msgstr "voabmng"
 
-#: crypt-gpgme.c:5323
+#: crypt-gpgme.c:5501
 msgid "Failed to verify sender"
 msgstr "Verifiëren van afzender is mislukt"
 
-#: crypt-gpgme.c:5326
+#: crypt-gpgme.c:5504
 msgid "Failed to figure out sender"
 msgstr "Kan afzender niet bepalen"
 
-#: crypt.c:67
-#, c-format
-msgid " (current time: %c)"
-msgstr " (huidige tijd: %c)"
-
-#: crypt.c:72
-#, c-format
-msgid "[-- %s output follows%s --]\n"
-msgstr "[-- %s uitvoer volgt%s --]\n"
-
-#: crypt.c:87
-msgid "Passphrase(s) forgotten."
-msgstr "Wachtwoord(en) zijn vergeten."
-
-#: crypt.c:151
-msgid "Inline PGP can't be used with attachments.  Revert to PGP/MIME?"
-msgstr "Inline PGP is niet mogelijk met bijlagen.  PGP/MIME gebruiken?"
-
-#: crypt.c:153
-msgid "Mail not sent: inline PGP can't be used with attachments."
-msgstr "Bericht is niet verzonden: inline PGP gaat niet met bijlagen."
-
-#: crypt.c:161
-#, fuzzy
-msgid "Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"
-msgstr "Inline PGP is niet mogelijk met bijlagen.  PGP/MIME gebruiken?"
-
-#: crypt.c:163
-#, fuzzy
-msgid "Mail not sent: inline PGP can't be used with format=flowed."
-msgstr "Bericht is niet verzonden: inline PGP gaat niet met bijlagen."
-
-#: crypt.c:170 cryptglue.c:110 pgpkey.c:564 pgpkey.c:753
-msgid "Invoking PGP..."
-msgstr "PGP wordt aangeroepen..."
-
-#: crypt.c:179
-msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
-msgstr "Bericht kan niet inline verzonden worden.  PGP/MIME gebruiken?"
-
-#: crypt.c:181 send.c:2009
-msgid "Mail not sent."
-msgstr "Bericht niet verstuurd."
-
-#: crypt.c:511
-msgid "S/MIME messages with no hints on content are unsupported."
-msgstr ""
-"S/MIME-berichten zonder aanwijzingen over inhoud zijn niet ondersteund."
-
-#: crypt.c:727 crypt.c:770
-msgid "Trying to extract PGP keys...\n"
-msgstr "PGP-sleutels onttrekken...\n"
-
-#: crypt.c:750 crypt.c:790
-msgid "Trying to extract S/MIME certificates...\n"
-msgstr "S/MIME-certificaten onttrekken...\n"
-
-#: crypt.c:983
-#, c-format
-msgid ""
-"[-- Error: Unknown multipart/signed protocol %s! --]\n"
-"\n"
-msgstr ""
-"[-- Fout: Onbekend multipart/signed-protocol: %s! --]\n"
-"\n"
-
-#: crypt.c:1017
-#, fuzzy
-msgid ""
-"[-- Error: Missing or bad-format multipart/signed signature! --]\n"
-"\n"
-msgstr ""
-"[-- Fout: Inconsistente multipart/signed-structuur! --]\n"
-"\n"
-
-#: crypt.c:1057
-#, c-format
-msgid ""
-"[-- Warning: We can't verify %s/%s signatures. --]\n"
-"\n"
-msgstr ""
-"[-- Waarschuwing: %s/%s-handtekeningen kunnen niet gecontroleerd worden --]\n"
-"\n"
-
-#: crypt.c:1069
-msgid ""
-"[-- The following data is signed --]\n"
-"\n"
-msgstr ""
-"[-- De volgende gegevens zijn ondertekend --]\n"
-"\n"
-
-#: crypt.c:1076
-msgid ""
-"[-- Warning: Can't find any signatures. --]\n"
-"\n"
-msgstr ""
-"[-- Waarschuwing: kan geen enkele handtekening vinden --]\n"
-"\n"
-
-#: crypt.c:1082
-msgid ""
-"\n"
-"[-- End of signed data --]\n"
-msgstr ""
-"\n"
-"[-- Einde van ondertekende gegevens --]\n"
-
-#: cryptglue.c:89
-msgid "\"crypt_use_gpgme\" set but not built with GPGME support."
-msgstr "\"crypt_use_gpgme\" aan, maar niet gebouwd met GPGME-ondersteuning."
-
-#: cryptglue.c:112
-msgid "Invoking S/MIME..."
-msgstr "S/MIME wordt aangeroepen..."
-
-#: curs_lib.c:287
+#: curs_lib.c:313
 msgid "yes"
 msgstr "ja"
 
-#: curs_lib.c:288
+#: curs_lib.c:314
 msgid "no"
 msgstr "nee"
 
-#: curs_lib.c:440
+#: curs_lib.c:466
 msgid "Exit Mutt?"
 msgstr "Mutt afsluiten?"
 
-#: curs_lib.c:508
+#: curs_lib.c:534
 msgid "Error History is disabled."
 msgstr ""
 
-#: curs_lib.c:514
+#: curs_lib.c:540
 #, fuzzy
 msgid "Error History is currently being shown."
 msgstr "Hulp wordt al weergegeven."
 
-#: curs_lib.c:528
+#: curs_lib.c:555
 msgid "Error History"
 msgstr ""
 
-#: curs_lib.c:901 mutt_socket.c:608 mutt_ssl.c:599
+#: curs_lib.c:931 mutt_socket.c:610 mutt_ssl.c:631
 msgid "unknown error"
 msgstr "onbekende fout"
 
-#: curs_lib.c:921
+#: curs_lib.c:951
 msgid "Press any key to continue..."
 msgstr "Druk een willekeurige toets in..."
 
-#: curs_lib.c:985
+#: curs_lib.c:1015
 msgid " ('?' for list): "
 msgstr " ('?' voor een overzicht): "
 
-#: curs_main.c:61 curs_main.c:813
+#: curs_main.c:65 curs_main.c:817
 msgid "No mailbox is open."
 msgstr "Er is geen postvak geopend."
 
-#: curs_main.c:62
+#: curs_main.c:66
 msgid "There are no messages."
 msgstr "Er zijn geen berichten."
 
-#: curs_main.c:63 mx.c:1182 pager.c:56 recvattach.c:45
+#: curs_main.c:67 mx.c:1192 pager.c:56 recvattach.c:45
 msgid "Mailbox is read-only."
 msgstr "Postvak is schrijfbeveiligd."
 
-#: curs_main.c:64 pager.c:57 recvattach.c:1098
+#: curs_main.c:68 pager.c:57 recvattach.c:1133
 msgid "Function not permitted in attach-message mode."
 msgstr "Functie wordt niet ondersteund in deze modus"
 
-#: curs_main.c:65
+#: curs_main.c:69
 msgid "No visible messages."
 msgstr "Geen zichtbare berichten"
 
 #. L10N: %s is one of the CHECK_ACL entries below.
-#: curs_main.c:111 pager.c:92
+#: curs_main.c:115 pager.c:92
 #, c-format
 msgid "%s: Operation not permitted by ACL"
 msgstr "%s: operatie niet toegestaan door ACL"
 
-#: curs_main.c:342
+#: curs_main.c:346
 msgid "Cannot toggle write on a readonly mailbox!"
 msgstr "Kan niet schrijven in een schrijfbeveiligd postvak!"
 
-#: curs_main.c:349
+#: curs_main.c:353
 msgid "Changes to folder will be written on folder exit."
 msgstr ""
 "Wijzigingen zullen worden weggeschreven bij het verlaten van het postvak."
 
-#: curs_main.c:354
+#: curs_main.c:358
 msgid "Changes to folder will not be written."
 msgstr "Wijzigingen worden niet weggeschreven."
 
-#: curs_main.c:538
+#: curs_main.c:542
 msgid "Quit"
 msgstr "Einde"
 
-#: curs_main.c:541 recvattach.c:59
+#: curs_main.c:545 recvattach.c:59
 msgid "Save"
 msgstr "Opslaan"
 
-#: curs_main.c:542 query.c:49
+#: curs_main.c:546 query.c:49
 msgid "Mail"
 msgstr "Sturen"
 
-#: curs_main.c:543 pager.c:1582
+#: curs_main.c:547 pager.c:1582
 msgid "Reply"
 msgstr "Antw."
 
-#: curs_main.c:544
+#: curs_main.c:548
 msgid "Group"
 msgstr "Groep"
 
-#: curs_main.c:691
+#: curs_main.c:696
 msgid "Mailbox was externally modified.  Flags may be wrong."
 msgstr "Postvak is extern veranderd.  Markeringen kunnen onjuist zijn."
 
-#: curs_main.c:694
+#: curs_main.c:699
 msgid "New mail in this mailbox."
 msgstr "Nieuwe berichten in dit postvak."
 
-#: curs_main.c:705
+#: curs_main.c:710
 msgid "Mailbox was externally modified."
 msgstr "Postvak is extern veranderd."
 
-#: curs_main.c:820
+#: curs_main.c:824
 msgid "No tagged messages."
 msgstr "Geen gemarkeerde berichten."
 
-#: curs_main.c:824 menu.c:1064
+#: curs_main.c:828 menu.c:1066
 msgid "Nothing to do."
 msgstr "Niets te doen."
 
-#: curs_main.c:904
+#: curs_main.c:908
 msgid "Jump to message: "
 msgstr "Ga naar bericht: "
 
-#: curs_main.c:917
+#: curs_main.c:921
 msgid "Argument must be a message number."
 msgstr "Argument moet een berichtnummer zijn."
 
-#: curs_main.c:949
+#: curs_main.c:953
 msgid "That message is not visible."
 msgstr "Dat bericht is niet zichtbaar."
 
-#: curs_main.c:952
+#: curs_main.c:956
 msgid "Invalid message number."
 msgstr "Ongeldig berichtnummer."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:966 curs_main.c:2156 pager.c:2557
+#: curs_main.c:970 curs_main.c:2154 pager.c:2559
 msgid "Cannot delete message(s)"
 msgstr "Kan bericht(en) niet verwijderen"
 
-#: curs_main.c:969
+#: curs_main.c:973
 msgid "Delete messages matching: "
 msgstr "Wis berichten volgens patroon: "
 
-#: curs_main.c:997
+#: curs_main.c:1001
 msgid "No limit pattern is in effect."
 msgstr "Er is geen beperkend patroon in werking."
 
 #. L10N: ask for a limit to apply
-#: curs_main.c:1002
+#: curs_main.c:1006
 #, c-format
 msgid "Limit: %s"
 msgstr "Limiet: %s"
 
-#: curs_main.c:1012
+#: curs_main.c:1016
 msgid "Limit to messages matching: "
 msgstr "Beperk berichten volgens patroon: "
 
-#: curs_main.c:1033
+#: curs_main.c:1037
 msgid "To view all messages, limit to \"all\"."
 msgstr "Beperk op \"all\" om alle berichten te bekijken."
 
-#: curs_main.c:1045 pager.c:2080
+#: curs_main.c:1049 pager.c:2080
 msgid "Quit Mutt?"
 msgstr "Mutt afsluiten?"
 
-#: curs_main.c:1135
+#: curs_main.c:1139
 msgid "Tag messages matching: "
 msgstr "Markeer berichten volgens patroon: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1145 curs_main.c:2499 pager.c:2802
+#: curs_main.c:1149 curs_main.c:2497 pager.c:2804
 msgid "Cannot undelete message(s)"
 msgstr "Kan bericht(en) niet herstellen"
 
-#: curs_main.c:1147
+#: curs_main.c:1151
 msgid "Undelete messages matching: "
 msgstr "Herstel berichten volgens patroon: "
 
-#: curs_main.c:1155
+#: curs_main.c:1159
 msgid "Untag messages matching: "
 msgstr "Verwijder markering volgens patroon: "
 
-#: curs_main.c:1185
+#: curs_main.c:1189
 msgid "Logged out of IMAP servers."
 msgstr "Uitgelogd uit IMAP-servers."
 
-#: curs_main.c:1275
+#: curs_main.c:1286
 msgid "Open mailbox in read-only mode"
 msgstr "Open postvak in schrijfbeveiligde modus"
 
-#: curs_main.c:1277
+#: curs_main.c:1288
 msgid "Open mailbox"
 msgstr "Open postvak"
 
-#: curs_main.c:1286
+#: curs_main.c:1297
 msgid "No mailboxes have new mail"
 msgstr "Geen postvak met nieuwe berichten"
 
-#: curs_main.c:1327 mx.c:535 mx.c:636
+#: curs_main.c:1331 mx.c:535 mx.c:636
 #, c-format
 msgid "%s is not a mailbox."
 msgstr "%s is geen postvak."
 
-#: curs_main.c:1469
+#: curs_main.c:1467
 msgid "Exit Mutt without saving?"
 msgstr "Mutt verlaten zonder op te slaan?"
 
-#: curs_main.c:1487 curs_main.c:1523 curs_main.c:1991 curs_main.c:2023
+#: curs_main.c:1485 curs_main.c:1521 curs_main.c:1989 curs_main.c:2021
 #: flags.c:303 thread.c:1026 thread.c:1082 thread.c:1151
 msgid "Threading is not enabled."
 msgstr "Het weergeven van threads is niet ingeschakeld."
 
-#: curs_main.c:1499
+#: curs_main.c:1497
 msgid "Thread broken"
 msgstr "Thread is verbroken"
 
-#: curs_main.c:1510
+#: curs_main.c:1508
 msgid "Thread cannot be broken, message is not part of a thread"
 msgstr "Thread kan niet verbroken worden; bericht is geen deel van een thread"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1520
+#: curs_main.c:1518
 msgid "Cannot link threads"
 msgstr "Kan threads niet linken"
 
-#: curs_main.c:1525
+#: curs_main.c:1523
 msgid "No Message-ID: header available to link thread"
 msgstr "Er is geen 'Message-ID'-kopregel beschikbaar om thread te koppelen"
 
-#: curs_main.c:1527
+#: curs_main.c:1525
 msgid "First, please tag a message to be linked here"
 msgstr "Markeer eerst een bericht om hieraan te koppelen"
 
-#: curs_main.c:1539
+#: curs_main.c:1537
 msgid "Threads linked"
 msgstr "Threads gekoppeld"
 
-#: curs_main.c:1542
+#: curs_main.c:1540
 msgid "No thread linked"
 msgstr "Geen thread gekoppeld"
 
-#: curs_main.c:1578 curs_main.c:1603
+#: curs_main.c:1576 curs_main.c:1601
 msgid "You are on the last message."
 msgstr "Dit is het laatste bericht."
 
-#: curs_main.c:1585 curs_main.c:1629
+#: curs_main.c:1583 curs_main.c:1627
 msgid "No undeleted messages."
 msgstr "Alle berichten zijn gewist."
 
-#: curs_main.c:1622 curs_main.c:1646
+#: curs_main.c:1620 curs_main.c:1644
 msgid "You are on the first message."
 msgstr "Dit is het eerste bericht."
 
-#: curs_main.c:1721 menu.c:885 pager.c:2198 pattern.c:1705
+#: curs_main.c:1719 menu.c:887 pager.c:2199 pattern.c:1709
 msgid "Search wrapped to top."
 msgstr "Zoekopdracht is bovenaan herbegonnen."
 
-#: curs_main.c:1730 pager.c:2220 pattern.c:1716
+#: curs_main.c:1728 pager.c:2221 pattern.c:1720
 msgid "Search wrapped to bottom."
 msgstr "Zoekopdracht is onderaan herbegonnen."
 
-#: curs_main.c:1774
+#: curs_main.c:1772
 msgid "No new messages in this limited view."
 msgstr "Geen nieuwe berichten in deze beperkte weergave."
 
-#: curs_main.c:1776
+#: curs_main.c:1774
 msgid "No new messages."
 msgstr "Geen nieuwe berichten."
 
-#: curs_main.c:1781
+#: curs_main.c:1779
 msgid "No unread messages in this limited view."
 msgstr "Geen ongelezen berichten in deze beperkte weergave."
 
-#: curs_main.c:1783
+#: curs_main.c:1781
 msgid "No unread messages."
 msgstr "Geen ongelezen berichten."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1801
+#: curs_main.c:1799
 msgid "Cannot flag message"
 msgstr "Kan bericht niet markeren"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1839 pager.c:2765
+#: curs_main.c:1837 pager.c:2767
 msgid "Cannot toggle new"
 msgstr "Kan 'nieuw'-markering niet omschakelen"
 
-#: curs_main.c:1924
+#: curs_main.c:1922
 msgid "No more threads."
 msgstr "Geen verdere threads."
 
-#: curs_main.c:1926
+#: curs_main.c:1924
 msgid "You are on the first thread."
 msgstr "U bent al bij de eerste thread."
 
-#: curs_main.c:2009
+#: curs_main.c:2007
 msgid "Thread contains unread messages."
 msgstr "Thread bevat ongelezen berichten"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2112 pager.c:2524
+#: curs_main.c:2110 pager.c:2526
 msgid "Cannot delete message"
 msgstr "Kan bericht niet verwijderen"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2193
+#: curs_main.c:2191
 msgid "Cannot edit message"
 msgstr "Kan bericht niet bewerken"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2229 pager.c:2854
+#: curs_main.c:2227 pager.c:2856
 #, c-format
 msgid "%d labels changed."
 msgstr "%d labels veranderd."
@@ -2023,44 +2416,44 @@ msgstr "%d labels veranderd."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2236 pager.c:2858
+#: curs_main.c:2234 pager.c:2860
 msgid "No labels changed."
 msgstr "Geen labels veranderd."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2324
+#: curs_main.c:2322
 msgid "Cannot mark message(s) as read"
 msgstr "Kan bericht(en) niet als gelezen markeren"
 
 #. L10N: This is the prompt for <mark-message>.  Whatever they
 #. enter will be prefixed by $mark_macro_prefix and will become
 #. a macro hotkey to jump to the currently selected message.
-#: curs_main.c:2360
+#: curs_main.c:2358
 msgid "Enter macro stroke: "
 msgstr "Typ de macrotoetsaanslag: "
 
 #. L10N: "message hotkey" is the key bindings menu description of a
 #. macro created by <mark-message>.
-#: curs_main.c:2368
+#: curs_main.c:2366
 msgid "message hotkey"
 msgstr "berichtsneltoets"
 
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
-#: curs_main.c:2373
+#: curs_main.c:2371
 #, c-format
 msgid "Message bound to %s."
 msgstr "Bericht is gebonden aan %s."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
-#: curs_main.c:2381
+#: curs_main.c:2379
 msgid "No message ID to macro."
 msgstr "Kan geen ID van dit bericht vinden in de index."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2469 pager.c:2785
+#: curs_main.c:2467 pager.c:2787
 msgid "Cannot undelete message"
 msgstr "Kan bericht niet herstellen"
 
@@ -2154,36 +2547,36 @@ msgstr "Ongeldige IDN in %s: '%s'\n"
 msgid "%s: unknown editor command (~? for help)\n"
 msgstr "%s: onbekend editor-commando (~? voor hulp)\n"
 
-#: editmsg.c:78
+#: editmsg.c:79
 #, c-format
 msgid "could not create temporary folder: %s"
 msgstr "Tijdelijke map kon niet worden aangemaakt: %s"
 
-#: editmsg.c:90
+#: editmsg.c:92
 #, c-format
 msgid "could not write temporary mail folder: %s"
 msgstr "Tijdelijke postmap kon niet worden aangemaakt: %s"
 
-#: editmsg.c:110
+#: editmsg.c:113
 #, c-format
 msgid "could not truncate temporary mail folder: %s"
 msgstr "Tijdelijke postmap kon niet worden ingekort: %s"
 
-#: editmsg.c:127
+#: editmsg.c:130
 msgid "Message file is empty!"
 msgstr "Postvak is leeg!"
 
-#: editmsg.c:134
+#: editmsg.c:137
 msgid "Message not modified!"
 msgstr "Bericht is niet gewijzigd!"
 
-#: editmsg.c:142
+#: editmsg.c:145
 #, c-format
 msgid "Can't open message file: %s"
 msgstr "Kan bestand niet openen: %s"
 
 #. L10N: %s is from strerror(errno)
-#: editmsg.c:150 editmsg.c:178
+#: editmsg.c:153 editmsg.c:181
 #, c-format
 msgid "Can't append to folder: %s"
 msgstr "Kan bericht niet toevoegen aan postvak: %s"
@@ -2196,80 +2589,80 @@ msgstr "Zet markering"
 msgid "Clear flag"
 msgstr "Verwijder markering"
 
-#: handler.c:1141
+#: handler.c:1142
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
 msgstr ""
 "[-- Fout: Kon geen enkel multipart/alternative-gedeelte weergeven! --]\n"
 
-#: handler.c:1257
+#: handler.c:1258
 #, c-format
 msgid "[-- Attachment #%d"
 msgstr "[-- Bijlage #%d"
 
-#: handler.c:1269
+#: handler.c:1270
 #, c-format
 msgid "[-- Type: %s/%s, Encoding: %s, Size: %s --]\n"
 msgstr "[-- Type: %s/%s, Codering: %s, Grootte: %s --]\n"
 
-#: handler.c:1285
+#: handler.c:1286
 msgid "One or more parts of this message could not be displayed"
 msgstr "Een of meer delen van dit bericht konden niet worden weergegeven"
 
-#: handler.c:1340
+#: handler.c:1341
 #, c-format
 msgid "[-- Autoview using %s --]\n"
 msgstr "[-- Automatische weergave met %s --]\n"
 
-#: handler.c:1341
+#: handler.c:1342
 #, c-format
 msgid "Invoking autoview command: %s"
 msgstr "Commando wordt aangeroepen: %s"
 
-#: handler.c:1373
+#: handler.c:1374
 #, c-format
 msgid "[-- Can't run %s. --]\n"
 msgstr "[-- Kan %s niet uitvoeren. --]\n"
 
-#: handler.c:1392 handler.c:1413
+#: handler.c:1393 handler.c:1414
 #, c-format
 msgid "[-- Autoview stderr of %s --]\n"
 msgstr "[-- Foutenuitvoer van %s --]\n"
 
-#: handler.c:1457
+#: handler.c:1458
 msgid "[-- Error: message/external-body has no access-type parameter --]\n"
 msgstr "[-- Fout: message/external-body heeft geen access-type parameter --]\n"
 
-#: handler.c:1478
+#: handler.c:1479
 #, c-format
 msgid "[-- This %s/%s attachment "
 msgstr "[-- Deze %s/%s bijlage "
 
-#: handler.c:1485
+#: handler.c:1486
 #, c-format
 msgid "(size %s bytes) "
 msgstr "(grootte %s bytes) "
 
-#: handler.c:1487
+#: handler.c:1488
 msgid "has been deleted --]\n"
 msgstr "werd gewist --]\n"
 
-#: handler.c:1492
+#: handler.c:1493
 #, c-format
 msgid "[-- on %s --]\n"
 msgstr "[-- op %s --]\n"
 
-#: handler.c:1497
+#: handler.c:1498
 #, c-format
 msgid "[-- name: %s --]\n"
 msgstr "[-- naam: %s --]\n"
 
-#: handler.c:1510 handler.c:1526
+#: handler.c:1511 handler.c:1527
 #, c-format
 msgid "[-- This %s/%s attachment is not included, --]\n"
 msgstr "[-- Deze %s/%s-bijlage is niet bijgesloten, --]\n"
 
 # FIXME: why the split?
-#: handler.c:1512
+#: handler.c:1513
 msgid ""
 "[-- and the indicated external source has --]\n"
 "[-- expired. --]\n"
@@ -2278,38 +2671,38 @@ msgstr ""
 "[-- bestaat niet meer. --]\n"
 
 # FIXME: add a period?
-#: handler.c:1530
+#: handler.c:1531
 #, c-format
 msgid "[-- and the indicated access-type %s is unsupported --]\n"
 msgstr "[-- en het access-type %s wordt niet ondersteund --]\n"
 
-#: handler.c:1636
+#: handler.c:1638
 msgid "Unable to open temporary file!"
 msgstr "Tijdelijk bestand kon niet worden geopend!"
 
-#: handler.c:1812
+#: handler.c:1822
 msgid "Error: multipart/signed has no protocol."
 msgstr "Fout: multipart/signed zonder protocol-parameter."
 
-#: handler.c:1871
+#: handler.c:1878
 msgid "[-- This is an attachment "
 msgstr "[-- Dit is een bijlage "
 
-#: handler.c:1873
+#: handler.c:1880
 #, c-format
 msgid "[-- %s/%s is unsupported "
 msgstr "[-- %s/%s wordt niet ondersteund "
 
-#: handler.c:1880
+#: handler.c:1887
 #, c-format
 msgid "(use '%s' to view this part)"
 msgstr "(gebruik '%s' om dit gedeelte weer te geven)"
 
-#: handler.c:1882
+#: handler.c:1889
 msgid "(need 'view-attachments' bound to key!)"
 msgstr "('view-attachments' moet aan een toets gekoppeld zijn!)"
 
-#: headers.c:186
+#: headers.c:184
 #, c-format
 msgid "%s: unable to attach file"
 msgstr "%s: kan bestand niet toevoegen"
@@ -2318,11 +2711,11 @@ msgstr "%s: kan bestand niet toevoegen"
 msgid "ERROR: please report this bug"
 msgstr "FOUT: Meld deze programmafout."
 
-#: help.c:352
+#: help.c:354
 msgid "<UNKNOWN>"
 msgstr "<onbekend>"
 
-#: help.c:365
+#: help.c:367
 msgid ""
 "\n"
 "Generic bindings:\n"
@@ -2332,7 +2725,7 @@ msgstr ""
 "Algemene toetsenbindingen:\n"
 "\n"
 
-#: help.c:369
+#: help.c:371
 msgid ""
 "\n"
 "Unbound functions:\n"
@@ -2342,7 +2735,7 @@ msgstr ""
 "Ongebonden functies:\n"
 "\n"
 
-#: help.c:377
+#: help.c:379
 #, c-format
 msgid "Help for %s"
 msgstr "Hulp voor %s"
@@ -2351,42 +2744,42 @@ msgstr "Hulp voor %s"
 msgid "Search"
 msgstr "Zoeken"
 
-#: history.c:126 history.c:210 history.c:249
+#: history.c:129 history.c:213 history.c:253
 #, c-format
 msgid "Bad history file format (line %d)"
 msgstr "Verkeerde indeling van geschiedenisbestand (regel %d)"
 
-#: history.c:522
+#: history.c:527
 #, fuzzy, c-format
 msgid "History '%s'"
 msgstr "Zoekopdracht '%s'"
 
-#: hook.c:98
+#: hook.c:100
 msgid "current mailbox shortcut '^' is unset"
 msgstr "sneltoets '^' voor huidige mailbox is uitgezet"
 
-#: hook.c:109
+#: hook.c:112
 msgid "mailbox shortcut expanded to empty regexp"
 msgstr "sneltoets voor mailbox expandeerde tot lege reguliere expressie"
 
-#: hook.c:122
+#: hook.c:125
 msgid "badly formatted command string"
 msgstr "onjuist opgemaakte commandotekenreeks"
 
-#: hook.c:308 init.c:700 init.c:781 init.c:789 init.c:811
+#: hook.c:301 init.c:701 init.c:782 init.c:790 init.c:812
 msgid "not enough arguments"
 msgstr "te weinig argumenten"
 
-#: hook.c:400
+#: hook.c:393
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Kan geen 'unhook *' doen binnen een 'hook'."
 
-#: hook.c:413
+#: hook.c:406
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: onbekend 'hook'-type: %s"
 
-#: hook.c:419
+#: hook.c:412
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Kan geen %s wissen binnen een %s."
@@ -2431,6 +2824,16 @@ msgstr "Aanmelden..."
 msgid "Login failed."
 msgstr "Aanmelden is mislukt..."
 
+#: imap/auth_oauth.c:48 pop_auth.c:334 smtp.c:694
+#, fuzzy
+msgid "Authenticating (OAUTHBEARER)..."
+msgstr "Authenticatie (SASL)..."
+
+#: imap/auth_oauth.c:82
+#, fuzzy
+msgid "OAUTHBEARER authentication failed."
+msgstr "SASL-authenticatie is mislukt."
+
 #: imap/auth_sasl.c:109 smtp.c:611
 #, c-format
 msgid "Authenticating (%s)..."
@@ -2457,38 +2860,38 @@ msgstr "Niet-bestaand postvak"
 msgid "Create mailbox: "
 msgstr "Postvak aanmaken: "
 
-#: imap/browse.c:267 imap/browse.c:320
+#: imap/browse.c:267 imap/browse.c:322
 msgid "Mailbox must have a name."
 msgstr "Postvak moet een naam hebben."
 
-#: imap/browse.c:275
+#: imap/browse.c:277
 msgid "Mailbox created."
 msgstr "Postvak is aangemaakt."
 
-#: imap/browse.c:308
+#: imap/browse.c:310
 msgid "Cannot rename root folder"
 msgstr "Kan de basismap niet hernoemen"
 
-#: imap/browse.c:312
+#: imap/browse.c:314
 #, c-format
 msgid "Rename mailbox %s to: "
 msgstr "Postvak %s hernoemen naar: "
 
-#: imap/browse.c:329
+#: imap/browse.c:331
 #, c-format
 msgid "Rename failed: %s"
 msgstr "Hernoemen is mislukt: %s"
 
-#: imap/browse.c:334
+#: imap/browse.c:338
 msgid "Mailbox renamed."
 msgstr "Postvak is hernoemd."
 
-#: imap/command.c:267 imap/command.c:352
+#: imap/command.c:267 imap/command.c:348
 #, fuzzy, c-format
 msgid "Connection to %s timed out"
 msgstr "Verbinding met %s beëindigd"
 
-#: imap/command.c:489
+#: imap/command.c:485
 #, fuzzy, c-format
 msgid "Mailbox %s@%s closed"
 msgstr "Postvak is gesloten."
@@ -2528,71 +2931,71 @@ msgstr "%s wordt uitgekozen..."
 msgid "Error opening mailbox"
 msgstr "Er is een fout opgetreden tijdens openen van het postvak"
 
-#: imap/imap.c:887 imap/imap.c:2324 imap/message.c:1393 muttlib.c:1823
+#: imap/imap.c:887 imap/imap.c:2339 imap/message.c:1418 muttlib.c:1902
 #, c-format
 msgid "Create %s?"
 msgstr "%s aanmaken?"
 
-#: imap/imap.c:1284
+#: imap/imap.c:1291
 msgid "Expunge failed"
 msgstr "Verwijderen is mislukt"
 
-#: imap/imap.c:1296
+#: imap/imap.c:1303
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "%d berichten worden gemarkeerd voor verwijdering..."
 
-#: imap/imap.c:1352
+#: imap/imap.c:1359
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Gewijzigde berichten worden opgeslagen... [%d/%d]"
 
-#: imap/imap.c:1413
+#: imap/imap.c:1420
 msgid "Error saving flags. Close anyway?"
 msgstr "Fout bij opslaan markeringen. Toch afsluiten?"
 
-#: imap/imap.c:1421
+#: imap/imap.c:1428
 msgid "Error saving flags"
 msgstr "Fout bij opslaan markeringen."
 
-#: imap/imap.c:1444
+#: imap/imap.c:1451
 msgid "Expunging messages from server..."
 msgstr "Berichten op de server worden gewist..."
 
-#: imap/imap.c:1450
+#: imap/imap.c:1457
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox: EXPUNGE is mislukt"
 
-#: imap/imap.c:1960
+#: imap/imap.c:1975
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Zoeken op header zonder headernaam: %s"
 
-#: imap/imap.c:2032
+#: imap/imap.c:2047
 msgid "Bad mailbox name"
 msgstr "Verkeerde postvaknaam"
 
-#: imap/imap.c:2058
+#: imap/imap.c:2073
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Aanmelden voor %s..."
 
-#: imap/imap.c:2060
+#: imap/imap.c:2075
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Abonnement opzeggen op %s..."
 
-#: imap/imap.c:2070
+#: imap/imap.c:2085
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Geabonneerd op %s"
 
-#: imap/imap.c:2072
+#: imap/imap.c:2087
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Abonnement op %s opgezegd"
 
-#: imap/imap.c:2309 imap/message.c:1357
+#: imap/imap.c:2324 imap/message.c:1382
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "%d berichten worden gekopieerd naar %s..."
@@ -2603,58 +3006,58 @@ msgstr "%d berichten worden gekopieerd naar %s..."
 msgid "Abort download and close mailbox?"
 msgstr ""
 
-#: imap/message.c:110 mx.c:1419
+#: imap/message.c:110 mx.c:1429
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Integer overflow -- kan geen geheugen alloceren!"
 
 #. L10N:
 #. Comparing the cached data with the IMAP server's data
-#: imap/message.c:423
+#: imap/message.c:426
 msgid "Evaluating cache..."
 msgstr "Headercache wordt gelezen..."
 
 #. L10N:
 #. Fetching IMAP flag changes, using the CONDSTORE extension
-#: imap/message.c:622
+#: imap/message.c:625
 #, fuzzy
 msgid "Fetching flag updates..."
 msgstr "Headers worden opgehaald..."
 
-#: imap/message.c:729
+#: imap/message.c:747
 msgid "Unable to fetch headers from this IMAP server version."
 msgstr "Kan berichtenoverzicht niet overhalen van deze IMAP-server."
 
-#: imap/message.c:739
+#: imap/message.c:760
 #, c-format
 msgid "Could not create temporary file %s"
 msgstr "Tijdelijk bestand %s kon niet worden aangemaakt"
 
-#: imap/message.c:745 pop.c:304
+#: imap/message.c:767 pop.c:309
 msgid "Fetching message headers..."
 msgstr "Headers worden opgehaald..."
 
-#: imap/message.c:954 imap/message.c:1014 pop.c:596
+#: imap/message.c:977 imap/message.c:1043 pop.c:603
 msgid "Fetching message..."
 msgstr "Bericht wordt gelezen..."
 
-#: imap/message.c:1001 pop.c:591
+#: imap/message.c:1030 pop.c:598
 msgid "The message index is incorrect. Try reopening the mailbox."
 msgstr "De berichtenindex is niet correct.  Probeer het postvak te heropenen."
 
-#: imap/message.c:1176
+#: imap/message.c:1205
 msgid "Uploading message..."
 msgstr "Bericht wordt ge-upload..."
 
-#: imap/message.c:1361
+#: imap/message.c:1386
 #, c-format
 msgid "Copying message %d to %s..."
 msgstr "Bericht %d wordt gekopieerd naar %s ..."
 
-#: imap/util.c:465
+#: imap/util.c:478
 msgid "Continue?"
 msgstr "Doorgaan?"
 
-#: init.c:61 init.c:2159 pager.c:55
+#: init.c:61 init.c:2187 pager.c:55
 msgid "Not available in this menu."
 msgstr "Optie niet beschikbaar in dit menu."
 
@@ -2667,243 +3070,239 @@ msgstr "Ongeldige reguliere expressie: %s"
 msgid "Not enough subexpressions for template"
 msgstr "Niet genoeg subexpressies voor sjabloon"
 
-#: init.c:872
+#: init.c:874
 msgid "spam: no matching pattern"
 msgstr "spam: geen overeenkomstig patroon"
 
-#: init.c:874
+#: init.c:876
 msgid "nospam: no matching pattern"
 msgstr "nospam: geen overeenkomstig patroon"
 
-#: init.c:1066
+#: init.c:1074
 #, c-format
 msgid "%sgroup: missing -rx or -addr."
 msgstr "%s-groep: Ontbrekende -rx of -addr."
 
-#: init.c:1084
+#: init.c:1092
 #, c-format
 msgid "%sgroup: warning: bad IDN '%s'.\n"
 msgstr "%s-groep: waarschuwing: Ongeldige IDN '%s'.\n"
 
-#: init.c:1303
+#: init.c:1311
 msgid "attachments: no disposition"
 msgstr "attachments: geen dispositie"
 
-#: init.c:1344
+#: init.c:1352
 msgid "attachments: invalid disposition"
 msgstr "attachments: ongeldige dispositie"
 
-#: init.c:1359
+#: init.c:1379
 msgid "unattachments: no disposition"
 msgstr "unattachments: geen dispositie"
 
-#: init.c:1386
+#: init.c:1417
 msgid "unattachments: invalid disposition"
 msgstr "unattachments: ongeldige dispositie"
 
-#: init.c:1515
+#: init.c:1546
 msgid "alias: no address"
 msgstr "alias: Geen adres"
 
-#: init.c:1563
+#: init.c:1594
 #, c-format
 msgid "Warning: Bad IDN '%s' in alias '%s'.\n"
 msgstr "Waarschuwing: Ongeldige IDN '%s' in alias '%s'.\n"
 
-#: init.c:1652
+#: init.c:1683
 msgid "invalid header field"
 msgstr "ongeldig veld in berichtenkop"
 
-#: init.c:1705
+#: init.c:1736
 #, c-format
 msgid "%s: unknown sorting method"
 msgstr "%s: onbekende sorteermethode"
 
-#: init.c:1819
+#: init.c:1845
 #, c-format
 msgid "mutt_restore_default(%s): error in regexp: %s\n"
 msgstr "mutt_restore_default(%s): fout in reguliere expressie: %s\n"
 
-#: init.c:2040 init.c:2206
+#: init.c:2067 init.c:2234
 #, c-format
 msgid "%s is unset"
 msgstr "%s is niet gezet"
 
-#: init.c:2136 init.c:2251
+#: init.c:2164 init.c:2279
 #, c-format
 msgid "%s: unknown variable"
 msgstr "%s: onbekende variable"
 
-#: init.c:2145
+#: init.c:2173
 msgid "prefix is illegal with reset"
 msgstr "Prefix is niet toegestaan"
 
-#: init.c:2151
+#: init.c:2179
 msgid "value is illegal with reset"
 msgstr "Toekenning van een waarde is niet toegestaan"
 
-#: init.c:2186 init.c:2198
+#: init.c:2214 init.c:2226
 msgid "Usage: set variable=yes|no"
 msgstr "Gebruik:  set variable=yes|no"
 
-#: init.c:2206
+#: init.c:2234
 #, c-format
 msgid "%s is set"
 msgstr "%s is gezet"
 
-#: init.c:2315
+#: init.c:2345
 #, c-format
 msgid "Invalid value for option %s: \"%s\""
 msgstr "Ongeldige waarde voor optie %s: \"%s\""
 
-#: init.c:2457
+#: init.c:2487
 #, c-format
 msgid "%s: invalid mailbox type"
 msgstr "%s: Ongeldig postvaktype"
 
-#: init.c:2488 init.c:2552
+#: init.c:2518 init.c:2582
 #, c-format
 msgid "%s: invalid value (%s)"
 msgstr "%s: ongeldige waarde (%s)"
 
-#: init.c:2489 init.c:2553
+#: init.c:2519 init.c:2583
 msgid "format error"
 msgstr "opmaakfout"
 
-#: init.c:2489 init.c:2553
+#: init.c:2519 init.c:2583
 msgid "number overflow"
 msgstr "overloop van getal"
 
-#: init.c:2587
+#: init.c:2617
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s: ongeldige waarde"
 
-#: init.c:2631
+#: init.c:2661
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s: Onbekend type."
 
-#: init.c:2658
+#: init.c:2688
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s: onbekend type"
 
-#: init.c:2733
+#: init.c:2763
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Fout in %s, regel %d: %s"
 
-#: init.c:2756
+#: init.c:2786
 #, c-format
 msgid "source: errors in %s"
 msgstr "source: fouten in %s"
 
-#: init.c:2757
+#: init.c:2787
 #, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "source: inlezen is gestaakt vanwege te veel fouten in %s"
 
-#: init.c:2771
+#: init.c:2802
 #, c-format
 msgid "source: error at %s"
 msgstr "source: fout bij %s"
 
-#: init.c:2776
+#: init.c:2807
 msgid "source: too many arguments"
 msgstr "source: te veel argumenten"
 
-#: init.c:2830
+#: init.c:2866
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s: onbekend commando"
 
-#: init.c:3329
+#: init.c:3370
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Fout in opdrachtregel: %s\n"
 
-#: init.c:3451
+#: init.c:3492
 msgid "unable to determine home directory"
 msgstr "Kan persoonlijke map niet achterhalen"
 
-#: init.c:3459
+#: init.c:3500
 msgid "unable to determine username"
 msgstr "Kan gebruikersnaam niet achterhalen"
 
-#: init.c:3485
+#: init.c:3526
 msgid "unable to determine nodename via uname()"
 msgstr "Kan hostnaam niet achterhalen via uname()"
 
-#: init.c:3712
+#: init.c:3754
 msgid "-group: no group name"
 msgstr "-group: geen groepsnaam"
 
-#: init.c:3722
+#: init.c:3764
 msgid "out of arguments"
 msgstr "te weinig argumenten"
 
-#: keymap.c:547
-msgid "Macros are currently disabled."
-msgstr "Macro's zijn momenteel uitgeschakeld."
-
-#: keymap.c:554
+#: keymap.c:564
 msgid "Macro loop detected."
 msgstr "Macro-lus gedetecteerd."
 
-#: keymap.c:856 keymap.c:891
+#: keymap.c:870 keymap.c:905
 msgid "Key is not bound."
 msgstr "Toets is niet in gebruik."
 
-#: keymap.c:896
+#: keymap.c:910
 #, c-format
 msgid "Key is not bound.  Press '%s' for help."
 msgstr "Toets is niet in gebruik.  Typ '%s' voor hulp."
 
-#: keymap.c:907
+#: keymap.c:921
 msgid "push: too many arguments"
 msgstr "push: te veel argumenten"
 
-#: keymap.c:937
+#: keymap.c:951
 #, c-format
 msgid "%s: no such menu"
 msgstr "%s: onbekend menu"
 
-#: keymap.c:952
+#: keymap.c:966
 msgid "null key sequence"
 msgstr "lege toetsenvolgorde"
 
-#: keymap.c:1039
+#: keymap.c:1058
 msgid "bind: too many arguments"
 msgstr "bind: te veel argumenten"
 
-#: keymap.c:1062
+#: keymap.c:1081
 #, c-format
 msgid "%s: no such function in map"
 msgstr "%s: onbekende functie"
 
-#: keymap.c:1086
+#: keymap.c:1105
 msgid "macro: empty key sequence"
 msgstr "macro: lege toetsenvolgorde"
 
-#: keymap.c:1097
+#: keymap.c:1116
 msgid "macro: too many arguments"
 msgstr "macro: te veel argumenten"
 
-#: keymap.c:1133
+#: keymap.c:1152
 msgid "exec: no arguments"
 msgstr "exec: geen argumenten"
 
-#: keymap.c:1153
+#: keymap.c:1172
 #, c-format
 msgid "%s: no such function"
 msgstr "%s: onbekende functie"
 
-#: keymap.c:1174
+#: keymap.c:1193
 msgid "Enter keys (^G to abort): "
 msgstr "Geef toetsen in (^G om af te breken): "
 
-#: keymap.c:1180
+#: keymap.c:1199
 #, c-format
 msgid "Char = %s, Octal = %o, Decimal = %d"
 msgstr "Teken = %s, Octaal = %o, Decimaal = %d"
@@ -2912,11 +3311,11 @@ msgstr "Teken = %s, Octaal = %o, Decimaal = %d"
 msgid "Integer overflow -- can't allocate memory!"
 msgstr "Integer overflow -- kan geen geheugen alloceren!"
 
-#: lib.c:138 lib.c:153 lib.c:185
+#: lib.c:138 lib.c:153 lib.c:185 safe_asprintf.c:42
 msgid "Out of memory!"
 msgstr "Onvoldoende geheugen!"
 
-#: main.c:72
+#: main.c:76
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
@@ -2927,7 +3326,7 @@ msgstr ""
 "Ga naar <https://gitlab.com/muttmua/mutt/issues> om een programmafout te "
 "melden.\n"
 
-#: main.c:77
+#: main.c:81
 msgid ""
 "Copyright (C) 1996-2016 Michael R. Elkins and others.\n"
 "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
@@ -2939,7 +3338,7 @@ msgstr ""
 "Mutt is vrije software, en u bent vrij om het te verspreiden\n"
 "onder bepaalde voorwaarden; type 'mutt -vv' voor meer informatie.\n"
 
-#: main.c:94
+#: main.c:98
 #, fuzzy
 msgid ""
 "Many others not mentioned here contributed code, fixes,\n"
@@ -2948,7 +3347,7 @@ msgstr ""
 "Vele anderen die hier niet vermeld zijn hebben code, verbeteringen,\n"
 "en suggesties bijgedragen.\n"
 
-#: main.c:98
+#: main.c:102
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -2970,7 +3369,7 @@ msgstr ""
 "    VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL.  Zie de GNU\n"
 "    Algemene Publieke Licentie voor meer details.\n"
 
-#: main.c:108
+#: main.c:112
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -2982,7 +3381,7 @@ msgstr ""
 "    Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
 "    Boston, MA 02110-1301, USA.\n"
 
-#: main.c:127
+#: main.c:131
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -3006,7 +3405,7 @@ msgstr ""
 "          mutt [<opties>] -D\n"
 "          mutt -v[v]\n"
 
-#: main.c:136
+#: main.c:140
 msgid ""
 "options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -3024,11 +3423,11 @@ msgstr ""
 "  -c <adres>\tspecificeer een carbon-copy (CC) adres\n"
 "  -D\t\tdruk de waardes van alle variabelen af op stdout"
 
-#: main.c:145
+#: main.c:149
 msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgstr "  -d <niveau>\tlog debug-uitvoer naar ~/.muttdebug0"
 
-#: main.c:148
+#: main.c:152
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
 "  -e <command>\tspecify a command to be executed after initialization\n"
@@ -3050,7 +3449,7 @@ msgstr ""
 "  -n\t\tzorgt dat Mutt de systeem Muttrc niet inleest\n"
 "  -p\t\troept een uitgesteld bericht op"
 
-#: main.c:158
+#: main.c:162
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3073,7 +3472,7 @@ msgstr ""
 "  -Z\t\topent het eerste postvak met nieuwe berichten, sluit af indien geen\n"
 "  -h\t\tdeze hulptekst"
 
-#: main.c:244
+#: main.c:248
 msgid ""
 "\n"
 "Compile options:"
@@ -3081,64 +3480,54 @@ msgstr ""
 "\n"
 "Opties tijdens compileren:"
 
-#: main.c:582
+#: main.c:586
 msgid "Error initializing terminal."
 msgstr "Kan terminal niet initialiseren."
 
-#: main.c:740
+#: main.c:746
 #, c-format
 msgid "Error: value '%s' is invalid for -d.\n"
 msgstr "Fout: waarde '%s' is een ongeldig voor optie '-d'.\n"
 
-#: main.c:743
+#: main.c:749
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "Debug-informatie op niveau %d.\n"
 
-#: main.c:745
+#: main.c:751
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr "DEBUG-optie is niet beschikbaar: deze wordt genegeerd.\n"
 
-#: main.c:932
-#, c-format
-msgid "%s does not exist. Create it?"
-msgstr "%s bestaat niet. Aanmaken?"
-
-#: main.c:936
-#, c-format
-msgid "Can't create %s: %s."
-msgstr "Kan bestand %s niet aanmaken: %s"
-
-#: main.c:977
+#: main.c:991
 msgid "Failed to parse mailto: link\n"
 msgstr "Kan mailto: koppeling niet verwerken\n"
 
-#: main.c:992
+#: main.c:1006
 msgid "No recipients specified.\n"
 msgstr "Geen ontvangers opgegeven.\n"
 
-#: main.c:1018
+#: main.c:1032
 msgid "Cannot use -E flag with stdin\n"
 msgstr "Optie '-E' gaat niet samen met standaardinvoer\n"
 
-#: main.c:1183
+#: main.c:1196
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: kan bestand niet bijvoegen.\n"
 
-#: main.c:1275
+#: main.c:1285
 msgid "No mailbox with new mail."
 msgstr "Geen postvak met nieuwe berichten."
 
-#: main.c:1289
+#: main.c:1299
 msgid "No incoming mailboxes defined."
 msgstr "Geen postvakken opgegeven."
 
-#: main.c:1317
+#: main.c:1327
 msgid "Mailbox is empty."
 msgstr "Postvak is leeg."
 
-#: mbox.c:131 mbox.c:294 mh.c:1298 mx.c:654
+#: mbox.c:131 mbox.c:294 mh.c:1299 mx.c:654
 #, c-format
 msgid "Reading %s..."
 msgstr "Bezig met het lezen van %s..."
@@ -3160,34 +3549,34 @@ msgstr "Kan bericht niet wegschrijven"
 msgid "Mailbox was corrupted!"
 msgstr "Postvak was beschadigd!"
 
-#: mbox.c:867 mbox.c:1126
+#: mbox.c:868 mbox.c:1124
 msgid "Fatal error!  Could not reopen mailbox!"
 msgstr "Fatale fout!  Kon postvak niet opnieuw openen!"
 
-#: mbox.c:918
+#: mbox.c:920
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
 msgstr "sync: mbox is gewijzigd, maar geen gewijzigde berichten gevonden!"
 
 #. L10N: Displayed before/as a mailbox is being synced
-#: mbox.c:942 mh.c:2007 mx.c:752
+#: mbox.c:943 mh.c:2008 mx.c:752
 #, c-format
 msgid "Writing %s..."
 msgstr "Bezig met het schrijven van %s..."
 
-#: mbox.c:1077
+#: mbox.c:1074
 msgid "Committing changes..."
 msgstr "Wijzigingen doorvoeren..."
 
-#: mbox.c:1112
+#: mbox.c:1108
 #, c-format
 msgid "Write failed!  Saved partial mailbox to %s"
 msgstr "Opslaan is mislukt!  Deel van postvak is opgeslagen als %s"
 
-#: mbox.c:1181
+#: mbox.c:1183
 msgid "Could not reopen mailbox!"
 msgstr "Kan postvak niet opnieuw openen!"
 
-#: mbox.c:1208
+#: mbox.c:1212
 msgid "Reopening mailbox..."
 msgstr "Heropenen van postvak..."
 
@@ -3200,7 +3589,7 @@ msgid "Invalid index number."
 msgstr "Ongeldig Indexnummer."
 
 #: menu.c:455 menu.c:477 menu.c:542 menu.c:585 menu.c:601 menu.c:612 menu.c:623
-#: menu.c:634 menu.c:647 menu.c:660 menu.c:1195
+#: menu.c:634 menu.c:647 menu.c:660 menu.c:1197
 msgid "No entries."
 msgstr "Geen items"
 
@@ -3228,44 +3617,44 @@ msgstr "U bent op het laatste item."
 msgid "You are on the first entry."
 msgstr "U bent op het eerste item."
 
-#: menu.c:859 pager.c:2242 pattern.c:1637
+#: menu.c:861 pager.c:2244 pattern.c:1641
 msgid "Search for: "
 msgstr "Zoek naar: "
 
-#: menu.c:859 pager.c:2242 pattern.c:1637
+#: menu.c:861 pager.c:2244 pattern.c:1641
 msgid "Reverse search for: "
 msgstr "Zoek achteruit naar: "
 
-#: menu.c:903 pager.c:2195 pager.c:2217 pager.c:2337 pattern.c:1759
+#: menu.c:905 pager.c:2196 pager.c:2218 pager.c:2339 pattern.c:1763
 msgid "Not found."
 msgstr "Niet gevonden."
 
-#: menu.c:1058
+#: menu.c:1060
 msgid "No tagged entries."
 msgstr "Geen geselecteerde items."
 
-#: menu.c:1159
+#: menu.c:1161
 msgid "Search is not implemented for this menu."
 msgstr "In dit menu kan niet worden gezocht."
 
-#: menu.c:1164
+#: menu.c:1166
 msgid "Jumping is not implemented for dialogs."
 msgstr "Verspringen is niet mogelijk in menu."
 
-#: menu.c:1198
+#: menu.c:1200
 msgid "Tagging is not supported."
 msgstr "Markeren wordt niet ondersteund."
 
-#: mh.c:1278
+#: mh.c:1279
 #, c-format
 msgid "Scanning %s..."
 msgstr "%s wordt geanalyseerd..."
 
-#: mh.c:1623 mh.c:1716
+#: mh.c:1624 mh.c:1717
 msgid "Could not flush message to disk"
 msgstr "Bericht kon niet naar schijf worden geschreven"
 
-#: mh.c:1670
+#: mh.c:1671
 msgid "_maildir_commit_message(): unable to set time on file"
 msgstr "_maildir_commit_message(): kan bestandstijd niet zetten"
 
@@ -3289,68 +3678,68 @@ msgstr "Fout bij het instellen van de SASL-beveiligingssterkte"
 msgid "Error setting SASL external user name"
 msgstr "Fout bij het instellen van de externe SASL-gebruikersnaam"
 
-#: mutt_socket.c:160
+#: mutt_socket.c:162
 #, c-format
 msgid "Connection to %s closed"
 msgstr "Verbinding met %s beëindigd"
 
-#: mutt_socket.c:279
+#: mutt_socket.c:281
 msgid "SSL is unavailable."
 msgstr "SSL is niet beschikbaar."
 
-#: mutt_socket.c:311
+#: mutt_socket.c:313
 msgid "Preconnect command failed."
 msgstr "Preconnect-commando is mislukt."
 
-#: mutt_socket.c:395 mutt_socket.c:418
+#: mutt_socket.c:397 mutt_socket.c:420
 #, c-format
 msgid "Error talking to %s (%s)"
 msgstr "Verbinding met %s is mislukt (%s)"
 
-#: mutt_socket.c:500 mutt_socket.c:559
+#: mutt_socket.c:502 mutt_socket.c:561
 #, c-format
 msgid "Bad IDN \"%s\"."
 msgstr "Ongeldige IDN \"%s\"."
 
-#: mutt_socket.c:508 mutt_socket.c:567
+#: mutt_socket.c:510 mutt_socket.c:569
 #, c-format
 msgid "Looking up %s..."
 msgstr "%s aan het opzoeken..."
 
-#: mutt_socket.c:518 mutt_socket.c:577
+#: mutt_socket.c:520 mutt_socket.c:579
 #, c-format
 msgid "Could not find the host \"%s\""
 msgstr "Kan adres van server \"%s\" niet achterhalen"
 
-#: mutt_socket.c:524 mutt_socket.c:583
+#: mutt_socket.c:526 mutt_socket.c:585
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Bezig met verbinden met %s..."
 
-#: mutt_socket.c:607
+#: mutt_socket.c:609
 #, c-format
 msgid "Could not connect to %s (%s)."
 msgstr "Kan niet verbinden met %s (%s)."
 
-#: mutt_ssl.c:261 mutt_ssl.c:522
+#: mutt_ssl.c:272 mutt_ssl.c:554
 msgid "Warning: error enabling ssl_verify_partial_chains"
 msgstr ""
 
-#: mutt_ssl.c:342
+#: mutt_ssl.c:358
 msgid "Failed to find enough entropy on your system"
 msgstr "Te weinig entropie op uw systeem gevonden"
 
-#: mutt_ssl.c:371
+#: mutt_ssl.c:387
 #, c-format
 msgid "Filling entropy pool: %s...\n"
 msgstr "Aanvullen van entropieverzameling: %s...\n"
 
-#: mutt_ssl.c:379
+#: mutt_ssl.c:395
 #, c-format
 msgid "%s has insecure permissions!"
 msgstr "%s heeft onveilige rechten!"
 
-#: mutt_ssl.c:398
+#: mutt_ssl.c:414
 msgid "SSL disabled due to the lack of entropy"
 msgstr "SSL is uitgeschakeld vanwege te weinig entropie"
 
@@ -3358,22 +3747,22 @@ msgstr "SSL is uitgeschakeld vanwege te weinig entropie"
 #. *       function SSL_CTX_new().  In this case it returned NULL: an
 #. *       error condition.
 #.
-#: mutt_ssl.c:465
+#: mutt_ssl.c:491
 msgid "Unable to create SSL context"
 msgstr "Aanmaken van SSL-context is mislukt"
 
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:582 mutt_ssl_gnutls.c:426
+#: mutt_ssl.c:614 mutt_ssl_gnutls.c:445
 msgid "Warning: unable to set TLS SNI host name"
 msgstr ""
 
-#: mutt_ssl.c:593
+#: mutt_ssl.c:625
 msgid "I/O error"
 msgstr "Invoer-/uitvoerfout"
 
-#: mutt_ssl.c:602
+#: mutt_ssl.c:634
 #, c-format
 msgid "SSL failed: %s"
 msgstr "SSL is mislukt: %s"
@@ -3382,83 +3771,83 @@ msgstr "SSL is mislukt: %s"
 #. %1$s is version (e.g. "TLSv1.2")
 #. %2$s is cipher_version (e.g. "TLSv1/SSLv3")
 #. %3$s is cipher_name (e.g. "ECDHE-RSA-AES128-GCM-SHA256")
-#: mutt_ssl.c:612
+#: mutt_ssl.c:644
 #, c-format
 msgid "%s connection using %s (%s)"
 msgstr "%s-verbinding via %s (%s)"
 
-#: mutt_ssl.c:741
+#: mutt_ssl.c:774
 msgid "Unknown"
 msgstr "Onbekende fout"
 
-#: mutt_ssl.c:754 mutt_ssl_gnutls.c:613
+#: mutt_ssl.c:787 mutt_ssl_gnutls.c:633
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[kan niet berekend worden]"
 
-#: mutt_ssl.c:772 mutt_ssl_gnutls.c:636
+#: mutt_ssl.c:805 mutt_ssl_gnutls.c:656
 msgid "[invalid date]"
 msgstr "[ongeldige datum]"
 
-#: mutt_ssl.c:841
+#: mutt_ssl.c:874
 msgid "Server certificate is not yet valid"
 msgstr "Certificaat van de server is nog niet geldig"
 
-#: mutt_ssl.c:851
+#: mutt_ssl.c:884
 msgid "Server certificate has expired"
 msgstr "Certificaat van de server is verlopen"
 
-#: mutt_ssl.c:1000
+#: mutt_ssl.c:1033
 msgid "cannot get certificate subject"
 msgstr "kan onderwerp van certificaat niet verkrijgen"
 
-#: mutt_ssl.c:1010 mutt_ssl.c:1019
+#: mutt_ssl.c:1043 mutt_ssl.c:1052
 msgid "cannot get certificate common name"
 msgstr "kan common name van van certificaat niet verkrijgen"
 
-#: mutt_ssl.c:1034
+#: mutt_ssl.c:1067
 #, c-format
 msgid "certificate owner does not match hostname %s"
 msgstr "certificaateigenaar komt niet overeen met naam van de server %s"
 
-#: mutt_ssl.c:1141
+#: mutt_ssl.c:1174
 #, c-format
 msgid "Certificate host check failed: %s"
 msgstr "Controle van servernaam van certificaat is mislukt: %s"
 
-#: mutt_ssl.c:1203 mutt_ssl_gnutls.c:880
+#: mutt_ssl.c:1236 mutt_ssl_gnutls.c:900
 msgid "This certificate belongs to:"
 msgstr "Dit certificaat behoort aan:"
 
-#: mutt_ssl.c:1212 mutt_ssl_gnutls.c:922
+#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:942
 msgid "This certificate was issued by:"
 msgstr "Dit certificaat is uitgegeven door:"
 
-#: mutt_ssl.c:1221 mutt_ssl_gnutls.c:935
+#: mutt_ssl.c:1254 mutt_ssl_gnutls.c:955
 msgid "This certificate is valid"
 msgstr "Dit certificaat is geldig"
 
-#: mutt_ssl.c:1222 mutt_ssl_gnutls.c:938
+#: mutt_ssl.c:1255 mutt_ssl_gnutls.c:958
 #, c-format
 msgid "   from %s"
 msgstr "    van %s"
 
-#: mutt_ssl.c:1225 mutt_ssl_gnutls.c:943
+#: mutt_ssl.c:1258 mutt_ssl_gnutls.c:963
 #, c-format
 msgid "     to %s"
 msgstr "    tot %s"
 
-#: mutt_ssl.c:1232 mutt_ssl_gnutls.c:950
+#: mutt_ssl.c:1265 mutt_ssl_gnutls.c:970
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "SHA1-vingerafdruk: %s"
 
-#: mutt_ssl.c:1238 mutt_ssl.c:1241 mutt_ssl_gnutls.c:956 mutt_ssl_gnutls.c:959
+#: mutt_ssl.c:1271 mutt_ssl.c:1274 mutt_ssl_gnutls.c:976 mutt_ssl_gnutls.c:979
 #, fuzzy
 msgid "SHA256 Fingerprint: "
 msgstr "SHA1-vingerafdruk: %s"
 
-#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:980
+#: mutt_ssl.c:1278 mutt_ssl_gnutls.c:1000
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "SSL-certificaatcontrole (certificaat %d van %d in keten)"
@@ -3469,84 +3858,84 @@ msgstr "SSL-certificaatcontrole (certificaat %d van %d in keten)"
 #. * These prompts are the interactive certificate confirmation prompts for
 #. * an OpenSSL connection.
 #.
-#: mutt_ssl.c:1271
+#: mutt_ssl.c:1304
 msgid "roas"
 msgstr "weas"
 
-#: mutt_ssl.c:1275
+#: mutt_ssl.c:1308
 #, fuzzy
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(w)eigeren, (e)enmalig toelaten, (a)ltijd toelaten, (s)kip"
 
-#: mutt_ssl.c:1277 mutt_ssl_gnutls.c:989
+#: mutt_ssl.c:1310 mutt_ssl_gnutls.c:1009
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(w)eigeren, (e)enmalig toelaten, (a)ltijd toelaten"
 
-#: mutt_ssl.c:1282
+#: mutt_ssl.c:1315
 #, fuzzy
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(w)eigeren, (e)enmalig toelaten, (s)kip"
 
-#: mutt_ssl.c:1284 mutt_ssl_gnutls.c:1000
+#: mutt_ssl.c:1317 mutt_ssl_gnutls.c:1020
 msgid "(r)eject, accept (o)nce"
 msgstr "(w)eigeren, (e)enmalig toelaten"
 
-#: mutt_ssl.c:1317 mutt_ssl_gnutls.c:1059
+#: mutt_ssl.c:1355 mutt_ssl_gnutls.c:1083
 msgid "Warning: Couldn't save certificate"
 msgstr "Waarschuwing: certificaat kan niet bewaard worden"
 
-#: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1064
+#: mutt_ssl.c:1360 mutt_ssl_gnutls.c:1088
 msgid "Certificate saved"
 msgstr "Certificaat wordt bewaard"
 
-#: mutt_ssl_gnutls.c:138 mutt_ssl_gnutls.c:166
+#: mutt_ssl_gnutls.c:139 mutt_ssl_gnutls.c:167
 msgid "Error: no TLS socket open"
 msgstr "Fout: geen TLS-socket open"
 
-#: mutt_ssl_gnutls.c:315 mutt_ssl_gnutls.c:354
+#: mutt_ssl_gnutls.c:329 mutt_ssl_gnutls.c:373
 msgid "All available protocols for TLS/SSL connection disabled"
 msgstr "Alle beschikbare protocollen voor TLS/SSL-verbinding uitgeschakeld"
 
-#: mutt_ssl_gnutls.c:360
+#: mutt_ssl_gnutls.c:379
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
 msgstr ""
 "Expliciete keuze van encryptie-algoritme via $ssl_ciphers wordt niet "
 "ondersteund"
 
-#: mutt_ssl_gnutls.c:478
+#: mutt_ssl_gnutls.c:497
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "SSL/TLS verbinding via %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:704 mutt_ssl_gnutls.c:832
+#: mutt_ssl_gnutls.c:724 mutt_ssl_gnutls.c:852
 msgid "Error initialising gnutls certificate data"
 msgstr "Kan gnutls certificaatgegevens niet initializeren"
 
-#: mutt_ssl_gnutls.c:711 mutt_ssl_gnutls.c:839
+#: mutt_ssl_gnutls.c:731 mutt_ssl_gnutls.c:859
 msgid "Error processing certificate data"
 msgstr "Fout bij het verwerken van certificaatgegevens"
 
-#: mutt_ssl_gnutls.c:966
+#: mutt_ssl_gnutls.c:986
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "WAARSCHUWING: Certificaat van de server is nog niet geldig"
 
-#: mutt_ssl_gnutls.c:968
+#: mutt_ssl_gnutls.c:988
 msgid "WARNING: Server certificate has expired"
 msgstr "WAARSCHUWING: Certificaat van de server is verlopen"
 
-#: mutt_ssl_gnutls.c:970
+#: mutt_ssl_gnutls.c:990
 msgid "WARNING: Server certificate has been revoked"
 msgstr "WAARSCHUWING: Certificaat van de server is herroepen"
 
-#: mutt_ssl_gnutls.c:972
+#: mutt_ssl_gnutls.c:992
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "WAARSCHUWING: Naam van de server komt niet overeen met certificaat"
 
-#: mutt_ssl_gnutls.c:974
+#: mutt_ssl_gnutls.c:994
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "WAARSCHUWING: Ondertekenaar van servercertificaat is geen CA"
 
-#: mutt_ssl_gnutls.c:977
+#: mutt_ssl_gnutls.c:997
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Waarschuwing: het server-certificaat werd ondertekend met een onveilig "
@@ -3558,7 +3947,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:996
+#: mutt_ssl_gnutls.c:1016
 msgid "roa"
 msgstr "wea"
 
@@ -3568,20 +3957,20 @@ msgstr "wea"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1007
+#: mutt_ssl_gnutls.c:1027
 msgid "ro"
 msgstr "we"
 
-#: mutt_ssl_gnutls.c:1095 mutt_ssl_gnutls.c:1130 mutt_ssl_gnutls.c:1140
+#: mutt_ssl_gnutls.c:1120 mutt_ssl_gnutls.c:1155 mutt_ssl_gnutls.c:1165
 msgid "Unable to get certificate from peer"
 msgstr "Kan server certificaat niet verkrijgen"
 
-#: mutt_ssl_gnutls.c:1101
+#: mutt_ssl_gnutls.c:1126
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Fout bij verifiëren van certificaat (%s)"
 
-#: mutt_ssl_gnutls.c:1110
+#: mutt_ssl_gnutls.c:1135
 msgid "Certificate is not X.509"
 msgstr "Certificaat is niet in X.509-formaat"
 
@@ -3603,43 +3992,43 @@ msgstr "Fout in tunnel in communicatie met %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1121
+#: muttlib.c:1154
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Bestand is een map, daarin opslaan? [(j)a, (n)ee, (a)llen]"
 
-#: muttlib.c:1121
+#: muttlib.c:1154
 msgid "yna"
 msgstr "jna"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1140
+#: muttlib.c:1173
 msgid "File is a directory, save under it?"
 msgstr "Bestand is een map, daarin opslaan?"
 
-#: muttlib.c:1144
+#: muttlib.c:1178
 msgid "File under directory: "
 msgstr "Bestandsnaam in map: "
 
-#: muttlib.c:1153
+#: muttlib.c:1192
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Bestand bestaat, (o)verschrijven, (t)oevoegen, (a)nnuleren?"
 
-#: muttlib.c:1153
+#: muttlib.c:1192
 msgid "oac"
 msgstr "ota"
 
-#: muttlib.c:1789
+#: muttlib.c:1865
 msgid "Can't save message to POP mailbox."
 msgstr "Kan het bericht niet opslaan in het POP-postvak."
 
-#: muttlib.c:1798
+#: muttlib.c:1875
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Bericht aan %s toevoegen?"
 
-#: muttlib.c:1810
+#: muttlib.c:1888
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s is geen postvak!"
@@ -3686,55 +4075,55 @@ msgstr "bericht(en) niet verwijderd"
 msgid "Can't open trash folder"
 msgstr "Kan prullenmap niet openen"
 
-#: mx.c:877
+#: mx.c:880
 #, fuzzy, c-format
 msgid "Move %d read messages to %s?"
 msgstr "Gelezen berichten naar %s verplaatsen?"
 
-#: mx.c:894 mx.c:1198
+#: mx.c:897 mx.c:1208
 #, c-format
 msgid "Purge %d deleted message?"
 msgstr "%d als gewist gemarkeerde berichten verwijderen?"
 
-#: mx.c:894 mx.c:1198
+#: mx.c:897 mx.c:1208
 #, c-format
 msgid "Purge %d deleted messages?"
 msgstr "%d als gewist gemarkeerde berichten verwijderen?"
 
-#: mx.c:915
+#: mx.c:918
 #, c-format
 msgid "Moving read messages to %s..."
 msgstr "Gelezen berichten worden naar %s verplaatst..."
 
-#: mx.c:976 mx.c:1189
+#: mx.c:979 mx.c:1199
 msgid "Mailbox is unchanged."
 msgstr "Postvak is niet veranderd."
 
-#: mx.c:1029
+#: mx.c:1035
 #, c-format
 msgid "%d kept, %d moved, %d deleted."
 msgstr "%d bewaard, %d verschoven, %d gewist."
 
-#: mx.c:1032 mx.c:1250
+#: mx.c:1038 mx.c:1260
 #, c-format
 msgid "%d kept, %d deleted."
 msgstr "%d bewaard, %d gewist."
 
-#: mx.c:1173
+#: mx.c:1183
 #, c-format
 msgid " Press '%s' to toggle write"
 msgstr " Druk '%s' om schrijfmode aan/uit te schakelen"
 
-#: mx.c:1175
+#: mx.c:1185
 msgid "Use 'toggle-write' to re-enable write!"
 msgstr "Gebruik 'toggle-write' om schrijven mogelijk te maken!"
 
-#: mx.c:1177
+#: mx.c:1187
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
 msgstr "Postvak is als schrijfbeveiligd gemarkeerd. %s"
 
-#: mx.c:1244
+#: mx.c:1254
 msgid "Mailbox checkpointed."
 msgstr "Postvak is gecontroleerd."
 
@@ -3754,122 +4143,122 @@ msgstr "Bijlagen tonen"
 msgid "Next"
 msgstr "Volgend ber."
 
-#: pager.c:2096 pager.c:2127 pager.c:2159 pager.c:2451
+#: pager.c:2096 pager.c:2127 pager.c:2160 pager.c:2453
 msgid "Bottom of message is shown."
 msgstr "Einde van bericht is weergegeven."
 
-#: pager.c:2112 pager.c:2134 pager.c:2141 pager.c:2148
+#: pager.c:2112 pager.c:2134 pager.c:2141 pager.c:2149
 msgid "Top of message is shown."
 msgstr "Begin van bericht is weergegeven."
 
-#: pager.c:2384
+#: pager.c:2386
 msgid "Help is currently being shown."
 msgstr "Hulp wordt al weergegeven."
 
-#: pager.c:2418
+#: pager.c:2420
 msgid "No more quoted text."
 msgstr "Geen verdere geciteerde text."
 
-#: pager.c:2431
+#: pager.c:2433
 msgid "No more unquoted text after quoted text."
 msgstr "Geen verdere eigen text na geciteerde text."
 
-#: parse.c:600
+#: parse.c:697
 msgid "multipart message has no boundary parameter!"
 msgstr "Multi-part bericht heeft geen \"boundary\" parameter."
 
-#: pattern.c:268 pattern.c:720
+#: pattern.c:272 pattern.c:724
 #, c-format
 msgid "Error in expression: %s"
 msgstr "Fout in expressie: %s"
 
-#: pattern.c:274 pattern.c:725
+#: pattern.c:278 pattern.c:729
 msgid "Empty expression"
 msgstr "Lege expressie"
 
-#: pattern.c:402
+#: pattern.c:406
 #, c-format
 msgid "Invalid day of month: %s"
 msgstr "Ongeldige dag van de maand: %s"
 
-#: pattern.c:416
+#: pattern.c:420
 #, c-format
 msgid "Invalid month: %s"
 msgstr "Ongeldige maand: %s"
 
-#: pattern.c:578
+#: pattern.c:582
 #, c-format
 msgid "Invalid relative date: %s"
 msgstr "Ongeldige maand: %s"
 
-#: pattern.c:849 pattern.c:1017
+#: pattern.c:853 pattern.c:1021
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "Fout in expressie bij: %s"
 
-#: pattern.c:876
+#: pattern.c:880
 #, c-format
 msgid "missing pattern: %s"
 msgstr "ontbrekend patroon: %s"
 
-#: pattern.c:895
+#: pattern.c:899
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "Haakjes kloppen niet: %s"
 
-#: pattern.c:955
+#: pattern.c:959
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: ongeldige patroonopgave"
 
-#: pattern.c:961
+#: pattern.c:965
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c: niet ondersteund in deze modus"
 
-#: pattern.c:974
+#: pattern.c:978
 msgid "missing parameter"
 msgstr "Te weinig parameters"
 
-#: pattern.c:990
+#: pattern.c:994
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "Haakjes kloppen niet: %s"
 
-#: pattern.c:1024
+#: pattern.c:1028
 msgid "empty pattern"
 msgstr "Leeg patroon"
 
-#: pattern.c:1416
+#: pattern.c:1420
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "fout: onbekende operatie %d  (rapporteer deze fout)"
 
-#: pattern.c:1508 pattern.c:1660
+#: pattern.c:1511 pattern.c:1664
 msgid "Compiling search pattern..."
 msgstr "Bezig met het compileren van patroon..."
 
-#: pattern.c:1527
+#: pattern.c:1530
 msgid "Executing command on matching messages..."
 msgstr "Commando wordt uitgevoerd..."
 
-#: pattern.c:1597
+#: pattern.c:1601
 msgid "No messages matched criteria."
 msgstr "Geen berichten voldeden aan de criteria."
 
-#: pattern.c:1695
+#: pattern.c:1699
 msgid "Searching..."
 msgstr "Bezig met zoeken..."
 
-#: pattern.c:1708
+#: pattern.c:1712
 msgid "Search hit bottom without finding match"
 msgstr "Zoeken heeft einde bereikt zonder iets te vinden"
 
-#: pattern.c:1719
+#: pattern.c:1723
 msgid "Search hit top without finding match"
 msgstr "Zoeken heeft begin bereikt zonder iets te vinden"
 
-#: pattern.c:1751
+#: pattern.c:1755
 msgid "Search interrupted."
 msgstr "Het zoeken is onderbroken."
 
@@ -3881,11 +4270,11 @@ msgstr "Geef PGP-wachtwoord in:"
 msgid "PGP passphrase forgotten."
 msgstr "PGP-wachtwoord is vergeten."
 
-#: pgp.c:533
+#: pgp.c:535
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
 msgstr "[-- Fout: Kan geen PGP-subproces starten! --]\n"
 
-#: pgp.c:580 pgp.c:850 pgp.c:999
+#: pgp.c:586 pgp.c:867 pgp.c:1025
 msgid ""
 "[-- End of PGP output --]\n"
 "\n"
@@ -3897,16 +4286,16 @@ msgstr ""
 #. (not encrypting) something and (2) it is a plaintext. So the
 #. message does not mean "You failed to encrypt the message."
 #.
-#: pgp.c:669
+#: pgp.c:674
 #, fuzzy
 msgid "PGP message is not encrypted."
 msgstr "PGP-bericht succesvol ontsleuteld."
 
-#: pgp.c:895
+#: pgp.c:919
 msgid "Internal error.  Please submit a bug report."
 msgstr "*Interne fout*.  Graag rapporteren."
 
-#: pgp.c:956
+#: pgp.c:982
 msgid ""
 "[-- Error: could not create a PGP subprocess! --]\n"
 "\n"
@@ -3914,28 +4303,28 @@ msgstr ""
 "[-- Fout: Kon PGP-subproces niet starten! --]\n"
 "\n"
 
-#: pgp.c:987 pgp.c:1011 smime.c:1950
+#: pgp.c:1013 pgp.c:1037 smime.c:1999
 msgid "Decryption failed"
 msgstr "Ontsleuteling is mislukt"
 
-#: pgp.c:1246
+#: pgp.c:1282
 msgid "Can't open PGP subprocess!"
 msgstr "Kan PGP-subproces niet starten!"
 
-#: pgp.c:1680
+#: pgp.c:1721
 msgid "Can't invoke PGP"
 msgstr "Kan PGP niet aanroepen"
 
-#: pgp.c:1784
+#: pgp.c:1829
 #, c-format
 msgid "PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (o)nderteken, ondert. (a)ls, %s, (g)een, of oppenc (u)it? "
 
-#: pgp.c:1785 pgp.c:1815 pgp.c:1837
+#: pgp.c:1830 pgp.c:1860 pgp.c:1882
 msgid "PGP/M(i)ME"
 msgstr "PGP/M(i)ME"
 
-#: pgp.c:1785 pgp.c:1815 pgp.c:1837
+#: pgp.c:1830 pgp.c:1860 pgp.c:1882
 msgid "(i)nline"
 msgstr "(i)nline"
 
@@ -3943,19 +4332,19 @@ msgstr "(i)nline"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: pgp.c:1791
+#: pgp.c:1836
 msgid "safcoi"
 msgstr "oangui"
 
-#: pgp.c:1796
+#: pgp.c:1841
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (o)nderteken, ondert. (a)ls, (g)een, of oppenc (u)it? "
 
-#: pgp.c:1797
+#: pgp.c:1842
 msgid "safco"
 msgstr "oangu"
 
-#: pgp.c:1814
+#: pgp.c:1859
 #, c-format
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc "
@@ -3963,34 +4352,34 @@ msgid ""
 msgstr ""
 "PGP (v)ersleutel, (o)ndert., ond. (a)ls, (b)eiden, %s, (g)een, opp(e)nc? "
 
-#: pgp.c:1817
+#: pgp.c:1862
 msgid "esabfcoi"
 msgstr "voabngei"
 
-#: pgp.c:1822
+#: pgp.c:1867
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr ""
 "PGP (v)ersleutel, (o)nderteken, ond. (a)ls, (b)eiden, (g)een, opp(e)nc-"
 "modus? "
 
-#: pgp.c:1823
+#: pgp.c:1868
 msgid "esabfco"
 msgstr "voabnge"
 
-#: pgp.c:1836
+#: pgp.c:1881
 #, c-format
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "
 msgstr "PGP (v)ersleutel, (o)nderteken, ond. (a)ls, (b)eiden, %s, of (g)een? "
 
-#: pgp.c:1839
+#: pgp.c:1884
 msgid "esabfci"
 msgstr "voabngi"
 
-#: pgp.c:1844
+#: pgp.c:1889
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (c)lear? "
 msgstr "PGP (v)ersleutel, (o)nderteken, ond. (a)ls, (b)eiden, of (g)een? "
 
-#: pgp.c:1845
+#: pgp.c:1890
 msgid "esabfc"
 msgstr "voabng"
 
@@ -3998,94 +4387,94 @@ msgstr "voabng"
 msgid "Fetching PGP key..."
 msgstr "PGP-sleutel wordt gelezen..."
 
-#: pgpkey.c:491
+#: pgpkey.c:492
 msgid "All matching keys are expired, revoked, or disabled."
 msgstr "Alle overeenkomende sleutels zijn verlopen/ingetrokken."
 
-#: pgpkey.c:533
+#: pgpkey.c:534
 #, c-format
 msgid "PGP keys matching <%s>."
 msgstr "PGP-sleutels voor <%s>."
 
-#: pgpkey.c:535
+#: pgpkey.c:536
 #, c-format
 msgid "PGP keys matching \"%s\"."
 msgstr "PGP-sleutels voor \"%s\"."
 
-#: pgpkey.c:554 pgpkey.c:746
+#: pgpkey.c:553 pgpkey.c:748
 msgid "Can't open /dev/null"
 msgstr "Kan /dev/null niet openen"
 
-#: pgpkey.c:778
+#: pgpkey.c:779
 #, c-format
 msgid "PGP Key %s."
 msgstr "PGP-key %s."
 
-#: pop.c:121 pop_lib.c:211
+#: pop.c:123 pop_lib.c:211
 msgid "Command TOP is not supported by server."
 msgstr "Het TOP commando wordt niet door de server ondersteund."
 
-#: pop.c:148
+#: pop.c:150
 msgid "Can't write header to temporary file!"
 msgstr "Kan de header niet naar een tijdelijk bestand wegschrijven!"
 
-#: pop.c:299 pop_lib.c:213
+#: pop.c:304 pop_lib.c:213
 msgid "Command UIDL is not supported by server."
 msgstr "Het UIDL commando wordt niet door de server ondersteund."
 
-#: pop.c:319
+#: pop.c:324
 #, c-format
 msgid "%d messages have been lost. Try reopening the mailbox."
 msgstr "%d berichten zijn verloren. Probeer het postvak te heropenen."
 
-#: pop.c:434 pop.c:848
+#: pop.c:439 pop.c:859
 #, c-format
 msgid "%s is an invalid POP path"
 msgstr "%s is een ongeldig POP-pad"
 
-#: pop.c:478
+#: pop.c:483
 msgid "Fetching list of messages..."
 msgstr "Berichtenlijst ophalen..."
 
-#: pop.c:636
+#: pop.c:643
 msgid "Can't write message to temporary file!"
 msgstr "Kan het bericht niet naar een tijdelijk bestand wegschrijven"
 
-#: pop.c:709
+#: pop.c:720
 msgid "Marking messages deleted..."
 msgstr "Berichten worden gemarkeerd voor verwijdering..."
 
-#: pop.c:787 pop.c:868
+#: pop.c:798 pop.c:879
 msgid "Checking for new messages..."
 msgstr "Controleren op nieuwe berichten..."
 
-#: pop.c:832
+#: pop.c:843
 msgid "POP host is not defined."
 msgstr "Er is geen POP-server gespecificeerd."
 
-#: pop.c:896
+#: pop.c:907
 msgid "No new mail in POP mailbox."
 msgstr "Geen nieuwe berichten op de POP-server."
 
-#: pop.c:903
+#: pop.c:914
 msgid "Delete messages from server?"
 msgstr "Berichten op de server verwijderen?"
 
-#: pop.c:905
+#: pop.c:916
 #, c-format
 msgid "Reading new messages (%d bytes)..."
 msgstr "Bezig met het lezen van nieuwe berichten (%d bytes)..."
 
-#: pop.c:947
+#: pop.c:958
 msgid "Error while writing mailbox!"
 msgstr "Er is een fout opgetreden tijdens het schrijven van het postvak!"
 
-#: pop.c:951
+#: pop.c:962
 #, c-format
 msgid "%s [%d of %d messages read]"
 msgstr "%s [%d van de %d berichten gelezen]"
 
-#: pop.c:974 pop_lib.c:379
+#: pop.c:985 pop_lib.c:379
 msgid "Server closed connection!"
 msgstr "Server heeft verbinding gesloten!"
 
@@ -4108,11 +4497,6 @@ msgstr "APOP authenticatie geweigerd."
 #: pop_auth.c:291
 msgid "Command USER is not supported by server."
 msgstr "Het UIDL commando wordt niet door de server ondersteund."
-
-#: pop_auth.c:334 smtp.c:694
-#, fuzzy
-msgid "Authenticating (OAUTHBEARER)..."
-msgstr "Authenticatie (SASL)..."
 
 #: pop_auth.c:373
 #, fuzzy
@@ -4145,27 +4529,27 @@ msgstr "Berichtenindex wordt geverifieerd..."
 msgid "Connection lost. Reconnect to POP server?"
 msgstr "Verbinding is verbroken.  Opnieuw verbinden met POP-server?"
 
-#: postpone.c:165
+#: postpone.c:170
 msgid "Postponed Messages"
 msgstr "Uitgestelde berichten"
 
-#: postpone.c:248 postpone.c:257
+#: postpone.c:252 postpone.c:261
 msgid "No postponed messages."
 msgstr "Geen uitgestelde berichten."
 
-#: postpone.c:459 postpone.c:480 postpone.c:514
+#: postpone.c:477 postpone.c:498 postpone.c:532
 msgid "Illegal crypto header"
 msgstr "Ongeldige crypto header"
 
-#: postpone.c:500
+#: postpone.c:518
 msgid "Illegal S/MIME header"
 msgstr "Ongeldige S/MIME header"
 
-#: postpone.c:598 postpone.c:711 postpone.c:734
+#: postpone.c:616 postpone.c:731 postpone.c:754
 msgid "Decrypting message..."
 msgstr "Bericht wordt ontsleuteld..."
 
-#: postpone.c:602 postpone.c:716 postpone.c:739
+#: postpone.c:620 postpone.c:736 postpone.c:759
 msgid "Decryption failed."
 msgstr "Ontsleuteling is mislukt."
 
@@ -4177,19 +4561,19 @@ msgstr "Nieuwe query"
 msgid "Make Alias"
 msgstr "Afkorting maken"
 
-#: query.c:117
+#: query.c:118
 msgid "Waiting for response..."
 msgstr "Wacht op antwoord..."
 
-#: query.c:263 query.c:292
+#: query.c:266 query.c:295
 msgid "Query command not defined."
 msgstr "Query-commando niet gedefinieerd."
 
-#: query.c:322 query.c:355
+#: query.c:325 query.c:358
 msgid "Query: "
 msgstr "Zoekopdracht: "
 
-#: query.c:330 query.c:364
+#: query.c:333 query.c:367
 #, c-format
 msgid "Query '%s'"
 msgstr "Zoekopdracht '%s'"
@@ -4202,77 +4586,77 @@ msgstr "Filteren"
 msgid "Print"
 msgstr "Druk af"
 
-#: recvattach.c:481
+#: recvattach.c:491
 msgid "Saving..."
 msgstr "Bezig met opslaan..."
 
-#: recvattach.c:484 recvattach.c:578
+#: recvattach.c:495 recvattach.c:600
 msgid "Attachment saved."
 msgstr "Bijlage opgeslagen."
 
-#: recvattach.c:590
+#: recvattach.c:618
 #, c-format
 msgid "WARNING!  You are about to overwrite %s, continue?"
 msgstr "Waarschuwing! Bestand %s bestaat al. Overschrijven?"
 
-#: recvattach.c:609
+#: recvattach.c:635
 msgid "Attachment filtered."
 msgstr "Bijlage gefilterd."
 
-#: recvattach.c:683
+#: recvattach.c:713
 msgid "Filter through: "
 msgstr "Filter door: "
 
-#: recvattach.c:683
+#: recvattach.c:713
 msgid "Pipe to: "
 msgstr "Doorgeven aan (pipe): "
 
-#: recvattach.c:721
+#: recvattach.c:751
 #, c-format
 msgid "I don't know how to print %s attachments!"
 msgstr "Kan %s-bijlagen niet afdrukken!"
 
-#: recvattach.c:787
+#: recvattach.c:821
 msgid "Print tagged attachment(s)?"
 msgstr "Gemarkeerde bericht(en) afdrukken?"
 
-#: recvattach.c:787
+#: recvattach.c:821
 msgid "Print attachment?"
 msgstr "Bijlage afdrukken?"
 
-#: recvattach.c:847
+#: recvattach.c:881
 msgid "Structural changes to decrypted attachments are not supported"
 msgstr ""
 
-#: recvattach.c:1004
+#: recvattach.c:1039
 msgid "Can't decrypt encrypted message!"
 msgstr "Kan het versleutelde bericht niet ontsleutelen!"
 
-#: recvattach.c:1131
+#: recvattach.c:1166
 msgid "Attachments"
 msgstr "Bijlagen"
 
-#: recvattach.c:1169
+#: recvattach.c:1204
 msgid "There are no subparts to show!"
 msgstr "Er zijn geen onderdelen om te laten zien!"
 
-#: recvattach.c:1224
+#: recvattach.c:1259
 msgid "Can't delete attachment from POP server."
 msgstr "Kan de bijlage niet van de POP-server verwijderen."
 
-#: recvattach.c:1232
+#: recvattach.c:1267
 msgid "Deletion of attachments from encrypted messages is unsupported."
 msgstr ""
 "Het wissen van bijlagen uit versleutelde berichten wordt niet ondersteund."
 
-#: recvattach.c:1238
+#: recvattach.c:1273
 msgid ""
 "Deletion of attachments from signed messages may invalidate the signature."
 msgstr ""
 "Het wissen van bijlagen uit versleutelde berichten kan de ondertekening "
 "ongeldig maken."
 
-#: recvattach.c:1255 recvattach.c:1272
+#: recvattach.c:1290 recvattach.c:1307
 msgid "Only deletion of multipart attachments is supported."
 msgstr "Kan alleen multipart-bijlagen wissen."
 
@@ -4288,24 +4672,24 @@ msgstr "Er is een fout opgetreden tijdens het doorsturen van het bericht!"
 msgid "Error bouncing messages!"
 msgstr "Er is een fout opgetreden tijdens het doorsturen van de berichten!"
 
-#: recvcmd.c:447
+#: recvcmd.c:448
 #, c-format
 msgid "Can't open temporary file %s."
 msgstr "Kan tijdelijk bestand %s niet aanmaken."
 
-#: recvcmd.c:478
+#: recvcmd.c:479
 msgid "Forward as attachments?"
 msgstr "Doorsturen als bijlagen?"
 
-#: recvcmd.c:492
+#: recvcmd.c:493
 msgid "Can't decode all tagged attachments.  MIME-forward the others?"
 msgstr "Kan niet alle bijlagen decoderen. De rest doorsturen met MIME?"
 
-#: recvcmd.c:618
+#: recvcmd.c:621
 msgid "Forward MIME encapsulated?"
 msgstr "Doorsturen als MIME-bijlage?"
 
-#: recvcmd.c:626 recvcmd.c:921
+#: recvcmd.c:629 recvcmd.c:926
 #, c-format
 msgid "Can't create %s."
 msgstr "Kan bestand %s niet aanmaken."
@@ -4313,20 +4697,20 @@ msgstr "Kan bestand %s niet aanmaken."
 #. L10N: You will see this error message if you invoke <compose-to-sender>
 #. when you are on a normal attachment.
 #.
-#: recvcmd.c:720
+#: recvcmd.c:727
 #, fuzzy
 msgid "You may only compose to sender with message/rfc822 parts."
 msgstr "U kunt alleen message/rfc882-gedeelten doorsturen!"
 
-#: recvcmd.c:794
+#: recvcmd.c:801
 msgid "Can't find any tagged messages."
 msgstr "Kan geen geselecteerde berichten vinden."
 
-#: recvcmd.c:815 send.c:855
+#: recvcmd.c:822 send.c:862
 msgid "No mailing lists found!"
 msgstr "Geen mailing-lists gevonden!"
 
-#: recvcmd.c:900
+#: recvcmd.c:907
 msgid "Can't decode all tagged attachments.  MIME-encapsulate the others?"
 msgstr "Kan niet alle bijlagen decoderen. De rest inpakken met MIME?"
 
@@ -4337,10 +4721,6 @@ msgstr "Toevoegen"
 #: remailer.c:487
 msgid "Insert"
 msgstr "Invoegen"
-
-#: remailer.c:488
-msgid "Delete"
-msgstr "Verwijderen"
 
 #: remailer.c:490
 msgid "OK"
@@ -4399,11 +4779,11 @@ msgstr "Er is een fout opgetreden tijdens het versturen van het bericht."
 msgid "Improperly formatted entry for type %s in \"%s\" line %d"
 msgstr "Ongeldig geformuleerde entry voor type %s in \"%s\", regel %d"
 
-#: rfc1524.c:427
+#: rfc1524.c:437
 msgid "No mailcap path specified"
 msgstr "Geen mailcap-pad opgegeven"
 
-#: rfc1524.c:455
+#: rfc1524.c:468
 #, c-format
 msgid "mailcap entry for type %s not found"
 msgstr "Kan geen mailcap-entry voor %s vinden."
@@ -4420,11 +4800,11 @@ msgstr "score: te veel argumenten"
 msgid "Error: score: invalid number"
 msgstr "Fout: score: ongeldig getal"
 
-#: send.c:255
+#: send.c:261
 msgid "No subject, abort?"
 msgstr "Geen onderwerp, afbreken?"
 
-#: send.c:257
+#: send.c:263
 msgid "No subject, aborting."
 msgstr "Geen onderwerp. Operatie afgebroken."
 
@@ -4436,7 +4816,7 @@ msgstr "Geen onderwerp. Operatie afgebroken."
 #. message contents, but other attachment, such as PDF files, will also
 #. be added as attachments to the new mail, if this is answered yes.
 #.
-#: send.c:440
+#: send.c:447
 #, fuzzy
 msgid "Forward attachments?"
 msgstr "Doorsturen als bijlagen?"
@@ -4444,46 +4824,55 @@ msgstr "Doorsturen als bijlagen?"
 #. L10N:
 #. Asks whether the user respects the reply-to header.
 #. If she says no, mutt will reply to the from header's address instead.
-#: send.c:610
+#: send.c:617
 #, c-format
 msgid "Reply to %s%s?"
 msgstr "Reactie sturen naar %s%s?"
 
-#: send.c:645
+#: send.c:652
 #, c-format
 msgid "Follow-up to %s%s?"
 msgstr "Reactie sturen naar %s%s?"
 
-#: send.c:830
+#: send.c:837
 msgid "No tagged messages are visible!"
 msgstr "Geen gemarkeerde berichten zichtbaar!"
 
-#: send.c:884
+#: send.c:891
 msgid "Include message in reply?"
 msgstr "Bericht in antwoord citeren?"
 
-#: send.c:889
+#: send.c:896
 msgid "Including quoted message..."
 msgstr "Geciteerde bericht wordt toegevoegd..."
 
-#: send.c:899
+#: send.c:906
 msgid "Could not include all requested messages!"
 msgstr "Kon niet alle berichten citeren!"
 
-#: send.c:913
+#: send.c:920
 msgid "Forward as attachment?"
 msgstr "Doorsturen als bijlage?"
 
-#: send.c:917
+#: send.c:924
 msgid "Preparing forwarded message..."
 msgstr "Voorbereiden door te sturen bericht..."
 
-#: send.c:1187
+#. L10N:
+#. This is the query for the $send_multipart_alternative quadoption.
+#. Answering yes generates an alternative content using
+#. $send_multipart_alternative_filter
+#.
+#: send.c:1122
+msgid "Generate multipart/alternative content?"
+msgstr ""
+
+#: send.c:1238
 #, fuzzy
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "%c: niet ondersteund in deze modus"
 
-#: send.c:1203
+#: send.c:1271
 msgid "Save attachments in Fcc?"
 msgstr "Bijlages opslaan in Fcc?"
 
@@ -4493,7 +4882,7 @@ msgstr "Bijlages opslaan in Fcc?"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1259
+#: send.c:1331
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 
@@ -4502,7 +4891,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1265
+#: send.c:1337
 msgid "rms"
 msgstr ""
 
@@ -4510,131 +4899,150 @@ msgstr ""
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1273
+#: send.c:1345
 #, fuzzy
 msgid "Fcc mailbox"
 msgstr "Open postvak"
 
-#: send.c:1450
+#: send.c:1524
 msgid "Cannot postpone.  $postponed is unset"
 msgstr ""
 
-#: send.c:1562
+#: send.c:1641
 msgid "Recall postponed message?"
 msgstr "Uigesteld bericht hervatten?"
 
-#: send.c:1815
+#: send.c:1905
 msgid "Edit forwarded message?"
 msgstr "Doorgestuurd bericht wijzigen?"
 
-#: send.c:1864
+#: send.c:1942
 msgid "Abort unmodified message?"
 msgstr "Uitgesteld bericht afbreken?"
 
-#: send.c:1866
+#: send.c:1944
 msgid "Aborted unmodified message."
 msgstr "Bericht werd niet veranderd. Operatie afgebroken."
 
-#: send.c:1971
+#: send.c:2062
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 
-#: send.c:2016
+#: send.c:2111
 msgid "Message postponed."
 msgstr "Bericht uitgesteld."
 
-#: send.c:2027
+#: send.c:2122
 msgid "No recipients are specified!"
 msgstr "Er zijn geen geadresseerden opgegeven!"
 
-#: send.c:2032
+#: send.c:2127
 msgid "No recipients were specified."
 msgstr "Er werden geen geadresseerden opgegeven!"
 
-#: send.c:2048
+#: send.c:2143
 msgid "No subject, abort sending?"
 msgstr "Geen onderwerp. Versturen afbreken?"
 
-#: send.c:2052
+#: send.c:2147
 msgid "No subject specified."
 msgstr "Geen onderwerp."
 
-#: send.c:2066
+#: send.c:2161
 #, fuzzy
 msgid "No attachments, abort sending?"
 msgstr "Geen onderwerp. Versturen afbreken?"
 
-#: send.c:2069
+#: send.c:2164
 msgid "Attachment referenced in message is missing"
 msgstr ""
 
-#: send.c:2132 smtp.c:191
+#: send.c:2236 smtp.c:191
 msgid "Sending message..."
 msgstr "Versturen van bericht..."
 
-#: send.c:2164
+#: send.c:2274
 msgid "Could not send the message."
 msgstr "Bericht kon niet verstuurd worden."
 
-#: send.c:2173
+#: send.c:2284
 msgid "Mail sent."
 msgstr "Bericht verstuurd."
 
-#: send.c:2173
+#: send.c:2284
 msgid "Sending in background."
 msgstr "Bericht wordt op de achtergrond verstuurd."
 
-#: sendlib.c:443
+#: sendlib.c:454
 msgid "No boundary parameter found! [report this error]"
 msgstr "Geen 'boundary parameter' gevonden! [meldt deze fout!]"
 
-#: sendlib.c:473
+#: sendlib.c:485
 #, c-format
 msgid "%s no longer exists!"
 msgstr "%s bestaat niet meer!"
 
-#: sendlib.c:901
+#: sendlib.c:913
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s is geen normaal bestand."
 
-#: sendlib.c:1074
+#: sendlib.c:1084
 #, c-format
 msgid "Could not open %s"
 msgstr "Kan %s niet openen."
 
-#: sendlib.c:2421
+#. L10N:
+#. The first line of output from $send_multipart_alternative_filter
+#. should be a mime type, e.g. text/html.  This error is generated
+#. if that is missing.
+#.
+#: sendlib.c:1440
+#, c-format
+msgid "Missing mime type from output of \"%s\"!"
+msgstr ""
+
+#. L10N:
+#. The second line of output from $send_multipart_alternative_filter
+#. should be a blank line.  This error is generated if the blank line
+#. is missing.
+#.
+#: sendlib.c:1452
+#, c-format
+msgid "Missing blank line separator from output of \"%s\"!"
+msgstr ""
+
+#. L10N:
+#. Some clever people may try to generate a multipart/mixed
+#. "alternative" using $send_multipart_alternative_filter.  The
+#. actual sending for this will not work, because the data
+#. structures will not be properly generated.  To preempt bug
+#. reports, this error is displayed, and the generation is blocked
+#. at the filter level.
+#.
+#: sendlib.c:1486
+msgid ""
+"$send_multipart_alternative_filter does not support multipart type "
+"generation."
+msgstr ""
+
+#: sendlib.c:2627
 msgid "$sendmail must be set in order to send mail."
 msgstr "$sendmail moet ingesteld zijn om mail te kunnen versturen."
 
-#: sendlib.c:2520
+#: sendlib.c:2726
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "Fout %d opgetreden tijdens versturen van bericht: %s"
 
-#: sendlib.c:2526
+#: sendlib.c:2732
 msgid "Output of the delivery process"
 msgstr "Uitvoer van het afleverings proces"
 
-#: sendlib.c:2684
+#: sendlib.c:2894
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "Ongeldige IDN %s tijdens maken resent-from header."
-
-#: signal.c:43
-#, c-format
-msgid "%s...  Exiting.\n"
-msgstr "%s... Mutt wordt afgesloten.\n"
-
-#: signal.c:46 signal.c:49
-#, c-format
-msgid "Caught %s...  Exiting.\n"
-msgstr "Signaal %s...\n"
-
-#: signal.c:51
-#, c-format
-msgid "Caught signal %d...  Exiting.\n"
-msgstr "Signaal %d...\n"
 
 #: smime.c:141
 msgid "Enter S/MIME passphrase:"
@@ -4677,45 +5085,45 @@ msgstr "S/MIME certficiaten voor \"%s\"."
 msgid "ID is not trusted."
 msgstr "Dit ID wordt niet vertrouwd."
 
-#: smime.c:776
+#: smime.c:779
 msgid "Enter keyID: "
 msgstr "Geef keyID: "
 
-#: smime.c:923
+#: smime.c:926
 #, c-format
 msgid "No (valid) certificate found for %s."
 msgstr "Geen (geldig) certificaat gevonden voor %s."
 
-#: smime.c:976 smime.c:1006 smime.c:1073 smime.c:1117 smime.c:1182 smime.c:1257
+#: smime.c:983 smime.c:1013 smime.c:1082 smime.c:1118 smime.c:1194 smime.c:1276
 msgid "Error: unable to create OpenSSL subprocess!"
 msgstr "Fout: kan geen OpenSSL-subproces starten!"
 
-#: smime.c:1245
+#: smime.c:1264
 msgid "Label for certificate: "
 msgstr "Label voor certificaat: "
 
-#: smime.c:1335
+#: smime.c:1356
 msgid "no certfile"
 msgstr "geen certfile"
 
-#: smime.c:1338
+#: smime.c:1359
 msgid "no mbox"
 msgstr "geen mbox"
 
-#: smime.c:1482 smime.c:1641
+#: smime.c:1501 smime.c:1675
 msgid "No output from OpenSSL..."
 msgstr "Geen uitvoer van OpenSSL..."
 
-#: smime.c:1551
+#: smime.c:1586
 msgid "Can't sign: No key specified. Use Sign As."
 msgstr ""
 "Kan niet ondertekenen: geen sleutel gegeven.  Gebruik Ondertekenen Als."
 
-#: smime.c:1603
+#: smime.c:1639
 msgid "Can't open OpenSSL subprocess!"
 msgstr "Kan OpenSSL-subproces niet starten!"
 
-#: smime.c:1809 smime.c:1932
+#: smime.c:1857 smime.c:1981
 msgid ""
 "[-- End of OpenSSL output --]\n"
 "\n"
@@ -4723,23 +5131,23 @@ msgstr ""
 "[-- Einde van OpenSSL-uitvoer --]\n"
 "\n"
 
-#: smime.c:1891 smime.c:1902
+#: smime.c:1941 smime.c:1951
 msgid "[-- Error: unable to create OpenSSL subprocess! --]\n"
 msgstr "[-- Fout: Kan geen OpenSSL-subproces starten! --]\n"
 
-#: smime.c:1936
+#: smime.c:1985
 msgid "[-- The following data is S/MIME encrypted --]\n"
 msgstr ""
 "[-- De volgende gegevens zijn S/MIME versleuteld --]\n"
 "\n"
 
-#: smime.c:1939
+#: smime.c:1988
 msgid "[-- The following data is S/MIME signed --]\n"
 msgstr ""
 "[-- De volgende gegevens zijn S/MIME ondertekend --]\n"
 "\n"
 
-#: smime.c:2036
+#: smime.c:2085
 msgid ""
 "\n"
 "[-- End of S/MIME encrypted data. --]\n"
@@ -4747,7 +5155,7 @@ msgstr ""
 "\n"
 "[-- Einde van S/MIME versleutelde data --]\n"
 
-#: smime.c:2038
+#: smime.c:2087
 msgid ""
 "\n"
 "[-- End of S/MIME signed data. --]\n"
@@ -4755,7 +5163,7 @@ msgstr ""
 "\n"
 "[-- Einde van S/MIME ondertekende gegevens --]\n"
 
-#: smime.c:2173
+#: smime.c:2241
 msgid ""
 "S/MIME (s)ign, encrypt (w)ith, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr ""
@@ -4765,11 +5173,11 @@ msgstr ""
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the two following letter sequences.
-#: smime.c:2178
+#: smime.c:2246
 msgid "swafco"
 msgstr "omabnge"
 
-#: smime.c:2187
+#: smime.c:2255
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, (c)lear, or "
 "(o)ppenc mode? "
@@ -4777,49 +5185,49 @@ msgstr ""
 "S/MIME (v)ersl, (o)ndert, versl. (m)et, ond. (a)ls, (b)eiden, (g)een, "
 "opp(e)nc? "
 
-#: smime.c:2188
+#: smime.c:2256
 msgid "eswabfco"
 msgstr "vomabnge"
 
-#: smime.c:2196
+#: smime.c:2264
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, or (c)lear? "
 msgstr ""
 "S/MIME (v)ersleutel, (o)ndert, versl. (m)et, ond. (a)ls, (b)eiden, (g)een? "
 
-#: smime.c:2197
+#: smime.c:2265
 msgid "eswabfc"
 msgstr "vomabgg"
 
-#: smime.c:2218
+#: smime.c:2286
 msgid "Choose algorithm family: 1: DES, 2: RC2, 3: AES, or (c)lear? "
 msgstr "Kies een algoritmefamilie: 1: DES, 2: RC2, 3: AES, of (g)een? "
 
-#: smime.c:2221
+#: smime.c:2289
 msgid "drac"
 msgstr "drag"
 
-#: smime.c:2224
+#: smime.c:2292
 msgid "1: DES, 2: Triple-DES "
 msgstr "1: DES, 2: Triple-DES "
 
-#: smime.c:2225
+#: smime.c:2293
 msgid "dt"
 msgstr "dt"
 
-#: smime.c:2237
+#: smime.c:2305
 msgid "1: RC2-40, 2: RC2-64, 3: RC2-128 "
 msgstr "1: RC2-40, 2: RC2-64, 3: RC2-128 "
 
-#: smime.c:2238
+#: smime.c:2306
 msgid "468"
 msgstr "468"
 
-#: smime.c:2253
+#: smime.c:2321
 msgid "1: AES128, 2: AES192, 3: AES256 "
 msgstr "1: AES128, 2: AES192, 3: AES256 "
 
-#: smime.c:2254
+#: smime.c:2322
 msgid "895"
 msgstr "895"
 
@@ -4934,1274 +5342,1357 @@ msgstr "schakel weergeven van onderdelen aan/uit"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:22
+msgid "manage autocrypt accounts"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:25
+msgid "create a new autocrypt account"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:28
+#, fuzzy
+msgid "delete the current account"
+msgstr "verwijder huidig item"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:31
+msgid "toggle the current account active/inactive"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:34
+msgid "toggle the current account prefer-encrypt flag"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:37
 msgid "move to the bottom of the page"
 msgstr "naar het einde van deze pagina"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:25
+#: ../keymap_alldefs.h:40
 msgid "remail a message to another user"
 msgstr "bericht opnieuw versturen naar een andere gebruiker"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:28
+#: ../keymap_alldefs.h:43
 msgid "select a new file in this directory"
 msgstr "kies een nieuw bestand in deze map"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:31
+#: ../keymap_alldefs.h:46
 msgid "view file"
 msgstr "toon bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:34
+#: ../keymap_alldefs.h:49
 msgid "display the currently selected file's name"
 msgstr "toon de bestandsnaam van het huidige bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:37
+#: ../keymap_alldefs.h:52
 msgid "subscribe to current mailbox (IMAP only)"
 msgstr "aanmelden voor huidig postvak (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:40
+#: ../keymap_alldefs.h:55
 msgid "unsubscribe from current mailbox (IMAP only)"
 msgstr "afmelden voor huidig postvak (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:43
+#: ../keymap_alldefs.h:58
 msgid "toggle view all/subscribed mailboxes (IMAP only)"
 msgstr "omschakelen van weergave alle/aangemelde postvakken (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:46
+#: ../keymap_alldefs.h:61
 msgid "list mailboxes with new mail"
 msgstr "toon postvakken met nieuwe berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:49
+#: ../keymap_alldefs.h:64
 msgid "change directories"
 msgstr "verander directories"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:52
+#: ../keymap_alldefs.h:67
 msgid "check mailboxes for new mail"
 msgstr "controleer postvakken op nieuwe berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:55
+#: ../keymap_alldefs.h:70
 msgid "attach file(s) to this message"
 msgstr "voeg bestand(en) aan dit bericht toe"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:58
+#: ../keymap_alldefs.h:73
 msgid "attach message(s) to this message"
 msgstr "voeg bericht(en) aan dit bericht toe"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:61
+#: ../keymap_alldefs.h:76
+msgid "show autocrypt compose menu options"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:79
 msgid "edit the BCC list"
 msgstr "bewerk de BCC-lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:64
+#: ../keymap_alldefs.h:82
 msgid "edit the CC list"
 msgstr "bewerk de CC-lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:67
+#: ../keymap_alldefs.h:85
 msgid "edit attachment description"
 msgstr "bewerk de omschrijving van een bijlage"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:70
+#: ../keymap_alldefs.h:88
 msgid "edit attachment transfer-encoding"
 msgstr "bewerk de transport-codering van een bijlage"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:73
+#: ../keymap_alldefs.h:91
 msgid "enter a file to save a copy of this message in"
 msgstr "kopieer bericht naar bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:76
+#: ../keymap_alldefs.h:94
 msgid "edit the file to be attached"
 msgstr "bewerk het bij te voegen bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:79
+#: ../keymap_alldefs.h:97
 msgid "edit the from field"
 msgstr "bewerk het From-veld"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:82
+#: ../keymap_alldefs.h:100
 msgid "edit the message with headers"
 msgstr "bewerk het bericht (inclusief header)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:85
+#: ../keymap_alldefs.h:103
 msgid "edit the message"
 msgstr "bewerk het bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:88
+#: ../keymap_alldefs.h:106
 msgid "edit attachment using mailcap entry"
 msgstr "bewerk bijlage volgens mailcap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:91
+#: ../keymap_alldefs.h:109
 msgid "edit the Reply-To field"
 msgstr "bewerk Reply-To-veld"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:94
+#: ../keymap_alldefs.h:112
 msgid "edit the subject of this message"
 msgstr "bewerk onderwerp (Subject) van dit bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:97
+#: ../keymap_alldefs.h:115
 msgid "edit the TO list"
 msgstr "bewerk ontvangers (To-veld)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:100
+#: ../keymap_alldefs.h:118
 msgid "create a new mailbox (IMAP only)"
 msgstr "maak een nieuw postvak aan (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:103
+#: ../keymap_alldefs.h:121
 msgid "edit attachment content type"
 msgstr "bewerk type van bijlage"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:106
+#: ../keymap_alldefs.h:124
 msgid "get a temporary copy of an attachment"
 msgstr "maak een tijdelijke kopie van de bijlage"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:109
+#: ../keymap_alldefs.h:127
 msgid "run ispell on the message"
 msgstr "controleer spelling via ispell"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:112
+#: ../keymap_alldefs.h:130
 msgid "compose new attachment using mailcap entry"
 msgstr "maak nieuwe bijlage aan volgens mailcap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:115
+#: ../keymap_alldefs.h:133
 msgid "toggle recoding of this attachment"
 msgstr "hercodering van deze bijlage omschakelen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:118
+#: ../keymap_alldefs.h:136
 msgid "save this message to send later"
 msgstr "sla dit bericht op om later te versturen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:121
+#: ../keymap_alldefs.h:139
 msgid "send attachment with a different name"
 msgstr "verstuur bijlage met andere naam"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:124
+#: ../keymap_alldefs.h:142
 msgid "rename/move an attached file"
 msgstr "hernoem/verplaats een toegevoegd bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:127
+#: ../keymap_alldefs.h:145
 msgid "send the message"
 msgstr "verstuur het bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:130
+#: ../keymap_alldefs.h:148
 #, fuzzy
 msgid "compose new message to the current message sender"
 msgstr "koppel gemarkeerd bericht met het huidige"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:133
+#: ../keymap_alldefs.h:151
 msgid "toggle disposition between inline/attachment"
 msgstr "bijvoeging omschakelen tussen in bericht/als bijlage"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:136
+#: ../keymap_alldefs.h:154
 msgid "toggle whether to delete file after sending it"
 msgstr "kies of bestand na versturen gewist wordt"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:139
+#: ../keymap_alldefs.h:157
 msgid "update an attachment's encoding info"
 msgstr "coderingsinfo van een bijlage bijwerken"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:142
+#: ../keymap_alldefs.h:160
+msgid "view multipart/alternative"
+msgstr ""
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:163
+#, fuzzy
+msgid "view multipart/alternative as text"
+msgstr "toon bijlage als tekst"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:166
+#, fuzzy
+msgid "view multipart/alternative using mailcap"
+msgstr "weergave van bijlage via mailcap afdwingen"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:169
 msgid "write the message to a folder"
 msgstr "schrijf het bericht naar een postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:145
+#: ../keymap_alldefs.h:172
 msgid "copy a message to a file/mailbox"
 msgstr "kopieer bericht naar bestand/postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:148
+#: ../keymap_alldefs.h:175
 msgid "create an alias from a message sender"
 msgstr "maak een afkorting van de afzender"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:151
+#: ../keymap_alldefs.h:178
 msgid "move entry to bottom of screen"
 msgstr "verplaats item naar onderkant van scherm"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:154
+#: ../keymap_alldefs.h:181
 msgid "move entry to middle of screen"
 msgstr "verplaats item naar midden van scherm"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:157
+#: ../keymap_alldefs.h:184
 msgid "move entry to top of screen"
 msgstr "verplaats item naar bovenkant van scherm"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:160
+#: ../keymap_alldefs.h:187
 msgid "make decoded (text/plain) copy"
 msgstr "maak gedecodeerde (text/plain) kopie"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:163
+#: ../keymap_alldefs.h:190
 msgid "make decoded copy (text/plain) and delete"
 msgstr "maak gedecodeerde kopie (text/plain) en verwijder"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:166
+#: ../keymap_alldefs.h:193
 msgid "delete the current entry"
 msgstr "verwijder huidig item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:169
+#: ../keymap_alldefs.h:196
 msgid "delete the current mailbox (IMAP only)"
 msgstr "verwijder het huidige postvak (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:172
+#: ../keymap_alldefs.h:199
 msgid "delete all messages in subthread"
 msgstr "verwijder alle berichten in subthread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:175
+#: ../keymap_alldefs.h:202
 msgid "delete all messages in thread"
 msgstr "wis alle berichten in thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:178
+#: ../keymap_alldefs.h:205
 msgid "display full address of sender"
 msgstr "toon volledig adres van afzender"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:181
+#: ../keymap_alldefs.h:208
 msgid "display message and toggle header weeding"
 msgstr "toon bericht en schakel kopfiltering om"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:184
+#: ../keymap_alldefs.h:211
 msgid "display a message"
 msgstr "toon bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:187
+#: ../keymap_alldefs.h:214
 msgid "add, change, or delete a message's label"
 msgstr "berichtlabel toevoegen, wijzigen, of verwijderen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:190
+#: ../keymap_alldefs.h:217
 msgid "edit the raw message"
 msgstr "bewerk het bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:193
+#: ../keymap_alldefs.h:220
 msgid "delete the char in front of the cursor"
 msgstr "wis teken voor de cursor"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:196
+#: ../keymap_alldefs.h:223
 msgid "move the cursor one character to the left"
 msgstr "verplaats cursor een teken naar links"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:199
+#: ../keymap_alldefs.h:226
 msgid "move the cursor to the beginning of the word"
 msgstr "verplaats cursor naar begin van het woord"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:202
+#: ../keymap_alldefs.h:229
 msgid "jump to the beginning of the line"
 msgstr "ga naar begin van de regel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:205
+#: ../keymap_alldefs.h:232
 msgid "cycle among incoming mailboxes"
 msgstr "roteer door postvakken"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:208
+#: ../keymap_alldefs.h:235
 msgid "complete filename or alias"
 msgstr "complete bestandsnaam of afkorting"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:211
+#: ../keymap_alldefs.h:238
 msgid "complete address with query"
 msgstr "compleet adres met vraag"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:214
+#: ../keymap_alldefs.h:241
 msgid "delete the char under the cursor"
 msgstr "wis teken onder de cursor"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:217
+#: ../keymap_alldefs.h:244
 msgid "jump to the end of the line"
 msgstr "ga naar regeleinde"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:220
+#: ../keymap_alldefs.h:247
 msgid "move the cursor one character to the right"
 msgstr "verplaats cursor een teken naar rechts"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:223
+#: ../keymap_alldefs.h:250
 msgid "move the cursor to the end of the word"
 msgstr "verplaats cursor naar einde van het woord"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:226
+#: ../keymap_alldefs.h:253
 msgid "scroll down through the history list"
 msgstr "ga omhoog in history lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:229
+#: ../keymap_alldefs.h:256
 msgid "scroll up through the history list"
 msgstr "ga omhoog in history list"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:232
+#: ../keymap_alldefs.h:259
 #, fuzzy
 msgid "search through the history list"
 msgstr "ga omhoog in history list"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:235
+#: ../keymap_alldefs.h:262
 msgid "delete chars from cursor to end of line"
 msgstr "wis alle tekens tot einde van de regel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:238
+#: ../keymap_alldefs.h:265
 msgid "delete chars from the cursor to the end of the word"
 msgstr "wis alle tekens tot einde van het woord"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:241
+#: ../keymap_alldefs.h:268
 msgid "delete all chars on the line"
 msgstr "wis regel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:244
+#: ../keymap_alldefs.h:271
 msgid "delete the word in front of the cursor"
 msgstr "wis woord voor de cursor"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:247
+#: ../keymap_alldefs.h:274
 msgid "quote the next typed key"
 msgstr "voeg volgende toets onveranderd in"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:250
+#: ../keymap_alldefs.h:277
 msgid "transpose character under cursor with previous"
 msgstr "transponeer teken onder cursor naar de vorige"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:253
+#: ../keymap_alldefs.h:280
 msgid "capitalize the word"
 msgstr "begin het woord met een hoofdletter"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:256
+#: ../keymap_alldefs.h:283
 msgid "convert the word to lower case"
 msgstr "verander het woord in kleine letters"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:259
+#: ../keymap_alldefs.h:286
 msgid "convert the word to upper case"
 msgstr "verander het woord in hoofdletters"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:262
+#: ../keymap_alldefs.h:289
 msgid "enter a muttrc command"
 msgstr "geef een muttrc commando in"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:265
+#: ../keymap_alldefs.h:292
 msgid "enter a file mask"
 msgstr "geef bestandsmasker in"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:268
+#: ../keymap_alldefs.h:295
 msgid "display recent history of error messages"
 msgstr ""
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:271
+#: ../keymap_alldefs.h:298
 msgid "exit this menu"
 msgstr "menu verlaten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:274
+#: ../keymap_alldefs.h:301
 msgid "filter attachment through a shell command"
 msgstr "filter bijlage door een shell commando"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:277
+#: ../keymap_alldefs.h:304
 msgid "move to the first entry"
 msgstr "ga naar eerste item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:280
+#: ../keymap_alldefs.h:307
 msgid "toggle a message's 'important' flag"
 msgstr "markeer bericht als belangrijk"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:283
+#: ../keymap_alldefs.h:310
 msgid "forward a message with comments"
 msgstr "stuur bericht door met commentaar"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:286
+#: ../keymap_alldefs.h:313
 msgid "select the current entry"
 msgstr "selecteer het huidige item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:289
+#: ../keymap_alldefs.h:316
 #, fuzzy
 msgid "reply to all recipients preserving To/Cc"
 msgstr "antwoord aan alle ontvangers"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:292
+#: ../keymap_alldefs.h:319
 msgid "reply to all recipients"
 msgstr "antwoord aan alle ontvangers"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:295
+#: ../keymap_alldefs.h:322
 msgid "scroll down 1/2 page"
 msgstr "ga 1/2 pagina naar beneden"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:298
+#: ../keymap_alldefs.h:325
 msgid "scroll up 1/2 page"
 msgstr "ga 1/2 pagina omhoog"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:301
+#: ../keymap_alldefs.h:328
 msgid "this screen"
 msgstr "dit scherm"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:304
+#: ../keymap_alldefs.h:331
 msgid "jump to an index number"
 msgstr "ga naar een index nummer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:307
+#: ../keymap_alldefs.h:334
 msgid "move to the last entry"
 msgstr "ga naar laatste item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:310
+#: ../keymap_alldefs.h:337
 msgid "reply to specified mailing list"
 msgstr "stuur antwoord naar mailing-list"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:313
+#: ../keymap_alldefs.h:340
 msgid "execute a macro"
 msgstr "Voer macro uit"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:316
+#: ../keymap_alldefs.h:343
 msgid "compose a new mail message"
 msgstr "maak nieuw bericht aan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:319
+#: ../keymap_alldefs.h:346
 msgid "break the thread in two"
 msgstr "splits de thread in tweeën"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:322
+#: ../keymap_alldefs.h:349
+#, fuzzy
+msgid "select a new mailbox from the browser"
+msgstr "kies een nieuw bestand in deze map"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:352
+#, fuzzy
+msgid "select a new mailbox from the browser in read only mode"
+msgstr "Open postvak in schrijfbeveiligde modus"
+
+#. L10N: Help screen function description.
+#. Generated from one of the OPS files.
+#: ../keymap_alldefs.h:355
 msgid "open a different folder"
 msgstr "open een ander postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:325
+#: ../keymap_alldefs.h:358
 msgid "open a different folder in read only mode"
 msgstr "open een ander postvak in alleen-lezen-modus"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:328
+#: ../keymap_alldefs.h:361
 msgid "clear a status flag from a message"
 msgstr "verwijder een status-vlag"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:331
+#: ../keymap_alldefs.h:364
 msgid "delete messages matching a pattern"
 msgstr "verwijder berichten volgens patroon"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:334
+#: ../keymap_alldefs.h:367
 msgid "force retrieval of mail from IMAP server"
 msgstr "forceer ophalen van mail vanaf IMAP-server"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:337
+#: ../keymap_alldefs.h:370
 msgid "logout from all IMAP servers"
 msgstr "uitloggen uit alle IMAP-servers"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:340
+#: ../keymap_alldefs.h:373
 msgid "retrieve mail from POP server"
 msgstr "haal mail vanaf POP-server"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:343
+#: ../keymap_alldefs.h:376
 msgid "show only messages matching a pattern"
 msgstr "geef alleen berichten weer volgens patroon"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:346
+#: ../keymap_alldefs.h:379
 msgid "link tagged message to the current one"
 msgstr "koppel gemarkeerd bericht met het huidige"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:349
+#: ../keymap_alldefs.h:382
 msgid "open next mailbox with new mail"
 msgstr "open volgend postvak met nieuwe berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:352
+#: ../keymap_alldefs.h:385
 msgid "jump to the next new message"
 msgstr "spring naar het volgende nieuwe bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:355
+#: ../keymap_alldefs.h:388
 msgid "jump to the next new or unread message"
 msgstr "spring naar het volgende nieuwe of ongelezen bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:358
+#: ../keymap_alldefs.h:391
 msgid "jump to the next subthread"
 msgstr "spring naar de volgende subthread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:361
+#: ../keymap_alldefs.h:394
 msgid "jump to the next thread"
 msgstr "spring naar de volgende thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:364
+#: ../keymap_alldefs.h:397
 msgid "move to the next undeleted message"
 msgstr "spring naar het volgende ongewiste bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:367
+#: ../keymap_alldefs.h:400
 msgid "jump to the next unread message"
 msgstr "spring naar het volgende ongelezen bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:370
+#: ../keymap_alldefs.h:403
 msgid "jump to parent message in thread"
 msgstr "spring naar het vorige bericht in de thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:373
+#: ../keymap_alldefs.h:406
 msgid "jump to previous thread"
 msgstr "spring naar de vorige thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:376
+#: ../keymap_alldefs.h:409
 msgid "jump to previous subthread"
 msgstr "spring naar de vorige subthread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:379
+#: ../keymap_alldefs.h:412
 msgid "move to the previous undeleted message"
 msgstr "spring naar het volgende ongewiste bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:382
+#: ../keymap_alldefs.h:415
 msgid "jump to the previous new message"
 msgstr "spring naar het vorige nieuwe bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:385
+#: ../keymap_alldefs.h:418
 msgid "jump to the previous new or unread message"
 msgstr "spring naar het vorige nieuwe of ongelezen bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:388
+#: ../keymap_alldefs.h:421
 msgid "jump to the previous unread message"
 msgstr "spring naar het vorige ongelezen bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:391
+#: ../keymap_alldefs.h:424
 msgid "mark the current thread as read"
 msgstr "markeer de huidige thread als gelezen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:394
+#: ../keymap_alldefs.h:427
 msgid "mark the current subthread as read"
 msgstr "markeer de huidige subthread als gelezen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:397
+#: ../keymap_alldefs.h:430
 msgid "jump to root message in thread"
 msgstr "spring naar eerste bericht in thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:400
+#: ../keymap_alldefs.h:433
 msgid "set a status flag on a message"
 msgstr "zet een status-vlag in een bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:403
+#: ../keymap_alldefs.h:436
 msgid "save changes to mailbox"
 msgstr "sla wijzigingen in postvak op"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:406
+#: ../keymap_alldefs.h:439
 msgid "tag messages matching a pattern"
 msgstr "markeer berichten volgens patroon"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:409
+#: ../keymap_alldefs.h:442
 msgid "undelete messages matching a pattern"
 msgstr "herstel berichten volgens patroon"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:412
+#: ../keymap_alldefs.h:445
 msgid "untag messages matching a pattern"
 msgstr "verwijder markering volgens patroon"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:415
+#: ../keymap_alldefs.h:448
 msgid "create a hotkey macro for the current message"
 msgstr "een sneltoetsmacro aanmaken voor huidig bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:418
+#: ../keymap_alldefs.h:451
 msgid "move to the middle of the page"
 msgstr "ga naar het midden van de pagina"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:421
+#: ../keymap_alldefs.h:454
 msgid "move to the next entry"
 msgstr "ga naar het volgende item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:424
+#: ../keymap_alldefs.h:457
 msgid "scroll down one line"
 msgstr "ga een regel naar beneden"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:427
+#: ../keymap_alldefs.h:460
 msgid "move to the next page"
 msgstr "ga naar de volgende pagina"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:430
+#: ../keymap_alldefs.h:463
 msgid "jump to the bottom of the message"
 msgstr "spring naar het einde van het bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:433
+#: ../keymap_alldefs.h:466
 msgid "toggle display of quoted text"
 msgstr "schakel weergeven van geciteerde tekst aan/uit"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:436
+#: ../keymap_alldefs.h:469
 msgid "skip beyond quoted text"
 msgstr "sla geciteerde tekst over"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:439
+#: ../keymap_alldefs.h:472
 msgid "jump to the top of the message"
 msgstr "spring naar het begin van het bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:442
+#: ../keymap_alldefs.h:475
 msgid "pipe message/attachment to a shell command"
 msgstr "bewerk (pipe) bericht/bijlage met een shell-commando"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:445
+#: ../keymap_alldefs.h:478
 msgid "move to the previous entry"
 msgstr "ga naar het vorige item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:448
+#: ../keymap_alldefs.h:481
 msgid "scroll up one line"
 msgstr "ga een regel omhoog"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:451
+#: ../keymap_alldefs.h:484
 msgid "move to the previous page"
 msgstr "ga naar de vorige pagina"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:454
+#: ../keymap_alldefs.h:487
 msgid "print the current entry"
 msgstr "druk het huidige item af"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:457
+#: ../keymap_alldefs.h:490
 #, fuzzy
 msgid "delete the current entry, bypassing the trash folder"
 msgstr "huidig item echt verwijderen, voorbijgaand aan prullenmap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:460
+#: ../keymap_alldefs.h:493
 msgid "query external program for addresses"
 msgstr "vraag een extern programma om adressen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:463
+#: ../keymap_alldefs.h:496
 msgid "append new query results to current results"
 msgstr "voeg resultaten van zoekopdracht toe aan huidige resultaten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:466
+#: ../keymap_alldefs.h:499
 msgid "save changes to mailbox and quit"
 msgstr "sla wijzigingen in postvak op en verlaat Mutt"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:469
+#: ../keymap_alldefs.h:502
 msgid "recall a postponed message"
 msgstr "bewerk een uitgesteld bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:472
+#: ../keymap_alldefs.h:505
 msgid "clear and redraw the screen"
 msgstr "wis scherm en bouw het opnieuw op"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:475
+#: ../keymap_alldefs.h:508
 msgid "{internal}"
 msgstr "(intern)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:478
+#: ../keymap_alldefs.h:511
 msgid "rename the current mailbox (IMAP only)"
 msgstr "hernoem het huidige postvak (alleen met IMAP)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:481
+#: ../keymap_alldefs.h:514
 msgid "reply to a message"
 msgstr "beantwoord een bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:484
+#: ../keymap_alldefs.h:517
 msgid "use the current message as a template for a new one"
 msgstr "gebruik het huidige bericht als sjabloon voor een nieuw bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:487
+#: ../keymap_alldefs.h:520
 msgid "save message/attachment to a mailbox/file"
 msgstr "sla bericht/bijlage op in een postvak/bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:490
+#: ../keymap_alldefs.h:523
 msgid "search for a regular expression"
 msgstr "zoek naar een reguliere expressie"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:493
+#: ../keymap_alldefs.h:526
 msgid "search backwards for a regular expression"
 msgstr "zoek achteruit naar een reguliere expressie"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:496
+#: ../keymap_alldefs.h:529
 msgid "search for next match"
 msgstr "zoek volgende match"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:499
+#: ../keymap_alldefs.h:532
 msgid "search for next match in opposite direction"
 msgstr "zoek achteruit naar volgende match"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:502
+#: ../keymap_alldefs.h:535
 msgid "toggle search pattern coloring"
 msgstr "schakel het kleuren van zoekpatronen aan/uit"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:505
+#: ../keymap_alldefs.h:538
 msgid "invoke a command in a subshell"
 msgstr "roep een commando in een shell aan"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:508
+#: ../keymap_alldefs.h:541
 msgid "sort messages"
 msgstr "sorteer berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:511
+#: ../keymap_alldefs.h:544
 msgid "sort messages in reverse order"
 msgstr "sorteer berichten in omgekeerde volgorde"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:514
+#: ../keymap_alldefs.h:547
 msgid "tag the current entry"
 msgstr "markeer huidig item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:517
+#: ../keymap_alldefs.h:550
 msgid "apply next function to tagged messages"
 msgstr "voer volgende functie uit op gemarkeerde berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:520
+#: ../keymap_alldefs.h:553
 msgid "apply next function ONLY to tagged messages"
 msgstr "voer volgende functie ALLEEN uit op gemarkeerde berichten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:523
+#: ../keymap_alldefs.h:556
 msgid "tag the current subthread"
 msgstr "markeer de huidige subthread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:526
+#: ../keymap_alldefs.h:559
 msgid "tag the current thread"
 msgstr "markeer de huidige thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:529
+#: ../keymap_alldefs.h:562
 msgid "toggle a message's 'new' flag"
 msgstr "zet/wis de 'nieuw'-markering van een bericht"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:532
+#: ../keymap_alldefs.h:565
 msgid "toggle whether the mailbox will be rewritten"
 msgstr "schakel het opslaan van wijzigingen aan/uit"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:535
+#: ../keymap_alldefs.h:568
 msgid "toggle whether to browse mailboxes or all files"
 msgstr "schakel tussen het doorlopen van postvakken of alle bestanden"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:538
+#: ../keymap_alldefs.h:571
 msgid "move to the top of the page"
 msgstr "spring naar het begin van de pagina"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:541
+#: ../keymap_alldefs.h:574
 msgid "undelete the current entry"
 msgstr "verwijder wismarkering van huidig item"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:544
+#: ../keymap_alldefs.h:577
 msgid "undelete all messages in thread"
 msgstr "verwijder wismarkering van alle berichten in thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:547
+#: ../keymap_alldefs.h:580
 msgid "undelete all messages in subthread"
 msgstr "verwijder wismarkering van alle berichten in subthread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:550
+#: ../keymap_alldefs.h:583
 msgid "show the Mutt version number and date"
 msgstr "toon versienummer van Mutt en uitgavedatum"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:553
+#: ../keymap_alldefs.h:586
 msgid "view attachment using mailcap entry if necessary"
 msgstr "geef bijlage weer, zo nodig via mailcap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:556
+#: ../keymap_alldefs.h:589
 msgid "show MIME attachments"
 msgstr "geef MIME-bijlagen weer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:559
+#: ../keymap_alldefs.h:592
 msgid "display the keycode for a key press"
 msgstr "toon de code voor een toets"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:562
+#: ../keymap_alldefs.h:595
 #, fuzzy
 msgid "calculate message statistics for all mailboxes"
 msgstr "sla bericht/bijlage op in een postvak/bestand"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:565
+#: ../keymap_alldefs.h:598
 msgid "show currently active limit pattern"
 msgstr "geef het momenteel actieve limietpatroon weer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:568
+#: ../keymap_alldefs.h:601
 msgid "collapse/uncollapse current thread"
 msgstr "comprimeer/expandeer huidige thread"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:571
+#: ../keymap_alldefs.h:604
 msgid "collapse/uncollapse all threads"
 msgstr "comprimeer/expandeer alle threads"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:574
+#: ../keymap_alldefs.h:607
 #, fuzzy
 msgid "descend into a directory"
 msgstr "%s is geen map."
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:577
+#: ../keymap_alldefs.h:610
 msgid "move the highlight to next mailbox"
 msgstr "verplaats markering naar volgend postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:580
+#: ../keymap_alldefs.h:613
 msgid "move the highlight to next mailbox with new mail"
 msgstr "verplaats markering naar volgend postvak met nieuwe mail"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:583
+#: ../keymap_alldefs.h:616
 msgid "open highlighted mailbox"
 msgstr "gemarkeerd postvak openen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:586
+#: ../keymap_alldefs.h:619
 msgid "scroll the sidebar down 1 page"
 msgstr "de zijbalk een pagina omlaag scrollen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:589
+#: ../keymap_alldefs.h:622
 msgid "scroll the sidebar up 1 page"
 msgstr "de zijbalk een pagina omhoog scrollen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:592
+#: ../keymap_alldefs.h:625
 msgid "move the highlight to previous mailbox"
 msgstr "verplaats markering naar voorgaand postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:595
+#: ../keymap_alldefs.h:628
 msgid "move the highlight to previous mailbox with new mail"
 msgstr "verplaats markering naar voorgaand postvak met nieuwe mail"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:598
+#: ../keymap_alldefs.h:631
 msgid "make the sidebar (in)visible"
 msgstr "de zijbalk tonen/verbergen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:601
+#: ../keymap_alldefs.h:634
 msgid "attach a PGP public key"
 msgstr "voeg een PGP publieke sleutel toe"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:604
+#: ../keymap_alldefs.h:637
 msgid "show PGP options"
 msgstr "geef PGP-opties weer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:607
+#: ../keymap_alldefs.h:640
 msgid "mail a PGP public key"
 msgstr "mail een PGP publieke sleutel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:610
+#: ../keymap_alldefs.h:643
 msgid "verify a PGP public key"
 msgstr "controleer een PGP publieke sleutel"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:613
+#: ../keymap_alldefs.h:646
 msgid "view the key's user id"
 msgstr "geef gebruikers-ID van sleutel weer"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:616
+#: ../keymap_alldefs.h:649
 msgid "check for classic PGP"
 msgstr "controleer op klassieke PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:619
+#: ../keymap_alldefs.h:652
 msgid "accept the chain constructed"
 msgstr "accepteer de gemaakte lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:622
+#: ../keymap_alldefs.h:655
 msgid "append a remailer to the chain"
 msgstr "voeg een remailer toe aan het einde van de lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:625
+#: ../keymap_alldefs.h:658
 msgid "insert a remailer into the chain"
 msgstr "voeg een remailer toe in de lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:628
+#: ../keymap_alldefs.h:661
 msgid "delete a remailer from the chain"
 msgstr "verwijder een remailer van de lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:631
+#: ../keymap_alldefs.h:664
 msgid "select the previous element of the chain"
 msgstr "kies het vorige item uit de lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:634
+#: ../keymap_alldefs.h:667
 msgid "select the next element of the chain"
 msgstr "kies het volgende item uit de lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:637
+#: ../keymap_alldefs.h:670
 msgid "send the message through a mixmaster remailer chain"
 msgstr "verstuur het bericht via een \"mixmaster remailer\" lijst"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:640
+#: ../keymap_alldefs.h:673
 msgid "make decrypted copy and delete"
 msgstr "maak een gedecodeerde kopie en wis"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:643
+#: ../keymap_alldefs.h:676
 msgid "make decrypted copy"
 msgstr "maak een gedecodeerde kopie"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:646
+#: ../keymap_alldefs.h:679
 msgid "wipe passphrase(s) from memory"
 msgstr "verwijder wachtwoord(en) uit geheugen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:649
+#: ../keymap_alldefs.h:682
 msgid "extract supported public keys"
 msgstr "extraheer ondersteunde publieke sleutels"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
-#: ../keymap_alldefs.h:652
+#: ../keymap_alldefs.h:685
 msgid "show S/MIME options"
 msgstr "geef S/MIME-opties weer"
+
+#~ msgid "Macros are currently disabled."
+#~ msgstr "Macro's zijn momenteel uitgeschakeld."
+
+#~ msgid "%s...  Exiting.\n"
+#~ msgstr "%s... Mutt wordt afgesloten.\n"
+
+#~ msgid "Caught %s...  Exiting.\n"
+#~ msgstr "Signaal %s...\n"
+
+#~ msgid "Caught signal %d...  Exiting.\n"
+#~ msgstr "Signaal %d...\n"
 
 #~ msgid "Error extracting key data!\n"
 #~ msgstr "Fout bij het onttrekken van sleutelgegevens!\n"

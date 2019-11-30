@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-15 12:06-0800\n"
+"POT-Creation-Date: 2019-11-30 10:17-0800\n"
 "PO-Revision-Date: 2019-11-17 19:07+0100\n"
 "Last-Translator: Morten Bo Johansen <mbj@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -2560,7 +2560,8 @@ msgstr "Fjern statusindikator"
 
 #: handler.c:1142
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
-msgstr "[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
+msgstr ""
+"[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
 
 #: handler.c:1258
 #, c-format
@@ -4291,7 +4292,8 @@ msgstr "usgyoi"
 
 #: pgp.c:1841
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
-msgstr "PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
+msgstr ""
+"PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
 
 #: pgp.c:1842
 msgid "safco"
@@ -4974,8 +4976,8 @@ msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
 msgstr ""
-"$send_multipart_alternative_filter understøtter ikke generering af "
-"multipart-type."
+"$send_multipart_alternative_filter understøtter ikke generering af multipart-"
+"type."
 
 #: sendlib.c:2627
 msgid "$sendmail must be set in order to send mail."

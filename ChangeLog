@@ -1,3 +1,2507 @@
+2019-11-30 10:08:44 -0800  Kevin McCarthy  <kevin@8t8.us> (b1d99670)
+
+        * Set UPDATING file release date for 1.13.0.
+
+M	UPDATING
+
+2019-11-30 09:56:16 -0800  Kevin McCarthy  <kevin@8t8.us> (0950403f)
+
+        * Change "Prf Enc" to "Prf Encr".
+        
+        Make the abbreviation a bit clearer, that it means Encryption instead
+        of Encoding.
+        
+        Thanks to Morten Bo Johansen for the suggestion.
+
+M	autocrypt/autocrypt_acct_menu.c
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/ja.po
+M	po/ru.po
+M	po/uk.po
+
+2019-11-29 18:22:49 +0100  Olaf Hering  <olaf@aepfle.de> (c6845bd1)
+
+        * Update de.po
+        
+        Sync from mutt.pot after 'make update-po'
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2019-11-28 07:13:47 +0000  Tamotsu TAKAHASHI  <ttakah@gmail.com> (e8214c87)
+
+        * Update copyright year
+
+M	po/ja.po
+
+2019-11-28 06:59:47 +0000  Tamotsu TAKAHASHI  <ttakah@gmail.com> (be4801f8)
+
+        * Update ja.po
+
+M	po/ja.po
+
+2019-11-25 15:36:48 -0800  Kevin McCarthy  <kevin@8t8.us> (220a4c91)
+
+        * Clarify $write_bcc documentation.
+        
+        The wording was ambiguous, and could give the impression that a
+        message, if fcc'ed, would contain the Bcc header when sent too.
+
+M	init.h
+
+2019-11-23 19:45:20 -0800  Kevin McCarthy  <kevin@8t8.us> (54aa06f7)
+
+        * Add a bit more documentation about sending.
+        
+        Although the behavior has now been fixed, add $write_bcc references to
+        $record, $sendmail, and $smtp_url to make users more aware of the
+        behavior.
+
+M	doc/manual.xml.head
+M	init.h
+
+2019-11-23 18:33:28 -0800  Kevin McCarthy  <kevin@8t8.us> (acca75f2)
+
+        * Minor UPDATING file edits.
+
+M	UPDATING
+
+2019-11-23 18:22:24 -0800  Ivan Vilata i Balaguer  <ivan@selidor.net> (b302a3e7)
+
+        * Updated Catalan translation.
+
+M	po/ca.po
+
+2019-11-20 13:23:00 -0800  Petr Pisar  <petr.pisar@atlas.cz> (2e3f535a)
+
+        * Updated Czech translation.
+
+M	po/cs.po
+
+2019-11-20 12:21:24 -0800  Vsevolod Volkov  <vvv@mutt.org.ua> (2e3e9556)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2019-11-20 12:19:47 -0800  Vsevolod Volkov  <vvv@mutt.org.ua> (0c0f4518)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2019-11-18 12:54:26 -0800  Morten Bo Johansen  <listmail@mbjnet.dk> (f84c1fba)
+
+        * Updated Danish translation.
+
+M	po/da.po
+
+2019-11-16 21:40:27 +0100  Olaf Hering  <olaf@aepfle.de> (40e7c914)
+
+        * Update de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2019-11-14 20:10:35 -0800  Kevin McCarthy  <kevin@8t8.us> (33604971)
+
+        * Add initial UPDATING file entries for 1.13.0.
+        
+        This is just an initial version, complete with typos and other
+        mistakes.  Committing now so translators can refer to it.
+
+M	UPDATING
+
+2019-11-13 20:09:37 -0800  Kevin McCarthy  <kevin@8t8.us> (24ca73ae)
+
+        * Fix $fcc_attach to not prompt in batch mode.
+        
+        Include attachments if it is 'yes' or 'ask-yes', like $copy and
+        $send_multipart_alternative.
+
+M	send.c
+
+2019-11-13 19:28:11 -0800  Kevin McCarthy  <kevin@8t8.us> (06698649)
+
+        * Change $send_multipart_alternative to run in batch mode on ask-yes.
+        
+        Emulate the behavior of $copy, which performs fcc for 'yes' or
+        'ask-yes' values.
+
+M	send.c
+
+2019-11-13 17:51:04 +0000  madroach  <madroach@gmerlin.de> (e850e89f)
+
+        * allow autoview preview of multipart/alternative content
+        
+        add view-alt function, so now we have
+         * view-alt "v"
+         * view-alt-text "Esc v"
+         * view-alt-mailcap "V"
+
+M	OPS
+M	compose.c
+M	doc/manual.xml.head
+M	functions.h
+
+2019-11-13 00:27:28 +0000  David Champion  <dgc@c13.us> (20c7b0d8)
+
+        * Fix __attribute__((warn_unused_result)) issue in query.c
+        
+        Changing to mutt_read_line() avoids -Wunused-result warning while
+        reading the ignored line in query protocol response.
+
+M	query.c
+
+2019-11-13 00:27:27 +0000  David Champion  <dgc@c13.us> (f098ac2d)
+
+        * Fix __attribute__((warn_unused_result)) issue in help.c
+
+M	help.c
+
+2019-11-13 00:27:27 +0000  David Champion  <dgc@c13.us> (09dfed3f)
+
+        * Fix __attribute__((warn_unused_result)) warning in enter.c
+
+M	enter.c
+
+2019-11-13 00:27:25 +0000  David Champion  <dgc@c13.us> (317b7f6b)
+
+        * Fixes unchecked return from link() in dotlock.c
+
+M	dotlock.c
+
+2019-11-11 10:06:44 +0000  David Champion  <dgc.github@c13.us> (afb14d62)
+
+        * Update copyrights
+
+M	COPYRIGHT
+
+2019-11-11 10:06:44 +0000  David Champion  <dgc.github@c13.us> (d8b9f793)
+
+        * Update patchlist.sh to support `guilt' patch queues
+
+M	patchlist.sh
+
+2019-11-10 19:58:43 -0800  Kevin McCarthy  <kevin@8t8.us> (88f26048)
+
+        * Add gcc comments for fallthrough case statements.
+        
+        Most of these were already commented.  Change a few of them to
+        a format gcc will recognize.  In the future, we'll want to change to
+        whatever is standardized.
+
+M	addrbook.c
+M	autocrypt/autocrypt_gpgme.c
+M	browser.c
+M	compose.c
+M	curs_main.c
+M	doc/makedoc.c
+M	enter.c
+M	handler.c
+M	hdrline.c
+M	pager.c
+M	pattern.c
+M	pgppacket.c
+M	query.c
+M	recvattach.c
+M	signal.c
+M	smime.c
+
+2019-11-10 18:50:41 -0800  Kevin McCarthy  <kevin@8t8.us> (aae2d87a)
+
+        * Add $count_alternatives to count attachments inside alternatives.
+        
+        Some mail clients (*cough* Apple Mail) have started to put email
+        attachments in one of the multipart/alternative branches.
+        
+        The config changes the searching to recurse inside alternatives when
+        performing attachment counting.
+
+M	doc/manual.xml.head
+M	init.h
+M	mutt.h
+M	parse.c
+
+2019-11-10 15:09:54 -0800  Kevin McCarthy  <kevin@8t8.us> (5835f4c0)
+
+        * Remove nonreentrant calls from exit_handler()
+        
+        _() can invoke malloc, so remove l10n translations.
+        
+        printf() is not safe either, so use write().
+        
+        I'm not sure at this point about curs_set() and endwin(), but they
+        seem important enough for proper terminal cleanup to risk leaving in.
+        
+        Thanks to Oswald Buddenhagen for pointing out the problem, and the old
+        trac ticket from Vincent at:
+        <https://gitlab.com/muttmua/trac-tickets/raw/master/tickets/open/3791-SIGQUIT_Ctrl_while_opening_mailbox_made_Mutt_hang.txt>
+
+M	signal.c
+
+2019-11-09 13:43:11 -0800  Kevin McCarthy  <kevin@8t8.us> (183c4687)
+
+        * Add markdown2html contrib script.
+        
+        This was contributed by martin f. kraft, to give an example script for
+        the new $send_multipart_alternative_filter funtionality.
+
+M	contrib/Makefile.am
+A	contrib/markdown2html
+
+2019-11-09 13:29:16 -0800  Kevin McCarthy  <kevin@8t8.us> (202ec2c8)
+
+        * Remove input buffer flush on sigwinch in index.
+        
+        I recall seeing a message on IRC, where someone reported their macro
+        suddenly aborting after invoking an editor or something similar.  At
+        the time, I wasn't sure of the problem, but this seems a likely
+        culprit, if the event caused a sigwinch.
+        
+        Neither the menu.c nor the pager.c SigWinch handlers do such a thing.
+        The line was part of the initial import 21 years ago, so there is no
+        justification given.
+
+M	curs_main.c
+
+2019-11-08 08:07:21 -0800  Kevin McCarthy  <kevin@8t8.us> (ef7e5e42)
+
+        * Fix sigwinch race in the index and menu processor.
+        
+        Reset the SigWinch flag before the screen resize/reflow, not afterwards.
+
+M	curs_main.c
+M	menu.c
+
+2019-11-07 19:33:31 -0800  Kevin McCarthy  <kevin@8t8.us> (c64baf93)
+
+        * Change $write_bcc to default off.
+        
+        Change Fcc'ing to always write a Bcc header regardless of the setting.
+        
+        Update the variable documentation to note the difference when Fcc'ing.
+
+M	init.h
+M	mutt.h
+M	sendlib.c
+
+2019-11-07 15:06:53 -0800  Kevin McCarthy  <kevin@8t8.us> (29167ecf)
+
+        * Block multipart type alternatives generation.
+        
+        Since generating multipart types using
+        $send_multipart_alternative_filter will not send properly, display an
+        error message and block alternatives of that type.
+
+M	sendlib.c
+
+2019-11-07 02:14:05 +0000  David Champion  <dgc.github@c13.us> (127bcc3c)
+
+        * s/Mercurial/Git/ in INSTALL
+
+M	INSTALL
+
+2019-11-06 10:43:09 -0800  Kevin McCarthy  <kevin@8t8.us> (ab9b7b08)
+
+        * Ensure APP_PGP flag is enabled for autocrypt.
+        
+        There was no code that explicitly enabled APP_PGP mode when either the
+        recommendation engine or autocrypt menu were invoked.  This would
+        cause the actual encryption to fail when sending.
+        
+        This was hidden by the $crypt_opportunistic_encrypt config, which does
+        ensure it gets turned on.  I can only guess that this variable is
+        popular with the autocrypt early adopters too.
+        
+        Also explicity enable APP_PGP for $autocrypt_reply.  We can't rely on
+        $crypt_autopgp to turn this on.
+
+M	compose.c
+M	send.c
+
+2019-10-29 13:53:20 +0800  Kevin McCarthy  <kevin@8t8.us> (0e566a03)
+
+        * Add ability to generate multipart/alternative using a filter script.
+        
+        Create config variables $send_multipart_alternative (a quadoption)
+        and $send_multipart_alternative_filter.  The filter script expects
+        output to be the mime type, a blank line, then the content.
+        
+        Add ability to preview alternative from compose menu.  <view-alt-text>
+        forces viewing as text.  <view-alt-mailcap> forces using the mailcap.
+        Bind them to 'v' and 'V', respectively.
+        
+        Improve <resend-message> so a multipart/alternative is stripped out,
+        which would just confuse the compose menu.  Currently this preserves
+        the first alternative.
+        
+        Allow alternative generation in batch mode, as long as the quadoption
+        is set to 'yes'.
+
+M	OPS
+M	compose.c
+M	doc/manual.xml.head
+M	functions.h
+M	globals.h
+M	init.h
+M	mutt.h
+M	postpone.c
+M	protos.h
+M	send.c
+M	sendlib.c
+
+2019-10-29 14:58:57 +0800  Kevin McCarthy  <kevin@8t8.us> (3f911681)
+
+        * Create multipart/mixed helpers.
+        
+        Since we will be dealing with multipart/alternative, we need the
+        helpers to be a bit more specific.
+        
+        We need to distinguish a top-level multipart/alternative from a
+        multipart/mixed created because of attachments.
+
+M	compose.c
+M	main.c
+M	postpone.c
+M	protos.h
+M	send.c
+M	sendlib.c
+
+2019-10-31 13:58:22 +0100  Fabian Groffen  <grobian@gentoo.org> (4cec4b63)
+
+        * mutt_parse_content_type: work around annoying charset behaviour from Outlook
+        
+        MS Outlook seems to add charset=charset=utf-8 to Content-Type, which
+        results in charset_utf-8 inside Mutt, which in turn confuses others.
+        
+        Strip a leading charset= from charset, so we work around this odd
+        behaviour.
+        
+        Signed-off-by: Fabian Groffen <grobian@gentoo.org>
+
+M	parse.c
+
+2019-10-29 13:21:51 +0800  Kevin McCarthy  <kevin@8t8.us> (e9ab7539)
+
+        * Convert smime_decrypt_mime() to use buffer pool.
+
+M	smime.c
+
+2019-10-28 18:59:02 +0800  Kevin McCarthy  <kevin@8t8.us> (ccf3f493)
+
+        * Convert smime_handle_entity() to use buffers.
+        
+        Because of the mutt_body_handler() invocation, we avoid using the
+        buffer pool.
+
+M	smime.c
+
+2019-10-28 12:36:29 +0800  Kevin McCarthy  <kevin@8t8.us> (05805ddd)
+
+        * Convert smime_verify_one() to use buffer pool.
+
+M	smime.c
+
+2019-10-28 12:22:45 +0800  Kevin McCarthy  <kevin@8t8.us> (56856d8e)
+
+        * Convert smime_sign_message() to use buffer pool.
+
+M	smime.c
+
+2019-10-27 19:29:41 +0800  Kevin McCarthy  <kevin@8t8.us> (ce55dbbf)
+
+        * Convert smime_build_smime_entity() to use buffer pool.
+
+M	smime.c
+
+2019-10-27 15:47:55 +0800  Kevin McCarthy  <kevin@8t8.us> (07e32b7a)
+
+        * Convert smime_invoke_import() and helpers to use buffer pool.
+
+M	smime.c
+
+2019-10-27 13:28:59 +0800  Kevin McCarthy  <kevin@8t8.us> (d4c00c67)
+
+        * Convert smime_verify_sender() and helpers to use buffer pool.
+
+M	smime.c
+
+2019-10-27 11:09:00 +0800  Kevin McCarthy  <kevin@8t8.us> (7c81cd61)
+
+        * Convert smime_get_candidates() to use buffer pool.
+
+M	smime.c
+
+2019-10-26 19:36:33 +0800  Kevin McCarthy  <kevin@8t8.us> (7e29eb23)
+
+        * Convert mutt_write_fcc() to use buffer pool.
+
+M	sendlib.c
+
+2019-10-25 19:29:56 +0800  Kevin McCarthy  <kevin@8t8.us> (58a81897)
+
+        * Convert _mutt_bounce_message to use buffer pool.
+
+M	sendlib.c
+
+2019-10-25 19:13:50 +0800  Kevin McCarthy  <kevin@8t8.us> (8de05d5f)
+
+        * Convert send_msg() $sendmail_wait to use buffer pool.
+
+M	sendlib.c
+
+2019-10-25 15:55:49 +0800  Kevin McCarthy  <kevin@8t8.us> (3565f686)
+
+        * Convert transform_to_7bit() to use buffer pool.
+
+M	sendlib.c
+
+2019-10-25 15:28:25 +0800  Kevin McCarthy  <kevin@8t8.us> (671e653c)
+
+        * Convert mutt_message_to_7bit() to use buffer.
+        
+        Clean up the error handling a bit.
+        
+        Because of the recursive invocation, avoid the buffer pool in this
+        case.
+
+M	sendlib.c
+
+2019-10-24 14:46:06 +0800  Kevin McCarthy  <kevin@8t8.us> (c5d770ea)
+
+        * Convert fcc to a buffer.
+        
+        This affects the send.c flow (ci_send_message()), the compose menu,
+        and various helper functions.
+
+M	compose.c
+M	edit.c
+M	headers.c
+M	hook.c
+M	postpone.c
+M	protos.h
+M	send.c
+M	sendlib.c
+
+2019-10-24 11:23:20 +0800  Kevin McCarthy  <kevin@8t8.us> (2fcde005)
+
+        * Convert send_message() to use buffer pool.
+
+M	send.c
+
+2019-10-23 19:17:09 +0800  Kevin McCarthy  <kevin@8t8.us> (12cd2d52)
+
+        * Add typelen parameter to rfc1524_mailcap_lookup().
+        
+        Because of mime_lookup commands, the call to mutt_check_lookup_list()
+        inside the function can modify the passed in type.  Add an explicit
+        length parameter to the function, rather than assume the parameter
+        size.  This also makes it more evident the type parameter can be
+        modified to callers.
+        
+        Change the len parameter to mutt_check_lookup_list() to type size_t,
+        just to be correct about it.
+
+M	attach.c
+M	handler.c
+M	protos.h
+M	recvattach.c
+M	rfc1524.c
+M	rfc1524.h
+
+2019-10-23 19:01:17 +0800  Kevin McCarthy  <kevin@8t8.us> (8997c55f)
+
+        * Convert rfc1524_mailcap_lookup() to use buffer pool for path.
+        
+        Adjust the rfc1524_mailcap_parse() and get_field_text() filename and
+        type parameters to be const.
+        
+        Note that the sizeof(type) needs to be passed to
+        rfc1524_mailcap_lookup().  I'll fix that next.
+
+M	rfc1524.c
+
+2019-10-23 16:03:56 +0800  Kevin McCarthy  <kevin@8t8.us> (6380cbd6)
+
+        * Convert mutt_attach_reply() to use buffer pool.
+
+M	recvcmd.c
+
+2019-10-23 15:36:59 +0800  Kevin McCarthy  <kevin@8t8.us> (8d12d900)
+
+        * Convert attach_forward_msgs() to use buffer pool.
+
+M	recvcmd.c
+
+2019-10-23 15:04:49 +0800  Kevin McCarthy  <kevin@8t8.us> (0b59dc75)
+
+        * Convert attach_forward_bodies to use buffer pool.
+
+M	recvcmd.c
+
+2019-10-23 14:44:47 +0800  Kevin McCarthy  <kevin@8t8.us> (1f71fad9)
+
+        * Convert attach_fmt %f to use buffer pool.
+
+M	recvattach.c
+
+2019-10-23 14:33:09 +0800  Kevin McCarthy  <kevin@8t8.us> (80bc61db)
+
+        * Convert mutt_num_postponed() maildir check to use buffer pool.
+
+M	postpone.c
+
+2019-10-23 13:53:26 +0800  Kevin McCarthy  <kevin@8t8.us> (d8b6f94e)
+
+        * Convert pop_fetch_message() to use buffer pool.
+
+M	pop.c
+
+2019-10-23 11:39:22 +0800  Kevin McCarthy  <kevin@8t8.us> (08480fa8)
+
+        * Convert pop_read_header() to use buffer pool.
+
+M	pop.c
+
+2019-10-20 15:52:22 +0800  Kevin McCarthy  <kevin@8t8.us> (5b53290a)
+
+        * Convert pgp_find_hash to use buffer pool.
+
+M	pgpmicalg.c
+
+2019-10-20 15:27:10 +0800  Kevin McCarthy  <kevin@8t8.us> (26e89164)
+
+        * Convert pgp_make_key_attachment() to use buffer pool.
+
+M	pgpkey.c
+
+2019-10-20 14:06:24 +0800  Kevin McCarthy  <kevin@8t8.us> (15f89f8e)
+
+        * Remove make_key_attachment parameter.
+        
+        The parameter is not actually used anywhere.  The next commit will
+        convert the classic pgp implementation to use the buffer pool.  This
+        change will simplify the logic.
+
+M	compose.c
+M	crypt-gpgme.c
+M	crypt-gpgme.h
+M	crypt-mod-pgp-classic.c
+M	crypt-mod-pgp-gpgme.c
+M	crypt-mod.h
+M	cryptglue.c
+M	mutt_crypt.h
+M	pgp.h
+M	pgpkey.c
+M	send.c
+
+2019-10-20 13:41:30 +0800  Kevin McCarthy  <kevin@8t8.us> (e3408a00)
+
+        * Convert pgp_select_key() to use buffer pool.
+
+M	pgpkey.c
+
+2019-10-19 15:50:22 +0800  Kevin McCarthy  <kevin@8t8.us> (782bcd7d)
+
+        * Convert pgp_traditional_encryptsign() to use buffer pool.
+
+M	pgp.c
+
+2019-10-19 15:35:06 +0800  Kevin McCarthy  <kevin@8t8.us> (978cdaf7)
+
+        * Convert pgp_encrypt_message() to use buffer pool.
+
+M	pgp.c
+
+2019-10-19 15:07:53 +0800  Kevin McCarthy  <kevin@8t8.us> (38291748)
+
+        * Convert pgp_sign_message to use buffer pool.
+
+M	pgp.c
+
+2019-10-19 14:48:17 +0800  Kevin McCarthy  <kevin@8t8.us> (48a34377)
+
+        * Convert pgp_encrypted_handler() to use buffer pool.
+
+M	pgp.c
+
+2019-10-18 15:05:33 +0800  Kevin McCarthy  <kevin@8t8.us> (aa66b414)
+
+        * Convert pgp_decrypt_mime() to use buffer pool.
+
+M	pgp.c
+
+2019-10-18 14:41:06 +0800  Kevin McCarthy  <kevin@8t8.us> (e383f5c9)
+
+        * Convert pgp_decrypt_part() to use buffer pool.
+
+M	pgp.c
+
+2019-10-18 14:29:56 +0800  Kevin McCarthy  <kevin@8t8.us> (f3bfb7d1)
+
+        * Convert pgp_extract_keys_from_attachment() to use buffer pool.
+
+M	pgp.c
+
+2019-10-18 14:21:19 +0800  Kevin McCarthy  <kevin@8t8.us> (e2722551)
+
+        * Convert pgp_verify_one() to use buffer pool.
+
+M	pgp.c
+
+2019-10-18 14:02:02 +0800  Kevin McCarthy  <kevin@8t8.us> (c1f9f00f)
+
+        * Convert pgp_check_traditional_one_body() to use buffer pool.
+
+M	pgp.c
+
+2019-10-17 18:34:55 +0800  Kevin McCarthy  <kevin@8t8.us> (e750e39c)
+
+        * Clean up pager change folder aborts to return to pager.
+        
+        Changing folder from within the pager behaved inconsistently when
+        aborting, or upon a normal error.  It would sometimes return the pager
+        and other times return to the index.
+        
+        Ensure it returns to the pager, except in the case where
+        mx_close_mailbox() fails due to a new mail or reopen event.  In that
+        case we likely want to be in the index - the message we were viewing
+        could have disappeared or relocated.
+
+M	curs_main.c
+
+2019-10-17 17:30:03 +0800  Kevin McCarthy  <kevin@8t8.us> (b15e8659)
+
+        * Remove menu->menu hack when redirecting pager ops through index.
+        
+        As noted in commit a327386c, this causes problems when redirecting ops
+        that open new menus.  There is no need to change the menu->menu type,
+        as a flag works perfectly well with no such side effects.
+        
+        This also removes the need for comments explaning the hack before
+        mutt_folder_hooks() when changing folders, or before displaying a
+        message in the pager.
+
+M	curs_main.c
+
+2019-10-17 16:01:11 +0800  Kevin McCarthy  <kevin@8t8.us> (e5f24ca8)
+
+        * Merge branch 'stable'
+
+2019-10-17 15:48:31 +0800  Kevin McCarthy  <kevin@8t8.us> (a327386c)
+
+        * Stable branch quick fix for pager change-mailbox push/exec bug.
+        
+        The menu functions mutt_push/pop_current_menu() keep track of the menu
+        stack, automatically setting CurrentMenu when exiting menus.
+        
+        The only gotcha was the function sharing between the index and pager
+        menus.  The index uses a hack, setting menu->menu to MENU_PAGER for
+        operations redirecting through the index and back to the pager
+        afterwards.
+        
+        I thought this was covered by the restoration of the menu before
+        returning to the pager, or when exiting the index switch.  However it
+        is not: invoking other menus, such as the browser, will result in
+        CurrentMenu being set to the Pager when exiting those (by
+        mutt_pop_current_menu()).  This can result in folder hooks failing for
+        unshared functions.
+        
+        A better fix is to remove the hack of using menu->menu, because this
+        can easily cause a problem in the future in other situations.  (I will
+        make this fix in master next.)  For the stable branch, I am explicitly
+        setting/restoring CurrentMenu before invoking the folder hooks.
+
+M	curs_main.c
+
+2019-10-16 15:42:54 +0800  Kevin McCarthy  <kevin@8t8.us> (30b1ff48)
+
+        * Convert pgp_app_handler to use buffer pool.
+        
+        Rename the pgp_copy_checksig() and mutt_wait_filter() return code
+        variables to provide more clarity, and to make the purpose and
+        assignment of rc more obvious.
+        
+        Change tmpfname creation failure to be like pgpoutfile and
+        pgperrfile, by going to the cleanup point.
+
+M	pgp.c
+
+2019-10-16 14:41:04 +0800  Kevin McCarthy  <kevin@8t8.us> (f566f734)
+
+        * Convert msg_search to use buffer.
+        
+        Avoid the buffer pool because of the long life cycle (across the
+        invocation of mutt_body_handler().
+
+M	pattern.c
+
+2019-10-16 14:13:05 +0800  Kevin McCarthy  <kevin@8t8.us> (23bfc45f)
+
+        * Convert mx_close_mailbox() to use buffer pool.
+
+M	mx.c
+
+2019-10-15 15:26:20 +0800  Kevin McCarthy  <kevin@8t8.us> (9506db1e)
+
+        * Reduce line buffer size in mx_get_magic().
+        
+        tmp is only used for mbox and mmdf iniital line examination.  That
+        only needs to look at 6 characters from the first line.
+
+M	mx.c
+
+2019-10-15 14:52:26 +0800  Kevin McCarthy  <kevin@8t8.us> (0944e898)
+
+        * Convert mutt_save_confirm() to use buffer pool.
+        
+        These are prompts, so don't really need the larger, dynamic
+        capability, but it might not hurt for a larger path.
+
+M	muttlib.c
+
+2019-10-15 14:38:07 +0800  Kevin McCarthy  <kevin@8t8.us> (48847904)
+
+        * Removed unused mutt_expand_link()
+
+M	muttlib.c
+M	protos.h
+
+2019-10-15 14:33:02 +0800  Kevin McCarthy  <kevin@8t8.us> (140cd885)
+
+        * Change ssl_init to use buffer pool for rand filename.
+
+M	mutt_ssl.c
+
+2019-10-15 13:48:59 +0800  Kevin McCarthy  <kevin@8t8.us> (5572a302)
+
+        * Convert mbox_sync_mailbox() to use buffer pool.
+        
+        Rewrite return(-1) to a new fatal target to ensure cleanup.
+        
+        Remove some repetitive unlink(tempfile) operations by adding a new
+        flag pointing when to start and stop that during a bail.
+
+M	mbox.c
+
+2019-10-13 16:25:54 +0800  Kevin McCarthy  <kevin@8t8.us> (71d6dbea)
+
+        * Update mime fields when piping a message with $pipe_decode set.
+        
+        Programs that process the message may get confused if the original
+        mime fields are in the output.  Add the CH_MIME flag to strip mime
+        headers and CH_TXTPLAIN to add decoded text mime headers in their
+        place, just as <decode-copy> does.
+        
+        However, make sure not to add the flags when printing, as printers
+        highly likely won't care and users probably don't want to see those
+        headers in their printout.
+
+M	commands.c
+
+2019-10-11 19:31:58 +0800  Kevin McCarthy  <kevin@8t8.us> (9a1b08bf)
+
+        * Merge branch 'stable'
+
+2019-10-11 19:17:58 +0800  Beck, Andre  <beck@ibh.de> (937a1eb1)
+
+        * Clear connection input buffer when closing.
+        
+        An RFC-violating reply from the Dovecot SMTP submission service
+        uncovered a bug in Mutt.  Mutt was not clearing out the input buffer
+        when closing the connection.
+        
+        Dovecot was including an extra 250 response after data submission:
+        
+          DATA
+          354 OK
+          Subject: Test 3
+        
+          Test 3
+          .
+          250 2.0.0  223 byte chunk, total 223
+          250 2.0.0 OK id=1iIqT1-0004wS-Ac
+          quit
+          221 2.0.0 Bye
+        
+        The multiline 250 reply requires a hyphen in the first response.  Mutt
+        closes the connection after the quit, but ends up leaving the
+        unexpected second line in the input buffer.  This causes an error in
+        the next usage of the connection.
+        
+        Clean out bufpos and available when closing the socket.
+
+M	mutt_socket.c
+
+2019-10-10 15:03:05 +0800  Kevin McCarthy  <kevin@8t8.us> (0e32b977)
+
+        * Add new browse-mailboxes function in index and pager.
+        
+        This allows direct access to the mailboxes list in the folder menu.
+        This is useful, for instance, if $browser_sticky_cursor is set and the
+        current directory does not contain the open mailbox.  The macro
+        version will lose the current mailbox while toggling to the mailboxes
+        list.
+
+M	OPS
+M	curs_main.c
+M	doc/Muttrc.head
+M	functions.h
+
+2019-10-09 12:59:41 +0800  Kevin McCarthy  <kevin@8t8.us> (e4c176b3)
+
+        * Convert main() to use buffers for paths.
+        
+        Convert fpath (used for checking and creating $folder.
+        
+        Convert expanded_infile and tempfile which are used for the -i,-H, and
+        -E options.  We allocate buffers, rather than use the pool, because
+        they are used for the duration of the compose/send operation.
+
+M	main.c
+M	protos.h
+M	send.c
+
+2019-10-09 08:36:59 +0800  Kevin McCarthy  <kevin@8t8.us> (fe69e4d1)
+
+        * Add sticky browser behavior for sorting.
+        
+        The menu isn't rebuilt after sorting, so the selected mailbox was not
+        sticky for that operation.
+        
+        Refactor the sticky cursor setting out so it can be explicitly called
+        after sorting too.
+
+M	browser.c
+
+2019-10-08 15:22:27 +0800  Kevin McCarthy  <kevin@8t8.us> (46223bc9)
+
+        * Convert start_debug() to use buffer pool.
+
+M	init.c
+
+2019-10-08 15:21:44 +0800  Kevin McCarthy  <kevin@8t8.us> (fb2487c2)
+
+        * Convert set/reset and source_rc to use buffers for paths.
+
+M	init.c
+
+2019-10-08 13:07:40 +0800  Kevin McCarthy  <kevin@8t8.us> (49c97808)
+
+        * Convert parse_path_(un)list to use buffer pool for path.
+        
+        Don't use the buf parameter to avoid stretching it out, as it's used
+        for the entire rc parsing, and typically just holds command names.
+
+M	init.c
+
+2019-10-08 12:28:30 +0800  Kevin McCarthy  <kevin@8t8.us> (d430f372)
+
+        * Change message cache id to use SHORT_STRING.
+        
+        Even that is too big, but it doesn't make make sense to use
+        _POSIX_PATH_MAX for the id string.
+
+M	imap/message.c
+
+2019-10-08 11:24:38 +0800  Kevin McCarthy  <kevin@8t8.us> (f055ff54)
+
+        * Convert imap_cachepath() and callers to use buffers.
+
+M	imap/imap_private.h
+M	imap/message.c
+M	imap/util.c
+
+2019-10-07 10:39:44 +0800  Kevin McCarthy  <kevin@8t8.us> (dcdbdfee)
+
+        * Convert imap fetch_new and fetch_message tempfiles to buffer pool.
+
+M	imap/message.c
+
+2019-10-07 09:55:39 +0800  Kevin McCarthy  <kevin@8t8.us> (2e0fc335)
+
+        * Convert imap_open_new_message() to use buffer pool.
+
+M	imap/imap.c
+
+2019-10-06 16:32:42 +0800  Kevin McCarthy  <kevin@8t8.us> (3f5b0220)
+
+        * Convert save-hook and fcc-hook to use buffer pool internally.
+        
+        The hook parameters still need to be converted, but I'm working
+        towards it slowly.
+
+M	hook.c
+M	muttlib.c
+M	protos.h
+
+2019-10-06 13:37:14 +0800  Kevin McCarthy  <kevin@8t8.us> (8351c060)
+
+        * Convert mutt_parse_hook() to use buffer pool.
+        
+        Remove the path variable, as this is not needed:
+        mutt_buffer_expand_path() and mutt_check_simple() can operate directly
+        on the pattern/command buffers.
+
+M	hook.c
+
+2019-10-05 14:10:04 +0800  Kevin McCarthy  <kevin@8t8.us> (43bc959c)
+
+        * Convert shrink_histfile() tempfile to use buffer pool.
+
+M	history.c
+
+2019-10-05 13:59:57 +0800  Kevin McCarthy  <kevin@8t8.us> (bb62f172)
+
+        * Convert mutt_help() to use buffer for tempfile.
+
+M	help.c
+
+2019-10-05 13:52:50 +0800  Kevin McCarthy  <kevin@8t8.us> (dafb1f38)
+
+        * Convert mutt_edit_headers() to use buffer pool.
+
+M	headers.c
+
+2019-10-04 15:29:03 +0800  Kevin McCarthy  <kevin@8t8.us> (48cf1092)
+
+        * Fix built-in pager checks for help and attachments.
+        
+        Mutt uses the built-in pager when $pager is unset too.  Fix a few
+        checks to also handle that case.
+
+M	help.c
+M	muttlib.c
+
+2019-09-30 18:50:27 -0700  Kevin McCarthy  <kevin@8t8.us> (a6bccbe1)
+
+        * Memcpy header cache fetch values to ensure alignment.
+        
+        While testing the hcache buffer pool changes, I noticed a misaligned
+        pointer warning when using LMDB.
+        
+        The other header cache backends must ensure alignment of the pointer
+        they return, but LMDB apparently does not.
+        
+        Instead of directly assigning and dereferencing the pointer fetched,
+        use memcpy to the appropriate type, just as the header cache restore
+        operation does.
+
+M	imap/imap.c
+M	imap/message.c
+M	imap/util.c
+M	mh.c
+
+2019-09-28 14:08:39 -0700  Kevin McCarthy  <kevin@8t8.us> (fb1686b6)
+
+        * Convert hcache delete and open calls to use buffer pool.
+
+M	hcache.c
+
+2019-09-27 19:21:26 -0700  Kevin McCarthy  <kevin@8t8.us> (36ee8d39)
+
+        * Convert hcache fetch and store raw to use buffer pool.
+
+M	hcache.c
+
+2019-09-27 18:12:27 -0700  Kevin McCarthy  <kevin@8t8.us> (a736d4a4)
+
+        * Convert hcache_open to use buffer pool.
+        
+        Change the namer function and mutt_hcache_per_folder to operate on a
+        buffer parameter.
+
+M	hcache.c
+M	hcache.h
+M	imap/util.c
+M	pop.c
+
+2019-09-27 15:46:49 -0700  Kevin McCarthy  <kevin@8t8.us> (84c1b646)
+
+        * Convert hcache db4 lockfile to buffer.
+
+M	hcache.c
+
+2019-09-27 14:42:45 -0700  Kevin McCarthy  <kevin@8t8.us> (34ad2134)
+
+        * Convert run_decode_and_handler() to use buffer pool.
+
+M	handler.c
+
+2019-09-27 14:28:01 -0700  Kevin McCarthy  <kevin@8t8.us> (a4f99230)
+
+        * Convert edit_one_message() to use buffer pool.
+
+M	editmsg.c
+
+2019-09-26 15:23:14 -0700  Kevin McCarthy  <kevin@8t8.us> (44349c11)
+
+        * Convert mutt_error_history to use buffer pool.
+
+M	curs_lib.c
+
+2019-09-25 18:44:50 -0700  Kevin McCarthy  <kevin@8t8.us> (13965f79)
+
+        * Convert crypt_extract_keys and signed handler to use buffers.
+
+M	crypt-mod-smime-classic.c
+M	crypt-mod.h
+M	crypt.c
+M	cryptglue.c
+M	mutt_crypt.h
+M	smime.c
+M	smime.h
+
+2019-09-25 15:28:30 -0700  Kevin McCarthy  <kevin@8t8.us> (fc0c2bee)
+
+        * Convert crypt-gpgme to use BUFFER for tempfiles.
+        
+        Use the pool where possible, but when the function calls other
+        long-running functions (such as mutt_body_handler() or
+        mutt_do_pager()), allocate the buffer.
+        
+        smime_gpgme_decrypt_mime() was not freeing the "cur" BODY generated on
+        error.  Add a call to mutt_free_body(cur) in the error handling.
+
+M	crypt-gpgme.c
+
+2019-09-22 15:59:27 -0700  Kevin McCarthy  <kevin@8t8.us> (4d2f645a)
+
+        * Fix memory leak in compose write-fcc function.
+        
+        The outer multipart was not being freed after writing.
+
+M	compose.c
+
+2019-09-22 15:58:58 -0700  Kevin McCarthy  <kevin@8t8.us> (0637998b)
+
+        * Convert compress setup_paths() to use buffer.
+
+M	compress.c
+
+2019-09-22 14:54:14 -0700  Kevin McCarthy  <kevin@8t8.us> (1ae6e10f)
+
+        * Remove nonull check from _mutt_enter_fname()
+        
+        It was a mistake to add the check when converting to use buffers in
+        commit 70ef4e9e.
+        
+        The buf must be non-null in the original version, and in this version
+        we are copying results back to it afterwards.
+
+M	curs_lib.c
+
+2019-09-22 14:38:03 -0700  Kevin McCarthy  <kevin@8t8.us> (b4cd9852)
+
+        * Convert compose menu fname variable to buffer.
+
+M	compose.c
+
+2019-09-22 14:16:56 -0700  Kevin McCarthy  <kevin@8t8.us> (5da50b4d)
+
+        * Convert buffer callers of mutt_get_field() to use buffer version.
+
+M	browser.c
+M	curs_lib.c
+M	muttlib.c
+M	pattern.c
+M	recvattach.c
+
+2019-09-22 14:11:43 -0700  Kevin McCarthy  <kevin@8t8.us> (ecd0d6ed)
+
+        * Create mutt_buffer_get_field().
+        
+        This will reduce the buffer->dptr fiddling all over the place into one
+        spot until mutt_enter_string() can be converted.
+
+M	curs_lib.c
+M	protos.h
+
+2019-09-21 19:41:28 -0700  Kevin McCarthy  <kevin@8t8.us> (4f89f530)
+
+        * Convert compose check_attachments() to use buffer pool.
+        
+        Modify error message so that the filename comes last, to prevent a
+        long path from hiding the error message or prompt.
+
+M	compose.c
+
+2019-09-21 18:34:51 -0700  Kevin McCarthy  <kevin@8t8.us> (4050cc43)
+
+        * Fix mutt_save_message() "enter_fname()" to use buffer version.
+        
+        Commit be632f11 converted this function to use the buffer pool, but
+        accidentally used the non-buffer prompt when there was already a
+        buffer-converted version.
+
+M	commands.c
+
+2019-09-21 12:41:10 -0700  Kevin McCarthy  <kevin@8t8.us> (7ca52826)
+
+        * Merge branch 'stable'
+
+2019-09-21 12:36:56 -0700  Kevin McCarthy  <kevin@8t8.us> (34cd43c3)
+
+        * automatic post-release commit for mutt-1.12.2
+
+M	ChangeLog
+M	VERSION
+
+2019-09-19 18:52:24 -0700  Kevin McCarthy  <kevin@8t8.us> (192a6d0e)
+
+        * Convert mutt_complete() to use the buffer pool.
+        
+        Add helper functions mutt_buffer_substrcpy() and
+        mutt_buffer_concatn_path().
+        
+        Remove mutt_concatn_path() because mutt_complete() was the only
+        caller.
+
+M	buffer.c
+M	buffer.h
+M	complete.c
+M	imap/imap.c
+M	imap/imap.h
+M	lib.c
+M	lib.h
+M	muttlib.c
+M	protos.h
+
+2019-09-15 15:41:42 -0700  Kevin McCarthy  <kevin@8t8.us> (a4b53e19)
+
+        * Improve sidebar indentation and shortpath behavior.
+        
+        The previous implementation only enabled $sidebar_folder_indent for
+        mailboxes underneath $folder.  Change indentation to be based upon the
+        previous common-path mailbox in the list.  Indent one more than the
+        common-path mailbox, rather than the number of delimiters after
+        $folder.
+        
+        Change $sidebar_short_path to shorten based on the previous mailbox in
+        the list too.
+        
+        Invoke mutt_buffer_pretty_mailbox() to prefix the mailbox with '~' or
+        '=' characters.  This changes the output for the case where mailbox
+        equals $folder, but provides uniform display behavior across mutt.
+        
+        Thanks to Christopher Zimmermann (@madroach) for the original patch,
+        which this commit is based upon.
+
+M	sidebar.c
+
+2019-09-11 19:47:13 -0700  Kevin McCarthy  <kevin@8t8.us> (fa965230)
+
+        * Convert print_attachment_list to use buffer pool.
+
+M	recvattach.c
+
+2019-09-11 19:40:48 -0700  Kevin McCarthy  <kevin@8t8.us> (70bb4fad)
+
+        * Convert query_pipe_attachment to use buffer pool.
+
+M	attach.c
+M	protos.h
+M	recvattach.c
+
+2019-09-11 19:10:02 -0700  Kevin McCarthy  <kevin@8t8.us> (4142e2e5)
+
+        * Convert recvattach save_attachment functions to use buffer pool.
+        
+        Convert utility functions prepend_curdir() and mutt_check_overwrite()
+        to use BUFFER, as they are only used by those two functions.
+
+M	muttlib.c
+M	protos.h
+M	recvattach.c
+
+2019-09-11 16:23:46 -0700  Kevin McCarthy  <kevin@8t8.us> (be632f11)
+
+        * Convert mutt_save_message() to use buffer pool.
+        
+        Change imap_copy_messages() dest parameter to const char *.
+        
+        mutt_default_save() will be converted to use a buffer next, removing
+        the dptr fixups.
+
+M	commands.c
+M	imap/imap.h
+M	imap/message.c
+
+2019-09-11 15:55:01 -0700  Kevin McCarthy  <kevin@8t8.us> (67f4d1d0)
+
+        * Convert mutt_display_message() to buffer pool.
+        
+        Remove an unused mime-type string generation at the top of the
+        function too.  The code using the mime type was removed a long time
+        ago in commit 246198ae.
+
+M	commands.c
+
+2019-09-09 18:39:19 -0700  Kevin McCarthy  <kevin@8t8.us> (f8e93908)
+
+        * Merge branch 'stable'
+
+2019-09-09 18:19:03 -0700  Kevin McCarthy  <kevin@8t8.us> (773166e9)
+
+        * Change browser <display-filename> to show full_path.
+        
+        Prior to the introduction of display_name/full_path, it showed "name",
+        which was the full IMAP URL but the shortname for folder/mailbox view.
+        
+        Now that the full_path is available, it makes sense to show that for
+        all cases.
+
+M	browser.c
+
+2019-09-09 14:06:31 -0700  Kevin McCarthy  <kevin@8t8.us> (2e6d4903)
+
+        * Convert remaining mutt_encode_path() call to use BUFFER.
+        
+        Then rename the other uses of mutt_buffer_encode_path() to
+        mutt_encode_path().
+
+M	bcache.c
+M	hcache.c
+M	muttlib.c
+M	protos.h
+
+2019-09-09 18:07:16 -0700  Kevin McCarthy  <kevin@8t8.us> (616b2063)
+
+        * Merge branch 'stable'
+
+2019-09-08 10:49:37 -0700  Kevin McCarthy  <kevin@8t8.us> (0fa71030)
+
+        * Add $browser_sticky_cursor default set.
+        
+        This option attempts to keep the browser cursor on the same mailbox.
+        
+        It does this by keeping track of the current selected mailbox and
+        comparing that when regenerating the menu.
+        
+        Modify imap_mailbox_create() and imap_mailbox_rename() to return the
+        new mailbox name so it can be automatically selected.
+
+M	browser.c
+M	imap/browse.c
+M	imap/imap.h
+M	imap/imap_private.h
+M	imap/util.c
+M	init.h
+M	mutt.h
+
+2019-09-08 12:09:51 -0700  Kevin McCarthy  <kevin@8t8.us> (1600dd18)
+
+        * Rename browser fields to display_name and full_path.
+        
+        Mailbox and Folder view don't make use of the desc field.  They store
+        an abbreviated version in the name field and expand it when selecting
+        or testing it.
+        
+        IMAP stores the full URL in name, and stores an abbreviated
+        version (possibly with a trailing slash) in the desc field.
+        
+        The asymetricity makes it awkward, and interferes with a smart-cursor
+        option in the next commit.  So instead rename the fields to
+        "display_name" and "full_path".
+        
+        In Mailfox and Folder view, store the fully expanded path, which we
+        have while iterating, in "full_path", and the shortened version in
+        "display_name".
+        
+        Likewise in IMAP, store the full URL in "full_path" and the shortened
+        version in "display_name".
+        
+        Simplify the code in browser.c to use the full_path instead of
+        concatenating and expanding.
+
+M	browser.c
+M	browser.h
+M	imap/browse.c
+
+2019-09-06 16:14:08 -0700  Kevin McCarthy  <kevin@8t8.us> (ad72ec6c)
+
+        * Convert bcache to use buffer pools.
+
+M	bcache.c
+M	muttlib.c
+M	protos.h
+
+2019-09-01 19:10:23 -0700  Kevin McCarthy  <kevin@8t8.us> (c28cba77)
+
+        * Fix memory leak when attaching messages.
+        
+        Setting actx->idx[]->content->parts to NULL causes a memory leak,
+        because message attachments store a BODY there that needs to be freed.
+        
+        I looked through the various use cases of ci_send_message() and
+        actually believe content->parts will be NULL for all other cases
+        except message attachments.  From the comment added to
+        delete_attachment():
+        
+          Other ci_send_message() message constructors are careful to free
+          any body->parts, removing depth:
+           - mutt_prepare_template() used by postponed, resent, and draft files
+           - mutt_copy_body() used by the recvattach menu and $forward_attachments.
+        
+          I believe it is safe to completely remove the "content->parts =
+          NULL" statement.  But for safety, am doing so only for the case
+          it must be avoided: message attachments.
+
+M	compose.c
+
+2019-09-01 13:25:06 -0700  Kevin McCarthy  <kevin@8t8.us> (aafe98ba)
+
+        * Reuse the static space_stuff function for unstuffing.
+
+M	rfc3676.c
+
+2019-08-31 14:17:22 -0700  Kevin McCarthy  <kevin@8t8.us> (7949149a)
+
+        * Remove manual note about space-stuffing only once.
+        
+        Stuffing is now performed each time.
+
+M	doc/manual.xml.head
+
+2019-08-31 13:37:16 -0700  Kevin McCarthy  <kevin@8t8.us> (4959e8d4)
+
+        * Re-enable and cleanup format-flowed space stuffing.
+        
+        Commit 04cb5bde tried to fix re-stuffing a postponed message more than
+        once, but unfortunately broke the normal case of composing a new
+        message.  So actually, space-stuffing has been turned off the past 7
+        years.
+        
+        Move format=flowed parameter setting below the standard message
+        pre-processing block.  It shouldn't be performed for draft-files even
+        with $resume_draft_files set.  Moving out of the block makes that
+        clearer.
+        
+        Create mutt_rfc3676_space_(un)stuff() functions, which check the
+        content type and stuff/unstuff apprpropriately.  Note that the
+        stuff/unstuff does not depend on $text_flowed, which is only in charge
+        of setting the format=flowed parameter.  This parameter can also come
+        from resumed/resent/draft messages and should still be respected.
+        
+        Add unstuffing to mutt_prepare_template().  This is called by
+        postponed, resent, and draft files.  This will prevent double-stuffing
+        in those cases.
+        
+        Unstuff/restuff around editing the message in the compose menu, to
+        keep everything transparent to the user.  I originally put the
+        stuffing *after* the compose menu, but previewing the messages in the
+        compose menu did not work properly in that case.  It's cleaner this
+        way too.
+        
+        Change the stuff/unstuff functions to preserve the original
+        hdr->content->filename.  The "hack" previously used would interact
+        poorly with editable body files (mutt -i -E).  Fortunately space
+        stuffing was pretty much disabled except in unusual cases before.
+
+M	compose.c
+M	doc/manual.xml.head
+M	init.h
+M	postpone.c
+M	rfc3676.c
+M	rfc3676.h
+M	send.c
+
+2019-08-31 13:36:28 -0700  Kevin McCarthy  <kevin@8t8.us> (af47e694)
+
+        * Properly revert on an autocrypt postpone failure.
+
+M	send.c
+
+2019-08-28 14:47:15 -0700  Kevin McCarthy  <kevin@8t8.us> (aa6d4663)
+
+        * Merge branch 'stable'
+
+2019-08-28 20:22:10 +0000  Olaf Hering  <olaf@aepfle.de> (2b8dc129)
+
+        * de.po: proper translation for term collapse
+        
+        The intention of the term "collapse" is something like opening and
+        closing an item. The initial translation which was added two decades
+        ago means something like "breaks by weakness", which does not fit in
+        the context of mutt.
+        
+        Use a term which means literally "opening and closing an item, like a
+        book".
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2019-08-20 15:37:06 -0700  Kevin McCarthy  <kevin@8t8.us> (c8ec78e1)
+
+        * Clean up the autocrypt doc a bit more.
+
+M	doc/manual.xml.head
+
+2019-08-20 15:17:31 -0700  Kevin McCarthy  <kevin@8t8.us> (f7c70a02)
+
+        * Update autocrypt keyring documentation.
+        
+        Recommend setting $autocrypt_dir to your normal keyring directory if
+        you want to use your existing key.
+        
+        Trying to copy it over leads to signature verification issues.  Even
+        if I reversed the order (which is much less clean), that would just
+        lead to missing key signature errors for Autocrypt messages instead.
+
+M	doc/manual.xml.head
+
+2019-08-20 14:57:29 -0700  Kevin McCarthy  <kevin@8t8.us> (577d5d14)
+
+        * Fix --with-sqlite3 test for autocrypt.
+        
+        Since $with_sqlite3 can contain a path, we want to check if it is
+        "no", not that it isn't "yes".
+
+M	configure.ac
+
+2019-08-17 15:38:34 -0700  Kevin McCarthy  <kevin@8t8.us> (d4ec818a)
+
+        * Add $ssl_use_tlsv1_3 config variable, default set.
+
+M	init.h
+M	mutt.h
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2019-06-28 15:09:51 -0700  Kevin McCarthy  <kevin@8t8.us> (be684ef2)
+
+        * Add size display configuration variables.
+        
+        Although it would be nice to "open this up" more, performance and
+        security/stability issues would arise.
+        
+        Based on the thread in mutt-dev, I hope these vars will satisfy most
+        customization needs:
+          $size_show_bytes
+          $size_show_mb
+          $size_show_fractions
+          $size_units_on_left
+
+M	doc/manual.xml.head
+M	init.h
+M	mutt.h
+M	muttlib.c
+
+2019-08-13 21:03:51 -0700  Kevin McCarthy  <kevin@8t8.us> (342b91cf)
+
+        * Fix LibreSSL build.
+        
+        Apparently LibreSSL doesn't implement SSL_has_pending(), even for
+        newer versions.
+
+M	mutt_ssl.c
+
+2019-08-13 15:14:37 -0700  Kevin McCarthy  <kevin@8t8.us> (536353c7)
+
+        * Update POTFILES.in.
+        
+        The file was missing a few files with translation strings:
+        copy.c, imap/auth_oauth.c, and safe_asprintf.c.
+
+M	po/POTFILES.in
+
+2019-07-28 07:54:32 -0700  Kevin McCarthy  <kevin@8t8.us> (8353407c)
+
+        * Add checks for buffered OpenSSL or GnuTLS data when polling.
+        
+        I don't believe this has had an actual effect, because Mutt doesn't
+        support renegotiation, and we are only polling immediately after
+        sending NOOP.
+        
+        However, it looks like checking is technically the correct thing to do
+        to avoid polling waiting for data that is already buffered.
+
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2019-08-13 14:20:33 -0700  Kevin McCarthy  <kevin@8t8.us> (fdfda1b7)
+
+        * Mention base64 keydata being stored in the autocrypt database.
+
+M	doc/manual.xml.head
+
+2019-08-11 14:35:07 -0700  Kevin McCarthy  <kevin@8t8.us> (c79c769f)
+
+        * Move LIBAUTOCRYPT before MUTTLIBS to fix building issues.
+
+M	Makefile.am
+
+2019-08-11 14:17:50 -0700  Kevin McCarthy  <kevin@8t8.us> (456737cd)
+
+        * Add autocrypt and sqlite3 to .gitlab-ci.yml.
+
+M	.gitlab-ci.yml
+
+2019-08-09 14:15:18 -0700  Kevin McCarthy  <kevin@8t8.us> (ae332f72)
+
+        * Add L10N comment about autocrypt menu help line abbreviations.
+
+M	autocrypt/autocrypt_acct_menu.c
+
+2019-08-09 13:58:55 -0700  Kevin McCarthy  <kevin@8t8.us> (9f692bd3)
+
+        * Add a note about autocrypt first-run and macros.
+
+M	doc/manual.xml.head
+
+2019-08-09 13:37:08 -0700  Kevin McCarthy  <kevin@8t8.us> (b8e9dfc1)
+
+        * Add autocrypt documentation about shared key and keyring strategies.
+
+M	doc/manual.xml.head
+
+2019-08-08 20:49:32 -0700  Kevin McCarthy  <kevin@8t8.us> (38f06669)
+
+        * Minor autocrypt manual section updates.
+        
+        Mention key selection during account creation and $autocrypt_reply for
+        controlling autocrypt mode setting during replies.
+
+M	doc/manual.xml.head
+
+2019-08-08 09:18:53 -0700  Kevin McCarthy  <kevin@8t8.us> (d0ef8c32)
+
+        * Enabled writing protected subject with autocrypt too.
+
+M	crypt.c
+
+2019-08-07 18:34:58 -0700  Kevin McCarthy  <kevin@8t8.us> (1de46058)
+
+        * Turn off macro processing during autocrypt initialization.
+        
+        The muttrc can push events into the macro buffer, with the assumption
+        that mailbox will be opened next.  This will interfere with the
+        prompts uses during first run.  The only issue is that macros won't
+        work inside the folder browser, if invoked.
+
+M	autocrypt/autocrypt.c
+
+2019-08-07 18:24:15 -0700  Kevin McCarthy  <kevin@8t8.us> (41d9d9cf)
+
+        * Allow nested setting of OPTIGNOREMACROEVENTS.
+        
+        This will be needed for the first-run of autocrypt initialization.
+        The initialization involves a number of prompts, and can even use the
+        folder browser.  The browser could in turn connect to IMAP which might
+        invoke a certificate prompt, login prompt, etc.
+
+M	curs_lib.c
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2019-08-07 14:31:53 -0700  Kevin McCarthy  <kevin@8t8.us> (04817c00)
+
+        * Add $autocrypt_reply.
+        
+        This allows turning off the force-autocrypt mode when replying to an
+        autocrypt email.
+
+M	init.h
+M	mutt.h
+M	send.c
+
+2019-08-07 14:17:28 -0700  Kevin McCarthy  <kevin@8t8.us> (01bc088c)
+
+        * Automatically clear screen when popping the last menu.
+        
+        This removes the need to manually clear the screen during pre-menu
+        operations, such as autocrypt first run initialization.
+
+M	autocrypt/autocrypt.c
+M	menu.c
+
+2019-08-07 14:12:43 -0700  Kevin McCarthy  <kevin@8t8.us> (d55b0390)
+
+        * Add ability to create autocrypt account from an existing key.
+        
+        This is useful when adding accounts, or for users who want to use an
+        existing key from the keyring during initial account creation.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	crypt-gpgme.c
+M	crypt-gpgme.h
+
+2019-08-04 07:55:26 -0700  Kevin McCarthy  <kevin@8t8.us> (769a7765)
+
+        * Don't try to decrypt autocrypt messages if the option is off.
+
+M	cryptglue.c
+
+2019-08-04 07:52:19 -0700  Kevin McCarthy  <kevin@8t8.us> (da54c660)
+
+        * Manual typo fix.
+        
+        Thanks to Petr Pisar for pointing out the error.
+
+M	doc/manual.xml.head
+
+2019-08-03 13:53:40 -0700  Kevin McCarthy  <kevin@8t8.us> (1089deb0)
+
+        * Add autocrypt README file
+
+M	autocrypt/Makefile.am
+A	autocrypt/README
+
+2019-08-02 09:03:41 -0700  Kevin McCarthy  <kevin@8t8.us> (128127cb)
+
+        * Add documentation for the autocrypt feature.
+
+M	doc/manual.xml.head
+M	init.h
+
+2019-07-31 18:56:29 -0700  Kevin McCarthy  <kevin@8t8.us> (2822b4eb)
+
+        * Add option to scan mailboxes during first run.
+        
+        The scanner will disable the header cache, allowing scanning all
+        messages in the mailbox.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_private.h
+
+2019-07-31 15:42:09 -0700  Kevin McCarthy  <kevin@8t8.us> (e01b3f02)
+
+        * Add more translation string comments for autocrypt.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt_acct_menu.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_gpgme.c
+M	compose.c
+
+2019-07-28 19:24:11 -0700  Kevin McCarthy  <kevin@8t8.us> (85bd11b0)
+
+        * Basic autocrypt account menu.
+        
+        Provide ability to create, delete, and toggle the prefer-encrypt and
+        enabled flag for an account.
+        
+        Hook into the index via 'A' <autocrypt-acct-menu>.
+
+M	OPS
+M	autocrypt/Makefile.am
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+A	autocrypt/autocrypt_acct_menu.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_private.h
+M	curs_main.c
+M	doc/manual.xml.tail
+M	functions.h
+M	globals.h
+M	init.h
+M	keymap.c
+M	keymap.h
+M	po/POTFILES.in
+
+2019-07-30 19:14:56 -0700  Kevin McCarthy  <kevin@8t8.us> (36115604)
+
+        * Convert peer_update to just pass the peer object.
+        
+        Unlike get and insert, there is no need for an addres parameter that
+        needs to be normalized, since the address is already in the peer
+        object.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_private.h
+
+2019-07-28 19:23:12 -0700  Kevin McCarthy  <kevin@8t8.us> (71e881a6)
+
+        * Improve gen-map-doc work on multi-word maps.
+
+M	doc/gen-map-doc
+
+2019-07-27 15:34:51 -0700  Kevin McCarthy  <kevin@8t8.us> (e5463f57)
+
+        * Add account->enabled checks.
+        
+        Add to ui recommendation, keylist generator, and autocrypt header
+        writing routines.
+
+M	autocrypt/autocrypt.c
+
+2019-07-27 15:11:38 -0700  Kevin McCarthy  <kevin@8t8.us> (a7a5abe4)
+
+        * Add prefer-encrypt prompt during account creation.
+
+M	autocrypt/autocrypt.c
+
+2019-07-27 13:44:36 -0700  Kevin McCarthy  <kevin@8t8.us> (ec6953f5)
+
+        * Add AUTOCRYPT header to imap fetch list.
+        
+        If $autocrypt is set, add the header to make IMAP behave the same as
+        other formats (parsing on initial mailbox opening).
+        
+        This will also be useful if we perform an initial scan during account
+        creation, to make that work for IMAP too.
+
+M	imap/message.c
+
+2019-07-26 16:27:04 -0700  Kevin McCarthy  <kevin@8t8.us> (0d94a3dc)
+
+        * Add L10N translation message comments.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_gpgme.c
+M	compose.c
+
+2019-07-26 16:00:22 -0700  Kevin McCarthy  <kevin@8t8.us> (43c57659)
+
+        * Add autocrypt source files to POTFILES.in
+
+M	po/POTFILES.in
+
+2019-07-26 15:59:47 -0700  Kevin McCarthy  <kevin@8t8.us> (baac6d68)
+
+        * Print an error message if an autocrypt key can't be found.
+
+M	autocrypt/autocrypt.c
+
+2019-07-26 13:55:46 -0700  Kevin McCarthy  <kevin@8t8.us> (2aec979b)
+
+        * Handle autocrypt message decryption.
+        
+        Try autocrypt first for crypt_pgp_decrypt_mime() and
+        pgp_gpgme_encrypted_handler().
+        
+        Propagate the autocrypt bit if successful.  This is used when replying
+        to an autocrypt message, to force a reply using autocrypt.
+
+M	crypt-gpgme.c
+M	crypt.c
+M	cryptglue.c
+M	handler.c
+M	mutt.h
+
+2019-07-25 19:12:32 -0700  Kevin McCarthy  <kevin@8t8.us> (d0a56a14)
+
+        * Slightly improve the gossip header key update.
+        
+        Don't set an empty peer.gossip_keydata with a value that matches the
+        current peer.keydata.  This just wastes space.
+
+M	autocrypt/autocrypt.c
+
+2019-07-24 18:59:07 -0700  Kevin McCarthy  <kevin@8t8.us> (78d028d7)
+
+        * Fix process_gossip_headers() to look at the right envelope.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	commands.c
+
+2019-07-21 15:15:06 -0700  Kevin McCarthy  <kevin@8t8.us> (963fc1ba)
+
+        * Autocrypt outgoing emails.
+        
+        Change crypt_get_keys() to query autocrypt.
+        
+        When oppenc_mode is set, we still query the original keyring
+        regardless, because the compose menu can still run oppenc even if
+        autocrypt is on.
+        
+        Since mutt_autocrypt_ui_recommendation() checks each key as part of
+        making the recommendation, add a keylist parameter and use that
+        function.
+        
+        Add gpgme changes to use the autocrypt context for encryption.
+        
+        Postpone work:
+        * Change mutt_protect() to have a postpone parameter.  Remove the
+          manual toggling of the SIGN bit outside the call when postponing.
+        
+        * Since autocrypt doesn't set the SIGN bit, this allows us to turn off
+          signing inside mutt_protect() for both normal and autocrypt mode.
+        
+        * Set the autocrypt postpone key in AutocryptDefaultKey.
+        
+        Write autocrypt and gossip headers in outgoing emails.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	compose.c
+M	crypt-gpgme.c
+M	crypt.c
+M	cryptglue.c
+M	globals.h
+M	mutt.h
+M	mutt_crypt.h
+M	postpone.c
+M	send.c
+M	sendlib.c
+
+2019-07-19 12:54:32 -0700  Kevin McCarthy  <kevin@8t8.us> (959628d0)
+
+        * Add autocrypt line to the compose menu.
+        
+        Remove the hardcoded HDR_ATTACH offset calcuation, and add an explicit
+        enum for the "-- Attachments" line to make loops and padding array
+        sizes easier.
+        
+        Add security and recommendataion fields on the line.
+        
+        Add mutt_autocrypt_ui_recommendation, following the autocrypt spec
+        guidelines.
+
+M	OPS
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	compose.c
+M	functions.h
+M	mutt.h
+M	mutt_crypt.h
+
+2019-07-20 14:48:06 -0700  Kevin McCarthy  <kevin@8t8.us> (009b62c9)
+
+        * Add another HEADER security bit for autocrypt.
+
+M	mutt.h
+M	mutt_crypt.h
+
+2019-07-18 13:22:52 -0700  Kevin McCarthy  <kevin@8t8.us> (7c183407)
+
+        * Change gossip header address comparison to use normalized addresses.
+
+M	autocrypt/autocrypt.c
+
+2019-07-18 13:19:47 -0700  Kevin McCarthy  <kevin@8t8.us> (8f0f0da2)
+
+        * Change autocrypt_db normalization to return ADDRESS.
+        
+        This makes reusing the code in autocrypt.c easier.
+
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_private.h
+
+2019-07-15 18:36:57 -0700  Kevin McCarthy  <kevin@8t8.us> (a2a2e885)
+
+        * Add gossip header processing.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_private.h
+M	commands.c
+M	mutt.h
+M	muttlib.c
+M	parse.c
+
+2019-07-14 18:59:28 -0700  Kevin McCarthy  <kevin@8t8.us> (f0946c86)
+
+        * Convert to use sqllite3_prepare_v3().
+        
+        The documentation suggests the SQLITE_PREPARE_PERSISTENT flag is
+        helpful for long-lived prepared statements, and Mutt is using.
+
+M	autocrypt/autocrypt_db.c
+
+2019-07-11 18:45:45 -0700  Kevin McCarthy  <kevin@8t8.us> (c7d4b019)
+
+        * Process autocrypt headers.
+        
+        Create/update peer database accounts and gpg keys based on the headers.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	mutt.h
+M	parse.c
+M	protos.h
+
+2019-07-11 18:06:56 -0700  Kevin McCarthy  <kevin@8t8.us> (7fd50ddd)
+
+        * Add autocrypt header parsing to mutt_parse_rfc822_line().
+        
+        Convert parse_parameters() for autocrypt header usage:
+        
+          * change to use a BUFFER to accomodate large autocrypt keydata
+            attribute values.
+        
+          * Autocrypt header parameters are not rfc2231 compliant.  Rather
+            than rolling another very similar function, just change the
+            existing one to allow space separation.
+
+M	mutt.h
+M	muttlib.c
+M	parse.c
+M	protos.h
+
+2019-07-08 20:58:32 -0700  Kevin McCarthy  <kevin@8t8.us> (f92049e9)
+
+        * Add initial autocrypt account setup.
+        
+        Generate gpg key and add account record to the database.
+
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	main.c
+
+2019-07-08 15:23:44 -0700  Kevin McCarthy  <kevin@8t8.us> (4586444c)
+
+        * Factor out mutt_edit_address() in send.c.
+        
+        For reuse by autocrypt for address prompts.
+
+M	protos.h
+M	send.c
+
+2019-07-07 14:37:52 -0700  Kevin McCarthy  <kevin@8t8.us> (715a50a8)
+
+        * Start autocrypt gpgme.
+        
+        Add a basic init function.
+        
+        Bump up the required gpgme version to 1.8.0 if autocrypt is enabled.
+
+M	autocrypt/Makefile.am
+M	autocrypt/autocrypt.c
+A	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	configure.ac
+
+2019-07-06 14:01:13 -0700  Kevin McCarthy  <kevin@8t8.us> (be89dc7b)
+
+        * Add database and schema initialization.
+        
+        Add mutt_mkdir() library function supporting recursive mkdir.
+
+M	autocrypt/Makefile.am
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+A	autocrypt/autocrypt_db.c
+A	autocrypt/autocrypt_private.h
+A	autocrypt/autocrypt_schema.c
+M	lib.c
+M	lib.h
+M	main.c
+
+2019-07-06 11:35:22 -0700  Kevin McCarthy  <kevin@8t8.us> (e9668902)
+
+        * Add autocrypt config vars.
+
+M	doc/makedoc-defs.h
+M	globals.h
+M	init.h
+M	mutt.h
+
+2019-07-03 19:51:09 -0700  Kevin McCarthy  <kevin@8t8.us> (1fe2980d)
+
+        * Initial autoconf and makefile setup for autocrypt.
+
+M	.gitignore
+M	Makefile.am
+A	autocrypt/Makefile.am
+A	autocrypt/autocrypt.c
+A	autocrypt/autocrypt.h
+M	check_sec.sh
+M	configure.ac
+M	main.c
+
+2019-07-28 10:13:22 -0700  Kevin McCarthy  <kevin@8t8.us> (6f1e5196)
+
+        * Add a comment to the OPTIGNOREMACROEVENTS km_dokey() change.
+        
+        The option was added in commit 53900afa, and its actual purpose was
+        to separate out an "unget" event buffer from the "macro" buffer, to
+        solve a problem with certificate prompts.
+        
+        The safest approach in a low-level function like km_dokey() was to
+        return an error if new macros were generated when the option is set.
+        However, this results in an unbuffered username/password prompt being
+        aborted.
+        
+        Currently the only users of unbuffered input are the SSL certificate
+        prompts, which use menu->dialog mode (and thus mutt_getch() directly)
+        and username/password prompts.  So the only affected cases are
+        editor-menu prompts, and returning the pressed keys is likely less
+        surprising than aborting the prompt.
+        
+        If other unbuffered menus are created in the future, we may want to
+        add a check for which menu mode is being used.
+
+M	keymap.c
+
+2019-07-26 13:54:12 +0200  Oneric  <Nyff@protonmail.ch> (a173719c)
+
+        * Change OPTIGNOREMACROEVENTS to actuallly ignore macros instead of throwing errors on macros
+
+M	keymap.c
+
+2019-07-25 18:23:38 -0700  Kevin McCarthy  <kevin@8t8.us> (6d4107c8)
+
+        * Merge branch 'stable'
+
+2019-07-05 08:44:21 -0700  Andrew Marks  <amarks@red.ridge.amrx.net> (53d5550b)
+
+        * Added * option to unattachments command
+        
+        The * option clears all previous attachments settings. A
+        list_free_generic method is added to muttlib to enable generic freeing
+        of specific LIST structures. free_attachments_data is used with
+        list_free_generic to clear four LISTs which manage allowed and excluded
+        inline and attached "attachments"
+        
+        refs #1
+
+M	doc/manual.xml.head
+M	init.c
+M	mutt.h
+M	muttlib.c
+
+2019-07-18 16:16:15 -0400  Drew DeVault  <sir@cmpwn.com> (70d879c4)
+
+        * Add builds.sr.ht CI manifests
+        
+        For Alpine Linux (musl libc), Debian (glibc), and FreeBSD.
+
+A	.builds/alpine.yml
+A	.builds/debian.yml
+A	.builds/freebsd.yml
+
+2019-07-18 13:44:19 -0700  Kevin McCarthy  <kevin@8t8.us> (ba7116d4)
+
+        * Fix a reference to HeaderCachePageSize.
+        
+        Commit 4c728278 converted the config far to type DT_LNUM, but
+        embarrassingly I missed a usage.
+
+M	hcache.c
+
+2019-07-13 21:49:05 -0400  Daniel Kahn Gillmor  <dkg@fifthhorseman.net> (82973a6e)
+
+        * Omit User-Agent: header by default
+        
+        The User-Agent: header can be fun and interesting and useful for
+        debugging, but it also leaks quite a bit of information about the user
+        and their software stack.
+        
+        This represents a potential security risk (attackers can target the
+        particular stack) and also an anonymity risk (a user trying to
+        preserve their anonymity by sending mail from a non-associated account
+        might reveal quite a lot of information if their choice of mail user
+        agent is exposed).
+        
+        Users who want to configure `user_agent` to `yes` can still do so, but
+        it makes sense to have safer defaults.
+        
+        Closes: #159
+
+M	init.h
+
+2019-06-28 13:00:57 -0700  Kevin McCarthy  <kevin@8t8.us> (7f8642d4)
+
+        * Merge branch 'stable'
+
+2019-06-27 15:35:12 -0700  Kevin McCarthy  <kevin@8t8.us> (8768e10f)
+
+        * Remove unnecessary "" checks for DT_STR and DT_PATH MuttVars.
+        
+        MuttVars of those types are set via safe_strdup(), which returns NULL
+        if the original is "".  Thus Var implies *Var.
+        
+        A good portion of the code relies on that axiom, but over the years
+        some (Var && *Var) checks have crept in, including from me.
+        
+        This was partially because of the INITVAL("") that were in the code,
+        which implied (incorrectly) the initial value could be "".  Commit
+        2f91d43e removed those to make it more clear.
+        
+        This commit removes the *Var checks to make it even clearer, and help
+        avoid them creeping back in again.
+
+M	alias.c
+M	bcache.c
+M	charset.c
+M	commands.c
+M	compose.c
+M	crypt-gpgme.c
+M	crypt.c
+M	curs_main.c
+M	handler.c
+M	hcache.c
+M	hook.c
+M	imap/auth.c
+M	imap/auth_oauth.c
+M	init.c
+M	mutt_socket.c
+M	muttlib.c
+M	parse.c
+M	pgpinvoke.c
+M	pop_auth.c
+M	rfc1524.c
+M	rfc2047.c
+M	rfc2231.c
+M	send.c
+M	sendlib.c
+M	smime.c
+M	smtp.c
+
+2019-06-27 11:06:19 -0700  Kevin McCarthy  <kevin@8t8.us> (4c728278)
+
+        * Convert $header_cache_pagesize to type DT_LNUM.
+        
+        Prior to commit 4bc76c2f there was no LNUM type, and so the workaround
+        was to store it as a string, converting in the hcache_open_gdbm()
+        call.
+        
+        This will not affect the user interface or config file, because DT_NUM
+        and DT_LNUM read in a string from the config file and convert to a
+        number.  Quotes are used for escaping style, not passed through to the
+        variable setter.
+        
+        So essentially this simply moves the conversion to parse_set(), and
+        provides feedback for a non-numeric type immediately.
+
+M	globals.h
+M	hcache.c
+M	init.h
+
+2019-06-25 14:25:33 -0700  Kevin McCarthy  <kevin@8t8.us> (793e0fc2)
+
+        * Convert Commands to use the union pointer_long_t too.
+        
+        As with MuttVars, Commands was using an unsigned long to hold pointers
+        as well as enums.  Convert to use the same union type of MuttVars.
+        
+        Adjust command functions data parameter type to the union.  Since
+        these are used outside init.c, relocate the union definition to
+        mutt.h.
+        
+        Although the number of functions affected was long, most of them did
+        not need much adjustment.  Many of them made no use of the parameter.
+        Those that did were easily cast into an added "data" variable at the
+        top.
+
+M	buffy.c
+M	color.c
+M	hook.c
+M	init.c
+M	init.h
+M	keymap.c
+M	mutt.h
+M	protos.h
+M	score.c
+
+2019-06-24 19:41:30 -0700  Kevin McCarthy  <kevin@8t8.us> (0d53c86e)
+
+        * Fix the makedoc program to cope with the new MuttVars format.
+        
+        Add '=' to token delimiter, to make the parsing more robust if
+        someone decides to add spaces between a designator and value.
+
+M	doc/makedoc.c
+
+2019-06-24 18:07:54 -0700  Kevin McCarthy  <kevin@8t8.us> (5bf53035)
+
+        * Convert MuttVars.data and .init to use a union type.
+        
+        They were using an "unsigned long" and casting to a pointer when
+        needed.  Obviously this has "worked" for a long time, but it's not
+        correct to assume a pointer can fit in unsigned long.
+        
+        Replace with a union contain "void *p" and "long l".  Fortunately, the
+        only parts making direct use of MuttVars are in init.h and init.c, so
+        we just need to update those manipulation functions.
+        
+        In general I don't like single letter variables, but brevity is worth
+        it in this case.
+
+M	init.c
+M	init.h
+
+2019-06-23 02:05:43 +0200  Vincent Lefevre  <vincent@vinc17.net> (6a74e24e)
+
+        * Detail the documentation of %l for index_format.
+
+M	init.h
+
+2019-06-22 16:13:46 -0700  Kevin McCarthy  <kevin@8t8.us> (5e49cbf2)
+
+        * Add NULL checks to rfc1524_free_entry().
+        
+        The existing code was fine, but make it robust like other free
+        functions in mutt, so the behavior isn't surprising.
+
+M	attach.c
+M	rfc1524.c
+
+2019-06-22 16:01:19 -0700  Kevin McCarthy  <kevin@8t8.us> (aea4a689)
+
+        * Clean up mutt_print_attachment() cleanup.
+        
+        Check if mutt_save_attachment() fails and abort the print in that
+        case.
+
+M	attach.c
+
+2019-06-22 15:00:59 -0700  Kevin McCarthy  <kevin@8t8.us> (cf05da7b)
+
+        * Merge branch 'stable'
+
+2019-06-22 13:33:11 -0700  Kevin McCarthy  <kevin@8t8.us> (6b44b8e3)
+
+        * Remove mutt_rfc1524_expand_filename() return value and checks.
+        
+        The return value was of dubious value.  It returned 0 only for the
+        case that a nametemplate was specified and it already matched the
+        supplied oldfile.
+        
+        However, just because the nametemplate matched does not mean
+        attachment handling in send-mode should skip the mutt_adv_mktemp()
+        conversion, which includes a call to mutt_sanitize_filename().  We
+        didn't do so if *no* nametemplate was supplied.
+        
+        Remove the return value from the function, and remove the checks and
+        "special handing" in attach.c calls.
+
+M	attach.c
+M	rfc1524.c
+M	rfc1524.h
+
+2019-06-22 12:54:40 -0700  Kevin McCarthy  <kevin@8t8.us> (03f6a9cb)
+
+        * Remove unnecessary strcmp for mutt_view_attachment().
+        
+        mutt_rfc1524_expand_filename() runs the result through
+        mutt_adv_mktemp(), which will sanitize and relocate the filename under
+        $tmpdir.  The strcmp() is unneeded and distracting to the program
+        logic; none of the other routines perform or need this check.
+
+M	attach.c
+
+2019-06-22 12:39:50 -0700  Kevin McCarthy  <kevin@8t8.us> (a3d38b9e)
+
+        * Merge branch 'stable'
+
+2019-06-22 10:25:04 -0700  Kevin McCarthy  <kevin@8t8.us> (2f44aa05)
+
+        * Merge branch 'stable'
+
+2019-06-21 13:40:52 -0700  Kevin McCarthy  <kevin@8t8.us> (05d31caa)
+
+        * Remove NULL and 0 INITVAL declarataions.
+        
+        The C standard says static storage duration variables will be
+        initialized to NULL/0.
+
+M	buffy.h
+M	globals.h
+M	lib.h
+M	monitor.h
+
+2019-06-21 13:36:09 -0700  Kevin McCarthy  <kevin@8t8.us> (6c01b284)
+
+        * Combine DT_STR and DT_PATH in mutt_set_default().
+        
+        19 years ago, they briefly performed different things, but the
+        mutt_pretty_mailbox() has been commented out since then.
+
+M	init.c
+
+2019-06-21 13:28:11 -0700  Kevin McCarthy  <kevin@8t8.us> (2f91d43e)
+
+        * Remove UL "" initialization from init.h.
+        
+        mutt_init() calls mutt_set_default() followed by
+        mutt_restore_default().  The mutt_restore_default() calls
+        mutt_str_replace(), which translates "" into 0.
+        
+        Therefore assigning "" to the option->init field simply wastes space
+        and (incorrectly) implies the option->data will be non-NULL by default.
+
+M	init.h
+
+2019-06-15 09:15:25 -0700  Kevin McCarthy  <kevin@8t8.us> (078654a4)
+
+        * Merge branch 'stable'
+
+2019-06-13 18:29:29 -0700  Kevin McCarthy  <kevin@8t8.us> (a621eaed)
+
+        * Merge branch 'stable'
+
+2019-06-13 17:58:56 -0700  Kevin McCarthy  <kevin@8t8.us> (ea3999ba)
+
+        * Merge branch 'stable'
+
+2019-06-10 14:51:50 -0700  Kevin McCarthy  <kevin@8t8.us> (ab457327)
+
+        * Allow imap_cmd_finish() to both expunge and fetch new mail.
+        
+        Since commit dd327606 changed check_status setting to use bit
+        operators, and imap_check_mailbox() can call imap_cmd_finish() twice,
+        there is no reason to delay the processing of new mail until a second
+        call.
+        
+        imap_read_headers() deals with msn_end < msg_begin, so remove
+        the (count > idata->max_msn) check.  This will allow the reopen flag
+        to be reset if somehow it's not the case.
+
+M	imap/command.c
+
+2019-06-09 11:12:23 -0700  Kevin McCarthy  <kevin@8t8.us> (c64084e5)
+
+        * Merge branch 'stable'
+
+2019-06-07 14:20:02 -0700  Kevin McCarthy  <kevin@8t8.us> (77c2a92a)
+
+        * Merge branch 'stable'
+
+2019-06-06 16:22:18 -0700  Kevin McCarthy  <kevin@8t8.us> (a8f9368f)
+
+        * Merge branch 'stable'
+
+2019-06-06 13:48:23 -0700  Kevin McCarthy  <kevin@8t8.us> (151c5711)
+
+        * Merge branch 'stable'
+
+2019-06-04 15:47:57 -0700  Kevin McCarthy  <kevin@8t8.us> (16bbafe6)
+
+        * Check for GNU Make to allow version.h FORCE target.
+        
+        If we're using GNU Make, the FORCE target allows automatically
+        updating the version number after each commit.
+        
+        See commit 22c6df82
+
+M	Makefile.am
+M	configure.ac
+
+2019-06-05 14:28:20 -0700  Kevin McCarthy  <kevin@8t8.us> (cf94a879)
+
+        * Merge branch 'stable'
+
+2019-06-03 19:08:21 -0700  Kevin McCarthy  <kevin@8t8.us> (9bacbaa9)
+
+        * Change --disable-doc to only skip manual generation.
+        
+        Instead of skipping the entire doc directory building, just skip the
+        manual.html, manual.txt, and mutt.info generation.
+        
+        Generate and install the other files in the doc directory, which don't
+        have the same involved dependencies as the DocBook generated files.
+
+M	Makefile.am
+M	doc/Makefile.am
+
+2019-05-31 09:41:53 -0700  Kevin McCarthy  <kevin@8t8.us> (84124dd3)
+
+        * Merge branch 'stable'
+
+2019-05-30 09:29:35 -0700  Kevin McCarthy  <kevin@8t8.us> (ee0aebab)
+
+        * Merge branch 'stable'
+
+2019-05-28 09:38:38 -0700  Kevin McCarthy  <kevin@8t8.us> (79dd54c4)
+
+        * Remove EXTRACT_MACROS check from EXTRACT_NUMBER in regex.
+        
+        Commit 367b1135 converted EXTRACT_NUMBER to always call a function, to
+        enable the use of parameter types and local variables.  In doing this
+        it removed the separate DEBUG implementation.
+        
+        The EXTRACT_MACROS check was accidentally left in, but no longer makes
+        sense outside of the DEBUG.
+
+M	regex.c
+
+2019-05-27 19:45:58 -0700  Kevin McCarthy  <kevin@8t8.us> (b4b47e1c)
+
+        * Rename --with-regex to --with-bundled-regex.
+        
+        This makes the configuration option purpose clearer.  Previously,
+        some distros enabled the option thinking it turned on a "regex" option
+        that should be enabled.
+        
+        Closes #89.
+
+M	configure.ac
+
+2019-05-27 19:36:34 -0700  Kevin McCarthy  <kevin@8t8.us> (367b1135)
+
+        * Remove undefined left-shift on negative value from regex.c.
+        
+        Replace with a bitwise-or of the byte 1, byte 22, and a mask to extend
+        the sign bit.
+        
+        Change the dest parameter type to unsigned int just to make sure the
+        compiler doesn't do anything tricky or get offended somehow.
+        
+        See #89.
+
+M	regex.c
+
+2019-05-26 16:03:40 -0700  Kevin McCarthy  <kevin@8t8.us> (cd30526c)
+
+        * Change mutt_addr_is_user() to no for a NULL address.
+        
+        See ticket #140.
+        
+        The behavior is generating a false 'F' flag for a spam message with an
+        unparsable From address.
+        
+        After reviewing the callers, I can't see a reason returning 'yes' in
+        this case.
+        
+        Commit 690c2945 fixed a potential segv issue, but the other callers
+        seem robust against this change in behavior.
+
+M	alias.c
+
+2019-05-26 14:34:42 -0700  Kevin McCarthy  <kevin@8t8.us> (c186d379)
+
+        * Turn on $ssl_force_tls by default.
+        
+        Ticket #135 suggests that these days, it's better to force encryption
+        over all connections.  RFC8314 is recommending MUA's move in that
+        direction (actually even directing towards implicit TLS over
+        STARTTLS).
+        
+        I'm enabling this at the beginning of the 1.13 development cycle to
+        give others time to chime in with any objections.  Personally, I've
+        had this option set myself for years.  The only place it could become
+        an issue is for a localhost IMAP server with no cert.  In that case,
+        it's easy enough to have an account hook unset if needed, and I think
+        a better idea that the user be forced to turn it off.
+
+M	init.h
+
+2019-05-26 18:52:47 +0200  Sebastian Stark  <sstark@mailbox.org> (035bd727)
+
+        * make OP_HALF_{UP,DOWN} behave symmetric.
+        
+          - the calculation of number of lines to scroll up/down should not
+          depend on whether the number of rows in the pager/index/terminal is
+          odd or even.
+          - this patch will make the behaviour symmetric such that in both cases
+          (even/odd number of rows) scrolling up and down by half a page (or the
+          other way round) will get you back to the exact same line as before.
+
+M	pager.c
 2019-09-21 12:27:57 -0700  Kevin McCarthy  <kevin@8t8.us> (6931c1ad)
 
         * Update UPDATING file for 1.12.2 release.
