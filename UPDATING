@@ -8,7 +8,7 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
-1.13.0 (Not yet released)
+1.13.0 (2019-11-30):
 
   ! <half-up> and <half-down> in the pager are now symmetric.
   ! $ssl_force_tls is now set by default.
