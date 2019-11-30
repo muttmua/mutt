@@ -717,6 +717,8 @@ greater than or equal to 70 as lying in the 20th century.
 Note that this behavior \fIis\fP Y2K compliant, but that mutt
 \fIdoes\fP have a Y2.07K problem.
 .PP
+Alternatively, you may use \fIYYYYMMDD\fP to specify a date.
+.PP
 If a date range consists of a single date, the operator in question
 will match that precise date.  If the date range consists of a dash
 (\(lq\fB-\fP\(rq), followed by a date, this range will match any

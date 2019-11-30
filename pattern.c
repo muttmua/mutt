@@ -399,6 +399,43 @@ static const char *getDate (const char *s, struct tm *t, BUFFER *err)
   char *p;
   time_t now = time (NULL);
   struct tm *tm = localtime (&now);
+  int iso8601=1;
+  int v=0;
+
+  for (v=0; v<8; v++)
+  {
+    if (s[v] && s[v] >= '0' && s[v] <= '9')
+    {
+      continue;
+    }
+    iso8601 = 0;
+    break;
+  }
+
+  if (iso8601)
+  {
+    int year;
+    int month;
+    int mday;
+    sscanf (s, "%4d%2d%2d", &year, &month, &mday);
+
+    t->tm_year = year - 1900;
+    t->tm_mon = month - 1;
+    t->tm_mday = mday;
+
+    if (t->tm_mday < 1 || t->tm_mday > 31)
+    {
+      snprintf (err->data, err->dsize, _("Invalid day of month: %s"), s);
+      return NULL;
+    }
+    if (t->tm_mon < 0 || t->tm_mon > 11)
+    {
+      snprintf (err->data, err->dsize, _("Invalid month: %s"), p);
+      return NULL;
+    }
+
+    return (s+8);
+  }
 
   t->tm_mday = strtol (s, &p, 10);
   if (t->tm_mday < 1 || t->tm_mday > 31)
