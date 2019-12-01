@@ -419,7 +419,9 @@ static const char *getDate (const char *s, struct tm *t, BUFFER *err)
     int mday;
     sscanf (s, "%4d%2d%2d", &year, &month, &mday);
 
-    t->tm_year = year - 1900;
+    t->tm_year = year;
+    if (t->tm_year > 1900)
+      t->tm_year -= 1900;
     t->tm_mon = month - 1;
     t->tm_mday = mday;
 
@@ -430,7 +432,7 @@ static const char *getDate (const char *s, struct tm *t, BUFFER *err)
     }
     if (t->tm_mon < 0 || t->tm_mon > 11)
     {
-      snprintf (err->data, err->dsize, _("Invalid month: %s"), p);
+      snprintf (err->data, err->dsize, _("Invalid month: %s"), s);
       return NULL;
     }
 
