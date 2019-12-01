@@ -70,4 +70,7 @@
 # ifndef USE_AUTOCRYPT
 #  define USE_AUTOCRYPT
 # endif
+# ifndef USE_ZLIB
+#  define USE_ZLIB
+# endif
 #endif
