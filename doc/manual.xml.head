@@ -5171,7 +5171,7 @@ how the numbers are displayed.
 
 <para>
   <link linkend="size-units-on-left">$size_units_on_left</link> will
-  display the unit (<quote>K</quote> or <quote>M</quote> to the left
+  display the unit (<quote>K</quote> or <quote>M</quote>) to the left
   of the number, instead of the right if unset.
 </para>
 
@@ -8156,7 +8156,7 @@ quadoption and
 <link linkend="send-multipart-alternative-filter">$send_multipart_alternative_filter</link>
 filter script.  The composed <literal>text/plain</literal> content
 will be piped to the filter script's stdin.  The output from the
-filter script should be the generated mime/type of the content, a
+filter script should be the generated mime type of the content, a
 blank line, and the content.  For example:
 </para>
 <screen>
