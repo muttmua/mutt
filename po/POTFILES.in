@@ -52,6 +52,7 @@ mutt_socket.c
 mutt_ssl.c
 mutt_ssl_gnutls.c
 mutt_tunnel.c
+mutt_zstrm.c
 muttlib.c
 mx.c
 pager.c
