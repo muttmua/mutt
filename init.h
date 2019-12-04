@@ -3283,15 +3283,6 @@ struct option_t MuttVars[] = {
   ** \fC<sidebar-prev-new>\fP command is similarly affected, wrapping around to
   ** the end of the list.
   */
-  { "sidebar_use_mb_shortcuts", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARUSEMBSHORTCUTS}, {.l=1} },
-  /*
-  ** .pp
-  ** When set, sidebar mailboxes will be displayed with mailbox shortcut prefixes
-  ** "=" or "~".
-  ** .pp
-  ** When unset, the sidebar will use pre-1.13.0 behavior: trimming off a matching
-  ** $$folder but otherwise not using mailbox shortcuts.
-  */
   { "sidebar_short_path", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARSHORTPATH}, {.l=0} },
   /*
   ** .pp
@@ -3326,6 +3317,15 @@ struct option_t MuttVars[] = {
   ** .pp
   ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
   ** order (example: ``\fCset sort_browser=reverse-date\fP'').
+  */
+  { "sidebar_use_mb_shortcuts", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARUSEMBSHORTCUTS}, {.l=1} },
+  /*
+  ** .pp
+  ** When set, sidebar mailboxes will be displayed with mailbox shortcut prefixes
+  ** "=" or "~".
+  ** .pp
+  ** When unset, the sidebar will use pre-1.13.0 behavior: trimming off a matching
+  ** $$folder but otherwise not using mailbox shortcuts.
   */
   { "sidebar_visible", DT_BOOL, R_REFLOW, {.l=OPTSIDEBAR}, {.l=0} },
   /*
