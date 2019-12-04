@@ -668,9 +668,30 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
       b->msg_flagged = Context->flagged;
     }
 
-    mutt_buffer_strcpy (pretty_folder_name, mutt_b2s (b->pathbuf));
-    mutt_buffer_pretty_mailbox (pretty_folder_name);
-    sidebar_folder_name = mutt_b2s (pretty_folder_name);
+    if (option (OPTSIDEBARUSEMBSHORTCUTS))
+    {
+      mutt_buffer_strcpy (pretty_folder_name, mutt_b2s (b->pathbuf));
+      mutt_buffer_pretty_mailbox (pretty_folder_name);
+      sidebar_folder_name = mutt_b2s (pretty_folder_name);
+    }
+    else
+    {
+      /* compute length of Maildir without trailing separator */
+      size_t maildirlen = mutt_strlen (Maildir);
+      if (maildirlen &&
+          SidebarDelimChars &&
+          strchr (SidebarDelimChars, Maildir[maildirlen - 1]))
+        maildirlen--;
+
+      /* check whether Maildir is a prefix of the current folder's path */
+      if ((mutt_buffer_len (b->pathbuf) > maildirlen) &&
+          (mutt_strncmp (Maildir, mutt_b2s (b->pathbuf), maildirlen) == 0) &&
+          SidebarDelimChars &&
+          strchr (SidebarDelimChars, mutt_b2s (b->pathbuf)[maildirlen]))
+        sidebar_folder_name = mutt_b2s (b->pathbuf) + (maildirlen + 1);
+      else
+        sidebar_folder_name = mutt_b2s (b->pathbuf);
+    }
 
     if (SidebarDelimChars)
     {
