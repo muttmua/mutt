@@ -3272,6 +3272,34 @@ struct option_t MuttVars[] = {
   ** \fC<sidebar-prev-new>\fP command is similarly affected, wrapping around to
   ** the end of the list.
   */
+  { "sidebar_relative_shortpath_indent", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARRELSPINDENT}, {.l=0} },
+  /*
+  ** .pp
+  ** When set, this option changes how $$sidebar_short_path and
+  ** $$sidebar_folder_indent perform shortening and indentation: both
+  ** will look at the previous sidebar entries and shorten/indent
+  ** relative to the most recent parent.
+  ** .pp
+  ** An example of this option set/unset for mailboxes listed in this
+  ** order, with $$sidebar_short_path=yes,
+  ** $$sidebar_folder_indent=yes, and $$sidebar_indent_string="→":
+  ** .dl
+  ** .dt \fBmailbox\fP  .dd \fBset\fP   .dd \fBunset\fP
+  ** .dt \fC=a.b\fP     .dd \fC=a.b\fP  .dd \fC→b\fP
+  ** .dt \fC=a.b.c.d\fP .dd \fC→c.d\fP  .dd \fC→→→d\fP
+  ** .dt \fC=a.b.e\fP   .dd \fC→e\fP    .dd \fC→→e\fP
+  ** .de
+  ** .pp
+  ** The second line illustrates most clearly.  With this option set,
+  ** \fC=a.b.c.d\fP is shortened relative to \fC=a.b\fP, becoming
+  ** \fCc.d\fP; it is also indented one place relative to \fC=a.b\fP.
+  ** With this option unset \fC=a.b.c.d\fP is always shortened to the
+  ** last part of the mailbox, \fCd\fP and is indented three places,
+  ** with respect to $$folder (represented by '=').
+  ** .pp
+  ** When set, the third line will also be indented and shortened
+  ** relative to the first line.
+  */
   { "sidebar_short_path", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARSHORTPATH}, {.l=0} },
   /*
   ** .pp
