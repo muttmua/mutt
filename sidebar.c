@@ -750,7 +750,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         }
       }
 
-      if (option (OPTSIDEBARSHORTPATH) && parent_depth)
+      if (option (OPTSIDEBARSHORTPATH) && (parent_depth > 0))
       {
         for (i = 0; parent_depth && sidebar_folder_name[i]; i++)
           if (strchr (SidebarDelimChars, sidebar_folder_name[i]))
@@ -758,7 +758,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         sidebar_folder_name += i;
       }
 
-      if (option (OPTSIDEBARFOLDERINDENT) && indent_width)
+      if (option (OPTSIDEBARFOLDERINDENT) && (indent_width > 0))
       {
         mutt_buffer_clear (indent_folder_name);
         for (i = 0; i < indent_width; i++)
