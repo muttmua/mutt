@@ -798,9 +798,9 @@ static int trash_append (CONTEXT *ctx)
     return 0;  /* we are in the trash folder: simple sync */
 
 #ifdef USE_IMAP
-  if (Context->magic == MUTT_IMAP && mx_is_imap (TrashPath))
+  if (ctx->magic == MUTT_IMAP && mx_is_imap (TrashPath))
   {
-    if (!imap_fast_trash (Context, TrashPath))
+    if (!imap_fast_trash (ctx, TrashPath))
       return 0;
   }
 #endif
