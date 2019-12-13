@@ -3346,14 +3346,14 @@ struct option_t MuttVars[] = {
   ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
   ** order (example: ``\fCset sort_browser=reverse-date\fP'').
   */
-  { "sidebar_use_mb_shortcuts", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARUSEMBSHORTCUTS}, {.l=1} },
+  { "sidebar_use_mailbox_shortcuts", DT_BOOL, R_SIDEBAR, {.l=OPTSIDEBARUSEMBSHORTCUTS}, {.l=0} },
   /*
   ** .pp
   ** When set, sidebar mailboxes will be displayed with mailbox shortcut prefixes
   ** "=" or "~".
   ** .pp
-  ** When unset, the sidebar will use pre-1.13.0 behavior: trimming off a matching
-  ** $$folder but otherwise not using mailbox shortcuts.
+  ** When unset, the sidebar will trim off a matching $$folder prefix
+  ** but otherwise not use mailbox shortcuts.
   */
   { "sidebar_visible", DT_BOOL, R_REFLOW, {.l=OPTSIDEBAR}, {.l=0} },
   /*
