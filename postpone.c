@@ -242,6 +242,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
   LIST *next;
   const char *p;
   int opt_delete;
+  int close_rc;
 
   if (!Postponed)
     return (-1);
@@ -256,7 +257,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
   if (! PostContext->msgcount)
   {
     PostCount = 0;
-    mx_close_mailbox (PostContext, NULL);
+    mx_fastclose_mailbox (PostContext);
     FREE (&PostContext);
     mutt_error _("No postponed messages.");
     return (-1);
@@ -269,7 +270,13 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
   }
   else if ((h = select_msg ()) == NULL)
   {
-    mx_close_mailbox (PostContext, NULL);
+    /* messages might have been marked for deletion.
+     * try once more on reopen before giving up. */
+    close_rc = mx_close_mailbox (PostContext, NULL);
+    if (close_rc > 0)
+      close_rc = mx_close_mailbox (PostContext, NULL);
+    if (close_rc != 0)
+      mx_fastclose_mailbox (PostContext);
     FREE (&PostContext);
     return (-1);
   }
@@ -291,7 +298,11 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
   /* avoid the "purge deleted messages" prompt */
   opt_delete = quadoption (OPT_DELETE);
   set_quadoption (OPT_DELETE, MUTT_YES);
-  mx_close_mailbox (PostContext, NULL);
+  close_rc = mx_close_mailbox (PostContext, NULL);
+  if (close_rc > 0)
+    close_rc = mx_close_mailbox (PostContext, NULL);
+  if (close_rc != 0)
+    mx_fastclose_mailbox (PostContext);
   set_quadoption (OPT_DELETE, opt_delete);
 
   FREE (&PostContext);

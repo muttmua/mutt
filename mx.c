@@ -829,7 +829,21 @@ static int trash_append (CONTEXT *ctx)
   return 0;
 }
 
-/* save changes and close mailbox */
+/* save changes and close mailbox.
+ *
+ * returns 0 on success.
+ *        -1 on error
+ *        one of the check_mailbox enums if aborted for one of those reasons.
+ *
+ * Note: it's very important to ensure the mailbox is properly closed
+ *       before free'ing the context.  For selected mailboxes, IMAP
+ *       will cache the context inside connection->idata until
+ *       imap_close_mailbox() removes it.
+ *
+ *       Readonly, dontwrite, and append mailboxes are guaranteed to call
+ *       mx_fastclose_mailbox(), so for most of Mutt's code you won't see
+ *       return value checks for temporary contexts.
+ */
 int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
 {
   int i, move_messages = 0, purge = 1, read_msgs = 0;
