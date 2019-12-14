@@ -1,3 +1,162 @@
+2019-12-14 11:33:51 -0800  Kevin McCarthy  <kevin@8t8.us> (fcfd5ee5)
+
+        * Update UPDATING file for 1.13.1 release.
+
+M	UPDATING
+
+2019-12-13 15:58:20 -0800  Kevin McCarthy  <kevin@8t8.us> (3d9a1072)
+
+        * Fix segv in IMAP postponed menu caused by reopen_allow.
+        
+        imap_open_mailbox() leaves IMAP_REOPEN_ALLOW set for the connection.
+        I noticed this previously but didn't bother untangling the logic yet
+        because the index always calls mx_check_mailbox() right away, which
+        unsets the flag.
+        
+        However, when debugging the segv for commit 51729d8d I realized the
+        postponed menu/context also suffers from the problem, leaving the menu
+        ripe for segvs due to unmanaged expunges.
+        
+        I believe imap_read_headers() turns it off and back on to avoid
+        goofing up imap_cmd_finish() when a reopen *is* allowed.
+        
+        The logic needs to be cleaned up and fixed.  However for a stable
+        branch fix, I'm am taking a conservative approach and just calling
+        mx_check_mailbox() to turn it back off.
+
+M	postpone.c
+
+2019-12-12 17:58:11 -0800  Kevin McCarthy  <kevin@8t8.us> (d9dd1d51)
+
+        * Fix imap postponed mailbox use-after-free error.
+        
+        mutt_get_postponed() was calling mx_close_mailbox(), but not checking
+        the return value.  Because the postponed context is an actual
+        read-write, selected mailbox in a new connection, a failed close left
+        a dangling pointer in connection->idata->ctx.
+        
+        imap_keepalive() traversed the connection list, finding the Postponed
+        connection still there, and passed the dangling pointer to
+        imap_check_mailbox.
+        
+        Change an empty postponed mailbox to just call fastclose.  Change the
+        other closes to retry on a postive return code "reopen" event and then
+        finally just call fastclose.
+        
+        Outside the index and postponed menu, Mutt's code only uses append or
+        readonly temporary contexts.  Those are guaranteed to call
+        mx_fastclose_mailbox() and return 0.
+
+M	mx.c
+M	postpone.c
+
+2019-12-13 10:57:03 -0800  Kevin McCarthy  <kevin@8t8.us> (011cfc67)
+
+        * Rename sidebar mailbox shortcuts option and default off.
+        
+        Rename to $sidebar_use_mailbox_shortcuts.  The shortening wasn't that
+        much shorter and made the name confusing.
+        
+        To prevent complaints in the future as others transition to 1.13,
+        default off.
+
+M	init.h
+
+2019-12-07 13:47:37 -0800  Kevin McCarthy  <kevin@8t8.us> (bbfa9271)
+
+        * Make shortpath/indent code guards explicit.
+        
+        In actuality, the parent_depth and indent_width won't ever be
+        negative.
+        
+        But the new code for unset $sidebar_relative_shortpath_indent makes
+        this much less obvious.  Better to be explicit than have some small
+        future code change result in a bug.
+
+M	sidebar.c
+
+2019-12-07 13:21:49 -0800  Kevin McCarthy  <kevin@8t8.us> (b09a0b80)
+
+        * Create $sidebar_relative_shortpath_indent, default unset.
+        
+        When unset this option provides the pre-1.13.0 sidebar indentation and
+        shortpath behavior.
+        
+        Setting the option will enable the new (relative to previous entries)
+        indentation and shortening behavior.
+        
+        Note the mailbox shortcuts are controlled by
+        $sidebar_use_mb_shortcuts, which defaults set.
+
+M	init.h
+M	mutt.h
+M	sidebar.c
+
+2019-12-03 19:16:33 -0800  Kevin McCarthy  <kevin@8t8.us> (8846480c)
+
+        * Fix new option order in the manual.
+        
+        I actually intended to push commit abfaa0e0 to a remote branch, but
+        accidentally ended up pushing it to stable. :-O
+        
+        Anyway, I think the option is okay, but may have to tweek it a bit.
+        This fixes a mistake where it was placed out of order in init.h.
+
+M	init.h
+
+2019-12-03 18:55:49 -0800  Kevin McCarthy  <kevin@8t8.us> (abfaa0e0)
+
+        * Add $sidebar_use_mb_shortcuts to turn off shortcuts.
+        
+        If unset, Mutt will revert to pre-1.13 display behavior, matching and
+        removing a literal $folder prefix, without using mailbox shortcuts.
+
+M	init.h
+M	mutt.h
+M	sidebar.c
+
+2019-12-01 12:44:36 -0800  Kevin McCarthy  <kevin@8t8.us> (ba1b595c)
+
+        * Minor documentation fixes.
+
+M	doc/manual.xml.head
+
+2019-11-30 10:19:26 -0800  Kevin McCarthy  <kevin@8t8.us> (1dd65e6b)
+
+        * automatic post-release commit for mutt-1.13.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
 2019-11-30 10:08:44 -0800  Kevin McCarthy  <kevin@8t8.us> (b1d99670)
 
         * Set UPDATING file release date for 1.13.0.
