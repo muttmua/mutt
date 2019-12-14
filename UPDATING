@@ -8,6 +8,16 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.13.1 (2019-12-14):
+
+  ! Bug fix release.
+  + $sidebar_relative_shortpath_indent, default unset, enables the
+    indentation and shortpath behavior introduced in 1.13.0.
+  + $sidebar_use_mailbox_shortcuts, default unset, displays standard
+    mailbox shortcuts, '~' and '=' in the sidebar.  When unset, the
+    sidebar will remove a $folder prefix but won't display mailbox
+    shortcuts.
+
 1.13.0 (2019-11-30):
 
   ! <half-up> and <half-down> in the pager are now symmetric.
