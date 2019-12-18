@@ -1,3 +1,17 @@
+2019-12-18 14:10:38 -0800  Kevin McCarthy  <kevin@8t8.us> (7aed228a)
+
+        * Revert "Fixes unchecked return from link() in dotlock.c"
+        
+        This reverts commit 317b7f6b53d8a4272acf8ef1b56f3406e9bc2691.
+
+M	dotlock.c
+
+2019-12-14 12:49:23 -0800  Kevin McCarthy  <kevin@8t8.us> (60dd8986)
+
+        * automatic post-release commit for mutt-1.13.1
+
+M	ChangeLog
+M	VERSION
 2019-12-14 11:33:51 -0800  Kevin McCarthy  <kevin@8t8.us> (fcfd5ee5)
 
         * Update UPDATING file for 1.13.1 release.
