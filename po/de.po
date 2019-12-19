@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-30 10:17-0800\n"
-"PO-Revision-Date: 2019-11-29 18:17+0100\n"
+"PO-Revision-Date: 2019-12-01 21:06+0100\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -284,7 +284,7 @@ msgstr "Verschlüsselung bevorzugen?"
 #.
 #: autocrypt/autocrypt.c:205
 msgid "Autocrypt account creation aborted."
-msgstr "Erstellung des Autocrypt-Kontos abgebrochen"
+msgstr "Erstellung des Autocrypt-Kontos abgebrochen."
 
 #. L10N:
 #. Message displayed after an autocrypt account is successfully created.
@@ -675,7 +675,7 @@ msgstr "Standard-Farben werden nicht unterstützt"
 #. L10N: Used for the $crypt_verify_sig prompt
 #: commands.c:184
 msgid "Verify signature?"
-msgstr "PGP-Signatur überprüfen?"
+msgstr "Signatur überprüfen?"
 
 #: commands.c:210 mbox.c:902
 msgid "Could not create temporary file!"
@@ -1030,7 +1030,7 @@ msgstr "Ja"
 #.
 #: compose.c:251
 msgid "Autocrypt: (e)ncrypt, (c)lear, (a)utomatic? "
-msgstr "Autocrypt: (v)erschlüsseln, (l)öschen, (a)utomatisch?"
+msgstr "Autocrypt: (v)erschlüsseln, (l)öschen, (a)utomatisch? "
 
 #. L10N:
 #. The letter corresponding to the compose menu autocrypt prompt
