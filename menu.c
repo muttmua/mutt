@@ -789,8 +789,16 @@ void mutt_pop_current_menu (MUTTMENU *menu)
   else
   {
     CurrentMenu = MENU_MAIN;
-    move (0, 0);
-    clrtobot ();
+    /* Clearing when Mutt exits would be an annoying change in
+     * behavior for those who have disabled alternative screens.  The
+     * option is currently set by autocrypt initialization which mixes
+     * menus and prompts outside of the normal menu system state.
+     */
+    if (option (OPTMENUPOPCLEARSCREEN))
+    {
+      move (0, 0);
+      clrtobot ();
+    }
   }
 }
 

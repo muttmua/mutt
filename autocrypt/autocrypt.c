@@ -80,6 +80,11 @@ int mutt_autocrypt_init (int can_create)
     return -1;
 
   set_option (OPTIGNOREMACROEVENTS);
+  /* The init process can display menus at various points
+   * (e.g. browser, pgp key selection).  This allows the screen to be
+   * autocleared after each menu, so the subsequent prompts can be
+   * read. */
+  set_option (OPTMENUPOPCLEARSCREEN);
 
   if (autocrypt_dir_init (can_create))
     goto bail;
@@ -91,11 +96,13 @@ int mutt_autocrypt_init (int can_create)
     goto bail;
 
   unset_option (OPTIGNOREMACROEVENTS);
+  unset_option (OPTMENUPOPCLEARSCREEN);
 
   return 0;
 
 bail:
   unset_option (OPTIGNOREMACROEVENTS);
+  unset_option (OPTMENUPOPCLEARSCREEN);
   unset_option (OPTAUTOCRYPT);
   mutt_autocrypt_db_close ();
   return -1;
