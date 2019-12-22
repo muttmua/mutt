@@ -617,6 +617,7 @@ enum
   OPTDONTHANDLEPGPKEYS,	/* (pseudo) used to extract PGP keys */
   OPTIGNOREMACROEVENTS, /* (pseudo) don't process macro/push/exec events while set */
   OPTAUTOCRYPTGPGME,    /* (pseudo) use Autocrypt context inside crypt-gpgme.c */
+  OPTMENUPOPCLEARSCREEN, /* (pseudo) clear the screen when popping the last menu. */
 
   OPTMAX
 };
