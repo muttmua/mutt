@@ -225,7 +225,7 @@ these variables, and the global Muttrc, are generated automatically
 from that documentation.  To start this process, type "make
 update-doc" in the top-level source directory.
 
-Note that you may have to update the makedoc utility (makedoc.c)
+Note that you may have to update the makedoc utility (makedoc.pl)
 when adding new data types to init.h.
 
 More precisely, variable name, type, and default value are directly

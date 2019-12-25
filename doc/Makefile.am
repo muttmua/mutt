@@ -17,8 +17,6 @@ AM_CPPFLAGS = -I. -I.. -I$(includedir) -I$(top_srcdir)
 
 MAKEDOC_CPP = $(CPP) $(AM_CPPFLAGS) $(DEFS) $(CPPFLAGS) -D_MAKEDOC -C
 
-noinst_PROGRAMS = makedoc
-
 EXTRA_DIST = dotlock.man		\
         smime_keys.man                  \
 	mutt.man			\
@@ -38,7 +36,7 @@ EXTRA_DIST = dotlock.man		\
 	patch-notes.txt			\
 	smime-notes.txt			\
 	Muttrc Muttrc.head stamp-doc-rc \
-	makedoc.c makedoc-defs.h 	\
+	makedoc.pl makedoc-defs.h 	\
 	mutt.css mutt.xsl html.xsl chunk.xsl $(BUILT_DISTFILES)
 
 CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
@@ -136,11 +134,11 @@ manual.txt: manual.html
 
 Muttrc: stamp-doc-rc
 
-stamp-doc-rc: $(top_srcdir)/init.h makedoc$(EXEEXT) $(srcdir)/Muttrc.head
+stamp-doc-rc: $(top_srcdir)/init.h makedoc.pl $(srcdir)/Muttrc.head
 	-rm -f Muttrc stamp-doc-rc
 	sed -e 's,[@]docdir[@],$(docdir),' $(srcdir)/Muttrc.head > Muttrc
 	$(CPP) $(AM_CPPFLAGS) $(DEFS) $(CPPFLAGS) -D_MAKEDOC -C \
-	  $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -c >> Muttrc
+	  $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -c >> Muttrc
 	touch stamp-doc-rc
 
 manual.html: $(srcdir)/html.xsl $(srcdir)/mutt.xsl stamp-doc-xml $(srcdir)/mutt.css
@@ -211,8 +209,8 @@ instdoc: instdoc.sh
 
 update-doc: stamp-doc-rc $(BUILD_DOC_TARGETS)
 
-muttrc.man: makedoc$(EXEEXT) $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
-	$(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -m | 	    \
+muttrc.man: makedoc.pl $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
+	$(MAKEDOC_CPP) $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -m | 	    \
 		cat $(srcdir)/muttrc.man.head - $(srcdir)/muttrc.man.tail\
 		> muttrc.man
 
@@ -232,13 +230,13 @@ mutt_pgpring.1: $(srcdir)/pgpring.man
 smime_keys.1: $(srcdir)/smime_keys.man
 	$(EDIT) $(srcdir)/smime_keys.man > $@
 
-stamp-doc-xml: makedoc$(EXEEXT) $(top_srcdir)/init.h \
+stamp-doc-xml: makedoc.pl $(top_srcdir)/init.h \
                manual.xml.head $(top_srcdir)/functions.h $(top_srcdir)/OPS* manual.xml.tail \
                $(srcdir)/gen-map-doc $(top_srcdir)/VERSION $(top_srcdir)/ChangeLog
 	( date=`(cd $(top_srcdir) && ./mkreldate.sh)` && \
 	  version=`(cd $(top_srcdir) && env sh ./version.sh)` && \
 	  sed -e "s/@VERSION\@/$$version ($$date)/" $(srcdir)/manual.xml.head && \
-	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -s && \
+	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -s && \
 	  $(MAKEDOC_CPP) $(top_srcdir)/functions.h | \
 	    perl $(srcdir)/gen-map-doc $(srcdir)/manual.xml.tail $(top_srcdir)/OPS* \
 	) > manual.xml
