@@ -465,6 +465,9 @@ static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs)
 {
   sslsockdata *data = conn->sockdata;
 
+  if (!data)
+    return -1;
+
   if (SSL_has_pending (data->ssl))
     return 1;
   else
