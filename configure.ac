@@ -1283,11 +1283,6 @@ then
   MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS md5.o"
 fi
 
-if test x$db_found != xno ; then
-  MUTT_MD5="mutt_md5$EXEEXT"
-fi
-AC_SUBST(MUTT_MD5)
-
 AC_SUBST(MUTTLIBS)
 AC_SUBST(MUTT_LIB_OBJECTS)
 AC_SUBST(LIBIMAP)
@@ -1677,5 +1672,5 @@ fi
 
 AC_CONFIG_FILES(Makefile contrib/Makefile doc/Makefile imap/Makefile
         intl/Makefile m4/Makefile po/Makefile.in autocrypt/Makefile
-        hcachever.sh doc/instdoc.sh)
+        doc/instdoc.sh)
 AC_OUTPUT

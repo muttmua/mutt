@@ -15,7 +15,6 @@
 /config.log
 /config.status
 /configure
-/hcachever.sh
 /stamp-h1
 /doc/Muttrc
 /doc/instdoc.sh
@@ -37,7 +36,6 @@
 /mutt
 /mutt_dotlock
 /mutt_dotlock.c
-/mutt_md5
 /patchlist.c
 /conststrings.c
 /pgpewrap
