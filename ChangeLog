@@ -1,3 +1,60 @@
+2020-01-12 13:01:58 -0800  Kevin McCarthy  <kevin@8t8.us> (f76b45e2)
+
+        * Update UPDATING file for 1.13.3 release.
+
+M	UPDATING
+
+2020-01-11 13:47:56 -0800  Kevin McCarthy  <kevin@8t8.us> (be406ede)
+
+        * Update copyrights to 2020.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+
+2019-12-28 15:43:07 -0800  Kevin McCarthy  <kevin@8t8.us> (edf5699c)
+
+        * Fix crash when polling a closed ssl connection.
+        
+        Commit 8353407c enabled checking for buffered OpenSSL/GnuTLS data when
+        polling, but neglected to check if the connection was already closed.
+        
+        This can be triggered during imap_logout() if the connection write of
+        "LOGOUT" fails and closes the connection, before the poll.  It's a bit
+        tricky to trigger because imap_logout_all() checks for a closed
+        connection, so the failure needs to take place at that last write.
+        
+        Thanks to Stefan Sperling for pointing out the problem, complete with
+        a backtrace and patch.  (This commit takes a different approach for a
+        stable-branch fix.)
+
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2019-12-21 19:40:52 -0800  Kevin McCarthy  <kevin@8t8.us> (8914a1ba)
+
+        * Turn off auto-clear outside of autocrypt initialization.
+        
+        The auto-clearing code was added in commit 01bc088c, for autocrypt
+        initial prompting.  It removed having to keep track of every place a
+        browser or other menu might be displayed and having to remember to
+        clear it out.
+        
+        However, clearing when mutt exits is a change of behavior for those
+        who have turned off alternative screens.
+
+M	autocrypt/autocrypt.c
+M	menu.c
+M	mutt.h
+
+2019-12-18 14:22:17 -0800  Kevin McCarthy  <kevin@8t8.us> (bbe9bd1a)
+
+        * automatic post-release commit for mutt-1.13.2
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
 2019-12-18 14:10:38 -0800  Kevin McCarthy  <kevin@8t8.us> (7aed228a)
 
         * Revert "Fixes unchecked return from link() in dotlock.c"
