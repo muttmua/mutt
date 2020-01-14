@@ -4769,7 +4769,8 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
         {
           if (the_strong_valid_key)
             k = crypt_copy_key (the_strong_valid_key);
-          else if (a_valid_addrmatch_key)
+          else if (a_valid_addrmatch_key &&
+                   !option (OPTCRYPTOPPENCSTRONGKEYS))
             k = crypt_copy_key (a_valid_addrmatch_key);
           else
             k = NULL;

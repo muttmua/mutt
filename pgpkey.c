@@ -915,7 +915,8 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
         pgp_remove_key (&matches, the_strong_valid_key);
         k = the_strong_valid_key;
       }
-      else if (a_valid_addrmatch_key)
+      else if (a_valid_addrmatch_key &&
+               !option (OPTCRYPTOPPENCSTRONGKEYS))
       {
         pgp_remove_key (&matches, a_valid_addrmatch_key);
         k = a_valid_addrmatch_key;
