@@ -658,7 +658,7 @@ static smime_key_t *smime_get_key_by_hash(char *hash, short public)
   return match;
 }
 
-static smime_key_t *smime_get_key_by_addr(char *mailbox, short abilities, short public, short may_ask)
+static smime_key_t *smime_get_key_by_addr(char *mailbox, short abilities, short public, short oppenc_mode)
 {
   smime_key_t *results, *result;
   smime_key_t *matches = NULL;
@@ -706,7 +706,7 @@ static smime_key_t *smime_get_key_by_addr(char *mailbox, short abilities, short 
 
   if (matches)
   {
-    if (! may_ask)
+    if (oppenc_mode)
     {
       if (trusted_match)
         return_key = smime_copy_key (trusted_match);
@@ -807,7 +807,7 @@ void _smime_getkeys (char *mailbox)
   char *k = NULL;
   char buf[STRING];
 
-  key = smime_get_key_by_addr (mailbox, KEYFLAG_CANENCRYPT, 0, 1);
+  key = smime_get_key_by_addr (mailbox, KEYFLAG_CANENCRYPT, 0, 0);
 
   if (!key)
   {
@@ -913,7 +913,7 @@ char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode)
 
     q = p;
 
-    key = smime_get_key_by_addr (q->mailbox, KEYFLAG_CANENCRYPT, 1, !oppenc_mode);
+    key = smime_get_key_by_addr (q->mailbox, KEYFLAG_CANENCRYPT, 1, oppenc_mode);
     if ((key == NULL) && (! oppenc_mode))
     {
       snprintf(buf, sizeof(buf),
