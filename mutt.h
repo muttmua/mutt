@@ -947,6 +947,7 @@ struct mutt_thread
 /* flag to mutt_pattern_comp() */
 #define MUTT_FULL_MSG           (1<<0)  /* enable body and header matching */
 #define MUTT_PATTERN_DYNAMIC    (1<<1)  /* enable runtime date range evaluation */
+#define MUTT_SEND_MODE_SEARCH   (1<<2)  /* allow send-mode body searching */
 
 typedef enum {
   MUTT_MATCH_FULL_ADDRESS = 1
@@ -975,6 +976,7 @@ typedef struct pattern_t
   unsigned int ign_case : 1;		/* ignore case for local stringmatch searches */
   unsigned int isalias : 1;
   unsigned int dynamic : 1;  /* evaluate date ranges at run time */
+  unsigned int sendmode : 1; /* evaluate searches in send-mode */
   int min;
   int max;
   struct pattern_t *next;

@@ -58,8 +58,8 @@ static const struct pattern_flags
 Flags[] =
 {
   { 'A', MUTT_ALL,			0,		NULL },
-  { 'b', MUTT_BODY,		MUTT_FULL_MSG,	eat_regexp },
-  { 'B', MUTT_WHOLE_MSG,		MUTT_FULL_MSG,	eat_regexp },
+  { 'b', MUTT_BODY,  MUTT_FULL_MSG|MUTT_SEND_MODE_SEARCH, eat_regexp },
+  { 'B', MUTT_WHOLE_MSG,  MUTT_FULL_MSG|MUTT_SEND_MODE_SEARCH, eat_regexp },
   { 'c', MUTT_CC,			0,		eat_regexp },
   { 'C', MUTT_RECIPIENT,		0,		eat_regexp },
   { 'd', MUTT_DATE,		0,		eat_date },
@@ -70,7 +70,7 @@ Flags[] =
   { 'F', MUTT_FLAG,		0,		NULL },
   { 'g', MUTT_CRYPT_SIGN,		0,		NULL },
   { 'G', MUTT_CRYPT_ENCRYPT,	0,		NULL },
-  { 'h', MUTT_HEADER,		MUTT_FULL_MSG,	eat_regexp },
+  { 'h', MUTT_HEADER,  MUTT_FULL_MSG|MUTT_SEND_MODE_SEARCH, eat_regexp },
   { 'H', MUTT_HORMEL,		0,		eat_regexp },
   { 'i', MUTT_ID,			0,		eat_regexp },
   { 'k', MUTT_PGP_KEY,		0,		NULL },
@@ -254,6 +254,74 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
 
 cleanup:
   mutt_buffer_free (&tempfile);
+  return match;
+}
+
+static int msg_search_sendmode (HEADER *h, pattern_t *pat)
+{
+  BUFFER *tempfile = NULL;
+  int match = 0;
+  char *buf = NULL;
+  size_t blen = 0;
+  FILE *fp = NULL;
+
+  if (pat->op == MUTT_HEADER || pat->op == MUTT_WHOLE_MSG)
+  {
+    tempfile = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (tempfile);
+    if ((fp = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
+    {
+      mutt_perror (mutt_b2s (tempfile));
+      mutt_buffer_pool_release (&tempfile);
+      return 0;
+    }
+
+    mutt_write_rfc822_header (fp, h->env, h->content,
+                              MUTT_WRITE_HEADER_POSTPONE,
+                              0, 0);
+    fflush (fp);
+    fseek (fp, 0, 0);
+
+    while ((buf = mutt_read_line (buf, &blen, fp, NULL, 0)) != NULL)
+    {
+      if (patmatch (pat, buf) == 0)
+      {
+        match = 1;
+        break;
+      }
+    }
+
+    FREE (&buf);
+    safe_fclose (&fp);
+    unlink (mutt_b2s (tempfile));
+    mutt_buffer_pool_release (&tempfile);
+
+    if (match)
+      return match;
+  }
+
+  if (pat->op == MUTT_BODY || pat->op == MUTT_WHOLE_MSG)
+  {
+
+    if ((fp = safe_fopen (h->content->filename, "r")) == NULL)
+    {
+      mutt_perror (h->content->filename);
+      return 0;
+    }
+
+    while ((buf = mutt_read_line (buf, &blen, fp, NULL, 0)) != NULL)
+    {
+      if (patmatch (pat, buf) == 0)
+      {
+        match = 1;
+        break;
+      }
+    }
+
+    FREE (&buf);
+    safe_fclose (&fp);
+  }
+
   return match;
 }
 
@@ -1005,6 +1073,9 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
 	  mutt_pattern_free (&curlist);
 	  return NULL;
 	}
+        if (flags & MUTT_SEND_MODE_SEARCH)
+          tmp->sendmode = 1;
+
 	tmp->op = entry->op;
 
 	ps.dptr++; /* eat the operator and any optional whitespace */
@@ -1325,6 +1396,12 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
     case MUTT_BODY:
     case MUTT_HEADER:
     case MUTT_WHOLE_MSG:
+      if (pat->sendmode)
+      {
+        if (!h->content || !h->content->filename)
+          return 0;
+        return (pat->not ^ msg_search_sendmode (h, pat));
+      }
       /*
        * ctx can be NULL in certain cases, such as when replying to a message from the attachment menu and
        * the user has a reply-hook using "~h" (bug #2190).

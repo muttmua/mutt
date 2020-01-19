@@ -180,8 +180,17 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
 
   if (data & (MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_SAVEHOOK | MUTT_FCCHOOK | MUTT_MESSAGEHOOK | MUTT_REPLYHOOK))
   {
+    int comp_flags;
+
+    if (data & (MUTT_SEND2HOOK))
+      comp_flags = MUTT_SEND_MODE_SEARCH;
+    else if (data & (MUTT_SENDHOOK | MUTT_FCCHOOK))
+      comp_flags = 0;
+    else
+      comp_flags = MUTT_FULL_MSG;
+
     if ((pat = mutt_pattern_comp (pattern->data,
-                                  (data & (MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_FCCHOOK)) ? 0 : MUTT_FULL_MSG,
+                                  comp_flags,
 				  err)) == NULL)
       goto cleanup;
   }
