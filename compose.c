@@ -660,6 +660,124 @@ static int delete_attachment (ATTACH_CONTEXT *actx, int x)
   return (0);
 }
 
+/* The compose menu doesn't currently allow nested attachments.
+ * However due to the shared structures and functions with recvattach,
+ * most of the compose code at least works through the v2r table.
+ *
+ * The next three functions continue to support those abstractions,
+ * but currently only allow sibling swapping.  Adding the additional
+ * code to move an attachment across trees would be more complexity to
+ * no purpose.
+ */
+static void swap_attachments (ATTACH_CONTEXT *actx, int cur_rindex, int next_rindex)
+{
+  BODY *prev = NULL, *cur, *next, *parent = NULL;
+  int prev_rindex;
+  ATTACHPTR *tmp;
+
+  cur = actx->idx[cur_rindex]->content;
+  next = actx->idx[next_rindex]->content;
+
+  for (prev_rindex = 0; prev_rindex < cur_rindex; prev_rindex++)
+  {
+    if (actx->idx[prev_rindex]->content->parts == cur)
+      parent = actx->idx[prev_rindex]->content;
+    if (actx->idx[prev_rindex]->content->next == cur)
+    {
+      prev = actx->idx[prev_rindex]->content;
+      break;
+    }
+  }
+
+  if (prev)
+    prev->next = next;
+  else if (cur_rindex == 0)
+    actx->hdr->content = next;
+  else if (parent)
+    parent->parts = next;
+
+  cur->next = next->next;
+  next->next = cur;
+
+  tmp = actx->idx[cur_rindex];
+  actx->idx[cur_rindex] = actx->idx[next_rindex];
+  actx->idx[next_rindex] = tmp;
+}
+
+static int move_attachment_down (ATTACH_CONTEXT *actx, MUTTMENU *menu)
+{
+  int cur_rindex, next_rindex, next_vindex;
+  BODY *cur, *next;
+
+  cur_rindex = actx->v2r[menu->current];
+  cur = actx->idx[cur_rindex]->content;
+
+  next = cur->next;
+  if (!next)
+  {
+    mutt_error _("You are on the last entry.");
+    return -1;
+  }
+  for (next_rindex = cur_rindex + 1; next_rindex < actx->idxlen; next_rindex++)
+  {
+    if (actx->idx[next_rindex]->content == next)
+      break;
+  }
+  if (next_rindex == actx->idxlen)
+  {
+    mutt_error _("You are on the last entry.");
+    return -1;
+  }
+
+  swap_attachments (actx, cur_rindex, next_rindex);
+  for (next_vindex = menu->current; next_vindex < actx->vcount; next_vindex++)
+  {
+    if (actx->v2r[next_vindex] == next_rindex)
+    {
+      menu->current = next_vindex;
+      break;
+    }
+  }
+
+  return 0;
+}
+
+static int move_attachment_up (ATTACH_CONTEXT *actx, MUTTMENU *menu)
+{
+  int prev_rindex, cur_rindex, prev_vindex;
+  BODY *prev = NULL, *cur;
+
+  cur_rindex = actx->v2r[menu->current];
+  cur = actx->idx[cur_rindex]->content;
+
+  for (prev_rindex = 0; prev_rindex < cur_rindex; prev_rindex++)
+  {
+    if (actx->idx[prev_rindex]->content->next == cur)
+    {
+      prev = actx->idx[prev_rindex]->content;
+      break;
+    }
+  }
+  if (!prev)
+  {
+    mutt_error _("You are on the first entry.");
+    return -1;
+  }
+
+  swap_attachments (actx, prev_rindex, cur_rindex);
+  for (prev_vindex = 0; prev_vindex < menu->current; prev_vindex++)
+  {
+    if (actx->v2r[prev_vindex] == prev_rindex)
+    {
+      menu->current = prev_vindex;
+      break;
+    }
+  }
+
+  return 0;
+}
+
+
 static void mutt_gen_compose_attach_list (ATTACH_CONTEXT *actx,
                                           BODY *m,
                                           int parent_type,
@@ -1223,6 +1341,20 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  msg->content = actx->idx[0]->content;
 
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
+        break;
+
+      case OP_COMPOSE_MOVE_DOWN:
+        CHECK_COUNT;
+        if (move_attachment_down (actx, menu) == -1)
+          break;
+	mutt_update_compose_menu (actx, menu, 0);
+        break;
+
+      case OP_COMPOSE_MOVE_UP:
+        CHECK_COUNT;
+        if (move_attachment_up (actx, menu) == -1)
+          break;
+	mutt_update_compose_menu (actx, menu, 0);
         break;
 
       case OP_COMPOSE_TOGGLE_RECODE:

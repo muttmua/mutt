@@ -389,6 +389,8 @@ const struct binding_t OpCompose[] = { /* map: compose */
   { "view-alt-mailcap", OP_COMPOSE_VIEW_ALT_MAILCAP,    "V" },
   { "send-message",	OP_COMPOSE_SEND_MESSAGE,	"y" },
   { "pipe-entry",	OP_PIPE,			"|" },
+  { "move-down",	OP_COMPOSE_MOVE_DOWN,		NULL },
+  { "move-up",		OP_COMPOSE_MOVE_UP,		NULL },
 
   { "attach-key",	OP_COMPOSE_ATTACH_KEY,		"\033k" },
   { "pgp-menu",		OP_COMPOSE_PGP_MENU,		"p" 	},
