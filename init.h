@@ -374,6 +374,11 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$fast_reply.
   */
+  { "background_edit",  DT_BOOL, R_NONE, {.l=OPTBACKGROUNDEDIT}, {.l=0} },
+  /*
+  ** .pp
+  ** ADD DOCUMENTATION.
+  */
   { "beep",		DT_BOOL, R_NONE, {.l=OPTBEEP}, {.l=1} },
   /*
   ** .pp

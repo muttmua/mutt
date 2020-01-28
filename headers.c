@@ -23,199 +23,223 @@
 #include "mutt.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "background.h"
 
 #include <sys/stat.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
 
-void mutt_edit_headers (const char *editor,
-                        SEND_CONTEXT *sctx)
+/* Returns 0 on normal exit
+ *        -1 on error
+ *         2 if edit headers is backgrounded.
+ */
+int mutt_edit_headers (const char *editor,
+                       SEND_CONTEXT *sctx, int flags)
 {
-  HEADER *msg;
   const char *filename;
-  BUFFER *path = NULL;	/* tempfile used to edit headers + body */
-  char buffer[LONG_STRING];
-  const char *p;
   FILE *ifp, *ofp;
-  int i, keep;
-  ENVELOPE *n;
-  time_t mtime;
   struct stat st;
-  LIST *cur, **last = NULL, *tmp;
+  int rc = -1;
 
-  msg = sctx->msg;
-  filename = msg->content->filename;
+  filename = sctx->msg->content->filename;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (path);
-  if ((ofp = safe_fopen (mutt_b2s (path), "w")) == NULL)
+  if (flags != MUTT_EDIT_HEADERS_RESUME)
   {
-    mutt_perror (mutt_b2s (path));
-    goto cleanup;
-  }
+    sctx->tempfile = mutt_buffer_new ();
+    mutt_buffer_mktemp (sctx->tempfile);
+    if ((ofp = safe_fopen (mutt_b2s (sctx->tempfile), "w")) == NULL)
+    {
+      mutt_perror (mutt_b2s (sctx->tempfile));
+      goto cleanup;
+    }
 
-  mutt_env_to_local (msg->env);
-  mutt_write_rfc822_header (ofp, msg->env, NULL, MUTT_WRITE_HEADER_EDITHDRS, 0, 0);
-  fputc ('\n', ofp);	/* tie off the header. */
+    mutt_env_to_local (sctx->msg->env);
+    mutt_write_rfc822_header (ofp, sctx->msg->env, NULL, MUTT_WRITE_HEADER_EDITHDRS, 0, 0);
+    fputc ('\n', ofp);	/* tie off the header. */
 
-  /* now copy the body of the message. */
-  if ((ifp = fopen (filename, "r")) == NULL)
-  {
-    mutt_perror (filename);
-    goto cleanup;
-  }
+    /* now copy the body of the message. */
+    if ((ifp = fopen (filename, "r")) == NULL)
+    {
+      mutt_perror (filename);
+      goto cleanup;
+    }
 
-  mutt_copy_stream (ifp, ofp);
+    mutt_copy_stream (ifp, ofp);
 
-  safe_fclose (&ifp);
-  safe_fclose (&ofp);
-
-  if (stat (mutt_b2s (path), &st) == -1)
-  {
-    mutt_perror (mutt_b2s (path));
-    goto cleanup;
-  }
-
-  mtime = mutt_decrease_mtime (mutt_b2s (path), &st);
-
-  mutt_edit_file (editor, mutt_b2s (path));
-  stat (mutt_b2s (path), &st);
-  if (mtime == st.st_mtime)
-  {
-    dprint (1, (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
-    /* the file has not changed! */
-    mutt_unlink (mutt_b2s (path));
-    goto cleanup;
-  }
-
-  mutt_unlink (filename);
-  mutt_free_list (&msg->env->userhdrs);
-
-  /* Read the temp file back in */
-  if ((ifp = fopen (mutt_b2s (path), "r")) == NULL)
-  {
-    mutt_perror (mutt_b2s (path));
-    goto cleanup;
-  }
-
-  if ((ofp = safe_fopen (filename, "w")) == NULL)
-  {
-    /* intentionally leak a possible temporary file here */
     safe_fclose (&ifp);
-    mutt_perror (filename);
-    goto cleanup;
-  }
+    safe_fclose (&ofp);
 
-  n = mutt_read_rfc822_header (ifp, NULL, 1, 0);
-  while ((i = fread (buffer, 1, sizeof (buffer), ifp)) > 0)
-    fwrite (buffer, 1, i, ofp);
-  safe_fclose (&ofp);
-  safe_fclose (&ifp);
-  mutt_unlink (mutt_b2s (path));
-
-  /* in case the user modifies/removes the In-Reply-To header with
-     $edit_headers set, we remove References: as they're likely invalid;
-     we can simply compare strings as we don't generate References for
-     multiple Message-Ids in IRT anyways */
-  if (msg->env->in_reply_to &&
-      (!n->in_reply_to || mutt_strcmp (n->in_reply_to->data,
-				       msg->env->in_reply_to->data) != 0))
-    mutt_free_list (&msg->env->references);
-
-  /* restore old info. */
-  mutt_free_list (&n->references);
-  n->references = msg->env->references;
-  msg->env->references = NULL;
-
-  mutt_free_envelope (&msg->env);
-  msg->env = n; n = NULL;
-
-  mutt_expand_aliases_env (msg->env);
-
-  /* search through the user defined headers added to see if
-   * fcc: or attach: or pgp: was specified
-   */
-
-  cur = msg->env->userhdrs;
-  last = &msg->env->userhdrs;
-  while (cur)
-  {
-    keep = 1;
-
-    if (ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
+    if (stat (mutt_b2s (sctx->tempfile), &st) == -1)
     {
-      p = skip_email_wsp(cur->data + 4);
-      if (*p)
+      mutt_perror (mutt_b2s (sctx->tempfile));
+      goto cleanup;
+    }
+
+    sctx->tempfile_mtime = mutt_decrease_mtime (mutt_b2s (sctx->tempfile), &st);
+
+    if (flags == MUTT_EDIT_HEADERS_BACKGROUND)
+    {
+      if (mutt_background_edit_file (sctx, editor, mutt_b2s (sctx->tempfile)) == 0)
       {
-	mutt_buffer_strcpy (sctx->fcc, p);
-	mutt_buffer_pretty_mailbox (sctx->fcc);
+        sctx->state = SEND_STATE_FIRST_EDIT_HEADERS;
+        return 2;
       }
-      keep = 0;
-    }
-    else if (ascii_strncasecmp ("attach:", cur->data, 7) == 0)
-    {
-      BODY *body;
-      BODY *parts;
-
-      p = skip_email_wsp(cur->data + 7);
-      if (*p)
-      {
-        mutt_buffer_clear (path);
-	for ( ; *p && *p != ' ' && *p != '\t'; p++)
-	{
-	  if (*p == '\\')
-	  {
-	    if (!*(p+1))
-	      break;
-	    p++;
-	  }
-          mutt_buffer_addch (path, *p);
-	}
-	p = skip_email_wsp(p);
-
-	mutt_buffer_expand_path (path);
-	if ((body = mutt_make_file_attach (mutt_b2s (path))))
-	{
-	  body->description = safe_strdup (p);
-	  for (parts = msg->content; parts->next; parts = parts->next) ;
-	  parts->next = body;
-	}
-	else
-	{
-	  mutt_buffer_pretty_mailbox (path);
-	  mutt_error (_("%s: unable to attach file"), mutt_b2s (path));
-	}
-      }
-      keep = 0;
-    }
-    else if ((WithCrypto & APPLICATION_PGP)
-             && ascii_strncasecmp ("pgp:", cur->data, 4) == 0)
-    {
-      msg->security = mutt_parse_crypt_hdr (cur->data + 4, 0, APPLICATION_PGP,
-                                            sctx);
-      if (msg->security)
-	msg->security |= APPLICATION_PGP;
-      keep = 0;
-    }
-
-    if (keep)
-    {
-      last = &cur->next;
-      cur  = cur->next;
+      flags = 0; /* fall through on error */
     }
     else
+      mutt_edit_file (editor, mutt_b2s (sctx->tempfile));
+  }
+
+  if (flags != MUTT_EDIT_HEADERS_BACKGROUND)
+  {
+    char buffer[LONG_STRING];
+    const char *p;
+    int i, keep;
+    ENVELOPE *n;
+    LIST *cur, **last = NULL, *tmp;
+
+    stat (mutt_b2s (sctx->tempfile), &st);
+    if (sctx->tempfile_mtime == st.st_mtime)
     {
-      tmp       = cur;
-      *last     = cur->next;
-      cur       = cur->next;
-      tmp->next = NULL;
-      mutt_free_list (&tmp);
+      dprint (1, (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
+      /* the file has not changed! */
+      mutt_unlink (mutt_b2s (sctx->tempfile));
+      goto cleanup;
+    }
+
+    mutt_unlink (filename);
+    mutt_free_list (&sctx->msg->env->userhdrs);
+
+    /* Read the temp file back in */
+    if ((ifp = fopen (mutt_b2s (sctx->tempfile), "r")) == NULL)
+    {
+      mutt_perror (mutt_b2s (sctx->tempfile));
+      goto cleanup;
+    }
+
+    if ((ofp = safe_fopen (filename, "w")) == NULL)
+    {
+      /* intentionally leak a possible temporary file here */
+      safe_fclose (&ifp);
+      mutt_perror (filename);
+      goto cleanup;
+    }
+
+    n = mutt_read_rfc822_header (ifp, NULL, 1, 0);
+    while ((i = fread (buffer, 1, sizeof (buffer), ifp)) > 0)
+      fwrite (buffer, 1, i, ofp);
+    safe_fclose (&ofp);
+    safe_fclose (&ifp);
+    mutt_unlink (mutt_b2s (sctx->tempfile));
+
+    /* in case the user modifies/removes the In-Reply-To header with
+       $edit_headers set, we remove References: as they're likely invalid;
+       we can simply compare strings as we don't generate References for
+       multiple Message-Ids in IRT anyways */
+    if (sctx->msg->env->in_reply_to &&
+        (!n->in_reply_to || mutt_strcmp (n->in_reply_to->data,
+                                         sctx->msg->env->in_reply_to->data) != 0))
+      mutt_free_list (&sctx->msg->env->references);
+
+    /* restore old info. */
+    mutt_free_list (&n->references);
+    n->references = sctx->msg->env->references;
+    sctx->msg->env->references = NULL;
+
+    mutt_free_envelope (&sctx->msg->env);
+    sctx->msg->env = n; n = NULL;
+
+    mutt_expand_aliases_env (sctx->msg->env);
+
+    /* search through the user defined headers added to see if
+     * fcc: or attach: or pgp: was specified
+     */
+
+    cur = sctx->msg->env->userhdrs;
+    last = &sctx->msg->env->userhdrs;
+    while (cur)
+    {
+      keep = 1;
+
+      if (ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
+      {
+        p = skip_email_wsp(cur->data + 4);
+        if (*p)
+        {
+          mutt_buffer_strcpy (sctx->fcc, p);
+          mutt_buffer_pretty_mailbox (sctx->fcc);
+        }
+        keep = 0;
+      }
+      else if (ascii_strncasecmp ("attach:", cur->data, 7) == 0)
+      {
+        BODY *body;
+        BODY *parts;
+
+        p = skip_email_wsp(cur->data + 7);
+        if (*p)
+        {
+          BUFFER *path = mutt_buffer_pool_get ();
+          for ( ; *p && *p != ' ' && *p != '\t'; p++)
+          {
+            if (*p == '\\')
+            {
+              if (!*(p+1))
+                break;
+              p++;
+            }
+            mutt_buffer_addch (path, *p);
+          }
+          p = skip_email_wsp(p);
+
+          mutt_buffer_expand_path (path);
+          if ((body = mutt_make_file_attach (mutt_b2s (path))))
+          {
+            body->description = safe_strdup (p);
+            for (parts = sctx->msg->content; parts->next; parts = parts->next) ;
+            parts->next = body;
+          }
+          else
+          {
+            mutt_buffer_pretty_mailbox (path);
+            mutt_error (_("%s: unable to attach file"), mutt_b2s (path));
+          }
+          mutt_buffer_pool_release (&path);
+        }
+        keep = 0;
+      }
+      else if ((WithCrypto & APPLICATION_PGP)
+               && ascii_strncasecmp ("pgp:", cur->data, 4) == 0)
+      {
+        sctx->msg->security = mutt_parse_crypt_hdr (cur->data + 4, 0, APPLICATION_PGP,
+                                                    sctx);
+        if (sctx->msg->security)
+          sctx->msg->security |= APPLICATION_PGP;
+        keep = 0;
+      }
+
+      if (keep)
+      {
+        last = &cur->next;
+        cur  = cur->next;
+      }
+      else
+      {
+        tmp       = cur;
+        *last     = cur->next;
+        cur       = cur->next;
+        tmp->next = NULL;
+        mutt_free_list (&tmp);
+      }
     }
   }
 
+  rc = 0;
+
 cleanup:
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_free (&sctx->tempfile);
+  return rc;
 }
 
 static void label_ref_dec(CONTEXT *ctx, char *label)

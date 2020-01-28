@@ -192,7 +192,7 @@ void mutt_display_address (ENVELOPE *);
 void mutt_display_sanitize (char *);
 int mutt_edit_content_type (HEADER *, BODY *, FILE *);
 void mutt_edit_file (const char *, const char *);
-void mutt_edit_headers (const char *, SEND_CONTEXT *);
+int mutt_edit_headers (const char *, SEND_CONTEXT *, int);
 char **mutt_envlist (void);
 void mutt_envlist_set (const char *name, const char *value, int overwrite);
 int mutt_filter_unprintable (char **);

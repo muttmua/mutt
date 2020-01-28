@@ -33,6 +33,7 @@
 #include "rfc3676.h"
 #include "attach.h"
 #include "send.h"
+#include "background.h"
 
 #ifdef USE_AUTOCRYPT
 #include "autocrypt.h"
@@ -1638,6 +1639,9 @@ static void send_ctx_free (SEND_CONTEXT **psctx)
   if (!(sctx->flags & SENDNOFREEHEADER))
     mutt_free_header (&sctx->msg);
   mutt_buffer_free (&sctx->fcc);
+  mutt_buffer_free (&sctx->tempfile);
+
+  FREE (&sctx->cur_message_id);
   FREE (&sctx->ctx_realpath);
 
   FREE (&sctx->pgp_sign_as);
@@ -1647,6 +1651,11 @@ static void send_ctx_free (SEND_CONTEXT **psctx)
   FREE (psctx);    /* __FREE_CHECKED__ */
 }
 
+/* Pre-initial edit message setup.
+ *
+ * Returns 0 if this part of the process finished normally
+ *        -1 if an error occured or the process was aborted
+ */
 static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
                                CONTEXT *ctx)
 {
@@ -1901,6 +1910,12 @@ cleanup:
   return rv;
 }
 
+/* Initial pre-compose menu edit, and actions before the compose menu.
+ *
+ * Returns 0 if this part of the process finished normally
+ *        -1 if an error occured or the process was aborted
+ *         2 if the initial edit was backgrounded
+ */
 static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
 {
   int rv = -1;
@@ -1914,60 +1929,109 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
   else if (! (sctx->flags & SENDBATCH))
   {
     struct stat st;
-    time_t mtime = mutt_decrease_mtime (sctx->msg->content->filename, NULL);
 
-    mutt_update_encoding (sctx->msg->content);
-
-    /*
-     * Select whether or not the user's editor should be called now.  We
-     * don't want to do this when:
-     * 1) we are sending a key/cert
-     * 2) we are forwarding a message and the user doesn't want to edit it.
-     *    This is controlled by the quadoption $forward_edit.  However, if
-     *    both $edit_headers and $autoedit are set, we want to ignore the
-     *    setting of $forward_edit because the user probably needs to add the
-     *    recipients.
-     */
-    if (! (sctx->flags & SENDKEY) &&
-	((sctx->flags & SENDFORWARD) == 0 ||
-	 (option (OPTEDITHDRS) && option (OPTAUTOEDIT)) ||
-	 query_quadoption (OPT_FORWEDIT, _("Edit forwarded message?")) == MUTT_YES))
+    /* Resume background editing */
+    if (sctx->state)
     {
-      /* If the this isn't a text message, look for a mailcap edit command */
-      if (mutt_needs_mailcap (sctx->msg->content))
+      if (sctx->state == SEND_STATE_FIRST_EDIT)
       {
-	if (!mutt_edit_attachment (sctx->msg->content))
-          goto cleanup;
+        if (stat (sctx->msg->content->filename, &st) == 0)
+        {
+          if (sctx->mtime != st.st_mtime)
+            fix_end_of_file (sctx->msg->content->filename);
+        }
+        else
+          mutt_perror (sctx->msg->content->filename);
       }
-      else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
-	mutt_builtin_editor (sctx);
-      else if (option (OPTEDITHDRS))
+      else if (sctx->state == SEND_STATE_FIRST_EDIT_HEADERS)
       {
-	mutt_env_to_local (sctx->msg->env);
-	mutt_edit_headers (Editor, sctx);
-	mutt_env_to_intl (sctx->msg->env, NULL, NULL);
+        mutt_edit_headers (Editor, sctx, MUTT_EDIT_HEADERS_RESUME);
+        mutt_env_to_intl (sctx->msg->env, NULL, NULL);
       }
-      else
-      {
-	mutt_edit_file (Editor, sctx->msg->content->filename);
-	if (stat (sctx->msg->content->filename, &st) == 0)
-	{
-	  if (mtime != st.st_mtime)
-	    fix_end_of_file (sctx->msg->content->filename);
-	}
-	else
-	  mutt_perror (sctx->msg->content->filename);
-      }
-
-      mutt_message_hook (NULL, sctx->msg, MUTT_SEND2HOOK);
+      sctx->state = 0;
     }
+    else
+    {
+      sctx->mtime = mutt_decrease_mtime (sctx->msg->content->filename, NULL);
+      mutt_update_encoding (sctx->msg->content);
+
+      /*
+       * Select whether or not the user's editor should be called now.  We
+       * don't want to do this when:
+       * 1) we are sending a key/cert
+       * 2) we are forwarding a message and the user doesn't want to edit it.
+       *    This is controlled by the quadoption $forward_edit.  However, if
+       *    both $edit_headers and $autoedit are set, we want to ignore the
+       *    setting of $forward_edit because the user probably needs to add the
+       *    recipients.
+       */
+      if (! (sctx->flags & SENDKEY) &&
+          ((sctx->flags & SENDFORWARD) == 0 ||
+           (option (OPTEDITHDRS) && option (OPTAUTOEDIT)) ||
+           query_quadoption (OPT_FORWEDIT, _("Edit forwarded message?")) == MUTT_YES))
+      {
+        int background_edit;
+
+        background_edit = (sctx->flags & SENDBACKGROUNDEDIT) &&
+          option (OPTBACKGROUNDEDIT);
+
+        /* If the this isn't a text message, look for a mailcap edit command */
+        if (mutt_needs_mailcap (sctx->msg->content))
+        {
+          if (!mutt_edit_attachment (sctx->msg->content))
+            goto cleanup;
+        }
+        else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
+          mutt_builtin_editor (sctx);
+        else if (option (OPTEDITHDRS))
+        {
+          mutt_env_to_local (sctx->msg->env);
+          if (background_edit)
+          {
+            if (mutt_edit_headers (Editor, sctx, MUTT_EDIT_HEADERS_BACKGROUND) == 2)
+            {
+              sctx->state = SEND_STATE_FIRST_EDIT_HEADERS;
+              return 2;
+            }
+          }
+          else
+            mutt_edit_headers (Editor, sctx, 0);
+
+          mutt_env_to_intl (sctx->msg->env, NULL, NULL);
+        }
+        else
+        {
+          if (background_edit)
+          {
+            if (mutt_background_edit_file (sctx, Editor,
+                                           sctx->msg->content->filename) == 0)
+            {
+              sctx->state = SEND_STATE_FIRST_EDIT;
+              return 2;
+            }
+          }
+          else
+            mutt_edit_file (Editor, sctx->msg->content->filename);
+
+          if (stat (sctx->msg->content->filename, &st) == 0)
+          {
+            if (sctx->mtime != st.st_mtime)
+              fix_end_of_file (sctx->msg->content->filename);
+          }
+          else
+            mutt_perror (sctx->msg->content->filename);
+        }
+      }
+    }
+
+    mutt_message_hook (NULL, sctx->msg, MUTT_SEND2HOOK);
 
     if (! (sctx->flags & (SENDPOSTPONED | SENDFORWARD | SENDKEY | SENDRESEND | SENDDRAFTFILE)))
     {
       if (stat (sctx->msg->content->filename, &st) == 0)
       {
 	/* if the file was not modified, bail out now */
-	if (mtime == st.st_mtime && !sctx->msg->content->next &&
+	if (sctx->mtime == st.st_mtime && !sctx->msg->content->next &&
 	    query_quadoption (OPT_ABORT, _("Abort unmodified message?")) == MUTT_YES)
 	{
 	  mutt_message _("Aborted unmodified message.");
@@ -2126,6 +2190,13 @@ cleanup:
   return rv;
 }
 
+/* Compose menu and post-compose menu sending
+ *
+ * Returns 0 if the message was successfully sent
+ *        -1 if the message was aborted or an error occurred
+ *         1 if the message was postponed
+ *         2 if the message editing was backgrounded
+ */
 static int send_message_resume_compose_menu (SEND_CONTEXT *sctx)
 {
   int rv = -1, i;
@@ -2152,6 +2223,11 @@ main_loop:
         goto main_loop;
       mutt_message _("Message postponed.");
       rv = 1;
+      goto cleanup;
+    }
+    else if (i == 2)
+    {
+      rv = 2;
       goto cleanup;
     }
   }
@@ -2339,10 +2415,8 @@ main_loop:
 
   /* TODO: this needs to be fixed up to use sctx values,
    * compare the context realpath.  open if the mailbox has
-   * changed.
-   *
-   * Perhaps we can store cur in sctx but NULL it out if the
-   * editing is backgrounded. */
+   * changed?
+   */
   if (sctx->flags & SENDREPLY)
   {
     if (sctx->ctx_realpath && Context &&
@@ -2370,22 +2444,29 @@ cleanup:
 /* backgroundable and resumable part of the send process.
  *
  * need to define a "backgrounded" return value.
+ *
+ * Returns 0 if the message was successfully sent
+ *        -1 if the message was aborted or an error occurred
+ *         1 if the message was postponed
+ *         2 if the message editing was backgrounded
  */
 int mutt_send_message_resume (SEND_CONTEXT *sctx)
 {
-  int rv = -1;
+  int rv;
 
-  rv = send_message_resume_first_edit (sctx);
-  if (rv < 0)
-    goto cleanup;
+  if (sctx->state <= SEND_STATE_FIRST_EDIT_HEADERS)
+  {
+    rv = send_message_resume_first_edit (sctx);
+    if (rv != 0)
+      goto cleanup;
+  }
 
   rv = send_message_resume_compose_menu (sctx);
-  if (rv < 0)
-    goto cleanup;
-
-  rv = 0;
 
 cleanup:
+  if (rv != 2)
+    send_ctx_free (&sctx);
+
   return rv;
 }
 
@@ -2393,6 +2474,7 @@ cleanup:
  * Returns 0 if the message was successfully sent
  *        -1 if the message was aborted or an error occurred
  *         1 if the message was postponed
+ *         2 if the message editing was backgrounded
  */
 int
 mutt_send_message (int flags,            /* send mode */
@@ -2403,53 +2485,52 @@ mutt_send_message (int flags,            /* send mode */
 {
   SEND_CONTEXT *sctx;
   int rv = -1;
-  int resume_rc;
 
   sctx = send_ctx_new ();
   sctx->flags = flags;
   sctx->msg = msg;
   sctx->cur = cur;
+  /* TODO:
+   * grab cur fields here? see TODO below.
+   */
   if (ctx)
     sctx->ctx_realpath = safe_strdup (ctx->realpath);
 
   /* NOTE:
-   * if msg is passed in, this function is *supposed* to free it
-   * unless flag SENDNOFREEHEADER is set.
-   * That is only done by main.  And for that case we want
-   * to make sure NO_BACKGROUND is set.
-   */
-
-  /* TODO:
-   * cur can't be stored in sctx for a backgroundable.
-   * see if we can store just the components of cur we need
-   * and regrab the actual header when persisting replied flag.
-   */
-
-  /* NOTE:
-   * we still need to check other callers to make sure the components
-   * of the msg header don't disappear after returning!!!
+   * we still need to check other callers as we allow them, to make
+   * sure the components of the msg header don't disappear after
+   * returning!!!
    */
 
   if (send_message_setup (sctx, tempfile, ctx) < 0)
-    goto cleanup;
+  {
+    send_ctx_free (&sctx);
+    return -1;
+  }
 
+  /* TODO:
+   * cur can't be stored in sctx for a backgroundable.
+   * so if background flag is set, grab and store needed fields in sctx.
+   *
+   * Ideally we would do this here.  However, postponed message may
+   * be resumed in another mailbox, preventing the cur from being used
+   * outside the context of open/closing the context.
+   *
+   * Perhaps instead we need to do so above *and* in postpone/resume via a
+   * function.
+   */
 
-  resume_rc = mutt_send_message_resume (sctx);
-  if (resume_rc < 0)
-    goto cleanup;
-
-  /* TODO: if rc is backgroundable, stuff in background list and pass along
-   * backgrounded rc value.  Should this be
-   * done inside mutt_send_message_resume so we don't have the logic
-   * everywhere? */
-
-  /* TODO: until we code up the background list menu, we can support
-   * a single backgrounded via a global, just to make testing easier */
-
-  rv = 0;
-
-cleanup:
-  send_ctx_free (&sctx);
+  /* Note: mutt_send_message_resume() takes care of freeing
+   * the sctx if appropriate, and also adds to the background edit
+   * list.
+   */
+  rv = mutt_send_message_resume (sctx);
+  if (rv == 2)
+  {
+    /* TODO:
+     * NULL out cur if message is backgrounded.
+     */
+  }
 
   return rv;
 }

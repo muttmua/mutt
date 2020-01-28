@@ -456,7 +456,7 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
 	    if (option (OPTEDITHDRS))
 	    {
 	      mutt_env_to_local (msg->env);
-	      mutt_edit_headers (NONULL(Visual), sctx);
+	      mutt_edit_headers (NONULL(Visual), sctx, 0);
 	      if (mutt_env_to_intl (msg->env, &tag, &err))
 		printw (_("Bad IDN in %s: '%s'\n"), tag, err);
 	    }

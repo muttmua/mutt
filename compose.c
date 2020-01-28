@@ -35,6 +35,7 @@
 #include "sort.h"
 #include "charset.h"
 #include "rfc3676.h"
+#include "background.h"
 
 #ifdef MIXMASTER
 #include "remailer.h"
@@ -1017,6 +1018,7 @@ static void compose_menu_redraw (MUTTMENU *menu)
  * 1	message should be postponed
  * 0	normal exit
  * -1	abort message
+ * 2    edit was backgrounded
  */
 int mutt_compose_menu (SEND_CONTEXT *sctx)
 {
@@ -1064,6 +1066,18 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
   /* Since this is rather long lived, we don't use the pool */
   fname = mutt_buffer_new ();
   mutt_buffer_increase_size (fname, LONG_STRING);
+
+  /* Another alternative would be to create a resume op and:
+   *   mutt_unget_event (0, OP_COMPOSE_EDIT_MESSAGE_RESUME);
+   */
+  if (sctx->state)
+  {
+    if (sctx->state == SEND_STATE_COMPOSE_EDIT)
+      goto edit_message_resume;
+    if (sctx->state == SEND_STATE_COMPOSE_EDIT_HEADERS)
+      goto edit_headers_resume;
+    sctx->state = 0;
+  }
 
   while (loop)
   {
@@ -1125,7 +1139,22 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	if (Editor && (mutt_strcmp ("builtin", Editor) != 0) && !option (OPTEDITHDRS))
 	{
           mutt_rfc3676_space_unstuff (msg);
-	  mutt_edit_file (Editor, msg->content->filename);
+
+          if ((sctx->flags & SENDBACKGROUNDEDIT) && option (OPTBACKGROUNDEDIT))
+          {
+            if (mutt_background_edit_file (sctx, Editor,
+                                           msg->content->filename) == 0)
+            {
+              sctx->state = SEND_STATE_COMPOSE_EDIT;
+              loop = 0;
+              r = 2;
+              break;
+            }
+          }
+          else
+            mutt_edit_file (Editor, msg->content->filename);
+        edit_message_resume:
+          sctx->state = 0;
           mutt_rfc3676_space_stuff (msg);
 	  mutt_update_encoding (msg->content);
 	  menu->redraw = REDRAW_FULL;
@@ -1142,7 +1171,26 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	{
 	  char *tag = NULL, *err = NULL;
 	  mutt_env_to_local (msg->env);
-	  mutt_edit_headers (NONULL (Editor), sctx);
+
+          if ((sctx->flags & SENDBACKGROUNDEDIT) && option (OPTBACKGROUNDEDIT))
+          {
+            if (mutt_edit_headers (Editor, sctx, MUTT_EDIT_HEADERS_BACKGROUND) == 2)
+            {
+              sctx->state = SEND_STATE_COMPOSE_EDIT_HEADERS;
+              loop = 0;
+              r = 2;
+              break;
+            }
+          }
+          else
+            mutt_edit_headers (NONULL (Editor), sctx, 0);
+
+        edit_headers_resume:
+          if (sctx->state == SEND_STATE_COMPOSE_EDIT_HEADERS)
+          {
+            mutt_edit_headers (Editor, sctx, MUTT_EDIT_HEADERS_RESUME);
+            sctx->state = 0;
+          }
 	  if (mutt_env_to_intl (msg->env, &tag, &err))
 	  {
 	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);

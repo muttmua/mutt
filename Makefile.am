@@ -27,8 +27,8 @@ BUILT_SOURCES = keymap_defs.h patchlist.c reldate.h conststrings.c version.h $(H
 
 bin_PROGRAMS = mutt $(DOTLOCK_TARGET) $(PGPAUX_TARGET)
 mutt_SOURCES = \
-	addrbook.c alias.c attach.c base64.c browser.c buffer.c buffy.c color.c \
-	crypt.c cryptglue.c \
+	addrbook.c alias.c attach.c background.c base64.c browser.c buffer.c \
+	buffy.c color.c crypt.c cryptglue.c \
 	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
 	edit.c enter.c flags.c init.c filter.c from.c \
 	getdomain.c group.c \
@@ -77,7 +77,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	rfc2231.h rfc822.h rfc3676.h sha1.h sort.h mime.types VERSION prepare \
 	_mutt_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h \
-	README.SSL smime.h group.h mutt_zstrm.h send.h \
+	README.SSL smime.h group.h mutt_zstrm.h send.h background.h \
 	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
 	ChangeLog mkchangelog.sh mkreldate.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
 	snprintf.c regex.c crypt-gpgme.h hcachever.pl \

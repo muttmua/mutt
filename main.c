@@ -32,6 +32,7 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 #include "send.h"
+#include "background.h"
 
 #ifdef USE_SIDEBAR
 #include "sidebar.h"
