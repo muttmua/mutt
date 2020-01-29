@@ -31,6 +31,8 @@
 #include "url.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "send.h"
+
 #ifdef USE_SIDEBAR
 #include "sidebar.h"
 #endif

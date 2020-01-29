@@ -26,6 +26,7 @@
 #include "mutt_regex.h"
 #include "mbyte.h"
 #include "charset.h"
+#include "send.h"
 
 #include <ctype.h>
 #include <stdlib.h>

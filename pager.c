@@ -31,6 +31,8 @@
 #include "mbyte.h"
 #include "sort.h"
 #include "buffy.h"
+#include "send.h"
+
 #ifdef USE_SIDEBAR
 #include "sidebar.h"
 #endif

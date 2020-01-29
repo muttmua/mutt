@@ -24,6 +24,7 @@
 #include "mutt_menu.h"
 #include "mutt_idna.h"
 #include "mapping.h"
+#include "send.h"
 
 #include <string.h>
 #include <stdlib.h>

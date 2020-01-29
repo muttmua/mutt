@@ -26,6 +26,7 @@
 #include "mime.h"
 #include "mutt_idna.h"
 #include "mailbox.h"
+#include "send.h"
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 

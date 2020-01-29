@@ -28,6 +28,7 @@
 #include "smime.h"
 #include "mime.h"
 #include "copy.h"
+#include "send.h"
 
 #include <sys/wait.h>
 #include <string.h>

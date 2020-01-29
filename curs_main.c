@@ -28,6 +28,7 @@
 #include "sort.h"
 #include "buffy.h"
 #include "mx.h"
+#include "send.h"
 
 #ifdef USE_SIDEBAR
 #include "sidebar.h"

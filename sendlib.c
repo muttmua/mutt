@@ -36,6 +36,7 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 #include "buffy.h"
+#include "send.h"
 
 #ifdef USE_AUTOCRYPT
 #include "autocrypt.h"

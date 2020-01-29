@@ -32,6 +32,7 @@
 #include "url.h"
 #include "rfc3676.h"
 #include "attach.h"
+#include "send.h"
 
 #ifdef USE_AUTOCRYPT
 #include "autocrypt.h"
@@ -468,7 +469,7 @@ cleanup:
   return rc;
 }
 
-int mutt_inline_forward (CONTEXT *ctx, HEADER *msg, HEADER *cur, FILE *out)
+static int mutt_inline_forward (CONTEXT *ctx, HEADER *msg, HEADER *cur, FILE *out)
 {
   int i, forwardq = -1;
   BODY **last;
@@ -689,7 +690,7 @@ int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
   return 0;
 }
 
-LIST *mutt_make_references(ENVELOPE *e)
+static LIST *mutt_make_references(ENVELOPE *e)
 {
   LIST *t = NULL, *l = NULL;
 
