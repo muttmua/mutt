@@ -1134,7 +1134,7 @@ static int generate_multipart_alternative (HEADER *msg, int flags)
   return 0;
 }
 
-static int send_message (HEADER *msg)
+static int invoke_mta (HEADER *msg)
 {
   BUFFER *tempfile = NULL;
   FILE *tempfp = NULL;
@@ -2241,7 +2241,7 @@ main_loop:
   if (option (OPTFCCBEFORESEND))
     save_fcc (msg, fcc, clear_content, pgpkeylist, flags);
 
-  if ((i = send_message (msg)) < 0)
+  if ((i = invoke_mta (msg)) < 0)
   {
     if (!(flags & SENDBATCH))
     {
