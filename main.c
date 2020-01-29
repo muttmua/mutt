@@ -959,7 +959,7 @@ int main (int argc, char **argv, char **environ)
   {
     if (!option (OPTNOCURSES))
       mutt_flushinp ();
-    ci_send_message (SENDPOSTPONED, NULL, NULL, NULL, NULL);
+    mutt_send_message (SENDPOSTPONED, NULL, NULL, NULL, NULL);
   }
   else if (subject || msg || sendflags || draftFile || includeFile || attach ||
 	   optind < argc)
@@ -1102,7 +1102,7 @@ int main (int argc, char **argv, char **environ)
         sendflags |= SENDNOFREEHEADER;
 
       /* Parse the draftFile into the full HEADER/BODY structure.
-       * Set SENDDRAFTFILE so ci_send_message doesn't overwrite
+       * Set SENDDRAFTFILE so mutt_send_message doesn't overwrite
        * our msg->content.
        */
       if (draftFile)
@@ -1204,7 +1204,7 @@ int main (int argc, char **argv, char **environ)
       mutt_free_list (&attach);
     }
 
-    rv = ci_send_message (sendflags, msg, bodyfile, NULL, NULL);
+    rv = mutt_send_message (sendflags, msg, bodyfile, NULL, NULL);
 
     if (edit_infile)
     {

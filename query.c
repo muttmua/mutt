@@ -479,7 +479,7 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
 		rfc822_free_address (&a);
 	      }
 	  }
-	  ci_send_message (0, msg, NULL, Context, NULL);
+	  mutt_send_message (0, msg, NULL, Context, NULL);
 	  menu->redraw = REDRAW_FULL;
 	  break;
 

@@ -2086,7 +2086,7 @@ int mutt_index_menu (void)
 	CHECK_ATTACH;
 	CHECK_MSGCOUNT;
         CHECK_VISIBLE;
-	ci_send_message (SENDTOSENDER, NULL, NULL, Context, tag ? NULL : CURHDR);
+	mutt_send_message (SENDTOSENDER, NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2205,7 +2205,7 @@ int mutt_index_menu (void)
 	CHECK_ATTACH;
 	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	ci_send_message (SENDFORWARD, NULL, NULL, Context, tag ? NULL : CURHDR);
+	mutt_send_message (SENDFORWARD, NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2239,7 +2239,7 @@ int mutt_index_menu (void)
       case OP_MAIL:
 
 	CHECK_ATTACH;
-	ci_send_message (0, NULL, NULL, Context, NULL);
+	mutt_send_message (0, NULL, NULL, Context, NULL);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2247,7 +2247,7 @@ int mutt_index_menu (void)
         if (!(WithCrypto & APPLICATION_PGP))
           break;
 	CHECK_ATTACH;
-	ci_send_message (SENDKEY, NULL, NULL, NULL, NULL);
+	mutt_send_message (SENDKEY, NULL, NULL, NULL, NULL);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2383,7 +2383,7 @@ int mutt_index_menu (void)
       case OP_RECALL_MESSAGE:
 
 	CHECK_ATTACH;
-	ci_send_message (SENDPOSTPONED, NULL, NULL, Context, NULL);
+	mutt_send_message (SENDPOSTPONED, NULL, NULL, Context, NULL);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2425,7 +2425,7 @@ int mutt_index_menu (void)
 
 	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	ci_send_message (replyflags, NULL, NULL, Context, tag ? NULL : CURHDR);
+	mutt_send_message (replyflags, NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
       }

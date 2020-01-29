@@ -638,7 +638,7 @@ static int delete_attachment (ATTACH_CONTEXT *actx, int x)
    * leak because mutt_free_body() frees body->parts, not
    * body->hdr->content.
    *
-   * Other ci_send_message() message constructors are careful to free
+   * Other mutt_send_message() message constructors are careful to free
    * any body->parts, removing depth:
    *  - mutt_prepare_template() used by postponed, resent, and draft files
    *  - mutt_copy_body() used by the recvattach menu and $forward_attachments.

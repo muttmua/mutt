@@ -342,7 +342,7 @@ enum
   OPT_MAX
 };
 
-/* flags to ci_send_message() */
+/* flags to mutt_send_message() */
 #define SENDREPLY	(1<<0)
 #define SENDGROUPREPLY	(1<<1)
 #define SENDLISTREPLY	(1<<2)

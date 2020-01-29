@@ -1464,7 +1464,7 @@ int mutt_resend_message (FILE *fp, CONTEXT *ctx, HEADER *cur)
     }
   }
 
-  return ci_send_message (SENDRESEND, msg, NULL, ctx, cur);
+  return mutt_send_message (SENDRESEND, msg, NULL, ctx, cur);
 }
 
 static int is_reply (HEADER *reply, HEADER *orig)
@@ -1610,11 +1610,11 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
  *         1 if the message was postponed
  */
 int
-ci_send_message (int flags,		/* send mode */
-		 HEADER *msg,		/* template to use for new message */
-		 const char *tempfile,	/* file specified by -i or -H */
-		 CONTEXT *ctx,		/* current mailbox */
-		 HEADER *cur)		/* current message */
+mutt_send_message (int flags,            /* send mode */
+                   HEADER *msg,          /* template to use for new message */
+                   const char *tempfile, /* file specified by -i or -H */
+                   CONTEXT *ctx,         /* current mailbox */
+                   HEADER *cur)          /* current message */
 {
   char buffer[LONG_STRING];
   BUFFER *fcc; /* where to copy this message */

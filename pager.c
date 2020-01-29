@@ -2508,7 +2508,7 @@ search_next:
 	  mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
                                    extra->bdy);
 	else
-	  ci_send_message (SENDTOSENDER, NULL, NULL, extra->ctx, extra->hdr);
+	  mutt_send_message (SENDTOSENDER, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2653,7 +2653,7 @@ search_next:
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;
-	ci_send_message (0, NULL, NULL, extra->ctx, NULL);
+	mutt_send_message (0, NULL, NULL, extra->ctx, NULL);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2676,7 +2676,7 @@ search_next:
 	  mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
 			     extra->bdy, replyflags);
 	else
-	  ci_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
+	  mutt_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
       }
@@ -2684,7 +2684,7 @@ search_next:
       case OP_RECALL_MESSAGE:
 	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
-	ci_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2695,7 +2695,7 @@ search_next:
 	  mutt_attach_forward (extra->fp, extra->hdr, extra->actx,
 			       extra->bdy);
         else
-	  ci_send_message (SENDFORWARD, NULL, NULL, extra->ctx, extra->hdr);
+	  mutt_send_message (SENDFORWARD, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2871,7 +2871,7 @@ search_next:
         }
 	CHECK_MODE(IsHeader(extra));
         CHECK_ATTACH;
-	ci_send_message (SENDKEY, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
