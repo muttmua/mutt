@@ -30,10 +30,10 @@
 #include <stdint.h>
 
 void mutt_edit_headers (const char *editor,
-			const char *body,
-			HEADER *msg,
-			BUFFER *fcc)
+                        SEND_CONTEXT *sctx)
 {
+  HEADER *msg;
+  const char *filename;
   BUFFER *path = NULL;	/* tempfile used to edit headers + body */
   char buffer[LONG_STRING];
   const char *p;
@@ -43,6 +43,9 @@ void mutt_edit_headers (const char *editor,
   time_t mtime;
   struct stat st;
   LIST *cur, **last = NULL, *tmp;
+
+  msg = sctx->msg;
+  filename = msg->content->filename;
 
   path = mutt_buffer_pool_get ();
   mutt_buffer_mktemp (path);
@@ -57,9 +60,9 @@ void mutt_edit_headers (const char *editor,
   fputc ('\n', ofp);	/* tie off the header. */
 
   /* now copy the body of the message. */
-  if ((ifp = fopen (body, "r")) == NULL)
+  if ((ifp = fopen (filename, "r")) == NULL)
   {
-    mutt_perror (body);
+    mutt_perror (filename);
     goto cleanup;
   }
 
@@ -86,7 +89,7 @@ void mutt_edit_headers (const char *editor,
     goto cleanup;
   }
 
-  mutt_unlink (body);
+  mutt_unlink (filename);
   mutt_free_list (&msg->env->userhdrs);
 
   /* Read the temp file back in */
@@ -96,11 +99,11 @@ void mutt_edit_headers (const char *editor,
     goto cleanup;
   }
 
-  if ((ofp = safe_fopen (body, "w")) == NULL)
+  if ((ofp = safe_fopen (filename, "w")) == NULL)
   {
     /* intentionally leak a possible temporary file here */
     safe_fclose (&ifp);
-    mutt_perror (body);
+    mutt_perror (filename);
     goto cleanup;
   }
 
@@ -140,13 +143,13 @@ void mutt_edit_headers (const char *editor,
   {
     keep = 1;
 
-    if (fcc && ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
+    if (ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
     {
       p = skip_email_wsp(cur->data + 4);
       if (*p)
       {
-	mutt_buffer_strcpy (fcc, p);
-	mutt_buffer_pretty_mailbox (fcc);
+	mutt_buffer_strcpy (sctx->fcc, p);
+	mutt_buffer_pretty_mailbox (sctx->fcc);
       }
       keep = 0;
     }

@@ -316,8 +316,10 @@ static void be_edit_header (ENVELOPE *e, int force)
   }
 }
 
-int mutt_builtin_editor (const char *path, HEADER *msg, HEADER *cur)
+int mutt_builtin_editor (SEND_CONTEXT *sctx)
 {
+  HEADER *msg, *cur;
+  const char *path;
   char **buf = NULL;
   int bufmax = 0, buflen = 0;
   char tmp[LONG_STRING];
@@ -325,6 +327,10 @@ int mutt_builtin_editor (const char *path, HEADER *msg, HEADER *cur)
   int done = 0;
   int i;
   char *p;
+
+  msg = sctx->msg;
+  cur = sctx->cur;
+  path = sctx->msg->content->filename;
 
   scrollok (stdscr, TRUE);
 
@@ -450,7 +456,7 @@ int mutt_builtin_editor (const char *path, HEADER *msg, HEADER *cur)
 	    if (option (OPTEDITHDRS))
 	    {
 	      mutt_env_to_local (msg->env);
-	      mutt_edit_headers (NONULL(Visual), path, msg, NULL);
+	      mutt_edit_headers (NONULL(Visual), sctx);
 	      if (mutt_env_to_intl (msg->env, &tag, &err))
 		printw (_("Bad IDN in %s: '%s'\n"), tag, err);
 	    }

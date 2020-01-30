@@ -1898,7 +1898,7 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
 
   if (sctx->flags & SENDMAILX)
   {
-    if (mutt_builtin_editor (sctx->msg->content->filename, sctx->msg, sctx->cur) == -1)
+    if (mutt_builtin_editor (sctx) == -1)
       goto cleanup;
   }
   else if (! (sctx->flags & SENDBATCH))
@@ -1930,11 +1930,11 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
           goto cleanup;
       }
       else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
-	mutt_builtin_editor (sctx->msg->content->filename, sctx->msg, sctx->cur);
+	mutt_builtin_editor (sctx);
       else if (option (OPTEDITHDRS))
       {
 	mutt_env_to_local (sctx->msg->env);
-	mutt_edit_headers (Editor, sctx->msg->content->filename, sctx->msg, sctx->fcc);
+	mutt_edit_headers (Editor, sctx);
 	mutt_env_to_intl (sctx->msg->env, NULL, NULL);
       }
       else

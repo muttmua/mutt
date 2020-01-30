@@ -1133,8 +1133,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	{
 	  char *tag = NULL, *err = NULL;
 	  mutt_env_to_local (msg->env);
-	  mutt_edit_headers (NONULL (Editor), msg->content->filename, msg,
-			     sctx->fcc);
+	  mutt_edit_headers (NONULL (Editor), sctx);
 	  if (mutt_env_to_intl (msg->env, &tag, &err))
 	  {
 	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
@@ -1148,7 +1147,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	     attachment list could change if the user invokes ~v to edit
 	     the message with headers, in which we need to execute the
 	     code below to regenerate the index array */
-	  mutt_builtin_editor (msg->content->filename, msg, sctx->cur);
+	  mutt_builtin_editor (sctx);
 	}
 
         mutt_rfc3676_space_stuff (msg);
