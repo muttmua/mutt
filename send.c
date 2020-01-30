@@ -1604,59 +1604,65 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
   return 0;
 }
 
-/*
- * Returns 0 if the message was successfully sent
- *        -1 if the message was aborted or an error occurred
- *         1 if the message was postponed
- */
-int
-mutt_send_message (int flags,            /* send mode */
-                   HEADER *msg,          /* template to use for new message */
-                   const char *tempfile, /* file specified by -i or -H */
-                   CONTEXT *ctx,         /* current mailbox */
-                   HEADER *cur)          /* current message */
+static SEND_CONTEXT *send_ctx_new (void)
 {
-  char buffer[LONG_STRING];
-  BUFFER *fcc; /* where to copy this message */
+  SEND_CONTEXT *sendctx;
+
+  sendctx = safe_calloc (1, sizeof(SEND_CONTEXT));
+
+  return sendctx;
+}
+
+static void send_ctx_free (SEND_CONTEXT **psctx)
+{
+  SEND_CONTEXT *sctx;
+
+  if (!psctx || !*psctx)
+    return;
+  sctx = *psctx;
+
+  if (!(sctx->flags & SENDNOFREEHEADER))
+    mutt_free_header (&sctx->msg);
+  mutt_buffer_free (&sctx->fcc);
+  FREE (&sctx->ctx_realpath);
+
+  FREE (psctx);    /* __FREE_CHECKED__ */
+}
+
+static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
+                               CONTEXT *ctx, char **pgp_signas, char **smime_signas)
+{
   FILE *tempfp = NULL;
+  int rv = -1, i;
+  int killfrom = 0;
   BODY *pbody;
-  int i, killfrom = 0;
-  int free_clear_content = 0;
-
-  BODY *clear_content = NULL;
-  char *pgpkeylist = NULL;
-  /* save current value of "pgp_sign_as"  and "smime_default_key" */
-  char *pgp_signas = NULL;
-  char *smime_signas = NULL;
-  char *tag = NULL, *err = NULL;
   char *ctype;
+  char buffer[LONG_STRING];
 
-  int rv = -1;
-
-  if (!flags && !msg && quadoption (OPT_RECALL) != MUTT_NO &&
+  if (!sctx->flags && !sctx->msg && quadoption (OPT_RECALL) != MUTT_NO &&
       mutt_num_postponed (1))
   {
     /* If the user is composing a new message, check to see if there
      * are any postponed messages first.
      */
     if ((i = query_quadoption (OPT_RECALL, _("Recall postponed message?"))) == -1)
-      return rv;
+      goto cleanup;
 
     if (i == MUTT_YES)
-      flags |= SENDPOSTPONED;
+      sctx->flags |= SENDPOSTPONED;
   }
 
   /* Allocate the buffer due to the long lifetime, but
    * pre-resize it to ensure there are no NULL data field issues */
-  fcc = mutt_buffer_new ();
-  mutt_buffer_increase_size (fcc, LONG_STRING);
+  sctx->fcc = mutt_buffer_new ();
+  mutt_buffer_increase_size (sctx->fcc, LONG_STRING);
 
-  if (flags & SENDPOSTPONED)
+  if (sctx->flags & SENDPOSTPONED)
   {
     if (WithCrypto & APPLICATION_PGP)
-      pgp_signas = safe_strdup(PgpSignAs);
+      *pgp_signas = safe_strdup(PgpSignAs);
     if (WithCrypto & APPLICATION_SMIME)
-      smime_signas = safe_strdup(SmimeSignAs);
+      *smime_signas = safe_strdup(SmimeSignAs);
   }
 
   /* Delay expansion of aliases until absolutely necessary--shouldn't
@@ -1664,88 +1670,88 @@ mutt_send_message (int flags,            /* send mode */
    * send-hook.
    */
 
-  if (!msg)
+  if (!sctx->msg)
   {
-    msg = mutt_new_header ();
+    sctx->msg = mutt_new_header ();
 
-    if (flags == SENDPOSTPONED)
+    if (sctx->flags == SENDPOSTPONED)
     {
-      if ((flags = mutt_get_postponed (ctx, msg, &cur, fcc)) < 0)
+      int tmpflags;
+
+      if ((tmpflags = mutt_get_postponed (ctx, sctx->msg, &sctx->cur, sctx->fcc)) < 0)
+	goto cleanup;
+      sctx->flags |= tmpflags;
+    }
+
+    if (sctx->flags & (SENDPOSTPONED|SENDRESEND))
+    {
+      if ((tempfp = safe_fopen (sctx->msg->content->filename, "a+")) == NULL)
       {
-        flags = SENDPOSTPONED;
+	mutt_perror (sctx->msg->content->filename);
 	goto cleanup;
       }
     }
 
-    if (flags & (SENDPOSTPONED|SENDRESEND))
-    {
-      if ((tempfp = safe_fopen (msg->content->filename, "a+")) == NULL)
-      {
-	mutt_perror (msg->content->filename);
-	goto cleanup;
-      }
-    }
-
-    if (!msg->env)
-      msg->env = mutt_new_envelope ();
+    if (!sctx->msg->env)
+      sctx->msg->env = mutt_new_envelope ();
   }
 
   /* Parse and use an eventual list-post header */
-  if ((flags & SENDLISTREPLY)
-      && cur && cur->env && cur->env->list_post)
+  if ((sctx->flags & SENDLISTREPLY)
+      && sctx->cur && sctx->cur->env && sctx->cur->env->list_post)
   {
     /* Use any list-post header as a template */
-    url_parse_mailto (msg->env, NULL, cur->env->list_post);
+    url_parse_mailto (sctx->msg->env, NULL, sctx->cur->env->list_post);
     /* We don't let them set the sender's address. */
-    rfc822_free_address (&msg->env->from);
+    rfc822_free_address (&sctx->msg->env->from);
   }
 
-  if (! (flags & (SENDKEY | SENDPOSTPONED | SENDRESEND)))
+  if (! (sctx->flags & (SENDKEY | SENDPOSTPONED | SENDRESEND)))
   {
     /* When SENDDRAFTFILE is set, the caller has already
      * created the "parent" body structure.
      */
-    if (! (flags & SENDDRAFTFILE))
+    if (! (sctx->flags & SENDDRAFTFILE))
     {
       pbody = mutt_new_body ();
-      pbody->next = msg->content; /* don't kill command-line attachments */
-      msg->content = pbody;
+      pbody->next = sctx->msg->content; /* don't kill command-line attachments */
+      sctx->msg->content = pbody;
 
       if (!(ctype = safe_strdup (ContentType)))
         ctype = safe_strdup ("text/plain");
-      mutt_parse_content_type (ctype, msg->content);
+      mutt_parse_content_type (ctype, sctx->msg->content);
       FREE (&ctype);
-      msg->content->unlink = 1;
-      msg->content->use_disp = 0;
-      msg->content->disposition = DISPINLINE;
+      sctx->msg->content->unlink = 1;
+      sctx->msg->content->use_disp = 0;
+      sctx->msg->content->disposition = DISPINLINE;
 
       if (!tempfile)
       {
         mutt_mktemp (buffer, sizeof (buffer));
         tempfp = safe_fopen (buffer, "w+");
-        msg->content->filename = safe_strdup (buffer);
+        sctx->msg->content->filename = safe_strdup (buffer);
       }
       else
       {
         tempfp = safe_fopen (tempfile, "a+");
-        msg->content->filename = safe_strdup (tempfile);
+        sctx->msg->content->filename = safe_strdup (tempfile);
       }
     }
     else
-      tempfp = safe_fopen (msg->content->filename, "a+");
+      tempfp = safe_fopen (sctx->msg->content->filename, "a+");
 
     if (!tempfp)
     {
-      dprint(1,(debugfile, "newsend_message: can't create tempfile %s (errno=%d)\n", msg->content->filename, errno));
-      mutt_perror (msg->content->filename);
+      dprint(1,(debugfile, "newsend_message: can't create tempfile %s (errno=%d)\n", sctx->msg->content->filename, errno));
+      mutt_perror (sctx->msg->content->filename);
       goto cleanup;
     }
   }
 
   /* this is handled here so that the user can match ~f in send-hook */
-  if (cur && option (OPTREVNAME) && !(flags & (SENDPOSTPONED|SENDRESEND)))
+  if (sctx->cur && option (OPTREVNAME) && !(sctx->flags & (SENDPOSTPONED|SENDRESEND)))
   {
-    /* we shouldn't have to worry about freeing `msg->env->from' before
+    /* we shouldn't have to worry about freeing `sctx->msg->env->from' before
      * setting it here since this code will only execute when doing some
      * sort of reply.  the pointer will only be set when using the -H command
      * line option.
@@ -1757,30 +1763,30 @@ mutt_send_message (int flags,            /* send mode */
      * have their aliases expanded.
      */
 
-    msg->env->from = set_reverse_name (cur->env);
+    sctx->msg->env->from = set_reverse_name (sctx->cur->env);
   }
 
-  if (! (flags & (SENDPOSTPONED|SENDRESEND)) &&
-      ! ((flags & SENDDRAFTFILE) && option (OPTRESUMEDRAFTFILES)))
+  if (! (sctx->flags & (SENDPOSTPONED|SENDRESEND)) &&
+      ! ((sctx->flags & SENDDRAFTFILE) && option (OPTRESUMEDRAFTFILES)))
   {
-    if ((flags & (SENDREPLY | SENDFORWARD | SENDTOSENDER)) && ctx &&
-	envelope_defaults (msg->env, ctx, cur, flags) == -1)
+    if ((sctx->flags & (SENDREPLY | SENDFORWARD | SENDTOSENDER)) && ctx &&
+	envelope_defaults (sctx->msg->env, ctx, sctx->cur, sctx->flags) == -1)
       goto cleanup;
 
     if (option (OPTHDRS))
-      process_user_recips (msg->env);
+      process_user_recips (sctx->msg->env);
 
     /* Expand aliases and remove duplicates/crossrefs */
-    mutt_expand_aliases_env (msg->env);
+    mutt_expand_aliases_env (sctx->msg->env);
 
-    if (flags & SENDREPLY)
-      mutt_fix_reply_recipients (msg->env);
+    if (sctx->flags & SENDREPLY)
+      mutt_fix_reply_recipients (sctx->msg->env);
 
-    if (! (flags & (SENDMAILX|SENDBATCH)) &&
+    if (! (sctx->flags & (SENDMAILX|SENDBATCH)) &&
 	! (option (OPTAUTOEDIT) && option (OPTEDITHDRS)) &&
-	! ((flags & SENDREPLY) && option (OPTFASTREPLY)))
+	! ((sctx->flags & SENDREPLY) && option (OPTFASTREPLY)))
     {
-      if (edit_envelope (msg->env) == -1)
+      if (edit_envelope (sctx->msg->env) == -1)
 	goto cleanup;
     }
 
@@ -1789,28 +1795,28 @@ mutt_send_message (int flags,            /* send mode */
      * patterns will work.  if $use_from is unset, the from address is killed
      * after send-hooks are evaluated */
 
-    if (!msg->env->from)
+    if (!sctx->msg->env->from)
     {
-      msg->env->from = mutt_default_from ();
+      sctx->msg->env->from = mutt_default_from ();
       killfrom = 1;
     }
 
-    if ((flags & SENDREPLY) && cur)
+    if ((sctx->flags & SENDREPLY) && sctx->cur)
     {
       /* change setting based upon message we are replying to */
-      mutt_message_hook (ctx, cur, MUTT_REPLYHOOK);
+      mutt_message_hook (ctx, sctx->cur, MUTT_REPLYHOOK);
 
       /*
        * set the replied flag for the message we are generating so that the
        * user can use ~Q in a send-hook to know when reply-hook's are also
        * being used.
        */
-      msg->replied = 1;
+      sctx->msg->replied = 1;
     }
 
     /* change settings based upon recipients */
 
-    mutt_message_hook (NULL, msg, MUTT_SENDHOOK);
+    mutt_message_hook (NULL, sctx->msg, MUTT_SENDHOOK);
 
     /*
      * Unset the replied flag from the message we are composing since it is
@@ -1818,33 +1824,33 @@ mutt_send_message (int flags,            /* send mode */
      * this message was erroneously get the 'R'eplied flag when stored in
      * a maildir-style mailbox.
      */
-    msg->replied = 0;
+    sctx->msg->replied = 0;
 
     /* $use_from and/or $from might have changed in a send-hook */
     if (killfrom)
     {
-      rfc822_free_address (&msg->env->from);
-      if (option (OPTUSEFROM) && !(flags & (SENDPOSTPONED|SENDRESEND)))
-	msg->env->from = mutt_default_from ();
+      rfc822_free_address (&sctx->msg->env->from);
+      if (option (OPTUSEFROM) && !(sctx->flags & (SENDPOSTPONED|SENDRESEND)))
+	sctx->msg->env->from = mutt_default_from ();
       killfrom = 0;
     }
 
     if (option (OPTHDRS))
-      process_user_header (msg->env);
+      process_user_header (sctx->msg->env);
 
-    if (flags & SENDBATCH)
+    if (sctx->flags & SENDBATCH)
       mutt_copy_stream (stdin, tempfp);
 
-    if (option (OPTSIGONTOP) && ! (flags & (SENDMAILX|SENDKEY|SENDBATCH))
+    if (option (OPTSIGONTOP) && ! (sctx->flags & (SENDMAILX|SENDKEY|SENDBATCH))
 	&& Editor && mutt_strcmp (Editor, "builtin") != 0)
       append_signature (tempfp);
 
     /* include replies/forwarded messages, unless we are given a template */
-    if (!tempfile && (ctx || !(flags & (SENDREPLY|SENDFORWARD)))
-	&& generate_body (tempfp, msg, flags, ctx, cur) == -1)
+    if (!tempfile && (ctx || !(sctx->flags & (SENDREPLY|SENDFORWARD)))
+	&& generate_body (tempfp, sctx->msg, sctx->flags, ctx, sctx->cur) == -1)
       goto cleanup;
 
-    if (!option (OPTSIGONTOP) && ! (flags & (SENDMAILX|SENDKEY|SENDBATCH))
+    if (!option (OPTSIGONTOP) && ! (sctx->flags & (SENDMAILX|SENDKEY|SENDBATCH))
 	&& Editor && mutt_strcmp (Editor, "builtin") != 0)
       append_signature (tempfp);
   }
@@ -1854,12 +1860,12 @@ mutt_send_message (int flags,            /* send mode */
    *
    * This is set here so that send-hook can be used to turn the option on.
    */
-  if (!(flags & (SENDKEY | SENDPOSTPONED | SENDRESEND | SENDDRAFTFILE)))
+  if (!(sctx->flags & (SENDKEY | SENDPOSTPONED | SENDRESEND | SENDDRAFTFILE)))
   {
     if (option (OPTTEXTFLOWED) &&
-        msg->content->type == TYPETEXT &&
-        !ascii_strcasecmp (msg->content->subtype, "plain"))
-      mutt_set_parameter ("format", "flowed", &msg->content->parameter);
+        sctx->msg->content->type == TYPETEXT &&
+        !ascii_strcasecmp (sctx->msg->content->subtype, "plain"))
+      mutt_set_parameter ("format", "flowed", &sctx->msg->content->parameter);
   }
 
   /*
@@ -1867,28 +1873,41 @@ mutt_send_message (int flags,            /* send mode */
    * used for setting the editor, the sendmail path, or the
    * envelope sender.
    */
-  mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
+  mutt_message_hook (NULL, sctx->msg, MUTT_SEND2HOOK);
 
   /* wait until now to set the real name portion of our return address so
      that $realname can be set in a send-hook */
-  if (msg->env->from && !msg->env->from->personal
-      && !(flags & (SENDRESEND|SENDPOSTPONED)))
-    msg->env->from->personal = safe_strdup (Realname);
+  if (sctx->msg->env->from && !sctx->msg->env->from->personal
+      && !(sctx->flags & (SENDRESEND|SENDPOSTPONED)))
+    sctx->msg->env->from->personal = safe_strdup (Realname);
 
-  if (!((WithCrypto & APPLICATION_PGP) && (flags & SENDKEY)))
+  if (!((WithCrypto & APPLICATION_PGP) && (sctx->flags & SENDKEY)))
     safe_fclose (&tempfp);
 
-  if (flags & SENDMAILX)
+  rv = 0;
+
+cleanup:
+  safe_fclose (&tempfp);
+
+  return rv;
+}
+
+static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
+{
+  int rv = -1;
+  int killfrom = 0;
+
+  if (sctx->flags & SENDMAILX)
   {
-    if (mutt_builtin_editor (msg->content->filename, msg, cur) == -1)
+    if (mutt_builtin_editor (sctx->msg->content->filename, sctx->msg, sctx->cur) == -1)
       goto cleanup;
   }
-  else if (! (flags & SENDBATCH))
+  else if (! (sctx->flags & SENDBATCH))
   {
     struct stat st;
-    time_t mtime = mutt_decrease_mtime (msg->content->filename, NULL);
+    time_t mtime = mutt_decrease_mtime (sctx->msg->content->filename, NULL);
 
-    mutt_update_encoding (msg->content);
+    mutt_update_encoding (sctx->msg->content);
 
     /*
      * Select whether or not the user's editor should be called now.  We
@@ -1900,46 +1919,46 @@ mutt_send_message (int flags,            /* send mode */
      *    setting of $forward_edit because the user probably needs to add the
      *    recipients.
      */
-    if (! (flags & SENDKEY) &&
-	((flags & SENDFORWARD) == 0 ||
+    if (! (sctx->flags & SENDKEY) &&
+	((sctx->flags & SENDFORWARD) == 0 ||
 	 (option (OPTEDITHDRS) && option (OPTAUTOEDIT)) ||
 	 query_quadoption (OPT_FORWEDIT, _("Edit forwarded message?")) == MUTT_YES))
     {
       /* If the this isn't a text message, look for a mailcap edit command */
-      if (mutt_needs_mailcap (msg->content))
+      if (mutt_needs_mailcap (sctx->msg->content))
       {
-	if (!mutt_edit_attachment (msg->content))
+	if (!mutt_edit_attachment (sctx->msg->content))
           goto cleanup;
       }
       else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
-	mutt_builtin_editor (msg->content->filename, msg, cur);
+	mutt_builtin_editor (sctx->msg->content->filename, sctx->msg, sctx->cur);
       else if (option (OPTEDITHDRS))
       {
-	mutt_env_to_local (msg->env);
-	mutt_edit_headers (Editor, msg->content->filename, msg, fcc);
-	mutt_env_to_intl (msg->env, NULL, NULL);
+	mutt_env_to_local (sctx->msg->env);
+	mutt_edit_headers (Editor, sctx->msg->content->filename, sctx->msg, sctx->fcc);
+	mutt_env_to_intl (sctx->msg->env, NULL, NULL);
       }
       else
       {
-	mutt_edit_file (Editor, msg->content->filename);
-	if (stat (msg->content->filename, &st) == 0)
+	mutt_edit_file (Editor, sctx->msg->content->filename);
+	if (stat (sctx->msg->content->filename, &st) == 0)
 	{
 	  if (mtime != st.st_mtime)
-	    fix_end_of_file (msg->content->filename);
+	    fix_end_of_file (sctx->msg->content->filename);
 	}
 	else
-	  mutt_perror (msg->content->filename);
+	  mutt_perror (sctx->msg->content->filename);
       }
 
-      mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
+      mutt_message_hook (NULL, sctx->msg, MUTT_SEND2HOOK);
     }
 
-    if (! (flags & (SENDPOSTPONED | SENDFORWARD | SENDKEY | SENDRESEND | SENDDRAFTFILE)))
+    if (! (sctx->flags & (SENDPOSTPONED | SENDFORWARD | SENDKEY | SENDRESEND | SENDDRAFTFILE)))
     {
-      if (stat (msg->content->filename, &st) == 0)
+      if (stat (sctx->msg->content->filename, &st) == 0)
       {
 	/* if the file was not modified, bail out now */
-	if (mtime == st.st_mtime && !msg->content->next &&
+	if (mtime == st.st_mtime && !sctx->msg->content->next &&
 	    query_quadoption (OPT_ABORT, _("Abort unmodified message?")) == MUTT_YES)
 	{
 	  mutt_message _("Aborted unmodified message.");
@@ -1947,14 +1966,14 @@ mutt_send_message (int flags,            /* send mode */
 	}
       }
       else
-	mutt_perror (msg->content->filename);
+	mutt_perror (sctx->msg->content->filename);
     }
   }
 
   /*
    * Set the message security unless:
    * 1) crypto support is not enabled (WithCrypto==0)
-   * 2) pgp: header field was present during message editing with $edit_headers (msg->security != 0)
+   * 2) pgp: header field was present during message editing with $edit_headers (sctx->msg->security != 0)
    * 3) we are resending a message
    * 4) we are recalling a postponed message (don't override the user's saved settings)
    * 5) we are in mailx mode
@@ -1963,7 +1982,7 @@ mutt_send_message (int flags,            /* send mode */
    * This is done after allowing the user to edit the message so that security
    * settings can be configured with send2-hook and $edit_headers.
    */
-  if (WithCrypto && (msg->security == 0) && !(flags & (SENDBATCH | SENDMAILX | SENDPOSTPONED | SENDRESEND)))
+  if (WithCrypto && (sctx->msg->security == 0) && !(sctx->flags & (SENDBATCH | SENDMAILX | SENDPOSTPONED | SENDRESEND)))
   {
     if (
 #ifdef USE_AUTOCRYPT
@@ -1971,33 +1990,33 @@ mutt_send_message (int flags,            /* send mode */
 #else
       0
 #endif
-      && cur && (cur->security & AUTOCRYPT))
+      && sctx->cur && (sctx->cur->security & AUTOCRYPT))
     {
-      msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE | APPLICATION_PGP);
+      sctx->msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE | APPLICATION_PGP);
     }
     else
     {
       if (option (OPTCRYPTAUTOSIGN))
-        msg->security |= SIGN;
+        sctx->msg->security |= SIGN;
       if (option (OPTCRYPTAUTOENCRYPT))
-        msg->security |= ENCRYPT;
-      if (option (OPTCRYPTREPLYENCRYPT) && cur && (cur->security & ENCRYPT))
-        msg->security |= ENCRYPT;
-      if (option (OPTCRYPTREPLYSIGN) && cur && (cur->security & SIGN))
-        msg->security |= SIGN;
-      if (option (OPTCRYPTREPLYSIGNENCRYPTED) && cur && (cur->security & ENCRYPT))
-        msg->security |= SIGN;
+        sctx->msg->security |= ENCRYPT;
+      if (option (OPTCRYPTREPLYENCRYPT) && sctx->cur && (sctx->cur->security & ENCRYPT))
+        sctx->msg->security |= ENCRYPT;
+      if (option (OPTCRYPTREPLYSIGN) && sctx->cur && (sctx->cur->security & SIGN))
+        sctx->msg->security |= SIGN;
+      if (option (OPTCRYPTREPLYSIGNENCRYPTED) && sctx->cur && (sctx->cur->security & ENCRYPT))
+        sctx->msg->security |= SIGN;
       if ((WithCrypto & APPLICATION_PGP) &&
-          ((msg->security & (ENCRYPT | SIGN)) || option (OPTCRYPTOPPORTUNISTICENCRYPT)))
+          ((sctx->msg->security & (ENCRYPT | SIGN)) || option (OPTCRYPTOPPORTUNISTICENCRYPT)))
       {
         if (option (OPTPGPAUTOINLINE))
-          msg->security |= INLINE;
-        if (option (OPTPGPREPLYINLINE) && cur && (cur->security & INLINE))
-          msg->security |= INLINE;
+          sctx->msg->security |= INLINE;
+        if (option (OPTPGPREPLYINLINE) && sctx->cur && (sctx->cur->security & INLINE))
+          sctx->msg->security |= INLINE;
       }
     }
 
-    if (msg->security || option (OPTCRYPTOPPORTUNISTICENCRYPT))
+    if (sctx->msg->security || option (OPTCRYPTOPPORTUNISTICENCRYPT))
     {
       /*
        * When replying / forwarding, use the original message's
@@ -2008,29 +2027,29 @@ mutt_send_message (int flags,            /* send mode */
        * make much sense. Should we have an option to completely
        * disable individual mechanisms at run-time?
        */
-      if (cur)
+      if (sctx->cur)
       {
 	if ((WithCrypto & APPLICATION_PGP) && option (OPTCRYPTAUTOPGP)
-	    && (cur->security & APPLICATION_PGP))
-	  msg->security |= APPLICATION_PGP;
+	    && (sctx->cur->security & APPLICATION_PGP))
+	  sctx->msg->security |= APPLICATION_PGP;
 	else if ((WithCrypto & APPLICATION_SMIME) && option (OPTCRYPTAUTOSMIME)
-                 && (cur->security & APPLICATION_SMIME))
-	  msg->security |= APPLICATION_SMIME;
+                 && (sctx->cur->security & APPLICATION_SMIME))
+	  sctx->msg->security |= APPLICATION_SMIME;
       }
 
       /*
        * No crypto mechanism selected? Use availability + smime_is_default
        * for the decision.
        */
-      if (!(msg->security & (APPLICATION_SMIME | APPLICATION_PGP)))
+      if (!(sctx->msg->security & (APPLICATION_SMIME | APPLICATION_PGP)))
       {
 	if ((WithCrypto & APPLICATION_SMIME) && option (OPTCRYPTAUTOSMIME)
 	    && option (OPTSMIMEISDEFAULT))
-	  msg->security |= APPLICATION_SMIME;
+	  sctx->msg->security |= APPLICATION_SMIME;
 	else if ((WithCrypto & APPLICATION_PGP) && option (OPTCRYPTAUTOPGP))
-	  msg->security |= APPLICATION_PGP;
+	  sctx->msg->security |= APPLICATION_PGP;
 	else if ((WithCrypto & APPLICATION_SMIME) && option (OPTCRYPTAUTOSMIME))
-	  msg->security |= APPLICATION_SMIME;
+	  sctx->msg->security |= APPLICATION_SMIME;
       }
     }
 
@@ -2041,64 +2060,78 @@ mutt_send_message (int flags,            /* send mode */
        * or OPTCRYPTREPLYENCRYPT, then don't enable opportunistic encrypt for
        * the message.
        */
-      if (! (msg->security & (ENCRYPT|AUTOCRYPT)))
+      if (! (sctx->msg->security & (ENCRYPT|AUTOCRYPT)))
       {
-        msg->security |= OPPENCRYPT;
-        crypt_opportunistic_encrypt(msg);
+        sctx->msg->security |= OPPENCRYPT;
+        crypt_opportunistic_encrypt(sctx->msg);
       }
     }
 
     /* No permissible mechanisms found.  Don't sign or encrypt. */
-    if (!(msg->security & (APPLICATION_SMIME|APPLICATION_PGP)))
-      msg->security = 0;
+    if (!(sctx->msg->security & (APPLICATION_SMIME|APPLICATION_PGP)))
+      sctx->msg->security = 0;
   }
 
   /* Deal with the corner case where the crypto module backend is not available.
    * This can happen if configured without pgp/smime and with gpgme, but
    * $crypt_use_gpgme is unset.
    */
-  if (msg->security &&
-      !crypt_has_module_backend (msg->security))
+  if (sctx->msg->security &&
+      !crypt_has_module_backend (sctx->msg->security))
   {
     mutt_error _("No crypto backend configured.  Disabling message security setting.");
     mutt_sleep (1);
-    msg->security = 0;
+    sctx->msg->security = 0;
   }
 
   /* specify a default fcc.  if we are in batchmode, only save a copy of
    * the message if the value of $copy is yes or ask-yes */
 
-  if (!mutt_buffer_len (fcc) &&
-      !(flags & (SENDPOSTPONEDFCC)) &&
-      (!(flags & SENDBATCH) || (quadoption (OPT_COPY) & 0x1)))
+  if (!mutt_buffer_len (sctx->fcc) &&
+      !(sctx->flags & (SENDPOSTPONEDFCC)) &&
+      (!(sctx->flags & SENDBATCH) || (quadoption (OPT_COPY) & 0x1)))
   {
     /* set the default FCC */
-    if (!msg->env->from)
+    if (!sctx->msg->env->from)
     {
-      msg->env->from = mutt_default_from ();
+      sctx->msg->env->from = mutt_default_from ();
       killfrom = 1; /* no need to check $use_from because if the user specified
 		       a from address it would have already been set by now */
     }
-    mutt_select_fcc (fcc, msg);
+    mutt_select_fcc (sctx->fcc, sctx->msg);
     if (killfrom)
     {
-      rfc822_free_address (&msg->env->from);
+      rfc822_free_address (&sctx->msg->env->from);
       killfrom = 0;
     }
   }
 
 
-  mutt_rfc3676_space_stuff (msg);
+  mutt_rfc3676_space_stuff (sctx->msg);
 
-  mutt_update_encoding (msg->content);
+  mutt_update_encoding (sctx->msg->content);
 
-  if (! (flags & (SENDMAILX | SENDBATCH)))
+  rv = 0;
+
+cleanup:
+  return rv;
+}
+
+static int send_message_resume_compose_menu (SEND_CONTEXT *sctx)
+{
+  int rv = -1, i;
+  int free_clear_content = 0;
+  char *tag = NULL, *err = NULL;
+  char *pgpkeylist = NULL;
+  BODY *clear_content = NULL;
+
+  if (! (sctx->flags & (SENDMAILX | SENDBATCH)))
   {
 main_loop:
 
-    mutt_buffer_pretty_mailbox (fcc);
-    i = mutt_compose_menu (msg, fcc, cur,
-                           (flags & SENDNOFREEHEADER ? MUTT_COMPOSE_NOFREEHEADER : 0));
+    mutt_buffer_pretty_mailbox (sctx->fcc);
+    i = mutt_compose_menu (sctx->msg, sctx->fcc, sctx->cur,
+                           (sctx->flags & SENDNOFREEHEADER ? MUTT_COMPOSE_NOFREEHEADER : 0));
     if (i == -1)
     {
       /* abort */
@@ -2107,7 +2140,7 @@ main_loop:
     }
     else if (i == 1)
     {
-      if (postpone_message (msg, cur, mutt_b2s (fcc), flags) != 0)
+      if (postpone_message (sctx->msg, sctx->cur, mutt_b2s (sctx->fcc), sctx->flags) != 0)
         goto main_loop;
       mutt_message _("Message postponed.");
       rv = 1;
@@ -2115,10 +2148,10 @@ main_loop:
     }
   }
 
-  if (!has_recips (msg->env->to) && !has_recips (msg->env->cc) &&
-      !has_recips (msg->env->bcc))
+  if (!has_recips (sctx->msg->env->to) && !has_recips (sctx->msg->env->cc) &&
+      !has_recips (sctx->msg->env->bcc))
   {
-    if (! (flags & SENDBATCH))
+    if (! (sctx->flags & SENDBATCH))
     {
       mutt_error _("No recipients are specified!");
       goto main_loop;
@@ -2130,17 +2163,17 @@ main_loop:
     }
   }
 
-  if (mutt_env_to_intl (msg->env, &tag, &err))
+  if (mutt_env_to_intl (sctx->msg->env, &tag, &err))
   {
     mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
     FREE (&err);
-    if (!(flags & SENDBATCH))
+    if (!(sctx->flags & SENDBATCH))
       goto main_loop;
     else
       goto cleanup;
   }
 
-  if (!msg->env->subject && ! (flags & SENDBATCH) &&
+  if (!sctx->msg->env->subject && ! (sctx->flags & SENDBATCH) &&
       (i = query_quadoption (OPT_SUBJECT, _("No subject, abort sending?"))) != MUTT_NO)
   {
     /* if the abort is automatic, print an error message */
@@ -2151,13 +2184,13 @@ main_loop:
 
   /* Scan for a mention of an attachment in the message body and
    * prompt if there is none. */
-  if (!(flags & SENDBATCH) &&
+  if (!(sctx->flags & SENDBATCH) &&
       (quadoption (OPT_ABORTNOATTACH) != MUTT_NO) &&
       AbortNoattachRegexp.pattern &&
-      !msg->content->next &&
-      (msg->content->type == TYPETEXT) &&
-      !ascii_strcasecmp (msg->content->subtype, "plain") &&
-      has_attach_keyword (msg->content->filename))
+      !sctx->msg->content->next &&
+      (sctx->msg->content->type == TYPETEXT) &&
+      !ascii_strcasecmp (sctx->msg->content->subtype, "plain") &&
+      has_attach_keyword (sctx->msg->content->filename))
   {
     if (query_quadoption (OPT_ABORTNOATTACH, _("No attachments, abort sending?")) != MUTT_NO)
     {
@@ -2167,16 +2200,16 @@ main_loop:
     }
   }
 
-  if (generate_multipart_alternative (msg, flags))
+  if (generate_multipart_alternative (sctx->msg, sctx->flags))
   {
-    if (!(flags & SENDBATCH))
+    if (!(sctx->flags & SENDBATCH))
       goto main_loop;
     else
       goto cleanup;
   }
 
-  if (msg->content->next)
-    msg->content = mutt_make_multipart_mixed (msg->content);
+  if (sctx->msg->content->next)
+    sctx->msg->content = mutt_make_multipart_mixed (sctx->msg->content);
 
   /*
    * Ok, we need to do it this way instead of handling all fcc stuff in
@@ -2184,7 +2217,7 @@ main_loop:
    * in case of error.  Ugh.
    */
 
-  mutt_encode_descriptions (msg->content, 1);
+  mutt_encode_descriptions (sctx->msg->content, 1);
 
   /*
    * Make sure that clear_content and free_clear_content are
@@ -2198,27 +2231,27 @@ main_loop:
 
   if (WithCrypto)
   {
-    if (msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
+    if (sctx->msg->security & (ENCRYPT | SIGN | AUTOCRYPT))
     {
       /* save the decrypted attachments */
-      clear_content = msg->content;
+      clear_content = sctx->msg->content;
 
-      if ((crypt_get_keys (msg, &pgpkeylist, 0) == -1) ||
-          mutt_protect (msg, pgpkeylist, 0) == -1)
+      if ((crypt_get_keys (sctx->msg, &pgpkeylist, 0) == -1) ||
+          mutt_protect (sctx->msg, pgpkeylist, 0) == -1)
       {
-        msg->content = mutt_remove_multipart_mixed (msg->content);
-        msg->content = mutt_remove_multipart_alternative (msg->content);
+        sctx->msg->content = mutt_remove_multipart_mixed (sctx->msg->content);
+        sctx->msg->content = mutt_remove_multipart_alternative (sctx->msg->content);
 
 	FREE (&pgpkeylist);
 
-        decode_descriptions (msg->content);
+        decode_descriptions (sctx->msg->content);
         goto main_loop;
       }
-      mutt_encode_descriptions (msg->content, 0);
+      mutt_encode_descriptions (sctx->msg->content, 0);
     }
 
     /*
-     * at this point, msg->content is one of the following three things:
+     * at this point, sctx->msg->content is one of the following three things:
      * - multipart/signed.  In this case, clear_content is a child.
      * - multipart/encrypted.  In this case, clear_content exists
      *   independently
@@ -2228,46 +2261,46 @@ main_loop:
 
     /* This is ugly -- lack of "reporting back" from mutt_protect(). */
 
-    if (clear_content && (msg->content != clear_content)
-        && (msg->content->parts != clear_content))
+    if (clear_content && (sctx->msg->content != clear_content)
+        && (sctx->msg->content->parts != clear_content))
       free_clear_content = 1;
   }
 
-  if (!option (OPTNOCURSES) && !(flags & SENDMAILX))
+  if (!option (OPTNOCURSES) && !(sctx->flags & SENDMAILX))
     mutt_message _("Sending message...");
 
-  mutt_prepare_envelope (msg->env, 1);
+  mutt_prepare_envelope (sctx->msg->env, 1);
 
   if (option (OPTFCCBEFORESEND))
-    save_fcc (msg, fcc, clear_content, pgpkeylist, flags);
+    save_fcc (sctx->msg, sctx->fcc, clear_content, pgpkeylist, sctx->flags);
 
-  if ((i = invoke_mta (msg)) < 0)
+  if ((i = invoke_mta (sctx->msg)) < 0)
   {
-    if (!(flags & SENDBATCH))
+    if (!(sctx->flags & SENDBATCH))
     {
       if (!WithCrypto)
         ;
-      else if ((msg->security & (ENCRYPT | AUTOCRYPT)) ||
-               ((msg->security & SIGN)
-                && msg->content->type == TYPEAPPLICATION))
+      else if ((sctx->msg->security & (ENCRYPT | AUTOCRYPT)) ||
+               ((sctx->msg->security & SIGN)
+                && sctx->msg->content->type == TYPEAPPLICATION))
       {
-	mutt_free_body (&msg->content); /* destroy PGP data */
-	msg->content = clear_content;	/* restore clear text. */
+	mutt_free_body (&sctx->msg->content); /* destroy PGP data */
+	sctx->msg->content = clear_content;	/* restore clear text. */
       }
-      else if ((msg->security & SIGN) &&
-               msg->content->type == TYPEMULTIPART &&
-               !ascii_strcasecmp (msg->content->subtype, "signed"))
+      else if ((sctx->msg->security & SIGN) &&
+               sctx->msg->content->type == TYPEMULTIPART &&
+               !ascii_strcasecmp (sctx->msg->content->subtype, "signed"))
       {
-	mutt_free_body (&msg->content->parts->next);	     /* destroy sig */
-	msg->content = mutt_remove_multipart (msg->content);
+	mutt_free_body (&sctx->msg->content->parts->next);	     /* destroy sig */
+	sctx->msg->content = mutt_remove_multipart (sctx->msg->content);
       }
 
       FREE (&pgpkeylist);
-      mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
-      msg->content = mutt_remove_multipart_mixed (msg->content);
-      msg->content = mutt_remove_multipart_alternative (msg->content);
-      decode_descriptions (msg->content);
-      mutt_unprepare_envelope (msg->env);
+      mutt_free_envelope (&sctx->msg->content->mime_headers);  /* protected headers */
+      sctx->msg->content = mutt_remove_multipart_mixed (sctx->msg->content);
+      sctx->msg->content = mutt_remove_multipart_alternative (sctx->msg->content);
+      decode_descriptions (sctx->msg->content);
+      mutt_unprepare_envelope (sctx->msg->env);
       goto main_loop;
     }
     else
@@ -2278,9 +2311,9 @@ main_loop:
   }
 
   if (!option (OPTFCCBEFORESEND))
-    save_fcc (msg, fcc, clear_content, pgpkeylist, flags);
+    save_fcc (sctx->msg, sctx->fcc, clear_content, pgpkeylist, sctx->flags);
 
-  if (!option (OPTNOCURSES) && ! (flags & SENDMAILX))
+  if (!option (OPTNOCURSES) && ! (sctx->flags & SENDMAILX))
   {
     mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
     mutt_sleep (0);
@@ -2295,26 +2328,133 @@ main_loop:
 
   /* set 'replied' flag only if the user didn't change/remove
      In-Reply-To: and References: headers during edit */
-  if (flags & SENDREPLY)
+
+  /* TODO: this needs to be fixed up to use sctx values,
+   * compare the context realpath.  open if the mailbox has
+   * changed.
+   *
+   * Perhaps we can store cur in sctx but NULL it out if the
+   * editing is backgrounded. */
+  if (sctx->flags & SENDREPLY)
   {
-    if (cur && ctx)
-      mutt_set_flag (ctx, cur, MUTT_REPLIED, is_reply (cur, msg));
-    else if (!(flags & SENDPOSTPONED) && ctx && ctx->tagged)
+    if (sctx->ctx_realpath && Context &&
+        !mutt_strcmp (sctx->ctx_realpath, Context->realpath))
     {
-      for (i = 0; i < ctx->vcount; i++)
-	if (ctx->hdrs[ctx->v2r[i]]->tagged)
-	  mutt_set_flag (ctx, ctx->hdrs[ctx->v2r[i]], MUTT_REPLIED,
-			 is_reply (ctx->hdrs[ctx->v2r[i]], msg));
+      CONTEXT *ctx = Context;
+      if (sctx->cur)
+        mutt_set_flag (ctx, sctx->cur, MUTT_REPLIED, is_reply (sctx->cur, sctx->msg));
+      else if (!(sctx->flags & SENDPOSTPONED) && ctx->tagged)
+      {
+        for (i = 0; i < ctx->vcount; i++)
+          if (ctx->hdrs[ctx->v2r[i]]->tagged)
+            mutt_set_flag (ctx, ctx->hdrs[ctx->v2r[i]], MUTT_REPLIED,
+                           is_reply (ctx->hdrs[ctx->v2r[i]], sctx->msg));
+      }
     }
   }
-
 
   rv = 0;
 
 cleanup:
-  mutt_buffer_free (&fcc);
+  return rv;
+}
 
-  if (flags & SENDPOSTPONED)
+/* backgroundable and resumable part of the send process.
+ *
+ * need to define a "backgrounded" return value.
+ */
+int mutt_send_message_resume (SEND_CONTEXT *sctx)
+{
+  int rv = -1;
+
+  rv = send_message_resume_first_edit (sctx);
+  if (rv < 0)
+    goto cleanup;
+
+  rv = send_message_resume_compose_menu (sctx);
+  if (rv < 0)
+    goto cleanup;
+
+  rv = 0;
+
+cleanup:
+  return rv;
+}
+
+/*
+ * Returns 0 if the message was successfully sent
+ *        -1 if the message was aborted or an error occurred
+ *         1 if the message was postponed
+ */
+int
+mutt_send_message (int flags,            /* send mode */
+                   HEADER *msg,          /* template to use for new message */
+                   const char *tempfile, /* file specified by -i or -H */
+                   CONTEXT *ctx,         /* current mailbox */
+                   HEADER *cur)          /* current message */
+{
+  SEND_CONTEXT *sctx;
+  char *pgp_signas = NULL;
+  char *smime_signas = NULL;
+  int rv = -1;
+  int resume_rc;
+
+  sctx = send_ctx_new ();
+  sctx->flags = flags;
+  sctx->msg = msg;
+  sctx->cur = cur;
+  if (ctx)
+    sctx->ctx_realpath = safe_strdup (ctx->realpath);
+
+  /* NOTE:
+   * if msg is passed in, this function is *supposed* to free it
+   * unless flag SENDNOFREEHEADER is set.
+   * That is only done by main.  And for that case we want
+   * to make sure NO_BACKGROUND is set.
+   */
+
+  /* TODO:
+   * cur can't be stored in sctx for a backgroundable.
+   * see if we can store just the components of cur we need
+   * and regrab the actual header when persisting replied flag.
+   */
+
+  /* NOTE:
+   * we still need to check other callers to make sure the components
+   * of the msg header don't disappear after returning!!!
+   */
+
+  /* TODO:
+   * mutt_get_postponed() and edit headers set PgpSignAs/SmimeSignAs.
+   * these need to be set in the sctx instead, and the globals swapped
+   * out around the "post-composemenu-send" function.  Note that edit
+   * headers and get_postponed have different behavior for an empty
+   * value.
+   */
+
+  if (send_message_setup (sctx, tempfile, ctx, &pgp_signas, &smime_signas) < 0)
+    goto cleanup;
+
+
+  resume_rc = mutt_send_message_resume (sctx);
+  if (resume_rc < 0)
+    goto cleanup;
+
+  /* TODO: if rc is backgroundable, stuff in background list and pass along
+   * backgrounded rc value.  Should this be
+   * done inside mutt_send_message_resume so we don't have the logic
+   * everywhere? */
+
+  /* TODO: until we code up the background list menu, we can support
+   * a single backgrounded via a global, just to make testing easier */
+
+  rv = 0;
+
+cleanup:
+  /* TODO: this should be based on sctx and moved around
+   * the resumable edit/compose/send function
+   */
+  if (sctx->flags & SENDPOSTPONED)
   {
     if (WithCrypto & APPLICATION_PGP)
     {
@@ -2328,9 +2468,7 @@ cleanup:
     }
   }
 
-  safe_fclose (&tempfp);
-  if (! (flags & SENDNOFREEHEADER))
-    mutt_free_header (&msg);
+  send_ctx_free (&sctx);
 
   return rv;
 }

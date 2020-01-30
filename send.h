@@ -19,6 +19,23 @@
 #ifndef _SEND_H
 #define _SEND_H 1
 
+typedef struct send_ctx
+{
+  int flags;
+  int state;
+
+  HEADER *msg;
+
+  /* Note: cur can't be stored in the send_context when
+   * background editing is added.  This is here for now
+   * just to ease refactoring.
+   */
+  HEADER *cur;
+  BUFFER *fcc;
+
+  char *ctx_realpath;
+} SEND_CONTEXT;
+
 ADDRESS *mutt_remove_xrefs (ADDRESS *, ADDRESS *);
 int mutt_edit_address (ADDRESS **, const char *, int);
 void mutt_forward_intro (CONTEXT *ctx, HEADER *cur, FILE *fp);
