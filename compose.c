@@ -1010,11 +1010,9 @@ static void compose_menu_redraw (MUTTMENU *menu)
  * 0	normal exit
  * -1	abort message
  */
-int mutt_compose_menu (HEADER *msg,   /* structure for new message */
-                       BUFFER *fcc,     /* where to save a copy of the message */
-                       HEADER *cur,   /* current message */
-                       int flags)
+int mutt_compose_menu (SEND_CONTEXT *sctx)
 {
+  HEADER *msg;   /* structure for new message */
   char helpstr[LONG_STRING];
   char buf[LONG_STRING];
   BUFFER *fname = NULL;
@@ -1032,10 +1030,12 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
   struct stat st;
   compose_redraw_data_t rd = {0};
 
+  msg = sctx->msg;
+
   init_header_padding ();
 
   rd.msg = msg;
-  rd.fcc = fcc;
+  rd.fcc = sctx->fcc;
 
   menu = mutt_new_menu (MENU_COMPOSE);
   menu->offset = HDR_ATTACH;
@@ -1101,13 +1101,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_FCC:
-	mutt_buffer_strcpy (fname, mutt_b2s (fcc));
+	mutt_buffer_strcpy (fname, mutt_b2s (sctx->fcc));
 	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_FILE | MUTT_CLEAR) == 0)
 	{
-	  mutt_buffer_strcpy (fcc, mutt_b2s (fname));
-	  mutt_buffer_pretty_mailbox (fcc);
+	  mutt_buffer_strcpy (sctx->fcc, mutt_b2s (fname));
+	  mutt_buffer_pretty_mailbox (sctx->fcc);
 	  mutt_window_move (MuttIndexWindow, HDR_FCC, HDR_XOFFSET);
-	  mutt_paddstr (W, mutt_b2s (fcc));
+	  mutt_paddstr (W, mutt_b2s (sctx->fcc));
 	  fccSet = 1;
 	}
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
@@ -1134,7 +1134,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  char *tag = NULL, *err = NULL;
 	  mutt_env_to_local (msg->env);
 	  mutt_edit_headers (NONULL (Editor), msg->content->filename, msg,
-			     fcc);
+			     sctx->fcc);
 	  if (mutt_env_to_intl (msg->env, &tag, &err))
 	  {
 	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
@@ -1148,7 +1148,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	     attachment list could change if the user invokes ~v to edit
 	     the message with headers, in which we need to execute the
 	     code below to regenerate the index array */
-	  mutt_builtin_editor (msg->content->filename, msg, cur);
+	  mutt_builtin_editor (msg->content->filename, msg, sctx->cur);
 	}
 
         mutt_rfc3676_space_stuff (msg);
@@ -1466,13 +1466,13 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  break;
 #endif
 
-	if (!fccSet && mutt_buffer_len (fcc))
+	if (!fccSet && mutt_buffer_len (sctx->fcc))
 	{
 	  if ((i = query_quadoption (OPT_COPY,
                                      _("Save a copy of this message?"))) == -1)
 	    break;
 	  else if (i == MUTT_NO)
-	    mutt_buffer_clear (fcc);
+	    mutt_buffer_clear (sctx->fcc);
 	}
 
 	loop = 0;
@@ -1709,7 +1709,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
             if (actx->idx[i]->unowned)
               actx->idx[i]->content->unlink = 0;
 
-          if (!(flags & MUTT_COMPOSE_NOFREEHEADER))
+          if (!(sctx->flags & SENDNOFREEHEADER))
           {
             for (i = 0; i < actx->idxlen; i++)
             {

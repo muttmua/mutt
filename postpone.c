@@ -223,20 +223,15 @@ static HEADER *select_msg (void)
 /* args:
  *      ctx	Context info, used when recalling a message to which
  *              we reply.
- *	hdr	envelope/attachment info for recalled message
- *	cur	if message was a reply, `cur' is set to the message which
- *		`hdr' is in reply to
- *	fcc	fcc for the recalled message
+ *      sctx    Send Context info.
  *
  * return vals:
  *	-1		error/no messages
  *	0		normal exit
- *	SENDREPLY	recalled message is a reply
  */
-int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
+int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
 {
   HEADER *h;
-  int code = SENDPOSTPONED;
   LIST *tmp;
   LIST *last = NULL;
   LIST *next;
@@ -293,7 +288,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
     return (-1);
   }
 
-  if (mutt_prepare_template (NULL, PostContext, hdr, h, 0) < 0)
+  if (mutt_prepare_template (NULL, PostContext, sctx->msg, h, 0) < 0)
   {
     mx_fastclose_mailbox (PostContext);
     FREE (&PostContext);
@@ -319,7 +314,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
 
   FREE (&PostContext);
 
-  for (tmp = hdr->env->userhdrs; tmp; )
+  for (tmp = sctx->msg->env->userhdrs; tmp; )
   {
     if (ascii_strncasecmp ("X-Mutt-References:", tmp->data, 18) == 0)
     {
@@ -330,7 +325,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
 	p = skip_email_wsp(tmp->data + 18);
 	if (!ctx->id_hash)
 	  ctx->id_hash = mutt_make_id_hash (ctx);
-	*cur = hash_find (ctx->id_hash, p);
+	sctx->cur = hash_find (ctx->id_hash, p);
       }
 
       /* Remove the X-Mutt-References: header field. */
@@ -338,25 +333,25 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
       if (last)
 	last->next = tmp->next;
       else
-	hdr->env->userhdrs = tmp->next;
+	sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
-      if (*cur)
-	code |= SENDREPLY;
+      if (sctx->cur)
+	sctx->flags |= SENDREPLY;
     }
     else if (ascii_strncasecmp ("X-Mutt-Fcc:", tmp->data, 11) == 0)
     {
       p = skip_email_wsp(tmp->data + 11);
-      mutt_buffer_strcpy (fcc, p);
-      mutt_buffer_pretty_mailbox (fcc);
+      mutt_buffer_strcpy (sctx->fcc, p);
+      mutt_buffer_pretty_mailbox (sctx->fcc);
 
       /* remove the X-Mutt-Fcc: header field */
       next = tmp->next;
       if (last)
 	last->next = tmp->next;
       else
-	hdr->env->userhdrs = tmp->next;
+	sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -365,7 +360,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
        * user to not make a copy if the header field is present, but empty.
        * see http://dev.mutt.org/trac/ticket/3653
        */
-      code |= SENDPOSTPONEDFCC;
+      sctx->flags |= SENDPOSTPONEDFCC;
     }
     else if ((WithCrypto & APPLICATION_PGP)
              && (mutt_strncmp ("Pgp:", tmp->data, 4) == 0 /* this is generated
@@ -373,16 +368,16 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
                                                            */
                  || mutt_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0))
     {
-      hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
-					    APPLICATION_PGP);
-      hdr->security |= APPLICATION_PGP;
+      sctx->msg->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
+                                                  APPLICATION_PGP);
+      sctx->msg->security |= APPLICATION_PGP;
 
       /* remove the pgp field */
       next = tmp->next;
       if (last)
 	last->next = tmp->next;
       else
-	hdr->env->userhdrs = tmp->next;
+	sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -390,16 +385,16 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
     else if ((WithCrypto & APPLICATION_SMIME)
              && mutt_strncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0)
     {
-      hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
-					    APPLICATION_SMIME);
-      hdr->security |= APPLICATION_SMIME;
+      sctx->msg->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
+                                                  APPLICATION_SMIME);
+      sctx->msg->security |= APPLICATION_SMIME;
 
       /* remove the smime field */
       next = tmp->next;
       if (last)
 	last->next = tmp->next;
       else
-	hdr->env->userhdrs = tmp->next;
+	sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -409,12 +404,12 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
     else if (mutt_strncmp ("X-Mutt-Mix:", tmp->data, 11) == 0)
     {
       char *t;
-      mutt_free_list (&hdr->chain);
+      mutt_free_list (&sctx->msg->chain);
 
       t = strtok (tmp->data + 11, " \t\n");
       while (t)
       {
-	hdr->chain = mutt_add_list (hdr->chain, t);
+	sctx->msg->chain = mutt_add_list (sctx->msg->chain, t);
 	t = strtok (NULL, " \t\n");
       }
 
@@ -422,7 +417,7 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
       if (last)
 	last->next = tmp->next;
       else
-	hdr->env->userhdrs = tmp->next;
+	sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -437,9 +432,9 @@ int mutt_get_postponed (CONTEXT *ctx, HEADER *hdr, HEADER **cur, BUFFER *fcc)
   }
 
   if (option (OPTCRYPTOPPORTUNISTICENCRYPT))
-    crypt_opportunistic_encrypt (hdr);
+    crypt_opportunistic_encrypt (sctx->msg);
 
-  return (code);
+  return (0);
 }
 
 

@@ -358,9 +358,6 @@ enum
 #define SENDTOSENDER            (1<<12)
 #define SENDGROUPCHATREPLY      (1<<13)
 
-/* flags for mutt_compose_menu() */
-#define MUTT_COMPOSE_NOFREEHEADER (1<<0)
-
 /* flags to _mutt_select_file() */
 #define MUTT_SEL_BUFFY  (1<<0)
 #define MUTT_SEL_MULTI  (1<<1)
@@ -1170,6 +1167,7 @@ typedef struct
 
 #define MUTT_PARTS_TOPLEVEL	(1<<0)	/* is the top-level part */
 
+#include "send.h"
 #include "ascii.h"
 #include "protos.h"
 #include "lib.h"

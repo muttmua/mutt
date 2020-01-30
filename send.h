@@ -52,5 +52,6 @@ ADDRESS *mutt_default_from (void);
 void mutt_encode_descriptions (BODY *, short);
 int mutt_resend_message (FILE *, CONTEXT *, HEADER *);
 int mutt_send_message (int, HEADER *, const char *, CONTEXT *, HEADER *);
+int mutt_send_message_resume (SEND_CONTEXT *sctx);
 
 #endif

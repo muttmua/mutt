@@ -1637,7 +1637,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
   int killfrom = 0;
   BODY *pbody;
   char *ctype;
-  char buffer[LONG_STRING];
+  BUFFER *tmpbuffer;
 
   if (!sctx->flags && !sctx->msg && quadoption (OPT_RECALL) != MUTT_NO &&
       mutt_num_postponed (1))
@@ -1676,11 +1676,8 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
 
     if (sctx->flags == SENDPOSTPONED)
     {
-      int tmpflags;
-
-      if ((tmpflags = mutt_get_postponed (ctx, sctx->msg, &sctx->cur, sctx->fcc)) < 0)
+      if (mutt_get_postponed (ctx, sctx) < 0)
 	goto cleanup;
-      sctx->flags |= tmpflags;
     }
 
     if (sctx->flags & (SENDPOSTPONED|SENDRESEND))
@@ -1727,9 +1724,11 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
 
       if (!tempfile)
       {
-        mutt_mktemp (buffer, sizeof (buffer));
-        tempfp = safe_fopen (buffer, "w+");
-        sctx->msg->content->filename = safe_strdup (buffer);
+        tmpbuffer = mutt_buffer_pool_get ();
+        mutt_buffer_mktemp (tmpbuffer);
+        tempfp = safe_fopen (mutt_b2s (tmpbuffer), "w+");
+        sctx->msg->content->filename = safe_strdup (mutt_b2s (tmpbuffer));
+        mutt_buffer_pool_release (&tmpbuffer);
       }
       else
       {
@@ -2130,8 +2129,7 @@ static int send_message_resume_compose_menu (SEND_CONTEXT *sctx)
 main_loop:
 
     mutt_buffer_pretty_mailbox (sctx->fcc);
-    i = mutt_compose_menu (sctx->msg, sctx->fcc, sctx->cur,
-                           (sctx->flags & SENDNOFREEHEADER ? MUTT_COMPOSE_NOFREEHEADER : 0));
+    i = mutt_compose_menu (sctx);
     if (i == -1)
     {
       /* abort */

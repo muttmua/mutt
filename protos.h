@@ -331,7 +331,7 @@ int _mutt_buffer_get_field (const char *, BUFFER *, int, int, char ***, int *);
 int mutt_get_hook_type (const char *);
 int mutt_get_field_unbuffered (char *, char *, size_t, int);
 #define mutt_get_password(A,B,C) mutt_get_field_unbuffered(A,B,C,MUTT_PASS)
-int mutt_get_postponed (CONTEXT *, HEADER *, HEADER **, BUFFER *);
+int mutt_get_postponed (CONTEXT *, SEND_CONTEXT *);
 int mutt_get_tmp_attachment (BODY *);
 int mutt_index_menu (void);
 int mutt_invoke_sendmail (ADDRESS *, ADDRESS *, ADDRESS *, ADDRESS *, const char *, int);
@@ -384,7 +384,7 @@ int mutt_smtp_send (const ADDRESS *, const ADDRESS *, const ADDRESS *,
 size_t mutt_wstr_trunc (const char *, size_t, size_t, size_t *);
 int mutt_charlen (const char *s, int *);
 int mutt_strwidth (const char *);
-int mutt_compose_menu (HEADER *, BUFFER *, HEADER *, int);
+int mutt_compose_menu (SEND_CONTEXT *);
 int mutt_thread_set_flag (HEADER *, int, int, int);
 int mutt_user_is_recipient (HEADER *);
 void mutt_update_num_postponed (void);
