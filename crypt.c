@@ -128,17 +128,23 @@ int crypt_valid_passphrase(int flags)
 
 
 /* In postpone mode, signing is automatically disabled. */
-int mutt_protect (HEADER *msg, char *keylist, int postpone)
+int mutt_protect (SEND_CONTEXT *sctx, char *keylist, int postpone)
 {
+  HEADER *msg;
   BODY *pbody = NULL, *tmp_pbody = NULL;
   BODY *tmp_smime_pbody = NULL;
   BODY *tmp_pgp_pbody = NULL;
   ENVELOPE *protected_headers = NULL;
   int security, sign, has_retainable_sig = 0;
-  int i;
+  int i, rc = -1;
+  char *orig_pgp_sign_as = NULL,
+    *orig_smime_sign_as = NULL,
+    *orig_smime_crypt_alg = NULL;
 
   if (!WithCrypto)
     return -1;
+
+  msg = sctx->msg;
 
   security = msg->security;
   sign = security & (AUTOCRYPT | SIGN);
@@ -156,6 +162,26 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
       !crypt_valid_passphrase (security))
     return (-1);
 
+  /* Override with sctx settings, if they are set.
+   * This can happen with the compose send_menus and when resuming a
+   * postponed message.
+   */
+  if (sctx->pgp_sign_as)
+  {
+    orig_pgp_sign_as = safe_strdup (PgpSignAs);
+    mutt_str_replace (&PgpSignAs, sctx->pgp_sign_as);
+  }
+  if (sctx->smime_sign_as)
+  {
+    orig_smime_sign_as = safe_strdup (SmimeSignAs);
+    mutt_str_replace (&SmimeSignAs, sctx->smime_sign_as);
+  }
+  if (sctx->smime_crypt_alg)
+  {
+    orig_smime_crypt_alg = safe_strdup (SmimeCryptAlg);
+    mutt_str_replace (&SmimeCryptAlg, sctx->smime_crypt_alg);
+  }
+
   if ((WithCrypto & APPLICATION_PGP) &&
       !(security & AUTOCRYPT) &&
       ((security & PGPINLINE) == PGPINLINE))
@@ -167,7 +193,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
               _("Inline PGP can't be used with attachments.  Revert to PGP/MIME?"))) != MUTT_YES)
       {
         mutt_error _("Mail not sent: inline PGP can't be used with attachments.");
-        return -1;
+        goto cleanup;
       }
     }
     else if (!mutt_strcasecmp ("flowed",
@@ -177,7 +203,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
               _("Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"))) != MUTT_YES)
       {
         mutt_error _("Mail not sent: inline PGP can't be used with format=flowed.");
-        return -1;
+        goto cleanup;
       }
     }
     else
@@ -188,14 +214,15 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
       if (pbody)
       {
         msg->content = pbody;
-        return 0;
+        rc = 0;
+        goto cleanup;
       }
 
       /* otherwise inline won't work...ask for revert */
       if ((i = query_quadoption (OPT_PGPMIMEAUTO, _("Message can't be sent inline.  Revert to using PGP/MIME?"))) != MUTT_YES)
       {
         mutt_error _("Mail not sent.");
-        return -1;
+        goto cleanup;
       }
     }
 
@@ -263,7 +290,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
         && (security & APPLICATION_SMIME))
     {
       if (!(tmp_pbody = crypt_smime_sign_message (msg->content)))
-	goto bail;
+	goto cleanup;
       pbody = tmp_smime_pbody = tmp_pbody;
     }
 
@@ -272,7 +299,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
         && (!(security & (ENCRYPT | AUTOCRYPT)) || option (OPTPGPRETAINABLESIG)))
     {
       if (!(tmp_pbody = crypt_pgp_sign_message (msg->content)))
-        goto bail;
+        goto cleanup;
 
       has_retainable_sig = 1;
       sign = 0;
@@ -297,7 +324,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
                                                         keylist)))
       {
 	/* signed ? free it! */
-	goto bail;
+	goto cleanup;
       }
       /* free tmp_body if messages was signed AND encrypted ... */
       if (tmp_smime_pbody != msg->content && tmp_smime_pbody != tmp_pbody)
@@ -327,7 +354,7 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
 	  mutt_free_body (&tmp_pgp_pbody->next);
 	}
 
-	goto bail;
+	goto cleanup;
       }
 
       /* destroy temporary signature envelope when doing retainable
@@ -345,12 +372,21 @@ int mutt_protect (HEADER *msg, char *keylist, int postpone)
   if (pbody)
   {
     msg->content = pbody;
-    return 0;
+    rc = 0;
   }
 
-bail:
-  mutt_free_envelope (&msg->content->mime_headers);
-  return -1;
+cleanup:
+  if (rc != 0)
+    mutt_free_envelope (&msg->content->mime_headers);
+
+  if (sctx->pgp_sign_as)
+    mutt_str_replace (&PgpSignAs, orig_pgp_sign_as);
+  if (sctx->smime_sign_as)
+    mutt_str_replace (&SmimeSignAs, orig_smime_sign_as);
+  if (sctx->smime_crypt_alg)
+    mutt_str_replace (&SmimeCryptAlg, orig_smime_crypt_alg);
+
+  return rc;
 }
 
 

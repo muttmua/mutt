@@ -1209,16 +1209,22 @@ cleanup:
   return (i);
 }
 
-static int save_fcc (HEADER *msg, BUFFER *fcc,
+static int save_fcc (SEND_CONTEXT *sctx,
                      BODY *clear_content, char *pgpkeylist,
                      int flags)
 {
+  HEADER *msg;
+  BUFFER *fcc;
   int rc = 0;
-  BODY *tmpbody = msg->content;
+  BODY *tmpbody;
   BODY *save_content = NULL;
   BODY *save_sig = NULL;
   BODY *save_parts = NULL;
   int choice, save_atts;
+
+  msg = sctx->msg;
+  fcc = sctx->fcc;
+  tmpbody = msg->content;
 
   mutt_buffer_expand_path (fcc);
 
@@ -1292,7 +1298,7 @@ static int save_fcc (HEADER *msg, BUFFER *fcc,
           /* this means writing only the main part */
           msg->content = clear_content->parts;
 
-          if (mutt_protect (msg, pgpkeylist, 0) == -1)
+          if (mutt_protect (sctx, pgpkeylist, 0) == -1)
           {
             /* we can't do much about it at this point, so
              * fallback to saving the whole thing to fcc
@@ -1514,8 +1520,11 @@ static int has_attach_keyword (char *filename)
   return match;
 }
 
-static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flags)
+static int postpone_message (SEND_CONTEXT *sctx)
 {
+  HEADER *msg, *cur;
+  const char *fcc;
+  int flags;
   char *pgpkeylist = NULL;
   char *encrypt_as = NULL;
   BODY *clear_content = NULL;
@@ -1525,6 +1534,11 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
     mutt_error _("Cannot postpone.  $postponed is unset");
     return -1;
   }
+
+  msg = sctx->msg;
+  cur = sctx->cur;
+  fcc = mutt_b2s (sctx->fcc);
+  flags = sctx->flags;
 
   if (msg->content->next)
     msg->content = mutt_make_multipart_mixed (msg->content);
@@ -1558,7 +1572,7 @@ static int postpone_message (HEADER *msg, HEADER *cur, const char *fcc, int flag
     {
       pgpkeylist = safe_strdup (encrypt_as);
       clear_content = msg->content;
-      if (mutt_protect (msg, pgpkeylist, 1) == -1)
+      if (mutt_protect (sctx, pgpkeylist, 1) == -1)
       {
         FREE (&pgpkeylist);
         msg->content = mutt_remove_multipart_mixed (msg->content);
@@ -2134,7 +2148,7 @@ main_loop:
     }
     else if (i == 1)
     {
-      if (postpone_message (sctx->msg, sctx->cur, mutt_b2s (sctx->fcc), sctx->flags) != 0)
+      if (postpone_message (sctx) != 0)
         goto main_loop;
       mutt_message _("Message postponed.");
       rv = 1;
@@ -2231,7 +2245,7 @@ main_loop:
       clear_content = sctx->msg->content;
 
       if ((crypt_get_keys (sctx->msg, &pgpkeylist, 0) == -1) ||
-          mutt_protect (sctx->msg, pgpkeylist, 0) == -1)
+          mutt_protect (sctx, pgpkeylist, 0) == -1)
       {
         sctx->msg->content = mutt_remove_multipart_mixed (sctx->msg->content);
         sctx->msg->content = mutt_remove_multipart_alternative (sctx->msg->content);
@@ -2266,7 +2280,7 @@ main_loop:
   mutt_prepare_envelope (sctx->msg->env, 1);
 
   if (option (OPTFCCBEFORESEND))
-    save_fcc (sctx->msg, sctx->fcc, clear_content, pgpkeylist, sctx->flags);
+    save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
 
   if ((i = invoke_mta (sctx->msg)) < 0)
   {
@@ -2305,7 +2319,7 @@ main_loop:
   }
 
   if (!option (OPTFCCBEFORESEND))
-    save_fcc (sctx->msg, sctx->fcc, clear_content, pgpkeylist, sctx->flags);
+    save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
 
   if (!option (OPTNOCURSES) && ! (sctx->flags & SENDMAILX))
   {

@@ -342,7 +342,8 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     printw ("%*s", HeaderPadding[HDR_CRYPTINFO], _(Prompts[HDR_CRYPTINFO]));
     NORMAL_COLOR;
-    printw ("%s", sctx->pgp_sign_as ? sctx->pgp_sign_as : _("<default>"));
+    printw ("%s", sctx->pgp_sign_as ? sctx->pgp_sign_as :
+            (PgpSignAs ? PgpSignAs : _("<default>")));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)
@@ -351,18 +352,19 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     printw ("%*s", HeaderPadding[HDR_CRYPTINFO], _(Prompts[HDR_CRYPTINFO]));
     NORMAL_COLOR;
-    printw ("%s", sctx->smime_sign_as ? sctx->smime_sign_as : _("<default>"));
+    printw ("%s", sctx->smime_sign_as ? sctx->smime_sign_as :
+            (SmimeSignAs ? SmimeSignAs : _("<default>")));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)
       && (msg->security & APPLICATION_SMIME)
       && (msg->security & ENCRYPT)
-      && sctx->smime_crypt_alg)
+      && (SmimeCryptAlg || sctx->smime_crypt_alg))
   {
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPTINFO, 40, "%s", _("Encrypt with: "));
     NORMAL_COLOR;
-    printw ("%s", NONULL(sctx->smime_crypt_alg));
+    printw ("%s", sctx->smime_crypt_alg ? sctx->smime_crypt_alg : SmimeCryptAlg );
   }
 
 #ifdef USE_AUTOCRYPT
