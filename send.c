@@ -1626,11 +1626,15 @@ static void send_ctx_free (SEND_CONTEXT **psctx)
   mutt_buffer_free (&sctx->fcc);
   FREE (&sctx->ctx_realpath);
 
+  FREE (&sctx->pgp_sign_as);
+  FREE (&sctx->smime_sign_as);
+  FREE (&sctx->smime_crypt_alg);
+
   FREE (psctx);    /* __FREE_CHECKED__ */
 }
 
 static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
-                               CONTEXT *ctx, char **pgp_signas, char **smime_signas)
+                               CONTEXT *ctx)
 {
   FILE *tempfp = NULL;
   int rv = -1, i;
@@ -1656,14 +1660,6 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
    * pre-resize it to ensure there are no NULL data field issues */
   sctx->fcc = mutt_buffer_new ();
   mutt_buffer_increase_size (sctx->fcc, LONG_STRING);
-
-  if (sctx->flags & SENDPOSTPONED)
-  {
-    if (WithCrypto & APPLICATION_PGP)
-      *pgp_signas = safe_strdup(PgpSignAs);
-    if (WithCrypto & APPLICATION_SMIME)
-      *smime_signas = safe_strdup(SmimeSignAs);
-  }
 
   /* Delay expansion of aliases until absolutely necessary--shouldn't
    * be necessary unless we are prompting the user or about to execute a
@@ -2392,8 +2388,6 @@ mutt_send_message (int flags,            /* send mode */
                    HEADER *cur)          /* current message */
 {
   SEND_CONTEXT *sctx;
-  char *pgp_signas = NULL;
-  char *smime_signas = NULL;
   int rv = -1;
   int resume_rc;
 
@@ -2422,15 +2416,7 @@ mutt_send_message (int flags,            /* send mode */
    * of the msg header don't disappear after returning!!!
    */
 
-  /* TODO:
-   * mutt_get_postponed() and edit headers set PgpSignAs/SmimeSignAs.
-   * these need to be set in the sctx instead, and the globals swapped
-   * out around the "post-composemenu-send" function.  Note that edit
-   * headers and get_postponed have different behavior for an empty
-   * value.
-   */
-
-  if (send_message_setup (sctx, tempfile, ctx, &pgp_signas, &smime_signas) < 0)
+  if (send_message_setup (sctx, tempfile, ctx) < 0)
     goto cleanup;
 
 
@@ -2449,23 +2435,6 @@ mutt_send_message (int flags,            /* send mode */
   rv = 0;
 
 cleanup:
-  /* TODO: this should be based on sctx and moved around
-   * the resumable edit/compose/send function
-   */
-  if (sctx->flags & SENDPOSTPONED)
-  {
-    if (WithCrypto & APPLICATION_PGP)
-    {
-      FREE (&PgpSignAs);
-      PgpSignAs = pgp_signas;
-    }
-    if (WithCrypto & APPLICATION_SMIME)
-    {
-      FREE (&SmimeSignAs);
-      SmimeSignAs = smime_signas;
-    }
-  }
-
   send_ctx_free (&sctx);
 
   return rv;

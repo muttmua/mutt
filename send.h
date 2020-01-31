@@ -34,6 +34,10 @@ typedef struct send_ctx
   BUFFER *fcc;
 
   char *ctx_realpath;
+
+  char *pgp_sign_as;
+  char *smime_sign_as;
+  char *smime_crypt_alg;
 } SEND_CONTEXT;
 
 ADDRESS *mutt_remove_xrefs (ADDRESS *, ADDRESS *);

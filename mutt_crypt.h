@@ -131,7 +131,7 @@ int mutt_protected_headers_handler (BODY *, STATE *);
 
 int mutt_signed_handler (BODY *, STATE *);
 
-int mutt_parse_crypt_hdr (const char *, int, int);
+int mutt_parse_crypt_hdr (const char *, int, int, SEND_CONTEXT *);
 
 
 void convert_to_7bit (BODY *);

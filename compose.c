@@ -172,6 +172,7 @@ typedef struct
 {
   HEADER *msg;
   BUFFER *fcc;
+  SEND_CONTEXT *sctx;
 #ifdef USE_AUTOCRYPT
   autocrypt_rec_t autocrypt_rec;
   int autocrypt_rec_override;
@@ -279,6 +280,7 @@ static void autocrypt_compose_menu (HEADER *msg)
 static void redraw_crypt_lines (compose_redraw_data_t *rd)
 {
   HEADER *msg = rd->msg;
+  SEND_CONTEXT *sctx = rd->sctx;
 
   SETCOLOR (MT_COLOR_COMPOSE_HEADER);
   mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPT, 0,
@@ -340,7 +342,7 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     printw ("%*s", HeaderPadding[HDR_CRYPTINFO], _(Prompts[HDR_CRYPTINFO]));
     NORMAL_COLOR;
-    printw ("%s", PgpSignAs ? PgpSignAs : _("<default>"));
+    printw ("%s", sctx->pgp_sign_as ? sctx->pgp_sign_as : _("<default>"));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)
@@ -349,18 +351,18 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     printw ("%*s", HeaderPadding[HDR_CRYPTINFO], _(Prompts[HDR_CRYPTINFO]));
     NORMAL_COLOR;
-    printw ("%s", SmimeSignAs ? SmimeSignAs : _("<default>"));
+    printw ("%s", sctx->smime_sign_as ? sctx->smime_sign_as : _("<default>"));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)
       && (msg->security & APPLICATION_SMIME)
       && (msg->security & ENCRYPT)
-      && SmimeCryptAlg)
+      && sctx->smime_crypt_alg)
   {
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPTINFO, 40, "%s", _("Encrypt with: "));
     NORMAL_COLOR;
-    printw ("%s", NONULL(SmimeCryptAlg));
+    printw ("%s", NONULL(sctx->smime_crypt_alg));
   }
 
 #ifdef USE_AUTOCRYPT
@@ -1036,6 +1038,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 
   rd.msg = msg;
   rd.fcc = sctx->fcc;
+  rd.sctx = sctx;
 
   menu = mutt_new_menu (MENU_COMPOSE);
   menu->offset = HDR_ATTACH;

@@ -369,7 +369,7 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
                  || mutt_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0))
     {
       sctx->msg->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
-                                                  APPLICATION_PGP);
+                                                  APPLICATION_PGP, sctx);
       sctx->msg->security |= APPLICATION_PGP;
 
       /* remove the pgp field */
@@ -386,7 +386,7 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
              && mutt_strncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0)
     {
       sctx->msg->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1,
-                                                  APPLICATION_SMIME);
+                                                  APPLICATION_SMIME, sctx);
       sctx->msg->security |= APPLICATION_SMIME;
 
       /* remove the smime field */
@@ -439,7 +439,8 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
 
 
 
-int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
+int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app,
+                          SEND_CONTEXT *sctx)
 {
   char smime_cryptalg[LONG_STRING] = "\0";
   char sign_as[LONG_STRING] = "\0", *q;
@@ -555,19 +556,19 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app)
 
   /* the cryptalg field must not be empty */
   if ((WithCrypto & APPLICATION_SMIME) && *smime_cryptalg)
-    mutt_str_replace (&SmimeCryptAlg, smime_cryptalg);
+    mutt_str_replace (&sctx->smime_crypt_alg, smime_cryptalg);
 
   /* Set {Smime,Pgp}SignAs, if desired. */
 
   if ((WithCrypto & APPLICATION_PGP) && (crypt_app == APPLICATION_PGP)
       && (flags & SIGN)
       && (set_empty_signas || *sign_as))
-    mutt_str_replace (&PgpSignAs, sign_as);
+    mutt_str_replace (&sctx->pgp_sign_as, sign_as);
 
   if ((WithCrypto & APPLICATION_SMIME) && (crypt_app == APPLICATION_SMIME)
       && (flags & SIGN)
       && (set_empty_signas || *sign_as))
-    mutt_str_replace (&SmimeSignAs, sign_as);
+    mutt_str_replace (&sctx->smime_sign_as, sign_as);
 
   return flags;
 }
