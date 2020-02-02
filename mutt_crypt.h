@@ -249,7 +249,7 @@ BODY *crypt_pgp_encrypt_message (HEADER *msg, BODY *a, char *keylist, int sign);
 /* Invoke the PGP command to import a key. */
 void crypt_pgp_invoke_import (const char *fname);
 
-int crypt_pgp_send_menu (HEADER *msg);
+void crypt_pgp_send_menu (SEND_CONTEXT *sctx);
 
 /* fixme: needs documentation */
 int crypt_pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempf);
@@ -299,7 +299,7 @@ BODY *crypt_smime_build_smime_entity (BODY *a, char *certlist);
 /* Add a certificate and update index file (externally). */
 void crypt_smime_invoke_import (const char *infile, const char *mailbox);
 
-int crypt_smime_send_menu (HEADER *msg);
+void crypt_smime_send_menu (SEND_CONTEXT *sctx);
 
 void crypt_smime_set_sender (const char *sender);
 

@@ -356,10 +356,14 @@ static void redraw_crypt_lines (compose_redraw_data_t *rd)
             (SmimeSignAs ? SmimeSignAs : _("<default>")));
   }
 
+  /* Note: the smime crypt alg can be cleared in smime.c.
+   * this causes a NULL sctx->smime_crypt_alg to override SmimeCryptAlg.
+   */
   if ((WithCrypto & APPLICATION_SMIME)
       && (msg->security & APPLICATION_SMIME)
       && (msg->security & ENCRYPT)
-      && (SmimeCryptAlg || sctx->smime_crypt_alg))
+      && (sctx->smime_crypt_alg ||
+          (!sctx->smime_crypt_alg_cleared && SmimeCryptAlg)))
   {
     SETCOLOR (MT_COLOR_COMPOSE_HEADER);
     mutt_window_mvprintw (MuttIndexWindow, HDR_CRYPTINFO, 40, "%s", _("Encrypt with: "));
@@ -1812,7 +1816,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	  msg->security |= APPLICATION_PGP;
           update_crypt_info (&rd);
 	}
-	msg->security = crypt_pgp_send_menu (msg);
+	crypt_pgp_send_menu (sctx);
 	update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
@@ -1849,7 +1853,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	  msg->security |= APPLICATION_SMIME;
           update_crypt_info (&rd);
 	}
-	msg->security = crypt_smime_send_menu(msg);
+	crypt_smime_send_menu (sctx);
 	update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;

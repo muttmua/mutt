@@ -104,6 +104,6 @@ BODY *pgp_traditional_encryptsign (BODY *, int, char *);
 BODY *pgp_encrypt_message (BODY *, char *, int);
 BODY *pgp_sign_message (BODY *);
 
-int pgp_send_menu (HEADER *msg);
+void pgp_send_menu (SEND_CONTEXT *sctx);
 
 #endif /* CRYPT_BACKEND_CLASSIC_PGP */

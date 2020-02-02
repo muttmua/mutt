@@ -176,7 +176,7 @@ int mutt_protect (SEND_CONTEXT *sctx, char *keylist, int postpone)
     orig_smime_sign_as = safe_strdup (SmimeSignAs);
     mutt_str_replace (&SmimeSignAs, sctx->smime_sign_as);
   }
-  if (sctx->smime_crypt_alg)
+  if (sctx->smime_crypt_alg || sctx->smime_crypt_alg_cleared)
   {
     orig_smime_crypt_alg = safe_strdup (SmimeCryptAlg);
     mutt_str_replace (&SmimeCryptAlg, sctx->smime_crypt_alg);
@@ -383,7 +383,7 @@ cleanup:
     mutt_str_replace (&PgpSignAs, orig_pgp_sign_as);
   if (sctx->smime_sign_as)
     mutt_str_replace (&SmimeSignAs, orig_smime_sign_as);
-  if (sctx->smime_crypt_alg)
+  if (sctx->smime_crypt_alg || sctx->smime_crypt_alg_cleared)
     mutt_str_replace (&SmimeCryptAlg, orig_smime_crypt_alg);
 
   return rc;

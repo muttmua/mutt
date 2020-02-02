@@ -5271,12 +5271,15 @@ void smime_gpgme_init (void)
   init_smime ();
 }
 
-static int gpgme_send_menu (HEADER *msg, int is_smime)
+static void gpgme_send_menu (SEND_CONTEXT *sctx, int is_smime)
 {
+  HEADER *msg;
   crypt_key_t *p;
   char input_signas[SHORT_STRING];
   char *prompt, *letters, *choices;
   int choice;
+
+  msg = sctx->msg;
 
   if (is_smime)
     msg->security |= APPLICATION_SMIME;
@@ -5371,7 +5374,8 @@ static int gpgme_send_menu (HEADER *msg, int is_smime)
       {
         snprintf (input_signas, sizeof (input_signas), "0x%s",
             crypt_fpr_or_lkeyid (p));
-        mutt_str_replace (is_smime? &SmimeSignAs : &PgpSignAs, input_signas);
+        mutt_str_replace (is_smime? &sctx->smime_sign_as : &sctx->pgp_sign_as,
+                          input_signas);
         crypt_free_key (&p);
 
         msg->security |= SIGN;
@@ -5418,18 +5422,16 @@ static int gpgme_send_menu (HEADER *msg, int is_smime)
       break;
     }
   }
-
-  return (msg->security);
 }
 
-int pgp_gpgme_send_menu (HEADER *msg)
+void pgp_gpgme_send_menu (SEND_CONTEXT *sctx)
 {
-  return gpgme_send_menu (msg, 0);
+  gpgme_send_menu (sctx, 0);
 }
 
-int smime_gpgme_send_menu (HEADER *msg)
+void smime_gpgme_send_menu (SEND_CONTEXT *sctx)
 {
-  return gpgme_send_menu (msg, 1);
+  gpgme_send_menu (sctx, 1);
 }
 
 static int verify_sender (HEADER *h, gpgme_protocol_t protocol)

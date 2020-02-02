@@ -38,6 +38,7 @@ typedef struct send_ctx
   char *pgp_sign_as;
   char *smime_sign_as;
   char *smime_crypt_alg;
+  unsigned int smime_crypt_alg_cleared : 1;
 } SEND_CONTEXT;
 
 ADDRESS *mutt_remove_xrefs (ADDRESS *, ADDRESS *);

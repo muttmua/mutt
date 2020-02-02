@@ -2222,14 +2222,17 @@ int smime_application_smime_handler (BODY *m, STATE *s)
   return rv;
 }
 
-int smime_send_menu (HEADER *msg)
+void smime_send_menu (SEND_CONTEXT *sctx)
 {
+  HEADER *msg;
   smime_key_t *key;
   char *prompt, *letters, *choices;
   int choice;
 
+  msg = sctx->msg;
+
   if (!(WithCrypto & APPLICATION_SMIME))
-    return msg->security;
+    return;
 
   msg->security |= APPLICATION_SMIME;
 
@@ -2295,10 +2298,10 @@ int smime_send_menu (HEADER *msg)
                                                   _("dt")))
               {
                 case 1:
-                  mutt_str_replace (&SmimeCryptAlg, "des");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "des");
                   break;
                 case 2:
-                  mutt_str_replace (&SmimeCryptAlg, "des3");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "des3");
                   break;
               }
               break;
@@ -2308,13 +2311,13 @@ int smime_send_menu (HEADER *msg)
                                                   _("468")))
               {
                 case 1:
-                  mutt_str_replace (&SmimeCryptAlg, "rc2-40");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "rc2-40");
                   break;
                 case 2:
-                  mutt_str_replace (&SmimeCryptAlg, "rc2-64");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "rc2-64");
                   break;
                 case 3:
-                  mutt_str_replace (&SmimeCryptAlg, "rc2-128");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "rc2-128");
                   break;
               }
               break;
@@ -2324,19 +2327,20 @@ int smime_send_menu (HEADER *msg)
                                                   _("895")))
               {
                 case 1:
-                  mutt_str_replace (&SmimeCryptAlg, "aes128");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "aes128");
                   break;
                 case 2:
-                  mutt_str_replace (&SmimeCryptAlg, "aes192");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "aes192");
                   break;
                 case 3:
-                  mutt_str_replace (&SmimeCryptAlg, "aes256");
+                  mutt_str_replace (&sctx->smime_crypt_alg, "aes256");
                   break;
               }
               break;
 
             case 4: /* (c)lear */
-              FREE (&SmimeCryptAlg);
+              FREE (&sctx->smime_crypt_alg);
+              sctx->smime_crypt_alg_cleared = 1;
               /* fall through */
             case -1: /* Ctrl-G or Enter */
               choice = 0;
@@ -2359,7 +2363,7 @@ int smime_send_menu (HEADER *msg)
 
         if ((key = smime_ask_for_key (_("Sign as: "), KEYFLAG_CANSIGN, 0)))
         {
-          mutt_str_replace (&SmimeSignAs, key->hash);
+          mutt_str_replace (&sctx->smime_sign_as, key->hash);
           smime_free_key (&key);
 
           msg->security |= SIGN;
@@ -2394,8 +2398,6 @@ int smime_send_menu (HEADER *msg)
         break;
     }
   }
-
-  return (msg->security);
 }
 
 

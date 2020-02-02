@@ -315,12 +315,10 @@ int crypt_pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
 }
 
 
-int crypt_pgp_send_menu (HEADER *msg)
+void crypt_pgp_send_menu (SEND_CONTEXT *sctx)
 {
   if (CRYPT_MOD_CALL_CHECK (PGP, send_menu))
-    return (CRYPT_MOD_CALL (PGP, send_menu)) (msg);
-
-  return 0;
+    (CRYPT_MOD_CALL (PGP, send_menu)) (sctx);
 }
 
 
@@ -449,12 +447,10 @@ int crypt_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
   return -1;
 }
 
-int crypt_smime_send_menu (HEADER *msg)
+void crypt_smime_send_menu (SEND_CONTEXT *sctx)
 {
   if (CRYPT_MOD_CALL_CHECK (SMIME, send_menu))
-    return (CRYPT_MOD_CALL (SMIME, send_menu)) (msg);
-
-  return 0;
+    (CRYPT_MOD_CALL (SMIME, send_menu)) (sctx);
 }
 
 void crypt_smime_set_sender (const char *sender)

@@ -1797,16 +1797,19 @@ cleanup:
   return b;
 }
 
-int pgp_send_menu (HEADER *msg)
+void pgp_send_menu (SEND_CONTEXT *sctx)
 {
+  HEADER *msg;
   pgp_key_t p;
   char input_signas[SHORT_STRING];
   char *prompt, *letters, *choices;
   char promptbuf[LONG_STRING];
   int choice;
 
+  msg = sctx->msg;
+
   if (!(WithCrypto & APPLICATION_PGP))
-    return msg->security;
+    return;
 
   /* If autoinline and no crypto options set, then set inline. */
   if (option (OPTPGPAUTOINLINE) &&
@@ -1918,7 +1921,7 @@ int pgp_send_menu (HEADER *msg)
         {
           snprintf (input_signas, sizeof (input_signas), "0x%s",
                     pgp_fpr_or_lkeyid (p));
-          mutt_str_replace (&PgpSignAs, input_signas);
+          mutt_str_replace (&sctx->pgp_sign_as, input_signas);
           pgp_free_key (&p);
 
           msg->security |= SIGN;
@@ -1955,8 +1958,6 @@ int pgp_send_menu (HEADER *msg)
         break;
     }
   }
-
-  return (msg->security);
 }
 
 
