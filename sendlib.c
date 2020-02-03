@@ -2975,8 +2975,9 @@ static void set_noconv_flags (BODY *b, short flag)
   }
 }
 
-int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, const char *fcc)
+int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int post, const char *fcc)
 {
+  HEADER *hdr;
   CONTEXT f;
   MESSAGE *msg;
   BUFFER *tempfile = NULL;
@@ -2985,6 +2986,8 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
   struct stat st;
   char buf[SHORT_STRING];
   int onm_flags;
+
+  hdr = sctx->msg;
 
   if (post)
     set_noconv_flags (hdr->content, 1);
@@ -3068,8 +3071,8 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     if (hdr->security & SIGN)
     {
       fputc ('S', msg->fp);
-      if (PgpSignAs)
-        fprintf (msg->fp, "<%s>", PgpSignAs);
+      if (sctx->pgp_sign_as)
+        fprintf (msg->fp, "<%s>", sctx->pgp_sign_as);
     }
     if (hdr->security & INLINE)
       fputc ('I', msg->fp);
@@ -3090,16 +3093,16 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
     if (hdr->security & ENCRYPT)
     {
       fputc ('E', msg->fp);
-      if (SmimeCryptAlg)
-        fprintf (msg->fp, "C<%s>", SmimeCryptAlg);
+      if (sctx->smime_crypt_alg)
+        fprintf (msg->fp, "C<%s>", sctx->smime_crypt_alg);
     }
     if (hdr->security & OPPENCRYPT)
       fputc ('O', msg->fp);
     if (hdr->security & SIGN)
     {
       fputc ('S', msg->fp);
-      if (SmimeSignAs)
-        fprintf (msg->fp, "<%s>", SmimeSignAs);
+      if (sctx->smime_sign_as)
+        fprintf (msg->fp, "<%s>", sctx->smime_sign_as);
     }
     if (hdr->security & INLINE)
       fputc ('I', msg->fp);

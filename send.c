@@ -1324,7 +1324,7 @@ full_fcc:
      * message was first postponed.
      */
     msg->received = time (NULL);
-    rc = mutt_write_fcc (mutt_b2s (fcc), msg, NULL, 0, NULL);
+    rc = mutt_write_fcc (mutt_b2s (fcc), sctx, NULL, 0, NULL);
     while (rc && !(flags & SENDBATCH))
     {
       mutt_clear_error ();
@@ -1358,7 +1358,7 @@ full_fcc:
           /* fall through */
 
         case 1:   /* (r)etry */
-          rc = mutt_write_fcc (mutt_b2s (fcc), msg, NULL, 0, NULL);
+          rc = mutt_write_fcc (mutt_b2s (fcc), sctx, NULL, 0, NULL);
           break;
 
         case -1:  /* abort */
@@ -1594,7 +1594,7 @@ static int postpone_message (SEND_CONTEXT *sctx)
   mutt_prepare_envelope (msg->env, 0);
   mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
 
-  if (mutt_write_fcc (NONULL (Postponed), msg,
+  if (mutt_write_fcc (NONULL (Postponed), sctx,
                       (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL,
                       1, fcc) < 0)
   {
