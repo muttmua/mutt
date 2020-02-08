@@ -203,9 +203,8 @@ typedef enum
 
 #define MUTT_THREAD_COLLAPSE    (1<<0)
 #define MUTT_THREAD_UNCOLLAPSE  (1<<1)
-#define MUTT_THREAD_GET_HIDDEN  (1<<2)
-#define MUTT_THREAD_UNREAD      (1<<3)
-#define MUTT_THREAD_NEXT_UNREAD (1<<4)
+#define MUTT_THREAD_UNREAD      (1<<2)
+#define MUTT_THREAD_NEXT_UNREAD (1<<3)
 
 enum
 {
@@ -882,7 +881,9 @@ typedef struct header
   /* the following are used to support collapsing threads  */
   unsigned int collapsed : 1; 	/* is this message part of a collapsed thread? */
   unsigned int limited : 1;   	/* is this message in a limited view?  */
-  size_t num_hidden;          	/* number of hidden messages in this view */
+  size_t num_hidden;            /* number of hidden messages in this view.
+                                 * only valid for the root header, when
+                                 * collapsed is set. */
 
   short recipient;		/* user_is_recipient()'s return value, cached */
 

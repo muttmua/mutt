@@ -1132,7 +1132,6 @@ void mutt_set_virtual (CONTEXT *ctx)
       ctx->vcount++;
       ctx->vsize += cur->content->length + cur->content->offset -
         cur->content->hdr_offset + padding;
-      cur->num_hidden = mutt_get_hidden (ctx, cur);
     }
   }
 }
@@ -1146,7 +1145,7 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
   int min_unread_msgno = INT_MAX, min_unread = cur->virtual;
 #define CHECK_LIMIT (!ctx->pattern || cur->limited)
 
-  if ((Sort & SORT_MASK) != SORT_THREADS && !(flag & MUTT_THREAD_GET_HIDDEN))
+  if ((Sort & SORT_MASK) != SORT_THREADS)
   {
     mutt_error (_("Threading is not enabled."));
     return (cur->virtual);
@@ -1194,11 +1193,13 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
   {
     /* return value depends on action requested */
     if (flag & (MUTT_THREAD_COLLAPSE | MUTT_THREAD_UNCOLLAPSE))
+    {
+      if (roothdr)
+        roothdr->num_hidden = num_hidden;
       return (final);
+    }
     else if (flag & MUTT_THREAD_UNREAD)
       return ((old && new) ? new : (old ? old : new));
-    else if (flag & MUTT_THREAD_GET_HIDDEN)
-      return (num_hidden);
     else if (flag & MUTT_THREAD_NEXT_UNREAD)
       return (min_unread);
   }
@@ -1280,11 +1281,13 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
 
   /* return value depends on action requested */
   if (flag & (MUTT_THREAD_COLLAPSE | MUTT_THREAD_UNCOLLAPSE))
+  {
+    if (roothdr)
+      roothdr->num_hidden = num_hidden + 1;
     return (final);
+  }
   else if (flag & MUTT_THREAD_UNREAD)
     return ((old && new) ? new : (old ? old : new));
-  else if (flag & MUTT_THREAD_GET_HIDDEN)
-    return (num_hidden+1);
   else if (flag & MUTT_THREAD_NEXT_UNREAD)
     return (min_unread);
 
