@@ -1194,8 +1194,7 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
     /* return value depends on action requested */
     if (flag & (MUTT_THREAD_COLLAPSE | MUTT_THREAD_UNCOLLAPSE))
     {
-      if (roothdr)
-        roothdr->num_hidden = num_hidden;
+      cur->num_hidden = num_hidden;
       return (final);
     }
     else if (flag & MUTT_THREAD_UNREAD)
@@ -1279,13 +1278,45 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
     }
   }
 
+  /* retraverse the thread and store num_hidden in all headers, with
+   * or without a virtual index.  this will allow ~v to match all
+   * collapsed messages when switching sort order to non-threaded.
+   */
+  if (flag & MUTT_THREAD_COLLAPSE)
+  {
+    thread = top;
+    FOREVER
+    {
+      cur = thread->message;
+      if (cur)
+        cur->num_hidden = num_hidden + 1;
+
+      if (thread->child)
+        thread = thread->child;
+      else if (thread->next)
+        thread = thread->next;
+      else
+      {
+        int done = 0;
+        while (!thread->next)
+        {
+          thread = thread->parent;
+          if (thread == top)
+          {
+            done = 1;
+            break;
+          }
+        }
+        if (done)
+          break;
+        thread = thread->next;
+      }
+    }
+  }
+
   /* return value depends on action requested */
   if (flag & (MUTT_THREAD_COLLAPSE | MUTT_THREAD_UNCOLLAPSE))
-  {
-    if (roothdr)
-      roothdr->num_hidden = num_hidden + 1;
     return (final);
-  }
   else if (flag & MUTT_THREAD_UNREAD)
     return ((old && new) ? new : (old ? old : new));
   else if (flag & MUTT_THREAD_NEXT_UNREAD)
