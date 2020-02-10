@@ -1286,7 +1286,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 	break;
       ++col;
       if (pa)
-	addch (replacement_char ());
+	mutt_addwch (replacement_char ());
     }
   }
   *pspace = space;
