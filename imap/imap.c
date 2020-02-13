@@ -1086,13 +1086,25 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
   BUFFER* cmd;
   int pos;
   int rc;
-  int count = 0;
+  int count = 0, reopen_set = 0;
 
   cmd = mutt_buffer_new ();
 
-  /* We make a copy of the headers just in case resorting doesn't give
-     exactly the original order (duplicate messages?), because other parts of
-     the ctx are tied to the header order. This may be overkill. */
+  /* Unlike imap_sync_mailbox(), this function can be called when
+   * IMAP_REOPEN_ALLOW is not set.  In that case, the caller isn't
+   * prepared to handle context changes.  Resorting may not always
+   * give the same order, so we must make a copy.
+   *
+   * See the comment in imap_sync_mailbox() for the dangers of running
+   * even queued execs while reopen is set.  To prevent memory
+   * corruption and data loss we must disable reopen for the duration
+   * of the swapped hdrs.
+   */
+  if (idata->reopen & IMAP_REOPEN_ALLOW)
+  {
+    idata->reopen &= ~IMAP_REOPEN_ALLOW;
+    reopen_set = 1;
+  }
   oldsort = Sort;
   if (Sort != SORT_ORDER)
   {
@@ -1129,12 +1141,14 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
 
 out:
   mutt_buffer_free (&cmd);
-  if (oldsort != Sort)
+  if ((oldsort != Sort) || hdrs)
   {
     Sort = oldsort;
     FREE (&idata->ctx->hdrs);
     idata->ctx->hdrs = hdrs;
   }
+  if (reopen_set)
+    idata->reopen |= IMAP_REOPEN_ALLOW;
 
   return rc;
 }
@@ -1278,7 +1292,7 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   HEADER** hdrs = NULL;
   int oldsort;
   int n;
-  int rc;
+  int rc, quickdel_rc = 0;
 
   idata = (IMAP_DATA*) ctx->data;
 
@@ -1298,22 +1312,24 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   /* if we are expunging anyway, we can do deleted messages very quickly... */
   if (expunge && mutt_bit_isset (ctx->rights, MUTT_ACL_DELETE))
   {
-    if ((rc = imap_exec_msgset (idata, "UID STORE", "+FLAGS.SILENT (\\Deleted)",
-                                MUTT_DELETED, 1, 0)) < 0)
+    if ((quickdel_rc = imap_exec_msgset (idata,
+                                         "UID STORE", "+FLAGS.SILENT (\\Deleted)",
+                                         MUTT_DELETED, 1, 0)) < 0)
     {
+      rc = quickdel_rc;
       mutt_error (_("Expunge failed"));
       mutt_sleep (1);
       goto out;
     }
 
-    if (rc > 0)
+    if (quickdel_rc > 0)
     {
       /* mark these messages as unchanged so second pass ignores them. Done
        * here so BOGUS UW-IMAP 4.7 SILENT FLAGS updates are ignored. */
       for (n = 0; n < ctx->msgcount; n++)
         if (ctx->hdrs[n]->deleted && ctx->hdrs[n]->changed)
           ctx->hdrs[n]->active = 0;
-      mutt_message (_("Marking %d messages deleted..."), rc);
+      mutt_message (_("Marking %d messages deleted..."), quickdel_rc);
     }
   }
 
@@ -1391,7 +1407,25 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   imap_hcache_close (idata);
 #endif
 
-  /* presort here to avoid doing 10 resorts in imap_exec_msgset */
+  /* presort here to avoid doing 10 resorts in imap_exec_msgset.
+   *
+   * Note: sync_helper() may trigger an imap_exec() if the queue fills
+   * up.  Because IMAP_REOPEN_ALLOW is set, this may result in new
+   * messages being downloaded or an expunge being processed.  For new
+   * messages this would both result in memory corruption (since we're
+   * alloc'ing msgcount instead of hdrmax pointers) and data loss of
+   * the new messages.  For an expunge, the restored hdrs would point
+   * to headers that have been freed.
+   *
+   * Since reopen is allowed, we could change this to call
+   * mutt_sort_headers() before and after instead, but the double sort
+   * is noticeably slower.
+   *
+   * So instead, just turn off reopen_allow for the duration of the
+   * swapped hdrs.  The imap_exec() below flushes the queue out,
+   * giving the opportunity to process any reopen events.
+   */
+  imap_disallow_reopen (ctx);
   oldsort = Sort;
   if (Sort != SORT_ORDER)
   {
@@ -1414,15 +1448,18 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   if (rc >= 0)
     rc |= sync_helper (idata, MUTT_ACL_WRITE, MUTT_REPLIED, "\\Answered");
 
-  if (oldsort != Sort)
+  if ((oldsort != Sort) || hdrs)
   {
     Sort = oldsort;
     FREE (&ctx->hdrs);
     ctx->hdrs = hdrs;
   }
+  imap_allow_reopen (ctx);
 
-  /* Flush the queued flags if any were changed in sync_helper. */
-  if (rc > 0)
+  /* Flush the queued flags if any were changed in sync_helper.
+   * The real (non-flag) changes loop might have flushed quickdel_rc
+   * queued commands, so we double check the cmdbuf isn't empty. */
+  if (((rc > 0) || (quickdel_rc > 0)) && mutt_buffer_len (idata->cmdbuf))
     if (imap_exec (idata, NULL, 0) != IMAP_CMD_OK)
       rc = -1;
 
