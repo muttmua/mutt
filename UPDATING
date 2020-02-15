@@ -8,6 +8,12 @@ http://www.mutt.org/doc/manual/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.13.4 (2020-02-15):
+
+  ! Bug fix release.
+  ! $ssl_force_tls reverted to default unset.  Defaulting this set was
+    overly optimistic, and caused breakage.
+
 1.13.3 (2020-01-12):
 
   ! Bug fix release.

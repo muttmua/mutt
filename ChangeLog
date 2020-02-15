@@ -1,3 +1,137 @@
+2020-02-15 11:25:37 -0800  Kevin McCarthy  <kevin@8t8.us> (05a257e8)
+
+        * Update UPDATING file 1.13.4.
+
+M	UPDATING
+
+2020-02-11 15:34:17 -0800  Kevin McCarthy  <kevin@8t8.us> (6051760c)
+
+        * Fix crash when syncing large IMAP mailboxes.
+        
+        imap_sync_mailbox() and imap_exec_msgset() make a copy of the headers
+        before resorting them to generate a message-set, to avoid context
+        changes.  I noticed the oddity in the past but didn't investigate
+        deeply enough at the time. :-/
+        
+        The code in imap_sync_mailbox() was wrong for four reasons:
+        1) Because IMAP_REOPEN_ALLOW is set, sync_helper() can trigger
+           an imap_exec if the queue fills up, resulting in new messages
+           being downloaded or expunges being triggered.
+        
+        2) The copy was only allocating msgcount headers, instead of hdrmax.
+           Downloading new messages could then attempt to append beyond the end
+           of the array if hdrmax > msgcount.
+        
+        3) New messages or expunges would disappear when the copy was restored
+           afterwards.
+        
+        4) The callers of mx_sync_mailbox() are prepared for context changes,
+           and will adjust the cursor properly to avoid jumps.
+        
+        The same problems can occur in imap_exec_msgset() when reopen is set.
+        Not all of its callers enable reopen, or are prepared to deal with
+        context changes though, so the copy is needed when reopen is not set.
+        
+        An alternative solution tried converting to call mutt_sort_headers()
+        when possible.  However that solution turned out to visibly slow down
+        syncs due to the double sorting.
+        
+        This commit instead turns off reopen for the duration of the msgset
+        operations.
+        
+        While verifying all queued operations are flushed, I noticed the
+        initial "quick delete" in imap_sync_mailbox() did not seem to be
+        guaranteed to flush.  Ensure the imap_exec() further below is
+        triggered if either the quick delete or sync_helper calls generate
+        changes.  Change the quick delete to assign to "quickdel_rc" to make
+        it clear the flush below is for both.
+        
+        Change the post sync/msgset check to look for both ((oldsort != Sort)
+        || hdrs), just to make sure a memory leak doesn't occur.
+
+M	imap/imap.c
+
+2020-02-08 11:34:13 -0800  Kevin McCarthy  <kevin@8t8.us> (0f8a079d)
+
+        * Speed up thread sort when many long threads exist.
+        
+        Merge request !75 reported a massive slowdown opening a mailbox with
+        many long threads: on the order of an hour.
+        
+        This is because mutt_set_virtual() was iterating through the whole
+        thread for each message.
+        
+        After taking a closer look at current Mutt behavior, it seems the
+        num_hidden count is only needed in the root thread.  Quoting my
+        comment in the merge request:
+        
+          The index-format expando %M only applies to root level headers, so
+          there are no issues there.
+        
+          The only concern is the pattern ~v. Limiting always resets collapsed
+          and num_hidden, so there also can't be any issues there. Tagging and
+          other pattern operators only work on visible messages. So tagging
+          while threads are sorted will only tag the root messages of
+          collapsed threads.
+        
+          However, if you sort by thread, collapse a thread, and then sort by
+          date, the collapsed and num_hidden fields are not reset for each
+          header. In theory this would allow us to tag ~v with date
+          ordering. However, in master the num_hidden is only set (by
+          mutt_set_virtual()) for visible messages with a virtual number.
+        
+          So even in master, switching to date-order and tagging ~v will only
+          tag the root messages of each collapsed thread.
+        
+        This commit removes the num_hidden setting in mutt_set_virtual(),
+        instead directly assigning that value in the roothdr during a collapse
+        operation.
+        
+        A subsequent commit will fix the behavior of ~v, when switching
+        sorting from threaded to something else, by putting num_hidden in
+        every header in the thread.  This is technically a change in behavior,
+        so I will make that commit in the master branch.
+        
+        Thanks to Score_Under for the pull request and for testing my
+        alternate solutions.
+
+M	mutt.h
+M	protos.h
+M	thread.c
+
+2020-02-10 14:52:32 -0800  Kevin McCarthy  <kevin@8t8.us> (376716eb)
+
+        * Revert $ssl_force_tls to default unset.
+        
+        In theory it's a good idea encourage SSL usage everywhere.
+        
+        However ticket #210 showed that, in reality, that kind of change
+        breaks configs and so is still not a good idea.
+        
+        $ssl_startls defaults set and will use STARTTLS if the server
+        advertises it.
+
+M	init.h
+
+2020-02-10 11:38:51 +0100  Daniel Tameling  <tamelingdaniel@gmail.com> (10a35e5d)
+
+        * Fix rendering of replacement_char when Charset_is_utf8
+        
+        Use mutt_addwch instead of addch to draw the replacement_char in
+        pager.c. The line to draw the replacement char was
+        addch (replacement_char ())
+        However, if Charset_is_utf8 is true, replacement_char returns 0xfffd,
+        which is outside the range that addch can handle. Use mutt_addwch
+        instead so that the pager displays the replacement char properly.
+
+M	pager.c
+
+2020-01-12 13:12:00 -0800  Kevin McCarthy  <kevin@8t8.us> (ad277fd1)
+
+        * automatic post-release commit for mutt-1.13.3
+
+M	ChangeLog
+M	VERSION
 2020-01-12 13:01:58 -0800  Kevin McCarthy  <kevin@8t8.us> (f76b45e2)
 
         * Update UPDATING file for 1.13.3 release.
