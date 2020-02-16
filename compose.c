@@ -1143,7 +1143,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           if ((sctx->flags & SENDBACKGROUNDEDIT) && option (OPTBACKGROUNDEDIT))
           {
             if (mutt_background_edit_file (sctx, Editor,
-                                           msg->content->filename) == 0)
+                                           msg->content->filename) == 2)
             {
               sctx->state = SEND_STATE_COMPOSE_EDIT;
               loop = 0;

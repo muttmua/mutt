@@ -22,6 +22,7 @@
 #endif
 
 #include "mutt.h"
+#include "mutt_menu.h"
 #include "send.h"
 #include "background.h"
 
@@ -30,6 +31,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <errno.h>
 
 
 static pid_t mutt_background_run (const char *cmd)
@@ -82,6 +84,114 @@ static pid_t mutt_background_run (const char *cmd)
   return (thepid);
 }
 
+static const struct mapping_t LandingHelp[] = {
+  { N_("Exit"),  OP_EXIT },
+  { N_("Redraw"), OP_REDRAW },
+  { N_("Help"),  OP_HELP },
+  { NULL,	 0 }
+};
+
+static void landing_redraw (MUTTMENU *menu)
+{
+  menu_redraw (menu);
+  mutt_window_mvaddstr (MuttIndexWindow, 0, 0,
+                        _("Waiting for editor to exit"));
+  mutt_window_mvaddstr (MuttIndexWindow, 1, 0,
+                        _("Hit <exit> to background editor."));
+}
+
+/* Displays the "waiting for editor" page.
+ * Returns:
+ *   2 if the the menu is exited, leaving the process backgrounded
+ *   0 when the waitpid() indicates the process has exited
+ */
+static int background_edit_landing_page (pid_t bg_pid)
+{
+  int done = 0, rc = 0, op;
+  short orig_timeout;
+  pid_t wait_rc;
+  MUTTMENU *menu;
+  char helpstr[STRING];
+
+  menu = mutt_new_menu (MENU_GENERIC);
+  menu->help = mutt_compile_help (helpstr, sizeof(helpstr),
+                                  MENU_GENERIC, LandingHelp);
+  menu->pagelen = 0;
+  menu->title = _("Waiting for editor to exit");
+
+  mutt_push_current_menu (menu);
+
+  /* Reduce timeout so we poll with bg_pid every second */
+  orig_timeout = Timeout;
+  Timeout = 1;
+
+  while (!done)
+  {
+    wait_rc = waitpid (bg_pid, NULL, WNOHANG);
+    if ((wait_rc > 0) ||
+        ((wait_rc < 0) && (errno == ECHILD)))
+    {
+      rc = 0;
+      break;
+    }
+
+#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+    if (SigWinch)
+    {
+      SigWinch = 0;
+      mutt_resize_screen ();
+      clearok (stdscr, TRUE);
+    }
+#endif
+
+    if (menu->redraw)
+      landing_redraw (menu);
+
+    op = km_dokey (MENU_GENERIC);
+
+    switch (op)
+    {
+      case OP_HELP:
+        mutt_help (MENU_GENERIC);
+        menu->redraw = REDRAW_FULL;
+        break;
+
+      case OP_EXIT:
+        rc = 2;
+        done = 1;
+        break;
+
+      case OP_REDRAW:
+	clearok (stdscr, TRUE);
+        menu->redraw = REDRAW_FULL;
+        break;
+    }
+  }
+
+  Timeout = orig_timeout;
+
+  mutt_pop_current_menu (menu);
+  mutt_menuDestroy (&menu);
+
+  return rc;
+}
+
+/* Runs editor in the background.
+ *
+ * After backgrounding the process, the background landing page will
+ * be displayed.  The user will have the opportunity to "quit" the
+ * landing page, exiting back to the index.  That will return 2
+ * (chosen for consistency with other backgrounding functions).
+ *
+ * If they leave the landing page up, it will detect when the editor finishes
+ * and return 0, indicating the callers should continue processing
+ * as if it were a foreground edit.
+ *
+ * Returns:
+ *      2  - the edit was backgrounded
+ *      0  - background edit completed.
+ *     -1  - an error occurred
+ */
 int mutt_background_edit_file (SEND_CONTEXT *sctx, const char *editor,
                                const char *filename)
 {
@@ -100,10 +210,12 @@ int mutt_background_edit_file (SEND_CONTEXT *sctx, const char *editor,
     goto cleanup;
   }
 
-  sctx->background_pid = pid;
-  BackgroundProcess = sctx;
-
-  rc = 0;
+  rc = background_edit_landing_page (pid);
+  if (rc == 2)
+  {
+    sctx->background_pid = pid;
+    BackgroundProcess = sctx;
+  }
 
 cleanup:
   mutt_buffer_pool_release (&cmd);

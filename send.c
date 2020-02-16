@@ -2004,7 +2004,7 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
           if (background_edit)
           {
             if (mutt_background_edit_file (sctx, Editor,
-                                           sctx->msg->content->filename) == 0)
+                                           sctx->msg->content->filename) == 2)
             {
               sctx->state = SEND_STATE_FIRST_EDIT;
               return 2;
