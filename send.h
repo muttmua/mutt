@@ -27,6 +27,27 @@ enum
   SEND_STATE_COMPOSE_EDIT_HEADERS
 };
 
+typedef struct send_scope
+{
+  unsigned char options[(OPTMAX + 7)/8];
+  unsigned char quadoptions[(OPT_MAX*2 + 7) / 8];
+
+  char *outbox;
+  char *postponed;
+  ADDRESS *env_from;
+  ADDRESS *from;
+  char *sendmail;
+#if USE_SMTP
+  char *smtp_url;
+#endif
+
+  /* We store these because if the send menu isn't altered, we
+   * want to preserve the original scope fallback values. */
+  char *pgp_sign_as;
+  char *smime_sign_as;
+  char *smime_crypt_alg;
+} SEND_SCOPE;
+
 typedef struct send_ctx
 {
   int flags;
@@ -49,6 +70,10 @@ typedef struct send_ctx
 
   pid_t background_pid;
 
+  SEND_SCOPE *global_scope;
+  SEND_SCOPE *local_scope;
+
+  /* These store the values set from the send menu */
   char *pgp_sign_as;
   char *smime_sign_as;
   char *smime_crypt_alg;
