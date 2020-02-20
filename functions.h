@@ -89,6 +89,7 @@ const struct binding_t OpMain[] = { /* map: index */
 #ifdef USE_AUTOCRYPT
   { "autocrypt-acct-menu",	OP_AUTOCRYPT_ACCT_MENU,		"A" },
 #endif
+  { "background-compose-menu",  OP_BACKGROUND_COMPOSE_MENU,     "B" },
   { "bounce-message",		OP_BOUNCE_MESSAGE,		"b" },
   { "break-thread",		OP_MAIN_BREAK_THREAD,		"#" },
   { "browse-mailboxes",		OP_MAIN_BROWSE_MAILBOXES,	"y" },
@@ -196,6 +197,7 @@ const struct binding_t OpMain[] = { /* map: index */
 };
 
 const struct binding_t OpPager[] = { /* map: pager */
+  { "background-compose-menu",  OP_BACKGROUND_COMPOSE_MENU,     "B" },
   { "break-thread",	OP_MAIN_BREAK_THREAD,		"#" },
   { "browse-mailboxes",	OP_MAIN_BROWSE_MAILBOXES,	"y" },
   { "browse-mailboxes-readonly", OP_MAIN_BROWSE_MAILBOXES_READONLY, NULL },

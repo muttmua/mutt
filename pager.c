@@ -32,6 +32,7 @@
 #include "sort.h"
 #include "buffy.h"
 #include "send.h"
+#include "background.h"
 
 #ifdef USE_SIDEBAR
 #include "sidebar.h"
@@ -2649,6 +2650,10 @@ search_next:
         else
 	  mutt_print_message (extra->hdr);
 	break;
+
+      case OP_BACKGROUND_COMPOSE_MENU:
+        mutt_background_compose_menu ();
+        break;
 
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));

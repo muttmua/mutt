@@ -80,6 +80,10 @@ typedef struct menu_t
   void (*custom_menu_redraw) (struct menu_t *);
   void *redraw_data;
 
+  /* these are used for out-of-band menu data updates,
+   * such as background process list updates */
+  void (*custom_menu_update) (struct menu_t *);
+
   /* color pair to be used for the requested element
    * (default function returns ColorDefs[MT_COLOR_NORMAL])
    */

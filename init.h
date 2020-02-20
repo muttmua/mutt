@@ -379,6 +379,20 @@ struct option_t MuttVars[] = {
   ** .pp
   ** ADD DOCUMENTATION.
   */
+  { "background_format", DT_STR, R_MENU, {.p=&BackgroundFormat}, {.p="%5p %10S %s"} },
+  /*
+  ** .pp
+  ** This variable describes the format of the ``background compose''
+  ** menu.  The following \fCprintf(3)\fP-style sequences are
+  ** understood:
+  ** .dl
+  ** .dt %n .dd the running number on the menu
+  ** .dt %p .dd pid of the $$editor process
+  ** .dt %r .dd comma separated list of ``To:'' recipients
+  ** .dt %R .dd comma separated list of ``Cc:'' recipients
+  ** .dt %s .dd subject of the message
+  ** .dt %S .dd status of the $$editor process: running/finished
+  */
   { "beep",		DT_BOOL, R_NONE, {.l=OPTBEEP}, {.l=1} },
   /*
   ** .pp

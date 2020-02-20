@@ -46,6 +46,7 @@ WHERE char *AutocryptDir;
 WHERE char *AutocryptSignAs;  /* This is used in crypt-gpgme.c */
 WHERE char *AutocryptDefaultKey;  /* Used for postponing messages */
 #endif
+WHERE char *BackgroundFormat;
 WHERE char *Charset;
 WHERE char *ComposeFormat;
 WHERE char *ConfigCharset;
@@ -257,6 +258,7 @@ WHERE short ImapPollTimeout;
 WHERE SIG_ATOMIC_VOLATILE_T SigAlrm;
 WHERE SIG_ATOMIC_VOLATILE_T SigInt;
 WHERE SIG_ATOMIC_VOLATILE_T SigWinch;
+WHERE SIG_ATOMIC_VOLATILE_T SigChld;
 
 WHERE int CurrentMenu;
 

@@ -1020,6 +1020,9 @@ int mutt_menuLoop (MUTTMENU *menu)
 
     mutt_curs_set (0);
 
+    if (menu->custom_menu_update)
+      menu->custom_menu_update (menu);
+
     if (menu_redraw (menu) == OP_REDRAW)
       return OP_REDRAW;
 

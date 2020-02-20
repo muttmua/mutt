@@ -68,8 +68,6 @@ typedef struct send_ctx
   char *cur_message_id;
   char *ctx_realpath;
 
-  pid_t background_pid;
-
   SEND_SCOPE *global_scope;
   SEND_SCOPE *local_scope;
 

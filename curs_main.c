@@ -2237,27 +2237,16 @@ int mutt_index_menu (void)
 	}
 	break;
 
+      case OP_BACKGROUND_COMPOSE_MENU:
+        mutt_background_compose_menu ();
+        break;
+
       case OP_MAIL:
 
 	CHECK_ATTACH;
-        if (BackgroundProcess)
-        {
-          SEND_CONTEXT *sctx = BackgroundProcess;
-          BackgroundProcess = NULL;
-          /* this is a quick hack for now */
-          mutt_message _("Waiting for editor to exit");
-          waitpid (sctx->background_pid, NULL, 0);
-          mutt_clear_error ();
-
-          if (mutt_send_message_resume (sctx) == 2)
-            mutt_message _("Editing backgrounded.  Hit m to restart");
-        }
-        else
-        {
-          if (mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL,
-                                 Context, NULL) == 2)
-            mutt_message _("Editing backgrounded.  Hit m to restart");
-        }
+        if (mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL,
+                               Context, NULL) == 2)
+          mutt_message _("Editing backgrounded.");
 	menu->redraw = REDRAW_FULL;
 	break;
 

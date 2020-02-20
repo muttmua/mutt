@@ -96,7 +96,7 @@ static void exit_handler (int sig)
 
 static void chld_handler (int sig)
 {
-  /* empty */
+  SigChld = 1;
 }
 
 static void sighandler (int sig)
@@ -184,9 +184,7 @@ void mutt_signal_init (void)
   sigaction (SIGWINCH, &act, NULL);
 #endif
 
-  /* POSIX doesn't allow us to ignore SIGCHLD,
-   * so we just install a dummy handler for it
-   */
+  /* Handle SIGCHLD.  Tracked for background editing processes. */
   act.sa_handler = chld_handler;
   /* don't need to block any other signals here */
   sigemptyset (&act.sa_mask);
