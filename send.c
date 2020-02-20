@@ -2531,16 +2531,21 @@ cleanup:
 
 /* backgroundable and resumable part of the send process.
  *
- * need to define a "backgrounded" return value.
+ * *psctx will be freed unless the message is backgrounded again.
  *
  * Returns 0 if the message was successfully sent
  *        -1 if the message was aborted or an error occurred
  *         1 if the message was postponed
  *         2 if the message editing was backgrounded
  */
-int mutt_send_message_resume (SEND_CONTEXT *sctx)
+int mutt_send_message_resume (SEND_CONTEXT **psctx)
 {
   int rv;
+  SEND_CONTEXT *sctx;
+
+  if (!psctx || !*psctx)
+    return -1;
+  sctx = *psctx;
 
   if (sctx->local_scope)
   {
@@ -2568,7 +2573,7 @@ cleanup:
   }
 
   if (rv != 2)
-    send_ctx_free (&sctx);
+    send_ctx_free (psctx);
 
   return rv;
 }
@@ -2627,7 +2632,7 @@ mutt_send_message (int flags,            /* send mode */
    * the sctx if appropriate, and also adds to the background edit
    * list.
    */
-  rv = mutt_send_message_resume (sctx);
+  rv = mutt_send_message_resume (&sctx);
   if (rv == 2)
   {
     /* TODO:

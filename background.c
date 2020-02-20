@@ -504,7 +504,7 @@ void mutt_background_compose_menu (void)
     sctx = process->sctx;
     process_list_remove (process);
     bg_process_free (&process);
-    if (mutt_send_message_resume (sctx) == 2)
+    if (mutt_send_message_resume (&sctx) == 2)
     {
       /* L10N:
          Message displayed when the user chooses to background
@@ -550,7 +550,7 @@ void mutt_background_compose_menu (void)
           process_list_remove (process);
           bg_process_free (&process);
 
-          if (mutt_send_message_resume (sctx) == 2)
+          if (mutt_send_message_resume (&sctx) == 2)
           {
             /* L10N:
                Message displayed when the user chooses to background
