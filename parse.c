@@ -593,6 +593,14 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
 void mutt_parse_part (FILE *fp, BODY *b)
 {
   char *bound = 0;
+  static unsigned short recurse_level = 0;
+
+  if (recurse_level >= 100)
+  {
+    dprint (1, (debugfile, "mutt_parse_part(): recurse level too deep. giving up!\n"));
+    return;
+  }
+  recurse_level++;
 
   switch (b->type)
   {
@@ -619,12 +627,12 @@ void mutt_parse_part (FILE *fp, BODY *b)
 	else if (ascii_strcasecmp (b->subtype, "external-body") == 0)
 	  b->parts = mutt_read_mime_header (fp, 0);
 	else
-	  return;
+	  goto bail;
       }
       break;
 
     default:
-      return;
+      goto bail;
   }
 
   /* try to recover from parsing error */
@@ -633,6 +641,8 @@ void mutt_parse_part (FILE *fp, BODY *b)
     b->type = TYPETEXT;
     mutt_str_replace (&b->subtype, "plain");
   }
+bail:
+  recurse_level--;
 }
 
 /* parse a MESSAGE/RFC822 body

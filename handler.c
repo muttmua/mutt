@@ -1770,8 +1770,16 @@ int mutt_body_handler (BODY *b, STATE *s)
   int plaintext = 0;
   handler_t handler = NULL, encrypted_handler = NULL;
   int rc = 0;
+  static unsigned short recurse_level = 0;
 
   int oflags = s->flags;
+
+  if (recurse_level >= 100)
+  {
+    dprint (1, (debugfile, "mutt_body_handler: recurse level too deep. giving up!\n"));
+    return -1;
+  }
+  recurse_level++;
 
   /* first determine which handler to use to process this part */
 
@@ -1892,6 +1900,7 @@ int mutt_body_handler (BODY *b, STATE *s)
   }
 
 cleanup:
+  recurse_level--;
   s->flags = oflags | (s->flags & MUTT_FIRSTDONE);
   if (rc)
   {
