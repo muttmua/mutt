@@ -89,6 +89,11 @@ static void process_list_remove (BACKGROUND_PROCESS *process)
   }
 }
 
+int mutt_background_has_backgrounded (void)
+{
+  return ProcessList ? 1 : 0;
+}
+
 /* Returns 0 if no processes were updated to finished.
  *         1 if one or more processes finished
  */

@@ -379,6 +379,12 @@ struct option_t MuttVars[] = {
   ** .pp
   ** ADD DOCUMENTATION.
   */
+  { "background_confirm_quit", DT_BOOL, R_NONE, {.l=OPTBACKGROUNDCONFIRMQUIT}, {.l=1} },
+  /*
+  ** .pp
+  ** When set, if there are any background edit sessions, you will be prompted
+  ** to confirm exiting Mutt, in addition to the $$quit prompt.
+  */
   { "background_format", DT_STR, R_MENU, {.p=&BackgroundFormat}, {.p="%5p %10S %s"} },
   /*
   ** .pp

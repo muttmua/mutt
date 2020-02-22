@@ -1052,6 +1052,18 @@ int mutt_index_menu (void)
 	{
 	  int check;
 
+          if (mutt_background_has_backgrounded () &&
+              option (OPTBACKGROUNDCONFIRMQUIT) &&
+              /* L10N:
+                 Prompt when trying to quit Mutt while there are backgrounded
+                 compose sessions in process.
+              */
+              mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
+                            MUTT_NO) == MUTT_NO)
+          {
+            break;
+          }
+
 	  oldcount = Context ? Context->msgcount : 0;
 
 	  if (!Context || (check = mx_close_mailbox (Context, &index_hint)) == 0)
@@ -1468,6 +1480,14 @@ int mutt_index_menu (void)
 	    && (query_quadoption (OPT_QUIT,
 				  _("Exit Mutt without saving?")) == MUTT_YES))
 	{
+          if (mutt_background_has_backgrounded () &&
+              option (OPTBACKGROUNDCONFIRMQUIT) &&
+              mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
+                            MUTT_NO) == MUTT_NO)
+          {
+            break;
+          }
+
 	  if (Context)
 	  {
 	    mx_fastclose_mailbox (Context);

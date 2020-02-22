@@ -26,6 +26,7 @@
 #include "mutt_curses.h"
 #include "pager.h"
 #include "mbyte.h"
+#include "background.h"
 #ifdef USE_INOTIFY
 #include "monitor.h"
 #endif
@@ -465,8 +466,14 @@ void mutt_query_exit (void)
     mutt_getch_timeout (-1); /* restore blocking operation */
   if (mutt_yesorno (_("Exit Mutt?"), MUTT_YES) == MUTT_YES)
   {
-    endwin ();
-    exit (1);
+    if (!(mutt_background_has_backgrounded () &&
+          option (OPTBACKGROUNDCONFIRMQUIT) &&
+          mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
+                        MUTT_NO) == MUTT_NO))
+    {
+      endwin ();
+      exit (1);
+    }
   }
   mutt_clear_error();
   mutt_curs_set (-1);
