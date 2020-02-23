@@ -1738,6 +1738,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	}
 
 	/* use callback function to handle this case */
+        *buf = '\0';
 	src = callback (buf, sizeof (buf), col, cols, ch, src, prefix, ifstring, elsestring, data, flags);
 
 	if (tolower)
