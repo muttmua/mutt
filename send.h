@@ -64,9 +64,12 @@ typedef struct send_ctx
    * just to ease refactoring.
    */
   HEADER *cur;
+  unsigned int has_cur : 1;
+  unsigned int is_backgrounded : 1;
   unsigned int cur_security;
   char *cur_message_id;
   char *ctx_realpath;
+  LIST *tagged_message_ids;
 
   SEND_SCOPE *global_scope;
   SEND_SCOPE *local_scope;

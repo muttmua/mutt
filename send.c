@@ -1523,7 +1523,7 @@ static int has_attach_keyword (char *filename)
 
 static int postpone_message (SEND_CONTEXT *sctx)
 {
-  HEADER *msg, *cur;
+  HEADER *msg;
   const char *fcc;
   int flags;
   char *pgpkeylist = NULL;
@@ -1537,7 +1537,6 @@ static int postpone_message (SEND_CONTEXT *sctx)
   }
 
   msg = sctx->msg;
-  cur = sctx->cur;
   fcc = mutt_b2s (sctx->fcc);
   flags = sctx->flags;
 
@@ -1596,7 +1595,7 @@ static int postpone_message (SEND_CONTEXT *sctx)
   mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
 
   if (mutt_write_fcc (NONULL (Postponed), sctx,
-                      (cur && (flags & SENDREPLY)) ? cur->env->message_id : NULL,
+                      (flags & SENDREPLY) ? sctx->cur_message_id : NULL,
                       1, fcc) < 0)
   {
     if (clear_content)
@@ -1728,6 +1727,8 @@ static void send_ctx_free (SEND_CONTEXT **psctx)
 
   FREE (&sctx->cur_message_id);
   FREE (&sctx->ctx_realpath);
+
+  mutt_free_list (&sctx->tagged_message_ids);
 
   scope_free (&sctx->global_scope);
   scope_free (&sctx->local_scope);
@@ -2151,7 +2152,7 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
 #else
       0
 #endif
-      && sctx->cur && (sctx->cur->security & AUTOCRYPT))
+      && sctx->has_cur && (sctx->cur_security & AUTOCRYPT))
     {
       sctx->msg->security |= (AUTOCRYPT | AUTOCRYPT_OVERRIDE | APPLICATION_PGP);
     }
@@ -2161,18 +2162,18 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
         sctx->msg->security |= SIGN;
       if (option (OPTCRYPTAUTOENCRYPT))
         sctx->msg->security |= ENCRYPT;
-      if (option (OPTCRYPTREPLYENCRYPT) && sctx->cur && (sctx->cur->security & ENCRYPT))
+      if (option (OPTCRYPTREPLYENCRYPT) && sctx->has_cur && (sctx->cur_security & ENCRYPT))
         sctx->msg->security |= ENCRYPT;
-      if (option (OPTCRYPTREPLYSIGN) && sctx->cur && (sctx->cur->security & SIGN))
+      if (option (OPTCRYPTREPLYSIGN) && sctx->has_cur && (sctx->cur_security & SIGN))
         sctx->msg->security |= SIGN;
-      if (option (OPTCRYPTREPLYSIGNENCRYPTED) && sctx->cur && (sctx->cur->security & ENCRYPT))
+      if (option (OPTCRYPTREPLYSIGNENCRYPTED) && sctx->has_cur && (sctx->cur_security & ENCRYPT))
         sctx->msg->security |= SIGN;
       if ((WithCrypto & APPLICATION_PGP) &&
           ((sctx->msg->security & (ENCRYPT | SIGN)) || option (OPTCRYPTOPPORTUNISTICENCRYPT)))
       {
         if (option (OPTPGPAUTOINLINE))
           sctx->msg->security |= INLINE;
-        if (option (OPTPGPREPLYINLINE) && sctx->cur && (sctx->cur->security & INLINE))
+        if (option (OPTPGPREPLYINLINE) && sctx->has_cur && (sctx->cur_security & INLINE))
           sctx->msg->security |= INLINE;
       }
     }
@@ -2188,13 +2189,13 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
        * make much sense. Should we have an option to completely
        * disable individual mechanisms at run-time?
        */
-      if (sctx->cur)
+      if (sctx->has_cur)
       {
 	if ((WithCrypto & APPLICATION_PGP) && option (OPTCRYPTAUTOPGP)
-	    && (sctx->cur->security & APPLICATION_PGP))
+	    && (sctx->cur_security & APPLICATION_PGP))
 	  sctx->msg->security |= APPLICATION_PGP;
 	else if ((WithCrypto & APPLICATION_SMIME) && option (OPTCRYPTAUTOSMIME)
-                 && (sctx->cur->security & APPLICATION_SMIME))
+                 && (sctx->cur_security & APPLICATION_SMIME))
 	  sctx->msg->security |= APPLICATION_SMIME;
       }
 
@@ -2287,7 +2288,7 @@ cleanup:
  */
 static int send_message_resume_compose_menu (SEND_CONTEXT *sctx)
 {
-  int rv = -1, i;
+  int rv = -1, i, mta_rc = 0;
   int free_clear_content = 0;
   char *tag = NULL, *err = NULL;
   char *pgpkeylist = NULL;
@@ -2446,7 +2447,7 @@ main_loop:
   if (option (OPTFCCBEFORESEND))
     save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
 
-  if ((i = invoke_mta (sctx->msg)) < 0)
+  if ((mta_rc = invoke_mta (sctx->msg)) < 0)
   {
     if (!(sctx->flags & SENDBATCH))
     {
@@ -2485,13 +2486,6 @@ main_loop:
   if (!option (OPTFCCBEFORESEND))
     save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
 
-  if (!option (OPTNOCURSES) && ! (sctx->flags & SENDMAILX))
-  {
-    mutt_message (i == 0 ? _("Mail sent.") : _("Sending in background."));
-    mutt_sleep (0);
-  }
-
-
   if (WithCrypto)
     FREE (&pgpkeylist);
 
@@ -2500,17 +2494,23 @@ main_loop:
 
   /* set 'replied' flag only if the user didn't change/remove
      In-Reply-To: and References: headers during edit */
-
-  /* TODO: this needs to be fixed up to use sctx values,
-   * compare the context realpath.  open if the mailbox has
-   * changed?
-   */
-  if (sctx->flags & SENDREPLY)
+  if ((sctx->flags & SENDREPLY) && sctx->ctx_realpath)
   {
-    if (sctx->ctx_realpath && Context &&
-        !mutt_strcmp (sctx->ctx_realpath, Context->realpath))
+    CONTEXT *ctx = Context;
+
+    if (!option (OPTNOCURSES) && !(sctx->flags & SENDMAILX))
     {
-      CONTEXT *ctx = Context;
+      /* L10N:
+         After sending a message, if the message was a reply Mutt will try
+         to set "replied" flags on the original message(s).
+         Background sending may cause the original mailbox to be reopened,
+         so this message was added in case that takes some time.
+      */
+      mutt_message _("Setting reply flags.");
+    }
+
+    if (!sctx->is_backgrounded && ctx)
+    {
       if (sctx->cur)
         mutt_set_flag (ctx, sctx->cur, MUTT_REPLIED, is_reply (sctx->cur, sctx->msg));
       else if (!(sctx->flags & SENDPOSTPONED) && ctx->tagged)
@@ -2521,6 +2521,64 @@ main_loop:
                            is_reply (ctx->hdrs[ctx->v2r[i]], sctx->msg));
       }
     }
+    else
+    {
+      int close_context = 0;
+
+      if (!ctx || mutt_strcmp (sctx->ctx_realpath, ctx->realpath))
+      {
+        ctx = mx_open_mailbox (sctx->ctx_realpath, MUTT_NOSORT | MUTT_QUIET, NULL);
+        if (ctx)
+        {
+          close_context = 1;
+          /* TODO: when IMAP_REOPEN_ALLOW setting is fixed this can be removed: */
+          mx_check_mailbox (ctx, NULL);
+        }
+      }
+      if (ctx)
+      {
+        HEADER *cur;
+
+	if (!ctx->id_hash)
+	  ctx->id_hash = mutt_make_id_hash (ctx);
+
+        if (sctx->has_cur)
+        {
+          cur = hash_find (ctx->id_hash, sctx->cur_message_id);
+          if (cur)
+            mutt_set_flag (ctx, cur, MUTT_REPLIED, is_reply (cur, sctx->msg));
+        }
+        else
+        {
+          LIST *entry = sctx->tagged_message_ids;
+
+          while (entry)
+          {
+            cur = hash_find (ctx->id_hash, (char *)entry->data);
+            if (cur)
+              mutt_set_flag (ctx, cur, MUTT_REPLIED, is_reply (cur, sctx->msg));
+            entry = entry->next;
+          }
+        }
+      }
+      if (close_context)
+      {
+        int close_rc;
+
+        close_rc = mx_close_mailbox (ctx, NULL);
+        if (close_rc > 0)
+          close_rc = mx_close_mailbox (ctx, NULL);
+        if (close_rc != 0)
+          mx_fastclose_mailbox (ctx);
+        FREE (&ctx);
+      }
+    }
+  }
+
+  if (!option (OPTNOCURSES) && !(sctx->flags & SENDMAILX))
+  {
+    mutt_message (mta_rc == 0 ? _("Mail sent.") : _("Sending in background."));
+    mutt_sleep (0);
   }
 
   rv = 0;
@@ -2532,6 +2590,10 @@ cleanup:
 /* backgroundable and resumable part of the send process.
  *
  * *psctx will be freed unless the message is backgrounded again.
+ *
+ * Note that in this function, and the functions it calls, we don't
+ * use sctx->cur directly.  Instead sctx->has_cur and related fields.
+ * in sctx are used.
  *
  * Returns 0 if the message was successfully sent
  *        -1 if the message was aborted or an error occurred
@@ -2592,17 +2654,30 @@ mutt_send_message (int flags,            /* send mode */
                    HEADER *cur)          /* current message */
 {
   SEND_CONTEXT *sctx;
-  int rv = -1;
+  int rv = -1, i;
 
   sctx = send_ctx_new ();
   sctx->flags = flags;
   sctx->msg = msg;
-  sctx->cur = cur;
-  /* TODO:
-   * grab cur fields here? see TODO below.
-   */
   if (ctx)
     sctx->ctx_realpath = safe_strdup (ctx->realpath);
+  if (cur)
+  {
+    sctx->cur = cur;
+    sctx->has_cur = 1;
+    sctx->cur_message_id = safe_strdup (cur->env->message_id);
+    sctx->cur_security = cur->security;
+  }
+  else if ((sctx->flags & SENDREPLY) && ctx && ctx->tagged)
+  {
+    for (i = 0; i < ctx->vcount; i++)
+      if (ctx->hdrs[ctx->v2r[i]]->tagged)
+      {
+        sctx->tagged_message_ids =
+          mutt_add_list (sctx->tagged_message_ids,
+                         ctx->hdrs[ctx->v2r[i]]->env->message_id);
+      }
+  }
 
   /* NOTE:
    * we still need to check other callers as we allow them, to make
@@ -2616,18 +2691,6 @@ mutt_send_message (int flags,            /* send mode */
     return -1;
   }
 
-  /* TODO:
-   * cur can't be stored in sctx for a backgroundable.
-   * so if background flag is set, grab and store needed fields in sctx.
-   *
-   * Ideally we would do this here.  However, postponed message may
-   * be resumed in another mailbox, preventing the cur from being used
-   * outside the context of open/closing the context.
-   *
-   * Perhaps instead we need to do so above *and* in postpone/resume via a
-   * function.
-   */
-
   /* Note: mutt_send_message_resume() takes care of freeing
    * the sctx if appropriate, and also adds to the background edit
    * list.
@@ -2635,9 +2698,8 @@ mutt_send_message (int flags,            /* send mode */
   rv = mutt_send_message_resume (&sctx);
   if (rv == 2)
   {
-    /* TODO:
-     * NULL out cur if message is backgrounded.
-     */
+    sctx->cur = NULL;
+    sctx->is_backgrounded = 1;
   }
 
   return rv;

@@ -329,6 +329,11 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
   char *p;
 
   msg = sctx->msg;
+  /* note: the built-in editor is not backgroundable.
+   * it's not likely the user backgrounds, then switches to the builtin
+   * editor and wants to include cur, so leaving the null-cur check
+   * logic rather than trying to port over to using message-id.
+   */
   cur = sctx->cur;
   path = sctx->msg->content->filename;
 

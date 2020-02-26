@@ -326,6 +326,13 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
 	if (!ctx->id_hash)
 	  ctx->id_hash = mutt_make_id_hash (ctx);
 	sctx->cur = hash_find (ctx->id_hash, p);
+        if (sctx->cur)
+        {
+          sctx->has_cur = 1;
+          sctx->cur_message_id = safe_strdup (sctx->cur->env->message_id);
+          sctx->cur_security = sctx->cur->security;
+          sctx->flags |= SENDREPLY;
+        }
       }
 
       /* Remove the X-Mutt-References: header field. */
@@ -337,8 +344,6 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
-      if (sctx->cur)
-	sctx->flags |= SENDREPLY;
     }
     else if (ascii_strncasecmp ("X-Mutt-Fcc:", tmp->data, 11) == 0)
     {
