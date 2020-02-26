@@ -1373,7 +1373,7 @@ void mutt_view_attachments (HEADER *hdr)
 
         CHECK_ATTACH;
 
-        flags = SENDREPLY |
+        flags = SENDREPLY | SENDBACKGROUNDEDIT |
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);

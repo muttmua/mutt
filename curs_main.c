@@ -2107,7 +2107,8 @@ int mutt_index_menu (void)
 	CHECK_ATTACH;
 	CHECK_MSGCOUNT;
         CHECK_VISIBLE;
-	mutt_send_message (SENDTOSENDER, NULL, NULL, Context, tag ? NULL : CURHDR);
+	mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
+                           NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2226,7 +2227,8 @@ int mutt_index_menu (void)
 	CHECK_ATTACH;
 	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
 	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-	mutt_send_message (SENDFORWARD, NULL, NULL, Context, tag ? NULL : CURHDR);
+	mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
+                           NULL, NULL, Context, tag ? NULL : CURHDR);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2264,9 +2266,7 @@ int mutt_index_menu (void)
       case OP_MAIL:
 
 	CHECK_ATTACH;
-        if (mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL,
-                               Context, NULL) == 2)
-          mutt_message _("Editing backgrounded.");
+        mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL, Context, NULL);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2410,7 +2410,8 @@ int mutt_index_menu (void)
       case OP_RECALL_MESSAGE:
 
 	CHECK_ATTACH;
-	mutt_send_message (SENDPOSTPONED, NULL, NULL, Context, NULL);
+	mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
+                           NULL, NULL, Context, NULL);
 	menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2445,7 +2446,7 @@ int mutt_index_menu (void)
 	CHECK_MSGCOUNT;
         CHECK_VISIBLE;
 
-        replyflags = SENDREPLY |
+        replyflags = SENDREPLY | SENDBACKGROUNDEDIT |
 	  (op == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (op == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
 	  (op == OP_LIST_REPLY ? SENDLISTREPLY : 0);

@@ -553,13 +553,11 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
   mutt_forward_trailer (Context, parent_hdr, tmpfp);
 
   safe_fclose (&tmpfp);
-  tmpfp = NULL;
 
   /* now that we have the template, send it. */
-  mutt_send_message (0, tmphdr, mutt_b2s (tmpbody), NULL, parent_hdr);
-
-  mutt_buffer_pool_release (&tmpbody);
-  return;
+  mutt_send_message (SENDBACKGROUNDEDIT, tmphdr, mutt_b2s (tmpbody), NULL,
+                     parent_hdr);
+  tmphdr = NULL;  /* mutt_send_message frees this */
 
 bail:
   if (tmpfp)
@@ -689,7 +687,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
   else
     mutt_free_header (&tmphdr);
 
-  mutt_send_message (0, tmphdr,
+  mutt_send_message (SENDBACKGROUNDEDIT, tmphdr,
                      mutt_buffer_len (tmpbody) ? mutt_b2s (tmpbody) : NULL,
                      NULL, curhdr);
   tmphdr = NULL;  /* mutt_send_message frees this */
@@ -747,7 +745,7 @@ void mutt_attach_mail_sender (FILE *fp, HEADER *hdr, ATTACH_CONTEXT *actx,
 	return;
     }
   }
-  mutt_send_message (0, tmphdr, NULL, NULL, NULL);
+  mutt_send_message (SENDBACKGROUNDEDIT, tmphdr, NULL, NULL, NULL);
 }
 
 

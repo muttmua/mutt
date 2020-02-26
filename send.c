@@ -1471,7 +1471,7 @@ int mutt_resend_message (FILE *fp, CONTEXT *ctx, HEADER *cur)
     }
   }
 
-  return mutt_send_message (SENDRESEND, msg, NULL, ctx, cur);
+  return mutt_send_message (SENDRESEND | SENDBACKGROUNDEDIT, msg, NULL, ctx, cur);
 }
 
 static int is_reply (HEADER *reply, HEADER *orig)
@@ -2636,6 +2636,14 @@ cleanup:
 
   if (rv != 2)
     send_ctx_free (psctx);
+  else
+  {
+    /* L10N:
+       Message displayed when the user chooses to background
+       editing from the landing page.
+    */
+    mutt_message _("Editing backgrounded.");
+  }
 
   return rv;
 }
@@ -2679,22 +2687,12 @@ mutt_send_message (int flags,            /* send mode */
       }
   }
 
-  /* NOTE:
-   * we still need to check other callers as we allow them, to make
-   * sure the components of the msg header don't disappear after
-   * returning!!!
-   */
-
   if (send_message_setup (sctx, tempfile, ctx) < 0)
   {
     send_ctx_free (&sctx);
     return -1;
   }
 
-  /* Note: mutt_send_message_resume() takes care of freeing
-   * the sctx if appropriate, and also adds to the background edit
-   * list.
-   */
   rv = mutt_send_message_resume (&sctx);
   if (rv == 2)
   {

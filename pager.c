@@ -2509,7 +2509,8 @@ search_next:
 	  mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
                                    extra->bdy);
 	else
-	  mutt_send_message (SENDTOSENDER, NULL, NULL, extra->ctx, extra->hdr);
+	  mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
+                             NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2658,7 +2659,7 @@ search_next:
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;
-	mutt_send_message (0, NULL, NULL, extra->ctx, NULL);
+	mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL, extra->ctx, NULL);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2672,7 +2673,7 @@ search_next:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
 
-        replyflags = SENDREPLY |
+        replyflags = SENDREPLY | SENDBACKGROUNDEDIT |
 	  (ch == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
 	  (ch == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
 	  (ch == OP_LIST_REPLY ? SENDLISTREPLY : 0);
@@ -2689,7 +2690,8 @@ search_next:
       case OP_RECALL_MESSAGE:
 	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
+                           NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2700,7 +2702,8 @@ search_next:
 	  mutt_attach_forward (extra->fp, extra->hdr, extra->actx,
 			       extra->bdy);
         else
-	  mutt_send_message (SENDFORWARD, NULL, NULL, extra->ctx, extra->hdr);
+	  mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
+                             NULL, NULL, extra->ctx, extra->hdr);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
