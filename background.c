@@ -186,11 +186,48 @@ static const struct mapping_t LandingHelp[] = {
 
 static void landing_redraw (MUTTMENU *menu)
 {
+  int row, col;
+  char key[SHORT_STRING];
+  BUFFER *messagebuf;
+  size_t messagelen;
+
   menu_redraw (menu);
-  mutt_window_mvaddstr (MuttIndexWindow, 0, 0,
-                        _("Waiting for editor to exit"));
-  mutt_window_mvaddstr (MuttIndexWindow, 1, 0,
-                        _("Hit <exit> to background editor."));
+
+  if (MuttIndexWindow->rows < 2)
+    return;
+
+  messagebuf = mutt_buffer_pool_get ();
+
+  /* L10N:
+     Background Edit Landing Page message, first line.
+     Displays while the editor is running.
+  */
+  mutt_buffer_strcpy (messagebuf, _("Waiting for editor to exit"));
+  messagelen = mutt_buffer_len (messagebuf);
+  row = MuttIndexWindow->rows >= 10 ? 5 : 0;
+  col = (MuttIndexWindow->cols > messagelen) ?
+    ((MuttIndexWindow->cols - messagelen) / 2) : 0;
+  mutt_window_mvaddstr (MuttIndexWindow, row, col, mutt_b2s (messagebuf));
+
+  *key = '\0';
+  if (!km_expand_key (key, sizeof(key), km_find_func (MENU_GENERIC, OP_EXIT)))
+    strfcpy (key, "<exit>", sizeof(key));
+
+  /* L10N:
+     Background Edit Landing Page message, second line.
+     Displays while the editor is running.
+     %s is the key binding for "<exit>", usually "q".
+  */
+  mutt_buffer_printf (messagebuf, _("Type '%s' to background compose session."),
+                                    key);
+  messagelen = mutt_buffer_len (messagebuf);
+  row = MuttIndexWindow->rows >= 10 ? 6 : 1;
+  col = (MuttIndexWindow->cols > messagelen) ?
+    ((MuttIndexWindow->cols - messagelen) / 2) : 0;
+  mutt_window_mvaddstr (MuttIndexWindow, row, col, mutt_b2s (messagebuf));
+
+  mutt_buffer_pool_release (&messagebuf);
+  mutt_curs_set (0);
 }
 
 /* Displays the "waiting for editor" page.
