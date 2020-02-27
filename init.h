@@ -377,13 +377,26 @@ struct option_t MuttVars[] = {
   { "background_edit",  DT_BOOL, R_NONE, {.l=OPTBACKGROUNDEDIT}, {.l=0} },
   /*
   ** .pp
-  ** ADD DOCUMENTATION.
+  ** When \fIset\fP, Mutt will run $$editor in the background during
+  ** message composition.  A landing page will display, waiting for
+  ** the $$editor to exit.  The landing page may be exited, allowing
+  ** perusal of the mailbox, or even for other messages to be
+  ** composed.  Backgrounded sessions may be returned to via the
+  ** \fC<background-compose-menu>\fP function.
+  ** .pp
+  ** For background editing to work properly, $$editor must be set to
+  ** an editor that does not try to use the Mutt terminal: for example
+  ** a graphical editor, or a script launching (and waiting for) the
+  ** editor in another Gnu Screen window.
+  ** .pp
+  ** For more details, see ``$bgedit'' ("Background Editing" in the manual).
   */
   { "background_confirm_quit", DT_BOOL, R_NONE, {.l=OPTBACKGROUNDCONFIRMQUIT}, {.l=1} },
   /*
   ** .pp
-  ** When set, if there are any background edit sessions, you will be prompted
-  ** to confirm exiting Mutt, in addition to the $$quit prompt.
+  ** When \fIset\fP, if there are any background edit sessions, you
+  ** will be prompted to confirm exiting Mutt, in addition to the
+  ** $$quit prompt.
   */
   { "background_format", DT_STR, R_MENU, {.p=&BackgroundFormat}, {.p="%5p %10S %s"} },
   /*

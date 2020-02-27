@@ -1761,6 +1761,83 @@ fo-table</literal> for details.
 
 </sect2>
 
+<sect2 id="bgedit">
+<title>Background Editing</title>
+
+<para>
+  If <link linkend="editor">$editor</link> is set to a graphical
+  editor, or an editor that doesn't try to use Mutt's terminal, you
+  can run the editor in the background by setting <link
+  linkend="background-edit">$background_edit</link>.
+</para>
+<para>
+  If set, Mutt will display a landing page while the editor runs.
+  When the editor exits, message composition will resume
+  automatically.  Alternatively, you can
+  <literal>&lt;exit&gt;</literal> from the landing page, which will
+  return you to the message index.  This allows viewing other
+  messages, changing mailboxes, even starting a new message
+  composition session - all while the first editor session is still
+  running.
+</para>
+<para>
+  Backgrounded message composition sessions can be viewed via
+  <literal>&lt;background-compose-menu&gt;</literal> in the index and
+  pager, by default bound to <quote><literal>B</literal></quote>.  If
+  there is only a single backgrounded session, which has already
+  exited, that session will automatically resume.  Otherwise the list
+  will be displayed, and a particular session can be selected.  <link
+  linkend="background-format">$background_format</link> controls the
+  format string used for the menu.
+</para>
+<para>
+  In case the open mailbox is changed while a reply is backgrounded,
+  Mutt keeps track of the original mailbox.  After sending, Mutt will
+  attempt to reopen the original mailbox, if needed, and set reply
+  flags appropriately.  This won't affect your currently open mailbox,
+  but may make setting flags a bit slower due to the need to reopen
+  the original mailbox behind the scenes.
+</para>
+<para>
+  One complication with backgrounded compose sessions is the config
+  changes caused by <link linkend="hooks">send, reply, and folder
+  hooks</link>.  These can get triggered by a new message composition
+  session, or by changing folders during a backgrounded sesssion.  To
+  help lessen these problems, Mutt takes a snapshot of certain
+  configuration variables and stores them with each editing session
+  when it is backgrounded.  When the session is resumed, those stored
+  settings will temporarily be restored, and removed again when the
+  session finishes (or is backgrounded again).
+</para>
+<para>
+  Mutt will save all <literal>boolean</literal> and
+  <literal>quadoption</literal> configuration variables, along with
+  <link linkend="record">$record</link>,
+  <link linkend="postponed">$postponed</link>,
+  <link linkend="envelope-from-address">$envelope_from_address</link>,
+  <link linkend="from">$from</link>,
+  <link linkend="sendmail">$sendmail</link>,
+  <link linkend="smtp-url">$smtp_url</link>,
+  <link linkend="pgp-sign-as">$pgp_sign_as</link>,
+  <link linkend="smime-sign-as">$smime_sign_as</link>, and
+  <link linkend="smime-encrypt-with">$smime_encrypt_with</link>.
+  It's not feasible to backup all variables, but if you believe
+  we've missed an important setting, please let the developers know.
+</para>
+<para>
+  To help prevent forgetting about backgrounded sessions, <link
+  linkend="background-confirm-quit">$background_confirm_quit</link>
+  will prompt before exiting, in addition to <link
+  linkend="quit">$quit</link>.
+</para>
+<para>
+  Background editing is available for most, but not all, message
+  composition in Mutt.  Sending from the command line disables
+  background editing, because there is no index to return to.
+</para>
+</sect2>
+
+
 </sect1>
 
 <sect1 id="forwarding-mail">
