@@ -470,8 +470,6 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
 
 int imap_open_connection (IMAP_DATA* idata)
 {
-  char buf[LONG_STRING];
-
   if (mutt_socket_open (idata->conn) < 0)
     return -1;
 
@@ -539,7 +537,7 @@ int imap_open_connection (IMAP_DATA* idata)
   }
   else
   {
-    imap_error ("imap_open_connection()", buf);
+    imap_error ("imap_open_connection()", idata->buf);
     goto bail;
   }
 
