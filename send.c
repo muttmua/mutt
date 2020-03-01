@@ -2533,6 +2533,8 @@ main_loop:
           close_context = 1;
           /* TODO: when IMAP_REOPEN_ALLOW setting is fixed this can be removed: */
           mx_check_mailbox (ctx, NULL);
+          /* A few connection strings display despite MUTT_QUIET, so refresh. */
+          mutt_message _("Setting reply flags.");
         }
       }
       if (ctx)
