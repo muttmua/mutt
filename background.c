@@ -106,7 +106,7 @@ int mutt_background_process_waitpid (void)
   if (!ProcessList)
     return 0;
 
-  while ((pid = waitpid (WAIT_ANY, NULL, WNOHANG)) > 0)
+  while ((pid = waitpid (-1, NULL, WNOHANG)) > 0)
   {
     process = ProcessList;
     while (process)
