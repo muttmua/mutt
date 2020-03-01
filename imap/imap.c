@@ -665,7 +665,8 @@ static int imap_open_mailbox (CONTEXT* ctx)
   idata->newMailCount = 0;
   idata->max_msn = 0;
 
-  mutt_message (_("Selecting %s..."), idata->mailbox);
+  if (!ctx->quiet)
+    mutt_message (_("Selecting %s..."), idata->mailbox);
   imap_munge_mbox_name (idata, buf, sizeof(buf), idata->mailbox);
 
   /* pipeline ACL test */
@@ -1327,7 +1328,8 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
       for (n = 0; n < ctx->msgcount; n++)
         if (ctx->hdrs[n]->deleted && ctx->hdrs[n]->changed)
           ctx->hdrs[n]->active = 0;
-      mutt_message (_("Marking %d messages deleted..."), quickdel_rc);
+      if (!ctx->quiet)
+        mutt_message (_("Marking %d messages deleted..."), quickdel_rc);
     }
   }
 
@@ -1383,8 +1385,9 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
 #if USE_HCACHE
         imap_hcache_close (idata);
 #endif
-        mutt_message (_("Saving changed messages... [%d/%d]"), n+1,
-                      ctx->msgcount);
+        if (!ctx->quiet)
+          mutt_message (_("Saving changed messages... [%d/%d]"), n+1,
+                        ctx->msgcount);
 	if (!appendctx)
 	  appendctx = mx_open_mailbox (ctx->path, MUTT_APPEND | MUTT_QUIET, NULL);
 	if (!appendctx)
@@ -1496,7 +1499,8 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   if (expunge && !(ctx->closing) &&
       mutt_bit_isset(ctx->rights, MUTT_ACL_DELETE))
   {
-    mutt_message _("Expunging messages from server...");
+    if (!ctx->quiet)
+      mutt_message _("Expunging messages from server...");
     /* Set expunge bit so we don't get spurious reopened messages */
     idata->reopen |= IMAP_EXPUNGE_EXPECTED;
     if (imap_exec (idata, "EXPUNGE", 0) != 0)
@@ -2368,7 +2372,7 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
       dprint (1, (debugfile, "could not queue copy\n"));
       goto out;
     }
-    else
+    else if (!ctx->quiet)
       mutt_message (_("Copying %d messages to %s..."), rc, mbox);
 
     /* let's get it on */

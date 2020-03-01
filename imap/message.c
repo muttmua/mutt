@@ -421,10 +421,11 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
   ctx = idata->ctx;
   idx = ctx->msgcount;
 
-  /* L10N:
-     Comparing the cached data with the IMAP server's data */
-  mutt_progress_init (&progress, _("Evaluating cache..."),
-                      MUTT_PROGRESS_MSG, ReadInc, msn_end);
+  if (!ctx->quiet)
+    /* L10N:
+       Comparing the cached data with the IMAP server's data */
+    mutt_progress_init (&progress, _("Evaluating cache..."),
+                        MUTT_PROGRESS_MSG, ReadInc, msn_end);
 
   /* If we are using CONDSTORE's "FETCH CHANGEDSINCE", then we keep
    * the flags in the header cache, and update them further below.
@@ -441,7 +442,8 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
     if (SigInt && query_abort_header_download (idata))
       return -1;
 
-    mutt_progress_update (&progress, msgno, -1);
+    if (!ctx->quiet)
+      mutt_progress_update (&progress, msgno, -1);
 
     memset (&h, 0, sizeof (h));
     h.data = safe_calloc (1, sizeof (IMAP_HEADER_DATA));
@@ -620,10 +622,11 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
 
   ctx = idata->ctx;
 
-  /* L10N:
-     Fetching IMAP flag changes, using the CONDSTORE extension */
-  mutt_progress_init (&progress, _("Fetching flag updates..."),
-                      MUTT_PROGRESS_MSG, ReadInc, msn_end);
+  if (!ctx->quiet)
+    /* L10N:
+       Fetching IMAP flag changes, using the CONDSTORE extension */
+    mutt_progress_init (&progress, _("Fetching flag updates..."),
+                        MUTT_PROGRESS_MSG, ReadInc, msn_end);
 
   snprintf (buf, sizeof (buf),
             "UID FETCH 1:%u (FLAGS) (CHANGEDSINCE %llu%s)",
@@ -638,7 +641,8 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
     if (SigInt && query_abort_header_download (idata))
       return -1;
 
-    mutt_progress_update (&progress, msgno, -1);
+    if (!ctx->quiet)
+      mutt_progress_update (&progress, msgno, -1);
 
     /* cmd_parse_fetch will update the flags */
     rc = imap_cmd_step (idata);
@@ -764,8 +768,9 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   unlink (mutt_b2s (tempfile));
   mutt_buffer_pool_release (&tempfile);
 
-  mutt_progress_init (&progress, _("Fetching message headers..."),
-		      MUTT_PROGRESS_MSG, ReadInc, msn_end);
+  if (!ctx->quiet)
+    mutt_progress_init (&progress, _("Fetching message headers..."),
+                        MUTT_PROGRESS_MSG, ReadInc, msn_end);
 
   b = mutt_buffer_pool_get ();
 
@@ -795,7 +800,8 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
           query_abort_header_download (idata))
         goto bail;
 
-      mutt_progress_update (&progress, msgno, -1);
+      if (!ctx->quiet)
+        mutt_progress_update (&progress, msgno, -1);
 
       rewind (fp);
       memset (&h, 0, sizeof (h));
@@ -972,7 +978,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
 
   /* This function is called in a few places after endwin()
    * e.g. _mutt_pipe_message(). */
-  output_progress = !isendwin ();
+  output_progress = !isendwin () && !ctx->quiet;
   if (output_progress)
     mutt_message _("Fetching message...");
 
@@ -1202,8 +1208,9 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   }
   rewind (fp);
 
-  mutt_progress_init (&progressbar, _("Uploading message..."),
-		      MUTT_PROGRESS_SIZE, NetInc, len);
+  if (!ctx->quiet)
+    mutt_progress_init (&progressbar, _("Uploading message..."),
+                        MUTT_PROGRESS_SIZE, NetInc, len);
 
   imap_munge_mbox_name (idata, mbox, sizeof (mbox), mailbox);
   imap_make_date (internaldate, msg->received);
@@ -1244,7 +1251,8 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
       sent += len;
       if (flush_buffer (buf, &len, idata->conn) < 0)
         goto fail;
-      mutt_progress_update (&progressbar, sent, -1);
+      if (!ctx->quiet)
+        mutt_progress_update (&progressbar, sent, -1);
     }
   }
 
