@@ -69,6 +69,7 @@ static void process_list_add (BACKGROUND_PROCESS *process)
 {
   process->next = ProcessList;
   ProcessList = process;
+  BackgroundProcessCount++;
 }
 
 static void process_list_remove (BACKGROUND_PROCESS *process)
@@ -82,6 +83,7 @@ static void process_list_remove (BACKGROUND_PROCESS *process)
     {
       *plast = cur->next;
       cur->next = NULL;
+      BackgroundProcessCount--;
       break;
     }
     plast = &cur->next;

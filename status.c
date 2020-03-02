@@ -28,6 +28,7 @@
 #include "mapping.h"
 #include "mx.h"
 #include "buffy.h"
+#include "background.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -84,6 +85,16 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
 	snprintf (buf, buflen, fmt, mutt_buffy_check (0));
       }
       else if (!mutt_buffy_check (0))
+	optional = 0;
+      break;
+
+    case 'B':
+      if (!optional)
+      {
+	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+	snprintf (buf, buflen, fmt, BackgroundProcessCount);
+      }
+      else if (!BackgroundProcessCount)
 	optional = 0;
       break;
 
