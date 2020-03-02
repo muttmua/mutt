@@ -380,13 +380,24 @@ static const char *bg_format_str (char *dest, size_t destlen, size_t col,
                                   unsigned long data, format_flag flags)
 {
   BG_ENTRY *entry = (BG_ENTRY *)data;
-  HEADER *hdr = entry->process->sctx->msg;
+  SEND_CONTEXT *sctx = entry->process->sctx;
+  HEADER *hdr = sctx->msg;
   char tmp[SHORT_STRING];
   char buf[LONG_STRING];
+  const char *msgid;
   int optional = (flags & MUTT_FORMAT_OPTIONAL);
 
   switch (op)
   {
+    case 'i':
+      msgid = sctx->cur_message_id;
+      if (!msgid && sctx->tagged_message_ids)
+        msgid = sctx->tagged_message_ids->data;
+      if (!optional)
+        mutt_format_s (dest, destlen, fmt, NONULL (msgid));
+      else if (!msgid)
+        optional = 0;
+      break;
     case 'n':
       snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
       snprintf (dest, destlen, tmp, entry->num);

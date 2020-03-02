@@ -405,6 +405,7 @@ struct option_t MuttVars[] = {
   ** menu.  The following \fCprintf(3)\fP-style sequences are
   ** understood:
   ** .dl
+  ** .dt %i .dd parent message id (for replies and forwarded messages)
   ** .dt %n .dd the running number on the menu
   ** .dt %p .dd pid of the $$editor process
   ** .dt %r .dd comma separated list of ``To:'' recipients
