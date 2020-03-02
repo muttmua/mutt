@@ -59,10 +59,7 @@ typedef struct send_ctx
   time_t mtime;
   time_t tempfile_mtime;
 
-  /* Note: cur can't be stored in the send_context when
-   * background editing is added.  This is here for now
-   * just to ease refactoring.
-   */
+  /* Note: cur is set to NULL if the session is backgrounded. */
   HEADER *cur;
   unsigned int has_cur : 1;
   unsigned int is_backgrounded : 1;
