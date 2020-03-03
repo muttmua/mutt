@@ -1785,7 +1785,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
   {
     sctx->msg = mutt_new_header ();
 
-    if (sctx->flags == SENDPOSTPONED)
+    if (sctx->flags & SENDPOSTPONED)
     {
       if (mutt_get_postponed (ctx, sctx) < 0)
 	goto cleanup;
