@@ -1755,7 +1755,10 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
   char *ctype;
   BUFFER *tmpbuffer;
 
-  if (!sctx->flags && !sctx->msg && quadoption (OPT_RECALL) != MUTT_NO &&
+  /* Prompt only for the <mail> operation. */
+  if ((sctx->flags == SENDBACKGROUNDEDIT) &&
+      !sctx->msg &&
+      quadoption (OPT_RECALL) != MUTT_NO &&
       mutt_num_postponed (1))
   {
     /* If the user is composing a new message, check to see if there
