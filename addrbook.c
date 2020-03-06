@@ -45,7 +45,7 @@ static const struct mapping_t AliasHelp[] = {
 static const char *
 alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
 		  const char *fmt, const char *ifstring, const char *elsestring,
-		  unsigned long data, format_flag flags)
+		  void *data, format_flag flags)
 {
   char tmp[SHORT_STRING], adr[SHORT_STRING];
   ALIAS *alias = (ALIAS *) data;
@@ -80,7 +80,7 @@ alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, con
 
 static void alias_entry (char *s, size_t slen, MUTTMENU *m, int num)
 {
-  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, NONULL (AliasFmt), alias_format_str, (unsigned long) ((ALIAS **) m->data)[num], MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, NONULL (AliasFmt), alias_format_str, ((ALIAS **) m->data)[num], MUTT_FORMAT_ARROWCURSOR);
 }
 
 static int alias_tag (MUTTMENU *menu, int n, int m)

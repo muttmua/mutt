@@ -379,7 +379,7 @@ static const char *bg_format_str (char *dest, size_t destlen, size_t col,
                                   int cols, char op, const char *src,
                                   const char *fmt, const char *ifstring,
                                   const char *elsestring,
-                                  unsigned long data, format_flag flags)
+                                  void *data, format_flag flags)
 {
   BG_ENTRY *entry = (BG_ENTRY *)data;
   SEND_CONTEXT *sctx = entry->process->sctx;
@@ -447,9 +447,9 @@ static const char *bg_format_str (char *dest, size_t destlen, size_t col,
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, cols, ifstring, bg_format_str, (unsigned long) entry, flags);
+    mutt_FormatString (dest, destlen, col, cols, ifstring, bg_format_str, entry, flags);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, cols, elsestring, bg_format_str, (unsigned long) entry, flags);
+    mutt_FormatString (dest, destlen, col, cols, elsestring, bg_format_str, entry, flags);
 
   return (src);
 }
@@ -461,7 +461,7 @@ static void make_bg_entry (char *s, size_t slen, MUTTMENU *m, int num)
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
                      NONULL (BackgroundFormat),
                      bg_format_str,
-		     (unsigned long) entry, MUTT_FORMAT_ARROWCURSOR);
+		     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static void update_bg_menu (MUTTMENU *menu)

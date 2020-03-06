@@ -128,7 +128,7 @@ static const char *pgp_entry_fmt (char *dest,
 				  const char *prefix,
 				  const char *ifstring,
 				  const char *elsestring,
-				  unsigned long data,
+				  void *data,
 				  format_flag flags)
 {
   char fmt[16];
@@ -293,7 +293,7 @@ static void pgp_entry (char *s, size_t l, MUTTMENU * menu, int num)
   entry.num = num + 1;
 
   mutt_FormatString (s, l, 0, MuttIndexWindow->cols, NONULL (PgpEntryFormat), pgp_entry_fmt,
-		     (unsigned long) &entry, MUTT_FORMAT_ARROWCURSOR);
+		     &entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static int _pgp_compare_address (const void *a, const void *b)

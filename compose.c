@@ -231,8 +231,9 @@ static void snd_entry (char *b, size_t blen, MUTTMENU *menu, int num)
 {
   ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
 
-  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt,
-                     (unsigned long)(actx->idx[actx->v2r[num]]),
+  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat),
+                     mutt_attach_fmt,
+                     actx->idx[actx->v2r[num]],
                      MUTT_FORMAT_STAT_FILE | MUTT_FORMAT_ARROWCURSOR);
 }
 
@@ -916,7 +917,7 @@ static const char *
 compose_format_str (char *buf, size_t buflen, size_t col, int cols, char op, const char *src,
                     const char *prefix, const char *ifstring,
                     const char *elsestring,
-                    unsigned long data, format_flag flags)
+                    void *data, format_flag flags)
 {
   char fmt[SHORT_STRING], tmp[SHORT_STRING];
   int optional = (flags & MUTT_FORMAT_OPTIONAL);
@@ -967,7 +968,7 @@ static void compose_status_line (char *buf, size_t buflen, size_t col, int cols,
                                  MUTTMENU *menu, const char *p)
 {
   mutt_FormatString (buf, buflen, col, cols, p, compose_format_str,
-                     (unsigned long) menu, 0);
+                     menu, 0);
 }
 
 static void compose_menu_redraw (MUTTMENU *menu)

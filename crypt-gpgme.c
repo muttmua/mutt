@@ -3238,7 +3238,7 @@ static const char *crypt_entry_fmt (char *dest,
                                     const char *prefix,
                                     const char *ifstring,
                                     const char *elsestring,
-                                    unsigned long data,
+                                    void *data,
                                     format_flag flags)
 {
   char fmt[16];
@@ -3445,7 +3445,7 @@ static void crypt_entry (char *s, size_t l, MUTTMENU * menu, int num)
   entry.num = num + 1;
 
   mutt_FormatString (s, l, 0, MuttIndexWindow->cols, NONULL (PgpEntryFormat), crypt_entry_fmt,
-		     (unsigned long) &entry, MUTT_FORMAT_ARROWCURSOR);
+		     &entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 /* Compare two addresses and the keyid to be used for sorting. */

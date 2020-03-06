@@ -495,7 +495,7 @@ void mutt_history_save_scratch (history_class_t hclass, const char *s)
 static const char *
 history_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
                     const char *fmt, const char *ifstring, const char *elsestring,
-                    unsigned long data, format_flag flags)
+                    void *data, format_flag flags)
 {
   char *match = (char *)data;
 
@@ -514,7 +514,7 @@ static void history_entry (char *s, size_t slen, MUTTMENU *m, int num)
   char *entry = ((char **)m->data)[num];
 
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, "%s", history_format_str,
-		     (unsigned long) entry, MUTT_FORMAT_ARROWCURSOR);
+		     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static void history_menu (char *buf, size_t buflen, char **matches, int match_count)

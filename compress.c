@@ -319,7 +319,7 @@ mutt_free_compress_info (CONTEXT *ctx)
 static const char *
 cb_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
                const char *fmt, const char *ifstring, const char *elsestring,
-               unsigned long data, format_flag flags)
+               void *data, format_flag flags)
 {
   CONTEXT *ctx = (CONTEXT *) data;
   BUFFER *quoted = NULL;
@@ -368,12 +368,12 @@ cb_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const 
  *      gzip -dc '~/mail/abc.gz' > '/tmp/xyz'
  */
 static void
-expand_command_str (const CONTEXT *ctx, const char *cmd, char *buf, int buflen)
+expand_command_str (CONTEXT *ctx, const char *cmd, char *buf, int buflen)
 {
   if (!ctx || !cmd || !buf)
     return;
 
-  mutt_FormatString (buf, buflen, 0, buflen, cmd, cb_format_str, (unsigned long) ctx, 0);
+  mutt_FormatString (buf, buflen, 0, buflen, cmd, cb_format_str, ctx, 0);
 }
 
 /**

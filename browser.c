@@ -173,7 +173,7 @@ static int link_is_dir (const char *full_path)
 static const char *
 folder_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
 		   const char *fmt, const char *ifstring, const char *elsestring,
-		   unsigned long data, format_flag flags)
+		   void *data, format_flag flags)
 {
   char fn[SHORT_STRING], tmp[SHORT_STRING], permission[11];
   char date[SHORT_STRING], *t_fmt;
@@ -597,7 +597,7 @@ static void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
   folder.num = num;
 
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, NONULL(FolderFormat), folder_format_str,
-                     (unsigned long) &folder, MUTT_FORMAT_ARROWCURSOR);
+                     &folder, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static void set_sticky_cursor (struct browser_state *state, MUTTMENU *menu, const char *defaultsel)

@@ -77,7 +77,7 @@ static int select_next (void);
  */
 static const char *cb_format_str(char *dest, size_t destlen, size_t col, int cols, char op,
                                  const char *src, const char *prefix, const char *ifstring,
-                                 const char *elsestring, unsigned long data, format_flag flags)
+                                 const char *elsestring, void *data, format_flag flags)
 {
   SBENTRY *sbe = (SBENTRY *) data;
   unsigned int optional;
@@ -188,9 +188,9 @@ static const char *cb_format_str(char *dest, size_t destlen, size_t col, int col
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, SidebarWidth, ifstring,   cb_format_str, (unsigned long) sbe, flags);
+    mutt_FormatString (dest, destlen, col, SidebarWidth, ifstring,   cb_format_str, sbe, flags);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, SidebarWidth, elsestring, cb_format_str, (unsigned long) sbe, flags);
+    mutt_FormatString (dest, destlen, col, SidebarWidth, elsestring, cb_format_str, sbe, flags);
 
   /* We return the format string, unchanged */
   return src;
@@ -216,7 +216,7 @@ static void make_sidebar_entry (char *buf, unsigned int buflen, int width, const
 
   strfcpy (sbe->box, box, sizeof (sbe->box));
 
-  mutt_FormatString (buf, buflen, 0, width, NONULL(SidebarFormat), cb_format_str, (unsigned long) sbe, 0);
+  mutt_FormatString (buf, buflen, 0, width, NONULL(SidebarFormat), cb_format_str, sbe, 0);
 
   /* Force string to be exactly the right width */
   int w = mutt_strwidth (buf);

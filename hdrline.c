@@ -258,7 +258,7 @@ hdr_format_str (char *dest,
 		const char *prefix,
 		const char *ifstring,
 		const char *elsestring,
-		unsigned long data,
+		void *data,
 		format_flag flags)
 {
   struct hdr_format_info *hfi = (struct hdr_format_info *) data;
@@ -768,7 +768,7 @@ hdr_format_str (char *dest,
         mutt_substrcpy (buf2, src, end, sizeof(buf2));
         mutt_FormatString (buf2, sizeof(buf2), col, cols,
                            NONULL (mutt_idxfmt_hook (buf2, ctx, hdr)),
-                           hdr_format_str, (unsigned long) hfi, flags);
+                           hdr_format_str, hfi, flags);
         mutt_format_s (dest, destlen, prefix, buf2);
         recurse--;
 
@@ -784,9 +784,9 @@ hdr_format_str (char *dest,
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, cols, ifstring, hdr_format_str, (unsigned long) hfi, flags);
+    mutt_FormatString (dest, destlen, col, cols, ifstring, hdr_format_str, hfi, flags);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, cols, elsestring, hdr_format_str, (unsigned long) hfi, flags);
+    mutt_FormatString (dest, destlen, col, cols, elsestring, hdr_format_str, hfi, flags);
 
   return (src);
 #undef THREAD_NEW
@@ -802,11 +802,11 @@ _mutt_make_string (char *dest, size_t destlen, const char *s, CONTEXT *ctx, HEAD
   hfi.ctx = ctx;
   hfi.pager_progress = 0;
 
-  mutt_FormatString (dest, destlen, 0, MuttIndexWindow->cols, s, hdr_format_str, (unsigned long) &hfi, flags);
+  mutt_FormatString (dest, destlen, 0, MuttIndexWindow->cols, s, hdr_format_str, &hfi, flags);
 }
 
 void
 mutt_make_string_info (char *dst, size_t dstlen, int cols, const char *s, struct hdr_format_info *hfi, format_flag flags)
 {
-  mutt_FormatString (dst, dstlen, 0, cols, s, hdr_format_str, (unsigned long) hfi, flags);
+  mutt_FormatString (dst, dstlen, 0, cols, s, hdr_format_str, hfi, flags);
 }

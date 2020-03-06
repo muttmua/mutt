@@ -67,7 +67,7 @@ static const char *account_format_str (char *dest, size_t destlen, size_t col,
                                        int cols, char op, const char *src,
                                        const char *fmt, const char *ifstring,
                                        const char *elsestring,
-                                       unsigned long data, format_flag flags)
+                                       void *data, format_flag flags)
 {
   ENTRY *entry = (ENTRY *)data;
   char tmp[SHORT_STRING];
@@ -124,7 +124,7 @@ static void account_entry (char *s, size_t slen, MUTTMENU *m, int num)
 
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
                      NONULL (AutocryptAcctFormat), account_format_str,
-		     (unsigned long) entry, MUTT_FORMAT_ARROWCURSOR);
+		     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static MUTTMENU *create_menu ()

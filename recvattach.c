@@ -155,7 +155,7 @@ const char *mutt_attach_fmt (char *dest,
                              const char *prefix,
                              const char *ifstring,
                              const char *elsestring,
-                             unsigned long data,
+                             void *data,
                              format_flag flags)
 {
   char fmt[16];
@@ -371,7 +371,7 @@ static void attach_entry (char *b, size_t blen, MUTTMENU *menu, int num)
   ATTACH_CONTEXT *actx = (ATTACH_CONTEXT *)menu->data;
 
   mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (AttachFormat), mutt_attach_fmt,
-                     (unsigned long) (actx->idx[actx->v2r[num]]), MUTT_FORMAT_ARROWCURSOR);
+                     actx->idx[actx->v2r[num]], MUTT_FORMAT_ARROWCURSOR);
 }
 
 int mutt_tag_attach (MUTTMENU *menu, int n, int m)

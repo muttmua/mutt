@@ -1400,7 +1400,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
                         int cols,               /* maximum columns */
 			const char *src,	/* template string */
 			format_t *callback,	/* callback for processing */
-			unsigned long data,	/* callback data */
+			void *data,		/* callback data */
 			format_flag flags)	/* callback flags */
 {
   char prefix[SHORT_STRING], buf[LONG_STRING], *cp, *wptr = dest, ch;

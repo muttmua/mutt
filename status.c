@@ -69,7 +69,7 @@ static const char *
 status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, const char *src,
 		   const char *prefix, const char *ifstring,
 		   const char *elsestring,
-		   unsigned long data, format_flag flags)
+		   void *data, format_flag flags)
 {
   char fmt[SHORT_STRING], tmp[SHORT_STRING], *cp;
   int count, optional = (flags & MUTT_FORMAT_OPTIONAL);
@@ -333,12 +333,12 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
 
 static void _menu_status_line (char *buf, size_t buflen, size_t col, int cols, MUTTMENU *menu, const char *p)
 {
-  mutt_FormatString (buf, buflen, col, cols, p, status_format_str, (unsigned long) menu, 0);
+  mutt_FormatString (buf, buflen, col, cols, p, status_format_str, menu, 0);
 }
 
 void menu_status_line (char *buf, size_t buflen, MUTTMENU *menu, const char *p)
 {
   mutt_FormatString (buf, buflen, 0,
                      menu ? menu->statuswin->cols : MuttStatusWindow->cols,
-                     p, status_format_str, (unsigned long) menu, 0);
+                     p, status_format_str, menu, 0);
 }
