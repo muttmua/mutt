@@ -3429,9 +3429,9 @@ static const char *crypt_entry_fmt (char *dest,
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, cols, ifstring, mutt_attach_fmt, data, 0);
+    mutt_FormatString (dest, destlen, col, cols, ifstring, crypt_entry_fmt, data, 0);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, cols, elsestring, mutt_attach_fmt, data, 0);
+    mutt_FormatString (dest, destlen, col, cols, elsestring, crypt_entry_fmt, data, 0);
   return (src);
 }
 
