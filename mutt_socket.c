@@ -432,14 +432,14 @@ int raw_socket_write (CONNECTION* conn, const char* buf, size_t count)
 int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
 {
   fd_set rfds;
-  unsigned long wait_millis, post_t_millis;
+  unsigned long long wait_millis, post_t_millis;
   struct timeval tv, pre_t, post_t;
   int rv;
 
   if (conn->fd < 0)
     return -1;
 
-  wait_millis = wait_secs * 1000UL;
+  wait_millis = (unsigned long long)wait_secs * 1000ULL;
 
   FOREVER
   {
@@ -460,8 +460,10 @@ int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
     if (SigInt)
       mutt_query_exit ();
 
-    wait_millis += (pre_t.tv_sec * 1000UL) + (pre_t.tv_usec / 1000);
-    post_t_millis = (post_t.tv_sec * 1000UL) + (post_t.tv_usec / 1000);
+    wait_millis += ((unsigned long long)pre_t.tv_sec * 1000ULL) +
+      (unsigned long long)(pre_t.tv_usec / 1000);
+    post_t_millis = ((unsigned long long)post_t.tv_sec * 1000ULL) +
+      (unsigned long long)(post_t.tv_usec / 1000);
     if (wait_millis <= post_t_millis)
       return 0;
     wait_millis -= post_t_millis;

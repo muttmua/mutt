@@ -169,7 +169,7 @@ typedef struct
   const char* msg;
   long pos;
   long size;
-  unsigned int timestamp;
+  unsigned long long timestamp_millis;
   char sizestr[SHORT_STRING];
 } progress_t;
 

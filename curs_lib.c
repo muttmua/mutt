@@ -649,8 +649,8 @@ void mutt_progress_init (progress_t* progress, const char *msg,
     dprint (1, (debugfile, "gettimeofday failed: %d\n", errno));
   /* if timestamp is 0 no time-based suppression is done */
   if (TimeInc)
-    progress->timestamp = ((unsigned int) tv.tv_sec * 1000)
-      + (unsigned int) (tv.tv_usec / 1000);
+    progress->timestamp_millis = ((unsigned long long) tv.tv_sec * 1000ULL)
+      + (unsigned long long) (tv.tv_usec / 1000);
   mutt_progress_update (progress, 0, 0);
 }
 
@@ -659,7 +659,7 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
   char posstr[SHORT_STRING];
   short update = 0;
   struct timeval tv = { 0, 0 };
-  unsigned int now = 0;
+  unsigned long long now_millis = 0;
 
   if (option(OPTNOCURSES))
     return;
@@ -675,11 +675,12 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     update = 1;
 
   /* skip refresh if not enough time has passed */
-  if (update && progress->timestamp && !gettimeofday (&tv, NULL))
+  if (update && progress->timestamp_millis && !gettimeofday (&tv, NULL))
   {
-    now = ((unsigned int) tv.tv_sec * 1000)
-      + (unsigned int) (tv.tv_usec / 1000);
-    if (now && now - progress->timestamp < TimeInc)
+    now_millis = ((unsigned long long) tv.tv_sec * 1000ULL)
+      + (unsigned long long) (tv.tv_usec / 1000);
+    if (now_millis &&
+        (now_millis - progress->timestamp_millis < TimeInc))
       update = 0;
   }
 
@@ -700,8 +701,8 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     dprint (5, (debugfile, "updating progress: %s\n", posstr));
 
     progress->pos = pos;
-    if (now)
-      progress->timestamp = now;
+    if (now_millis)
+      progress->timestamp_millis = now_millis;
 
     if (progress->size > 0)
     {
