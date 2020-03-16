@@ -32,6 +32,7 @@ typedef struct send_scope
   unsigned char options[(OPTMAX + 7)/8];
   unsigned char quadoptions[(OPT_MAX*2 + 7) / 8];
 
+  char *maildir;  /* $folder */
   char *outbox;
   char *postponed;
   ADDRESS *env_from;

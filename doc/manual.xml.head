@@ -1812,6 +1812,7 @@ fo-table</literal> for details.
 <para>
   Mutt will save all <literal>boolean</literal> and
   <literal>quadoption</literal> configuration variables, along with
+  <link linkend="folder">$folder</link>,
   <link linkend="record">$record</link>,
   <link linkend="postponed">$postponed</link>,
   <link linkend="envelope-from-address">$envelope_from_address</link>,
