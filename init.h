@@ -1061,6 +1061,15 @@ struct option_t MuttVars[] = {
   ** signed.
   ** (PGP only)
   */
+  { "fcc_delimiter", DT_STR, R_NONE, {.p=&FccDelimiter}, {.p=0} },
+  /*
+  ** .pp
+  ** When specified, this allows the ability to Fcc to more than one
+  ** mailbox.  The fcc value will be split by this delimiter and Mutt
+  ** will evaluate each part as a mailbox separately.
+  ** .pp
+  ** See $$record, ``$fcc-hook'', and ``$fcc-save-hook''.
+  */
   { "flag_safe", DT_BOOL, R_NONE, {.l=OPTFLAGSAFE}, {.l=0} },
   /*
   ** .pp
@@ -2945,6 +2954,9 @@ struct option_t MuttVars[] = {
   ** The value of \fI$$record\fP is overridden by the $$force_name and
   ** $$save_name variables, and the ``$fcc-hook'' command.  Also see $$copy
   ** and $$write_bcc.
+  ** .pp
+  ** Multiple mailboxes may be specified if $$fcc_delimiter is
+  ** set to a string delimiter.
   */
   { "reflow_space_quotes",	DT_BOOL, R_NONE, {.l=OPTREFLOWSPACEQUOTES}, {.l=1} },
   /*

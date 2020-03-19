@@ -58,6 +58,7 @@ WHERE char *DsnNotify;
 WHERE char *DsnReturn;
 WHERE char *Editor;
 WHERE char *EscChar;
+WHERE char *FccDelimiter;
 WHERE char *FolderFormat;
 WHERE char *ForwardAttrIntro;
 WHERE char *ForwardAttrTrailer;

@@ -168,7 +168,7 @@ int mutt_edit_headers (const char *editor,
         if (*p)
         {
           mutt_buffer_strcpy (sctx->fcc, p);
-          mutt_buffer_pretty_mailbox (sctx->fcc);
+          mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
         }
         keep = 0;
       }

@@ -349,7 +349,7 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
     {
       p = skip_email_wsp(tmp->data + 11);
       mutt_buffer_strcpy (sctx->fcc, p);
-      mutt_buffer_pretty_mailbox (sctx->fcc);
+      mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
 
       /* remove the X-Mutt-Fcc: header field */
       next = tmp->next;

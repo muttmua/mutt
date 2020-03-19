@@ -1210,24 +1210,22 @@ cleanup:
   return (i);
 }
 
-static int save_fcc (SEND_CONTEXT *sctx,
-                     BODY *clear_content, char *pgpkeylist,
-                     int flags)
+static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
+                                   int flags)
 {
-  HEADER *msg;
-  BUFFER *fcc;
-  int rc = 0;
-  BODY *tmpbody;
-  BODY *save_content = NULL;
-  BODY *save_sig = NULL;
-  BODY *save_parts = NULL;
-  int choice, save_atts;
+  int rc, choice;
 
-  msg = sctx->msg;
-  fcc = sctx->fcc;
-  tmpbody = msg->content;
+  /* L10N:
+     Message when saving fcc after sending.
+     %s is the mailbox name.
+  */
+  mutt_message (_("Saving Fcc to %s"), mutt_b2s (fcc_mailbox));
 
-  mutt_buffer_expand_path (fcc);
+  mutt_buffer_expand_path (fcc_mailbox);
+
+  if (!(mutt_buffer_len (fcc_mailbox) &&
+        mutt_strcmp ("/dev/null", mutt_b2s (fcc_mailbox))))
+    return;
 
   /* Don't save a copy when we are in batch-mode, and the FCC
    * folder is on an IMAP server: This would involve possibly lots
@@ -1237,20 +1235,82 @@ static int save_fcc (SEND_CONTEXT *sctx,
    * from non-curses mode is available from Brendan Cully.  However,
    * I'd like to think a bit more about this before including it.
    */
-
 #ifdef USE_IMAP
   if ((flags & SENDBATCH) &&
-      mutt_buffer_len (fcc) &&
-      mx_is_imap (mutt_b2s (fcc)))
+      mx_is_imap (mutt_b2s (fcc_mailbox)))
   {
+    mutt_sleep (1);
     mutt_error _ ("Fcc to an IMAP mailbox is not supported in batch mode");
-    return rc;
+    return;
   }
 #endif
 
-  if (!(mutt_buffer_len (fcc) &&
-        mutt_strcmp ("/dev/null", mutt_b2s (fcc))))
+  rc = mutt_write_fcc (mutt_b2s (fcc_mailbox), sctx, NULL, 0, NULL);
+  while (rc && !(flags & SENDBATCH))
+  {
+    mutt_sleep (1);
+    mutt_clear_error ();
+    choice = mutt_multi_choice (
+      /* L10N:
+         Called when saving to $record or Fcc failed after sending.
+         (r)etry tries the same mailbox again.
+         alternate (m)ailbox prompts for a different mailbox to try.
+         (s)kip aborts saving.
+      */
+      _("Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "),
+      /* L10N:
+         These correspond to the "Fcc failed" multi-choice prompt
+         (r)etry, alternate (m)ailbox, or (s)kip.
+         Any similarity to famous leaders of the FSF is coincidental.
+      */
+      _("rms"));
+    switch (choice)
+    {
+      case 2:   /* alternate (m)ailbox */
+        /* L10N:
+           This is the prompt to enter an "alternate (m)ailbox" when the
+           initial Fcc fails.
+        */
+        rc = mutt_buffer_enter_fname (_("Fcc mailbox"), fcc_mailbox, 1);
+        if ((rc == -1) || !mutt_buffer_len (fcc_mailbox))
+        {
+          rc = 0;
+          break;
+        }
+        /* fall through */
+
+      case 1:   /* (r)etry */
+        rc = mutt_write_fcc (mutt_b2s (fcc_mailbox), sctx, NULL, 0, NULL);
+        break;
+
+      case -1:  /* abort */
+      case 3:   /* (s)kip */
+        rc = 0;
+        break;
+    }
+  }
+
+  return;
+}
+
+static int save_fcc (SEND_CONTEXT *sctx,
+                     BODY *clear_content, char *pgpkeylist,
+                     int flags)
+{
+  HEADER *msg;
+  int rc = 0;
+  BODY *tmpbody;
+  BODY *save_content = NULL;
+  BODY *save_sig = NULL;
+  BODY *save_parts = NULL;
+  int save_atts;
+
+  if (!(mutt_buffer_len (sctx->fcc) &&
+        mutt_strcmp ("/dev/null", mutt_b2s (sctx->fcc))))
     return rc;
+
+  msg = sctx->msg;
+  tmpbody = msg->content;
 
   /* Before sending, we don't allow message manipulation because it
    * will break message signatures.  This is especially complicated by
@@ -1320,53 +1380,44 @@ static int save_fcc (SEND_CONTEXT *sctx,
 full_fcc:
   if (msg->content)
   {
+    size_t delim_size;
+
     /* update received time so that when storing to a mbox-style folder
      * the From_ line contains the current time instead of when the
      * message was first postponed.
      */
     msg->received = time (NULL);
-    rc = mutt_write_fcc (mutt_b2s (fcc), sctx, NULL, 0, NULL);
-    while (rc && !(flags & SENDBATCH))
+
+    /* Split fcc into comma separated mailboxes */
+    delim_size = mutt_strlen (FccDelimiter);
+    if (!delim_size)
+      save_fcc_mailbox_part (sctx->fcc, sctx, flags);
+    else
     {
-      mutt_clear_error ();
-      choice = mutt_multi_choice (
-        /* L10N:
-           Called when saving to $record or Fcc failed after sending.
-           (r)etry tries the same mailbox again.
-           alternate (m)ailbox prompts for a different mailbox to try.
-           (s)kip aborts saving.
-        */
-        _("Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "),
-        /* L10N:
-           These correspond to the "Fcc failed" multi-choice prompt
-           (r)etry, alternate (m)ailbox, or (s)kip.
-           Any similarity to famous leaders of the FSF is coincidental.
-        */
-        _("rms"));
-      switch (choice)
+      BUFFER *fcc_mailbox;
+      const char *mb_beg, *mb_end;
+
+      fcc_mailbox = mutt_buffer_pool_get ();
+
+      mb_beg = mutt_b2s (sctx->fcc);
+      while (mb_beg && *mb_beg)
       {
-        case 2:   /* alternate (m)ailbox */
-          /* L10N:
-             This is the prompt to enter an "alternate (m)ailbox" when the
-             initial Fcc fails.
-          */
-          rc = mutt_buffer_enter_fname (_("Fcc mailbox"), fcc, 1);
-          if ((rc == -1) || !mutt_buffer_len (fcc))
-          {
-            rc = 0;
-            break;
-          }
-          /* fall through */
+        mb_end = strstr (mb_beg, FccDelimiter);
+        if (mb_end)
+        {
+          mutt_buffer_substrcpy (fcc_mailbox, mb_beg, mb_end);
+          mb_end += delim_size;
+        }
+        else
+          mutt_buffer_strcpy (fcc_mailbox, mb_beg);
 
-        case 1:   /* (r)etry */
-          rc = mutt_write_fcc (mutt_b2s (fcc), sctx, NULL, 0, NULL);
-          break;
+        if (mutt_buffer_len (fcc_mailbox))
+          save_fcc_mailbox_part (fcc_mailbox, sctx, flags);
 
-        case -1:  /* abort */
-        case 3:   /* (s)kip */
-          rc = 0;
-          break;
+        mb_beg = mb_end;
       }
+
+      mutt_buffer_pool_release (&fcc_mailbox);
     }
   }
 
@@ -2304,7 +2355,7 @@ static int send_message_resume_compose_menu (SEND_CONTEXT *sctx)
   {
 main_loop:
 
-    mutt_buffer_pretty_mailbox (sctx->fcc);
+    mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
     i = mutt_compose_menu (sctx);
     if (i == -1)
     {

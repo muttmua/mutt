@@ -3915,6 +3915,16 @@ of <emphasis>pattern</emphasis>.
 linkend="fcc-save-hook"><command>fcc-save-hook</command></link> command.
 </para>
 
+<para>
+Multiple mailboxes may be specified by separating them with <link
+linkend="fcc-delimiter">$fcc_delimiter</link>, if set:
+</para>
+
+<screen>
+  set fcc_delimiter = ','
+  fcc-hook 'foo@example\.com$' '+one,+two'
+</screen>
+
 </sect1>
 
 <sect1 id="fcc-save-hook">
@@ -3933,11 +3943,17 @@ linkend="fcc-save-hook"><command>fcc-save-hook</command></link> command.
 </cmdsynopsis>
 
 <para>
-This command is a shortcut, equivalent to doing both a <link
+This command is a shortcut, almost equivalent to doing both a <link
 linkend="fcc-hook"><command>fcc-hook</command></link> and a <link
 linkend="save-hook"><command>save-hook</command></link> with its
 arguments, including %-expansion on <emphasis>mailbox</emphasis>
 according to <link linkend="index-format">$index_format</link>.
+</para>
+
+<para>
+Note, however that the fcc-save-hook is not designed to take advantage
+of multiple mailboxes, as fcc-hook is.  For correct behavior, you should
+use separate fcc and save hooks in that case.
 </para>
 
 </sect1>
@@ -6565,7 +6581,20 @@ to set <link linkend="record">$record</link>:
 </para>
 
 <screen>
-folder-hook . 'set record=^'</screen>
+  folder-hook . 'set record=^'
+</screen>
+
+<para>
+Note: the <link linkend="record">$record</link> shortcut
+<quote><literal>&lt;</literal></quote> is substituted without any
+regard to multiple mailboxes and <link
+linkend="fcc-delimiter">$fcc_delimiter</link>.  If you use multiple
+Fcc mailboxes, and also want to use the
+<quote><literal>&lt;</literal></quote> mailbox shortcut, it might be
+better to set <link linkend="record">$record</link> to the primary
+mailbox and use a <link linkend="fcc-hook">fcc-hook</link> to set all
+mailboxes during message composition.
+</para>
 
 </sect1>
 

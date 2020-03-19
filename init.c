@@ -2266,6 +2266,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
       {
 	char _tmp[LONG_STRING];
 	const char *val = NULL;
+        BUFFER *path_buf = NULL;
 
         if (myvar)
         {
@@ -2288,10 +2289,13 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	}
 	else if (DTYPE (MuttVars[idx].type) == DT_PATH)
 	{
-	  _tmp[0] = '\0';
-	  strfcpy (_tmp, NONULL(*((char **) MuttVars[idx].data.p)), sizeof (_tmp));
-	  mutt_pretty_mailbox (_tmp, sizeof (_tmp));
-	  val = _tmp;
+          path_buf = mutt_buffer_pool_get ();
+          mutt_buffer_strcpy (path_buf, NONULL(*((char **) MuttVars[idx].data.p)));
+          if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
+            mutt_buffer_pretty_multi_mailbox (path_buf, FccDelimiter);
+          else
+            mutt_buffer_pretty_mailbox (path_buf);
+	  val = mutt_b2s (path_buf);
 	}
 	else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
         {
@@ -2303,6 +2307,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 
 	/* user requested the value of this variable */
 	pretty_var (err->data, err->dsize, MuttVars[idx].option, NONULL(val));
+
+        mutt_buffer_pool_release (&path_buf);
 	break;
       }
       else
@@ -2333,7 +2339,10 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 
           scratch = mutt_buffer_pool_get ();
 	  mutt_buffer_strcpy (scratch, tmp->data);
-	  mutt_buffer_expand_path (scratch);
+          if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
+            mutt_buffer_expand_multi_path (scratch, FccDelimiter);
+          else
+            mutt_buffer_expand_path (scratch);
 	  *((char **) MuttVars[idx].data.p) = safe_strdup (mutt_b2s (scratch));
           mutt_buffer_pool_release (&scratch);
         }
@@ -3133,17 +3142,26 @@ int mutt_var_value_complete (char *buffer, size_t len, int pos)
 static int var_to_string (int idx, char* val, size_t len)
 {
   char tmp[LONG_STRING];
+  BUFFER *path_buf = NULL;
   static const char * const vals[] = { "no", "yes", "ask-no", "ask-yes" };
 
   tmp[0] = '\0';
 
   if ((DTYPE(MuttVars[idx].type) == DT_STR) ||
-      (DTYPE(MuttVars[idx].type) == DT_PATH) ||
       (DTYPE(MuttVars[idx].type) == DT_RX))
   {
     strfcpy (tmp, NONULL (*((char **) MuttVars[idx].data.p)), sizeof (tmp));
-    if (DTYPE (MuttVars[idx].type) == DT_PATH)
-      mutt_pretty_mailbox (tmp, sizeof (tmp));
+  }
+  else if (DTYPE (MuttVars[idx].type) == DT_PATH)
+  {
+    path_buf = mutt_buffer_pool_get ();
+    mutt_buffer_strcpy (path_buf, NONULL (*((char **) MuttVars[idx].data.p)));
+    if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
+      mutt_buffer_pretty_multi_mailbox (path_buf, FccDelimiter);
+    else
+      mutt_buffer_pretty_mailbox (path_buf);
+    strfcpy (tmp, mutt_b2s (path_buf), sizeof (tmp));
+    mutt_buffer_pool_release (&path_buf);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
   {

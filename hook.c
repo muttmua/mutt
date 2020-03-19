@@ -138,9 +138,13 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     mutt_check_simple (pattern, DefaultHook);
   }
 
-  if (data & (MUTT_MBOXHOOK | MUTT_SAVEHOOK | MUTT_FCCHOOK))
+  if (data & (MUTT_MBOXHOOK | MUTT_SAVEHOOK))
   {
     mutt_buffer_expand_path (command);
+  }
+  else if (data & MUTT_FCCHOOK)
+  {
+    mutt_buffer_expand_multi_path (command, FccDelimiter);
   }
 
   /* check to make sure that a matching hook doesn't already exist */
@@ -606,7 +610,7 @@ void mutt_select_fcc (BUFFER *path, HEADER *hdr)
   else
     mutt_buffer_fix_dptr (path);
 
-  mutt_buffer_pretty_mailbox (path);
+  mutt_buffer_pretty_multi_mailbox (path, FccDelimiter);
 }
 
 static char *_mutt_string_hook (const char *match, int hook)

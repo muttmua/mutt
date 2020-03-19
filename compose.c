@@ -1129,7 +1129,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_FILE | MUTT_CLEAR) == 0)
 	{
 	  mutt_buffer_strcpy (sctx->fcc, mutt_b2s (fname));
-	  mutt_buffer_pretty_mailbox (sctx->fcc);
+	  mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
 	  mutt_window_move (MuttIndexWindow, HDR_FCC, HDR_XOFFSET);
 	  mutt_paddstr (W, mutt_b2s (sctx->fcc));
 	  fccSet = 1;

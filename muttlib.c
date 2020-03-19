@@ -402,6 +402,59 @@ int mutt_matches_ignore (const char *s, LIST *t)
   return 0;
 }
 
+/* Splits src into parts delimited by delimiter.
+ * Invokes mapfunc on each part and joins the result back into src.
+ * Note this function currently does not preserve trailing delimiters.
+ */
+static void delimited_buffer_map_join (BUFFER *src, const char *delimiter,
+                                       void (*mapfunc)(BUFFER *))
+{
+  BUFFER *dest, *part;
+  const char *part_begin, *part_end;
+  size_t delim_size;
+
+  delim_size = mutt_strlen (delimiter);
+  if (!delim_size)
+  {
+    mapfunc (src);
+    return;
+  }
+
+  dest = mutt_buffer_pool_get ();
+  part = mutt_buffer_pool_get ();
+
+  part_begin = mutt_b2s (src);
+  while (part_begin && *part_begin)
+  {
+    part_end = strstr (part_begin, delimiter);
+    if (part_end)
+    {
+      mutt_buffer_substrcpy (part, part_begin, part_end);
+      part_end += delim_size;
+    }
+    else
+      mutt_buffer_strcpy (part, part_begin);
+
+    mapfunc (part);
+
+    if (part_begin != mutt_b2s (src))
+      mutt_buffer_addstr (dest, delimiter);
+    mutt_buffer_addstr (dest, mutt_b2s (part));
+
+    part_begin = part_end;
+  }
+
+  mutt_buffer_strcpy (src, mutt_b2s (dest));
+
+  mutt_buffer_pool_release (&dest);
+  mutt_buffer_pool_release (&part);
+}
+
+void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter)
+{
+  delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path);
+}
+
 char *mutt_expand_path (char *s, size_t slen)
 {
   return _mutt_expand_path (s, slen, 0);
@@ -918,6 +971,11 @@ void mutt_free_alias (ALIAS **p)
     rfc822_free_address (&t->addr);
     FREE (&t);
   }
+}
+
+void mutt_buffer_pretty_multi_mailbox (BUFFER *s, const char *delimiter)
+{
+  delimited_buffer_map_join (s, delimiter, mutt_buffer_pretty_mailbox);
 }
 
 void mutt_buffer_pretty_mailbox (BUFFER *s)
