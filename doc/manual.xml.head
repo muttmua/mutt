@@ -5271,7 +5271,7 @@ how the numbers are displayed.
 
 <para>
   These variables also affect size display in a few other places, such
-  as progress indicators and attachment delimeters in the pager.
+  as progress indicators and attachment delimiters in the pager.
 </para>
 </sect2>
 

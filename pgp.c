@@ -280,7 +280,7 @@ static int pgp_check_pgp_decryption_okay_regexp (FILE *fpin)
  *   1 - no patterns were matched (if delegated to decryption_okay_regexp)
  *   0 - DECRYPTION_OKAY was seen, with no PLAINTEXT outside.
  *  -1 - No decryption status codes were encountered
- *  -2 - PLAINTEXT was encountered outside of DECRYPTION delimeters.
+ *  -2 - PLAINTEXT was encountered outside of DECRYPTION delimiters.
  *  -3 - DECRYPTION_FAILED was encountered
  */
 static int pgp_check_decryption_okay (FILE *fpin)
