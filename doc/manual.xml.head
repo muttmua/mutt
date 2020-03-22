@@ -1518,8 +1518,9 @@ If you want to use PGP, you can specify
 <para>
 <quote>E</quote> selects encryption, <quote>S</quote> selects signing
 and <quote>S&lt;id&gt;</quote> selects signing with the given key,
-setting <link linkend="pgp-sign-as">$pgp_sign_as</link> permanently. The
-selection can later be changed in the compose menu.
+setting <link linkend="pgp-sign-as">$pgp_sign_as</link> for the
+duration of the message composition session. The selection can later
+be changed in the compose menu.
 </para>
 
 </sect3>
