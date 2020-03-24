@@ -281,10 +281,14 @@ char *safe_strncat (char *d, size_t l, const char *s, size_t sl)
 }
 
 
+/* Free *p afterwards to handle the case that *p and s reference the
+ * same memory
+ */
 void mutt_str_replace (char **p, const char *s)
 {
-  FREE (p);		/* __FREE_CHECKED__ */
+  char *tmp = *p;
   *p = safe_strdup (s);
+  FREE (&tmp);
 }
 
 void mutt_str_adjust (char **p)
