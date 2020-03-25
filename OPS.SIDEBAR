@@ -1,3 +1,5 @@
+OP_SIDEBAR_FIRST "move the highlight to the first mailbox"
+OP_SIDEBAR_LAST "move the highlight to the last mailbox"
 OP_SIDEBAR_NEXT "move the highlight to next mailbox"
 OP_SIDEBAR_NEXT_NEW "move the highlight to next mailbox with new mail"
 OP_SIDEBAR_OPEN "open highlighted mailbox"

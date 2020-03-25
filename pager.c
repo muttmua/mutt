@@ -2908,6 +2908,8 @@ search_next:
 	break;
 
 #ifdef USE_SIDEBAR
+      case OP_SIDEBAR_FIRST:
+      case OP_SIDEBAR_LAST:
       case OP_SIDEBAR_NEXT:
       case OP_SIDEBAR_NEXT_NEW:
       case OP_SIDEBAR_PAGE_DOWN:

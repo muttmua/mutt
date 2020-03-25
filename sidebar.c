@@ -52,6 +52,7 @@ static int HilIndex = -1;    /* Highlighted mailbox */
 static int BotIndex = -1;    /* Last mailbox visible in sidebar */
 
 static int select_next (void);
+static int select_prev (void);
 
 
 /**
@@ -813,6 +814,49 @@ void mutt_sb_draw (void)
 }
 
 /**
+ * select_first - Selects the first unhidden mailbox
+ *
+ * Returns:
+ *      1: Success
+ *      0: Failure
+ */
+static int select_first (void)
+{
+  int orig_hil_index = HilIndex;
+
+  if (!EntryCount || HilIndex < 0)
+    return 0;
+
+  HilIndex = 0;
+  if (Entries[HilIndex]->is_hidden)
+    if (!select_next ())
+      HilIndex = orig_hil_index;
+
+  return (orig_hil_index != HilIndex);
+}
+
+/**
+ * select_last - Selects the last unhidden mailbox
+ *
+ * Returns:
+ *      1: Success
+ *      0: Failure
+ */
+static int select_last (void)
+{
+  int orig_hil_index = HilIndex;
+
+  if (!EntryCount || HilIndex < 0)
+    return 0;
+
+  HilIndex = EntryCount;
+  if (!select_prev ())
+    HilIndex = orig_hil_index;
+
+  return (orig_hil_index != HilIndex);
+}
+
+/**
  * select_next - Selects the next unhidden mailbox
  *
  * Returns:
@@ -989,7 +1033,8 @@ static int select_page_up (void)
  * If the operation is successful, HilBuffy will be set to the new mailbox.
  * This function only *selects* the mailbox, doesn't *open* it.
  *
- * Allowed values are: OP_SIDEBAR_NEXT, OP_SIDEBAR_NEXT_NEW,
+ * Allowed values are: OP_SIDEBAR_FIRST, OP_SIDEBAR_LAST,
+ * OP_SIDEBAR_NEXT, OP_SIDEBAR_NEXT_NEW,
  * OP_SIDEBAR_PAGE_DOWN, OP_SIDEBAR_PAGE_UP, OP_SIDEBAR_PREV,
  * OP_SIDEBAR_PREV_NEW.
  */
@@ -1003,6 +1048,14 @@ void mutt_sb_change_mailbox (int op)
 
   switch (op)
   {
+    case OP_SIDEBAR_FIRST:
+      if (! select_first ())
+        return;
+      break;
+    case OP_SIDEBAR_LAST:
+      if (! select_last ())
+        return;
+      break;
     case OP_SIDEBAR_NEXT:
       if (! select_next ())
         return;

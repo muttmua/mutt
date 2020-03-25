@@ -183,6 +183,8 @@ const struct binding_t OpMain[] = { /* map: index */
   { "decrypt-save",		OP_DECRYPT_SAVE,		NULL },
 
 #ifdef USE_SIDEBAR
+  { "sidebar-first",		OP_SIDEBAR_FIRST,		NULL },
+  { "sidebar-last",		OP_SIDEBAR_LAST,		NULL },
   { "sidebar-next",		OP_SIDEBAR_NEXT,		NULL },
   { "sidebar-next-new",		OP_SIDEBAR_NEXT_NEW,		NULL },
   { "sidebar-open",		OP_SIDEBAR_OPEN,		NULL },
@@ -308,6 +310,8 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "check-stats",	OP_CHECK_STATS,		NULL },
 
 #ifdef USE_SIDEBAR
+  { "sidebar-first",		OP_SIDEBAR_FIRST,		NULL },
+  { "sidebar-last",		OP_SIDEBAR_LAST,		NULL },
   { "sidebar-next",		OP_SIDEBAR_NEXT,		NULL },
   { "sidebar-next-new",		OP_SIDEBAR_NEXT_NEW,		NULL },
   { "sidebar-open",		OP_SIDEBAR_OPEN,		NULL },
