@@ -420,8 +420,10 @@ static int prepare_sidebar (int page_size)
     else
     {
       HilIndex = 0;
+      /* Note is_hidden will only be set when OPTSIDEBARNEWMAILONLY */
       if (Entries[HilIndex]->is_hidden)
-        select_next ();
+        if (!select_next ())
+          HilIndex = -1;
     }
   }
 
@@ -457,7 +459,8 @@ static int prepare_sidebar (int page_size)
     BotIndex = EntryCount - 1;
 
   PreviousSort = SidebarSortMethod;
-  return 1;
+
+  return (HilIndex >= 0);
 }
 
 /**
@@ -801,16 +804,10 @@ void mutt_sb_draw (void)
   if (div_width < 0)
     return;
 
-  if (!Incoming)
-  {
-    fill_empty_space (0, num_rows, SidebarWidth - div_width);
-    return;
-  }
-
   if (!prepare_sidebar (num_rows))
-    return;
-
-  draw_sidebar (num_rows, num_cols, div_width);
+    fill_empty_space (0, num_rows, SidebarWidth - div_width);
+  else
+    draw_sidebar (num_rows, num_cols, div_width);
 }
 
 /**
