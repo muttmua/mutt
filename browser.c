@@ -496,7 +496,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
     tmp = Incoming;
     while (tmp && mutt_strcmp (mutt_b2s (full_path), mutt_b2s (tmp->pathbuf)))
       tmp = tmp->next;
-    if (tmp && Context &&
+    if (tmp && Context && !tmp->nopoll &&
         !mutt_strcmp (tmp->realpath, Context->realpath))
     {
       tmp->msg_count = Context->msgcount;
@@ -528,16 +528,21 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
 
   do
   {
-    if (Context &&
+    if (Context && !tmp->nopoll &&
         !mutt_strcmp (tmp->realpath, Context->realpath))
     {
       tmp->msg_count = Context->msgcount;
       tmp->msg_unread = Context->unread;
     }
 
-    mutt_buffer_strcpy (mailbox, mutt_b2s (tmp->pathbuf));
-    if (option (OPTBROWSERABBRMAILBOXES))
-      mutt_buffer_pretty_mailbox (mailbox);
+    if (tmp->label)
+      mutt_buffer_strcpy (mailbox, tmp->label);
+    else
+    {
+      mutt_buffer_strcpy (mailbox, mutt_b2s (tmp->pathbuf));
+      if (option (OPTBROWSERABBRMAILBOXES))
+        mutt_buffer_pretty_mailbox (mailbox);
+    }
 
 #ifdef USE_IMAP
     if (mx_is_imap (mutt_b2s (tmp->pathbuf)))

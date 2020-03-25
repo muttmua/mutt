@@ -3686,12 +3686,29 @@ to save read mail in more than a single mailbox).
 
 <cmdsynopsis>
 <command>mailboxes</command>
-<arg choice="plain">
-<replaceable class="parameter">mailbox</replaceable>
+<arg choice="opt">
+  <group choice="opt">
+    <arg choice="plain">
+      <replaceable class="parameter">-poll</replaceable>
+    </arg>
+    <arg choice="plain">
+      <replaceable class="parameter">-nopoll</replaceable>
+    </arg>
+  </group>
+  <group choice="opt">
+    <arg choice="opt">
+      <replaceable class="parameter">-label</replaceable>
+      <replaceable>label</replaceable>
+    </arg>
+    <arg choice="plain">
+      <replaceable class="parameter">-nolabel</replaceable>
+    </arg>
+  </group>
+  <arg choice="plain">
+    <replaceable class="parameter">mailbox</replaceable>
+  </arg>
 </arg>
-<arg choice="opt" rep="repeat">
-<replaceable class="parameter">mailbox</replaceable>
-</arg>
+<arg choice="opt" rep="repeat"></arg>
 
 <command>unmailboxes</command>
 <group choice="req">
@@ -3710,9 +3727,25 @@ checked for new messages periodically.
 </para>
 
 <para>
-<emphasis>folder</emphasis> can either be a local file or directory
+To disable polling, specify <literal>-nopoll</literal> before the
+mailbox name.  The <literal>-poll</literal> argument can be used to
+reenable polling for an existing mailbox.  If unspecified: a new
+mailbox will poll by default, while an existing mailbox will be
+unchanged.
+</para>
+
+<para>
+The <literal>-label</literal> argument can be used to specify an
+alternative label to print in the sidebar or mailbox browser instead
+of the mailbox path.  A label may be removed via the
+<literal>-nolabel</literal> argument.  If unspecified, an existing
+mailbox label will be unchanged.
+</para>
+
+<para>
+<emphasis>mailbox</emphasis> can either be a local file or directory
 (Mbox/Mmdf or Maildir/Mh). If Mutt was built with POP and/or IMAP
-support, <emphasis>folder</emphasis> can also be a POP/IMAP folder
+support, <emphasis>mailbox</emphasis> can also be a POP/IMAP folder
 URL. The URL syntax is described in <xref linkend="url-syntax"/>, POP
 and IMAP are described in <xref linkend="pop"/> and <xref
 linkend="imap"/> respectively.
@@ -11055,12 +11088,29 @@ The following are the commands understood by Mutt:
 <listitem>
 <cmdsynopsis>
 <command><link linkend="mailboxes">mailboxes</link></command>
-<arg choice="plain">
-<replaceable class="parameter">mailbox</replaceable>
+<arg choice="opt">
+  <group choice="opt">
+    <arg choice="plain">
+      <replaceable class="parameter">-poll</replaceable>
+    </arg>
+    <arg choice="plain">
+      <replaceable class="parameter">-nopoll</replaceable>
+    </arg>
+  </group>
+  <group choice="opt">
+    <arg choice="opt">
+      <replaceable class="parameter">-label</replaceable>
+      <replaceable>label</replaceable>
+    </arg>
+    <arg choice="plain">
+      <replaceable class="parameter">-nolabel</replaceable>
+    </arg>
+  </group>
+  <arg choice="plain">
+    <replaceable class="parameter">mailbox</replaceable>
+  </arg>
 </arg>
-<arg choice="opt" rep="repeat">
-<replaceable class="parameter">mailbox</replaceable>
-</arg>
+<arg choice="opt" rep="repeat"></arg>
 
 <command><link linkend="mailboxes">unmailboxes</link></command>
 <group choice="req">

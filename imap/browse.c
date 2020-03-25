@@ -454,7 +454,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
     b = b->next;
   if (b)
   {
-    if (Context &&
+    if (Context && !b->nopoll &&
         !mutt_strcmp (b->realpath, Context->realpath))
     {
       b->msg_count = Context->msgcount;

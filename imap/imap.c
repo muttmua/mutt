@@ -1735,6 +1735,9 @@ int imap_buffy_check (int force, int check_stats)
     if (mailbox->magic != MUTT_IMAP)
       continue;
 
+    if (mailbox->nopoll)
+      continue;
+
     if (imap_get_mailbox (mutt_b2s (mailbox->pathbuf), &idata, name, sizeof (name)) < 0)
     {
       mailbox->new = 0;

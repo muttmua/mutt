@@ -4551,11 +4551,11 @@ const struct mapping_t SortKeyMethods[] = {
 };
 
 const struct mapping_t SortSidebarMethods[] = {
-  { "alpha",		SORT_PATH },
+  { "alpha",		SORT_SUBJECT },
   { "count",		SORT_COUNT },
   { "flagged",		SORT_FLAGGED },
   { "mailbox-order",	SORT_ORDER },
-  { "name",		SORT_PATH },
+  { "name",		SORT_SUBJECT },
   { "new",		SORT_UNREAD },  /* kept for compatibility */
   { "path",		SORT_PATH },
   { "unread",		SORT_UNREAD },
@@ -4649,8 +4649,8 @@ const struct command_t Commands[] = {
   { "index-format-hook",mutt_parse_idxfmt_hook, {.l=MUTT_IDXFMTHOOK} },
   { "lists",		parse_lists,		{.l=0} },
   { "macro",		mutt_parse_macro,	{.l=0} },
-  { "mailboxes",	mutt_parse_mailboxes,	{.l=MUTT_MAILBOXES} },
-  { "unmailboxes",	mutt_parse_mailboxes,	{.l=MUTT_UNMAILBOXES} },
+  { "mailboxes",	mutt_parse_mailboxes,	{.l=0} },
+  { "unmailboxes",	mutt_parse_unmailboxes,	{.l=0} },
   { "mailto_allow",	parse_list,		{.p=&MailtoAllow} },
   { "unmailto_allow",	parse_unlist,		{.p=&MailtoAllow} },
   { "message-hook",	mutt_parse_hook,	{.l=MUTT_MESSAGEHOOK} },

@@ -19,15 +19,13 @@
 #ifndef _BUFFY_H
 #define _BUFFY_H
 
-/*parameter to mutt_parse_mailboxes*/
-#define MUTT_MAILBOXES   1
-#define MUTT_UNMAILBOXES 2
-
 typedef struct buffy_t
 {
   BUFFER *pathbuf;
   const char *realpath; /* used for duplicate detection, context comparison,
                            and the sidebar */
+  char *label;    /* an optional label for the mailbox */
+
   off_t size;
   struct buffy_t *next;
   short new;			/* mailbox has new mail */
@@ -37,6 +35,7 @@ typedef struct buffy_t
   int msg_unread;		/* number of unread messages */
   int msg_flagged;		/* number of flagged messages */
 
+  short nopoll;                 /* if set, don't poll for new mail */
   short notified;		/* user has been notified */
   short magic;			/* mailbox type */
   short newly_created;		/* mbox or mmdf just popped into existence */

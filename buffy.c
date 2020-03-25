@@ -250,101 +250,196 @@ static void buffy_free (BUFFY **mailbox)
 
   mutt_buffer_free (&((*mailbox)->pathbuf));
   FREE (&((*mailbox)->realpath));
+  FREE (&((*mailbox)->label));
   FREE (mailbox); /* __FREE_CHECKED__ */
 }
 
-int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+static BUFFY **find_buffy_slot (const char *path)
 {
-  BUFFY **tmp,*tmp1;
+  const char *p;
+  char rp[PATH_MAX];
+  BUFFY **slot;
+
+  p = realpath (path, rp);
+  for (slot = &Incoming; *slot; slot = &((*slot)->next))
+    if (mutt_strcmp (p ? p : path, (*slot)->realpath) == 0)
+      break;
+
+  return slot;
+}
+
+/* To avoid overwriting existing values:
+ * - label will be NULL if unspecified
+ * - nopoll will be -1 if unspecified
+ */
+static void buffy_add (BUFFER *path, const char *label, int nopoll)
+{
+  BUFFY **tmp;
   struct stat sb;
-  char f1[PATH_MAX];
-  char *p;
-  long data = udata.l;
+  int new = 0;
+
+  tmp = find_buffy_slot (mutt_b2s (path));
+  if (!*tmp)
+  {
+    new = 1;
+    *tmp = buffy_new (mutt_b2s (path));
+#ifdef USE_SIDEBAR
+    mutt_sb_notify_mailbox (*tmp, 1);
+#endif
+  }
+
+  if (label)
+    mutt_str_replace (&(*tmp)->label, label);
+
+  if (nopoll == -1)
+    nopoll = (*tmp)->nopoll;
+
+  if (new || (nopoll != (*tmp)->nopoll))
+  {
+    (*tmp)->nopoll = nopoll;
+#ifdef USE_INOTIFY
+    if (!nopoll)
+    {
+      (*tmp)->magic = mx_get_magic (mutt_b2s ((*tmp)->pathbuf));
+      mutt_monitor_add (*tmp);
+    }
+    else
+      mutt_monitor_remove (*tmp);
+#endif
+  }
+
+  (*tmp)->new = 0;
+  (*tmp)->notified = 1;
+  (*tmp)->newly_created = 0;
+
+  /* for check_mbox_size, it is important that if the folder is new (tested by
+   * reading it), the size is set to 0 so that later when we check we see
+   * that it increased .  without check_mbox_size we probably don't care.
+   */
+  if (!nopoll &&
+      option(OPTCHECKMBOXSIZE) &&
+      stat (mutt_b2s ((*tmp)->pathbuf), &sb) == 0 &&
+      !test_new_folder (mutt_b2s ((*tmp)->pathbuf)))
+  {
+    /* some systems out there don't have an off_t type */
+    (*tmp)->size = (off_t) sb.st_size;
+  }
+  else
+    (*tmp)->size = 0;
+}
+
+static void buffy_remove (BUFFY **pbuffy)
+{
+  BUFFY *next;
+
+  next = (*pbuffy)->next;
+
+#ifdef USE_SIDEBAR
+  mutt_sb_notify_mailbox (*pbuffy, 0);
+#endif
+#ifdef USE_INOTIFY
+  if (!(*pbuffy)->nopoll)
+    mutt_monitor_remove (*pbuffy);
+#endif
+  buffy_free (pbuffy);
+
+  *pbuffy = next;
+}
+
+int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
+                          BUFFER *err)
+{
+  BUFFER *label = NULL;
+  BUFFER *mailbox = NULL;
+  int nopoll = -1, rc = -1;
+  int label_set = 0, mailbox_set = 0;
+
+  mailbox = mutt_buffer_pool_get ();
+  label = mutt_buffer_pool_get ();
+
+  while (MoreArgs (s))
+  {
+    do
+    {
+      mutt_extract_token (path, s, 0);
+
+      if (mutt_strcmp (mutt_b2s (path), "-poll") == 0)
+        nopoll = 0;
+      else if (mutt_strcmp (mutt_b2s (path), "-nopoll") == 0)
+        nopoll = 1;
+      else if (mutt_strcmp (mutt_b2s (path), "-label") == 0)
+      {
+        if (!MoreArgs (s))
+        {
+          mutt_buffer_strcpy (err, _("too few arguments"));
+          goto cleanup;
+        }
+        label_set = 1;
+        mutt_extract_token (label, s, 0);
+      }
+      else if (mutt_strcmp (mutt_b2s (path), "-nolabel") == 0)
+      {
+        label_set = 1;
+        mutt_buffer_clear (label);
+      }
+      else
+      {
+        mailbox_set = 1;
+        mutt_buffer_strcpy (mailbox, mutt_b2s (path));
+        mutt_buffer_expand_path (mailbox);
+        break;
+      }
+    } while (MoreArgs (s));
+
+    if (!mutt_buffer_len (mailbox))
+    {
+      if (!mailbox_set)
+      {
+        mutt_buffer_strcpy (err, _("too few arguments"));
+        goto cleanup;
+      }
+    }
+    else
+      buffy_add (mailbox, label_set ? mutt_b2s (label) : NULL, nopoll);
+
+    mutt_buffer_clear (mailbox);
+    mutt_buffer_clear (label);
+    nopoll = -1;
+    label_set = 0;
+    mailbox_set = 0;
+  }
+
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&mailbox);
+  mutt_buffer_pool_release (&label);
+  return rc;
+}
+
+int mutt_parse_unmailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+{
+  BUFFY **pbuffy;
 
   while (MoreArgs (s))
   {
     mutt_extract_token (path, s, 0);
 
-    if (data == MUTT_UNMAILBOXES && mutt_strcmp(mutt_b2s (path),"*") == 0)
+    if (mutt_strcmp(mutt_b2s (path),"*") == 0)
     {
-      for (tmp = &Incoming; *tmp;)
-      {
-        tmp1=(*tmp)->next;
-#ifdef USE_SIDEBAR
-	mutt_sb_notify_mailbox (*tmp, 0);
-#endif
-#ifdef USE_INOTIFY
-        mutt_monitor_remove (*tmp);
-#endif
-        buffy_free (tmp);
-        *tmp=tmp1;
-      }
+      pbuffy = &Incoming;
+      while (*pbuffy)
+        buffy_remove (pbuffy);
       return 0;
     }
 
     mutt_buffer_expand_path (path);
-
-    /* Skip empty tokens. */
-    if (!mutt_buffer_len (path)) continue;
-
-    /* avoid duplicates */
-    p = realpath (mutt_b2s (path), f1);
-    for (tmp = &Incoming; *tmp; tmp = &((*tmp)->next))
-    {
-      if (mutt_strcmp (p ? p : mutt_b2s (path), (*tmp)->realpath) == 0)
-      {
-	dprint(3,(debugfile,"mailbox '%s' already registered as '%s'\n", mutt_b2s (path),
-                  mutt_b2s ((*tmp)->pathbuf)));
-	break;
-      }
-    }
-
-    if (data == MUTT_UNMAILBOXES)
-    {
-      if (*tmp)
-      {
-        tmp1=(*tmp)->next;
-#ifdef USE_SIDEBAR
-	mutt_sb_notify_mailbox (*tmp, 0);
-#endif
-#ifdef USE_INOTIFY
-        mutt_monitor_remove (*tmp);
-#endif
-        buffy_free (tmp);
-        *tmp=tmp1;
-      }
+    if (!mutt_buffer_len (path))
       continue;
-    }
 
-    if (!*tmp)
-    {
-      *tmp = buffy_new (mutt_b2s (path));
-#ifdef USE_SIDEBAR
-      mutt_sb_notify_mailbox (*tmp, 1);
-#endif
-#ifdef USE_INOTIFY
-      (*tmp)->magic = mx_get_magic (mutt_b2s ((*tmp)->pathbuf));
-      mutt_monitor_add (*tmp);
-#endif
-    }
-
-    (*tmp)->new = 0;
-    (*tmp)->notified = 1;
-    (*tmp)->newly_created = 0;
-
-    /* for check_mbox_size, it is important that if the folder is new (tested by
-     * reading it), the size is set to 0 so that later when we check we see
-     * that it increased .  without check_mbox_size we probably don't care.
-     */
-    if (option(OPTCHECKMBOXSIZE) &&
-	stat (mutt_b2s ((*tmp)->pathbuf), &sb) == 0 &&
-        !test_new_folder (mutt_b2s ((*tmp)->pathbuf)))
-    {
-      /* some systems out there don't have an off_t type */
-      (*tmp)->size = (off_t) sb.st_size;
-    }
-    else
-      (*tmp)->size = 0;
+    pbuffy = find_buffy_slot (mutt_b2s (path));
+    if (*pbuffy)
+      buffy_remove (pbuffy);
   }
   return 0;
 }
@@ -579,6 +674,9 @@ int mutt_buffy_check (int force)
 
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
+    if (tmp->nopoll)
+      continue;
+
 #ifdef USE_SIDEBAR
     orig_new = tmp->new;
     orig_count = tmp->msg_count;

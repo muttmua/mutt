@@ -270,6 +270,10 @@ static int cb_qsort_sbe (const void *a, const void *b)
     case SORT_PATH:
       result = mutt_strcasecmp (mutt_b2s (b1->pathbuf), mutt_b2s (b2->pathbuf));
       break;
+    case SORT_SUBJECT:
+      result = mutt_strcasecmp (b1->label ? b1->label : mutt_b2s (b1->pathbuf),
+                                b2->label ? b2->label : mutt_b2s (b2->pathbuf));
+      break;
   }
 
   if (SidebarSortMethod & SORT_REVERSE)
@@ -366,7 +370,8 @@ static void sort_entries (void)
   if ((ssm == SORT_COUNT)     ||
       (ssm == SORT_UNREAD)    ||
       (ssm == SORT_FLAGGED)   ||
-      (ssm == SORT_PATH))
+      (ssm == SORT_PATH)      ||
+      (ssm == SORT_SUBJECT))
     qsort (Entries, EntryCount, sizeof (*Entries), cb_qsort_sbe);
   else if ((ssm == SORT_ORDER) &&
            (SidebarSortMethod != PreviousSort))
@@ -665,7 +670,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
       SETCOLOR(MT_COLOR_NORMAL);
 
     mutt_window_move (MuttSidebarWindow, row, 0);
-    if (Context && Context->realpath &&
+    if (Context && Context->realpath && !b->nopoll &&
         !mutt_strcmp (b->realpath, Context->realpath))
     {
       b->msg_unread  = Context->unread;
@@ -762,6 +767,10 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         sidebar_folder_name += i;
       }
 
+      /* For labels, ignore shortpath, but allow indentation */
+      if (b->label)
+        sidebar_folder_name = b->label;
+
       if (option (OPTSIDEBARFOLDERINDENT) && (indent_width > 0))
       {
         mutt_buffer_clear (indent_folder_name);
@@ -771,6 +780,8 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         sidebar_folder_name = mutt_b2s (indent_folder_name);
       }
     }
+    else if (b->label)
+      sidebar_folder_name = b->label;
 
     char str[STRING];
     make_sidebar_entry (str, sizeof (str), w, sidebar_folder_name, entry);
@@ -1102,9 +1113,12 @@ void mutt_sb_set_buffystats (const CONTEXT *ctx)
   {
     if (!mutt_strcmp (b->realpath, ctx->realpath))
     {
-      b->msg_unread  = ctx->unread;
-      b->msg_count   = ctx->msgcount;
-      b->msg_flagged = ctx->flagged;
+      if (!b->nopoll)
+      {
+        b->msg_unread  = ctx->unread;
+        b->msg_count   = ctx->msgcount;
+        b->msg_flagged = ctx->flagged;
+      }
       break;
     }
   }

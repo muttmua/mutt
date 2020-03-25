@@ -299,7 +299,7 @@ messages will be moved to that folder when the mail folder is left.
 The first matching \fBmbox-hook\fP applies.
 .PP
 .nf
-\fBmailboxes\fP \fIfilename\fP [ \fIfilename\fP ... ]
+\fBmailboxes\fP [[\fB-poll\fP | \fB-nopoll\fP] [[\fB-label\fP \fIlabel\fP] | \fB-nolabel\fP] \fIfilename\fP] [ ... ]
 \fBunmailboxes\fP [ \fB*\fP | \fIfilename\fP ... ]
 .fi
 .IP
