@@ -3689,19 +3689,19 @@ to save read mail in more than a single mailbox).
 <arg choice="opt">
   <group choice="opt">
     <arg choice="plain">
-      <replaceable class="parameter">-poll</replaceable>
+      <option>-poll</option>
     </arg>
     <arg choice="plain">
-      <replaceable class="parameter">-nopoll</replaceable>
+      <option>-nopoll</option>
     </arg>
   </group>
   <group choice="opt">
-    <arg choice="opt">
-      <replaceable class="parameter">-label</replaceable>
+    <arg choice="plain">
+      <option>-label</option>
       <replaceable>label</replaceable>
     </arg>
     <arg choice="plain">
-      <replaceable class="parameter">-nolabel</replaceable>
+      <option>-nolabel</option>
     </arg>
   </group>
   <arg choice="plain">
@@ -11091,19 +11091,19 @@ The following are the commands understood by Mutt:
 <arg choice="opt">
   <group choice="opt">
     <arg choice="plain">
-      <replaceable class="parameter">-poll</replaceable>
+      <option>-poll</option>
     </arg>
     <arg choice="plain">
-      <replaceable class="parameter">-nopoll</replaceable>
+      <option>-nopoll</option>
     </arg>
   </group>
   <group choice="opt">
-    <arg choice="opt">
-      <replaceable class="parameter">-label</replaceable>
+    <arg choice="plain">
+      <option>-label</option>
       <replaceable>label</replaceable>
     </arg>
     <arg choice="plain">
-      <replaceable class="parameter">-nolabel</replaceable>
+      <option>-nolabel</option>
     </arg>
   </group>
   <arg choice="plain">
