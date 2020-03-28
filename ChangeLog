@@ -1,3 +1,63 @@
+2020-03-28 11:20:21 -0700  Kevin McCarthy  <kevin@8t8.us> (f42ee069)
+
+        * Update UPDATING for 1.13.5.
+
+M	UPDATING
+
+2020-03-24 10:01:07 -0700  Kevin McCarthy  <kevin@8t8.us> (0266f6e4)
+
+        * Fix use-after-free in mutt_str_replace().
+        
+        The Outlook content-type fix in commit 4cec4b63 inadvertantly
+        introduced a use-after-free.  Calling mutt_set_parameter() pointing to
+        a different part of the same string ends up calling mutt_str_replace()
+        with both parameters pointing to the same hunk of memory.
+        
+        Improve mutt_str_replace() to deal with that case, to fix this bug and
+        prevent possible future bugs resulting from that mistake.
+        
+        Thank you to Vita Batrla for the excellent bug report and patch.  I
+        merely added a comment and removed the "SAFE_FREE comment" from his
+        patch.
+
+M	lib.c
+
+2020-03-06 13:48:45 -0800  Kevin McCarthy  <kevin@8t8.us> (d7ab6a73)
+
+        * Fix format string parameters.
+        
+        crypt-gpgme and pgpkey $pgp_entry_format optional expando processing
+        passed the wrong function parameter.  So did remailer for
+        $mix_entry_format.
+
+M	crypt-gpgme.c
+M	pgpkey.c
+M	remailer.c
+
+2020-02-23 12:53:46 -0800  Kevin McCarthy  <kevin@8t8.us> (619cd6cf)
+
+        * Ensure format string dest buffer is cleared for callback function.
+        
+        There is some variation in Mutt as to the behavior of an undefined
+        expando.  Some functions pass the op through, some output nothing.
+        
+        Unfortunately, a few callback functions also don't ensure the dest
+        buffer is cleared if no expandos match the passed in op.  This is
+        mostly my fault - I think I added a few using addrbook as a template,
+        which was unfortunately missing the default clear switch.
+        
+        Rather than adding it to the places a default is missing, just ensure
+        it's cleared in mutt_FormatString() itself, which will prevent future
+        mistakes too.
+
+M	muttlib.c
+
+2020-02-15 12:23:36 -0800  Kevin McCarthy  <kevin@8t8.us> (1adc3a5d)
+
+        * automatic post-release commit for mutt-1.13.4
+
+M	ChangeLog
+M	VERSION
 2020-02-15 11:25:37 -0800  Kevin McCarthy  <kevin@8t8.us> (05a257e8)
 
         * Update UPDATING file 1.13.4.
