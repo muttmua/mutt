@@ -1830,7 +1830,9 @@ fo-table</literal> for details.
   To help prevent forgetting about backgrounded sessions, <link
   linkend="background-confirm-quit">$background_confirm_quit</link>
   will prompt before exiting, in addition to <link
-  linkend="quit">$quit</link>.
+  linkend="quit">$quit</link>.  Additionally, the <literal>%B</literal>
+  expando in <link linkend="status-format">$status_format</link>
+  displays the number of backgrounded compose sessions.
 </para>
 <para>
   Background editing is available for most, but not all, message
