@@ -485,7 +485,7 @@ static void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
 
 /* the following code is shared between printing and piping */
 
-static int _mutt_pipe_message (HEADER *h, char *cmd,
+static int _mutt_pipe_message (HEADER *h, const char *cmd,
 			       int decode,
 			       int print,
 			       int split,
@@ -600,19 +600,24 @@ static int _mutt_pipe_message (HEADER *h, char *cmd,
 
 void mutt_pipe_message (HEADER *h)
 {
-  char buffer[LONG_STRING];
+  BUFFER *buffer;
 
-  buffer[0] = 0;
-  if (mutt_get_field (_("Pipe to command: "), buffer, sizeof (buffer), MUTT_CMD)
-      != 0 || !buffer[0])
-    return;
+  buffer = mutt_buffer_pool_get ();
+  if (mutt_buffer_get_field (_("Pipe to command: "), buffer, MUTT_CMD) != 0)
+    goto cleanup;
 
-  mutt_expand_path (buffer, sizeof (buffer));
-  _mutt_pipe_message (h, buffer,
+  if (!mutt_buffer_len (buffer))
+    goto cleanup;
+
+  mutt_buffer_expand_path (buffer);
+  _mutt_pipe_message (h, mutt_b2s (buffer),
 		      option (OPTPIPEDECODE),
 		      0,
 		      option (OPTPIPESPLIT),
 		      PipeSep);
+
+cleanup:
+  mutt_buffer_pool_release (&buffer);
 }
 
 void mutt_print_message (HEADER *h)
