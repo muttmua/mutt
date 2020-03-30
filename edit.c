@@ -421,9 +421,11 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
 	case 'r':
 	  if (*p)
           {
-	    strncpy(tmp, p, sizeof(tmp));
-	    mutt_expand_path(tmp, sizeof(tmp));
-	    buf = be_snarf_file (tmp, buf, &bufmax, &buflen, 1);
+            BUFFER *filename = mutt_buffer_pool_get ();
+	    mutt_buffer_strcpy (filename, p);
+	    mutt_buffer_expand_path (filename);
+	    buf = be_snarf_file (mutt_b2s (filename), buf, &bufmax, &buflen, 1);
+            mutt_buffer_pool_release (&filename);
           }
 	  else
 	    addstr (_("missing filename.\n"));
