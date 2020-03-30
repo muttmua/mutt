@@ -605,7 +605,7 @@ cleanup:
 }
 
 static void
-mutt_query_pipe_attachment (char *command, FILE *fp, BODY *body, int filter)
+mutt_query_pipe_attachment (const char *command, FILE *fp, BODY *body, int filter)
 {
   BUFFER *tfile = NULL, *warning = NULL;
 
@@ -672,7 +672,7 @@ static void pipe_attachment (FILE *fp, BODY *b, STATE *state)
 }
 
 static void
-pipe_attachment_list (char *command, ATTACH_CONTEXT *actx, FILE *fp, int tag,
+pipe_attachment_list (const char *command, ATTACH_CONTEXT *actx, FILE *fp, int tag,
                       BODY *top, int filter, STATE *state)
 {
   int i;
@@ -699,34 +699,41 @@ pipe_attachment_list (char *command, ATTACH_CONTEXT *actx, FILE *fp, int tag,
 void mutt_pipe_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, int filter)
 {
   STATE state;
-  char buf[SHORT_STRING];
+  BUFFER *buf = NULL;
   pid_t thepid;
 
   if (fp)
     filter = 0; /* sanity check: we can't filter in the recv case yet */
 
-  buf[0] = 0;
+  buf = mutt_buffer_pool_get ();
+
   memset (&state, 0, sizeof (STATE));
   /* perform charset conversion on text attachments when piping */
   state.flags = MUTT_CHARCONV;
 
-  if (mutt_get_field ((filter ? _("Filter through: ") : _("Pipe to: ")),
-                      buf, sizeof (buf), MUTT_CMD) != 0 || !buf[0])
-    return;
+  if (mutt_buffer_get_field ((filter ? _("Filter through: ") : _("Pipe to: ")),
+                             buf, MUTT_CMD) != 0)
+    goto cleanup;
 
-  mutt_expand_path (buf, sizeof (buf));
+  if (!mutt_buffer_len (buf))
+    goto cleanup;
+
+  mutt_buffer_expand_path (buf);
 
   if (!filter && !option (OPTATTACHSPLIT))
   {
     mutt_endwin (NULL);
-    thepid = mutt_create_filter (buf, &state.fpout, NULL, NULL);
-    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
+    thepid = mutt_create_filter (mutt_b2s (buf), &state.fpout, NULL, NULL);
+    pipe_attachment_list (mutt_b2s (buf), actx, fp, tag, top, filter, &state);
     safe_fclose (&state.fpout);
     if (mutt_wait_filter (thepid) != 0 || option (OPTWAITKEY))
       mutt_any_key_to_continue (NULL);
   }
   else
-    pipe_attachment_list (buf, actx, fp, tag, top, filter, &state);
+    pipe_attachment_list (mutt_b2s (buf), actx, fp, tag, top, filter, &state);
+
+cleanup:
+  mutt_buffer_pool_release (&buf);
 }
 
 static int can_print (ATTACH_CONTEXT *actx, BODY *top, int tag)
