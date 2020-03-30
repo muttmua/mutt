@@ -988,7 +988,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
 static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 {
   char buf[STRING];
-  char errstr[STRING];
+  char quoted_name[STRING];
   BUFFER err, token;
   ciss_url_t url;
   IMAP_LIST list;
@@ -1017,8 +1017,8 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
   mutt_account_tourl (&idata->conn->account, &url);
   /* escape \ and ". Also escape ` because the resulting
    * string will be passed to mutt_parse_rc_line. */
-  imap_quote_string_and_backquotes (errstr, sizeof (errstr), list.name);
-  url.path = errstr + 1;
+  imap_quote_string_and_backquotes (quoted_name, sizeof (quoted_name), list.name);
+  url.path = quoted_name + 1;
   url.path[strlen(url.path) - 1] = '\0';
   if (!mutt_strcmp (url.user, ImapUser))
     url.user = NULL;
@@ -1026,11 +1026,12 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
   safe_strcat (buf, sizeof (buf), "\"");
   mutt_buffer_init (&token);
   mutt_buffer_init (&err);
-  err.data = errstr;
-  err.dsize = sizeof (errstr);
+  err.dsize = STRING;
+  err.data = safe_malloc (err.dsize);
   if (mutt_parse_rc_line (buf, &token, &err))
-    dprint (1, (debugfile, "Error adding subscribed mailbox: %s\n", errstr));
+    dprint (1, (debugfile, "Error adding subscribed mailbox: %s\n", err.data));
   FREE (&token.data);
+  FREE (&err.data);
 }
 
 /* cmd_parse_myrights: set rights bits according to MYRIGHTS response */
