@@ -225,8 +225,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
     {
       FILE	*fp;
       pid_t	pid;
-      char	*cmd, *ptr;
-      size_t	expnlen;
+      char	*cmd;
       BUFFER	expn;
       int	line = 0;
 
@@ -262,30 +261,23 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
       safe_fclose (&fp);
       mutt_wait_filter (pid);
 
-      /* if we got output, make a new string consisting of the shell output
-	 plus whatever else was left on the original line */
-      /* BUT: If this is inside a quoted string, directly add output to
-       * the token */
+      /* If this is inside a quoted string, directly add output to
+       * the token (dest) */
       if (expn.data && qc)
       {
 	mutt_buffer_addstr (dest, expn.data);
-	FREE (&expn.data);
       }
+      /* Otherwise, reset tok to the shell output plus whatever else
+       * was left on the original line and continue processing it. */
       else if (expn.data)
       {
-	expnlen = mutt_strlen (expn.data);
-	tok->dsize = expnlen + mutt_strlen (tok->dptr) + 1;
-	ptr = safe_malloc (tok->dsize);
-	memcpy (ptr, expn.data, expnlen);
-	strcpy (ptr + expnlen, tok->dptr);	/* __STRCPY_CHECKED__ */
-	if (tok->destroy)
-	  FREE (&tok->data);
-	tok->data = ptr;
-	tok->dptr = ptr;
-	tok->destroy = 1; /* mark that the caller should destroy this data */
-	ptr = NULL;
-	FREE (&expn.data);
+        mutt_buffer_fix_dptr (&expn);
+        mutt_buffer_addstr (&expn, tok->dptr);
+        mutt_buffer_strcpy (tok, expn.data);
+	tok->dptr = tok->data;
       }
+
+      FREE (&expn.data);
     }
     else if (ch == '$' && (!qc || qc == '"') && (*tok->dptr == '{' || isalpha ((unsigned char) *tok->dptr)))
     {

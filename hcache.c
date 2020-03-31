@@ -395,7 +395,6 @@ dump_buffer(BUFFER * b, unsigned char *d, int *off, int convert)
   d = dump_char_size(b->data, d, off, b->dsize + 1, convert);
   d = dump_int(b->dptr - b->data, d, off);
   d = dump_int(b->dsize, d, off);
-  d = dump_int(b->destroy, d, off);
 
   return d;
 }
@@ -418,8 +417,6 @@ restore_buffer(BUFFER ** b, const unsigned char *d, int *off, int convert)
   (*b)->dptr = (*b)->data + offset;
   restore_int (&used, d, off);
   (*b)->dsize = used;
-  restore_int (&used, d, off);
-  (*b)->destroy = used;
 }
 
 static unsigned char *

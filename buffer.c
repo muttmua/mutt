@@ -275,7 +275,6 @@ void mutt_buffer_pool_release (BUFFER **pbuf)
     safe_realloc (&buf->data, buf->dsize);
   }
   mutt_buffer_clear (buf);
-  buf->destroy = 0;
   BufferPool[BufferPoolCount++] = buf;
 
   *pbuf = NULL;
