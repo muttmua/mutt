@@ -29,7 +29,7 @@
 #include "mutt.h"
 
 
-int getdnsdomainname (char *d, size_t len)
+int getdnsdomainname (BUFFER *d)
 {
   int ret = -1;
 
@@ -40,7 +40,7 @@ int getdnsdomainname (char *d, size_t len)
   struct addrinfo *h;
   char *p;
 
-  *d = '\0';
+  mutt_buffer_clear (d);
   memset(&hints, 0, sizeof (struct addrinfo));
   hints.ai_flags = AI_CANONNAME;
   hints.ai_family = AF_UNSPEC;
@@ -59,9 +59,9 @@ int getdnsdomainname (char *d, size_t len)
       ret = -1;
     else
     {
-      strfcpy(d, ++p, len);
+      mutt_buffer_strcpy (d, ++p);
       ret = 0;
-      dprint(1, (debugfile, "getdnsdomainname(): %s\n", d));
+      dprint (1, (debugfile, "getdnsdomainname(): %s\n", mutt_b2s (d)));
     }
     freeaddrinfo(h);
   }

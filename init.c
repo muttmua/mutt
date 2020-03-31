@@ -3467,10 +3467,10 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 {
   struct passwd *pw;
   struct utsname utsname;
-  char *p, buffer[STRING];
+  char *p;
   char *domain = NULL;
   int i, need_pause = 0;
-  BUFFER err;
+  BUFFER err, *buffer = NULL;
 
   mutt_buffer_init (&err);
   mutt_buffer_increase_size (&err, STRING);
@@ -3483,6 +3483,8 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   mutt_menu_init ();
   mutt_srandom ();
   mutt_buffer_pool_init ();
+
+  buffer = mutt_buffer_pool_get ();
 
   /*
    * XXX - use something even more difficult to predict?
@@ -3566,10 +3568,10 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     Fqdn = safe_malloc (mutt_strlen (domain) + mutt_strlen (Hostname) + 2);
     sprintf (Fqdn, "%s.%s", NONULL(Hostname), domain);	/* __SPRINTF_CHECKED__ */
   }
-  else if (!(getdnsdomainname (buffer, sizeof buffer)))
+  else if (!(getdnsdomainname (buffer)))
   {
-    Fqdn = safe_malloc (mutt_strlen (buffer) + mutt_strlen (Hostname) + 2);
-    sprintf (Fqdn, "%s.%s", NONULL(Hostname), buffer);	/* __SPRINTF_CHECKED__ */
+    Fqdn = safe_malloc (mutt_buffer_len (buffer) + mutt_strlen (Hostname) + 2);
+    sprintf (Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s (buffer));	/* __SPRINTF_CHECKED__ */
   }
   else
     /*
@@ -3591,11 +3593,11 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   else
   {
 #ifdef HOMESPOOL
-    mutt_concat_path (buffer, NONULL (Homedir), MAILPATH, sizeof (buffer));
+    mutt_buffer_concat_path (buffer, NONULL (Homedir), MAILPATH);
 #else
-    mutt_concat_path (buffer, MAILPATH, NONULL(Username), sizeof (buffer));
+    mutt_buffer_concat_path (buffer, MAILPATH, NONULL(Username));
 #endif
-    Spoolfile = safe_strdup (buffer);
+    Spoolfile = safe_strdup (mutt_b2s (buffer));
   }
 
   if ((p = getenv ("MAILCAPS")))
@@ -3620,17 +3622,12 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 
   if ((p = getenv ("REPLYTO")) != NULL)
   {
-    BUFFER buf, token;
+    BUFFER token;
     union pointer_long_t udata = {.l=0};
 
-    snprintf (buffer, sizeof (buffer), "Reply-To: %s", p);
-
-    mutt_buffer_init (&buf);
-    buf.data = buf.dptr = buffer;
-    buf.dsize = mutt_strlen (buffer);
-
+    mutt_buffer_printf (buffer, "Reply-To: %s", p);
     mutt_buffer_init (&token);
-    parse_my_hdr (&token, &buf, udata, &err);
+    parse_my_hdr (&token, buffer, udata, &err);
     FREE (&token.data);
   }
 
@@ -3681,26 +3678,26 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 
   if (!Muttrc)
   {
-    char *xdg_cfg_home = getenv ("XDG_CONFIG_HOME");
+    const char *xdg_cfg_home = getenv ("XDG_CONFIG_HOME");
 
     if (!xdg_cfg_home && Homedir)
     {
-      snprintf (buffer, sizeof (buffer), "%s/.config", Homedir);
-      xdg_cfg_home = buffer;
+      mutt_buffer_printf (buffer, "%s/.config", Homedir);
+      xdg_cfg_home = mutt_b2s (buffer);
     }
 
     Muttrc = mutt_find_cfg (Homedir, xdg_cfg_home);
   }
   else
   {
-    strfcpy (buffer, Muttrc, sizeof (buffer));
+    mutt_buffer_strcpy (buffer, Muttrc);
     FREE (&Muttrc);
-    mutt_expand_path (buffer, sizeof (buffer));
-    Muttrc = safe_strdup (buffer);
+    mutt_buffer_expand_path (buffer);
+    Muttrc = safe_strdup (mutt_b2s (buffer));
     if (access (Muttrc, F_OK))
     {
-      snprintf (buffer, sizeof (buffer), "%s: %s", Muttrc, strerror (errno));
-      mutt_endwin (buffer);
+      mutt_buffer_printf (buffer, "%s: %s", Muttrc, strerror (errno));
+      mutt_endwin (mutt_b2s (buffer));
       exit (1);
     }
   }
@@ -3715,16 +3712,16 @@ void mutt_init (int skip_sys_rc, LIST *commands)
      requested not to via "-n".  */
   if (!skip_sys_rc)
   {
-    snprintf (buffer, sizeof(buffer), "%s/Muttrc-%s", SYSCONFDIR, MUTT_VERSION);
-    if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof(buffer), "%s/Muttrc", SYSCONFDIR);
-    if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/Muttrc-%s", PKGDATADIR, MUTT_VERSION);
-    if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/Muttrc", PKGDATADIR);
-    if (access (buffer, F_OK) != -1)
+    mutt_buffer_printf (buffer, "%s/Muttrc-%s", SYSCONFDIR, MUTT_VERSION);
+    if (access (mutt_b2s (buffer), F_OK) == -1)
+      mutt_buffer_printf (buffer, "%s/Muttrc", SYSCONFDIR);
+    if (access (mutt_b2s (buffer), F_OK) == -1)
+      mutt_buffer_printf (buffer, "%s/Muttrc-%s", PKGDATADIR, MUTT_VERSION);
+    if (access (mutt_b2s (buffer), F_OK) == -1)
+      mutt_buffer_printf (buffer, "%s/Muttrc", PKGDATADIR);
+    if (access (mutt_b2s (buffer), F_OK) != -1)
     {
-      if (source_rc (buffer, &err) != 0)
+      if (source_rc (mutt_b2s (buffer), &err) != 0)
       {
 	fputs (err.data, stderr);
 	fputc ('\n', stderr);
@@ -3758,6 +3755,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   mutt_read_histfile ();
 
   FREE (&err.data);
+  mutt_buffer_pool_release (&buffer);
 }
 
 int mutt_get_hook_type (const char *name)

@@ -475,7 +475,7 @@ void mutt_pattern_free (pattern_t **pat);
 #define S_ISLNK(x) (((x) & S_IFMT) == S_IFLNK ? 1 : 0)
 #endif
 
-int getdnsdomainname (char *, size_t);
+int getdnsdomainname (BUFFER *);
 
 /* According to SCO support, this is how to detect SCO */
 #if defined (_M_UNIX) || defined (MUTT_OS)
