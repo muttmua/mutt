@@ -66,6 +66,8 @@ typedef void (*crypt_func_smime_invoke_import_t) (const char *infile, const char
 
 typedef void (*crypt_func_init_t) (void);
 
+typedef void (*crypt_func_cleanup_t) (void);
+
 typedef void (*crypt_func_set_sender_t) (const char *sender);
 
 /*
@@ -75,6 +77,7 @@ typedef struct crypt_module_functions
 {
   /* Common/General functions.  */
   crypt_func_init_t init;
+  crypt_func_cleanup_t cleanup;
   crypt_func_void_passphrase_t void_passphrase;
   crypt_func_valid_passphrase_t valid_passphrase;
   crypt_func_decrypt_mime_t decrypt_mime;

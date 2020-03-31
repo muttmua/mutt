@@ -110,6 +110,7 @@ struct crypt_module_specs crypt_mod_pgp_classic =
 { APPLICATION_PGP,
   {
     NULL,			/* init */
+    NULL,                       /* cleanup */
     crypt_mod_pgp_void_passphrase,
     crypt_mod_pgp_valid_passphrase,
     crypt_mod_pgp_decrypt_mime,

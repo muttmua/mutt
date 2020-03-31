@@ -32,6 +32,9 @@ typedef struct smime_key {
   struct smime_key *next;
 } smime_key_t;
 
+void smime_init (void);
+
+void smime_cleanup (void);
 
 void smime_free_key (smime_key_t **);
 

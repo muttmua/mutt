@@ -107,6 +107,15 @@ void crypt_init (void)
 #endif
 }
 
+void crypt_cleanup (void)
+{
+  if (CRYPT_MOD_CALL_CHECK (PGP, cleanup))
+    (CRYPT_MOD_CALL (PGP, cleanup)) ();
+
+  if (CRYPT_MOD_CALL_CHECK (SMIME, cleanup))
+    (CRYPT_MOD_CALL (SMIME, cleanup)) ();
+}
+
 
 /* Show a message that a backend will be invoked. */
 void crypt_invoke_message (int type)

@@ -1369,6 +1369,7 @@ cleanup_and_exit:
 #endif
   mutt_browser_cleanup ();
   mutt_commands_cleanup ();
+  crypt_cleanup ();
   mutt_free_opts ();
   mutt_free_windows ();
   mutt_buffer_pool_free ();

@@ -73,6 +73,16 @@ static char SmimeKeyToUse[_POSIX_PATH_MAX] = { 0 };
 static char SmimeCertToUse[_POSIX_PATH_MAX];
 static char SmimeIntermediateToUse[_POSIX_PATH_MAX];
 
+void smime_init (void)
+{
+  dprint (1, (debugfile, "In smime_init()\n"));
+}
+
+void smime_cleanup (void)
+{
+  dprint (1, (debugfile, "In smime_cleanup()\n"));
+}
+
 
 void smime_free_key (smime_key_t **keylist)
 {

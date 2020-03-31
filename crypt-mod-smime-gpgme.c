@@ -89,6 +89,7 @@ struct crypt_module_specs crypt_mod_smime_gpgme =
 { APPLICATION_SMIME,
   {
     crypt_mod_smime_init,
+    NULL,                       /* cleanup */
     crypt_mod_smime_void_passphrase,
     crypt_mod_smime_valid_passphrase,
     crypt_mod_smime_decrypt_mime,

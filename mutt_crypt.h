@@ -308,4 +308,6 @@ int crypt_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf);
 
 void crypt_init (void);
 
+void crypt_cleanup (void);
+
 #endif /*MUTT_CRYPT_H*/
