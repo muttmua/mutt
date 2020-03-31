@@ -1303,7 +1303,7 @@ void mutt_update_encoding (BODY *a)
 
 BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
 {
-  char buffer[LONG_STRING];
+  BUFFER *buffer = NULL;
   BODY *body;
   FILE *fp;
   int cmflags, chflags;
@@ -1319,18 +1319,24 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
     }
   }
 
-  mutt_mktemp (buffer, sizeof (buffer));
-  if ((fp = safe_fopen (buffer, "w+")) == NULL)
+  buffer = mutt_buffer_pool_get ();
+  mutt_buffer_mktemp (buffer);
+  if ((fp = safe_fopen (mutt_b2s (buffer), "w+")) == NULL)
+  {
+    mutt_buffer_pool_release (&buffer);
     return NULL;
+  }
 
   body = mutt_new_body ();
   body->type = TYPEMESSAGE;
   body->subtype = safe_strdup ("rfc822");
-  body->filename = safe_strdup (buffer);
+  body->filename = safe_strdup (mutt_b2s (buffer));
   body->unlink = 1;
   body->use_disp = 0;
   body->disposition = DISPINLINE;
   body->noconv = 1;
+
+  mutt_buffer_pool_release (&buffer);
 
   mutt_parse_mime_message (ctx, hdr);
 
