@@ -162,7 +162,7 @@ reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
 # If configured with --with-included-gettext this means that intl will
 # not have generated libintl.h yet, and mutt.h -> lib.h will generate
 # an error.
-hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h config.h $(srcdir)/hcachever.pl
+hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h $(srcdir)/buffer.h config.h $(srcdir)/hcachever.pl
 	( echo '#include "config.h"'; echo '#undef ENABLE_NLS'; echo '#include "mutt.h"'; ) \
 	| $(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) - | perl $(srcdir)/hcachever.pl > hcversion.h
 
