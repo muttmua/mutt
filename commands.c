@@ -59,7 +59,12 @@
 static const char *ExtPagerProgress = "all";
 
 /* The folder the user last saved to.  Used by ci_save_message() */
-static char LastSaveFolder[_POSIX_PATH_MAX] = "";
+static BUFFER *LastSaveFolder = NULL;
+
+void mutt_commands_cleanup (void)
+{
+  mutt_buffer_free (&LastSaveFolder);
+}
 
 static void process_protected_headers (HEADER *cur)
 {
@@ -920,10 +925,12 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
   /* This is an undocumented feature of ELM pointed out to me by Felix von
    * Leitner <leitner@prz.fu-berlin.de>
    */
+  if (!LastSaveFolder)
+    LastSaveFolder = mutt_buffer_new ();
   if (mutt_strcmp (mutt_b2s (buf), ".") == 0)
-    mutt_buffer_strcpy (buf, LastSaveFolder);
+    mutt_buffer_strcpy (buf, mutt_b2s (LastSaveFolder));
   else
-    strfcpy (LastSaveFolder, mutt_b2s (buf), sizeof (LastSaveFolder));
+    mutt_buffer_strcpy (LastSaveFolder, mutt_b2s (buf));
 
   mutt_buffer_expand_path (buf);
 

@@ -1368,6 +1368,7 @@ cleanup_and_exit:
   mutt_autocrypt_cleanup ();
 #endif
   mutt_browser_cleanup ();
+  mutt_commands_cleanup ();
   mutt_free_opts ();
   mutt_free_windows ();
   mutt_buffer_pool_free ();
