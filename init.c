@@ -2738,11 +2738,11 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 static int source_rc (const char *rcfile, BUFFER *err)
 {
   FILE *f;
-  int line = 0, rc = 0, conv = 0;
-  BUFFER token;
-  char *linebuf = NULL;
+  int lineno = 0, rc = 0, conv = 0;
+  BUFFER *token, *linebuf;
+  char *line = NULL;
   char *currentline = NULL;
-  size_t buflen;
+  size_t linelen;
   pid_t pid;
 
   dprint (2, (debugfile, "Reading configuration file '%s'.\n",
@@ -2754,22 +2754,27 @@ static int source_rc (const char *rcfile, BUFFER *err)
     return (-1);
   }
 
-  mutt_buffer_init (&token);
-  while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line, MUTT_CONT)) != NULL)
+  token = mutt_buffer_pool_get ();
+  linebuf = mutt_buffer_pool_get ();
+
+  while ((line = mutt_read_line (line, &linelen, f, &lineno, MUTT_CONT)) != NULL)
   {
     conv=ConfigCharset && Charset;
     if (conv)
     {
-      currentline=safe_strdup(linebuf);
-      if (!currentline) continue;
-      mutt_convert_string(&currentline, ConfigCharset, Charset, 0);
+      currentline = safe_strdup(line);
+      if (!currentline)
+        continue;
+      mutt_convert_string (&currentline, ConfigCharset, Charset, 0);
     }
     else
-      currentline=linebuf;
+      currentline = line;
 
-    if (mutt_parse_rc_line (currentline, &token, err) == -1)
+    mutt_buffer_strcpy (linebuf, currentline);
+
+    if (mutt_parse_rc_buffer (linebuf, token, err) == -1)
     {
-      mutt_error (_("Error in %s, line %d: %s"), rcfile, line, err->data);
+      mutt_error (_("Error in %s, line %d: %s"), rcfile, lineno, err->data);
       if (--rc < -MAXERRS)
       {
         if (conv) FREE(&currentline);
@@ -2784,11 +2789,12 @@ static int source_rc (const char *rcfile, BUFFER *err)
     if (conv)
       FREE(&currentline);
   }
-  FREE (&token.data);
-  FREE (&linebuf);
+
+  FREE (&line);
   safe_fclose (&f);
   if (pid != -1)
     mutt_wait_filter (pid);
+
   if (rc)
   {
     /* the muttrc source keyword */
@@ -2796,6 +2802,9 @@ static int source_rc (const char *rcfile, BUFFER *err)
               : _("source: reading aborted due to too many errors in %s"), rcfile);
     rc = -1;
   }
+
+  mutt_buffer_pool_release (&token);
+  mutt_buffer_pool_release (&linebuf);
   return (rc);
 }
 
@@ -2826,46 +2835,64 @@ static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUF
   return rc;
 }
 
+int mutt_parse_rc_line (const char *line, BUFFER *err)
+{
+  BUFFER *line_buffer = NULL, *token = NULL;
+  int rc;
+
+  if (!line || !*line)
+    return 0;
+
+  line_buffer = mutt_buffer_pool_get ();
+  token = mutt_buffer_pool_get ();
+
+  mutt_buffer_strcpy (line_buffer, line);
+
+  rc = mutt_parse_rc_buffer (line_buffer, token, err);
+
+  mutt_buffer_pool_release (&line_buffer);
+  mutt_buffer_pool_release (&token);
+  return rc;
+}
+
 /* line		command to execute
 
-   token	scratch buffer to be used by parser.  caller should free
-   		token->data when finished.  the reason for this variable is
+   token	scratch buffer to be used by parser.
+                the reason for this variable is
 		to avoid having to allocate and deallocate a lot of memory
 		if we are parsing many lines.  the caller can pass in the
 		memory to use, which avoids having to create new space for
 		every call to this function.
 
    err		where to write error messages */
-int mutt_parse_rc_line (/* const */ char *line, BUFFER *token, BUFFER *err)
+int mutt_parse_rc_buffer (BUFFER *line, BUFFER *token, BUFFER *err)
 {
   int i, r = -1;
-  BUFFER expn;
 
-  if (!line || !*line)
+  if (!mutt_buffer_len (line))
     return 0;
 
-  mutt_buffer_init (&expn);
-  expn.data = expn.dptr = line;
-  expn.dsize = mutt_strlen (line);
+  mutt_buffer_clear (err);
 
-  *err->data = 0;
+  /* Read from the beginning of line->data */
+  line->dptr = line->data;
 
-  SKIPWS (expn.dptr);
-  while (*expn.dptr)
+  SKIPWS (line->dptr);
+  while (*line->dptr)
   {
-    if (*expn.dptr == '#')
+    if (*line->dptr == '#')
       break; /* rest of line is a comment */
-    if (*expn.dptr == ';')
+    if (*line->dptr == ';')
     {
-      expn.dptr++;
+      line->dptr++;
       continue;
     }
-    mutt_extract_token (token, &expn, 0);
+    mutt_extract_token (token, line, 0);
     for (i = 0; Commands[i].name; i++)
     {
       if (!mutt_strcmp (token->data, Commands[i].name))
       {
-	if (Commands[i].func (token, &expn, Commands[i].data, err) != 0)
+	if (Commands[i].func (token, line, Commands[i].data, err) != 0)
 	  goto finish;
         break;
       }
@@ -2878,8 +2905,6 @@ int mutt_parse_rc_line (/* const */ char *line, BUFFER *token, BUFFER *err)
   }
   r = 0;
 finish:
-  if (expn.destroy)
-    FREE (&expn.data);
   return (r);
 }
 
@@ -3259,10 +3284,9 @@ int mutt_query_variables (LIST *queries)
 
   char command[STRING];
 
-  BUFFER err, token;
+  BUFFER err;
 
   mutt_buffer_init (&err);
-  mutt_buffer_init (&token);
 
   err.dsize = STRING;
   err.data = safe_malloc (err.dsize);
@@ -3270,10 +3294,9 @@ int mutt_query_variables (LIST *queries)
   for (p = queries; p; p = p->next)
   {
     snprintf (command, sizeof (command), "set ?%s\n", p->data);
-    if (mutt_parse_rc_line (command, &token, &err) == -1)
+    if (mutt_parse_rc_line (command, &err) == -1)
     {
       fprintf (stderr, "%s\n", err.data);
-      FREE (&token.data);
       FREE (&err.data);
 
       return 1;
@@ -3281,7 +3304,6 @@ int mutt_query_variables (LIST *queries)
     printf ("%s\n", err.data);
   }
 
-  FREE (&token.data);
   FREE (&err.data);
 
   return 0;
@@ -3294,10 +3316,9 @@ int mutt_dump_variables (void)
 
   char command[STRING];
 
-  BUFFER err, token;
+  BUFFER err;
 
   mutt_buffer_init (&err);
-  mutt_buffer_init (&token);
 
   err.dsize = STRING;
   err.data = safe_malloc (err.dsize);
@@ -3308,10 +3329,9 @@ int mutt_dump_variables (void)
       continue;
 
     snprintf (command, sizeof (command), "set ?%s\n", MuttVars[i].option);
-    if (mutt_parse_rc_line (command, &token, &err) == -1)
+    if (mutt_parse_rc_line (command, &err) == -1)
     {
       fprintf (stderr, "%s\n", err.data);
-      FREE (&token.data);
       FREE (&err.data);
 
       return 1;
@@ -3319,7 +3339,6 @@ int mutt_dump_variables (void)
     printf("%s\n", err.data);
   }
 
-  FREE (&token.data);
   FREE (&err.data);
 
   return 0;
@@ -3375,24 +3394,21 @@ static void start_debug (void)
 
 static int mutt_execute_commands (LIST *p)
 {
-  BUFFER err, token;
+  BUFFER err;
 
   mutt_buffer_init (&err);
   err.dsize = STRING;
   err.data = safe_malloc (err.dsize);
-  mutt_buffer_init (&token);
   for (; p; p = p->next)
   {
-    if (mutt_parse_rc_line (p->data, &token, &err) != 0)
+    if (mutt_parse_rc_line (p->data, &err) != 0)
     {
       fprintf (stderr, _("Error in command line: %s\n"), err.data);
-      FREE (&token.data);
       FREE (&err.data);
 
       return -1;
     }
   }
-  FREE (&token.data);
   FREE (&err.data);
 
   return 0;

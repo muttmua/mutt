@@ -737,7 +737,7 @@ void mutt_shell_escape (void)
 /* enter a mutt command */
 void mutt_enter_command (void)
 {
-  BUFFER err, token;
+  BUFFER err;
   char buffer[LONG_STRING];
   int r;
 
@@ -747,9 +747,7 @@ void mutt_enter_command (void)
   mutt_buffer_init (&err);
   err.dsize = STRING;
   err.data = safe_malloc(err.dsize);
-  mutt_buffer_init (&token);
-  r = mutt_parse_rc_line (buffer, &token, &err);
-  FREE (&token.data);
+  r = mutt_parse_rc_line (buffer, &err);
   if (err.data[0])
   {
     /* since errbuf could potentially contain printf() sequences in it,

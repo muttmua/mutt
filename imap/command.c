@@ -989,7 +989,7 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 {
   char buf[STRING];
   char quoted_name[STRING];
-  BUFFER err, token;
+  BUFFER err;
   ciss_url_t url;
   IMAP_LIST list;
 
@@ -1024,13 +1024,11 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
     url.user = NULL;
   url_ciss_tostring (&url, buf + 11, sizeof (buf) - 11, 0);
   safe_strcat (buf, sizeof (buf), "\"");
-  mutt_buffer_init (&token);
   mutt_buffer_init (&err);
   err.dsize = STRING;
   err.data = safe_malloc (err.dsize);
-  if (mutt_parse_rc_line (buf, &token, &err))
+  if (mutt_parse_rc_line (buf, &err))
     dprint (1, (debugfile, "Error adding subscribed mailbox: %s\n", err.data));
-  FREE (&token.data);
   FREE (&err.data);
 }
 
