@@ -819,7 +819,7 @@ smime_key_t *smime_ask_for_key(char *prompt, short abilities, short public)
 void _smime_getkeys (char *mailbox)
 {
   smime_key_t *key = NULL;
-  char *k = NULL;
+  const char *k = NULL;
   char buf[STRING];
   size_t smime_keys_len;
 
@@ -833,46 +833,18 @@ void _smime_getkeys (char *mailbox)
     key = smime_ask_for_key (buf, KEYFLAG_CANENCRYPT, 0);
   }
 
-  if (key)
+  k = key ? key->hash : NONULL (SmimeDefaultKey);
+
+  /* if the key is different from last time */
+  if ((mutt_buffer_len (SmimeKeyToUse) <= smime_keys_len) ||
+      mutt_strcasecmp (k, SmimeKeyToUse->data + smime_keys_len + 1))
   {
-    k = key->hash;
-
-    /* the key used last time. */
-    if (mutt_buffer_len (SmimeKeyToUse) > smime_keys_len &&
-        !mutt_strcasecmp (k, SmimeKeyToUse->data + smime_keys_len + 1))
-    {
-      smime_free_key (&key);
-      return;
-    }
-    else smime_void_passphrase ();
-
-    mutt_buffer_printf (SmimeKeyToUse, "%s/%s",
-	      NONULL(SmimeKeys), k);
-
-    mutt_buffer_printf (SmimeCertToUse, "%s/%s",
-	      NONULL(SmimeCertificates), k);
-
-    if (mutt_strcasecmp (k, SmimeDefaultKey))
-      smime_void_passphrase ();
-
-    smime_free_key (&key);
-    return;
-  }
-
-  if (mutt_buffer_len (SmimeKeyToUse) > smime_keys_len)
-  {
-    if (!mutt_strcasecmp (SmimeDefaultKey,
-                          SmimeKeyToUse->data + smime_keys_len + 1))
-      return;
-
     smime_void_passphrase ();
+    mutt_buffer_printf (SmimeKeyToUse, "%s/%s", NONULL(SmimeKeys), k);
+    mutt_buffer_printf (SmimeCertToUse, "%s/%s", NONULL(SmimeCertificates), k);
   }
 
-  mutt_buffer_printf (SmimeKeyToUse, "%s/%s",
-	    NONULL (SmimeKeys), NONULL (SmimeDefaultKey));
-
-  mutt_buffer_printf (SmimeCertToUse, "%s/%s",
-	    NONULL (SmimeCertificates), NONULL (SmimeDefaultKey));
+  smime_free_key (&key);
 }
 
 void smime_getkeys (ENVELOPE *env)
