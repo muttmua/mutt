@@ -1755,10 +1755,6 @@ static int count_body_parts (BODY *body, int flags)
 	AT_NOCOUNT("top-level multipart");
     }
 
-    if (bp->disposition == DISPINLINE &&
-        bp->type != TYPEMULTIPART && bp->type != TYPEMESSAGE && bp == body)
-      AT_NOCOUNT("ignore fundamental inlines");
-
     /* If this body isn't scheduled for enumeration already, don't bother
      * profiling it further.
      */
@@ -1778,10 +1774,20 @@ static int count_body_parts (BODY *body, int flags)
       }
       else
       {
-        if (!count_body_parts_check(&InlineAllow, bp, 1))
-	  AT_NOCOUNT("inline not allowed");
-        if (count_body_parts_check(&InlineExclude, bp, 0))
-	  AT_NOCOUNT("excluded");
+        if (bp == body)
+        {
+          if (!count_body_parts_check(&RootAllow, bp, 1))
+            AT_NOCOUNT("root not allowed");
+          if (count_body_parts_check(&RootExclude, bp, 0))
+            AT_NOCOUNT("root excluded");
+        }
+        else
+        {
+          if (!count_body_parts_check(&InlineAllow, bp, 1))
+            AT_NOCOUNT("inline not allowed");
+          if (count_body_parts_check(&InlineExclude, bp, 0))
+            AT_NOCOUNT("excluded");
+        }
       }
     }
 
@@ -1816,7 +1822,8 @@ int mutt_count_body_parts (CONTEXT *ctx, HEADER *hdr)
   else
     mutt_parse_mime_message (ctx, hdr);
 
-  if (AttachAllow || AttachExclude || InlineAllow || InlineExclude)
+  if (AttachAllow || AttachExclude || InlineAllow || InlineExclude ||
+      RootAllow || RootExclude)
     hdr->attach_total = count_body_parts(hdr->content, MUTT_PARTS_TOPLEVEL);
   else
     hdr->attach_total = 0;

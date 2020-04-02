@@ -189,6 +189,8 @@ WHERE LIST *AttachAllow;
 WHERE LIST *AttachExclude;
 WHERE LIST *InlineAllow;
 WHERE LIST *InlineExclude;
+WHERE LIST *RootAllow;
+WHERE LIST *RootExclude;
 WHERE LIST *HeaderOrderList;
 WHERE LIST *Ignore;
 WHERE LIST *MailtoAllow;

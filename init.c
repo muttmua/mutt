@@ -1316,6 +1316,8 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata
     print_attach_list(AttachExclude, '-', "A");
     print_attach_list(InlineAllow,   '+', "I");
     print_attach_list(InlineExclude, '-', "I");
+    print_attach_list(RootAllow,     '+', "R");
+    print_attach_list(RootExclude,   '-', "R");
     mutt_any_key_to_continue (NULL);
     return 0;
   }
@@ -1338,6 +1340,13 @@ static int parse_attachments (BUFFER *buf, BUFFER *s, union pointer_long_t udata
       listp = &InlineAllow;
     else
       listp = &InlineExclude;
+  }
+  else if (!ascii_strncasecmp(category, "root", strlen(category)))
+  {
+    if (op == '+')
+      listp = &RootAllow;
+    else
+      listp = &RootExclude;
   }
   else
   {
@@ -1381,6 +1390,8 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, union pointer_long_t uda
       mutt_free_list_generic(&AttachExclude, free_attachments_data);
       mutt_free_list_generic(&InlineAllow, free_attachments_data);
       mutt_free_list_generic(&InlineExclude, free_attachments_data);
+      mutt_free_list_generic(&RootAllow, free_attachments_data);
+      mutt_free_list_generic(&RootExclude, free_attachments_data);
       _attachments_clean();
       return 0;
   }
@@ -1403,6 +1414,13 @@ static int parse_unattachments (BUFFER *buf, BUFFER *s, union pointer_long_t uda
       listp = &InlineAllow;
     else
       listp = &InlineExclude;
+  }
+  else if (!ascii_strncasecmp(p, "root", strlen(p)))
+  {
+    if (op == '+')
+      listp = &RootAllow;
+    else
+      listp = &RootExclude;
   }
   else
   {

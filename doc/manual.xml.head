@@ -8394,6 +8394,13 @@ type &mdash; either <literal>inline</literal> or
 </para>
 
 <para>
+A first (or only) inline part of a message or multipart is considered
+a <quote>root</quote> part, and is counted separately than other
+inline parts.  Specify <literal>root</literal> or <literal>R</literal>
+for <emphasis>disposition</emphasis> to count these as attachments.
+</para>
+
+<para>
 Disposition is prefixed by either a <quote>+</quote> symbol or a
 <quote>-</quote> symbol.  If it's a <quote>+</quote>, you're saying that
 you want to allow this disposition and MIME type to qualify.  If it's a
