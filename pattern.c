@@ -872,6 +872,41 @@ static const struct pattern_flags *lookup_tag (char tag)
   return NULL;
 }
 
+static const struct pattern_flags *lookup_op (int op)
+{
+  int i;
+
+  for (i = 0; Flags[i].tag; i++)
+    if (Flags[i].op == op)
+      return (&Flags[i]);
+  return NULL;
+}
+
+static void print_crypt_pattern_op_error (int op)
+{
+  const struct pattern_flags *entry;
+
+  entry = lookup_op (op);
+  if (entry)
+  {
+    /* L10N:
+       One of the crypt pattern operators: ~g, ~G, ~k, ~V
+       was invoked when Mutt was compiled without crypto support.
+       %c is the pattern character, i.e. "g".
+    */
+    mutt_error (_("Pattern operator '~%c' is disabled."), entry->tag);
+  }
+  else
+  {
+    /* L10N:
+       An unknown pattern operator was somehow invoked.  This
+       shouldn't be possible unless there is a bug.
+    */
+    mutt_error (_("error: unknown op %d (report this error)."), op);
+  }
+
+}
+
 static /* const */ char *find_matching_paren (/* const */ char *s)
 {
   int level = 1;
@@ -1498,19 +1533,31 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ (h->collapsed && h->num_hidden > 1));
     case MUTT_CRYPT_SIGN:
       if (!WithCrypto)
-        break;
+      {
+        print_crypt_pattern_op_error (pat->op);
+        return 0;
+      }
       return (pat->not ^ ((h->security & SIGN) ? 1 : 0));
     case MUTT_CRYPT_VERIFIED:
       if (!WithCrypto)
-        break;
+      {
+        print_crypt_pattern_op_error (pat->op);
+        return 0;
+      }
       return (pat->not ^ ((h->security & GOODSIGN) ? 1 : 0));
     case MUTT_CRYPT_ENCRYPT:
       if (!WithCrypto)
-        break;
+      {
+        print_crypt_pattern_op_error (pat->op);
+        return 0;
+      }
       return (pat->not ^ ((h->security & ENCRYPT) ? 1 : 0));
     case MUTT_PGP_KEY:
       if (!(WithCrypto & APPLICATION_PGP))
-        break;
+      {
+        print_crypt_pattern_op_error (pat->op);
+        return 0;
+      }
       return (pat->not ^ ((h->security & PGPKEY) == PGPKEY));
     case MUTT_XLABEL:
       return (pat->not ^ (h->env->x_label && patmatch (pat, h->env->x_label) == 0));
@@ -1534,7 +1581,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ (h->thread && !h->thread->child));
   }
   mutt_error (_("error: unknown op %d (report this error)."), pat->op);
-  return (-1);
+  return (0);
 }
 
 static void quote_simple (BUFFER *tmp, const char *p)
