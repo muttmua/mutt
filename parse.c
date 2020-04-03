@@ -1713,7 +1713,7 @@ static int count_body_parts_check(LIST **checklist, BODY *b, int dflt)
 static int count_body_parts (BODY *body, int flags)
 {
   int count = 0;
-  int shallcount, shallrecurse;
+  int shallcount, shallrecurse, recurse_flags = 0;
   BODY *bp;
 
   if (body == NULL)
@@ -1748,7 +1748,16 @@ static int count_body_parts (BODY *body, int flags)
       /* Always recurse multiparts, except multipart/alternative. */
       shallrecurse = 1;
       if (!ascii_strcasecmp(bp->subtype, "alternative"))
+      {
         shallrecurse = option (OPTCOUNTALTERNATIVES);
+        /* alternative counting needs to distinguish between a "root"
+         * multipart/alternative and non-root.  See further below.
+         */
+        if (bp == body)
+          recurse_flags |= MUTT_PARTS_ROOT_MPALT;
+        else
+          recurse_flags |= MUTT_PARTS_NONROOT_MPALT;
+      }
 
       /* Don't count containers if they're top-level. */
       if (flags & MUTT_PARTS_TOPLEVEL)
@@ -1774,7 +1783,14 @@ static int count_body_parts (BODY *body, int flags)
       }
       else
       {
-        if (bp == body)
+        /* - root multipart/alternative top-level inline parts are
+         *   also treated as root parts
+         * - nonroot multipart/alternative top-level parts are NOT
+         *   treated as root parts
+         * - otherwise, initial inline parts are considered root
+         */
+        if (((bp == body) && !(flags & MUTT_PARTS_NONROOT_MPALT)) ||
+            (flags & MUTT_PARTS_ROOT_MPALT))
         {
           if (!count_body_parts_check(&RootAllow, bp, 1))
             AT_NOCOUNT("root not allowed");
@@ -1800,7 +1816,7 @@ static int count_body_parts (BODY *body, int flags)
     if (shallrecurse)
     {
       dprint(5, (debugfile, "cbp: %p pre count = %d\n", (void *)bp, count));
-      bp->attach_count = count_body_parts(bp->parts, flags & ~MUTT_PARTS_TOPLEVEL);
+      bp->attach_count = count_body_parts(bp->parts, recurse_flags);
       count += bp->attach_count;
       dprint(5, (debugfile, "cbp: %p post count = %d\n", (void *)bp, count));
     }

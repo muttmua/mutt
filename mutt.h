@@ -1172,7 +1172,10 @@ typedef struct
   char *orig_str;
 } mbchar_table;
 
-#define MUTT_PARTS_TOPLEVEL	(1<<0)	/* is the top-level part */
+/* flags for count_body_parts() */
+#define MUTT_PARTS_TOPLEVEL      (1<<0) /* is the top-level part */
+#define MUTT_PARTS_ROOT_MPALT    (1<<1) /* root multipart/alternative */
+#define MUTT_PARTS_NONROOT_MPALT (1<<2) /* non-root multipart/alternative */
 
 #include "send.h"
 #include "ascii.h"
