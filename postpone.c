@@ -134,7 +134,8 @@ int mutt_num_postponed (int force)
 
     if (access (Postponed, R_OK | F_OK) != 0)
       return (PostCount = 0);
-    if (mx_open_mailbox (Postponed, MUTT_NOSORT | MUTT_QUIET, &ctx) == NULL)
+    if (mx_open_mailbox (Postponed, MUTT_NOSORT | MUTT_QUIET | MUTT_READONLY,
+                         &ctx) == NULL)
       PostCount = 0;
     else
       PostCount = ctx.msgcount;
