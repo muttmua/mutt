@@ -249,18 +249,6 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
     return (-1);
   }
 
-  /* TODO:
-   * mx_open_mailbox() for IMAP leaves IMAP_REOPEN_ALLOW set.  For the
-   * index this is papered-over because it calls mx_check_mailbox()
-   * every event loop (which resets that flag).
-   *
-   * For a stable-branch fix, I'm doing the same here, to prevent
-   * context changes from occuring behind the scenes and causing
-   * segvs, but probably the flag needs to be reset after downloading
-   * headers in imap_open_mailbox().
-   */
-  mx_check_mailbox (PostContext, NULL);
-
   if (! PostContext->msgcount)
   {
     PostCount = 0;

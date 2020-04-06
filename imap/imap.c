@@ -851,6 +851,8 @@ static int imap_open_mailbox (CONTEXT* ctx)
     goto fail;
   }
 
+  imap_disallow_reopen (ctx);
+
   dprint (2, (debugfile, "imap_open_mailbox: msgcount is %d\n", ctx->msgcount));
   FREE (&mx.mbox);
   return 0;
@@ -1306,7 +1308,7 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   imap_allow_reopen (ctx);
 
   if ((rc = imap_check_mailbox (ctx, index_hint, 0)) != 0)
-    return rc;
+    goto out;
 
   /* if we are expunging anyway, we can do deleted messages very quickly... */
   if (expunge && mutt_bit_isset (ctx->rights, MUTT_ACL_DELETE))
@@ -1525,6 +1527,7 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
   rc = 0;
 
 out:
+  imap_disallow_reopen (ctx);
   if (appendctx)
   {
     mx_fastclose_mailbox (appendctx);
