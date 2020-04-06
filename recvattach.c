@@ -390,7 +390,9 @@ int mutt_is_message_type (int type, const char *subtype)
     return 0;
 
   subtype = NONULL(subtype);
-  return (ascii_strcasecmp (subtype, "rfc822") == 0 || ascii_strcasecmp (subtype, "news") == 0);
+  return (ascii_strcasecmp (subtype, "rfc822") == 0 ||
+          ascii_strcasecmp (subtype, "news") == 0 ||
+          ascii_strcasecmp (subtype, "global") == 0);
 }
 
 /*
