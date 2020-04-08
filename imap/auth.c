@@ -55,7 +55,7 @@ int imap_authenticate (IMAP_DATA* idata)
   char* methods;
   char* method;
   char* delim;
-  int r = -1;
+  int r = IMAP_AUTH_UNAVAIL;
 
   if (ImapAuthenticators)
   {
