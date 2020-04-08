@@ -860,8 +860,11 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 {
   int i, need_buffy_cleanup;
   int need_passphrase = 0, app=0;
-  int rc = -1;
+  int rc = -1, context_flags;
   char prompt[SHORT_STRING];
+  const char *progress_msg;
+  progress_t progress;
+  int tagged_progress_count = 0;
   BUFFER *buf = NULL;
   CONTEXT ctx;
   struct stat st;
@@ -965,7 +968,13 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
   }
 #endif
 
-  if (mx_open_mailbox (mutt_b2s (buf), MUTT_APPEND, &ctx) != NULL)
+  context_flags = MUTT_APPEND;
+  /* Display a tagged message progress counter, rather than (for
+   * IMAP) a per-message progress counter */
+  if (!h)
+    context_flags |= MUTT_QUIET;
+
+  if (mx_open_mailbox (mutt_b2s (buf), context_flags, &ctx) != NULL)
   {
     if (h)
     {
@@ -977,10 +986,22 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
     }
     else
     {
+      /* L10N:
+         Progress meter message when saving tagged messages
+      */
+      progress_msg = delete ? _("Saving tagged messages...") :
+      /* L10N:
+         Progress meter message when copying tagged messages
+      */
+        _("Copying tagged messages...");
+      mutt_progress_init (&progress, progress_msg, MUTT_PROGRESS_MSG,
+                          WriteInc, Context->tagged);
+
       for (i = 0; i < Context->vcount; i++)
       {
 	if (Context->hdrs[Context->v2r[i]]->tagged)
 	{
+          mutt_progress_update (&progress, ++tagged_progress_count, -1);
 	  mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
 	  if (_mutt_save_message(Context->hdrs[Context->v2r[i]],
                                  &ctx, delete, decode, decrypt) != 0)
