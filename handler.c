@@ -1140,7 +1140,7 @@ static int alternative_handler (BODY *a, STATE *s)
     /* didn't find anything that we could display! */
     state_mark_attach (s);
     state_puts(_("[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"), s);
-    rc = -1;
+    rc = 1;
   }
 
   if (mustfree)
@@ -1373,7 +1373,7 @@ static int autoview_handler (BODY *a, STATE *s)
 	state_mark_attach (s);
 	state_printf (s, _("[-- Can't run %s. --]\n"), mutt_b2s (command));
       }
-      rc = -1;
+      rc = 1;
       goto bail;
     }
 

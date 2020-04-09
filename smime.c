@@ -2195,7 +2195,7 @@ bail:
 
 int smime_application_smime_handler (BODY *m, STATE *s)
 {
-  int rv = -1;
+  int rv = 1;
   BODY *tattach;
 
   /* clear out any mime headers before the handler, so they can't be

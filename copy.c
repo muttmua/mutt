@@ -729,8 +729,14 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
   return rc;
 }
 
-/* should be made to return -1 on fatal errors, and 1 on non-fatal errors
- * like partial decode, where it is worth displaying as much as possible */
+/* Returns:
+ *    0 on success
+ *   -1 on a fatal error
+ *    1 on a partial decode, or errors that are still deemed viewable
+ *      by mutt_display_message() (such as decryption errors).
+ * Callers besides mutt_display_message should consider rc != 0 as
+ * failure.
+ */
 int
 mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
 		   int chflags)
@@ -740,8 +746,8 @@ mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
 
   if ((msg = mx_open_message (src, hdr->msgno)) == NULL)
     return -1;
-  if ((r = _mutt_copy_message (fpout, msg->fp, hdr, hdr->content, flags, chflags)) == 0
-      && (ferror (fpout) || feof (fpout)))
+  r = _mutt_copy_message (fpout, msg->fp, hdr, hdr->content, flags, chflags);
+  if ((r >= 0) && (ferror (fpout) || feof (fpout)))
   {
     dprint (1, (debugfile, "_mutt_copy_message failed to detect EOF!\n"));
     r = -1;
@@ -779,6 +785,9 @@ _mutt_append_message (CONTEXT *dest, FILE *fpin, CONTEXT *src, HEADER *hdr,
     chflags |= CH_FROM | CH_FORCE_FROM;
   chflags |= (dest->magic == MUTT_MAILDIR ? CH_NOSTATUS : CH_UPDATE);
   r = _mutt_copy_message (msg->fp, fpin, hdr, body, flags, chflags);
+  /* Partial decode is still an error. */
+  if (r != 0)
+    r = -1;
   if (mx_commit_message (msg, dest) != 0)
     r = -1;
 

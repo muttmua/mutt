@@ -2861,6 +2861,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
                             _("Error: decryption/verification failed: %s\n"),
                             gpgme_strerror (err));
                   state_puts (errbuf, s);
+                  err = 1;
                 }
               else
                 { /* Decryption/Verification succeeded */
@@ -3019,7 +3020,7 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
       if (s->flags & MUTT_DISPLAY)
         state_attach_puts (_("[-- Error: could not create temporary file! "
                              "--]\n"), s);
-      rc = -1;
+      rc = 1;
       goto cleanup;
     }
 
@@ -3087,12 +3088,7 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
     }
   else
     {
-      if (!option (OPTAUTOCRYPTGPGME))
-        {
-          mutt_error _("Could not decrypt PGP message");
-          mutt_sleep (2);
-        }
-      rc = -1;
+      rc = 1;
     }
 
   safe_fclose (&fpout);
@@ -3130,7 +3126,7 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
       if (s->flags & MUTT_DISPLAY)
         state_attach_puts (_("[-- Error: could not create temporary file! "
                              "--]\n"), s);
-      rc = -1;
+      rc = 1;
       goto cleanup;
     }
 
@@ -3203,6 +3199,8 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
 
       mutt_free_body (&tattach);
     }
+  else
+    rc = 1;
 
   safe_fclose (&fpout);
   mutt_unlink(mutt_b2s (tempfile));

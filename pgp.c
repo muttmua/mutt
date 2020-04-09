@@ -1022,7 +1022,6 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
       p->goodsig = 1;
     else
       p->goodsig = 0;
-    state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
   }
   safe_fclose (&pgperr);
 
@@ -1153,7 +1152,7 @@ int pgp_encrypted_handler (BODY *a, STATE *s)
   BUFFER *tempfile = NULL;
   FILE *fpout, *fpin;
   BODY *tattach;
-  int rc = -1;
+  int rc = 1;
 
   tempfile = mutt_buffer_pool_get ();
   mutt_buffer_mktemp (tempfile);
@@ -1164,9 +1163,15 @@ int pgp_encrypted_handler (BODY *a, STATE *s)
     goto cleanup;
   }
 
-  if (s->flags & MUTT_DISPLAY) crypt_current_time (s, "PGP");
+  if (s->flags & MUTT_DISPLAY)
+    crypt_current_time (s, "PGP");
 
-  if ((tattach = pgp_decrypt_part (a, s, fpout, a)) != NULL)
+  tattach = pgp_decrypt_part (a, s, fpout, a);
+
+  if (s->flags & MUTT_DISPLAY)
+    state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
+
+  if (tattach != NULL)
   {
     if (s->flags & MUTT_DISPLAY)
     {
@@ -1222,8 +1227,9 @@ int pgp_encrypted_handler (BODY *a, STATE *s)
   }
   else
   {
-    mutt_error _("Could not decrypt PGP message");
-    mutt_sleep (2);
+    if (s->flags & MUTT_DISPLAY)
+      state_attach_puts (_("[-- Error: decryption failed --]\n\n"), s);
+
     /* void the passphrase, even if it's not necessarily the problem */
     pgp_void_passphrase ();
   }

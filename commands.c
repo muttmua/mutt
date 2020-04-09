@@ -262,6 +262,18 @@ int mutt_display_message (HEADER *cur)
     goto cleanup;
   }
 
+  if (res > 0)
+  {
+    /* L10N:
+       Before displaying a message in the pager, Mutt iterates through
+       all the message parts, decoding, converting, running autoview,
+       decrypting, etc.  If there is an error somewhere in there, Mutt
+       will still display what it was able to generate, but will also
+       display this message in the message line.
+    */
+    mutt_error (_("There was an error displaying all or part of the message"));
+  }
+
   if (fpfilterout != NULL && mutt_wait_filter (filterpid) != 0)
     mutt_any_key_to_continue (NULL);
 
