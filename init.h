@@ -1520,10 +1520,11 @@ struct option_t MuttVars[] = {
   { "imap_fetch_chunk_size",	DT_LNUM, R_NONE, {.p=&ImapFetchChunkSize}, {.l=0} },
   /*
   ** .pp
-  ** When set to a value greater than 0, new headers will be downloaded
-  ** in sets of this size.  If you have a very large mailbox, this might
-  ** prevent a timeout and disconnect when opening the mailbox, by sending
-  ** a FETCH per set of this size instead of a single FETCH for all new
+  ** When set to a value greater than 0, new headers will be
+  ** downloaded in groups of this many headers per request.  If you
+  ** have a very large mailbox, this might prevent a timeout and
+  ** disconnect when opening the mailbox, by sending a FETCH per set
+  ** of this many headers, instead of a single FETCH for all new
   ** headers.
   */
   { "imap_headers",	DT_STR, R_INDEX, {.p=&ImapHeaders}, {.p=0} },
