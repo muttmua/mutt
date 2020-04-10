@@ -398,7 +398,7 @@ struct option_t MuttVars[] = {
   ** will be prompted to confirm exiting Mutt, in addition to the
   ** $$quit prompt.
   */
-  { "background_format", DT_STR, R_MENU, {.p=&BackgroundFormat}, {.p="%5p %10S %s"} },
+  { "background_format", DT_STR, R_MENU, {.p=&BackgroundFormat}, {.p="%10S %7p %s"} },
   /*
   ** .pp
   ** This variable describes the format of the ``background compose''
