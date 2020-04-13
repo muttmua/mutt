@@ -1803,7 +1803,7 @@ fo-table</literal> for details.
   One complication with backgrounded compose sessions is the config
   changes caused by <link linkend="hooks">send, reply, and folder
   hooks</link>.  These can get triggered by a new message composition
-  session, or by changing folders during a backgrounded sesssion.  To
+  session, or by changing folders during a backgrounded session.  To
   help lessen these problems, Mutt takes a snapshot of certain
   configuration variables and stores them with each editing session
   when it is backgrounded.  When the session is resumed, those stored
