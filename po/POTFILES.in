@@ -7,6 +7,7 @@ autocrypt/autocrypt_acct_menu.c
 autocrypt/autocrypt_db.c
 autocrypt/autocrypt_gpgme.c
 autocrypt/autocrypt_schema.c
+background.c
 browser.c
 buffy.c
 charset.c
