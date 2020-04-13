@@ -9836,7 +9836,7 @@ please have a look at the mixmaster documentation.
     normal encryption via your keyring, using key signing and the web
     of trust to verify identities.  With an understanding of these
     limitations, Autocrypt still provides an easy way to minimize
-    cleartext emails sent between common correspondants, without
+    cleartext emails sent between common correspondents, without
     having to explicitly exchange keys.  More information can be found
     at <ulink
     url="https://autocrypt.org/">https://autocrypt.org/</ulink>.
