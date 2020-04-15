@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-09 23:15+0200\n"
-"PO-Revision-Date: 2020-04-09 23:20+0200\n"
+"POT-Creation-Date: 2020-04-15 20:13+0200\n"
+"PO-Revision-Date: 2020-04-15 20:25+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -42,8 +42,9 @@ msgstr "mutt_account_getoauthbearer: Konnte refresh Befehl nicht ausführen"
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: Der refresh Befehl hatte kein Ergebnis"
 
-#: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 browser.c:46 history.c:75
-#: pager.c:1577 postpone.c:42 query.c:49 recvattach.c:58
+#: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
+#: background.c:369 browser.c:46 history.c:75 pager.c:1577 postpone.c:42
+#: query.c:49 recvattach.c:58
 msgid "Exit"
 msgstr "Verlassen"
 
@@ -59,10 +60,11 @@ msgstr "Behalten"
 msgid "Select"
 msgstr "Auswählen"
 
-#: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 browser.c:49 compose.c:143
-#: crypt-gpgme.c:4533 curs_main.c:551 history.c:78 mutt_ssl.c:1326
-#: mutt_ssl_gnutls.c:1036 pager.c:1982 pgpkey.c:523 postpone.c:45 query.c:54
-#: recvattach.c:62 smime.c:468
+#: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
+#: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4533
+#: curs_main.c:551 history.c:78 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1036
+#: pager.c:1982 pgpkey.c:523 postpone.c:45 query.c:54 recvattach.c:62
+#: smime.c:468
 msgid "Help"
 msgstr "Hilfe"
 
@@ -132,8 +134,9 @@ msgstr "Namensschema kann nicht erfüllt werden, fortfahren?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "\"compose\"-Eintrag in der Mailcap-Datei erfordert %%s"
 
-#: attach.c:140 attach.c:273 commands.c:343 compose.c:1806 compress.c:414
-#: curs_lib.c:298 curs_lib.c:988 sendlib.c:1431 sendlib.c:1469 sendlib.c:1532
+#: attach.c:140 attach.c:273 background.c:342 commands.c:343 compose.c:1806
+#: compress.c:414 curs_lib.c:298 curs_lib.c:988 sendlib.c:1431 sendlib.c:1469
+#: sendlib.c:1532
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Fehler beim Ausführen von \"%s\"!"
@@ -502,6 +505,77 @@ msgstr "Stattdessen einen neuen GPG Schlüssel für diesen Account erstellen?"
 #: autocrypt/autocrypt_schema.c:116
 msgid "Autocrypt database version is too new"
 msgstr "Autocrypt Datenbank Version ist zu neu"
+
+#: background.c:181
+msgid "Redraw"
+msgstr ""
+
+#. L10N:
+#. Background Edit Landing Page message, first line.
+#. Displays while the editor is running.
+#.
+#: background.c:207 background.c:252 background.c:593
+msgid "Waiting for editor to exit"
+msgstr "Warten bis sich Editor beendet hat"
+
+#. L10N:
+#. Background Edit Landing Page message, second line.
+#. Displays while the editor is running.
+#. %s is the key binding for "<exit>", usually "q".
+#.
+#: background.c:223
+#, c-format
+msgid "Type '%s' to background compose session."
+msgstr ""
+
+#. L10N: Background Compose Menu Help line:
+#. resume composing the mail
+#.
+#: background.c:373
+msgid "Resume"
+msgstr ""
+
+#. L10N:
+#. Background Compose menu
+#. flag that indicates the editor process has finished.
+#.
+#: background.c:436
+msgid "finished"
+msgstr ""
+
+#. L10N:
+#. Background Compose menu
+#. flag that indicates the editor process is still running.
+#.
+#: background.c:442
+msgid "running"
+msgstr ""
+
+#. L10N:
+#. Background Compose Menu title
+#.
+#: background.c:499
+msgid "Background Compose Menu"
+msgstr ""
+
+#. L10N:
+#. Background Compose Menu:
+#. displayed if there are no background processes and the
+#. user tries to bring up the background compose menu
+#.
+#: background.c:547
+msgid "No backgrounded editing sessions."
+msgstr ""
+
+#. L10N:
+#. Background Compose menu:
+#. Confirms if an unfinished process is selected
+#. to continue.
+#.
+#: background.c:590
+#, c-format
+msgid "Process is still running. Really select?"
+msgstr ""
 
 #: browser.c:47
 msgid "Chdir"
@@ -2453,7 +2527,7 @@ msgstr ""
 #. macro created by <mark-message>.
 #: curs_main.c:2394
 msgid "message hotkey"
-msgstr ""
+msgstr "Kürzel für Nachricht"
 
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
@@ -2461,7 +2535,7 @@ msgstr ""
 #: curs_main.c:2399
 #, c-format
 msgid "Message bound to %s."
-msgstr ""
+msgstr "Nachricht mit %s abrufbar."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
@@ -2639,46 +2713,46 @@ msgstr "Automatische Anzeige mittels: %s"
 msgid "[-- Can't run %s. --]\n"
 msgstr "[-- Kann %s nicht ausführen. --]\n"
 
-#: handler.c:1393 handler.c:1414
+#: handler.c:1401 handler.c:1422
 #, c-format
 msgid "[-- Autoview stderr of %s --]\n"
 msgstr "[-- Fehlerausgabe von %s --]\n"
 
-#: handler.c:1458
+#: handler.c:1466
 msgid "[-- Error: message/external-body has no access-type parameter --]\n"
 msgstr ""
 "[-- Fehler: message/external-body hat keinen access-type Parameter --]\n"
 
-#: handler.c:1479
+#: handler.c:1487
 #, c-format
 msgid "[-- This %s/%s attachment "
 msgstr "[-- Dieser %s/%s-Anhang "
 
-#: handler.c:1486
+#: handler.c:1494
 #, c-format
 msgid "(size %s bytes) "
 msgstr "(Größe %s Byte) "
 
-#: handler.c:1488
+#: handler.c:1496
 msgid "has been deleted --]\n"
 msgstr "wurde gelöscht --]\n"
 
-#: handler.c:1493
+#: handler.c:1501
 #, c-format
 msgid "[-- on %s --]\n"
 msgstr "[-- am %s --]\n"
 
-#: handler.c:1498
+#: handler.c:1506
 #, c-format
 msgid "[-- name: %s --]\n"
 msgstr "[-- Name: %s --]\n"
 
-#: handler.c:1511 handler.c:1527
+#: handler.c:1519 handler.c:1535
 #, c-format
 msgid "[-- This %s/%s attachment is not included, --]\n"
 msgstr "[-- Dieser %s/%s-Anhang ist nicht in der Nachricht enthalten, --]\n"
 
-#: handler.c:1513
+#: handler.c:1521
 msgid ""
 "[-- and the indicated external source has --]\n"
 "[-- expired. --]\n"
@@ -2686,34 +2760,34 @@ msgstr ""
 "[-- und die zugehörige externe Quelle --]\n"
 "[-- existiert nicht mehr. --]\n"
 
-#: handler.c:1531
+#: handler.c:1539
 #, c-format
 msgid "[-- and the indicated access-type %s is unsupported --]\n"
 msgstr "[-- und die angegebene Zugangsmethode %s wird nicht unterstützt --]\n"
 
-#: handler.c:1638
+#: handler.c:1646
 msgid "Unable to open temporary file!"
 msgstr "Konnte temporäre Datei nicht öffnen!"
 
-#: handler.c:1830
+#: handler.c:1838
 msgid "Error: multipart/signed has no protocol."
 msgstr "Fehler: multipart/signed ohne \"protocol\"-Parameter."
 
-#: handler.c:1886
+#: handler.c:1894
 msgid "[-- This is an attachment "
 msgstr "[-- Dies ist ein Anhang "
 
-#: handler.c:1888
+#: handler.c:1896
 #, c-format
 msgid "[-- %s/%s is unsupported "
 msgstr "[-- %s/%s wird nicht unterstützt "
 
-#: handler.c:1895
+#: handler.c:1903
 #, c-format
 msgid "(use '%s' to view this part)"
 msgstr "(benutzen Sie '%s', um diesen Teil anzuzeigen)"
 
-#: handler.c:1897
+#: handler.c:1905
 msgid "(need 'view-attachments' bound to key!)"
 msgstr "(Tastaturbindung für 'view-attachments' benötigt!)"
 
@@ -2944,7 +3018,7 @@ msgstr "Wähle %s aus..."
 msgid "Error opening mailbox"
 msgstr "Fehler beim Öffnen der Mailbox"
 
-#: imap/imap.c:901 imap/imap.c:2395 imap/message.c:1426 muttlib.c:1961
+#: imap/imap.c:901 imap/imap.c:2395 imap/message.c:1426 muttlib.c:2007
 #, c-format
 msgid "Create %s?"
 msgstr "%s erstellen?"
@@ -3994,43 +4068,43 @@ msgstr "Tunnel-Fehler bei Verbindung mit %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1212
+#: muttlib.c:1258
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Datei ist ein Verzeichnis, darin abspeichern? [(j)a, (n)ein, (a)lle]"
 
-#: muttlib.c:1212
+#: muttlib.c:1258
 msgid "yna"
 msgstr "jna"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1231
+#: muttlib.c:1277
 msgid "File is a directory, save under it?"
 msgstr "Datei ist ein Verzeichnis, darin abspeichern?"
 
-#: muttlib.c:1236
+#: muttlib.c:1282
 msgid "File under directory: "
 msgstr "Datei in diesem Verzeichnis: "
 
-#: muttlib.c:1250
+#: muttlib.c:1296
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Datei existiert, (u)eberschreiben, (a)nhängen, a(b)brechen?"
 
-#: muttlib.c:1250
+#: muttlib.c:1296
 msgid "oac"
 msgstr "uab"
 
-#: muttlib.c:1924
+#: muttlib.c:1970
 msgid "Can't save message to POP mailbox."
 msgstr "Kann Nachricht nicht in POP-Mailbox schreiben."
 
-#: muttlib.c:1934
+#: muttlib.c:1980
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Nachricht an %s anhängen?"
 
-#: muttlib.c:1947
+#: muttlib.c:1993
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s ist keine Mailbox!"
@@ -4199,9 +4273,9 @@ msgstr "Ungültiges relatives Datum: %s"
 #. %c is the pattern character, i.e. "g".
 #.
 #: pattern.c:897
-#, fuzzy, c-format
+#, c-format
 msgid "Pattern operator '~%c' is disabled."
-msgstr "Einstellung error_history ist deaktiviert."
+msgstr ""
 
 #. L10N:
 #. An unknown pattern operator was somehow invoked.  This
@@ -5028,9 +5102,8 @@ msgstr "Verschicke im Hintergrund."
 #. editing from the landing page.
 #.
 #: send.c:2702
-#, fuzzy
 msgid "Editing backgrounded."
-msgstr "Verschicke im Hintergrund."
+msgstr "Editor läuft jetzt im Hintergrund."
 
 #: sendlib.c:455
 msgid "No boundary parameter found! [report this error]"
@@ -5400,7 +5473,7 @@ msgstr "Schalte Anzeige von Teilen ein/aus"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:22
 msgid "manage autocrypt accounts"
-msgstr ""
+msgstr "autocrypt Konten verwalten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5622,14 +5695,13 @@ msgstr "Rechtschreibprüfung via ispell"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:133
 msgid "move attachment down in compose menu list"
-msgstr ""
+msgstr "Anhang nach unten verschieben"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:136
-#, fuzzy
 msgid "move attachment up in compose menu list"
-msgstr "Editiere Anhang mittels mailcap"
+msgstr "Anhang nach oben verschieben"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5869,7 +5941,7 @@ msgstr "Springe zum Zeilenende"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:256
 msgid "move the cursor one character to the right"
-msgstr "Bewege den Cursor ein Zeichen nach rechts"
+msgstr "Bewege Cursor ein Zeichen nach rechts"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6594,16 +6666,14 @@ msgstr "Verzeichnis öffnen"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:619
-#, fuzzy
 msgid "move the highlight to the first mailbox"
-msgstr "Nächste Mailbox auswählen"
+msgstr "Erste Mailbox auswählen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:622
-#, fuzzy
 msgid "move the highlight to the last mailbox"
-msgstr "Nächste Mailbox auswählen"
+msgstr "Letzte Mailbox auswählen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
