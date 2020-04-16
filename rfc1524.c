@@ -434,7 +434,7 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, size_t typelen, rfc1524_entry *
    */
   if (!curr)
   {
-    mutt_error _("No mailcap path specified");
+    mutt_error _("Neither mailcap_path nor MAILCAPS specified");
     return 0;
   }
 
