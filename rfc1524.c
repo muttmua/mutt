@@ -434,6 +434,20 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, size_t typelen, rfc1524_entry *
    */
   if (!curr)
   {
+    /* L10N:
+       Mutt is trying to look up a mailcap value, but $mailcap_path is
+       empty.  We added a reference to the MAILCAPS environment
+       variable as a hint too.
+
+       Because the variable is automatically populated by Mutt, this
+       should only occur if the user deliberately runs in their shell:
+         export MAILCAPS=
+
+       or deliberately runs inside Mutt or their .muttrc:
+         set mailcap_path=""
+         -or-
+         unset mailcap_path
+    */
     mutt_error _("Neither mailcap_path nor MAILCAPS specified");
     return 0;
   }
