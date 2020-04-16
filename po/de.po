@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-15 20:13+0200\n"
-"PO-Revision-Date: 2020-04-15 20:25+0200\n"
+"POT-Creation-Date: 2020-04-16 19:50+0200\n"
+"PO-Revision-Date: 2020-04-16 19:46+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -40,7 +40,7 @@ msgstr "mutt_account_getoauthbearer: Konnte refresh Befehl nicht ausführen"
 
 #: account.c:301
 msgid "mutt_account_getoauthbearer: Command returned empty string"
-msgstr "mutt_account_getoauthbearer: Der refresh Befehl hatte kein Ergebnis"
+msgstr "mutt_account_getoauthbearer: Der Befehl hatte kein Ergebnis"
 
 #: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
 #: background.c:369 browser.c:46 history.c:75 pager.c:1577 postpone.c:42
@@ -132,7 +132,7 @@ msgstr "Namensschema kann nicht erfüllt werden, fortfahren?"
 #: attach.c:132
 #, c-format
 msgid "Mailcap compose entry requires %%s"
-msgstr "\"compose\"-Eintrag in der Mailcap-Datei erfordert %%s"
+msgstr "\"compose\"-Eintrag in mailcap erfordert %%s"
 
 #: attach.c:140 attach.c:273 background.c:342 commands.c:343 compose.c:1806
 #: compress.c:414 curs_lib.c:298 curs_lib.c:988 sendlib.c:1431 sendlib.c:1469
@@ -156,22 +156,21 @@ msgstr "Fehler beim Umbenennen der Datei."
 #: attach.c:202
 #, c-format
 msgid "No mailcap compose entry for %s, creating empty file."
-msgstr ""
-"Kein \"compose\"-Eintrag für %s in der Mailcap-Datei, erzeuge leere Datei."
+msgstr "Kein \"compose\"-Eintrag für %s in mailcap, erzeuge leere Datei."
 
 #: attach.c:265
 #, c-format
 msgid "Mailcap Edit entry requires %%s"
-msgstr "\"edit\"-Eintrag in Mailcap erfordert %%s"
+msgstr "\"edit\"-Eintrag in mailcap erfordert %%s"
 
 #: attach.c:286
 #, c-format
 msgid "No mailcap edit entry for %s"
-msgstr "Kein \"edit\"-Eintrag für %s in Mailcap"
+msgstr "Kein \"edit\"-Eintrag für %s in mailcap"
 
 #: attach.c:383
 msgid "No matching mailcap entry found.  Viewing as text."
-msgstr "Es gibt keinen passenden Mailcap-Eintrag. Anzeige als Text."
+msgstr "Es gibt keinen passenden Eintrag in mailcap. Anzeige als Text."
 
 #: attach.c:396
 msgid "MIME type not defined.  Cannot view attachment."
@@ -423,7 +422,7 @@ msgstr "Fehler bei der Aktualisierung der Datenbank"
 #: autocrypt/autocrypt_acct_menu.c:258
 #, c-format
 msgid "Really delete account \"%s\"?"
-msgstr "Account \"%s\" wirklich löschen?"
+msgstr "Konto \"%s\" wirklich löschen?"
 
 #. L10N:
 #. %s is the path to the database.  For some reason sqlite3 failed
@@ -494,7 +493,7 @@ msgstr "nw"
 #.
 #: autocrypt/autocrypt_gpgme.c:260
 msgid "Create a new gpg key for this account, instead?"
-msgstr "Stattdessen einen neuen GPG Schlüssel für diesen Account erstellen?"
+msgstr "Stattdessen einen neuen GPG Schlüssel für dieses Konto erstellen?"
 
 #. L10N:
 #. The autocrypt database keeps track of schema version numbers.
@@ -533,7 +532,7 @@ msgstr ""
 #.
 #: background.c:373
 msgid "Resume"
-msgstr ""
+msgstr "Fortsetzen"
 
 #. L10N:
 #. Background Compose menu
@@ -541,7 +540,7 @@ msgstr ""
 #.
 #: background.c:436
 msgid "finished"
-msgstr ""
+msgstr "beendet"
 
 #. L10N:
 #. Background Compose menu
@@ -549,14 +548,14 @@ msgstr ""
 #.
 #: background.c:442
 msgid "running"
-msgstr ""
+msgstr "läuft"
 
 #. L10N:
 #. Background Compose Menu title
 #.
 #: background.c:499
 msgid "Background Compose Menu"
-msgstr ""
+msgstr "Menü Bearbeitung im Hintergrund"
 
 #. L10N:
 #. Background Compose Menu:
@@ -565,7 +564,7 @@ msgstr ""
 #.
 #: background.c:547
 msgid "No backgrounded editing sessions."
-msgstr ""
+msgstr "Keine laufenden Hintergrund-Prozesse."
 
 #. L10N:
 #. Background Compose menu:
@@ -575,7 +574,7 @@ msgstr ""
 #: background.c:590
 #, c-format
 msgid "Process is still running. Really select?"
-msgstr ""
+msgstr "Prozess läuft noch. Wirklich auswählen?"
 
 #: browser.c:47
 msgid "Chdir"
@@ -772,7 +771,7 @@ msgstr "Konnte Nachricht nicht kopieren"
 #.
 #: commands.c:274
 msgid "There was an error displaying all or part of the message"
-msgstr ""
+msgstr "Diese Nachricht kann nicht oder nur teilweise angezeigt werden."
 
 #: commands.c:306
 msgid "S/MIME signature successfully verified."
@@ -1687,7 +1686,7 @@ msgstr "aka: "
 #.
 #: crypt-gpgme.c:1660
 msgid "no signature fingerprint available"
-msgstr ""
+msgstr "Kein Fingerabdruck für diese Signatur vorhanden"
 
 #: crypt-gpgme.c:1663
 msgid "KeyID "
@@ -2202,7 +2201,7 @@ msgstr "Mutt verlassen?"
 #.
 #: curs_lib.c:471 curs_main.c:1061 curs_main.c:1485
 msgid "There are $background_edit sessions. Really quit Mutt?"
-msgstr ""
+msgstr "Es laufen noch $background_edit Prozesse. Mutt wirklich beenden?"
 
 #: curs_lib.c:541
 msgid "Error History is disabled."
@@ -3160,7 +3159,7 @@ msgstr "Nicht genügend Unterausdrücke für Vorlage"
 
 #: init.c:866
 msgid "spam: no matching pattern"
-msgstr "Spam: kein passendes Muster"
+msgstr "spam: kein passendes Muster"
 
 #: init.c:868
 msgid "nospam: no matching pattern"
@@ -4284,7 +4283,7 @@ msgstr ""
 #: pattern.c:905 pattern.c:1583
 #, c-format
 msgid "error: unknown op %d (report this error)."
-msgstr "Fehler: Unbekannter Muster-Operator %d (Bitte Bug melden)."
+msgstr "Fehler: Unbekannter Muster-Operator %d (Bitte als Fehler melden)."
 
 #: pattern.c:995 pattern.c:1166
 #, c-format
@@ -4886,14 +4885,28 @@ msgstr "Fehler beim Versand der Nachricht."
 msgid "Improperly formatted entry for type %s in \"%s\" line %d"
 msgstr "Ungültiger Eintrag für Typ %s in \"%s\", Zeile %d"
 
-#: rfc1524.c:437
-msgid "No mailcap path specified"
-msgstr "Kein Mailcap-Pfad definiert"
+#. L10N:
+#. Mutt is trying to look up a mailcap value, but $mailcap_path is
+#. empty.  We added a reference to the MAILCAPS environment
+#. variable as a hint too.
+#.
+#. Because the variable is automatically populated by Mutt, this
+#. should only occur if the user deliberately runs in their shell:
+#. export MAILCAPS=
+#.
+#. or deliberately runs inside Mutt or their .muttrc:
+#. set mailcap_path=""
+#. -or-
+#. unset mailcap_path
+#.
+#: rfc1524.c:451
+msgid "Neither mailcap_path nor MAILCAPS specified"
+msgstr "Weder mailcap_path noch MAILCAPS sind gesetzt"
 
-#: rfc1524.c:468
+#: rfc1524.c:482
 #, c-format
 msgid "mailcap entry for type %s not found"
-msgstr "Kann keinen Mailcap-Eintrag für %s finden"
+msgstr "Keinen Eintrag für %s in mailcap gefunden"
 
 #: score.c:76
 msgid "score: too few arguments"
@@ -4980,7 +4993,7 @@ msgstr ""
 #: send.c:1222
 #, c-format
 msgid "Saving Fcc to %s"
-msgstr ""
+msgstr "Speichere Fcc in %s"
 
 #: send.c:1243
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
@@ -5021,7 +5034,7 @@ msgstr "Anhänge in Fcc-Mailbox speichern?"
 
 #: send.c:1586
 msgid "Cannot postpone.  $postponed is unset"
-msgstr ""
+msgstr "Zurückstellen nicht möglich, $postponed ist nicht gesetzt."
 
 #: send.c:1821
 msgid "Recall postponed message?"
@@ -5069,7 +5082,7 @@ msgstr "Kein Angang, Versand abbrechen?"
 
 #: send.c:2428
 msgid "Attachment referenced in message is missing"
-msgstr ""
+msgstr "Der in der Nachricht verwendete Anhang ist nicht vorhanden"
 
 #: send.c:2500 smtp.c:191
 msgid "Sending message..."
@@ -5473,25 +5486,25 @@ msgstr "Schalte Anzeige von Teilen ein/aus"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:22
 msgid "manage autocrypt accounts"
-msgstr "autocrypt Konten verwalten"
+msgstr "Autocrypt Konten verwalten"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:25
 msgid "create a new autocrypt account"
-msgstr ""
+msgstr "Neues Autocrypt Konto erstellen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:28
 msgid "delete the current account"
-msgstr "Lösche aktuellen Account"
+msgstr "Lösche aktuelles Konto"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:31
 msgid "toggle the current account active/inactive"
-msgstr ""
+msgstr "Aktuelles Konto aktivieren/deaktivieren"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5707,7 +5720,7 @@ msgstr "Anhang nach oben verschieben"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:139
 msgid "compose new attachment using mailcap entry"
-msgstr "Erzeuge neues Attachment via mailcap"
+msgstr "Erzeuge neuen Anhang via mailcap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5767,7 +5780,7 @@ msgstr "Aktualisiere Kodierungsinformation eines Anhangs"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:169
 msgid "view multipart/alternative"
-msgstr ""
+msgstr "Ansicht des Anhangs"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6037,7 +6050,7 @@ msgstr "Gib Dateimaske ein"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:304
 msgid "display recent history of error messages"
-msgstr ""
+msgstr "Liste der Fehlermeldungen anzeigen"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6619,7 +6632,7 @@ msgstr "Zeige Versionsnummer an"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:595
 msgid "view attachment using mailcap entry if necessary"
-msgstr "Zeige Anhang, wenn nötig via Mailcap"
+msgstr "Zeige Anhang, wenn nötig via mailcap"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
