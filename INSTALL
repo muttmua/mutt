@@ -92,6 +92,11 @@ to ``configure'' to help it out, or change the default behavior:
 --enable-imap
 	enable IMAP support
 
+--enable-sidebar
+	Build with sidebar functionality. The sidebar can show a list of all
+	your mailboxes at... *drums roll* ...the side. Visibility of the
+	sidebar can be turned on and off as desired.
+
 --with-gss[=PFX]
 	Enable GSSAPI authentication to IMAP servers. This should work with
 	both MIT and Heimdal GSSAPI implementations - others haven't been
