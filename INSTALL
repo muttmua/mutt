@@ -62,10 +62,91 @@ balls, but not in the Git repository.
 
 In most cases, configure will automatically determine everything it
 needs to know in order to compile.  However, there are a few options
-to ``configure'' to help it out, or change the default behavior:
+to ``configure'' to help it out, or change the default behavior.
+To view them all, type ``configure --help''.  Some of the important
+options are:
 
 --prefix=DIR
 	install Mutt in DIR instead of /usr/local
+
+--enable-autocrypt
+        enable autocrypt 1.1 <https://autocrypt.org/> support.
+        Requires sqlite3.
+
+--enable-gpgme
+        enable GPGME crypt backend support.
+
+--enable-sidebar
+	Build with sidebar functionality. The sidebar can show a list of all
+	your mailboxes at... *drums roll* ...the side. Visibility of the
+	sidebar can be turned on and off as desired.
+
+--enable-compressed
+        enable compressed folders support.
+
+--enable-pop
+	enable POP3 support
+
+--enable-imap
+	enable IMAP support
+
+--enable-smtp
+	enable built in SMTP client support
+
+--enable-debug
+        enable debug flag '-d' support.
+
+--enable-flock
+	use flock() to lock files.
+
+--disable-fcntl
+	by default, Mutt uses fcntl() to lock files.  Over NFS this can
+	result in poor performance on read/write.  Note that using this
+	option could be dangerous if dotlocking is also disabled.
+
+--disable-filemonitor
+        disables inotify support for faster local mailbox monitoring.
+        The filemonitor option is only available on Linux.
+
+--enable-nfs-fix
+	some implementations of NFS do not always write the
+	atime/mtime of small files.  This means that Mutt's ``mailboxes''
+	feature does not always work properly, as it uses these
+	attributes to work out whether the file has new mail.  This
+	option enables a workaround to this bug.
+
+--enable-locales-fix
+	on some systems, the result of isprint() can't be used reliably
+	to decide which characters are printable, even if you set the
+	LANG environment variable.  If you set this option, Mutt will
+	assume all characters in the ISO-8859-* range are printable.  If
+	you leave it unset, Mutt will attempt to use isprint() if either
+	of the environment variables LANG, LC_ALL or LC_CTYPE is set,
+	and will revert to the ISO-8859-* range if they aren't.
+	If you need --enable-locales-fix then you will probably need
+	--without-wc-funcs too. However, on a correctly configured
+	modern system you shouldn't need either (try setting LANG,
+	LC_ALL or LC_CTYPE instead).
+
+--enable-exact-address
+	By default, Mutt will rewrite all addresses in the form
+		Personal Name <user@host.domain>
+	regardless of the input.  By enabling this option, Mutt will write
+	addresses in the same form they are parsed.  NOTE: this requires
+	significantly more memory.
+
+--enable-hcache
+        Enable header caching support.  Mutt will scan for header
+        cache libraries in the order: tokyocabinet, qdbm, gdbm, bdb,
+        lmdb, kyotocabinet.  The library locations can be specified,
+        or disabled, via with --with/--without for each of those.
+
+--disable-nls
+	This switch disables mutt's native language support.
+
+--disable-doc
+        Turns off building the Mutt manual.  This can be helpful if you
+        don't have all the DocBook dependencies installed.
 
 --with-curses=DIR
 	use the curses lib in DIR/lib.  If you have ncurses, ``configure''
@@ -85,17 +166,6 @@ to ``configure'' to help it out, or change the default behavior:
 	treat file in the user's home directory as the spool mailbox.  Note
 	that this is *not* the full pathname, but relative to the user's
 	home directory.  Defaults to "mailbox" if FILE is not specified.
-
---enable-pop
-	enable POP3 support
-
---enable-imap
-	enable IMAP support
-
---enable-sidebar
-	Build with sidebar functionality. The sidebar can show a list of all
-	your mailboxes at... *drums roll* ...the side. Visibility of the
-	sidebar can be turned on and off as desired.
 
 --with-gss[=PFX]
 	Enable GSSAPI authentication to IMAP servers. This should work with
@@ -120,48 +190,17 @@ to ``configure'' to help it out, or change the default behavior:
 	mutt. SASL may also be able to encrypt your mail session even if
 	SSL is not available.
 
---disable-nls
-	This switch disables mutt's native language support.
-
---with-included-gettext 
+--with-included-gettext
 	Mutt will be built using the GNU gettext library included in
 	the intl/ sub-directory.  You may need to use this switch if
 	your machine has something which looks like gettext to the
 	configure script, but isn't able to cope with mutt's catalog
 	files.
 
---with-regex
-	use GNU regex instead of local regexp routines.  Many systems
+--with-bundled-regex
+	use bundled GNU regex instead of local regexp routines.  Many systems
 	don't have the POSIX compliant regcomp/regexec/regfree
 	routines, so this provides a way to support them.
-
---enable-flock
-	use flock() to lock files.  
-
---disable-fcntl
-	by default, Mutt uses fcntl() to lock files.  Over NFS this can
-	result in poor performance on read/write.  Note that using this
-	option could be dangerous if dotlocking is also disabled.
-	
---enable-nfs-fix
-	some implementations of NFS do not always write the
-	atime/mtime of small files.  This means that Mutt's ``mailboxes''
-	feature does not always work properly, as it uses these
-	attributes to work out whether the file has new mail.  This
-	option enables a workaround to this bug.
-
---enable-locales-fix
-	on some systems, the result of isprint() can't be used reliably
-	to decide which characters are printable, even if you set the
-	LANG environment variable.  If you set this option, Mutt will
-	assume all characters in the ISO-8859-* range are printable.  If
-	you leave it unset, Mutt will attempt to use isprint() if either
-	of the environment variables LANG, LC_ALL or LC_CTYPE is set,
-	and will revert to the ISO-8859-* range if they aren't.
-	If you need --enable-locales-fix then you will probably need
-	--without-wc-funcs too. However, on a correctly configured
-	modern system you shouldn't need either (try setting LANG,
-	LC_ALL or LC_CTYPE instead).
 
 --without-wc-funcs
 	by default Mutt uses the functions mbrtowc(), wctomb() and
@@ -182,7 +221,7 @@ to ``configure'' to help it out, or change the default behavior:
 	you press control-G in emacs, mutt and emacs become very confused,
 	you may want to try using a Bourne-derived shell other than
 	/bin/sh here.  Some shells that may work are bash, zsh, and ksh.
-	C shells such as csh and tcsh will amost certainly not work right.
+	C shells such as csh and tcsh will almost certainly not work right.
 	Note that this option is unrelated to what shell mutt gives you
 	when you press '!'.  Only use this option to solve the above problem,
 	and only specify one of the above shells as its argument.
@@ -191,13 +230,6 @@ to ``configure'' to help it out, or change the default behavior:
 	Bourne shell, please send a short report to mutt-dev@mutt.org,
 	so a short note on this topic can be added to the Platform notes
 	section below.)
-
---enable-exact-address
-	By default, Mutt will rewrite all addresses in the form
-		Personal Name <user@host.domain>
-	regardless of the input.  By enabling this option, Mutt will write
-	addresses in the same form they are parsed.  NOTE: this requires
-	significantly more memory.
 
 Once ``configure'' has completed, simply type ``make install.''
 
