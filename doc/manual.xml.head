@@ -9505,7 +9505,7 @@ please have a look at the mixmaster documentation.
 	<tbody>
 	  <row>
 	    <entry><literal>alpha</literal></entry>
-	    <entry>Alphabetically by path</entry>
+	    <entry>Alphabetically by path or label</entry>
 	  </row>
 	  <row>
 	    <entry><literal>count</literal></entry>
@@ -9517,7 +9517,7 @@ please have a look at the mixmaster documentation.
 	  </row>
 	  <row>
 	    <entry><literal>name</literal></entry>
-	    <entry>Alphabetically by path</entry>
+	    <entry>Alphabetically by path or label</entry>
 	  </row>
 	  <row>
 	    <entry><literal>new</literal></entry>
@@ -9525,7 +9525,7 @@ please have a look at the mixmaster documentation.
 	  </row>
 	  <row>
 	    <entry><literal>path</literal></entry>
-	    <entry>Alphabetically by path</entry>
+	    <entry>Alphabetically by path (ignores label)</entry>
 	  </row>
 	  <row>
 	    <entry><literal>unread</literal></entry>
