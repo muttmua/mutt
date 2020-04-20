@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-20 00:17+0200\n"
-"PO-Revision-Date: 2020-04-20 03:01+0200\n"
+"PO-Revision-Date: 2020-04-20 03:29+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -553,7 +553,7 @@ msgstr "En attente que l'éditeur soit quitté"
 #: background.c:223
 #, c-format
 msgid "Type '%s' to background compose session."
-msgstr "Taper '%s' pour passer la composition en arrière-plan"
+msgstr "Taper '%s' pour passer la composition en arrière-plan."
 
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
