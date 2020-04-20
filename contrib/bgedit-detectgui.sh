@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2020 Eike Rathke <list@erack.de>
+# Copyright (C) 2020 Eike Rathke <erack@erack.de>
 #
 #     This program is free software; you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
