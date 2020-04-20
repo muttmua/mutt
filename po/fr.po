@@ -15,7 +15,7 @@
 # Pour "autocrypt", le site https://autocrypt.org/ utilise "Autocrypt"
 # avec une majuscule; c'est donc un nom propre, à ne pas traduire.
 # Suivant les cas, "(c)lear" est traduit par "rien" (quand il y a le choix
-# de chiffre et/ou signer) ou "en clair" (choix entre chiffrer ou non); la
+# de chiffrer et/ou signer) ou "en clair" (choix entre chiffrer ou non); la
 # lettre utilisée en français est le "r" dans les deux cas.
 # -- VL.
 #
