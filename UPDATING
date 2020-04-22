@@ -3,10 +3,39 @@ mutt. Please read this file carefully when upgrading your installation.
 
 The description of changes are intentionally brief.  For a more detailed
 explanation of features, please refer to the manual at
-http://www.mutt.org/doc/manual/
+http://www.mutt.org/doc/manual/ and the release notes at
+http://www.mutt.org/relnotes/
 
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
+
+1.14.0 (unreleased):
+
+  + $imap_deflate enables support for COMPRESS=DEFLATE compression.
+    Defaults unset, but please give it a try and report any issues.
+  ! Date pattern modifiers accept YYYYMMDD format dates.
+  + $crypt_opportunistic_encrypt_strong_keys modifies
+    $crypt_opportunistic_encrypt to only look at strong (fully-valid) keys.
+  ! Pattern modifies ~b, ~B, and ~h are allowed in send2-hook patterns.
+  + New compose menu functions <move-up> and <move-down> to rearrange
+    the order parts.
+  + Background editing support.  Compose and browse your mailbox at the same
+    time, or have multiple compose sessions ongoing!
+    New config vars $background_edit, $background_confirm_quit, and
+    $background_format.  New function <background-compose-menu> in the
+    index and pager menu.  New %B expando added to the default for
+    $status_format.  Please see the manual and release notes for details.
+  + $fcc_delimiter, when set, allows Fcc'ing to multiple mailboxes via
+    $record or fcc-hook.
+  + Index and pager menu functions <sidebar-first> and <sidebar-last>.
+  ! "mailboxes -label" allows displaying a label in the sidebar or
+    mailbox browser instead of the mailbox path.  "-nolabel" removes
+    an existing label.
+  ! "mailboxes -nopoll" turn off new mail polling for the mailbox.
+    "-poll" restores polling for an existing mailbox.
+  ! "root" disposition added to the "attachments" command.  Please see
+    the manual for the details of how it works.
+  ! Decryption failures will no longer abort the displaying the pager.
 
 1.13.5 (2020-03-28):
 
