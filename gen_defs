@@ -10,18 +10,25 @@ for mode in help defs; do
 		help)
 			echo "#ifdef HELP_C"
 			echo "const char *HelpStrings[] = {"
-			expr='i\
-	/* L10N: Help screen function description.\
-	         Generated from one of the OPS files. */
-s;^[^ ]* *\(.*\);	N_(\1),;'
 			;;
 		*)
 			echo "enum {"
-			expr='s;^\([^ ]*\).*;	\1,;'
 			;;
 	esac
 	for i in $*; do
-		sed -e '/^\/\*/d' -e "$expr" < $i
+		if test $mode = help; then
+			cat $i | {
+				number=1
+				while IFS="" read -r oneline; do
+					printf "%d %s\n" $number "$oneline"
+					number=$(($number + 1))
+				done
+			} | \
+			sed -e 's;^[0-9]* \(\/\*.*\*\/\);\1;' \
+			-e 's;^\([0-9]*\) \(OP_[^ ]*\) *\(.*\);	/* L10N: Help screen description for \2\n#: '"$i"':\1 */\n	N_(\3),;'
+		else
+			sed -e '/^\/\*/d' -e 's;^\([^ ]*\).*;	\1,;' < $i
+		fi
 	done
 	if test $mode = help; then
 		echo '	NULL'

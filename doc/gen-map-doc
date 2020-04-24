@@ -8,6 +8,7 @@ my $xml = shift @ARGV;
 
 open F, "cat @ARGV |" or die "OPS*: $!";
 while (<F>) {
+  next if /^\/\*/;
   /(\w+) "(.+)"/ or die "$.: parse error";
   $OPS{$1} = $2;
 }
