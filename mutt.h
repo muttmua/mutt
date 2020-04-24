@@ -890,8 +890,7 @@ typedef struct header
   unsigned int collapsed : 1; 	/* is this message part of a collapsed thread? */
   unsigned int limited : 1;   	/* is this message in a limited view?  */
   size_t num_hidden;            /* number of hidden messages in this view.
-                                 * only valid for the root header, when
-                                 * collapsed is set. */
+                                 * only valid when collapsed is set. */
 
   short recipient;		/* user_is_recipient()'s return value, cached */
 
