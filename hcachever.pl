@@ -56,7 +56,7 @@ sub process_struct($$) {
   }
 
   while (($line = read_line()) ne "") {
-      if (!$inbody) {
+    if (!$inbody) {
       return if $line =~ /;$/;
       if ($line =~ /{$/) {
         $inbody = 1;
