@@ -16,7 +16,7 @@ The keys used are:
   ! Date pattern modifiers accept YYYYMMDD format dates.
   + $crypt_opportunistic_encrypt_strong_keys modifies
     $crypt_opportunistic_encrypt to only look at strong (fully-valid) keys.
-  ! Pattern modifies ~b, ~B, and ~h are allowed in send2-hook patterns.
+  ! Pattern modifiers ~b, ~B, and ~h are allowed in send2-hook patterns.
   + New compose menu functions <move-up> and <move-down> to rearrange
     the order parts.
   + Background editing support.  Compose and browse your mailbox at the same
