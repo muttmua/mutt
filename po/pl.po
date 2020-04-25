@@ -3415,7 +3415,7 @@ msgstr ""
 "Aby skontaktować się z autorami, proszę pisać na <mutt-dev@mutt.org>.\n"
 "Aby zgłosić błąd, proszę skontaktować się z opiekunami Mutta poprzez"
 " GitLaba:\n"
-"    https://gitlab.com/muttmua/mutt/issues"
+"    https://gitlab.com/muttmua/mutt/issues\n"
 
 #: main.c:84
 msgid ""
