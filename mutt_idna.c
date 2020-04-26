@@ -204,7 +204,8 @@ static char *local_to_intl (char *user, char *domain)
     goto cleanup;
 
 #if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
-  if (option (OPTIDNENCODE))
+  if (option (OPTIDNENCODE) &&
+      intl_domain && *intl_domain != '[')  /* don't encode domain-literals */
   {
     if (idna_to_ascii_8z (intl_domain, &tmp, IDNA_ALLOW_UNASSIGNED) != IDNA_SUCCESS)
       goto cleanup;

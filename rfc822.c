@@ -60,7 +60,8 @@ const char * const RFC822Errors[] = {
   "mismatched quotes",
   "bad route in <>",
   "bad address in <>",
-  "bad address spec"
+  "bad address spec",
+  "bad address literal"
 };
 
 void rfc822_dequote_comment (char *s)
@@ -202,6 +203,29 @@ parse_quote (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
 }
 
 static const char *
+parse_literal (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
+{
+  while (*s)
+  {
+    if (*s == '\\' || *s == '[')
+    {
+      RFC822Error = ERR_BAD_LITERAL;
+      return NULL;
+    }
+
+    if (*tokenlen < tokenmax)
+      token[(*tokenlen)++] = *s;
+
+    if (*s == ']')
+      return s + 1;
+
+    s++;
+  }
+  RFC822Error = ERR_BAD_LITERAL;
+  return NULL;
+}
+
+static const char *
 next_token (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
 {
   if (*s == '(')
@@ -258,6 +282,65 @@ parse_mailboxdomain (const char *s, const char *nonspecial,
 }
 
 static const char *
+parse_domain (const char *s,
+              char *mailbox, size_t *mailboxlen, size_t mailboxmax,
+              char *comment, size_t *commentlen, size_t commentmax)
+{
+  const char *ps;
+  const char *nonspecial;
+  int domain_literal = 0;
+
+  while (*s)
+  {
+    s = skip_email_wsp(s);
+    if (! *s)
+      return s;
+
+    if (*s == '(')
+    {
+      if (*commentlen && *commentlen < commentmax)
+	comment[(*commentlen)++] = ' ';
+      ps = next_token (s, comment, commentlen, commentmax);
+    }
+    else
+    {
+      if (*s == '[')
+      {
+        domain_literal = 1;
+        if (*mailboxlen < mailboxmax)
+          mailbox[(*mailboxlen)++] = '[';
+        s++;
+        nonspecial = "@.,:;<>\"()";
+      }
+      else
+        nonspecial = ".([]\\";
+
+      s = parse_mailboxdomain (s, nonspecial,
+                               mailbox, mailboxlen, mailboxmax,
+                               comment, commentlen, commentmax);
+      if (domain_literal)
+      {
+        if (!s || *s != ']')
+        {
+          RFC822Error = ERR_BAD_LITERAL;
+          return NULL;
+        }
+
+        if (*mailboxlen < mailboxmax)
+          mailbox[(*mailboxlen)++] = ']';
+        s++;
+      }
+      return s;
+    }
+    if (!ps)
+      return NULL;
+    s = ps;
+  }
+
+  return s;
+}
+
+static const char *
 parse_address (const char *s,
                char *token, size_t *tokenlen, size_t tokenmax,
 	       char *comment, size_t *commentlen, size_t commentmax,
@@ -273,9 +356,9 @@ parse_address (const char *s,
   {
     if (*tokenlen < tokenmax)
       token[(*tokenlen)++] = '@';
-    s = parse_mailboxdomain (s + 1, ".([]\\",
-			     token, tokenlen, tokenmax,
-			     comment, commentlen, commentmax);
+    s = parse_domain (s + 1,
+                      token, tokenlen, tokenmax,
+                      comment, commentlen, commentmax);
     if (!s)
       return NULL;
   }
@@ -443,6 +526,19 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
       if (phraselen && phraselen < sizeof (phrase) - 1)
         phrase[phraselen++] = ' ';
       if ((ps = parse_quote (s + 1, phrase, &phraselen, sizeof (phrase) - 1)) == NULL)
+      {
+        rfc822_free_address (&top);
+        return NULL;
+      }
+      s = ps;
+    }
+    else if (*s == '[')
+    {
+      if (phraselen && phraselen < sizeof (phrase) - 1 && ws_pending)
+	phrase[phraselen++] = ' ';
+      if (phraselen < sizeof (phrase) - 1)
+        phrase[phraselen++] = '[';
+      if ((ps = parse_literal (s + 1, phrase, &phraselen, sizeof (phrase) - 1)) == NULL)
       {
         rfc822_free_address (&top);
         return NULL;

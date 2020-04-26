@@ -30,7 +30,8 @@ enum
   ERR_MISMATCH_QUOTE,
   ERR_BAD_ROUTE,
   ERR_BAD_ROUTE_ADDR,
-  ERR_BAD_ADDR_SPEC
+  ERR_BAD_ADDR_SPEC,
+  ERR_BAD_LITERAL
 };
 
 typedef struct address_t
