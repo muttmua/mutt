@@ -1337,7 +1337,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
     if (Charset_is_utf8)
     {
-      if (wc == 0x200B || wc == 0xFEFF)
+      if (wc == 0x200B || wc == 0x200C || wc == 0xFEFF)
       {
 	dprint (3, (debugfile, "skip zero-width character U+%04X\n", (unsigned short)wc));
 	continue;
