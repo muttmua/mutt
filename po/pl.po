@@ -3841,7 +3841,7 @@ msgstr "Nie udało się utworzyć kontekstu OpenSSL"
 #. * the correct certificate if it supports multiple hosts.
 #: mutt_ssl.c:617 mutt_ssl_gnutls.c:448
 msgid "Warning: unable to set TLS SNI host name"
-msgstr "OStrzeżenie: nie można ustawić nazwy hosta TLS SNI"
+msgstr "Ostrzeżenie: nie można ustawić nazwy hosta TLS SNI"
 
 #: mutt_ssl.c:628
 msgid "I/O error"
