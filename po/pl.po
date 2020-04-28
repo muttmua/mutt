@@ -3834,7 +3834,7 @@ msgstr "Protokół SSL nie może zostać użyty ze względu na brak entropii"
 #.
 #: mutt_ssl.c:494
 msgid "Unable to create SSL context"
-msgstr "Błąd: nie można wywołać podprocesu OpenSSL!"
+msgstr "Nie udało się utworzyć kontekstu OpenSSL"
 
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
