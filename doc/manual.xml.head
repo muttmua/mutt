@@ -1767,8 +1767,10 @@ fo-table</literal> for details.
 
 <para>
   If <link linkend="editor">$editor</link> is set to a graphical
-  editor, or an editor that doesn't try to use Mutt's terminal, you
-  can run the editor in the background by setting <link
+  editor, or a script such as <ulink
+  url="https://gitlab.com/muttmua/mutt/tree/master/contrib/bgedit-screen-tmux.sh"
+  >contrib/bgedit-screen-tmux.sh</ulink> if running inside GNU Screen or
+  tmux, you can run the editor in the background by setting <link
   linkend="background-edit">$background_edit</link>.
 </para>
 <para>
