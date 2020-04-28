@@ -397,7 +397,9 @@ static size_t choose_block (char *d, size_t dlen, int col,
  * allocated buffer (e, elen). The input data is in charset fromcode
  * and is converted into a charset chosen from charsets.
  * Return 1 if the conversion to UTF-8 failed, 2 if conversion from UTF-8
- * failed, otherwise 0. If conversion failed, fromcode is assumed to be
+ * failed, 3 if no encoding was required, otherwise 0.
+ *
+ * If conversion failed, fromcode is assumed to be
  * compatible with us-ascii and the original data is used.
  * The input data is assumed to be a single line starting at column col;
  * if col is non-zero, the preceding character was a space.
@@ -455,7 +457,7 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
     /* No encoding is required. */
     *e = u;
     *elen = ulen;
-    return ret;
+    return 3;
   }
 
   /* Choose target charset. */
@@ -583,25 +585,28 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
   return ret;
 }
 
-void _rfc2047_encode_string (char **pd, int encode_specials, int col)
+int _rfc2047_encode_string (char **pd, int encode_specials, int col)
 {
   char *e;
   size_t elen;
   char *charsets;
+  int rv = 0;
 
   if (!Charset || !*pd)
-    return;
+    return rv;
 
   charsets = SendCharset;
   if (!charsets)
     charsets = "utf-8";
 
-  rfc2047_encode (*pd, strlen (*pd), col,
-		  Charset, charsets, &e, &elen,
-		  encode_specials ? RFC822Specials : NULL);
+  rv = rfc2047_encode (*pd, strlen (*pd), col,
+                       Charset, charsets, &e, &elen,
+                       encode_specials ? RFC822Specials : NULL);
 
   FREE (pd);		/* __FREE_CHECKED__ */
   *pd = e;
+
+  return rv;
 }
 
 void rfc2047_encode_adrlist (ADDRESS *addr, const char *tag)
@@ -616,8 +621,15 @@ void rfc2047_encode_adrlist (ADDRESS *addr, const char *tag)
     else if (ptr->group && ptr->mailbox)
       _rfc2047_encode_string (&ptr->mailbox, 1, col);
 #ifdef EXACT_ADDRESS
-    if (ptr->val)
-      _rfc2047_encode_string (&ptr->val, 1, col);
+    /* If any kind of encoding is needed for the exact-address value,
+     * abort using it.  We can't properly encode it (nor apply IDNA) without
+     * parsing it, so revert to using the parsed values.
+     */
+    if (ptr->val && Charset)
+    {
+      if (_rfc2047_encode_string (&ptr->val, 1, col) != 3)
+        FREE (&ptr->val);
+    }
 #endif
     ptr = ptr->next;
   }
