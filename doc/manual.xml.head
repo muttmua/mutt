@@ -9196,6 +9196,12 @@ configure to build it with write-support for the latter
 syntax. <literal>EXACT_ADDRESS</literal> in the output of <literal>mutt
 -v</literal> indicates whether it's supported.
 </para>
+<para>
+Note: If the full address contains non-ascii characters, or sequences
+that require RFC 2047 encoding, Mutt reverts to writing out the
+normalized <quote>Name &lt;user@host&gt;</quote> form, in order to
+generate legal output.
+</para>
 
 </sect1>
 

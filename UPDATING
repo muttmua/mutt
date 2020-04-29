@@ -36,6 +36,10 @@ The keys used are:
   ! "root" disposition added to the "attachments" command.  Please see
     the manual for the details of how it works.
   ! Decryption failures will no longer abort the displaying the pager.
+  ! With "exact address" enabled, mailboxes that contain non-ascii
+    characters, or sequences that require RFC 2047 encoding, will be
+    written in normalized "Name <user@host>" form when sending emails,
+    so that they can be properly RFC 2047 and IDNA encoded.
 
 1.13.5 (2020-03-28):
 
