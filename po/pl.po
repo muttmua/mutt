@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-17 09:33-0700\n"
-"PO-Revision-Date: 2020-04-25 14:25+0200\n"
+"PO-Revision-Date: 2020-04-30 16:54+0200\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
 "Language: pl\n"
@@ -974,7 +974,7 @@ msgstr "Przekonwertować do %s przy wysyłaniu?"
 #: commands.c:1118
 #, c-format
 msgid "Content-Type changed to %s."
-msgstr "Typ treści zmieniono na %s."
+msgstr "Typ (Content-Type) zmieniono na %s."
 
 #: commands.c:1123
 #, c-format
@@ -1404,7 +1404,7 @@ msgstr "Typ skrzynki nie wspiera dopisywania."
 #: compress.c:618
 #, c-format
 msgid "Compressed-appending to %s..."
-msgstr "Dopisywanie-skompresowane do %s…"
+msgstr "Dopisywanie‐skompresowane do %s…"
 
 #: compress.c:623
 #, c-format
@@ -1616,7 +1616,7 @@ msgstr ""
 
 #: crypt-gpgme.c:1424
 msgid "Warning: One of the keys has been revoked\n"
-msgstr "Ostrzeżenie: jeden z kluczy został wycofany\n"
+msgstr "Ostrzeżenie: jeden z kluczy został unieważniony\n"
 
 #: crypt-gpgme.c:1433
 msgid "Warning: The key used to create the signature expired at: "
@@ -1995,7 +1995,7 @@ msgstr "wykonanie gpgme_op_keylist_next nie powiodło się: %s"
 
 #: crypt-gpgme.c:4496
 msgid "All matching keys are marked expired/revoked."
-msgstr "Wszystkie pasujące klucze są zaznaczone jako wygasłe lub wycofane."
+msgstr "Wszystkie pasujące klucze są zaznaczone jako wygasłe lub unieważnione."
 
 #: crypt-gpgme.c:4525 mutt_ssl.c:1324 mutt_ssl_gnutls.c:1034 pgpkey.c:516
 #: smime.c:463
@@ -2044,11 +2044,11 @@ msgstr "%s „%s”."
 
 #: crypt-gpgme.c:4591 pgpkey.c:608
 msgid "This key can't be used: expired/disabled/revoked."
-msgstr "Nie można użyć tego klucza: wygasł, został wyłączony lub wyprowadzony."
+msgstr "Nie można użyć tego klucza: wygasł, został wyłączony lub unieważniony."
 
 #: crypt-gpgme.c:4605 pgpkey.c:620 smime.c:496
 msgid "ID is expired/disabled/revoked."
-msgstr "Identyfikator wygasł, został wyłączony lub wyprowadzony."
+msgstr "Identyfikator wygasł, został wyłączony lub unieważniony."
 
 #: crypt-gpgme.c:4613 pgpkey.c:624 smime.c:499
 msgid "ID has undefined validity."
@@ -2566,12 +2566,12 @@ msgid ""
 "~p\t\tprint the message\n"
 msgstr ""
 "~~\t\twstaw linię zaczynającą się pojedyńczym ~\n"
-"~b użytkownicy\tdodaj użytkowników do pola BCC:\n"
-"~c użytkownicy\tdodaj użytkowników do pola Cc:\n"
+"~b użytkownicy\tdodaj użytkowników do pola Ukryta kopia:\n"
+"~c użytkownicy\tdodaj użytkowników do pola Kopia:\n"
 "~f listy\tdołącz listy\n"
 "~F listy\tto samo co ~f ale dołącz też nagłówki\n"
 "~h\t\tedytuj nagłówki\n"
-"~m listy\tdodaj i zacytuj listy\n"
+"~m listy\tdodaj i zacytuj listy\n"
 "~M listy\tto samo co ~m ale dołącz też nagłówki\n"
 "~p\t\tdrukuj list\n"
 
@@ -2587,15 +2587,15 @@ msgid ""
 "~?\t\tthis message\n"
 ".\t\ton a line by itself ends input\n"
 msgstr ""
-"~q\t\tzapisz plik i wyjdź z edytora\n"
+"~q\t\tzapisz plik i wyjdź z edytora\n"
 "~r plik\t\twczytaj plik do edytora\n"
-"~t użytkownicy\tdodaj użytkowników do pola To:\n"
+"~t użytkownicy\tdodaj użytkowników do pola Do:\n"
 "~u\t\todtwórz poprzednią linię\n"
-"~v\t\tedytuj list edytorem zdefiniowanym w $visual\n"
+"~v\t\tedytuj list edytorem zdefiniowanym w $visual\n"
 "~w plik\t\tzapisz list do pliku\n"
-"~x\t\tporzuć zmiany i wyjdź z edytora\n"
+"~x\t\tporzuć zmiany i wyjdź z edytora\n"
 "~?\t\tten list\n"
-".\t\tstojąc sama w linii kończy wpisywanie\n"
+".\t\tstojąc sama w linii kończy wpisywanie\n"
 
 #: edit.c:191
 #, c-format
@@ -2604,7 +2604,7 @@ msgstr "%d: błędny numer listu.\n"
 
 #: edit.c:344
 msgid "(End message with a . on a line by itself)\n"
-msgstr "(Zakończ list . (kropką) w osobnej linii)\n"
+msgstr "(Zakończ list . (kropką) w osobnej linii)\n"
 
 #: edit.c:403
 msgid "No mailbox.\n"
@@ -2686,7 +2686,7 @@ msgstr "Wyczyść flagę"
 #: handler.c:1142
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
 msgstr ""
-"[--Błąd: Nie można wyświetlić żadnego z fragmentów Multipart/Alternative! "
+"[--Błąd: Nie można wyświetlić żadnego z fragmentów Multipart/Alternative! "
 "--]\n"
 
 #: handler.c:1258
@@ -2736,7 +2736,7 @@ msgstr "[-- Ten załącznik typu %s/%s "
 #: handler.c:1494
 #, c-format
 msgid "(size %s bytes) "
-msgstr "(o wielkości %s bajtów) "
+msgstr "(o wielkości %s bajtów) "
 
 #: handler.c:1496
 msgid "has been deleted --]\n"
@@ -2762,13 +2762,13 @@ msgid ""
 "[-- and the indicated external source has --]\n"
 "[-- expired. --]\n"
 msgstr ""
-"[-- a podane źródło zewnętrzne jest --]\n"
+"[-- a podane źródło zewnętrzne jest --]\n"
 "[-- nieaktualne. --]\n"
 
 #: handler.c:1539
 #, c-format
 msgid "[-- and the indicated access-type %s is unsupported --]\n"
-msgstr "[-- a podany typ dostępu %s nie jest obsługiwany --]\n"
+msgstr "[-- a podany typ dostępu %s nie jest obsługiwany --]\n"
 
 #: handler.c:1646
 msgid "Unable to open temporary file!"
@@ -2866,7 +2866,7 @@ msgstr "niewystarczająca liczba argumentów"
 
 #: hook.c:406
 msgid "unhook: Can't do unhook * from within a hook."
-msgstr "unhook: Nie można wykonać \"unhook *\" wewnątrz innego polecenia hook."
+msgstr "unhook: Nie można wykonać „unhook *” wewnątrz innego polecenia hook."
 
 #: hook.c:419
 #, c-format
@@ -2876,11 +2876,11 @@ msgstr "unhook: nieznany typ polecenia hook: %s"
 #: hook.c:425
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
-msgstr "unhook: Nie można skasować %s z wewnątrz %s."
+msgstr "unhook: Nie można skasować %s z wewnątrz %s."
 
 #: imap/auth.c:109 pop_auth.c:497 smtp.c:573
 msgid "No authenticators available"
-msgstr "Żadna z metod uwierzytelniania nie jest dostępna"
+msgstr "Żadna z metod uwierzytelniania nie jest dostępna"
 
 #: imap/auth_anon.c:43
 msgid "Authenticating (anonymous)..."
@@ -2892,11 +2892,11 @@ msgstr "Uwierzytelnianie anonymous nie powiodło się."
 
 #: imap/auth_cram.c:48
 msgid "Authenticating (CRAM-MD5)..."
-msgstr "Uwierzytelnianie (CRAM-MD5)…"
+msgstr "Uwierzytelnianie (CRAM‑MD5)…"
 
 #: imap/auth_cram.c:128
 msgid "CRAM-MD5 authentication failed."
-msgstr "Uwierzytelnianie CRAM-MD5 nie powiodło się."
+msgstr "Uwierzytelnianie CRAM‑MD5 nie powiodło się."
 
 #: imap/auth_gss.c:165
 msgid "Authenticating (GSSAPI)..."
@@ -2981,7 +2981,7 @@ msgstr "Nazwa została zmieniona."
 #: imap/command.c:268 imap/command.c:349
 #, c-format
 msgid "Connection to %s timed out"
-msgstr "Połączenie z %s prekroczyło czas oczekiwania"
+msgstr "Połączenie z %s przekroczyło czas oczekiwania"
 
 #: imap/command.c:486
 #, c-format
@@ -3000,7 +3000,7 @@ msgstr "Zamykanie połączenia do %s…"
 
 #: imap/imap.c:348
 msgid "This IMAP server is ancient. Mutt does not work with it."
-msgstr "Zbyt stara wersja serwera IMAP. Praca z tym serwerem nie jest możliwa."
+msgstr "Zbyt stara wersja serwera IMAP. Praca z tym serwerem nie jest możliwa."
 
 #: imap/imap.c:499 pop_lib.c:296 smtp.c:469
 msgid "Secure connection with TLS?"
@@ -3096,11 +3096,11 @@ msgstr "Kopiowanie %d listów do %s…"
 #. * an IMAP mailbox
 #: imap/message.c:87
 msgid "Abort download and close mailbox?"
-msgstr "Przerwać pobieranie i zamknąć skrzynkę?"
+msgstr "Przerwać pobieranie i zamknąć skrzynkę?"
 
 #: imap/message.c:110 mx.c:1443
 msgid "Integer overflow -- can't allocate memory."
-msgstr "Przepełnienie zmiennej całkowitej - nie można zaalokować pamięci."
+msgstr "Przepełnienie zmiennej całkowitej — nie można zaalokować pamięci."
 
 #. L10N:
 #. Comparing the cached data with the IMAP server's data
@@ -3116,7 +3116,7 @@ msgstr "Pobieranie aktualizacji flag…"
 
 #: imap/message.c:751
 msgid "Unable to fetch headers from this IMAP server version."
-msgstr "Nie można pobrać nagłówków z serwera IMAP w tej wersji."
+msgstr "Nie można pobrać nagłówków z serwera IMAP w tej wersji."
 
 #: imap/message.c:764
 #, c-format
@@ -3150,12 +3150,12 @@ msgstr "Kontynuować?"
 
 #: init.c:61 init.c:2197 pager.c:58
 msgid "Not available in this menu."
-msgstr "Nie ma takiego polecenia w tym menu."
+msgstr "Nie ma takiego polecenia w tym menu."
 
 #: init.c:457
 #, c-format
 msgid "Bad regexp: %s"
-msgstr "Błąd w wyrażeniu regularnym: %s"
+msgstr "Błąd w wyrażeniu regularnym: %s"
 
 #: init.c:514
 msgid "Not enough subexpressions for template"
@@ -3167,7 +3167,7 @@ msgstr "Spam: brak pasującego wzorca"
 
 #: init.c:868
 msgid "nospam: no matching pattern"
-msgstr "NieSpam: brak pasującego wzorca"
+msgstr "Nie‐spam: brak pasującego wzorca"
 
 #: init.c:1066
 #, c-format
@@ -3248,7 +3248,7 @@ msgstr "%s ustawiony"
 #: init.c:2364
 #, c-format
 msgid "Invalid value for option %s: \"%s\""
-msgstr "Niewłaściwa wartość dla opcji %s: \"%s\""
+msgstr "Niewłaściwa wartość dla opcji %s: „%s”"
 
 #: init.c:2506
 #, c-format
@@ -3286,22 +3286,22 @@ msgstr "%s: nieprawidłowy typ"
 #: init.c:2787
 #, c-format
 msgid "Error in %s, line %d: %s"
-msgstr "Błąd w %s, linia %d: %s"
+msgstr "Błąd w %s, linia %d: %s"
 
 #: init.c:2811
 #, c-format
 msgid "source: errors in %s"
-msgstr "source: błędy w %s"
+msgstr "source: błędy w %s"
 
 #: init.c:2812
 #, c-format
 msgid "source: reading aborted due to too many errors in %s"
-msgstr "source: wczytywanie zaniechane z powodu zbyt wielu błędów w %s"
+msgstr "source: wczytywanie zaniechane z powodu zbyt wielu błędów w %s"
 
 #: init.c:2830
 #, c-format
 msgid "source: error at %s"
-msgstr "source: błędy w %s"
+msgstr "source: błędy w %s"
 
 #: init.c:2835
 msgid "source: too many arguments"
@@ -3315,7 +3315,7 @@ msgstr "%s: nieznane polecenie"
 #: init.c:3416
 #, c-format
 msgid "Error in command line: %s\n"
-msgstr "Błąd w poleceniu: %s\n"
+msgstr "Błąd w poleceniu: %s\n"
 
 #: init.c:3538
 msgid "unable to determine home directory"
@@ -3339,7 +3339,7 @@ msgstr "brak argumentów"
 
 #: keymap.c:564
 msgid "Macro loop detected."
-msgstr "Wykryto pętlę w makrze."
+msgstr "Wykryto pętlę w makrze."
 
 #: keymap.c:870 keymap.c:905
 msgid "Key is not bound."
@@ -3400,7 +3400,7 @@ msgstr "Znak = %s, ósemkowo = %o, dziesiętnie = %d"
 
 #: lib.c:131
 msgid "Integer overflow -- can't allocate memory!"
-msgstr "Przepełnienie zmiennej całkowitej - nie można zaalokować pamięci!"
+msgstr "Przepełnienie zmiennej całkowitej — nie można zaalokować pamięci!"
 
 #: lib.c:138 lib.c:153 lib.c:185 safe_asprintf.c:42
 msgid "Out of memory!"
@@ -3435,7 +3435,7 @@ msgid ""
 "and suggestions.\n"
 msgstr ""
 "Wielu innych twórców, nie wspomnianych tutaj,\n"
-"wniosło wiele nowego kodu, poprawek i sugestii.\n"
+"wniosło wiele nowego kodu, poprawek i sugestii.\n"
 
 #: main.c:105
 msgid ""
@@ -3452,14 +3452,14 @@ msgstr ""
 "    Ten program jest wolnym oprogramowaniem; możesz rozprowadzać go i/lub"
 " modyfikować\n"
 "    zachowując warunki Powszechnej Licencji Publicznej GNU (General Public\n"
-"    Licence), opublikowanej przez Free Software Foundation, w wersji 2\n"
+"    Licence), opublikowanej przez Free Software Foundation, w wersji 2\n"
 "    lub wyższej.\n"
 "\n"
-"    Program ten jest rozprowadzany w nadziei, że będzie przydatny,\n"
+"    Program ten jest rozprowadzany w nadziei, że będzie przydatny,\n"
 "    ale BEZ ŻADNYCH GWARANCJI, wyrażonych wprost lub domyślnie nawet,\n"
-"    w tym gwarancji możliwości SPRZEDAŻY i PRZYDATNOŚCI DO KONKRETNYCH "
+"    w tym gwarancji możliwości SPRZEDAŻY i PRZYDATNOŚCI DO KONKRETNYCH "
 "CELÓW.\n"
-"    Szczegóły znajdziesz w Powszechnej Licencji Publicznej GNU.\n"
+"    Szczegóły znajdziesz w Powszechnej Licencji Publicznej GNU.\n"
 
 #: main.c:115
 msgid ""
@@ -3509,10 +3509,10 @@ msgid ""
 msgstr ""
 "opcje:\n"
 "  -A <alias>\tużyj aliasu\n"
-"  -a <plik> [...]\tdołącz plik(i) do listu\n"
-"\t\tlista plików musi zostać zakończona sekwencją \"--\"  -b <adres>\tpodaj "
-"adres blind carbon-copy (BCC)\n"
-"  -c <adres>\tpodaj adres carbon-copy (CC)\n"
+"  -a <plik> [...] --\tdołącz plik(i) do listu\n"
+"\t\tlista plików musi zostać zakończona sekwencją „--”\n"
+"  -b <adres>\tpodaj adres ukrytej kopii (UDW)\n"
+"  -c <adres>\tpodaj adres kopii (DW)\n"
 "  -D\t\twydrukuj wartości wszystkich zmiennych"
 
 #: main.c:152
@@ -3535,8 +3535,8 @@ msgstr ""
 "  -e <polec>\tpodaj polecenie do wykonania po inicjalizacji\n"
 "  -f <plik>\totwórz najpierw tą skrzynkę\n"
 "  -F <plik>\tużyj alternatywnego pliku muttrc\n"
-"  -H <plik>\twczytaj szablon nagłówków i treści listu z pliku\n"
-"  -i <plik>\twstaw ten plik w odpowiedzi\n"
+"  -H <plik>\twczytaj szablon nagłówków i treści listu z pliku\n"
+"  -i <plik>\twstaw ten plik w odpowiedzi\n"
 "  -m <typ>\tpodaj typ skrzynki\n"
 "  -n\t\tnie czytaj systemowego Muttrc\n"
 "  -p\t\tponownie edytuj zarzucony list"
@@ -3554,13 +3554,13 @@ msgid ""
 "  -h\t\tthis help message"
 msgstr ""
 "  -Q <zmienna>\tpodaj wartość zmiennej konfiguracyjnej\n"
-"  -R\t\totwórz skrzynkę w trybie tylko do odczytu\n"
-"  -s <tytuł>\tpodaj tytuł (musi być w apostrofach, jeśli zawiera spacje)\n"
-"  -v\t\tpokaż wersję i wkompilowane parametry\n"
+"  -R\t\totwórz skrzynkę w trybie tylko do odczytu\n"
+"  -s <tytuł>\tpodaj tytuł (musi być w apostrofach, jeśli zawiera spacje)\n"
+"  -v\t\tpokaż wersję i wkompilowane parametry\n"
 "  -x\t\tsymuluj zachowanie mailx\n"
-"  -y\t\twybierz skrzynkę podaną w twojej liście `mailboxes'\n"
-"  -z\t\twyjdź natychmiast jeśli brak nowych listów w skrzynce\n"
-"  -Z\t\totwórz pierwszą skrzynkę z nowym listem i wyjdź jeśli brak nowych\n"
+"  -y\t\twybierz skrzynkę podaną w twojej liście „mailboxes”\n"
+"  -z\t\twyjdź natychmiast jeśli brak nowych listów w skrzynce\n"
+"  -Z\t\totwórz pierwszą skrzynkę z nowym listem i wyjdź jeśli brak nowych\n"
 "  -h\t\tten tekst"
 
 #: main.c:251
@@ -3599,7 +3599,7 @@ msgstr "Nie wskazano adresatów listu.\n"
 
 #: main.c:1035
 msgid "Cannot use -E flag with stdin\n"
-msgstr "Nie można użyć flagi -E z stdin\n"
+msgstr "Nie można użyć flagi -E z stdin\n"
 
 #: main.c:1199
 #, c-format
@@ -3608,11 +3608,11 @@ msgstr "%s: nie można dołączyć pliku.\n"
 
 #: main.c:1288
 msgid "No mailbox with new mail."
-msgstr "Brak skrzynki z nową pocztą."
+msgstr "Brak skrzynki z nową pocztą."
 
 #: main.c:1302
 msgid "No incoming mailboxes defined."
-msgstr "Nie zdefiniowano położenia skrzynek z nową pocztą."
+msgstr "Nie zdefiniowano położenia skrzynek z nową pocztą."
 
 #: main.c:1330
 msgid "Mailbox is empty."
@@ -3647,8 +3647,8 @@ msgstr "Błąd! Nie można ponownie otworzyć skrzynki!"
 #: mbox.c:920
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
 msgstr ""
-"sync: skrzynka zmodyfikowana, ale żaden z listów nie został zmieniony! "
-"(zgłoś ten błąd)"
+"sync: skrzynka zmodyfikowana, ale żaden z listów nie został zmieniony! "
+"(Zgłoś ten błąd.)"
 
 #. L10N: Displayed before/as a mailbox is being synced
 #: mbox.c:943 mh.c:2008 mx.c:752
@@ -3708,7 +3708,7 @@ msgstr "Szukaj frazy: "
 
 #: menu.c:869 pager.c:2247 pattern.c:1804
 msgid "Reverse search for: "
-msgstr "Szukaj frazy w przeciwnym kierunku: "
+msgstr "Szukaj frazy w przeciwnym kierunku: "
 
 #: menu.c:913 pager.c:2199 pager.c:2221 pager.c:2342 pattern.c:1926
 msgid "Not found."
@@ -3720,11 +3720,11 @@ msgstr "Brak zaznaczonych pozycji listy."
 
 #: menu.c:1172
 msgid "Search is not implemented for this menu."
-msgstr "Poszukiwanie nie jest możliwe w tym menu."
+msgstr "Poszukiwanie nie jest możliwe w tym menu."
 
 #: menu.c:1177
 msgid "Jumping is not implemented for dialogs."
-msgstr "Przeskakiwanie nie jest możliwe w oknach dialogowych."
+msgstr "Przeskakiwanie nie jest możliwe w oknach dialogowych."
 
 #: menu.c:1211
 msgid "Tagging is not supported."
@@ -3766,7 +3766,7 @@ msgstr "SASL: błąd konfigurowania nazwy użytkownika hosta zdalnego"
 #: mutt_socket.c:162
 #, c-format
 msgid "Connection to %s closed"
-msgstr "Połączenie z %s zostało zakończone"
+msgstr "Połączenie z %s zostało zakończone"
 
 #: mutt_socket.c:281
 msgid "SSL is unavailable."
@@ -3784,7 +3784,7 @@ msgstr "Błąd komunikacji z %s (%s)"
 #: mutt_socket.c:504 mutt_socket.c:563
 #, c-format
 msgid "Bad IDN \"%s\"."
-msgstr "Błędny IDN \"%s\"."
+msgstr "Błędny IDN „%s”."
 
 #: mutt_socket.c:512 mutt_socket.c:571
 #, c-format
@@ -3794,17 +3794,17 @@ msgstr "Wyszukiwanie %s…"
 #: mutt_socket.c:522 mutt_socket.c:581
 #, c-format
 msgid "Could not find the host \"%s\""
-msgstr "Host \"%s\" nie został znaleziony"
+msgstr "Host „%s” nie został znaleziony"
 
 #: mutt_socket.c:528 mutt_socket.c:587
 #, c-format
 msgid "Connecting to %s..."
-msgstr "Łączenie z %s…"
+msgstr "Łączenie z %s…"
 
 #: mutt_socket.c:611
 #, c-format
 msgid "Could not connect to %s (%s)."
-msgstr "Połączenie z %s (%s) nie zostało ustanowione."
+msgstr "Połączenie z %s (%s) nie zostało ustanowione."
 
 #: mutt_ssl.c:272 mutt_ssl.c:557
 msgid "Warning: error enabling ssl_verify_partial_chains"
@@ -3822,7 +3822,7 @@ msgstr "Wypełnianie zbiornika entropii: %s…\n"
 #: mutt_ssl.c:395
 #, c-format
 msgid "%s has insecure permissions!"
-msgstr "Prawa dostępu do %s mogą powodować problemy z bezpieczeństwem!"
+msgstr "Prawa dostępu do %s mogą powodować problemy z bezpieczeństwem!"
 
 #: mutt_ssl.c:414
 msgid "SSL disabled due to the lack of entropy"
@@ -3934,7 +3934,7 @@ msgstr "Odcisk SHA‑256: "
 #: mutt_ssl.c:1281 mutt_ssl_gnutls.c:1003
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
-msgstr "Weryfikacja certyfikatu SSL (certyfikat %d z %d w łańcuchu)"
+msgstr "Weryfikacja certyfikatu SSL (certyfikat %d z %d w łańcuchu)"
 
 #. L10N:
 #. * These four letters correspond to the choices in the next four strings:
@@ -4006,7 +4006,7 @@ msgstr "Ostrzeżenie: certyfikat serwera wygasł"
 
 #: mutt_ssl_gnutls.c:993
 msgid "WARNING: Server certificate has been revoked"
-msgstr "Ostrzeżenie: certyfikat serwera został odwołany"
+msgstr "Ostrzeżenie: certyfikat serwera został unieważniony"
 
 #: mutt_ssl_gnutls.c:995
 msgid "WARNING: Server hostname does not match certificate"
@@ -4042,7 +4042,7 @@ msgstr "or"
 
 #: mutt_ssl_gnutls.c:1123 mutt_ssl_gnutls.c:1158 mutt_ssl_gnutls.c:1168
 msgid "Unable to get certificate from peer"
-msgstr "Nie można pobrać certyfikatu z docelowego hosta"
+msgstr "Nie można pobrać certyfikatu z docelowego hosta"
 
 #: mutt_ssl_gnutls.c:1129
 #, c-format
@@ -4056,7 +4056,7 @@ msgstr "To nie jest certyfikat X.509"
 #: mutt_tunnel.c:73
 #, c-format
 msgid "Connecting with \"%s\"..."
-msgstr "Łączenie z \"%s\"…"
+msgstr "Łączenie z „%s”…"
 
 #: mutt_tunnel.c:149
 #, c-format
@@ -4066,14 +4066,14 @@ msgstr "Zestawianie tunelu: %s zwrócił błąd %d (%s)"
 #: mutt_tunnel.c:171 mutt_tunnel.c:195
 #, c-format
 msgid "Tunnel error talking to %s: %s"
-msgstr "Zestawianie tunelu: błąd komunikacji z %s: %s"
+msgstr "Zestawianie tunelu: błąd komunikacji z %s: %s"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
 #: muttlib.c:1258
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
-msgstr "Ten plik jest katalogim, zapisać w nim? [(t)ak, (n)ie, (w)szystkie]"
+msgstr "Ten plik jest katalogiem, zapisać w nim? [(t)ak, (n)ie, (w)szystkie]"
 
 #: muttlib.c:1258
 msgid "yna"
@@ -4084,11 +4084,11 @@ msgstr "tnw"
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
 #: muttlib.c:1277
 msgid "File is a directory, save under it?"
-msgstr "Ten plik jest katalogim, zapisać w nim?"
+msgstr "Ten plik jest katalogiem, zapisać w nim?"
 
 #: muttlib.c:1282
 msgid "File under directory: "
-msgstr "Plik w katalogu: "
+msgstr "Plik w katalogu: "
 
 #: muttlib.c:1296
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
@@ -4100,7 +4100,7 @@ msgstr "nda"
 
 #: muttlib.c:1970
 msgid "Can't save message to POP mailbox."
-msgstr "Nie można zapisać listu w skrzynce POP."
+msgstr "Nie można zapisać listu w skrzynce POP."
 
 #: muttlib.c:1980
 #, c-format
@@ -4204,19 +4204,19 @@ msgstr "Skrzynka jest oznaczona jako niezapisywalna. %s"
 
 #: mx.c:1268
 msgid "Mailbox checkpointed."
-msgstr "Zmiany w skrzynce naniesiono."
+msgstr "Zmiany w skrzynce naniesiono."
 
 #: pager.c:1578
 msgid "PrevPg"
-msgstr "PoprzStr"
+msgstr "W górę"
 
 #: pager.c:1579
 msgid "NextPg"
-msgstr "NastStr"
+msgstr "W dół"
 
 #: pager.c:1583
 msgid "View Attachm."
-msgstr "Zobacz zał."
+msgstr "Załączniki"
 
 #: pager.c:1586
 msgid "Next"
@@ -4249,7 +4249,7 @@ msgstr "wieloczęściowy list nie posiada wpisu ograniczającego!"
 #: pattern.c:340 pattern.c:831
 #, c-format
 msgid "Error in expression: %s"
-msgstr "Błąd w wyrażeniu: %s"
+msgstr "Błąd w wyrażeniu: %s"
 
 #: pattern.c:346 pattern.c:836
 msgid "Empty expression"
@@ -4287,7 +4287,7 @@ msgstr "Operator wzorca „~%c” nie jest obsługiwany."
 #: pattern.c:905 pattern.c:1583
 #, c-format
 msgid "error: unknown op %d (report this error)."
-msgstr "błąd: nieznany op %d (zgłoś ten błąd)."
+msgstr "błąd: nieznany operator %d (zgłoś ten błąd)."
 
 #: pattern.c:995 pattern.c:1166
 #, c-format
@@ -4312,7 +4312,7 @@ msgstr "%c: błędny modyfikator wyrażenia"
 #: pattern.c:1107
 #, c-format
 msgid "%c: not supported in this mode"
-msgstr "%c: nie obsługiwane w tym trybie"
+msgstr "%c: nie obsługiwane w tym trybie"
 
 #: pattern.c:1123
 msgid "missing parameter"
@@ -4337,7 +4337,7 @@ msgstr "Wykonywanie polecenia na pasujących do wzorca listach…"
 
 #: pattern.c:1764
 msgid "No messages matched criteria."
-msgstr "Żaden z listów nie spełnia kryteriów."
+msgstr "Żaden z listów nie spełnia kryteriów."
 
 #: pattern.c:1862
 msgid "Searching..."
@@ -4494,7 +4494,7 @@ msgstr "Sprowadzam klucz PGP…"
 
 #: pgpkey.c:492
 msgid "All matching keys are expired, revoked, or disabled."
-msgstr "Wszystkie pasujące klucze wygasły, zostały wyłączone lub wyprowadzone."
+msgstr "Wszystkie pasujące klucze wygasły, zostały unieważnione lub wyłączone."
 
 #: pgpkey.c:534
 #, c-format
@@ -4504,7 +4504,7 @@ msgstr "Klucze PGP dla <%s>."
 #: pgpkey.c:536
 #, c-format
 msgid "PGP keys matching \"%s\"."
-msgstr "Klucze PGP dla \"%s\"."
+msgstr "Klucze PGP dla „%s”."
 
 #: pgpkey.c:553 pgpkey.c:748
 msgid "Can't open /dev/null"
@@ -4559,11 +4559,11 @@ msgstr "Serwer POP nie został wskazany."
 
 #: pop.c:907
 msgid "No new mail in POP mailbox."
-msgstr "Brak nowej poczty w skrzynce POP."
+msgstr "Brak nowej poczty w skrzynce POP."
 
 #: pop.c:914
 msgid "Delete messages from server?"
-msgstr "Usunąć listy z serwera?"
+msgstr "Usunąć listy z serwera?"
 
 #: pop.c:916
 #, c-format
@@ -4619,11 +4619,11 @@ msgstr "Nie można zostawić listów na serwerze."
 #: pop_lib.c:239
 #, c-format
 msgid "Error connecting to server: %s"
-msgstr "Błąd łączenia z serwerem: %s"
+msgstr "Błąd łączenia z serwerem: %s"
 
 #: pop_lib.c:393
 msgid "Closing connection to POP server..."
-msgstr "Zamykanie połączenia z serwerem POP…"
+msgstr "Zamykanie połączenia z serwerem POP…"
 
 #: pop_lib.c:572
 msgid "Verifying message indexes..."
@@ -4631,7 +4631,7 @@ msgstr "Sprawdzanie indeksów listów…"
 
 #: pop_lib.c:594
 msgid "Connection lost. Reconnect to POP server?"
-msgstr "Połączenie z serwerem POP zostało zerwane. Połączyć ponownie?"
+msgstr "Połączenie z serwerem POP zostało zerwane. Połączyć ponownie?"
 
 #: postpone.c:171
 msgid "Postponed Messages"
@@ -4742,7 +4742,7 @@ msgstr "Załączniki"
 
 #: recvattach.c:1213
 msgid "There are no subparts to show!"
-msgstr "Brak pod-listów!"
+msgstr "Brak podlistów!"
 
 #: recvattach.c:1268
 msgid "Can't delete attachment from POP server."
@@ -4750,7 +4750,7 @@ msgstr "Nie można skasować załącznika na serwerze POP."
 
 #: recvattach.c:1276
 msgid "Deletion of attachments from encrypted messages is unsupported."
-msgstr "Usuwanie załączników z zaszyfrowanych listów jest niemożliwe."
+msgstr "Usuwanie załączników z zaszyfrowanych listów jest niemożliwe."
 
 #: recvattach.c:1282
 msgid ""
@@ -4764,7 +4764,7 @@ msgstr "Możliwe jest jedynie usuwanie załączników multipart."
 
 #: recvcmd.c:44
 msgid "You may only bounce message/rfc822 parts."
-msgstr "Możesz wysyłać kopie tylko listów zgodnych z RFC 822."
+msgstr "Możesz wysyłać kopie tylko listów zgodnych z RFC 822."
 
 #: recvcmd.c:240
 msgid "Error bouncing message!"
@@ -4790,7 +4790,7 @@ msgstr ""
 
 #: recvcmd.c:620
 msgid "Forward MIME encapsulated?"
-msgstr "Przesłać dalej w trybie MIME?"
+msgstr "Przesłać dalej w trybie MIME?"
 
 #: recvcmd.c:628 recvcmd.c:925
 #, c-format
@@ -4802,11 +4802,11 @@ msgstr "Nie można utworzyć %s."
 #.
 #: recvcmd.c:726
 msgid "You may only compose to sender with message/rfc822 parts."
-msgstr "Możesz wysyłać tylko do nadawców listów zgodnych z RFC 822."
+msgstr "Możesz wysyłać tylko do nadawców listów zgodnych z RFC 822."
 
 #: recvcmd.c:800
 msgid "Can't find any tagged messages."
-msgstr "Nie można znaleźć żadnego z zaznaczonych listów."
+msgstr "Nie można znaleźć żadnego z zaznaczonych listów."
 
 #: recvcmd.c:821 send.c:864
 msgid "No mailing lists found!"
@@ -4861,7 +4861,7 @@ msgstr "Już zdefiniowano ostatni element łańcucha."
 
 #: remailer.c:713
 msgid "Mixmaster doesn't accept Cc or Bcc headers."
-msgstr "Mixmaster nie akceptuje nagłówków Cc i Bcc."
+msgstr "Mixmaster nie akceptuje nagłówków Kopia i Ukryta kopia."
 
 #: remailer.c:737
 msgid ""
@@ -4880,7 +4880,7 @@ msgstr "Błąd podczas wysyłania listu."
 #: rfc1524.c:194
 #, c-format
 msgid "Improperly formatted entry for type %s in \"%s\" line %d"
-msgstr "Błędnie sformatowane pole dla typu %s w \"%s\" linii %d"
+msgstr "Błędnie sformatowane pole dla typu %s w „%s”, w linii %d"
 
 #. L10N:
 #. Mutt is trying to look up a mailcap value, but $mailcap_path is
@@ -4952,11 +4952,11 @@ msgstr "Follow-up do %s%s?"
 
 #: send.c:839
 msgid "No tagged messages are visible!"
-msgstr "Żaden z zaznaczonych listów nie jest widoczny!"
+msgstr "Żaden z zaznaczonych listów nie jest widoczny!"
 
 #: send.c:893
 msgid "Include message in reply?"
-msgstr "Zacytować oryginalny list w odpowiedzi?"
+msgstr "Zacytować oryginalny list w odpowiedzi?"
 
 #: send.c:898
 msgid "Including quoted message..."
@@ -5118,7 +5118,7 @@ msgstr "Edytowanie w tle."
 
 #: sendlib.c:455
 msgid "No boundary parameter found! [report this error]"
-msgstr "Brak parametru granicznego! (zgłoś ten błąd)"
+msgstr "Brak parametru granicznego! (Zgłoś ten błąd.)"
 
 #: sendlib.c:486
 #, c-format
@@ -5172,7 +5172,7 @@ msgstr ""
 
 #: sendlib.c:2634
 msgid "$sendmail must be set in order to send mail."
-msgstr "zmienna $sendmail musi być ustawiona aby móc wysyłać listy."
+msgstr "Zmienna $sendmail musi być ustawiona aby móc wysyłać listy."
 
 #: sendlib.c:2733
 #, c-format
@@ -5186,7 +5186,7 @@ msgstr "Wynik procesu dostarczania"
 #: sendlib.c:2901
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
-msgstr "Błędny IDN %s w trakcie przygotowywania resent-from."
+msgstr "Błędny IDN %s w trakcie przygotowywania resent-from."
 
 #: smime.c:156
 msgid "Enter S/MIME passphrase:"
@@ -5210,7 +5210,7 @@ msgstr "Wygasły   "
 
 #: smime.c:420
 msgid "Revoked   "
-msgstr "Wyprowadzony   "
+msgstr "Unieważniony   "
 
 #: smime.c:423
 msgid "Invalid   "
@@ -5223,15 +5223,15 @@ msgstr "Nieznany   "
 #: smime.c:458
 #, c-format
 msgid "S/MIME certificates matching \"%s\"."
-msgstr "Certyfikat S/MIME dla \"%s\"."
+msgstr "Certyfikat S/MIME dla „%s”."
 
 #: smime.c:502
 msgid "ID is not trusted."
-msgstr "Identyfikator nie jest zaufany.."
+msgstr "Identyfikator nie jest zaufany."
 
 #: smime.c:795
 msgid "Enter keyID: "
-msgstr "Podaj numer klucza: "
+msgstr "Podaj identyfikator klucza: "
 
 #: smime.c:916
 #, c-format
@@ -5240,7 +5240,7 @@ msgstr "Brak (poprawnych) certyfikatów dla %s."
 
 #: smime.c:973 smime.c:1003 smime.c:1072 smime.c:1108 smime.c:1184 smime.c:1266
 msgid "Error: unable to create OpenSSL subprocess!"
-msgstr "Błąd: nie można wywołać podprocesu OpenSSL!"
+msgstr "Błąd: nie można utworzyć podprocesu OpenSSL!"
 
 #: smime.c:1254
 msgid "Label for certificate: "
@@ -5260,7 +5260,7 @@ msgstr "Brak wyników działania OpenSSL…"
 
 #: smime.c:1577
 msgid "Can't sign: No key specified. Use Sign As."
-msgstr "Nie można podpisać - nie podano klucza. Użyj Podpisz jako."
+msgstr "Nie można podpisać — nie podano klucza. Użyj Podpisz jako."
 
 #: smime.c:1630
 msgid "Can't open OpenSSL subprocess!"
@@ -5348,7 +5348,7 @@ msgstr "123a"
 
 #: smime.c:2286
 msgid "1: DES, 2: Triple-DES "
-msgstr "1: DES, 2: Triple-DES "
+msgstr "1: DES, 2: Triple‑DES "
 
 #: smime.c:2287
 msgid "dt"
@@ -5356,7 +5356,7 @@ msgstr "12"
 
 #: smime.c:2299
 msgid "1: RC2-40, 2: RC2-64, 3: RC2-128 "
-msgstr "1: RC2-40, 2: RC2-64, 3: RC2-128 "
+msgstr "1: RC2‑40, 2: RC2‑64, 3: RC2‑128 "
 
 #: smime.c:2300
 msgid "468"
@@ -5425,11 +5425,11 @@ msgstr "Uwierzytelnianie SASL nie powiodło się"
 
 #: sort.c:301
 msgid "Sorting mailbox..."
-msgstr "Sortowanie poczty w skrzynce…"
+msgstr "Sortowanie poczty w skrzynce…"
 
 #: sort.c:338
 msgid "Could not find sorting function! [report this bug]"
-msgstr "Nie znaleziono funkcji sortowania! (zgłoś ten błąd)"
+msgstr "Nie znaleziono funkcji sortowania! (Zgłoś ten błąd.)"
 
 #: status.c:127
 msgid "(no mailbox)"
@@ -5437,17 +5437,17 @@ msgstr "(brak skrzynki)"
 
 #: thread.c:1102
 msgid "Parent message is not available."
-msgstr "Pierwszy list tego wątku nie jest dostępny."
+msgstr "Poprzedni list nie jest dostępny."
 
 #: thread.c:1108
 msgid "Root message is not visible in this limited view."
 msgstr ""
-"Pierwszy list wątku nie jest widoczny w trybie ograniczonego przeglądania."
+"Pierwszy list wątku nie jest widoczny w trybie ograniczonego przeglądania."
 
 #: thread.c:1110
 msgid "Parent message is not visible in this limited view."
 msgstr ""
-"Pierwszy list wątku nie jest widoczny w trybie ograniczonego przeglądania."
+"Poprzedni list wątku nie jest widoczny w trybie ograniczonego przeglądania."
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5477,7 +5477,7 @@ msgstr "obejrzyj załącznik jako tekst"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:19
 msgid "Toggle display of subparts"
-msgstr "przełącza podgląd pod-listów listów złożonych"
+msgstr "przełącza podgląd podlistów listów złożonych"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5531,7 +5531,7 @@ msgstr "wyślij ponownie do innego użytkownika"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:46
 msgid "select a new file in this directory"
-msgstr "wybierz nowy plik w tym katalogu"
+msgstr "wybierz nowy plik w tym katalogu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5568,7 +5568,7 @@ msgstr ""
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:64
 msgid "list mailboxes with new mail"
-msgstr "pokaż skrzynki z nową pocztą"
+msgstr "pokaż skrzynki z nową pocztą"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5580,7 +5580,7 @@ msgstr "zmień katalog"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:70
 msgid "check mailboxes for new mail"
-msgstr "szukaj nowych listów w skrzynkach"
+msgstr "sprawdź nową pocztę w skrzynkach"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5604,13 +5604,13 @@ msgstr "pokaż opcje menu edycji Autocrypt"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:82
 msgid "edit the BCC list"
-msgstr "podaj treść pola BCC"
+msgstr "podaj treść pola Ukryta kopia"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:85
 msgid "edit the CC list"
-msgstr "podaj treść pola CC"
+msgstr "podaj treść pola Kopia"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5664,19 +5664,19 @@ msgstr "edytuj załącznik używając mailcap"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:112
 msgid "edit the Reply-To field"
-msgstr "podaj treść pola Odpowiedź‐do"
+msgstr "edytuj pole Odpowiedź‐do"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:115
 msgid "edit the subject of this message"
-msgstr "podaj tytuł listu"
+msgstr "edytuj temat listu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:118
 msgid "edit the TO list"
-msgstr "podaj treść listy TO"
+msgstr "edytuj listę adresatów (pole Do)"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5688,7 +5688,7 @@ msgstr "utwórz nową skrzynkę (tylko IMAP)"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:124
 msgid "edit attachment content type"
-msgstr "podaj rodzaj typu \"Content-Type\" załącznika"
+msgstr "podaj typ (Content-Type) załącznika"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5700,7 +5700,7 @@ msgstr "weź tymczasową kopię załącznika"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:130
 msgid "run ispell on the message"
-msgstr "sprawdź poprawność pisowni listu"
+msgstr "sprawdź poprawność pisowni używając ispell"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5736,7 +5736,7 @@ msgstr "zapisz list aby wysłać go później"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:148
 msgid "send attachment with a different name"
-msgstr "wyślij załącznik z inną nazwą"
+msgstr "wyślij załącznik z inną nazwą"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5760,7 +5760,7 @@ msgstr "napisz nowy list do aktualnego nadawcy"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:160
 msgid "toggle disposition between inline/attachment"
-msgstr "ustala czy wstawiać w treści czy jako załącznik"
+msgstr "ustala czy wstawiać w treści czy jako załącznik"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5772,7 +5772,7 @@ msgstr "ustala czy usunąć plik po wysłaniu"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:166
 msgid "update an attachment's encoding info"
-msgstr "zaktualizuj informację o kodowaniu załącznika"
+msgstr "zaktualizuj informację o kodowaniu załącznika"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5838,7 +5838,7 @@ msgstr "utwórz rozkodowaną (text/plain) kopię"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:199
 msgid "make decoded copy (text/plain) and delete"
-msgstr "utwórz rozkodowaną kopię (text/plain) i usuń"
+msgstr "utwórz rozkodowaną kopię (text/plain) i usuń"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5856,13 +5856,13 @@ msgstr "usuń bieżącą skrzynkę (tylko IMAP)"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:208
 msgid "delete all messages in subthread"
-msgstr "usuń wszystkie listy w podwątku"
+msgstr "usuń wszystkie listy w podwątku"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:211
 msgid "delete all messages in thread"
-msgstr "usuń wszystkie listy w wątku"
+msgstr "usuń wszystkie listy w wątku"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5892,7 +5892,7 @@ msgstr "dodaj, zmień lub usuń etykietę listu"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:226
 msgid "edit the raw message"
-msgstr "edytuj list z nagłowkami"
+msgstr "edytuj list z nagłowkami"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5904,7 +5904,7 @@ msgstr "usuń znak przed kursorem"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:232
 msgid "move the cursor one character to the left"
-msgstr "przesuń kursor jeden znak w lewo"
+msgstr "przesuń kursor jeden znak w lewo"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5952,7 +5952,7 @@ msgstr "przeskocz do końca linii"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:256
 msgid "move the cursor one character to the right"
-msgstr "przesuń kursor o znak w prawo"
+msgstr "przesuń kursor o znak w prawo"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5964,7 +5964,7 @@ msgstr "przesuń kursor do końca słowa"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:262
 msgid "scroll down through the history list"
-msgstr "przewijaj w dół listę wydanych poleceń"
+msgstr "przewijaj w dół listę wydanych poleceń"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5976,7 +5976,7 @@ msgstr "przewijaj do góry listę wydanych poleceń"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:268
 msgid "search through the history list"
-msgstr "szukaj w historii wydanych poleceń"
+msgstr "szukaj w historii wydanych poleceń"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5994,7 +5994,7 @@ msgstr "usuń znaki od kursora do końca słowa"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:277
 msgid "delete all chars on the line"
-msgstr "usuń wszystkie znaki w linii"
+msgstr "usuń wszystkie znaki w linii"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6090,7 +6090,7 @@ msgstr "wybierz obecną pozycję"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:325
 msgid "reply to all recipients preserving To/Cc"
-msgstr "odpowiedz wszystkim adresatom zachowując Do/DW"
+msgstr "odpowiedz wszystkim adresatom zachowując Do/Kopia"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6102,13 +6102,13 @@ msgstr "odpowiedz wszystkim adresatom"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:331
 msgid "scroll down 1/2 page"
-msgstr "przewiń o pół strony w dół"
+msgstr "przewiń o pół strony w dół"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:334
 msgid "scroll up 1/2 page"
-msgstr "przewiń o pół strony w górę"
+msgstr "przewiń o pół strony w górę"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6174,7 +6174,7 @@ msgstr "otwórz inny katalog"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:367
 msgid "open a different folder in read only mode"
-msgstr "otwórz inny katalog w trybie tylko do odczytu"
+msgstr "otwórz inny katalog w trybie tylko do odczytu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6306,13 +6306,13 @@ msgstr "przejdź do poprzedniego nieprzeczytanego listu"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:433
 msgid "mark the current thread as read"
-msgstr "zaznacz obecny wątek jako przeczytany"
+msgstr "oznacz obecny wątek jako przeczytany"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:436
 msgid "mark the current subthread as read"
-msgstr "zaznacz obecny podwątek jako przeczytany"
+msgstr "oznacz obecny podwątek jako przeczytany"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6618,13 +6618,13 @@ msgstr "odtwórz wszystkie listy w wątku"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:589
 msgid "undelete all messages in subthread"
-msgstr "odtwórz wszystkie listy w podwątku"
+msgstr "odtwórz wszystkie listy w podwątku"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:592
 msgid "show the Mutt version number and date"
-msgstr "pokaż wersję i datę Mutta"
+msgstr "pokaż wersję i datę Mutta"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6714,7 +6714,7 @@ msgstr "przewiń pasek boczny o jedną stronę w dół"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:637
 msgid "scroll the sidebar up 1 page"
-msgstr "przewiń pasek boczny o jedną stronę w górę"
+msgstr "przewiń pasek boczny o jedną stronę w górę"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6769,7 +6769,7 @@ msgstr "wyświetl identyfikator użytkownika klucza"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:664
 msgid "check for classic PGP"
-msgstr "spróbuj użyć klasycznego PGP"
+msgstr "szukaj klasycznego PGP"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6793,7 +6793,7 @@ msgstr "wstaw remailera do łańcucha"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:676
 msgid "delete a remailer from the chain"
-msgstr "usuń remailera z łańcucha"
+msgstr "usuń remailera z łańcucha"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6817,7 +6817,7 @@ msgstr "prześlij list przez łańcuch remailerów typu mixmaster"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:688
 msgid "make decrypted copy and delete"
-msgstr "utwórz rozszyfrowaną kopię i usuń oryginał"
+msgstr "utwórz rozszyfrowaną kopię i usuń oryginał"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
