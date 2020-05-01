@@ -1566,7 +1566,7 @@ int imap_close_mailbox (CONTEXT* ctx)
       idata->state = IMAP_AUTHENTICATED;
     }
 
-    idata->reopen &= IMAP_REOPEN_ALLOW;
+    idata->reopen = 0;
     FREE (&(idata->mailbox));
     mutt_free_list (&idata->flags);
     idata->ctx = NULL;
