@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = 1.6 foreign
 subdir = doc
 
 if BUILD_INFO
-INFO_DOCFILES = mutt.info
+INFO_DOCFILES = mutt.info mutt.texi
 endif
 if BUILD_DOC
 BUILD_DOC_TARGETS = stamp-doc-chunked manual.html manual.txt $(INFO_DOCFILES)
@@ -45,7 +45,7 @@ CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
 
 HTML_DOCFILES = manual.html $(CHUNKED_DOCFILES)
 
-BUILT_DISTFILES = stamp-doc-xml stamp-doc-chunked manual.txt $(HTML_DOCFILES) $(INFO_DOCFILES)
+BUILT_DISTFILES = stamp-doc-xml stamp-doc-chunked manual.txt muttrc.man $(HTML_DOCFILES) $(INFO_DOCFILES)
 
 srcdir_DOCFILES = PGP-Notes.txt applying-patches.txt	\
 	devel-notes.txt patch-notes.txt smime-notes.txt
