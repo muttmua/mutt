@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 09:33-0700\n"
+"POT-Creation-Date: 2020-05-02 14:34-0700\n"
 "PO-Revision-Date: 2020-04-26 23:44-0400\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -2367,7 +2367,8 @@ msgstr "Voleu abandonar Mutt?"
 #.
 #: curs_lib.c:471 curs_main.c:1061 curs_main.c:1485
 msgid "There are $background_edit sessions. Really quit Mutt?"
-msgstr "Hi ha sessions de redacció en segon pla. Voleu realment abandonar Mutt?"
+msgstr ""
+"Hi ha sessions de redacció en segon pla. Voleu realment abandonar Mutt?"
 
 #: curs_lib.c:541
 msgid "Error History is disabled."
@@ -4688,7 +4689,9 @@ msgstr "El desxifratge ha fallat."
 msgid ""
 "[-- Error: decryption failed --]\n"
 "\n"
-msgstr "[-- Error: El desxifratge ha fallat. --]\n\n"
+msgstr ""
+"[-- Error: El desxifratge ha fallat. --]\n"
+"\n"
 
 #: pgp.c:1288
 msgid "Can't open PGP subprocess!"

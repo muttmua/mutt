@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 09:33-0700\n"
+"POT-Creation-Date: 2020-05-02 14:34-0700\n"
 "PO-Revision-Date: 2020-04-17 20:26+02:00\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -4913,7 +4913,9 @@ msgstr "Nesprávně formátovaná položka pro typ %s v „%s“ na řádku %d"
 #.
 #: rfc1524.c:451
 msgid "Neither mailcap_path nor MAILCAPS specified"
-msgstr "Není zadána ani konfigurační volba mailcap_path, ani proměnná prostředí MAILCAPS"
+msgstr ""
+"Není zadána ani konfigurační volba mailcap_path, ani proměnná prostředí "
+"MAILCAPS"
 
 #: rfc1524.c:482
 #, c-format

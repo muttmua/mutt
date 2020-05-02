@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 09:33-0700\n"
+"POT-Creation-Date: 2020-05-02 14:34-0700\n"
 "PO-Revision-Date: 2020-04-26 09:30+0200\n"
 "Last-Translator: Morten Bo Johansen <mbj@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -1494,7 +1494,8 @@ msgid ""
 "[-- Error: Missing or bad-format multipart/signed signature! --]\n"
 "\n"
 msgstr ""
-"[-- Fejl: multipart/signed-undeskrift mangler eller er i et forkert format! --]\n"
+"[-- Fejl: multipart/signed-undeskrift mangler eller er i et forkert format! "
+"--]\n"
 "\n"
 
 #: crypt.c:1153
@@ -1601,8 +1602,8 @@ msgstr "fejl ved underskrivelse af data: %s\n"
 #: crypt-gpgme.c:1242
 msgid "$pgp_sign_as unset and no default key specified in ~/.gnupg/gpg.conf"
 msgstr ""
-"$pgp_sign_as er ikke indstillet, og ingen standardnøgle er anført i "
-"~/.gnupg/gpg.conf"
+"$pgp_sign_as er ikke indstillet, og ingen standardnøgle er anført i ~/.gnupg/"
+"gpg.conf"
 
 #: crypt-gpgme.c:1424
 msgid "Warning: One of the keys has been revoked\n"
@@ -2250,7 +2251,8 @@ msgstr "Kan ikke skrive til et skrivebeskyttet mailkatalog!"
 
 #: curs_main.c:355
 msgid "Changes to folder will be written on folder exit."
-msgstr "Ændringer i mailkataloget vil blive skrevet til disk, når den forlades."
+msgstr ""
+"Ændringer i mailkataloget vil blive skrevet til disk, når den forlades."
 
 #: curs_main.c:360
 msgid "Changes to folder will not be written."
@@ -2670,7 +2672,8 @@ msgstr "Fjern statusindikator"
 
 #: handler.c:1142
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
-msgstr "[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
+msgstr ""
+"[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
 
 #: handler.c:1258
 #, c-format
@@ -3431,7 +3434,8 @@ msgid ""
 msgstr ""
 "    Dette program er fri software; du kan redistribuere det og/eller ændre\n"
 "    det under betingelserne i GNU General Public License i den form som den\n"
-"    er udgivet af the Free Software Foundation; enten i version 2 af Licensen\n"
+"    er udgivet af the Free Software Foundation; enten i version 2 af "
+"Licensen\n"
 "    eller (hvis du ønsker det) enhver senere version.\n"
 "\n"
 "    Dette program distribueres med et håb om at det vil være nyttigt,\n"
@@ -3449,8 +3453,8 @@ msgstr ""
 "    Du burde have modtaget en kopi af the GNU General Public License\n"
 "    sammen med dette program; hvis dette ikke er tilfælde, skriv til Free "
 "Software\n"
-"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, "
-"USA.\n"
+"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+"02110-1301, USA.\n"
 
 #: main.c:134
 msgid ""
@@ -4421,7 +4425,8 @@ msgstr "usgyoi"
 
 #: pgp.c:1850
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
-msgstr "PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
+msgstr ""
+"PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
 
 #: pgp.c:1851
 msgid "safco"
