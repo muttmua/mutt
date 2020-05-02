@@ -82,7 +82,7 @@ To report a bug, please contact the Mutt maintainers via gitlab:\n\
     https://gitlab.com/muttmua/mutt/issues\n");
 
 static const char *Notice = N_("\
-Copyright (C) 1996-2016 Michael R. Elkins and others.\n\
+Copyright (C) 1996-2020 Michael R. Elkins and others.\n\
 Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n\
 Mutt is free software, and you are welcome to redistribute it\n\
 under certain conditions; type `mutt -vv' for details.\n");
