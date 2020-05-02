@@ -494,7 +494,7 @@ msgstr "uw"
 #. for some reason, we prompt to see if they want to create a key instead.
 #.
 #: autocrypt/autocrypt_gpgme.c:260
-msgid "Create a new gpg key for this account, instead?"
+msgid "Create a new GPG key for this account, instead?"
 msgstr "Czy zamiast tego utworzyć nowy klucz GPG dla tego konta?"
 
 #. L10N:

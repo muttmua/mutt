@@ -498,7 +498,7 @@ msgstr "vs"
 #. for some reason, we prompt to see if they want to create a key instead.
 #.
 #: autocrypt/autocrypt_gpgme.c:260
-msgid "Create a new gpg key for this account, instead?"
+msgid "Create a new GPG key for this account, instead?"
 msgstr "Namísto toho vytvořit pro tento účet nový klíč GPG?"
 
 #. L10N:
