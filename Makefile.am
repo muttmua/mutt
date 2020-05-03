@@ -208,7 +208,7 @@ check-security:
 
 update-changelog:
 	(cd $(top_srcdir); \
-	sh ./mkchangelog.sh | cat  - ChangeLog > ChangeLog.$$$$ && mv ChangeLog.$$$$ ChangeLog; \
+	(sh ./mkchangelog.sh; echo; cat ChangeLog) > ChangeLog.$$$$ && mv ChangeLog.$$$$ ChangeLog; \
 	$${VISUAL:-vi} ChangeLog)
 
 mutt-dist:
