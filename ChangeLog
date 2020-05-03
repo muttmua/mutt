@@ -1784,6 +1784,7 @@ M	init.h
 M	mutt.h
 A	mutt_zstrm.c
 A	mutt_zstrm.h
+
 2020-03-28 11:20:21 -0700  Kevin McCarthy  <kevin@8t8.us> (f42ee069)
 
         * Update UPDATING for 1.13.5.
@@ -1844,6 +1845,7 @@ M	muttlib.c
 
 M	ChangeLog
 M	VERSION
+
 2020-02-15 11:25:37 -0800  Kevin McCarthy  <kevin@8t8.us> (05a257e8)
 
         * Update UPDATING file 1.13.4.
@@ -1978,6 +1980,7 @@ M	pager.c
 
 M	ChangeLog
 M	VERSION
+
 2020-01-12 13:01:58 -0800  Kevin McCarthy  <kevin@8t8.us> (f76b45e2)
 
         * Update UPDATING file for 1.13.3 release.
@@ -2035,6 +2038,7 @@ M	mutt.h
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2019-12-18 14:10:38 -0800  Kevin McCarthy  <kevin@8t8.us> (7aed228a)
 
         * Revert "Fixes unchecked return from link() in dotlock.c"
@@ -2049,6 +2053,7 @@ M	dotlock.c
 
 M	ChangeLog
 M	VERSION
+
 2019-12-14 11:33:51 -0800  Kevin McCarthy  <kevin@8t8.us> (fcfd5ee5)
 
         * Update UPDATING file for 1.13.1 release.
@@ -2208,6 +2213,7 @@ M	po/tr.po
 M	po/uk.po
 M	po/zh_CN.po
 M	po/zh_TW.po
+
 2019-11-30 10:08:44 -0800  Kevin McCarthy  <kevin@8t8.us> (b1d99670)
 
         * Set UPDATING file release date for 1.13.0.
@@ -4712,6 +4718,7 @@ M	init.h
           other way round) will get you back to the exact same line as before.
 
 M	pager.c
+
 2019-09-21 12:27:57 -0700  Kevin McCarthy  <kevin@8t8.us> (6931c1ad)
 
         * Update UPDATING file for 1.12.2 release.
@@ -4814,6 +4821,7 @@ M	attach.c
 
 M	ChangeLog
 M	VERSION
+
 2019-06-15 09:02:36 -0700  Kevin McCarthy  <kevin@8t8.us> (e299de25)
 
         * Update UPDATING file for 1.12.1 release.
@@ -5039,6 +5047,7 @@ M	po/tr.po
 M	po/uk.po
 M	po/zh_CN.po
 M	po/zh_TW.po
+
 2019-05-25 09:08:33 -0700  Kevin McCarthy  <kevin@8t8.us> (7d8db3e2)
 
         * Set UPDATING file release date for 1.12.0.
@@ -7621,6 +7630,7 @@ M	pager.c
         at one time it made sense.
 
 M	pager.c
+
 2019-03-13 12:06:11 +0800  Kevin McCarthy  <kevin@8t8.us> (fedb91e2)
 
         * Fix incorrect IMAP message purging bug.
@@ -7666,6 +7676,7 @@ M	imap/imap.c
 
 M	ChangeLog
 M	VERSION
+
 2019-02-01 12:34:19 -0800  Kevin McCarthy  <kevin@8t8.us> (cd5db026)
 
         * Update UPDATING file for 1.11.3 release.
@@ -7813,6 +7824,7 @@ M	mutt_ssl.c
 
 M	ChangeLog
 M	VERSION
+
 2019-01-07 17:26:53 -0800  Kevin McCarthy  <kevin@8t8.us> (5f1f14e2)
 
         * Add UPDATING notes for 1.11.2 release.
@@ -7975,6 +7987,7 @@ M	po/fi.po
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2018-12-01 11:27:20 -0800  Kevin McCarthy  <kevin@8t8.us> (bf2f59d4)
 
         * Document Sender header as a default in $imap_headers.
@@ -8047,6 +8060,7 @@ M	po/tr.po
 M	po/uk.po
 M	po/zh_CN.po
 M	po/zh_TW.po
+
 2018-11-25 09:33:53 -0800  Kevin McCarthy  <kevin@8t8.us> (6de8a20e)
 
         * Bump release date.
@@ -9847,6 +9861,7 @@ M	mbyte.c
         consistent with the other token comparisons.
 
 M	color.c
+
 2018-07-13 14:25:28 -0700  Kevin McCarthy  <kevin@8t8.us> (3d9028fe)
 
         * Check outbuf length in mutt_from_base64()
@@ -10077,6 +10092,7 @@ M	po/tr.po
 M	po/uk.po
 M	po/zh_CN.po
 M	po/zh_TW.po
+
 2018-05-17 12:24:31 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net> (70c9c89b)
 
         * Updated Catalan translation.
@@ -11398,6 +11414,7 @@ M	crypt.c
 2017-09-04 09:47:26 -0700  Kevin McCarthy  <kevin@8t8.us> (61c7e548)
 
         * merge stable
+
 2018-04-13 20:39:35 -0700  Kevin McCarthy  <kevin@8t8.us> (ceb0534d)
 
         * Improve gss debug printing of status_string.
@@ -11489,6 +11506,7 @@ M	crypt-gpgme.c
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2018-02-28 15:20:59 -0800  Kevin McCarthy  <kevin@8t8.us> (65068235)
 
         * Add subjectrx section to the muttrc man page.
@@ -11607,6 +11625,7 @@ M	po/zh_TW.po
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2018-01-21 18:33:16 -0800  Kevin McCarthy  <kevin@8t8.us> (45b15d3d)
 
         * Fix the ftp site url in the manual.
@@ -11789,6 +11808,7 @@ M	version.sh
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2017-12-15 12:09:42 -0800  Kevin McCarthy  <kevin@8t8.us> (9eedfd4e)
 
         * Fix s/mime certificate deletion bug. (closes #3982)
@@ -11936,6 +11956,7 @@ M	.hgtags
 M	ChangeLog
 M	UPDATING
 M	VERSION
+
 2017-09-22 11:14 -0700  Kevin McCarthy  <kevin@8t8.us>  (19c81a140c6e)
 
 	* imap/imap.c: Add missing IMAP_CMD_POLL flag in imap buffy check.
@@ -27252,7 +27273,7 @@ M	VERSION
 	(fallout from conversion from article to book).
 
 	* UPDATING: Use +/-/! instead of N/D/M in UPDATING.
-                                 
+
 2006-05-19 18:30:10  Rocco Rutte  <pdmef@gmx.net>  (brendan)
 
 	* Makefile.am, README, UPDATING: The UPDATING document is supposed
@@ -27746,7 +27767,7 @@ M	VERSION
 	destabilised things. Time for some brave (or lazy
 	non-Changelog-reading) testers to report... next up, IDLE
 	support.
-                                 
+
 2005-12-10 07:06:44  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* imap/browse.c, imap/command.c, imap/imap.c, imap/imap_private.h,
