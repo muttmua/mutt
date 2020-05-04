@@ -302,9 +302,9 @@ The keys used are:
     be checked second, but should be considered deprecated.
   + $forward_attribution_intro and $forward_attribution_trailer can be used
     to customize the message preceding and following a forwarded message.
-  + The ~<() and ~>() pattern operators match messages whose immediate parent,
+  + The ~<() and ~>() pattern modifiers match messages whose immediate parent,
     or immediate children respectively, match the subpattern inside ().
-    They are more specific versions of the ~() pattern operator.
+    They are more specific versions of the ~() pattern modifier.
   + $imap_poll_timeout allow IMAP mailbox polling to time out.  This defaults
     to 15 seconds.
   + The attachment menu now supports nested encryption.  This allows

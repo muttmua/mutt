@@ -890,16 +890,16 @@ static void print_crypt_pattern_op_error (int op)
   if (entry)
   {
     /* L10N:
-       One of the crypt pattern operators: ~g, ~G, ~k, ~V
+       One of the crypt pattern modifiers: ~g, ~G, ~k, ~V
        was invoked when Mutt was compiled without crypto support.
        %c is the pattern character, i.e. "g".
     */
-    mutt_error (_("Pattern operator '~%c' is disabled."), entry->tag);
+    mutt_error (_("Pattern modifier '~%c' is disabled."), entry->tag);
   }
   else
   {
     /* L10N:
-       An unknown pattern operator was somehow invoked.  This
+       An unknown pattern modifier was somehow invoked.  This
        shouldn't be possible unless there is a bug.
     */
     mutt_error (_("error: unknown op %d (report this error)."), op);

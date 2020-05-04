@@ -3468,7 +3468,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Specifies how Mutt should expand a simple search into a real search
   ** pattern.  A simple search is one that does not contain any of the ``~'' pattern
-  ** operators.  See ``$patterns'' for more information on search patterns.
+  ** modifiers.  See ``$patterns'' for more information on search patterns.
   ** .pp
   ** For example, if you simply type ``joe'' at a search or limit prompt, Mutt
   ** will automatically expand it to the value specified by this variable by
