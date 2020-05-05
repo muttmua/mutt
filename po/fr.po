@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-02 14:34-0700\n"
-"PO-Revision-Date: 2020-04-20 03:29+0200\n"
+"POT-Creation-Date: 2020-05-05 13:31+0200\n"
+"PO-Revision-Date: 2020-05-05 13:32+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -4452,18 +4452,18 @@ msgid "Invalid relative date: %s"
 msgstr "Date relative invalide : %s"
 
 #. L10N:
-#. One of the crypt pattern operators: ~g, ~G, ~k, ~V
+#. One of the crypt pattern modifiers: ~g, ~G, ~k, ~V
 #. was invoked when Mutt was compiled without crypto support.
 #. %c is the pattern character, i.e. "g".
 #.
 #: pattern.c:897
 #, c-format
-msgid "Pattern operator '~%c' is disabled."
-msgstr "L'opérateur de motif '~%c' est désactivé."
+msgid "Pattern modifier '~%c' is disabled."
+msgstr "Le modificateur de motif '~%c' est désactivé."
 
 # , c-format
 #. L10N:
-#. An unknown pattern operator was somehow invoked.  This
+#. An unknown pattern modifier was somehow invoked.  This
 #. shouldn't be possible unless there is a bug.
 #.
 #: pattern.c:905 pattern.c:1583
