@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-02 14:34-0700\n"
-"PO-Revision-Date: 2020-04-30 16:54+0200\n"
+"PO-Revision-Date: 2020-05-06 21:53+0200\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
 "Language: pl\n"
@@ -5845,7 +5845,7 @@ msgstr "utwórz rozkodowaną kopię (text/plain) i usuń"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:202
 msgid "delete the current entry"
-msgstr "usuń bieżący list"
+msgstr "usuń bieżący element"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
