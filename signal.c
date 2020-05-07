@@ -35,6 +35,10 @@ static struct sigaction SysOldInt;
 static struct sigaction SysOldQuit;
 static int IsEndwin = 0;
 
+static char *Caught_Signal_L10N = NULL;
+static char *Exiting_L10N = NULL;
+
+
 static void exit_print_int_recursive (int n)
 {
   char digit;
@@ -78,7 +82,7 @@ static void exit_handler (int sig)
   curs_set (1);
   endwin (); /* just to be safe */
 
-  exit_print_string ("Caught signal ");
+  exit_print_string (Caught_Signal_L10N ? Caught_Signal_L10N : "Caught signal ");
 #if SYS_SIGLIST_DECLARED
   exit_print_string (sys_siglist[sig]);
 #else
@@ -92,8 +96,40 @@ static void exit_handler (int sig)
 #endif
 #endif
 #endif
-  exit_print_string ("...  Exiting.\n");
+  exit_print_string (Exiting_L10N ? Exiting_L10N : "...  Exiting.\n");
   exit (0);
+}
+
+/* These are gettext() translated in advance because that
+ * is not guaranteed reentrant.
+ */
+static void exit_handler_l10n_init (void)
+{
+  if (!Caught_Signal_L10N)
+  {
+    /* L10N:
+       This is printed in the exit handler when a signal is caught.
+       The whole string is "Caught signal [XXX]...  Exiting\n".
+       This is the first part of the string: note with a trailing space.
+    */
+    Caught_Signal_L10N = safe_strdup (_("Caught signal "));
+  }
+  if (!Exiting_L10N)
+  {
+    /* L10N:
+       This is printed in the exit handler when a signal is caught.
+       The whole string is "Caught signal [XXX]...  Exiting\n".
+       This is the second part of the string, printed after the
+       signal number or name.
+    */
+    Exiting_L10N = safe_strdup (_("...  Exiting.\n"));
+  }
+}
+
+static void exit_handler_l10n_cleanup (void)
+{
+  FREE (&Caught_Signal_L10N);
+  FREE (&Exiting_L10N);
 }
 
 static void chld_handler (int sig)
@@ -153,6 +189,8 @@ void mutt_signal_init (void)
 {
   struct sigaction act;
 
+  exit_handler_l10n_init ();
+
   sigemptyset (&act.sa_mask);
   act.sa_flags = 0;
   act.sa_handler = SIG_IGN;
@@ -204,6 +242,11 @@ void mutt_signal_init (void)
    */
   SLang_getkey_intr_hook = mutt_intr_hook;
 #endif
+}
+
+void mutt_signal_cleanup (void)
+{
+  exit_handler_l10n_cleanup ();
 }
 
 /* signals which are important to block while doing critical ops */
