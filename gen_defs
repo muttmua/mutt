@@ -25,7 +25,9 @@ for mode in help defs; do
 				done
 			} | \
 			sed -e 's;^[0-9]* \(\/\*.*\*\/\);\1;' \
-			-e 's;^\([0-9]*\) \(OP_[^ ]*\) *\(.*\);	/* L10N: Help screen description for \2\n#: '"$i"':\1 */\n	N_(\3),;'
+			-e 's;^\([0-9]*\) \(OP_[^ ]*\) *\(.*\);	/* L10N: Help screen description for \2\
+#: '"$i"':\1 */\
+	N_(\3),;'
 		else
 			sed -e '/^\/\*/d' -e 's;^\([^ ]*\).*;	\1,;' < $i
 		fi
