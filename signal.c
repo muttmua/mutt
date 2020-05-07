@@ -70,7 +70,9 @@ static void exit_print_string (const char *str)
     write (1, str, len);
 }
 
-/* Attempt to catch "ordinary" signals and shut down gracefully. */
+/* Attempt to catch "ordinary" signals and shut down gracefully.
+   Do not do l10n translations as _() can invoke malloc(), which
+   may not be re-entrant. */
 static void exit_handler (int sig)
 {
   curs_set (1);
