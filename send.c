@@ -1215,11 +1215,14 @@ static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
 {
   int rc, choice;
 
-  /* L10N:
-     Message when saving fcc after sending.
-     %s is the mailbox name.
-  */
-  mutt_message (_("Saving Fcc to %s"), mutt_b2s (fcc_mailbox));
+  if (!option (OPTNOCURSES) && !(sctx->flags & SENDMAILX))
+  {
+    /* L10N:
+       Message when saving fcc after sending.
+       %s is the mailbox name.
+    */
+    mutt_message (_("Saving Fcc to %s"), mutt_b2s (fcc_mailbox));
+  }
 
   mutt_buffer_expand_path (fcc_mailbox);
 
