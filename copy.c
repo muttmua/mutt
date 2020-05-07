@@ -141,7 +141,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
     }
   }
 
-  dprint (1, (debugfile, "WEED is %s\n", (flags & CH_WEED) ? "Set" : "Not"));
+  dprint (1, (debugfile, "WEED is %s\n", (flags & CH_WEED) ? "Set" : "Not Set"));
 
   headers = safe_calloc (hdr_count, sizeof (char *));
 
