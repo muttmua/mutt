@@ -75,8 +75,8 @@ static void exit_print_string (const char *str)
 }
 
 /* Attempt to catch "ordinary" signals and shut down gracefully.
-   Do not do l10n translations as _() can invoke malloc(), which
-   may not be re-entrant. */
+ * Do not do l10n translations as _() can invoke malloc(), (__MEM_CHECKED__)
+ * which may not be re-entrant. */
 static void exit_handler (int sig)
 {
   curs_set (1);
