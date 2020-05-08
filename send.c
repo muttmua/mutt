@@ -2102,6 +2102,11 @@ static int send_message_resume_first_edit (SEND_CONTEXT *sctx)
     else
     {
       sctx->mtime = mutt_decrease_mtime (sctx->msg->content->filename, NULL);
+      if (sctx->mtime == (time_t) -1)
+      {
+        mutt_perror (sctx->msg->content->filename);
+        goto cleanup;
+      }
       mutt_update_encoding (sctx->msg->content);
 
       /*

@@ -2124,6 +2124,7 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
   struct utimbuf utim;
   struct stat _st;
   time_t mtime;
+  int rc;
 
   if (!st)
   {
@@ -2137,7 +2138,12 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
     mtime -= 1;
     utim.actime = mtime;
     utim.modtime = mtime;
-    utime (f, &utim);
+    do
+      rc = utime (f, &utim);
+    while (rc == -1 && errno == EINTR);
+
+    if (rc == -1)
+      return -1;
   }
 
   return mtime;

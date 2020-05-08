@@ -77,6 +77,11 @@ int mutt_edit_headers (const char *editor,
     }
 
     sctx->tempfile_mtime = mutt_decrease_mtime (mutt_b2s (sctx->tempfile), &st);
+    if (sctx->tempfile_mtime == (time_t) -1)
+    {
+      mutt_perror (mutt_b2s (sctx->tempfile));
+      goto cleanup;
+    }
 
     if (flags == MUTT_EDIT_HEADERS_BACKGROUND)
     {

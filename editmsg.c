@@ -123,7 +123,12 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
     goto bail;
   }
 
-  mtime = mutt_decrease_mtime (mutt_b2s (tmp), &sb);
+  if ((mtime = mutt_decrease_mtime (mutt_b2s (tmp), &sb)) == (time_t) -1)
+  {
+    rc = -1;
+    mutt_perror (mutt_b2s (tmp));
+    goto bail;
+  }
 
   mutt_edit_file (NONULL(Editor), mutt_b2s (tmp));
 
