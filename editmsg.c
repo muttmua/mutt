@@ -116,6 +116,13 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
     goto bail;
   }
 
+  /* re-stat after the truncate, to avoid false "modified" bugs */
+  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
+  {
+    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
+    goto bail;
+  }
+
   mtime = mutt_decrease_mtime (mutt_b2s (tmp), &sb);
 
   mutt_edit_file (NONULL(Editor), mutt_b2s (tmp));
