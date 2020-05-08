@@ -110,8 +110,16 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
   if (sb.st_size != 0 &&
       truncate (mutt_b2s (tmp), sb.st_size - 1) == -1)
   {
+    rc = -1;
     mutt_error (_("could not truncate temporary mail folder: %s"),
 		strerror (errno));
+    goto bail;
+  }
+
+  /* re-stat after the truncate, to avoid false "modified" bugs */
+  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
+  {
+    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
     goto bail;
   }
 
@@ -178,6 +186,7 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
 
   if (msg == NULL)
   {
+    rc = -1;
     mutt_error (_("Can't append to folder: %s"), strerror (errno));
     mx_close_mailbox (&tmpctx, NULL);
     goto bail;
