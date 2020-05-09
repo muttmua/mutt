@@ -35,7 +35,7 @@ EXTRA_DIST = dotlock.man		\
 	instdoc.sh.in			\
 	patch-notes.txt			\
 	smime-notes.txt			\
-	Muttrc Muttrc.head stamp-doc-rc \
+	Muttrc.head			\
 	makedoc.pl makedoc-defs.h 	\
 	mutt.css mutt.xsl html.xsl chunk.xsl $(BUILT_DISTFILES)
 
@@ -45,7 +45,16 @@ CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
 
 HTML_DOCFILES = manual.html $(CHUNKED_DOCFILES)
 
-BUILT_DISTFILES = stamp-doc-xml stamp-doc-chunked manual.txt muttrc.man $(HTML_DOCFILES) $(INFO_DOCFILES)
+# Note: these are bundled with a dist tarball, so they should be
+# installed from $(srcdir).
+BUILT_DISTFILES = stamp-doc-xml		\
+		stamp-doc-chunked	\
+		stamp-doc-rc		\
+		Muttrc			\
+		manual.txt		\
+		muttrc.man		\
+		$(HTML_DOCFILES)	\
+		$(INFO_DOCFILES)
 
 srcdir_DOCFILES = PGP-Notes.txt applying-patches.txt	\
 	devel-notes.txt patch-notes.txt smime-notes.txt
@@ -67,7 +76,7 @@ install-data-local: makedoc-all instdoc
 	./instdoc mutt_pgpring.1 $(DESTDIR)$(mandir)/man1/mutt_pgpring.1
 	test x$(DOTLOCK_TARGET) = x || ./instdoc $(srcdir)/dotlock.man \
 		$(DESTDIR)$(mandir)/man1/mutt_dotlock.1
-	./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5
+	./instdoc $(srcdir)/muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5
 	./instdoc $(srcdir)/mbox.man $(DESTDIR)$(mandir)/man5/mbox.5
 	./instdoc $(srcdir)/mmdf.man $(DESTDIR)$(mandir)/man5/mmdf.5
 	$(MKDIR_P) $(DESTDIR)$(docdir)
@@ -77,25 +86,25 @@ install-data-local: makedoc-all instdoc
 	for f in $(srcdir_DOCFILES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	done
-	-if [ -f manual.txt ] ; then \
-	  $(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) ; \
+	-if [ -f $(srcdir)/manual.txt ] ; then \
+	  $(INSTALL) -m 644 $(srcdir)/manual.txt $(DESTDIR)$(docdir) ; \
 	fi
 	-for f in $(HTML_DOCFILES) ; do \
-	  if [ -f $$f ] ; then \
-	    $(INSTALL) -m 644 $$f $(DESTDIR)$(docdir) ; \
+	  if [ -f $(srcdir)/$$f ] ; then \
+	    $(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	  fi \
 	done
-	$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir)/Muttrc.dist
+	$(INSTALL) -m 644 $(srcdir)/Muttrc $(DESTDIR)$(sysconfdir)/Muttrc.dist
 	-if [ -f $(DESTDIR)$(pkgdatadir)/Muttrc ] ; then \
 		mv $(DESTDIR)$(pkgdatadir)/Muttrc* $(DESTDIR)$(sysconfdir) ; \
 	elif [ -f $(DESTDIR)$(pkgdatadir)/../Muttrc ] ; then \
 	 	mv $(DESTDIR)$(pkgdatadir)/../Muttrc* $(DESTDIR)$(sysconfdir) ; \
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttrc ] ; then \
-		$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir) ; \
+		$(INSTALL) -m 644 $(srcdir)/Muttrc $(DESTDIR)$(sysconfdir) ; \
 	fi
-	-if [ -f mutt.info ] ; then \
+	-if [ -f $(srcdir)/mutt.info ] ; then \
 	  $(MKDIR_P) $(DESTDIR)$(infodir) ; \
-	  $(INSTALL) -m 644 mutt.info $(DESTDIR)$(infodir) ; \
+	  $(INSTALL) -m 644 $(srcdir)/mutt.info $(DESTDIR)$(infodir) ; \
 	  if command -v install-info >/dev/null 2>&1 ; then \
 	    install-info $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
 	  fi \
