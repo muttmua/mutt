@@ -57,6 +57,11 @@ DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 
 AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS) -Iintl
 
+# This option allows `make distcheck` to run without encountering
+# setgid errors.
+AM_DISTCHECK_CONFIGURE_FLAGS = --with-homespool
+
+
 EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-classic.c \
 	crypt-mod-pgp-gpgme.c crypt-mod-smime-classic.c \
 	crypt-mod-smime-gpgme.c dotlock.c gnupgparse.c hcache.c md5.c monitor.c \
