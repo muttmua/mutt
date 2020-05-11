@@ -997,22 +997,6 @@ int mutt_do_pager (const char *banner,
   return rc;
 }
 
-int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int buffy,
-                       int multiple, char ***files, int *numfiles)
-{
-  BUFFER *fname;
-  int rc;
-
-  fname = mutt_buffer_pool_get ();
-
-  mutt_buffer_addstr (fname, buf);
-  rc = _mutt_buffer_enter_fname (prompt, fname, buffy, multiple, files, numfiles);
-  strfcpy (buf, mutt_b2s (fname), blen);
-
-  mutt_buffer_pool_release (&fname);
-  return rc;
-}
-
 int _mutt_buffer_enter_fname (const char *prompt, BUFFER *fname, int buffy,
                               int multiple, char ***files, int *numfiles)
 {
