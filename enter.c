@@ -278,7 +278,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 
   if (flags & MUTT_FILE)
     hclass = HC_FILE;
-  else if (flags & MUTT_EFILE)
+  else if (flags & MUTT_MAILBOX)
     hclass = HC_MBOX;
   else if (flags & MUTT_CMD)
     hclass = HC_CMD;
@@ -541,7 +541,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  break;
 
 	case OP_EDITOR_BUFFY_CYCLE:
-	  if (flags & MUTT_EFILE)
+	  if (flags & MUTT_INCOMING)
 	  {
 	    first = 1; /* clear input if user types a real key later */
 	    my_wcstombs (buf, buflen, state->wbuf, state->curpos);
@@ -549,7 +549,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    state->curpos = state->lastchar = my_mbstowcs (&state->wbuf, &state->wbuflen, 0, buf);
 	    break;
 	  }
-	  else if (!(flags & MUTT_FILE))
+	  else if (!(flags & (MUTT_FILE | MUTT_MAILBOX)))
 	    goto self_insert;
           /* else fall through */
 
@@ -564,7 +564,8 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    if (tempbuf && templen == state->lastchar - i &&
 		!memcmp (tempbuf, state->wbuf + i, (state->lastchar - i) * sizeof (wchar_t)))
 	    {
-	      mutt_select_file (buf, buflen, (flags & MUTT_EFILE) ? MUTT_SEL_FOLDER : 0);
+	      mutt_select_file (buf, buflen,
+                                (flags & MUTT_MAILBOX) ? MUTT_SEL_FOLDER : 0);
 	      if (*buf)
 		replace_part (state, i, buf);
 	      rv = 1;
@@ -666,7 +667,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	      BEEP ();
 	    replace_part (state, 0, buf);
 	  }
-	  else if (flags & (MUTT_FILE | MUTT_EFILE))
+	  else if (flags & (MUTT_FILE | MUTT_MAILBOX))
 	  {
 	    my_wcstombs (buf, buflen, state->wbuf, state->curpos);
 
@@ -676,7 +677,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
                  !memcmp (tempbuf, state->wbuf, state->lastchar * sizeof (wchar_t))))
 	    {
 	      _mutt_select_file (buf, buflen,
-				 ((flags & MUTT_EFILE) ? MUTT_SEL_FOLDER : 0) | (multiple ? MUTT_SEL_MULTI : 0),
+				 ((flags & MUTT_MAILBOX) ? MUTT_SEL_FOLDER : 0) | (multiple ? MUTT_SEL_MULTI : 0),
 				 files, numfiles);
 	      if (*buf)
 	      {

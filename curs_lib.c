@@ -997,8 +997,8 @@ int mutt_do_pager (const char *banner,
   return rc;
 }
 
-int _mutt_buffer_enter_fname (const char *prompt, BUFFER *fname, int buffy,
-                              int multiple, char ***files, int *numfiles)
+static int enter_fname (const char *prompt, BUFFER *fname, int flags,
+                        int multiple, char ***files, int *numfiles)
 {
   event_t ch;
 
@@ -1037,13 +1037,29 @@ int _mutt_buffer_enter_fname (const char *prompt, BUFFER *fname, int buffy,
 
     mutt_buffer_increase_size (fname, LONG_STRING);
     if (_mutt_buffer_get_field (pc, fname,
-                                (buffy ? MUTT_EFILE : MUTT_FILE) | MUTT_CLEAR,
+                                flags | MUTT_CLEAR,
                                 multiple, files, numfiles) != 0)
       mutt_buffer_clear (fname);
     FREE (&pc);
   }
 
   return 0;
+}
+
+int mutt_buffer_enter_mailbox (const char *prompt, BUFFER *fname, int do_incoming)
+{
+  int flags = MUTT_MAILBOX;
+
+  if (do_incoming)
+    flags |= MUTT_INCOMING;
+
+  return enter_fname (prompt, fname, flags, 0, NULL, NULL);
+}
+
+int mutt_buffer_enter_filenames (const char *prompt, BUFFER *fname,
+                                 int multiple, char ***files, int *numfiles)
+{
+  return enter_fname (prompt, fname, MUTT_FILE, multiple, files, numfiles);
 }
 
 void mutt_unget_event (int ch, int op)

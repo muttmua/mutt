@@ -1253,7 +1253,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         numfiles = 0;
         files = NULL;
 
-        if ((_mutt_buffer_enter_fname (prompt, fname, 0, 1, &files, &numfiles) == -1) ||
+        if ((mutt_buffer_enter_filenames (prompt, fname, 1, &files, &numfiles) == -1) ||
             !mutt_buffer_len (fname))
           break;
 
@@ -1299,7 +1299,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           mutt_buffer_pretty_mailbox (fname);
         }
 
-        if ((mutt_buffer_enter_fname (prompt, fname, 1) == -1) ||
+        if ((mutt_buffer_enter_mailbox (prompt, fname, 0) == -1) ||
             !mutt_buffer_len (fname))
           break;
 
@@ -1821,8 +1821,8 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         }
         if (actx->idxlen)
           msg->content = actx->idx[0]->content;
-        if ((mutt_buffer_enter_fname (_("Write message to mailbox"), fname,
-                                      1) != -1) &&
+        if ((mutt_buffer_enter_mailbox (_("Write message to mailbox"), fname,
+                                        0) != -1) &&
             mutt_buffer_len (fname))
         {
           mutt_message (_("Writing message to %s ..."), mutt_b2s (fname));

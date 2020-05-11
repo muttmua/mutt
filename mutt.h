@@ -107,15 +107,16 @@ struct timespec
 #include "mutt_regex.h"
 
 /* flags for mutt_enter_string() */
-#define  MUTT_ALIAS   1      /* do alias "completion" by calling up the alias-menu */
-#define  MUTT_FILE    (1<<1) /* do file completion */
-#define  MUTT_EFILE   (1<<2) /* do file completion, plus incoming folders */
-#define  MUTT_CMD     (1<<3) /* do completion on previous word */
-#define  MUTT_PASS    (1<<4) /* password mode (no echo) */
-#define  MUTT_CLEAR   (1<<5) /* clear input if printable character is pressed */
-#define  MUTT_COMMAND (1<<6) /* do command completion */
-#define  MUTT_PATTERN (1<<7) /* pattern mode - only used for history classes */
-#define  MUTT_LABEL   (1<<8) /* do label completion */
+#define  MUTT_ALIAS    1      /* do alias "completion" by calling up the alias-menu */
+#define  MUTT_FILE     (1<<1) /* do file completion, file history ring */
+#define  MUTT_MAILBOX  (1<<2) /* do file completion, mailbox history ring */
+#define  MUTT_INCOMING (1<<3) /* do incoming folders buffy cycle */
+#define  MUTT_CMD      (1<<4) /* do completion on previous word */
+#define  MUTT_PASS     (1<<5) /* password mode (no echo) */
+#define  MUTT_CLEAR    (1<<6) /* clear input if printable character is pressed */
+#define  MUTT_COMMAND  (1<<7) /* do command completion */
+#define  MUTT_PATTERN  (1<<8) /* pattern mode - only used for history classes */
+#define  MUTT_LABEL    (1<<9) /* do label completion */
 
 /* flags for mutt_get_token() */
 #define MUTT_TOKEN_EQUAL      1       /* treat '=' as a special */

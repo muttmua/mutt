@@ -1330,7 +1330,7 @@ int mutt_index_menu (void)
           }
 	  mutt_buffer_buffy (folderbuf);
 
-          if (mutt_buffer_enter_fname (cp, folderbuf, 1) == -1)
+          if (mutt_buffer_enter_mailbox (cp, folderbuf, 1) == -1)
             goto changefoldercleanup;
 	}
 
