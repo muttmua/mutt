@@ -1015,59 +1015,79 @@ time_t mutt_parse_date (const char *s, HEADER *h)
  */
 char *mutt_extract_message_id (const char *s, const char **saveptr)
 {
-  const char *o, *onull, *p;
-  char *ret = NULL;
+  BUFFER *message_id = NULL;
+  char *retval;
+  int in_brackets = 0, has_atsign = 0;
+  size_t tmp;
 
-  if (s)
-    p = s;
-  else if (saveptr)
-    p = *saveptr;
-  else
+  if (!s && saveptr)
+    s = *saveptr;
+  if (!s || !*s)
     return NULL;
 
-  for (s = NULL, o = NULL, onull = NULL;
-       (p = strpbrk (p, "<> \t;")) != NULL; ++p)
+  message_id = mutt_buffer_pool_get ();
+
+  while (s && *s)
   {
-    if (*p == '<')
+    if (*s == '<')
     {
-      s = p;
-      o = onull = NULL;
+      in_brackets = 1;
+      mutt_buffer_clear (message_id);
+      mutt_buffer_addch (message_id, '<');
+    }
+    else if (*s == '>')
+    {
+      if (in_brackets)
+      {
+        mutt_buffer_addch (message_id, '>');
+        s++;
+        goto success;
+      }
+      mutt_buffer_clear (message_id);
+      has_atsign = 0;
+    }
+    else if (*s == '(')
+    {
+      tmp = 0;
+      s = rfc822_parse_comment (s + 1, NULL, &tmp, 0);
       continue;
     }
-
-    if (!s)
-      continue;
-
-    if (*p == '>')
+    else if (*s == ' ' || *s == '\t')
     {
-      size_t olen = onull - o, slen = p - s + 1;
-      ret = safe_malloc (olen + slen + 1);
-      if (o)
-	memcpy (ret, o, olen);
-      memcpy (ret + olen, s, slen);
-      ret[olen + slen] = '\0';
-      if (saveptr)
-	*saveptr = p + 1; /* next call starts after '>' */
-      return ret;
+      if (!in_brackets && mutt_buffer_len (message_id))
+      {
+        if (has_atsign)
+          break;
+        mutt_buffer_clear (message_id);
+      }
     }
-
-    /* some idiotic clients break their message-ids between lines */
-    if (s == p)
-      /* step past another whitespace */
-      s = p + 1;
-    else if (o)
-      /* more than two lines, give up */
-      s = o = onull = NULL;
     else
     {
-      /* remember the first line, start looking for the second */
-      o = s;
-      onull = p;
-      s = p + 1;
+      if (!in_brackets && !mutt_buffer_len (message_id))
+        mutt_buffer_addch (message_id, '<');
+      if (*s == '@')
+        has_atsign = 1;
+      mutt_buffer_addch (message_id, *s);
     }
+
+    s++;
   }
 
-  return NULL;
+  /* be a little stricter for ids outside of brackets.
+   * at least insist they have an '@' in them */
+  if (!in_brackets && has_atsign && mutt_buffer_len (message_id))
+    mutt_buffer_addch (message_id, '>');
+  else
+    mutt_buffer_clear (message_id);
+
+success:
+  if (saveptr)
+    *saveptr = s;
+
+  retval = safe_strdup (mutt_b2s (message_id));
+  mutt_buffer_pool_release (&message_id);
+
+  return retval;
 }
 
 void mutt_parse_mime_message (CONTEXT *ctx, HEADER *cur)

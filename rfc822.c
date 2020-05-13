@@ -143,9 +143,9 @@ void rfc822_free_address (ADDRESS **p)
   }
 }
 
-static const char *
-parse_comment (const char *s,
-	       char *comment, size_t *commentlen, size_t commentmax)
+const char *
+rfc822_parse_comment (const char *s,
+                      char *comment, size_t *commentlen, size_t commentmax)
 {
   int level = 1;
 
@@ -229,7 +229,7 @@ static const char *
 next_token (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
 {
   if (*s == '(')
-    return (parse_comment (s + 1, token, tokenlen, tokenmax));
+    return (rfc822_parse_comment (s + 1, token, tokenlen, tokenmax));
   if (*s == '"')
     return (parse_quote (s + 1, token, tokenlen, tokenmax));
   if (*s && is_special (*s))

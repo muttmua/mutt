@@ -62,6 +62,9 @@ void rfc822_cat (char *, size_t, const char *, const char *);
 int rfc822_valid_msgid (const char *msgid);
 int rfc822_remove_from_adrlist (ADDRESS **a, const char *mailbox);
 
+const char *rfc822_parse_comment (const char *, char *, size_t *, size_t);
+
+
 extern int RFC822Error;
 extern const char * const RFC822Errors[];
 
