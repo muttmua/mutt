@@ -527,16 +527,40 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr, char **keylist)
       !hdr ||
       !hdr->env->from ||
       hdr->env->from->next)
+  {
+    if (keylist)
+    {
+      /* L10N:
+         Error displayed if the user tries to force sending an Autocrypt
+         email when the engine is not available.
+      */
+      mutt_message (_("Autocrypt is not available."));
+    }
     return AUTOCRYPT_REC_OFF;
+  }
 
   if (hdr->security & APPLICATION_SMIME)
+  {
+    if (keylist)
+      mutt_message (_("Autocrypt is not available."));
     return AUTOCRYPT_REC_OFF;
+  }
 
-  if (mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0)
+  if ((mutt_autocrypt_db_account_get (hdr->env->from, &account) <= 0) ||
+      !account->enabled)
+  {
+    if (keylist)
+    {
+      /* L10N:
+         Error displayed if the user tries to force sending an Autocrypt
+         email when the account does not exist or is not enabled.
+         %s is the From email address used to look up the Autocrypt account.
+      */
+      mutt_message (_("Autocrypt is not enabled for %s."),
+                    NONULL (hdr->env->from->mailbox));
+    }
     goto cleanup;
-
-  if (!account->enabled)
-    goto cleanup;
+  }
 
   keylist_buf = mutt_buffer_pool_get ();
   mutt_buffer_addstr (keylist_buf, account->keyid);
