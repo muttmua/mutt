@@ -368,6 +368,7 @@ int mutt_parse_unmono (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_push (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_rc_buffer (BUFFER *, BUFFER *, BUFFER *);
 int mutt_parse_rc_line (const char *, BUFFER *);
+LIST *mutt_parse_references (char *s, int allow_nb);
 int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p,
                             short user_hdrs, short weed, short do_2047, LIST **lastp);
 int mutt_parse_score (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);

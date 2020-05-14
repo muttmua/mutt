@@ -98,13 +98,13 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
   /* not reached */
 }
 
-static LIST *mutt_parse_references (char *s, int in_reply_to)
+LIST *mutt_parse_references (char *s, int allow_nb)
 {
   LIST *t, *lst = NULL;
   char *m;
   const char *sp;
 
-  m = mutt_extract_message_id (s, &sp, 0);
+  m = mutt_extract_message_id (s, &sp, allow_nb);
   while (m)
   {
     t = safe_malloc (sizeof (LIST));
@@ -112,7 +112,7 @@ static LIST *mutt_parse_references (char *s, int in_reply_to)
     t->next = lst;
     lst = t;
 
-    m = mutt_extract_message_id (NULL, &sp, 0);
+    m = mutt_extract_message_id (NULL, &sp, allow_nb);
   }
 
   return lst;
@@ -1272,7 +1272,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       if (!ascii_strcasecmp (line+1, "n-reply-to"))
       {
         mutt_free_list (&e->in_reply_to);
-        e->in_reply_to = mutt_parse_references (p, 1);
+        e->in_reply_to = mutt_parse_references (p, 0);
         matched = 1;
       }
       break;

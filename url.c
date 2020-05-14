@@ -333,6 +333,13 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
 	if (body)
 	  mutt_str_replace (body, value);
       }
+      /* This is a hack to allow un-bracketed message-ids in mailto URLs
+       * without doing the same for email header parsing. */
+      else if (!ascii_strcasecmp (tag, "in-reply-to"))
+      {
+        mutt_free_list (&e->in_reply_to);
+        e->in_reply_to = mutt_parse_references (value, 1);
+      }
       else
       {
 	char *scratch;
