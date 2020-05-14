@@ -104,7 +104,7 @@ static LIST *mutt_parse_references (char *s, int in_reply_to)
   char *m;
   const char *sp;
 
-  m = mutt_extract_message_id (s, &sp);
+  m = mutt_extract_message_id (s, &sp, 0);
   while (m)
   {
     t = safe_malloc (sizeof (LIST));
@@ -112,7 +112,7 @@ static LIST *mutt_parse_references (char *s, int in_reply_to)
     t->next = lst;
     lst = t;
 
-    m = mutt_extract_message_id (NULL, &sp);
+    m = mutt_extract_message_id (NULL, &sp, 0);
   }
 
   return lst;
@@ -1012,12 +1012,17 @@ time_t mutt_parse_date (const char *s, HEADER *h)
 
 /* extract the first substring that looks like a message-id.
  * call back with NULL for more (like strtok).
+ *
+ * allow_nb ("allow nonbracketed"), if set, extracts tokens without
+ * angle brackets.  This is a fallback to try and get something from
+ * illegal message-id headers.  The token returned will be surrounded
+ * by angle brackets.
  */
-char *mutt_extract_message_id (const char *s, const char **saveptr)
+char *mutt_extract_message_id (const char *s, const char **saveptr, int allow_nb)
 {
   BUFFER *message_id = NULL;
   char *retval;
-  int in_brackets = 0, has_atsign = 0;
+  int in_brackets = 0;
   size_t tmp;
 
   if (!s && saveptr)
@@ -1044,7 +1049,6 @@ char *mutt_extract_message_id (const char *s, const char **saveptr)
         goto success;
       }
       mutt_buffer_clear (message_id);
-      has_atsign = 0;
     }
     else if (*s == '(')
     {
@@ -1054,28 +1058,23 @@ char *mutt_extract_message_id (const char *s, const char **saveptr)
     }
     else if (*s == ' ' || *s == '\t')
     {
-      if (!in_brackets && mutt_buffer_len (message_id))
-      {
-        if (has_atsign)
-          break;
-        mutt_buffer_clear (message_id);
-      }
+      if (!in_brackets && allow_nb && mutt_buffer_len (message_id))
+        break;
     }
     else
     {
-      if (!in_brackets && !mutt_buffer_len (message_id))
-        mutt_buffer_addch (message_id, '<');
-      if (*s == '@')
-        has_atsign = 1;
-      mutt_buffer_addch (message_id, *s);
+      if (in_brackets || allow_nb)
+      {
+        if (allow_nb && !mutt_buffer_len (message_id))
+          mutt_buffer_addch (message_id, '<');
+        mutt_buffer_addch (message_id, *s);
+      }
     }
 
     s++;
   }
 
-  /* be a little stricter for ids outside of brackets.
-   * at least insist they have an '@' in them */
-  if (!in_brackets && has_atsign && mutt_buffer_len (message_id))
+  if (!in_brackets && allow_nb && mutt_buffer_len (message_id))
     mutt_buffer_addch (message_id, '>');
   else
     mutt_buffer_clear (message_id);
@@ -1331,7 +1330,9 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
       {
         /* We add a new "Message-ID:" when building a message */
         FREE (&e->message_id);
-        e->message_id = mutt_extract_message_id (p, NULL);
+        e->message_id = mutt_extract_message_id (p, NULL, 0);
+        if (!e->message_id)
+          e->message_id = mutt_extract_message_id (p, NULL, 1);
         matched = 1;
       }
       else if (!ascii_strncasecmp (line + 1, "ail-", 4))
