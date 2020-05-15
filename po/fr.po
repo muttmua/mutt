@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 21:17+0200\n"
-"PO-Revision-Date: 2020-05-09 21:19+0200\n"
+"POT-Creation-Date: 2020-05-15 09:15+0200\n"
+"PO-Revision-Date: 2020-05-15 09:17+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -321,11 +321,29 @@ msgid "Autocrypt account creation succeeded"
 msgstr "La création du compte Autocrypt a réussi"
 
 #. L10N:
+#. Error displayed if the user tries to force sending an Autocrypt
+#. email when the engine is not available.
+#.
+#: autocrypt/autocrypt.c:537 autocrypt/autocrypt.c:545
+msgid "Autocrypt is not available."
+msgstr "Autocrypt n'est pas disponible."
+
+#. L10N:
+#. Error displayed if the user tries to force sending an Autocrypt
+#. email when the account does not exist or is not enabled.
+#. %s is the From email address used to look up the Autocrypt account.
+#.
+#: autocrypt/autocrypt.c:559
+#, c-format
+msgid "Autocrypt is not enabled for %s."
+msgstr "Autocrypt n'est pas activé pour %s."
+
+#. L10N:
 #. %s is an email address.  Autocrypt is scanning for the keyids
 #. to use to encrypt, but it can't find a valid keyid for this address.
 #. The message is printed and they are returned to the compose menu.
 #.
-#: autocrypt/autocrypt.c:562 autocrypt/autocrypt.c:590
+#: autocrypt/autocrypt.c:586 autocrypt/autocrypt.c:614
 #, c-format
 msgid "No (valid) autocrypt key found for %s."
 msgstr "Pas de clé Autocrypt (valide) trouvée pour %s."
@@ -337,14 +355,14 @@ msgstr "Pas de clé Autocrypt (valide) trouvée pour %s."
 #. and used for encryption.
 #. If this is answered yes, they will be prompted for a mailbox.
 #.
-#: autocrypt/autocrypt.c:832
+#: autocrypt/autocrypt.c:856
 msgid "Scan a mailbox for autocrypt headers?"
 msgstr "Lire une boîte aux lettres pour récupérer des en-têtes Autocrypt ?"
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
 #.
-#: autocrypt/autocrypt.c:839
+#: autocrypt/autocrypt.c:863
 msgid "Scan mailbox"
 msgstr "Lire la boîte aux lettres"
 
@@ -355,7 +373,7 @@ msgstr "Lire la boîte aux lettres"
 #. for a mailbox.  This is because this is a one-time operation
 #. and I don't want them to accidentally ctrl-g and abort it.
 #.
-#: autocrypt/autocrypt.c:861
+#: autocrypt/autocrypt.c:885
 msgid "Scan another mailbox for autocrypt headers?"
 msgstr ""
 "Lire une autre boîte aux lettres pour récupérer des en-têtes Autocrypt ?"
@@ -2297,7 +2315,7 @@ msgstr "erreur inconnue"
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: curs_lib.c:1023
+#: curs_lib.c:1007
 msgid " ('?' for list): "
 msgstr " ('?' pour avoir la liste) : "
 
