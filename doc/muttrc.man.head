@@ -424,7 +424,7 @@ Quadoption variables are used to control whether or not to be
 prompted for certain actions, or to specify a default action.  A
 value of \fByes\fP will cause the action to be carried out automatically
 as if you had answered yes to the question.  Similarly, a value of
-\fBno\fP will cause the the action to be carried out as if you had
+\fBno\fP will cause the action to be carried out as if you had
 answered \(lqno.\(rq A value of \fBask-yes\fP will cause a prompt
 with a default answer of \(lqyes\(rq and \fBask-no\fP will provide a
 default answer of \(lqno.\(rq

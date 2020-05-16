@@ -31,7 +31,7 @@
 # - \fB switches to boldface
 # - \fC swtiches to a literal string
 # - \fP switches to normal display
-# - .dl on a line starts a definition list (name taken taken from HTML).
+# - .dl on a line starts a definition list (name taken from HTML).
 # - .dt starts a term in a definition list.
 # - .dd starts a definition in a definition list.
 # - .de on a line finishes a definition list.

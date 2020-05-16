@@ -3637,7 +3637,7 @@ address.
 </para>
 
 <para>
-Specify as much of the address as you need to to remove ambiguity.  For
+Specify as much of the address as you need to remove ambiguity.  For
 example, if you've subscribed to the Mutt mailing list, you will receive
 mail addressed to <literal>mutt-users@mutt.org</literal>.  So, to tell
 Mutt that this is a mailing list, you could add <literal>lists
@@ -9056,7 +9056,7 @@ account-hook smtp://user@host3/ 'set tunnel="ssh host3 /usr/libexec/smtpd"'
 <para>
 To manage multiple accounts with, for example, different values of <link
 linkend="record">$record</link> or sender addresses, <link
-linkend="folder-hook"><command>folder-hook</command></link> has to be be
+linkend="folder-hook"><command>folder-hook</command></link> has to be
 used together with the <link
 linkend="mailboxes"><command>mailboxes</command></link> command.
 </para>
@@ -10377,7 +10377,7 @@ reading/writing folders.
 <para>
 For example, when opening a maildir folder with a few thousand messages,
 the default value for <link linkend="read-inc">$read_inc</link> may be
-too low. It can be tuned on on a folder-basis using <link
+too low. It can be tuned on a folder-basis using <link
 linkend="folder-hook"><command>folder-hook</command>s</link>:
 </para>
 
