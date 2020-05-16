@@ -1,3 +1,120 @@
+2020-05-03 17:29:55 +0200  Vincent Lefevre  <vincent@vinc17.net> (b4936342)
+
+        * Add missing blank lines in ChangeLog due to buggy update-changelog.
+
+M	ChangeLog
+
+2020-05-03 17:18:28 +0200  Vincent Lefevre  <vincent@vinc17.net> (274b1c5a)
+
+        * Fix update-changelog rule (missing blank line in generated ChangeLog).
+
+M	Makefile.am
+
+2020-05-09 18:30:13 -0700  Kevin McCarthy  <kevin@8t8.us> (7bd57bc3)
+
+        * Set AM_DISTCHECK_CONFIGURE_FLAGS to allow make distcheck to run.
+        
+        Add the '--with-homespool' flag, to allow it to run as non-root.
+
+M	Makefile.am
+
+2020-05-09 16:26:20 -0700  Kevin McCarthy  <kevin@8t8.us> (ba0c9f9e)
+
+        * Fix doc installation directories.
+        
+        The conversion of makedoc.c to perl goofed up the documentation
+        build/install process from a tarball.  A late commit, 3c575cab, tried
+        to fix this, but didn't fix the problem when building with a separate
+        srcdir.
+        
+        Previously, because makedoc didn't exist, all the documentation would
+        be rebuilt, even though it was distributed in the tarball.
+        
+        Now the files don't need to be rebuilt, and so exist in $(srcdir)
+        instead of the build directory.
+        
+        I'm a little bit unsure how this would all work, trying to install
+        from git with a separate srcdir.  I think it would fail now.  However,
+        I don't believe that's a common use case.
+        
+        If I'm wrong, then an alternative would be to go back to rebuilding
+        everything.  This would be done by creating a new makedoc target, with
+        rule 'cp $(srcdir)/makedoc.pl makedoc', and then changing all the
+        other targets to depend on and invoke makedoc instead.
+
+M	doc/Makefile.am
+
+2020-05-08 12:48:19 -0700  Kevin McCarthy  <kevin@8t8.us> (30340e50)
+
+        * Fix edit-message false-modified bug.
+        
+        The file was being stat() before the truncate, and
+        mutt_decrease_mtime() only decreases if the sb.st_mtime is equal to
+        the current time.  That means operations crossing the second boundary:
+          time x:   stat
+          time x+1: truncate, decrease_mtime
+        would result in a false-modified bug if no changes were made during
+        editing.
+        
+        The mutt_decrease_mtime() and callers need to be cleaned up for better
+        error handling, but I will do that in master.
+
+M	editmsg.c
+
+2020-05-08 12:10:51 -0700  Kevin McCarthy  <kevin@8t8.us> (094a07fc)
+
+        * Fix rc error setting in edit_one_message().
+        
+        In a couple places, the rc was not set before bailing on an error.
+        With a default of 0, the original message would be marked for
+        delete/purge.
+
+M	editmsg.c
+
+2020-05-07 15:23:12 -0700  Kevin McCarthy  <kevin@8t8.us> (51ed59a7)
+
+        * Wrap 'saving fcc' message in curses and sendmailx check.
+
+M	send.c
+
+2020-05-02 15:16:46 -0700  Kevin McCarthy  <kevin@8t8.us> (020321ed)
+
+        * automatic post-release commit for mutt-1.14.0
+
+M	ChangeLog
+M	VERSION
+M	build-release
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2020-05-02 14:58:03 -0700  Kevin McCarthy  <kevin@8t8.us> (3c575cab)
 
         * Add missing doc built distfiles.
