@@ -12,94 +12,50 @@
 # Thomas Roessler <roessler@does-not-exist.org> Mon,  8 Nov 1999 22:32:41 +0100
 #
 
-set -e
 
-if test "$1" = "-nodiff" ; then
-	diff=no
-else
-	diff=yes
-fi
+echo "Automatic release building is disabled"
+exit 1
 
+#
+# I don't have it automated, but this is my basic release process:
+# -Kevin McCarthy
+#
 
-#devel="devel/"	# comment out for the stable branch
+# Preparation:
+./prepare  [flags]
+make
+./check_sec.sh
 
-# test for uncommitted changes
-if hg id | grep -q '+'
-then
-  echo "Uncommitted changes"
-  exit 1
-fi
+Edit UPDATING file.
+Commit change so release date (generated from ChangeLog file) is today.
 
-# update the source
-
-hg update
-
-# Do automated security checks
-
-./check_sec.sh || exit 1
-
-# bump the version number, and calculate the tags
-
-OVERSION="`cat VERSION`" 
-OTAG="mutt-`echo $OVERSION | tr . -`-rel" 
-
-echo $OVERSION | awk -F . '{printf("%d.%d.%d\n", $1, $2, $3 + 1);}' > VERSION 
-${VISUAL:-vi} VERSION
-
-VERSION="`cat VERSION`" 
-TAG="mutt-`echo $VERSION | tr . -`-rel" 
-
-#echo 'const char *ReleaseDate = "'`date +%Y-%m-%d`'";' > reldate.h
-
-# now, prepare the distribution tar balls
-
-automake --add-missing --copy --force-missing
-touch configure.ac
-make config.status
-./config.status
+Edit VERSION file.
 make update-changelog
-(cd po && make update-po)
-
-# build them
-
-# commit and tag the release
-
-hg commit -m "automatic post-release commit for mutt-${VERSION}"
-#make commit-changelog 
-hg tag ${TAG}
-
-make update-doc
-make dist
-
-# build the diff between the two releases
-
-if test "$diff" = yes
+if releasing from master
 then
-  hg diff -r ${OTAG} -r ${TAG} | gzip -9 \
-		> diff-${OVERSION}-${VERSION}.gz
+   (cd po && make update-po)
 fi
 
-# sign the various files
+# Tag and commit:
+# Note: major releases have version 1.14.0 but tag mutt-1-14-rel
+OTAG=mutt-1-14-1-rel
+TAG=mutt-1-14-2-rel
+OVERSION=1.14.1
+VERSION=1.14.2
 
-# DISTFILES="mutt-${VERSION}.tar.gz mutt-${VERSION}i.tar.gz diff-${OVERSION}i-${VERSION}i.gz"
-DISTFILES="mutt-${VERSION}.tar.gz"
+git commit -a -m "automatic post-release commit for mutt-$VERSION"
+git tag -s $TAG -m "mutt-$VERSION signed"
+switch to other branch and merge
+push to gitlab and srht
+push tags to gitlab and srht
 
-if test "$diff" = yes ; then
-	DISTFILES="$DISTFILES diff-${OVERSION}-${VERSION}.gz"
-fi
+# Build the release tarball and diff:
+autoreconf --install --force
+make update-doc
+make distcheck
 
-for f in $DISTFILES; do
-	gpg -ba $f
-	chmod 644 $f.asc
-done
+git diff $OTAG..$TAG | gzip -9 > diff-$OVERSION-$VERSION.gz
+gpg -ba mutt-$VERSION.tar.gz; chmod 644 mutt-$VERSION.tar.gz.asc
+gpg -ba diff-$OVERSION-$VERSION.gz; chmod 644 diff-$OVERSION-$VERSION.gz.asc
 
-for f in $DISTFILES ; do
-	scp $f $f.asc trithemius.gnupg.org:/home/ftp/mutt/${devel}
-done
-
-hg sign -m"mutt-${VERSION} signed" ${TAG}
-
-# Finally, announce the new mutt to the public
-
-# mutt -s "[Announce] mutt-${VERSION} is out" mutt-dev@mutt.org
-
+# - - - end - - -
