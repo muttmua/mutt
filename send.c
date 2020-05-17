@@ -1274,7 +1274,7 @@ static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
            This is the prompt to enter an "alternate (m)ailbox" when the
            initial Fcc fails.
         */
-        rc = mutt_buffer_enter_mailbox (_("Fcc mailbox"), fcc_mailbox, 0);
+        rc = mutt_enter_mailbox (_("Fcc mailbox"), fcc_mailbox, 0);
         if ((rc == -1) || !mutt_buffer_len (fcc_mailbox))
         {
           rc = 0;

@@ -208,22 +208,8 @@ event_t mutt_getch (void)
   return (ch == ctrl ('G') ? err : ret);
 }
 
-int _mutt_get_field (const char *field, char *buf, size_t buflen, int complete, int multiple, char ***files, int *numfiles)
-{
-  BUFFER *buffer;
-  int rc;
-
-  buffer = mutt_buffer_pool_get ();
-
-  mutt_buffer_addstr (buffer, buf);
-  rc = _mutt_buffer_get_field (field, buffer, complete, multiple, files, numfiles);
-  strfcpy (buf, mutt_b2s (buffer), buflen);
-
-  mutt_buffer_pool_release (&buffer);
-  return rc;
-}
-
-int _mutt_buffer_get_field (const char *field, BUFFER *buffer, int complete, int multiple, char ***files, int *numfiles)
+static int _get_field (const char *field, BUFFER *buffer, int complete,
+                       int multiple, char ***files, int *numfiles)
 {
   int ret;
   int x;
@@ -260,6 +246,26 @@ int _mutt_buffer_get_field (const char *field, BUFFER *buffer, int complete, int
   mutt_free_enter_state (&es);
 
   return (ret);
+}
+
+int mutt_get_field (const char *field, char *buf, size_t buflen, int complete)
+{
+  BUFFER *buffer;
+  int rc;
+
+  buffer = mutt_buffer_pool_get ();
+
+  mutt_buffer_addstr (buffer, buf);
+  rc = _get_field (field, buffer, complete, 0, NULL, NULL);
+  strfcpy (buf, mutt_b2s (buffer), buflen);
+
+  mutt_buffer_pool_release (&buffer);
+  return rc;
+}
+
+int mutt_buffer_get_field (const char *field, BUFFER *buffer, int complete)
+{
+  return _get_field (field, buffer, complete, 0, NULL, NULL);
 }
 
 int mutt_get_field_unbuffered (char *msg, char *buf, size_t buflen, int flags)
@@ -997,7 +1003,7 @@ int mutt_do_pager (const char *banner,
   return rc;
 }
 
-static int enter_fname (const char *prompt, BUFFER *fname, int flags,
+static int _enter_fname (const char *prompt, BUFFER *fname, int flags,
                         int multiple, char ***files, int *numfiles)
 {
   event_t ch;
@@ -1036,9 +1042,9 @@ static int enter_fname (const char *prompt, BUFFER *fname, int flags,
     mutt_unget_event (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
 
     mutt_buffer_increase_size (fname, LONG_STRING);
-    if (_mutt_buffer_get_field (pc, fname,
-                                flags | MUTT_CLEAR,
-                                multiple, files, numfiles) != 0)
+    if (_get_field (pc, fname,
+                    flags | MUTT_CLEAR,
+                    multiple, files, numfiles) != 0)
       mutt_buffer_clear (fname);
     FREE (&pc);
   }
@@ -1046,20 +1052,30 @@ static int enter_fname (const char *prompt, BUFFER *fname, int flags,
   return 0;
 }
 
-int mutt_buffer_enter_mailbox (const char *prompt, BUFFER *fname, int do_incoming)
+int mutt_enter_mailbox (const char *prompt, BUFFER *fname, int do_incoming)
 {
   int flags = MUTT_MAILBOX;
 
   if (do_incoming)
     flags |= MUTT_INCOMING;
 
-  return enter_fname (prompt, fname, flags, 0, NULL, NULL);
+  return _enter_fname (prompt, fname, flags, 0, NULL, NULL);
 }
 
-int mutt_buffer_enter_filenames (const char *prompt, BUFFER *fname,
-                                 int multiple, char ***files, int *numfiles)
+int mutt_enter_filename (const char *prompt, BUFFER *fname)
 {
-  return enter_fname (prompt, fname, MUTT_FILE, multiple, files, numfiles);
+  return _enter_fname (prompt, fname, MUTT_FILE, 0, NULL, NULL);
+}
+
+int mutt_enter_filenames (const char *prompt, char ***files, int *numfiles)
+{
+  BUFFER *tmp;
+  int rc;
+
+  tmp = mutt_buffer_pool_get ();
+  rc = _enter_fname (prompt, tmp, MUTT_FILE, 1, files, numfiles);
+  mutt_buffer_pool_release (&tmp);
+  return rc;
 }
 
 void mutt_unget_event (int ch, int op)

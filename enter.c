@@ -210,13 +210,15 @@ static inline int is_shell_char(wchar_t ch)
 /* This function is for very basic input, currently used only by the
  * built-in editor.  It does not handle screen redrawing on resizes
  * well, because there is no active menu for the built-in editor.
- * Most callers should prefer mutt_get_field() instead.
+ *
+ * Most callers should prefer one of the public functions
+ * listed in the comment header for _mutt_enter_string().
  *
  * Returns:
  *	0 if input was given
  * 	-1 if abort.
  */
-int  mutt_enter_string(char *buf, size_t buflen, int col, int flags)
+int mutt_enter_string (char *buf, size_t buflen, int col, int flags)
 {
   int rv;
   ENTER_STATE *es = mutt_new_enter_state ();
@@ -237,7 +239,23 @@ int  mutt_enter_string(char *buf, size_t buflen, int col, int flags)
   return rv;
 }
 
-/*
+/* Generic Editor Menu.
+ *
+ * This function should not be called directly.  It must be wrapped by
+ * _get_field().  Instead call one of the public interfaces:
+ *
+ *   mutt_enter_filename()
+ *   mutt_enter_filenames()
+ *   mutt_enter_mailbox()
+ *
+ *   mutt_get_field() / mutt_buffer_get_field()
+ *   mutt_get_field_unbuffered() / mutt_get_password()
+ *
+ * If multiple is set, then the string (or selected files from the
+ * browser) will be returned via files and numfiles.
+ *
+ * Otherwise the string will be returned inside buf.
+ *
  * Returns:
  *      1 need to redraw the screen and call me again
  *	0 if input was given

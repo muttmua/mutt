@@ -860,7 +860,7 @@ void mutt_autocrypt_scan_mailboxes (void)
     /* L10N:
        The prompt for a mailbox to scan for Autocrypt: headers
     */
-    if ((!mutt_buffer_enter_mailbox (_("Scan mailbox"), folderbuf, 0)) &&
+    if ((!mutt_enter_mailbox (_("Scan mailbox"), folderbuf, 0)) &&
         mutt_buffer_len (folderbuf))
     {
       mutt_buffer_expand_path (folderbuf);

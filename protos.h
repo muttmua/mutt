@@ -323,14 +323,13 @@ int mutt_chscmp (const char *s, const char *chs);
 #define mutt_is_us_ascii(a) mutt_chscmp (a, "us-ascii")
 int mutt_parent_message (CONTEXT *, HEADER *, int);
 int mutt_prepare_template(FILE*, CONTEXT *, HEADER *, HEADER *, short);
-int mutt_buffer_enter_filenames (const char *, BUFFER *, int, char ***, int *);
-int mutt_buffer_enter_mailbox (const char *, BUFFER *, int);
+int mutt_enter_filename (const char *prompt, BUFFER *fname);
+int mutt_enter_filenames (const char *prompt, char ***files, int *numfiles);
+int mutt_enter_mailbox (const char *, BUFFER *, int);
 int  mutt_enter_string (char *buf, size_t buflen, int col, int flags);
 int _mutt_enter_string (char *, size_t, int, int, int, char ***, int *, ENTER_STATE *);
-#define mutt_get_field(A,B,C,D) _mutt_get_field(A,B,C,D,0,NULL,NULL)
-int _mutt_get_field (const char *, char *, size_t, int, int, char ***, int *);
-#define mutt_buffer_get_field(A,B,C) _mutt_buffer_get_field(A,B,C,0,NULL,NULL)
-int _mutt_buffer_get_field (const char *, BUFFER *, int, int, char ***, int *);
+int mutt_get_field (const char *, char *, size_t, int);
+int mutt_buffer_get_field (const char *, BUFFER *, int);
 int mutt_get_hook_type (const char *);
 int mutt_get_field_unbuffered (char *, char *, size_t, int);
 #define mutt_get_password(A,B,C) mutt_get_field_unbuffered(A,B,C,MUTT_PASS)
