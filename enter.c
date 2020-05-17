@@ -679,7 +679,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	      _mutt_select_file (buf, buflen,
 				 ((flags & MUTT_MAILBOX) ? MUTT_SEL_FOLDER : 0) | (multiple ? MUTT_SEL_MULTI : 0),
 				 files, numfiles);
-	      if (*buf)
+	      if (!multiple && *buf)
 	      {
 		mutt_pretty_mailbox (buf, buflen);
 		if (!pass)
@@ -687,6 +687,11 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 		rv = 0;
 		goto bye;
 	      }
+              if (multiple && *numfiles > 0)
+              {
+		rv = 0;
+		goto bye;
+              }
 
 	      /* file selection cancelled */
 	      rv = 1;
@@ -794,6 +799,9 @@ self_insert:
 	if (!pass)
 	  mutt_history_add (hclass, buf, 1);
 
+        /* If multiple is set, the caller expects the result to be in
+         * tfiles[0], not buf.
+         */
 	if (multiple)
 	{
 	  char **tfiles;

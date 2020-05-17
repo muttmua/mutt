@@ -1253,8 +1253,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         numfiles = 0;
         files = NULL;
 
-        if ((mutt_buffer_enter_filenames (prompt, fname, 1, &files, &numfiles) == -1) ||
-            !mutt_buffer_len (fname))
+        if (mutt_buffer_enter_filenames (prompt, fname, 1, &files, &numfiles) == -1)
           break;
 
         error = 0;
