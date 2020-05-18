@@ -478,8 +478,8 @@ const struct binding_t OpEditor[] = { /* map: editor */
   { "complete",		OP_EDITOR_COMPLETE,		"\t"   },
   { "complete-query",	OP_EDITOR_COMPLETE_QUERY,	"\024" },
   { "buffy-cycle",	OP_EDITOR_BUFFY_CYCLE,		" "    },
-  { "history-up",	OP_EDITOR_HISTORY_UP,		NULL   },
-  { "history-down",	OP_EDITOR_HISTORY_DOWN,		NULL   },
+  { "history-up",	OP_EDITOR_HISTORY_UP,		"\020" },
+  { "history-down",	OP_EDITOR_HISTORY_DOWN,		"\016" },
   { "history-search",	OP_EDITOR_HISTORY_SEARCH,	"\022" },
   { "transpose-chars",	OP_EDITOR_TRANSPOSE_CHARS,	NULL   },
   { NULL,		0,				NULL   }
