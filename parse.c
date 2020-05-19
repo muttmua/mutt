@@ -38,6 +38,12 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
+static void _parse_part (FILE *fp, BODY *b, int *counter);
+static BODY *_parse_messageRFC822 (FILE *fp, BODY *parent, int *counter);
+static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
+                               int digest, int *counter);
+
+
 /* Reads an arbitrarily long header field, and looks ahead for continuation
  * lines.  ``line'' must point to a dynamically allocated string; it is
  * increased if more space is required to fit the whole line.
@@ -590,12 +596,12 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
   return (p);
 }
 
-void mutt_parse_part (FILE *fp, BODY *b)
+static void _parse_part (FILE *fp, BODY *b, int *counter)
 {
   char *bound = 0;
   static unsigned short recurse_level = 0;
 
-  if (recurse_level >= 100)
+  if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
     dprint (1, (debugfile, "mutt_parse_part(): recurse level too deep. giving up!\n"));
     return;
@@ -613,9 +619,10 @@ void mutt_parse_part (FILE *fp, BODY *b)
         bound = mutt_get_parameter ("boundary", b->parameter);
 
       fseeko (fp, b->offset, SEEK_SET);
-      b->parts =  mutt_parse_multipart (fp, bound,
-					b->offset + b->length,
-					ascii_strcasecmp ("digest", b->subtype) == 0);
+      b->parts =  _parse_multipart (fp, bound,
+                                    b->offset + b->length,
+                                    ascii_strcasecmp ("digest", b->subtype) == 0,
+                                    counter);
       break;
 
     case TYPEMESSAGE:
@@ -623,7 +630,7 @@ void mutt_parse_part (FILE *fp, BODY *b)
       {
 	fseeko (fp, b->offset, SEEK_SET);
 	if (mutt_is_message_type(b->type, b->subtype))
-	  b->parts = mutt_parse_messageRFC822 (fp, b);
+	  b->parts = _parse_messageRFC822 (fp, b, counter);
 	else if (ascii_strcasecmp (b->subtype, "external-body") == 0)
 	  b->parts = mutt_read_mime_header (fp, 0);
 	else
@@ -656,7 +663,7 @@ bail:
  * NOTE: this assumes that `parent->length' has been set!
  */
 
-BODY *mutt_parse_messageRFC822 (FILE *fp, BODY *parent)
+static BODY *_parse_messageRFC822 (FILE *fp, BODY *parent, int *counter)
 {
   BODY *msg;
 
@@ -674,7 +681,7 @@ BODY *mutt_parse_messageRFC822 (FILE *fp, BODY *parent)
   if (msg->length < 0)
     msg->length = 0;
 
-  mutt_parse_part(fp, msg);
+  _parse_part(fp, msg, counter);
   return (msg);
 }
 
@@ -691,7 +698,8 @@ BODY *mutt_parse_messageRFC822 (FILE *fp, BODY *parent)
  *	digest		1 if reading a multipart/digest, 0 otherwise
  */
 
-BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int digest)
+static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
+                               int digest, int *counter)
 {
 #ifdef SUN_ATTACHMENT
   int lines;
@@ -769,6 +777,14 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 	}
 	else
 	  last = head = new;
+
+        /* It seems more intuitive to add the counter increment to
+         * _parse_part(), but we want to stop the case where a multipart
+         * contains thousands of tiny parts before the memory and data
+         * structures are allocated.
+         */
+        if (++(*counter) >= MUTT_MIME_MAX_PARTS)
+          break;
       }
     }
   }
@@ -779,10 +795,32 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 
   /* parse recursive MIME parts */
   for (last = head; last; last = last->next)
-    mutt_parse_part(fp, last);
+    _parse_part(fp, last, counter);
 
   return (head);
 }
+
+void mutt_parse_part (FILE *fp, BODY *b)
+{
+  int counter = 0;
+
+  _parse_part (fp, b, &counter);
+}
+
+BODY *mutt_parse_messageRFC822 (FILE *fp, BODY *parent)
+{
+  int counter = 0;
+
+  return _parse_messageRFC822 (fp, parent, &counter);
+}
+
+BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int digest)
+{
+  int counter = 0;
+
+  return _parse_multipart (fp, boundary, end_off, digest, &counter);
+}
+
 
 static const char *uncomment_timezone (char *buf, size_t buflen, const char *tz)
 {
