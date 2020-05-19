@@ -1782,10 +1782,10 @@ int mutt_body_handler (BODY *b, STATE *s)
 
   int oflags = s->flags;
 
-  if (recurse_level >= 100)
+  if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
     dprint (1, (debugfile, "mutt_body_handler: recurse level too deep. giving up!\n"));
-    return -1;
+    return 1;
   }
   recurse_level++;
 
