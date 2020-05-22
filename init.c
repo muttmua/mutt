@@ -2865,6 +2865,31 @@ int mutt_parse_rc_line (const char *line, BUFFER *err)
   return rc;
 }
 
+static int parse_cd (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+{
+  mutt_extract_token (tmp, s, 0);
+  mutt_buffer_expand_path (tmp);
+  if (!mutt_buffer_len (tmp))
+  {
+    if (Homedir)
+      mutt_buffer_strcpy (tmp, Homedir);
+    else
+    {
+      mutt_buffer_strcpy (err, _("too few arguments"));
+      return -1;
+    }
+  }
+
+  if (chdir (mutt_b2s (tmp)) != 0)
+  {
+    mutt_buffer_printf (err, "cd: %s", strerror (errno));
+    return (-1);
+  }
+
+  return (0);
+}
+
+
 /* line		command to execute
 
    token	scratch buffer to be used by parser.

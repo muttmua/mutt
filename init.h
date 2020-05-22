@@ -4585,6 +4585,7 @@ static int parse_echo (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_ignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_unignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_source (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_cd (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_set (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_setenv (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_my_hdr (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
@@ -4625,6 +4626,7 @@ const struct command_t Commands[] = {
   { "auto_view",	parse_list,		{.p=&AutoViewList} },
   { "alternative_order",	parse_list,	{.p=&AlternativeOrderList} },
   { "bind",		mutt_parse_bind,	{.l=0} },
+  { "cd",		parse_cd,		{.l=0} },
   { "charset-hook",	mutt_parse_hook,	{.l=MUTT_CHARSETHOOK} },
 #ifdef HAVE_COLOR
   { "color",		mutt_parse_color,	{.l=0} },

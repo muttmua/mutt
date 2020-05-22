@@ -486,6 +486,9 @@ the generated message.  By default the list contains only
 Prints \fImessage\fP to the message window. After printing the
 message, echo will pause for the number of seconds specified by
 $sleep_time.
+.TP
+\fBcd\fP \fIdirectory\fP
+Changes the current working directory.
 .SH PATTERNS
 .PP
 In various places with mutt, including some of the above mentioned
