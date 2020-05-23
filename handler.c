@@ -36,6 +36,7 @@
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "rfc3676.h"
+#include "pager.h"
 
 #define BUFI_SIZE 1000
 #define BUFO_SIZE 2000
@@ -1386,7 +1387,7 @@ static int autoview_handler (BODY *a, STATE *s)
       BUFFER *stripped = mutt_buffer_pool_get ();
       while (fgets (buffer, sizeof(buffer), fpout) != NULL)
       {
-        mutt_buffer_strip_formatting (stripped, buffer);
+        mutt_buffer_strip_formatting (stripped, buffer, 0);
         state_puts (s->prefix, s);
         state_puts (mutt_b2s (stripped), s);
       }

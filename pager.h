@@ -47,3 +47,4 @@ typedef struct
 
 int mutt_do_pager (const char *, const char *, int, pager_t *);
 int mutt_pager (const char *, const char *, int, pager_t *);
+void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_markers);

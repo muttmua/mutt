@@ -1139,52 +1139,6 @@ void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash)
   }
 }
 
-static int is_ansi (const char *buf)
-{
-  while (*buf && (isdigit(*buf) || *buf == ';'))
-    buf++;
-  return (*buf == 'm');
-}
-
-/* Removes ANSI and backspace formatting.
- *
- * This logic is pulled from the pager fill_buffer() function, for use
- * in stripping reply-quoted autoview output of ansi sequences.
- */
-void mutt_buffer_strip_formatting (BUFFER *dest, const char *src)
-{
-  const char *s = src;
-
-  mutt_buffer_clear (dest);
-
-  if (!s)
-    return;
-
-  while (*s)
-  {
-    if (*s == '\010' && (s > src))
-    {
-      if (*(s+1) == '_')	/* underline */
-        s += 2;
-      else if (*(s+1) && mutt_buffer_len (dest))	/* bold or overstrike */
-      {
-        dest->dptr--;
-        mutt_buffer_addch (dest, *(s+1));
-        s += 2;
-      }
-      else			/* ^H */
-        mutt_buffer_addch (dest, *s++);
-    }
-    else if (*s == '\033' && *(s+1) == '[' && is_ansi (s + 2))
-    {
-      while (*s++ != 'm')	/* skip ANSI sequence */
-        ;
-    }
-    else
-      mutt_buffer_addch (dest, *s++);
-  }
-}
-
 void mutt_expand_file_fmt (BUFFER *dest, const char *fmt, const char *src)
 {
   BUFFER *tmp;

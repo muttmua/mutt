@@ -952,7 +952,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
   }
 }
 
-static int is_ansi (unsigned char *buf)
+static int is_ansi (const char *buf)
 {
   while (*buf && (isdigit(*buf) || *buf == ';'))
     buf++;
@@ -1060,64 +1060,85 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
   return pos;
 }
 
+/* Removes ANSI and backspace formatting, and optionally markers.
+ *
+ * This is separated out so that it can be used both by the pager
+ * and the autoview handler.
+ */
+void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_markers)
+{
+  const char *s = src;
+
+  mutt_buffer_clear (dest);
+
+  if (!s)
+    return;
+
+  while (*s)
+  {
+    if (*s == '\010' && (s > src))
+    {
+      if (*(s+1) == '_')	/* underline */
+        s += 2;
+      else if (*(s+1) && mutt_buffer_len (dest))	/* bold or overstrike */
+      {
+        dest->dptr--;
+        mutt_buffer_addch (dest, *(s+1));
+        s += 2;
+      }
+      else			/* ^H */
+        mutt_buffer_addch (dest, *s++);
+    }
+    else if (*s == '\033' && *(s+1) == '[' && is_ansi (s + 2))
+    {
+      while (*s++ != 'm')	/* skip ANSI sequence */
+        ;
+    }
+    else if (strip_markers &&
+             *s == '\033' && *(s+1) == ']' &&
+             ((check_attachment_marker (s) == 0) ||
+              (check_protected_header_marker (s) == 0)))
+    {
+      dprint (2, (debugfile, "mutt_buffer_strip_formatting: Seen attachment marker.\n"));
+      while (*s++ != '\a')	/* skip pseudo-ANSI sequence */
+        ;
+    }
+    else
+      mutt_buffer_addch (dest, *s++);
+  }
+}
+
 static int
 fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
 	     unsigned char **fmt, size_t *blen, int *buf_ready)
 {
-  unsigned char *p, *q;
   static int b_read;
-  int l;
+  BUFFER stripped;
 
   if (*buf_ready == 0)
   {
     if (offset != *last_pos)
       fseeko (f, offset, 0);
-    if ((*buf = (unsigned char *) mutt_read_line ((char *) *buf, blen, f, &l, MUTT_EOL)) == NULL)
+
+    if ((*buf = (unsigned char *) mutt_read_line ((char *) *buf, blen, f,
+                                                  NULL, MUTT_EOL)) == NULL)
     {
-      fmt[0] = 0;
+      *fmt = NULL;
       return (-1);
     }
+
     *last_pos = ftello (f);
     b_read = (int) (*last_pos - offset);
     *buf_ready = 1;
 
-    safe_realloc (fmt, *blen);
-
-    /* copy "buf" to "fmt", but without bold and underline controls */
-    p = *buf;
-    q = *fmt;
-    while (*p)
-    {
-      if (*p == '\010' && (p > *buf))
-      {
-	if (*(p+1) == '_')	/* underline */
-	  p += 2;
-	else if (*(p+1) && q > *fmt)	/* bold or overstrike */
-	{
-	  *(q-1) = *(p+1);
-	  p += 2;
-	}
-	else			/* ^H */
-	  *q++ = *p++;
-      }
-      else if (*p == '\033' && *(p+1) == '[' && is_ansi (p + 2))
-      {
-	while (*p++ != 'm')	/* skip ANSI sequence */
-	  ;
-      }
-      else if (*p == '\033' && *(p+1) == ']' &&
-               ((check_attachment_marker ((char *) p) == 0) ||
-                (check_protected_header_marker ((char *) p) == 0)))
-      {
-	dprint (2, (debugfile, "fill_buffer: Seen attachment marker.\n"));
-	while (*p++ != '\a')	/* skip pseudo-ANSI sequence */
-	  ;
-      }
-      else
-	*q++ = *p++;
-    }
-    *q = 0;
+    mutt_buffer_init (&stripped);
+    mutt_buffer_increase_size (&stripped, *blen);
+    mutt_buffer_strip_formatting (&stripped, (const char *) *buf, 1);
+    /* This should be a noop, because *fmt should be NULL */
+    FREE (fmt);   /* __FREE_CHECKED__ */
+    *fmt = (unsigned char *) stripped.data;
   }
+
   return b_read;
 }
 
@@ -1145,7 +1166,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
   {
     /* Handle ANSI sequences */
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == '[' &&
-	   is_ansi (buf+ch+2))
+	   is_ansi ((char *) buf+ch+2))
       ch = grok_ansi (buf, ch+2, pa) + 1;
 
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == ']' &&

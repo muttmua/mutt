@@ -179,7 +179,6 @@ void mutt_buffer_concatn_path (BUFFER *dst, const char *dir, size_t dirlen,
 #define mutt_buffer_quote_filename(a,b) _mutt_buffer_quote_filename (a, b, 1);
 void _mutt_buffer_quote_filename (BUFFER *, const char *, int);
 void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash);
-void mutt_buffer_strip_formatting (BUFFER *dest, const char *src);
 void mutt_canonical_charset (char *, size_t, const char *);
 void mutt_check_stats(void);
 int mutt_count_body_parts (CONTEXT *, HEADER *);
