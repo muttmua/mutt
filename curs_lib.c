@@ -215,6 +215,7 @@ int _mutt_get_field (const char *field, char *buf, size_t buflen, int complete, 
 
   buffer = mutt_buffer_pool_get ();
 
+  mutt_buffer_increase_size (buffer, buflen);
   mutt_buffer_addstr (buffer, buf);
   rc = _mutt_buffer_get_field (field, buffer, complete, multiple, files, numfiles);
   strfcpy (buf, mutt_b2s (buffer), buflen);
