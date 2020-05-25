@@ -269,7 +269,7 @@ void mutt_buffer_pool_release (BUFFER **pbuf)
   }
 
   buf = *pbuf;
-  if (buf->dsize > LONG_STRING*2)
+  if ((buf->dsize > LONG_STRING*2) || (buf->dsize < LONG_STRING))
   {
     buf->dsize = LONG_STRING;
     safe_realloc (&buf->data, buf->dsize);

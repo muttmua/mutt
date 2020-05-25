@@ -966,6 +966,12 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
   char *buf;
   BUFFER ps;
 
+  if (!s || !*s)
+  {
+    strfcpy (err->data, _("empty pattern"), err->dsize);
+    return NULL;
+  }
+
   mutt_buffer_init (&ps);
   ps.dptr = s;
   ps.dsize = mutt_strlen (s);

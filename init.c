@@ -1703,9 +1703,7 @@ static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUF
       if (ascii_strncasecmp (buf->data, tmp->data, keylen) == 0)
       {
 	/* replace the old value */
-	FREE (&tmp->data);
-	tmp->data = buf->data;
-	mutt_buffer_init (buf);
+	mutt_str_replace (&tmp->data, mutt_b2s (buf));
 	return 0;
       }
       if (!tmp->next)
@@ -1719,8 +1717,7 @@ static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUF
     tmp = mutt_new_list ();
     UserHeader = tmp;
   }
-  tmp->data = buf->data;
-  mutt_buffer_init (buf);
+  tmp->data = safe_strdup (mutt_b2s (buf));
   return 0;
 }
 
