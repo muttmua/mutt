@@ -1,3 +1,94 @@
+2020-05-25 13:29:22 -0700  Kevin McCarthy  <kevin@8t8.us> (642a1cfd)
+
+        * Update UPDATING file for release.
+
+M	UPDATING
+
+2020-05-25 12:44:43 -0700  Kevin McCarthy  <kevin@8t8.us> (f6fb5a17)
+
+        * Fix mutt_pattern_comp() to not segv on a NULL pattern string.
+        
+        The change to mutt_parse_score() could now result in a NULL score
+        pattern if the user specified ''.  It might be possible for this to
+        happen elsewhere too, so just add a check at the top of
+        mutt_pattern_comp() to handle the case.
+
+M	pattern.c
+
+2020-05-25 12:23:02 -0700  Kevin McCarthy  <kevin@8t8.us> (5761113a)
+
+        * Fix buffer pool buffer truncation with my_hdr and score commands.
+        
+        The buffer pool is now used for command invocation, but unfortunately
+        a couple cases of mutt_buffer_init() were hidden in the my_hdr and
+        score command processors.
+        
+        This would result in a shortened buffer being returned to the pool and
+        used later for something like the prompt - which expects LONG_STRING
+        everywhere.
+        
+        Fix up the two places to instead copy the string over.  They don't
+        need to grab a large buffer pool sized hunk of memory.
+        
+        Also, fix the mutt_buffer_pool_release() to resize upwards in case
+        future code does this.  I should have done this originally, but was
+        afraid it would paper over more serious issues.  :-/
+        
+        Thanks to Armin Wolfermann for reporting the problem.
+
+M	buffer.c
+M	init.c
+M	score.c
+
+2020-05-24 13:26:49 -0700  Kevin McCarthy  <kevin@8t8.us> (d8e518db)
+
+        * Increase the buffer size in _mutt_get_field().
+        
+        Not doing so caused the subsequent _mutt_enter_string() to use the
+        default buffer pool size of 1024 - negating the HUGE_STRING value
+        passed into _mutt_get_field().
+        
+        (Once we fully transition to buffers, this awkwardness can go away...)
+
+M	curs_lib.c
+
+2020-05-19 12:26:55 -0700  Kevin McCarthy  <kevin@8t8.us> (c72f740a)
+
+        * Add mitigation against DoS from thousands of parts.
+        
+        A demonstration attack using a million tiny parts will freeze Mutt for
+        several minutes.  This is actually better than some other mail
+        software, but can still be a problem at large levels.
+        
+        For now, set it to a very conservative 5000, but this can be adjusted
+        up (or down) if necessary.
+        
+        Declare the previous stack-limit max depth as a constant too, and
+        decrease it down to 50.  Change the handler to return non-fatal "1" on
+        reaching the limit.
+
+M	handler.c
+M	mime.h
+M	parse.c
+
+2020-05-16 14:34:07 -0700  Kevin McCarthy  <kevin@8t8.us> (a4059dd2)
+
+        * Document my release process.
+        
+        The old script contents is for mercurial so remove it.
+        
+        My process is not automated, but at least write it down.
+
+M	build-release
+
+2020-05-16 10:43:06 -0700  Kevin McCarthy  <kevin@8t8.us> (12cf5b46)
+
+        * automatic post-release commit for mutt-1.14.1
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
+
 2020-05-03 17:29:55 +0200  Vincent Lefevre  <vincent@vinc17.net> (b4936342)
 
         * Add missing blank lines in ChangeLog due to buggy update-changelog.
