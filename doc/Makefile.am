@@ -47,11 +47,11 @@ HTML_DOCFILES = manual.html $(CHUNKED_DOCFILES)
 
 # Note: these are bundled with a dist tarball, so they should be
 # installed from $(srcdir).
+#
+# Muttrc and stamp-doc-rc are not included because of docdir substitution.
+# manual.txt is not included because of different generation tool preferences.
 BUILT_DISTFILES = stamp-doc-xml		\
 		stamp-doc-chunked	\
-		stamp-doc-rc		\
-		Muttrc			\
-		manual.txt		\
 		muttrc.man		\
 		$(HTML_DOCFILES)	\
 		$(INFO_DOCFILES)
@@ -86,21 +86,21 @@ install-data-local: makedoc-all instdoc
 	for f in $(srcdir_DOCFILES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	done
-	-if [ -f $(srcdir)/manual.txt ] ; then \
-	  $(INSTALL) -m 644 $(srcdir)/manual.txt $(DESTDIR)$(docdir) ; \
+	-if [ -f manual.txt ] ; then \
+	  $(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) ; \
 	fi
 	-for f in $(HTML_DOCFILES) ; do \
 	  if [ -f $(srcdir)/$$f ] ; then \
 	    $(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	  fi \
 	done
-	$(INSTALL) -m 644 $(srcdir)/Muttrc $(DESTDIR)$(sysconfdir)/Muttrc.dist
+	$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir)/Muttrc.dist
 	-if [ -f $(DESTDIR)$(pkgdatadir)/Muttrc ] ; then \
 		mv $(DESTDIR)$(pkgdatadir)/Muttrc* $(DESTDIR)$(sysconfdir) ; \
 	elif [ -f $(DESTDIR)$(pkgdatadir)/../Muttrc ] ; then \
 	 	mv $(DESTDIR)$(pkgdatadir)/../Muttrc* $(DESTDIR)$(sysconfdir) ; \
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttrc ] ; then \
-		$(INSTALL) -m 644 $(srcdir)/Muttrc $(DESTDIR)$(sysconfdir) ; \
+		$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir) ; \
 	fi
 	-if [ -f $(srcdir)/mutt.info ] ; then \
 	  $(MKDIR_P) $(DESTDIR)$(infodir) ; \
