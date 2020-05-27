@@ -45,8 +45,10 @@ CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
 
 HTML_DOCFILES = manual.html $(CHUNKED_DOCFILES)
 
-# Note: these are bundled with a dist tarball, so they should be
-# installed from $(srcdir).
+# Note: these are bundled with a dist tarball, so they can be
+# installed from $(srcdir), after checking that they haven't been
+# rebuilt in the build directory.  This could happen in a git checkout
+# with a separate build directory, for example.
 #
 # Muttrc and stamp-doc-rc are not included because of docdir substitution.
 # manual.txt is not included because of different generation tool preferences.
@@ -76,7 +78,11 @@ install-data-local: makedoc-all instdoc
 	./instdoc mutt_pgpring.1 $(DESTDIR)$(mandir)/man1/mutt_pgpring.1
 	test x$(DOTLOCK_TARGET) = x || ./instdoc $(srcdir)/dotlock.man \
 		$(DESTDIR)$(mandir)/man1/mutt_dotlock.1
-	./instdoc $(srcdir)/muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5
+	-if [ -f muttrc.man ] ; then \
+	  ./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5 ; \
+	elif [ -f $(srcdir)/muttrc.man ] ; then \
+	  ./instdoc $(srcdir)/muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5 ; \
+	fi
 	./instdoc $(srcdir)/mbox.man $(DESTDIR)$(mandir)/man5/mbox.5
 	./instdoc $(srcdir)/mmdf.man $(DESTDIR)$(mandir)/man5/mmdf.5
 	$(MKDIR_P) $(DESTDIR)$(docdir)
@@ -90,7 +96,9 @@ install-data-local: makedoc-all instdoc
 	  $(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) ; \
 	fi
 	-for f in $(HTML_DOCFILES) ; do \
-	  if [ -f $(srcdir)/$$f ] ; then \
+	  if [ -f $$f ] ; then \
+	    $(INSTALL) -m 644 $$f $(DESTDIR)$(docdir) ; \
+	  elif [ -f $(srcdir)/$$f ] ; then \
 	    $(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	  fi \
 	done
@@ -102,7 +110,13 @@ install-data-local: makedoc-all instdoc
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttrc ] ; then \
 		$(INSTALL) -m 644 Muttrc $(DESTDIR)$(sysconfdir) ; \
 	fi
-	-if [ -f $(srcdir)/mutt.info ] ; then \
+	-if [ -f mutt.info ] ; then \
+	  $(MKDIR_P) $(DESTDIR)$(infodir) ; \
+	  $(INSTALL) -m 644 mutt.info $(DESTDIR)$(infodir) ; \
+	  if command -v install-info >/dev/null 2>&1 ; then \
+	    install-info $(DESTDIR)$(infodir)/mutt.info $(DESTDIR)$(infodir)/dir ; \
+	  fi \
+	elif [ -f $(srcdir)/mutt.info ] ; then \
 	  $(MKDIR_P) $(DESTDIR)$(infodir) ; \
 	  $(INSTALL) -m 644 $(srcdir)/mutt.info $(DESTDIR)$(infodir) ; \
 	  if command -v install-info >/dev/null 2>&1 ; then \
