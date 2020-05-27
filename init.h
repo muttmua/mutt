@@ -51,6 +51,7 @@
 #define DT_SORT_KEYS	0x40
 #define DT_SORT_AUX	0x80
 #define DT_SORT_SIDEBAR	0x100
+#define DT_L10N_STR     0x200
 
 /* flags to parse_set() */
 #define MUTT_SET_INV	(1<<0)	/* default is to invert all vars */
@@ -281,7 +282,10 @@ struct option_t MuttVars[] = {
   ** $$attach_sep separator is added after each attachment. When \fIset\fP,
   ** Mutt will operate on the attachments one by one.
   */
-  { "attribution",	DT_STR,	 R_NONE, {.p=&Attribution}, {.p="On %d, %n wrote:"} },
+  /* L10N:
+     $attribution default value
+  */
+  { "attribution",	DT_STR|DT_L10N_STR, R_NONE, {.p=&Attribution}, {.p=N_("On %d, %n wrote:")} },
   /*
   ** .pp
   ** This is the string that will precede a message which has been included
@@ -544,7 +548,10 @@ struct option_t MuttVars[] = {
   ** When \fIunset\fP, Mutt will not collapse a thread if it contains any
   ** unread messages.
   */
-  { "compose_format",	DT_STR,	 R_MENU, {.p=&ComposeFormat}, {.p="-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"} },
+  /* L10N:
+     $compose_format default value
+  */
+  { "compose_format",	DT_STR|DT_L10N_STR, R_MENU, {.p=&ComposeFormat}, {.p=N_("-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-")} },
   /*
   ** .pp
   ** Controls the format of the status line displayed in the ``compose''
@@ -1159,7 +1166,10 @@ struct option_t MuttVars[] = {
   ** to the newly composed message if this quadoption is \fIset\fP or
   ** answered with ``yes''.
   */
-  { "forward_attribution_intro", DT_STR, R_NONE, {.p=&ForwardAttrIntro}, {.p="----- Forwarded message from %f -----"} },
+  /* L10N:
+     $forward_attribution_intro default value
+  */
+  { "forward_attribution_intro", DT_STR|DT_L10N_STR, R_NONE, {.p=&ForwardAttrIntro}, {.p=N_("----- Forwarded message from %f -----")} },
   /*
   ** .pp
   ** This is the string that will precede a message which has been forwarded
@@ -1167,7 +1177,10 @@ struct option_t MuttVars[] = {
   ** For a full listing of defined \fCprintf(3)\fP-like sequences see
   ** the section on $$index_format.  See also $$attribution_locale.
   */
-  { "forward_attribution_trailer", DT_STR, R_NONE, {.p=&ForwardAttrTrailer}, {.p="----- End forwarded message -----"} },
+  /* L10N:
+     $forward_attribution_trailer default value
+  */
+  { "forward_attribution_trailer", DT_STR|DT_L10N_STR, R_NONE, {.p=&ForwardAttrTrailer}, {.p=N_("----- End forwarded message -----")} },
   /*
   ** .pp
   ** This is the string that will follow a message which has been forwarded
@@ -4077,7 +4090,10 @@ struct option_t MuttVars[] = {
   ** message mode (Certain operations like composing a new mail, replying,
   ** forwarding, etc. are not permitted in this mode).
   */
-  { "status_format",	DT_STR,	 R_BOTH, {.p=&Status}, {.p="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-(%P)---"} },
+  /* L10N:
+     $status_format default value
+  */
+  { "status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&Status}, {.p=N_("-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-(%P)---")} },
   /*
   ** .pp
   ** Controls the format of the status line displayed in the ``index''
@@ -4277,7 +4293,10 @@ struct option_t MuttVars[] = {
   ** NOTE: When you delete a message in the trash folder, it is really
   ** deleted, so that you have a way to clean the trash.
   */
-  {"ts_icon_format",	DT_STR,  R_BOTH, {.p=&TSIconFormat}, {.p="M%?n?AIL&ail?"} },
+  /* L10N:
+     $ts_icon_format default value
+  */
+  {"ts_icon_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&TSIconFormat}, {.p=N_("M%?n?AIL&ail?")} },
   /*
   ** .pp
   ** Controls the format of the icon title, as long as ``$$ts_enabled'' is set.
@@ -4291,7 +4310,10 @@ struct option_t MuttVars[] = {
   ** Controls whether mutt tries to set the terminal status line and icon name.
   ** Most terminal emulators emulate the status line in the window title.
   */
-  {"ts_status_format",	DT_STR,   R_BOTH, {.p=&TSStatusFormat}, {.p="Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"} },
+  /* L10N:
+     $ts_status_format default value
+  */
+  {"ts_status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&TSStatusFormat}, {.p=N_("Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?")} },
   /*
   ** .pp
   ** Controls the format of the terminal status line (or window title),

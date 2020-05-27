@@ -107,13 +107,15 @@ my %type2human = ("DT_NONE"  => "-none-",
                   "DT_RX"    => "regular expression",
                   "DT_MAGIC" => "folder magic",
                   "DT_ADDR"  => "e-mail address",
-                  "DT_MBCHARTBL"=> "string");
+                  "DT_MBCHARTBL"=> "string",
+                  "DT_L10N_STR" => "string (localized)");
 
 my %string_types = ("DT_STR"  => 1,
                     "DT_RX"   => 1,
                     "DT_ADDR" => 1,
                     "DT_PATH" => 1,
-                    "DT_MBCHARTBL" => 1);
+                    "DT_MBCHARTBL" => 1,
+                    "DT_L10N_STR"  => 1);
 
 my %quad2human = ("MUTT_YES" => "yes",
                   "MUTT_NO"  => "no",
@@ -239,13 +241,25 @@ sub flush_doc($) {
 sub handle_confline($) {
   my ($line) = @_;
 
+  my $localized = 0;
   my ($name, $type, $flags, $data, $val) = split(/\s*,\s*/, $line, 5);
   $name =~ s/"//g;
 
-  $type =~ s/\|.*//;
+  if ($type =~ /DT_L10N_STR/) {
+    $localized = 1;
+    $type = "DT_L10N_STR";
+  }
+  else {
+    $type =~ s/\|.*//;
+  }
 
   $val =~ s/^{\s*\.[lp]\s*=\s*"?//;
   $val =~ s/"?\s*}\s*},\s*$//;
+  if ($localized) {
+    $val =~ s/^N_\s*\("//;
+    $val =~ s/"\)$//;
+  }
+
   # This is a hack to concatenate compile-time constants.
   # (?<!..) is a zero-width negative lookbehind assertion, asserting
   # the first quote isn't preceded by a backslash

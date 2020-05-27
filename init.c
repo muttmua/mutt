@@ -1757,6 +1757,8 @@ static void mutt_set_default (struct option_t *p)
     case DT_PATH:
       if (!p->init.p && *((char **) p->data.p))
         p->init.p = safe_strdup (* ((char **) p->data.p));
+      else if (p->init.p && (p->type & DT_L10N_STR))
+        p->init.p = safe_strdup (_(p->init.p));
       break;
     case DT_ADDR:
       if (!p->init.p && *((ADDRESS **) p->data.p))

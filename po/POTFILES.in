@@ -42,6 +42,7 @@ imap/imap.c
 imap/message.c
 imap/util.c
 init.c
+init.h
 keymap.c
 lib.c
 main.c
