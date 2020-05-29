@@ -62,17 +62,7 @@
 #define DEVRANDOM "/dev/urandom"
 #endif
 
-/* This is ugly, but as RAND_status came in on OpenSSL version 0.9.5
- * and the code has to support older versions too, this is seemed to
- * be cleaner way compared to having even uglier #ifdefs all around.
- */
-#ifdef HAVE_RAND_STATUS
 #define HAVE_ENTROPY()	(RAND_status() == 1)
-#else
-static int entropy_byte_count = 0;
-/* OpenSSL fills the entropy pool from /dev/urandom if it exists */
-#define HAVE_ENTROPY()	(!access(DEVRANDOM, R_OK) || entropy_byte_count >= 16)
-#endif
 
 /* index for storing hostname as application specific data in SSL structure */
 static int HostExDataIndex = -1;
@@ -403,9 +393,6 @@ static int add_entropy (const char *file)
   if (n <= 0)
     n = RAND_load_file (file, -1);
 
-#ifndef HAVE_RAND_STATUS
-  if (n > 0) entropy_byte_count += n;
-#endif
   return n;
 }
 
