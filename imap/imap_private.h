@@ -271,6 +271,7 @@ void imap_logout (IMAP_DATA** idata);
 int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
                                 int *err_continue);
 int imap_has_flag (LIST* flag_list, const char* flag);
+int imap_reconnect (IMAP_DATA **p_idata);
 
 /* auth.c */
 int imap_authenticate (IMAP_DATA* idata);

@@ -481,6 +481,10 @@ static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
 {
   int j;
 
+  /* for purposes of updating the index, MUTT_RECONNECTED is the same */
+  if (check == MUTT_RECONNECTED)
+    check = MUTT_REOPENED;
+
   /* take note of the current message */
   if (oldcount)
   {
@@ -689,13 +693,22 @@ int mutt_index_menu (void)
 
 	set_option (OPTSEARCHINVALID);
       }
-      else if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED || check == MUTT_FLAGS)
+      else if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED ||
+               check == MUTT_FLAGS || check == MUTT_RECONNECTED)
       {
 	update_index (menu, Context, check, oldcount, index_hint);
 
 	/* notify the user of new mail */
 	if (check == MUTT_REOPENED)
 	  mutt_error _("Mailbox was externally modified.  Flags may be wrong.");
+	else if (check == MUTT_RECONNECTED)
+        {
+          /* L10N:
+             Message printed on status line in index after mx_check_mailbox(),
+             when IMAP has an error and Mutt successfully reconnects.
+          */
+	  mutt_error _("Mailbox reconnected.  Some changes may have been lost.");
+        }
 	else if (check == MUTT_NEW_MAIL)
 	{
 	  mutt_message _("New mail in this mailbox.");
@@ -1070,7 +1083,8 @@ int mutt_index_menu (void)
 	    done = 1;
 	  else
 	  {
-	    if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED)
+	    if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED ||
+                check == MUTT_RECONNECTED)
 	      update_index (menu, Context, check, oldcount, index_hint);
 
 	    menu->redraw = REDRAW_FULL; /* new mail arrived? */
@@ -1191,7 +1205,8 @@ int mutt_index_menu (void)
 
 	  if ((check = mx_close_mailbox (Context, &index_hint)) != 0)
 	  {
-            if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED)
+            if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED ||
+                check == MUTT_RECONNECTED)
               update_index (menu, Context, check, oldcount, index_hint);
 	    set_option (OPTSEARCHINVALID);
 	    menu->redraw = REDRAW_FULL;
@@ -1246,7 +1261,8 @@ int mutt_index_menu (void)
 	      }
 	    set_option (OPTSEARCHINVALID);
 	  }
-	  else if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED)
+	  else if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED ||
+                   check == MUTT_RECONNECTED)
 	    update_index (menu, Context, check, oldcount, index_hint);
 
 	  /*
@@ -1376,7 +1392,8 @@ int mutt_index_menu (void)
             if (!monitor_remove_rc)
               mutt_monitor_add (NULL);
 #endif
-	    if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED)
+	    if (check == MUTT_NEW_MAIL || check == MUTT_REOPENED ||
+                check == MUTT_RECONNECTED)
 	      update_index (menu, Context, check, oldcount, index_hint);
 
             FREE (&new_last_folder);

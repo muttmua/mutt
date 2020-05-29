@@ -266,7 +266,7 @@ int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
       (mutt_socket_poll (idata->conn, ImapPollTimeout)) == 0)
   {
     mutt_error (_("Connection to %s timed out"), idata->conn->account.host);
-    mutt_sleep (2);
+    mutt_sleep (0);
     cmd_handle_fatal (idata);
     return -1;
   }
@@ -347,7 +347,7 @@ int imap_cmd_idle (IMAP_DATA* idata)
       (mutt_socket_poll (idata->conn, ImapPollTimeout)) == 0)
   {
     mutt_error (_("Connection to %s timed out"), idata->conn->account.host);
-    mutt_sleep (2);
+    mutt_sleep (0);
     cmd_handle_fatal (idata);
     return -1;
   }
@@ -476,6 +476,23 @@ static int cmd_status (const char *s)
 /* cmd_handle_fatal: when IMAP_DATA is in fatal state, do what we can */
 static void cmd_handle_fatal (IMAP_DATA* idata)
 {
+  /* Attempt to reconnect later during mx_check_mailbox() */
+  if (Context && idata->ctx == Context)
+  {
+    if (idata->status != IMAP_FATAL)
+    {
+      idata->status = IMAP_FATAL;
+      /* L10N:
+         When a fatal error occurs with the IMAP connnection for
+         the currently open mailbox, we print this message, and
+         will try to reconnect and merge current changes back during
+         mx_check_mailbox()
+      */
+      mutt_error _("A fatal error occurred.  Will attempt reconnection.");
+    }
+    return;
+  }
+
   idata->status = IMAP_FATAL;
 
   if ((idata->state >= IMAP_SELECTED) &&
