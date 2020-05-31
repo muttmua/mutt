@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-02 14:34-0700\n"
-"PO-Revision-Date: 2020-05-06 21:53+0200\n"
+"PO-Revision-Date: 2020-05-31 09:08+0200\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
 "Language: pl\n"
@@ -6253,7 +6253,7 @@ msgstr "przejdź do następnego wątku"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:406
 msgid "move to the next undeleted message"
-msgstr "przejdź do następnego odtworzonego listu"
+msgstr "przejdź do następnego nieusuniętego listu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6283,7 +6283,7 @@ msgstr "przejdź do poprzedniego podwątku"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:421
 msgid "move to the previous undeleted message"
-msgstr "przejdź do poprzedniego odtworzonego listu"
+msgstr "przejdź do poprzedniego nieusuniętego listu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6607,7 +6607,7 @@ msgstr "przejdź na początek strony"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:583
 msgid "undelete the current entry"
-msgstr "odtwórz bieżącą pozycję listy"
+msgstr "odtwórz bieżący list"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
