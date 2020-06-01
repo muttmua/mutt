@@ -752,7 +752,7 @@ struct option_t MuttVars[] = {
   ** you enable this variable.
   ** (Crypto only)
    */
-  { "crypt_protected_headers_subject", DT_STR, R_NONE, {.p=&ProtHdrSubject}, {.p="Encrypted subject"} },
+  { "crypt_protected_headers_subject", DT_STR, R_NONE, {.p=&ProtHdrSubject}, {.p="..."} },
   /*
   ** .pp
   ** When $$crypt_protected_headers_write is set, and the message is marked
