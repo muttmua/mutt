@@ -1327,6 +1327,7 @@ static int save_fcc (SEND_CONTEXT *sctx,
       msg->content = clear_content;
       msg->security &= ~(ENCRYPT | SIGN | AUTOCRYPT);
       mutt_free_envelope (&msg->content->mime_headers);
+      mutt_delete_parameter ("protected-headers", &msg->content->parameter);
     }
 
     /* check to see if the user wants copies of all attachments */
@@ -1658,6 +1659,7 @@ static int postpone_message (SEND_CONTEXT *sctx)
       msg->content = clear_content;
     }
     mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
+    mutt_delete_parameter ("protected-headers", &msg->content->parameter);
     msg->content = mutt_remove_multipart_mixed (msg->content);
     decode_descriptions (msg->content);
     mutt_unprepare_envelope (msg->env);
@@ -2535,6 +2537,7 @@ main_loop:
 
       FREE (&pgpkeylist);
       mutt_free_envelope (&sctx->msg->content->mime_headers);  /* protected headers */
+      mutt_delete_parameter ("protected-headers", &sctx->msg->content->parameter);
       sctx->msg->content = mutt_remove_multipart_mixed (sctx->msg->content);
       sctx->msg->content = mutt_remove_multipart_alternative (sctx->msg->content);
       decode_descriptions (sctx->msg->content);

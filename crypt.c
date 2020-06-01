@@ -258,11 +258,8 @@ int mutt_protect (SEND_CONTEXT *sctx, char *keylist, int postpone)
 
     mutt_free_envelope (&msg->content->mime_headers);
     msg->content->mime_headers = protected_headers;
-    /* Optional part of the draft RFC, but required by Enigmail */
-    mutt_set_parameter("protected-headers", "v1", &msg->content->parameter);
+    mutt_set_parameter ("protected-headers", "v1", &msg->content->parameter);
   }
-  else
-    mutt_delete_parameter("protected-headers", &msg->content->parameter);
 
   /* A note about msg->content->mime_headers.  If postpone or send
    * fails, the mime_headers is cleared out before returning to the
@@ -377,7 +374,10 @@ int mutt_protect (SEND_CONTEXT *sctx, char *keylist, int postpone)
 
 cleanup:
   if (rc != 0)
+  {
     mutt_free_envelope (&msg->content->mime_headers);
+    mutt_delete_parameter ("protected-headers", &msg->content->parameter);
+  }
 
   if (sctx->pgp_sign_as)
     mutt_str_replace (&PgpSignAs, orig_pgp_sign_as);
