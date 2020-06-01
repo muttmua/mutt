@@ -712,12 +712,12 @@ struct option_t MuttVars[] = {
   { "crypt_protected_headers_read", DT_BOOL, R_NONE, {.l=OPTCRYPTPROTHDRSREAD}, {.l=1} },
   /*
   ** .pp
-  ** When set, Mutt will display protected headers ("Memory Hole") in the pager,
+  ** When set, Mutt will display protected headers in the pager,
   ** and will update the index and header cache with revised headers.
   **
   ** Protected headers are stored inside the encrypted or signed part of an
   ** an email, to prevent disclosure or tampering.
-  ** For more information see https://github.com/autocrypt/memoryhole.
+  ** For more information see https://github.com/autocrypt/protected-headers.
   ** Currently Mutt only supports the Subject header.
   ** .pp
   ** Encrypted messages using protected headers often substitute the exposed
@@ -766,12 +766,12 @@ struct option_t MuttVars[] = {
   { "crypt_protected_headers_write", DT_BOOL, R_NONE, {.l=OPTCRYPTPROTHDRSWRITE}, {.l=0} },
   /*
   ** .pp
-  ** When set, Mutt will generate protected headers ("Memory Hole") for
-  ** signed and encrypted emails.
+  ** When set, Mutt will generate protected headers for signed and
+  ** encrypted emails.
   **
   ** Protected headers are stored inside the encrypted or signed part of an
   ** an email, to prevent disclosure or tampering.
-  ** For more information see https://github.com/autocrypt/memoryhole.
+  ** For more information see https://github.com/autocrypt/protected-headers.
   **
   ** Currently Mutt only supports the Subject header.
   ** (Crypto only)
