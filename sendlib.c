@@ -427,7 +427,8 @@ int mutt_write_mime_header (BODY *a, FILE *f)
         ) &&
       a->mime_headers)
   {
-    mutt_write_rfc822_header (f, a->mime_headers, NULL, MUTT_WRITE_HEADER_MIME, 0, 0);
+    mutt_write_rfc822_header (f, a->mime_headers, NULL, a->mime_headers->date,
+                              MUTT_WRITE_HEADER_MIME, 0, 0);
   }
 
   /* Do NOT add the terminator here!!! */
@@ -2167,6 +2168,10 @@ out:
  *
  * Likewise, all IDN processing should happen outside of this routine.
  *
+ * date can be NULL, otherwise it should be the output of
+ * mutt_make_date().  This is passed in explicitly to prevent
+ * accidental date setting from "garbage" in env->date.
+ *
  * mode == MUTT_WRITE_HEADER_EDITHDRS  => "lite" mode (used for edit_hdrs)
  * mode == MUTT_WRITE_HEADER_NORMAL    => normal mode.  write full header + MIME headers
  * mode == MUTT_WRITE_HEADER_FCC       => fcc mode, like normal mode but for Bcc header
@@ -2181,7 +2186,7 @@ out:
  * $crypt_protected_headers_subject in NORMAL or POSTPONE mode.
  *
  */
-int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
+int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
 			      mutt_write_header_mode mode, int privacy,
                               int hide_protected_subject)
 {
@@ -2190,13 +2195,19 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
   LIST *tmp = env->userhdrs;
   int has_agent = 0; /* user defined user-agent header field exists */
 
-  if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC) &&
+  if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC ||
+       mode == MUTT_WRITE_HEADER_MIME) &&
       !privacy)
   {
-    BUFFER *date = mutt_buffer_pool_get ();
-    mutt_make_date (date);
-    fprintf (fp, "Date: %s\n", mutt_b2s (date));
-    mutt_buffer_pool_release (&date);
+    if (date)
+      fprintf (fp, "Date: %s\n", date);
+    else
+    {
+      BUFFER *datebuf = mutt_buffer_pool_get ();
+      mutt_make_date (datebuf);
+      fprintf (fp, "Date: %s\n", mutt_b2s (datebuf));
+      mutt_buffer_pool_release (&datebuf);
+    }
   }
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
@@ -3047,7 +3058,7 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
   /* post == 1 => postpone message.
    * post == 0 => fcc mode.
    * */
-  mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content,
+  mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content, sctx->date_header,
                             post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_FCC,
                             0,
                             option (OPTCRYPTPROTHDRSREAD) &&

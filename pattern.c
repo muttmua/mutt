@@ -276,7 +276,7 @@ static int msg_search_sendmode (HEADER *h, pattern_t *pat)
       return 0;
     }
 
-    mutt_write_rfc822_header (fp, h->env, h->content,
+    mutt_write_rfc822_header (fp, h->env, h->content, NULL,
                               MUTT_WRITE_HEADER_POSTPONE,
                               0, 0);
     fflush (fp);

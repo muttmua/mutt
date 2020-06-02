@@ -1135,8 +1135,9 @@ static int generate_multipart_alternative (HEADER *msg, int flags)
   return 0;
 }
 
-static int invoke_mta (HEADER *msg)
+static int invoke_mta (SEND_CONTEXT *sctx)
 {
+  HEADER *msg = sctx->msg;
   BUFFER *tempfile = NULL;
   FILE *tempfp = NULL;
   int i = -1;
@@ -1156,12 +1157,12 @@ static int invoke_mta (HEADER *msg)
     unset_option (OPTWRITEBCC);
 #endif
 #ifdef MIXMASTER
-  mutt_write_rfc822_header (tempfp, msg->env, msg->content,
+  mutt_write_rfc822_header (tempfp, msg->env, msg->content, sctx->date_header,
                             MUTT_WRITE_HEADER_NORMAL, msg->chain ? 1 : 0,
                             mutt_should_hide_protected_subject (msg));
 #endif
 #ifndef MIXMASTER
-  mutt_write_rfc822_header (tempfp, msg->env, msg->content,
+  mutt_write_rfc822_header (tempfp, msg->env, msg->content, sctx->date_header,
                             MUTT_WRITE_HEADER_NORMAL, 0,
                             mutt_should_hide_protected_subject (msg));
 #endif
@@ -1658,8 +1659,12 @@ static int postpone_message (SEND_CONTEXT *sctx)
       mutt_free_body (&msg->content);
       msg->content = clear_content;
     }
-    mutt_free_envelope (&msg->content->mime_headers);  /* protected headers */
+
+    /* protected headers cleanup: */
+    mutt_free_envelope (&msg->content->mime_headers);
     mutt_delete_parameter ("protected-headers", &msg->content->parameter);
+    FREE (&sctx->date_header);
+
     msg->content = mutt_remove_multipart_mixed (msg->content);
     decode_descriptions (msg->content);
     mutt_unprepare_envelope (msg->env);
@@ -1783,6 +1788,7 @@ static void send_ctx_free (SEND_CONTEXT **psctx)
     mutt_free_header (&sctx->msg);
   mutt_buffer_free (&sctx->fcc);
   mutt_buffer_free (&sctx->tempfile);
+  FREE (&sctx->date_header);
 
   FREE (&sctx->cur_message_id);
   FREE (&sctx->ctx_realpath);
@@ -2514,7 +2520,7 @@ main_loop:
   if (option (OPTFCCBEFORESEND))
     save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
 
-  if ((mta_rc = invoke_mta (sctx->msg)) < 0)
+  if ((mta_rc = invoke_mta (sctx)) < 0)
   {
     if (!(sctx->flags & SENDBATCH))
     {
@@ -2536,8 +2542,12 @@ main_loop:
       }
 
       FREE (&pgpkeylist);
-      mutt_free_envelope (&sctx->msg->content->mime_headers);  /* protected headers */
+
+      /* protected headers cleanup: */
+      mutt_free_envelope (&sctx->msg->content->mime_headers);
       mutt_delete_parameter ("protected-headers", &sctx->msg->content->parameter);
+      FREE (&sctx->date_header);
+
       sctx->msg->content = mutt_remove_multipart_mixed (sctx->msg->content);
       sctx->msg->content = mutt_remove_multipart_alternative (sctx->msg->content);
       decode_descriptions (sctx->msg->content);

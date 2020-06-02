@@ -1246,7 +1246,7 @@ int main (int argc, char **argv, char **environ)
           mutt_env_to_intl (msg->env, NULL, NULL);
         }
 
-        mutt_write_rfc822_header (fout, msg->env, msg->content,
+        mutt_write_rfc822_header (fout, msg->env, msg->content, NULL,
                                   MUTT_WRITE_HEADER_POSTPONE, 0,
                                   option (OPTCRYPTPROTHDRSREAD) &&
                                   mutt_should_hide_protected_subject (msg));

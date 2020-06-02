@@ -59,6 +59,7 @@ typedef struct send_ctx
   BUFFER *tempfile;
   time_t mtime;
   time_t tempfile_mtime;
+  char *date_header;
 
   /* Note: cur is set to NULL if the session is backgrounded. */
   HEADER *cur;
