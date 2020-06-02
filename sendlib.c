@@ -2196,7 +2196,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
   int has_agent = 0; /* user defined user-agent header field exists */
 
   if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC ||
-       mode == MUTT_WRITE_HEADER_MIME) &&
+       mode == MUTT_WRITE_HEADER_POSTPONE || mode == MUTT_WRITE_HEADER_MIME) &&
       !privacy)
   {
     if (date)
@@ -3081,16 +3081,6 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
 
   if (f.magic == MUTT_MMDF || f.magic == MUTT_MBOX)
     fprintf (msg->fp, "Status: RO\n");
-
-  /* mutt_write_rfc822_header() only writes out a Date: header with
-   * mode == 0, i.e. _not_ postponment; so write out one ourself */
-  if (post)
-  {
-    BUFFER *date = mutt_buffer_pool_get ();
-    mutt_make_date (date);
-    fprintf (msg->fp, "Date: %s\n", mutt_b2s (date));
-    mutt_buffer_pool_release (&date);
-  }
 
   /* (postponment) if the mail is to be signed or encrypted, save this info */
   if ((WithCrypto & APPLICATION_PGP)
