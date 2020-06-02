@@ -1717,7 +1717,10 @@ BODY *mutt_remove_multipart_alternative (BODY *b)
   return b;
 }
 
-char *mutt_make_date (char *s, size_t len)
+/* Appends the date to the passed in buffer.
+ * The buffer is not cleared because some callers prepend quotes.
+ */
+void mutt_make_date (BUFFER *s)
 {
   time_t t = time (NULL);
   struct tm *l = localtime (&t);
@@ -1725,11 +1728,10 @@ char *mutt_make_date (char *s, size_t len)
 
   tz /= 60;
 
-  snprintf (s, len,  "Date: %s, %d %s %d %02d:%02d:%02d %+03d%02d\n",
+  mutt_buffer_add_printf (s,  "%s, %d %s %d %02d:%02d:%02d %+03d%02d",
 	    Weekdays[l->tm_wday], l->tm_mday, Months[l->tm_mon],
 	    l->tm_year + 1900, l->tm_hour, l->tm_min, l->tm_sec,
 	    (int) tz / 60, (int) abs ((int) tz) % 60);
-  return (s);
 }
 
 /* wrapper around mutt_write_address() so we can handle very large
@@ -2190,7 +2192,12 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
 
   if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC) &&
       !privacy)
-    fputs (mutt_make_date (buffer, sizeof(buffer)), fp);
+  {
+    BUFFER *date = mutt_buffer_pool_get ();
+    mutt_make_date (date);
+    fprintf (fp, "Date: %s\n", mutt_b2s (date));
+    mutt_buffer_pool_release (&date);
+  }
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
    * field if the user sets it with the `my_hdr' command
@@ -2811,7 +2818,6 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
 {
   int i, ret = 0;
   FILE *f;
-  char date[SHORT_STRING];
   BUFFER *tempfile;
   MESSAGE *msg = NULL;
 
@@ -2836,13 +2842,19 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
   {
     int ch_flags = CH_XMIT | CH_NONEWLINE | CH_NOQFROM;
     char* msgid_str;
+    BUFFER *date;
 
     if (!option (OPTBOUNCEDELIVERED))
       ch_flags |= CH_WEED_DELIVERED;
 
     fseeko (fp, h->offset, 0);
-    fprintf (f, "Resent-From: %s", resent_from);
-    fprintf (f, "\nResent-%s", mutt_make_date (date, sizeof(date)));
+    fprintf (f, "Resent-From: %s\n", resent_from);
+
+    date = mutt_buffer_pool_get ();
+    mutt_make_date (date);
+    fprintf (f, "Resent-Date: %s\n", mutt_b2s (date));
+    mutt_buffer_pool_release (&date);
+
     msgid_str = mutt_gen_msgid();
     fprintf (f, "Resent-Message-ID: %s\n", msgid_str);
     fputs ("Resent-To: ", f);
@@ -2990,7 +3002,6 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
   FILE *tempfp = NULL;
   int r = -1, need_buffy_cleanup = 0;
   struct stat st;
-  char buf[SHORT_STRING];
   int onm_flags;
 
   hdr = sctx->msg;
@@ -3063,7 +3074,12 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
   /* mutt_write_rfc822_header() only writes out a Date: header with
    * mode == 0, i.e. _not_ postponment; so write out one ourself */
   if (post)
-    fprintf (msg->fp, "%s", mutt_make_date (buf, sizeof (buf)));
+  {
+    BUFFER *date = mutt_buffer_pool_get ();
+    mutt_make_date (date);
+    fprintf (msg->fp, "Date: %s\n", mutt_b2s (date));
+    mutt_buffer_pool_release (&date);
+  }
 
   /* (postponment) if the mail is to be signed or encrypted, save this info */
   if ((WithCrypto & APPLICATION_PGP)

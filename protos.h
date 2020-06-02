@@ -152,7 +152,7 @@ char *mutt_get_body_charset (char *, size_t, BODY *);
 const char *mutt_get_name (ADDRESS *);
 char *mutt_get_parameter (const char *, PARAMETER *);
 LIST *mutt_crypt_hook (ADDRESS *);
-char *mutt_make_date (char *, size_t);
+void mutt_make_date (BUFFER *);
 
 const char *mutt_make_version (void);
 

@@ -36,7 +36,7 @@
 #include <unistd.h> /* needed for SEEK_SET under SunOS 4.1.4 */
 
 static int address_header_decode (char **str);
-static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, char *date);
+static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, const char *date);
 
 /* Ok, the only reason for not merging this with mutt_copy_header()
  * below is to avoid creating a HEADER structure in message_handler().
@@ -499,8 +499,12 @@ static int count_delete_lines (FILE *fp, BODY *b, LOFF_T *length, size_t datelen
       if (ch == '\n')
 	dellines ++;
     }
+    /* 3 and 89 come from the added header of three lines in
+     * copy_delete_attach().  89 is the size of the header (including
+     * the newlines, tabs, and a single digit length), not including
+     * the date length. */
     dellines -= 3;
-    *length -= b->length - (84 + datelen);
+    *length -= b->length - (89 + datelen);
     /* Count the number of digits exceeding the first one to write the size */
     for (l = 10 ; b->length >= l ; l *= 10)
       (*length) ++;
@@ -555,22 +559,24 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
     else if (hdr->attach_del && (chflags & CH_UPDATE_LEN))
     {
-      int new_lines;
+      int new_lines, attach_del_rc = -1;
       LOFF_T new_length = body->length;
-      char date[SHORT_STRING];
+      BUFFER *quoted_date = NULL;
 
-      mutt_make_date (date, sizeof (date));
-      date[5] = date[mutt_strlen (date) - 1] = '\"';
+      quoted_date = mutt_buffer_pool_get ();
+      mutt_buffer_addch (quoted_date, '"');
+      mutt_make_date (quoted_date);
+      mutt_buffer_addch (quoted_date, '"');
 
       /* Count the number of lines and bytes to be deleted */
       fseeko (fpin, body->offset, SEEK_SET);
       new_lines = hdr->lines -
-	count_delete_lines (fpin, body, &new_length, mutt_strlen (date));
+	count_delete_lines (fpin, body, &new_length, mutt_buffer_len (quoted_date));
 
       /* Copy the headers */
       if (mutt_copy_header (fpin, hdr, fpout,
 			    chflags | CH_NOLEN | CH_NONEWLINE, NULL))
-	return -1;
+	goto attach_del_cleanup;
       fprintf (fpout, "Content-Length: " OFF_T_FMT "\n", new_length);
       if (new_lines <= 0)
 	new_lines = 0;
@@ -579,13 +585,15 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
       putc ('\n', fpout);
       if (ferror (fpout) || feof (fpout))
-	return -1;
+	goto attach_del_cleanup;
       new_offset = ftello (fpout);
 
       /* Copy the body */
       fseeko (fpin, body->offset, SEEK_SET);
-      if (copy_delete_attach (body, fpin, fpout, date))
-	return -1;
+      if (copy_delete_attach (body, fpin, fpout, mutt_b2s (quoted_date)))
+	goto attach_del_cleanup;
+
+      mutt_buffer_pool_release (&quoted_date);
 
 #ifdef DEBUG
       {
@@ -620,7 +628,11 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 	mutt_free_body (&body->parts);
       }
 
-      return 0;
+      attach_del_rc = 0;
+
+    attach_del_cleanup:
+      mutt_buffer_pool_release (&quoted_date);
+      return attach_del_rc;
     }
 
     if (mutt_copy_header (fpin, hdr, fpout, chflags,
@@ -816,7 +828,8 @@ mutt_append_message (CONTEXT *dest, CONTEXT *src, HEADER *hdr, int cmflags,
  *
  * The function will return 0 on success and -1 on failure.
  */
-static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, char *date)
+static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout,
+                               const char *quoted_date)
 {
   BODY *part;
 
@@ -830,10 +843,11 @@ static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, char *date)
 
       if (part->deleted)
       {
+        /* If this is modified, count_delete_lines() needs to be changed too */
 	fprintf (fpout,
 		 "Content-Type: message/external-body; access-type=x-mutt-deleted;\n"
 		 "\texpiration=%s; length=" OFF_T_FMT "\n"
-		 "\n", date + 5, part->length);
+		 "\n", quoted_date, part->length);
 	if (ferror (fpout))
 	  return -1;
 
@@ -846,7 +860,7 @@ static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, char *date)
       }
       else
       {
-	if (copy_delete_attach (part, fpin, fpout, date))
+	if (copy_delete_attach (part, fpin, fpout, quoted_date))
 	  return -1;
       }
     }
