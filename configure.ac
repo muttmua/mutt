@@ -139,6 +139,8 @@ if test x$with_sqlite3 != xno; then
 
   AC_CHECK_LIB(sqlite3, sqlite3_open, [],
     AC_MSG_ERROR([Unable to find sqlite3 library]))
+  AC_CHECK_FUNC(sqlite3_prepare_v3, [],
+    AC_MSG_ERROR([sqlite3 version 3.20 or greater is required]))
 
   LIBS="$saved_LIBS"
   MUTTLIBS="$MUTTLIBS -lsqlite3"
