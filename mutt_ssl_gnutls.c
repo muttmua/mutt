@@ -1219,8 +1219,12 @@ static int tls_check_certificate (CONNECTION* conn)
     rc = tls_check_one_certificate (&cert_list[i], certstat, conn->account.host,
                                     i, cert_list_size);
 
+    /* Stop checking if the menu cert is aborted or rejected. */
+    if (!rc)
+      break;
+
     /* add signers to trust set, then reverify */
-    if (i && rc)
+    if (i)
     {
       rcsettrust = gnutls_certificate_set_x509_trust_mem (data->xcred,
                                                           &cert_list[i],
