@@ -712,6 +712,9 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
   return 0;
 }
 
+/* Returns 0 on success
+ *        -1 on failure
+ */
 static int tls_check_preauth (const gnutls_datum_t *certdata,
                               gnutls_certificate_status_t certstat,
                               const char *hostname, int chainidx, int* certerr,
@@ -816,8 +819,8 @@ static int tls_check_preauth (const gnutls_datum_t *certdata,
   return -1;
 }
 
-/*
- * Returns 0 on failure, nonzero on success.
+/* Returns 1 on success.
+ *         0 on failure.
  */
 static int tls_check_one_certificate (const gnutls_datum_t *certdata,
                                       gnutls_certificate_status_t certstat,
@@ -1105,44 +1108,57 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   mutt_menuDestroy (&menu);
   gnutls_x509_crt_deinit (cert);
 
-  return (done == 2);
+  return (done == 2) ? 1 : 0;
 }
 
-/* sanity-checking wrapper for gnutls_certificate_verify_peers */
-static gnutls_certificate_status_t tls_verify_peers (gnutls_session_t tlsstate)
+/* sanity-checking wrapper for gnutls_certificate_verify_peers.
+ *
+ * certstat is technically a bitwise-or of gnutls_certificate_status_t
+ * values.
+ *
+ * Returns:
+ *   - 0 if certstat was set. note: this does not mean success.
+ *   - nonzero on failure.
+ */
+static int tls_verify_peers (gnutls_session_t tlsstate,
+                             gnutls_certificate_status_t *certstat)
 {
   int verify_ret;
-  unsigned int status;
 
-  verify_ret = gnutls_certificate_verify_peers2 (tlsstate, &status);
+  /* gnutls_certificate_verify_peers2() chains to
+   * gnutls_x509_trust_list_verify_crt2().  That function's documentation says:
+   *
+   *   When a certificate chain of cert_list_size with more than one
+   *   certificates is provided, the verification status will apply to
+   *   the first certificate in the chain that failed
+   *   verification. The verification process starts from the end of
+   *   the chain (from CA to end certificate). The first certificate
+   *   in the chain must be the end-certificate while the rest of the
+   *   members may be sorted or not.
+   *
+   * This is why tls_check_certificate() loops from CA to host in that order,
+   * calling the menu, and recalling tls_verify_peers() for each approved
+   * cert in the chain.
+   */
+  verify_ret = gnutls_certificate_verify_peers2 (tlsstate, certstat);
+
+  /* certstat was set */
   if (!verify_ret)
-    return status;
+    return 0;
 
-  if (status == GNUTLS_E_NO_CERTIFICATE_FOUND)
-  {
+  if (verify_ret == GNUTLS_E_NO_CERTIFICATE_FOUND)
     mutt_error (_("Unable to get certificate from peer"));
-    mutt_sleep (2);
-    return 0;
-  }
-  if (verify_ret < 0)
-  {
+  else
     mutt_error (_("Certificate verification error (%s)"),
-                gnutls_strerror (status));
-    mutt_sleep (2);
-    return 0;
-  }
+                gnutls_strerror (verify_ret));
 
-  /* We only support X.509 certificates (not OpenPGP) at the moment */
-  if (gnutls_certificate_type_get (tlsstate) != GNUTLS_CRT_X509)
-  {
-    mutt_error (_("Certificate is not X.509"));
-    mutt_sleep (2);
-    return 0;
-  }
-
-  return status;
+  mutt_sleep (2);
+  return verify_ret;
 }
 
+/* Returns 1 on success.
+ *         0 on failure.
+ */
 static int tls_check_certificate (CONNECTION* conn)
 {
   tlssockdata *data = conn->sockdata;
@@ -1151,16 +1167,17 @@ static int tls_check_certificate (CONNECTION* conn)
   unsigned int cert_list_size = 0;
   gnutls_certificate_status_t certstat;
   int certerr, i, preauthrc, savedcert, rc = 0;
-  int rcpeer = -1; /* the result of tls_check_preauth() on the peer's EE cert */
+  int max_preauth_pass = -1;
+  int rcsettrust;
 
-  if (gnutls_auth_get_type (state) != GNUTLS_CRD_CERTIFICATE)
-  {
-    mutt_error (_("Unable to get certificate from peer"));
-    mutt_sleep (2);
+  /* tls_verify_peers() calls gnutls_certificate_verify_peers2(),
+   * which verifies the auth_type is GNUTLS_CRD_CERTIFICATE
+   * and that get_certificate_type() for the server is GNUTLS_CRT_X509.
+   * If it returns 0, certstat will be set with failure codes for the first
+   * cert in the chain (from CA to host) with an error.
+   */
+  if (tls_verify_peers (state, &certstat) != 0)
     return 0;
-  }
-
-  certstat = tls_verify_peers (state);
 
   cert_list = gnutls_certificate_get_peers (state, &cert_list_size);
   if (!cert_list)
@@ -1179,13 +1196,8 @@ static int tls_check_certificate (CONNECTION* conn)
     rc = tls_check_preauth(&cert_list[i], certstat, conn->account.host, i,
                            &certerr, &savedcert);
     preauthrc += rc;
-    if (i == 0)
-    {
-      /* This is the peer's end-entity X.509 certificate.  Stash the result
-       * to check later in this function.
-       */
-      rcpeer = rc;
-    }
+    if (!preauthrc)
+      max_preauth_pass = i;
 
     if (savedcert)
     {
@@ -1202,19 +1214,26 @@ static int tls_check_certificate (CONNECTION* conn)
     rc = tls_check_one_certificate (&cert_list[i], certstat, conn->account.host,
                                     i, cert_list_size);
 
-    /* add signers to trust set, then reverify */
-    if (i && rc)
-    {
-      rc = gnutls_certificate_set_x509_trust_mem (data->xcred, &cert_list[i],
-                                                  GNUTLS_X509_FMT_DER);
-      if (rc != 1)
-        dprint (1, (debugfile, "error trusting certificate %d: %d\n", i, rc));
+    /* Stop checking if the menu cert is aborted or rejected. */
+    if (!rc)
+      break;
 
-      certstat = tls_verify_peers (state);
-      /* If the cert chain now verifies, and the peer's cert was otherwise
-       * valid (rcpeer==0), we are done.
+    /* add signers to trust set, then reverify */
+    if (i)
+    {
+      rcsettrust = gnutls_certificate_set_x509_trust_mem (data->xcred,
+                                                          &cert_list[i],
+                                                          GNUTLS_X509_FMT_DER);
+      if (rcsettrust != 1)
+        dprint (1, (debugfile, "error trusting certificate %d: %d\n", i, rcsettrust));
+
+      if (tls_verify_peers (state, &certstat) != 0)
+        return 0;
+
+      /* If the cert chain now verifies, and all lower certs already
+       * passed preauth, we are done.
        */
-      if (!certstat && !rcpeer)
+      if (!certstat && (max_preauth_pass >= i - 1))
         return 1;
     }
   }
