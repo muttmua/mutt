@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-06 16:08+0200\n"
-"PO-Revision-Date: 2020-06-06 16:12+0200\n"
+"POT-Creation-Date: 2020-06-08 23:21+0200\n"
+"PO-Revision-Date: 2020-06-08 23:23+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -92,7 +92,7 @@ msgstr "Sélectionner"
 
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4533
-#: curs_main.c:555 history.c:78 mutt_ssl.c:1313 mutt_ssl_gnutls.c:1036
+#: curs_main.c:555 history.c:78 mutt_ssl.c:1313 mutt_ssl_gnutls.c:1039
 #: pager.c:2003 pgpkey.c:523 postpone.c:45 query.c:54 recvattach.c:62
 #: smime.c:468
 msgid "Help"
@@ -2093,7 +2093,7 @@ msgstr "gpgme_op_keylist_next a échoué : %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4525 mutt_ssl.c:1311 mutt_ssl_gnutls.c:1034 pgpkey.c:516
+#: crypt-gpgme.c:4525 mutt_ssl.c:1311 mutt_ssl_gnutls.c:1037 pgpkey.c:516
 #: smime.c:463
 msgid "Exit  "
 msgstr "Quitter  "
@@ -2399,6 +2399,7 @@ msgstr ""
 #: curs_main.c:710
 msgid "Mailbox reconnected.  Some changes may have been lost."
 msgstr ""
+"Boîte aux lettres reconnectée. Certains changements ont pu être perdus."
 
 #: curs_main.c:714
 msgid "New mail in this mailbox."
@@ -4179,38 +4180,38 @@ msgstr "le propriétaire du certificat ne correspond pas au nom %s"
 msgid "Certificate host check failed: %s"
 msgstr "Échec de vérification de machine : %s"
 
-#: mutt_ssl.c:1226 mutt_ssl_gnutls.c:903
+#: mutt_ssl.c:1226 mutt_ssl_gnutls.c:906
 msgid "This certificate belongs to:"
 msgstr "Ce certificat appartient à :"
 
-#: mutt_ssl.c:1235 mutt_ssl_gnutls.c:945
+#: mutt_ssl.c:1235 mutt_ssl_gnutls.c:948
 msgid "This certificate was issued by:"
 msgstr "Ce certificat a été émis par :"
 
-#: mutt_ssl.c:1244 mutt_ssl_gnutls.c:958
+#: mutt_ssl.c:1244 mutt_ssl_gnutls.c:961
 msgid "This certificate is valid"
 msgstr "Ce certificat est valide"
 
-#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:961
+#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:964
 #, c-format
 msgid "   from %s"
 msgstr "     de %s"
 
-#: mutt_ssl.c:1248 mutt_ssl_gnutls.c:966
+#: mutt_ssl.c:1248 mutt_ssl_gnutls.c:969
 #, c-format
 msgid "     to %s"
 msgstr "      à %s"
 
-#: mutt_ssl.c:1255 mutt_ssl_gnutls.c:973
+#: mutt_ssl.c:1255 mutt_ssl_gnutls.c:976
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Empreinte SHA1 : %s"
 
-#: mutt_ssl.c:1261 mutt_ssl.c:1264 mutt_ssl_gnutls.c:979 mutt_ssl_gnutls.c:982
+#: mutt_ssl.c:1261 mutt_ssl.c:1264 mutt_ssl_gnutls.c:982 mutt_ssl_gnutls.c:985
 msgid "SHA256 Fingerprint: "
 msgstr "Empreinte SHA256 : "
 
-#: mutt_ssl.c:1268 mutt_ssl_gnutls.c:1003
+#: mutt_ssl.c:1268 mutt_ssl_gnutls.c:1006
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
@@ -4229,7 +4230,7 @@ msgstr "ruas"
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours, (s)auter"
 
-#: mutt_ssl.c:1300 mutt_ssl_gnutls.c:1012
+#: mutt_ssl.c:1300 mutt_ssl_gnutls.c:1015
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 
@@ -4237,15 +4238,15 @@ msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (s)auter"
 
-#: mutt_ssl.c:1307 mutt_ssl_gnutls.c:1023
+#: mutt_ssl.c:1307 mutt_ssl_gnutls.c:1026
 msgid "(r)eject, accept (o)nce"
 msgstr "(r)ejeter, accepter (u)ne fois"
 
-#: mutt_ssl.c:1345 mutt_ssl_gnutls.c:1086
+#: mutt_ssl.c:1345 mutt_ssl_gnutls.c:1089
 msgid "Warning: Couldn't save certificate"
 msgstr "Attention : le certificat n'a pas pu être sauvé"
 
-#: mutt_ssl.c:1350 mutt_ssl_gnutls.c:1091
+#: mutt_ssl.c:1350 mutt_ssl_gnutls.c:1094
 msgid "Certificate saved"
 msgstr "Certificat sauvé"
 
@@ -4269,35 +4270,35 @@ msgstr ""
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "Connexion SSL/TLS utilisant %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:727 mutt_ssl_gnutls.c:855
+#: mutt_ssl_gnutls.c:730 mutt_ssl_gnutls.c:858
 msgid "Error initialising gnutls certificate data"
 msgstr "Erreur d'initialisation des données du certificat gnutls"
 
-#: mutt_ssl_gnutls.c:734 mutt_ssl_gnutls.c:862
+#: mutt_ssl_gnutls.c:737 mutt_ssl_gnutls.c:865
 msgid "Error processing certificate data"
 msgstr "Erreur de traitement des données du certificat"
 
-#: mutt_ssl_gnutls.c:989
+#: mutt_ssl_gnutls.c:992
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "ATTENTION ! Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl_gnutls.c:991
+#: mutt_ssl_gnutls.c:994
 msgid "WARNING: Server certificate has expired"
 msgstr "ATTENTION ! Le certificat du serveur a expiré"
 
-#: mutt_ssl_gnutls.c:993
+#: mutt_ssl_gnutls.c:996
 msgid "WARNING: Server certificate has been revoked"
 msgstr "ATTENTION ! Le certificat du serveur a été révoqué"
 
-#: mutt_ssl_gnutls.c:995
+#: mutt_ssl_gnutls.c:998
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "ATTENTION ! Le nom du serveur ne correspond pas au certificat"
 
-#: mutt_ssl_gnutls.c:997
+#: mutt_ssl_gnutls.c:1000
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "ATTENTION ! Le signataire du certificat du serveur n'est pas un CA"
 
-#: mutt_ssl_gnutls.c:1000
+#: mutt_ssl_gnutls.c:1003
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Attention : le certificat du serveur a été signé avec un algorithme peu sûr"
@@ -4308,7 +4309,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1019
+#: mutt_ssl_gnutls.c:1022
 msgid "roa"
 msgstr "rua"
 
@@ -4318,22 +4319,18 @@ msgstr "rua"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1030
+#: mutt_ssl_gnutls.c:1033
 msgid "ro"
 msgstr "ru"
 
-#: mutt_ssl_gnutls.c:1123 mutt_ssl_gnutls.c:1158 mutt_ssl_gnutls.c:1168
+#: mutt_ssl_gnutls.c:1150 mutt_ssl_gnutls.c:1185
 msgid "Unable to get certificate from peer"
 msgstr "Impossible d'obtenir le certificat de la machine distante"
 
-#: mutt_ssl_gnutls.c:1129
+#: mutt_ssl_gnutls.c:1152
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Erreur de vérification du certificat (%s)"
-
-#: mutt_ssl_gnutls.c:1138
-msgid "Certificate is not X.509"
-msgstr "Le certificat n'est pas de type X.509"
 
 # , c-format
 #: mutt_tunnel.c:73
@@ -7202,3 +7199,6 @@ msgstr "extraire les clés publiques supportées"
 #: ../keymap_alldefs.h:700
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
+
+#~ msgid "Certificate is not X.509"
+#~ msgstr "Le certificat n'est pas de type X.509"
