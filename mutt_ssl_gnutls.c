@@ -36,13 +36,13 @@
 /* certificate error bitmap values */
 #define CERTERR_VALID       0
 #define CERTERR_EXPIRED     1
-#define CERTERR_NOTYETVALID 2
-#define CERTERR_REVOKED     4
-#define CERTERR_NOTTRUSTED  8
-#define CERTERR_HOSTNAME    16
-#define CERTERR_SIGNERNOTCA 32
-#define CERTERR_INSECUREALG 64
-#define CERTERR_OTHER       128
+#define CERTERR_NOTYETVALID (1<<1)
+#define CERTERR_REVOKED     (1<<2)
+#define CERTERR_NOTTRUSTED  (1<<3)
+#define CERTERR_HOSTNAME    (1<<4)
+#define CERTERR_SIGNERNOTCA (1<<5)
+#define CERTERR_INSECUREALG (1<<6)
+#define CERTERR_OTHER       (1<<7)
 
 /* deprecated types compatibility */
 
@@ -103,10 +103,10 @@ static int tls_init (void)
   if (init_complete)
     return 0;
 
-  err = gnutls_global_init();
+  err = gnutls_global_init ();
   if (err < 0)
   {
-    mutt_error ("gnutls_global_init: %s", gnutls_strerror(err));
+    mutt_error ("gnutls_global_init: %s", gnutls_strerror (err));
     mutt_sleep (2);
     return -1;
   }
@@ -117,7 +117,7 @@ static int tls_init (void)
 
 int mutt_ssl_socket_setup (CONNECTION* conn)
 {
-  if (tls_init() < 0)
+  if (tls_init () < 0)
     return -1;
 
   conn->conn_open	= tls_socket_open;
@@ -218,7 +218,7 @@ static int tls_socket_open (CONNECTION* conn)
 
 int mutt_ssl_starttls (CONNECTION* conn)
 {
-  if (tls_init() < 0)
+  if (tls_init () < 0)
     return -1;
 
   if (tls_negotiate (conn) < 0)
@@ -232,15 +232,18 @@ int mutt_ssl_starttls (CONNECTION* conn)
   return 0;
 }
 
+/* Note: this function grabs the CN out of the client
+ * cert but appears to do nothing with it.  It does contain a call
+ * to mutt_account_getuser().
+ */
 static void tls_get_client_cert (CONNECTION* conn)
 {
   tlssockdata *data = conn->sockdata;
   const gnutls_datum_t* crtdata;
   gnutls_x509_crt_t clientcrt;
-  char* dn;
-  char* cn;
-  char* cnend;
-  size_t dnlen;
+  char* cn = NULL;
+  size_t cnlen = 0;
+  int rc;
 
   /* get our cert CN if we have one */
   if (!(crtdata = gnutls_certificate_get_ours (data->state)))
@@ -254,41 +257,32 @@ static void tls_get_client_cert (CONNECTION* conn)
   if (gnutls_x509_crt_import (clientcrt, crtdata, GNUTLS_X509_FMT_DER) < 0)
   {
     dprint (1, (debugfile, "Failed to import gnutls client crt\n"));
-    goto err_crt;
+    goto err;
   }
-  /* get length of DN */
-  dnlen = 0;
-  gnutls_x509_crt_get_dn (clientcrt, NULL, &dnlen);
-  if (!(dn = calloc (1, dnlen)))
+
+  /* get length of CN, then grab it. */
+  rc = gnutls_x509_crt_get_dn_by_oid (clientcrt, GNUTLS_OID_X520_COMMON_NAME,
+                                      0, 0, NULL, &cnlen);
+  if (((rc >= 0) || (rc == GNUTLS_E_SHORT_MEMORY_BUFFER)) &&
+      cnlen > 0)
   {
-    dprint (1, (debugfile, "could not allocate DN\n"));
-    goto err_crt;
+    cn = safe_calloc (1, cnlen);
+    if (gnutls_x509_crt_get_dn_by_oid (clientcrt, GNUTLS_OID_X520_COMMON_NAME,
+                                       0, 0, cn, &cnlen) < 0)
+      goto err;
+    dprint (2, (debugfile, "client certificate CN: %s\n", cn));
+
+    /* if we are using a client cert, SASL may expect an external auth name */
+    mutt_account_getuser (&conn->account);
   }
-  gnutls_x509_crt_get_dn (clientcrt, dn, &dnlen);
-  dprint (2, (debugfile, "client certificate DN: %s\n", dn));
 
-  /* extract CN to use as external user name */
-  if (!(cn = strstr (dn, "CN=")))
-  {
-    dprint (1, (debugfile, "no CN found in DN\n"));
-    goto err_dn;
-  }
-  cn += 3;
-
-  if ((cnend = strstr (dn, ",EMAIL=")))
-    *cnend = '\0';
-
-  /* if we are using a client cert, SASL may expect an external auth name */
-  mutt_account_getuser (&conn->account);
-
-err_dn:
-  FREE (&dn);
-err_crt:
+err:
+  FREE (&cn);
   gnutls_x509_crt_deinit (clientcrt);
 }
 
 #if HAVE_GNUTLS_PRIORITY_SET_DIRECT
-static int tls_set_priority(tlssockdata *data)
+static int tls_set_priority (tlssockdata *data)
 {
   size_t nproto = 5;
   BUFFER *priority = NULL;
@@ -301,27 +295,27 @@ static int tls_set_priority(tlssockdata *data)
   else
     mutt_buffer_strcpy (priority, "NORMAL");
 
-  if (!option(OPTTLSV1_3))
+  if (!option (OPTTLSV1_3))
   {
     nproto--;
     mutt_buffer_addstr (priority, ":-VERS-TLS1.3");
   }
-  if (!option(OPTTLSV1_2))
+  if (!option (OPTTLSV1_2))
   {
     nproto--;
     mutt_buffer_addstr (priority, ":-VERS-TLS1.2");
   }
-  if (!option(OPTTLSV1_1))
+  if (!option (OPTTLSV1_1))
   {
     nproto--;
     mutt_buffer_addstr (priority, ":-VERS-TLS1.1");
   }
-  if (!option(OPTTLSV1))
+  if (!option (OPTTLSV1))
   {
     nproto--;
     mutt_buffer_addstr (priority, ":-VERS-TLS1.0");
   }
-  if (!option(OPTSSLV3))
+  if (!option (OPTSSLV3))
   {
     nproto--;
     mutt_buffer_addstr (priority, ":-VERS-SSL3.0");
@@ -335,7 +329,7 @@ static int tls_set_priority(tlssockdata *data)
 
   if ((err = gnutls_priority_set_direct (data->state, mutt_b2s (priority), NULL)) < 0)
   {
-    mutt_error ("gnutls_priority_set_direct(%s): %s", mutt_b2s (priority), gnutls_strerror(err));
+    mutt_error ("gnutls_priority_set_direct(%s): %s", mutt_b2s (priority), gnutls_strerror (err));
     mutt_sleep (2);
     goto cleanup;
   }
@@ -357,17 +351,17 @@ cleanup:
  */
 static int protocol_priority[] = {GNUTLS_TLS1_2, GNUTLS_TLS1_1, GNUTLS_TLS1, GNUTLS_SSL3, 0};
 
-static int tls_set_priority(tlssockdata *data)
+static int tls_set_priority (tlssockdata *data)
 {
   size_t nproto = 0; /* number of tls/ssl protocols */
 
-  if (option(OPTTLSV1_2))
+  if (option (OPTTLSV1_2))
     protocol_priority[nproto++] = GNUTLS_TLS1_2;
-  if (option(OPTTLSV1_1))
+  if (option (OPTTLSV1_1))
     protocol_priority[nproto++] = GNUTLS_TLS1_1;
-  if (option(OPTTLSV1))
+  if (option (OPTTLSV1))
     protocol_priority[nproto++] = GNUTLS_TLS1;
-  if (option(OPTSSLV3))
+  if (option (OPTSSLV3))
     protocol_priority[nproto++] = GNUTLS_SSL3;
   protocol_priority[nproto] = 0;
 
@@ -403,8 +397,8 @@ static int tls_negotiate (CONNECTION * conn)
   err = gnutls_certificate_allocate_credentials (&data->xcred);
   if (err < 0)
   {
-    FREE(&conn->sockdata);
-    mutt_error ("gnutls_certificate_allocate_credentials: %s", gnutls_strerror(err));
+    FREE (&conn->sockdata);
+    mutt_error ("gnutls_certificate_allocate_credentials: %s", gnutls_strerror (err));
     mutt_sleep (2);
     return -1;
   }
@@ -429,12 +423,12 @@ static int tls_negotiate (CONNECTION * conn)
 #if HAVE_DECL_GNUTLS_VERIFY_DISABLE_TIME_CHECKS
   /* disable checking certificate activation/expiration times
      in gnutls, we do the checks ourselves */
-  gnutls_certificate_set_verify_flags(data->xcred, GNUTLS_VERIFY_DISABLE_TIME_CHECKS);
+  gnutls_certificate_set_verify_flags (data->xcred, GNUTLS_VERIFY_DISABLE_TIME_CHECKS);
 #endif
 
-  if ((err = gnutls_init(&data->state, GNUTLS_CLIENT)))
+  if ((err = gnutls_init (&data->state, GNUTLS_CLIENT)))
   {
-    mutt_error ("gnutls_handshake: %s", gnutls_strerror(err));
+    mutt_error ("gnutls_init(): %s", gnutls_strerror (err));
     mutt_sleep (2);
     goto fail;
   }
@@ -449,7 +443,7 @@ static int tls_negotiate (CONNECTION * conn)
     mutt_sleep (1);
   }
 
-  if (tls_set_priority(data) < 0)
+  if (tls_set_priority (data) < 0)
   {
     goto fail;
   }
@@ -459,34 +453,29 @@ static int tls_negotiate (CONNECTION * conn)
     gnutls_dh_set_prime_bits (data->state, SslDHPrimeBits);
   }
 
-/*
-  gnutls_set_cred (data->state, GNUTLS_ANON, NULL);
-*/
-
   gnutls_credentials_set (data->state, GNUTLS_CRD_CERTIFICATE, data->xcred);
 
-  err = gnutls_handshake(data->state);
-
-  while (err == GNUTLS_E_AGAIN || err == GNUTLS_E_INTERRUPTED)
+  do
   {
-    err = gnutls_handshake(data->state);
-  }
+    err = gnutls_handshake (data->state);
+  } while (err == GNUTLS_E_AGAIN || err == GNUTLS_E_INTERRUPTED);
+
   if (err < 0)
   {
     if (err == GNUTLS_E_FATAL_ALERT_RECEIVED)
     {
-      mutt_error("gnutls_handshake: %s(%s)", gnutls_strerror(err),
-		 gnutls_alert_get_name(gnutls_alert_get(data->state)));
+      mutt_error ("gnutls_handshake: %s(%s)", gnutls_strerror (err),
+                  gnutls_alert_get_name (gnutls_alert_get (data->state)));
     }
     else
     {
-      mutt_error("gnutls_handshake: %s", gnutls_strerror(err));
+      mutt_error ("gnutls_handshake: %s", gnutls_strerror (err));
     }
     mutt_sleep (2);
     goto fail;
   }
 
-  if (!tls_check_certificate(conn))
+  if (!tls_check_certificate (conn))
     goto fail;
 
   /* set Security Strength Factor (SSF) for SASL */
@@ -495,7 +484,7 @@ static int tls_negotiate (CONNECTION * conn)
 
   tls_get_client_cert (conn);
 
-  if (!option(OPTNOCURSES))
+  if (!option (OPTNOCURSES))
   {
     mutt_message (_("SSL/TLS connection using %s (%s/%s/%s)"),
                   gnutls_protocol_get_name (gnutls_protocol_get_version (data->state)),
@@ -510,7 +499,7 @@ static int tls_negotiate (CONNECTION * conn)
 fail:
   gnutls_certificate_free_credentials (data->xcred);
   gnutls_deinit (data->state);
-  FREE(&conn->sockdata);
+  FREE (&conn->sockdata);
   return -1;
 }
 
@@ -563,7 +552,7 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
   unsigned char *b64_data_data;
   struct stat filestat;
 
-  if (stat(SslCertFile, &filestat) == -1)
+  if (stat (SslCertFile, &filestat) == -1)
     return 0;
 
   b64_data.size = filestat.st_size+1;
@@ -571,18 +560,18 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
   b64_data_data[b64_data.size-1] = '\0';
   b64_data.data = b64_data_data;
 
-  fd1 = fopen(SslCertFile, "r");
+  fd1 = fopen (SslCertFile, "r");
   if (fd1 == NULL)
   {
     return 0;
   }
 
-  b64_data.size = fread(b64_data.data, 1, b64_data.size, fd1);
+  b64_data.size = fread (b64_data.data, 1, b64_data.size, fd1);
   safe_fclose (&fd1);
 
   do
   {
-    ret = gnutls_pem_base64_decode_alloc(NULL, &b64_data, &cert);
+    ret = gnutls_pem_base64_decode_alloc (NULL, &b64_data, &cert);
     if (ret != 0)
     {
       FREE (&b64_data_data);
@@ -590,15 +579,15 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
     }
 
     /* find start of cert, skipping junk */
-    ptr = (unsigned char *)strstr((char*)b64_data.data, CERT_SEP);
+    ptr = (unsigned char *)strstr ((char*)b64_data.data, CERT_SEP);
     if (!ptr)
     {
-      gnutls_free(cert.data);
+      gnutls_free (cert.data);
       FREE (&b64_data_data);
       return 0;
     }
     /* find start of next cert */
-    ptr = (unsigned char *)strstr((char*)ptr + 1, CERT_SEP);
+    ptr = (unsigned char *)strstr ((char*)ptr + 1, CERT_SEP);
 
     b64_data.size = b64_data.size - (ptr - b64_data.data);
     b64_data.data = ptr;
@@ -608,13 +597,13 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
       if (memcmp (cert.data, peercert->data, cert.size) == 0)
       {
 	/* match found */
-        gnutls_free(cert.data);
+        gnutls_free (cert.data);
 	FREE (&b64_data_data);
 	return 1;
       }
     }
 
-    gnutls_free(cert.data);
+    gnutls_free (cert.data);
   } while (ptr != NULL);
 
   /* no match found */
@@ -675,8 +664,8 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
   /* try checking against names stored in stored certs file */
   if ((fp = fopen (SslCertFile, "r")))
   {
-    if (REGCOMP(&preg, "^#H ([a-zA-Z0-9_\\.-]+) ([0-9A-F]{4}( [0-9A-F]{4}){7})[ \t]*$",
-                REG_ICASE) != 0)
+    if (REGCOMP (&preg, "^#H ([a-zA-Z0-9_\\.-]+) ([0-9A-F]{4}( [0-9A-F]{4}){7})[ \t]*$",
+                 REG_ICASE) != 0)
     {
       safe_fclose (&fp);
       return 0;
@@ -684,19 +673,19 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
 
     buf[0] = '\0';
     tls_fingerprint (GNUTLS_DIG_MD5, buf, sizeof (buf), cert);
-    while ((linestr = mutt_read_line(linestr, &linestrsize, fp, &linenum, 0)) != NULL)
+    while ((linestr = mutt_read_line (linestr, &linestrsize, fp, &linenum, 0)) != NULL)
     {
       if (linestr[0] == '#' && linestr[1] == 'H')
       {
-        if (regexec(&preg, linestr, 3, pmatch, 0) == 0)
+        if (regexec (&preg, linestr, 3, pmatch, 0) == 0)
         {
           linestr[pmatch[1].rm_eo] = '\0';
           linestr[pmatch[2].rm_eo] = '\0';
-          if (strcmp(linestr + pmatch[1].rm_so, hostname) == 0 &&
-              strcmp(linestr + pmatch[2].rm_so, buf) == 0)
+          if (strcmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
+              strcmp (linestr + pmatch[2].rm_so, buf) == 0)
           {
-            regfree(&preg);
-            FREE(&linestr);
+            regfree (&preg);
+            FREE (&linestr);
             safe_fclose (&fp);
             return 1;
           }
@@ -704,7 +693,7 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
       }
     }
 
-    regfree(&preg);
+    regfree (&preg);
     safe_fclose (&fp);
   }
 
@@ -746,9 +735,9 @@ static int tls_check_preauth (const gnutls_datum_t *certdata,
    * GNUTLS_CERT_EXPIRED and GNUTLS_CERT_NOT_ACTIVATED bits set. */
   if (option (OPTSSLVERIFYDATES) != MUTT_NO)
   {
-    if (gnutls_x509_crt_get_expiration_time (cert) < time(NULL))
+    if (gnutls_x509_crt_get_expiration_time (cert) < time (NULL))
       *certerr |= CERTERR_EXPIRED;
-    if (gnutls_x509_crt_get_activation_time (cert) > time(NULL))
+    if (gnutls_x509_crt_get_activation_time (cert) > time (NULL))
       *certerr |= CERTERR_NOTYETVALID;
   }
 
@@ -1064,7 +1053,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
 	  {
             fpbuf[0] = '\0';
             tls_fingerprint (GNUTLS_DIG_MD5, fpbuf, sizeof (fpbuf), certdata);
-	    fprintf(fp, "#H %s %s\n", hostname, fpbuf);
+	    fprintf (fp, "#H %s %s\n", hostname, fpbuf);
 	    done = 1;
 	  }
           /* Save the cert for all other errors */
@@ -1193,8 +1182,8 @@ static int tls_check_certificate (CONNECTION* conn)
   preauthrc = 0;
   for (i = 0; i < cert_list_size; i++)
   {
-    rc = tls_check_preauth(&cert_list[i], certstat, conn->account.host, i,
-                           &certerr, &savedcert);
+    rc = tls_check_preauth (&cert_list[i], certstat, conn->account.host, i,
+                            &certerr, &savedcert);
     preauthrc += rc;
     if (!preauthrc)
       max_preauth_pass = i;
