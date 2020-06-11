@@ -28,58 +28,88 @@
 #include "auth.h"
 
 /* imap_auth_oauth: AUTH=OAUTHBEARER support. See RFC 7628 */
-imap_auth_res_t imap_auth_oauth (IMAP_DATA* idata, const char* method)
+static imap_auth_res_t imap_auth_oauth (IMAP_DATA* idata, int xoauth2)
 {
-  char* ibuf = NULL;
-  char* oauthbearer = NULL;
-  int ilen;
-  int rc;
+  int rc = IMAP_AUTH_FAILURE, steprc;
+  BUFFER *bearertoken = NULL, *authline = NULL;
+  const char *authtype;
 
-  /* For now, we only support SASL_IR also and over TLS */
-  if (!mutt_bit_isset (idata->capabilities, AUTH_OAUTHBEARER) ||
-      !mutt_bit_isset (idata->capabilities, SASL_IR) ||
-      !idata->conn->ssf)
-    return IMAP_AUTH_UNAVAIL;
+  authtype = xoauth2 ? "XOAUTH2" : "OAUTHBEARER";
 
-  /* If they did not explicitly request or configure oauth then fail quietly */
-  if (!(method || ImapOauthRefreshCmd))
-      return IMAP_AUTH_UNAVAIL;
+  mutt_message (_("Authenticating (%s)..."), authtype);
 
-  mutt_message _("Authenticating (OAUTHBEARER)...");
+  bearertoken = mutt_buffer_pool_get ();
+  authline = mutt_buffer_pool_get ();
 
   /* We get the access token from the imap_oauth_refresh_command */
-  oauthbearer = mutt_account_getoauthbearer (&idata->conn->account);
-  if (oauthbearer == NULL)
-    return IMAP_AUTH_FAILURE;
+  if (mutt_account_getoauthbearer (&idata->conn->account, bearertoken, xoauth2))
+    goto cleanup;
 
-  ilen = strlen (oauthbearer) + 30;
-  ibuf = safe_malloc (ilen);
-  snprintf (ibuf, ilen, "AUTHENTICATE OAUTHBEARER %s", oauthbearer);
+  mutt_buffer_printf (authline, "AUTHENTICATE %s %s",
+                      authtype, mutt_b2s (bearertoken));
 
   /* This doesn't really contain a password, but the token is good for
    * an hour, so suppress it anyways.
    */
-  rc = imap_exec (idata, ibuf, IMAP_CMD_FAIL_OK | IMAP_CMD_PASS);
-
-  FREE (&oauthbearer);
-  FREE (&ibuf);
-
-  if (rc)
+  if (imap_exec (idata, mutt_b2s (authline), IMAP_CMD_FAIL_OK | IMAP_CMD_PASS))
   {
     /* The error response was in SASL continuation, so continue the SASL
      * to cause a failure and exit SASL input.  See RFC 7628 3.2.3
+     * "AQ==" is Base64 encoded ^A (0x01) .
      */
-    mutt_socket_write (idata->conn, "\001");
-    rc = imap_exec (idata, ibuf, IMAP_CMD_FAIL_OK);
+    mutt_socket_write (idata->conn, "AQ==\r\n");
+    do
+      steprc = imap_cmd_step (idata);
+    while (steprc == IMAP_CMD_CONTINUE);
+
+    /* L10N:
+       %s is the authentication type, for example OAUTHBEARER
+    */
+    mutt_error (_("%s authentication failed."), authtype);
+    mutt_sleep (2);
+    goto cleanup;
   }
 
-  if (!rc)
-  {
-    mutt_clear_error();
-    return IMAP_AUTH_SUCCESS;
-  }
+  mutt_clear_error();
+  rc = IMAP_AUTH_SUCCESS;
 
-  mutt_error _("OAUTHBEARER authentication failed.");
-  mutt_sleep (2);
-  return IMAP_AUTH_FAILURE;
+cleanup:
+  mutt_buffer_pool_release (&bearertoken);
+  mutt_buffer_pool_release (&authline);
+  return rc;
+}
+
+/* AUTH=OAUTHBEARER support. See RFC 7628 */
+imap_auth_res_t imap_auth_oauthbearer (IMAP_DATA* idata, const char* method)
+{
+  /* For now, we only support SASL_IR also and over TLS */
+  if (!mutt_bit_isset (idata->capabilities, SASL_IR) ||
+      !idata->conn->ssf)
+    return IMAP_AUTH_UNAVAIL;
+
+  if (!mutt_bit_isset (idata->capabilities, AUTH_OAUTHBEARER))
+    return IMAP_AUTH_UNAVAIL;
+
+  if (!ImapOauthRefreshCmd)
+    return IMAP_AUTH_UNAVAIL;
+
+  return imap_auth_oauth (idata, 0);
+}
+
+/* AUTH=XOAUTH2 support. */
+imap_auth_res_t imap_auth_xoauth2 (IMAP_DATA* idata, const char* method)
+{
+  /* For now, we only support SASL_IR also and over TLS */
+  if (!mutt_bit_isset (idata->capabilities, SASL_IR) ||
+      !idata->conn->ssf)
+    return IMAP_AUTH_UNAVAIL;
+
+  if (!mutt_bit_isset (idata->capabilities, AUTH_XOAUTH2))
+    return IMAP_AUTH_UNAVAIL;
+
+  /* If they did not explicitly request XOAUTH2 then fail quietly */
+  if (!(method && ImapOauthRefreshCmd))
+      return IMAP_AUTH_UNAVAIL;
+
+  return imap_auth_oauth (idata, 1);
 }

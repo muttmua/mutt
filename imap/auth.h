@@ -51,6 +51,7 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method);
 #ifdef USE_SASL
 imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method);
 #endif
-imap_auth_res_t imap_auth_oauth (IMAP_DATA* idata, const char* method);
+imap_auth_res_t imap_auth_oauthbearer (IMAP_DATA* idata, const char* method);
+imap_auth_res_t imap_auth_xoauth2 (IMAP_DATA* idata, const char* method);
 
 #endif /* _IMAP_AUTH_H */

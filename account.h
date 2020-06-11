@@ -57,6 +57,6 @@ int mutt_account_getuser (ACCOUNT* account);
 int mutt_account_getlogin (ACCOUNT* account);
 int mutt_account_getpass (ACCOUNT* account);
 void mutt_account_unsetpass (ACCOUNT* account);
-char* mutt_account_getoauthbearer (ACCOUNT* account);
+int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoauth2);
 
 #endif /* _MUTT_ACCOUNT_H_ */

@@ -29,7 +29,8 @@
 #include "auth.h"
 
 static const imap_auth_t imap_authenticators[] = {
-  { imap_auth_oauth, "oauthbearer" },
+  { imap_auth_oauthbearer, "oauthbearer" },
+  { imap_auth_xoauth2, "xoauth2" },
 #ifdef USE_SASL
   { imap_auth_sasl, NULL },
 #else

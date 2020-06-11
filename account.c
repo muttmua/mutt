@@ -241,25 +241,26 @@ void mutt_account_unsetpass (ACCOUNT* account)
 
 /* mutt_account_getoauthbearer: call external command to generate the
  * oauth refresh token for this ACCOUNT, then create and encode the
- * OAUTHBEARER token based on RFC 7628.  Returns NULL on failure.
- * Resulting token is dynamically allocated and should be FREE'd by the
- * caller.
+ * OAUTHBEARER token based on RFC 7628.
+ *
+ * Returns 0 on success, -1 on failure.
+ *
+ * If xoauth2 is set, a deprecated XOAUTH2 token will be generated instead.
  */
-char* mutt_account_getoauthbearer (ACCOUNT* account)
+int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoauth2)
 {
   FILE	*fp;
   char *cmd = NULL;
   char *token = NULL;
   size_t token_size = 0;
-  char *oauthbearer = NULL;
-  size_t oalen;
-  char *encoded_token = NULL;
-  size_t encoded_len;
   pid_t	pid;
+  BUFFER *unencoded_bearertoken = NULL;
+
+  mutt_buffer_clear (authbearer);
 
   /* The oauthbearer token includes the login */
   if (mutt_account_getlogin (account))
-    return NULL;
+    return -1;
 
 #ifdef USE_IMAP
   if ((account->type == MUTT_ACCT_TYPE_IMAP) && ImapOauthRefreshCmd)
@@ -282,13 +283,13 @@ char* mutt_account_getoauthbearer (ACCOUNT* account)
        your $*_oauth_refresh_command's are defined."
     */
     mutt_error (_("mutt_account_getoauthbearer: No OAUTH refresh command defined"));
-    return NULL;
+    return -1;
   }
 
   if ((pid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0)
   {
     mutt_perror _("mutt_account_getoauthbearer: Unable to run refresh command");
-    return NULL;
+    return -1;
   }
 
   /* read line */
@@ -300,26 +301,27 @@ char* mutt_account_getoauthbearer (ACCOUNT* account)
   {
     mutt_error (_("mutt_account_getoauthbearer: Command returned empty string"));
     FREE (&token);
-    return NULL;
+    return -1;
   }
 
-  /* Determine the length of the keyed message digest, add 50 for
-   * overhead.
-   */
-  oalen = strlen (account->login) + strlen (account->host) + strlen (token) + 50;
-  oauthbearer = safe_malloc (oalen);
+  unencoded_bearertoken = mutt_buffer_pool_get ();
 
-  snprintf (oauthbearer, oalen,
-            "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
-            account->login, account->host, account->port, token);
+  if (xoauth2)
+    mutt_buffer_printf (unencoded_bearertoken,
+                        "user=%s\001auth=Bearer %s\001\001",
+                        account->login, token);
+  else
+    mutt_buffer_printf (unencoded_bearertoken,
+                        "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
+                        account->login, account->host, account->port, token);
 
   FREE (&token);
 
-  encoded_len = strlen (oauthbearer) * 4 / 3 + 10;
-  encoded_token = safe_malloc (encoded_len);
-  mutt_to_base64 ((unsigned char*) encoded_token,
-                  (unsigned char*) oauthbearer, strlen (oauthbearer),
-		  encoded_len);
-  FREE (&oauthbearer);
-  return encoded_token;
+  mutt_buffer_to_base64 (authbearer,
+                         (const unsigned char *) mutt_b2s (unencoded_bearertoken),
+                         mutt_buffer_len (unencoded_bearertoken));
+
+  mutt_buffer_pool_release (&unencoded_bearertoken);
+
+  return 0;
 }

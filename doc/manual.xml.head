@@ -9026,6 +9026,26 @@ set imap_oauth_refresh_command="/path/to/oauth2.py --quiet --user=[email_address
 <para>
 Substitute pop or smtp for imap in the above example to configure for those.
 </para>
+
+<sect2 id="xoauth2">
+  <title>XOAUTH2 Support</title>
+
+  <para>
+    Support for the deprecated XOAUTH2 protocol is also available.  To
+    enable this, add <quote>xoauth2</quote> to the
+    <link linkend="imap-authenticators">$imap_authenticators</link>,
+    <link linkend="pop-authenticators">$pop_authenticators</link>, or
+    <link linkend="smtp-authenticators">$smtp_authenticators</link> config
+    variables.  XOAUTH2 uses the same refresh command configuration variables
+    as OAUTHBEARER:
+    <link linkend="imap-oauth-refresh-command">$imap_oauth_refresh_command</link>,
+    <link linkend="pop-oauth-refresh-command">$pop_oauth_refresh_command</link>, and
+    <link linkend="smtp-oauth-refresh-command">$smtp_oauth_refresh_command</link>.
+    Those will need to be set to a script to generate the appropriate XOAUTH2
+    token.
+  </para>
+</sect2>
+
 </sect1>
 
 <sect1 id="account-hook">

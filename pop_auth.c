@@ -317,52 +317,50 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
   return POP_A_FAILURE;
 }
 
-/* OAUTHBEARER authenticator */
-static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, const char *method)
+/* OAUTHBEARER/XOAUTH2 authenticator */
+static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, int xoauth2)
 {
-  char *oauthbearer = NULL;
+  int rc = POP_A_FAILURE;
+  BUFFER *bearertoken = NULL, *authline = NULL;
+  const char *authtype;
   char decoded_err[LONG_STRING];
   char *err = NULL;
-  char *auth_cmd = NULL;
-  size_t auth_cmd_len;
   int ret, len;
 
-  /* If they did not explicitly request or configure oauth then fail quietly */
-  if (!(method || PopOauthRefreshCmd))
-      return POP_A_UNAVAIL;
+  authtype = xoauth2 ? "XOAUTH2" : "OAUTHBEARER";
 
-  mutt_message _("Authenticating (OAUTHBEARER)...");
+  mutt_message (_("Authenticating (%s)..."), authtype);
 
-  oauthbearer = mutt_account_getoauthbearer (&pop_data->conn->account);
-  if (oauthbearer == NULL)
-    return POP_A_FAILURE;
+  bearertoken = mutt_buffer_pool_get ();
+  authline = mutt_buffer_pool_get ();
 
-  auth_cmd_len = strlen (oauthbearer) + 30;
-  auth_cmd = safe_malloc (auth_cmd_len);
-  snprintf (auth_cmd, auth_cmd_len, "AUTH OAUTHBEARER %s\r\n", oauthbearer);
-  FREE (&oauthbearer);
+  if (mutt_account_getoauthbearer (&pop_data->conn->account, bearertoken, xoauth2))
+    goto cleanup;
 
-  ret = pop_query_d (pop_data, auth_cmd, strlen (auth_cmd),
+  mutt_buffer_printf (authline, "AUTH %s %s\r\n", authtype, mutt_b2s (bearertoken));
+
+  ret = pop_query_d (pop_data, authline->data, authline->dsize,
 #ifdef DEBUG
                      /* don't print the bearer token unless we're at the ungodly debugging level */
-                     debuglevel < MUTT_SOCK_LOG_FULL ? "AUTH OAUTHBEARER *\r\n" :
+                     debuglevel < MUTT_SOCK_LOG_FULL ?
+                     (xoauth2 ? "AUTH XOAUTH2 *\r\n" : "AUTH OAUTHBEARER *\r\n")
+                     :
 #endif
                      NULL);
-  FREE (&auth_cmd);
 
   switch (ret)
   {
     case 0:
-      return POP_A_SUCCESS;
+      rc = POP_A_SUCCESS;
+      goto cleanup;
     case -1:
-      return POP_A_SOCKET;
+      rc = POP_A_SOCKET;
+      goto cleanup;
   }
 
   /* The error response was a SASL continuation, so "continue" it.
-   * See RFC 7628 3.2.3
+   * See RFC 7628 3.2.3.  "AQ==" is Base64 encoded ^A (0x01) .
    */
-  mutt_socket_write (pop_data->conn, "\001");
-
   err = pop_data->err_msg;
   len = mutt_from_base64 (decoded_err, pop_data->err_msg, sizeof(decoded_err) - 1);
   if (len >= 0)
@@ -370,14 +368,41 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, const char *method)
     decoded_err[len] = '\0';
     err = decoded_err;
   }
+  mutt_buffer_strcpy (authline, "AQ==\r\n");
+  pop_query_d (pop_data, authline->data, authline->dsize, NULL);
   mutt_error ("%s %s", _("Authentication failed."), err);
   mutt_sleep (2);
 
-  return POP_A_FAILURE;
+cleanup:
+  mutt_buffer_pool_release (&bearertoken);
+  mutt_buffer_pool_release (&authline);
+  return rc;
 }
 
+
+/* OAUTHBEARER/XOAUTH2 authenticator */
+static pop_auth_res_t pop_auth_oauthbearer (POP_DATA *pop_data, const char *method)
+{
+  if (!PopOauthRefreshCmd)
+    return POP_A_UNAVAIL;
+
+  return pop_auth_oauth (pop_data, 0);
+}
+
+/* OAUTHBEARER/XOAUTH2 authenticator */
+static pop_auth_res_t pop_auth_xoauth2 (POP_DATA *pop_data, const char *method)
+{
+  /* If they did not explicitly request XOAUTH2 then fail quietly */
+  if (!(method && PopOauthRefreshCmd))
+    return POP_A_UNAVAIL;
+
+  return pop_auth_oauth (pop_data, 1);
+}
+
+
 static const pop_auth_t pop_authenticators[] = {
-  { pop_auth_oauth, "oauthbearer" },
+  { pop_auth_oauthbearer, "oauthbearer" },
+  { pop_auth_xoauth2, "xoauth2" },
 #ifdef USE_SASL
   { pop_auth_sasl, NULL },
 #endif

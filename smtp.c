@@ -67,7 +67,7 @@ enum {
 };
 
 static int smtp_auth (CONNECTION* conn);
-static int smtp_auth_oauth (CONNECTION* conn);
+static int smtp_auth_oauth (CONNECTION* conn, int xoauth2);
 #ifdef USE_SASL
 static int smtp_auth_sasl (CONNECTION* conn, const char* mechanisms);
 #endif
@@ -524,9 +524,13 @@ static int smtp_auth (CONNECTION* conn)
 
       dprint (2, (debugfile, "smtp_authenticate: Trying method %s\n", method));
 
-      if (!strcmp (method, "oauthbearer"))
+      if (!ascii_strcasecmp (method, "oauthbearer"))
       {
-	r = smtp_auth_oauth (conn);
+	r = smtp_auth_oauth (conn, 0);
+      }
+      else if (!ascii_strcasecmp (method, "xoauth2"))
+      {
+	r = smtp_auth_oauth (conn, 1);
       }
       else
       {
@@ -684,33 +688,45 @@ fail:
 
 
 /* smtp_auth_oauth: AUTH=OAUTHBEARER support. See RFC 7628 */
-static int smtp_auth_oauth (CONNECTION* conn)
+static int smtp_auth_oauth (CONNECTION* conn, int xoauth2)
 {
-  char* ibuf = NULL;
-  char* oauthbearer = NULL;
-  int ilen;
-  int rc;
+  int rc = SMTP_AUTH_FAIL;
+  BUFFER *bearertoken = NULL, *authline = NULL;
+  const char *authtype;
 
-  mutt_message _("Authenticating (OAUTHBEARER)...");
+  authtype = xoauth2 ? "XOAUTH2" : "OAUTHBEARER";
+
+  /* L10N:
+     %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
+  */
+  mutt_message (_("Authenticating (%s)..."), authtype);;
+
+  bearertoken = mutt_buffer_pool_get ();
+  authline = mutt_buffer_pool_get ();
 
   /* We get the access token from the smtp_oauth_refresh_command */
-  oauthbearer = mutt_account_getoauthbearer (&conn->account);
-  if (oauthbearer == NULL)
-    return SMTP_AUTH_FAIL;
+  if (mutt_account_getoauthbearer (&conn->account, bearertoken, xoauth2))
+    goto cleanup;
 
-  ilen = strlen (oauthbearer) + 30;
-  ibuf = safe_malloc (ilen);
+  mutt_buffer_printf (authline, "AUTH %s %s\r\n", authtype, mutt_b2s (bearertoken));
 
-  snprintf (ibuf, ilen, "AUTH OAUTHBEARER %s\r\n", oauthbearer);
-
-  rc = mutt_socket_write (conn, ibuf);
-  FREE (&oauthbearer);
-  FREE (&ibuf);
-
-  if (rc == -1)
-    return SMTP_AUTH_FAIL;
+  if (mutt_socket_write (conn, mutt_b2s (authline)) == -1)
+    goto cleanup;
   if (smtp_get_resp (conn) != 0)
-    return SMTP_AUTH_FAIL;
+  {
+    /* The error response was in SASL continuation, so continue the SASL
+     * to cause a failure and exit SASL input.  See RFC 7628 3.2.3
+     * "AQ==" is Base64 encoded ^A (0x01) .
+     */
+    mutt_socket_write (conn, "AQ==\r\n");
+    smtp_get_resp (conn);
+    goto cleanup;
+  }
 
-  return SMTP_AUTH_SUCCESS;
+  rc = SMTP_AUTH_SUCCESS;
+
+cleanup:
+  mutt_buffer_pool_release (&bearertoken);
+  mutt_buffer_pool_release (&authline);
+  return rc;
 }
