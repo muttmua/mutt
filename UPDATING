@@ -9,6 +9,11 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.14.3 (2020-06-14):
+
+  ! Bug fix release.
+  ! $ssl_starttls also controls aborting an unencrypted IMAP PREAUTH connection.
+
 1.14.2 (2020-05-25):
 
   ! Bug fix release.
