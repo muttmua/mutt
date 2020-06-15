@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 23:21+0200\n"
-"PO-Revision-Date: 2020-06-08 23:23+0200\n"
+"POT-Creation-Date: 2020-06-15 11:07+0200\n"
+"PO-Revision-Date: 2020-06-15 12:26+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -57,18 +57,18 @@ msgstr "Mot de passe pour %s@%s : "
 #. $*_oauth_refresh_command defined. So the message does not mean "None of
 #. your $*_oauth_refresh_command's are defined."
 #.
-#: account.c:284
+#: account.c:285
 msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
 msgstr ""
 "mutt_account_getoauthbearer: Commande de rafraîchissement OAUTH non définie"
 
-#: account.c:290
+#: account.c:291
 msgid "mutt_account_getoauthbearer: Unable to run refresh command"
 msgstr ""
 "mutt_account_getoauthbearer: Impossible d'exécuter la commande de "
 "rafraîchissement"
 
-#: account.c:301
+#: account.c:302
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
@@ -92,7 +92,7 @@ msgstr "Sélectionner"
 
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4533
-#: curs_main.c:555 history.c:78 mutt_ssl.c:1313 mutt_ssl_gnutls.c:1039
+#: curs_main.c:555 history.c:78 mutt_ssl.c:1313 mutt_ssl_gnutls.c:1028
 #: pager.c:2003 pgpkey.c:523 postpone.c:45 query.c:54 recvattach.c:62
 #: smime.c:468
 msgid "Help"
@@ -2093,7 +2093,7 @@ msgstr "gpgme_op_keylist_next a échoué : %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4525 mutt_ssl.c:1311 mutt_ssl_gnutls.c:1037 pgpkey.c:516
+#: crypt-gpgme.c:4525 mutt_ssl.c:1311 mutt_ssl_gnutls.c:1026 pgpkey.c:516
 #: smime.c:463
 msgid "Exit  "
 msgstr "Quitter  "
@@ -3014,7 +3014,7 @@ msgstr "unhook : type hook inconnu : %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook : impossible de supprimer un %s à l'intérieur d'un %s."
 
-#: imap/auth.c:109 pop_auth.c:497 smtp.c:573
+#: imap/auth.c:110 pop_auth.c:522 smtp.c:577
 msgid "No authenticators available"
 msgstr "Pas d'authentificateurs disponibles"
 
@@ -3054,24 +3054,28 @@ msgstr "Connexion..."
 msgid "Login failed."
 msgstr "La connexion a échoué."
 
-#: imap/auth_oauth.c:48 pop_auth.c:334 smtp.c:694
-msgid "Authenticating (OAUTHBEARER)..."
-msgstr "Authentification (OAUTHBEARER)..."
-
-#: imap/auth_oauth.c:82
-msgid "OAUTHBEARER authentication failed."
-msgstr "L'authentification OAUTHBEARER a échoué."
-
-#: imap/auth_sasl.c:109 smtp.c:611
+#. L10N:
+#. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
+#.
+#: imap/auth_oauth.c:39 imap/auth_sasl.c:109 pop_auth.c:332 smtp.c:615
+#: smtp.c:702
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Authentification (%s)..."
+
+#. L10N:
+#. %s is the authentication type, for example OAUTHBEARER
+#.
+#: imap/auth_oauth.c:68
+#, c-format
+msgid "%s authentication failed."
+msgstr "L'authentification %s a échoué."
 
 #: imap/auth_sasl.c:236 pop_auth.c:185
 msgid "SASL authentication failed."
 msgstr "L'authentification SASL a échoué."
 
-#: imap/browse.c:60 imap/imap.c:773
+#: imap/browse.c:60 imap/imap.c:789
 #, c-format
 msgid "%s is an invalid IMAP path"
 msgstr "%s n'est pas un chemin IMAP valide"
@@ -3116,7 +3120,7 @@ msgid "Mailbox renamed."
 msgstr "Boîte aux lettres renommée."
 
 # , c-format
-#: imap/command.c:268 imap/command.c:349
+#: imap/command.c:269 imap/command.c:350
 #, c-format
 msgid "Connection to %s timed out"
 msgstr "Connexion à %s interrompue"
@@ -3127,11 +3131,11 @@ msgstr "Connexion à %s interrompue"
 #. will try to reconnect and merge current changes back during
 #. mx_check_mailbox()
 #.
-#: imap/command.c:491
+#: imap/command.c:492
 msgid "A fatal error occurred.  Will attempt reconnection."
 msgstr "Une erreur fatale s'est produite. Une reconnexion va être essayée."
 
-#: imap/command.c:503
+#: imap/command.c:504
 #, c-format
 msgid "Mailbox %s@%s closed"
 msgstr "Boîte aux lettres %s@%s fermée"
@@ -3158,15 +3162,19 @@ msgstr "Connexion sécurisée avec TLS ?"
 msgid "Could not negotiate TLS connection"
 msgstr "Impossible de négocier la connexion TLS"
 
-#: imap/imap.c:525 pop_lib.c:337
+#: imap/imap.c:525 imap/imap.c:542 pop_lib.c:337
 msgid "Encrypted connection unavailable"
 msgstr "Connexion chiffrée non disponible"
+
+#: imap/imap.c:540
+msgid "Abort unencrypted PREAUTH connection?"
+msgstr "Abandonner la connexion PREAUTH non chiffrée ?"
 
 #. L10N:
 #. Message displayed when IMAP connection is lost and Mutt
 #. tries to reconnect.
 #.
-#: imap/imap.c:580
+#: imap/imap.c:596
 msgid "Trying to reconnect..."
 msgstr "Tentative de reconnexion..."
 
@@ -3174,100 +3182,100 @@ msgstr "Tentative de reconnexion..."
 #. Message when Mutt tries to reconnect to an IMAP mailbox but is
 #. unable to.
 #.
-#: imap/imap.c:685
+#: imap/imap.c:701
 msgid "Reconnect failed.  Mailbox closed."
 msgstr "La reconnexion a échoué. Boîte aux lettres fermée."
 
 #. L10N:
 #. Message when Mutt reconnects to an IMAP mailbox after a fatal error.
 #.
-#: imap/imap.c:696
+#: imap/imap.c:712
 msgid "Reconnect succeeded."
 msgstr "La reconnexion a réussi."
 
 # , c-format
-#: imap/imap.c:806
+#: imap/imap.c:822
 #, c-format
 msgid "Selecting %s..."
 msgstr "Sélection de %s..."
 
-#: imap/imap.c:986
+#: imap/imap.c:1002
 msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1038 imap/imap.c:2551 imap/message.c:1426 muttlib.c:1961
+#: imap/imap.c:1054 imap/imap.c:2567 imap/message.c:1426 muttlib.c:1961
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
 
-#: imap/imap.c:1458
+#: imap/imap.c:1474
 msgid "Expunge failed"
 msgstr "Expunge a échoué"
 
 # , c-format
-#: imap/imap.c:1471
+#: imap/imap.c:1487
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Marquage de %d messages à effacer..."
 
 # , c-format
-#: imap/imap.c:1528
+#: imap/imap.c:1544
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Sauvegarde des messages changés... [%d/%d]"
 
-#: imap/imap.c:1610
+#: imap/imap.c:1626
 msgid "Error saving flags. Close anyway?"
 msgstr "Erreur en sauvant les indicateurs. Fermer tout de même ?"
 
-#: imap/imap.c:1618
+#: imap/imap.c:1634
 msgid "Error saving flags"
 msgstr "Erreur en sauvant les indicateurs"
 
-#: imap/imap.c:1642
+#: imap/imap.c:1658
 msgid "Expunging messages from server..."
 msgstr "Effacement des messages sur le serveur..."
 
-#: imap/imap.c:1648
+#: imap/imap.c:1664
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:2189
+#: imap/imap.c:2205
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:2260
+#: imap/imap.c:2276
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:2285
+#: imap/imap.c:2301
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:2287
+#: imap/imap.c:2303
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:2297
+#: imap/imap.c:2313
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:2299
+#: imap/imap.c:2315
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2536 imap/message.c:1390
+#: imap/imap.c:2552 imap/message.c:1390
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
@@ -4116,7 +4124,7 @@ msgstr "Impossible de créer le contexte SSL"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:604 mutt_ssl_gnutls.c:448
+#: mutt_ssl.c:604 mutt_ssl_gnutls.c:442
 msgid "Warning: unable to set TLS SNI host name"
 msgstr "Attention : impossible de fixer le nom d'hôte TLS SNI"
 
@@ -4144,13 +4152,13 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 # , c-format
-#: mutt_ssl.c:777 mutt_ssl_gnutls.c:636
+#: mutt_ssl.c:777 mutt_ssl_gnutls.c:625
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[impossible de calculer]"
 
 # , c-format
-#: mutt_ssl.c:795 mutt_ssl_gnutls.c:659
+#: mutt_ssl.c:795 mutt_ssl_gnutls.c:648
 msgid "[invalid date]"
 msgstr "[date invalide]"
 
@@ -4180,38 +4188,38 @@ msgstr "le propriétaire du certificat ne correspond pas au nom %s"
 msgid "Certificate host check failed: %s"
 msgstr "Échec de vérification de machine : %s"
 
-#: mutt_ssl.c:1226 mutt_ssl_gnutls.c:906
+#: mutt_ssl.c:1226 mutt_ssl_gnutls.c:895
 msgid "This certificate belongs to:"
 msgstr "Ce certificat appartient à :"
 
-#: mutt_ssl.c:1235 mutt_ssl_gnutls.c:948
+#: mutt_ssl.c:1235 mutt_ssl_gnutls.c:937
 msgid "This certificate was issued by:"
 msgstr "Ce certificat a été émis par :"
 
-#: mutt_ssl.c:1244 mutt_ssl_gnutls.c:961
+#: mutt_ssl.c:1244 mutt_ssl_gnutls.c:950
 msgid "This certificate is valid"
 msgstr "Ce certificat est valide"
 
-#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:964
+#: mutt_ssl.c:1245 mutt_ssl_gnutls.c:953
 #, c-format
 msgid "   from %s"
 msgstr "     de %s"
 
-#: mutt_ssl.c:1248 mutt_ssl_gnutls.c:969
+#: mutt_ssl.c:1248 mutt_ssl_gnutls.c:958
 #, c-format
 msgid "     to %s"
 msgstr "      à %s"
 
-#: mutt_ssl.c:1255 mutt_ssl_gnutls.c:976
+#: mutt_ssl.c:1255 mutt_ssl_gnutls.c:965
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Empreinte SHA1 : %s"
 
-#: mutt_ssl.c:1261 mutt_ssl.c:1264 mutt_ssl_gnutls.c:982 mutt_ssl_gnutls.c:985
+#: mutt_ssl.c:1261 mutt_ssl.c:1264 mutt_ssl_gnutls.c:971 mutt_ssl_gnutls.c:974
 msgid "SHA256 Fingerprint: "
 msgstr "Empreinte SHA256 : "
 
-#: mutt_ssl.c:1268 mutt_ssl_gnutls.c:1006
+#: mutt_ssl.c:1268 mutt_ssl_gnutls.c:995
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
@@ -4230,7 +4238,7 @@ msgstr "ruas"
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours, (s)auter"
 
-#: mutt_ssl.c:1300 mutt_ssl_gnutls.c:1015
+#: mutt_ssl.c:1300 mutt_ssl_gnutls.c:1004
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 
@@ -4238,15 +4246,15 @@ msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (s)auter"
 
-#: mutt_ssl.c:1307 mutt_ssl_gnutls.c:1026
+#: mutt_ssl.c:1307 mutt_ssl_gnutls.c:1015
 msgid "(r)eject, accept (o)nce"
 msgstr "(r)ejeter, accepter (u)ne fois"
 
-#: mutt_ssl.c:1345 mutt_ssl_gnutls.c:1089
+#: mutt_ssl.c:1345 mutt_ssl_gnutls.c:1078
 msgid "Warning: Couldn't save certificate"
 msgstr "Attention : le certificat n'a pas pu être sauvé"
 
-#: mutt_ssl.c:1350 mutt_ssl_gnutls.c:1094
+#: mutt_ssl.c:1350 mutt_ssl_gnutls.c:1083
 msgid "Certificate saved"
 msgstr "Certificat sauvé"
 
@@ -4254,51 +4262,51 @@ msgstr "Certificat sauvé"
 msgid "Error: no TLS socket open"
 msgstr "Erreur : pas de socket TLS ouverte"
 
-#: mutt_ssl_gnutls.c:332 mutt_ssl_gnutls.c:376
+#: mutt_ssl_gnutls.c:326 mutt_ssl_gnutls.c:370
 msgid "All available protocols for TLS/SSL connection disabled"
 msgstr ""
 "Tous les protocoles disponibles pour une connexion TLS/SSL sont désactivés"
 
-#: mutt_ssl_gnutls.c:382
+#: mutt_ssl_gnutls.c:376
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
 msgstr ""
 "Sélection de suite cryptographique explicite via $ssl_ciphers non supportée"
 
 # , c-format
-#: mutt_ssl_gnutls.c:500
+#: mutt_ssl_gnutls.c:489
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "Connexion SSL/TLS utilisant %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:730 mutt_ssl_gnutls.c:858
+#: mutt_ssl_gnutls.c:719 mutt_ssl_gnutls.c:847
 msgid "Error initialising gnutls certificate data"
 msgstr "Erreur d'initialisation des données du certificat gnutls"
 
-#: mutt_ssl_gnutls.c:737 mutt_ssl_gnutls.c:865
+#: mutt_ssl_gnutls.c:726 mutt_ssl_gnutls.c:854
 msgid "Error processing certificate data"
 msgstr "Erreur de traitement des données du certificat"
 
-#: mutt_ssl_gnutls.c:992
+#: mutt_ssl_gnutls.c:981
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "ATTENTION ! Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl_gnutls.c:994
+#: mutt_ssl_gnutls.c:983
 msgid "WARNING: Server certificate has expired"
 msgstr "ATTENTION ! Le certificat du serveur a expiré"
 
-#: mutt_ssl_gnutls.c:996
+#: mutt_ssl_gnutls.c:985
 msgid "WARNING: Server certificate has been revoked"
 msgstr "ATTENTION ! Le certificat du serveur a été révoqué"
 
-#: mutt_ssl_gnutls.c:998
+#: mutt_ssl_gnutls.c:987
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "ATTENTION ! Le nom du serveur ne correspond pas au certificat"
 
-#: mutt_ssl_gnutls.c:1000
+#: mutt_ssl_gnutls.c:989
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "ATTENTION ! Le signataire du certificat du serveur n'est pas un CA"
 
-#: mutt_ssl_gnutls.c:1003
+#: mutt_ssl_gnutls.c:992
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Attention : le certificat du serveur a été signé avec un algorithme peu sûr"
@@ -4309,7 +4317,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1022
+#: mutt_ssl_gnutls.c:1011
 msgid "roa"
 msgstr "rua"
 
@@ -4319,15 +4327,15 @@ msgstr "rua"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1033
+#: mutt_ssl_gnutls.c:1022
 msgid "ro"
 msgstr "ru"
 
-#: mutt_ssl_gnutls.c:1150 mutt_ssl_gnutls.c:1185
+#: mutt_ssl_gnutls.c:1139 mutt_ssl_gnutls.c:1174
 msgid "Unable to get certificate from peer"
 msgstr "Impossible d'obtenir le certificat de la machine distante"
 
-#: mutt_ssl_gnutls.c:1152
+#: mutt_ssl_gnutls.c:1141
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Erreur de vérification du certificat (%s)"
@@ -5757,21 +5765,21 @@ msgstr "URL SMTP invalide : %s"
 msgid "SMTP server does not support authentication"
 msgstr "Le serveur SMTP ne supporte pas l'authentification"
 
-#: smtp.c:536
+#: smtp.c:540
 #, c-format
 msgid "SMTP authentication method %s requires SASL"
 msgstr "La méthode d'authentification SMTP %s nécessite SASL"
 
-#: smtp.c:543
+#: smtp.c:547
 #, c-format
 msgid "%s authentication failed, trying next method"
 msgstr "L'authentification %s a échoué, essayons la méthode suivante"
 
-#: smtp.c:557
+#: smtp.c:561
 msgid "SMTP authentication requires SASL"
 msgstr "L'authentification SMTP nécessite SASL"
 
-#: smtp.c:568
+#: smtp.c:572
 msgid "SASL authentication failed"
 msgstr "L'authentification SASL a échoué"
 
@@ -7199,6 +7207,12 @@ msgstr "extraire les clés publiques supportées"
 #: ../keymap_alldefs.h:700
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
+
+#~ msgid "Authenticating (OAUTHBEARER)..."
+#~ msgstr "Authentification (OAUTHBEARER)..."
+
+#~ msgid "OAUTHBEARER authentication failed."
+#~ msgstr "L'authentification OAUTHBEARER a échoué."
 
 #~ msgid "Certificate is not X.509"
 #~ msgstr "Le certificat n'est pas de type X.509"
