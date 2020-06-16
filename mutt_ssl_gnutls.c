@@ -218,6 +218,18 @@ static int tls_socket_open (CONNECTION* conn)
 
 int mutt_ssl_starttls (CONNECTION* conn)
 {
+  if (mutt_socket_has_buffered_input (conn))
+  {
+    /* L10N:
+       The server is not supposed to send data immediately after
+       confirming STARTTLS.  This warns the user that something
+       weird is going on.
+    */
+    mutt_error _("Warning: clearing unexpected buffered data before STARTTLS");
+    mutt_sleep (0);
+    mutt_socket_clear_buffered_input (conn);
+  }
+
   if (tls_init() < 0)
     return -1;
 
