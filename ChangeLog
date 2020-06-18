@@ -1,3 +1,53 @@
+2020-06-18 14:09:03 -0700  Kevin McCarthy  <kevin@8t8.us> (e6ec35de)
+
+        * Update UPDATING file for 1.14.4.
+
+M	UPDATING
+
+2020-06-16 13:49:20 -0700  Kevin McCarthy  <kevin@8t8.us> (c547433c)
+
+        * Fix STARTTLS response injection attack.
+        
+        Thanks again to Damian Poddebniak and Fabian Ising from the Münster
+        University of Applied Sciences for reporting this issue.  Their
+        summary in ticket 248 states the issue clearly:
+        
+          We found another STARTTLS-related issue in Mutt. Unfortunately, it
+          affects SMTP, POP3 and IMAP.
+        
+          When the server responds with its "let's do TLS now message", e.g. A
+          OK begin TLS\r\n in IMAP or +OK begin TLS\r\n in POP3, Mutt will
+          also read any data after the \r\n and save it into some internal
+          buffer for later processing. This is problematic, because a MITM
+          attacker can inject arbitrary responses.
+        
+          There is a nice blogpost by Wietse Venema about a "command
+          injection" in postfix (http://www.postfix.org/CVE-2011-0411.html).
+          What we have here is the problem in reverse, i.e. not a command
+          injection, but a "response injection."
+        
+        This commit fixes the issue by clearing the CONNECTION input buffer in
+        mutt_ssl_starttls().
+        
+        To make backporting this fix easier, the new functions only clear the
+        top-level CONNECTION buffer; they don't handle nested buffering in
+        mutt_zstrm.c or mutt_sasl.c.  However both of those wrap the
+        connection *after* STARTTLS, so this is currently okay.  mutt_tunnel.c
+        occurs before connecting, but it does not perform any nesting.
+
+M	mutt_socket.c
+M	mutt_socket.h
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2020-06-14 14:17:45 -0700  Kevin McCarthy  <kevin@8t8.us> (34e3a1a3)
+
+        * automatic post-release commit for mutt-1.14.3
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
+
 2020-06-14 11:30:00 -0700  Kevin McCarthy  <kevin@8t8.us> (3e88866d)
 
         * Prevent possible IMAP MITM via PREAUTH response.

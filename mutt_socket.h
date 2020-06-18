@@ -53,6 +53,8 @@ typedef struct _connection
 
 int mutt_socket_open (CONNECTION* conn);
 int mutt_socket_close (CONNECTION* conn);
+int mutt_socket_has_buffered_input (CONNECTION *conn);
+void mutt_socket_clear_buffered_input (CONNECTION *conn);
 int mutt_socket_poll (CONNECTION* conn, time_t wait_secs);
 int mutt_socket_readchar (CONNECTION *conn, char *c);
 #define mutt_socket_readln(A,B,C) mutt_socket_readln_d(A,B,C,MUTT_SOCK_LOG_CMD)

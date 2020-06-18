@@ -129,6 +129,36 @@ int mutt_socket_write_d (CONNECTION *conn, const char *buf, int len, int dbg)
   return sent;
 }
 
+/* Checks if the CONNECTION input buffer has unread data.
+ *
+ * NOTE: for general use, the function needs to expand to poll nested
+ * connections.  It currently does not to make backporting a security
+ * fix easier.
+ *
+ * STARTTLS occurs before SASL and COMPRESS=DEFLATE processing, and
+ * mutt_tunnel() does not wrap the connection.  So this and the next
+ * function are safe for current usage in mutt_ssl_starttls().
+ */
+int mutt_socket_has_buffered_input (CONNECTION *conn)
+{
+  return conn->bufpos < conn->available;
+}
+
+/* Clears buffered input from a connection.
+ *
+ * NOTE: for general use, the function needs to expand to call nested
+ * connections.  It currently does not to make backporting a security
+ * fix easier.
+ *
+ * STARTTLS occurs before SASL and COMPRESS=DEFLATE processing, and
+ * mutt_tunnel() does not wrap the connection.  So this and the previous
+ * function are safe for current usage in mutt_ssl_starttls().
+ */
+void mutt_socket_clear_buffered_input (CONNECTION *conn)
+{
+  conn->bufpos = conn->available = 0;
+}
+
 /* poll whether reads would block.
  *   Returns: >0 if there is data to read,
  *            0 if a read would block,
