@@ -3977,6 +3977,11 @@ struct option_t MuttVars[] = {
   ** If \fIset\fP (the default), mutt will attempt to use \fCSTARTTLS\fP on servers
   ** advertising the capability. When \fIunset\fP, mutt will not attempt to
   ** use \fCSTARTTLS\fP regardless of the server's capabilities.
+  ** .pp
+  ** \fBNote\fP that \fCSTARTTLS\fP is subject to many kinds of
+  ** attacks, including the ability of a machine-in-the-middle to
+  ** suppress the advertising of support.  Setting $$ssl_force_tls is
+  ** recommended if you rely on \fCSTARTTLS\fP.
   */
 # ifdef USE_SSL_OPENSSL
   { "ssl_use_sslv2", DT_BOOL, R_NONE, {.l=OPTSSLV2}, {.l=0} },
