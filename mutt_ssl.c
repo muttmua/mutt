@@ -196,7 +196,7 @@ int mutt_ssl_starttls (CONNECTION* conn)
        confirming STARTTLS.  This warns the user that something
        weird is going on.
     */
-    mutt_error _("Warning: clearing unexpected buffered data before STARTTLS");
+    mutt_error _("Warning: clearing unexpected server data before TLS negotiation");
     mutt_sleep (0);
     mutt_socket_clear_buffered_input (conn);
   }
