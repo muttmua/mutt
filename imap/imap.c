@@ -532,8 +532,8 @@ int imap_open_connection (IMAP_DATA* idata)
   {
 #if defined(USE_SSL)
     /* An unencrypted PREAUTH response is most likely a MITM attack.
-     * Require a confirmation. */
-    if (!idata->conn->ssf)
+     * Require a confirmation unless using $tunnel. */
+    if (!idata->conn->ssf && !Tunnel)
     {
       if (option(OPTSSLFORCETLS) ||
           (query_quadoption (OPT_SSLSTARTTLS,
