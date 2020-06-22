@@ -531,31 +531,17 @@ int imap_open_connection (IMAP_DATA* idata)
   else if (ascii_strncasecmp ("* PREAUTH", idata->buf, 9) == 0)
   {
 #if defined(USE_SSL)
-    /* An unencrypted PREAUTH response is most likely a MITM attack.
-     * Require a confirmation unless using $tunnel. */
-    if (!idata->conn->ssf && !Tunnel)
+    /* Unless using a secure $tunnel, an unencrypted PREAUTH response
+     * may be a MITM attack.  The only way to stop "STARTTLS" MITM
+     * attacks is via $ssl_force_tls: an attacker can easily spoof
+     * "* OK" and strip the STARTTLS capability.  So consult
+     * $ssl_force_tls, not $ssl_starttls, to decide whether to
+     * abort. */
+    if (!idata->conn->ssf && !Tunnel && option(OPTSSLFORCETLS))
     {
-      if (option(OPTSSLFORCETLS) ||
-          (query_quadoption (OPT_SSLSTARTTLS,
-    /* L10N:
-       Gitlab ticket #246 identified a machine-in-the-middle attack
-       by sending a "PREAUTH" response instead of "OK".  STARTTLS
-       is not allowed once you are authenticated, so this would be
-       a clever way to prevent encryption, and talk to the MITM instead.
-
-       This prompt is based on the quadoption $ssl_starttls.  The
-       default is "yes" which will automatically abort unencrypted
-       PREAUTH.  But if the user changes to ask-yes or ask-no, this
-       prompt will occur instead to warn them that the connection is
-       an unusual "PREAUTH" and is unencrypted.  The warning is terse,
-       so translator feedback and suggestions most welcome.
-    */
-                             _("Abort unencrypted PREAUTH connection?")) != MUTT_NO))
-      {
-        mutt_error _("Encrypted connection unavailable");
-        mutt_sleep (1);
-        goto err_close_conn;
-      }
+      mutt_error _("Encrypted connection unavailable");
+      mutt_sleep (1);
+      goto err_close_conn;
     }
 #endif
 
