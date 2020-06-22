@@ -531,18 +531,17 @@ int imap_open_connection (IMAP_DATA* idata)
   else if (ascii_strncasecmp ("* PREAUTH", idata->buf, 9) == 0)
   {
 #if defined(USE_SSL)
-    /* An unencrypted PREAUTH response is most likely a MITM attack.
-     * Require a confirmation unless using $tunnel. */
-    if (!idata->conn->ssf && !Tunnel)
+    /* Unless using a secure $tunnel, an unencrypted PREAUTH response
+     * may be a MITM attack.  The only way to stop "STARTTLS" MITM
+     * attacks is via $ssl_force_tls: an attacker can easily spoof
+     * "* OK" and strip the STARTTLS capability.  So consult
+     * $ssl_force_tls, not $ssl_starttls, to decide whether to
+     * abort. */
+    if (!idata->conn->ssf && !Tunnel && option(OPTSSLFORCETLS))
     {
-      if (option(OPTSSLFORCETLS) ||
-          (query_quadoption (OPT_SSLSTARTTLS,
-                             _("Abort unencrypted PREAUTH connection?")) != MUTT_NO))
-      {
-        mutt_error _("Encrypted connection unavailable");
-        mutt_sleep (1);
-        goto err_close_conn;
-      }
+      mutt_error _("Encrypted connection unavailable");
+      mutt_sleep (1);
+      goto err_close_conn;
     }
 #endif
 
