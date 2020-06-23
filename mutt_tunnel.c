@@ -56,7 +56,7 @@ int mutt_tunnel_socket_setup (CONNECTION *conn)
   conn->conn_write = tunnel_socket_write;
   conn->conn_poll = tunnel_socket_poll;
 
-  /* Note we are use ssf as a boolean in this case.  See the notes
+  /* Note we are using ssf as a boolean in this case.  See the notes
    * in mutt_socket.h */
   if (option (OPTTUNNELISSECURE))
     conn->ssf = 1;
