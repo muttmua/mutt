@@ -31,7 +31,17 @@
 typedef struct _connection
 {
   ACCOUNT account;
-  /* security strength factor, in bits */
+  /* security strength factor, in bits (in theory).
+   *
+   * In actuality, Mutt uses this as a boolean to determine if the connection
+   * is "secure" using TLS or $tunnel if $tunnel_is_secure is set.
+   *
+   * The value is passed to SASL, but since no min_ssf is also passed to SASL
+   * I don't believe it makes any difference.
+   *
+   * The GnuTLS code currently even puts bytes in here, so I doubt the exact
+   * value has significance for Mutt purposes.
+   */
   unsigned int ssf;
   void *data;
 

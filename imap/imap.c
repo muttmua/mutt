@@ -536,8 +536,9 @@ int imap_open_connection (IMAP_DATA* idata)
      * attacks is via $ssl_force_tls: an attacker can easily spoof
      * "* OK" and strip the STARTTLS capability.  So consult
      * $ssl_force_tls, not $ssl_starttls, to decide whether to
-     * abort. */
-    if (!idata->conn->ssf && !Tunnel && option(OPTSSLFORCETLS))
+     * abort. Note that if using $tunnel and $tunnel_is_secure,
+     * conn->ssf will be set to 1. */
+    if (!idata->conn->ssf && option(OPTSSLFORCETLS))
     {
       mutt_error _("Encrypted connection unavailable");
       mutt_sleep (1);
