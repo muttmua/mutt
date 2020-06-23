@@ -1,3 +1,53 @@
+2020-06-23 10:24:23 -0700  Kevin McCarthy  <kevin@8t8.us> (09cf1bca)
+
+        * Update UPDATING file for 1.14.5 release.
+        
+        Amend notes for the 1.14.3 release, which also added $ssl_force_tls
+        checking for an unencrypted IMAP PREAUTH connection.
+
+M	UPDATING
+
+2020-06-22 12:33:09 -0700  Kevin McCarthy  <kevin@8t8.us> (e37516c3)
+
+        * Remove $ssl_starttls check for IMAP PREAUTH.
+        
+        Checking $ssl_starttls provides no real protection, because an
+        attacker can just as easily spoof "* OK" and strip the STARTTLS
+        capability as it can spoof "* PREAUTH".  The only way to really
+        protect again the MITM is through $ssl_force_tls.
+        
+        Add documentation about STARTTLS, $tunnel, and the current PREAUTH
+        exception when using $tunnel.
+        
+        The behavior of Mutt about $tunnel is somewhat inconsistent: is it
+        considered secure or not?  For PREAUTH, to avoid breaking
+        configurations, we assume it is secure.  But at the same time, Mutt is
+        still negotiating STARTTLS for other $tunnel connections.
+        
+        This will be resolved in master for the next release; probably by
+        adding a $tunnel_is_secure config variable defaulting "yes" and
+        removing the STARTTLS negotiation in that case.
+
+M	doc/manual.xml.head
+M	imap/imap.c
+
+2020-06-20 06:35:35 -0700  Kevin McCarthy  <kevin@8t8.us> (dc909119)
+
+        * Don't check IMAP PREAUTH encryption if $tunnel is in use.
+        
+        $tunnel is used to create an external encrypted connection.  The
+        default of $ssl_starttls is yes, meaning those kinds of connections
+        will be broken by the CVE-2020-14093 fix.
+
+M	imap/imap.c
+
+2020-06-18 14:13:12 -0700  Kevin McCarthy  <kevin@8t8.us> (c94d2b00)
+
+        * automatic post-release commit for mutt-1.14.4
+
+M	ChangeLog
+M	VERSION
+
 2020-06-18 14:09:03 -0700  Kevin McCarthy  <kevin@8t8.us> (e6ec35de)
 
         * Update UPDATING file for 1.14.4.
