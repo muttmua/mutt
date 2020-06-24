@@ -8777,7 +8777,7 @@ communication</quote>.
     force <literal>STARTTLS</literal> negotiation.  Note that doing so
     will prevent connection to an IMAP server configured for
     preauthentication (<literal>PREAUTH</literal>).  If you use this
-    configuration it is recommended to use a secure tunnel.
+    configuration, it is recommended to use a secure tunnel.
   </para>
 </sect2>
 
