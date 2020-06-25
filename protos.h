@@ -294,6 +294,7 @@ int mutt_alias_complete (char *, size_t);
 void mutt_alias_add_reverse (ALIAS *t);
 void mutt_alias_delete_reverse (ALIAS *t);
 int mutt_alloc_color (int fg, int bg);
+int mutt_ask_pattern (char *, size_t);
 int mutt_any_key_to_continue (const char *);
 char *mutt_apply_replace (char *, size_t, char *, REPLACE_LIST *);
 int mutt_builtin_editor (SEND_CONTEXT *);

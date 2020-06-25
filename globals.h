@@ -112,6 +112,7 @@ WHERE char *Muttrc;
 WHERE char *Outbox;
 WHERE char *Pager;
 WHERE char *PagerFmt;
+WHERE char *PatternFormat;
 WHERE char *PipeSep;
 #ifdef USE_POP
 WHERE char *PopAuthenticators;

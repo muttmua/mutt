@@ -2224,6 +2224,18 @@ struct option_t MuttVars[] = {
   ** when you are at the end of a message and invoke the \fC<next-page>\fP
   ** function.
   */
+  { "pattern_format", DT_STR, R_NONE, {.p=&PatternFormat}, {.p="%2n %-15e  %d"} },
+  /*
+  ** .pp
+  ** This variable describes the format of the ``pattern completion'' menu. The
+  ** following \fCprintf(3)\fP-style sequences are understood:
+  ** .dl
+  ** .dt %d  .dd pattern description
+  ** .dt %e  .dd pattern expression
+  ** .dt %n  .dd index number
+  ** .de
+  ** .pp
+  */
   { "pgp_auto_decode", DT_BOOL, R_NONE, {.l=OPTPGPAUTODEC}, {.l=0} },
   /*
   ** .pp

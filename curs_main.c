@@ -1109,7 +1109,7 @@ int mutt_index_menu (void)
 	if ((menu->current = mutt_search_command (menu->current, op)) == -1)
 	  menu->current = menu->oldcurrent;
 	else
-	  menu->redraw = REDRAW_MOTION;
+	  menu->redraw |= REDRAW_MOTION;
 	break;
 
       case OP_SORT:

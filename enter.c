@@ -638,7 +638,15 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  }
           else if (flags & MUTT_PATTERN && ch == OP_EDITOR_COMPLETE)
           {
-            for (i = state->curpos; i && state->wbuf[i-1] != '~'; i--)
+            i = state->curpos;
+            if (i && state->wbuf[i - 1] == '~')
+            {
+              if (mutt_ask_pattern (buf, buflen))
+                replace_part (state, i - 1, buf);
+              rv = 1;
+              goto bye;
+            }
+            for (; i && state->wbuf[i - 1] != '~'; i--)
               ;
             if (i && i < state->curpos && state->wbuf[i-1] == '~' && state->wbuf[i] == 'y')
             {
