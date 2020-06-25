@@ -71,7 +71,7 @@ typedef struct myvar
 
 static myvar_t* MyVars;
 
-static int var_to_string (int idx, char* val, size_t len);
+static int var_to_string (int idx, BUFFER *val);
 
 static void myvar_set (const char* var, const char* val);
 static const char* myvar_get (const char* var);
@@ -308,10 +308,11 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
         else if ((idx = mutt_option_index (var)) != -1)
         {
           /* expand settable mutt variables */
-          char val[LONG_STRING];
+          BUFFER *val = mutt_buffer_pool_get ();
 
-          if (var_to_string (idx, val, sizeof (val)))
-            mutt_buffer_addstr (dest, val);
+          if (var_to_string (idx, val))
+            mutt_buffer_addstr (dest, mutt_b2s (val));
+          mutt_buffer_pool_release (&val);
         }
         FREE (&var);
       }
@@ -319,7 +320,6 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
     else
       mutt_buffer_addch (dest, ch);
   }
-  mutt_buffer_addch (dest, 0); /* terminate the string */
   SKIPWS (tok->dptr);
   return 0;
 }
@@ -3156,7 +3156,7 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
 int mutt_var_value_complete (char *buffer, size_t len, int pos)
 {
   char var[STRING], *pt = buffer;
-  int spaces;
+  int spaces, rv = 0;
 
   if (buffer[0] == 0)
     return 0;
@@ -3174,7 +3174,6 @@ int mutt_var_value_complete (char *buffer, size_t len, int pos)
   if (mutt_strncmp (buffer, "set", 3) == 0)
   {
     int idx;
-    char val[LONG_STRING];
     const char *myvarval;
 
     strfcpy (var, pt, sizeof (var));
@@ -3185,54 +3184,65 @@ int mutt_var_value_complete (char *buffer, size_t len, int pos)
       if ((myvarval = myvar_get(var)) != NULL)
       {
 	pretty_var (pt, len - (pt - buffer), var, myvarval);
-	return 1;
+	rv = 1;
       }
-      return 0; /* no such variable. */
     }
-    else if (var_to_string (idx, val, sizeof (val)))
+    else
     {
-      snprintf (pt, len - (pt - buffer), "%s=\"%s\"", var, val);
-      return 1;
+      BUFFER *val = mutt_buffer_pool_get ();
+
+      if (var_to_string (idx, val))
+      {
+        pretty_var (pt, len - (pt - buffer), var, mutt_b2s (val));
+        rv = 1;
+      }
+      mutt_buffer_pool_release (&val);
     }
   }
-  return 0;
+  return rv;
 }
 
-static int var_to_string (int idx, char* val, size_t len)
+static int var_to_string (int idx, BUFFER *val)
 {
-  char tmp[LONG_STRING];
-  BUFFER *path_buf = NULL;
   static const char * const vals[] = { "no", "yes", "ask-no", "ask-yes" };
 
-  tmp[0] = '\0';
+  mutt_buffer_clear (val);
+  mutt_buffer_increase_size (val, LONG_STRING);
 
   if ((DTYPE(MuttVars[idx].type) == DT_STR) ||
       (DTYPE(MuttVars[idx].type) == DT_RX))
   {
-    strfcpy (tmp, NONULL (*((char **) MuttVars[idx].data.p)), sizeof (tmp));
+    mutt_buffer_strcpy (val, NONULL (*((char **) MuttVars[idx].data.p)));
   }
   else if (DTYPE (MuttVars[idx].type) == DT_PATH)
   {
-    path_buf = mutt_buffer_pool_get ();
-    mutt_buffer_strcpy (path_buf, NONULL (*((char **) MuttVars[idx].data.p)));
+    mutt_buffer_strcpy (val, NONULL (*((char **) MuttVars[idx].data.p)));
     if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
-      mutt_buffer_pretty_multi_mailbox (path_buf, FccDelimiter);
+      mutt_buffer_pretty_multi_mailbox (val, FccDelimiter);
     else
-      mutt_buffer_pretty_mailbox (path_buf);
-    strfcpy (tmp, mutt_b2s (path_buf), sizeof (tmp));
-    mutt_buffer_pool_release (&path_buf);
+      mutt_buffer_pretty_mailbox (val);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
   {
     mbchar_table *mbt = (*((mbchar_table **) MuttVars[idx].data.p));
-    strfcpy (tmp, mbt ? NONULL (mbt->orig_str) : "", sizeof (tmp));
+    if (mbt)
+      mutt_buffer_strcpy (val, NONULL (mbt->orig_str));
   }
   else if (DTYPE (MuttVars[idx].type) == DT_ADDR)
   {
-    rfc822_write_address (tmp, sizeof (tmp), *((ADDRESS **) MuttVars[idx].data.p), 0);
+    rfc822_write_address (val->data, val->dsize, *((ADDRESS **) MuttVars[idx].data.p), 0);
+    mutt_buffer_fix_dptr (val);
+    /* XXX: this is a hack until we have buffer address writing */
+    if (mutt_buffer_len (val) + 1 == val->dsize)
+    {
+      mutt_buffer_clear (val);
+      mutt_buffer_increase_size (val, HUGE_STRING);
+      rfc822_write_address (val->data, val->dsize, *((ADDRESS **) MuttVars[idx].data.p), 0);
+      mutt_buffer_fix_dptr (val);
+    }
   }
   else if (DTYPE (MuttVars[idx].type) == DT_QUAD)
-    strfcpy (tmp, vals[quadoption (MuttVars[idx].data.l)], sizeof (tmp));
+    mutt_buffer_strcpy (val, vals[quadoption (MuttVars[idx].data.l)]);
   else if (DTYPE (MuttVars[idx].type) == DT_NUM)
   {
     short sval = *((short *) MuttVars[idx].data.p);
@@ -3241,13 +3251,13 @@ static int var_to_string (int idx, char* val, size_t len)
     if (mutt_strcmp (MuttVars[idx].option, "wrapmargin") == 0)
       sval = sval > 0 ? 0 : -sval;
 
-    snprintf (tmp, sizeof (tmp), "%d", sval);
+    mutt_buffer_printf (val, "%d", sval);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_LNUM)
   {
     long sval = *((long *) MuttVars[idx].data.p);
 
-    snprintf (tmp, sizeof (tmp), "%ld", sval);
+    mutt_buffer_printf (val, "%ld", sval);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_SORT)
   {
@@ -3273,7 +3283,7 @@ static int var_to_string (int idx, char* val, size_t len)
         break;
     }
     p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data.p) & SORT_MASK, map);
-    snprintf (tmp, sizeof (tmp), "%s%s%s",
+    mutt_buffer_printf (val, "%s%s%s",
               (*((short *) MuttVars[idx].data.p) & SORT_REVERSE) ? "reverse-" : "",
               (*((short *) MuttVars[idx].data.p) & SORT_LAST) ? "last-" : "",
               p);
@@ -3299,14 +3309,12 @@ static int var_to_string (int idx, char* val, size_t len)
       default:
         p = "unknown";
     }
-    strfcpy (tmp, p, sizeof (tmp));
+    mutt_buffer_strcpy (val, p);
   }
   else if (DTYPE (MuttVars[idx].type) == DT_BOOL)
-    strfcpy (tmp, option (MuttVars[idx].data.l) ? "yes" : "no", sizeof (tmp));
+    mutt_buffer_strcpy (val, option (MuttVars[idx].data.l) ? "yes" : "no");
   else
     return 0;
-
-  escape_string (val, len - 1, tmp);
 
   return 1;
 }
