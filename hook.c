@@ -52,7 +52,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
 {
   HOOK *ptr;
   BUFFER *command, *pattern;
-  int rc = -1, not = 0;
+  int rc = -1, not = 0, token_flags = 0;
   regex_t *rx = NULL;
   pattern_t *pat = NULL;
   long data = udata.l;
@@ -75,7 +75,13 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     goto cleanup;
   }
 
-  mutt_extract_token (command, s, (data & (MUTT_FOLDERHOOK | MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_ACCOUNTHOOK | MUTT_REPLYHOOK)) ?  MUTT_TOKEN_SPACE : 0);
+  /* These hook types have a command parameter which is run through
+   * mutt_parse_rc_line() a second time upon hook execution. */
+  if (data & (MUTT_FOLDERHOOK | MUTT_SENDHOOK | MUTT_SEND2HOOK |
+              MUTT_ACCOUNTHOOK | MUTT_REPLYHOOK | MUTT_MESSAGEHOOK))
+    token_flags = MUTT_TOKEN_SPACE | MUTT_TOKEN_ESC_VARS;
+
+  mutt_extract_token (command, s, token_flags);
 
   if (!mutt_buffer_len (command))
   {

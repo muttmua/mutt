@@ -72,6 +72,7 @@ typedef struct myvar
 static myvar_t* MyVars;
 
 static int var_to_string (int idx, BUFFER *val);
+static void escape_string_to_buffer (BUFFER *dst, const char *src);
 
 static void myvar_set (const char* var, const char* val);
 static const char* myvar_get (const char* var);
@@ -311,7 +312,18 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
           BUFFER *val = mutt_buffer_pool_get ();
 
           if (var_to_string (idx, val))
-            mutt_buffer_addstr (dest, mutt_b2s (val));
+          {
+            if (flags & MUTT_TOKEN_ESC_VARS)
+            {
+              BUFFER *escval = mutt_buffer_pool_get ();
+
+              escape_string_to_buffer (escval, mutt_b2s (val));
+              mutt_buffer_addstr (dest, mutt_b2s (escval));
+              mutt_buffer_pool_release (&escval);
+            }
+            else
+              mutt_buffer_addstr (dest, mutt_b2s (val));
+          }
           mutt_buffer_pool_release (&val);
         }
         FREE (&var);
@@ -1886,6 +1898,36 @@ static void mutt_restore_default (struct option_t *p)
 #endif
   if (p->flags & R_MENU)
     mutt_set_current_menu_redraw_full ();
+}
+
+static void escape_string_to_buffer (BUFFER *dst, const char *src)
+{
+  mutt_buffer_clear (dst);
+
+  if (!src || !*src)
+    return;
+
+  for (; *src; src++)
+  {
+    switch (*src)
+    {
+      case '\n':
+        mutt_buffer_addstr (dst, "\\n");
+        break;
+      case '\r':
+        mutt_buffer_addstr (dst, "\\r");
+        break;
+      case '\t':
+        mutt_buffer_addstr (dst, "\\t");
+        break;
+      case '\\':
+      case '"':
+        mutt_buffer_addch (dst, '\\');
+        /* fall through */
+      default:
+        mutt_buffer_addch (dst, *src);
+    }
+  }
 }
 
 static size_t escape_string (char *dst, size_t len, const char* src)
