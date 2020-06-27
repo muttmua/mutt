@@ -567,6 +567,8 @@ static int include_reply (CONTEXT *ctx, HEADER *cur, FILE *out)
 static int default_to (ADDRESS **to, ENVELOPE *env, int flags, int hmfupto)
 {
   char prompt[STRING];
+  ADDRESS *default_addr = NULL;
+  int default_prune = 0;
 
   if (flags && env->mail_followup_to && hmfupto == MUTT_YES)
   {
@@ -582,64 +584,76 @@ static int default_to (ADDRESS **to, ENVELOPE *env, int flags, int hmfupto)
 
   if (!option(OPTREPLYSELF) && mutt_addr_is_user (env->from))
   {
-    /* mail is from the user, assume replying to recipients */
-    rfc822_append (to, env->to, 1);
-  }
-  else if (env->reply_to)
-  {
-    if ((mutt_addrcmp (env->from, env->reply_to) && !env->reply_to->next &&
-         !env->reply_to->personal) ||
-	(option (OPTIGNORELISTREPLYTO) &&
-         mutt_is_mail_list (env->reply_to) &&
-         (mutt_addrsrc (env->reply_to, env->to) ||
-          mutt_addrsrc (env->reply_to, env->cc))))
-    {
-      /* If the Reply-To: address is a mailing list, assume that it was
-       * put there by the mailing list, and use the From: address
-       *
-       * We also take the from header if our correspondent has a reply-to
-       * header which is identical to the electronic mail address given
-       * in his From header, and the reply-to has no display-name.
-       *
-       */
-      rfc822_append (to, env->from, 0);
-    }
-    else if (!(mutt_addrcmp (env->from, env->reply_to) &&
-	       !env->reply_to->next) &&
-	     quadoption (OPT_REPLYTO) != MUTT_YES)
-    {
-      /* There are quite a few mailing lists which set the Reply-To:
-       * header field to the list address, which makes it quite impossible
-       * to send a message to only the sender of the message.  This
-       * provides a way to do that.
-       */
-      /* L10N:
-         Asks whether the user respects the reply-to header.
-         If she says no, mutt will reply to the from header's address instead. */
-      snprintf (prompt, sizeof (prompt), _("Reply to %s%s?"),
-		env->reply_to->mailbox,
-		env->reply_to->next?",...":"");
-      switch (query_quadoption (OPT_REPLYTO, prompt))
-      {
-        case MUTT_YES:
-          rfc822_append (to, env->reply_to, 0);
-          break;
-
-        case MUTT_NO:
-          rfc822_append (to, env->from, 0);
-          break;
-
-        default:
-          return (-1); /* abort */
-      }
-    }
-    else
-      rfc822_append (to, env->reply_to, 0);
+    default_addr = env->to;
+    default_prune = 1;
   }
   else
-    rfc822_append (to, env->from, 0);
+    default_addr = env->from;
 
-  return (0);
+  if (env->reply_to)
+  {
+    /* If the Reply-To: address is a mailing list, assume that it was
+     * put there by the mailing list.
+     */
+    if (option (OPTIGNORELISTREPLYTO) &&
+        mutt_is_mail_list (env->reply_to) &&
+        (mutt_addrsrc (env->reply_to, env->to) ||
+         mutt_addrsrc (env->reply_to, env->cc)))
+    {
+      rfc822_append (to, default_addr, default_prune);
+      return 0;
+    }
+
+    /* Use the From header if our correspondent has a reply-to
+     * header which is identical.
+     *
+     * Trac ticket 3909 mentioned a case where the reply-to display
+     * name field had significance, so this is done more selectively
+     * now.
+     */
+    if (default_addr == env->from &&
+        mutt_addrcmp (env->from, env->reply_to) &&
+        !env->from->next &&
+        !env->reply_to->next &&
+        (!env->reply_to->personal ||
+         !mutt_strcasecmp (env->reply_to->personal, env->from->personal)))
+    {
+      rfc822_append (to, env->from, 0);
+      return 0;
+    }
+
+    /* Aside from the above two exceptions, prompt via $reply_to quadoption.
+     *
+     * There are quite a few mailing lists which set the Reply-To:
+     * header field to the list address, which makes it quite impossible
+     * to send a message to only the sender of the message.  This
+     * provides a way to do that.
+     */
+
+    /* L10N:
+       Asks whether the user wishes respects the reply-to header when replying.
+    */
+    snprintf (prompt, sizeof (prompt), _("Reply to %s%s?"),
+              env->reply_to->mailbox,
+              env->reply_to->next?",...":"");
+    switch (query_quadoption (OPT_REPLYTO, prompt))
+    {
+      case MUTT_YES:
+        rfc822_append (to, env->reply_to, 0);
+        break;
+
+      case MUTT_NO:
+        rfc822_append (to, default_addr, default_prune);
+        break;
+
+      default:
+        return -1; /* abort */
+    }
+    return 0;
+  }
+
+  rfc822_append (to, default_addr, default_prune);
+  return 0;
 }
 
 int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags)
