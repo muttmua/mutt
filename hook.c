@@ -75,11 +75,16 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     goto cleanup;
   }
 
-  /* These hook types have a command parameter which is run through
-   * mutt_parse_rc_line() a second time upon hook execution. */
+  /* These hook types have a "command" parameter.
+   * It's useful be able include spaces without having to quote it.
+   *
+   * Note: MUTT_TOKEN_ESC_VARS was briefly added to the flag for
+   * backwards compatibilty, but after research and discussion
+   * was removed.
+   */
   if (data & (MUTT_FOLDERHOOK | MUTT_SENDHOOK | MUTT_SEND2HOOK |
               MUTT_ACCOUNTHOOK | MUTT_REPLYHOOK | MUTT_MESSAGEHOOK))
-    token_flags = MUTT_TOKEN_SPACE | MUTT_TOKEN_ESC_VARS;
+    token_flags = MUTT_TOKEN_SPACE;
 
   mutt_extract_token (command, s, token_flags);
 

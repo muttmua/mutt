@@ -313,6 +313,9 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
 
           if (var_to_string (idx, val))
           {
+            /* This flag is not used.  I'm keeping the code for the next
+             * release cycle in case it needs to be reenabled for hooks.
+             */
             if (flags & MUTT_TOKEN_ESC_VARS)
             {
               BUFFER *escval = mutt_buffer_pool_get ();
