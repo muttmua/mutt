@@ -612,6 +612,12 @@ struct option_t MuttVars[] = {
   ** will be saved for later references.  Also see $$record,
   ** $$save_name, $$force_name and ``$fcc-hook''.
   */
+  { "copy_decode_weed",	DT_BOOL, R_NONE, {.l=OPTCOPYDECODEWEED}, {.l=0} },
+  /*
+  ** .pp
+  ** Controls whether Mutt will weed headers when invoking the
+  ** \fC<decode-copy>\fP or \fC<decode-save>\fP functions.
+  */
   { "count_alternatives", DT_BOOL, R_NONE, {.l=OPTCOUNTALTERNATIVES}, {.l=0} },
   /*
   ** .pp
@@ -2652,10 +2658,18 @@ struct option_t MuttVars[] = {
   { "pipe_decode",	DT_BOOL, R_NONE, {.l=OPTPIPEDECODE}, {.l=0} },
   /*
   ** .pp
-  ** Used in connection with the \fC<pipe-message>\fP command.  When \fIunset\fP,
+  ** Used in connection with the \fC<pipe-message>\fP function.  When \fIunset\fP,
   ** Mutt will pipe the messages without any preprocessing. When \fIset\fP, Mutt
-  ** will weed headers and will attempt to decode the messages
-  ** first.
+  ** will attempt to decode the messages first.
+  ** .pp
+  ** Also see $$pipe_decode_weed, which controls whether headers will
+  ** be weeded when this is \fIset\fP.
+  */
+  { "pipe_decode_weed",	DT_BOOL, R_NONE, {.l=OPTPIPEDECODEWEED}, {.l=1} },
+  /*
+  ** .pp
+  ** For \fC<pipe-message>\fP, when $$pipe_decode is set, this further
+  ** controls whether Mutt will weed headers.
   */
   { "pipe_sep",		DT_STR,	 R_NONE, {.p=&PipeSep}, {.p="\n"} },
   /*
@@ -2843,18 +2857,27 @@ struct option_t MuttVars[] = {
   { "print_decode",	DT_BOOL, R_NONE, {.l=OPTPRINTDECODE}, {.l=1} },
   /*
   ** .pp
-  ** Used in connection with the \fC<print-message>\fP command.  If this
+  ** Used in connection with the \fC<print-message>\fP function.  If this
   ** option is \fIset\fP, the message is decoded before it is passed to the
   ** external command specified by $$print_command.  If this option
   ** is \fIunset\fP, no processing will be applied to the message when
   ** printing it.  The latter setting may be useful if you are using
   ** some advanced printer filter which is able to properly format
   ** e-mail messages for printing.
+  ** .pp
+  ** Also see $$print_decode_weed, which controls whether headers will
+  ** be weeded when this is \fIset\fP.
+  */
+  { "print_decode_weed", DT_BOOL, R_NONE, {.l=OPTPRINTDECODEWEED}, {.l=1} },
+  /*
+  ** .pp
+  ** For \fC<print-message>\fP, when $$print_decode is set, this
+  ** further controls whether Mutt will weed headers.
   */
   { "print_split",	DT_BOOL, R_NONE, {.l=OPTPRINTSPLIT},  {.l=0} },
   /*
   ** .pp
-  ** Used in connection with the \fC<print-message>\fP command.  If this option
+  ** Used in connection with the \fC<print-message>\fP function.  If this option
   ** is \fIset\fP, the command specified by $$print_command is executed once for
   ** each message which is to be printed.  If this option is \fIunset\fP,
   ** the command specified by $$print_command is executed only once, and
@@ -4466,7 +4489,9 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** When \fIset\fP, mutt will weed headers when displaying, forwarding,
-  ** printing, or replying to messages.
+  ** or replying to messages.
+  ** .pp
+  ** Also see $$copy_decode_weed, $$pipe_decode_weed, $$print_decode_weed.
   */
   { "wrap",             DT_NUM,  R_PAGER, {.p=&Wrap}, {.l=0} },
   /*

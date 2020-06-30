@@ -460,7 +460,7 @@ static void pipe_set_flags (int decode, int print, int *cmflags, int *chflags)
     *chflags |= CH_DECODE | CH_REORDER;
     *cmflags |= MUTT_CM_DECODE | MUTT_CM_CHARCONV;
 
-    if (option (OPTWEED))
+    if (print ? option (OPTPRINTDECODEWEED) : option (OPTPIPEDECODEWEED))
     {
       *chflags |= CH_WEED;
       *cmflags |= MUTT_CM_WEED;
@@ -834,7 +834,7 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
     {
       *chflags |= CH_DECODE;	/* then decode RFC 2047 headers, */
 
-      if (option (OPTWEED))
+      if (option (OPTCOPYDECODEWEED))
       {
 	*chflags |= CH_WEED;	/* and respect $weed. */
 	*cmflags |= MUTT_CM_WEED;
