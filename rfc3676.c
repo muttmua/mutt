@@ -332,7 +332,7 @@ int rfc3676_handler (BODY * a, STATE * s)
  * Care is taken to preserve the hdr->content->filename, as
  * mutt -i -E can directly edit a passed in filename.
  */
-static void rfc3676_space_stuff (HEADER* hdr, int unstuff)
+static void rfc3676_space_stuff (const char *filename, int unstuff)
 {
   FILE *in = NULL, *out = NULL;
   char *buf = NULL;
@@ -341,7 +341,7 @@ static void rfc3676_space_stuff (HEADER* hdr, int unstuff)
 
   tmpfile = mutt_buffer_pool_get ();
 
-  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
+  if ((in = safe_fopen (filename, "r")) == NULL)
     goto bail;
 
   mutt_buffer_mktemp (tmpfile);
@@ -368,22 +368,22 @@ static void rfc3676_space_stuff (HEADER* hdr, int unstuff)
   FREE (&buf);
   safe_fclose (&in);
   safe_fclose (&out);
-  mutt_set_mtime (hdr->content->filename, mutt_b2s (tmpfile));
+  mutt_set_mtime (filename, mutt_b2s (tmpfile));
 
   if ((in = safe_fopen (mutt_b2s (tmpfile), "r")) == NULL)
     goto bail;
 
-  if ((truncate (hdr->content->filename, 0) == -1) ||
-      ((out = safe_fopen (hdr->content->filename, "a")) == NULL))
+  if ((truncate (filename, 0) == -1) ||
+      ((out = safe_fopen (filename, "a")) == NULL))
   {
-    mutt_perror (hdr->content->filename);
+    mutt_perror (filename);
     goto bail;
   }
 
   mutt_copy_stream (in, out);
   safe_fclose (&in);
   safe_fclose (&out);
-  mutt_set_mtime (mutt_b2s (tmpfile), hdr->content->filename);
+  mutt_set_mtime (mutt_b2s (tmpfile), filename);
   unlink (mutt_b2s (tmpfile));
   mutt_buffer_pool_release (&tmpfile);
   return;
@@ -394,38 +394,74 @@ bail:
   mutt_buffer_pool_release (&tmpfile);
 }
 
+int mutt_rfc3676_is_format_flowed (BODY *b)
+{
+  if (b &&
+      b->type == TYPETEXT &&
+      !ascii_strcasecmp ("plain", b->subtype))
+  {
+    const char *format = mutt_get_parameter ("format", b->parameter);
+    if (!ascii_strcasecmp ("flowed", format))
+      return 1;
+  }
+
+  return 0;
+}
+
 /* Note: we don't check the option OPTTEXTFLOWED because we want to
  * stuff based the actual content type.  The option only decides
  * whether to *set* format=flowed on new messages.
  */
 void mutt_rfc3676_space_stuff (HEADER *hdr)
 {
-  const char *format;
-
   if (!hdr || !hdr->content || !hdr->content->filename)
     return;
 
-  if (hdr->content->type == TYPETEXT &&
-      !ascii_strcasecmp ("plain", hdr->content->subtype))
-  {
-    format = mutt_get_parameter ("format", hdr->content->parameter);
-    if (!ascii_strcasecmp ("flowed", format))
-      rfc3676_space_stuff (hdr, 0);
-  }
+  if (mutt_rfc3676_is_format_flowed (hdr->content))
+    rfc3676_space_stuff (hdr->content->filename, 0);
 }
 
 void mutt_rfc3676_space_unstuff (HEADER *hdr)
 {
-  const char *format;
-
   if (!hdr || !hdr->content || !hdr->content->filename)
     return;
 
-  if (hdr->content->type == TYPETEXT &&
-      !ascii_strcasecmp ("plain", hdr->content->subtype))
-  {
-    format = mutt_get_parameter ("format", hdr->content->parameter);
-    if (!ascii_strcasecmp ("flowed", format))
-      rfc3676_space_stuff (hdr, 1);
-  }
+  if (mutt_rfc3676_is_format_flowed (hdr->content))
+    rfc3676_space_stuff (hdr->content->filename, 1);
+}
+
+/* This routine is used when saving/piping/viewing rfc3676 attachments.
+ *
+ * BODY *b is optional, but if provided it will verify it is
+ * format-flowed.
+ *
+ * The filename, not b->filename or b->fp will be unstuffed.
+ */
+void mutt_rfc3676_space_unstuff_attachment (BODY *b, const char *filename)
+{
+  if (!filename)
+    return;
+
+  if (b && !mutt_rfc3676_is_format_flowed (b))
+    return;
+
+  rfc3676_space_stuff (filename, 1);
+}
+
+/* This routine is used when filtering rfc3676 attachments.
+ *
+ * BODY *b is optional, but if provided it will verify it is
+ * format-flowed.
+ *
+ * The filename, not b->filename or b->fp will be stuffed.
+ */
+void mutt_rfc3676_space_stuff_attachment (BODY *b, const char *filename)
+{
+  if (!filename)
+    return;
+
+  if (b && !mutt_rfc3676_is_format_flowed (b))
+    return;
+
+  rfc3676_space_stuff (filename, 0);
 }
