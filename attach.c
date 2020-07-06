@@ -33,6 +33,7 @@
 #include "copy.h"
 #include "mx.h"
 #include "mutt_crypt.h"
+#include "rfc3676.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -356,7 +357,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
   char *fname;
   rfc1524_entry *entry = NULL;
   int rc = -1;
-  int unlink_tempfile = 0;
+  int unlink_tempfile = 0, unlink_pagerfile = 0;
 
   is_message = mutt_is_message_type(a->type, a->subtype);
   if (WithCrypto && is_message && a->hdr && (a->hdr->security & ENCRYPT) &&
@@ -398,36 +399,19 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     }
     mutt_buffer_strcpy (command, entry->command);
 
-    if (fp)
-    {
-      fname = safe_strdup (a->filename);
-      mutt_sanitize_filename (fname, 1);
-    }
-    else
-      fname = a->filename;
-
+    fname = safe_strdup (a->filename);
+    /* In send mode (!fp), we allow slashes because those are part of
+     * the tempfile.  The path will be removed in expand_filename */
+    mutt_sanitize_filename (fname, fp ? 1 : 0);
     mutt_rfc1524_expand_filename (entry->nametemplate, fname,
                                   tempfile);
+    FREE (&fname);
 
-    /* send case: the file is already there; symlink to it */
-    if (fp == NULL)
-    {
-      if (safe_symlink (a->filename, mutt_b2s (tempfile)) == -1)
-      {
-        if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
-          goto return_error;
-        mutt_buffer_strcpy (tempfile, a->filename);
-      }
-      else
-        unlink_tempfile = 1;
-    }
-    /* recv case: we need to save the attachment to a file */
-    else
-    {
-      FREE (&fname);
-      if (mutt_save_attachment (fp, a, mutt_b2s (tempfile), 0, NULL) == -1)
-	goto return_error;
-    }
+    if (mutt_save_attachment (fp, a, mutt_b2s (tempfile), 0, NULL) == -1)
+      goto return_error;
+    unlink_tempfile = 1;
+
+    mutt_rfc3676_space_unstuff_attachment (a, mutt_b2s (tempfile));
 
     use_pipe = mutt_rfc1524_expand_command (a, mutt_b2s (tempfile), type,
                                             command);
@@ -461,6 +445,8 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	mutt_perror ("open");
 	goto return_error;
       }
+      unlink_pagerfile = 1;
+
       if (use_pipe && ((tempfd = open (mutt_b2s (tempfile), 0)) == -1))
       {
 	if (pagerfd != -1)
@@ -540,6 +526,8 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	  mutt_sleep(1);
 	  goto return_error;
 	}
+        unlink_pagerfile = 1;
+
 	decode_state.fpin = fp;
 	decode_state.flags = MUTT_CHARCONV;
 	mutt_decode_attachment(a, &decode_state);
@@ -555,7 +543,9 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	 */
 	if (mutt_save_attachment(fp, a, mutt_b2s (pagerfile), 0, NULL))
 	  goto return_error;
+        unlink_pagerfile = 1;
       }
+      mutt_rfc3676_space_unstuff_attachment (a, mutt_b2s (pagerfile));
     }
     else
     {
@@ -567,6 +557,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	unset_option (OPTVIEWATTACH);
 	goto return_error;
       }
+      unlink_pagerfile = 1;
       unset_option (OPTVIEWATTACH);
     }
 
@@ -594,7 +585,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 
     rc = mutt_do_pager (descrip, mutt_b2s (pagerfile),
 			MUTT_PAGER_ATTACHMENT | (is_message ? MUTT_PAGER_MESSAGE : 0), &info);
-    mutt_buffer_clear (pagerfile);
+    unlink_pagerfile = 0;
   }
   else
     rc = 0;
@@ -602,12 +593,9 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 return_error:
 
   rfc1524_free_entry (&entry);
-  if (fp && (mutt_b2s (tempfile))[0])
+  if (unlink_tempfile)
     mutt_unlink (mutt_b2s (tempfile));
-  else if (unlink_tempfile)
-    unlink (mutt_b2s (tempfile));
-
-  if ((mutt_b2s (pagerfile))[0])
+  if (unlink_pagerfile)
     mutt_unlink (mutt_b2s (pagerfile));
 
   mutt_buffer_pool_release (&tempfile);
