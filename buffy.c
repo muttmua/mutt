@@ -269,20 +269,25 @@ static BUFFY **find_buffy_slot (const char *path)
 }
 
 /* To avoid overwriting existing values:
- * - label will be NULL if unspecified
- * - nopoll will be -1 if unspecified
+ * - label should be NULL if unspecified
+ * - nopoll should be -1 if unspecified
  */
-static void buffy_add (BUFFER *path, const char *label, int nopoll)
+void mutt_buffy_add (const char *path, const char *label, int nopoll)
 {
   BUFFY **tmp;
   struct stat sb;
   int new = 0;
 
-  tmp = find_buffy_slot (mutt_b2s (path));
+  if (!path || !*path)
+    return;
+
+  dprint (3, (debugfile, "mutt_buffy_add: %s\n", path));
+
+  tmp = find_buffy_slot (path);
   if (!*tmp)
   {
     new = 1;
-    *tmp = buffy_new (mutt_b2s (path));
+    *tmp = buffy_new (path);
 #ifdef USE_SIDEBAR
     mutt_sb_notify_mailbox (*tmp, 1);
 #endif
@@ -346,6 +351,20 @@ static void buffy_remove (BUFFY **pbuffy)
   *pbuffy = next;
 }
 
+void mutt_buffy_remove (const char *path)
+{
+  BUFFY **pbuffy;
+
+  if (!path || !*path)
+    return;
+
+  dprint (3, (debugfile, "mutt_buffy_remove: %s\n", path));
+
+  pbuffy = find_buffy_slot (path);
+  if (*pbuffy)
+    buffy_remove (pbuffy);
+}
+
 int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
                           BUFFER *err)
 {
@@ -400,7 +419,8 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
       }
     }
     else
-      buffy_add (mailbox, label_set ? mutt_b2s (label) : NULL, nopoll);
+      mutt_buffy_add (mutt_b2s (mailbox), label_set ? mutt_b2s (label) : NULL,
+                      nopoll);
 
     mutt_buffer_clear (mailbox);
     mutt_buffer_clear (label);

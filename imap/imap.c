@@ -2267,8 +2267,6 @@ int imap_subscribe (char *path, int subscribe)
   IMAP_DATA *idata;
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
-  int mblen;
-  BUFFER err;
   IMAP_MBOX mx;
 
   if (!mx_is_imap (path) || imap_parse_path (path, &mx) || !mx.mbox)
@@ -2285,16 +2283,10 @@ int imap_subscribe (char *path, int subscribe)
 
   if (option (OPTIMAPCHECKSUBSCRIBED))
   {
-    mutt_buffer_init (&err);
-    err.dsize = STRING;
-    err.data = safe_malloc (err.dsize);
-    mblen = snprintf (mbox, sizeof (mbox), "%smailboxes ",
-                      subscribe ? "" : "un");
-    imap_quote_string_and_backquotes (mbox + mblen, sizeof(mbox) - mblen,
-                                      path);
-    if (mutt_parse_rc_line (mbox, &err))
-      dprint (1, (debugfile, "Error adding subscribed mailbox: %s\n", err.data));
-    FREE (&err.data);
+    if (subscribe)
+      mutt_buffy_add (path, NULL, -1);
+    else
+      mutt_buffy_remove (path);
   }
 
   if (subscribe)

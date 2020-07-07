@@ -50,6 +50,9 @@ WHERE short BuffyCheckStatsInterval INITVAL (60);
 
 extern time_t BuffyDoneTime;	/* last time we knew for sure how much mail there was */
 
+void mutt_buffy_add (const char *path, const char *label, int nopoll);
+void mutt_buffy_remove (const char *path);
+
 void mutt_buffer_buffy (BUFFER *);
 void mutt_buffy (char *, size_t);
 
