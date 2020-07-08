@@ -468,7 +468,7 @@ int mx_get_magic (const char *path)
 #ifdef HAVE_UTIMENSAT
       mutt_get_stat_timespec (&ts[0], &st, MUTT_STAT_ATIME);
       mutt_get_stat_timespec (&ts[1], &st, MUTT_STAT_MTIME);
-      utimensat (0, path, ts, 0);
+      utimensat (AT_FDCWD, path, ts, 0);
 #else
       times.actime = st.st_atime;
       times.modtime = st.st_mtime;
@@ -699,7 +699,7 @@ void mx_fastclose_mailbox (CONTEXT *ctx)
 #ifdef HAVE_UTIMENSAT
     ts[0] = ctx->atime;
     ts[1] = ctx->mtime;
-    utimensat (0, ctx->path, ts, 0);
+    utimensat (AT_FDCWD, ctx->path, ts, 0);
 #else
     ut.actime  = ctx->atime.tv_sec;
     ut.modtime = ctx->mtime.tv_sec;

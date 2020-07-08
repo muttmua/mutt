@@ -115,7 +115,7 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
     ts[0].tv_nsec = UTIME_NOW;
     ts[1].tv_sec = 0;
     ts[1].tv_nsec = UTIME_OMIT;
-    utimensat (0, ctx->path, ts, 0);
+    utimensat (AT_FDCWD, ctx->path, ts, 0);
 #else
     newtime.actime = time (NULL);
     newtime.modtime = sb.st_mtime;
@@ -277,7 +277,7 @@ int mbox_parse_mailbox (CONTEXT *ctx)
     ts[0].tv_nsec = UTIME_NOW;
     ts[1].tv_sec = 0;
     ts[1].tv_nsec = UTIME_OMIT;
-    utimensat (0, ctx->path, ts, 0);
+    utimensat (AT_FDCWD, ctx->path, ts, 0);
 #else
     newtime.actime = time (NULL);
     newtime.modtime = sb.st_mtime;
