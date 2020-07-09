@@ -31,6 +31,7 @@
 #include "mapping.h"
 #include "mx.h"
 #include "mutt_crypt.h"
+#include "rfc3676.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -419,6 +420,60 @@ static void prepend_curdir (BUFFER *dst)
   mutt_buffer_pool_release (&tmp);
 }
 
+/* This is a proxy between the mutt_save_attachment_list() calls and
+ * mutt_save_attachment().  It (currently) exists solely to unstuff
+ * format=flowed text attachments.
+ *
+ * Direct modification of mutt_save_attachment() wasn't easily possible
+ * because:
+ * 1) other callers of mutt_save_attachment() should not have unstuffing
+ *    performed, such as replying/forwarding attachments.
+ * 2) the attachment saving can append to a file, making the
+ *    unstuffing inside difficult with current functions.
+ * 3) we can't unstuff before-hand because decoding hasn't occurred.
+ *
+ * So, I apologize for this horrific proxy, but it was the most
+ * straightforward method.
+ */
+static int save_attachment_flowed_helper (FILE *fp, BODY *m, const char *path,
+                                          int flags, HEADER *hdr)
+{
+  int rc = -1;
+
+  if (mutt_rfc3676_is_format_flowed (m))
+  {
+    BUFFER *tempfile;
+    BODY fakebody;
+
+    tempfile = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (tempfile);
+
+    /* Pass flags=0 to force safe_fopen("w") */
+    rc = mutt_save_attachment (fp, m, mutt_b2s (tempfile), 0, hdr);
+    if (rc)
+      goto cleanup;
+
+    mutt_rfc3676_space_unstuff_attachment (m, mutt_b2s (tempfile));
+
+    /* Now "really" save it.  Send mode does this without touching anything,
+     * so force send-mode. */
+    memset (&fakebody, 0, sizeof (BODY));
+    fakebody.filename = tempfile->data;
+    rc = mutt_save_attachment (NULL, &fakebody, path, flags, hdr);
+
+    mutt_unlink (mutt_b2s (tempfile));
+
+  cleanup:
+    mutt_buffer_pool_release (&tempfile);
+  }
+  else
+  {
+    rc = mutt_save_attachment (fp, m, path, flags, hdr);
+  }
+
+  return rc;
+}
+
 static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char **directory)
 {
   char *prompt;
@@ -491,8 +546,8 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
     }
 
     mutt_message _("Saving...");
-    if (mutt_save_attachment (fp, body, mutt_b2s (tfile), append,
-                              (hdr || !is_message) ? hdr : body->hdr) == 0)
+    if (save_attachment_flowed_helper (fp, body, mutt_b2s (tfile), append,
+                                       (hdr || !is_message) ? hdr : body->hdr) == 0)
     {
       mutt_message _("Attachment saved.");
       rc = 0;
@@ -548,7 +603,7 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	  if (mutt_check_overwrite (top->filename, mutt_b2s (buf), tfile,
 				    &append, NULL))
 	    goto cleanup;
-	  rc = mutt_save_attachment (fp, top, mutt_b2s (tfile), append, hdr);
+	  rc = save_attachment_flowed_helper (fp, top, mutt_b2s (tfile), append, hdr);
 	  if (rc == 0 &&
               AttachSep &&
               (fpout = fopen (mutt_b2s (tfile), "a")) != NULL)
@@ -559,7 +614,8 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	}
 	else
 	{
-	  rc = mutt_save_attachment (fp, top, mutt_b2s (tfile), MUTT_SAVE_APPEND, hdr);
+	  rc = save_attachment_flowed_helper (fp, top, mutt_b2s (tfile),
+                                              MUTT_SAVE_APPEND, hdr);
 	  if (rc == 0 &&
               AttachSep &&
               (fpout = fopen (mutt_b2s (tfile), "a")) != NULL)
