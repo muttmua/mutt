@@ -608,9 +608,10 @@ return_error:
 /* returns 1 on success, 0 on error */
 int mutt_pipe_attachment (FILE *fp, BODY *b, const char *path, const char *outfile)
 {
-  pid_t thepid;
-  int out = -1;
-  int rv = 0;
+  pid_t thepid = 0;
+  int out = -1, rv = 0, is_flowed = 0, unlink_unstuff = 0;
+  FILE *filter_fp = NULL, *unstuff_fp = NULL, *ifp = NULL;
+  BUFFER *unstuff_tempfile = NULL;
 
   if (outfile && *outfile)
     if ((out = safe_open (outfile, O_CREAT | O_EXCL | O_WRONLY)) < 0)
@@ -619,78 +620,118 @@ int mutt_pipe_attachment (FILE *fp, BODY *b, const char *path, const char *outfi
       return 0;
     }
 
+  if (mutt_rfc3676_is_format_flowed (b))
+  {
+    is_flowed = 1;
+    unstuff_tempfile = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (unstuff_tempfile);
+  }
+
   mutt_endwin (NULL);
 
+  if (outfile && *outfile)
+    thepid = mutt_create_filter_fd (path, &filter_fp, NULL, NULL, -1, out, -1);
+  else
+    thepid = mutt_create_filter (path, &filter_fp, NULL, NULL);
+  if (thepid < 0)
+  {
+    mutt_perror _("Can't create filter");
+    goto bail;
+  }
+
+  /* recv case */
   if (fp)
   {
-    /* recv case */
-
     STATE s;
 
     memset (&s, 0, sizeof (STATE));
     /* perform charset conversion on text attachments when piping */
     s.flags = MUTT_CHARCONV;
 
-    if (outfile && *outfile)
-      thepid = mutt_create_filter_fd (path, &s.fpout, NULL, NULL, -1, out, -1);
-    else
-      thepid = mutt_create_filter (path, &s.fpout, NULL, NULL);
-
-    if (thepid < 0)
+    if (is_flowed)
     {
-      mutt_perror _("Can't create filter");
-      goto bail;
-    }
+      unstuff_fp = safe_fopen (mutt_b2s (unstuff_tempfile), "w");
+      if (unstuff_fp == NULL)
+      {
+        mutt_perror ("safe_fopen");
+        goto bail;
+      }
+      unlink_unstuff = 1;
 
-    s.fpin = fp;
-    mutt_decode_attachment (b, &s);
-    safe_fclose (&s.fpout);
+      s.fpin = fp;
+      s.fpout = unstuff_fp;
+      mutt_decode_attachment (b, &s);
+      safe_fclose (&unstuff_fp);
+
+      mutt_rfc3676_space_unstuff_attachment (b, mutt_b2s (unstuff_tempfile));
+
+      unstuff_fp = safe_fopen (mutt_b2s (unstuff_tempfile), "r");
+      if (unstuff_fp == NULL)
+      {
+        mutt_perror ("safe_fopen");
+        goto bail;
+      }
+      mutt_copy_stream (unstuff_fp, filter_fp);
+      safe_fclose (&unstuff_fp);
+    }
+    else
+    {
+      s.fpin = fp;
+      s.fpout = filter_fp;
+      mutt_decode_attachment (b, &s);
+    }
   }
+
+  /* send case */
   else
   {
-    /* send case */
+    const char *infile;
 
-    FILE *ifp, *ofp;
+    if (is_flowed)
+    {
+      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL) == -1)
+        goto bail;
+      unlink_unstuff = 1;
+      mutt_rfc3676_space_unstuff_attachment (b, mutt_b2s (unstuff_tempfile));
+      infile = mutt_b2s (unstuff_tempfile);
+    }
+    else
+      infile = b->filename;
 
-    if ((ifp = fopen (b->filename, "r")) == NULL)
+    if ((ifp = fopen (infile, "r")) == NULL)
     {
       mutt_perror ("fopen");
-      if (outfile && *outfile)
-      {
-	close (out);
-	unlink (outfile);
-      }
-      return 0;
-    }
-
-    if (outfile && *outfile)
-      thepid = mutt_create_filter_fd (path, &ofp, NULL, NULL, -1, out, -1);
-    else
-      thepid = mutt_create_filter (path, &ofp, NULL, NULL);
-
-    if (thepid < 0)
-    {
-      mutt_perror _("Can't create filter");
-      safe_fclose (&ifp);
       goto bail;
     }
-
-    mutt_copy_stream (ifp, ofp);
-    safe_fclose (&ofp);
+    mutt_copy_stream (ifp, filter_fp);
     safe_fclose (&ifp);
   }
 
+  safe_fclose (&filter_fp);
   rv = 1;
 
 bail:
-
   if (outfile && *outfile)
+  {
     close (out);
+    if (rv == 0)
+      unlink (outfile);
+    else if (is_flowed)
+      mutt_rfc3676_space_stuff_attachment (NULL, outfile);
+  }
+
+  safe_fclose (&unstuff_fp);
+  safe_fclose (&filter_fp);
+  safe_fclose (&ifp);
+
+  if (unlink_unstuff)
+    mutt_unlink (mutt_b2s (unstuff_tempfile));
+  mutt_buffer_pool_release (&unstuff_tempfile);
 
   /*
    * check for error exit from child process
    */
-  if (mutt_wait_filter (thepid) != 0)
+  if ((thepid > 0) && (mutt_wait_filter (thepid) != 0))
     rv = 0;
 
   if (rv == 0 || option (OPTWAITKEY))

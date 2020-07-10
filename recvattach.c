@@ -706,27 +706,85 @@ cleanup:
 
 static void pipe_attachment (FILE *fp, BODY *b, STATE *state)
 {
-  FILE *ifp;
+  FILE *unstuff_fp = NULL, *ifp = NULL;
+  int is_flowed = 0, unlink_unstuff = 0;
+  BUFFER *unstuff_tempfile = NULL;
+
+  if (mutt_rfc3676_is_format_flowed (b))
+  {
+    is_flowed = 1;
+    unstuff_tempfile = mutt_buffer_pool_get ();
+    mutt_buffer_mktemp (unstuff_tempfile);
+  }
 
   if (fp)
   {
     state->fpin = fp;
-    mutt_decode_attachment (b, state);
-    if (AttachSep)
-      state_puts (AttachSep, state);
+
+    if (is_flowed)
+    {
+      FILE *filter_fp;
+
+      unstuff_fp = safe_fopen (mutt_b2s (unstuff_tempfile), "w");
+      if (unstuff_fp == NULL)
+      {
+        mutt_perror ("safe_fopen");
+        goto bail;
+      }
+      unlink_unstuff = 1;
+
+      filter_fp = state->fpout;
+      state->fpout = unstuff_fp;
+      mutt_decode_attachment (b, state);
+      safe_fclose (&unstuff_fp);
+      state->fpout = filter_fp;
+
+      unstuff_fp = safe_fopen (mutt_b2s (unstuff_tempfile), "r");
+      if (unstuff_fp == NULL)
+      {
+        mutt_perror ("safe_fopen");
+        goto bail;
+      }
+      mutt_copy_stream (unstuff_fp, filter_fp);
+      safe_fclose (&unstuff_fp);
+    }
+    else
+      mutt_decode_attachment (b, state);
   }
   else
   {
-    if ((ifp = fopen (b->filename, "r")) == NULL)
+    const char *infile;
+
+    if (is_flowed)
+    {
+      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL) == -1)
+        goto bail;
+      unlink_unstuff = 1;
+      mutt_rfc3676_space_unstuff_attachment (b, mutt_b2s (unstuff_tempfile));
+      infile = mutt_b2s (unstuff_tempfile);
+    }
+    else
+      infile = b->filename;
+
+    if ((ifp = fopen (infile, "r")) == NULL)
     {
       mutt_perror ("fopen");
-      return;
+      goto bail;
     }
     mutt_copy_stream (ifp, state->fpout);
     safe_fclose (&ifp);
-    if (AttachSep)
-      state_puts (AttachSep, state);
   }
+
+  if (AttachSep)
+    state_puts (AttachSep, state);
+
+bail:
+  safe_fclose (&unstuff_fp);
+  safe_fclose (&ifp);
+
+  if (unlink_unstuff)
+    mutt_unlink (mutt_b2s (unstuff_tempfile));
+  mutt_buffer_pool_release (&unstuff_tempfile);
 }
 
 static void
