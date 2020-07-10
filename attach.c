@@ -961,7 +961,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
   if (rfc1524_mailcap_lookup (a, type, sizeof(type), NULL, MUTT_PRINT))
   {
     rfc1524_entry *entry = NULL;
-    int piped = FALSE;
+    int piped = 0;
 
     dprint (2, (debugfile, "Using mailcap...\n"));
 
@@ -970,24 +970,11 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     mutt_rfc1524_expand_filename (entry->nametemplate, a->filename,
                                   newfile);
 
-    /* send mode: symlink from existing file to the newfile */
-    if (!fp)
-    {
-      if (safe_symlink (a->filename, mutt_b2s (newfile)) == -1)
-      {
-        if (mutt_yesorno (_("Can't match nametemplate, continue?"), MUTT_YES) != MUTT_YES)
-          goto mailcap_cleanup;
-        mutt_buffer_strcpy (newfile, a->filename);
-      }
-      else
-        unlink_newfile = 1;
-    }
-    /* in recv mode, save file to newfile first */
-    else
-    {
-      if (mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL) == -1)
-        goto mailcap_cleanup;
-    }
+    if (mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL) == -1)
+      goto mailcap_cleanup;
+    unlink_newfile = 1;
+
+    mutt_rfc3676_space_unstuff_attachment (a, mutt_b2s (newfile));
 
     mutt_buffer_strcpy (command, entry->printcommand);
     piped = mutt_rfc1524_expand_command (a, mutt_b2s (newfile), type, command);
@@ -1024,10 +1011,8 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     rc = 1;
 
   mailcap_cleanup:
-    if (fp)
+    if (unlink_newfile)
       mutt_unlink (mutt_b2s (newfile));
-    else if (unlink_newfile)
-      unlink(mutt_b2s (newfile));
 
     rfc1524_free_entry (&entry);
     goto out;
@@ -1049,7 +1034,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     mutt_buffer_mktemp (newfile);
     if (mutt_decode_save_attachment (fp, a, mutt_b2s (newfile), MUTT_PRINTING, 0) == 0)
     {
-
+      unlink_newfile = 1;
       dprint (2, (debugfile, "successfully decoded %s type attachment to %s\n",
 		  type, mutt_b2s (newfile)));
 
@@ -1082,7 +1067,8 @@ int mutt_print_attachment (FILE *fp, BODY *a)
   decode_cleanup:
     safe_fclose (&ifp);
     safe_fclose (&fpout);
-    mutt_unlink (mutt_b2s (newfile));
+    if (unlink_newfile)
+      mutt_unlink (mutt_b2s (newfile));
   }
   else
   {
