@@ -1,3 +1,37 @@
+2020-07-11 12:55:01 -0700  Kevin McCarthy  <kevin@8t8.us> (e78fcc51)
+
+        * Update UPDATING file for 1.14.6.
+
+M	UPDATING
+
+2020-07-07 21:09:03 -0700  Kevin McCarthy  <kevin@8t8.us> (222bd804)
+
+        * Fix utimensat() to use cwd for relative paths.
+        
+        The utimensat() invocations were missing the AT_FDCWD parameter,
+        meaning they would not work on relative paths.
+        
+        I can't remember whether I completely missed that difference from
+        utime, or somehow thought all the paths would be full paths.  :-(
+        
+        In any case, Mutt currently does not expand relative paths in
+        mutt_expand_path(), so the paths can most certainly be relative in
+        those calls too.
+        
+        This caused a bug where atimes were not being properly reset for
+        mailbox entries.
+
+M	buffy.c
+M	mbox.c
+M	mx.c
+
+2020-06-23 10:44:09 -0700  Kevin McCarthy  <kevin@8t8.us> (85ab28c9)
+
+        * automatic post-release commit for mutt-1.14.5
+
+M	ChangeLog
+M	VERSION
+
 2020-06-23 10:24:23 -0700  Kevin McCarthy  <kevin@8t8.us> (09cf1bca)
 
         * Update UPDATING file for 1.14.5 release.
