@@ -2757,7 +2757,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
   int needpass = -1, pgp_keyblock = 0;
   int clearsign = 0;
   long bytes;
-  LOFF_T last_pos, offset;
+  LOFF_T last_pos, offset, block_begin, block_end;
   char buf[HUGE_STRING];
   FILE *pgpout = NULL;
 
@@ -2768,6 +2768,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
   short have_any_sigs = 0;
 
   char body_charset[STRING];  /* Only used for clearsigned messages. */
+  char *gpgcharset = NULL;
 
   dprint (2, (debugfile, "Entering pgp_application_pgp handler\n"));
 
@@ -2782,6 +2783,9 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
 
   for (bytes = m->length; bytes > 0;)
     {
+      /* record before the fgets in case it is a BEGIN block */
+      block_begin = last_pos;
+
       if (fgets (buf, sizeof (buf), s->fpin) == NULL)
         break;
 
@@ -2791,20 +2795,16 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
 
       if (!mutt_strncmp ("-----BEGIN PGP ", buf, 15))
         {
+          needpass = 0;
           clearsign = 0;
+          pgp_keyblock = 0;
 
           if (MESSAGE(buf + 15))
             needpass = 1;
           else if (SIGNED_MESSAGE(buf + 15))
-            {
-              clearsign = 1;
-              needpass = 0;
-            }
+            clearsign = 1;
           else if (PUBLIC_KEY_BLOCK(buf + 15))
-          {
-            needpass = 0;
             pgp_keyblock = 1;
-          }
           else
             {
               /* XXX - we may wish to recode here */
@@ -2814,11 +2814,43 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
               continue;
             }
 
+          /* Find the end of armored block. */
+          while (bytes > 0 && fgets (buf, sizeof (buf) - 1, s->fpin) != NULL)
+          {
+            offset = ftello (s->fpin);
+            bytes -= (offset - last_pos); /* don't rely on mutt_strlen(buf) */
+            last_pos = offset;
+
+            if (needpass &&
+                mutt_strcmp ("-----END PGP MESSAGE-----\n", buf) == 0)
+              break;
+
+            if (!needpass &&
+                (mutt_strcmp ("-----END PGP SIGNATURE-----\n", buf) == 0 ||
+                 mutt_strcmp ("-----END PGP PUBLIC KEY BLOCK-----\n",buf) == 0))
+              break;
+
+            /* remember optional Charset: armor header as defined by RfC4880 */
+            if (mutt_strncmp ("Charset: ", buf, 9) == 0)
+            {
+              size_t l = 0;
+              gpgcharset = safe_strdup (buf + 9);
+              if ((l = mutt_strlen (gpgcharset)) > 0 && gpgcharset[l-1] == '\n')
+                gpgcharset[l-1] = 0;
+              if (mutt_check_charset (gpgcharset, 0) < 0)
+                mutt_str_replace (&gpgcharset, "UTF-8");
+            }
+          }
+          block_end = ftello (s->fpin);
+
           have_any_sigs = (have_any_sigs
                            || (clearsign && (s->flags & MUTT_VERIFY)));
 
           /* Copy PGP material to an data container */
-	  armored_data = file_to_data_object (s->fpin, m->offset, m->length);
+	  armored_data = file_to_data_object (s->fpin, block_begin,
+                                              block_end - block_begin);
+          fseeko (s->fpin, block_end, 0);
+
           /* Invoke PGP if needed */
           if (pgp_keyblock)
           {
@@ -2942,8 +2974,10 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
             {
               FGETCONV *fc;
               int c;
+              char *expected_charset = gpgcharset && *gpgcharset ? gpgcharset : "utf-8";
+
               rewind (pgpout);
-              fc = fgetconv_open (pgpout, "utf-8", Charset, 0);
+              fc = fgetconv_open (pgpout, expected_charset, Charset, MUTT_ICONV_HOOK_FROM);
               while ((c = fgetconv (fc)) != EOF)
                 {
                   state_putc (c, s);
@@ -2964,11 +2998,12 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
                 state_attach_puts (_("[-- END PGP SIGNED MESSAGE --]\n"), s);
             }
 
+          /*
+           * Multiple PGP blocks can exist, so clean these up in each loop.
+           */
+          FREE (&gpgcharset);
           gpgme_data_release (armored_data);
-          if (pgpout)
-            {
-              safe_fclose (&pgpout);
-            }
+          safe_fclose (&pgpout);
         }
       else
       {

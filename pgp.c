@@ -442,22 +442,18 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
 
     if (mutt_strncmp ("-----BEGIN PGP ", buf, 15) == 0)
     {
+      needpass = 0;
       clearsign = 0;
+      pgp_keyblock = 0;
       could_not_decrypt = 0;
       decrypt_okay_rc = 0;
 
       if (mutt_strcmp ("MESSAGE-----\n", buf + 15) == 0)
         needpass = 1;
       else if (mutt_strcmp ("SIGNED MESSAGE-----\n", buf + 15) == 0)
-      {
 	clearsign = 1;
-        needpass = 0;
-      }
       else if (!mutt_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15))
-      {
-        needpass = 0;
         pgp_keyblock = 1;
-      }
       else
       {
 	/* XXX - we may wish to recode here */
@@ -657,6 +653,7 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
       mutt_unlink (mutt_b2s (tmpfname));
       safe_fclose (&pgpout);
       safe_fclose (&pgperr);
+      FREE (&gpgcharset);
 
       if (s->flags & MUTT_DISPLAY)
       {
