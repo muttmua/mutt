@@ -9083,6 +9083,14 @@ set imap_oauth_refresh_command="/path/to/oauth2.py --quiet --user=[email_address
 Substitute pop or smtp for imap in the above example to configure for those.
 </para>
 
+<para>
+An alternative script is <ulink
+url="https://gitlab.com/muttmua/mutt/tree/master/contrib/mutt_oauth2.py"
+>contrib/mutt_oauth2.py</ulink> script.  For more details see <ulink
+url="https://gitlab.com/muttmua/mutt/tree/master/contrib/mutt_oauth2.py.README"
+>contrib/mutt_oauth2.py.README</ulink>.
+</para>
+
 <sect2 id="xoauth2">
   <title>XOAUTH2 Support</title>
 

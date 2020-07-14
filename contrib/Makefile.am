@@ -7,7 +7,8 @@ SAMPLES = Mush.rc Pine.rc gpg.rc pgp2.rc pgp5.rc pgp6.rc Tin.rc \
 	sample.muttrc-compress sample.muttrc-starter \
 	sample.vimrc-sidebar colors.default colors.linux smime.rc \
 	ca-bundle.crt smime_keys_test.pl mutt_xtitle markdown2html \
-	bgedit-detectgui.sh bgedit-screen-tmux.sh
+	bgedit-detectgui.sh bgedit-screen-tmux.sh \
+	mutt_oauth2.py mutt_oauth2.py.README
 
 EXTRA_DIST = language.txt language50.txt  \
 	patch.slang-1.2.2.keypad.1	\

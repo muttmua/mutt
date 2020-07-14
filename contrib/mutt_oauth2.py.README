@@ -1,0 +1,67 @@
+This is from Alexander Perlis' email to mutt-dev
+<158CA2EB-5AE4-44CB-B562-BB9B9537DF7E@math.lsu.edu>:
+
+With the attached mutt_oauth2.py script and a corresponding app registration I successfully connected mutt to:
+  - Gmail account
+  - Microsoft consumer account (e.g., outlook.com)
+ -  Microsoft work/school account (Office365 under an Azure organizational tenant)
+
+An obstacle for users is the needed "app registration". With Google it didn't strike me as obvious how to create a test registration. As for a Microsoft work/school account, my institution won't even allow end users to get to the app registration screen, nor do my institutional security admins seem willing to create an in-house app registration for me to use, feeling that the software vendor should have obtained one and coded it into their product (as is the case with Microsoft Outlook, Apple Mail, and Mozilla Thunderbird). I might succeed in convincing them to approve an unofficial registration that I create myself using a consumer account, but only mutt maintainers would be able to create an official mutt registration verified by the cloud mail provider as belonging to "mutt.org". I suspect my institution is more likely to approve an official registration.
+
+Ideally the mutt maintainers create an official registration and hardcode it into the script distributed with mutt, but this is surely an unreasonable expectation once one considers all the different mail providers on the planet. Perhaps for the time being this could be limited to specific mail providers requested by people on the mutt mailing list? Taking Thunderbird as an example, the version 78.0b2 source has hardcoded registrations for several major providers---see the OAuth2-related files in comm/mailnews/base/util. A source comment reveals they are exploring eventually replacing the hardcoded registrations with some type of "dynamic registration" that some mail providers might support. I don't know how that mechanism would work and whether it would be an option for mutt, by which I mean I don't know whether anyone would be able to use that mechanism or whether some entity like Mozilla Foundation will be brokering access to such a mechanism on behalf of Thunderbird.
+
+Here's how to create a Microsoft registration (whether done individually by each end user, or done once and for all by the mutt maintainers). Go to portal.azure.com, log in with a Microsoft account (get a free one at outlook.com), then search for "app registration", and add a new registration. On the initial form that appears, put a name like "Mutt", and leave the other two questions at default (allow any type of account, no redirect URI), then more carefully go through each screen:
+
+  Branding
+    - End users might leave these fields blank
+    - For official registration, verify the publisher domain by adding a retrievable file to "mutt.org"
+  Authentication:
+    - Platform "Mobile and desktop"
+    - Redirect URI "https://login.microsoftonline.com/common/oauth2/nativeclient"
+    - Any kind of account
+    - Enable public client (allow device code flow)
+  API permissions:
+    - Microsoft Graph, Delegated, "offline_access"
+    - Microsoft Graph, Delegated, "IMAP.AccessAsUser.All"
+    - Microsoft Graph, Delegated, "POP.AccessAsUser.All"
+    - Microsoft Graph, Delegated, "SMTP.Send"
+    - Microsoft Graph, Delegated, "User.Read"
+  Overview:
+    - Take note of the Application ID (a.k.a. Client ID), you'll need it shortly
+
+End users who aren't able to get to the app registration screen within portal.azure.com for their work/school account can temporarily use an incognito browser window to create a free outlook.com account and use that to create the app registration.
+
+Edit the client ID into the mutt_oauth2.py script. Run "mutt_oauth2.py --help" to learn script usage. To obtain the initial set of tokens, run the script specifying a name for a disposable token storage file, as well as "--authorize", for example using this naming scheme:
+
+  mutt_oauth2.py userid@myschool.edu.tokens --verbose --authorize
+
+The script will ask questions and provide some instructions. For the flow question, pick one; you can go back later and delete your token file and start over with the other flow, to see which one you like more. Depending on the OAuth2 provider and how the app registration was configured, both flows might not work, but trying them is the best way to figure out what works and which one you prefer. In the "authcode" flow you paste a complicated URL into a browser, then manually extract a "code" parameter from a subsequent URL in the browser and paste that back to the script; in the "devicecode" flow you go to a simple URL and just enter a short code, no additional steps.
+
+If you're stuck at this point because a web browser screen says your institution admins must grant approval, either request that approval, or as a temporary punt for end-user experimentation you could "borrow" the Mozilla Thunderbird registrations mentioned earlier (but heed the comment in their source warning their experimental registration might eventually disappear). You'll need the client_id, client_secret, and redirect_uri. Before trying mutt with this borrowed registration, I suggest first configuring Thunderbird itself for your work/school account using OAuth2 (called "Modern Auth" in Microsoft marketing lingo), as you might need to seek approval from your institutional admins to get that to work. Once Thunderbird itself is working, any OAuth2-capable IMAP/POP/SMTP client using the same registration should also work (how could the server possibly tell the difference?).
+
+Once you've succeeded authorizing mutt_oauth2.py to obtain tokens, try one of the following to see whether IMAP/POP/SMTP are working:
+
+  mutt_oauth2.py userid@myschool.edu.tokens --verbose --test
+  mutt_oauth2.py userid@myschool.edu.tokens --verbose --debug --test
+
+Without optional parameters, the script simply returns an access token (possibly first conducting a behind-the-scenes URL retrieval using a stored refresh token to obtain an updated access token). This is how the script will be used by mutt. Your muttrc would look something like:
+
+  set imap_user="userid@myschool.edu"
+  set folder="imap://outlook.office365.com/"
+  set smtp_url="smtp://${imap_user}@smtp.office365.com:587/"
+  set imap_authenticators="xoauth2"
+  set imap_oauth_refresh_command="/path/to/script/mutt_oauth2.py ${imap_user}.tokens"
+  set smtp_authenticators=${imap_authenticators}
+  set smtp_oauth_refresh_command=${imap_oauth_refresh_command}
+
+I didn't navigate creating my own registration at Google, instead tested the script against Google by borrowing the Thunderbird registration and using the authcode flow. Using a Microsoft consumer account I could easily create my own registration, and tested both the authcode flow and the devicecode flow. For a Microsoft work/school account I needed a registration approved by my institution, so I again borrowed the Thunderbird registration and could test the authcode flow.
+
+Security considerations and roadmap for improvement:
+  Any client mechanism for OAuth2 will want to somehow store the long-term refresh token, otherwise the user will have to go through the entire authorization gauntlet upon each client invocation. Ideally the tokens would be kept in an encrypted store that must first be unlocked by the user in a way that limits which client can access the unlocked tokens---instead of reinventing the wheel here, leveraging OS-provided crypto stores is appealing but doing so in a platform-independent way may be challenging at present. These considerations aren't specific to mutt, but in the case of mutt there would be increased opportunity for security and improved user experience as follows. At a minimum, mutt itself could hold in memory the current access token, reusing it until it expires, relying on the external script only at time of such expiration. That way a user could choose not to store refresh tokens at all (and servers might not even hand them out in the first place), and no tokens will leak. Even better if mutt can also keep the optional refresh token in memory, simply to be passed back and forth between mutt and the script, thus allowing the script to maintain some "state" between invocations, thereby allowing mutt sessions to go longer than the life of one access token (an hour?), yet still not leaking tokens. Finally, somehow allowing the script to interact with the user would be nice, as then the script could usually just return a new access token if the script already has a valid refresh token, but otherwise immediately interact with the user to complete an authcode flow or devicecode flow---from the user perspective all of this would be occurring seamlessly inside mutt. Whether refresh tokens get stored on disk by the script could then be user-configurable, and how they are stored/retrieved could be improved as better options for that become available (for one thing, allowing the script to interact means users could be prompted for a PIN to unlock tokens). Eventually the entire script logic could be moved inside mutt, but perhaps reasonable to wait until many more cloud providers offer OAuth2 and the subtle differences between their implementations have been identified---it is easier for users to play with script variations to experiment connecting to their cloud provider than to mess around with mutt source code. For the time being, the proposed roadmap would keep most of the script separate but merely move the token state inside mutt and allow the script to interact with the user. Would that be hard to implement?
+
+
+I hope this is useful to someone. Feedback/comments/questions/improvements are always welcome.
+
+--Alex
+
+
