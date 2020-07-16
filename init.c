@@ -236,7 +236,12 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
 	{
 	  /* skip any quoted chars */
 	  if (*pc == '\\')
-	    pc += 2;
+          {
+            if (*(pc+1))
+              pc += 2;
+            else
+              pc = NULL;
+          }
 	}
       } while (pc && *pc != '`');
       if (!pc)
