@@ -1520,7 +1520,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
         dprint(3, (debugfile, "fmtpipe +++: %s\n", srcbuf->dptr));
         if (word->data)
           *word->data = '\0';
-        mutt_extract_token(word, srcbuf, 0);
+        mutt_extract_token(word, srcbuf, MUTT_TOKEN_NOLISP);
         dprint(3, (debugfile, "fmtpipe %2d: %s\n", i++, word->data));
         mutt_buffer_addch(command, '\'');
         mutt_FormatString(buf, sizeof(buf), 0, cols, word->data, callback, data,

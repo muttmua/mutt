@@ -959,7 +959,7 @@ static char *parse_keymap (int *menu, BUFFER *s, int maxmenus, int *nummenus, BU
     }
     *nummenus=i;
     /* key sequence */
-    mutt_extract_token (&buf, s, 0);
+    mutt_extract_token (&buf, s, MUTT_TOKEN_NOLISP);
 
     if (!*buf.data)
     {

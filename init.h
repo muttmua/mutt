@@ -2148,6 +2148,12 @@ struct option_t MuttVars[] = {
   ** from your spool mailbox to your $$mbox mailbox, or as a result of
   ** a ``$mbox-hook'' command.
   */
+  { "muttlisp_inline_eval", DT_BOOL, R_NONE, {.l=OPTMUTTLISPINLINEEVAL}, {.l=0} },
+  /*
+  ** .pp
+  ** If \fIset\fP, Mutt will evaluate bare parenthesis arguments to commands
+  ** as MuttLisp expressions.
+  */
   { "narrow_tree",	DT_BOOL, R_TREE|R_INDEX, {.l=OPTNARROWTREE}, {.l=0} },
   /*
   ** .pp
@@ -4662,6 +4668,7 @@ static int parse_unalias (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_echo (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_ignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_unignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_run (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_source (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_cd (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 static int parse_set (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
@@ -4745,6 +4752,7 @@ const struct command_t Commands[] = {
   { "push",		mutt_parse_push,	{.l=0} },
   { "reply-hook",	mutt_parse_hook,	{.l=MUTT_REPLYHOOK} },
   { "reset",		parse_set,		{.l=MUTT_SET_RESET} },
+  { "run",		parse_run,		{.l=0} },
   { "save-hook",	mutt_parse_hook,	{.l=MUTT_SAVEHOOK} },
   { "score",		mutt_parse_score,	{.l=0} },
   { "send-hook",	mutt_parse_hook,	{.l=MUTT_SENDHOOK} },

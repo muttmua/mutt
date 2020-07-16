@@ -49,6 +49,7 @@ main.c
 mbox.c
 menu.c
 mh.c
+mutt_lisp.c
 mutt_sasl.c
 mutt_socket.c
 mutt_ssl.c

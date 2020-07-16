@@ -33,6 +33,7 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 #include "group.h"
+#include "mutt_lisp.h"
 
 #if defined(USE_SSL)
 #include "mutt_ssl.h"
@@ -145,6 +146,13 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
   mutt_buffer_clear (dest);
 
   SKIPWS (tok->dptr);
+
+  if ((*tok->dptr == '(') && !(flags & MUTT_TOKEN_NOLISP) &&
+      ((flags & MUTT_TOKEN_LISP) || option (OPTMUTTLISPINLINEEVAL)))
+  {
+    return mutt_lisp_eval_list (dest, tok);
+  }
+
   while ((ch = *tok->dptr))
   {
     if (!qc)
@@ -2868,6 +2876,29 @@ static int source_rc (const char *rcfile, BUFFER *err)
 }
 
 #undef MAXERRS
+
+static int parse_run (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+{
+  int rc;
+  BUFFER *token = NULL;
+
+  if (mutt_extract_token (buf, s, MUTT_TOKEN_LISP) != 0)
+  {
+    snprintf (err->data, err->dsize, _("source: error at %s"), s->dptr);
+    return (-1);
+  }
+  if (MoreArgs (s))
+  {
+    strfcpy (err->data, _("run: too many arguments"), err->dsize);
+    return (-1);
+  }
+
+  token = mutt_buffer_pool_get ();
+  rc = mutt_parse_rc_buffer (buf, token, err);
+  mutt_buffer_pool_release (&token);
+
+  return rc;
+}
 
 static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {

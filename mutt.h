@@ -127,6 +127,8 @@ struct timespec
 #define MUTT_TOKEN_COMMENT    (1<<5)  /* don't reap comments */
 #define MUTT_TOKEN_SEMICOLON  (1<<6)  /* don't treat ; as special */
 #define MUTT_TOKEN_ESC_VARS   (1<<7)  /* escape configuration variables */
+#define MUTT_TOKEN_LISP       (1<<8)  /* enable lisp processing */
+#define MUTT_TOKEN_NOLISP     (1<<9)  /* force-disable lisp, ignoring $lisp_args */
 
 typedef struct
 {
@@ -475,6 +477,7 @@ enum
   OPTINCLUDEENCRYPTED,
   OPTINCLUDEONLYFIRST,
   OPTKEEPFLAGGED,
+  OPTMUTTLISPINLINEEVAL,
   OPTMAILCAPSANITIZE,
   OPTMAILCHECKRECENT,
   OPTMAILCHECKSTATS,
