@@ -626,6 +626,7 @@ static void calculate_depth (const char *path, const char *lastpath,
 static void draw_sidebar (int num_rows, int num_cols, int div_width)
 {
   int entryidx;
+  int entry_color;
   SBENTRY *entry;
   BUFFY *b;
   int maildir_is_prefix;
@@ -650,24 +651,30 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
       continue;
     b = entry->buffy;
 
+    if ((b->msg_unread > 0) || (b->new))
+      entry_color = MT_COLOR_NEW;
+    else if (b->msg_flagged > 0)
+      entry_color = MT_COLOR_FLAGGED;
+    else if ((ColorDefs[MT_COLOR_SB_SPOOLFILE] != 0) &&
+             (mutt_strcmp (mutt_b2s (b->pathbuf), Spoolfile) == 0))
+      entry_color = MT_COLOR_SB_SPOOLFILE;
+    else
+      entry_color = MT_COLOR_NORMAL;
+
     if (entryidx == OpnIndex)
     {
       if ((ColorDefs[MT_COLOR_SB_INDICATOR] != 0))
-        SETCOLOR(MT_COLOR_SB_INDICATOR);
+	ATTRSET(mutt_merge_colors (ColorDefs[entry_color],
+		ColorDefs[MT_COLOR_SB_INDICATOR]));
       else
-        SETCOLOR(MT_COLOR_INDICATOR);
+	ATTRSET(mutt_merge_colors (ColorDefs[entry_color],
+		ColorDefs[MT_COLOR_INDICATOR]));
     }
     else if (entryidx == HilIndex)
-      SETCOLOR(MT_COLOR_HIGHLIGHT);
-    else if ((b->msg_unread > 0) || (b->new))
-      SETCOLOR(MT_COLOR_NEW);
-    else if (b->msg_flagged > 0)
-      SETCOLOR(MT_COLOR_FLAGGED);
-    else if ((ColorDefs[MT_COLOR_SB_SPOOLFILE] != 0) &&
-             (mutt_strcmp (mutt_b2s (b->pathbuf), Spoolfile) == 0))
-      SETCOLOR(MT_COLOR_SB_SPOOLFILE);
+      ATTRSET(mutt_merge_colors (ColorDefs[entry_color],
+	      ColorDefs[MT_COLOR_HIGHLIGHT]));
     else
-      SETCOLOR(MT_COLOR_NORMAL);
+      SETCOLOR(entry_color);
 
     mutt_window_move (MuttSidebarWindow, row, 0);
     if (Context && Context->realpath && !b->nopoll &&

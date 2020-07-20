@@ -269,7 +269,7 @@ void menu_redraw_index (MUTTMENU *menu)
 
       if (i == menu->current)
       {
-        SETCOLOR(MT_COLOR_INDICATOR);
+        ATTRSET(mutt_merge_colors (attr, ColorDefs[MT_COLOR_INDICATOR]));
         if (option(OPTARROWCURSOR))
         {
           addstr ("->");
@@ -313,6 +313,8 @@ void menu_redraw_motion (MUTTMENU *menu)
   mutt_window_move (menu->indexwin, menu->oldcurrent + menu->offset - menu->top, 0);
   ATTRSET(old_color);
 
+  cur_color = menu->color (menu->current);
+
   if (option (OPTARROWCURSOR))
   {
     /* clear the pointer */
@@ -327,7 +329,7 @@ void menu_redraw_motion (MUTTMENU *menu)
     }
 
     /* now draw it in the new location */
-    SETCOLOR(MT_COLOR_INDICATOR);
+    ATTRSET(mutt_merge_colors (cur_color, ColorDefs[MT_COLOR_INDICATOR]));
     mutt_window_mvaddstr (menu->indexwin, menu->current + menu->offset - menu->top, 0, "->");
   }
   else
@@ -338,10 +340,9 @@ void menu_redraw_motion (MUTTMENU *menu)
     print_enriched_string (old_color, (unsigned char *) buf, 1);
 
     /* now draw the new one to reflect the change */
-    cur_color = menu->color (menu->current);
     menu_make_entry (buf, sizeof (buf), menu, menu->current);
     menu_pad_string (menu, buf, sizeof (buf));
-    SETCOLOR(MT_COLOR_INDICATOR);
+    ATTRSET(mutt_merge_colors (cur_color, ColorDefs[MT_COLOR_INDICATOR]));
     mutt_window_move (menu->indexwin, menu->current + menu->offset - menu->top, 0);
     print_enriched_string (cur_color, (unsigned char *) buf, 0);
   }
@@ -358,7 +359,7 @@ void menu_redraw_current (MUTTMENU *menu)
   menu_make_entry (buf, sizeof (buf), menu, menu->current);
   menu_pad_string (menu, buf, sizeof (buf));
 
-  SETCOLOR(MT_COLOR_INDICATOR);
+  ATTRSET(mutt_merge_colors (attr, ColorDefs[MT_COLOR_INDICATOR]));
   if (option (OPTARROWCURSOR))
   {
     addstr ("->");
