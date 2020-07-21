@@ -276,7 +276,7 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
     if ((a->attr & ANSI_COLOR))
     {
       if (a->pair == -1)
-	a->pair = mutt_alloc_color (a->fg, a->bg);
+	a->pair = mutt_alloc_color (a->fg, a->bg, 1);
       color = a->pair;
       if (a->attr & ANSI_BOLD)
         color |= A_BOLD;
