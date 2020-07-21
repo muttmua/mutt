@@ -631,6 +631,14 @@ struct option_t MuttVars[] = {
   ** and count matching attachments hidden there, and include them
   ** in the index via %X or through ~X pattern matching.
   */
+  { "cursor_overlay", DT_BOOL, R_BOTH|R_SIDEBAR, {.l=OPTCURSOROVERLAY}, {.l=0} },
+  /*
+  ** .pp
+  ** When \fIset\fP, Mutt will overlay the indicator, sidebar_highlight,
+  ** and sidebar_indicator onto the currently selected line.
+  ** This will allow default colors in the cursor to be overridden, and for
+  ** attributes to be merged between them.
+  */
   { "pgp_autoencrypt",		DT_SYN,  R_NONE, {.p="crypt_autoencrypt"}, {.p=0} },
   { "crypt_autoencrypt",	DT_BOOL, R_NONE, {.l=OPTCRYPTAUTOENCRYPT}, {.l=0} },
   /*

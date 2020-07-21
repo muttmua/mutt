@@ -265,6 +265,16 @@ int mutt_merge_colors (int source_pair, int overlay_pair)
   return merged_pair;
 }
 
+void mutt_attrset_cursor (int source_pair, int cursor_pair)
+{
+  int merged_pair = cursor_pair;
+
+  if (option (OPTCURSOROVERLAY))
+    merged_pair = mutt_merge_colors (source_pair, cursor_pair);
+
+  ATTRSET (merged_pair);
+}
+
 int mutt_alloc_color (int fg, int bg)
 {
   COLOR_LIST *p = ColorList;
