@@ -258,9 +258,10 @@ int mutt_merge_colors (int source_pair, int overlay_pair)
       merged_fg = overlay->fg < 0 ? source->fg : overlay->fg;
       merged_bg = overlay->bg < 0 ? source->bg : overlay->bg;
       merged_pair = mutt_alloc_color (merged_fg, merged_bg, 0);
-      merged_pair |= (source_pair & ATTR_MASK) | (overlay_pair & ATTR_MASK);
     }
   }
+
+  merged_pair |= (source_pair & ATTR_MASK) | (overlay_pair & ATTR_MASK);
 
   return merged_pair;
 }
