@@ -35,20 +35,41 @@ static size_t MenuStackCount = 0;
 static size_t MenuStackLen = 0;
 static MUTTMENU **MenuStack = NULL;
 
-static void print_enriched_string (int attr, unsigned char *s, int do_color)
+static void print_enriched_string (int base_color, unsigned char *s, int use_indicator)
 {
   wchar_t wc;
   size_t k;
   size_t n = mutt_strlen ((char *)s);
   mbstate_t mbstate;
+  int tree_color;
+
+  if (option (OPTCURSOROVERLAY))
+  {
+    tree_color = mutt_merge_colors (base_color, ColorDefs[MT_COLOR_TREE]);
+    if (use_indicator)
+    {
+      tree_color = mutt_merge_colors (tree_color, ColorDefs[MT_COLOR_INDICATOR]);
+      base_color = mutt_merge_colors (base_color, ColorDefs[MT_COLOR_INDICATOR]);
+    }
+  }
+  else
+  {
+    tree_color = ColorDefs[MT_COLOR_TREE];
+    if (use_indicator)
+    {
+      tree_color = ColorDefs[MT_COLOR_INDICATOR];
+      base_color = ColorDefs[MT_COLOR_INDICATOR];
+    }
+  }
+
+  ATTRSET (base_color);
 
   memset (&mbstate, 0, sizeof (mbstate));
   while (*s)
   {
     if (*s < MUTT_TREE_MAX)
     {
-      if (do_color)
-	SETCOLOR (MT_COLOR_TREE);
+      ATTRSET (tree_color);
       while (*s && *s < MUTT_TREE_MAX)
       {
 	switch (*s)
@@ -165,7 +186,7 @@ static void print_enriched_string (int attr, unsigned char *s, int do_color)
 	}
 	s++, n--;
       }
-      if (do_color) ATTRSET(attr);
+      ATTRSET(base_color);
     }
     else if ((k = mbrtowc (&wc, (char *)s, n, &mbstate)) > 0)
     {
@@ -251,7 +272,6 @@ void menu_redraw_index (MUTTMENU *menu)
 {
   char buf[LONG_STRING];
   int i;
-  int do_color;
   int attr;
 
   for (i = menu->top; i < menu->top + menu->pagelen; i++)
@@ -262,27 +282,30 @@ void menu_redraw_index (MUTTMENU *menu)
 
       menu_make_entry (buf, sizeof (buf), menu, i);
       menu_pad_string (menu, buf, sizeof (buf));
-
-      ATTRSET(attr);
       mutt_window_move (menu->indexwin, i - menu->top + menu->offset, 0);
-      do_color = 1;
 
       if (i == menu->current)
       {
-        mutt_attrset_cursor (attr, ColorDefs[MT_COLOR_INDICATOR]);
         if (option(OPTARROWCURSOR))
         {
+          SETCOLOR(MT_COLOR_INDICATOR);
           addstr ("->");
           ATTRSET(attr);
           addch (' ');
+          print_enriched_string (attr, (unsigned char *) buf, 0);
         }
         else
-          do_color = 0;
+          print_enriched_string (attr, (unsigned char *) buf, 1);
       }
-      else if (option(OPTARROWCURSOR))
-	addstr("   ");
-
-      print_enriched_string (attr, (unsigned char *) buf, do_color);
+      else
+      {
+        if (option(OPTARROWCURSOR))
+        {
+          ATTRSET(attr);
+          addstr("   ");
+        }
+        print_enriched_string (attr, (unsigned char *) buf, 0);
+      }
     }
     else
     {
@@ -311,13 +334,13 @@ void menu_redraw_motion (MUTTMENU *menu)
    * position the cursor for drawing. */
   old_color = menu->color (menu->oldcurrent);
   mutt_window_move (menu->indexwin, menu->oldcurrent + menu->offset - menu->top, 0);
-  ATTRSET(old_color);
 
   cur_color = menu->color (menu->current);
 
   if (option (OPTARROWCURSOR))
   {
     /* clear the pointer */
+    ATTRSET(old_color);
     addstr ("  ");
 
     if (menu->redraw & REDRAW_MOTION_RESYNCH)
@@ -325,11 +348,11 @@ void menu_redraw_motion (MUTTMENU *menu)
       menu_make_entry (buf, sizeof (buf), menu, menu->oldcurrent);
       menu_pad_string (menu, buf, sizeof (buf));
       mutt_window_move (menu->indexwin, menu->oldcurrent + menu->offset - menu->top, 3);
-      print_enriched_string (old_color, (unsigned char *) buf, 1);
+      print_enriched_string (old_color, (unsigned char *) buf, 0);
     }
 
     /* now draw it in the new location */
-    mutt_attrset_cursor (cur_color, ColorDefs[MT_COLOR_INDICATOR]);
+    SETCOLOR(MT_COLOR_INDICATOR);
     mutt_window_mvaddstr (menu->indexwin, menu->current + menu->offset - menu->top, 0, "->");
   }
   else
@@ -337,14 +360,13 @@ void menu_redraw_motion (MUTTMENU *menu)
     /* erase the current indicator */
     menu_make_entry (buf, sizeof (buf), menu, menu->oldcurrent);
     menu_pad_string (menu, buf, sizeof (buf));
-    print_enriched_string (old_color, (unsigned char *) buf, 1);
+    print_enriched_string (old_color, (unsigned char *) buf, 0);
 
     /* now draw the new one to reflect the change */
     menu_make_entry (buf, sizeof (buf), menu, menu->current);
     menu_pad_string (menu, buf, sizeof (buf));
-    mutt_attrset_cursor (cur_color, ColorDefs[MT_COLOR_INDICATOR]);
     mutt_window_move (menu->indexwin, menu->current + menu->offset - menu->top, 0);
-    print_enriched_string (cur_color, (unsigned char *) buf, 0);
+    print_enriched_string (cur_color, (unsigned char *) buf, 1);
   }
   menu->redraw &= REDRAW_STATUS;
   NORMAL_COLOR;
@@ -359,17 +381,18 @@ void menu_redraw_current (MUTTMENU *menu)
   menu_make_entry (buf, sizeof (buf), menu, menu->current);
   menu_pad_string (menu, buf, sizeof (buf));
 
-  mutt_attrset_cursor (attr, ColorDefs[MT_COLOR_INDICATOR]);
   if (option (OPTARROWCURSOR))
   {
+    SETCOLOR(MT_COLOR_INDICATOR);
     addstr ("->");
     ATTRSET(attr);
     addch (' ');
     menu_pad_string (menu, buf, sizeof (buf));
-    print_enriched_string (attr, (unsigned char *) buf, 1);
+    print_enriched_string (attr, (unsigned char *) buf, 0);
   }
   else
-    print_enriched_string (attr, (unsigned char *) buf, 0);
+    print_enriched_string (attr, (unsigned char *) buf, 1);
+
   menu->redraw &= REDRAW_STATUS;
   NORMAL_COLOR;
 }
