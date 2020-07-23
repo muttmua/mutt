@@ -175,23 +175,36 @@ Default Reply-To address.
 Specifies the editor to use when composing messages.
 .SH FILES
 .PP
-.IP "~/.muttrc or ~/.mutt/muttrc"
-User configuration file.
-.IP "@sysconfdir@/Muttrc"
+.TP
+.I ~/.muttrc
+.TQ
+.I ~/.mutt/muttrc
+.TQ
+.I $XDG_CONFIG_HOME/mutt/muttrc
+User configuration files.
+.TP
+.I @sysconfdir@/Muttrc
 System-wide configuration file.
-.IP "/tmp/muttXXXXXX"
+.TP
+.I /tmp/muttXXXXXX
 Temporary files created by Mutt.
-.IP "~/.mailcap"
+.TP
+.I ~/.mailcap
 User definition for handling non-text MIME types.
-.IP "@sysconfdir@/mailcap"
+.TP
+.I @sysconfdir@/mailcap
 System definition for handling non-text MIME types.
-.IP "~/.mime.types"
+.TP
+.I ~/.mime.types
 User's personal mapping between MIME types and file extensions.
-.IP "@sysconfdir@/mime.types"
+.TP
+.I @sysconfdir@/mime.types
 System mapping between MIME types and file extensions.
-.IP "@bindir@/mutt_dotlock"
+.TP
+.I @bindir@/mutt_dotlock
 The privileged dotlocking program.
-.IP "@docdir@/manual.txt"
+.TP
+.I @docdir@/manual.txt
 The Mutt manual.
 .SH BUGS
 .PP
