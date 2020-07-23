@@ -335,8 +335,6 @@ void menu_redraw_motion (MUTTMENU *menu)
   old_color = menu->color (menu->oldcurrent);
   mutt_window_move (menu->indexwin, menu->oldcurrent + menu->offset - menu->top, 0);
 
-  cur_color = menu->color (menu->current);
-
   if (option (OPTARROWCURSOR))
   {
     /* clear the pointer */
@@ -363,6 +361,7 @@ void menu_redraw_motion (MUTTMENU *menu)
     print_enriched_string (old_color, (unsigned char *) buf, 0);
 
     /* now draw the new one to reflect the change */
+    cur_color = menu->color (menu->current);
     menu_make_entry (buf, sizeof (buf), menu, menu->current);
     menu_pad_string (menu, buf, sizeof (buf));
     mutt_window_move (menu->indexwin, menu->current + menu->offset - menu->top, 0);
