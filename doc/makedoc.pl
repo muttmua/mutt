@@ -755,7 +755,7 @@ sub print_docline_man($$$$) {
     $docstat &= ~($D_BF|$D_TT);
   }
   elsif ($special == $SP_START_TT) {
-    print "\\fC";
+    print "\\fB";
     $docstat |= $D_TT;
     $docstat &= ~($D_BF|$D_EM);
   }
