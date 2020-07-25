@@ -143,6 +143,47 @@ as an argument.
 .
 .PP
 .nf
+\fBattachments\fP [ \fB+\fP | \fB-\fP ]\fIdisposition\fP \fImime-type\fP
+\fBunattachments\fP [ \fB+\fP | \fB-\fP ]\fIdisposition\fI \fImime-type\fP
+\fBattachments\fP \fB?\fP
+\fBunattachments\fP \fB*\fP
+.fi
+.IP
+\fBattachments\fP specifies what kinds of attachments are used for Mutt's
+attachment counting and searching support.
+.IP
+\fIdisposition\fP is the attachment's Content-Disposition type - either
+inline or attachment. You can abbreviate this to I or A.
+.IP
+The first part of a message or multipart group, if inline, is counted
+separately than other inline parts. Specify root or R for disposition
+to count these as attachments. If this first part is of type
+multipart/alternative, note that its top-level inline parts are also
+counted via root disposition (if $count_alternatives is set).
+.IP
+\fIdisposition\fP is prefixed by either a \fB+\fP symbol or a \fB-\fP
+symbol. If it's a \fB+\fP, you're saying that you want to allow this
+disposition and MIME type to qualify. If it's a \fB-\fP, you're saying
+that this disposition and MIME type is an exception to previous \fB+\fP
+rules.
+.IP
+\fImime-type\fP is the MIME type of the attachment you want the
+command to affect. A MIME type is always of the format major/minor,
+where major describes the broad category of document you're looking
+at, and minor describes the specific type within that category. The
+major part of mime-type must be literal text (or the special token
+\fB*\fP), but the minor part may be a regular expression. (Therefore,
+\fB*/.*\fP matches any MIME type.)
+.IP
+The MIME types you give to the attachments directive are a kind of
+pattern. When you use the attachments directive, the patterns you
+specify are added to a list. When you use unattachments, the pattern
+is removed from the list. The patterns are not expanded and matched to
+specific MIME types at this time - they're just text in a
+list. They're only matched when actually evaluating a message.
+.
+.PP
+.nf
 \fBauto_view\fP \fItype\fP[\fB/\fP\fIsubtype\fP] [ ... ]
 \fBunauto_view\fP \fItype\fP[\fB/\fP\fIsubtype\fP] [ ... ]
 .fi
@@ -428,9 +469,31 @@ which is replaced with the (compressed) folder name, and \fB%t\fP
 which is replaced with the name of the temporary folder to which to
 write.
 .
-.TP
+.PP
+.nf
 \fBpush\fP \fIstring\fP
-This command adds the named \fIstring\fP to the keyboard buffer.
+\fBexec\fP \fIfunction\fP [ ... ]
+.fi
+.IP
+\fBpush\fP adds the named \fIstring\fP to the keyboard buffer.
+\(lqexec function\(rq is equivalent to \(lqpush <function>\(rq.
+.
+.TP
+\fBrun\fP \fIMuttLisp\fP
+.IP
+The \fBrun\fP command evaluates the \fIMuttLisp\fP argument. The
+output of the \fIMuttLisp\fP is then executed as a Mutt command, as if it
+were typed in the muttrc instead.
+.
+.PP
+.nf
+\fBscore\fP \fIpattern\fP \fIvalue\fP
+\fBunscore\fP [ \fB*\fP | \fIpattern\fP ... ]
+.fi
+.IP
+The \fBscore\fP commands adds \fIvalue\fP to a message's score if
+\fIpattern\fP matches it.  The \fBunscore\fP command removes score
+entries from the list.
 .
 .PP
 .nf
@@ -465,6 +528,30 @@ default answer of \(lqno.\(rq
 The \fBreset\fP command resets all given variables to the compile
 time defaults.  If you reset the special variable \fBall\fP, all
 variables will reset to their compile time defaults.
+.
+.PP
+.nf
+\fBsetenv\fP [\fB?\fP]\fIvariable\fP [ \fIvalue\fP ]
+\fBunsetenv\fP \fIvariable\fP
+.fi
+.IP
+These alter the environment that Mutt passes on to its child
+processes.  You can also query current environment values by prefixing
+a “?” character.
+.
+.PP
+.nf
+\fBsidebar_whitelist\fP \fImailbox\fP [ \fImailbox\fP ...]
+\fBunsidebar_whitelist\fP [ \fB*\fP | \fImailbox\fP ... ]
+.fi
+.IP
+\fBsidebar_whitelist\fP specifies mailboxes that will always be
+displayed in the sidebar, even if $sidebar_new_mail_only is set and
+the mailbox does not contain new mail.
+.IP
+\fBunsidebar_whitelist\fP is used to remove a mailbox from the list of
+whitelisted mailboxes. Use \fBunsidebar_whitelist *\fP to remove all
+mailboxes.
 .
 .TP
 \fBsource\fP \fIfilename\fP
