@@ -337,16 +337,23 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, int xoauth2)
   if (mutt_account_getoauthbearer (&pop_data->conn->account, bearertoken, xoauth2))
     goto cleanup;
 
-  mutt_buffer_printf (authline, "AUTH %s %s\r\n", authtype, mutt_b2s (bearertoken));
+  mutt_buffer_printf (authline, "AUTH %s\r\n", authtype);
+  ret = pop_query (pop_data, authline->data, authline->dsize);
 
-  ret = pop_query_d (pop_data, authline->data, authline->dsize,
+  if (ret == 0 ||
+      (ret == -2 && !mutt_strncmp (authline->data, "+", 1)))
+  {
+    mutt_buffer_printf (authline, "%s\r\n", mutt_b2s (bearertoken));
+
+    ret = pop_query_d (pop_data, authline->data, authline->dsize,
 #ifdef DEBUG
-                     /* don't print the bearer token unless we're at the ungodly debugging level */
-                     debuglevel < MUTT_SOCK_LOG_FULL ?
-                     (xoauth2 ? "AUTH XOAUTH2 *\r\n" : "AUTH OAUTHBEARER *\r\n")
-                     :
+                       /* don't print the bearer token unless we're at the ungodly debugging level */
+                       debuglevel < MUTT_SOCK_LOG_FULL ?
+                       (xoauth2 ? "*\r\n" : "*\r\n")
+                       :
 #endif
-                     NULL);
+                       NULL);
+  }
 
   switch (ret)
   {
