@@ -7369,7 +7369,7 @@ macro index ,a "&lt;save-message&gt;=archive&lt;enter&gt;&lt;enter-command&gt;ec
     </cmdsynopsis>
 
     <para>
-      The <literal>run</literal> command evaulates the MuttLisp argument.
+      The <literal>run</literal> command evaluates the MuttLisp argument.
       The output of the MuttLisp is then executed as a
       Mutt command, as if it were typed in the muttrc instead.
     </para>
@@ -7615,7 +7615,7 @@ macro index i '&lt;enter-command&gt;set index_format =  \
 &lt;enter&gt;'
 </screen>
     <para>
-      It's important to rememember that function arguments are
+      It's important to remember that function arguments are
       evaluated, but the result is not.  Also, the result of an
       interpolated command argument is used directly, and needs no
       quoting.
