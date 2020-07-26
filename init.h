@@ -920,7 +920,7 @@ struct option_t MuttVars[] = {
   { "dotlock_program",  DT_PATH, R_NONE, {.p=&MuttDotlock}, {.p=BINDIR "/mutt_dotlock"} },
   /*
   ** .pp
-  ** Contains the path of the \fCmutt_dotlock(8)\fP binary to be used by
+  ** Contains the path of the \fCmutt_dotlock(1)\fP binary to be used by
   ** mutt.
   */
 #endif
