@@ -17,136 +17,200 @@
 .\"     along with this program; if not, write to the Free Software
 .\"     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 .\"
-.TH mutt 1 "January 2019" Unix "User Manuals"
+.TH MUTT 1 "July 24, 2020" Unix "User Manuals"
 .SH NAME
 mutt \- The Mutt Mail User Agent
 .SH SYNOPSIS
-.PP
+.TP 6
 .B mutt
-[\-nRyzZ]
-[\-e \fIcmd\fP] [\-F \fIfile\fP] [\-m \fItype\fP] [\-f \fIfile\fP]
-.PP
-.B mutt 
-[\-Enx] 
-[\-e \fIcmd\fP] 
-[\-F \fIfile\fP]
-[\-H \fIfile\fP]
-[\-i \fIfile\fP]
-[\-s \fIsubj\fP]
-[\-b \fIaddr\fP]
-[\-c \fIaddr\fP]
-[\-a \fIfile\fP [...] \-\-]
-\fIaddr|mailto_url\fP [...]
-.PP
-.B mutt 
-[\-nx] 
-[\-e \fIcmd\fP] 
-[\-F \fIfile\fP]
-[\-s \fIsubj\fP]
-[\-b \fIaddr\fP]
-[\-c \fIaddr\fP]
-[\-a \fIfile\fP [...] \-\-]
-\fIaddr|mailto_url\fP [...]
-< message
-.PP
+[\fB\-nRyzZ\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+[\fB\-m \fItype\fR]
+[\fB\-f \fImailbox\fR]
+.TP 6
 .B mutt
-[\-n] [\-e \fIcmd\fP] [\-F \fIfile\fP] \-p
-.PP
+[\fB\-Enx\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+[\fB\-H \fIdraft\fR]
+[\fB\-i \fIinclude\fR]
+.br
+[\fB\-b \fIbcc-addr\fR]
+[\fB\-c \fIcc-addr\fR]
+[\fB\-s \fIsubject\fR]
+.br
+[\fB\-a \fIfile ... \fB\-\-\fR]
+\fIto-addr ...
+.TP 6
 .B mutt
-[\-n] [\-e \fIcmd\fP] [\-F \fIfile\fP] \-A \fIalias\fP
-.PP
+[\fB\-nx\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+[\fB\-b \fIbcc-addr\fR]
+[\fB\-c \fIcc-addr\fR]
+.br
+[\fB\-s \fIsubject\fR]
+[\fB\-a \fIfile ... \fB\-\-\fR]
+\fIto-addr ... \fR< message
+.TP 6
 .B mutt
-[\-n] [\-e \fIcmd\fP] [\-F \fIfile\fP] \-Q \fIquery\fP
-.PP
-.B mutt 
-\-v[v]
-.PP
-.B mutt 
-\-D
+[\fB\-n\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+\fB\-p
+.TP 6
+.B mutt
+[\fB\-n\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+\fB\-A \fIalias
+.TP 6
+.B mutt
+[\fB\-n\fR]
+[\fB\-e \fIcommand\fR]
+[\fB\-F \fIrcfile\fR]
+\fB\-Q \fIvariable
+.TP 6
+.B mutt
+\fB\-v\fR[\fBv\fR]
+.TP 6
+.B mutt
+\fB\-D
 .SH DESCRIPTION
 .PP
 Mutt is a small but very powerful text based program for reading and sending electronic
 mail under unix operating systems, including support for color terminals, MIME,
 OpenPGP, and a threaded sorting mode.
 .PP
-.I Note:
-.IR
-This manual page gives a brief overview of mutt's command line
-options. You should find a copy of the full manual in @docdir@, in
-text, HTML, and/or PDF format.
+.BR Note :
+This manual page gives a brief overview of the \fBmutt\fP executable command
+line options.
+A copy of the full manual is located in \fI@docdir@\fP, in text, HTML, and/or
+PDF format.
+Please refer to the manual to learn how to use and configure Mutt.
 .SH OPTIONS
-.PP
-.IP "-A \fIalias\fP"
-An expanded version of the given alias is passed to stdout.
-.IP "-a \fIfile\fP [...]"
-Attach a file to your message using MIME.
-When attaching single or multiple files, separating filenames and recipient addresses with
-"\-\-" is mandatory, e.g. \fBmutt \-a image.jpg \-\- addr1\fP or
-\fBmutt \-a img.jpg *.png \-\- addr1 addr2\fP.
-The \-a option must be placed at the end of command line options.
-.IP "-b \fIaddress\fP"
-Specify a blind-carbon-copy (BCC) recipient
-.IP "-c \fIaddress\fP"
-Specify a carbon-copy (CC) recipient
-.IP "-d \fIlevel\fP"
-If mutt was compiled with +DEBUG log debugging output to ~/.muttdebug0.
-\fILevel\fP can range from 1-5 and effects verbosity. A value of 2 is
-recommended.
-.IP "-D"
+.TP
+.BI \-A " alias"
+Print an expanded version of the given \fIalias\fP and exit.
+.TP
+.BI \-a " file ... "
+Attach a \fIfile\fP using MIME.
+Separating \fIfile\fP and \fIto-addr\fP arguments with \*(lq\fB\-\-\fP\*(rq is
+mandatory.
+For example:
+.sp
+.nf
+.ft C
+\&    mutt \-a image.jpg \-\- to-addr
+\&    mutt \-a img.jpg *.png \-\- to-addr-1 to-addr-2
+.ft R
+.fi
+.sp
+The \fB\-a\fP option must be placed at the end of command line options.
+.TP
+.BI \-b " bcc-addr"
+Specify a blind carbon copy (BCC) address.
+.TP
+.BI \-c " cc-addr"
+Specify a carbon copy (CC) address.
+.TP
+.BI \-d " level"
+If Mutt was compiled with \fB+DEBUG\fP log debugging output to
+\fI~/.muttdebug0\fP.
+\fILevel\fP can range from 1-5 and effects verbosity.
+A value of 2 is recommended.
+.TP
+.B \-D
 Print the value of all configuration options to stdout.
-.IP "-E"
-Causes the draft file specified by -H or include file specified by -i
-to be edited during message composition.
-.IP "-e \fIcommand\fP"
-Specify a configuration command to be run after processing of initialization
-files.
-.IP "-f \fImailbox\fP"
-Specify which mailbox to load.
-.IP "-F \fImuttrc\fP"
-Specify an initialization file to read instead of ~/.muttrc
-.IP "-h"
-Display help.
-.IP "-H \fIdraft\fP"
-Specify a draft file which contains header and body to use to send a
+.TP
+.B \-E
+Edit the \fIdraft\fP file specified by \fB\-H\fP or \fIinclude\fP file
+specified by \fB-i\fP during message composition.
+.TP
+.BI \-e " command"
+Specify a configuration \fIcommand\fP to be run after processing of
+initialization files.
+.TP
+.BI \-f " mailbox"
+Specify a \fImailbox\fP to load.
+.TP
+.BI \-F " rcfile"
+Use \fIrcfile\fP instead of the user configuration file.
+.TP
+.B \-h
+Display a short option summary and exit.
+.TP
+.BI \-H " draft"
+Specify a \fIdraft\fP file which contains header and body to use to send a
 message.
-.IP "-i \fIinclude\fP"
-Specify a file to include into the body of a message.
-.IP "-m \fItype\fP       "
-specify a default mailbox type for newly created folders.
-.IP "-n"
-Causes Mutt to bypass the system configuration file.
-.IP "-p"
+If \fIdraft\fP is \*(lq\fB\-\fP\*(rq, then data is read from stdin.
+.TP
+.BI \-i " include"
+Specify an \fIinclude\fP file to be inserted into the body of a message.
+Ignored if \fB\-H\fP is set.
+If \fIinclude\fP is \*(lq\fB\-\fP\*(rq, then data is read from stdin.
+.TP
+.BI \-m " type"
+Specify a default mailbox \fItype\fP for newly created folders.
+Can be one of the following: mbox, MMDF, MH or Maildir.
+See also \fB$mbox_type\fP in the manual.
+.TP
+.B \-n
+Do not read the system-wide Muttrc configuration file.
+.TP
+.B \-p
 Resume a postponed message.
-.IP "-Q \fIquery\fP"
-Query a configuration variables value.  The query is executed after
-all configuration files have been parsed, and any commands given on
-the command line have been executed.
-.IP "-R"
-Open a mailbox in \fIread-only\fP mode.
-.IP "-s \fIsubject\fP"
-Specify the subject of the message.
-.IP "-v"
+Exit immediately if there are no postponed messages.
+.TP
+.BI \-Q " variable"
+Query a configuration \fIvariable\fP.
+The query is performed after all configuration files have been parsed, and any
+\fIcommands\fP given on the command line have been executed.
+.TP
+.B \-R
+Open a mailbox in read-only mode.
+.TP
+.BI \-s " subject"
+Specify the \fIsubject\fP of the message.
+Must be enclosed in quotes if it contains spaces.
+.TP
+.B \-v
 Display the Mutt version number and compile-time definitions.
-.IP "-vv"
+.TP
+.B \-vv
 Display license and copyright information.
-.IP "-x"
-Emulate the mailx compose mode.
-.IP "-y"
+.TP
+.B \-x
+Emulate the
+.BR mailx (1)
+compose mode.
+.TP
+.B \-y
 Start Mutt with a listing of all mailboxes specified by the \fImailboxes\fP
-command.
-.IP "-z"
-When used with \-f, causes Mutt not to start if there are no messages in the
-mailbox.
-.IP "-Z"
-Causes Mutt to open the first mailbox specified by the \fImailboxes\fP
-command which contains new mail.
-.IP "--"
-Treat remaining arguments as \fIaddr\fP even if they start with a dash.
-See also "\-a" above.
+configuration command.
+.TP
+.B \-z
+Exit immediately with code 1 if \fImailbox\fP specified by \fB\-f\fP does not
+contain any messages.
+.TP
+.B \-Z
+Open the first mailbox specified by the \fImailboxes\fP configuration command
+which contains new mail.
+Exit immediately with code 1 if there is no new mail in any of them.
+.TP
+.B \-\-
+Treat remaining arguments as \fIto-addr\fP even if they start with a dash.
+See also \fB\-a\fP above.
+\fITo-addr\fP can be a local or network mail address as well as mailto: URL.
 .SH ENVIRONMENT
-.PP
-.IP "EDITOR"
-Specifies the editor to use if VISUAL is unset.
+.IP "EDITOR, VISUAL"
+Specifies the editor to use when composing messages.
+If both EDITOR and VISUAL are set, VISUAL takes precedence.
+If neither EDITOR nor VISUAL are set, the default is
+.BR vi (1).
+.IP "EGDSOCKET, RANDFILE"
+Paths used to initialize the random engine for SSL library.
 .IP "EMAIL"
 The user's e-mail address.
 .IP "HOME"
@@ -154,27 +218,32 @@ Full path of the user's home directory.
 .IP "MAIL"
 Full path of the user's spool mailbox.
 .IP "MAILDIR"
-Full path of the user's spool mailbox if MAIL is unset.  Commonly used when the spool
-mailbox is a
-.B maildir (5)
+Full path of the user's spool mailbox if MAIL is unset.
+Commonly used when the spool mailbox is a
+.BR maildir (5)
 folder.
 .IP "MAILCAPS"
 Path to search for mailcap files.
 .IP "MM_NOASK"
 If this variable is set, mailcap are always used without prompting first.
 .IP "PGPPATH"
-Directory in which the user's PGP public keyring can be found.  When used with
-the original PGP program, mutt and
-.B mutt_pgpring (1)
+Directory in which the user's PGP public keyring can be found.
+When used with the original PGP program, mutt and
+.BR mutt_pgpring (1)
 rely on this being set.
-.IP "TMPDIR"
-Directory in which temporary files are created.
 .IP "REPLYTO"
 Default Reply-To address.
-.IP "VISUAL"
-Specifies the editor to use when composing messages.
+.IP "TMPDIR"
+Directory in which temporary files are created.
+If unset, \fI/tmp\fP is used.
+See also $tmpdir configuration variable.
+.IP "LC_ALL, LC_CTYPE, LANG"
+Used to determine charset and locale to use.
+.IP TEXTDOMAINDIR
+Directory containing translation files.
+If set, this path overwrite the Mutt installation directory.
+Used for testing translation changes.
 .SH FILES
-.PP
 .TP
 .I ~/.muttrc
 .TQ
@@ -188,6 +257,11 @@ System-wide configuration file.
 .TP
 .I /tmp/muttXXXXXX
 Temporary files created by Mutt.
+.TP
+.I ~/.muttdebug0
+File containing debugging output.
+Log files are automatically rotated by \fBmutt\fP changing the number at the end.
+See \fB\-d\fP option above.
 .TP
 .I ~/.mailcap
 User definition for handling non-text MIME types.
@@ -232,20 +306,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 .SH SEE ALSO
 .PP
+.BR mutt_dotlock (1),
+.BR mutt_pgpring (1),
+.BR pgpewrap (1),
+.BR sendmail (1),
+.BR smail (1),
+.BR smime_keys (1),
 .BR curses (3),
+.BR ncurses (3),
 .BR mailcap (5),
 .BR maildir (5),
 .BR mbox (5),
-.BR mutt_dotlock (1),
-.BR muttrc (5),
-.BR ncurses (3),
-.BR sendmail (1),
-.BR smail (1).
+.BR mmdf (5),
+.BR muttrc (5)
 .PP
 Mutt Home Page: http://www.mutt.org/
 .PP
 The Mutt manual
 .SH AUTHOR
 .PP
-Michael Elkins, and others.  Use <mutt-dev@mutt.org> to contact
-the developers.
+Michael Elkins, and others.
+Use <mutt-dev@mutt.org> to contact the developers.
