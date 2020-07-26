@@ -6161,7 +6161,7 @@ msgstr "создать новое сообщение"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:355
 msgid "break the thread in two"
-msgstr "резделить дикуссию на две части"
+msgstr "разделить дискуссию на две части"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
