@@ -712,8 +712,17 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
         sidebar_folder_name = mutt_b2s (b->pathbuf) + (maildirlen + 1);
         maildir_is_prefix = 1;
       }
+      /* mutt_expand_path() now expands relative paths too.
+       * To try not to change the sidebar in case it has those, use
+       * pretty_mailbox to translate back to relative paths */
       else
-        sidebar_folder_name = mutt_b2s (b->pathbuf);
+      {
+        mutt_buffer_strcpy (pretty_folder_name, mutt_b2s (b->pathbuf));
+        mutt_buffer_pretty_mailbox (pretty_folder_name);
+        sidebar_folder_name = mutt_b2s (pretty_folder_name);
+        if ((*sidebar_folder_name == '=') || (*sidebar_folder_name == '~'))
+          sidebar_folder_name = mutt_b2s (b->pathbuf);
+      }
     }
 
     if (SidebarDelimChars)

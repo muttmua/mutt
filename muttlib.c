@@ -647,14 +647,28 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx)
 
   mutt_buffer_pool_release (&p);
   mutt_buffer_pool_release (&q);
-  mutt_buffer_pool_release (&tmp);
 
 #ifdef USE_IMAP
   /* Rewrite IMAP path in canonical form - aids in string comparisons of
    * folders. May possibly fail, in which case s should be the same. */
   if (mx_is_imap (mutt_b2s (src)))
     imap_expand_path (src);
+  else
 #endif
+    if ((url_check_scheme (mutt_b2s (src)) == U_UNKNOWN) &&
+        mutt_buffer_len (src) &&
+        *mutt_b2s (src) != '/')
+    {
+      if (mutt_getcwd (tmp))
+      {
+        if (mutt_buffer_len (tmp) > 1)
+          mutt_buffer_addch (tmp, '/');
+        mutt_buffer_addstr (tmp, mutt_b2s (src));
+        mutt_buffer_strcpy (src, mutt_b2s (tmp));
+      }
+    }
+
+  mutt_buffer_pool_release (&tmp);
 }
 
 /* Extract the real name from /etc/passwd's GECOS field.
@@ -1050,11 +1064,44 @@ void mutt_pretty_mailbox (char *s, size_t buflen)
     *s++ = '=';
     memmove (s, s + len, mutt_strlen (s + len) + 1);
   }
-  else if (mutt_strncmp (s, Homedir, (len = mutt_strlen (Homedir))) == 0 &&
-	   s[len] == '/')
+  else
   {
-    *s++ = '~';
-    memmove (s, s + len - 1, mutt_strlen (s + len - 1) + 1);
+    BUFFER *cwd = mutt_buffer_pool_get ();
+    BUFFER *home = mutt_buffer_pool_get ();
+    int under_cwd = 0, under_home = 0, cwd_under_home = 0;
+    size_t cwd_len, home_len;
+
+    mutt_getcwd (cwd);
+    if (mutt_buffer_len (cwd) > 1)
+      mutt_buffer_addch (cwd, '/');
+    cwd_len = mutt_buffer_len (cwd);
+
+    mutt_buffer_strcpy (home, NONULL (Homedir));
+    if (mutt_buffer_len (home) > 1)
+      mutt_buffer_addch (home, '/');
+    home_len = mutt_buffer_len (home);
+
+    if (cwd_len &&
+        mutt_strncmp (s, mutt_b2s (cwd), cwd_len) == 0)
+      under_cwd = 1;
+
+    if (home_len &&
+        mutt_strncmp (s, mutt_b2s (home), home_len) == 0)
+      under_home = 1;
+
+    if (under_cwd && under_home && (home_len < cwd_len))
+      cwd_under_home = 1;
+
+    if (under_cwd && (!under_home || cwd_under_home))
+      memmove (s, s + cwd_len, mutt_strlen (s + cwd_len) + 1);
+    else if (under_home && (home_len > 1))
+    {
+      *s++ = '~';
+      memmove (s, s + home_len - 2, mutt_strlen (s + home_len - 2) + 1);
+    }
+
+    mutt_buffer_pool_release (&cwd);
+    mutt_buffer_pool_release (&home);
   }
 }
 
