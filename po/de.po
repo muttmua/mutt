@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 08:31+0200\n"
-"PO-Revision-Date: 2020-07-13 08:44+0200\n"
+"POT-Creation-Date: 2020-07-27 08:52+0200\n"
+"PO-Revision-Date: 2020-07-27 08:55+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -61,7 +61,7 @@ msgid "Select"
 msgstr "Auswählen"
 
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
-#: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4533
+#: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4568
 #: curs_main.c:555 history.c:78 mutt_ssl.c:1325 mutt_ssl_gnutls.c:1040
 #: pager.c:2003 pattern.c:2142 pgpkey.c:523 postpone.c:45 query.c:54
 #: recvattach.c:63 smime.c:468
@@ -704,8 +704,8 @@ msgstr "Verzeichnisse können nicht angezeigt werden"
 msgid "Error trying to view file"
 msgstr "Fehler bei der Anzeige einer Datei"
 
-#: buffy.c:394 buffy.c:418 color.c:807 hook.c:74 hook.c:93 hook.c:341
-#: init.c:2084 init.c:2159 init.c:2922 keymap.c:973
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:341
+#: init.c:2097 init.c:2172 init.c:2958 keymap.c:973
 msgid "too few arguments"
 msgstr "Zu wenige Parameter"
 
@@ -713,53 +713,53 @@ msgstr "Zu wenige Parameter"
 msgid "New mail in "
 msgstr "Neue Nachrichten in "
 
-#: color.c:355
+#: color.c:416
 #, c-format
 msgid "%s: color not supported by term"
 msgstr "%s: Farbe wird nicht vom Terminal unterstützt"
 
-#: color.c:361
+#: color.c:422
 #, c-format
 msgid "%s: no such color"
 msgstr "%s: Farbe unbekannt"
 
-#: color.c:435 color.c:651 color.c:672 color.c:678
+#: color.c:496 color.c:712 color.c:733 color.c:739
 #, c-format
 msgid "%s: no such object"
 msgstr "%s: Objekt unbekannt"
 
-#: color.c:451
+#: color.c:512
 #, c-format
 msgid "%s: command valid only for index, body, header objects"
 msgstr "%s: Kommando ist nur für Index-/Body-/Header-Objekt gültig"
 
-#: color.c:459
+#: color.c:520
 #, c-format
 msgid "%s: too few arguments"
 msgstr "%s: Zu wenige Parameter"
 
-#: color.c:639 color.c:664
+#: color.c:700 color.c:725
 msgid "Missing arguments."
 msgstr "Fehlende Parameter."
 
-#: color.c:696 color.c:724
+#: color.c:757 color.c:785
 msgid "color: too few arguments"
 msgstr "color: Zu wenige Parameter"
 
-#: color.c:747
+#: color.c:808
 msgid "mono: too few arguments"
 msgstr "mono: Zu wenige Parameter"
 
-#: color.c:767
+#: color.c:828
 #, c-format
 msgid "%s: no such attribute"
 msgstr "%s: Attribut unbekannt"
 
-#: color.c:816 hook.c:99 hook.c:348
+#: color.c:877 hook.c:99 hook.c:348
 msgid "too many arguments"
 msgstr "Zu viele Parameter"
 
-#: color.c:832
+#: color.c:893
 msgid "default colors not supported"
 msgstr "Standard-Farben werden nicht unterstützt"
 
@@ -1061,7 +1061,7 @@ msgstr "Security: "
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:123 crypt-gpgme.c:5369 pgp.c:1926 smime.c:2353
+#: compose.c:123 crypt-gpgme.c:5404 pgp.c:1923 smime.c:2353
 msgid "Sign as: "
 msgstr "Signiere als: "
 
@@ -1246,11 +1246,11 @@ msgstr "Warnung: '%s' ist eine ungültige IDN."
 msgid "You may not delete the only attachment."
 msgstr "Der einzige Nachrichtenteil kann nicht gelöscht werden."
 
-#: compose.c:728 compose.c:738 menu.c:671
+#: compose.c:728 compose.c:738 menu.c:694
 msgid "You are on the last entry."
 msgstr "Sie sind auf dem letzten Eintrag."
 
-#: compose.c:773 menu.c:682
+#: compose.c:773 menu.c:705
 msgid "You are on the first entry."
 msgstr "Sie sind auf dem ersten Eintrag."
 
@@ -1584,7 +1584,7 @@ msgstr "Fehler beim Zurücklegen des Datenobjekts: %s\n"
 msgid "error reading data object: %s\n"
 msgstr "Fehler beim Lesen des Datenobjekts: %s\n"
 
-#: crypt-gpgme.c:793 crypt-gpgme.c:4181 pgpkey.c:561 pgpkey.c:742
+#: crypt-gpgme.c:793 crypt-gpgme.c:4216 pgpkey.c:561 pgpkey.c:742
 msgid "Can't create temporary file"
 msgstr "Kann temporäre Datei nicht erzeugen"
 
@@ -1671,7 +1671,7 @@ msgstr "WARNUNG: PKA Eintrag entspricht nicht Adresse des Unterzeichners: "
 msgid "PKA verified signer's address is: "
 msgstr "Die PKA geprüfte Adresse des Unterzeichners lautet: "
 
-#: crypt-gpgme.c:1540 crypt-gpgme.c:3871
+#: crypt-gpgme.c:1540 crypt-gpgme.c:3906
 msgid "Fingerprint: "
 msgstr "Fingerabdruck: "
 
@@ -1695,7 +1695,7 @@ msgstr ""
 "WARNUNG: Es ist NICHT sicher, dass der Schlüssel zur oben genannten Person "
 "gehört\n"
 
-#: crypt-gpgme.c:1641 crypt-gpgme.c:1646 crypt-gpgme.c:3866
+#: crypt-gpgme.c:1641 crypt-gpgme.c:1646 crypt-gpgme.c:3901
 msgid "aka: "
 msgstr "aka: "
 
@@ -1738,7 +1738,7 @@ msgstr "Problematische Unterschrift von:"
 msgid "               expires: "
 msgstr "              läuft ab: "
 
-#: crypt-gpgme.c:1835 crypt-gpgme.c:2065 crypt-gpgme.c:2886
+#: crypt-gpgme.c:1835 crypt-gpgme.c:2065 crypt-gpgme.c:2918
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Anfang der Unterschrift --]\n"
 
@@ -1756,7 +1756,7 @@ msgstr "*** Anfang Darstellung (Unterschrift von: %s) ***\n"
 msgid "*** End Notation ***\n"
 msgstr "*** Ende Darstellung ***\n"
 
-#: crypt-gpgme.c:1931 crypt-gpgme.c:2078 crypt-gpgme.c:2899
+#: crypt-gpgme.c:1931 crypt-gpgme.c:2078 crypt-gpgme.c:2931
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1778,16 +1778,16 @@ msgstr ""
 msgid "error importing key: %s\n"
 msgstr "Fehler beim importieren des Schlüssels: %s\n"
 
-#: crypt-gpgme.c:2861
+#: crypt-gpgme.c:2893
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Fehler: Entschlüsselung/Prüfung fehlgeschlagen: %s\n"
 
-#: crypt-gpgme.c:2907
+#: crypt-gpgme.c:2939
 msgid "Error: copy data failed\n"
 msgstr "Fehler: Kopieren der Daten fehlgeschlagen\n"
 
-#: crypt-gpgme.c:2928 pgp.c:622
+#: crypt-gpgme.c:2960 pgp.c:618
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1795,11 +1795,11 @@ msgstr ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
 
-#: crypt-gpgme.c:2930 pgp.c:624
+#: crypt-gpgme.c:2962 pgp.c:620
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 
-#: crypt-gpgme.c:2933 pgp.c:626
+#: crypt-gpgme.c:2965 pgp.c:622
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1807,19 +1807,19 @@ msgstr ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
 
-#: crypt-gpgme.c:2960 pgp.c:666
+#: crypt-gpgme.c:2994 pgp.c:663
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- END PGP MESSAGE --]\n"
 
-#: crypt-gpgme.c:2962 pgp.c:679
+#: crypt-gpgme.c:2996 pgp.c:676
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- END PGP PUBLIC KEY BLOCK --]\n"
 
-#: crypt-gpgme.c:2964 pgp.c:681
+#: crypt-gpgme.c:2998 pgp.c:678
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- END PGP SIGNED MESSAGE --]\n"
 
-#: crypt-gpgme.c:2987 pgp.c:715
+#: crypt-gpgme.c:3022 pgp.c:712
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1827,11 +1827,11 @@ msgstr ""
 "[-- Fehler: Konnte Anfang der PGP-Nachricht nicht finden! --]\n"
 "\n"
 
-#: crypt-gpgme.c:3021 crypt-gpgme.c:3127 pgp.c:1162
+#: crypt-gpgme.c:3056 crypt-gpgme.c:3162 pgp.c:1159
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Fehler: Konnte Temporärdatei nicht anlegen! --]\n"
 
-#: crypt-gpgme.c:3035
+#: crypt-gpgme.c:3070
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1839,7 +1839,7 @@ msgstr ""
 "[-- Die folgenden Daten sind PGP/MIME-signiert und -verschlüsselt --]\n"
 "\n"
 
-#: crypt-gpgme.c:3036 pgp.c:1178
+#: crypt-gpgme.c:3071 pgp.c:1175
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1847,19 +1847,19 @@ msgstr ""
 "[-- Die folgenden Daten sind PGP/MIME-verschlüsselt --]\n"
 "\n"
 
-#: crypt-gpgme.c:3081
+#: crypt-gpgme.c:3116
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- Ende der PGP/MIME-signierten und -verschlüsselten Daten --]\n"
 
-#: crypt-gpgme.c:3082 pgp.c:1221
+#: crypt-gpgme.c:3117 pgp.c:1218
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- Ende der PGP/MIME-verschlüsselten Daten --]\n"
 
-#: crypt-gpgme.c:3087 pgp.c:676 pgp.c:1226
+#: crypt-gpgme.c:3122 pgp.c:673 pgp.c:1223
 msgid "PGP message successfully decrypted."
 msgstr "PGP-Nachricht erfolgreich entschlüsselt."
 
-#: crypt-gpgme.c:3141
+#: crypt-gpgme.c:3176
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1867,7 +1867,7 @@ msgstr ""
 "[-- Die folgenden Daten sind S/MIME signiert --]\n"
 "\n"
 
-#: crypt-gpgme.c:3142
+#: crypt-gpgme.c:3177
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1875,23 +1875,23 @@ msgstr ""
 "[-- Die folgenden Daten sind S/MIME-verschlüsselt --]\n"
 "\n"
 
-#: crypt-gpgme.c:3195
+#: crypt-gpgme.c:3230
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- Ende der S/MIME signierten Daten --]\n"
 
-#: crypt-gpgme.c:3196
+#: crypt-gpgme.c:3231
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- Ende der S/MIME-verschlüsselten Daten --]\n"
 
-#: crypt-gpgme.c:3784
+#: crypt-gpgme.c:3819
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Kann Benutzer-ID nicht darstellen (unbekannte Kodierung)]"
 
-#: crypt-gpgme.c:3786
+#: crypt-gpgme.c:3821
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Kann Benutzer-ID nicht darstellen (unzulässige Kodierung)]"
 
-#: crypt-gpgme.c:3791
+#: crypt-gpgme.c:3826
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Kann Benutzer-ID nicht darstellen (unzulässiger DN)]"
 
@@ -1899,144 +1899,144 @@ msgstr "[Kann Benutzer-ID nicht darstellen (unzulässiger DN)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3865
+#: crypt-gpgme.c:3900
 msgid "Name: "
 msgstr "Name: "
 
-#: crypt-gpgme.c:3867
+#: crypt-gpgme.c:3902
 msgid "Valid From: "
 msgstr "Gültig ab: "
 
-#: crypt-gpgme.c:3868
+#: crypt-gpgme.c:3903
 msgid "Valid To: "
 msgstr "Gültig bis: "
 
-#: crypt-gpgme.c:3869
+#: crypt-gpgme.c:3904
 msgid "Key Type: "
 msgstr "Schlüssel Typ: "
 
-#: crypt-gpgme.c:3870
+#: crypt-gpgme.c:3905
 msgid "Key Usage: "
 msgstr "Schlüssel Gebrauch: "
 
-#: crypt-gpgme.c:3872
+#: crypt-gpgme.c:3907
 msgid "Serial-No: "
 msgstr "Seriennr.: "
 
-#: crypt-gpgme.c:3873
+#: crypt-gpgme.c:3908
 msgid "Issued By: "
 msgstr "Herausgegeben von : "
 
-#: crypt-gpgme.c:3874
+#: crypt-gpgme.c:3909
 msgid "Subkey: "
 msgstr "Unter-Schlüssel: "
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3925 crypt-gpgme.c:4080
+#: crypt-gpgme.c:3960 crypt-gpgme.c:4115
 msgid "[Invalid]"
 msgstr "[Ungültig]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:3977 crypt-gpgme.c:4136
+#: crypt-gpgme.c:4012 crypt-gpgme.c:4171
 #, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "%s, %lu Bit %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3986 crypt-gpgme.c:4144
+#: crypt-gpgme.c:4021 crypt-gpgme.c:4179
 msgid "encryption"
 msgstr "Verschlüsselung"
 
-#: crypt-gpgme.c:3987 crypt-gpgme.c:3993 crypt-gpgme.c:3999 crypt-gpgme.c:4145
-#: crypt-gpgme.c:4150 crypt-gpgme.c:4155
+#: crypt-gpgme.c:4022 crypt-gpgme.c:4028 crypt-gpgme.c:4034 crypt-gpgme.c:4180
+#: crypt-gpgme.c:4185 crypt-gpgme.c:4190
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3992 crypt-gpgme.c:4149
+#: crypt-gpgme.c:4027 crypt-gpgme.c:4184
 msgid "signing"
 msgstr "Signieren"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:3998 crypt-gpgme.c:4154
+#: crypt-gpgme.c:4033 crypt-gpgme.c:4189
 msgid "certification"
 msgstr "Zertifikat"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4074
+#: crypt-gpgme.c:4109
 msgid "[Revoked]"
 msgstr "[Zurückgez.]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4086
+#: crypt-gpgme.c:4121
 msgid "[Expired]"
 msgstr "[Abgelaufen]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4092
+#: crypt-gpgme.c:4127
 msgid "[Disabled]"
 msgstr "[Deaktiviert]"
 
-#: crypt-gpgme.c:4184
+#: crypt-gpgme.c:4219
 msgid "Collecting data..."
 msgstr "Sammle Informationen..."
 
-#: crypt-gpgme.c:4202
+#: crypt-gpgme.c:4237
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Fehler bei der Suche nach dem Schlüssel des Herausgebers: %s\n"
 
-#: crypt-gpgme.c:4212
+#: crypt-gpgme.c:4247
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Fehler: Zertifikatskette zu lang - Stoppe hier\n"
 
-#: crypt-gpgme.c:4223 pgpkey.c:587
+#: crypt-gpgme.c:4258 pgpkey.c:587
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "Schlüssel ID: 0x%s"
 
-#: crypt-gpgme.c:4341 crypt-gpgme.c:4394
+#: crypt-gpgme.c:4376 crypt-gpgme.c:4429
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "gpgme_op_keylist_start fehlgeschlagen: %s"
 
-#: crypt-gpgme.c:4381 crypt-gpgme.c:4425 crypt-gpgme.c:5130
+#: crypt-gpgme.c:4416 crypt-gpgme.c:4460 crypt-gpgme.c:5165
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "gpgme_op_keylist_next fehlgeschlagen: %s"
 
-#: crypt-gpgme.c:4496
+#: crypt-gpgme.c:4531
 msgid "All matching keys are marked expired/revoked."
 msgstr "Alles passenden Schlüssel sind abgelaufen/zurückgezogen."
 
-#: crypt-gpgme.c:4525 mutt_ssl.c:1323 mutt_ssl_gnutls.c:1038 pgpkey.c:516
+#: crypt-gpgme.c:4560 mutt_ssl.c:1323 mutt_ssl_gnutls.c:1038 pgpkey.c:516
 #: smime.c:463
 msgid "Exit  "
 msgstr "Ende  "
 
-#: crypt-gpgme.c:4527 pgpkey.c:518 smime.c:465
+#: crypt-gpgme.c:4562 pgpkey.c:518 smime.c:465
 msgid "Select  "
 msgstr "Auswahl  "
 
-#: crypt-gpgme.c:4530 pgpkey.c:521
+#: crypt-gpgme.c:4565 pgpkey.c:521
 msgid "Check key  "
 msgstr "Schlüssel prüfen  "
 
-#: crypt-gpgme.c:4547
+#: crypt-gpgme.c:4582
 msgid "PGP and S/MIME keys matching"
 msgstr "Passende PGP- und S/MIME-Schlüssel"
 
-#: crypt-gpgme.c:4549
+#: crypt-gpgme.c:4584
 msgid "PGP keys matching"
 msgstr "Passende PGP-Schlüssel"
 
-#: crypt-gpgme.c:4551
+#: crypt-gpgme.c:4586
 msgid "S/MIME keys matching"
 msgstr "Passende S/MIME-Schlüssel"
 
-#: crypt-gpgme.c:4553
+#: crypt-gpgme.c:4588
 msgid "keys matching"
 msgstr "Passende Schlüssel"
 
@@ -2044,55 +2044,55 @@ msgstr "Passende Schlüssel"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4560
+#: crypt-gpgme.c:4595
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4564
+#: crypt-gpgme.c:4599
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s \"%s\"."
 
-#: crypt-gpgme.c:4591 pgpkey.c:608
+#: crypt-gpgme.c:4626 pgpkey.c:608
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr ""
 "Dieser Schlüssel ist nicht verwendbar: veraltet/deaktiviert/zurückgezogen."
 
-#: crypt-gpgme.c:4605 pgpkey.c:620 smime.c:496
+#: crypt-gpgme.c:4640 pgpkey.c:620 smime.c:496
 msgid "ID is expired/disabled/revoked."
 msgstr "Diese ID ist veraltet/deaktiviert/zurückgezogen."
 
-#: crypt-gpgme.c:4613 pgpkey.c:624 smime.c:499
+#: crypt-gpgme.c:4648 pgpkey.c:624 smime.c:499
 msgid "ID has undefined validity."
 msgstr "Die Gültigkeit dieser ID ist undefiniert."
 
-#: crypt-gpgme.c:4616 pgpkey.c:627
+#: crypt-gpgme.c:4651 pgpkey.c:627
 msgid "ID is not valid."
 msgstr "Diese ID ist ungültig."
 
-#: crypt-gpgme.c:4619 pgpkey.c:630
+#: crypt-gpgme.c:4654 pgpkey.c:630
 msgid "ID is only marginally valid."
 msgstr "Diese Gültigkeit dieser ID ist begrenzt."
 
-#: crypt-gpgme.c:4628 pgpkey.c:634 smime.c:506
+#: crypt-gpgme.c:4663 pgpkey.c:634 smime.c:506
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%s Wollen Sie den Schlüssel wirklich benutzen?"
 
-#: crypt-gpgme.c:4695 crypt-gpgme.c:4812 pgpkey.c:841 pgpkey.c:969
+#: crypt-gpgme.c:4730 crypt-gpgme.c:4847 pgpkey.c:841 pgpkey.c:969
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "Suche nach Schlüsseln, die auf \"%s\" passen..."
 
-#: crypt-gpgme.c:4963 pgp.c:1412
+#: crypt-gpgme.c:4998 pgp.c:1409
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "Benutze KeyID = \"%s\" für %s?"
 
-#: crypt-gpgme.c:5016 pgp.c:1461 smime.c:831 smime.c:909
+#: crypt-gpgme.c:5051 pgp.c:1458 smime.c:831 smime.c:909
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "KeyID für %s: "
@@ -2101,15 +2101,15 @@ msgstr "KeyID für %s: "
 #. mutt_gpgme_select_secret_key() tries to list all secret keys to choose
 #. from.  This error is displayed if no results were found.
 #.
-#: crypt-gpgme.c:5139
+#: crypt-gpgme.c:5174
 msgid "No secret keys found"
 msgstr "Keine geheimen Schlüssel"
 
-#: crypt-gpgme.c:5173 pgpkey.c:731
+#: crypt-gpgme.c:5208 pgpkey.c:731
 msgid "Please enter the key ID: "
 msgstr "Bitte Schlüsselidentifikation eingeben: "
 
-#: crypt-gpgme.c:5186
+#: crypt-gpgme.c:5221
 #, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Fehler beim exportieren des Schlüssels: %s\n"
@@ -2118,20 +2118,20 @@ msgstr "Fehler beim exportieren des Schlüssels: %s\n"
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:5206
+#: crypt-gpgme.c:5241
 #, c-format
 msgid "PGP Key 0x%s."
 msgstr "PGP-Schlüssel 0x%s."
 
-#: crypt-gpgme.c:5248
+#: crypt-gpgme.c:5283
 msgid "GPGME: OpenPGP protocol not available"
 msgstr "GPGME: OpenPGP Protokoll nicht verfügbar"
 
-#: crypt-gpgme.c:5256
+#: crypt-gpgme.c:5291
 msgid "GPGME: CMS protocol not available"
 msgstr "GPGME: CMS Protokoll nicht verfügbar"
 
-#: crypt-gpgme.c:5296
+#: crypt-gpgme.c:5331
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr "S/MIME (s)ign., sign. (a)ls, (p)gp, (u)nverschl., (o)ppenc Modus aus? "
 
@@ -2139,19 +2139,19 @@ msgstr "S/MIME (s)ign., sign. (a)ls, (p)gp, (u)nverschl., (o)ppenc Modus aus? "
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:5301
+#: crypt-gpgme.c:5336
 msgid "sapfco"
 msgstr "sapuuo"
 
-#: crypt-gpgme.c:5306
+#: crypt-gpgme.c:5341
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (s)ign., sign. (a)ls, s/(m)ime, (u)nverschl., (o)ppenc Modus aus? "
 
-#: crypt-gpgme.c:5307
+#: crypt-gpgme.c:5342
 msgid "samfco"
 msgstr "samuuo"
 
-#: crypt-gpgme.c:5319
+#: crypt-gpgme.c:5354
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
@@ -2159,11 +2159,11 @@ msgstr ""
 "S/MIME (v)erschl., (s)ign., sign. (a)ls, (b)eides, (p)gp, (u)nverschl., "
 "(o)ppenc Modus? "
 
-#: crypt-gpgme.c:5320
+#: crypt-gpgme.c:5355
 msgid "esabpfco"
 msgstr "vsabpuuo"
 
-#: crypt-gpgme.c:5325
+#: crypt-gpgme.c:5360
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
@@ -2171,33 +2171,33 @@ msgstr ""
 "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, s/(m)ime, (u)nverschl., "
 "(o)ppenc Modus? "
 
-#: crypt-gpgme.c:5326
+#: crypt-gpgme.c:5361
 msgid "esabmfco"
 msgstr "vsabmuuo"
 
-#: crypt-gpgme.c:5337
+#: crypt-gpgme.c:5372
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr ""
 "S/MIME (v)erschl., (s)ign., sign. (a)ls, (b)eides, (p)gp, (u)nverschl.? "
 
-#: crypt-gpgme.c:5338
+#: crypt-gpgme.c:5373
 msgid "esabpfc"
 msgstr "vsabpuu"
 
-#: crypt-gpgme.c:5343
+#: crypt-gpgme.c:5378
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr ""
 "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, s/(m)ime, (u)nverschl.? "
 
-#: crypt-gpgme.c:5344
+#: crypt-gpgme.c:5379
 msgid "esabmfc"
 msgstr "vsabmuu"
 
-#: crypt-gpgme.c:5502
+#: crypt-gpgme.c:5537
 msgid "Failed to verify sender"
 msgstr "Prüfung des Absenders fehlgeschlagen"
 
-#: crypt-gpgme.c:5505
+#: crypt-gpgme.c:5540
 msgid "Failed to figure out sender"
 msgstr "Kann Absender nicht ermitteln"
 
@@ -2327,7 +2327,7 @@ msgstr "Mailbox wurde von außen verändert."
 msgid "No tagged messages."
 msgstr "Keine markierten Nachrichten."
 
-#: curs_main.c:843 menu.c:1077
+#: curs_main.c:843 menu.c:1100
 msgid "Nothing to do."
 msgstr "Nichts zu erledigen."
 
@@ -2466,7 +2466,7 @@ msgstr "Keine ungelöschten Nachrichten."
 msgid "You are on the first message."
 msgstr "Sie sind bereits auf der ersten Nachricht."
 
-#: curs_main.c:1758 menu.c:895 pager.c:2223 pattern.c:2070
+#: curs_main.c:1758 menu.c:918 pager.c:2223 pattern.c:2070
 msgid "Search wrapped to top."
 msgstr "Suche von vorne begonnen."
 
@@ -2880,7 +2880,7 @@ msgstr ""
 msgid "badly formatted command string"
 msgstr ""
 
-#: hook.c:325 init.c:708 init.c:789 init.c:797 init.c:819
+#: hook.c:325 init.c:721 init.c:802 init.c:810 init.c:832
 msgid "not enough arguments"
 msgstr "Zu wenige Parameter"
 
@@ -2898,7 +2898,7 @@ msgstr "unhook: Unbekannter hook-Typ: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Kann kein %s innerhalb von %s löschen."
 
-#: imap/auth.c:110 pop_auth.c:522 smtp.c:577
+#: imap/auth.c:110 pop_auth.c:529 smtp.c:577
 msgid "No authenticators available"
 msgstr "Keine Authentifizierung verfügbar"
 
@@ -3207,192 +3207,196 @@ msgstr "Kopiere Nachricht %d nach %s..."
 msgid "Continue?"
 msgstr "Weiter?"
 
-#: init.c:61 init.c:2241 pager.c:58
+#: init.c:62 init.c:2254 pager.c:58
 msgid "Not available in this menu."
 msgstr "Funktion ist in diesem Menü nicht verfügbar."
 
-#: init.c:472
+#: init.c:485
 #, c-format
 msgid "Bad regexp: %s"
 msgstr "Fehlerhafte regexp: %s"
 
-#: init.c:529
+#: init.c:542
 msgid "Not enough subexpressions for template"
 msgstr "Nicht genügend Unterausdrücke für Vorlage"
 
-#: init.c:881
+#: init.c:894
 msgid "spam: no matching pattern"
 msgstr "spam: kein passendes Muster"
 
-#: init.c:883
+#: init.c:896
 msgid "nospam: no matching pattern"
 msgstr "nospam: kein passendes Muster"
 
-#: init.c:1081
+#: init.c:1094
 #, c-format
 msgid "%sgroup: missing -rx or -addr."
 msgstr "%sgroup: -rx oder -addr fehlt."
 
-#: init.c:1099
+#: init.c:1112
 #, c-format
 msgid "%sgroup: warning: bad IDN '%s'.\n"
 msgstr "%sgroup: Warnung: Ungültige IDN '%s'.\n"
 
-#: init.c:1318
+#: init.c:1331
 msgid "attachments: no disposition"
 msgstr "attachments: keine Disposition"
 
-#: init.c:1368
+#: init.c:1381
 msgid "attachments: invalid disposition"
 msgstr "attachments: ungültige Disposition"
 
-#: init.c:1395
+#: init.c:1408
 msgid "unattachments: no disposition"
 msgstr "unattachments: keine Disposition"
 
-#: init.c:1442
+#: init.c:1455
 msgid "unattachments: invalid disposition"
 msgstr "unattachments: ungültige Disposition"
 
-#: init.c:1571
+#: init.c:1584
 msgid "alias: no address"
 msgstr "alias: Keine Adresse"
 
-#: init.c:1619
+#: init.c:1632
 #, c-format
 msgid "Warning: Bad IDN '%s' in alias '%s'.\n"
 msgstr "Warnung: Ungültige IDN '%s' in Alias '%s'.\n"
 
-#: init.c:1708
+#: init.c:1721
 msgid "invalid header field"
 msgstr "my_hdr: Ungültiges Kopf-Feld"
 
-#: init.c:1758
+#: init.c:1771
 #, c-format
 msgid "%s: unknown sorting method"
 msgstr "%s: Unbekannte Sortiermethode"
 
-#: init.c:1869
+#: init.c:1882
 #, c-format
 msgid "mutt_restore_default(%s): error in regexp: %s\n"
 msgstr "mutt_restore_default(%s): Fehler in regulärem Ausdruck: %s\n"
 
-#: init.c:2121 init.c:2288
+#: init.c:2134 init.c:2301
 #, c-format
 msgid "%s is unset"
 msgstr "%s ist nicht gesetzt"
 
-#: init.c:2218 init.c:2334
+#: init.c:2231 init.c:2347
 #, c-format
 msgid "%s: unknown variable"
 msgstr "%s: Unbekannte Variable"
 
-#: init.c:2227
+#: init.c:2240
 msgid "prefix is illegal with reset"
 msgstr "Präfix ist bei \"reset\" nicht zulässig"
 
-#: init.c:2233
+#: init.c:2246
 msgid "value is illegal with reset"
 msgstr "Wertzuweisung ist bei \"reset\" nicht zulässig"
 
-#: init.c:2268 init.c:2280
+#: init.c:2281 init.c:2293
 msgid "Usage: set variable=yes|no"
 msgstr "Benutzung: set variable=yes|no"
 
-#: init.c:2288
+#: init.c:2301
 #, c-format
 msgid "%s is set"
 msgstr "%s ist gesetzt"
 
-#: init.c:2408
+#: init.c:2421
 #, c-format
 msgid "Invalid value for option %s: \"%s\""
 msgstr "Ungültiger Wert für Variable %s: \"%s\""
 
-#: init.c:2550
+#: init.c:2563
 #, c-format
 msgid "%s: invalid mailbox type"
 msgstr "%s: Ungültiger Mailbox-Typ"
 
-#: init.c:2581 init.c:2645
+#: init.c:2594 init.c:2658
 #, c-format
 msgid "%s: invalid value (%s)"
 msgstr "%s: ungültiger Wert (%s)"
 
-#: init.c:2582 init.c:2646
+#: init.c:2595 init.c:2659
 msgid "format error"
 msgstr "Format-Fehler"
 
-#: init.c:2582 init.c:2646
+#: init.c:2595 init.c:2659
 msgid "number overflow"
 msgstr "Zahlenüberlauf"
 
-#: init.c:2680
+#: init.c:2693
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s: Ungültiger Wert"
 
-#: init.c:2724
+#: init.c:2737
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s: Unbekannter Typ."
 
-#: init.c:2751
+#: init.c:2764
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s: Unbekannter Typ"
 
-#: init.c:2831
+#: init.c:2844
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Fehler in %s, Zeile %d: %s"
 
-#: init.c:2855
+#: init.c:2868
 #, c-format
 msgid "source: errors in %s"
 msgstr "source: Fehler in %s"
 
-#: init.c:2856
+#: init.c:2869
 #, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "source: Lesevorgang abgebrochen, zu viele Fehler in %s"
 
-#: init.c:2874
+#: init.c:2887 init.c:2910
 #, c-format
 msgid "source: error at %s"
 msgstr "source: Fehler bei %s"
 
-#: init.c:2879
+#: init.c:2892
+msgid "run: too many arguments"
+msgstr "run: Zu viele Argumente"
+
+#: init.c:2915
 msgid "source: too many arguments"
 msgstr "source: Zu viele Argumente"
 
-#: init.c:2981
+#: init.c:3017
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s: Unbekanntes Kommando"
 
-#: init.c:3493
+#: init.c:3529
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Fehler in Kommandozeile: %s\n"
 
-#: init.c:3615
+#: init.c:3651
 msgid "unable to determine home directory"
 msgstr "Kann Home-Verzeichnis nicht bestimmen"
 
-#: init.c:3623
+#: init.c:3659
 msgid "unable to determine username"
 msgstr "Kann Nutzernamen nicht bestimmen"
 
-#: init.c:3649
+#: init.c:3685
 msgid "unable to determine nodename via uname()"
 msgstr "Kann Hostname nicht bestimmen."
 
-#: init.c:3873
+#: init.c:3909
 msgid "-group: no group name"
 msgstr "-group: Kein Gruppen Name"
 
-#: init.c:3883
+#: init.c:3919
 msgid "out of arguments"
 msgstr "Zu wenige Parameter"
 
@@ -3414,7 +3418,7 @@ msgstr ""
 #. L10N:
 #. $forward_attribution_intro default value
 #.
-#: init.h:1178
+#: init.h:1186
 #, c-format
 msgid "----- Forwarded message from %f -----"
 msgstr ""
@@ -3422,14 +3426,14 @@ msgstr ""
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
-#: init.h:1189
+#: init.h:1197
 msgid "----- End forwarded message -----"
 msgstr ""
 
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4136
+#: init.h:4150
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
@@ -3439,14 +3443,14 @@ msgstr ""
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4339
+#: init.h:4353
 msgid "M%?n?AIL&ail?"
 msgstr ""
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4356
+#: init.h:4370
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr ""
 
@@ -3786,60 +3790,60 @@ msgstr "Konnte Mailbox nicht erneut öffnen!"
 msgid "Reopening mailbox..."
 msgstr "Öffne Mailbox erneut..."
 
-#: menu.c:442
+#: menu.c:465
 msgid "Jump to: "
 msgstr "Springe zu: "
 
-#: menu.c:451
+#: menu.c:474
 msgid "Invalid index number."
 msgstr "Ungültige Indexnummer."
 
-#: menu.c:455 menu.c:477 menu.c:542 menu.c:585 menu.c:601 menu.c:612 menu.c:623
-#: menu.c:634 menu.c:647 menu.c:660 menu.c:1208
+#: menu.c:478 menu.c:500 menu.c:565 menu.c:608 menu.c:624 menu.c:635 menu.c:646
+#: menu.c:657 menu.c:670 menu.c:683 menu.c:1231
 msgid "No entries."
 msgstr "Keine Einträge."
 
-#: menu.c:474
+#: menu.c:497
 msgid "You cannot scroll down farther."
 msgstr "Sie können nicht weiter nach unten gehen."
 
-#: menu.c:492
+#: menu.c:515
 msgid "You cannot scroll up farther."
 msgstr "Sie können nicht weiter nach oben gehen."
 
-#: menu.c:535
+#: menu.c:558
 msgid "You are on the first page."
 msgstr "Sie sind auf der ersten Seite."
 
-#: menu.c:536
+#: menu.c:559
 msgid "You are on the last page."
 msgstr "Sie sind auf der letzten Seite."
 
-#: menu.c:869 pager.c:2268 pattern.c:2002
+#: menu.c:892 pager.c:2268 pattern.c:2002
 msgid "Search for: "
 msgstr "Suche nach: "
 
-#: menu.c:869 pager.c:2268 pattern.c:2002
+#: menu.c:892 pager.c:2268 pattern.c:2002
 msgid "Reverse search for: "
 msgstr "Suche rückwärts nach: "
 
-#: menu.c:913 pager.c:2220 pager.c:2242 pager.c:2363 pattern.c:2124
+#: menu.c:936 pager.c:2220 pager.c:2242 pager.c:2363 pattern.c:2124
 msgid "Not found."
 msgstr "Nicht gefunden."
 
-#: menu.c:1071
+#: menu.c:1094
 msgid "No tagged entries."
 msgstr "Keine markierten Einträge."
 
-#: menu.c:1172
+#: menu.c:1195
 msgid "Search is not implemented for this menu."
 msgstr "In diesem Menü kann nicht gesucht werden."
 
-#: menu.c:1177
+#: menu.c:1200
 msgid "Jumping is not implemented for dialogs."
 msgstr "Springen in Dialogen ist nicht möglich."
 
-#: menu.c:1211
+#: menu.c:1234
 msgid "Tagging is not supported."
 msgstr "Markieren wird nicht unterstützt."
 
@@ -3855,6 +3859,40 @@ msgstr "Konnte Nachricht nicht auf Festplatte speichern"
 #: mh.c:1675
 msgid "_maildir_commit_message(): unable to set time on file"
 msgstr "_maildir_commit_message(): kann Zeitstempel der Datei nicht setzen"
+
+#. L10N:
+#. Printed when backticks in MuttLisp are not matched.
+#.
+#: mutt_lisp.c:62
+#, c-format
+msgid "MuttLisp: unclosed backticks: %s"
+msgstr ""
+
+#. L10N:
+#. Printed when a MuttLisp list is missing a matching closing
+#. parenthesis.  For example: (a
+#.
+#: mutt_lisp.c:123
+#, c-format
+msgid "MuttLisp: unclosed list: %s"
+msgstr ""
+
+#. L10N:
+#. An error printed for the 'if' function if the condition is missing.
+#. For example (if) by itself.
+#.
+#: mutt_lisp.c:399
+#, c-format
+msgid "MuttLisp: missing if condition: %s"
+msgstr ""
+
+#. L10N:
+#. Printed when a function is called that is not recognized by MuttLisp.
+#.
+#: mutt_lisp.c:447
+#, c-format
+msgid "MuttLisp: no such function %s"
+msgstr ""
 
 #: mutt_sasl.c:196
 msgid "Unknown SASL profile"
@@ -4841,11 +4879,11 @@ msgstr "PGP-Mantra eingeben:"
 msgid "PGP passphrase forgotten."
 msgstr "PGP-Mantra vergessen."
 
-#: pgp.c:535
+#: pgp.c:531
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
 msgstr "[-- Fehler: Kann keinen PGP-Prozess erzeugen! --]\n"
 
-#: pgp.c:586 pgp.c:867 pgp.c:1172
+#: pgp.c:582 pgp.c:864 pgp.c:1169
 msgid ""
 "[-- End of PGP output --]\n"
 "\n"
@@ -4853,7 +4891,7 @@ msgstr ""
 "[-- Ende der PGP-Ausgabe --]\n"
 "\n"
 
-#: pgp.c:609 pgp.c:668
+#: pgp.c:605 pgp.c:665
 msgid "Could not decrypt PGP message"
 msgstr "Konnte PGP-Nachricht nicht entschlüsseln"
 
@@ -4861,15 +4899,15 @@ msgstr "Konnte PGP-Nachricht nicht entschlüsseln"
 #. (not encrypting) something and (2) it is a plaintext. So the
 #. message does not mean "You failed to encrypt the message."
 #.
-#: pgp.c:674
+#: pgp.c:671
 msgid "PGP message is not encrypted."
 msgstr "PGP-Nachricht ist nicht verschlüsselt."
 
-#: pgp.c:919
+#: pgp.c:916
 msgid "Internal error.  Please submit a bug report."
 msgstr "INTERNER FEHLER: Bitte melden sie diesen Fehler."
 
-#: pgp.c:982
+#: pgp.c:979
 msgid ""
 "[-- Error: could not create a PGP subprocess! --]\n"
 "\n"
@@ -4877,11 +4915,11 @@ msgstr ""
 "[-- Fehler: Konnte PGP-Subprozess nicht erzeugen! --]\n"
 "\n"
 
-#: pgp.c:1013 pgp.c:1036 smime.c:1990
+#: pgp.c:1010 pgp.c:1033 smime.c:1990
 msgid "Decryption failed"
 msgstr "Entschlüsselung gescheitert"
 
-#: pgp.c:1231
+#: pgp.c:1228
 msgid ""
 "[-- Error: decryption failed --]\n"
 "\n"
@@ -4889,25 +4927,25 @@ msgstr ""
 "[-- Fehler: Entschlüsselung fehlgeschlagen: --]\n"
 "\n"
 
-#: pgp.c:1288
+#: pgp.c:1285
 msgid "Can't open PGP subprocess!"
 msgstr "Kann PGP-Subprozess nicht erzeugen!"
 
-#: pgp.c:1727
+#: pgp.c:1724
 msgid "Can't invoke PGP"
 msgstr "Kann PGP nicht aufrufen"
 
-#: pgp.c:1838
+#: pgp.c:1835
 #, c-format
 msgid "PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "
 msgstr ""
 "PGP (v)erschl., sign. (a)ls, %s Format, (u)nverschl., (o)ppenc Modus aus? "
 
-#: pgp.c:1839 pgp.c:1869 pgp.c:1891
+#: pgp.c:1836 pgp.c:1866 pgp.c:1888
 msgid "PGP/M(i)ME"
 msgstr "PGP/M(i)ME"
 
-#: pgp.c:1839 pgp.c:1869 pgp.c:1891
+#: pgp.c:1836 pgp.c:1866 pgp.c:1888
 msgid "(i)nline"
 msgstr "(i)nline"
 
@@ -4915,19 +4953,19 @@ msgstr "(i)nline"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: pgp.c:1845
+#: pgp.c:1842
 msgid "safcoi"
 msgstr "vauuoi"
 
-#: pgp.c:1850
+#: pgp.c:1847
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (v)erschl., sign. (a)ls, (u)nverschl, (o)ppenc Modus aus? "
 
-#: pgp.c:1851
+#: pgp.c:1848
 msgid "safco"
 msgstr "vauuo"
 
-#: pgp.c:1868
+#: pgp.c:1865
 #, c-format
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc "
@@ -4936,35 +4974,35 @@ msgstr ""
 "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, %s Format, (u)nverschl., "
 "(o)ppenc Modus? "
 
-#: pgp.c:1871
+#: pgp.c:1868
 msgid "esabfcoi"
 msgstr "vsabuuoi"
 
-#: pgp.c:1876
+#: pgp.c:1873
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr ""
 "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, (u)nverschl., (o)ppenc "
 "Modus? "
 
-#: pgp.c:1877
+#: pgp.c:1874
 msgid "esabfco"
 msgstr "vsabuuo"
 
-#: pgp.c:1890
+#: pgp.c:1887
 #, c-format
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "
 msgstr ""
 "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, %s Format, (u)nverschl.? "
 
-#: pgp.c:1893
+#: pgp.c:1890
 msgid "esabfci"
 msgstr "vsabuui"
 
-#: pgp.c:1898
+#: pgp.c:1895
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (c)lear? "
 msgstr "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, (u)nverschl.? "
 
-#: pgp.c:1899
+#: pgp.c:1896
 msgid "esabfc"
 msgstr "vsabuu"
 
@@ -5085,7 +5123,7 @@ msgstr "APOP-Authentifizierung fehlgeschlagen."
 msgid "Command USER is not supported by server."
 msgstr "Kommando USER wird vom Server nicht unterstützt."
 
-#: pop_auth.c:373
+#: pop_auth.c:380
 msgid "Authentication failed."
 msgstr "Authentifizierung fehlgeschlagen."
 
