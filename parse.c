@@ -1319,6 +1319,8 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
           char *beg, *end;
           for (beg = strchr (p, '<'); beg; beg = strchr (end, ','))
           {
+            if ((*beg == ',') && !(beg = strchr (beg, '<')))
+              break;
             ++beg;
             if (!(end = strchr (beg, '>')))
               break;
