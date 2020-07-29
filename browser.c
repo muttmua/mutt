@@ -1141,7 +1141,9 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    mutt_buffer_len (buf))
 	{
 	  buffy = 0;
-	  mutt_buffer_expand_path (buf);
+          /* no relative path expansion, because that should be compared
+           * to LastDir, not cwd */
+	  mutt_buffer_expand_path_norel (buf);
 #ifdef USE_IMAP
 	  if (mx_is_imap (mutt_b2s (buf)))
 	  {

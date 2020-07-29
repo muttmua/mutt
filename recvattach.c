@@ -834,7 +834,8 @@ void mutt_pipe_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
   if (!mutt_buffer_len (buf))
     goto cleanup;
 
-  mutt_buffer_expand_path (buf);
+  /* norel because buf is a command */
+  mutt_buffer_expand_path_norel (buf);
 
   if (!filter && !option (OPTATTACHSPLIT))
   {

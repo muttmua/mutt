@@ -457,17 +457,12 @@ void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter)
 
 char *mutt_expand_path (char *s, size_t slen)
 {
-  return _mutt_expand_path (s, slen, 0);
-}
-
-char *_mutt_expand_path (char *s, size_t slen, int rx)
-{
   BUFFER *s_buf;
 
   s_buf = mutt_buffer_pool_get ();
 
   mutt_buffer_addstr (s_buf, NONULL (s));
-  _mutt_buffer_expand_path (s_buf, rx);
+  mutt_buffer_expand_path (s_buf);
   strfcpy (s, mutt_b2s (s_buf), slen);
 
   mutt_buffer_pool_release (&s_buf);
@@ -477,10 +472,16 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 
 void mutt_buffer_expand_path (BUFFER *src)
 {
-  _mutt_buffer_expand_path (src, 0);
+  _mutt_buffer_expand_path (src, 0, 1);
 }
 
-void _mutt_buffer_expand_path (BUFFER *src, int rx)
+/* Does expansion without relative path expansion */
+void mutt_buffer_expand_path_norel (BUFFER *src)
+{
+  _mutt_buffer_expand_path (src, 0, 0);
+}
+
+void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
 {
   BUFFER *p, *q, *tmp;
   const char *s, *tail = "";
@@ -655,7 +656,8 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx)
     imap_expand_path (src);
   else
 #endif
-    if ((url_check_scheme (mutt_b2s (src)) == U_UNKNOWN) &&
+    if (expand_relative &&
+        (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN) &&
         mutt_buffer_len (src) &&
         *mutt_b2s (src) != '/')
     {

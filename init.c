@@ -373,6 +373,7 @@ static void mutt_free_opt (struct option_t* p)
       }
       break;
     case DT_PATH:
+    case DT_CMD_PATH:
     case DT_STR:
       FREE ((char**)p->data.p);		/* __FREE_CHECKED__ */
       break;
@@ -1785,6 +1786,7 @@ static void mutt_set_default (struct option_t *p)
   {
     case DT_STR:
     case DT_PATH:
+    case DT_CMD_PATH:
       if (!p->init.p && *((char **) p->data.p))
         p->init.p = safe_strdup (* ((char **) p->data.p));
       else if (p->init.p && (p->type & DT_L10N_STR))
@@ -1821,13 +1823,17 @@ static void mutt_restore_default (struct option_t *p)
       *((mbchar_table **) p->data.p) = parse_mbchar_table ((char *) p->init.p);
       break;
     case DT_PATH:
+    case DT_CMD_PATH:
       FREE((char **) p->data.p);		/* __FREE_CHECKED__ */
       if (p->init.p)
       {
 	BUFFER *path;
         path = mutt_buffer_pool_get ();
 	mutt_buffer_strcpy (path, (char *) p->init.p);
-	mutt_buffer_expand_path (path);
+        if (DTYPE (p->type) == DT_CMD_PATH)
+          mutt_buffer_expand_path_norel (path);
+        else
+          mutt_buffer_expand_path (path);
 	*((char **) p->data.p) = safe_strdup (mutt_b2s (path));
         mutt_buffer_pool_release (&path);
       }
@@ -2314,6 +2320,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
     }
     else if (myvar || DTYPE (MuttVars[idx].type) == DT_STR ||
 	     DTYPE (MuttVars[idx].type) == DT_PATH ||
+	     DTYPE (MuttVars[idx].type) == DT_CMD_PATH ||
 	     DTYPE (MuttVars[idx].type) == DT_ADDR ||
 	     DTYPE (MuttVars[idx].type) == DT_MBCHARTBL)
     {
@@ -2356,7 +2363,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	  rfc822_write_address (_tmp, sizeof (_tmp), *((ADDRESS **) MuttVars[idx].data.p), 0);
 	  val = _tmp;
 	}
-	else if (DTYPE (MuttVars[idx].type) == DT_PATH)
+	else if (DTYPE (MuttVars[idx].type) == DT_PATH ||
+                 DTYPE (MuttVars[idx].type) == DT_CMD_PATH)
 	{
           path_buf = mutt_buffer_pool_get ();
           mutt_buffer_strcpy (path_buf, NONULL(*((char **) MuttVars[idx].data.p)));
@@ -2399,7 +2407,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
           FREE (&myvar);
 	  myvar="don't resort";
         }
-        else if (DTYPE (MuttVars[idx].type) == DT_PATH)
+        else if (DTYPE (MuttVars[idx].type) == DT_PATH ||
+                 DTYPE (MuttVars[idx].type) == DT_CMD_PATH)
         {
 	  /* MuttVars[idx].data is already 'char**' (or some 'void**') or...
 	   * so cast to 'void*' is okay */
@@ -2409,6 +2418,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	  mutt_buffer_strcpy (scratch, tmp->data);
           if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
             mutt_buffer_expand_multi_path (scratch, FccDelimiter);
+          else if (DTYPE (MuttVars[idx].type) == DT_CMD_PATH)
+            mutt_buffer_expand_path_norel (scratch);
           else
             mutt_buffer_expand_path (scratch);
 	  *((char **) MuttVars[idx].data.p) = safe_strdup (mutt_b2s (scratch));
@@ -2949,7 +2960,8 @@ int mutt_parse_rc_line (const char *line, BUFFER *err)
 static int parse_cd (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   mutt_extract_token (tmp, s, 0);
-  mutt_buffer_expand_path (tmp);
+  /* norel because could be '..' or other parent directory traversal */
+  mutt_buffer_expand_path_norel (tmp);
   if (!mutt_buffer_len (tmp))
   {
     if (Homedir)
@@ -3296,7 +3308,8 @@ static int var_to_string (int idx, BUFFER *val)
   {
     mutt_buffer_strcpy (val, NONULL (*((char **) MuttVars[idx].data.p)));
   }
-  else if (DTYPE (MuttVars[idx].type) == DT_PATH)
+  else if (DTYPE (MuttVars[idx].type) == DT_PATH ||
+           DTYPE (MuttVars[idx].type) == DT_CMD_PATH)
   {
     mutt_buffer_strcpy (val, NONULL (*((char **) MuttVars[idx].data.p)));
     if (mutt_strcmp (MuttVars[idx].option, "record") == 0)

@@ -96,24 +96,26 @@ my $SP_END_SECT    = 18;
 my $SP_REFER       = 19;
 
 # Types to documentation readable strings:
-my %type2human = ("DT_NONE"  => "-none-",
-                  "DT_BOOL"  => "boolean",
-                  "DT_NUM"   => "number",
-                  "DT_LNUM"  => "number (long)",
-                  "DT_STR"   => "string",
-                  "DT_PATH"  => "path",
-                  "DT_QUAD"  => "quadoption",
-                  "DT_SORT"  => "sort order",
-                  "DT_RX"    => "regular expression",
-                  "DT_MAGIC" => "folder magic",
-                  "DT_ADDR"  => "e-mail address",
-                  "DT_MBCHARTBL"=> "string",
-                  "DT_L10N_STR" => "string (localized)");
+my %type2human = ("DT_NONE"      => "-none-",
+                  "DT_BOOL"      => "boolean",
+                  "DT_NUM"       => "number",
+                  "DT_LNUM"      => "number (long)",
+                  "DT_STR"       => "string",
+                  "DT_PATH"      => "path",
+                  "DT_CMD_PATH"  => "path",
+                  "DT_QUAD"      => "quadoption",
+                  "DT_SORT"      => "sort order",
+                  "DT_RX"        => "regular expression",
+                  "DT_MAGIC"     => "folder magic",
+                  "DT_ADDR"      => "e-mail address",
+                  "DT_MBCHARTBL" => "string",
+                  "DT_L10N_STR"  => "string (localized)");
 
-my %string_types = ("DT_STR"  => 1,
-                    "DT_RX"   => 1,
-                    "DT_ADDR" => 1,
-                    "DT_PATH" => 1,
+my %string_types = ("DT_STR"       => 1,
+                    "DT_RX"        => 1,
+                    "DT_ADDR"      => 1,
+                    "DT_PATH"      => 1,
+                    "DT_CMD_PATH"  => 1,
                     "DT_MBCHARTBL" => 1,
                     "DT_L10N_STR"  => 1);
 

@@ -33,14 +33,15 @@
 #define DT_NUM		2 /* a number (short) */
 #define DT_STR		3 /* a string */
 #define DT_PATH		4 /* a pathname */
-#define DT_QUAD		5 /* quad-option (yes/no/ask-yes/ask-no) */
-#define DT_SORT		6 /* sorting methods */
-#define DT_RX		7 /* regular expressions */
-#define DT_MAGIC	8 /* mailbox type */
-#define DT_SYN		9 /* synonym for another variable */
-#define DT_ADDR	       10 /* e-mail address */
-#define DT_MBCHARTBL   11 /* multibyte char table */
-#define DT_LNUM        12 /* a number (long) */
+#define DT_CMD_PATH	5 /* a pathname for a command: no relpath expansion */
+#define DT_QUAD		6 /* quad-option (yes/no/ask-yes/ask-no) */
+#define DT_SORT		7 /* sorting methods */
+#define DT_RX		8 /* regular expressions */
+#define DT_MAGIC	9 /* mailbox type */
+#define DT_SYN	       10 /* synonym for another variable */
+#define DT_ADDR	       11 /* e-mail address */
+#define DT_MBCHARTBL   12 /* multibyte char table */
+#define DT_LNUM        13 /* a number (long) */
 
 #define DTYPE(x) ((x) & DT_MASK)
 
@@ -909,7 +910,7 @@ struct option_t MuttVars[] = {
   ** If this option is \fIset\fP, mutt's received-attachments menu will not show the subparts of
   ** individual messages in a multipart/digest.  To see these subparts, press ``v'' on that menu.
   */
-  { "display_filter",	DT_PATH, R_PAGER, {.p=&DisplayFilter}, {.p=0} },
+  { "display_filter",	DT_CMD_PATH, R_PAGER, {.p=&DisplayFilter}, {.p=0} },
   /*
   ** .pp
   ** When set, specifies a command used to filter messages.  When a message
@@ -917,7 +918,7 @@ struct option_t MuttVars[] = {
   ** filtered message is read from the standard output.
   */
 #if defined(DL_STANDALONE) && defined(USE_DOTLOCK)
-  { "dotlock_program",  DT_PATH, R_NONE, {.p=&MuttDotlock}, {.p=BINDIR "/mutt_dotlock"} },
+  { "dotlock_program",  DT_CMD_PATH, R_NONE, {.p=&MuttDotlock}, {.p=BINDIR "/mutt_dotlock"} },
   /*
   ** .pp
   ** Contains the path of the \fCmutt_dotlock(1)\fP binary to be used by
@@ -990,7 +991,7 @@ struct option_t MuttVars[] = {
   { "edit_hdrs",	DT_SYN,  R_NONE, {.p="edit_headers"}, {.p=0} },
   /*
   */
-  { "editor",		DT_PATH, R_NONE, {.p=&Editor}, {.p=0} },
+  { "editor",		DT_CMD_PATH, R_NONE, {.p=&Editor}, {.p=0} },
   /*
   ** .pp
   ** This variable specifies which editor is used by mutt.
@@ -1834,7 +1835,7 @@ struct option_t MuttVars[] = {
   ** $$forward_format, $$indent_string, $$message_format, $$pager_format,
   ** and $$post_indent_string.
   */
-  { "ispell",		DT_PATH, R_NONE, {.p=&Ispell}, {.p=ISPELL} },
+  { "ispell",		DT_CMD_PATH, R_NONE, {.p=&Ispell}, {.p=ISPELL} },
   /*
   ** .pp
   ** How to invoke ispell (GNU's spell-checking software).
@@ -2140,7 +2141,7 @@ struct option_t MuttVars[] = {
   ** .dt %a .dd The remailer's e-mail address.
   ** .de
   */
-  { "mixmaster",	DT_PATH, R_NONE, {.p=&Mixmaster}, {.p=MIXMASTER} },
+  { "mixmaster",	DT_CMD_PATH, R_NONE, {.p=&Mixmaster}, {.p=MIXMASTER} },
   /*
   ** .pp
   ** This variable contains the path to the Mixmaster binary on your
@@ -2179,14 +2180,14 @@ struct option_t MuttVars[] = {
   ** See also $$read_inc, $$write_inc and $$net_inc.
   */
 #endif
-  { "new_mail_command",	DT_PATH, R_NONE, {.p=&NewMailCmd}, {.p=0} },
+  { "new_mail_command",	DT_CMD_PATH, R_NONE, {.p=&NewMailCmd}, {.p=0} },
   /*
   ** .pp
   ** If \fIset\fP, Mutt will call this command after a new message is received.
   ** See the $$status_format documentation for the values that can be formatted
   ** into this command.
   */
-  { "pager",		DT_PATH, R_NONE, {.p=&Pager}, {.p="builtin"} },
+  { "pager",		DT_CMD_PATH, R_NONE, {.p=&Pager}, {.p="builtin"} },
   /*
   ** .pp
   ** This variable specifies which pager you would like to use to view
@@ -2860,7 +2861,7 @@ struct option_t MuttVars[] = {
   ** This is set to ``ask-no'' by default, because some people
   ** accidentally hit ``p'' often.
   */
-  { "print_command",	DT_PATH, R_NONE, {.p=&PrintCmd}, {.p="lpr"} },
+  { "print_command",	DT_CMD_PATH, R_NONE, {.p=&PrintCmd}, {.p="lpr"} },
   /*
   ** .pp
   ** This specifies the command pipe that should be used to print messages.
@@ -2909,7 +2910,7 @@ struct option_t MuttVars[] = {
   ** than returning to the index menu.  If \fIunset\fP, Mutt will return to the
   ** index menu when the external pager exits.
   */
-  { "query_command",	DT_PATH, R_NONE, {.p=&QueryCmd}, {.p=0} },
+  { "query_command",	DT_CMD_PATH, R_NONE, {.p=&QueryCmd}, {.p=0} },
   /*
   ** .pp
   ** This specifies the command Mutt will use to make external address
@@ -3278,7 +3279,7 @@ struct option_t MuttVars[] = {
   ** Note that enabling multipart/alternative is not compatible with inline
   ** PGP encryption.  Mutt will prompt to use PGP/MIME in that case.
   */
-  { "send_multipart_alternative_filter", DT_PATH, R_NONE, {.p=&SendMultipartAltFilter}, {.p=0} },
+  { "send_multipart_alternative_filter", DT_CMD_PATH, R_NONE, {.p=&SendMultipartAltFilter}, {.p=0} },
   /*
   ** .pp
   ** This specifies a filter script, which will convert the main
@@ -3288,7 +3289,7 @@ struct option_t MuttVars[] = {
   ** followed by a blank line, and then the converted content.
   ** See the section ``MIME Multipart/Alternative'' ($alternative-order).
   */
-  { "sendmail",		DT_PATH, R_NONE, {.p=&Sendmail}, {.p=SENDMAIL " -oem -oi"} },
+  { "sendmail",	DT_CMD_PATH, R_NONE, {.p=&Sendmail}, {.p=SENDMAIL " -oem -oi"} },
   /*
   ** .pp
   ** Specifies the program and arguments used to deliver mail sent by Mutt.
@@ -3317,7 +3318,7 @@ struct option_t MuttVars[] = {
   ** process will be put in a temporary file.  If there is some error, you
   ** will be informed as to where to find the output.
   */
-  { "shell",		DT_PATH, R_NONE, {.p=&Shell}, {.p=0} },
+  { "shell",		DT_CMD_PATH, R_NONE, {.p=&Shell}, {.p=0} },
   /*
   ** .pp
   ** Command to use when spawning a subshell.  By default, the user's login
@@ -4478,7 +4479,7 @@ struct option_t MuttVars[] = {
   ** messages, indicating which version of mutt was used for composing
   ** them.
   */
-  { "visual",		DT_PATH, R_NONE, {.p=&Visual}, {.p=0} },
+  { "visual",		DT_CMD_PATH, R_NONE, {.p=&Visual}, {.p=0} },
   /*
   ** .pp
   ** Specifies the visual editor to invoke when the ``\fC~v\fP'' command is

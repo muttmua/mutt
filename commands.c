@@ -626,7 +626,8 @@ void mutt_pipe_message (HEADER *h)
   if (!mutt_buffer_len (buffer))
     goto cleanup;
 
-  mutt_buffer_expand_path (buffer);
+  /* norel because it's a command which searches path */
+  mutt_buffer_expand_path_norel (buffer);
   _mutt_pipe_message (h, mutt_b2s (buffer),
 		      option (OPTPIPEDECODE),
 		      0,
