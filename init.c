@@ -150,7 +150,9 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
   if ((*tok->dptr == '(') && !(flags & MUTT_TOKEN_NOLISP) &&
       ((flags & MUTT_TOKEN_LISP) || option (OPTMUTTLISPINLINEEVAL)))
   {
-    return mutt_lisp_eval_list (dest, tok);
+    int rc = mutt_lisp_eval_list (dest, tok);
+    SKIPWS (tok->dptr);
+    return rc;
   }
 
   while ((ch = *tok->dptr))
