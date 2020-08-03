@@ -2389,7 +2389,6 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	{
 	  /* myvar is a pointer to tmp and will be lost on extract_token */
 	  myvar = safe_strdup (myvar);
-          myvar_del (myvar);
 	}
 
         mutt_extract_token (tmp, s, 0);
