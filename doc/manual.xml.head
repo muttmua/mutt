@@ -7379,7 +7379,7 @@ run (concat "set my_name = '" \
       (or $ENV_NAME "Test User") "'")
 
   ==> generates and runs the line:
-      set my_name = 'Text User'
+      set my_name = 'Test User'
 </screen>
 
     <para>
