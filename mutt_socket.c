@@ -350,12 +350,18 @@ static int socket_preconnect (void)
   return 0;
 }
 
+static void alarm_handler (int sig)
+{
+  /* empty */
+}
+
 /* socket_connect: set up to connect to a socket fd. */
 static int socket_connect (int fd, struct sockaddr* sa)
 {
   int sa_size;
   int save_errno;
   sigset_t set;
+  struct sigaction act, oldalrm;
 
   if (sa->sa_family == AF_INET)
     sa_size = sizeof (struct sockaddr_in);
@@ -369,8 +375,21 @@ static int socket_connect (int fd, struct sockaddr* sa)
     return -1;
   }
 
+  /* Batch mode does not call mutt_signal_init(), so ensure the alarm
+   * interrupts the connect call */
   if (ConnectTimeout > 0)
+  {
+    act.sa_handler = alarm_handler;
+#ifdef SA_INTERRUPT
+    act.sa_flags = SA_INTERRUPT;
+#else
+    act.sa_flags = 0;
+#endif
+    sigemptyset (&act.sa_mask);
+    sigaction (SIGALRM, &act, &oldalrm);
+
     alarm (ConnectTimeout);
+  }
 
   mutt_allow_interrupt (1);
 
@@ -390,7 +409,10 @@ static int socket_connect (int fd, struct sockaddr* sa)
   }
 
   if (ConnectTimeout > 0)
+  {
     alarm (0);
+    sigaction (SIGALRM, &oldalrm, NULL);
+  }
   mutt_allow_interrupt (0);
   sigprocmask (SIG_UNBLOCK, &set, NULL);
 
