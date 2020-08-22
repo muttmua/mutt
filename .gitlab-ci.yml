@@ -2,7 +2,16 @@ image: registry.gitlab.com/muttmua/mutt/ubuntu:18.04
 
 stages:
   - build
+  - pylint
   - deploy
+
+pylint:
+  stage: pylint
+  image: python:3.8-slim
+  script:
+    - pip install flake8 pylint
+    - flake8 **/*.py --max-line-length=100
+    - pylint **/*.py
 
 build:
   stage: build
