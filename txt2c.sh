@@ -14,13 +14,15 @@ txt2c_fallback () {
 	    -e 's/\\/\\\\/g' \
 	    -e 's/"/\\"/g' \
 	    -e 's/??/\\?\\?/g' \
-	    -e 's/	/\\t/'g \
+	    -e 's/	/\\t/g' \
 	    -e 's//\\r/g' \
 	    -e 's/^/	"/g' \
 	    -e 's/$/\\n"/g'
 	echo ";"
 }
 
-./txt2c test </dev/null >/dev/null 2>&1 &&
-./txt2c "$1" ||
-txt2c_fallback "$1"
+if ./txt2c test </dev/null >/dev/null 2>&1; then
+    ./txt2c "$1"
+else
+    txt2c_fallback "$1"
+fi

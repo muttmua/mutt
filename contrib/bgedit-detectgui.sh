@@ -24,7 +24,7 @@
 # switches to the background editing feature.
 #
 
-if [ -n "$MUTT_USE_GVIM" -a -n "$DISPLAY" ]; then
+if [ -n "$MUTT_USE_GVIM" ] && [ -n "$DISPLAY" ]; then
     # Foreground gvim, window 80 cols by 40 rows at X 400 and Y 0.
     echo 'set editor="gvim -f -geometry 80x40+400+0"'
     echo 'set background_edit=yes'

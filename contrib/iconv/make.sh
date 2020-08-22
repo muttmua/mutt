@@ -8,12 +8,13 @@
 # it under the terms of the GNU General Public License version 2 or later.
 #
 
-LIBICONV="$1"
+LIBICONV=$1
 test -d $LIBICONV/libcharset/tools || {
 	echo "Sorry, I can't find libiconv's source!" >&2 ; 
 	exit 1 ;
 }
 
+# shellcheck disable=SC2231
 for f in $LIBICONV/libcharset/tools/* ; do
 	rm -f tmp.rc.
 	( head -3 $f | grep -q 'locale name.*locale charmap.*locale_charset' ) && (

@@ -4,7 +4,7 @@
 # grep for some things which may look like security problems.
 #
 
-TMPFILE="`mktemp check_sec.tmp.XXXXXX`" || exit 1
+TMPFILE=`mktemp check_sec.tmp.XXXXXX` || exit 1
 
 RV=0;
 
@@ -13,9 +13,9 @@ do_check_files ()
 	pattern="$1" ; shift
 	magic="$1" ; shift
 	msg="$1" ; shift
-	egrep -n "$pattern" "$@"        	| \
+	grep -En "$pattern" "$@"        	| \
 		grep -v '^[^	 ]*:[^ 	]*#' 	| \
-		fgrep -v "$magic" > $TMPFILE
+		grep -Fv "$magic" > $TMPFILE
 
 	test -s $TMPFILE && {
 		echo "$msg" ;
@@ -41,7 +41,7 @@ do_check '\<FREE[ ]?\([^&]' __FREE_CHECKED__ "You probably meant FREE(&...) here
 
 # don't do this check on others' code.
 do_check_files '\<(malloc|realloc|free|strdup)[ 	]*\(' __MEM_CHECKED__ "Alert: Use of traditional memory management calls." \
-	*.c imap/*.c autocrypt/*.c
+	./*.c imap/*.c autocrypt/*.c
 
 rm -f $TMPFILE
 exit $RV

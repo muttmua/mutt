@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC1004
 
 # $Id$
 
@@ -15,21 +16,21 @@ for mode in help defs; do
 			echo "enum {"
 			;;
 	esac
-	for i in $*; do
+	for i in "$@"; do
 		if test $mode = help; then
-			cat $i | {
+			{
 				number=1
 				while IFS="" read -r oneline; do
 					printf "%d %s\n" $number "$oneline"
 					number=`expr $number + 1`
 				done
-			} | \
+			} < "$i" | \
 			sed -e 's;^[0-9]* \(\/\*.*\*\/\);\1;' \
 			-e 's;^\([0-9]*\) \(OP_[^ ]*\) *\(.*\);	/* L10N: Help screen description for \2\
 #: '"$i"':\1 */\
 	N_(\3),;'
 		else
-			sed -e '/^\/\*/d' -e 's;^\([^ ]*\).*;	\1,;' < $i
+			sed -e '/^\/\*/d' -e 's;^\([^ ]*\).*;	\1,;' < "$i"
 		fi
 	done
 	if test $mode = help; then
