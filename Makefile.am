@@ -217,4 +217,7 @@ mutt-dist:
 update-doc:
 	(cd doc && $(MAKE) update-doc)
 
-.PHONY: commit pclean check-security
+shellcheck:
+	(find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
+
+.PHONY: commit pclean check-security shellcheck
