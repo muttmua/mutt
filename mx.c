@@ -673,6 +673,8 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
     mx_fastclose_mailbox (ctx);
     if (!pctx)
       FREE (&ctx);
+    else
+      ctx = NULL;
   }
 
   unset_option (OPTFORCEREFRESH);
