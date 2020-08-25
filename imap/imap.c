@@ -207,8 +207,7 @@ void imap_logout_all (void)
 }
 
 /* imap_read_literal: read bytes bytes from server into file. Not explicitly
- *   buffered, relies on FILE buffering. NOTE: strips \r from \r\n.
- *   Apparently even literals use \r\n-terminated strings ?! */
+ *   buffered, relies on FILE buffering. */
 int imap_read_literal (FILE* fp, IMAP_DATA* idata, unsigned int bytes, progress_t* pbar)
 {
   unsigned int pos;
@@ -228,7 +227,8 @@ int imap_read_literal (FILE* fp, IMAP_DATA* idata, unsigned int bytes, progress_
       return -1;
     }
 
-#if 1
+    /* Strip \r from \r\n, apparantly even literals use \r\n-terminated
+      strings ?! */
     if (r == 1 && c != '\n')
       fputc ('\r', fp);
 
@@ -239,7 +239,7 @@ int imap_read_literal (FILE* fp, IMAP_DATA* idata, unsigned int bytes, progress_
     }
     else
       r = 0;
-#endif
+
     fputc (c, fp);
 
     if (pbar && !(pos % 1024))
