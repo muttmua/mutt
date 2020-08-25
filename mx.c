@@ -619,7 +619,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
     {
       mx_fastclose_mailbox (ctx);
       if (!pctx)
-	FREE (&ctx);
+        FREE (&ctx);
       return NULL;
     }
     return ctx;
@@ -638,7 +638,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
     mx_fastclose_mailbox (ctx);
     if (!pctx)
       FREE (&ctx);
-    return (NULL);
+    return NULL;
   }
 
   mutt_make_label_hash (ctx);
