@@ -2712,7 +2712,7 @@ search_next:
 	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
 	mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
-                           NULL, NULL, extra->ctx, extra->hdr);
+                           NULL, NULL, extra->ctx, NULL);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
@@ -2900,7 +2900,7 @@ search_next:
         }
 	CHECK_MODE(IsHeader(extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, NULL);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
