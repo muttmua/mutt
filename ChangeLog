@@ -1,3 +1,98 @@
+2020-08-29 12:25:28 -0700  Kevin McCarthy  <kevin@8t8.us> (5fb17352)
+
+        * Update UPDATING file for 1.14.7.
+
+M	UPDATING
+
+2020-08-27 15:03:08 -0700  Kevin McCarthy  <kevin@8t8.us> (2b30e41d)
+
+        * Remove cur parameter for pager recall and make-key ops.
+        
+        For the recall operation, this can lead to a memory leak where the
+        recalled message overwrites the sctx saved data.
+        
+        Arguably instead, the send_message setup could be more picky about
+        saving cur, or recall-message could be careful to not overwrite the
+        message-id.
+        
+        The context parameter isn't actually used for mail-key, and the
+        curs_main.c doesn't pass it.  But I can't bring myself to make that
+        change for a stable fix.
+
+M	pager.c
+
+2020-08-24 13:45:24 -0400  Remco Rĳnders  <remco@webconquest.com> (f8f760d8)
+
+        * Fix segfault when imap server is unreachable
+
+M	mx.c
+
+2020-08-12 10:37:56 -0700  Kevin McCarthy  <kevin@8t8.us> (3548ec07)
+
+        * Ensure SIGALRM interrupts connect() in batch mode.
+        
+        Mutt doesn't call mutt_signal_init() in batch mode, which mean no
+        default handler for SIGALRM is set in that case.  The man pages seem
+        to indicate SIGALRM by default should terminate the process, but
+        ticket 273 reported no interruption occurring: Mutt just hung
+        indefinitely.
+        
+        In any case, terminating isn't the desired behavior either.  Add a
+        handler, as is done in imap_wait_keepalive() and send_msg().
+
+M	mutt_socket.c
+
+2020-07-29 13:54:19 -0700  Kevin McCarthy  <kevin@8t8.us> (05a2008e)
+
+        * Fix List-Post header parser to handle multiple values.
+        
+        If the mailto url was in the second or greater position, beg was on
+        the wrong character.  This would cause url_check_scheme() to fail to
+        recognize the mailto.
+        
+        Change the loop to skip to the '<' on subsequent loops.  Keep the loop
+        iterator the same, to ensure the list-post entries are comma
+        separated.
+        
+        As a note, the parser is still not strictly following the RFC, but
+        appears to work well enough in the "real world" that I'm not going to
+        tweak it for now.
+
+M	parse.c
+
+2020-07-24 15:45:17 -0700  Kevin McCarthy  <kevin@8t8.us> (c3ae7ba5)
+
+        * Prevent lynx from dumping a remote site if manual.txt is missing.
+        
+        Ambrose Li reported that if the xsltproc step fails in manual
+        generation, lynx will dump a *remote* site to manual.txt, because
+        manual.html does not exist.  w3m and elinks appear not to have this
+        issue.
+        
+        Prevent lynx from doing this by adding '-localhost' flag.
+        
+        Ambrose also suggested prefixing './manual.html' instead should fix
+        the problem, but to be conservative about not breaking anything I'm
+        just adding the '-localhost' flag.
+
+M	doc/Makefile.am
+
+2020-07-15 19:47:11 -0700  Kevin McCarthy  <kevin@8t8.us> (62fab7bd)
+
+        * Ensure a blackslash inside backquotes doesn't skip past eos.
+        
+        I'm not sure if this is possible because of the way the input is read
+        by the muttrc parser, but fix the logic to ensure it can't happen.
+
+M	init.c
+
+2020-07-11 12:58:51 -0700  Kevin McCarthy  <kevin@8t8.us> (9bb7acf7)
+
+        * automatic post-release commit for mutt-1.14.6
+
+M	ChangeLog
+M	VERSION
+
 2020-07-11 12:55:01 -0700  Kevin McCarthy  <kevin@8t8.us> (e78fcc51)
 
         * Update UPDATING file for 1.14.6.
