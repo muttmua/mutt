@@ -9,6 +9,10 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+1.14.7 (2020-08-29):
+
+  ! Bug fix release.
+
 1.14.6 (2020-07-11):
 
   ! Bug fix release.
