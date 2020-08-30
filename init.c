@@ -2418,6 +2418,10 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	  mutt_buffer_strcpy (scratch, tmp->data);
           if (mutt_strcmp (MuttVars[idx].option, "record") == 0)
             mutt_buffer_expand_multi_path (scratch, FccDelimiter);
+          else if ((mutt_strcmp (MuttVars[idx].option, "signature") == 0) &&
+                   mutt_buffer_len (scratch) &&
+                   (*(scratch->dptr - 1) == '|'))
+            mutt_buffer_expand_path_norel (scratch);
           else if (DTYPE (MuttVars[idx].type) == DT_CMD_PATH)
             mutt_buffer_expand_path_norel (scratch);
           else
@@ -2930,7 +2934,10 @@ static int parse_source (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUF
 
   path = mutt_buffer_new ();
   mutt_buffer_strcpy (path, tmp->data);
-  mutt_buffer_expand_path (path);
+  if (mutt_buffer_len (path) && (*(path->dptr - 1) == '|'))
+    mutt_buffer_expand_path_norel (path);
+  else
+    mutt_buffer_expand_path (path);
   rc = source_rc (mutt_b2s (path), err);
   mutt_buffer_free (&path);
 
