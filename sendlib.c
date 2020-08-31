@@ -34,6 +34,7 @@
 #include "pager.h"
 #include "charset.h"
 #include "mutt_crypt.h"
+#include "mutt_random.h"
 #include "mutt_idna.h"
 #include "buffy.h"
 #include "send.h"
@@ -516,13 +517,8 @@ int mutt_write_mime_body (BODY *a, FILE *f)
 void mutt_generate_boundary (PARAMETER **parm)
 {
   char rs[BOUNDARYLEN + 1];
-  char *p = rs;
-  int i;
 
-  rs[BOUNDARYLEN] = 0;
-  for (i=0;i<BOUNDARYLEN;i++)
-    *p++ = B64Chars[LRAND() % sizeof (B64Chars)];
-  *p = 0;
+  mutt_base64_random96(rs);
 
   mutt_set_parameter ("boundary", rs, parm);
 }

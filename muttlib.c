@@ -34,6 +34,7 @@
 #endif
 
 #include "mutt_crypt.h"
+#include "mutt_random.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -1005,9 +1006,12 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
 void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
                           const char *src, int line)
 {
-  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%ld%ld%s%s",
+  RANDOM64 random64;
+  mutt_random_bytes((char *)random64.char_array, sizeof(random64));
+
+  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%lu%s%s",
                       NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-                      (int) getuid (), (int) getpid (), random (), random (),
+                      (int) getuid (), (int) getpid (), random64.int_64,
                       suffix ? "." : "", NONULL (suffix));
   dprint (3, (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, mutt_b2s (buf)));
   if (unlink (mutt_b2s (buf)) && errno != ENOENT)
@@ -1018,9 +1022,12 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
 void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                    const char *src, int line)
 {
-  size_t n = snprintf (s, slen, "%s/%s-%s-%d-%d-%ld%ld%s%s",
+  RANDOM64 random64;
+  mutt_random_bytes((char *) random64.char_array, sizeof(random64));
+
+  size_t n = snprintf (s, slen, "%s/%s-%s-%d-%d-%lu%s%s",
                        NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-                       (int) getuid (), (int) getpid (), random (), random (),
+                       (int) getuid (), (int) getpid (), random64.int_64,
                        suffix ? "." : "", NONULL (suffix));
   if (n >= slen)
     dprint (1, (debugfile, "%s:%d: ERROR: insufficient buffer space to hold temporary filename! slen=%zu but need %zu\n",
