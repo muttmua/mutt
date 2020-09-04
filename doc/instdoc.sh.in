@@ -1,4 +1,5 @@
 #!/bin/sh --
+# shellcheck disable=SC2034
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
