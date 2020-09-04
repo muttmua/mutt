@@ -8,7 +8,6 @@ stages:
 
 shellcheck:
   stage: shellcheck
-  image: koalaman/shellcheck-alpine:stable
   script:
     - (find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
 
