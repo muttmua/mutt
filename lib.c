@@ -677,44 +677,6 @@ char *mutt_substrdup (const char *begin, const char *end)
   return p;
 }
 
-/* prepare a file name to survive the shell's quoting rules.
- * From the Unix programming FAQ by way of Liviu.
- */
-
-size_t mutt_quote_filename (char *d, size_t l, const char *f)
-{
-  size_t i, j = 0;
-
-  if (!f)
-  {
-    *d = '\0';
-    return 0;
-  }
-
-  /* leave some space for the trailing characters. */
-  l -= 6;
-
-  d[j++] = '\'';
-
-  for (i = 0; j < l && f[i]; i++)
-  {
-    if (f[i] == '\'' || f[i] == '`')
-    {
-      d[j++] = '\'';
-      d[j++] = '\\';
-      d[j++] = f[i];
-      d[j++] = '\'';
-    }
-    else
-      d[j++] = f[i];
-  }
-
-  d[j++] = '\'';
-  d[j]   = '\0';
-
-  return j;
-}
-
 /* NULL-pointer aware string comparison functions */
 
 int mutt_strcmp(const char *a, const char *b)
