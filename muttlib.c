@@ -542,21 +542,6 @@ void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter)
   delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path);
 }
 
-char *mutt_expand_path (char *s, size_t slen)
-{
-  BUFFER *s_buf;
-
-  s_buf = mutt_buffer_pool_get ();
-
-  mutt_buffer_addstr (s_buf, NONULL (s));
-  mutt_buffer_expand_path (s_buf);
-  strfcpy (s, mutt_b2s (s_buf), slen);
-
-  mutt_buffer_pool_release (&s_buf);
-
-  return s;
-}
-
 void mutt_buffer_expand_path (BUFFER *src)
 {
   _mutt_buffer_expand_path (src, 0, 1);
