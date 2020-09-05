@@ -176,7 +176,7 @@ void mutt_browser_cleanup (void);
 void mutt_buffer_concat_path (BUFFER *, const char *, const char *);
 void mutt_buffer_concatn_path (BUFFER *dst, const char *dir, size_t dirlen,
                                const char *fname, size_t fnamelen);
-#define mutt_buffer_quote_filename(a,b) _mutt_buffer_quote_filename (a, b, 1);
+#define mutt_buffer_quote_filename(a,b) _mutt_buffer_quote_filename (a, b, 1)
 void _mutt_buffer_quote_filename (BUFFER *, const char *, int);
 void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, short slash);
 void mutt_canonical_charset (char *, size_t, const char *);
@@ -302,7 +302,6 @@ char *mutt_apply_replace (char *, size_t, char *, REPLACE_LIST *);
 int mutt_builtin_editor (SEND_CONTEXT *);
 int mutt_can_decode (BODY *);
 int mutt_change_flag (HEADER *, int);
-int mutt_check_alias_name (const char *, char *, size_t);
 int mutt_check_encoding (const char *);
 int mutt_check_key (const char *);
 int mutt_check_menu (const char *);

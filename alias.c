@@ -28,6 +28,9 @@
 #include <string.h>
 #include <ctype.h>
 
+static int check_alias_name (const char *s, BUFFER *dest);
+
+
 ADDRESS *mutt_lookup_alias (const char *s)
 {
   ALIAS *t = Aliases;
@@ -165,7 +168,7 @@ void mutt_expand_aliases_env (ENVELOPE *env)
  * variable.
  */
 
-static void write_safe_address (FILE *fp, char *s)
+static void write_safe_address (FILE *fp, const char *s)
 {
   while (*s)
   {
@@ -211,28 +214,30 @@ ADDRESS *mutt_get_address (ENVELOPE *env, char **pfxp)
   return adr;
 }
 
-static void recode_buf (char *buf, size_t buflen)
+static void recode_buf (BUFFER *buf)
 {
   char *s;
 
   if (!ConfigCharset || !Charset)
     return;
-  s = safe_strdup (buf);
+  s = safe_strdup (mutt_b2s (buf));
   if (!s)
     return;
   if (mutt_convert_string (&s, Charset, ConfigCharset, 0) == 0)
-    strfcpy (buf, s, buflen);
+    mutt_buffer_strcpy (buf, s);
   FREE(&s);
 }
 
 void mutt_create_alias (ENVELOPE *cur, ADDRESS *iadr)
 {
   ALIAS *new, *t;
-  char buf[LONG_STRING], tmp[LONG_STRING], prompt[SHORT_STRING], *pc;
-  char *err = NULL;
-  char fixed[LONG_STRING];
-  FILE *rc;
+  BUFFER *buf = NULL, *tmp = NULL;
+  char prompt[SHORT_STRING], *pc, *err = NULL, line_end;
+  FILE *rc = NULL;
   ADDRESS *adr = NULL;
+
+  buf = mutt_buffer_pool_get ();
+  tmp = mutt_buffer_pool_get ();
 
   if (cur)
   {
@@ -245,62 +250,65 @@ void mutt_create_alias (ENVELOPE *cur, ADDRESS *iadr)
 
   if (adr && adr->mailbox)
   {
-    strfcpy (tmp, adr->mailbox, sizeof (tmp));
-    if ((pc = strchr (tmp, '@')))
+    mutt_buffer_strcpy (tmp, adr->mailbox);
+    if ((pc = strchr (tmp->data, '@')))
+    {
       *pc = 0;
+      mutt_buffer_fix_dptr (tmp);
+    }
   }
-  else
-    tmp[0] = '\0';
 
   /* Don't suggest a bad alias name in the event of a strange local part. */
-  mutt_check_alias_name (tmp, buf, sizeof (buf));
+  check_alias_name (mutt_b2s (tmp), buf);
 
 retry_name:
   /* L10N: prompt to add a new alias */
-  if (mutt_get_field (_("Alias as: "), buf, sizeof (buf), 0) != 0 || !buf[0])
-    return;
+  if (mutt_buffer_get_field (_("Alias as: "), buf, 0) != 0 ||
+      !mutt_buffer_len (buf))
+    goto cleanup;
 
   /* check to see if the user already has an alias defined */
-  if (mutt_lookup_alias (buf))
+  if (mutt_lookup_alias (mutt_b2s (buf)))
   {
     mutt_error _("You already have an alias defined with that name!");
-    return;
+    goto cleanup;
   }
 
-  if (mutt_check_alias_name (buf, fixed, sizeof (fixed)))
+  if (check_alias_name (mutt_b2s (buf), tmp))
   {
     switch (mutt_yesorno (_("Warning: This alias name may not work.  Fix it?"), MUTT_YES))
     {
       case MUTT_YES:
-      	strfcpy (buf, fixed, sizeof (buf));
+      	mutt_buffer_strcpy (buf, mutt_b2s (tmp));
 	goto retry_name;
       case -1:
-	return;
+	goto cleanup;
     }
   }
 
   new       = safe_calloc (1, sizeof (ALIAS));
   new->self = new;
-  new->name = safe_strdup (buf);
+  new->name = safe_strdup (mutt_b2s (buf));
 
   mutt_addrlist_to_local (adr);
 
   if (adr)
-    strfcpy (buf, adr->mailbox, sizeof (buf));
+    mutt_buffer_strcpy (buf, adr->mailbox);
   else
-    buf[0] = 0;
+    mutt_buffer_clear (buf);
 
   mutt_addrlist_to_intl (adr, NULL);
 
   do
   {
-    if (mutt_get_field (_("Address: "), buf, sizeof (buf), 0) != 0 || !buf[0])
+    if (mutt_buffer_get_field (_("Address: "), buf, 0) != 0 ||
+        !mutt_buffer_len (buf))
     {
       mutt_free_alias (&new);
-      return;
+      goto cleanup;
     }
 
-    if ((new->addr = rfc822_parse_adrlist (new->addr, buf)) == NULL)
+    if ((new->addr = rfc822_parse_adrlist (new->addr, mutt_b2s (buf))) == NULL)
       BEEP ();
     if (mutt_addrlist_to_intl (new->addr, &err))
     {
@@ -313,24 +321,25 @@ retry_name:
   while (new->addr == NULL);
 
   if (adr && adr->personal && !mutt_is_mail_list (adr))
-    strfcpy (buf, adr->personal, sizeof (buf));
+    mutt_buffer_strcpy (buf, adr->personal);
   else
-    buf[0] = 0;
+    mutt_buffer_clear (buf);
 
-  if (mutt_get_field (_("Personal name: "), buf, sizeof (buf), 0) != 0)
+  if (mutt_buffer_get_field (_("Personal name: "), buf, 0) != 0)
   {
     mutt_free_alias (&new);
-    return;
+    goto cleanup;
   }
-  new->addr->personal = safe_strdup (buf);
+  new->addr->personal = safe_strdup (mutt_b2s (buf));
 
-  buf[0] = 0;
-  rfc822_write_address (buf, sizeof (buf), new->addr, 1);
-  snprintf (prompt, sizeof (prompt), _("[%s = %s] Accept?"), new->name, buf);
+  mutt_buffer_clear (buf);
+  rfc822_write_address (buf->data, buf->dsize, new->addr, 1);
+  mutt_buffer_fix_dptr (buf);
+  snprintf (prompt, sizeof (prompt), _("[%s = %s] Accept?"), new->name, mutt_b2s (buf));
   if (mutt_yesorno (prompt, MUTT_YES) != MUTT_YES)
   {
     mutt_free_alias (&new);
-    return;
+    goto cleanup;
   }
 
   mutt_alias_add_reverse (new);
@@ -344,53 +353,63 @@ retry_name:
   else
     Aliases = new;
 
-  strfcpy (buf, NONULL (AliasFile), sizeof (buf));
-  if (mutt_get_field (_("Save to file: "), buf, sizeof (buf), MUTT_FILE) != 0)
-    return;
-  mutt_expand_path (buf, sizeof (buf));
-  if ((rc = fopen (buf, "a+")))
+  mutt_buffer_strcpy (buf, NONULL (AliasFile));
+  if (mutt_buffer_get_field (_("Save to file: "), buf, MUTT_FILE) != 0)
+    goto cleanup;
+  mutt_buffer_expand_path (buf);
+  if ((rc = fopen (mutt_b2s (buf), "a+")))
   {
     /* terminate existing file with \n if necessary */
     if (fseek (rc, 0, SEEK_END))
-      goto fseek_err;
+    {
+      mutt_perror (_("Error seeking in alias file"));
+      goto cleanup;
+    }
     if (ftell(rc) > 0)
     {
       if (fseek (rc, -1, SEEK_CUR) < 0)
-	goto fseek_err;
-      if (fread(buf, 1, 1, rc) != 1)
+      {
+        mutt_perror (_("Error seeking in alias file"));
+	goto cleanup;
+      }
+      if (fread(&line_end, 1, 1, rc) != 1)
       {
 	mutt_perror (_("Error reading alias file"));
-	safe_fclose (&rc);
-	return;
+	goto cleanup;
       }
       if (fseek (rc, 0, SEEK_END) < 0)
-	goto fseek_err;
-      if (buf[0] != '\n')
+      {
+        mutt_perror (_("Error seeking in alias file"));
+	goto cleanup;
+      }
+      if (line_end != '\n')
 	fputc ('\n', rc);
     }
 
-    if (mutt_check_alias_name (new->name, NULL, 0))
-      mutt_quote_filename (buf, sizeof (buf), new->name);
+    if (check_alias_name (new->name, NULL))
+      mutt_buffer_quote_filename (buf, new->name);
     else
-      strfcpy (buf, new->name, sizeof (buf));
-    recode_buf (buf, sizeof (buf));
-    fprintf (rc, "alias %s ", buf);
-    buf[0] = 0;
-    rfc822_write_address (buf, sizeof (buf), new->addr, 0);
-    recode_buf (buf, sizeof (buf));
-    write_safe_address (rc, buf);
+      mutt_buffer_strcpy (buf, new->name);
+    recode_buf (buf);
+    fprintf (rc, "alias %s ", mutt_b2s (buf));
+    mutt_buffer_clear (buf);
+    rfc822_write_address (buf->data, buf->dsize, new->addr, 0);
+    mutt_buffer_fix_dptr (buf);
+    recode_buf (buf);
+    write_safe_address (rc, mutt_b2s (buf));
     fputc ('\n', rc);
     safe_fclose (&rc);
     mutt_message _("Alias added.");
   }
   else
-    mutt_perror (buf);
+    mutt_perror (mutt_b2s (buf));
 
-  return;
+cleanup:
+  mutt_buffer_pool_release (&buf);
+  mutt_buffer_pool_release (&tmp);
 
-fseek_err:
-  mutt_perror (_("Error seeking in alias file"));
   safe_fclose (&rc);
+
   return;
 }
 
@@ -399,23 +418,22 @@ fseek_err:
  * the RFC 822 and the mutt configuration parser are permitted.
  */
 
-int mutt_check_alias_name (const char *s, char *dest, size_t destlen)
+static int check_alias_name (const char *s, BUFFER *dest)
 {
   wchar_t wc;
   mbstate_t mb;
   size_t l;
-  int rv = 0, bad = 0, dry = !dest || !destlen;
+  int rv = 0, bad = 0, dry = !dest;
 
   memset (&mb, 0, sizeof (mbstate_t));
 
   if (!dry)
-    destlen--;
-  for (; s && *s && (dry || destlen) &&
+    mutt_buffer_clear (dest);
+  for (; s && *s &&
          (l = mbrtowc (&wc, s, MB_CUR_MAX, &mb)) != 0;
-       s += l, destlen -= l)
+       s += l)
   {
     bad = l == (size_t)(-1) || l == (size_t)(-2); /* conversion error */
-    bad = bad || (!dry && l > destlen);		/* too few room for mb char */
     if (l == 1)
       bad = bad || (strchr ("-_+=.", *s) == NULL && !iswalnum (wc));
     else
@@ -426,17 +444,12 @@ int mutt_check_alias_name (const char *s, char *dest, size_t destlen)
 	return -1;
       if (l == (size_t)(-1))
         memset (&mb, 0, sizeof (mbstate_t));
-      *dest++ = '_';
+      mutt_buffer_addch (dest, '_');
       rv = -1;
     }
     else if (!dry)
-    {
-      memcpy (dest, s, l);
-      dest += l;
-    }
+      mutt_buffer_addstr_n (dest, s, l);
   }
-  if (!dry)
-    *dest = 0;
   return rv;
 }
 
