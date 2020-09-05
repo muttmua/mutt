@@ -831,11 +831,16 @@ self_insert:
 	if (multiple)
 	{
 	  char **tfiles;
+          BUFFER *path = NULL;
+
+          path = mutt_buffer_pool_get ();
 	  *numfiles = 1;
 	  tfiles = safe_calloc (*numfiles, sizeof (char *));
-	  mutt_expand_path (buf, buflen);
-	  tfiles[0] = safe_strdup (buf);
+          mutt_buffer_strcpy (path, buf);
+	  mutt_buffer_expand_path (path);
+	  tfiles[0] = safe_strdup (mutt_b2s (path));
 	  *files = tfiles;
+          mutt_buffer_pool_release (&path);
 	}
 	rv = 0;
 	goto bye;
