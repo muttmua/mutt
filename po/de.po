@@ -475,7 +475,7 @@ msgstr "Erzeuge Schlüssel für Autocrypt..."
 #: autocrypt/autocrypt_gpgme.c:148 autocrypt/autocrypt_gpgme.c:169
 #, c-format
 msgid "Error creating autocrypt key: %s\n"
-msgstr "Fehler beim erstellen des Autocrypt Schlüssels: %s\n"
+msgstr "Fehler beim Erstellen des Autocrypt-Schlüssels: %s\n"
 
 #. L10N:
 #. After selecting a key for an autocrypt account,
@@ -1562,12 +1562,12 @@ msgstr "Rufe S/MIME auf..."
 #: crypt-gpgme.c:586
 #, c-format
 msgid "error enabling CMS protocol: %s\n"
-msgstr "Fehler beim Aktivieren des CMS Protokolls : %s\n"
+msgstr "Fehler beim Aktivieren des CMS-Protokolls: %s\n"
 
 #: crypt-gpgme.c:607
 #, c-format
 msgid "error creating gpgme data object: %s\n"
-msgstr "Fehler beim Erzeugen des gpgme Datenobjekts: %s\n"
+msgstr "Fehler beim Erzeugen des gpgme-Datenobjekts: %s\n"
 
 #: crypt-gpgme.c:701 crypt-gpgme.c:725 crypt-gpgme.c:1827 crypt-gpgme.c:2605
 #, c-format
