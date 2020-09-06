@@ -479,9 +479,11 @@ static int mbox_open_mailbox_append (CONTEXT *ctx, int flags)
     return -1;
   }
 
+  mutt_block_signals ();
   if (mbox_lock_mailbox (ctx, 1, 1) != 0)
   {
     mutt_error (_("Couldn't lock %s\n"), ctx->path);
+    mutt_unblock_signals ();
     safe_fclose (&ctx->fp);
     return -1;
   }
