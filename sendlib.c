@@ -80,8 +80,6 @@ const char B64Chars[64] = {
   '8', '9', '+', '/'
 };
 
-static char MsgIdPfx = 'A';
-
 static void transform_to_7bit (BODY *a, FILE *fpin);
 
 static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
@@ -2415,19 +2413,28 @@ const char *mutt_fqdn(short may_hide_host)
 char *mutt_gen_msgid (void)
 {
   char buf[SHORT_STRING];
-  time_t now;
-  struct tm *tm;
+  time_t now = time (NULL);
+  char random_bytes[8];
+  char localpart[12]; /* = 32 bit timestamp, plus 64 bit randomness */
+  unsigned char localpart_B64[16+1]; /* = Base64 encoded value of localpart plus
+                                        terminating \0 */
   const char *fqdn;
 
-  now = time (NULL);
-  tm = gmtime (&now);
-  if (!(fqdn = mutt_fqdn(0)))
-    fqdn = NONULL(Hostname);
+  mutt_random_bytes ((char *) &random_bytes, sizeof(random_bytes));
 
-  snprintf (buf, sizeof (buf), "<%d%02d%02d%02d%02d%02d.G%c%u@%s>",
-	    tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour,
-	    tm->tm_min, tm->tm_sec, MsgIdPfx, (unsigned int)getpid (), fqdn);
-  MsgIdPfx = (MsgIdPfx == 'Z') ? 'A' : MsgIdPfx + 1;
+  /* Convert the four least significant bytes of our timestamp and put it in
+     localpart, with proper endianness (for humans) taken into account. */
+  for (int i = 0; i < 4; i++)
+    localpart[i] = (uint8_t) (now >> (3-i)*8u);
+
+  memcpy (&localpart[4], &random_bytes, 8);
+
+  mutt_to_base64 (localpart_B64, (unsigned char *) localpart, 12, 17);
+
+  if (!(fqdn = mutt_fqdn (0)))
+    fqdn = NONULL (Hostname);
+
+  snprintf (buf, sizeof (buf), "<%s@%s>", localpart_B64, fqdn);
   return (safe_strdup (buf));
 }
 
