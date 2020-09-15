@@ -10697,25 +10697,6 @@ via the <link linkend="tmpdir">$tmpdir</link> variable.
 <sect1 id="security-leaks">
 <title>Information Leaks</title>
 
-<sect2 id="security-leaks-mid">
-<title>Message-Id: headers</title>
-
-<para>
-Message-Id: headers contain a local part that is to be created in a
-unique fashion. In order to do so, Mutt will <quote>leak</quote> some
-information to the outside world when sending messages: the generation
-of this header includes a step counter which is increased (and rotated)
-with every message sent. Other parts include the date, time, PID of mutt,
-and <link linkend="hostname">$hostname</link>.
-In a longer running mutt session, others can
-make assumptions about your mailing habits depending on the number of
-messages sent. If this is not desired, the header can be manually
-provided using <link linkend="edit-headers">$edit_headers</link> (though
-not recommended).
-</para>
-
-</sect2>
-
 <sect2 id="security-leaks-mailto">
 <title><literal>mailto:</literal>-style Links</title>
 
