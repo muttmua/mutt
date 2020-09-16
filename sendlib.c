@@ -2420,7 +2420,7 @@ char *mutt_gen_msgid (void)
                                         terminating \0 */
   const char *fqdn;
 
-  mutt_random_bytes ((char *) &random_bytes, sizeof(random_bytes));
+  mutt_random_bytes (random_bytes, sizeof(random_bytes));
 
   /* Convert the four least significant bytes of our timestamp and put it in
      localpart, with proper endianness (for humans) taken into account. */

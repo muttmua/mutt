@@ -112,7 +112,7 @@ void mutt_base64_random96 (char output_B64[static 17])
 {
   char random_bytes[12];
 
-  mutt_random_bytes ((char *) random_bytes, sizeof(random_bytes));
+  mutt_random_bytes (random_bytes, sizeof(random_bytes));
   mutt_to_base64 ((unsigned char *) output_B64, (unsigned char *) random_bytes,
                   12, 17);
 }

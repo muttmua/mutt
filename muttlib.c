@@ -1007,7 +1007,7 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
                           const char *src, int line)
 {
   RANDOM64 random64;
-  mutt_random_bytes((char *)random64.char_array, sizeof(random64));
+  mutt_random_bytes(random64.char_array, sizeof(random64));
 
   mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
                       NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
@@ -1023,7 +1023,7 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                    const char *src, int line)
 {
   RANDOM64 random64;
-  mutt_random_bytes((char *) random64.char_array, sizeof(random64));
+  mutt_random_bytes(random64.char_array, sizeof(random64));
 
   size_t n = snprintf (s, slen, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
                        NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
