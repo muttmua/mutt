@@ -20,7 +20,7 @@
 .\"     along with this program; if not, write to the Free Software
 .\"     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 .\"
-.TH smime_keys 1 "May 2009" Unix "User Manuals"
+.TH smime_keys 1 "September 19, 2020" Unix "User Manuals"
 .SH "NAME"
 smime_keys \- Utility to add S/MIME certificate to the internal database used by mutt
 .SH SYNOPSIS
@@ -35,6 +35,9 @@ and signed with S/MIME.
 .PP
 .IP \fBinit\fP
 no files needed, inits directory structure.
+.IP \fBrefresh\fP
+no files needed. refreshes index files, including
+trust flag/expiration.
 .IP \fBlist\fP
 lists the certificates stored in database.
 .IP \fBlabel\fP
