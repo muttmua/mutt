@@ -4004,7 +4004,7 @@ struct option_t MuttVars[] = {
   ** The file containing a client certificate and its associated private
   ** key.
   */
-  { "ssl_force_tls",		DT_BOOL, R_NONE, {.l=OPTSSLFORCETLS}, {.l=0} },
+  { "ssl_force_tls",		DT_BOOL, R_NONE, {.l=OPTSSLFORCETLS}, {.l=1} },
   /*
   ** .pp
   ** If this variable is \fIset\fP, Mutt will require that all connections

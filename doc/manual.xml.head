@@ -9095,7 +9095,7 @@ communication</quote>.
   <title>Tunnel</title>
   <para>
     When connecting through a <link linkend="tunnel">$tunnel</link>
-    and <link linkend="tunnel-is-secure">$tunnel_is_secure"</link> is
+    and <link linkend="tunnel-is-secure">$tunnel_is_secure</link> is
     set (the default), Mutt will assume the connection to the server
     through the pipe is already secured.  Mutt will ignore <link
     linkend="ssl-starttls">$ssl_starttls</link> and <link
@@ -9103,7 +9103,7 @@ communication</quote>.
     has already been negotiated.
   </para>
   <para>
-    When <link linkend="tunnel-is-secure">$tunnel_is_secure"</link> is
+    When <link linkend="tunnel-is-secure">$tunnel_is_secure</link> is
     unset, Mutt will respect the values of <link
     linkend="ssl-starttls">$ssl_starttls</link> and <link
     linkend="ssl-force-tls">$ssl_force_tls</link>.  It is
