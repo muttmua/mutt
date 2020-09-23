@@ -3669,11 +3669,15 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     start_debug ();
 #endif
 
-  /* And about the host... */
 
-#ifdef DOMAIN
-  domain = safe_strdup (DOMAIN);
-#endif /* DOMAIN */
+  /*
+   * Determine Hostname.
+   *
+   * This is used in tempfile creation, so set it early.  We delay
+   * Fqdn ($hostname) setting until the muttrc is evaluated, so the
+   * user has the ability to manually set it (for example, if their
+   * DNS resolution has issues).
+   */
 
   /*
    * The call to uname() shouldn't fail, but if it does, the system is horribly
@@ -3692,30 +3696,6 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     Hostname = mutt_substrdup (utsname.nodename, p);
   else
     Hostname = safe_strdup (utsname.nodename);
-
-  /* now get FQDN.  Use configured domain first, DNS next, then uname */
-  if (domain)
-  {
-    /* we have a compile-time domain name, use that for Fqdn */
-    Fqdn = safe_malloc (mutt_strlen (domain) + mutt_strlen (Hostname) + 2);
-    sprintf (Fqdn, "%s.%s", NONULL(Hostname), domain);	/* __SPRINTF_CHECKED__ */
-  }
-  else if (!(getdnsdomainname (buffer)))
-  {
-    Fqdn = safe_malloc (mutt_buffer_len (buffer) + mutt_strlen (Hostname) + 2);
-    sprintf (Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s (buffer));	/* __SPRINTF_CHECKED__ */
-  }
-  else
-    /*
-     * DNS failed, use the nodename.  Whether or not the nodename had a '.' in
-     * it, we can use the nodename as the FQDN.  On hosts where DNS is not
-     * being used, e.g. small network that relies on hosts files, a short host
-     * name is all that is required for SMTP to work correctly.  It could be
-     * wrong, but we've done the best we can, at this point the onus is on the
-     * user to provide the correct hostname if the nodename won't work in their
-     * network.
-     */
-    Fqdn = safe_strdup(utsname.nodename);
 
 
   if ((p = getenv ("MAIL")))
@@ -3883,6 +3863,41 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     if (mutt_any_key_to_continue (NULL) == -1)
       mutt_exit(1);
   }
+
+
+  /* If not set in the muttrc or mutt_execute_commands(), set Fqdn ($hostname).
+   * Use configured domain first, DNS next, then uname
+   */
+  if (!Fqdn)
+  {
+#ifdef DOMAIN
+    domain = safe_strdup (DOMAIN);
+#endif /* DOMAIN */
+
+    if (domain)
+    {
+      /* we have a compile-time domain name, use that for Fqdn */
+      Fqdn = safe_malloc (mutt_strlen (domain) + mutt_strlen (Hostname) + 2);
+      sprintf (Fqdn, "%s.%s", NONULL(Hostname), domain);	/* __SPRINTF_CHECKED__ */
+    }
+    else if (!(getdnsdomainname (buffer)))
+    {
+      Fqdn = safe_malloc (mutt_buffer_len (buffer) + mutt_strlen (Hostname) + 2);
+      sprintf (Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s (buffer));	/* __SPRINTF_CHECKED__ */
+    }
+    else
+      /*
+       * DNS failed, use the nodename.  Whether or not the nodename had a '.' in
+       * it, we can use the nodename as the FQDN.  On hosts where DNS is not
+       * being used, e.g. small network that relies on hosts files, a short host
+       * name is all that is required for SMTP to work correctly.  It could be
+       * wrong, but we've done the best we can, at this point the onus is on the
+       * user to provide the correct hostname if the nodename won't work in their
+       * network.
+       */
+      Fqdn = safe_strdup(utsname.nodename);
+  }
+
 
   mutt_read_histfile ();
 

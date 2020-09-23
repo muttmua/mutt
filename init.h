@@ -1449,6 +1449,12 @@ struct option_t MuttVars[] = {
   ** Optionally, Mutt can be compiled with a fixed domain name in
   ** which case a detected one is not used.
   ** .pp
+  ** Starting in Mutt 2.0, the operations described in the previous
+  ** paragraph are performed after the muttrc is processed, instead of
+  ** beforehand.  This way, if the DNS operations are creating delays
+  ** at startup, you can avoid those by manually setting the value in
+  ** your muttrc.
+  ** .pp
   ** Also see $$use_domain and $$hidden_host.
   */
 #if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
