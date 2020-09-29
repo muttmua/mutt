@@ -1544,8 +1544,12 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
 #endif
 
   /* end the last color pattern (needed by S-Lang) */
-  if (special || (col != pager_window->cols && (flags & (MUTT_SHOWCOLOR | MUTT_SEARCH))))
+  if (special ||
+      a.attr ||
+      (col != pager_window->cols && (flags & (MUTT_SHOWCOLOR | MUTT_SEARCH))))
+  {
     resolve_color (*lineInfo, n, vch, flags, 0, &a);
+  }
 
   /*
    * Fill the blank space at the end of the line with the prevailing color.
@@ -1571,7 +1575,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
    * clrtoeol, otherwise the color for this line will not be
    * filled to the right margin.
    */
-  if (flags & MUTT_SHOWCOLOR)
+  if (special || a.attr || flags & MUTT_SHOWCOLOR)
     NORMAL_COLOR;
 
   /* build a return code */
