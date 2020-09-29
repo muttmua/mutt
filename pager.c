@@ -278,37 +278,42 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
       if (a->pair == -1)
 	a->pair = mutt_alloc_color (a->fg, a->bg, 1);
       color = a->pair;
-      if (a->attr & ANSI_BOLD)
-        color |= A_BOLD;
     }
     else
 #endif
-      if ((special & A_BOLD) || (a->attr & ANSI_BOLD))
+      if (special)
       {
-        if (ColorDefs[MT_COLOR_BOLD] && !search)
+        if ((special & A_BOLD) && ColorDefs[MT_COLOR_BOLD] && !search)
+        {
           color = ColorDefs[MT_COLOR_BOLD];
+          if (special & A_UNDERLINE)
+            color |= A_UNDERLINE;
+        }
+        else if ((special & A_UNDERLINE) && ColorDefs[MT_COLOR_UNDERLINE] && !search)
+        {
+          color = ColorDefs[MT_COLOR_UNDERLINE];
+          if (special & A_BOLD)
+            color |= A_BOLD;
+        }
         else
-          color ^= A_BOLD;
+        {
+          if (special & A_BOLD)
+            color |= A_BOLD;
+          if (special & A_UNDERLINE)
+            color |= A_UNDERLINE;
+        }
       }
-    if ((special & A_UNDERLINE) || (a->attr & ANSI_UNDERLINE))
-    {
-      if (ColorDefs[MT_COLOR_UNDERLINE] && !search)
-	color = ColorDefs[MT_COLOR_UNDERLINE];
-      else
-	color ^= A_UNDERLINE;
-    }
-    else if (a->attr & ANSI_REVERSE)
-    {
-      color ^= A_REVERSE;
-    }
-    else if (a->attr & ANSI_BLINK)
-    {
-      color ^= A_BLINK;
-    }
-    else if (a->attr == ANSI_OFF)
-    {
+
+    if (a->attr & ANSI_BOLD)
+      color |= A_BOLD;
+    if (a->attr & ANSI_UNDERLINE)
+      color |= A_UNDERLINE;
+    if (a->attr & ANSI_REVERSE)
+      color |= A_REVERSE;
+    if (a->attr & ANSI_BLINK)
+      color |= A_BLINK;
+    if (a->attr == ANSI_OFF)
       a->attr = 0;
-    }
   }
 
   if (color != last_color)
