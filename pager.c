@@ -275,8 +275,14 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 #ifdef HAVE_COLOR
     if ((a->attr & ANSI_COLOR))
     {
+      /* Note: we don't free ansi colors.  This used to be done in
+       * grok_ansi() but a color-pair in use on the screen can not be
+       * reallocated via init_pair() to another color. There are at
+       * most 64 ansi colors, so just let them accumulate.
+       * However, don't refcount since they aren't tracked.
+       */
       if (a->pair == -1)
-	a->pair = mutt_alloc_color (a->fg, a->bg, 1);
+	a->pair = mutt_alloc_color (a->fg, a->bg, 0);
       color = a->pair;
     }
     else
@@ -993,10 +999,6 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
   {
     if (pos == x)
     {
-#ifdef HAVE_COLOR
-      if (a->pair != -1)
-	mutt_free_color (a->fg, a->bg);
-#endif
       a->attr = ANSI_OFF;
       a->pair = -1;
     }
@@ -1024,20 +1026,12 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
       }
       else if (buf[pos] == '0' && (pos+1 == x || buf[pos+1] == ';'))
       {
-#ifdef HAVE_COLOR
-	if (a->pair != -1)
-	  mutt_free_color(a->fg,a->bg);
-#endif
 	a->attr = ANSI_OFF;
 	a->pair = -1;
 	pos += 2;
       }
       else if (buf[pos] == '3' && isdigit(buf[pos+1]))
       {
-#ifdef HAVE_COLOR
-	if (a->pair != -1)
-	  mutt_free_color(a->fg,a->bg);
-#endif
 	a->pair = -1;
 	a->attr |= ANSI_COLOR;
 	a->fg = buf[pos+1] - '0';
@@ -1045,10 +1039,6 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
       }
       else if (buf[pos] == '4' && isdigit(buf[pos+1]))
       {
-#ifdef HAVE_COLOR
-	if (a->pair != -1)
-	  mutt_free_color(a->fg,a->bg);
-#endif
 	a->pair = -1;
 	a->attr |= ANSI_COLOR;
 	a->bg = buf[pos+1] - '0';
