@@ -273,7 +273,7 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   if (special || a->attr)
   {
 #ifdef HAVE_COLOR
-    if ((a->attr & ANSI_COLOR))
+    if ((a->attr & ANSI_COLOR) && !search)
     {
       /* Note: we don't free ansi colors.  This used to be done in
        * grok_ansi() but a color-pair in use on the screen can not be
