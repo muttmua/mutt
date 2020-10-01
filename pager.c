@@ -269,47 +269,47 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
     }
   }
 
-  /* handle "special" bold & underlined characters */
-  if (special || a->attr)
-  {
+  /* handle ansi and "special" bold & underlined characters */
 #ifdef HAVE_COLOR
-    if ((a->attr & ANSI_COLOR) && !search)
-    {
-      /* Note: we don't free ansi colors.  This used to be done in
-       * grok_ansi() but a color-pair in use on the screen can not be
-       * reallocated via init_pair() to another color. There are at
-       * most 64 ansi colors, so just let them accumulate.
-       * However, don't refcount since they aren't tracked.
-       */
-      if (a->pair == -1)
-	a->pair = mutt_alloc_color (a->fg, a->bg, 0);
-      color = a->pair;
-    }
-    else
+  if ((a->attr & ANSI_COLOR) && !search)
+  {
+    /* Note: we don't free ansi colors.  This used to be done in
+     * grok_ansi() but a color-pair in use on the screen can not be
+     * reallocated via init_pair() to another color. There are at
+     * most 64 ansi colors, so just let them accumulate.
+     * However, don't refcount since they aren't tracked.
+     */
+    if (a->pair == -1)
+      a->pair = mutt_alloc_color (a->fg, a->bg, 0);
+    color = a->pair;
+  }
+  else
 #endif
-      if (special)
+    if (special)
+    {
+      if ((special & A_BOLD) && ColorDefs[MT_COLOR_BOLD] && !search)
       {
-        if ((special & A_BOLD) && ColorDefs[MT_COLOR_BOLD] && !search)
-        {
-          color = ColorDefs[MT_COLOR_BOLD];
-          if (special & A_UNDERLINE)
-            color |= A_UNDERLINE;
-        }
-        else if ((special & A_UNDERLINE) && ColorDefs[MT_COLOR_UNDERLINE] && !search)
-        {
-          color = ColorDefs[MT_COLOR_UNDERLINE];
-          if (special & A_BOLD)
-            color |= A_BOLD;
-        }
-        else
-        {
-          if (special & A_BOLD)
-            color |= A_BOLD;
-          if (special & A_UNDERLINE)
-            color |= A_UNDERLINE;
-        }
+        color = ColorDefs[MT_COLOR_BOLD];
+        if (special & A_UNDERLINE)
+          color |= A_UNDERLINE;
       }
+      else if ((special & A_UNDERLINE) && ColorDefs[MT_COLOR_UNDERLINE] && !search)
+      {
+        color = ColorDefs[MT_COLOR_UNDERLINE];
+        if (special & A_BOLD)
+          color |= A_BOLD;
+      }
+      else
+      {
+        if (special & A_BOLD)
+          color |= A_BOLD;
+        if (special & A_UNDERLINE)
+          color |= A_UNDERLINE;
+      }
+    }
 
+  if (a->attr)
+  {
     if (a->attr & ANSI_BOLD)
       color |= A_BOLD;
     if (a->attr & ANSI_UNDERLINE)
