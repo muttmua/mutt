@@ -7598,6 +7598,12 @@ echo (if (equal $spoolfile "/var/mail/user") yes no)
 
   <sect2 id="muttlisp-examples">
     <title>Examples</title>
+    <para>
+      It's important to remember that function arguments are
+      evaluated, but the result is not.  Also, the result of an
+      interpolated command argument is used directly, and needs no
+      quoting.
+    </para>
 <screen>
 # A three-way toggle of $index_format:
 
@@ -7614,13 +7620,12 @@ macro index i '&lt;enter-command&gt;set index_format =  \
     $my_idx1) \
 &lt;enter&gt;'
 </screen>
-    <para>
-      It's important to remember that function arguments are
-      evaluated, but the result is not.  Also, the result of an
-      interpolated command argument is used directly, and needs no
-      quoting.
-    </para>
 
+    <para>
+      The output of the run command is re-evaluated by the muttrc
+      parser.  So it's important to pay more attention to quoting
+      issues when generating the command string below.
+    </para>
 <screen>
 # Conditionally set up background editing in tmux or GNU Screen:
 
@@ -7633,12 +7638,11 @@ run \
       'unset background_edit;'                    \
       'set editor = "vim"'))
 </screen>
-    <para>
-      The output of the run command is re-evaluated by the muttrc
-      parser.  So it's important to pay more attention to quoting
-      issues when generating the command string.
-    </para>
 
+  <para>
+    Because backticks are evaluated by MuttLisp too, we need to use
+    the run command below and pay close attention to quoting.
+  </para>
 <screen>
 # Use a Mutt variable inside backticks.
 
@@ -7652,10 +7656,6 @@ run                                       \
      $spoolfile                           \
      '`"')
 </screen>
-  <para>
-    Because backticks are evaluated by MuttLisp too, we need to use
-    the run command and pay close attention to quoting.
-  </para>
   </sect2>
 
 </sect1>
