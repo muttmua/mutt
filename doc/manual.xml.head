@@ -1281,7 +1281,7 @@ new message.
 <row><entry>Key</entry><entry>Function</entry><entry>Description</entry></row>
 </thead>
 <tbody>
-<row><entry>m</entry><entry><literal>&lt;compose&gt;</literal></entry><entry>compose a new message</entry></row>
+<row><entry>m</entry><entry><literal>&lt;mail&gt;</literal></entry><entry>compose a new message</entry></row>
 <row><entry>r</entry><entry><literal>&lt;reply&gt;</literal></entry><entry>reply to sender</entry></row>
 <row><entry>g</entry><entry><literal>&lt;group-reply&gt;</literal></entry><entry>reply to all recipients</entry></row>
 <row><entry></entry><entry><literal>&lt;group-chat-reply&gt;</literal></entry><entry>reply to all recipients preserving To/Cc</entry></row>
