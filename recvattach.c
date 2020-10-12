@@ -568,14 +568,56 @@ cleanup:
 
 void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
 {
-  BUFFER *buf = NULL, *tfile = NULL;
+  BUFFER *buf = NULL, *tfile = NULL, *orig_cwd = NULL;
   char *directory = NULL;
-  int i, rc = 1;
+  int i, rc = 1, restore_cwd = 0;
   int last = menu ? menu->current : -1;
   FILE *fpout;
 
   buf = mutt_buffer_pool_get ();
   tfile = mutt_buffer_pool_get ();
+
+  if (AttachSaveDir)
+  {
+    orig_cwd = mutt_buffer_pool_get ();
+    mutt_getcwd (orig_cwd);
+
+    if (chdir (AttachSaveDir) == 0)
+      restore_cwd = 1;
+    else
+    {
+      struct stat sb;
+      char msg[STRING];
+
+      if (stat (AttachSaveDir, &sb) == -1 && errno == ENOENT)
+      {
+        snprintf (msg, sizeof (msg), _("%s does not exist. Create it?"),
+                  AttachSaveDir);
+        if (mutt_yesorno (msg, MUTT_YES) == MUTT_YES)
+        {
+          if (mutt_mkdir (AttachSaveDir, 0700) != 0)
+          {
+            mutt_error ( _("Can't create %s: %s."), AttachSaveDir, strerror (errno));
+            mutt_sleep (1);
+          }
+          else if (chdir (AttachSaveDir) == 0)
+            restore_cwd = 1;
+        }
+      }
+    }
+
+    if (!restore_cwd)
+    {
+      /* L10N:
+         Printed if the value of $attach_save_dir can not be chdir'ed to
+         before saving.  This could be a permission issue, or if the value
+         doesn't point to a directory, or the value didn't exist but
+         couldn't be created.
+      */
+      mutt_error (_("Unable to save attachments to %s.  Using cwd"), AttachSaveDir);
+      mutt_sleep (1);
+    }
+  }
 
   for (i = 0; !tag || i < actx->idxlen; i++)
   {
@@ -658,8 +700,14 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
     mutt_message _("Attachment saved.");
 
 cleanup:
+  /* if restore_cwd is set, the orig_cwd buffer is non-null.  However,
+   * the getcwd() could have failed, so check it has a value. */
+  if (restore_cwd && mutt_buffer_len (orig_cwd))
+    chdir (mutt_b2s (orig_cwd));
+
   mutt_buffer_pool_release (&buf);
   mutt_buffer_pool_release (&tfile);
+  mutt_buffer_pool_release (&orig_cwd);
 }
 
 static void

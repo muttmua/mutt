@@ -268,6 +268,16 @@ struct option_t MuttVars[] = {
   ** .pp
   ** For an explanation of ``soft-fill'', see the $$index_format documentation.
   */
+  { "attach_save_dir",	DT_PATH, R_NONE, {.p=&AttachSaveDir}, {.p=0} },
+  /*
+  ** .pp
+  ** The default directory to save attachments from the ``attachment'' menu.
+  ** If it doesn't exist, Mutt will prompt to create the directory before
+  ** saving.
+  ** .pp
+  ** If the path is invalid (e.g. not a directory, or cannot be
+  ** chdir'ed to), Mutt will fall back to using the current directory.
+  */
   { "attach_sep",	DT_STR,	 R_NONE, {.p=&AttachSep}, {.p="\n"} },
   /*
   ** .pp

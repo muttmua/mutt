@@ -35,6 +35,7 @@ WHERE ADDRESS *From;
 WHERE char *AliasFile;
 WHERE char *AliasFmt;
 WHERE char *AssumedCharset;
+WHERE char *AttachSaveDir;
 WHERE char *AttachSep;
 WHERE char *Attribution;
 WHERE char *AttributionLocale;
