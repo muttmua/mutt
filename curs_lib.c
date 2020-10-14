@@ -939,7 +939,7 @@ void mutt_endwin (const char *msg)
 
 void mutt_perror (const char *s)
 {
-  char *p = strerror (errno);
+  const char *p = strerror (errno);
 
   dprint (1, (debugfile, "%s: %s (errno = %d)\n", s,
               p ? p : "unknown error", errno));
