@@ -614,6 +614,7 @@ following categories:
 <listitem><para>addresses and aliases</para></listitem>
 <listitem><para>shell commands</para></listitem>
 <listitem><para>filenames</para></listitem>
+<listitem><para>mailboxes</para></listitem>
 <listitem><para>patterns</para></listitem>
 <listitem><para>everything else</para></listitem>
 </itemizedlist>
