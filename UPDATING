@@ -9,6 +9,60 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.0.0 (unreleased):
+
+  + Domain-literal support for email addresses, e.g user@[IPv6:fcXX:...]
+  ! Buffy completion only occurs for the "change-folder" set of functions.
+    It has been disabled for <attach-message>, <write-fcc>, the fcc
+    mailbox prompt, and the autocrypt scan mailbox prompt.
+  ! The "save/copy message to mailbox" set of functions use the "mailbox"
+    history list, instead of the "filename" list.
+  ! Message-ID extraction permits values missing angle brackets and '@'
+    to allow properly threading the garbage sent by some providers.
+    Mutt will add missing angle brackets when sending out replies, however.
+  ! When adding multiple attachments, via <attach-file> in the compose menu,
+    the browser menu can be exiting via <quit> after tagging the files.
+    Previously, <select-entry> had to be used.
+  ! ctrl-p/ctrl-n are by default bound to <history-up>/<history-down> in the
+    editor menu.
+  + The "cd" command allows changing the current working directory.
+    As part of this, Mutt expands relative paths internally.  There
+    may be a change to some "prettified" relative paths because of this.
+  ! Some configuration variable default values are localizable by
+    translators.  Currently these are: $attribution, $compose_format,
+    $forward_attribution_intro, $forward_attribution_trailer, $status_format,
+    $ts_icon_format, $ts_status_format.
+  + Mutt will try to automatically reconnect to an IMAP mailbox on error,
+    and will merge unsync'ed changes if possible.
+  ! $crypt_protected_headers_subject defaults to "...", following the
+    protected headers revised specification.
+  ! Date, From, To, Cc, and Reply-To headers are stored as protected headers.
+  + XOAUTH2 support.  Please see the manual, contrib script mutt_oauth2.py,
+    and mutt_oauth.py.README for more details.
+  + $tunnel_is_secure, default set, assumes a connection via $tunnel is
+    encrypted.  Unsetting this will cause $ssl_forcetls and $ssl_force_tls
+    to be respected.
+  + Patterns are tab-completable in the editor menu.
+  ! $reply_to is consulted before $reply_self.
+  + $copy_decode_weed, default unset, controls header weeding for <decode-copy>
+    and <decode-save>.
+  + $pipe_decode_weed, default set, enables header weeding for <pipe-message>.
+  + $print_decode_weed, default set, enables header weeding for <print-message>.
+  ! format=flowed attachments are space-unstuffed when viewed, saved,
+    piped, and printed.
+  + The "run" command will execute MuttLisp. $muttlisp_inline_eval, if set, will
+    execute unquoted parenthesized command arguments as MuttLisp.  Please see
+    the manual for more details about both.
+  + $cursor_overlay, when set, will overlay the indicator, tree,
+    sidebar_highlight, and sidebar_indicator colors onto the current line.
+    "default" colors will be overridden and attributes will be merged.
+  ! The message-id generation algorithm uses a random number instead of
+    the step counter and PID.
+  ! $ssl_force_tls defaults set.  (Trying this again for 2.0).
+  ! $hostname is set *after* muttrc processing.  It can be manually set
+    in the muttrc to avoid using DNS calls to obtain the FQDN.
+  + $attach_save_dir specifies a directory to use when saving attachments.
+
 1.14.7 (2020-08-29):
 
   ! Bug fix release.
