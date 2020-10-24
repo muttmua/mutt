@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-02 14:34-0700\n"
-"PO-Revision-Date: 2020-04-18 11:23-0400\n"
+"PO-Revision-Date: 2020-10-24 09:02-0400\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
@@ -519,9 +519,8 @@ msgstr ""
 #. Displays while the editor is running.
 #.
 #: background.c:207 background.c:252 background.c:593
-#, fuzzy
 msgid "Waiting for editor to exit"
-msgstr "Wacht op antwoord..."
+msgstr "Wacht op afsluiten van de editor"
 
 #. L10N:
 #. Background Edit Landing Page message, second line.
@@ -531,14 +530,14 @@ msgstr "Wacht op antwoord..."
 #: background.c:223
 #, c-format
 msgid "Type '%s' to background compose session."
-msgstr ""
+msgstr "Typ '%s' om het opstellen in de achtergrond uit te voeren."
 
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
 #.
 #: background.c:373
 msgid "Resume"
-msgstr ""
+msgstr "Doorgaan"
 
 #. L10N:
 #. Background Compose menu
@@ -546,7 +545,7 @@ msgstr ""
 #.
 #: background.c:436
 msgid "finished"
-msgstr ""
+msgstr "gereed"
 
 #. L10N:
 #. Background Compose menu
@@ -554,14 +553,14 @@ msgstr ""
 #.
 #: background.c:442
 msgid "running"
-msgstr ""
+msgstr "loopt nog"
 
 #. L10N:
 #. Background Compose Menu title
 #.
 #: background.c:499
 msgid "Background Compose Menu"
-msgstr ""
+msgstr "Opstellen in de achtergrond menu"
 
 #. L10N:
 #. Background Compose Menu:
@@ -580,7 +579,7 @@ msgstr ""
 #: background.c:590
 #, c-format
 msgid "Process is still running. Really select?"
-msgstr ""
+msgstr "Proces loopt nog. Wilt u deze echt selecteren?"
 
 #: browser.c:47
 msgid "Chdir"
@@ -776,6 +775,7 @@ msgstr "Bericht kon niet gekopieerd worden"
 #: commands.c:274
 msgid "There was an error displaying all or part of the message"
 msgstr ""
+"Er is een fout opgetreden bij het weergeven van (een deel van) het bericht"
 
 #: commands.c:306
 msgid "S/MIME signature successfully verified."
@@ -954,17 +954,15 @@ msgstr "Kopiëren naar %s..."
 #. Progress meter message when saving tagged messages
 #.
 #: commands.c:1004
-#, fuzzy
 msgid "Saving tagged messages..."
-msgstr "Gewijzigde berichten worden opgeslagen... [%d/%d]"
+msgstr "Gemarkeerde berichten worden opgeslagen..."
 
 #. L10N:
 #. Progress meter message when copying tagged messages
 #.
 #: commands.c:1008
-#, fuzzy
 msgid "Copying tagged messages..."
-msgstr "Geen gemarkeerde berichten."
+msgstr "Gemarkeerde berichten worden gekopieerd..."
 
 #: commands.c:1108
 #, c-format
@@ -2206,7 +2204,7 @@ msgstr "Mutt afsluiten?"
 #.
 #: curs_lib.c:471 curs_main.c:1061 curs_main.c:1485
 msgid "There are $background_edit sessions. Really quit Mutt?"
-msgstr ""
+msgstr "Er zijn achtergrond sessies actief. Wilt u Mutt echt afsluiten?"
 
 #: curs_lib.c:541
 msgid "Error History is disabled."
@@ -3485,7 +3483,7 @@ msgid ""
 "       mutt [<options>] -D\n"
 "       mutt -v[v]\n"
 msgstr ""
-"Gebruik:  mutt [<opties>] [-z] [-f <bestand> | -yZ]\n"
+"gebruik: mutt [<opties>] [-z] [-f <bestand> | -yZ]\n"
 "          mutt [<opties>] [-Ex] [-Hi <bestand>] [-s <onderwerp>]\n"
 "               [-bc <adres>] [-a <bestand> [...] --] <adres> [...]\n"
 "          mutt [<opties>] [-x] [-s <onderwerp>] [-bc <adres>]\n"
@@ -3506,7 +3504,7 @@ msgid ""
 "  -c <address>\tspecify a carbon-copy (CC) address\n"
 "  -D\t\tprint the value of all variables to stdout"
 msgstr ""
-"Opties:\n"
+"opties:\n"
 "  -A <afkorting>\tgebruik een afkorting\n"
 "  -a <bestand> [...] --\tvoeg een bestand bij het bericht;\n"
 "\t\tde lijst met bestanden dient afgesloten te worden met '--'\n"
@@ -4277,9 +4275,9 @@ msgstr "Ongeldige maand: %s"
 #. %c is the pattern character, i.e. "g".
 #.
 #: pattern.c:897
-#, fuzzy, c-format
+#, c-format
 msgid "Pattern operator '~%c' is disabled."
-msgstr "Foutgeschiedenis is uitgeschakeld."
+msgstr "Patroonopgave '~%c' is uitgeschakeld."
 
 #. L10N:
 #. An unknown pattern operator was somehow invoked.  This
@@ -4405,11 +4403,12 @@ msgid "Decryption failed"
 msgstr "Ontsleuteling is mislukt"
 
 #: pgp.c:1231
-#, fuzzy
 msgid ""
 "[-- Error: decryption failed --]\n"
 "\n"
-msgstr "[-- Fout: ontsleuteling is mislukt: %s --]\n"
+msgstr ""
+"[-- Fout: ontsleuteling is mislukt --]\n"
+"\n"
 
 #: pgp.c:1288
 msgid "Can't open PGP subprocess!"
@@ -4897,9 +4896,8 @@ msgstr "Ongeldig geformuleerde entry voor type %s in \"%s\", regel %d"
 #. unset mailcap_path
 #.
 #: rfc1524.c:451
-#, fuzzy
 msgid "Neither mailcap_path nor MAILCAPS specified"
-msgstr "Geen mailcap-pad opgegeven"
+msgstr "Zowel mailcap-pad als MAILCAPS zijn niet opgegeven"
 
 #: rfc1524.c:482
 #, c-format
@@ -4991,7 +4989,7 @@ msgstr "Genereer multipart/alternative-inhoud?"
 #: send.c:1222
 #, c-format
 msgid "Saving Fcc to %s"
-msgstr ""
+msgstr "Fcc wordt bewaard in %s"
 
 #: send.c:1243
 msgid "Fcc to an IMAP mailbox is not supported in batch mode"
@@ -5098,7 +5096,7 @@ msgstr "Bericht kon niet verstuurd worden."
 #.
 #: send.c:2566 send.c:2592
 msgid "Setting reply flags."
-msgstr ""
+msgstr "Antwoord-vlaggen worden ingesteld."
 
 #: send.c:2637
 msgid "Mail sent."
@@ -5113,9 +5111,8 @@ msgstr "Bericht wordt op de achtergrond verstuurd."
 #. editing from the landing page.
 #.
 #: send.c:2702
-#, fuzzy
 msgid "Editing backgrounded."
-msgstr "Bericht wordt op de achtergrond verstuurd."
+msgstr "Bericht wordt op de achtergrond bewerkt."
 
 #: sendlib.c:455
 msgid "No boundary parameter found! [report this error]"
@@ -5519,7 +5516,7 @@ msgstr "schakel huidige account \"encryptievoorkeur\"-vlag in/uit"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:37
 msgid "list and select backgrounded compose sessions"
-msgstr ""
+msgstr "overzicht en selectie van achtergrondsessies"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -5711,14 +5708,13 @@ msgstr "controleer spelling via ispell"
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:133
 msgid "move attachment down in compose menu list"
-msgstr ""
+msgstr "verplaats bijlage omlaag in het opstelmenu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:136
-#, fuzzy
 msgid "move attachment up in compose menu list"
-msgstr "bewerk bijlage volgens mailcap"
+msgstr "verplaats bijlage omhoog in het opstelmenu"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
@@ -6684,16 +6680,14 @@ msgstr "ga een map binnen"
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:619
-#, fuzzy
 msgid "move the highlight to the first mailbox"
-msgstr "verplaats markering naar volgend postvak"
+msgstr "verplaats markering naar het eerste postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
 #: ../keymap_alldefs.h:622
-#, fuzzy
 msgid "move the highlight to the last mailbox"
-msgstr "verplaats markering naar volgend postvak"
+msgstr "verplaats markering naar het laatste postvak"
 
 #. L10N: Help screen function description.
 #. Generated from one of the OPS files.
