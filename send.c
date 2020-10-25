@@ -1128,16 +1128,22 @@ static int generate_multipart_alternative (HEADER *msg, int flags)
       return 0;
   }
   else
-  {
-    if (query_quadoption (OPT_SENDMULTIPARTALT,
+    switch (query_quadoption (OPT_SENDMULTIPARTALT,
                           /* L10N:
                              This is the query for the $send_multipart_alternative quadoption.
                              Answering yes generates an alternative content using
                              $send_multipart_alternative_filter
                           */
-                          _("Generate multipart/alternative content?")) != MUTT_YES)
-      return 0;
-  }
+                          _("Generate multipart/alternative content?")))
+    {
+      case MUTT_NO:
+	return 0;
+      case MUTT_YES:
+	break;
+      case -1:
+      default:
+	return -1;
+    }
 
 
   alternative = mutt_run_send_alternative_filter (msg->content);
