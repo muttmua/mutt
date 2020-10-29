@@ -84,7 +84,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	_mutt_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h \
 	README.SSL smime.h group.h mutt_zstrm.h send.h background.h \
-	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
+	muttbug pgppacket.h depcomp ascii.h PATCHES patchlist.sh \
 	ChangeLog mkchangelog.sh mkreldate.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
 	snprintf.c regex.c crypt-gpgme.h hcachever.pl \
 	txt2c.c txt2c.sh version.sh check_sec.sh
