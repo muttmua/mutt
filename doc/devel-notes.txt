@@ -2,10 +2,10 @@ Required tools
 --------------
 
 If you are planning to hack on mutt, please subscribe to the
-mutt-dev mailing list (mutt-dev@mutt.org, contact
-majordomo@mutt.org).  Announcements about recent development
-versions go to that mailing list, as go technical discussions and
-patches.
+mutt-dev mailing list (mutt-dev@mutt.org). To subscribe, send an
+email with as subject "subscribe" to mutt-dev-request@mutt.org .
+Announcements about recent development versions go to that mailing
+list, as go technical discussions and patches.
 
 Patches should, if possible, be made using Git against the latest
 revision.
