@@ -40,7 +40,7 @@ The keys used are:
   + XOAUTH2 support.  Please see the manual, contrib script mutt_oauth2.py,
     and mutt_oauth.py.README for more details.
   + $tunnel_is_secure, default set, assumes a connection via $tunnel is
-    encrypted.  Unsetting this will cause $ssl_forcetls and $ssl_force_tls
+    encrypted.  Unsetting this will cause $ssl_starttls and $ssl_force_tls
     to be respected.
   + Patterns are tab-completable in the editor menu.
   ! $reply_to is consulted before $reply_self.
