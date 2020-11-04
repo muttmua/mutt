@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-23 18:41+0200\n"
-"PO-Revision-Date: 2020-11-04 20:14+0100\n"
+"PO-Revision-Date: 2020-11-04 23:01+0100\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
 "Language: pl\n"
@@ -3419,7 +3419,7 @@ msgstr "Dnia %d, %n napisał(a):"
 #.
 #: init.h:565
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
-msgstr "-- Mutt: Tworzenie  [Rozm. listu ok.: %l   Atryb.: %a]%>-"
+msgstr "-- Mutt: Tworzenie  [Rozm. listu ok.: %l   Zał.: %a]%>-"
 
 #. L10N:
 #. $forward_attribution_intro default value
