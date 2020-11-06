@@ -543,6 +543,11 @@ void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter)
   delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path);
 }
 
+void mutt_buffer_expand_multi_path_norel (BUFFER *src, const char *delimiter)
+{
+  delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path_norel);
+}
+
 void mutt_buffer_expand_path (BUFFER *src)
 {
   _mutt_buffer_expand_path (src, 0, 1);

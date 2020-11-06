@@ -150,13 +150,27 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     mutt_check_simple (pattern, DefaultHook);
   }
 
-  if (data & (MUTT_MBOXHOOK | MUTT_SAVEHOOK))
+  if (data & MUTT_MBOXHOOK)
   {
     mutt_buffer_expand_path (command);
   }
+  else if (data & MUTT_SAVEHOOK)
+  {
+    /* Do not perform relative path expansion.  "\^" can be expanded later:
+     *   mutt_default_save() => mutt_addr_hook() => mutt_make_string()
+     * which will perform backslash expansion, converting "\^" to "^".
+     * The saving code then calls mutt_buffer_expand_path() after prompting.
+     */
+    mutt_buffer_expand_path_norel (command);
+  }
   else if (data & MUTT_FCCHOOK)
   {
-    mutt_buffer_expand_multi_path (command, FccDelimiter);
+    /* Do not perform relative path expansion  "\^" can be expanded later:
+     *   mutt_select_fcc() => mutt_addr_hook() => mutt_make_string()
+     * which will perform backslash expansion, converting "\^" to "^".
+     * save_fcc_mailbox_part() then calls mutt_buffer_expand_path() on each part.
+     */
+    mutt_buffer_expand_multi_path_norel (command, FccDelimiter);
   }
 
   /* check to make sure that a matching hook doesn't already exist */
