@@ -411,6 +411,16 @@ static void buffer_normalize_fullpath (BUFFER *dest, const char *src)
   if (!src)
     return;
 
+  /* Disabling this for the 2.0 release.
+   * See Gitlab #290 - '..' can not be simplified in this manner.
+   * Furthermore, it looks like mutt_pretty_mailbox() calls realpath()
+   * if there are any '..' strings in the path, and does its own '.'
+   * normalization much more succinctly than this.  I'll remove this
+   * code after the release.
+   */
+  mutt_buffer_strcpy (dest, src);
+  return;
+
   if (*src != '/')
   {
     mutt_buffer_strcpy (dest, src);
