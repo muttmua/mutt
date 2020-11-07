@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 21:10+0200\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-11-06 21:23+0200\n"
 "Last-Translator: Vsevolod Volkov <vvv@mutt.org.ua>\n"
 "Language-Team: \n"
@@ -702,7 +702,7 @@ msgstr "Неможливо переглянути каталог"
 msgid "Error trying to view file"
 msgstr "Помилка при спробі перегляду файлу"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "змало аргументів"
@@ -753,7 +753,7 @@ msgstr "mono: замало аргументів"
 msgid "%s: no such attribute"
 msgstr "%s: такого атрібуту немає"
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "забагато аргументів"
 
@@ -2870,20 +2870,20 @@ msgstr "скорочення для скриньки перетворене на
 msgid "badly formatted command string"
 msgstr "погано форматований командний рядок"
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "замало аргументів"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Неможливо зробити unhook * з hook."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: невідомий тип hook: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Неможливо видалити %s з %s."
@@ -3070,7 +3070,7 @@ msgstr "Вибір %s..."
 msgid "Error opening mailbox"
 msgstr "Помилка відкриття поштової скриньки"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "Створити %s?"
@@ -4215,43 +4215,43 @@ msgstr "Помилка тунелю у з’єднанні з сервером %
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Файл є каталогом, зберегти у ньому? [(y)так/(n)ні/(a)все]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "yna"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Файл є каталогом, зберегти у ньому?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Файл у каталозі: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Файл існує, (o)переписати/(a)додати до нього/(c)відмовити?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "oac"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "Неможливо записати лист до скриньки POP."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Додати листи до %s?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s не є поштовою скринькою!"

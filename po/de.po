@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 19:10+0200\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-07-27 08:55+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
@@ -704,7 +704,7 @@ msgstr "Verzeichnisse können nicht angezeigt werden"
 msgid "Error trying to view file"
 msgstr "Fehler bei der Anzeige einer Datei"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "Zu wenige Parameter"
@@ -755,7 +755,7 @@ msgstr "mono: Zu wenige Parameter"
 msgid "%s: no such attribute"
 msgstr "%s: Attribut unbekannt"
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "Zu viele Parameter"
 
@@ -1254,7 +1254,7 @@ msgstr "Sie sind auf dem letzten Eintrag."
 msgid "You are on the first entry."
 msgstr "Sie sind auf dem ersten Eintrag."
 
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Ungültige IDN in \"%s\": '%s'"
@@ -1483,7 +1483,7 @@ msgstr "Rufe PGP auf..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Nachricht kann nicht inline verschickt werden. PGP/MIME verwenden?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "Nachricht nicht verschickt."
 
@@ -2880,20 +2880,20 @@ msgstr ""
 msgid "badly formatted command string"
 msgstr ""
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "Zu wenige Parameter"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Innerhalb eines hook kann kein unhook * aufgerufen werden."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: Unbekannter hook-Typ: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Kann kein %s innerhalb von %s löschen."
@@ -3080,7 +3080,7 @@ msgstr "Wähle %s aus..."
 msgid "Error opening mailbox"
 msgstr "Fehler beim Öffnen der Mailbox"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "%s erstellen?"
@@ -4227,43 +4227,43 @@ msgstr "Tunnel-Fehler bei Verbindung mit %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Datei ist ein Verzeichnis, darin abspeichern? [(j)a, (n)ein, (a)lle]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "jna"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Datei ist ein Verzeichnis, darin abspeichern?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Datei in diesem Verzeichnis: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Datei existiert, (u)eberschreiben, (a)nhängen, a(b)brechen?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "uab"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "Kann Nachricht nicht in POP-Mailbox schreiben."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Nachricht an %s anhängen?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s ist keine Mailbox!"
@@ -5513,7 +5513,7 @@ msgstr "Bereite Nachricht zum Weiterleiten vor..."
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr ""
 
@@ -5521,12 +5521,12 @@ msgstr ""
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Speichere Fcc in %s"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Warnung: Fcc in eine IMAP Mailbox funktioniert nicht im Batch-Modus"
 
@@ -5536,7 +5536,7 @@ msgstr "Warnung: Fcc in eine IMAP Mailbox funktioniert nicht im Batch-Modus"
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "Überspringe Fcc nach %s"
@@ -5547,7 +5547,7 @@ msgstr "Überspringe Fcc nach %s"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 "Fcc fehlgeschlagen. E(r)neut versuchen, andere (M)ailbox, oder "
@@ -5558,7 +5558,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "rms"
 
@@ -5566,71 +5566,71 @@ msgstr "rms"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Fcc Mailbox"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Anhänge in Fcc-Mailbox speichern?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Zurückstellen nicht möglich, $postponed ist nicht gesetzt"
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Zurückgestellte Nachricht weiterbearbeiten?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "Weitergeleitete Nachricht editieren?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "Unveränderte Nachricht verwerfen?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "Unveränderte Nachricht verworfen."
 
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "Nachricht zurückgestellt."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "Es wurden keine Empfänger angegeben!"
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "Es wurden keine Empfänger angegeben."
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "Kein Betreff, Versand abbrechen?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "Kein Betreff."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "Kein Angang, Versand abbrechen?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "Der in der Nachricht verwendete Anhang ist nicht vorhanden"
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "Verschicke Nachricht..."
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "Konnte Nachricht nicht verschicken."
 
@@ -5640,15 +5640,15 @@ msgstr "Konnte Nachricht nicht verschicken."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr ""
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "Nachricht verschickt."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "Verschicke im Hintergrund."
 
@@ -5656,7 +5656,7 @@ msgstr "Verschicke im Hintergrund."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "Editor läuft jetzt im Hintergrund."
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 18:41+0200\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-11-04 23:01+0100\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
@@ -706,7 +706,7 @@ msgstr "Nie można przeglądać tego katalogu"
 msgid "Error trying to view file"
 msgstr "Błąd podczas próby przeglądania pliku"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "za mało argumentów"
@@ -758,7 +758,7 @@ msgstr "mono: za mało argumentów"
 msgid "%s: no such attribute"
 msgstr "%s: nie ma takiego atrybutu"
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "za dużo argumentów"
 
@@ -1258,7 +1258,7 @@ msgstr "To jest ostatnia pozycja."
 msgid "You are on the first entry."
 msgstr "To jest pierwsza pozycja."
 
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Błędny IDN w „%s”: „%s”"
@@ -1486,7 +1486,7 @@ msgstr "Wywoływanie PGP…"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Nie można wysłać listu w trybie inline. Przełączyć do PGP/MIME?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "List nie został wysłany."
 
@@ -2886,20 +2886,20 @@ msgstr "skrót do skrzynki rozwiniętey do pustego wyrażenia regularnego"
 msgid "badly formatted command string"
 msgstr "źle sformatowany łańcuch znaków polecenia"
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "niewystarczająca liczba argumentów"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Nie można wykonać „unhook *” wewnątrz innego polecenia hook."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: nieznany typ polecenia hook: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Nie można skasować %s z wewnątrz %s."
@@ -3088,7 +3088,7 @@ msgstr "Wybieranie %s…"
 msgid "Error opening mailbox"
 msgstr "Błąd otwarcia skrzynki"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "Utworzyć %s?"
@@ -3446,8 +3446,8 @@ msgid ""
 "(%P)---"
 msgstr ""
 "-%r-Mutt: %f [Listy:%?M?%M/?%m%?n? Nowe:%n?%?o? Stare:%o?%?d? Usun.:%d?%?F? "
-"Oflag.:%F?%?t? Zazn.:%t?%?p? Szkice:%p?%?b? Skrz. z now.:%b?%?B? W tle:%B?"
-"%?l? %l?]---(%s/%S)-%>-(%P)---"
+"Oflag.:%F?%?t? Zazn.:%t?%?p? Szkice:%p?%?b? Skrz. z now.:%b?%?B? W tle:%B?%?"
+"l? %l?]---(%s/%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -3974,7 +3974,8 @@ msgstr "Połączenie z %s (%s) nie zostało ustanowione."
 #: mutt_ssl.c:199 mutt_ssl_gnutls.c:228
 msgid "Warning: clearing unexpected server data before TLS negotiation"
 msgstr ""
-"Ostrzeżenie: pomijanie nieoczekiwanych danych z serwera (przed negocjacją TLS)"
+"Ostrzeżenie: pomijanie nieoczekiwanych danych z serwera (przed negocjacją "
+"TLS)"
 
 #: mutt_ssl.c:274 mutt_ssl.c:556
 msgid "Warning: error enabling ssl_verify_partial_chains"
@@ -4237,43 +4238,43 @@ msgstr "Zestawianie tunelu: błąd komunikacji z %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Ten plik jest katalogiem, zapisać w nim? [(t)ak, (n)ie, (w)szystkie]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "tnw"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Ten plik jest katalogiem, zapisać w nim?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Plik w katalogu: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Plik istnieje: (n)adpisać, (d)ołączyć czy (a)nulować?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "nda"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "Nie można zapisać listu w skrzynce POP."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Dopisać listy do %s?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s nie jest skrzynką!"
@@ -4439,7 +4440,8 @@ msgstr "listy, których treść lub nagłówki pasują do WYRAŻENIA"
 #: pattern.c:86
 msgid "messages whose CC header matches EXPR"
 msgstr ""
-"listy, których kopia (DW) jest skierowana do adresatów pasujących do WYRAŻENIA"
+"listy, których kopia (DW) jest skierowana do adresatów pasujących do "
+"WYRAŻENIA"
 
 #. L10N:
 #. Pattern Completion Menu description for ~C
@@ -5520,7 +5522,7 @@ msgstr "Przygotowywanie listu do przesłania dalej…"
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr "Wygenerować treść multipart/alternative?"
 
@@ -5528,14 +5530,15 @@ msgstr "Wygenerować treść multipart/alternative?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Zapisywanie w %s"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "Uwaga: zapisywanie do skrzynki IMAP nie jest obsługiwane w trybie wsadowym"
+msgstr ""
+"Uwaga: zapisywanie do skrzynki IMAP nie jest obsługiwane w trybie wsadowym"
 
 #. L10N:
 #. Printed after the "Fcc to an IMAP mailbox is not supported" message.
@@ -5543,7 +5546,7 @@ msgstr "Uwaga: zapisywanie do skrzynki IMAP nie jest obsługiwane w trybie wsad
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "Pomijanie zapisu w %s"
@@ -5554,7 +5557,7 @@ msgstr "Pomijanie zapisu w %s"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 "Nie udało się zapisać. (s)próbować ponownie, (z)mienić skrzynkę czy "
@@ -5565,7 +5568,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "szp"
 
@@ -5573,73 +5576,73 @@ msgstr "szp"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Zapisz w skrzynce"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Zapisać załączniki w Fcc?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Nie można odłożyć. $postponed nie jest ustawione"
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Wywołać odłożony list?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "Edytować przesyłany list?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "List nie został zmieniony. Anulować wysyłanie?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "Anulowano wysyłanie niezmienionego listu."
 
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Nie skonfigurowano mechanizmu kryptograficznego. Ustawienia bezpieczeństwa "
 "listów są wyłączone."
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "List został odłożony."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "Nie wskazano adresatów!"
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "Nie wskazano adresatów!"
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "Brak tematu, anulować wysyłanie?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "Brak tematu."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "Brak załączników, anulować wysyłanie?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "Brakuje załącznika wskazanego w liście"
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "Wysyłanie listu…"
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "Wysłanie listu nie powiodło się."
 
@@ -5649,15 +5652,15 @@ msgstr "Wysłanie listu nie powiodło się."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr "Ustawianie flagi „odpowiedziano”."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "Poczta została wysłana."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "Wysyłanie w tle."
 
@@ -5665,7 +5668,7 @@ msgstr "Wysyłanie w tle."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "Edytowanie w tle."
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 09:21-0700\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-10-23 20:00+0300\n"
 "Last-Translator: Emir SARI <bitigchi@me.com>\n"
 "Language-Team: https://gitlab.com/bitigchi/mutt\n"
@@ -704,7 +704,7 @@ msgstr "Bir dizin görüntülenemez"
 msgid "Error trying to view file"
 msgstr "Dosyayı görüntülemeye çalışırken hata oluştu"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "değişken sayısı pek az"
@@ -755,7 +755,7 @@ msgstr "siyah-beyaz: değişken sayısı pek az"
 msgid "%s: no such attribute"
 msgstr "%s: böyle bir öznitelik yok"
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "değişken sayısı pek fazla"
 
@@ -1254,7 +1254,7 @@ msgstr "Son girdidesiniz."
 msgid "You are on the first entry."
 msgstr "İlk girdidesiniz."
 
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "\"%s\" hatalı IDN'e sahip: '%s'"
@@ -1483,7 +1483,7 @@ msgstr "PGP çağırılıyor..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "İleti satıriçi olarak gönderilemez. PGP/MIME'a geri dönülsün mü?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "E-posta gönderilmedi."
 
@@ -2317,7 +2317,7 @@ msgstr "Posta kutusu değiştirildi. Bayraklar hatalı olabilir."
 #. when IMAP has an error and Mutt successfully reconnects.
 #.
 #: curs_main.c:710
-    msgid "Mailbox reconnected.  Some changes may have been lost."
+msgid "Mailbox reconnected.  Some changes may have been lost."
 msgstr "Posta kutusu yeniden bağlandı. Bazı değişiklikler kaybolmuş olabilir."
 
 #: curs_main.c:714
@@ -2884,20 +2884,20 @@ msgstr "posta kutusu kısayolu boş düzenli ifadeye genişletilmiş"
 msgid "badly formatted command string"
 msgstr "hatalı biçimlendirilmiş komut dizisi"
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "değişken sayısı pek az"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Bir kanca içindeyken unhook * komutu kullanılamaz."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: bilinmeyen kanca: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: %s bir %s içindeyken silinemez."
@@ -3084,7 +3084,7 @@ msgstr "%s seçiliyor..."
 msgid "Error opening mailbox"
 msgstr "Posta kutusu açılırken hata oluştu!"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "%s oluşturulsun mu?"
@@ -3443,8 +3443,8 @@ msgid ""
 "(%P)---"
 msgstr ""
 "-%r-Mutt: %f [İletiler:%?M?%M/?%m%?n? Yeni:%n?%?o? Eski:%o?%?d? Del:%d?%?F? "
-"Bayrak:%F?%?t? Etiket:%t?%?p? Gönderi:%p?%?b? İçer:%b?%?B? Geri:%B?%?l? %l?]"
-"---(%s/%S)-%>-(%P)---"
+"Bayrak:%F?%?t? Etiket:%t?%?p? Gönderi:%p?%?b? İçer:%b?%?B? Geri:%B?%?l? "
+"%l?]---(%s/%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -3583,10 +3583,11 @@ msgstr ""
 "    GNU General Public License for more details.\n"
 
 #: main.c:115
+#, fuzzy
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
-"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
+"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
 "02110-1301, USA.\n"
 msgstr ""
 "    Bu program ile birlike GNU Genel Kamu Lisansı'nın bir kopyasını almış\n"
@@ -4228,44 +4229,44 @@ msgstr "%s ile konuşurken tünel hatası oluştu: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr ""
 "Dosya bir dizin; bu dizinin altına kaydedilsin mi? [(e)vet, (h)ayır, (t)ümü]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "eht"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Dosya bir dizin; bu dizin altına kaydedilsin mi?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Dosyayı dizin altına kaydet: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Dosya zaten var, ü(s)tüne yaz, (e)kle, i(p)tal?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "sep"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "İleti POP posta kutusuna kaydedilemiyor."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "İletiler %s sonuna eklensin mi?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s bir posta kutusu değil!"
@@ -5513,7 +5514,7 @@ msgstr "İletilecek posta hazırlanıyor..."
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr "Çok parçalı/alternatif içerik oluşturulsun mu?"
 
@@ -5521,12 +5522,12 @@ msgstr "Çok parçalı/alternatif içerik oluşturulsun mu?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Fcc %s konumuna kaydediliyor"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Uyarı: Toplu iş kipinde bir IMAP posta kutusuna Fcc desteklenmiyor"
 
@@ -5536,7 +5537,7 @@ msgstr "Uyarı: Toplu iş kipinde bir IMAP posta kutusuna Fcc desteklenmiyor"
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "Fcc %s konumuna atlanıyor"
@@ -5547,7 +5548,7 @@ msgstr "Fcc %s konumuna atlanıyor"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 "Fcc başarısız oldu. (y)eniden dene, alternatif (p)osta kutusu veya (a)tla?"
@@ -5557,7 +5558,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "ypa"
 
@@ -5565,73 +5566,73 @@ msgstr "ypa"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Posta kutusunu kopyala (Fcc)"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Ekleri Fcc içine kaydet?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Ertelenemiyor. $postponed ayarlanmamış."
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Ertelenen ileti açılsın mı?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "İletilen posta düzenlensin mi?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "Değiştirilmemiş ileti iptal edilsin mi?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "Değiştirilmemiş ileti iptal edildi."
 
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Hiçbir kripto arka uç yapılandırılmamış. İleti güvenlik ayarı devre dışı "
 "bırakılıyor."
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "İleti ertelendi."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "Alıcı belirtilmedi!"
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "Alıcılar belirtilmedi!"
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "Konu girilmedi, gönderme iptal edilsin mi?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "Konu girilmedi."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "Ek eklenmemiş, gönderme iptal edilsin mi?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "İletide referans gösterilen ek eksik"
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "İleti gönderiliyor..."
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "İleti gönderilemedi."
 
@@ -5641,15 +5642,15 @@ msgstr "İleti gönderilemedi."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr "Yanıt bayrakları ayarlanıyor."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "E-posta gönderildi."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "Ardalanda gönderiliyor."
 
@@ -5657,7 +5658,7 @@ msgstr "Ardalanda gönderiliyor."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "Düzenleme ardalana alındı."
 

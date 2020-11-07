@@ -1,3 +1,2182 @@
+2020-11-07 11:30:13 -0800  Kevin McCarthy  <kevin@8t8.us> (0c8f4357)
+
+        * Add missing new header files to EXTRA_mutt_SOURCES.
+        
+        I forgot to add the mutt_lisp.h and mutt_random.h files there.
+
+M	Makefile.am
+
+2020-11-07 11:01:47 -0800  Kevin McCarthy  <kevin@8t8.us> (a374cea8)
+
+        * Update UPDATING file for 2.0.
+
+M	UPDATING
+
+2020-11-06 14:31:57 -0800  Vsevolod Volkov  <vvv@mutt.org.ua> (3e9c605d)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2020-11-06 14:29:11 -0800  Vsevolod Volkov  <vvv@mutt.org.ua> (3317883a)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2020-11-06 14:26:09 -0800  Ivan Vilata i Balaguer  <ivan@selidor.net> (32fcad9f)
+
+        * Updated Catalan translation.
+
+M	po/ca.po
+
+2020-11-06 14:02:49 -0800  Kevin McCarthy  <kevin@8t8.us> (f5aa9382)
+
+        * Disable normalization after expand_path().
+        
+        The algorithm used was incorrect, for '..' expansion with symlinks
+        involved.  Furthermore, mutt_pretty_mailbox() takes care of this for
+        us.
+        
+        To be conservative, just before the release, I'm leaving the function
+        but converting it to a noop.  I'll pull the function out after the
+        release.
+        
+        Thanks to Oswald Buddenhagen for pointing out the bug!
+
+M	muttlib.c
+
+2020-11-06 13:18:27 -0800  Kevin McCarthy  <kevin@8t8.us> (6704caf4)
+
+        * Don't relative-path expand for fcc-hook and save-hook.
+        
+        "fcc-hook ~x. \\^" used to work, because mutt_addr_hook() calls
+        mutt_make_string(), which performs backslash expansion.
+        
+        The same would happen for save-hook.
+        
+        Many thanks to Oswald Buddenhagen for reporting the issue.
+
+M	hook.c
+M	muttlib.c
+M	protos.h
+
+2020-11-04 23:01:55 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (533c38f4)
+
+        * Fix the Polish translation of “Attachments”
+        
+        I have misunderstood the “Atts” abbreviation for “Attributes”, while it
+        actually means “Attachments”.
+
+M	po/pl.po
+
+2020-11-04 20:15:52 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (cdc99643)
+
+        * Update the Polish translation for Mutt 2.0
+
+M	po/pl.po
+
+2020-11-03 16:50:23 +0100  Flammie Pirinen  <tommi.pirinen@uit.no> (f26731fa)
+
+        * updated finnish translation
+
+M	po/fi.po
+
+2020-11-03 07:11:00 -0800  Kevin McCarthy  <kevin@8t8.us> (e677c196)
+
+        * Minor fix to UPDATING file.
+
+M	UPDATING
+
+2020-10-31 15:35:53 +0100  Petr Písař  <petr.pisar@atlas.cz> (d752a64c)
+
+        * Czech translation updated for 2.0
+
+M	po/cs.po
+
+2020-10-29 14:46:30 -0400  Remco Rĳnders  <remco@webconquest.com> (f6fb0ca9)
+
+        * Adjust Makefile.am to exclude BEWARE file
+
+M	Makefile.am
+
+2020-10-29 14:24:08 -0400  Remco Rĳnders  <remco@webconquest.com> (37a1950a)
+
+        * Move contents from BEWARE to devel-notes.txt
+
+D	BEWARE
+M	doc/devel-notes.txt
+
+2020-10-29 13:59:13 -0400  Remco Rĳnders  <remco@webconquest.com> (4fa19ba4)
+
+        * Change instructions to subscribe to dev mail list
+
+M	doc/devel-notes.txt
+
+2020-10-25 15:07:55 -0700  Kevin McCarthy  <kevin@8t8.us> (9258922a)
+
+        * Add a more explicit mention of ^G in the manual.
+        
+        It's a FAQ, so I think is worth emphasizing in the "getting started"
+        section.
+
+M	doc/manual.xml.head
+
+2020-10-25 20:49:22 +0100  Christopher Zimmermann  <madroach@gmerlin.de> (cafe0fb5)
+
+        * Allow to abort on question about multipart/alternative
+
+M	send.c
+
+2020-10-24 09:13:19 -0400  Remco Rĳnders  <remco@webconquest.com> (63e8ba68)
+
+        * Updated Dutch translation.
+
+M	po/nl.po
+
+2020-10-23 15:50:06 -0700  Emir Sarı  <bitigchi@me.com> (d8bbd22c)
+
+        * Update Turkish translations.
+
+M	po/tr.po
+
+2020-10-23 19:10:58 +0200  Olaf Hering  <olaf@aepfle.de> (18a07d14)
+
+        * refresh de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-10-22 19:41:14 -0700  Kevin McCarthy  <kevin@8t8.us> (e1089b5e)
+
+        * Remove obsolete stamp-h.in.
+        
+        This file was used a long time ago (pre-1.0) when Makefile.in was
+        checked in.
+        
+        We now generate Makefile.in from Makefile.am, and automake appears to
+        use a different mechanism of time-stamping, using stamp-h + $counter.
+
+D	stamp-h.in
+
+2020-10-17 18:55:27 -0700  Kevin McCarthy  <kevin@8t8.us> (1036f0ed)
+
+        * Add an initial change list for 2.0.0 to the UPDATING file.
+
+M	UPDATING
+
+2020-10-17 18:54:52 -0700  Kevin McCarthy  <kevin@8t8.us> (47fa1503)
+
+        * Add the mailboxes history category to the manual.
+
+M	doc/manual.xml.head
+
+2020-10-14 14:29:27 +0200  Philipp Klaus Krause  <pkk@spth.de> (36640a88)
+
+        * Since the string from strerror should never be modified, use const.
+
+M	curs_lib.c
+
+2020-10-12 15:34:44 -0700  Kevin McCarthy  <kevin@8t8.us> (1061dcbc)
+
+        * Create $attach_save_dir.
+        
+        This will be used when saving attachments via
+        mutt_save_attachment_list().
+        
+        Try to create the directory if it doesn't exist.  If we're unable to
+        chdir or create the directory just continue on, using cwd.
+
+M	globals.h
+M	init.h
+M	recvattach.c
+
+2020-10-09 09:20:11 -0700  Kevin McCarthy  <kevin@8t8.us> (f8263764)
+
+        * Fix mutt_oauth.py.README example.
+        
+        $imap_authenticators should be colon delimited.
+
+M	contrib/mutt_oauth2.py.README
+
+2020-10-06 13:39:55 +1100  Cameron Simpson  <cs@cskk.id.au> (0241b030)
+
+        * doc/manual.xml.head: Most common mail sending keys: replace "compose" with "mail", incorrect function name
+
+M	doc/manual.xml.head
+
+2020-10-03 15:43:06 -0700  Kevin McCarthy  <kevin@8t8.us> (489ade5c)
+
+        * Move MuttLisp example descriptions before the code.
+
+M	doc/manual.xml.head
+
+2020-10-01 13:33:55 -0700  Kevin McCarthy  <kevin@8t8.us> (ed9303a8)
+
+        * More ansi/special cleanup.
+        
+        Relocate the checks for a->attr and special around the blocks that use
+        them.
+
+M	pager.c
+
+2020-09-30 09:49:17 -0700  Kevin McCarthy  <kevin@8t8.us> (65b1ceab)
+
+        * Don't do ansi coloring on a search result.
+
+M	pager.c
+
+2020-09-29 18:46:27 -0700  Kevin McCarthy  <kevin@8t8.us> (73a7bf2c)
+
+        * Don't free and reuse ansi colors.
+        
+        You can't reallocate a color-pair to another color while the previous
+        one is still on the screen.
+        
+        Since there are at most 64 ansi-color combinations, just let them
+        accumulate.
+
+M	pager.c
+
+2020-09-29 14:20:24 -0700  Kevin McCarthy  <kevin@8t8.us> (a3a4d12f)
+
+        * Fix $allow_ansi end-of-line handling for attachments.
+        
+        Attachment viewing doesn't set MUTT_SHOWCOLOR, but for proper display
+        we need to call resolve_color() before clearing to end-of-line.
+
+M	pager.c
+
+2020-09-29 14:17:27 -0700  Kevin McCarthy  <kevin@8t8.us> (15372907)
+
+        * Separate special color setting from $allow_ansi colors.
+        
+        The ColorDefs for MT_COLOR_BOLD and MT_COLOR_UNDERLINE should only be
+        applied for the special formatting.  They shouldn't apply when
+        $allow_ansi has a bold/underline sequence.
+        
+        Change the exclusive or operator to a regular or.  Exclusive or
+        implies we are doing some kind of toggling, which we are not in this
+        case.  It just confuses things.
+        
+        Don't make the ansi underline, reverse, and blink mutually exclusive.
+
+M	pager.c
+
+2020-09-23 11:08:03 -0700  Kevin McCarthy  <kevin@8t8.us> (b0ccf259)
+
+        * Delay $hostname setting until after the muttrc is evaluated.
+        
+        Commit 5c5c34f2 made back in 1.6 changed Fqdn setting to use
+        gethostname() and getaddrinfo() to get the canonical domain.  This is
+        more accurate but can cause startup delays for systems where the DNS
+        resolution is not set up properly.
+        
+        Because this occurred before muttrc reading, there was no workaround
+        except to "fix DNS".
+        
+        Change Fqdn ($hostname) setting to occur after the muttrc and '-e'
+        argument processing occur.
+        
+        This is a possible breaking change if users rely on $hostname inside
+        their muttrc, for example 'source "muttrc.$hostname"'.  The workaround
+        would be to put something like (depending on the system type): 'set
+        hostname = `hostname --fqdn`' in the muttrc above that invocation.
+        
+        Also note that we still set Hostname (the internal variable) early,
+        because it is used in more places than Fqdn, such as tempfiles.
+
+M	init.c
+M	init.h
+
+2020-09-22 11:17:07 -0700  Kevin McCarthy  <kevin@8t8.us> (8a2fc801)
+
+        * Note that $cursor_overlay affects tree colors too.
+        
+        Change the font on "default" to indicate that actual value allows for
+        color overlays between the layers.
+
+M	init.h
+
+2020-09-20 18:46:48 -0700  Kevin McCarthy  <kevin@8t8.us> (9204b24e)
+
+        * Reenable $ssl_force_tls.
+        
+        The next release will be 2.0, providing more justification for
+        (reasonable) breaking changes.  In 2020, this should be the default.
+        
+        The documentation seems to already make appropriate warnings about
+        $tunnel_is_secure.  Since that option is introduced this release,
+        there is no need to worry about existing users with it unset.
+        
+        However, there were a couple stray double-quotes in the documentation
+        for that, so clean those up in this commit.
+
+M	doc/manual.xml.head
+M	init.h
+
+2020-09-19 15:31:36 -0700  Kevin McCarthy  <kevin@8t8.us> (2ce2fb7b)
+
+        * Add refresh option to smime_keys man page.
+
+M	doc/smime_keys.man
+
+2020-09-18 09:39:18 -0700  Kevin McCarthy  <kevin@8t8.us> (34ba89ec)
+
+        * Add missing full stops in smime_keys.man page.
+        
+        Thanks to hmartink and the manpage-l10n project for pointing out the
+        issues.
+
+M	doc/smime_keys.man
+
+2020-09-16 09:44:07 -0700  Kevin McCarthy  <kevin@8t8.us> (e91313b8)
+
+        * Remove casts for mutt_random_bytes() argument.
+        
+        Unneeded casts can hide issues later on, so take them out.
+
+M	mutt_random.c
+M	muttlib.c
+M	sendlib.c
+
+2020-09-15 14:32:19 -0700  Kevin McCarthy  <kevin@8t8.us> (ee2b9d1d)
+
+        * Remove message-id security leaks section of manual.
+        
+        The message-id generator has been changed to use a combination of time
+        and random components for the left side.
+
+M	doc/manual.xml.head
+
+2020-09-08 14:05:49 -0400  Remco Rĳnders  <remco@webconquest.com> (9da4e6e1)
+
+        * Change Message-ID to be more unique and leak less information
+        
+        A Message-ID should be globally unique. Currently mutt generates this ID
+        based on the current date and time, followed by ".G", followed by a letter
+        A to Z (A for the 1st and 27th email sent, Z for the 26th, etc.), followed
+        by the pid of the active mutt process, followed by "@" and the configured
+        fqdn.
+        
+        This can lead to information being leaked as to an users email habits and
+        activities, which might be undesirable.
+        
+        By replacing everything left of the "@" in the Message-ID with a Base64
+        encoded timestamp and 64 bits of randomness, we no longer include this
+        information.
+
+M	sendlib.c
+
+2020-08-31 13:48:51 -0400  Remco Rĳnders  <remco@webconquest.com> (b48233f7)
+
+        * Use PRIu64 macro as format when printing uint64_t values
+
+M	muttlib.c
+
+2020-08-31 13:10:25 -0400  Remco Rĳnders  <remco@webconquest.com> (8ccd96db)
+
+        * Implement LFRS113 PRNG functions
+        
+        - Instead of relying on random() implementations which can be of
+        questionable quality or relying on the presence of /dev/urandom, we
+        implement our own PRNG implementation that uses the LFRS113 PRNG algorithm
+        by Pierre L'Ecuyer.
+        
+        We seed this PRNG with values based on time, pid and ppid. It is OK if not
+        all seeds are of the highest quality as all four seeds would have to be
+        known to predict the numbers generated. In addition to this, we also use
+        /dev/urandom values (if available) that we mix into our four seeds.
+        
+        In case we are reseeding we will also reuse our existing state information
+        for setting the new seed values.
+        
+        - Add a function to Base64 encode 96 random bits
+
+M	Makefile.am
+M	init.c
+A	mutt_random.c
+A	mutt_random.h
+M	muttlib.c
+M	sendlib.c
+
+2020-09-13 00:05:22 +0100  isdtor  <isdtor@gmail.com> (56de020a)
+
+        * Add note about $smime_default_key to use with GPGME.
+        
+        When using GPGME for S/MIME, the key id used should be the id
+        displayed by "gpgsm --list-keys".
+
+M	init.h
+
+2020-09-06 15:39:07 -0700  Kevin McCarthy  <kevin@8t8.us> (4219d5f9)
+
+        * Block signals during mbox-append operation.
+        
+        I first noticed this back in 2017, but no one replied to my query to
+        mutt-dev and I forgot about it too.
+        
+        Thanks to Oswald Buddenhagen for the followup when he was going
+        through the mailing list archives, confirming the mistake.
+        
+        I've also reviewed MUTT_APPEND and MUTT_NEWFOLDER uses to make sure
+        the context is properly closed (and the signals restored).
+
+M	mbox.c
+
+2020-09-05 15:15:40 -0700  Kevin McCarthy  <kevin@8t8.us> (7157d009)
+
+        * Removed unused mutt_expand_path()
+        
+        All usages now call mutt_buffer_expand_path().
+
+M	muttlib.c
+M	protos.h
+
+2020-09-05 15:11:59 -0700  Kevin McCarthy  <kevin@8t8.us> (d76aebd2)
+
+        * Convert _mutt_enter_string() to use buffer expand_path function.
+        
+        This is the last usage of mutt_expand_path().  Converting all of
+        _mutt_enter_string() is a large project, so instead just localize to
+        use a BUFFER for the mutt_expand_path() call.
+
+M	enter.c
+
+2020-09-05 14:10:18 -0700  Kevin McCarthy  <kevin@8t8.us> (4a2f1067)
+
+        * Remove unused mutt_quote_filename().
+        
+        All callers now call the buffer function instead.
+
+M	lib.c
+M	lib.h
+
+2020-09-04 19:46:02 -0700  Kevin McCarthy  <kevin@8t8.us> (bf68f089)
+
+        * Convert mutt_create_alias and helpers to use buffer pool.
+        
+        This is working towards removing a few of the partially converted path
+        functions, such as mutt_expand_path().
+
+M	alias.c
+M	protos.h
+
+2020-09-06 23:21:15 +0200  Olaf Hering  <olaf@aepfle.de> (2d9c05c9)
+
+        * Fix typos in de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-09-04 14:16:21 -0700  Kevin McCarthy  <kevin@8t8.us> (c4fe5624)
+
+        * Use muttmua ubuntu image for shellcheck.
+
+M	.gitlab-ci.yml
+
+2020-09-04 14:11:55 -0700  Kevin McCarthy  <kevin@8t8.us> (0f97dd3a)
+
+        * Turn off shellcheck unused var warning for doc/instdoc.sh.
+
+M	doc/instdoc.sh.in
+
+2020-08-30 13:26:29 -0700  Kevin McCarthy  <kevin@8t8.us> (7ae6d9aa)
+
+        * Disable relative expansion for signature and source pipes.
+        
+        Relative expansion shouldn't be performed when those values are to be
+        executed as a pipe for the output.
+        
+        I believe this issue only affects $signature and the source command,
+        so for now I'm disabling relative expansion for those two cases.  If
+        there is too much more breakage, I will consider backing out the
+        relative expansion and disabling the :cd command.
+        
+        Thanks to Aaron Schrab for reporting this issue.
+
+M	init.c
+
+2020-08-28 15:51:55 -0700  Kevin McCarthy  <kevin@8t8.us> (2ba1d11f)
+
+        * Normalize expanded paths with '.' or '..' in them.
+        
+        This usage is not too likely, but to prevent strange looking mailbox
+        paths, make sure the path is normalized after being expanded.
+
+M	muttlib.c
+
+2020-07-29 13:44:17 -0700  Kevin McCarthy  <kevin@8t8.us> (6fc79323)
+
+        * Remove relative path expansion for some cases.
+        
+        Some paths, such as the folder browser, or certain hook values,
+        should be expanded for shortcuts, but not for relative paths.
+        
+        Configuration variables that hold commands that search by PATH should
+        also not be expanded.
+        
+        Create a separate call, and a separate data type for config vars.
+
+M	browser.c
+M	commands.c
+M	doc/makedoc.pl
+M	hook.c
+M	init.c
+M	init.h
+M	muttlib.c
+M	protos.h
+M	recvattach.c
+
+2020-07-26 19:10:57 -0700  Kevin McCarthy  <kevin@8t8.us> (0f455d51)
+
+        * Change expand_path() to expand relative paths.
+        
+        The introduction of the "cd" command can make relative paths
+        unreliable.  Change expand_path() to expand relative paths.
+        
+        Change pretty_mailbox() to contract relative paths, but only when the
+        folder is outside of homedir, or when cwd is underneath the homedir.
+        
+        To try and keep the sidebar from changing, use the pretty_mailbox code
+        to contract relative paths only.
+
+M	muttlib.c
+M	sidebar.c
+
+2020-08-29 12:30:18 -0700  Kevin McCarthy  <kevin@8t8.us> (092bc204)
+
+        * Merge branch 'stable' into master
+
+2020-08-29 12:29:50 -0700  Kevin McCarthy  <kevin@8t8.us> (f34d0909)
+
+        * automatic post-release commit for mutt-1.14.7
+
+M	ChangeLog
+M	VERSION
+
+2020-08-27 15:11:25 -0700  Kevin McCarthy  <kevin@8t8.us> (55c09cfb)
+
+        * Merge branch 'stable' into master
+
+2020-08-25 12:29:14 -0400  Remco Rĳnders  <remco@webconquest.com> (20165b4e)
+
+        * Remove always true conditional (#if 1)
+
+M	main.c
+
+2020-08-25 12:23:37 -0400  Remco Rĳnders  <remco@webconquest.com> (9ef96f1f)
+
+        * Remove always true conditional (#if 1)
+
+M	strcasestr.c
+
+2020-08-25 12:16:52 -0400  Remco Rĳnders  <remco@webconquest.com> (ae3014e9)
+
+        * Make returns after mx_fastclose_mailbox calls more consistent and cleaner
+
+M	mx.c
+
+2020-08-25 12:14:33 -0400  Remco Rĳnders  <remco@webconquest.com> (97398c4f)
+
+        * Remove always true conditional (#if 1)
+
+M	imap/imap.c
+
+2020-08-22 07:43:15 -0700  William Yardley  <wyardley@users.noreply.github.com> (3f856d11)
+
+        * refactor: update shell scripts for shellcheck warnings
+        
+        This updates shell scripts in the project to resolve shellcheck lint
+        warnings.
+        
+        A couple of warnings are ignored instead, at least for now.
+
+M	check_sec.sh
+M	contrib/bgedit-detectgui.sh
+M	contrib/iconv/make.sh
+M	gen_defs
+M	txt2c.sh
+
+2020-08-24 12:12:39 -0700  William Yardley  <wyardley@users.noreply.github.com> (6f4c0f7a)
+
+        * gen_defs: switch from $(()) to expr
+        
+        For greater compatibility with Solaris's Bourne shell, switch to "expr" for
+        numeric evaluation
+
+M	gen_defs
+
+2020-08-21 21:43:23 -0700  William Yardley  <wyardley@users.noreply.github.com> (18dc7be4)
+
+        * ci: enable shellcheck
+
+M	.gitlab-ci.yml
+M	Makefile.am
+
+2020-08-25 09:00:26 -0700  Kevin McCarthy  <kevin@8t8.us> (2d1da9c0)
+
+        * Merge branch 'stable' into master
+
+2020-08-21 22:50:55 -0700  William Yardley  <wyardley@users.noreply.github.com> (2f5a9496)
+
+        * mutt_oauth2: update for pylint / flake8 warnings
+        
+        * Update style to resolve some pylint / flake8 warnings
+        * Run pylint / flake8 in CI
+
+M	.gitlab-ci.yml
+A	.pylintrc
+M	contrib/mutt_oauth2.py
+
+2020-08-21 15:22:50 -0700  Alexander Perlis  <aperlis@math.lsu.edu> (c0218ade)
+
+        * Updates to contrib/mutt_oauth2.py and README.
+        
+        The newer version of the mutt_oauth2.py script incorporates the
+        following changes:
+         - Uses /usr/bin/env at top
+         - Many formatting changes to appease pylint
+         - Improvement to POP test error message output
+        
+        Also attached is a README that has instructions for both Microsoft and Google.
+
+M	contrib/mutt_oauth2.py
+M	contrib/mutt_oauth2.py.README
+
+2020-07-23 19:15:11 +0300  Maxim Tarasov  <mu@magi.net.ru> (a563ce85)
+
+        * Change hardcoded subject of replies
+        
+        This affects prefilled subject of a reply to an email with an empty
+        subject.
+
+M	send.c
+
+2020-08-13 13:00:01 -0700  Kevin McCarthy  <kevin@8t8.us> (2bfb7fed)
+
+        * Merge branch 'stable' into master
+
+2020-08-13 19:07:10 +0200  Vincent Lefevre  <vincent@vinc17.net> (c994f365)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-08-10 11:19:46 -0700  Kevin McCarthy  <kevin@8t8.us> (a84e8823)
+
+        * Improve clarity of help format_line() splitting.
+        
+        Thanks to Zero King for the initial patch.  He says the original line
+        confused some static analysis tools.
+        
+        I don't see anything wrong with the operator precedence, but as long
+        as we are cleaning up the line, split assignment and conditional
+        evaluation to make it even clearer.
+
+M	help.c
+
+2020-08-06 15:50:53 -0700  Kevin McCarthy  <kevin@8t8.us> (17df35f0)
+
+        * Merge branch 'stable'
+
+2020-08-04 11:03:08 -0700  Kevin McCarthy  <kevin@8t8.us> (8e8c586d)
+
+        * Fix manual typo.
+
+M	doc/manual.xml.head
+
+2020-08-03 16:14:29 -0700  Kevin McCarthy  <kevin@8t8.us> (2fbc29ec)
+
+        * Allow my_var assignments to reference the $my_var in the value.
+        
+        This is important for MuttLisp, where the current value could be used
+        to determine the new assignment.
+
+M	init.c
+
+2020-08-01 19:55:26 -0700  Kevin McCarthy  <kevin@8t8.us> (312e9bd9)
+
+        * Fix MuttLisp extract_token() call to remove trailing whitespace.
+        
+        MoreArgs() doesn't look for whitespace, and so assumes
+        mutt_extract_token() will remove trailing whitespace too.
+
+M	init.c
+
+2020-07-27 08:56:10 +0200  Olaf Hering  <olaf@aepfle.de> (7fe1aaad)
+
+        * refresh de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-07-26 03:04:33 +0300  Maxim Tarasov  <mu@magi.net.ru> (0b3fc03c)
+
+        * Fix man section in reference to mutt_dotlock
+
+M	init.h
+
+2020-07-26 03:00:54 +0300  Maxim Tarasov  <mu@magi.net.ru> (661bd665)
+
+        * Update mutt.1 manpage
+        
+        * Change the wording for some options to be imperative.
+        
+        * Rename parameters to be descriptive ("draft" instead of "file").
+        
+        * Mention possible values for -m parameter.
+        
+        * Change "file [...]" to "file ..." as ellipsis already implies it's
+          optional.
+        
+        * Format entries in the SYNOPSIS to avoid wrapping inside square
+          brackets.
+        
+        * Space out examples in -a description.
+        
+        * Use consistent formatting everywhere: options using B, paths and
+          option values using I, manual references using BR.
+        
+        * Group together descriptions of EDITOR and VISUAL environment
+          variables since they're closely related. Mention the default editor.
+        
+        * Add references to these environment variables: EGDSOCKET, RANDFILE,
+          LC_ALL, LC_CTYPE, LANG, and TEXTDOMAINDIR.
+        
+        * Clarify the way TMPDIR is used.
+        
+        * Add ~/.muttdebug0 to the FILES section.
+        
+        * Add missing manual pages to the SEE ALSO section. Sort the list.
+        
+        * Add line breaks after sentences (this is recommended in roff manual
+          to enable sentence processing; sentences are double spaced
+          automatically).
+
+M	doc/mutt.man
+
+2020-07-26 13:47:06 +0000  Asif Talybov  <talybov.asif@yandex.ru> (be906781)
+
+        * Update russian translation - add a missing character and fix typo
+
+M	po/ru.po
+
+2020-07-25 16:08:03 -0700  Kevin McCarthy  <kevin@8t8.us> (317abd8f)
+
+        * Fix a few typos in the manual.
+
+M	doc/manual.xml.head
+M	init.h
+
+2020-07-25 16:07:14 -0700  Kevin McCarthy  <kevin@8t8.us> (9ab12e1e)
+
+        * Add missing commands in the muttrc.man page.
+
+M	doc/muttrc.man.head
+
+2020-07-25 14:25:43 -0700  Kevin McCarthy  <kevin@8t8.us> (692a6069)
+
+        * Add empty-request lines to muttrc.man for spacing.
+        
+        Adding them makes it a bit easier to see where the different commands
+        stop and start.
+
+M	doc/muttrc.man.head
+
+2020-07-25 13:03:09 -0700  Kevin McCarthy  <kevin@8t8.us> (9edbbac1)
+
+        * Change POP3 oauth to not use initial response.
+        
+        The Microsoft documents indicate their implementation requires a
+          > AUTH XOAUTH2
+          < +
+          > token
+        sequence.
+        
+        I don't have their services configured to test, but it's safer to
+        assume not all implementations will support initial response.
+        
+        I did test Gmail's and they are fine with the second round trip.
+
+M	pop_auth.c
+
+2020-07-25 09:29:21 -0700  Kevin McCarthy  <kevin@8t8.us> (e050c314)
+
+        * Improve w3m invocation for manual.txt generation.
+        
+        This fix is also from Ambrose Li (@gniw).  The invocation makes sure
+        w3m won't attempt a remote connection if manual.html doesn't exist and
+        a proxy is configured, by using manual.txt as stdin.
+        
+        It also gives a non-zero exit status in that case, and makes sure
+        input is processed as utf-8.
+
+M	doc/Makefile.am
+
+2020-07-25 04:18:03 +0300  Maxim Tarasov  <mu@magi.net.ru> (daab98e3)
+
+        * Change \fC to \fB during muttrc.man generation
+        
+        \fC is not actually a valid escape sequence. Using it results in
+        misplaced underlined formatting.
+
+M	doc/makedoc.pl
+
+2020-07-24 16:02:32 -0700  Kevin McCarthy  <kevin@8t8.us> (a21c9fc1)
+
+        * Merge branch 'stable'
+
+2020-07-23 17:11:47 +0300  Maxim Tarasov  <mu@magi.net.ru> (6479ec5c)
+
+        * Mention $XDG_CONFIG_HOME in the manpage
+        
+        Mutt supported processing $XDG_CONFIG_HOME/mutt/muttrc for a while
+        now, but mutt(1) man page hasn't been updated to reflect that.
+        
+        This will also replace .IP with .TP to use one line per file name and
+        highlight file names with .I which is common practice in manual
+        formatting.
+
+M	doc/mutt.man
+
+2020-07-22 18:46:51 -0700  Kevin McCarthy  <kevin@8t8.us> (3c2501e5)
+
+        * Fix redraw_motion() redraw bug.
+        
+        Commit e2a28006 moved the cur_color assignment so that $arrow_cursor
+        could also use the value for overlays.
+        
+        Unfortunately, it at the same time moved the call *after* the call to
+        mutt_window_move(), which would introduce a drawing bug if
+        menu->color() went across IMAP.
+        
+        The previous commit removed overlays for $arrow_cursor, also removing
+        the need for cur_color to be assigned for both.  Move it back to where
+        it was before.
+
+M	menu.c
+
+2020-07-22 18:22:03 -0700  Maxim Tarasov  <mu@magi.net.ru> (12ff55e2)
+
+        * Add color overlay to print_enriched_string().
+        
+        It is called by main menu drawing routines and contains its own
+        conditional coloring of a tree component. As is, everything in there
+        gets overwritten by the indicator. Furthermore, do_color parameter
+        specifically disables any coloring in order for indicator highlight to
+        overwrite everything else.
+        
+        We need to merge three colors here:
+        
+        1) index color;
+        2) tree color, that is drawn within menu using its own color;
+        3) indicator color, that, if active, is drawn over both of them.
+        
+        Combining these colors is implemented in that order.
+        
+        After some testing, I think it doesn't make sense to merge colors when
+        $arrow_cursor is on. This part is reverted to the original behavior.
+        
+        Make print_enriched_string() coloring behavior self-contained, instead
+        of assuming the proper base_color is already set.  This makes the
+        callers simpler and allows them to only handle $arrow_cursor logic.
+
+M	menu.c
+
+2020-07-21 14:40:50 -0700  Maxim Tarasov  <mu@magi.net.ru> (aa8e6d4c)
+
+        * Fix cursor overlay logic.
+        
+        Attributes should always be merged, not only when indicator background
+        or foreground is set.
+
+M	color.c
+
+2020-07-20 19:43:58 -0700  Kevin McCarthy  <kevin@8t8.us> (e12028bd)
+
+        * Don't increment color refcount for overlays.
+        
+        Add a ref parameter, setting to 0 for the overlays.
+        
+        The pager also allocates temporary colors, but seems to take the
+        trouble to try and free them too.
+
+M	color.c
+M	pager.c
+M	protos.h
+
+2020-07-20 18:22:41 -0700  Kevin McCarthy  <kevin@8t8.us> (f2e96586)
+
+        * Add $cursor_overlay, default unset, to control overlaying.
+        
+        Although I think the new behavior is desirable, experience has shown
+        that changes need to be controlled by an option and usually defaulting
+        the same as before.
+
+M	color.c
+M	init.h
+M	menu.c
+M	mutt.h
+M	protos.h
+M	sidebar.c
+
+2020-07-20 22:50:10 +0300  Maxim Tarasov  <mu@magi.net.ru> (e2a28006)
+
+        * Add cursor overlay capability.
+        
+        Currently, when the indicator line is over an unread message, full
+        indicator color definition is used, and the line is no longer
+        displayed bold. It's harder to notice when using default reverse style
+        for the indicator, but it becomes much more prominent when you have
+        black on white display and only subtle change in the indicator
+        background.
+        
+        We could improve this by merging indicator color definition with color
+        definition of the underlying menu item. Here is how it's done:
+        
+        1. First color definitions for the indicator and underlying menu item
+        are taken and split back to foreground, background and attributes
+        (meaning bold, underline, etc.).
+        2. If indicator does not specify foreground or background color, new
+        color pair is created by using underlying menu item as base. Else
+        indicator's own foreground and background are used (current behavior).
+        3. Then attributes of both colors are combined together. For example,
+        if indicator has 'underline' and menu item has 'bold' result will be
+        highlighted as 'bold underline'.
+        4. The resulting color is used in place of MT_COLOR_INDICATOR when
+        highlighting things in menu.c.
+        
+        Combining attributes this way makes sense to me, because indicator is
+        meant to _indicate_, meaning increasing information density. It also
+        looks better when moving through the list containing differently
+        styled items.
+        
+        This patch affects indicator, sidebar_highlight, and sidebar_indicator
+        color objects.
+
+M	color.c
+M	menu.c
+M	protos.h
+M	sidebar.c
+
+2020-07-15 19:44:52 -0700  Kevin McCarthy  <kevin@8t8.us> (40ce20c8)
+
+        * Add first version of MuttLisp.
+        
+        This is somewhat simple enhancement to muttrc processing, not a
+        full-blown embedded scripting language.  There are no variables,
+        functions, types, or abilities that compete with macros.
+        
+        MuttLisp can be invoked using the "run" command.  If
+        $muttlisp_inline_eval is set, it can also be invoked with a bare
+        parenthesis expression as a command argument.
+        
+        $muttlisp_inline_eval defaults unset, to avoid breaking existing
+        configurations, which might have bare parenthesis arguments for
+        regexps.
+
+M	Makefile.am
+M	doc/manual.xml.head
+M	init.c
+M	init.h
+M	keymap.c
+M	mutt.h
+A	mutt_lisp.c
+A	mutt_lisp.h
+M	muttlib.c
+M	po/POTFILES.in
+
+2020-07-19 13:44:47 -0700  Kevin McCarthy  <kevin@8t8.us> (c5c448d4)
+
+        * Merge branch 'stable'
+
+2020-07-14 14:42:30 -0700  Kevin McCarthy  <kevin@8t8.us> (c037a5a9)
+
+        * Add mutt_oauth2.py and README file.
+        
+        This was contributed by Alexander Perlis to the mutt-dev mailing list.
+        
+        mutt_oauth2.py.README contains the contents of his introduction email
+        for the script.
+
+M	contrib/Makefile.am
+A	contrib/mutt_oauth2.py
+A	contrib/mutt_oauth2.py.README
+M	doc/manual.xml.head
+
+2020-07-13 12:43:39 -0700  Kevin McCarthy  <kevin@8t8.us> (35d63818)
+
+        * Improve GPGME inline processing.
+        
+        Properly deal with multiple blocks:
+        
+        * Extract the inline block to armored_data, instead of the entire
+        message.  Use the code from pgp.c to find the block boundaries.
+        
+        * The copy_clearsigned() function, probably originally ported from the
+        classic code too, assumes the first blank line starts the clear text.
+        But this is only true if the passed in data is just the block.
+        
+        * Use the Charset armor header if found for encrypted content
+        conversion, as pgp.d does.
+        
+        * Reset all states in each loop.
+        
+        It looks like the pgp.c code wasn't resetting pgp_keyblock and
+        gpgcharset, so reset those in pgp.c too.
+
+M	crypt-gpgme.c
+M	pgp.c
+
+2020-07-13 08:45:01 +0200  Olaf Hering  <olaf@aepfle.de> (04490360)
+
+        * update de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-07-12 10:50:51 -0700  Kevin McCarthy  <kevin@8t8.us> (69afc2f0)
+
+        * Try to improve "fcc to an imap mailbox" warning message.
+        
+        Add a "Warning: prefix", and print a followup message indicating the
+        mailbox is being skipped.
+        
+        Previously, the message might leave the impression the send was
+        aborted too.
+
+M	send.c
+
+2020-07-11 12:59:26 -0700  Kevin McCarthy  <kevin@8t8.us> (0e826090)
+
+        * Merge branch 'stable'
+
+2020-07-10 13:41:53 -0700  Kevin McCarthy  <kevin@8t8.us> (c94f43f9)
+
+        * Fix mutt_print_attachment_list() to unstuff format=flowed.
+        
+        Several of the cases are covered by the pipe fixes in the last commit.
+        
+        The last case is similar to the mutt_view_attachment case.  Since the
+        send-mode file might be modified, change it to always save to a
+        tempfile and then unstuff the tempfile.
+
+M	attach.c
+
+2020-07-09 19:31:48 -0700  Kevin McCarthy  <kevin@8t8.us> (b8217c6b)
+
+        * Fix mutt_pipe_attachment_list() to unstuff format=flowed.
+        
+        The pipe routines are not used in other places (except printing
+        attachments - to be handled next), so just directly modify them.
+        
+        Take care to space-stuff the filter output, since it replaces the
+        space-stuffed compose part.
+
+M	attach.c
+M	recvattach.c
+
+2020-07-08 19:07:55 -0700  Kevin McCarthy  <kevin@8t8.us> (104768bf)
+
+        * Fix mutt_save_attachment_list() to unstuff format=flowed.
+        
+        Directly modifying mutt_save_attachment was awkward for several
+        reasons.  So instead implement a proxy function.  It's ugly but
+        straight-forward.
+
+M	recvattach.c
+
+2020-07-06 15:18:42 -0700  Kevin McCarthy  <kevin@8t8.us> (0600ebae)
+
+        * Fix mutt_view_attachment() to unstuff format=flowed.
+        
+        This is used in receive mode for <view-text> and <view-mailcap>.
+        I don't think those are accessible from the compose menu, but the code
+        allows it.  So fix up the send-case too.
+        
+        Since we may need to unstuff the send-mode file, make a copy instead
+        of symlinking.  Also clean up the code to just sanitize the filename
+        regardless.
+
+M	attach.c
+
+2020-07-06 10:39:06 -0700  Kevin McCarthy  <kevin@8t8.us> (e8436a01)
+
+        * Factor out stuff/unstuff routines for attachment handling.
+
+M	rfc3676.c
+M	rfc3676.h
+
+2020-07-09 19:25:52 +0000  Emir  <emir_sari@msn.com> (00838646)
+
+        * Update Turkish translations.
+
+M	po/tr.po
+
+2020-07-08 12:59:36 -0700  Kevin McCarthy  <kevin@8t8.us> (b108d1b7)
+
+        * Merge branch 'stable'
+
+2020-07-06 20:17:59 -0700  Kevin McCarthy  <kevin@8t8.us> (b48f8e1e)
+
+        * Directly add/remove mailboxes for IMAP.
+        
+        The LSUB processor along with <subscribe> and <unsubscribe> would
+        construct a mailboxes command and send it to the muttrc parser.
+        
+        Since the poll/label refactor it's much easier to just directly call
+        the functions, and is much more secure.  So do that instead.
+
+M	buffy.c
+M	buffy.h
+M	imap/command.c
+M	imap/imap.c
+
+2020-06-30 15:31:19 -0700  Kevin McCarthy  <kevin@8t8.us> (25f82cf6)
+
+        * Create $copy_decode_weed, $pipe_decode_weed, $print_decode_weed.
+        
+        $weed covers a bit too much functionality.  It makes sense for it to
+        control the display of messages in the pager, along with forwarding
+        and replying.  But (in my opinion) piping and copy/save-decode are
+        something users might like to set differently without affecting the
+        rest of Mutt's behavior.
+        
+        $copy_decode_weed affects the <decode-copy> and <decode-save>
+        functions.  I've defaulted this *unset*, despite that it breaks
+        backward compatibility, because I believe the header weeding is
+        surprising to users and loses important information when copy/saving a
+        message.
+        
+        $pipe_decode_weed affects <pipe-message> when $pipe_decode is set.
+        I've default this *set* for backward compatibility.
+        
+        $print_decode_weed affects <print-message> when $print_decode is set.
+        I've default this *set* for backward compatibility.
+
+M	commands.c
+M	doc/manual.xml.head
+M	init.h
+M	mutt.h
+
+2020-06-27 15:04:45 -0700  Kevin McCarthy  <kevin@8t8.us> (3cacfb12)
+
+        * Consider $reply_to before $reply_self.
+        
+        This is based on Derek Martin's patch in Trac ticket 2304.
+        
+        I've modified it to:
+        
+        * default to the value set by OPTREPLYSELF if the
+          $ignore_list_reply_to short-circuit fires.
+        
+        * only apply the "from==reply_to" short circuit when $reply_self would
+          indicate replying to from.
+        
+        * improve the "from==reply_to" short circuit to also fire when the
+          display names are equal.
+        
+        The discussion in the trac ticket was somewhat contentious.  This
+        isn't particularly an area in the code I'm eager to touch.  However,
+        there are three points worth noting:
+        
+        1) Mail-Followup-To is considered before $reply_self, so it makes some
+        sense for Reply-To to also be.
+        
+        2) $reply_to is a quadoption, allowing the header to be declined and
+        then using $reply_self if appropriate.
+        
+        3) $reply_self is a boolean.  Previously, the only way to evaluate
+        reply_to in these cases is to set $reply_self.  Most users probably
+        don't want that set by default, making that a poor workaround.
+        
+        If this becomes sore point, I'll revert, but I don't believe the
+        change will be controversial in practice.
+
+M	send.c
+
+2020-06-28 11:55:31 -0700  Kevin McCarthy  <kevin@8t8.us> (2311519a)
+
+        * Disable hook "command" argument expansion of config variables.
+        
+        From my email to mutt-dev:
+        
+          I've been thinking about this a *lot* more, and digging into past
+          commits.  It looks like the escaping has pretty consistently been
+          intended for value completion and queries.  See commits 3c00eb7a and
+          032dcbeb.
+        
+          I don't believe the escaping is useful for variable expansion as
+          part of mutt_extract_token() - even for the hook "command" argument
+          case.  The escaping is targeted only for an expression surrounded by
+          double quotes (as is generated by completion and queries).  It
+          doesn't escape single quotes or spaces, for instance.
+        
+        Thanks also to Oswald Buddenhagen and Cameron Simpson for their
+        feedback.
+
+M	hook.c
+M	init.c
+
+2020-06-26 12:31:22 -0700  Kevin McCarthy  <kevin@8t8.us> (e53ae9ed)
+
+        * Escape config vars when expanding hook "command" argument.
+        
+        The "command" parameter of folder, send, send2, account, reply, and
+        message hooks is run through mutt_extract_token() twice.  Once when
+        parsing the hook command initially, and once via mutt_parse_rc_line()
+        when the actual hook fires.
+        
+        In theory, Mutt users should be aware of this, and should place all
+        their command strings with configuration variables in single-quotes,
+        to delay expansion until execution.
+        
+        But in reality Mutt has been escaping configuration variables as part
+        of mutt_extract_token() for many years.
+        
+        The previous commit turned the escaping off, because it damages
+        "backup" assignments to a $my_ variable, and I believe is confusing
+        behavior.
+        
+        But for hooks, users now expect the escaping behavior (for
+        double-quoted or unquoted command strings).
+        
+        Note that mutt_parse_hook() also passed the MUTT_TOKEN_SPACE flag, but
+        neglected to do so for message-hook.  Since all other "command"
+        argument hooks were included, and were added to the list over the
+        years, I believe this was an accidental oversight.
+
+M	hook.c
+M	init.c
+M	mutt.h
+
+2020-06-25 15:13:48 -0700  Kevin McCarthy  <kevin@8t8.us> (e5a32a61)
+
+        * Convert var_to_string() to use a buffer, and disable auto-escaping.
+        
+        Inside mutt_extract_token(), expanding a configuration variable used a
+        fixed size LONG_STRING.  This would truncate long values, such as
+        oauth_refresh, which may have a large token embedded in them.
+        
+        Convert var_to_string() to use a BUFFER parameter instead.
+        
+        var_to_string() also performed escaping, which is not always helpful.
+        Disable the escaping inside.  Add it back in
+        mutt_var_value_complete(), via the pretty_var() call.
+        
+        The escaping may also be useful for hook "command" parameters.  Since
+        Mutt has had the escaping behavior there for years, removing it will
+        likely break configurations.  This will be added back in the next
+        commit.
+
+M	init.c
+
+2020-06-24 18:44:18 -0700  Kevin McCarthy  <kevin@8t8.us> (110562b3)
+
+        * Add tab-completion menu for patterns.
+        
+        This is based upon the patch from TAKAHASHI Tamotsu, maintained by
+        Vincent Lefèvre.
+        
+        The push/pop menu operations take care of most redraw operations, so
+        remove those from the patch.  Change post-search to '|= REDRAW_MOTION'
+        instead of assigning so it doesn't overwrite a full redraw.
+        
+        Add L10N for the new help strings.
+        
+        Add a format string and configuration variable for the menu.
+        
+        Add the multi-character thread patterns.
+        
+        Doing the above required some structural changes to the menu, so I
+        rewrote it in a more common style used elsewhere in Mutt.
+
+M	curs_main.c
+M	enter.c
+M	globals.h
+M	init.h
+M	pattern.c
+M	protos.h
+
+2020-06-24 02:03:40 +0200  Vincent Lefevre  <vincent@vinc17.net> (bb407ec3)
+
+        * Add a missing comma in the manual.
+
+M	doc/manual.xml.head
+
+2020-06-24 01:48:29 +0200  Vincent Lefevre  <vincent@vinc17.net> (5b3b7a80)
+
+        * Correct wording in a comment.
+
+M	mutt_tunnel.c
+
+2020-06-22 18:31:47 -0700  Kevin McCarthy  <kevin@8t8.us> (c9b58e3d)
+
+        * Add $tunnel_is_secure config, defaulting set.
+        
+        The config variable is to resolve an ambiguity in Mutt about whether
+        using $tunnel is secure.
+        
+        On the one hand, the examples in the manual show using ssh or a direct
+        pipe to a program.  Many users do this to connect to an IMAP server
+        with PREAUTH configured, relying on the tunnel to be secured by ssh or
+        by the fact that it's a local pipe.
+        
+        On the other hand, the Mutt connection code still respects
+        $ssl_starttls and $ssl_force_tls, as if the $tunnel connection were
+        not already secured.
+        
+        After some discussion on mutt-dev, it seemed the best idea to assume
+        the connection is secure by default, in order to not break IMAP
+        PREAUTH connections, but to provide a configuration variable in case
+        there are situations where it is not.
+        
+        Thanks to Aaron Schrab for the original idea of setting conn->ssf for
+        $tunnel in his patch to ticket 250.
+
+M	doc/manual.xml.head
+M	imap/imap.c
+M	init.h
+M	mutt.h
+M	mutt_socket.h
+M	mutt_tunnel.c
+
+2020-06-23 10:45:01 -0700  Kevin McCarthy  <kevin@8t8.us> (0e428dd5)
+
+        * Merge branch 'stable'
+
+2020-06-22 12:46:08 -0700  Kevin McCarthy  <kevin@8t8.us> (22d7a1b3)
+
+        * Merge branch 'stable'
+
+2020-06-21 15:17:04 +0200  Vincent Lefevre  <vincent@vinc17.net> (e807360d)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-06-20 14:12:43 -0700  Kevin McCarthy  <kevin@8t8.us> (43184600)
+
+        * Improve warning message for possible STARTTLS response injection.
+        
+        Thanks to Vincent Lefèvre for the improved wording, and to Cameron
+        Simpson for his suggestions too.
+
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2020-06-20 22:30:20 +0200  Olaf Hering  <olaf@aepfle.de> (db656f46)
+
+        * Update de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-06-20 06:55:47 -0700  Kevin McCarthy  <kevin@8t8.us> (4adb274a)
+
+        * Merge branch 'stable'
+
+2020-06-19 15:00:53 -0700  Kevin McCarthy  <kevin@8t8.us> (73b70169)
+
+        * Add recommendation to use $ssl_force_tls.
+
+M	init.h
+
+2020-06-19 14:39:33 -0700  Kevin McCarthy  <kevin@8t8.us> (a400fc3f)
+
+        * Add L10N comment for unencrypted PREAUTH warning.
+        
+        I forgot to add one while trying to get the fix out.
+
+M	imap/imap.c
+
+2020-06-18 14:18:48 -0700  Kevin McCarthy  <kevin@8t8.us> (fee31356)
+
+        * Merge branch 'stable'
+
+2020-06-15 12:27:24 +0200  Vincent Lefevre  <vincent@vinc17.net> (75be2b07)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-06-14 14:18:49 -0700  Kevin McCarthy  <kevin@8t8.us> (64c1d9ac)
+
+        * Merge branch 'stable'
+
+2020-06-11 16:11:36 -0700  Kevin McCarthy  <kevin@8t8.us> (c7a872d1)
+
+        * Add basic XOAUTH2 support.
+        
+        This still relies on an external script to obtain the resource access
+        token.  Since XOAUTH2 should be slowly going away, use the same
+        refresh_commands as with OAUTHBEARER.
+        
+        Unlike OAUTHBEARER, XOAUTH2 must be explicitly added to the
+        $imap/smtp/pop_authenticators list.
+        
+        To keep the shared functions simpler, convert them to use buffers.
+        
+        RFC 7628 indicates that upon authentication failure the clients should
+        be sending an BASE 64 encoded '^a' ("AQ=="), to terminate the SASL
+        session, so change all the handlers to do that and read the following
+        response.  The RFC doesn't comment about a line terminator being
+        required, but I assume it is, so add that too.
+
+M	account.c
+M	account.h
+M	doc/manual.xml.head
+M	imap/auth.c
+M	imap/auth.h
+M	imap/auth_oauth.c
+M	imap/command.c
+M	imap/imap_private.h
+M	pop_auth.c
+M	smtp.c
+
+2020-06-08 12:57:43 -0700  Kevin McCarthy  <kevin@8t8.us> (5b844328)
+
+        * Perform small cleanups in gnutls.c.
+        
+        These are some cleanups I started making during the stable branch
+        fixes committed yesterday.  It seemed a better idea to perform this
+        amount of change in master rather than in stable, so they are in this
+        separate commit.
+        
+        Fix the function-call spacing style.
+        
+        Change the #define CERTERR values to match the pattern used elsewhere
+        in mutt.
+        
+        Use safe_calloc() instead of calloc.
+        
+        Add a few error checks in tls_get_client_cert(), and change to
+        directly extract the CN using gnutls_x509_crt_get_dn_by_oid().
+        
+        Use a do-while around the gnutls_handshake() instead of repeating it.
+
+M	mutt_ssl_gnutls.c
+
+2020-06-08 23:24:18 +0200  Vincent Lefevre  <vincent@vinc17.net> (4938c97a)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-06-07 12:30:01 -0700  Kevin McCarthy  <kevin@8t8.us> (8799adcf)
+
+        * Merge branch 'stable'
+
+2020-06-06 16:17:07 +0200  Vincent Lefevre  <vincent@vinc17.net> (dcc59c63)
+
+        * French translation: correction and improvement.
+
+M	po/fr.po
+
+2020-06-06 15:57:03 +0200  Vincent Lefevre  <vincent@vinc17.net> (d4cb383e)
+
+        * Updated French translation.
+        
+        Note: I initially translated "forward" as "faire suivre", but this is
+        no longer possible now that the past participle "forwarded" is used.
+        The translated term is now "transférer" (like in Thunderbird).
+
+M	po/fr.po
+
+2020-06-02 15:59:12 -0700  Kevin McCarthy  <kevin@8t8.us> (14709d7d)
+
+        * Change postpone mode to write Date header too.
+        
+        This will ensure that postponed protected headers will match, in case
+        Mutt later adds checks about that.
+        
+        I can't see any reason to not include it for the two other
+        cases (searching and edit draft).
+
+M	sendlib.c
+
+2020-06-02 15:48:59 -0700  Kevin McCarthy  <kevin@8t8.us> (82b5c697)
+
+        * Add other headers to written Protected Headers.
+        
+        In order to avoid $edit_headers, <resend-message>, or other places
+        setting env->date and inadvertantly generating a wrong Date header,
+        store the "protected headers" generated date header in the sctx, in
+        addition to mime_headers.
+        
+        I initially removed env->date setting from mutt_parse_rfc822_line(),
+        thinking it a more elegant solution, but unfortunately protected
+        headers reading needs it to be there.  We don't currently print or
+        compare the headers, but might wish to in the future.
+        
+        Explicitly pass in a date parameters to mutt_write_rfc822_header() to
+        make each caller conscious of where the date is coming from.
+
+M	crypt.c
+M	headers.c
+M	main.c
+M	pattern.c
+M	protos.h
+M	send.c
+M	send.h
+M	sendlib.c
+
+2020-06-01 18:48:41 -0700  Kevin McCarthy  <kevin@8t8.us> (b0faa8d2)
+
+        * Modify mutt_make_date() to append to a buffer.
+        
+        Remove the "Date: " prefix and the trailing newline, and convert
+        callers to add those.
+        
+        This will be needed for protected headers Date support, where we will
+        have to generate and store the date inside mutt_protect().
+
+M	copy.c
+M	protos.h
+M	sendlib.c
+
+2020-06-01 13:50:41 -0700  Kevin McCarthy  <kevin@8t8.us> (82e80422)
+
+        * Move protected-headers parameter cleanup out to send.c cleanup.
+        
+        Remove it in the same place that the mime-headers are removed.  This
+        is so that the parameter doesn't stay in there if we loop back to the
+        compose menu on failure and the sender toggle encrption off.
+
+M	crypt.c
+M	send.c
+
+2020-06-01 13:40:25 -0700  Kevin McCarthy  <kevin@8t8.us> (f07fa1a1)
+
+        * Update the terminology and link for protected headers.
+
+M	init.h
+
+2020-06-01 13:27:38 -0700  Kevin McCarthy  <kevin@8t8.us> (e7ed170c)
+
+        * Change default of $crypt_protected_headers_subject to "...".
+        
+        The most recent protected headers draft now specifies the obscured
+        subject be "...".  See https://github.com/autocrypt/protected-headers
+        and
+        https://datatracker.ietf.org/doc/draft-autocrypt-lamps-protected-headers/
+
+M	init.h
+
+2020-06-03 12:34:51 -0700  Kevin McCarthy  <kevin@8t8.us> (c5441904)
+
+        * Add check for sqlite3_prepare_v3() in configure.ac
+        
+        I didn't realize the function was added so recently: sqlite
+        3.20.0 (2017-08-01).
+        
+        Thanks to isdtor for pointing out the problem.
+
+M	configure.ac
+
+2020-05-29 10:54:56 -0700  Kevin McCarthy  <kevin@8t8.us> (44711a24)
+
+        * Try to automatically reconnect to an open IMAP mailbox on error.
+        
+        For the Context, change cmd_handle_fatal() to flag idata->status on
+        the error, but not close the mailbox and disconnect.
+        
+        Then have imap_check_mailbox() reconnect when IMAP_REOPEN_ALLOW is
+        set (so the index is prepared to rebuild with all new headers).  Try
+        to merge flag, envelope, and attach_del changes back in.  Replace the
+        existing Context pointer with the new values, and swap out the idata
+        passed in on success, so we don't continue to work with the wrong
+        idata.
+        
+        The imap_check_mailbox() changes are purposely coded loosely to try
+        and catch all sorts of errors - not just polling and imap_idle
+        errors.
+        
+        Create a new check_mailbox() return code to indicate a reconnect.
+        Display a more appropriate message in the index, but otherwise treat
+        it the same as a REOPEN.
+
+M	curs_main.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/imap_private.h
+M	mailbox.h
+M	mutt.h
+
+2020-05-31 09:09:14 +0200  Grzegorz Szymaszek  <gszymaszek@short.pl> (878e261a)
+
+        * Improve Polish translation of “undeleted” messages
+
+M	po/pl.po
+
+2020-05-29 15:46:29 -0400  Remco Rĳnders  <remco@webconquest.com> (4091cbcd)
+
+        * Remove support for OpenSSL <0.9.5
+        
+        The current code provides a workaround for the absence of RAND_status in
+        OpenSSL versions before 0.9.5. The comments in the code indicate these
+        versions have to be supported, but as these versions are now more than
+        20 years old, this no longer applies. Removing this support simplifies the
+        code and on the small chance that anyone is still using such old versions,
+        breaking their build will actually be doing them a favor given the known
+        issues with these OpenSSL versions.
+
+M	configure.ac
+M	mutt_ssl.c
+
+2020-05-27 15:25:13 -0700  Kevin McCarthy  <kevin@8t8.us> (e2d27aac)
+
+        * Add myself to the contributor list in the manual.
+        
+        I didn't realize previous maintainers were in the list, so I guess I
+        should add myself. :-)
+
+M	doc/manual.xml.tail
+
+2020-05-27 14:51:04 -0700  Kevin McCarthy  <kevin@8t8.us> (9723c62c)
+
+        * Allow tagging string config vars as L10N.
+        
+        Translate them once in mutt_set_default().
+        
+        Modify makedoc.pl to remove the N_() tag, and to also note the type as
+        "string (localized)".
+        
+        The makedoc.pl already will ignore L10N comment so add a basic comment
+        above each config var in init.h.
+        
+        I'm not tagging $crypt_protected_headers_subject because the spec now
+        says this should be "...".  I plan on implementing that change along
+        with other fixes before the next release.
+
+M	doc/makedoc.pl
+M	init.c
+M	init.h
+M	po/POTFILES.in
+
+2020-05-27 14:39:51 -0700  Kevin McCarthy  <kevin@8t8.us> (4aedee85)
+
+        * Merge branch 'stable'
+
+2020-05-26 13:57:18 -0700  Kevin McCarthy  <kevin@8t8.us> (d3fd97b4)
+
+        * Merge branch 'stable'
+
+2020-05-25 13:38:46 -0700  Kevin McCarthy  <kevin@8t8.us> (52f5694b)
+
+        * Merge branch 'stable'
+
+2020-05-25 12:59:50 -0700  Kevin McCarthy  <kevin@8t8.us> (cb9c683d)
+
+        * Merge branch 'stable'
+
+2020-05-24 13:34:33 -0700  Kevin McCarthy  <kevin@8t8.us> (cd3b529f)
+
+        * Merge branch 'stable'
+
+2020-05-23 14:41:50 -0700  Kevin McCarthy  <kevin@8t8.us> (0ac6b609)
+
+        * Refactor mutt_buffer_strip_formatting() inside of pager.c.
+        
+        Rather than duplicate the logic, move the function back inside
+        pager.c.  Add a parameter to optionally remove attachment markers.
+        
+        Inside fill_buffer(), use a stack-based buffer and directly assign the
+        buffer.data back to fmt, to keep it as fast as before.
+
+M	handler.c
+M	muttlib.c
+M	pager.c
+M	pager.h
+M	protos.h
+
+2020-05-22 16:13:38 -0700  Kevin McCarthy  <kevin@8t8.us> (c44f0ce5)
+
+        * Add cd command to change the current working directory.
+        
+        Original Author: Christoph Berg <myon@debian.org>
+        Use cases are saving attachments to some other place and others.
+        
+        Modified by Kevin McCarthy:
+        - Fix up documentation to use cmdsynopsis/command/arg.
+        - Add muttrc.man entry.
+        - Fix compilation error.
+        - Clean up the parse_cd() function to use buffers and remove new
+          translation strings.
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+M	init.c
+M	init.h
+
+2020-05-19 13:14:48 -0700  Kevin McCarthy  <kevin@8t8.us> (b3ab8ca9)
+
+        * Merge branch 'stable'
+
+2020-05-18 05:35:32 +0200  Cyril Roelandt  <tipecaml@gmail.com> (5bbc6be5)
+
+        * Add default keybindings for common operations.
+        
+        This adds the following bindinds:
+        
+        - ^P for "history up"
+        - ^N for "history down"
+
+M	functions.h
+
+2020-05-17 13:01:35 -0700  Kevin McCarthy  <kevin@8t8.us> (6150d285)
+
+        * Clean up Editor Menu interface inside Mutt.
+        
+        enter_filename() api:
+        
+        * Rename enter_fname() to _enter_fname()
+        
+        * Rename mutt_buffer_enter_mailbox() to mutt_enter_mailbox()
+        
+        * Rename mutt_buffer_enter_filenames() to mutt_enter_filenames()
+        
+        * Remove 'multiple' and 'fname buffer' parameters from
+          mutt_enter_filenames().  Create a temp buffer, and enable multiple
+          automatically.  This removes the possibility of mistakenly looking
+          at an unpopulated 'fname' parameter for the result.
+        
+        * Create mutt_enter_filename().  This isn't used currently, but it
+          makes sense to have a "single filename" api already set up with
+          correct parameters.
+        
+        get_field() api:
+        
+        * Rename _mutt_buffer_get_field() to a static _get_field() function.
+        
+        * Remove _mutt_get_field() and make mutt_get_field() an actual
+          function.
+        
+        * Remove the multiple/files/numfiles parameters, since this
+          should only be done through mutt_enter_filenames().
+        
+        _mutt_enter_string() api:
+        
+        Add comments to mutt_enter_string() and _mutt_enter_string() headers.
+        Noting that they should generally not be called directly.  List the
+        functions that should be used inside Mutt.  Note the behavior of the
+        multiple parameter.
+
+M	autocrypt/autocrypt.c
+M	commands.c
+M	compose.c
+M	curs_lib.c
+M	curs_main.c
+M	enter.c
+M	protos.h
+M	send.c
+
+2020-05-17 12:37:24 -0700  Kevin McCarthy  <kevin@8t8.us> (95cf171e)
+
+        * Fix attach-file tag operation to work when quitting browser.
+        
+        There was a disconnect between the compose menu and the behavior when
+        selecting multiple files.  The select_file() operation populates the
+        files and numfiles when hitting 'quit'.  The compose menu was
+        incorrectly looking at the fname parameter, which won't be populated
+        unless the user presses enter.
+        
+        The enter_string() menu makes the same mistake.  Change it to behave
+        differently depending on whether multiple is set.
+        
+        The logic needs to be made clearer by changing the api.  I will do
+        that in the next commit.
+
+M	browser.c
+M	compose.c
+M	enter.c
+
+2020-05-16 14:39:00 -0700  Kevin McCarthy  <kevin@8t8.us> (1f20684a)
+
+        * Merge branch 'stable'
+
+2020-05-16 11:15:37 -0700  Kevin McCarthy  <kevin@8t8.us> (a0bbc02e)
+
+        * Merge branch 'stable'
+
+2020-05-16 14:41:58 +0800  Martin Michlmayr  <tbm@cyrius.com> (5d4ec51a)
+
+        * Fix typos
+
+M	doc/makedoc.pl
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+
+2020-05-15 18:23:32 -0400  Remco Rĳnders  <remco@webconquest.com> (a8824b55)
+
+        * Fix sidebar_sort_method usage in documentation
+
+M	init.h
+
+2020-05-15 09:27:31 +0200  Vincent Lefevre  <vincent@vinc17.net> (e78d2b4f)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-05-14 15:42:38 -0700  Kevin McCarthy  <kevin@8t8.us> (d1199f76)
+
+        * Add Autocrypt error messages when trying to force send.
+        
+        If the account doesn't exist, or isn't enabled, display a message back
+        in the compose menu.
+
+M	autocrypt/autocrypt.c
+
+2020-05-14 14:02:20 -0700  Kevin McCarthy  <kevin@8t8.us> (e3e0a0ba)
+
+        * Change mailto handling to parse in-reply-to loosely.
+        
+        To fix ticket 241 without loosening in-reply-to email header parsing,
+        add a direct call to mutt_parse_references().  Change the second
+        parameter, which was not used, to indicate "allow nonbracketed" mode.
+
+M	parse.c
+M	protos.h
+M	url.c
+
+2020-05-14 12:01:21 -0700  Kevin McCarthy  <kevin@8t8.us> (194a60ae)
+
+        * Adjust message-id extraction to retry more permissively on failure.
+        
+        It turns out some illegal message-id headers have neither angle
+        brackets nor even an '@' in them.  So adopt a different approach.
+        
+        First try parsing the Message-ID header in a strict(ish) mode
+        requiring angle brackets.  If that returns nothing, then try again in
+        loose mode, which will basically grab the first non-comment token.
+        
+        Change References and In-Reply-To to keep the strict(ish) mode.  We
+        might loose some parent references, but that won't cause much loss of
+        functionality in Mutt, and also helps prevents parsing in "garbage"
+        and passing that back in replies.
+        
+        Thanks to Oswald Buddenhagen for the suggested approach.
+
+M	parse.c
+M	protos.h
+M	send.c
+
+2020-05-13 15:52:30 -0700  Kevin McCarthy  <kevin@8t8.us> (99ba609f)
+
+        * Loosen message-id parser to parse ids without angle brackets.
+        
+        To do this, we need to enhance the loop to skip over comments.  It
+        does this using the rfc822 address parse_comment() routine.
+        
+        Keep parsing inside angle brackets non-strict, because of the history
+        of trac tickets (1116, 1935, 3090) demonstrating message-ids with
+        spaces inside the angle brackets, double-'@'s, or even completely
+        missing '@'.
+        
+        However, in order to reduce the risk of extracting garbage, insist
+        that message-id's outside of angle brackets at least have an '@'.
+        
+        Automatically add missing angle brackets so that Mutt will generate
+        valid references/in-reply-to headers.
+
+M	parse.c
+M	rfc822.c
+M	rfc822.h
+
+2020-05-13 19:55:48 +0200  Vincent Lefevre  <vincent@vinc17.net> (ba2430af)
+
+        * Update section "Terminal Keybindings" in the manual.
+        
+        Also list ^Q, ^S and ^Z.
+        Note that not all bindings output by "stty -a" affect Mutt.
+
+M	doc/manual.xml.head
+
+2020-05-12 20:05:12 -0700  Kevin McCarthy  <kevin@8t8.us> (48a0e90e)
+
+        * Add a brief section on stty to the manual.
+        
+        Place it at the bottom of the keybindings section.  It's by no means
+        complete, but may be helpful to point some beginners in the right
+        direction.
+
+M	doc/manual.xml.head
+
+2020-05-11 14:15:27 -0700  Kevin McCarthy  <kevin@8t8.us> (b0570d76)
+
+        * Separate mailbox vs buffy-incoming for the "enter_fname" functions.
+        
+        Create mutt_buffer_enter_mailbox(), which turns on the MUTT_MAILBOX
+        flag (renamed from MUTT_EFILE).  This uses the mailbox history file
+        category, and turns on MUTT_SEL_FOLDER in the select_file browser.
+        
+        Add a do_incoming paramter and a new separate flag MUTT_INCOMING, so
+        that buffy-completion can be enabled optionally for mailboxes.  It
+        only makes sense for the change-folder operation, so disable it in
+        other contexts (such as saving/copying a message, prompting for an Fcc
+        mailbox, or an autocrypt scan mailbox).
+        
+        Change saving/copying a message to use the mailbox function, so that
+        it shares the history file with other mailbox operations.  It would
+        previously use the "file" history category.
+        
+        Create mutt_buffer_enter_filenames() to replace the enter_fname()
+        prompt for files.
+        
+        Since nothing directly uses the _mutt_buffer_enter_fname() function
+        anymore, rename and make it static.
+
+M	autocrypt/autocrypt.c
+M	commands.c
+M	compose.c
+M	curs_lib.c
+M	curs_main.c
+M	enter.c
+M	mutt.h
+M	protos.h
+M	send.c
+
+2020-05-11 13:12:23 -0700  Kevin McCarthy  <kevin@8t8.us> (d338650f)
+
+        * Remove unused mutt_enter_fname() functions.
+        
+        All the callers use the buffer version.
+
+M	curs_lib.c
+M	protos.h
+
+2020-05-09 18:43:55 -0700  Kevin McCarthy  <kevin@8t8.us> (64d67279)
+
+        * Merge branch 'stable'
+
+2020-05-09 21:21:20 +0200  Vincent Lefevre  <vincent@vinc17.net> (254e5eb5)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-05-08 15:57:18 -0700  Kevin McCarthy  <kevin@8t8.us> (78ab1cca)
+
+        * Add utime() loop for _maildir_commit_message().
+        
+        While fixing up mutt_decrease_mtime(), I thought about creating a
+        helper function to loop for EINTR.  However, there is only one other
+        place in the code that cares enough about utime succeeding to check
+        the return value.
+        
+        maildir_commit_message() is used fairly often, so it's possible I
+        might be writing useless error handling.  However there are
+        reports (easily found by internet search) of some systems returning
+        EINTR, so might as well fix this place too.
+
+M	mh.c
+
+2020-05-08 13:47:41 -0700  Kevin McCarthy  <kevin@8t8.us> (1aa61c2e)
+
+        * Improve mutt_decrease_mtime() error handling.
+        
+        Add a check for utime failure.  Some non-posix implementations return
+        EINTR.  Since editing messages is a very common operation in Mutt,
+        take care to retry in that case so as not to introduce message
+        composition failures.
+        
+        Make sure all callers check mutt_decrease_mtime()'s return value,
+        since stat could also fail.
+
+M	editmsg.c
+M	headers.c
+M	muttlib.c
+M	send.c
+
+2020-05-08 13:05:44 -0700  Kevin McCarthy  <kevin@8t8.us> (08294769)
+
+        * Merge branch 'stable'
+
+2020-05-07 19:41:43 -0400  Remco Rijnders  <remco@webconquest.com> (4717b041)
+
+        * Remove commented out mutt_message_hook calls
+
+M	recvcmd.c
+
+2020-05-07 19:17:42 -0400  Remco Rijnders  <remco@webconquest.com> (ad5dcf17)
+
+        * Clarify CH_WEED debug message
+
+M	copy.c
+
+2020-05-07 16:32:46 -0700  Kevin McCarthy  <kevin@8t8.us> (a9fdeeab)
+
+        * Fix sed invocation in gen_defs to work with non-GNU sed.
+        
+        \n isn't supported on FreeBSD's version, so instead directly embed the
+        newline.
+
+M	gen_defs
+
+2020-05-07 16:09:24 -0700  Kevin McCarthy  <kevin@8t8.us> (3745c59e)
+
+        * Turn off check_sec.sh warning.
+        
+        The script is stupid, but still useful, so just add the tag to turn
+        off the warning. :-)
+
+M	signal.c
+
+2020-05-07 16:01:46 -0700  Kevin McCarthy  <kevin@8t8.us> (b70676a2)
+
+        * Add L10N strings to exit_handler().
+        
+        Since gettext() is not safe in the handler, cache them in advance.
+
+M	main.c
+M	protos.h
+M	signal.c
+
+2020-05-07 15:26:52 -0700  Kevin McCarthy  <kevin@8t8.us> (6c21b111)
+
+        * Merge branch 'stable'
+
+2020-05-07 15:10:44 +0200  Vincent Lefevre  <vincent@vinc17.net> (52751db2)
+
+        * exit_handler: add explanation about the missing l10n translations.
+        
+        Details in commit 5835f4c0594ff94a2aa62ad122c4dc2871ee8492.
+
+M	signal.c
+
+2020-04-25 18:39:38 -0700  Kevin McCarthy  <kevin@8t8.us> (27439a7e)
+
+        * Support domain-literal values in email adddresses.
+        
+        RFC 5322 defines the domain-literal:
+        
+           domain          =   dot-atom / domain-literal / obs-domain
+        
+           domain-literal  =   [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
+        
+           dtext           =   %d33-90 /          ; Printable US-ASCII
+                               %d94-126 /         ;  characters not including
+                               obs-dtext          ;  "[", "]", or "\"
+        
+        RFC 5321 defines possible literal values in section 4.1.3.
+        
+        I think this was unnoticed (and possibly unimplemented) because it's a
+        rare use-case.  However, Stuart Gathman @sdgathman in the
+        ticket (#226) noted:
+        
+          The use case is replacing alpine with mutt for this fully
+          decentralized usage:
+        
+          https://fedoramagazine.org/decentralize-common-fedora-apps-cjdns/
+        
+          The only requirements are to support IPv6 and IPv6 literals (to
+          avoid use of DNS).
+        
+        Adding this slightly complicates the parser, because we can't wait to
+        decide whether it's a domain-literal until parse_mailboxdomain(), but
+        we also need to accommodate the CFWS.
+        
+        Break out a parse_domain() function, with partial duplication of
+        parse_mailboxdomain()'s logic.
+        
+        Also, add parse_literal() to the outer parser, because we need to
+        handle both name-addr and top level addr-spec.
+        
+        The RFC822Errors[] are currently unused (and broken), but add a new
+        error code and message, in case those get fixed up and introduced to
+        the code in the future.
+        
+        Disable IDNA encoding for domain-literals.
+
+M	mutt_idna.c
+M	rfc822.c
+M	rfc822.h
+
+2020-05-06 21:54:02 +0200  Grzegorz Szymaszek  <gszymaszek@short.pl> (a48328bd)
+
+        * Fix the Polish translation of a message
+        
+        The “delete the current entry” message refers to any entries/items
+        (“element”), not just to letters/messages (“list”).
+
+M	po/pl.po
+
+2020-04-25 01:28:30 +0900  Tamotsu TAKAHASHI  <ttakah@lapis.plala.or.jp> (f11a6b1f)
+
+        * L10N: add more helpful comments on OPS entries.
+        
+        Now translators can see exactly where the entries came from.
+        
+        Also, OPS.* can have L10N comments. Add "/* L10N: blabla */" to OPS files.
+        
+        This commit would help translators a lot.
+        
+        For example, the msgid "delete the current account" once surprised me.
+        I said, "What? Can mutt delete my account???"
+        
+        With this commit, I can see that "the account" is clearly the "autocrypt" account.
+        
+        ```
+         #. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
+         #. #: ../OPS:8
+         #: ../keymap_alldefs.h:29
+         msgid "delete the current account"
+        ```
+
+M	doc/gen-map-doc
+M	gen_defs
+
+2020-05-05 13:32:59 +0200  Vincent Lefevre  <vincent@vinc17.net> (3b2c4b7c)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-04-19 16:28:02 -0400  Remco Rijnders  <remco@webconquest.com> (c5b8dba7)
+
+        * olen length requirement was too conservative
+        
+        When converting binary values to Base 64 encoding, we go from a 8 bit
+        representation to a 6 bit representation. As a result, we need extra space
+        to store the result compared to the input value being converted.
+        
+        In the current implementation, the requirements on the size of the output
+        buffer are too conservative; We only have to check if the remaining space
+        is larger than 4 (3 input bytes get converted into 4 Base64 encoded output
+        bytes, plus allowing for a terminating '\0' character) rather than 10.
+
+M	base64.c
+
+2020-05-04 11:06:23 -0700  Kevin McCarthy  <kevin@8t8.us> (e6679dfa)
+
+        * Change pattern "operator" to "modifier" in doc and L10N strings.
+        
+        Thanks to TAKAHASHI Tamotsu for pointing out the inconsistency.
+
+M	UPDATING
+M	doc/muttrc.man.head
+M	init.h
+M	pattern.c
+
+2020-05-03 17:29:55 +0200  Vincent Lefevre  <vincent@vinc17.net> (f5a8419d)
+
+        * Add missing blank lines in ChangeLog due to buggy update-changelog.
+
+M	ChangeLog
+
+2020-05-03 17:18:28 +0200  Vincent Lefevre  <vincent@vinc17.net> (986f6263)
+
+        * Fix update-changelog rule (missing blank line in generated ChangeLog).
+
+M	Makefile.am
+
 2020-08-29 12:25:28 -0700  Kevin McCarthy  <kevin@8t8.us> (5fb17352)
 
         * Update UPDATING file for 1.14.7.

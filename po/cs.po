@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 09:21-0700\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-10-28 20:04+01:00\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -713,7 +713,7 @@ msgstr "Adresář nelze zobrazit"
 msgid "Error trying to view file"
 msgstr "Chyba při zobrazování souboru"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "příliš málo argumentů"
@@ -764,7 +764,7 @@ msgstr "mono: příliš málo argumentů"
 msgid "%s: no such attribute"
 msgstr "Atribut %s není definován."
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "příliš mnoho argumentů"
 
@@ -1262,7 +1262,7 @@ msgstr "Jste na poslední položce."
 msgid "You are on the first entry."
 msgstr "Jste na první položce."
 
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Neplatné IDN v \"%s\": „%s“"
@@ -1489,7 +1489,7 @@ msgstr "Spouští se PGP…"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Zprávu nelze poslat vloženou do textu. Použít PGP/MIME?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "Zpráva nebyla odeslána."
 
@@ -2890,20 +2890,20 @@ msgstr "zkratka pro schránku expandována na prázdný regulární výraz"
 msgid "badly formatted command string"
 msgstr "špatně utvořený řetězec s příkazem"
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "příliš málo argumentů"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: unhook * nelze provést z jiného háčku."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: neznámý typ háčku: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: %s nelze z %s smazat."
@@ -3090,7 +3090,7 @@ msgstr "Vybírá se %s…"
 msgid "Error opening mailbox"
 msgstr "Chyba při otevírání schránky"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "Vytvořit %s?"
@@ -3451,9 +3451,9 @@ msgid ""
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
 "(%P)---"
 msgstr ""
-"-%r-Mutt: %f [Zpr:%?M?%M/?%m%?n? Nové:%n?%?o? Staré:%o?%?d? Smaz:%d?%?F? Příz:"
-"%F?%?t? Ozn:%t?%?p? Odl:%p?%?b? Pří:%b?%?B? Poz:%B?%?l? %l?]---(%s/%S)-%>-"
-"(%P)---"
+"-%r-Mutt: %f [Zpr:%?M?%M/?%m%?n? Nové:%n?%?o? Staré:%o?%?d? Smaz:%d?%?F? "
+"Příz:%F?%?t? Ozn:%t?%?p? Odl:%p?%?b? Pří:%b?%?B? Poz:%B?%?l? %l?]---(%s/%S)-"
+"%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -4242,43 +4242,43 @@ msgstr "Chyba při komunikaci tunelem s %s (%s)"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Soubor je adresářem. Uložit do něj? [(a)no, (n)e, (v)šechny]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "anv"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Soubor je adresářem. Uložit do něj?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Zadejte jméno souboru: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Soubor již existuje: (p)řepsat, př(i)pojit či (z)rušit?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "piz"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "Do POP schránek nelze ukládat zprávy."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Připojit zprávy do %s?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s není schránkou!"
@@ -5534,7 +5534,7 @@ msgstr "Připravuje se zpráva k přeposlání…"
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr "Vytvořit multipart/alternative obsah?"
 
@@ -5542,12 +5542,12 @@ msgstr "Vytvořit multipart/alternative obsah?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Kopie zprávy se ukládá do souboru %s"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr ""
 "Pozor: V dávkovém režimu není ukládání kopie do schránky IMAP podporováno"
@@ -5558,7 +5558,7 @@ msgstr ""
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "Vynechává se kopírování zprávy do %s"
@@ -5569,7 +5569,7 @@ msgstr "Vynechává se kopírování zprávy do %s"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr "Fcc selhalo. (o)pakovat, (j)iná schránka, nebo pře(s)kočit? "
 
@@ -5578,7 +5578,7 @@ msgstr "Fcc selhalo. (o)pakovat, (j)iná schránka, nebo pře(s)kočit? "
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "ojs"
 
@@ -5586,72 +5586,72 @@ msgstr "ojs"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Schránka pro kopii"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Uložit do Fcc přílohy?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Nelze odložit. $postponed není nastaveno"
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Vrátit se k odloženým zprávám?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "Upravit přeposílanou zprávu?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "Zahodit nezměněnou zprávu?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "Nezměněná zpráva byla zahozena."
 
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Žádná implementace kryptografie nenastavena. Zabezpečení zprávy vypnuto."
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "Zpráva byla odložena."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "Nejsou zadáni příjemci!"
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "Nebyli zadání příjemci."
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "Žádná věc, zrušit odeslání?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "Věc nebyla zadána."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "Žádné přílohy, zrušit odeslání?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "Příloha odkazovaná ve zprávě chybí"
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "Posílám zprávu…"
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "Zprávu nelze odeslat."
 
@@ -5661,15 +5661,15 @@ msgstr "Zprávu nelze odeslat."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr "Nastavují se příznaky odpovězeno."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "Zpráva odeslána."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "Zasílám na pozadí."
 
@@ -5677,7 +5677,7 @@ msgstr "Zasílám na pozadí."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "Úprava přesunuta na pozadí."
 

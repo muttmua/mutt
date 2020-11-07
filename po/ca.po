@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 09:21-0700\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-11-06 22:34+0100\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -767,7 +767,7 @@ msgstr "Error en intentar veure el fitxer."
 
 # ivb (2001/12/08)
 # ivb  També apareix com a error aïllat.
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "Manquen arguments."
@@ -822,7 +822,7 @@ msgstr "%s: L’atribut no existeix."
 
 # ivb (2001/12/08)
 # ivb  També apareix com a error aïllat.
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "Sobren arguments."
 
@@ -1344,7 +1344,7 @@ msgid "You are on the first entry."
 msgstr "Vos trobeu a la primera entrada."
 
 # El primer camp és una capçalera de correu.  ivb
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "L’IDN de «%s» no és vàlid: %s"
@@ -1593,7 +1593,7 @@ msgstr "S’està invocant PGP…"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "No s’ha pogut enviar el missatge en línia.  Emprar PGP/MIME?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "No s’ha enviat el missatge."
 
@@ -3087,20 +3087,20 @@ msgstr "La drecera a bústia s’ha expandit a l’expressió regular buida."
 msgid "badly formatted command string"
 msgstr "La cadena d’ordre no té un format vàlid."
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "Manquen arguments."
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: No es pot fer «unhook *» des d’un «hook»."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: El tipus de «hook» no és conegut: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: No es pot esborrar un «%s» des d’un «%s»."
@@ -3288,7 +3288,7 @@ msgstr "S’està seleccionant la bústia «%s»…"
 msgid "Error opening mailbox"
 msgstr "Error en obrir la bústia."
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "Voleu crear «%s»?"
@@ -3666,7 +3666,10 @@ msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
 "(%P)---"
-msgstr "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%S)-%>-(%P)---"
+msgstr ""
+"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:"
+"%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%S)-"
+"%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -3773,7 +3776,8 @@ msgid ""
 msgstr ""
 "Copyright © 1996‐2020 Michael R. Elkins i d’altres.\n"
 "Mutt s’ofereix SENSE CAP GARANTIA; empreu «mutt -vv» per a obtenir‐ne més\n"
-"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo sota\n"
+"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo "
+"sota\n"
 "certes condicions; empreu «mutt -vv» per a obtenir‐ne més detalls.\n"
 
 #: main.c:101
@@ -4213,7 +4217,8 @@ msgstr "No s’ha pogut connectar amb «%s» (%s)."
 #.
 #: mutt_ssl.c:199 mutt_ssl_gnutls.c:228
 msgid "Warning: clearing unexpected server data before TLS negotiation"
-msgstr "Avís: Es descarten dades inesperades del sevidor abans de negociació TLS."
+msgstr ""
+"Avís: Es descarten dades inesperades del sevidor abans de negociació TLS."
 
 #: mutt_ssl.c:274 mutt_ssl.c:556
 msgid "Warning: error enabling ssl_verify_partial_chains"
@@ -4488,46 +4493,46 @@ msgstr "Error al túnel establert amb «%s»: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "El fitxer és un directori; voleu desar a dins? [(s)í, (n)o, (t)ots]"
 
 # (s)í, (n)o, (t)ots  ivb
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "snt"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "El fitxer és un directori; voleu desar a dins?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Fitxer a sota del directori: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "El fitxer ja existeix; (s)obreescriu, (a)fegeix, (c)ancel·la? "
 
 # ivb (2001/11/27)
 # ivb  (s)obreescriu, (a)fegeix, (c)ancel·la
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "sac"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "No es poden desar missatges en bústies POP."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Voleu afegir els missatges a «%s»?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "«%s» no és una bústia."
@@ -4743,7 +4748,8 @@ msgstr "missatges esborrats"
 #.
 #: pattern.c:106
 msgid "messages whose Sender header matches EXPR"
-msgstr "missatges amb capçaleres de remitent (Sender) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres de remitent (Sender) que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~E
@@ -4757,7 +4763,8 @@ msgstr "missatges expirats"
 #.
 #: pattern.c:116
 msgid "messages whose From header matches EXPR"
-msgstr "missatges amb capçaleres de remitent (From) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres de remitent (From) que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~F
@@ -4799,7 +4806,8 @@ msgstr "missatges amb etiquetes d’spam que concorden amb l’EXPRESSIÓ"
 #.
 #: pattern.c:146
 msgid "messages whose Message-ID matches EXPR"
-msgstr "missatges amb identificadors (Message-ID) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb identificadors (Message-ID) que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~k
@@ -4820,7 +4828,8 @@ msgstr "missatges adreçats a llistes de correu conegudes"
 #.
 #: pattern.c:161
 msgid "messages whose From/Sender/To/CC matches EXPR"
-msgstr "missatges amb capçaleres From/Sender/To/Cc que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres From/Sender/To/Cc que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~m
@@ -4897,7 +4906,8 @@ msgstr "missatges ja llegits"
 #.
 #: pattern.c:216
 msgid "messages whose Subject header matches EXPR"
-msgstr "missatges amb capçaleres d’assumpte (Subject) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres d’assumpte (Subject) que concorden amb l’EXPRESSIÓ"
 
 # Empre aquest terme ja que Replaces i Supersedes tenen usos similars.  ivb
 # https://people.dsv.su.se/~jpalme/ietf/message-threading.pdf
@@ -4913,7 +4923,8 @@ msgstr "missatges reemplaçats"
 #.
 #: pattern.c:226
 msgid "messages whose To header matches EXPR"
-msgstr "missatges amb capçaleres de destinatari (To) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres de destinatari (To) que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
@@ -4955,7 +4966,9 @@ msgstr "missatges verificats criptogràficament"
 #.
 #: pattern.c:256
 msgid "messages whose References header matches EXPR"
-msgstr "missatges amb capçaleres de referències (References) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres de referències (References) que concorden amb "
+"l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
@@ -4969,7 +4982,8 @@ msgstr "missatges amb un nombre d’adjuncions dins del RANG_NUM"
 #.
 #: pattern.c:266
 msgid "messages whose X-Label header matches EXPR"
-msgstr "missatges amb capçaleres d’etiquetes (X-Label) que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres d’etiquetes (X-Label) que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
@@ -5541,7 +5555,8 @@ msgstr "S’ha desat l’adjunció."
 #: recvattach.c:617
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
-msgstr "No s’han pogut desar les adjuncions a «%s», s’emprarà el directori actual."
+msgstr ""
+"No s’han pogut desar les adjuncions a «%s», s’emprarà el directori actual."
 
 # ivb (2001/12/08)
 # ivb  ABREUJAT!
@@ -5843,7 +5858,7 @@ msgstr "S’està preparant el missatge a reenviar…"
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr "Voleu generar contingut «multipart/alternative»?"
 
@@ -5851,12 +5866,12 @@ msgstr "Voleu generar contingut «multipart/alternative»?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "S’està desant una còpia a la bústia «%s»…"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Avís: No es permet la còpia a una bústia IMAP en el mode per lots."
 
@@ -5866,7 +5881,7 @@ msgstr "Avís: No es permet la còpia a una bústia IMAP en el mode per lots."
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "No es desa còpia a la bústia «%s»."
@@ -5879,7 +5894,7 @@ msgstr "No es desa còpia a la bústia «%s»."
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 "La còpia a bústia ha fallat; (r)eintentar, (c)anviar de bústia, (s)altar? "
@@ -5889,7 +5904,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "rcs"
 
@@ -5897,75 +5912,75 @@ msgstr "rcs"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Còpia a bústia"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Voleu desar les adjuncions a la bústia de còpia?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "No es pot postposar; $postponed no està establerta."
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Voleu recuperar un missatge posposat?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "Voleu editar el missatge a reenviar?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "Voleu avortar el missatge no modificat?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "S’avorta el missatge no modificat."
 
 # ABREUJAT!  ivb
 # No heu configurat cap implementació criptogràfica.  S’inhabilita l’opció de seguretat del missatge.
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Cal configurar implementació criptogràfica.  Es retira seguretat del "
 "missatge."
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "S’ha posposat el missatge."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "No s’ha indicat cap destinatari."
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "No s’ha indicat cap destinatari."
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "No hi ha assumpte; voleu avortar l’enviament?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "No s’ha indicat l’assumpte."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "No hi ha cap adjunció; voleu avortar l’enviament?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "Manca l’adjunció esmentada en el missatge."
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "S’està enviant el missatge…"
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "No s’ha pogut enviar el missatge."
 
@@ -5975,15 +5990,15 @@ msgstr "No s’ha pogut enviar el missatge."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr "S’estan establint els senyaladors de missatge respost."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "S’ha enviat el missatge."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "S’està enviant en segon pla."
 
@@ -5991,7 +6006,7 @@ msgstr "S’està enviant en segon pla."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "S’està editant en segon pla."
 

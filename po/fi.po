@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 09:21-0700\n"
+"POT-Creation-Date: 2020-11-07 11:05-0800\n"
 "PO-Revision-Date: 2020-11-03 16:49+0100\n"
 "Last-Translator: Flammie A Pirinen <flammie@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -714,7 +714,7 @@ msgstr "Ei voida näyttää tiedostoa"
 msgid "Error trying to view file"
 msgstr "Virhe tiedostoa näytettäessä"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "liian vähän argumentteja"
@@ -765,7 +765,7 @@ msgstr "mono: liian vähän argumentteja"
 msgid "%s: no such attribute"
 msgstr "%s: attribuuttia ei ole olemassa"
 
-#: color.c:877 hook.c:99 hook.c:349
+#: color.c:877 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "liikaa argumentteja"
 
@@ -1263,7 +1263,7 @@ msgstr "Viimeisessä tietueessa."
 msgid "You are on the first entry."
 msgstr "Ensimmäisessä tietueessa."
 
-#: compose.c:1197 send.c:2435
+#: compose.c:1197 send.c:2441
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Toimimaton IDN kohteessa %s: %s"
@@ -1495,7 +1495,7 @@ msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr ""
 "Viestiä ei voi lähettää sisällytettynä, käytetäänkö sittenkin PGP/MIMEä?"
 
-#: crypt.c:225 send.c:2400
+#: crypt.c:225 send.c:2406
 msgid "Mail not sent."
 msgstr "Viestiä ei lähetetty."
 
@@ -2893,20 +2893,20 @@ msgstr "postilaatikon oikopolku laventui tyhjäksi ilmaukseksi"
 msgid "badly formatted command string"
 msgstr "epäkelpo komentojono"
 
-#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "ei tarpeeksi argumentteja"
 
-#: hook.c:418
+#: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: unhook * ei toimi hookin sisältä."
 
-#: hook.c:431
+#: hook.c:445
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: tuntematon hook-tyyppi: %s"
 
-#: hook.c:437
+#: hook.c:451
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Ei voitu poistaa kohdetta %s kohteesta %s."
@@ -3093,7 +3093,7 @@ msgstr "Valitaan %s..."
 msgid "Error opening mailbox"
 msgstr "Virhe avattaessa postilaatikkoa"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
 #, c-format
 msgid "Create %s?"
 msgstr "Luodaanko %s?"
@@ -3452,8 +3452,8 @@ msgid ""
 "(%P)---"
 msgstr ""
 "-%r-Mutt: %f [Viesti:%?M?%M/?%m%?n? Uusi:%n?%?o? Vanha:%o?%?d? Osa:%d?%?F? "
-"Lippu:%F?%?t? Tägi:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
-"(%P)---"
+"Lippu:%F?%?t? Tägi:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/"
+"%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -4239,44 +4239,44 @@ msgstr "Tunnelivirhe yhteydessä kohteeseen %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr ""
 "Tiedosto on hakemisto, tallennetaanko sen alle? [k(y)llä, (e)i, k(a)ikki]"
 
-#: muttlib.c:1340
+#: muttlib.c:1355
 msgid "yna"
 msgstr "yea"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1359
+#: muttlib.c:1374
 msgid "File is a directory, save under it?"
 msgstr "Tiedosto on hakemisto, tallennetaanko sen alle?"
 
-#: muttlib.c:1364
+#: muttlib.c:1379
 msgid "File under directory: "
 msgstr "Tiedosto hakemistossa: "
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Tiedosto on olemassa, k(o)rvaa, j(a)tka tai (p)eru?"
 
-#: muttlib.c:1378
+#: muttlib.c:1393
 msgid "oac"
 msgstr "oap"
 
-#: muttlib.c:2052
+#: muttlib.c:2067
 msgid "Can't save message to POP mailbox."
 msgstr "Ei voida tallentaa POP-laatikkoon."
 
-#: muttlib.c:2062
+#: muttlib.c:2077
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Lisätäänkö viestit kohteeseen %s?"
 
-#: muttlib.c:2075
+#: muttlib.c:2090
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s ei ole postilaatikko."
@@ -4868,8 +4868,8 @@ msgstr "PATTERN"
 #.
 #: pattern.c:2263
 msgid "messages in threads containing messages matching PATTERN"
-msgstr "viestit joiden ketjuissa on viestejä jotka täsämäävät "
-"ilmaukseen PATTERN"
+msgstr ""
+"viestit joiden ketjuissa on viestejä jotka täsämäävät ilmaukseen PATTERN"
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
@@ -5523,7 +5523,7 @@ msgstr "Valmistellaan edelleenlähetettävää viestiä..."
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1138
+#: send.c:1137
 msgid "Generate multipart/alternative content?"
 msgstr "Luodaanko multipart/alternative-sisältö?"
 
@@ -5531,12 +5531,12 @@ msgstr "Luodaanko multipart/alternative-sisältö?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1239
+#: send.c:1245
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Tallennetaan Fcc postilaatikkoon %s"
 
-#: send.c:1261
+#: send.c:1267
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "Varoitus: Fcc IMAP-laatikkoon ei toimi jonosuoritustilassa"
 
@@ -5546,7 +5546,7 @@ msgstr "Varoitus: Fcc IMAP-laatikkoon ei toimi jonosuoritustilassa"
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1268
+#: send.c:1274
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr "Ohitetaan Fcc osoitteelle %s"
@@ -5557,17 +5557,18 @@ msgstr "Ohitetaan Fcc osoitteelle %s"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1285
+#: send.c:1291
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
-msgstr "Fcc epäonnistui. (y)ritetäänkö uudelleen, vaihtoehtosta"
-"(p)ostilaatiokka vai (o)hitetaanko?"
+msgstr ""
+"Fcc epäonnistui. (y)ritetäänkö uudelleen, vaihtoehtosta(p)ostilaatiokka vai "
+"(o)hitetaanko?"
 
 #. L10N:
 #. These correspond to the "Fcc failed" multi-choice prompt
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1291
+#: send.c:1297
 msgid "rms"
 msgstr "ypo"
 
@@ -5575,72 +5576,72 @@ msgstr "ypo"
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1299
+#: send.c:1305
 msgid "Fcc mailbox"
 msgstr "Fcc-postilaatikko"
 
-#: send.c:1365
+#: send.c:1371
 msgid "Save attachments in Fcc?"
 msgstr "Tallennetaanko liitteet FCC-kansioon myös?"
 
-#: send.c:1612
+#: send.c:1618
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Ei voida lähettää myöhemmin, koska $postponed on asettamatta."
 
-#: send.c:1853
+#: send.c:1859
 msgid "Recall postponed message?"
 msgstr "Palautetaanko lykätty viesti?"
 
-#: send.c:2154
+#: send.c:2160
 msgid "Edit forwarded message?"
 msgstr "Muokataanko edelleenlähetettävää viestiä?"
 
-#: send.c:2218
+#: send.c:2224
 msgid "Abort unmodified message?"
 msgstr "Perutaanko muokkaamaton viesti?"
 
-#: send.c:2220
+#: send.c:2226
 msgid "Aborted unmodified message."
 msgstr "Muokkaamaton viesti peruttu."
 
-#: send.c:2338
+#: send.c:2344
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Crypto-backend on asettamatta, joten turvallisuusasetukset on pois käytöstä."
 
-#: send.c:2407
+#: send.c:2413
 msgid "Message postponed."
 msgstr "Viesti lykätty."
 
-#: send.c:2423
+#: send.c:2429
 msgid "No recipients are specified!"
 msgstr "Ei vastaanottajia."
 
-#: send.c:2428
+#: send.c:2434
 msgid "No recipients were specified."
 msgstr "Ei vastaanottajia."
 
-#: send.c:2444
+#: send.c:2450
 msgid "No subject, abort sending?"
 msgstr "Ei aihetta, perutaanko lähetys?"
 
-#: send.c:2448
+#: send.c:2454
 msgid "No subject specified."
 msgstr "Ei aihetta."
 
-#: send.c:2462
+#: send.c:2468
 msgid "No attachments, abort sending?"
 msgstr "Ei liitteitä, perutaanko lähetys?"
 
-#: send.c:2465
+#: send.c:2471
 msgid "Attachment referenced in message is missing"
 msgstr "Viite, joka on mainittu viestin sisällössä, puuttuu"
 
-#: send.c:2537 smtp.c:191
+#: send.c:2543 smtp.c:191
 msgid "Sending message..."
 msgstr "Lähetetään viestiä..."
 
-#: send.c:2580
+#: send.c:2586
 msgid "Could not send the message."
 msgstr "Ei voitu lähettää viestiä."
 
@@ -5650,15 +5651,15 @@ msgstr "Ei voitu lähettää viestiä."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2608 send.c:2634
+#: send.c:2614 send.c:2640
 msgid "Setting reply flags."
 msgstr "Asetetaan vastauslippuja."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Mail sent."
 msgstr "Viesti lähetetty."
 
-#: send.c:2679
+#: send.c:2685
 msgid "Sending in background."
 msgstr "Lähetetää taustalla."
 
@@ -5666,7 +5667,7 @@ msgstr "Lähetetää taustalla."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2744
+#: send.c:2750
 msgid "Editing backgrounded."
 msgstr "Muokkaus taustalla."
 
@@ -5721,8 +5722,7 @@ msgstr "Tyhjä rivi -erotin puuttuu tulosteesta %s."
 msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
-msgstr ""
-"$send_multipart_alternative_filter ei tue multipart-tyyppien luontia."
+msgstr "$send_multipart_alternative_filter ei tue multipart-tyyppien luontia."
 
 #: sendlib.c:2655
 msgid "$sendmail must be set in order to send mail."
