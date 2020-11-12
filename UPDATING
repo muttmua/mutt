@@ -42,7 +42,8 @@ The keys used are:
   + $tunnel_is_secure, default set, assumes a connection via $tunnel is
     encrypted.  Unsetting this will cause $ssl_starttls and $ssl_force_tls
     to be respected.
-  + Patterns are tab-completable in the editor menu.
+  + Patterns are completable in the editor menu.  Invoke the <complete> function
+    (by default bound to Tab) after typing ~ to get a selectable list.
   ! $reply_to is consulted before $reply_self.
   + $copy_decode_weed, default unset, controls header weeding for <decode-copy>
     and <decode-save>.
