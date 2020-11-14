@@ -1,3 +1,61 @@
+2020-11-14 13:10:45 -0800  Kevin McCarthy  <kevin@8t8.us> (78fe7d4e)
+
+        * Update UPDATING file for 2.0.1.
+
+M	UPDATING
+
+2020-11-12 09:42:28 -0800  Kevin McCarthy  <kevin@8t8.us> (894a49f6)
+
+        * Clarify pattern completion uses <complete>.
+        
+        Some users may have bound tab to another function, so be specific.
+
+M	UPDATING
+
+2020-11-09 10:59:44 +0100  Remco Rĳnders  <remco@webconquest.com> (86d64caa)
+
+        * Consistently use uint32_t (closes #294)
+
+M	hcache.c
+M	mutt_random.c
+
+2020-11-07 12:18:03 -0800  Kevin McCarthy  <kevin@8t8.us> (3d08634b)
+
+        * automatic post-release commit for mutt-2.0.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2020-11-07 11:30:13 -0800  Kevin McCarthy  <kevin@8t8.us> (0c8f4357)
 
         * Add missing new header files to EXTRA_mutt_SOURCES.
