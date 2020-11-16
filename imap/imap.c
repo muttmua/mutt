@@ -561,9 +561,9 @@ int imap_open_connection (IMAP_DATA* idata)
 
 #if defined(USE_SSL)
 err_close_conn:
-  imap_close_connection (idata);
 #endif
 bail:
+  imap_close_connection (idata);
   FREE (&idata->capstr);
   return -1;
 }
