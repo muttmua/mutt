@@ -403,102 +403,6 @@ int mutt_matches_ignore (const char *s, LIST *t)
   return 0;
 }
 
-static void buffer_normalize_fullpath (BUFFER *dest, const char *src)
-{
-  enum { init, dot, dotdot, standard } state = init;
-
-  mutt_buffer_clear (dest);
-  if (!src)
-    return;
-
-  /* Disabling this for the 2.0 release.
-   * See Gitlab #290 - '..' can not be simplified in this manner.
-   * Furthermore, it looks like mutt_pretty_mailbox() calls realpath()
-   * if there are any '..' strings in the path, and does its own '.'
-   * normalization much more succinctly than this.  I'll remove this
-   * code after the release.
-   */
-  mutt_buffer_strcpy (dest, src);
-  return;
-
-  if (*src != '/')
-  {
-    mutt_buffer_strcpy (dest, src);
-    return;
-  }
-
-  while (*src)
-  {
-    if (*src == '.')
-    {
-      switch (state)
-      {
-        case init:
-          state = dot;
-          break;
-        case dot:
-          state = dotdot;
-          break;
-        default:
-          state = standard;
-          break;
-      }
-    }
-    else if (*src == '/')
-    {
-      switch (state)
-      {
-        case dot:
-          dest->dptr -= 2;
-          break;
-        case dotdot:
-          dest->dptr -= 3;
-          if (dest->dptr != dest->data)
-          {
-            dest->dptr--;
-            while (*dest->dptr != '/')
-              dest->dptr--;
-          }
-          break;
-        default:
-          break;
-      }
-      state = init;
-    }
-    else
-    {
-      state = standard;
-    }
-
-    mutt_buffer_addch (dest, *src);
-    src++;
-  }
-
-  /* Deal with a trailing /. or /.. */
-  switch (state)
-  {
-    case dot:
-      dest->dptr -= 2;
-      if (dest->dptr == dest->data)
-        dest->dptr++;
-      *dest->dptr = '\0';
-      break;
-    case dotdot:
-      dest->dptr -= 3;
-      if (dest->dptr != dest->data)
-      {
-        dest->dptr--;
-        while (*dest->dptr != '/')
-          dest->dptr--;
-      }
-      if (dest->dptr == dest->data)
-        dest->dptr++;
-      *dest->dptr = '\0';
-      break;
-    default:
-      break;
-  }
-}
 
 /* Splits src into parts delimited by delimiter.
  * Invokes mapfunc on each part and joins the result back into src.
@@ -751,10 +655,11 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
     {
       if (mutt_getcwd (tmp))
       {
+        /* Note, mutt_pretty_mailbox() does '..' and '.' handling. */
         if (mutt_buffer_len (tmp) > 1)
           mutt_buffer_addch (tmp, '/');
         mutt_buffer_addstr (tmp, mutt_b2s (src));
-        buffer_normalize_fullpath (src, mutt_b2s (tmp));
+        mutt_buffer_strcpy (src, mutt_b2s (tmp));
       }
     }
 
