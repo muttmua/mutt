@@ -369,15 +369,17 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
   command = mutt_buffer_pool_get ();
 
   use_mailcap = (flag == MUTT_MAILCAP ||
-                 (flag == MUTT_REGULAR && mutt_needs_mailcap (a)));
+                 (flag == MUTT_REGULAR && mutt_needs_mailcap (a)) ||
+                 flag == MUTT_VIEW_PAGER);
   snprintf (type, sizeof (type), "%s/%s", TYPE (a), a->subtype);
 
   if (use_mailcap)
   {
     entry = rfc1524_new_entry ();
-    if (!rfc1524_mailcap_lookup (a, type, sizeof(type), entry, 0))
+    if (!rfc1524_mailcap_lookup (a, type, sizeof(type), entry,
+                                 flag == MUTT_VIEW_PAGER ? MUTT_AUTOVIEW : 0))
     {
-      if (flag == MUTT_REGULAR)
+      if (flag == MUTT_REGULAR || flag == MUTT_VIEW_PAGER)
       {
 	/* fallback to view as text */
 	rfc1524_free_entry (&entry);

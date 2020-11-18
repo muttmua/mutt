@@ -1364,6 +1364,12 @@ void mutt_view_attachments (HEADER *hdr)
 	menu->redraw = REDRAW_FULL;
 	break;
 
+      case OP_ATTACH_VIEW_PAGER:
+	mutt_view_attachment (CURATTACH->fp, CURATTACH->content, MUTT_VIEW_PAGER,
+			      hdr, actx);
+	menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_DISPLAY_HEADERS:
       case OP_VIEW_ATTACH:
         op = mutt_attach_display_loop (menu, op, hdr, actx, 1);

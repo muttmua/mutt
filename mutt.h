@@ -215,6 +215,7 @@ enum
   /* modes for mutt_view_attachment() */
   MUTT_REGULAR = 1,
   MUTT_MAILCAP,
+  MUTT_VIEW_PAGER,
   MUTT_AS_TEXT,
 
   /* action codes used by mutt_set_flag() and mutt_pattern_function() */

@@ -334,6 +334,7 @@ const struct binding_t OpAttach[] = { /* map: attachment */
   { "save-entry",	OP_SAVE,			"s" },
   { "pipe-entry",	OP_PIPE,			"|" },
   { "view-mailcap",	OP_ATTACH_VIEW_MAILCAP,		"m" },
+  { "view-pager",	OP_ATTACH_VIEW_PAGER,		NULL },
   { "reply",		OP_REPLY,			"r" },
   { "resend-message",	OP_RESEND,			"\033e" },
   { "group-chat-reply",	OP_GROUP_CHAT_REPLY,		NULL },
