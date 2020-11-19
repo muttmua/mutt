@@ -2,19 +2,21 @@
 # This file is distributed under the same license as the Mutt package.
 # Byrial Jensen <byrial@image.dk> 2000-2005.
 # Morten Bo Johansen <mbj@mbjnet.dk>, 2000-2020.
+# Keld Simonsen <keld@keldix.com>, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 1.14.0\n"
+"Project-Id-Version: Mutt 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-07 11:05-0800\n"
-"PO-Revision-Date: 2020-04-26 09:30+0200\n"
-"Last-Translator: Morten Bo Johansen <mbj@mbjnet.dk>\n"
+"POT-Creation-Date: 2020-10-23 09:21-0700\n"
+"PO-Revision-Date: 2020-11-19 23:05+0100\n"
+"Last-Translator: Keld Simonsen <keld@keldix.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
-"Language: da\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Jed w/po-mode: http://mbjnet.dk/po_mode/\n"
+"Language: da\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: account.c:163
 #, c-format
@@ -301,9 +303,8 @@ msgstr "Oprettelse af autocrypt-konto lykkedes"
 #. email when the engine is not available.
 #.
 #: autocrypt/autocrypt.c:537 autocrypt/autocrypt.c:545
-#, fuzzy
 msgid "Autocrypt is not available."
-msgstr "Forrige mail i tråden er ikke tilgængelig."
+msgstr "Autocrypt er ikke tilgængelig."
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
@@ -311,9 +312,9 @@ msgstr "Forrige mail i tråden er ikke tilgængelig."
 #. %s is the From email address used to look up the Autocrypt account.
 #.
 #: autocrypt/autocrypt.c:559
-#, fuzzy, c-format
+#, c-format
 msgid "Autocrypt is not enabled for %s."
-msgstr "Fandt ikke nogen (gyldig) autocrypt-nøgle til %s."
+msgstr "Autocrypt er ikke aktiveret for %s."
 
 #. L10N:
 #. %s is an email address.  Autocrypt is scanning for the keyids
@@ -334,14 +335,14 @@ msgstr "Fandt ikke nogen (gyldig) autocrypt-nøgle til %s."
 #.
 #: autocrypt/autocrypt.c:856
 msgid "Scan a mailbox for autocrypt headers?"
-msgstr "Skan mailkatalog for autocrypt-headere?"
+msgstr "Skan brevbakke for autocrypt-headere?"
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
 #.
 #: autocrypt/autocrypt.c:863
 msgid "Scan mailbox"
-msgstr "Scan mailkatalog"
+msgstr "Scan brevbakke"
 
 #. L10N:
 #. This is the second prompt to see if the user would like
@@ -352,7 +353,7 @@ msgstr "Scan mailkatalog"
 #.
 #: autocrypt/autocrypt.c:885
 msgid "Scan another mailbox for autocrypt headers?"
-msgstr "Skan et andet mailkatalog for autocrypt-headere?"
+msgstr "Skan en anden brevbakke for autocrypt-headere?"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. create new account
@@ -612,7 +613,7 @@ msgstr "%s er ikke et filkatalog."
 #: browser.c:644
 #, c-format
 msgid "Mailboxes [%d]"
-msgstr "Mailkataloger [%d]"
+msgstr "brevbakke [%d]"
 
 #: browser.c:651
 #, c-format
@@ -634,15 +635,15 @@ msgstr "Ingen filer passer til filmasken"
 
 #: browser.c:1037
 msgid "Create is only supported for IMAP mailboxes"
-msgstr "Oprettelse er kun understøttet for IMAP-mailkataloger"
+msgstr "Oprettelse er kun understøttet for IMAP-brevbakker"
 
 #: browser.c:1060
 msgid "Rename is only supported for IMAP mailboxes"
-msgstr "Omdøbning er kun understøttet for IMAP-mailkataloger"
+msgstr "Omdøbning er kun understøttet for IMAP-brevbakker"
 
 #: browser.c:1082
 msgid "Delete is only supported for IMAP mailboxes"
-msgstr "Sletning er kun understøttet for IMAP-mailkataloger"
+msgstr "Sletning er kun understøttet for IMAP-brevbakker"
 
 #: browser.c:1092
 msgid "Cannot delete root folder"
@@ -651,19 +652,19 @@ msgstr "Kan ikke slette rodkatalog"
 #: browser.c:1095
 #, c-format
 msgid "Really delete mailbox \"%s\"?"
-msgstr "Vil du slette mailkataloget \"%s\"?"
+msgstr "Vil du slette brevbakken \"%s\"?"
 
 #: browser.c:1111
 msgid "Mailbox deleted."
-msgstr "Mailkatalog slettet."
+msgstr "Brevbakken slettet."
 
 #: browser.c:1116
 msgid "Mailbox deletion failed."
-msgstr "Sletning af mailkatalog mislykkedes."
+msgstr "Sletning af brevbakke mislykkedes."
 
 #: browser.c:1119
 msgid "Mailbox not deleted."
-msgstr "Mailkatalog ikke slettet."
+msgstr "Brevbakke ikke slettet."
 
 #: browser.c:1140
 msgid "Chdir to: "
@@ -687,8 +688,8 @@ msgstr ""
 #: browser.c:1275
 msgid "Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
 msgstr ""
-"Sortering efter (d)ato, (a)lfabetisk, (s)tr., an(t)al, (u)læste eller "
-"(i)ngen? "
+"Sortering efter (d)ato, (a)lfabetisk, (s)tr., an(t)al, (u)læste eller (i)"
+"ngen? "
 
 #: browser.c:1276
 msgid "dazcun"
@@ -706,7 +707,7 @@ msgstr "Filkataloger kan ikke vises"
 msgid "Error trying to view file"
 msgstr "Fejl ved visning af fil"
 
-#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:356
+#: buffy.c:394 buffy.c:418 color.c:868 hook.c:74 hook.c:93 hook.c:342
 #: init.c:2103 init.c:2178 init.c:2976 keymap.c:973
 msgid "too few arguments"
 msgstr "for få parametre"
@@ -757,7 +758,7 @@ msgstr "mono: for få parametre"
 msgid "%s: no such attribute"
 msgstr "%s: ukendt attribut"
 
-#: color.c:877 hook.c:99 hook.c:363
+#: color.c:877 hook.c:99 hook.c:349
 msgid "too many arguments"
 msgstr "for mange parametre"
 
@@ -928,32 +929,32 @@ msgstr "Skalkommando: "
 #: commands.c:888
 #, c-format
 msgid "Decode-save%s to mailbox"
-msgstr "Afkod-gem%s i mailkatalog"
+msgstr "Afkod-gem%s i brevbakke"
 
 #: commands.c:889
 #, c-format
 msgid "Decode-copy%s to mailbox"
-msgstr "Afkod-kopiér%s til mailkatalog"
+msgstr "Afkod-kopiér%s til brevbakke"
 
 #: commands.c:890
 #, c-format
 msgid "Decrypt-save%s to mailbox"
-msgstr "Dekryptér-gem%s i mailkatalog"
+msgstr "Dekryptér-gem%s i brevbakke"
 
 #: commands.c:891
 #, c-format
 msgid "Decrypt-copy%s to mailbox"
-msgstr "Dekryptér-kopiér%s til mailkatalog"
+msgstr "Dekryptér-kopiér%s til brevbakke"
 
 #: commands.c:892
 #, c-format
 msgid "Save%s to mailbox"
-msgstr "Gem%s i mailkatalog"
+msgstr "Gem%s i brevbakke"
 
 #: commands.c:892
 #, c-format
 msgid "Copy%s to mailbox"
-msgstr "Kopiér%s til mailkatalog"
+msgstr "Kopiér%s til brevbakke"
 
 #: commands.c:893
 msgid " tagged"
@@ -969,14 +970,14 @@ msgstr "Kopierer til %s ..."
 #.
 #: commands.c:1005
 msgid "Saving tagged messages..."
-msgstr "Gemmer markerede mails ..."
+msgstr "Gemmer udvalgte beskeder ..."
 
 #. L10N:
 #. Progress meter message when copying tagged messages
 #.
 #: commands.c:1009
 msgid "Copying tagged messages..."
-msgstr "Kopierer markerede mails ..."
+msgstr "Kopierer udvalgte beskeder ..."
 
 #: commands.c:1109
 #, c-format
@@ -1252,7 +1253,7 @@ msgstr "Du er på den sidste post."
 msgid "You are on the first entry."
 msgstr "Du er på den første post."
 
-#: compose.c:1197 send.c:2441
+#: compose.c:1197 send.c:2435
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Forkert IDN i \"%s\": '%s'"
@@ -1268,16 +1269,16 @@ msgstr "Kan ikke vedlægge %s!"
 
 #: compose.c:1292
 msgid "Open mailbox to attach message from"
-msgstr "Åbn mailkataloget med mailen som skal vedlægges"
+msgstr "Åbn brevbakke med mailen som skal vedlægges"
 
 #: compose.c:1323
 #, c-format
 msgid "Unable to open mailbox %s"
-msgstr "Kan ikke åbne mailkatalog %s"
+msgstr "Kan ikke åbne brevbakke %s"
 
 #: compose.c:1331
 msgid "No messages in that folder."
-msgstr "Ingen mails i det mailkatalog."
+msgstr "Ingen neskeder i den brevbakke."
 
 #: compose.c:1340
 msgid "Tag the messages you want to attach!"
@@ -1354,7 +1355,7 @@ msgstr "Udsæt afsendelse af denne mail?"
 
 #: compose.c:1822
 msgid "Write message to mailbox"
-msgstr "Skriv mailen til mailkatalog"
+msgstr "Skriv mailen til brevbakke"
 
 #: compose.c:1825
 #, c-format
@@ -1383,7 +1384,7 @@ msgstr "PGP allerede valgt. Ryd & fortsæt ? "
 
 #: compress.c:451 compress.c:521 compress.c:676 compress.c:865 mbox.c:879
 msgid "Unable to lock mailbox!"
-msgstr "Kan ikke låse mailkatalog!"
+msgstr "Kan ikke låse brevbakke!"
 
 #: compress.c:455 compress.c:528 compress.c:680
 #, c-format
@@ -1397,7 +1398,7 @@ msgstr "Kan ikke bestemme indholdet i den komprimerede fil"
 #: compress.c:471 compress.c:549
 #, c-format
 msgid "Can't find mailbox ops for mailbox type %d"
-msgstr "Kan ikke finde operationer for mailkatalog af typen %d"
+msgstr "Kan ikke finde operationer for brevbakke af typen %d"
 
 #: compress.c:510 compress.c:804
 #, c-format
@@ -1411,7 +1412,7 @@ msgstr "Komprimeringskommando fejlede: %s"
 
 #: compress.c:542
 msgid "Unsupported mailbox type for appending."
-msgstr "Typen på mailkataloget understøttes ikke ved tilføjelse."
+msgstr "Typen på brevbakke understøttes ikke ved tilføjelse."
 
 #: compress.c:618
 #, c-format
@@ -1457,8 +1458,7 @@ msgstr "Har glemt løsen(er)."
 
 #: crypt.c:194
 msgid "Inline PGP can't be used with attachments.  Revert to PGP/MIME?"
-msgstr ""
-"Integreret PGP kan ikke bruges sammen med bilag. Brug PGP/MIME i stedet?"
+msgstr "Integreret PGP kan ikke bruges sammen med bilag. Brug PGP/MIME i stedet?"
 
 #: crypt.c:196
 msgid "Mail not sent: inline PGP can't be used with attachments."
@@ -1483,7 +1483,7 @@ msgstr "Starter PGP ..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Mailen kan ikke sendes integreret. Brug PGP/MIME i stedet?"
 
-#: crypt.c:225 send.c:2406
+#: crypt.c:225 send.c:2400
 msgid "Mail not sent."
 msgstr "Mail ikke sendt."
 
@@ -2169,8 +2169,8 @@ msgstr "kusbmgyo"
 #: crypt-gpgme.c:5372
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr ""
-"S/MIME (k)ryptér, (u)nderskriv, underskriv (s)om, (b)egge, (p)gp, eller "
-"r(y)d? "
+"S/MIME (k)ryptér, (u)nderskriv, underskriv (s)om, (b)egge, (p)gp, eller r(y)"
+"d? "
 
 #: crypt-gpgme.c:5373
 msgid "esabpfc"
@@ -2179,8 +2179,8 @@ msgstr "kusbpgy"
 #: crypt-gpgme.c:5378
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr ""
-"PGP (k)ryptér, (u)nderskriv, underskriv (s)om, (b)egge, s/(m)ime, eller "
-"r(y)d? "
+"PGP (k)ryptér, (u)nderskriv, underskriv (s)om, (b)egge, s/(m)ime, eller r(y)"
+"d? "
 
 #: crypt-gpgme.c:5379
 msgid "esabmfc"
@@ -2240,7 +2240,7 @@ msgstr " ('?' for en liste): "
 
 #: curs_main.c:67 curs_main.c:832
 msgid "No mailbox is open."
-msgstr "Intet mailkatalog er åbent."
+msgstr "Ingen brevbakke er åben."
 
 #: curs_main.c:68
 msgid "There are no messages."
@@ -2248,7 +2248,7 @@ msgstr "Der er ingen mails."
 
 #: curs_main.c:69 mx.c:1208 pager.c:59 recvattach.c:46
 msgid "Mailbox is read-only."
-msgstr "Mailkataloget er skrivebeskyttet."
+msgstr "Brevbakke er skrivebeskyttet."
 
 #: curs_main.c:70 pager.c:60 recvattach.c:1305
 msgid "Function not permitted in attach-message mode."
@@ -2266,16 +2266,15 @@ msgstr "%s: Operationen er ikke tilladt af ACL"
 
 #: curs_main.c:348
 msgid "Cannot toggle write on a readonly mailbox!"
-msgstr "Kan ikke skrive til et skrivebeskyttet mailkatalog!"
+msgstr "Kan ikke skrive til en skrivebeskyttet brevbakke!"
 
 #: curs_main.c:355
 msgid "Changes to folder will be written on folder exit."
-msgstr ""
-"Ændringer i mailkataloget vil blive skrevet til disk, når den forlades."
+msgstr "Ændringer i brevbakken vil blive skrevet til disk, når den forlades."
 
 #: curs_main.c:360
 msgid "Changes to folder will not be written."
-msgstr "Ændringer i mailkataloget vil ikke blive skrevet til disk."
+msgstr "Ændringer i brevbakken vil ikke blive skrevet til disk."
 
 #: curs_main.c:548
 msgid "Quit"
@@ -2299,7 +2298,7 @@ msgstr "Gruppe"
 
 #: curs_main.c:703
 msgid "Mailbox was externally modified.  Flags may be wrong."
-msgstr "Mailkatalog ændret udefra. Statusindikatorer kan være forkerte."
+msgstr "Brevbakken ændret udefra. Statusindikatorer kan være forkerte."
 
 #. L10N:
 #. Message printed on status line in index after mx_check_mailbox(),
@@ -2307,15 +2306,15 @@ msgstr "Mailkatalog ændret udefra. Statusindikatorer kan være forkerte."
 #.
 #: curs_main.c:710
 msgid "Mailbox reconnected.  Some changes may have been lost."
-msgstr ""
+msgstr "Mailboks genåbnet. Nogen ændringer er måske gået tabt."
 
 #: curs_main.c:714
 msgid "New mail in this mailbox."
-msgstr "Nye mails i dette mailkatalog."
+msgstr "Nye mails i denne brevbakke."
 
 #: curs_main.c:725
 msgid "Mailbox was externally modified."
-msgstr "Mailkatalog ændret udefra."
+msgstr "Brevbakke ændret udefra."
 
 #: curs_main.c:839
 msgid "No tagged messages."
@@ -2395,20 +2394,20 @@ msgstr "Logget ud fra IMAP-servere."
 
 #: curs_main.c:1316
 msgid "Open mailbox in read-only mode"
-msgstr "Åbn mailkatalog i skrivebeskyttet tilstand"
+msgstr "Åbn brevbakke i skrivebeskyttet tilstand"
 
 #: curs_main.c:1318
 msgid "Open mailbox"
-msgstr "Åbn mailkatalog"
+msgstr "Åbn brevbakke"
 
 #: curs_main.c:1327
 msgid "No mailboxes have new mail"
-msgstr "Ingen mailkataloger med nye mails"
+msgstr "Ingen brevbakker med nye mails"
 
 #: curs_main.c:1361 mx.c:535 mx.c:636
 #, c-format
 msgid "%s is not a mailbox."
-msgstr "%s er ikke et mailkatalog."
+msgstr "%s er ikke en brevbakke."
 
 #: curs_main.c:1498
 msgid "Exit Mutt without saving?"
@@ -2622,7 +2621,7 @@ msgstr "(Afslut mailen med et '.' på en linje for sig selv).\n"
 
 #: edit.c:403
 msgid "No mailbox.\n"
-msgstr "Intet mailkatalog.\n"
+msgstr "Ingen brevbakke.\n"
 
 #: edit.c:407
 msgid "Message contains:\n"
@@ -2658,17 +2657,17 @@ msgstr "%s: ukendt editor-kommando (~? for hjælp)\n"
 #: editmsg.c:79
 #, c-format
 msgid "could not create temporary folder: %s"
-msgstr "kunne ikke oprette midlertidigt mailkatalog: %s"
+msgstr "kunne ikke oprette midlertidig brevbakke: %s"
 
 #: editmsg.c:92
 #, c-format
 msgid "could not write temporary mail folder: %s"
-msgstr "kunne ikke skrive til midlertidigt mailkatalog: %s"
+msgstr "kunne ikke skrive til midlertidig brevbakke: %s"
 
 #: editmsg.c:114
 #, c-format
 msgid "could not truncate temporary mail folder: %s"
-msgstr "kunne ikke afkorte midlertidigt mailkatalog: %s"
+msgstr "kunne ikke afkorte midlertidig brevbakke: %s"
 
 #: editmsg.c:143
 msgid "Message file is empty!"
@@ -2699,8 +2698,7 @@ msgstr "Fjern statusindikator"
 
 #: handler.c:1143
 msgid "[-- Error:  Could not display any parts of Multipart/Alternative! --]\n"
-msgstr ""
-"[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
+msgstr "[-- Fejl: Kunne ikke vise nogen del af \"Multipart/Alternative\"! --]\n"
 
 #: handler.c:1259
 #, c-format
@@ -2861,30 +2859,30 @@ msgstr "Historik '%s'"
 
 #: hook.c:111
 msgid "current mailbox shortcut '^' is unset"
-msgstr "genvejstasten '^' til det aktuelle mailkatalog er inaktivt"
+msgstr "genvejstasten '^' til den aktuelle brevbakke er inaktiv"
 
 #: hook.c:124
 msgid "mailbox shortcut expanded to empty regexp"
-msgstr "genvejstaste til mailkatalog udfoldet til tomt regulært udtryk"
+msgstr "genvejstast til brevbakke udfoldet til tomt regulært udtryk"
 
 #: hook.c:137
 msgid "badly formatted command string"
 msgstr "fejlformateret kommandostreng"
 
-#: hook.c:340 init.c:722 init.c:803 init.c:811 init.c:833
+#: hook.c:326 init.c:722 init.c:803 init.c:811 init.c:833
 msgid "not enough arguments"
 msgstr "ikke nok parametre"
 
-#: hook.c:432
+#: hook.c:418
 msgid "unhook: Can't do unhook * from within a hook."
 msgstr "unhook: Kan ikke foretage unhook * inde fra en hook."
 
-#: hook.c:445
+#: hook.c:431
 #, c-format
 msgid "unhook: unknown hook type: %s"
 msgstr "unhook: ukendt hooktype: %s"
 
-#: hook.c:451
+#: hook.c:437
 #, c-format
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Kan ikke slette en %s inde fra en %s."
@@ -2942,9 +2940,9 @@ msgstr "Godkender (%s) ..."
 #. %s is the authentication type, for example OAUTHBEARER
 #.
 #: imap/auth_oauth.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s authentication failed."
-msgstr "Godkendelse mislykkedes."
+msgstr "%s godkendelse mislykkedes."
 
 #: imap/auth_sasl.c:236 pop_auth.c:185
 msgid "SASL authentication failed."
@@ -2957,7 +2955,7 @@ msgstr "%s er en ugyldig IMAP-sti"
 
 #: imap/browse.c:85
 msgid "Getting folder list..."
-msgstr "Henter liste over mailkataloger ..."
+msgstr "Henter liste over brevbakker ..."
 
 #: imap/browse.c:209
 msgid "No such folder"
@@ -2965,7 +2963,7 @@ msgstr "Mailkataloget findes ikke"
 
 #: imap/browse.c:262
 msgid "Create mailbox: "
-msgstr "Opret mailkatalog: "
+msgstr "Opret brevbakke: "
 
 #: imap/browse.c:267 imap/browse.c:322
 msgid "Mailbox must have a name."
@@ -2991,7 +2989,7 @@ msgstr "Omdøbning mislykkedes: %s"
 
 #: imap/browse.c:338
 msgid "Mailbox renamed."
-msgstr "Mailkatalog omdøbt."
+msgstr "Brevbakke omdøbt."
 
 #: imap/command.c:269 imap/command.c:350
 #, c-format
@@ -3006,12 +3004,12 @@ msgstr "Forbindelse til %s fik timeout"
 #.
 #: imap/command.c:492
 msgid "A fatal error occurred.  Will attempt reconnection."
-msgstr ""
+msgstr "En fatal fejl indtraf. Vil forsøge genforbindelse."
 
 #: imap/command.c:504
 #, c-format
 msgid "Mailbox %s@%s closed"
-msgstr "Mailkatalog %s@%s lukket"
+msgstr "Brevbakke %s@%s lukket"
 
 #: imap/imap.c:128
 #, c-format
@@ -3044,26 +3042,23 @@ msgstr "Krypteret forbindelse ikke tilgængelig"
 #. tries to reconnect.
 #.
 #: imap/imap.c:596
-#, fuzzy
 msgid "Trying to reconnect..."
-msgstr "Venter på svar ..."
+msgstr "Forsøger at genforbinde ..."
 
 #. L10N:
 #. Message when Mutt tries to reconnect to an IMAP mailbox but is
 #. unable to.
 #.
 #: imap/imap.c:701
-#, fuzzy
 msgid "Reconnect failed.  Mailbox closed."
-msgstr "\"Preconnect\"-kommando slog fejl."
+msgstr "Genforbindelse fejlede. Brevboks lukket."
 
 #. L10N:
 #. Message when Mutt reconnects to an IMAP mailbox after a fatal error.
 #.
 #: imap/imap.c:712
-#, fuzzy
 msgid "Reconnect succeeded."
-msgstr "\"Preconnect\"-kommando slog fejl."
+msgstr "Genforbindelse lykkedes-"
 
 #: imap/imap.c:822
 #, c-format
@@ -3072,9 +3067,9 @@ msgstr "Vælger %s ..."
 
 #: imap/imap.c:1002
 msgid "Error opening mailbox"
-msgstr "Fejl ved åbning af mailkatalog"
+msgstr "Fejl ved åbning af brevboks"
 
-#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2104
+#: imap/imap.c:1054 imap/imap.c:2559 imap/message.c:1426 muttlib.c:2089
 #, c-format
 msgid "Create %s?"
 msgstr "Opret %s?"
@@ -3116,7 +3111,7 @@ msgstr "Headersøgning uden et headernavn: %s"
 
 #: imap/imap.c:2274
 msgid "Bad mailbox name"
-msgstr "Ugyldigt navn på mailkatalog"
+msgstr "Ugyldigt navn på brevbakke"
 
 #: imap/imap.c:2293
 #, c-format
@@ -3147,7 +3142,7 @@ msgstr "Kopierer %d mails til %s ..."
 #. * an IMAP mailbox
 #: imap/message.c:87
 msgid "Abort download and close mailbox?"
-msgstr "Afbryd download og luk mailkatalog?"
+msgstr "Afbryd download og luk brevbakke?"
 
 #: imap/message.c:110 mx.c:1445
 msgid "Integer overflow -- can't allocate memory."
@@ -3184,7 +3179,7 @@ msgstr "Henter mail ..."
 
 #: imap/message.c:1036 pop.c:598
 msgid "The message index is incorrect. Try reopening the mailbox."
-msgstr "Mailindekset er forkert. Prøv at genåbne mailkataloget."
+msgstr "Mailindekset er forkert. Prøv at genåbne brevbakken."
 
 #: imap/message.c:1212
 msgid "Uploading message..."
@@ -3304,7 +3299,7 @@ msgstr "Ugyldig værdi for tilvalget %s: \"%s\""
 #: init.c:2577
 #, c-format
 msgid "%s: invalid mailbox type"
-msgstr "%s: ugyldig type mailkatalog"
+msgstr "%s: ugyldig type brevbakke"
 
 #: init.c:2608 init.c:2672
 #, c-format
@@ -3355,9 +3350,8 @@ msgid "source: error at %s"
 msgstr "source: Fejl ved %s"
 
 #: init.c:2906
-#, fuzzy
 msgid "run: too many arguments"
-msgstr "push: For mange parametre"
+msgstr "run: For mange parametre"
 
 #: init.c:2929
 msgid "source: too many arguments"
@@ -3399,14 +3393,14 @@ msgstr "parametre slap op"
 #: init.h:299
 #, c-format
 msgid "On %d, %n wrote:"
-msgstr ""
+msgstr "Den %d skrev %n:"
 
 #. L10N:
 #. $compose_format default value
 #.
 #: init.h:565
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
-msgstr ""
+msgstr "-- Mutt: Compose  [Omtrentlig besked-størrelse: %l   Bilag: %a]%>-"
 
 #. L10N:
 #. $forward_attribution_intro default value
@@ -3414,39 +3408,43 @@ msgstr ""
 #: init.h:1198
 #, c-format
 msgid "----- Forwarded message from %f -----"
-msgstr ""
+msgstr "----- Videresendt besked fra %f -----"
 
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
 #: init.h:1209
-#, fuzzy
 msgid "----- End forwarded message -----"
-msgstr "Redigér mail før videresendelse?"
+msgstr "----- Slut på videresendt besked -----"
 
 #. L10N:
 #. $status_format default value
 #.
 #: init.h:4169
 msgid ""
-"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
-"%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
-"(%P)---"
+"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%"
+"F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-(%"
+"P)---"
 msgstr ""
+"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nye:%n?%?o? Gamle:%o?%?d? Slettet:%d?%?F? "
+"Mærket:%"
+"F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Tilbage:%B?%?l? %l?]---(%s/%S)-%>"
+"-(%"
+"P)---"
 
 #. L10N:
 #. $ts_icon_format default value
 #.
 #: init.h:4372
 msgid "M%?n?AIL&ail?"
-msgstr ""
+msgstr "M%?n?AIL&ail?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
 #: init.h:4389
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
-msgstr ""
+msgstr "Mutt med %?m?%m beskeder&ingen beskeder?%?n? [%n NYE?"
 
 #: keymap.c:564
 msgid "Macro loop detected."
@@ -3574,14 +3572,14 @@ msgstr ""
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
-"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
-"02110-1301, USA.\n"
+"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-"
+"1301, USA.\n"
 msgstr ""
 "    Du burde have modtaget en kopi af the GNU General Public License\n"
 "    sammen med dette program; hvis dette ikke er tilfælde, skriv til Free "
 "Software\n"
-"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
-"02110-1301, USA.\n"
+"    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-"
+"1301, USA.\n"
 
 #: main.c:134
 msgid ""
@@ -3643,11 +3641,11 @@ msgid ""
 msgstr ""
 "  -E\t\tredigér kladden (-H) eller medtag (-i) fil\n"
 "  -e <kommando>\tanfør en kommando til udførelse efter opstart\n"
-"  -f <fil>\tanfør hvilken mailkatalog der skal læses\n"
+"  -f <fil>\tanfør hvilken brevbakke der skal læses\n"
 "  -F <fil>\tanfør en alternativ muttrc-fil\n"
 "  -H <fil>\tanfør en kladdefil hvorfra mailheadere og indhold skal læses\n"
 "  -i <fil>\tanfør en fil som Mutt skal medtage i mailen\n"
-"  -m <type>\tanfør en standardtype på mailkatalog\n"
+"  -m <type>\tanfør en standardtype på brevbakke\n"
 "  -n\t\tbevirker at Mutt ikke læser systemets Muttrc\n"
 "  -p\t\tgenkald et udsat mail"
 
@@ -3664,13 +3662,13 @@ msgid ""
 "  -h\t\tthis help message"
 msgstr ""
 "  -Q <variabel>\tspørg til en opsætningsvariabel\n"
-"  -R\t\tåbn et mailkatalog i skrivebeskyttet tilstand\n"
+"  -R\t\tåbn en brevbakke i skrivebeskyttet tilstand\n"
 "  -s <emne>\tanfør et emne (skal stå i citationstegn hvis der er mellemrum)\n"
 "  -v\t\tvis version og definitioner ved kompilering\n"
 "  -x\t\tsimulér mailx' måde at sende på\n"
-"  -y\t\tvælg et mailkatalog som er angivet i din \"mailboxes\"-liste\n"
-"  -z\t\tafslut øjeblikkeligt hvis der ikke er nogen mails i mailkataloget\n"
-"  -Z\t\tåbn det første mailkatalog med nye mails, afslut øjeblikkeligt hvis "
+"  -y\t\tvælg en brevbakke som er angivet i din \"mailboxes\"-liste\n"
+"  -z\t\tafslut øjeblikkeligt hvis der ikke er nogen mails i brevbakken\n"
+"  -Z\t\tåbn den første brevbakke med nye mails, afslut øjeblikkeligt hvis "
 "ingen\n"
 "  -h\t\tdenne hjælpebesked"
 
@@ -3719,15 +3717,15 @@ msgstr "%s: kan ikke vedlægge fil.\n"
 
 #: main.c:1286
 msgid "No mailbox with new mail."
-msgstr "Ingen mailkatalog med nye mails."
+msgstr "Ingen brevbakke med nye mails."
 
 #: main.c:1300
 msgid "No incoming mailboxes defined."
-msgstr "Ingen indgående mailkataloger er defineret."
+msgstr "Ingen indgående brevbakker er defineret."
 
 #: main.c:1328
 msgid "Mailbox is empty."
-msgstr "Mailkataloget er tom."
+msgstr "Brevbakken er tom."
 
 #: mbox.c:131 mbox.c:294 mh.c:1299 mx.c:654
 #, c-format
@@ -3736,7 +3734,7 @@ msgstr "Læser %s ..."
 
 #: mbox.c:169 mbox.c:227
 msgid "Mailbox is corrupt!"
-msgstr "Mailkataloget er ødelagt!"
+msgstr "Brevbakken er ødelagt!"
 
 #: mbox.c:485
 #, c-format
@@ -3749,15 +3747,15 @@ msgstr "Kan ikke skrive mail"
 
 #: mbox.c:787
 msgid "Mailbox was corrupted!"
-msgstr "Mailkataloget blev ødelagt!"
+msgstr "Brevbakken var ødelagt!"
 
 #: mbox.c:870 mbox.c:1126
 msgid "Fatal error!  Could not reopen mailbox!"
-msgstr "Kritisk fejl! Kunne ikke genåbne mailkatalog!"
+msgstr "Kritisk fejl! Kunne ikke genåbne brevbakke!"
 
 #: mbox.c:922
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
-msgstr "sync: mbox ændret, men ingen ændrede mails! (rapportér denne fejl)"
+msgstr "sync: brevbakke ændret, men ingen ændrede mails! (rapportér denne fejl)"
 
 #. L10N: Displayed before/as a mailbox is being synced
 #: mbox.c:945 mh.c:2012 mx.c:754
@@ -3772,15 +3770,15 @@ msgstr "Udfører ændringer ..."
 #: mbox.c:1110
 #, c-format
 msgid "Write failed!  Saved partial mailbox to %s"
-msgstr "Kunne ikke skrive! Gemte en del af mailkataloget i %s"
+msgstr "Kunne ikke skrive! Gemte en del af brevbakke i %s"
 
 #: mbox.c:1185
 msgid "Could not reopen mailbox!"
-msgstr "Kunne ikke genåbne mailkatalog!"
+msgstr "Kunne ikke genåbne brevbakke!"
 
 #: mbox.c:1214
 msgid "Reopening mailbox..."
-msgstr "Genåbner mailkatalog ..."
+msgstr "Genåbner brevbakke ..."
 
 #: menu.c:465
 msgid "Jump to: "
@@ -3790,8 +3788,8 @@ msgstr "Hop til: "
 msgid "Invalid index number."
 msgstr "Ugyldigt indeksnummer."
 
-#: menu.c:478 menu.c:500 menu.c:565 menu.c:608 menu.c:624 menu.c:635 menu.c:646
-#: menu.c:657 menu.c:670 menu.c:683 menu.c:1231
+#: menu.c:478 menu.c:500 menu.c:565 menu.c:608 menu.c:624 menu.c:635
+#: menu.c:646 menu.c:657 menu.c:670 menu.c:683 menu.c:1231
 msgid "No entries."
 msgstr "Ingen punkter."
 
@@ -3858,7 +3856,7 @@ msgstr "_maildir_commit_message(): kan ikke sætte tidsstempel på fil"
 #: mutt_lisp.c:62
 #, c-format
 msgid "MuttLisp: unclosed backticks: %s"
-msgstr ""
+msgstr "MuttLisp: ikke-lukkede baglæns-accenttegn: %s"
 
 #. L10N:
 #. Printed when a MuttLisp list is missing a matching closing
@@ -3867,7 +3865,7 @@ msgstr ""
 #: mutt_lisp.c:123
 #, c-format
 msgid "MuttLisp: unclosed list: %s"
-msgstr ""
+msgstr "MuttLisp: ikke-lukket liste: %s"
 
 #. L10N:
 #. An error printed for the 'if' function if the condition is missing.
@@ -3876,15 +3874,15 @@ msgstr ""
 #: mutt_lisp.c:399
 #, c-format
 msgid "MuttLisp: missing if condition: %s"
-msgstr ""
+msgstr "MuttLisp: manglende if betingelse: %s"
 
 #. L10N:
 #. Printed when a function is called that is not recognized by MuttLisp.
 #.
 #: mutt_lisp.c:447
-#, fuzzy, c-format
+#, c-format
 msgid "MuttLisp: no such function %s"
-msgstr "%s: ukendt funktion"
+msgstr "MuttLisp: ingen sådan funktion %s"
 
 #: mutt_sasl.c:196
 msgid "Unknown SASL profile"
@@ -3956,7 +3954,7 @@ msgstr "Kunne ikke forbinde til %s (%s)."
 #.
 #: mutt_ssl.c:199 mutt_ssl_gnutls.c:228
 msgid "Warning: clearing unexpected server data before TLS negotiation"
-msgstr ""
+msgstr "Advarsel: rydder uventet serverdata før TLS-forhandling"
 
 #: mutt_ssl.c:274 mutt_ssl.c:556
 msgid "Warning: error enabling ssl_verify_partial_chains"
@@ -4218,46 +4216,46 @@ msgstr "Fejl i tunnel under kommunikation med %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1355
+#: muttlib.c:1340
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr "Filen er et filkatalog; gem i det? [(j)a, (n)ej, (a)lle]"
 
-#: muttlib.c:1355
+#: muttlib.c:1340
 msgid "yna"
 msgstr "jna"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1374
+#: muttlib.c:1359
 msgid "File is a directory, save under it?"
 msgstr "Filen er et filkatalog, gem i det?"
 
-#: muttlib.c:1379
+#: muttlib.c:1364
 msgid "File under directory: "
 msgstr "Fil i dette filkatalog: "
 
-#: muttlib.c:1393
+#: muttlib.c:1378
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Filen eksisterer , (o)verskriv, (t)ilføj, (a)nnulér?"
 
-#: muttlib.c:1393
+#: muttlib.c:1378
 msgid "oac"
 msgstr "ota"
 
-#: muttlib.c:2067
+#: muttlib.c:2052
 msgid "Can't save message to POP mailbox."
-msgstr "Kan ikke gemme mail i POP-mailkatalog."
+msgstr "Kan ikke gemme mail i POP-brevbakke."
 
-#: muttlib.c:2077
+#: muttlib.c:2062
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Føj mails til %s?"
 
-#: muttlib.c:2090
+#: muttlib.c:2075
 #, c-format
 msgid "%s is not a mailbox!"
-msgstr "%s er intet mailkatalog!"
+msgstr "%s er ikke en brevbakke!"
 
 #: mx.c:160
 #, c-format
@@ -4323,7 +4321,7 @@ msgstr "Flytter læste mails til %s ..."
 
 #: mx.c:995 mx.c:1215
 msgid "Mailbox is unchanged."
-msgstr "Mailkataloget er uændret."
+msgstr "Brevbakken er uændret."
 
 #: mx.c:1051
 #, c-format
@@ -4347,11 +4345,11 @@ msgstr "Brug 'toggle-write' for at muliggøre skrivning!"
 #: mx.c:1203
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
-msgstr "Mailkataloget er skrivebeskyttet. %s"
+msgstr "Brevbakke er skrivebeskyttet. %s"
 
 #: mx.c:1270
 msgid "Mailbox checkpointed."
-msgstr "Mailkatalog opdateret."
+msgstr "Brevbakke opdateret."
 
 #: pager.c:1598
 msgid "PrevPg"
@@ -4397,321 +4395,302 @@ msgstr "mail med flere dele har ingen \"boundary\"-parameter!"
 #. Pattern Completion Menu description for ~A
 #.
 #: pattern.c:71
-#, fuzzy
 msgid "all messages"
-msgstr "sortér mails"
+msgstr "alle beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~b
 #.
 #: pattern.c:76
 msgid "messages whose body matches EXPR"
-msgstr ""
+msgstr "beskeder hvis tekst passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~B
 #.
 #: pattern.c:81
 msgid "messages whose body or headers match EXPR"
-msgstr ""
+msgstr "beskeder hvis tekst eller felter passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~c
 #.
 #: pattern.c:86
 msgid "messages whose CC header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis CC-felt passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~C
 #.
 #: pattern.c:91
 msgid "messages whose recipient matches EXPR"
-msgstr ""
+msgstr "beskeder hvis modtager passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~d
 #.
 #: pattern.c:96
 msgid "messages sent in DATERANGE"
-msgstr ""
+msgstr "beskeder sendt i DATO-OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu description for ~D
 #.
 #: pattern.c:101
-#, fuzzy
 msgid "deleted messages"
-msgstr "Alle mails har slet-markering."
+msgstr "slettede beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~e
 #.
 #: pattern.c:106
 msgid "messages whose Sender header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis Sender-felt passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~E
 #.
 #: pattern.c:111
-#, fuzzy
 msgid "expired messages"
-msgstr "sortér mails"
+msgstr "Udløbne beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~f
 #.
 #: pattern.c:116
 msgid "messages whose From header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis From-felt passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~F
 #.
 #: pattern.c:121
-#, fuzzy
 msgid "flagged messages"
-msgstr "Ingen mails er udvalgt."
+msgstr "mails med statusindikator"
 
 #. L10N:
 #. Pattern Completion Menu description for ~g
 #.
 #: pattern.c:126
-#, fuzzy
 msgid "cryptographically signed messages"
-msgstr "genindlæs en tilbageholdt mail"
+msgstr "kryptografisk signerede mails"
 
 #. L10N:
 #. Pattern Completion Menu description for ~G
 #.
 #: pattern.c:131
-#, fuzzy
 msgid "cryptographically encrypted messages"
-msgstr "Kan ikke dekryptere krypteret mail!"
+msgstr "kryptografisk krypteret mail!"
 
 #. L10N:
 #. Pattern Completion Menu description for ~h
 #.
 #: pattern.c:136
 msgid "messages whose header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis felter passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~H
 #.
 #: pattern.c:141
 msgid "messages whose spam tag matches EXPR"
-msgstr ""
+msgstr "beskeder hvis spam-mærke passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~i
 #.
 #: pattern.c:146
 msgid "messages whose Message-ID matches EXPR"
-msgstr ""
+msgstr "beskeder hvis Message-ID passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~k
 #.
 #: pattern.c:151
-#, fuzzy
 msgid "messages which contain PGP key"
-msgstr "mailens genvejstast"
+msgstr "beskeder som indeholder PGP nøgle"
 
 #. L10N:
 #. Pattern Completion Menu description for ~l
 #.
 #: pattern.c:156
 msgid "messages addressed to known mailing lists"
-msgstr ""
+msgstr "beskeder adresseret til kendte postlister"
 
 #. L10N:
 #. Pattern Completion Menu description for ~L
 #.
 #: pattern.c:161
 msgid "messages whose From/Sender/To/CC matches EXPR"
-msgstr ""
+msgstr "beskeder hvis From/Sender/To/CC passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~m
 #.
 #: pattern.c:166
 msgid "messages whose number is in RANGE"
-msgstr ""
+msgstr "beskeder hvis nummer er indenfor OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu description for ~M
 #.
 #: pattern.c:171
 msgid "messages with a Content-Type matching EXPR"
-msgstr ""
+msgstr "beskeder med en indholgd-type der passer på UDTTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~n
 #.
 #: pattern.c:176
 msgid "messages whose score is in RANGE"
-msgstr ""
+msgstr "beskeder hvis skore er indenfor OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu description for ~N
 #.
 #: pattern.c:181
-#, fuzzy
 msgid "new messages"
-msgstr "Ingen nye mails."
+msgstr "nye beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~O
 #.
 #: pattern.c:186
-#, fuzzy
 msgid "old messages"
-msgstr "sortér mails"
+msgstr "gamle mails"
 
 #. L10N:
 #. Pattern Completion Menu description for ~p
 #.
 #: pattern.c:191
 msgid "messages addressed to you"
-msgstr ""
+msgstr "beskeder adresseret til dig"
 
 #. L10N:
 #. Pattern Completion Menu description for ~P
 #.
 #: pattern.c:196
-#, fuzzy
 msgid "messages from you"
-msgstr "mailens genvejstast"
+msgstr "beskeder fra dig"
 
 #. L10N:
 #. Pattern Completion Menu description for ~Q
 #.
 #: pattern.c:201
 msgid "messages which have been replied to"
-msgstr ""
+msgstr "beskeder som er blevet besvaret"
 
 #. L10N:
 #. Pattern Completion Menu description for ~r
 #.
 #: pattern.c:206
 msgid "messages received in DATERANGE"
-msgstr ""
+msgstr "beskeder modtaget inden for DATO-OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu description for ~R
 #.
 #: pattern.c:211
-#, fuzzy
 msgid "already read messages"
-msgstr "Ingen ulæste mails."
+msgstr "allerede læste beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~s
 #.
 #: pattern.c:216
 msgid "messages whose Subject header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis emne-felt  passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~S
 #.
 #: pattern.c:221
-#, fuzzy
 msgid "superseded messages"
-msgstr "sortér mails"
+msgstr "forældede beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~t
 #.
 #: pattern.c:226
 msgid "messages whose To header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis Til-felt passer med  UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
 #.
 #: pattern.c:231
-#, fuzzy
 msgid "tagged messages"
-msgstr "Ingen mails er udvalgt."
+msgstr "udvalgte beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~u
 #.
 #: pattern.c:236
-#, fuzzy
 msgid "messages addressed to subscribed mailing lists"
-msgstr "svar til en angivet postliste"
+msgstr "beskeder sendt til abonnerede postlister"
 
 #. L10N:
 #. Pattern Completion Menu description for ~U
 #.
 #: pattern.c:241
-#, fuzzy
 msgid "unread messages"
-msgstr "Ingen ulæste mails."
+msgstr "ulæste beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~v
 #.
 #: pattern.c:246
-#, fuzzy
 msgid "messages in collapsed threads"
-msgstr "sammen-/udfold alle tråde"
+msgstr "beskeder i sammenfoldede tråde"
 
 #. L10N:
 #. Pattern Completion Menu description for ~V
 #.
 #: pattern.c:251
 msgid "cryptographically verified messages"
-msgstr ""
+msgstr "kryptografisk efterprøvede beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~x
 #.
 #: pattern.c:256
 msgid "messages whose References header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis reference-felt passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
 #.
 #: pattern.c:261
-#, fuzzy
 msgid "messages with RANGE attachments"
-msgstr "vis MIME-dele"
+msgstr "beskeder med OMRÅDE-bilag"
 
 #. L10N:
 #. Pattern Completion Menu description for ~y
 #.
 #: pattern.c:266
 msgid "messages whose X-Label header matches EXPR"
-msgstr ""
+msgstr "beskeder hvis X-Label header passer med UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
 #.
 #: pattern.c:271
 msgid "messages whose size is in RANGE"
-msgstr ""
+msgstr "beskeder hvis størrelse er indenfor OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu description for ~=
 #.
 #: pattern.c:276
-#, fuzzy
 msgid "duplicated messages"
-msgstr "redigér mail"
+msgstr "duplikerede beskeder"
 
 #. L10N:
 #. Pattern Completion Menu description for ~$
 #.
 #: pattern.c:281
-#, fuzzy
 msgid "unreferenced messages"
-msgstr "Ingen ulæste mails."
+msgstr "urefererede beskeder"
 
 #: pattern.c:519 pattern.c:1010
 #, c-format
@@ -4725,7 +4704,7 @@ msgstr "Tomt udtryk"
 #: pattern.c:677 pattern.c:692
 #, c-format
 msgid "Invalid day of month: %s"
-msgstr "Ugyldig dag: %s"
+msgstr "Ugyldig dag i måneden: %s"
 
 #: pattern.c:682 pattern.c:706
 #, c-format
@@ -4743,7 +4722,7 @@ msgstr "Ugyldig relativ dato: %s"
 #. %c is the pattern character, i.e. "g".
 #.
 #: pattern.c:1076
-#, fuzzy, c-format
+#, c-format
 msgid "Pattern modifier '~%c' is disabled."
 msgstr "Mønster-operator '~%c' er deaktiveret."
 
@@ -4827,14 +4806,14 @@ msgstr "Søgning afbrudt."
 #.
 #: pattern.c:2202
 msgid "Patterns"
-msgstr ""
+msgstr "Mønstre"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a regular expression
 #.
 #: pattern.c:2224
 msgid "EXPR"
-msgstr ""
+msgstr "UDTRYK"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a numeric range.
@@ -4842,7 +4821,7 @@ msgstr ""
 #.
 #: pattern.c:2231
 msgid "RANGE"
-msgstr ""
+msgstr "OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a date range
@@ -4850,7 +4829,7 @@ msgstr ""
 #.
 #: pattern.c:2238
 msgid "DATERANGE"
-msgstr ""
+msgstr "DATO-OMRÅDE"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a nested pattern.
@@ -4858,28 +4837,28 @@ msgstr ""
 #.
 #: pattern.c:2254
 msgid "PATTERN"
-msgstr ""
+msgstr "MØNSTER"
 
 #. L10N:
 #. Pattern Completion Menu description for ~()
 #.
 #: pattern.c:2263
 msgid "messages in threads containing messages matching PATTERN"
-msgstr ""
+msgstr "beskeder i tråde med beskeder der passer med MØNSTER"
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
 #.
 #: pattern.c:2273
 msgid "messages whose immediate parent matches PATTERN"
-msgstr ""
+msgstr "beskeder hvis umiddelbare forælder passer med MØNSTER"
 
 #. L10N:
 #. Pattern Completion Menu description for ~>()
 #.
 #: pattern.c:2283
 msgid "messages having an immediate child matching PATTERN"
-msgstr ""
+msgstr "beskeder hvis umiddelbare barn passer med MØNSTER"
 
 #: pgp.c:91
 msgid "Enter PGP passphrase:"
@@ -4970,8 +4949,7 @@ msgstr "usgyoi"
 
 #: pgp.c:1847
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
-msgstr ""
-"PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
+msgstr "PGP (u)nderskriv, underskriv (s)om, r(y)d eller (o)ppenc-tilstand fra? "
 
 #: pgp.c:1848
 msgid "safco"
@@ -5060,7 +5038,7 @@ msgstr "Kommandoen UIDL er ikke understøttet af server."
 #: pop.c:324
 #, c-format
 msgid "%d messages have been lost. Try reopening the mailbox."
-msgstr "%d mails er gået tabt. Prøv at genåbne mailkataloget."
+msgstr "%d mails er gået tabt. Prøv at genåbne brevbakken."
 
 #: pop.c:439 pop.c:859
 #, c-format
@@ -5102,7 +5080,7 @@ msgstr "Indlæser nye mails (%d bytes) ..."
 
 #: pop.c:958
 msgid "Error while writing mailbox!"
-msgstr "Fejl ved skrivning til mailkatalog!"
+msgstr "Fejl ved skrivning til brevbakke!"
 
 #: pop.c:962
 #, c-format
@@ -5237,7 +5215,7 @@ msgstr "Bilag gemt."
 #: recvattach.c:617
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
-msgstr ""
+msgstr "Kan ikke gemme bilag i  %s. Bruger cwd"
 
 #: recvattach.c:724
 #, c-format
@@ -5403,8 +5381,7 @@ msgid "Mixmaster doesn't accept Cc or Bcc headers."
 msgstr "Mails sendt med Mixmaster må ikke have Cc- eller Bcc-felter."
 
 #: remailer.c:737
-msgid ""
-"Please set the hostname variable to a proper value when using mixmaster!"
+msgid "Please set the hostname variable to a proper value when using mixmaster!"
 msgstr "Sæt hostname-variablen til en passende værdi ved brug af mixmaster!"
 
 #: remailer.c:773
@@ -5518,7 +5495,7 @@ msgstr "Forbereder mail til videresendelse ..."
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1137
+#: send.c:1138
 msgid "Generate multipart/alternative content?"
 msgstr "Generér \"multipart/alternative\"-indhold?"
 
@@ -5526,15 +5503,14 @@ msgstr "Generér \"multipart/alternative\"-indhold?"
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1245
+#: send.c:1239
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr "Gemmer Fcc til %s"
 
-#: send.c:1267
-#, fuzzy
+#: send.c:1261
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "Fcc til et IMAP-mailkatalog understøttes ikke i batch-tilstand"
+msgstr "Advarsel: Fcc til en IMAP-brevbakke understøttes ikke i batch-tilstand"
 
 #. L10N:
 #. Printed after the "Fcc to an IMAP mailbox is not supported" message.
@@ -5542,10 +5518,10 @@ msgstr "Fcc til et IMAP-mailkatalog understøttes ikke i batch-tilstand"
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1274
-#, fuzzy, c-format
+#: send.c:1268
+#, c-format
 msgid "Skipping Fcc to %s"
-msgstr "Gemmer Fcc til %s"
+msgstr "Overspringer Fcc til %s"
 
 #. L10N:
 #. Called when saving to $record or Fcc failed after sending.
@@ -5553,91 +5529,91 @@ msgstr "Gemmer Fcc til %s"
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1291
+#: send.c:1285
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
-"Fcc mislykkedes. forsøg (i)gen, alternativt (m)ailkatalog, eller (a)fbryd? "
+"Fcc mislykkedes. forsøg (i)gen, alternativt (b)revbakke, eller (a)fbryd? "
 
 #. L10N:
 #. These correspond to the "Fcc failed" multi-choice prompt
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1297
+#: send.c:1291
 msgid "rms"
-msgstr "ima"
+msgstr "iba"
 
 #. L10N:
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1305
+#: send.c:1299
 msgid "Fcc mailbox"
-msgstr "Fcc-mailkatalog"
+msgstr "Fcc-brevbakke"
 
-#: send.c:1371
+#: send.c:1365
 msgid "Save attachments in Fcc?"
 msgstr "Gem bilag i Fcc?"
 
-#: send.c:1618
+#: send.c:1612
 msgid "Cannot postpone.  $postponed is unset"
 msgstr "Kan ikke udsætte. Variablen $postponed er ikke sat"
 
-#: send.c:1859
+#: send.c:1853
 msgid "Recall postponed message?"
 msgstr "Genindlæs tilbageholdt mail?"
 
-#: send.c:2160
+#: send.c:2154
 msgid "Edit forwarded message?"
 msgstr "Redigér mail før videresendelse?"
 
-#: send.c:2224
+#: send.c:2218
 msgid "Abort unmodified message?"
 msgstr "Annullér uændret mail?"
 
-#: send.c:2226
+#: send.c:2220
 msgid "Aborted unmodified message."
 msgstr "Annullerede uændret mail."
 
-#: send.c:2344
+#: send.c:2338
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Ingen krypteringsressource er konfigureret. Deaktiverer mailens "
 "sikkerhedsindstilling."
 
-#: send.c:2413
+#: send.c:2407
 msgid "Message postponed."
 msgstr "Mail tilbageholdt."
 
-#: send.c:2429
+#: send.c:2423
 msgid "No recipients are specified!"
 msgstr "Ingen modtagere er anført!"
 
-#: send.c:2434
+#: send.c:2428
 msgid "No recipients were specified."
 msgstr "Ingen modtagere blev anført."
 
-#: send.c:2450
+#: send.c:2444
 msgid "No subject, abort sending?"
 msgstr "Intet emne - undlad at sende?"
 
-#: send.c:2454
+#: send.c:2448
 msgid "No subject specified."
 msgstr "Intet emne er angivet."
 
-#: send.c:2468
+#: send.c:2462
 msgid "No attachments, abort sending?"
 msgstr "Ingen bilag - afbryd afsendelse?"
 
-#: send.c:2471
+#: send.c:2465
 msgid "Attachment referenced in message is missing"
 msgstr "Bilag, der henvises til i mail, mangler"
 
-#: send.c:2543 smtp.c:191
+#: send.c:2537 smtp.c:191
 msgid "Sending message..."
 msgstr "Sender mail ..."
 
-#: send.c:2586
+#: send.c:2580
 msgid "Could not send the message."
 msgstr "Kunne ikke sende mailen."
 
@@ -5647,15 +5623,15 @@ msgstr "Kunne ikke sende mailen."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2614 send.c:2640
+#: send.c:2608 send.c:2634
 msgid "Setting reply flags."
 msgstr "Sættet \"reply\"-indikatorer."
 
-#: send.c:2685
+#: send.c:2679
 msgid "Mail sent."
 msgstr "Mail sendt."
 
-#: send.c:2685
+#: send.c:2679
 msgid "Sending in background."
 msgstr "Sender i baggrunden."
 
@@ -5663,7 +5639,7 @@ msgstr "Sender i baggrunden."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2750
+#: send.c:2744
 msgid "Editing backgrounded."
 msgstr "Redigering sat i baggrunden."
 
@@ -5747,7 +5723,7 @@ msgstr "Forkert IDN %s under forberedelse af \"Resent-From\"-felt."
 #.
 #: signal.c:115
 msgid "Caught signal "
-msgstr ""
+msgstr "Fangede signal "
 
 #. L10N:
 #. This is printed in the exit handler when a signal is caught.
@@ -5757,7 +5733,7 @@ msgstr ""
 #.
 #: signal.c:125
 msgid "...  Exiting.\n"
-msgstr ""
+msgstr "... Afslutter.\n"
 
 #: smime.c:156
 msgid "Enter S/MIME passphrase:"
@@ -5794,7 +5770,7 @@ msgstr "Ukendt   "
 #: smime.c:458
 #, c-format
 msgid "S/MIME certificates matching \"%s\"."
-msgstr "S/MIME-certifikater som matcher \"%s\"."
+msgstr "S/MIME-certifikater som passer med \"%s\"."
 
 #: smime.c:502
 msgid "ID is not trusted."
@@ -5809,9 +5785,10 @@ msgstr "Anfør nøgle-ID: "
 msgid "No (valid) certificate found for %s."
 msgstr "Fandt ikke et (gyldigt) certifikat for %s."
 
-#: smime.c:973 smime.c:1003 smime.c:1072 smime.c:1108 smime.c:1184 smime.c:1266
+#: smime.c:973 smime.c:1003 smime.c:1072 smime.c:1108 smime.c:1184
+#: smime.c:1266
 msgid "Error: unable to create OpenSSL subprocess!"
-msgstr "Fejl: kan ikke skabe en OpenSSL-delproces!"
+msgstr "Fejl: kan ikke skabe en OpenSSL-underproces!"
 
 #: smime.c:1254
 msgid "Label for certificate: "
@@ -5835,7 +5812,7 @@ msgstr "Kan ikke underskrive: Ingen nøgle er angivet. Brug \"underskriv som\"."
 
 #: smime.c:1630
 msgid "Can't open OpenSSL subprocess!"
-msgstr "Kan ikke åbne OpenSSL-delproces!"
+msgstr "Kan ikke åbne OpenSSL-underproces!"
 
 #: smime.c:1848 smime.c:1972
 msgid ""
@@ -5847,7 +5824,7 @@ msgstr ""
 
 #: smime.c:1932 smime.c:1942
 msgid "[-- Error: unable to create OpenSSL subprocess! --]\n"
-msgstr "[-- Fejl: kan ikke skabe en OpenSSL-delproces! --]\n"
+msgstr "[-- Fejl: kan ikke skabe en OpenSSL-underproces! --]\n"
 
 #: smime.c:1976
 msgid "[-- The following data is S/MIME encrypted --]\n"
@@ -5874,8 +5851,7 @@ msgstr ""
 "[-- Slut på S/MIME-underskrevne data --]\n"
 
 #: smime.c:2235
-msgid ""
-"S/MIME (s)ign, encrypt (w)ith, sign (a)s, (c)lear, or (o)ppenc mode off? "
+msgid "S/MIME (s)ign, encrypt (w)ith, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr ""
 "S/MIME (u).skriv, kryptér (m)ed, u.skriv (s)om, r(y)d eller (o)ppenc-"
 "tilstand fra? "
@@ -5888,10 +5864,10 @@ msgstr ""
 msgid "swafco"
 msgstr "umsgyo"
 
-#: smime.c:2249
+#: smime.c:224
 msgid ""
-"S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, (c)lear, or "
-"(o)ppenc mode? "
+"S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, (c)lear, or (o)"
+"ppenc mode? "
 msgstr ""
 "S/MIME (k)ryptér, (u).skriv, kryptér (m)ed, u.skriv (s)om, (b)egge, r(y)d "
 "eller (o)ppenc-tilstand? "
@@ -5901,8 +5877,7 @@ msgid "eswabfco"
 msgstr "kumsbgyo"
 
 #: smime.c:2258
-msgid ""
-"S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, or (c)lear? "
+msgid "S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, or (c)lear? "
 msgstr ""
 "S/MIME (k)ryptér, (u).skriv, kryptér (m)ed, u.skriv (s)om, (b)egge, r(y)d? "
 
@@ -5997,7 +5972,7 @@ msgstr "SASL-godkendelse mislykkedes"
 
 #: sort.c:301
 msgid "Sorting mailbox..."
-msgstr "Sorterer mailkatalog ..."
+msgstr "Sorterer brevbakke ..."
 
 #: sort.c:338
 msgid "Could not find sorting function! [report this bug]"
@@ -6005,7 +5980,7 @@ msgstr "Kunne ikke finde sorteringsfunktion! [rapportér denne fejl]"
 
 #: status.c:127
 msgid "(no mailbox)"
-msgstr "(intet mailkatalog)"
+msgstr "(ingen brevbakke)"
 
 #: thread.c:1102
 msgid "Parent message is not available."
@@ -6119,25 +6094,25 @@ msgstr "vis navnet på den aktuelt valgte fil"
 #. #: ./OPS:17
 #: ../keymap_alldefs.h:55
 msgid "subscribe to current mailbox (IMAP only)"
-msgstr "abonnér på aktuelle mailkatalog (kun IMAP)"
+msgstr "abonnér på aktuelle brevbakke (kun IMAP)"
 
 #. L10N: Help screen description for OP_BROWSER_UNSUBSCRIBE
 #. #: ./OPS:18
 #: ../keymap_alldefs.h:58
 msgid "unsubscribe from current mailbox (IMAP only)"
-msgstr "afmeld abonnement på aktuelle mailkatalog (kun IMAP)"
+msgstr "afmeld abonnement på aktuelle brevbakke (kun IMAP)"
 
 #. L10N: Help screen description for OP_BROWSER_TOGGLE_LSUB
 #. #: ./OPS:19
 #: ../keymap_alldefs.h:61
 msgid "toggle view all/subscribed mailboxes (IMAP only)"
-msgstr "skift mellem visning af alle/abonnerede mailkataloger (kun IMAP)"
+msgstr "skift mellem visning af alle/abonnerede brevbakker (kun IMAP)"
 
 #. L10N: Help screen description for OP_BUFFY_LIST
 #. #: ./OPS:20
 #: ../keymap_alldefs.h:64
 msgid "list mailboxes with new mail"
-msgstr "oplist mailkataloger med nye mails"
+msgstr "oplist brevbakker med nye mails"
 
 #. L10N: Help screen description for OP_CHANGE_DIRECTORY
 #. #: ./OPS:21
@@ -6149,7 +6124,7 @@ msgstr "skift filkatalog"
 #. #: ./OPS:22
 #: ../keymap_alldefs.h:70
 msgid "check mailboxes for new mail"
-msgstr "undersøg mailkataloger for nye mails"
+msgstr "undersøg brevbakker for nye mails"
 
 #. L10N: Help screen description for OP_COMPOSE_ATTACH_FILE
 #. #: ./OPS:23
@@ -6251,7 +6226,7 @@ msgstr "ret listen over modtagere (To:)"
 #. #: ./OPS:39
 #: ../keymap_alldefs.h:121
 msgid "create a new mailbox (IMAP only)"
-msgstr "opret en ny mailkatalog (kun IMAP)"
+msgstr "opret en ny brevbakke (kun IMAP)"
 
 #. L10N: Help screen description for OP_EDIT_TYPE
 #. #: ./OPS:40
@@ -6371,7 +6346,7 @@ msgstr "læg mailen i et mailkatalog"
 #. #: ./OPS:59
 #: ../keymap_alldefs.h:181
 msgid "copy a message to a file/mailbox"
-msgstr "kopiér mail til en fil/mailkatalog"
+msgstr "kopiér mail til en fil/brevbakke"
 
 #. L10N: Help screen description for OP_CREATE_ALIAS
 #. #: ./OPS:60
@@ -6419,7 +6394,7 @@ msgstr "slet den aktuelle mail"
 #. #: ./OPS:67
 #: ../keymap_alldefs.h:205
 msgid "delete the current mailbox (IMAP only)"
-msgstr "slet den aktuelle mailkatalog (kun IMAP)"
+msgstr "slet den aktuelle brevbakke (kun IMAP)"
 
 #. L10N: Help screen description for OP_DELETE_SUBTHREAD
 #. #: ./OPS:68
@@ -6491,7 +6466,7 @@ msgstr "gå til begyndelsen af linje"
 #. #: ./OPS:79
 #: ../keymap_alldefs.h:241
 msgid "cycle among incoming mailboxes"
-msgstr "skift mellem indgående mailkataloger"
+msgstr "skift mellem indgående brevbakker"
 
 #. L10N: Help screen description for OP_EDITOR_COMPLETE
 #. #: ./OPS:80
@@ -6641,7 +6616,7 @@ msgstr "gå til den første post"
 #. #: ./OPS:104
 #: ../keymap_alldefs.h:316
 msgid "toggle a message's 'important' flag"
-msgstr "markér mail som vigtig/fjern markering"
+msgstr "markér mail som vigtig/fjern statusindikator"
 
 #. L10N: Help screen description for OP_FORWARD_MESSAGE
 #. #: ./OPS:105
@@ -6725,7 +6700,7 @@ msgstr "del tråden i to"
 #. #: ./OPS:118
 #: ../keymap_alldefs.h:358
 msgid "select a new mailbox from the browser"
-msgstr "vælg et nyt mailkatalog fra katalogbrowseren"
+msgstr "vælg en ny brevbakke fra katalogbrowseren"
 
 #. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
 #. #: ./OPS:119
@@ -6785,13 +6760,13 @@ msgstr "vis kun mails, der matcher et mønster"
 #. #: ./OPS:128
 #: ../keymap_alldefs.h:388
 msgid "link tagged message to the current one"
-msgstr "sammenkæd markeret mail med det aktuelle"
+msgstr "sammenkæd udvalg mail med det aktuelle"
 
 #. L10N: Help screen description for OP_MAIN_NEXT_UNREAD_MAILBOX
 #. #: ./OPS:129
 #: ../keymap_alldefs.h:391
 msgid "open next mailbox with new mail"
-msgstr "åbn næste mailkatalog med nye mails"
+msgstr "åbn næste brevbakke med nye mails"
 
 #. L10N: Help screen description for OP_MAIN_NEXT_NEW
 #. #: ./OPS:130
@@ -6899,7 +6874,7 @@ msgstr "sæt en statusindikator på en mail"
 #. #: ./OPS:147
 #: ../keymap_alldefs.h:445
 msgid "save changes to mailbox"
-msgstr "gem ændringer i mailkatalog"
+msgstr "gem ændringer i brevbakke"
 
 #. L10N: Help screen description for OP_MAIN_TAG_PATTERN
 #. #: ./OPS:148
@@ -7025,7 +7000,7 @@ msgstr "føj nye resultater af forespørgsel til de aktuelle resultater"
 #. #: ./OPS:168
 #: ../keymap_alldefs.h:508
 msgid "save changes to mailbox and quit"
-msgstr "gem ændringer i mailkatalog og afslut"
+msgstr "gem ændringer i brevbakke og afslut"
 
 #. L10N: Help screen description for OP_RECALL_MESSAGE
 #. #: ./OPS:169
@@ -7049,7 +7024,7 @@ msgstr "{intern}"
 #. #: ./OPS:172
 #: ../keymap_alldefs.h:520
 msgid "rename the current mailbox (IMAP only)"
-msgstr "omdøb det aktuelle mailkatalog (kun IMAP)"
+msgstr "omdøb den aktuelle brevbakke (kun IMAP)"
 
 #. L10N: Help screen description for OP_REPLY
 #. #: ./OPS:173
@@ -7067,7 +7042,7 @@ msgstr "brug den aktuelle mail som forlæg for en ny"
 #. #: ./OPS:175
 #: ../keymap_alldefs.h:529
 msgid "save message/attachment to a mailbox/file"
-msgstr "gem mail/maildel i et mailkatalog/fil"
+msgstr "gem mail/maildel i en brevbakke/fil"
 
 #. L10N: Help screen description for OP_SEARCH
 #. #: ./OPS:176
@@ -7139,13 +7114,13 @@ msgstr "anvend næste funktion KUN på udvalgte mails"
 #. #: ./OPS:187
 #: ../keymap_alldefs.h:565
 msgid "tag the current subthread"
-msgstr "markér den aktuelle deltråd"
+msgstr "udvælg den aktuelle deltråd"
 
 #. L10N: Help screen description for OP_TAG_THREAD
 #. #: ./OPS:188
 #: ../keymap_alldefs.h:568
 msgid "tag the current thread"
-msgstr "markér den aktuelle tråd"
+msgstr "udvælg den aktuelle tråd"
 
 #. L10N: Help screen description for OP_TOGGLE_NEW
 #. #: ./OPS:189
@@ -7157,13 +7132,13 @@ msgstr "sæt/fjern en mails \"ny\"-indikator"
 #. #: ./OPS:190
 #: ../keymap_alldefs.h:574
 msgid "toggle whether the mailbox will be rewritten"
-msgstr "slå genskrivning af mailkatalog til/fra"
+msgstr "slå genskrivning af brevbakke til/fra"
 
 #. L10N: Help screen description for OP_TOGGLE_MAILBOXES
 #. #: ./OPS:191
 #: ../keymap_alldefs.h:577
 msgid "toggle whether to browse mailboxes or all files"
-msgstr "skift mellem visning af mailkataloger eller alle filer"
+msgstr "skift mellem visning af brevbakker eller alle filer"
 
 #. L10N: Help screen description for OP_TOP_PAGE
 #. #: ./OPS:192
@@ -7217,7 +7192,7 @@ msgstr "vis tastekoden for et tastetryk"
 #. #: ./OPS:200
 #: ../keymap_alldefs.h:604
 msgid "calculate message statistics for all mailboxes"
-msgstr "beregn mailstatistik for alle mailkataloger"
+msgstr "beregn mailstatistik for alle brevbakker"
 
 #. L10N: Help screen description for OP_MAIN_SHOW_LIMIT
 #. #: ./OPS:201
@@ -7247,31 +7222,31 @@ msgstr "gå ned i et katalog"
 #. #: ./OPS.SIDEBAR:1
 #: ../keymap_alldefs.h:619
 msgid "move the highlight to the first mailbox"
-msgstr "flyt markeringslinjen til det første mailkatalog"
+msgstr "flyt markeringslinjen til den første brevbakke"
 
 #. L10N: Help screen description for OP_SIDEBAR_LAST
 #. #: ./OPS.SIDEBAR:2
 #: ../keymap_alldefs.h:622
 msgid "move the highlight to the last mailbox"
-msgstr "flyt markeringslinjen til det sidste mailkatalog"
+msgstr "flyt markeringslinjen til den sidste brevbakke"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT
 #. #: ./OPS.SIDEBAR:3
 #: ../keymap_alldefs.h:625
 msgid "move the highlight to next mailbox"
-msgstr "flyt markeringslinjen til det næste mailkatalog"
+msgstr "flyt markeringslinjen til den næste brevbakke"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT_NEW
 #. #: ./OPS.SIDEBAR:4
 #: ../keymap_alldefs.h:628
 msgid "move the highlight to next mailbox with new mail"
-msgstr "flyt markeringslinjen til det næste mailkatalog med ny post"
+msgstr "flyt markeringslinjen til den næste brevbakke med ny post"
 
 #. L10N: Help screen description for OP_SIDEBAR_OPEN
 #. #: ./OPS.SIDEBAR:5
 #: ../keymap_alldefs.h:631
 msgid "open highlighted mailbox"
-msgstr "åbner markeret mailkatalog"
+msgstr "åbner markeret brevbakke"
 
 #. L10N: Help screen description for OP_SIDEBAR_PAGE_DOWN
 #. #: ./OPS.SIDEBAR:6
@@ -7289,13 +7264,13 @@ msgstr "gå 1 side op i sidepanelet"
 #. #: ./OPS.SIDEBAR:8
 #: ../keymap_alldefs.h:640
 msgid "move the highlight to previous mailbox"
-msgstr "flyt markeringslinjen til det forrige mailkatalog"
+msgstr "flyt markeringslinjen til den forrige brevbakke"
 
 #. L10N: Help screen description for OP_SIDEBAR_PREV_NEW
 #. #: ./OPS.SIDEBAR:9
 #: ../keymap_alldefs.h:643
 msgid "move the highlight to previous mailbox with new mail"
-msgstr "flyt markeringslinjen til det forrige mailkatalog med ny post"
+msgstr "flyt markeringslinjen til den forrige brevbakke med ny post"
 
 #. L10N: Help screen description for OP_SIDEBAR_TOGGLE_VISIBLE
 #. #: ./OPS.SIDEBAR:10
