@@ -3507,7 +3507,7 @@ int mutt_getvaluebyname (const char *name, const struct mapping_t *map)
 }
 
 #ifdef DEBUG
-static void start_debug (void)
+static void start_debug (int rotate)
 {
   int i;
   BUFFER *buf, *buf2;
@@ -3516,13 +3516,23 @@ static void start_debug (void)
   buf2 = mutt_buffer_pool_get ();
 
   /* rotate the old debug logs */
-  for (i=3; i>=0; i--)
+  if (rotate)
   {
-    mutt_buffer_printf (buf, "%s/.muttdebug%d", NONULL(Homedir), i);
-    mutt_buffer_printf (buf2, "%s/.muttdebug%d", NONULL(Homedir), i+1);
-    rename (mutt_b2s (buf), mutt_b2s (buf2));
+    for (i=3; i>=0; i--)
+    {
+      mutt_buffer_printf (buf, "%s/.muttdebug%d", NONULL(Homedir), i);
+      mutt_buffer_printf (buf2, "%s/.muttdebug%d", NONULL(Homedir), i+1);
+      rename (mutt_b2s (buf), mutt_b2s (buf2));
+    }
+    debugfile = safe_fopen(mutt_b2s (buf), "w");
   }
-  if ((debugfile = safe_fopen(mutt_b2s (buf), "w")) != NULL)
+  else
+  {
+    mutt_buffer_printf (buf, "%s/.muttdebug0", NONULL(Homedir));
+    debugfile = safe_fopen(mutt_b2s (buf), "a");
+  }
+
+  if (debugfile != NULL)
   {
     setbuf (debugfile, NULL); /* don't buffer the debugging output! */
     dprint(1,(debugfile,"Mutt/%s (%s) debugging at level %d\n",
@@ -3666,7 +3676,12 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 #ifdef DEBUG
   /* Start up debugging mode if requested */
   if (debuglevel > 0)
-    start_debug ();
+    start_debug (1);
+  if (debuglevel < 0)
+  {
+    debuglevel = -debuglevel;
+    start_debug (0);
+  }
 #endif
 
 

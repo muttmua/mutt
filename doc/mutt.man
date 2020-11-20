@@ -118,8 +118,10 @@ Specify a carbon copy (CC) address.
 .BI \-d " level"
 If Mutt was compiled with \fB+DEBUG\fP log debugging output to
 \fI~/.muttdebug0\fP.
-\fILevel\fP can range from 1-5 and effects verbosity.
-A value of 2 is recommended.
+\fILevel\fP can range from -5 to 5 and affects verbosity. A value of
+zero disables debugging. A value less than zero disables automatic log
+file rotation; the log level is then its absolute value. A value of 2
+(-2) is recommended for most diagnosis.
 .TP
 .B \-D
 Print the value of all configuration options to stdout.
