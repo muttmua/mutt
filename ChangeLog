@@ -1,3 +1,46 @@
+2020-11-20 09:20:01 -0800  Kevin McCarthy  <kevin@8t8.us> (e4fd9247)
+
+        * Update UPDATING file for 2.0.2.
+
+M	UPDATING
+
+2020-11-16 10:20:21 -0800  Kevin McCarthy  <kevin@8t8.us> (04b06aaa)
+
+        * Ensure IMAP connection is closed after a connection error.
+        
+        During connection, if the server provided an illegal initial response,
+        Mutt "bailed", but did not actually close the connection.  The calling
+        code unfortunately relied on the connection status to decide to
+        continue with authentication, instead of checking the "bail" return
+        value.
+        
+        This could result in authentication credentials being sent over an
+        unencrypted connection, without $ssl_force_tls being consulted.
+        
+        Fix this by strictly closing the connection on any invalid response
+        during connection.  The fix is intentionally small, to ease
+        backporting.  A better fix would include removing the 'err_close_conn'
+        label, and perhaps adding return value checking in the caller (though
+        this change obviates the need for that).
+        
+        This addresses CVE-2020-28896.  Thanks to Gabriel Salles-Loustau for
+        reporting the problem, and providing test cases to reproduce.
+
+M	imap/imap.c
+
+2020-11-19 15:06:51 -0800  Keld Simonsen  <keld@keldix.com> (d4c97068)
+
+        * Updated Danish translation.
+
+M	po/da.po
+
+2020-11-14 13:16:03 -0800  Kevin McCarthy  <kevin@8t8.us> (42e08237)
+
+        * automatic post-release commit for mutt-2.0.1
+
+M	ChangeLog
+M	VERSION
+
 2020-11-14 13:10:45 -0800  Kevin McCarthy  <kevin@8t8.us> (78fe7d4e)
 
         * Update UPDATING file for 2.0.1.
