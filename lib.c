@@ -798,6 +798,33 @@ void mutt_debug (FILE *fp, const char *fmt, ...)
   va_end (ap);
 }
 
+void mutt_debug_f (const char *file, const int line, const char *function, const char *fmt, ...)
+{
+  va_list ap;
+  time_t now = time (NULL);
+  static char buf[23] = "";
+  static time_t last = 0;
+
+  if (now > last)
+  {
+    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", localtime (&now));
+    last = now;
+  }
+
+  if (function)
+    fprintf (debugfile, "[%s %s@%s:%d] ", buf, function, file, line);
+  else
+    fprintf (debugfile, "[%s %s:%d] ", buf, file, line);
+
+  va_start (ap, fmt);
+  vfprintf (debugfile, fmt, ap);
+  va_end (ap);
+
+  /* because we always print a line header, in dprintf() we auto-newline */
+  if (strchr(fmt, '\n') == NULL)
+    fputc('\n', debugfile);
+}
+
 int mutt_atos (const char *str, short *dst)
 {
   int rc;
