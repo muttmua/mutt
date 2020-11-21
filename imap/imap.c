@@ -497,7 +497,7 @@ int imap_open_connection (IMAP_DATA* idata)
         rc = MUTT_YES;
       else if ((rc = query_quadoption (OPT_SSLSTARTTLS,
                                        _("Secure connection with TLS?"))) == -1)
-	goto err_close_conn;
+	goto bail;
       if (rc == MUTT_YES)
       {
 	if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
@@ -508,7 +508,7 @@ int imap_open_connection (IMAP_DATA* idata)
 	  {
 	    mutt_error (_("Could not negotiate TLS connection"));
 	    mutt_sleep (1);
-	    goto err_close_conn;
+	    goto bail;
 	  }
 	  else
 	  {
@@ -524,7 +524,7 @@ int imap_open_connection (IMAP_DATA* idata)
     {
       mutt_error _("Encrypted connection unavailable");
       mutt_sleep (1);
-      goto err_close_conn;
+      goto bail;
     }
 #endif
   }
@@ -542,7 +542,7 @@ int imap_open_connection (IMAP_DATA* idata)
     {
       mutt_error _("Encrypted connection unavailable");
       mutt_sleep (1);
-      goto err_close_conn;
+      goto bail;
     }
 #endif
 
@@ -559,9 +559,6 @@ int imap_open_connection (IMAP_DATA* idata)
 
   return 0;
 
-#if defined(USE_SSL)
-err_close_conn:
-#endif
 bail:
   imap_close_connection (idata);
   FREE (&idata->capstr);
