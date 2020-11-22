@@ -145,6 +145,9 @@ Display a short option summary and exit.
 Specify a \fIdraft\fP file which contains header and body to use to send a
 message.
 If \fIdraft\fP is \*(lq\fB\-\fP\*(rq, then data is read from stdin.
+The draft file is expected to contain just an RFC822 email \(em headers and a body.
+Although it is not an mbox file, if an mbox "\fBFrom\~\fP" line is present,
+it will be silently discarded.
 .TP
 .BI \-i " include"
 Specify an \fIinclude\fP file to be inserted into the body of a message.
@@ -323,6 +326,9 @@ GNU General Public License for more details.
 Mutt Home Page: http://www.mutt.org/
 .PP
 The Mutt manual
+.PP
+RFC5322 \(em Internet Message Format: https://tools.ietf.org/rfcmarkup/5322
+(obsoletes RFC2822 and RFC822)
 .SH AUTHOR
 .PP
 Michael Elkins, and others.
