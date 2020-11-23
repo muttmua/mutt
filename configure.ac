@@ -26,10 +26,10 @@ AC_MSG_RESULT($mutt_cv_prefix)
 
 AC_PROG_CC
 AC_PROG_CC_C99
-AC_SEARCH_LIBS([strerror],[cposix])
-if test "x$U" != "x"; then
-  AC_MSG_ERROR(Compiler not ANSI compliant)
+if test "x$ac_cv_prog_cc_c99" = "xno"; then
+  AC_MSG_ERROR(A C99 compliant compiler is required)
 fi
+AC_SEARCH_LIBS([strerror],[cposix])
 AC_PROG_CPP
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
