@@ -1082,7 +1082,12 @@ static ADDRESS *set_reverse_name (ENVELOPE *env)
      * may be set vi a reply- or send-hook.
      */
     if (!option (OPTREVREAL))
+    {
       FREE (&tmp->personal);
+#ifdef EXACT_ADDRESS
+      FREE (&tmp->val);
+#endif
+    }
   }
   return (tmp);
 }
@@ -2081,7 +2086,12 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
      that $realname can be set in a send-hook */
   if (sctx->msg->env->from && !sctx->msg->env->from->personal
       && !(sctx->flags & (SENDRESEND|SENDPOSTPONED)))
+  {
     sctx->msg->env->from->personal = safe_strdup (Realname);
+#ifdef EXACT_ADDRESS
+    FREE (&sctx->msg->env->from->val);
+#endif
+  }
 
   if (!((WithCrypto & APPLICATION_PGP) && (sctx->flags & SENDKEY)))
     safe_fclose (&tempfp);

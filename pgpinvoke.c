@@ -292,6 +292,9 @@ void pgp_invoke_getkeys (ADDRESS *addr)
   int devnull;
 
   char *personal;
+#ifdef EXACT_ADDRESS
+  char *exact_addr_val;
+#endif
 
   struct pgp_command_context cctx;
 
@@ -302,6 +305,10 @@ void pgp_invoke_getkeys (ADDRESS *addr)
 
   personal = addr->personal;
   addr->personal = NULL;
+#ifdef EXACT_ADDRESS
+  exact_addr_val = addr->val;
+  addr->val = NULL;
+#endif
 
   *tmp = '\0';
   mutt_addrlist_to_local (addr);
@@ -309,6 +316,9 @@ void pgp_invoke_getkeys (ADDRESS *addr)
   mutt_buffer_quote_filename (buff, tmp);
 
   addr->personal = personal;
+#ifdef EXACT_ADDRESS
+  addr->val = exact_addr_val;
+#endif
 
   cctx.ids = mutt_b2s (buff);
 

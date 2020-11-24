@@ -65,7 +65,12 @@ static ADDRESS *result_to_addr (QUERY *r)
     return NULL;
 
   if (!tmp->next && !tmp->personal)
+  {
     tmp->personal = safe_strdup (r->name);
+#ifdef EXACT_ADDRESS
+    FREE (&tmp->val);
+#endif
+  }
 
   mutt_addrlist_to_intl (tmp, NULL);
   return tmp;

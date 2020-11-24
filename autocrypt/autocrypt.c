@@ -143,7 +143,12 @@ int mutt_autocrypt_account_init (int prompt)
   {
     addr = rfc822_cpy_adr_real (From);
     if (!addr->personal && Realname)
+    {
       addr->personal = safe_strdup (Realname);
+#ifdef EXACT_ADDRESS
+      FREE (&addr->val);
+#endif
+    }
   }
 
   do
