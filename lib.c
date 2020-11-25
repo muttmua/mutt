@@ -780,6 +780,8 @@ mutt_strsysexit(int e)
   return sysexits_h[i].str;
 }
 
+#ifdef DEBUG
+
 void mutt_debug (FILE *fp, const char *fmt, ...)
 {
   va_list ap;
@@ -824,6 +826,8 @@ void mutt_debug_f (const char *file, const int line, const char *function, const
   if (strchr(fmt, '\n') == NULL)
     fputc('\n', debugfile);
 }
+
+#endif /* DEBUG */
 
 int mutt_atos (const char *str, short *dst)
 {
