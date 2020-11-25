@@ -330,7 +330,10 @@ retry_name:
     mutt_free_alias (&new);
     goto cleanup;
   }
-  new->addr->personal = safe_strdup (mutt_b2s (buf));
+  mutt_str_replace (&new->addr->personal, mutt_b2s (buf));
+#ifdef EXACT_ADDRESS
+  FREE (&new->addr->val);
+#endif
 
   mutt_buffer_clear (buf);
   rfc822_write_address (buf->data, buf->dsize, new->addr, 1);

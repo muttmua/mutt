@@ -2916,7 +2916,12 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
    * upon message criteria.
    */
   if (! from->personal)
+  {
     from->personal = safe_strdup(Realname);
+#ifdef EXACT_ADDRESS
+    FREE (&from->val);
+#endif
+  }
 
   if (fqdn)
     rfc822_qualify (from, fqdn);
