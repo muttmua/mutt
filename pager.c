@@ -2461,6 +2461,44 @@ search_next:
 	}
 	break;
 
+      case OP_PAGER_SKIP_HEADERS:
+	if (rd.has_types)
+	{
+	  int dretval = 0;
+	  int new_topline = rd.topline;
+
+          if (!ISHEADER (rd.lineInfo[new_topline].type))
+          {
+            /* L10N:
+               Displayed if <skip-headers> is invoked in the pager, but we are
+               already past the headers
+            */
+	    mutt_error _("Already skipped past headers.");
+	    break;
+	  }
+
+	  while ((new_topline < rd.lastLine ||
+		  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+			 new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+                         &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+		 && ISHEADER (rd.lineInfo[new_topline].type))
+	    new_topline++;
+
+	  if (dretval < 0)
+	  {
+            /* L10N:
+               Displayed if <skip-headers> is invoked in the pager, but there is
+               no text past the headers.
+               (I don't think this is actually possible in Mutt's code, but
+               display some kind of message in case it somehow occurs.)
+            */
+	    mutt_error _("No text past headers.");
+	    break;
+	  }
+	  rd.topline = new_topline;
+	}
+	break;
+
       case OP_PAGER_BOTTOM: /* move to the end of the file */
 	if (rd.lineInfo[rd.curline].offset < rd.sb.st_size - 1)
 	{

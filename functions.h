@@ -257,6 +257,7 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "read-subthread",	OP_MAIN_READ_SUBTHREAD,		"\033r" },
   { "resend-message",	OP_RESEND,			"\033e" },
   { "save-message",	OP_SAVE,			"s" },
+  { "skip-headers",	OP_PAGER_SKIP_HEADERS,		"H" },
   { "skip-quoted",	OP_PAGER_SKIP_QUOTED,		"S" },
   { "decode-save",	OP_DECODE_SAVE,			"\033s" },
   { "tag-message",	OP_TAG,				"t" },
