@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: Mutt 1.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-07 11:05-0800\n"
-"PO-Revision-Date: 2020-08-13 18:23+0200\n"
+"PO-Revision-Date: 2020-11-30 00:06+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -5435,7 +5435,7 @@ msgstr "Attachement sauvé."
 #: recvattach.c:617
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
-msgstr ""
+msgstr "Impossible de sauver les attachements dans %s.  Utilisation de cwd"
 
 # , c-format
 #: recvattach.c:724
