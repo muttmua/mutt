@@ -94,7 +94,7 @@ void mutt_buffer_increase_size (BUFFER *buf, size_t new_size)
 
   if (buf->dsize < new_size)
   {
-    offset = buf->dptr - buf->data;
+    offset = buf->data ? (buf->dptr - buf->data) : 0;
     buf->dsize = new_size;
     safe_realloc (&buf->data, buf->dsize);
     buf->dptr = buf->data + offset;
@@ -179,7 +179,8 @@ int mutt_buffer_add_printf (BUFFER* buf, const char* fmt, ...)
  * the buffer is always null-terminated */
 void mutt_buffer_addstr_n (BUFFER* buf, const char* s, size_t len)
 {
-  if (buf->dptr + len + 1 > buf->data + buf->dsize)
+  if (!buf->data ||
+      (buf->dptr + len + 1 > buf->data + buf->dsize))
     mutt_buffer_increase_size (buf, buf->dsize + (len < 128 ? 128 : len + 1));
   memcpy (buf->dptr, s, len);
   buf->dptr += len;
