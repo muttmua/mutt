@@ -3749,13 +3749,15 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 
   if ((p = getenv ("REPLYTO")) != NULL)
   {
-    BUFFER token;
+    BUFFER *token;
     union pointer_long_t udata = {.l=0};
 
     mutt_buffer_printf (buffer, "Reply-To: %s", p);
-    mutt_buffer_init (&token);
-    parse_my_hdr (&token, buffer, udata, &err);
-    FREE (&token.data);
+    buffer->dptr = buffer->data;
+
+    token = mutt_buffer_pool_get ();
+    parse_my_hdr (token, buffer, udata, &err);
+    mutt_buffer_pool_release (&token);
   }
 
   if ((p = getenv ("EMAIL")) != NULL)
