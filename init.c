@@ -799,9 +799,8 @@ static int parse_unalternates (BUFFER *buf, BUFFER *s, union pointer_long_t udat
 static int parse_replace_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
   REPLACE_LIST **list = (REPLACE_LIST **)udata.p;
-  BUFFER templ;
-
-  memset(&templ, 0, sizeof(templ));
+  BUFFER *templ = NULL;
+  int rc = -1;
 
   /* First token is a regexp. */
   if (!MoreArgs(s))
@@ -817,16 +816,17 @@ static int parse_replace_list (BUFFER *buf, BUFFER *s, union pointer_long_t udat
     strfcpy(err->data, _("not enough arguments"), err->dsize);
     return -1;
   }
-  mutt_extract_token(&templ, s, 0);
 
-  if (add_to_replace_list(list, buf->data, templ.data, err) != 0)
-  {
-    FREE(&templ.data);
-    return -1;
-  }
-  FREE(&templ.data);
+  templ = mutt_buffer_pool_get ();
+  mutt_extract_token(templ, s, 0);
+  if (add_to_replace_list(list, buf->data, mutt_b2s (templ), err) != 0)
+    goto cleanup;
 
-  return 0;
+  rc = 0;
+
+cleanup:
+  mutt_buffer_pool_release (&templ);
+  return rc;
 }
 
 static int parse_unreplace_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
@@ -889,10 +889,7 @@ static int parse_unsubjectrx_list (BUFFER *buf, BUFFER *s, union pointer_long_t 
 
 static int parse_spam_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  BUFFER templ;
   long data = udata.l;
-
-  mutt_buffer_init (&templ);
 
   /* Insist on at least one parameter */
   if (!MoreArgs(s))
@@ -913,15 +910,18 @@ static int parse_spam_list (BUFFER *buf, BUFFER *s, union pointer_long_t udata, 
     /* If there's a second parameter, it's a template for the spam tag. */
     if (MoreArgs(s))
     {
-      mutt_extract_token (&templ, s, 0);
+      BUFFER *templ = NULL;
+
+      templ = mutt_buffer_pool_get ();
+      mutt_extract_token (templ, s, 0);
 
       /* Add to the spam list. */
-      if (add_to_replace_list (&SpamList, buf->data, templ.data, err) != 0)
+      if (add_to_replace_list (&SpamList, buf->data, mutt_b2s (templ), err) != 0)
       {
-        FREE(&templ.data);
+        mutt_buffer_pool_release (&templ);
         return -1;
       }
-      FREE(&templ.data);
+      mutt_buffer_pool_release (&templ);
     }
 
     /* If not, try to remove from the nospam list. */

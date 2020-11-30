@@ -934,6 +934,7 @@ static char *parse_keymap (int *menu, BUFFER *s, int maxmenus, int *nummenus, BU
   char *p, *q;
 
   mutt_buffer_init (&buf);
+  mutt_buffer_increase_size (&buf, STRING);
 
   /* menu name */
   mutt_extract_token (&buf, s, 0);
