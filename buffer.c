@@ -67,6 +67,15 @@ void mutt_buffer_clear (BUFFER *b)
     *(b->dptr) = '\0';
 }
 
+/* This is used for cases where the buffer is read from.
+ * A value is placed in the buffer, and then b->dptr is set back to the
+ * beginning as a read marker instead of write marker.
+ */
+void mutt_buffer_rewind (BUFFER *b)
+{
+  b->dptr = b->data;
+}
+
 /* Creates and initializes a BUFFER by copying the seed string. */
 BUFFER *mutt_buffer_from (char *seed)
 {

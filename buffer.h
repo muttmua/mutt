@@ -36,6 +36,7 @@ BUFFER *mutt_buffer_init (BUFFER *);
 void mutt_buffer_free (BUFFER **);
 BUFFER *mutt_buffer_from (char *);
 void mutt_buffer_clear (BUFFER *);
+void mutt_buffer_rewind (BUFFER *);
 
 size_t mutt_buffer_len (BUFFER *);
 void mutt_buffer_increase_size (BUFFER *, size_t);

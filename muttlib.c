@@ -1555,7 +1555,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
       srcbuf = mutt_buffer_from (srccopy);
       /* note: we are resetting dptr and *reading* from the buffer, so we don't
        * want to use mutt_buffer_clear(). */
-      srcbuf->dptr = srcbuf->data;
+      mutt_buffer_rewind (srcbuf);
       word = mutt_buffer_new ();
       command = mutt_buffer_new ();
 

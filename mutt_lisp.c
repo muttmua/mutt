@@ -215,7 +215,7 @@ static int read_eval_sexp (BUFFER *sexp, BUFFER *line)
   if (rc <= 0)
     goto cleanup;
 
-  temp_sexp->dptr = temp_sexp->data;
+  mutt_buffer_rewind (temp_sexp);
 
   /* We send evaluation back through the muttrc parser.
    * Variables/expressions will be handled there, while list evaluation
@@ -245,7 +245,7 @@ static int read_eval_sexp (BUFFER *sexp, BUFFER *line)
     mutt_buffer_strcpy (extra, temp_sexp->dptr);
     mutt_buffer_addstr (extra, line->dptr);
     mutt_buffer_strcpy (line, mutt_b2s (extra));
-    line->dptr = line->data;
+    mutt_buffer_rewind (line);
     mutt_buffer_pool_release (&extra);
   }
 

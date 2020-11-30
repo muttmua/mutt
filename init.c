@@ -294,7 +294,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
         mutt_buffer_fix_dptr (&expn);
         mutt_buffer_addstr (&expn, tok->dptr);
         mutt_buffer_strcpy (tok, expn.data);
-	tok->dptr = tok->data;
+        mutt_buffer_rewind (tok);
       }
 
       FREE (&expn.data);
@@ -3014,7 +3014,7 @@ int mutt_parse_rc_buffer (BUFFER *line, BUFFER *token, BUFFER *err)
   mutt_buffer_clear (err);
 
   /* Read from the beginning of line->data */
-  line->dptr = line->data;
+  mutt_buffer_rewind (line);
 
   SKIPWS (line->dptr);
   while (*line->dptr)
@@ -3759,7 +3759,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     union pointer_long_t udata = {.l=0};
 
     mutt_buffer_printf (buffer, "Reply-To: %s", p);
-    buffer->dptr = buffer->data;
+    mutt_buffer_rewind (buffer);
 
     token = mutt_buffer_pool_get ();
     parse_my_hdr (token, buffer, udata, &err);
