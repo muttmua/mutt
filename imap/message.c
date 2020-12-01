@@ -1308,7 +1308,7 @@ fail:
 int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
 {
   IMAP_DATA* idata;
-  BUFFER cmd, sync_cmd;
+  BUFFER *sync_cmd = NULL, *cmd = NULL;
   char mbox[LONG_STRING];
   char mmbox[LONG_STRING];
   char prompt[LONG_STRING];
@@ -1331,13 +1331,15 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
   {
     dprint (3, (debugfile, "imap_copy_messages: %s not same server as %s\n",
                 dest, ctx->path));
-    return 1;
+    rc = 1;
+    goto out;
   }
 
   if (h && h->attach_del)
   {
     dprint (3, (debugfile, "imap_copy_messages: Message contains attachments to be deleted\n"));
-    return 1;
+    rc = 1;
+    goto out;
   }
 
   imap_fix_path (idata, mx.mbox, mbox, sizeof (mbox));
@@ -1345,11 +1347,14 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
     strfcpy (mbox, "INBOX", sizeof (mbox));
   imap_munge_mbox_name (idata, mmbox, sizeof (mmbox), mbox);
 
+  sync_cmd = mutt_buffer_pool_get ();
+  cmd = mutt_buffer_pool_get ();
+
   /* loop in case of TRYCREATE */
   do
   {
-    mutt_buffer_init (&sync_cmd);
-    mutt_buffer_init (&cmd);
+    mutt_buffer_clear (sync_cmd);
+    mutt_buffer_clear (cmd);
 
     /* Null HEADER* means copy tagged messages */
     if (!h)
@@ -1362,13 +1367,14 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
         if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->attach_del)
         {
           dprint (3, (debugfile, "imap_copy_messages: Message contains attachments to be deleted\n"));
-          return 1;
+          rc = 1;
+          goto out;
         }
 
         if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->active &&
             ctx->hdrs[n]->changed)
         {
-          rc = imap_sync_message_for_copy (idata, ctx->hdrs[n], &sync_cmd, &err_continue);
+          rc = imap_sync_message_for_copy (idata, ctx->hdrs[n], sync_cmd, &err_continue);
           if (rc < 0)
           {
             dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
@@ -1395,18 +1401,18 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
     else
     {
       mutt_message (_("Copying message %d to %s..."), h->index+1, mbox);
-      mutt_buffer_add_printf (&cmd, "UID COPY %u %s", HEADER_DATA (h)->uid, mmbox);
+      mutt_buffer_printf (cmd, "UID COPY %u %s", HEADER_DATA (h)->uid, mmbox);
 
       if (h->active && h->changed)
       {
-        rc = imap_sync_message_for_copy (idata, h, &sync_cmd, &err_continue);
+        rc = imap_sync_message_for_copy (idata, h, sync_cmd, &err_continue);
         if (rc < 0)
         {
           dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
           goto out;
         }
       }
-      if ((rc = imap_exec (idata, cmd.data, IMAP_CMD_QUEUE)) < 0)
+      if ((rc = imap_exec (idata, mutt_b2s (cmd), IMAP_CMD_QUEUE)) < 0)
       {
         dprint (1, (debugfile, "could not queue copy\n"));
         goto out;
@@ -1471,10 +1477,8 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
   rc = 0;
 
 out:
-  if (cmd.data)
-    FREE (&cmd.data);
-  if (sync_cmd.data)
-    FREE (&sync_cmd.data);
+  mutt_buffer_pool_release (&sync_cmd);
+  mutt_buffer_pool_release (&cmd);
   FREE (&mx.mbox);
 
   return rc < 0 ? -1 : rc;
