@@ -2249,7 +2249,7 @@ parenthesis-enclosed expression will be evaluated as MuttLisp.  See the
 </para>
 
 <example id="ex-rc-muttlisp">
-<title>Using MuttLisp expresions</title>
+<title>Using MuttLisp expressions</title>
 <screen>
 set signature = \
   (if (equal $my_name "Kevin McCarthy") ~/kevin.sig ~/other.sig)
@@ -7547,7 +7547,7 @@ echo (not (equal one two))
     <sect3 id="muttlisp-and">
       <title>and</title>
       <para>
-        Returns the first argument that evalutes to the empty string.
+        Returns the first argument that evaluates to the empty string.
         Otherwise returns the last argument, or "t" if there are no arguments.
       </para>
 <screen>
