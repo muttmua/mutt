@@ -2046,11 +2046,6 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     else
       OldHdr = NULL;
 
-    ch = km_dokey (MENU_PAGER);
-    if (ch >= 0)
-      mutt_clear_error ();
-    mutt_curs_set (1);
-
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
     if (SigWinch)
     {
@@ -2084,6 +2079,12 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       continue;
     }
 #endif
+
+    ch = km_dokey (MENU_PAGER);
+    if (ch >= 0)
+      mutt_clear_error ();
+    mutt_curs_set (1);
+
     if (ch < 0)
     {
       ch = 0;
