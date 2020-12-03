@@ -1702,34 +1702,47 @@ int mutt_index_menu (void)
       case OP_SAVE:
       case OP_DECODE_COPY:
       case OP_DECODE_SAVE:
+      {
+        int rc;
+
 	CHECK_MSGCOUNT;
         CHECK_VISIBLE;
-        if (mutt_save_message (tag ? NULL : CURHDR,
-			       (op == OP_DECRYPT_SAVE) ||
-			       (op == OP_SAVE) || (op == OP_DECODE_SAVE),
-			       (op == OP_DECODE_SAVE) || (op == OP_DECODE_COPY),
-			       (op == OP_DECRYPT_SAVE) || (op == OP_DECRYPT_COPY) ||
-			       0) == 0 &&
-            (op == OP_SAVE || op == OP_DECODE_SAVE || op == OP_DECRYPT_SAVE)
-          )
-	{
-          menu->redraw |= REDRAW_STATUS;
+        rc = mutt_save_message (tag ? NULL : CURHDR,
+                                (op == OP_DECRYPT_SAVE) ||
+                                (op == OP_SAVE) || (op == OP_DECODE_SAVE),
+                                (op == OP_DECODE_SAVE) || (op == OP_DECODE_COPY),
+                                (op == OP_DECRYPT_SAVE) || (op == OP_DECRYPT_COPY) ||
+                                0);
+        /* These update status and delete flags, so require a redraw. */
+        if (op == OP_SAVE || op == OP_DECODE_SAVE || op == OP_DECRYPT_SAVE)
+        {
+          /* tagged operation could abort in the middle.  need to make sure
+           * affected messages are still redrawn */
 	  if (tag)
+          {
+            menu->redraw |= REDRAW_STATUS;
 	    menu->redraw |= REDRAW_INDEX;
-	  else if (option (OPTRESOLVE))
-	  {
-	    if ((menu->current = ci_next_undeleted (menu->current)) == -1)
-	    {
-	      menu->current = menu->oldcurrent;
-	      menu->redraw |= REDRAW_CURRENT;
-	    }
-	    else
-	      menu->redraw |= REDRAW_MOTION_RESYNCH;
-	  }
-	  else
-	    menu->redraw |= REDRAW_CURRENT;
-	}
-	break;
+          }
+
+          if (rc == 0 && !tag)
+          {
+            menu->redraw |= REDRAW_STATUS;
+            if (option (OPTRESOLVE))
+            {
+              if ((menu->current = ci_next_undeleted (menu->current)) == -1)
+              {
+                menu->current = menu->oldcurrent;
+                menu->redraw |= REDRAW_CURRENT;
+              }
+              else
+                menu->redraw |= REDRAW_MOTION_RESYNCH;
+            }
+            else
+              menu->redraw |= REDRAW_CURRENT;
+          }
+        }
+ 	break;
+      }
 
       case OP_MAIN_NEXT_NEW:
       case OP_MAIN_NEXT_UNREAD:
