@@ -976,7 +976,7 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
         break;
       /* fatal error, abort */
       case -1:
-        goto cleanup;
+        goto errcleanup;
     }
   }
 #endif
@@ -994,7 +994,7 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
       if (_mutt_save_message(h, &ctx, delete, decode, decrypt) != 0)
       {
         mx_close_mailbox (&ctx, NULL);
-        goto cleanup;
+        goto errcleanup;
       }
     }
     else
@@ -1020,7 +1020,7 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
                                  &ctx, delete, decode, decrypt) != 0)
           {
             mx_close_mailbox (&ctx, NULL);
-            goto cleanup;
+            goto errcleanup;
           }
 	}
       }
@@ -1035,6 +1035,37 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 
     mutt_clear_error ();
     rc = 0;
+  }
+
+errcleanup:
+  if (rc != 0)
+  {
+    if (delete)
+    {
+      if (h)
+        /* L10N:
+           Message when an index/pager save operation fails for some reason.
+        */
+        mutt_error _("Error saving message");
+      else
+        /* L10N:
+           Message when an index tagged save operation fails for some reason.
+        */
+        mutt_error _("Error saving tagged messages");
+    }
+    else
+    {
+      if (h)
+        /* L10N:
+           Message when an index/pager copy operation fails for some reason.
+        */
+        mutt_error _("Error copying message");
+      else
+        /* L10N:
+           Message when an index tagged copy operation fails for some reason.
+        */
+        mutt_error _("Error copying tagged messages");
+    }
   }
 
 cleanup:
