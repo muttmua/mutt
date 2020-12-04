@@ -9,6 +9,15 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.0.3 (2020-12-04):
+
+  ! Bug fix release.
+  ! Some bugs with exact-address handling were fixed.  The "personal"
+    field was not properly updated in some case.  The fix may result in
+    behavior changes for those who have enabled this mode; most notably in
+    alias creation, the query menu, $from + $realname setting, and
+    unset $reverse_realname handling.
+
 2.0.2 (2020-11-20):
 
   ! Bug fix release.

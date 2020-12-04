@@ -1,3 +1,133 @@
+2020-12-04 10:48:04 -0800  Kevin McCarthy  <kevin@8t8.us> (c6f114f8)
+
+        * Update UPDATING file for 2.0.3 release.
+
+M	UPDATING
+
+2020-12-02 13:03:06 -0800  Kevin McCarthy  <kevin@8t8.us> (3ba8dac0)
+
+        * Fix pager dropped input on SigWinch flag handling.
+        
+        The code to process the SigWinch flag ocurred after, and would drop an
+        input character when the flag was set outside of, km_dokey().  This
+        could happen, for instance, when a pipe operation was invoked.
+        
+        Thanks to Vincent Lefèvre for uncovering the problem.
+
+M	pager.c
+
+2020-11-30 15:53:49 -0800  Kevin McCarthy  <kevin@8t8.us> (f420be68)
+
+        * Ensure mutt_extract_token() never returns a NULL dest->data.
+        
+        Commit e5a32a61 removed a 'mutt_buffer_addch (dest, 0)' at the end of
+        the function.  Most callers had been converted to use the buffer pool,
+        and the call was strange since buffers self-terminate.
+        
+        However, this line covered up logic errors in some of the callers,
+        which assumed the buffer->data could not be NULL afterwards.
+        
+        I will try to fix up callers with the logic errors in master.  This is
+        to fix the problem in stable, and also ensure future callers don't
+        make the same mistake.
+
+M	init.c
+
+2020-11-29 13:44:30 -0800  Kevin McCarthy  <kevin@8t8.us> (cfdcfa7f)
+
+        * Fix REPLY_TO environment variable handling.
+        
+        Commit 4e153adf changed this code to reuse the function buffer
+        variable, but forgot to rewind the buffer for parsing in
+        parse_my_hdr().
+        
+        Additionally commit e5a32a61 removed an extra "null termination"
+        mutt_buffer_addch() at the end of mutt_extract_token().  This caused a
+        NULL value to be passed to the strpbrk() in parse_my_hdr(), causing a
+        segv.  Change to use a buffer pool token parameter instead.
+        
+        I actually think, like with the previous IMAP mailbox handling, this
+        method of adding a my_hdr is dangerous.  I'll look into refactoring it
+        in master instead.
+        
+        Thanks to Paul Nevai for reporting the problem and tracking down the
+        backtrace.
+
+M	init.c
+
+2020-11-29 10:48:22 -0800  Kevin McCarthy  <kevin@8t8.us> (dbdf481c)
+
+        * Fix undefined NULL pointer arithmetic.
+        
+        clang 10 is giving a warning about arithmetic with a NULL pointer.  To
+        prevent any problems, add checks in the BUFFER increase-size handling
+        functions.
+
+M	buffer.c
+
+2020-11-25 13:46:47 -0800  Kevin McCarthy  <kevin@8t8.us> (9109eff8)
+
+        * Fix exact-address recording of last value.
+        
+        If the last address was also terminated by a comma (e.g: foo@local,
+        bar@local,) the exact-address was incorrectly overwriting the recorded
+        value.
+
+M	rfc822.c
+
+2020-11-24 12:54:00 -0800  Kevin McCarthy  <kevin@8t8.us> (d73a83f7)
+
+        * Fix exact-address handling when addr->personal is set.
+        
+        The exact-address compile-time option takes an exact copy of an
+        address when it is parsed, and prints that out when outputting the
+        address.  The idea is to preserve older "user@host (Name)" syntax.
+        
+        Unfortunately, when code tries to "update" the personal/name field, it
+        needs to clear the exact-address copy for it to have any effect.
+        
+        An object-oriented design encapsulating the setting would help prevent
+        this problem.  It might be desirable to create a C function instead,
+        but callers would have to remember it, and such a thing isn't common
+        in the Mutt codebase.
+        
+        Another patch (I'm still debating applying) changes the address parser
+        to discard the exact-address copy when it exactly matches the
+        mailbox.  However, that still won't fix every case (and it makes the
+        parser even more difficult to follow.)
+        
+        So this commit (to stable) takes the straightforward approach.
+        
+        It fixes bugs in:
+        
+        * Alias creation.  The "personal name" prompt was ignored.
+        
+        * Autocrypt initialization from address setting with $realname.
+        
+        * $pgp_getkeys_command handling.
+        
+        * Query menu results.
+        
+        * "unset $reverse_realname" handling.
+        
+        * $from handling of $realname.
+        
+        * Bounce Resent-From handling of $realname.
+
+M	alias.c
+M	autocrypt/autocrypt.c
+M	pgpinvoke.c
+M	query.c
+M	send.c
+M	sendlib.c
+
+2020-11-20 09:23:29 -0800  Kevin McCarthy  <kevin@8t8.us> (d9268908)
+
+        * automatic post-release commit for mutt-2.0.2
+
+M	ChangeLog
+M	VERSION
+
 2020-11-20 09:20:01 -0800  Kevin McCarthy  <kevin@8t8.us> (e4fd9247)
 
         * Update UPDATING file for 2.0.2.
