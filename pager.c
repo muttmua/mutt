@@ -2708,6 +2708,11 @@ search_next:
 	break;
       }
 
+      case OP_LIST_ACTION:
+        if (IsHeader(extra))
+          mutt_list_menu (Context, extra->hdr);
+        break;
+
       case OP_RECALL_MESSAGE:
 	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;

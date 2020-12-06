@@ -521,7 +521,12 @@ dump_envelope(ENVELOPE * e, unsigned char *d, int *off, int convert)
   d = dump_address(e->reply_to, d, off, convert);
   d = dump_address(e->mail_followup_to, d, off, convert);
 
+  d = dump_char(e->list_archive, d, off, convert);
+  d = dump_char(e->list_help, d, off, convert);
+  d = dump_char(e->list_owner, d, off, convert);
   d = dump_char(e->list_post, d, off, convert);
+  d = dump_char(e->list_subscribe, d, off, convert);
+  d = dump_char(e->list_unsubscribe, d, off, convert);
   d = dump_char(e->subject, d, off, convert);
 
   if (e->real_subj)
@@ -557,7 +562,13 @@ restore_envelope(ENVELOPE * e, const unsigned char *d, int *off, int convert)
   restore_address(&e->reply_to, d, off, convert);
   restore_address(&e->mail_followup_to, d, off, convert);
 
+  restore_char(&e->list_archive, d, off, convert);
+  restore_char(&e->list_help, d, off, convert);
+  restore_char(&e->list_owner, d, off, convert);
   restore_char(&e->list_post, d, off, convert);
+  restore_char(&e->list_subscribe, d, off, convert);
+  restore_char(&e->list_unsubscribe, d, off, convert);
+
   if (option (OPTAUTOSUBSCRIBE))
     mutt_auto_subscribe (e->list_post);
 

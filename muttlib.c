@@ -847,7 +847,13 @@ void mutt_free_envelope (ENVELOPE **p)
   rfc822_free_address (&(*p)->reply_to);
   rfc822_free_address (&(*p)->mail_followup_to);
 
+  FREE (&(*p)->list_archive);
+  FREE (&(*p)->list_help);
+  FREE (&(*p)->list_owner);
   FREE (&(*p)->list_post);
+  FREE (&(*p)->list_subscribe);
+  FREE (&(*p)->list_unsubscribe);
+
   FREE (&(*p)->subject);
   /* real_subj is just an offset to subject and shouldn't be freed */
   FREE (&(*p)->disp_subj);
@@ -885,7 +891,12 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
   MOVE_ELEM(sender);
   MOVE_ELEM(reply_to);
   MOVE_ELEM(mail_followup_to);
+  MOVE_ELEM(list_archive);
+  MOVE_ELEM(list_help);
+  MOVE_ELEM(list_owner);
   MOVE_ELEM(list_post);
+  MOVE_ELEM(list_subscribe);
+  MOVE_ELEM(list_unsubscribe);
   MOVE_ELEM(message_id);
   MOVE_ELEM(supersedes);
   MOVE_ELEM(date);

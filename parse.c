@@ -1127,6 +1127,29 @@ success:
   return retval;
 }
 
+static int parse_list_header(char **dst, char *p)
+{
+  char *beg, *end;
+
+  for (beg = strchr (p, '<'); beg; beg = strchr (end, ','))
+  {
+    if ((*beg == ',') && !(beg = strchr (beg, '<')))
+      break;
+    ++beg;
+    if (!(end = strchr (beg, '>')))
+      break;
+
+    /* Take the first mailto URL */
+    if (url_check_scheme (beg) == U_MAILTO)
+    {
+      FREE (dst);  /* __FREE_CHECKED__ */
+      *dst = mutt_substrdup (beg, end);
+      break;
+    }
+  }
+  return 1;
+}
+
 void mutt_parse_mime_message (CONTEXT *ctx, HEADER *cur)
 {
   MESSAGE *msg;
@@ -1330,32 +1353,31 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 
         matched = 1;
       }
+      else if (!ascii_strcasecmp (line + 1, "ist-Archive"))
+      {
+        matched = parse_list_header(&e->list_archive, p);
+      }
+      else if (!ascii_strcasecmp (line + 1, "ist-Help"))
+      {
+        matched = parse_list_header(&e->list_help, p);
+      }
+      else if (!ascii_strcasecmp (line + 1, "ist-Owner"))
+      {
+        matched = parse_list_header(&e->list_owner, p);
+      }
       else if (!ascii_strcasecmp (line + 1, "ist-Post"))
       {
-        /* RFC 2369.  FIXME: We should ignore whitespace, but don't. */
-        if (strncmp (p, "NO", 2))
-        {
-          char *beg, *end;
-          for (beg = strchr (p, '<'); beg; beg = strchr (end, ','))
-          {
-            if ((*beg == ',') && !(beg = strchr (beg, '<')))
-              break;
-            ++beg;
-            if (!(end = strchr (beg, '>')))
-              break;
-
-            /* Take the first mailto URL */
-            if (url_check_scheme (beg) == U_MAILTO)
-            {
-              FREE (&e->list_post);
-              e->list_post = mutt_substrdup (beg, end);
-              if (option (OPTAUTOSUBSCRIBE))
-                mutt_auto_subscribe (e->list_post);
-              break;
-            }
-          }
-        }
-        matched = 1;
+        matched = parse_list_header(&e->list_post, p);
+        if (matched && option (OPTAUTOSUBSCRIBE))
+          mutt_auto_subscribe (e->list_post);
+      }
+      else if (!ascii_strcasecmp (line + 1, "ist-Subscribe"))
+      {
+        matched = parse_list_header(&e->list_subscribe, p);
+      }
+      else if (!ascii_strcasecmp (line + 1, "ist-Unsubscribe"))
+      {
+        matched = parse_list_header(&e->list_unsubscribe, p);
       }
       break;
 

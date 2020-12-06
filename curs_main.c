@@ -2488,6 +2488,12 @@ int mutt_index_menu (void)
 	break;
       }
 
+      case OP_LIST_ACTION:
+
+        mutt_list_menu (Context, CURHDR);
+        menu->redraw = REDRAW_FULL;
+        break;
+
       case OP_SHELL_ESCAPE:
 
 	mutt_shell_escape ();
