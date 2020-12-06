@@ -4,13 +4,13 @@
  *     License as published by the Free Software Foundation; either
  *     version 2 of the License, or (at your option) any later
  *     version.
- * 
+ *
  *     This program is distributed in the hope that it will be
  *     useful, but WITHOUT ANY WARRANTY; without even the implied
  *     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  *     PURPOSE.  See the GNU General Public License for more
  *     details.
- * 
+ *
  *     You should have received a copy of the GNU General Public
  *     License along with this program; if not, write to the Free
  *     Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -57,30 +57,56 @@ static const struct mapping_t ListActions[] = {
 struct menu_data {
   HEADER *msg;
   char fmt[12];
+  int num;
 };
 
 /* Computes a printf() style format string including enough
  * field width for the largest list action name. */
-void make_field_format(int max, char *dst)
+static void make_field_format (int max, char *dst)
 {
   int len = 0;
   struct mapping_t *action;
 
   dst[--max] = '\0';
   for (action = (struct mapping_t *)ListActions; action->name; action++)
-    len = MAX(len, strlen(_(action->name)));
+    len = MAX(len, mutt_strwidth (_(action->name)));
 
   /* n.b. not localized - is a metaformat */
-  snprintf(dst, max, "%%%ds: %%s", len);
+  snprintf(dst, max, "%%%dl: %%v", len);
+}
+
+static const char *list_format_str (char *dest, size_t destlen, size_t col,
+                                    int cols, char op, const char *src,
+                                    const char *fmt, const char *ifstring,
+                                    const char *elsestring,
+                                    void *data, format_flag flags)
+{
+  struct menu_data *md = (struct menu_data *) data;
+  char **value;
+
+  value = (char **)( ((caddr_t) md->msg->env) + ListActions[md->num].value);
+
+  switch (op)
+  {
+    case 'l':
+      mutt_format_s (dest, destlen, fmt, _(ListActions[md->num].name));
+      break;
+    case 'v':
+      mutt_format_s (dest, destlen, fmt, *value ? *value : "--");
+      break;
+  }
+
+  return (src);
 }
 
 static void make_entry (char *b, size_t blen, MUTTMENU *menu, int num)
 {
-  char **value;
   struct menu_data *md = menu->data;
 
-  value = (char **)( ((caddr_t) md->msg->env) + ListActions[num].value);
-  snprintf (b, blen, md->fmt, _(ListActions[num].name), *value ? *value : "--");
+  md->num = num;
+  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols,
+                     md->fmt, list_format_str, md,
+		     MUTT_FORMAT_ARROWCURSOR);
 }
 
 static int list_action (CONTEXT *ctx, HEADER *msg, struct mapping_t *action)
@@ -98,7 +124,7 @@ static int list_action (CONTEXT *ctx, HEADER *msg, struct mapping_t *action)
   }
 
   if (url_check_scheme (*address) != U_MAILTO)
-  { 
+  {
     /* L10N: given when a message's rfc 2369 action is not mailto: */
     mutt_error (_("List actions only support mailto: URIs. (Try a browser?)"));
     return 1;
