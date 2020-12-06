@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-06 19:27+0100\n"
-"PO-Revision-Date: 2020-12-06 19:56+0100\n"
+"POT-Creation-Date: 2020-12-06 20:32+0100\n"
+"PO-Revision-Date: 2020-12-06 20:59+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -76,8 +76,8 @@ msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
 #: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
-#: background.c:369 browser.c:46 history.c:75 pager.c:1597 pattern.c:2140
-#: postpone.c:42 query.c:49 recvattach.c:59
+#: background.c:369 browser.c:46 history.c:75 listmenu.c:37 pager.c:1597
+#: pattern.c:2140 postpone.c:42 query.c:49 recvattach.c:59
 msgid "Exit"
 msgstr "Quitter"
 
@@ -93,11 +93,12 @@ msgstr "Récup"
 msgid "Select"
 msgstr "Sélectionner"
 
+#. L10N: localized names of RFC 2369 list operations
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4568
-#: curs_main.c:555 history.c:78 mutt_ssl.c:1325 mutt_ssl_gnutls.c:1040
-#: pager.c:2002 pattern.c:2142 pgpkey.c:523 postpone.c:45 query.c:54
-#: recvattach.c:63 smime.c:468
+#: curs_main.c:555 history.c:78 listmenu.c:48 mutt_ssl.c:1325
+#: mutt_ssl_gnutls.c:1040 pager.c:2002 pattern.c:2142 pgpkey.c:523
+#: postpone.c:45 query.c:54 recvattach.c:63 smime.c:468
 msgid "Help"
 msgstr "Aide"
 
@@ -2411,7 +2412,7 @@ msgstr "Sauver"
 msgid "Mail"
 msgstr "Message"
 
-#: curs_main.c:553 pager.c:1605
+#: curs_main.c:553 listmenu.c:38 pager.c:1605
 msgid "Reply"
 msgstr "Répondre"
 
@@ -3711,6 +3712,49 @@ msgstr ""
 #: lib.c:138 lib.c:153 lib.c:185 safe_asprintf.c:42
 msgid "Out of memory!"
 msgstr "Plus de mémoire !"
+
+#: listmenu.c:39 listmenu.c:49
+msgid "Post"
+msgstr "Poster"
+
+# , c-format
+#: listmenu.c:40 listmenu.c:50
+msgid "Subscribe"
+msgstr "S'abonner"
+
+# , c-format
+#: listmenu.c:41 listmenu.c:51
+msgid "Unsubscribe"
+msgstr "Se désabonner"
+
+#: listmenu.c:42 listmenu.c:53
+msgid "Owner"
+msgstr "Propriétaire"
+
+#: listmenu.c:52
+msgid "Archives"
+msgstr "Archives"
+
+#. L10N: given when an rfc 2369 action is not specified by this message
+#: listmenu.c:96
+#, c-format
+msgid "No list action available for %s."
+msgstr "Pas d'action de liste disponible pour \"%s\"."
+
+#. L10N: given when a message's rfc 2369 action is not mailto:
+#: listmenu.c:103
+msgid "List actions only support mailto: URIs. (Try a browser?)"
+msgstr "Les actions de liste ne supportent que les URI mailto:. (Prendre un navigateur?)"
+
+#. L10N: given when mailto: URI was unparsable while trying to execute it
+#: listmenu.c:112
+msgid "Could not parse mailto: URI."
+msgstr "Impossible d'analyser l'URI \"mailto:\"."
+
+#. L10N: menu name for list actions
+#: listmenu.c:135
+msgid "Available mailing list actions"
+msgstr "Actions de liste de diffusion disponibles"
 
 #: main.c:79
 msgid ""
