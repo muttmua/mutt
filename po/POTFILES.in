@@ -45,6 +45,7 @@ init.c
 init.h
 keymap.c
 lib.c
+listmenu.c
 main.c
 mbox.c
 menu.c
