@@ -479,6 +479,19 @@ and easy access to message's internals.
 
 </sect2>
 
+<sect2 id="intro-list">
+<title>List Menu</title>
+
+<para>
+The list menu assists with operations on mailing lists. RFC 2369 defines
+several interactions with mailing lists and list memberships that can
+be specified within the email message: subscribe, unsubscribe, contact
+the list owner, etc. When you invoke the list menu, these interactions
+are made accessible as menu options.
+</para>
+
+</sect2>
+
 </sect1>
 
 <sect1 id="menus">
@@ -3726,6 +3739,16 @@ keep it on the list of known mailing lists, use
 <command>unsubscribe</command>.
 </para>
 
+<para>
+All of the mailing list configuration options described so far govern
+mutt's knowledge of your list subscriptions and how it presents list
+information to you. If you have a message from a mailing list, you
+can also use the <link linkend="tab-list-bindings">list
+menu</link> (bound to &quot;ESC L&quot; by default) to interact with
+the message's list's list server.  This makes it easy to subscribe,
+unsubscribe, and so on.
+</para>
+
 </sect1>
 
 <sect1 id="mbox-hook">
@@ -6815,6 +6838,24 @@ you would like to use the address given in the <quote>Reply-To</quote>
 field, or reply directly to the address given in the <quote>From</quote>
 field.  When set to <emphasis>yes</emphasis>, the
 <quote>Reply-To</quote> field will be used when present.
+</para>
+
+<para>
+While looking at an email message from a mailing list in the index or
+pager, you can interact with the list server in the ways defined by RFC
+2369, provided the email message specifies how to do so.  Invoke the
+<link linkend="tab-list-bindings"> list menu</link> (bound to &quot;ESC
+L&quot; by default) to see what options are available for a given
+message. Common options are:
+<itemizedlist>
+<listitem><para>Post to the list</para></listitem>
+<listitem><para>Contact the list owner</para></listitem>
+<listitem><para>Subscribe to the list</para></listitem>
+<listitem><para>Unsubscribe from the list</para></listitem>
+<listitem><para>Get help from the list server</para></listitem>
+<listitem><para>Get list archive information</para></listitem>
+</itemizedlist>
+Note that many list servers only specify some of these options.
 </para>
 
 <para>
