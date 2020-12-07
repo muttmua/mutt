@@ -671,6 +671,9 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
     imap_hcache_put (idata, idata->msn_index[header_msn - 1]);
   }
 
+  if (rc != IMAP_CMD_OK)
+    return -1;
+
   /* The IMAP flag setting as part of cmd_parse_fetch() ends up
    * flipping these on. */
   idata->check_status &= ~IMAP_FLAGS_PENDING;
