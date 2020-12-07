@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-06 20:32+0100\n"
-"PO-Revision-Date: 2020-12-06 20:59+0100\n"
+"POT-Creation-Date: 2020-12-07 02:06+0100\n"
+"PO-Revision-Date: 2020-12-07 02:08+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -2468,7 +2468,7 @@ msgid "Invalid message number."
 msgstr "Numéro de message invalide."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:985 curs_main.c:2207 pager.c:2584
+#: curs_main.c:985 curs_main.c:2207 pager.c:2622
 msgid "Cannot delete message(s)"
 msgstr "Impossible d'effacer le(s) message(s)"
 
@@ -2504,7 +2504,7 @@ msgid "Tag messages matching: "
 msgstr "Marquer les messages correspondant à : "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1177 curs_main.c:2562 pager.c:2840
+#: curs_main.c:1177 curs_main.c:2562 pager.c:2878
 msgid "Cannot undelete message(s)"
 msgstr "Impossible de récupérer le(s) message(s)"
 
@@ -2620,7 +2620,7 @@ msgid "Cannot flag message"
 msgstr "Impossible de marquer le message comme important"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1889 pager.c:2803
+#: curs_main.c:1889 pager.c:2841
 msgid "Cannot toggle new"
 msgstr "Impossible d'inverser l'indic. 'nouveau'"
 
@@ -2637,7 +2637,7 @@ msgid "Thread contains unread messages."
 msgstr "Cette discussion contient des messages non-lus."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2163 pager.c:2551
+#: curs_main.c:2163 pager.c:2589
 msgid "Cannot delete message"
 msgstr "Impossible d'effacer le message"
 
@@ -2648,7 +2648,7 @@ msgstr "Impossible d'éditer le message"
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2281 pager.c:2892
+#: curs_main.c:2281 pager.c:2930
 #, c-format
 msgid "%d labels changed."
 msgstr "%d labels ont changé."
@@ -2656,7 +2656,7 @@ msgstr "%d labels ont changé."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2288 pager.c:2896
+#: curs_main.c:2288 pager.c:2934
 msgid "No labels changed."
 msgstr "Aucun label n'a changé."
 
@@ -2694,7 +2694,7 @@ msgid "No message ID to macro."
 msgstr "Pas de Message-ID pour la macro."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2532 pager.c:2823
+#: curs_main.c:2532 pager.c:2861
 msgid "Cannot undelete message"
 msgstr "Impossible de récupérer le message"
 
@@ -3736,23 +3736,25 @@ msgid "Archives"
 msgstr "Archives"
 
 #. L10N: given when an rfc 2369 action is not specified by this message
-#: listmenu.c:96
+#: listmenu.c:122
 #, c-format
 msgid "No list action available for %s."
 msgstr "Pas d'action de liste disponible pour \"%s\"."
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
-#: listmenu.c:103
+#: listmenu.c:129
 msgid "List actions only support mailto: URIs. (Try a browser?)"
-msgstr "Les actions de liste ne supportent que les URI mailto:. (Prendre un navigateur?)"
+msgstr ""
+"Les actions de liste ne supportent que les URI mailto:. (Prendre un "
+"navigateur?)"
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
-#: listmenu.c:112
+#: listmenu.c:138
 msgid "Could not parse mailto: URI."
 msgstr "Impossible d'analyser l'URI \"mailto:\"."
 
 #. L10N: menu name for list actions
-#: listmenu.c:135
+#: listmenu.c:161
 msgid "Available mailing list actions"
 msgstr "Actions de liste de diffusion disponibles"
 
@@ -4650,7 +4652,7 @@ msgstr "Voir attach."
 msgid "Next"
 msgstr "Suivant"
 
-#: pager.c:2120 pager.c:2151 pager.c:2184 pager.c:2477
+#: pager.c:2120 pager.c:2151 pager.c:2184 pager.c:2515
 msgid "Bottom of message is shown."
 msgstr "La fin du message est affichée."
 
@@ -4669,6 +4671,24 @@ msgstr "Il n'y a plus de texte cité."
 #: pager.c:2457
 msgid "No more unquoted text after quoted text."
 msgstr "Il n'y a plus de texte non cité après le texte cité."
+
+#. L10N:
+#. Displayed if <skip-headers> is invoked in the pager, but we are
+#. already past the headers
+#.
+#: pager.c:2476
+msgid "Already skipped past headers."
+msgstr "En-têtes déjà sautés."
+
+#. L10N:
+#. Displayed if <skip-headers> is invoked in the pager, but there is
+#. no text past the headers.
+#. (I don't think this is actually possible in Mutt's code, but
+#. display some kind of message in case it somehow occurs.)
+#.
+#: pager.c:2495
+msgid "No text past headers."
+msgstr "Pas de texte après les en-têtes."
 
 #: parse.c:715
 msgid "multipart message has no boundary parameter!"
@@ -7314,451 +7334,457 @@ msgstr "inverser l'affichage du texte cité"
 msgid "skip beyond quoted text"
 msgstr "sauter le texte cité"
 
-#. L10N: Help screen description for OP_PAGER_TOP
+#. L10N: Help screen description for OP_PAGER_SKIP_HEADERS
 #. #: ./OPS:167
 #: ../keymap_alldefs.h:505
+msgid "skip beyond headers"
+msgstr "sauter les en-têtes"
+
+#. L10N: Help screen description for OP_PAGER_TOP
+#. #: ./OPS:168
+#: ../keymap_alldefs.h:508
 msgid "jump to the top of the message"
 msgstr "aller au début du message"
 
 #. L10N: Help screen description for OP_PIPE
-#. #: ./OPS:168
-#: ../keymap_alldefs.h:508
+#. #: ./OPS:169
+#: ../keymap_alldefs.h:511
 msgid "pipe message/attachment to a shell command"
 msgstr "passer le message/l'attachement à une commande shell"
 
 #. L10N: Help screen description for OP_PREV_ENTRY
-#. #: ./OPS:169
-#: ../keymap_alldefs.h:511
+#. #: ./OPS:170
+#: ../keymap_alldefs.h:514
 msgid "move to the previous entry"
 msgstr "aller à l'entrée précédente"
 
 #. L10N: Help screen description for OP_PREV_LINE
-#. #: ./OPS:170
-#: ../keymap_alldefs.h:514
+#. #: ./OPS:171
+#: ../keymap_alldefs.h:517
 msgid "scroll up one line"
 msgstr "remonter d'une ligne"
 
 #. L10N: Help screen description for OP_PREV_PAGE
-#. #: ./OPS:171
-#: ../keymap_alldefs.h:517
+#. #: ./OPS:172
+#: ../keymap_alldefs.h:520
 msgid "move to the previous page"
 msgstr "aller à la page précédente"
 
 #. L10N: Help screen description for OP_PRINT
-#. #: ./OPS:172
-#: ../keymap_alldefs.h:520
+#. #: ./OPS:173
+#: ../keymap_alldefs.h:523
 msgid "print the current entry"
 msgstr "imprimer l'entrée courante"
 
 #. L10N: Help screen description for OP_PURGE_MESSAGE
-#. #: ./OPS:173
-#: ../keymap_alldefs.h:523
+#. #: ./OPS:174
+#: ../keymap_alldefs.h:526
 msgid "delete the current entry, bypassing the trash folder"
 msgstr "supprimer l'entrée courante, sans utiliser la corbeille"
 
 #. L10N: Help screen description for OP_QUERY
-#. #: ./OPS:174
-#: ../keymap_alldefs.h:526
+#. #: ./OPS:175
+#: ../keymap_alldefs.h:529
 msgid "query external program for addresses"
 msgstr "demander des adresses à un programme externe"
 
 #. L10N: Help screen description for OP_QUERY_APPEND
-#. #: ./OPS:175
-#: ../keymap_alldefs.h:529
+#. #: ./OPS:176
+#: ../keymap_alldefs.h:532
 msgid "append new query results to current results"
 msgstr "ajouter les nouveaux résultats de la requête aux résultats courants"
 
 #. L10N: Help screen description for OP_QUIT
-#. #: ./OPS:176
-#: ../keymap_alldefs.h:532
+#. #: ./OPS:177
+#: ../keymap_alldefs.h:535
 msgid "save changes to mailbox and quit"
 msgstr "sauver les modifications de la boîte aux lettres et quitter"
 
 #. L10N: Help screen description for OP_RECALL_MESSAGE
-#. #: ./OPS:177
-#: ../keymap_alldefs.h:535
+#. #: ./OPS:178
+#: ../keymap_alldefs.h:538
 msgid "recall a postponed message"
 msgstr "rappeler un message ajourné"
 
 #. L10N: Help screen description for OP_REDRAW
-#. #: ./OPS:178
-#: ../keymap_alldefs.h:538
+#. #: ./OPS:179
+#: ../keymap_alldefs.h:541
 msgid "clear and redraw the screen"
 msgstr "effacer l'écran et réafficher"
 
 #. L10N: Help screen description for OP_REFORMAT_WINCH
-#. #: ./OPS:179
-#: ../keymap_alldefs.h:541
+#. #: ./OPS:180
+#: ../keymap_alldefs.h:544
 msgid "{internal}"
 msgstr "{interne}"
 
 #. L10N: Help screen description for OP_RENAME_MAILBOX
-#. #: ./OPS:180
-#: ../keymap_alldefs.h:544
+#. #: ./OPS:181
+#: ../keymap_alldefs.h:547
 msgid "rename the current mailbox (IMAP only)"
 msgstr "renommer la BAL courante (IMAP seulement)"
 
 #. L10N: Help screen description for OP_REPLY
-#. #: ./OPS:181
-#: ../keymap_alldefs.h:547
+#. #: ./OPS:182
+#: ../keymap_alldefs.h:550
 msgid "reply to a message"
 msgstr "répondre à un message"
 
 #. L10N: Help screen description for OP_RESEND
-#. #: ./OPS:182
-#: ../keymap_alldefs.h:550
+#. #: ./OPS:183
+#: ../keymap_alldefs.h:553
 msgid "use the current message as a template for a new one"
 msgstr "utiliser le message courant comme modèle pour un nouveau message"
 
 #. L10N: Help screen description for OP_SAVE
-#. #: ./OPS:183
-#: ../keymap_alldefs.h:553
+#. #: ./OPS:184
+#: ../keymap_alldefs.h:556
 msgid "save message/attachment to a mailbox/file"
 msgstr ""
 "sauver le message/l'attachement dans une boîte aux lettres ou un fichier"
 
 #. L10N: Help screen description for OP_SEARCH
-#. #: ./OPS:184
-#: ../keymap_alldefs.h:556
+#. #: ./OPS:185
+#: ../keymap_alldefs.h:559
 msgid "search for a regular expression"
 msgstr "rechercher une expression rationnelle"
 
 #. L10N: Help screen description for OP_SEARCH_REVERSE
-#. #: ./OPS:185
-#: ../keymap_alldefs.h:559
+#. #: ./OPS:186
+#: ../keymap_alldefs.h:562
 msgid "search backwards for a regular expression"
 msgstr "rechercher en arrière une expression rationnelle"
 
 #. L10N: Help screen description for OP_SEARCH_NEXT
-#. #: ./OPS:186
-#: ../keymap_alldefs.h:562
+#. #: ./OPS:187
+#: ../keymap_alldefs.h:565
 msgid "search for next match"
 msgstr "rechercher la prochaine occurrence"
 
 #. L10N: Help screen description for OP_SEARCH_OPPOSITE
-#. #: ./OPS:187
-#: ../keymap_alldefs.h:565
+#. #: ./OPS:188
+#: ../keymap_alldefs.h:568
 msgid "search for next match in opposite direction"
 msgstr "rechercher la prochaine occurrence dans la direction opposée"
 
 #. L10N: Help screen description for OP_SEARCH_TOGGLE
-#. #: ./OPS:188
-#: ../keymap_alldefs.h:568
+#. #: ./OPS:189
+#: ../keymap_alldefs.h:571
 msgid "toggle search pattern coloring"
 msgstr "inverser la coloration du motif de recherche"
 
 #. L10N: Help screen description for OP_SHELL_ESCAPE
-#. #: ./OPS:189
-#: ../keymap_alldefs.h:571
+#. #: ./OPS:190
+#: ../keymap_alldefs.h:574
 msgid "invoke a command in a subshell"
 msgstr "exécuter une commande dans un sous-shell"
 
 #. L10N: Help screen description for OP_SORT
-#. #: ./OPS:190
-#: ../keymap_alldefs.h:574
+#. #: ./OPS:191
+#: ../keymap_alldefs.h:577
 msgid "sort messages"
 msgstr "trier les messages"
 
 #. L10N: Help screen description for OP_SORT_REVERSE
-#. #: ./OPS:191
-#: ../keymap_alldefs.h:577
+#. #: ./OPS:192
+#: ../keymap_alldefs.h:580
 msgid "sort messages in reverse order"
 msgstr "trier les messages dans l'ordre inverse"
 
 #. L10N: Help screen description for OP_TAG
-#. #: ./OPS:192
-#: ../keymap_alldefs.h:580
+#. #: ./OPS:193
+#: ../keymap_alldefs.h:583
 msgid "tag the current entry"
 msgstr "marquer l'entrée courante"
 
 #. L10N: Help screen description for OP_TAG_PREFIX
-#. #: ./OPS:193
-#: ../keymap_alldefs.h:583
+#. #: ./OPS:194
+#: ../keymap_alldefs.h:586
 msgid "apply next function to tagged messages"
 msgstr "appliquer la prochaine fonction aux messages marqués"
 
 #. L10N: Help screen description for OP_TAG_PREFIX_COND
-#. #: ./OPS:194
-#: ../keymap_alldefs.h:586
+#. #: ./OPS:195
+#: ../keymap_alldefs.h:589
 msgid "apply next function ONLY to tagged messages"
 msgstr "appliquer la prochaine fonction SEULEMENT aux messages marqués"
 
 #. L10N: Help screen description for OP_TAG_SUBTHREAD
-#. #: ./OPS:195
-#: ../keymap_alldefs.h:589
+#. #: ./OPS:196
+#: ../keymap_alldefs.h:592
 msgid "tag the current subthread"
 msgstr "marquer la sous-discussion courante"
 
 #. L10N: Help screen description for OP_TAG_THREAD
-#. #: ./OPS:196
-#: ../keymap_alldefs.h:592
+#. #: ./OPS:197
+#: ../keymap_alldefs.h:595
 msgid "tag the current thread"
 msgstr "marquer la discussion courante"
 
 #. L10N: Help screen description for OP_TOGGLE_NEW
-#. #: ./OPS:197
-#: ../keymap_alldefs.h:595
+#. #: ./OPS:198
+#: ../keymap_alldefs.h:598
 msgid "toggle a message's 'new' flag"
 msgstr "inverser l'indicateur 'nouveau' d'un message"
 
 #. L10N: Help screen description for OP_TOGGLE_WRITE
-#. #: ./OPS:198
-#: ../keymap_alldefs.h:598
+#. #: ./OPS:199
+#: ../keymap_alldefs.h:601
 msgid "toggle whether the mailbox will be rewritten"
 msgstr "inverser l'option de réécriture de la boîte aux lettres"
 
 #. L10N: Help screen description for OP_TOGGLE_MAILBOXES
-#. #: ./OPS:199
-#: ../keymap_alldefs.h:601
+#. #: ./OPS:200
+#: ../keymap_alldefs.h:604
 msgid "toggle whether to browse mailboxes or all files"
 msgstr "changer entre l'affichage des BAL et celui de tous les fichiers"
 
 #. L10N: Help screen description for OP_TOP_PAGE
-#. #: ./OPS:200
-#: ../keymap_alldefs.h:604
+#. #: ./OPS:201
+#: ../keymap_alldefs.h:607
 msgid "move to the top of the page"
 msgstr "aller en haut de la page"
 
 #. L10N: Help screen description for OP_UNDELETE
-#. #: ./OPS:201
-#: ../keymap_alldefs.h:607
+#. #: ./OPS:202
+#: ../keymap_alldefs.h:610
 msgid "undelete the current entry"
 msgstr "récupérer l'entrée courante"
 
 #. L10N: Help screen description for OP_UNDELETE_THREAD
-#. #: ./OPS:202
-#: ../keymap_alldefs.h:610
+#. #: ./OPS:203
+#: ../keymap_alldefs.h:613
 msgid "undelete all messages in thread"
 msgstr "récupérer tous les messages de la discussion"
 
 #. L10N: Help screen description for OP_UNDELETE_SUBTHREAD
-#. #: ./OPS:203
-#: ../keymap_alldefs.h:613
+#. #: ./OPS:204
+#: ../keymap_alldefs.h:616
 msgid "undelete all messages in subthread"
 msgstr "récupérer tous les messages de la sous-discussion"
 
 #. L10N: Help screen description for OP_VERSION
-#. #: ./OPS:204
-#: ../keymap_alldefs.h:616
+#. #: ./OPS:205
+#: ../keymap_alldefs.h:619
 msgid "show the Mutt version number and date"
 msgstr "afficher la version de Mutt (numéro et date)"
 
 #. L10N: Help screen description for OP_VIEW_ATTACH
-#. #: ./OPS:205
-#: ../keymap_alldefs.h:619
+#. #: ./OPS:206
+#: ../keymap_alldefs.h:622
 msgid "view attachment using mailcap entry if necessary"
 msgstr "visualiser l'attachement en utilisant l'entrée mailcap si nécessaire"
 
 #. L10N: Help screen description for OP_VIEW_ATTACHMENTS
-#. #: ./OPS:206
-#: ../keymap_alldefs.h:622
+#. #: ./OPS:207
+#: ../keymap_alldefs.h:625
 msgid "show MIME attachments"
 msgstr "afficher les attachements MIME"
 
 #. L10N: Help screen description for OP_WHAT_KEY
-#. #: ./OPS:207
-#: ../keymap_alldefs.h:625
+#. #: ./OPS:208
+#: ../keymap_alldefs.h:628
 msgid "display the keycode for a key press"
 msgstr "afficher le code d'une touche enfoncée"
 
 #. L10N: Help screen description for OP_CHECK_STATS
-#. #: ./OPS:208
-#: ../keymap_alldefs.h:628
+#. #: ./OPS:209
+#: ../keymap_alldefs.h:631
 msgid "calculate message statistics for all mailboxes"
 msgstr ""
 "calculer les statistiques des messages pour toutes les boîtes aux lettres"
 
 #. L10N: Help screen description for OP_MAIN_SHOW_LIMIT
-#. #: ./OPS:209
-#: ../keymap_alldefs.h:631
+#. #: ./OPS:210
+#: ../keymap_alldefs.h:634
 msgid "show currently active limit pattern"
 msgstr "afficher le motif de limitation actuel"
 
 #. L10N: Help screen description for OP_MAIN_COLLAPSE_THREAD
-#. #: ./OPS:210
-#: ../keymap_alldefs.h:634
+#. #: ./OPS:211
+#: ../keymap_alldefs.h:637
 msgid "collapse/uncollapse current thread"
 msgstr "comprimer/décomprimer la discussion courante"
 
 #. L10N: Help screen description for OP_MAIN_COLLAPSE_ALL
-#. #: ./OPS:211
-#: ../keymap_alldefs.h:637
+#. #: ./OPS:212
+#: ../keymap_alldefs.h:640
 msgid "collapse/uncollapse all threads"
 msgstr "comprimer/décomprimer toutes les discussions"
 
 # , c-format
 #. L10N: Help screen description for OP_DESCEND_DIRECTORY
-#. #: ./OPS:212
-#: ../keymap_alldefs.h:640
+#. #: ./OPS:213
+#: ../keymap_alldefs.h:643
 msgid "descend into a directory"
 msgstr "descendre dans un répertoire"
 
 #. L10N: Help screen description for OP_SIDEBAR_FIRST
 #. #: ./OPS.SIDEBAR:1
-#: ../keymap_alldefs.h:643
+#: ../keymap_alldefs.h:646
 msgid "move the highlight to the first mailbox"
 msgstr "déplacer la marque sur la première boîte aux lettres"
 
 #. L10N: Help screen description for OP_SIDEBAR_LAST
 #. #: ./OPS.SIDEBAR:2
-#: ../keymap_alldefs.h:646
+#: ../keymap_alldefs.h:649
 msgid "move the highlight to the last mailbox"
 msgstr "déplacer la marque sur la dernière boîte aux lettres"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT
 #. #: ./OPS.SIDEBAR:3
-#: ../keymap_alldefs.h:649
+#: ../keymap_alldefs.h:652
 msgid "move the highlight to next mailbox"
 msgstr "déplacer la marque sur la boîte aux lettres suivante"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT_NEW
 #. #: ./OPS.SIDEBAR:4
-#: ../keymap_alldefs.h:652
+#: ../keymap_alldefs.h:655
 msgid "move the highlight to next mailbox with new mail"
 msgstr "déplacer la marque sur la BAL avec de nouveaux messages suivante"
 
 #. L10N: Help screen description for OP_SIDEBAR_OPEN
 #. #: ./OPS.SIDEBAR:5
-#: ../keymap_alldefs.h:655
+#: ../keymap_alldefs.h:658
 msgid "open highlighted mailbox"
 msgstr "ouvrir la boîte aux lettres marquée"
 
 #. L10N: Help screen description for OP_SIDEBAR_PAGE_DOWN
 #. #: ./OPS.SIDEBAR:6
-#: ../keymap_alldefs.h:658
+#: ../keymap_alldefs.h:661
 msgid "scroll the sidebar down 1 page"
 msgstr "descendre la barre latérale d'une page"
 
 #. L10N: Help screen description for OP_SIDEBAR_PAGE_UP
 #. #: ./OPS.SIDEBAR:7
-#: ../keymap_alldefs.h:661
+#: ../keymap_alldefs.h:664
 msgid "scroll the sidebar up 1 page"
 msgstr "remonter la barre latérale d'une page"
 
 #. L10N: Help screen description for OP_SIDEBAR_PREV
 #. #: ./OPS.SIDEBAR:8
-#: ../keymap_alldefs.h:664
+#: ../keymap_alldefs.h:667
 msgid "move the highlight to previous mailbox"
 msgstr "déplacer la marque sur la boîte aux lettres précédente"
 
 #. L10N: Help screen description for OP_SIDEBAR_PREV_NEW
 #. #: ./OPS.SIDEBAR:9
-#: ../keymap_alldefs.h:667
+#: ../keymap_alldefs.h:670
 msgid "move the highlight to previous mailbox with new mail"
 msgstr "déplacer la marque sur la BAL avec de nouveaux messages précédente"
 
 #. L10N: Help screen description for OP_SIDEBAR_TOGGLE_VISIBLE
 #. #: ./OPS.SIDEBAR:10
-#: ../keymap_alldefs.h:670
+#: ../keymap_alldefs.h:673
 msgid "make the sidebar (in)visible"
 msgstr "rendre la barre latérale (in)visible"
 
 #. L10N: Help screen description for OP_COMPOSE_ATTACH_KEY
 #. #: ./OPS.PGP:1
-#: ../keymap_alldefs.h:673
+#: ../keymap_alldefs.h:676
 msgid "attach a PGP public key"
 msgstr "attacher une clé publique PGP"
 
 #. L10N: Help screen description for OP_COMPOSE_PGP_MENU
 #. #: ./OPS.PGP:2
-#: ../keymap_alldefs.h:676
+#: ../keymap_alldefs.h:679
 msgid "show PGP options"
 msgstr "afficher les options PGP"
 
 #. L10N: Help screen description for OP_MAIL_KEY
 #. #: ./OPS.PGP:3
-#: ../keymap_alldefs.h:679
+#: ../keymap_alldefs.h:682
 msgid "mail a PGP public key"
 msgstr "envoyer une clé publique PGP"
 
 #. L10N: Help screen description for OP_VERIFY_KEY
 #. #: ./OPS.PGP:4
-#: ../keymap_alldefs.h:682
+#: ../keymap_alldefs.h:685
 msgid "verify a PGP public key"
 msgstr "vérifier une clé publique PGP"
 
 #. L10N: Help screen description for OP_VIEW_ID
 #. #: ./OPS.PGP:5
-#: ../keymap_alldefs.h:685
+#: ../keymap_alldefs.h:688
 msgid "view the key's user id"
 msgstr "afficher le numéro d'utilisateur de la clé"
 
 #. L10N: Help screen description for OP_CHECK_TRADITIONAL
 #. #: ./OPS.PGP:6
-#: ../keymap_alldefs.h:688
+#: ../keymap_alldefs.h:691
 msgid "check for classic PGP"
 msgstr "reconnaissance PGP classique"
 
 #. L10N: Help screen description for OP_MIX_USE
 #. #: ./OPS.MIX:1
-#: ../keymap_alldefs.h:691
+#: ../keymap_alldefs.h:694
 msgid "accept the chain constructed"
 msgstr "accepter la chaîne construite"
 
 #. L10N: Help screen description for OP_MIX_APPEND
 #. #: ./OPS.MIX:2
-#: ../keymap_alldefs.h:694
+#: ../keymap_alldefs.h:697
 msgid "append a remailer to the chain"
 msgstr "ajouter un redistributeur de courrier à la fin de la chaîne"
 
 #. L10N: Help screen description for OP_MIX_INSERT
 #. #: ./OPS.MIX:3
-#: ../keymap_alldefs.h:697
+#: ../keymap_alldefs.h:700
 msgid "insert a remailer into the chain"
 msgstr "insérer un redistributeur de courrier dans la chaîne"
 
 #. L10N: Help screen description for OP_MIX_DELETE
 #. #: ./OPS.MIX:4
-#: ../keymap_alldefs.h:700
+#: ../keymap_alldefs.h:703
 msgid "delete a remailer from the chain"
 msgstr "retirer un redistributeur de courrier de la chaîne"
 
 #. L10N: Help screen description for OP_MIX_CHAIN_PREV
 #. #: ./OPS.MIX:5
-#: ../keymap_alldefs.h:703
+#: ../keymap_alldefs.h:706
 msgid "select the previous element of the chain"
 msgstr "sélectionner l'élément précédent de la chaîne"
 
 #. L10N: Help screen description for OP_MIX_CHAIN_NEXT
 #. #: ./OPS.MIX:6
-#: ../keymap_alldefs.h:706
+#: ../keymap_alldefs.h:709
 msgid "select the next element of the chain"
 msgstr "sélectionner l'élément suivant de la chaîne"
 
 #. L10N: Help screen description for OP_COMPOSE_MIX
 #. #: ./OPS.MIX:7
-#: ../keymap_alldefs.h:709
+#: ../keymap_alldefs.h:712
 msgid "send the message through a mixmaster remailer chain"
 msgstr ""
 "envoyer le message dans une chaîne de redistributeurs de courrier mixmaster"
 
 #. L10N: Help screen description for OP_DECRYPT_SAVE
 #. #: ./OPS.CRYPT:1
-#: ../keymap_alldefs.h:712
+#: ../keymap_alldefs.h:715
 msgid "make decrypted copy and delete"
 msgstr "faire une copie déchiffrée et effacer"
 
 #. L10N: Help screen description for OP_DECRYPT_COPY
 #. #: ./OPS.CRYPT:2
-#: ../keymap_alldefs.h:715
+#: ../keymap_alldefs.h:718
 msgid "make decrypted copy"
 msgstr "faire une copie déchiffrée"
 
 #. L10N: Help screen description for OP_FORGET_PASSPHRASE
 #. #: ./OPS.CRYPT:3
-#: ../keymap_alldefs.h:718
+#: ../keymap_alldefs.h:721
 msgid "wipe passphrase(s) from memory"
 msgstr "effacer les phrases de passe de la mémoire"
 
 #. L10N: Help screen description for OP_EXTRACT_KEYS
 #. #: ./OPS.CRYPT:4
-#: ../keymap_alldefs.h:721
+#: ../keymap_alldefs.h:724
 msgid "extract supported public keys"
 msgstr "extraire les clés publiques supportées"
 
 #. L10N: Help screen description for OP_COMPOSE_SMIME_MENU
 #. #: ./OPS.SMIME:1
-#: ../keymap_alldefs.h:724
+#: ../keymap_alldefs.h:727
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
 
