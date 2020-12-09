@@ -719,7 +719,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
   FILE *fp = NULL;
   IMAP_HEADER h;
   BUFFER *b = NULL, *hdr_list = NULL;
-  static const char * const want_headers = "DATE FROM SENDER SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES LIST-ARCHIVE LIST-HELP LIST-OWNER LIST-POST LIST-SUBSCRIBE LIST-UNSUBSCRIBE X-LABEL";
+  static const char * const want_headers = "DATE FROM SENDER SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES LIST-POST X-LABEL";
 
   ctx = idata->ctx;
   idx = ctx->msgcount;

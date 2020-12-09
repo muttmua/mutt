@@ -1127,7 +1127,7 @@ success:
   return retval;
 }
 
-static int parse_list_header(char **dst, char *p)
+int mutt_parse_list_header (char **dst, char *p)
 {
   char *beg, *end;
 
@@ -1353,31 +1353,11 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
 
         matched = 1;
       }
-      else if (!ascii_strcasecmp (line + 1, "ist-Archive"))
-      {
-        matched = parse_list_header(&e->list_archive, p);
-      }
-      else if (!ascii_strcasecmp (line + 1, "ist-Help"))
-      {
-        matched = parse_list_header(&e->list_help, p);
-      }
-      else if (!ascii_strcasecmp (line + 1, "ist-Owner"))
-      {
-        matched = parse_list_header(&e->list_owner, p);
-      }
       else if (!ascii_strcasecmp (line + 1, "ist-Post"))
       {
-        matched = parse_list_header(&e->list_post, p);
+        matched = mutt_parse_list_header (&e->list_post, p);
         if (matched && option (OPTAUTOSUBSCRIBE))
           mutt_auto_subscribe (e->list_post);
-      }
-      else if (!ascii_strcasecmp (line + 1, "ist-Subscribe"))
-      {
-        matched = parse_list_header(&e->list_subscribe, p);
-      }
-      else if (!ascii_strcasecmp (line + 1, "ist-Unsubscribe"))
-      {
-        matched = parse_list_header(&e->list_unsubscribe, p);
       }
       break;
 

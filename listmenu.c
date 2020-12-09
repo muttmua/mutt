@@ -25,6 +25,7 @@
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "url.h"
+#include "mx.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -33,7 +34,18 @@
 
 #include <locale.h>
 
-static const struct mapping_t ListHelp[] = {
+struct list_headers
+{
+  char *list_archive;
+  char *list_help;
+  char *list_owner;
+  char *list_post;
+  char *list_subscribe;
+  char *list_unsubscribe;
+};
+
+static const struct mapping_t ListHelp[] =
+{
   { N_("Exit"),        OP_EXIT },
   { N_("Reply"),       OP_LIST_REPLY },
   { N_("Post"),        OP_LIST_POST },
@@ -43,22 +55,95 @@ static const struct mapping_t ListHelp[] = {
   { NULL,              0 }
 };
 
-static const struct mapping_t ListActions[] = {
+static const struct mapping_t ListActions[] =
+{
   /* L10N: localized names of RFC 2369 list operations */
-  { N_("Help"),        offsetof(ENVELOPE, list_help) },
-  { N_("Post"),        offsetof(ENVELOPE, list_post) },
-  { N_("Subscribe"),   offsetof(ENVELOPE, list_subscribe) },
-  { N_("Unsubscribe"), offsetof(ENVELOPE, list_unsubscribe) },
-  { N_("Archives"),    offsetof(ENVELOPE, list_archive) },
-  { N_("Owner"),       offsetof(ENVELOPE, list_owner) },
+  { N_("Help"),        offsetof(struct list_headers, list_help) },
+  { N_("Post"),        offsetof(struct list_headers, list_post) },
+  { N_("Subscribe"),   offsetof(struct list_headers, list_subscribe) },
+  { N_("Unsubscribe"), offsetof(struct list_headers, list_unsubscribe) },
+  { N_("Archives"),    offsetof(struct list_headers, list_archive) },
+  { N_("Owner"),       offsetof(struct list_headers, list_owner) },
   { NULL, 0 }
 };
 
-struct menu_data {
-  HEADER *msg;
+struct menu_data
+{
+  struct list_headers *lhdrs;
   char fmt[12];
   int num;
 };
+
+static void parse_list_headers (CONTEXT *ctx, HEADER *hdr,
+                                struct list_headers *lhdrs)
+{
+  MESSAGE *msg;
+  char *line, *h, *p;
+  size_t linelen;
+
+  if ((msg = mx_open_message (ctx, hdr->msgno)) != NULL)
+  {
+    fseeko (msg->fp, hdr->offset, 0);
+
+    linelen = LONG_STRING;
+    line = safe_malloc (linelen);
+
+    while (*(line = mutt_read_rfc822_line (msg->fp, line, &linelen)) != 0)
+    {
+      if ((p = strpbrk (line, ": \t")) == NULL || *p != ':')
+        break; /* end of header */
+
+      h = line;                    /* header */
+      *p = 0;
+      p = skip_email_wsp(p + 1);   /* header value */
+      if (!*p)
+        continue;
+
+      if (!ascii_strncasecmp (h, "list-", 5))
+      {
+        h += 5;
+        if (!ascii_strcasecmp (h, "archive"))
+          mutt_parse_list_header (&lhdrs->list_archive, p);
+        else if (!ascii_strcasecmp (h, "help"))
+          mutt_parse_list_header (&lhdrs->list_help, p);
+        else if (!ascii_strcasecmp (h, "owner"))
+          mutt_parse_list_header (&lhdrs->list_owner, p);
+        else if (!ascii_strcasecmp (h, "post"))
+          mutt_parse_list_header (&lhdrs->list_post, p);
+        else if (!ascii_strcasecmp (h, "subscribe"))
+          mutt_parse_list_header (&lhdrs->list_subscribe, p);
+        else if (!ascii_strcasecmp (h, "unsubscribe"))
+          mutt_parse_list_header (&lhdrs->list_unsubscribe, p);
+      }
+    }
+
+    FREE (&line);
+    mx_close_message (ctx, &msg);
+  }
+}
+
+static struct list_headers *list_headers_new (void)
+{
+  return safe_calloc (1, sizeof(struct list_headers));
+}
+
+static void list_headers_free (struct list_headers **p_lhdrs)
+{
+  struct list_headers *lhdrs;
+
+  if (!p_lhdrs || !*p_lhdrs)
+    return;
+
+  lhdrs = *p_lhdrs;
+  FREE (&lhdrs->list_archive);
+  FREE (&lhdrs->list_help);
+  FREE (&lhdrs->list_owner);
+  FREE (&lhdrs->list_post);
+  FREE (&lhdrs->list_subscribe);
+  FREE (&lhdrs->list_unsubscribe);
+
+  FREE (p_lhdrs);      /* __FREE_CHECKED__ */
+}
 
 /* Computes a printf() style format string including enough
  * field width for the largest list action name. */
@@ -84,7 +169,7 @@ static const char *list_format_str (char *dest, size_t destlen, size_t col,
   struct menu_data *md = (struct menu_data *) data;
   char **value;
 
-  value = (char **)( ((caddr_t) md->msg->env) + ListActions[md->num].value);
+  value = (char **)( ((caddr_t) md->lhdrs) + ListActions[md->num].value);
 
   switch (op)
   {
@@ -109,13 +194,14 @@ static void make_entry (char *b, size_t blen, MUTTMENU *menu, int num)
 		     MUTT_FORMAT_ARROWCURSOR);
 }
 
-static int list_action (CONTEXT *ctx, HEADER *msg, struct mapping_t *action)
+static int list_action (CONTEXT *ctx, struct list_headers *lhdrs,
+                        const struct mapping_t *action)
 {
   HEADER *newmsg = NULL;
   char *body = NULL;
   char **address = NULL;
 
-  address = (char **)( ((caddr_t) msg->env) + action->value);
+  address = (char **)( ((caddr_t) lhdrs) + action->value);
   if (address == NULL || *address == NULL)
   {
     /* L10N: given when an rfc 2369 action is not specified by this message */
@@ -148,9 +234,13 @@ void mutt_list_menu (CONTEXT *ctx, HEADER *msg)
   MUTTMENU *menu = NULL;
   int done = 0;
   char helpstr[LONG_STRING];
+  struct list_headers *lhdrs = NULL;
   struct menu_data mdata = {0};
 
-  mdata.msg = msg;
+  lhdrs = list_headers_new ();
+  parse_list_headers (ctx, msg, lhdrs);
+
+  mdata.lhdrs = lhdrs;
   make_field_format(sizeof(mdata.fmt), mdata.fmt);
 
   menu = mutt_new_menu (MENU_LIST);
@@ -168,31 +258,31 @@ void mutt_list_menu (CONTEXT *ctx, HEADER *msg)
     {
 
     case OP_LIST_HELP:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[0]);
+      done = list_action (ctx, lhdrs, &ListActions[0]);
       break;
 
     case OP_LIST_POST:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[1]);
+      done = list_action (ctx, lhdrs, &ListActions[1]);
       break;
 
     case OP_LIST_SUBSCRIBE:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[2]);
+      done = list_action (ctx, lhdrs, &ListActions[2]);
       break;
 
     case OP_LIST_UNSUBSCRIBE:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[3]);
+      done = list_action (ctx, lhdrs, &ListActions[3]);
       break;
 
     case OP_LIST_ARCHIVE:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[4]);
+      done = list_action (ctx, lhdrs, &ListActions[4]);
       break;
 
     case OP_LIST_OWNER:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[5]);
+      done = list_action (ctx, lhdrs, &ListActions[5]);
       break;
 
     case OP_GENERIC_SELECT_ENTRY:
-      done = list_action(ctx, msg, (struct mapping_t *)&ListActions[menu->current]);
+      done = list_action (ctx, lhdrs, &ListActions[menu->current]);
       break;
 
     case OP_EXIT:
@@ -200,6 +290,8 @@ void mutt_list_menu (CONTEXT *ctx, HEADER *msg)
       break;
     }
   }
+
+  list_headers_free (&lhdrs);
 
   mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);

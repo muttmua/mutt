@@ -732,12 +732,7 @@ typedef struct envelope
   ADDRESS *sender;
   ADDRESS *reply_to;
   ADDRESS *mail_followup_to;
-  char *list_archive;
-  char *list_help;
-  char *list_owner;
   char *list_post;
-  char *list_subscribe;
-  char *list_unsubscribe;
   char *subject;
   char *real_subj;      /* offset of the real subject */
   char *disp_subj;      /* display subject (modified copy of subject) */

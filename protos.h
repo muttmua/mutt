@@ -361,6 +361,7 @@ int mutt_parse_color (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_uncolor (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_hook (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_idxfmt_hook (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+int mutt_parse_list_header (char **dst, char *p);
 int mutt_parse_macro (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_mailboxes (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 int mutt_parse_unmailboxes (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
