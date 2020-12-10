@@ -2845,7 +2845,7 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
   }
 
   /* If we failed to open a message, return with error */
-  if (!fp && (msg = mx_open_message (Context, h->msgno)) == NULL)
+  if (!fp && (msg = mx_open_message (Context, h->msgno, 0)) == NULL)
     return -1;
 
   if (!fp) fp = msg->fp;

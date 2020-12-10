@@ -931,13 +931,15 @@ bail:
   return retval;
 }
 
-int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
+int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 {
   IMAP_DATA* idata;
   HEADER* h;
   ENVELOPE* newenv;
+  BUFFER *path;
   char buf[LONG_STRING];
   char *pc;
+  const char *fetch_data;
   unsigned int bytes;
   progress_t progressbar;
   unsigned int uid;
@@ -958,7 +960,10 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
     if (HEADER_DATA(h)->parsed)
       return 0;
     else
+    {
+      headers = 0;
       goto parsemsg;
+    }
   }
 
   /* we still do some caching even if imap_cachedir is unset */
@@ -972,7 +977,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
     if (cache->uid == HEADER_DATA(h)->uid &&
         (msg->fp = fopen (cache->path, "r")))
       return 0;
-    else
+    else if (!headers)
     {
       unlink (cache->path);
       FREE (&cache->path);
@@ -985,33 +990,44 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   if (output_progress)
     mutt_message _("Fetching message...");
 
-  if (!(msg->fp = msg_cache_put (idata, h)))
+  if (headers ||
+      !(msg->fp = msg_cache_put (idata, h)))
   {
-    BUFFER *path;
-
-    cache->uid = HEADER_DATA(h)->uid;
-
     path = mutt_buffer_pool_get ();
     mutt_buffer_mktemp (path);
-    cache->path = safe_strdup (mutt_b2s (path));
-    mutt_buffer_pool_release (&path);
-
-    if (!(msg->fp = safe_fopen (cache->path, "w+")))
+    if (!(msg->fp = safe_fopen (mutt_b2s (path), "w+")))
     {
-      FREE (&cache->path);
+      mutt_buffer_pool_release (&path);
       return -1;
     }
+
+    if (!headers)
+    {
+      cache->uid = HEADER_DATA(h)->uid;
+      cache->path = safe_strdup (mutt_b2s (path));
+    }
+    else
+      unlink (mutt_b2s (path));
+
+    mutt_buffer_pool_release (&path);
   }
+
+  if (mutt_bit_isset (idata->capabilities, IMAP4REV1))
+  {
+    if (option (OPTIMAPPEEK))
+      fetch_data = headers ? "BODY.PEEK[HEADER]" : "BODY.PEEK[]";
+    else
+      fetch_data = headers ? "BODY[HEADER]" : "BODY[]";
+  }
+  else
+    fetch_data = headers ? "RFC822.HEADER" : "RFC822";
 
   /* mark this header as currently inactive so the command handler won't
    * also try to update it. HACK until all this code can be moved into the
    * command handler */
   h->active = 0;
 
-  snprintf (buf, sizeof (buf), "UID FETCH %u %s", HEADER_DATA(h)->uid,
-	    (mutt_bit_isset (idata->capabilities, IMAP4REV1) ?
-	     (option (OPTIMAPPEEK) ? "BODY.PEEK[]" : "BODY[]") :
-	     "RFC822"));
+  snprintf (buf, sizeof (buf), "UID FETCH %u %s", HEADER_DATA(h)->uid, fetch_data);
 
   imap_cmd_start (idata, buf);
   do
@@ -1039,7 +1055,9 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
 	    mutt_error (_("The message index is incorrect. Try reopening the mailbox."));
 	}
 	else if ((ascii_strncasecmp ("RFC822", pc, 6) == 0) ||
-		 (ascii_strncasecmp ("BODY[]", pc, 6) == 0))
+		 (ascii_strncasecmp ("RFC822.HEADER", pc, 13) == 0) ||
+		 (ascii_strncasecmp ("BODY[]", pc, 6) == 0) ||
+		 (ascii_strncasecmp ("BODY[HEADER]", pc, 12) == 0))
 	{
 	  pc = imap_next_word (pc);
 	  if (imap_get_literal_count(pc, &bytes) < 0)
@@ -1082,7 +1100,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   fflush (msg->fp);
   if (ferror (msg->fp))
   {
-    mutt_perror (cache->path);
+    mutt_perror ("imap_fetch_message");
     goto bail;
   }
 
@@ -1092,7 +1110,8 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
   if (!fetched || !imap_code (idata->buf))
     goto bail;
 
-  msg_cache_commit (idata, h);
+  if (!headers)
+    msg_cache_commit (idata, h);
 
 parsemsg:
   /* Update the header information.  Previously, we only downloaded a
@@ -1116,15 +1135,18 @@ parsemsg:
     mutt_set_flag (ctx, h, MUTT_NEW, read);
   }
 
-  h->lines = 0;
-  fgets (buf, sizeof (buf), msg->fp);
-  while (!feof (msg->fp))
+  if (!headers)
   {
-    h->lines++;
+    h->lines = 0;
     fgets (buf, sizeof (buf), msg->fp);
-  }
+    while (!feof (msg->fp))
+    {
+      h->lines++;
+      fgets (buf, sizeof (buf), msg->fp);
+    }
 
-  h->content->length = ftell (msg->fp) - h->content->offset;
+    h->content->length = ftell (msg->fp) - h->content->offset;
+  }
 
   /* This needs to be done in case this is a multipart message */
 #if defined(HAVE_PGP) || defined(HAVE_SMIME)
@@ -1133,7 +1155,9 @@ parsemsg:
 
   mutt_clear_error();
   rewind (msg->fp);
-  HEADER_DATA(h)->parsed = 1;
+
+  if (!headers)
+    HEADER_DATA(h)->parsed = 1;
 
   return 0;
 
@@ -1141,7 +1165,7 @@ bail:
   h->active = 1;
   safe_fclose (&msg->fp);
   imap_cache_del (idata, h);
-  if (cache->path)
+  if (!headers && cache->path)
   {
     unlink (cache->path);
     FREE (&cache->path);

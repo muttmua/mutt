@@ -413,7 +413,7 @@ static int inline_forward_attachments (CONTEXT *ctx, HEADER *cur,
   mutt_parse_mime_message (ctx, cur);
   mutt_message_hook (ctx, cur, MUTT_MESSAGEHOOK);
 
-  if ((msg = mx_open_message (ctx, cur->msgno)) == NULL)
+  if ((msg = mx_open_message (ctx, cur->msgno, 0)) == NULL)
     return -1;
 
   actx = safe_calloc (sizeof(ATTACH_CONTEXT), 1);

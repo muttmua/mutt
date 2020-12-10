@@ -591,7 +591,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
   memset (&s, 0, sizeof (s));
 
-  if (!fp && (msg = mx_open_message (ctx, hdr->msgno)) == NULL)
+  if (!fp && (msg = mx_open_message (ctx, hdr->msgno, 0)) == NULL)
     return (-1);
 
   if (!fp) fp = msg->fp;

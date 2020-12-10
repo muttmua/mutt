@@ -1494,12 +1494,12 @@ static int maildir_mh_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno,
   return rc;
 }
 
-static int maildir_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
+static int maildir_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 {
   return maildir_mh_open_message (ctx, msg, msgno, 1);
 }
 
-static int mh_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno)
+static int mh_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 {
   return maildir_mh_open_message (ctx, msg, msgno, 0);
 }

@@ -1380,8 +1380,12 @@ int mx_check_mailbox (CONTEXT *ctx, int *index_hint)
   return ctx->mx_ops->check (ctx, index_hint);
 }
 
-/* return a stream pointer for a message */
-MESSAGE *mx_open_message (CONTEXT *ctx, int msgno)
+/* return a stream pointer for a message.
+ *
+ * if headers is set, some backends will only download and return the
+ * message headers.
+ */
+MESSAGE *mx_open_message (CONTEXT *ctx, int msgno, int headers)
 {
   MESSAGE *msg;
 
@@ -1392,7 +1396,7 @@ MESSAGE *mx_open_message (CONTEXT *ctx, int msgno)
   }
 
   msg = safe_calloc (1, sizeof (MESSAGE));
-  if (ctx->mx_ops->open_msg (ctx, msg, msgno))
+  if (ctx->mx_ops->open_msg (ctx, msg, msgno, headers))
     FREE (&msg);
 
   return msg;

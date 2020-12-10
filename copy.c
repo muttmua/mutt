@@ -756,7 +756,7 @@ mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
   MESSAGE *msg;
   int r;
 
-  if ((msg = mx_open_message (src, hdr->msgno)) == NULL)
+  if ((msg = mx_open_message (src, hdr->msgno, 0)) == NULL)
     return -1;
   r = _mutt_copy_message (fpout, msg->fp, hdr, hdr->content, flags, chflags);
   if ((r >= 0) && (ferror (fpout) || feof (fpout)))
@@ -814,7 +814,7 @@ mutt_append_message (CONTEXT *dest, CONTEXT *src, HEADER *hdr, int cmflags,
   MESSAGE *msg;
   int r;
 
-  if ((msg = mx_open_message (src, hdr->msgno)) == NULL)
+  if ((msg = mx_open_message (src, hdr->msgno, 0)) == NULL)
     return -1;
   r = _mutt_append_message (dest, msg->fp, src, hdr, hdr->content, cmflags, chflags);
   mx_close_message (src, &msg);

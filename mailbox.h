@@ -61,7 +61,7 @@ typedef struct _message
 
 CONTEXT *mx_open_mailbox (const char *, int, CONTEXT *);
 
-MESSAGE *mx_open_message (CONTEXT *, int);
+MESSAGE *mx_open_message (CONTEXT *, int, int);
 MESSAGE *mx_open_new_message (CONTEXT *, HEADER *, int);
 
 void mx_fastclose_mailbox (CONTEXT *);

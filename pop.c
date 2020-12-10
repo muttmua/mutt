@@ -542,7 +542,7 @@ int pop_close_mailbox (CONTEXT *ctx)
 }
 
 /* fetch message from POP server */
-static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
+static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers)
 {
   int ret, rc = -1;
   void *uidl;
@@ -577,7 +577,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
       mutt_sleep (2);
       return -1;
     }
-    else
+    else if (!headers)
     {
       /* clear the previous entry */
       unlink (cache->path);
@@ -601,10 +601,14 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
     }
 
     mutt_progress_init (&progressbar, _("Fetching message..."),
-			MUTT_PROGRESS_SIZE, NetInc, h->content->length + h->content->offset - 1);
+			MUTT_PROGRESS_SIZE, NetInc,
+                        headers ?
+                        h->content->offset - 1 :
+                        h->content->length + h->content->offset - 1);
 
     /* see if we can put in body cache; use our cache as fallback */
-    if (!(msg->fp = mutt_bcache_put (pop_data->bcache, cache_id (h->data), 1)))
+    if (headers ||
+        !(msg->fp = mutt_bcache_put (pop_data->bcache, cache_id (h->data), 1)))
     {
       /* no */
       bcache = 0;
@@ -615,24 +619,35 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
 	mutt_sleep (2);
 	goto cleanup;
       }
-    }
 
-    snprintf (buf, sizeof (buf), "RETR %d\r\n", h->refno);
+      if (headers)
+        unlink (mutt_b2s (path));
+   }
+
+    snprintf (buf, sizeof (buf),
+              headers ? "TOP %d 0\r\n" : "RETR %d\r\n",
+              h->refno);
 
     ret = pop_fetch_data (pop_data, buf, &progressbar, fetch_message, msg->fp);
     if (ret == 0)
+    {
+      if (headers && pop_data->cmd_top == 2)
+	pop_data->cmd_top = 1;
       break;
+    }
 
     safe_fclose (&msg->fp);
 
     /* if RETR failed (e.g. connection closed), be sure to remove either
      * the file in bcache or from POP's own cache since the next iteration
      * of the loop will re-attempt to put() the message */
-    if (!bcache)
+    if (!bcache && !headers)
       unlink (mutt_b2s (path));
 
     if (ret == -2)
     {
+      if (headers && pop_data->cmd_top == 2)
+        pop_data->cmd_top = 0;
       mutt_error ("%s", pop_data->err_msg);
       mutt_sleep (2);
       goto cleanup;
@@ -649,13 +664,17 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
   /* Update the header information.  Previously, we only downloaded a
    * portion of the headers, those required for the main display.
    */
-  if (bcache)
-    mutt_bcache_commit (pop_data->bcache, cache_id (h->data));
-  else
+  if (!headers)
   {
-    cache->index = h->index;
-    cache->path = safe_strdup (mutt_b2s (path));
+    if (bcache)
+      mutt_bcache_commit (pop_data->bcache, cache_id (h->data));
+    else
+    {
+      cache->index = h->index;
+      cache->path = safe_strdup (mutt_b2s (path));
+    }
   }
+
   rewind (msg->fp);
   uidl = h->data;
 
@@ -670,15 +689,19 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno)
   mutt_label_hash_add (ctx, h);
 
   h->data = uidl;
-  h->lines = 0;
-  fgets (buf, sizeof (buf), msg->fp);
-  while (!feof (msg->fp))
-  {
-    ctx->hdrs[msgno]->lines++;
-    fgets (buf, sizeof (buf), msg->fp);
-  }
 
-  h->content->length = ftello (msg->fp) - h->content->offset;
+  if (!headers)
+  {
+    h->lines = 0;
+    fgets (buf, sizeof (buf), msg->fp);
+    while (!feof (msg->fp))
+    {
+      ctx->hdrs[msgno]->lines++;
+      fgets (buf, sizeof (buf), msg->fp);
+    }
+
+    h->content->length = ftello (msg->fp) - h->content->offset;
+  }
 
   /* This needs to be done in case this is a multipart message */
   if (!WithCrypto)

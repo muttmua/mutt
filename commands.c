@@ -1197,7 +1197,7 @@ static int _mutt_check_traditional_pgp (HEADER *h, int *redraw)
   h->security |= PGP_TRADITIONAL_CHECKED;
 
   mutt_parse_mime_message (Context, h);
-  if ((msg = mx_open_message (Context, h->msgno)) == NULL)
+  if ((msg = mx_open_message (Context, h->msgno, 0)) == NULL)
     return 0;
   if (crypt_pgp_check_traditional (msg->fp, h->content, 0))
   {

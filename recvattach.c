@@ -1331,7 +1331,7 @@ void mutt_view_attachments (HEADER *hdr)
 
   mutt_message_hook (Context, hdr, MUTT_MESSAGEHOOK);
 
-  if ((msg = mx_open_message (Context, hdr->msgno)) == NULL)
+  if ((msg = mx_open_message (Context, hdr->msgno, 0)) == NULL)
     return;
 
   menu = mutt_new_menu (MENU_ATTACH);

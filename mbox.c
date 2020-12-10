@@ -506,7 +506,7 @@ static int mbox_close_mailbox (CONTEXT *ctx)
   return 0;
 }
 
-static int mbox_open_message (CONTEXT *ctx,  MESSAGE *msg, int msgno)
+static int mbox_open_message (CONTEXT *ctx,  MESSAGE *msg, int msgno, int headers)
 {
   msg->fp = ctx->fp;
 

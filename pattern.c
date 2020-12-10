@@ -336,7 +336,7 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
   char *buf;
   size_t blen;
 
-  if ((msg = mx_open_message (ctx, msgno)) != NULL)
+  if ((msg = mx_open_message (ctx, msgno, pat->op == MUTT_HEADER)) != NULL)
   {
     if (option (OPTTHOROUGHSRC))
     {

@@ -81,7 +81,7 @@ static void parse_list_headers (CONTEXT *ctx, HEADER *hdr,
   char *line, *h, *p;
   size_t linelen;
 
-  if ((msg = mx_open_message (ctx, hdr->msgno)) != NULL)
+  if ((msg = mx_open_message (ctx, hdr->msgno, 1)) != NULL)
   {
     fseeko (msg->fp, hdr->offset, 0);
 

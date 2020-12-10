@@ -1163,7 +1163,7 @@ void mutt_parse_mime_message (CONTEXT *ctx, HEADER *cur)
     if (cur->content->parts)
       break; /* The message was parsed earlier. */
 
-    if ((msg = mx_open_message (ctx, cur->msgno)))
+    if ((msg = mx_open_message (ctx, cur->msgno, 0)))
     {
       mutt_parse_part (msg->fp, cur->content);
 
