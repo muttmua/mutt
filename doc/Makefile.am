@@ -238,6 +238,7 @@ muttrc.man: makedoc.pl $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
 		> muttrc.man
 
 EDIT = sed -e 's,@sysconfdir\@,$(sysconfdir),g' \
+	-e 's,@pkgdatadir\@,$(pkgdatadir),g' \
 	-e 's,@bindir\@,$(bindir),g' \
 	-e 's,@docdir\@,$(docdir),g'
 

@@ -257,7 +257,7 @@ Used for testing translation changes.
 .I $XDG_CONFIG_HOME/mutt/muttrc
 User configuration files.
 .TP
-.I @sysconfdir@/Muttrc
+.I @sysconfdir@/Muttrc or @pkgdatadir@/Muttrc
 System-wide configuration file.
 .TP
 .I /tmp/muttXXXXXX
