@@ -579,7 +579,10 @@ static int ssl_socket_open (CONNECTION * conn)
 static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
 {
   int err;
-  const char* errmsg;
+  const char *errmsg;
+  char *hostname;
+
+  hostname = SslVerifyHostOverride ? SslVerifyHostOverride : conn->account.host;
 
   if ((HostExDataIndex = SSL_get_ex_new_index (0, "host", NULL, NULL, NULL)) == -1)
   {
@@ -587,7 +590,7 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
     return -1;
   }
 
-  if (! SSL_set_ex_data (ssldata->ssl, HostExDataIndex, conn->account.host))
+  if (! SSL_set_ex_data (ssldata->ssl, HostExDataIndex, hostname))
   {
     dprint (1, (debugfile, "failed to save hostname in SSL structure\n"));
     return -1;
@@ -608,7 +611,7 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
   SSL_set_verify (ssldata->ssl, SSL_VERIFY_PEER, ssl_verify_callback);
   SSL_set_mode (ssldata->ssl, SSL_MODE_AUTO_RETRY);
 
-  if (!SSL_set_tlsext_host_name (ssldata->ssl, conn->account.host))
+  if (!SSL_set_tlsext_host_name (ssldata->ssl, hostname))
   {
     /* L10N: This is a warning when trying to set the host name for
      * TLS Server Name Indication (SNI).  This allows the server to present

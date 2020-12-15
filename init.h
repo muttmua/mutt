@@ -4119,6 +4119,14 @@ struct option_t MuttVars[] = {
   ** URL. You should only unset this for particular known hosts, using
   ** the \fC$<account-hook>\fP function.
   */
+  { "ssl_verify_host_override", DT_STR, R_NONE, {.p=&SslVerifyHostOverride}, {.p=0} },
+  /*
+  ** .pp
+  ** Defines an alternate host name to verify the server certificate against.
+  ** This should not be set unless you are sure what you are doing, but it
+  ** might be useful for connection to a .onion host without a properly
+  ** configured host name in the certificate.  See $$ssl_verify_host.
+  */
 # ifdef USE_SSL_OPENSSL
 #  ifdef HAVE_SSL_PARTIAL_CHAIN
   { "ssl_verify_partial_chains", DT_BOOL, R_NONE, {.l=OPTSSLVERIFYPARTIAL}, {.l=0} },

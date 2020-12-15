@@ -403,6 +403,7 @@ static int tls_negotiate (CONNECTION * conn)
 {
   tlssockdata *data;
   int err;
+  char *hostname;
 
   data = (tlssockdata *) safe_calloc (1, sizeof (tlssockdata));
   conn->sockdata = data;
@@ -448,8 +449,9 @@ static int tls_negotiate (CONNECTION * conn)
   /* set socket */
   gnutls_transport_set_ptr (data->state, (gnutls_transport_ptr_t)(long)conn->fd);
 
-  if (gnutls_server_name_set (data->state, GNUTLS_NAME_DNS, conn->account.host,
-                              mutt_strlen (conn->account.host)))
+  hostname = SslVerifyHostOverride ? SslVerifyHostOverride : conn->account.host;
+  if (gnutls_server_name_set (data->state, GNUTLS_NAME_DNS, hostname,
+                              mutt_strlen (hostname)))
   {
     mutt_error _("Warning: unable to set TLS SNI host name");
     mutt_sleep (1);
@@ -1170,6 +1172,9 @@ static int tls_check_certificate (CONNECTION* conn)
   int certerr, i, preauthrc, savedcert, rc = 0;
   int max_preauth_pass = -1;
   int rcsettrust;
+  char *hostname;
+
+  hostname = SslVerifyHostOverride ? SslVerifyHostOverride : conn->account.host;
 
   /* tls_verify_peers() calls gnutls_certificate_verify_peers2(),
    * which verifies the auth_type is GNUTLS_CRD_CERTIFICATE
@@ -1194,7 +1199,7 @@ static int tls_check_certificate (CONNECTION* conn)
   preauthrc = 0;
   for (i = 0; i < cert_list_size; i++)
   {
-    rc = tls_check_preauth (&cert_list[i], certstat, conn->account.host, i,
+    rc = tls_check_preauth (&cert_list[i], certstat, hostname, i,
                             &certerr, &savedcert);
     preauthrc += rc;
     if (!preauthrc)
@@ -1212,7 +1217,7 @@ static int tls_check_certificate (CONNECTION* conn)
   /* then check interactively, starting from chain root */
   for (i = cert_list_size - 1; i >= 0; i--)
   {
-    rc = tls_check_one_certificate (&cert_list[i], certstat, conn->account.host,
+    rc = tls_check_one_certificate (&cert_list[i], certstat, hostname,
                                     i, cert_list_size);
 
     /* Stop checking if the menu cert is aborted or rejected. */
