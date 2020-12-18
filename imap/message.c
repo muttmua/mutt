@@ -56,6 +56,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
                                                    unsigned int uidnext,
                                                    unsigned long long hc_modseq,
                                                    int eval_qresync);
+static int verify_qresync (IMAP_DATA *idata);
 #endif  /* USE_HCACHE */
 
 static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
@@ -243,6 +244,10 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
 
   ctx = idata->ctx;
 
+#if USE_HCACHE
+retry:
+#endif /* USE_HCACHE */
+
   /* make sure context has room to hold the mailbox */
   while (msn_end > ctx->hdrmax)
     mx_alloc_memory (ctx);
@@ -338,6 +343,26 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
   if (read_headers_fetch_new (idata, msn_begin, msn_end, evalhc, &maxuid,
                               initial_download) < 0)
     goto bail;
+
+#if USE_HCACHE
+  if (eval_qresync && initial_download)
+  {
+    if (verify_qresync (idata) != 0)
+    {
+      eval_qresync = 0;
+      eval_condstore = 0;
+      evalhc = 0;
+      hc_modseq = 0;
+      maxuid = 0;
+      FREE (&uid_seqset);
+      uid_validity = 0;
+      uidnext = 0;
+
+      goto retry;
+    }
+  }
+#endif /* USE_HCACHE */
+
 
   if (maxuid && (status = imap_mboxcache_get (idata, idata->mailbox, 0)) &&
       (status->uidnext < maxuid + 1))
@@ -701,6 +726,71 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
   ctx->flagged = 0;
 
   return 0;
+}
+
+/*
+ * Run a couple basic checks to see if QRESYNC got jumbled.
+ * If so, wipe the context and try again with a normal download.
+ */
+static int verify_qresync (IMAP_DATA *idata)
+{
+  CONTEXT *ctx;
+  HEADER *h, *uidh;
+  int i;
+  unsigned int msn;
+
+  ctx = idata->ctx;
+
+  for (i = 0; i < ctx->msgcount; i++)
+  {
+    h = ctx->hdrs[i];
+
+    if (!h)
+      goto fail;
+
+    msn = HEADER_DATA(h)->msn;
+    if ((msn < 1) || (msn > idata->max_msn) ||
+        (idata->msn_index[msn - 1] != h))
+      goto fail;
+
+    uidh = (HEADER *)int_hash_find (idata->uid_hash, HEADER_DATA(h)->uid);
+    if (uidh != h)
+      goto fail;
+  }
+
+  return 0;
+
+fail:
+  FREE (&idata->msn_index);
+  idata->msn_index_size = 0;
+  idata->max_msn = 0;
+
+  hash_destroy (&idata->uid_hash, NULL);
+
+  for (i = 0; i < ctx->msgcount; i++)
+  {
+    if (ctx->hdrs[i] && ctx->hdrs[i]->data)
+      imap_free_header_data ((IMAP_HEADER_DATA**)&(ctx->hdrs[i]->data));
+    mutt_free_header (&ctx->hdrs[i]);
+  }
+  ctx->msgcount = 0;
+
+  mutt_hcache_delete (idata->hcache, "/MODSEQ", imap_hcache_keylen);
+  imap_hcache_clear_uid_seqset (idata);
+  imap_hcache_close (idata);
+
+  if (!ctx->quiet)
+  {
+    /* L10N:
+       After opening an IMAP mailbox using QRESYNC, Mutt performs
+       a quick sanity check.  If that fails, Mutt reopens the mailbox
+       using a normal download.
+    */
+    mutt_error _("QRESYNC failed.  Reopening mailbox.");
+    mutt_sleep (0);
+  }
+
+  return -1;
 }
 #endif  /* USE_HCACHE */
 
