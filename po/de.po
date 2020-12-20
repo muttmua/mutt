@@ -3091,7 +3091,7 @@ msgstr "Erneut verbinden ..."
 #.
 #: imap/imap.c:698
 msgid "Reconnect failed.  Mailbox closed."
-msgstr "Verbindung abgebrochen. Mailbox geschlosse."
+msgstr "Verbindung abgebrochen. Mailbox geschlossen."
 
 #. L10N:
 #. Message when Mutt reconnects to an IMAP mailbox after a fatal error.
