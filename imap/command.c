@@ -484,7 +484,7 @@ static void cmd_handle_fatal (IMAP_DATA* idata)
     {
       idata->status = IMAP_FATAL;
       /* L10N:
-         When a fatal error occurs with the IMAP connnection for
+         When a fatal error occurs with the IMAP connection for
          the currently open mailbox, we print this message, and
          will try to reconnect and merge current changes back during
          mx_check_mailbox()
