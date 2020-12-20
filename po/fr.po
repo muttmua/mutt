@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-07 02:06+0100\n"
-"PO-Revision-Date: 2020-12-07 02:08+0100\n"
+"POT-Creation-Date: 2020-12-20 03:39+0100\n"
+"PO-Revision-Date: 2020-12-20 03:40+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -76,7 +76,7 @@ msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
 #: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
-#: background.c:369 browser.c:46 history.c:75 listmenu.c:37 pager.c:1597
+#: background.c:369 browser.c:46 history.c:75 listmenu.c:49 pager.c:1597
 #: pattern.c:2140 postpone.c:42 query.c:49 recvattach.c:59
 msgid "Exit"
 msgstr "Quitter"
@@ -96,8 +96,8 @@ msgstr "Sélectionner"
 #. L10N: localized names of RFC 2369 list operations
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4568
-#: curs_main.c:555 history.c:78 listmenu.c:48 mutt_ssl.c:1325
-#: mutt_ssl_gnutls.c:1040 pager.c:2002 pattern.c:2142 pgpkey.c:523
+#: curs_main.c:555 history.c:78 listmenu.c:61 mutt_ssl.c:1328
+#: mutt_ssl_gnutls.c:1042 pager.c:2002 pattern.c:2142 pgpkey.c:523
 #: postpone.c:45 query.c:54 recvattach.c:63 smime.c:468
 msgid "Help"
 msgstr "Aide"
@@ -2126,7 +2126,7 @@ msgstr "gpgme_op_keylist_next a échoué : %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4560 mutt_ssl.c:1323 mutt_ssl_gnutls.c:1038 pgpkey.c:516
+#: crypt-gpgme.c:4560 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1040 pgpkey.c:516
 #: smime.c:463
 msgid "Exit  "
 msgstr "Quitter  "
@@ -2348,7 +2348,7 @@ msgstr "L'historique des erreurs est actuellement affiché."
 msgid "Error History"
 msgstr "Historique des erreurs"
 
-#: curs_lib.c:946 mutt_socket.c:664 mutt_ssl.c:633
+#: curs_lib.c:946 mutt_socket.c:664 mutt_ssl.c:636
 msgid "unknown error"
 msgstr "erreur inconnue"
 
@@ -2412,7 +2412,7 @@ msgstr "Sauver"
 msgid "Mail"
 msgstr "Message"
 
-#: curs_main.c:553 listmenu.c:38 pager.c:1605
+#: curs_main.c:553 listmenu.c:50 pager.c:1605
 msgid "Reply"
 msgstr "Répondre"
 
@@ -3233,7 +3233,7 @@ msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1051 imap/imap.c:2556 imap/message.c:1432 muttlib.c:2020
+#: imap/imap.c:1051 imap/imap.c:2557 imap/message.c:1549 muttlib.c:2010
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
@@ -3270,100 +3270,109 @@ msgstr "Effacement des messages sur le serveur..."
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:2202
+#: imap/imap.c:2203
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:2271
+#: imap/imap.c:2272
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:2290
+#: imap/imap.c:2291
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:2292
+#: imap/imap.c:2293
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:2302
+#: imap/imap.c:2303
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:2304
+#: imap/imap.c:2305
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2541 imap/message.c:1396
+#: imap/imap.c:2542 imap/message.c:1513
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
 
 #. L10N: This prompt is made if the user hits Ctrl-C when opening
 #. * an IMAP mailbox
-#: imap/message.c:87
+#: imap/message.c:88
 msgid "Abort download and close mailbox?"
 msgstr "Abandonner le téléchargement et fermer la boîte aux lettres ?"
 
-#: imap/message.c:110 mx.c:1445
+#: imap/message.c:111 mx.c:1449
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Dépassement de capacité sur entier -- impossible d'allouer la mémoire."
 
 # , c-format
 #. L10N:
 #. Comparing the cached data with the IMAP server's data
-#: imap/message.c:427
+#: imap/message.c:452
 msgid "Evaluating cache..."
 msgstr "Évaluation du cache..."
 
 # , c-format
 #. L10N:
 #. Fetching IMAP flag changes, using the CONDSTORE extension
-#: imap/message.c:628
+#: imap/message.c:653
 msgid "Fetching flag updates..."
 msgstr "Récupération de la mise à jour des indicateurs..."
 
-#: imap/message.c:751
+#. L10N:
+#. After opening an IMAP mailbox using QRESYNC, Mutt performs
+#. a quick sanity check.  If that fails, Mutt reopens the mailbox
+#. using a normal download.
+#.
+#: imap/message.c:789
+msgid "QRESYNC failed.  Reopening mailbox."
+msgstr "QRESYNC a échoué. Réouverture de la boîte aux lettres."
+
+#: imap/message.c:844
 msgid "Unable to fetch headers from this IMAP server version."
 msgstr ""
 "Impossible de récupérer les en-têtes à partir de cette version du serveur "
 "IMAP."
 
-#: imap/message.c:764
+#: imap/message.c:857
 #, c-format
 msgid "Could not create temporary file %s"
 msgstr "Impossible de créer le fichier temporaire %s"
 
 # , c-format
-#: imap/message.c:772 pop.c:309
+#: imap/message.c:865 pop.c:309
 msgid "Fetching message headers..."
 msgstr "Récupération des en-têtes des messages..."
 
-#: imap/message.c:983 imap/message.c:1049 pop.c:603
+#: imap/message.c:1081 imap/message.c:1160 pop.c:603
 msgid "Fetching message..."
 msgstr "Récupération du message..."
 
-#: imap/message.c:1036 pop.c:598
+#: imap/message.c:1145 pop.c:598
 msgid "The message index is incorrect. Try reopening the mailbox."
 msgstr ""
 "L'index du message est incorrect. Essayez de rouvrir la boîte aux lettres."
 
-#: imap/message.c:1212
+#: imap/message.c:1329
 msgid "Uploading message..."
 msgstr "Chargement du message..."
 
 # , c-format
-#: imap/message.c:1400
+#: imap/message.c:1517
 #, c-format
 msgid "Copying message %d to %s..."
 msgstr "Copie du message %d dans %s..."
@@ -3614,7 +3623,7 @@ msgstr "----- Fin du message transféré -----"
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4169
+#: init.h:4177
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
@@ -3627,14 +3636,14 @@ msgstr ""
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4372
+#: init.h:4380
 msgid "M%?n?AIL&ail?"
 msgstr "C%?n?OURRIER&ourrier?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4389
+#: init.h:4397
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt avec %?m?%m messages&aucun message?%?n? [%n NOUV.]?"
 
@@ -3713,48 +3722,48 @@ msgstr ""
 msgid "Out of memory!"
 msgstr "Plus de mémoire !"
 
-#: listmenu.c:39 listmenu.c:49
+#: listmenu.c:51 listmenu.c:62
 msgid "Post"
 msgstr "Poster"
 
 # , c-format
-#: listmenu.c:40 listmenu.c:50
+#: listmenu.c:52 listmenu.c:63
 msgid "Subscribe"
 msgstr "S'abonner"
 
 # , c-format
-#: listmenu.c:41 listmenu.c:51
+#: listmenu.c:53 listmenu.c:64
 msgid "Unsubscribe"
 msgstr "Se désabonner"
 
-#: listmenu.c:42 listmenu.c:53
+#: listmenu.c:54 listmenu.c:66
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: listmenu.c:52
+#: listmenu.c:65
 msgid "Archives"
 msgstr "Archives"
 
 #. L10N: given when an rfc 2369 action is not specified by this message
-#: listmenu.c:122
+#: listmenu.c:208
 #, c-format
 msgid "No list action available for %s."
 msgstr "Pas d'action de liste disponible pour \"%s\"."
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
-#: listmenu.c:129
+#: listmenu.c:215
 msgid "List actions only support mailto: URIs. (Try a browser?)"
 msgstr ""
 "Les actions de liste ne supportent que les URI mailto:. (Prendre un "
 "navigateur?)"
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
-#: listmenu.c:138
+#: listmenu.c:224
 msgid "Could not parse mailto: URI."
 msgstr "Impossible d'analyser l'URI \"mailto:\"."
 
 #. L10N: menu name for list actions
-#: listmenu.c:161
+#: listmenu.c:251
 msgid "Available mailing list actions"
 msgstr "Actions de liste de diffusion disponibles"
 
@@ -4248,15 +4257,15 @@ msgstr "Impossible de créer le contexte SSL"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:616 mutt_ssl_gnutls.c:454
+#: mutt_ssl.c:619 mutt_ssl_gnutls.c:456
 msgid "Warning: unable to set TLS SNI host name"
 msgstr "Attention : impossible de fixer le nom d'hôte TLS SNI"
 
-#: mutt_ssl.c:627
+#: mutt_ssl.c:630
 msgid "I/O error"
 msgstr "erreur d'E/S"
 
-#: mutt_ssl.c:636
+#: mutt_ssl.c:639
 #, c-format
 msgid "SSL failed: %s"
 msgstr "SSL a échoué : %s"
@@ -4266,84 +4275,84 @@ msgstr "SSL a échoué : %s"
 #. %1$s is version (e.g. "TLSv1.2")
 #. %2$s is cipher_version (e.g. "TLSv1/SSLv3")
 #. %3$s is cipher_name (e.g. "ECDHE-RSA-AES128-GCM-SHA256")
-#: mutt_ssl.c:646
+#: mutt_ssl.c:649
 #, c-format
 msgid "%s connection using %s (%s)"
 msgstr "Connexion %s utilisant %s (%s)"
 
-#: mutt_ssl.c:776
+#: mutt_ssl.c:779
 msgid "Unknown"
 msgstr "Inconnu"
 
 # , c-format
-#: mutt_ssl.c:789 mutt_ssl_gnutls.c:637
+#: mutt_ssl.c:792 mutt_ssl_gnutls.c:639
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[impossible de calculer]"
 
 # , c-format
-#: mutt_ssl.c:807 mutt_ssl_gnutls.c:660
+#: mutt_ssl.c:810 mutt_ssl_gnutls.c:662
 msgid "[invalid date]"
 msgstr "[date invalide]"
 
-#: mutt_ssl.c:876
+#: mutt_ssl.c:879
 msgid "Server certificate is not yet valid"
 msgstr "Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl.c:886
+#: mutt_ssl.c:889
 msgid "Server certificate has expired"
 msgstr "Le certificat du serveur a expiré"
 
-#: mutt_ssl.c:1035
+#: mutt_ssl.c:1038
 msgid "cannot get certificate subject"
 msgstr "impossible d'obtenir le détenteur du certificat (subject)"
 
-#: mutt_ssl.c:1045 mutt_ssl.c:1054
+#: mutt_ssl.c:1048 mutt_ssl.c:1057
 msgid "cannot get certificate common name"
 msgstr "impossible d'obtenir le nom du détenteur du certificat (CN)"
 
-#: mutt_ssl.c:1069
+#: mutt_ssl.c:1072
 #, c-format
 msgid "certificate owner does not match hostname %s"
 msgstr "le propriétaire du certificat ne correspond pas au nom %s"
 
-#: mutt_ssl.c:1176
+#: mutt_ssl.c:1179
 #, c-format
 msgid "Certificate host check failed: %s"
 msgstr "Échec de vérification de machine : %s"
 
-#: mutt_ssl.c:1238 mutt_ssl_gnutls.c:907
+#: mutt_ssl.c:1241 mutt_ssl_gnutls.c:909
 msgid "This certificate belongs to:"
 msgstr "Ce certificat appartient à :"
 
-#: mutt_ssl.c:1247 mutt_ssl_gnutls.c:949
+#: mutt_ssl.c:1250 mutt_ssl_gnutls.c:951
 msgid "This certificate was issued by:"
 msgstr "Ce certificat a été émis par :"
 
-#: mutt_ssl.c:1256 mutt_ssl_gnutls.c:962
+#: mutt_ssl.c:1259 mutt_ssl_gnutls.c:964
 msgid "This certificate is valid"
 msgstr "Ce certificat est valide"
 
-#: mutt_ssl.c:1257 mutt_ssl_gnutls.c:965
+#: mutt_ssl.c:1260 mutt_ssl_gnutls.c:967
 #, c-format
 msgid "   from %s"
 msgstr "     de %s"
 
-#: mutt_ssl.c:1260 mutt_ssl_gnutls.c:970
+#: mutt_ssl.c:1263 mutt_ssl_gnutls.c:972
 #, c-format
 msgid "     to %s"
 msgstr "      à %s"
 
-#: mutt_ssl.c:1267 mutt_ssl_gnutls.c:977
+#: mutt_ssl.c:1270 mutt_ssl_gnutls.c:979
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Empreinte SHA1 : %s"
 
-#: mutt_ssl.c:1273 mutt_ssl.c:1276 mutt_ssl_gnutls.c:983 mutt_ssl_gnutls.c:986
+#: mutt_ssl.c:1276 mutt_ssl.c:1279 mutt_ssl_gnutls.c:985 mutt_ssl_gnutls.c:988
 msgid "SHA256 Fingerprint: "
 msgstr "Empreinte SHA256 : "
 
-#: mutt_ssl.c:1280 mutt_ssl_gnutls.c:1007
+#: mutt_ssl.c:1283 mutt_ssl_gnutls.c:1009
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
@@ -4354,31 +4363,31 @@ msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
 #. * These prompts are the interactive certificate confirmation prompts for
 #. * an OpenSSL connection.
 #.
-#: mutt_ssl.c:1306
+#: mutt_ssl.c:1309
 msgid "roas"
 msgstr "ruas"
 
-#: mutt_ssl.c:1310
+#: mutt_ssl.c:1313
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours, (s)auter"
 
-#: mutt_ssl.c:1312 mutt_ssl_gnutls.c:1016
+#: mutt_ssl.c:1315 mutt_ssl_gnutls.c:1018
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 
-#: mutt_ssl.c:1317
+#: mutt_ssl.c:1320
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (s)auter"
 
-#: mutt_ssl.c:1319 mutt_ssl_gnutls.c:1027
+#: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1029
 msgid "(r)eject, accept (o)nce"
 msgstr "(r)ejeter, accepter (u)ne fois"
 
-#: mutt_ssl.c:1357 mutt_ssl_gnutls.c:1090
+#: mutt_ssl.c:1360 mutt_ssl_gnutls.c:1092
 msgid "Warning: Couldn't save certificate"
 msgstr "Attention : le certificat n'a pas pu être sauvé"
 
-#: mutt_ssl.c:1362 mutt_ssl_gnutls.c:1095
+#: mutt_ssl.c:1365 mutt_ssl_gnutls.c:1097
 msgid "Certificate saved"
 msgstr "Certificat sauvé"
 
@@ -4397,40 +4406,40 @@ msgstr ""
 "Sélection de suite cryptographique explicite via $ssl_ciphers non supportée"
 
 # , c-format
-#: mutt_ssl_gnutls.c:501
+#: mutt_ssl_gnutls.c:503
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "Connexion SSL/TLS utilisant %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:731 mutt_ssl_gnutls.c:859
+#: mutt_ssl_gnutls.c:733 mutt_ssl_gnutls.c:861
 msgid "Error initialising gnutls certificate data"
 msgstr "Erreur d'initialisation des données du certificat gnutls"
 
-#: mutt_ssl_gnutls.c:738 mutt_ssl_gnutls.c:866
+#: mutt_ssl_gnutls.c:740 mutt_ssl_gnutls.c:868
 msgid "Error processing certificate data"
 msgstr "Erreur de traitement des données du certificat"
 
-#: mutt_ssl_gnutls.c:993
+#: mutt_ssl_gnutls.c:995
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "ATTENTION ! Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl_gnutls.c:995
+#: mutt_ssl_gnutls.c:997
 msgid "WARNING: Server certificate has expired"
 msgstr "ATTENTION ! Le certificat du serveur a expiré"
 
-#: mutt_ssl_gnutls.c:997
+#: mutt_ssl_gnutls.c:999
 msgid "WARNING: Server certificate has been revoked"
 msgstr "ATTENTION ! Le certificat du serveur a été révoqué"
 
-#: mutt_ssl_gnutls.c:999
+#: mutt_ssl_gnutls.c:1001
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "ATTENTION ! Le nom du serveur ne correspond pas au certificat"
 
-#: mutt_ssl_gnutls.c:1001
+#: mutt_ssl_gnutls.c:1003
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "ATTENTION ! Le signataire du certificat du serveur n'est pas un CA"
 
-#: mutt_ssl_gnutls.c:1004
+#: mutt_ssl_gnutls.c:1006
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Attention : le certificat du serveur a été signé avec un algorithme peu sûr"
@@ -4441,7 +4450,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1023
+#: mutt_ssl_gnutls.c:1025
 msgid "roa"
 msgstr "rua"
 
@@ -4451,15 +4460,15 @@ msgstr "rua"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1034
+#: mutt_ssl_gnutls.c:1036
 msgid "ro"
 msgstr "ru"
 
-#: mutt_ssl_gnutls.c:1151 mutt_ssl_gnutls.c:1186
+#: mutt_ssl_gnutls.c:1153 mutt_ssl_gnutls.c:1191
 msgid "Unable to get certificate from peer"
 msgstr "Impossible d'obtenir le certificat de la machine distante"
 
-#: mutt_ssl_gnutls.c:1153
+#: mutt_ssl_gnutls.c:1155
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Erreur de vérification du certificat (%s)"
@@ -4484,46 +4493,46 @@ msgstr "Erreur de tunnel en parlant à %s : %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1271
+#: muttlib.c:1261
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr ""
 "Le fichier est un répertoire, sauver dans celui-ci ? [(o)ui, (n)on, (t)ous]"
 
-#: muttlib.c:1271
+#: muttlib.c:1261
 msgid "yna"
 msgstr "ont"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1290
+#: muttlib.c:1280
 msgid "File is a directory, save under it?"
 msgstr "Le fichier est un répertoire, sauver dans celui-ci ?"
 
-#: muttlib.c:1295
+#: muttlib.c:1285
 msgid "File under directory: "
 msgstr "Fichier dans le répertoire : "
 
-#: muttlib.c:1309
+#: muttlib.c:1299
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Le fichier existe, écras(e)r, (c)oncaténer ou (a)nnuler ?"
 
-#: muttlib.c:1309
+#: muttlib.c:1299
 msgid "oac"
 msgstr "eca"
 
-#: muttlib.c:1983
+#: muttlib.c:1973
 msgid "Can't save message to POP mailbox."
 msgstr "Impossible de sauver le message dans la boîte aux lettres POP."
 
 # , c-format
-#: muttlib.c:1993
+#: muttlib.c:1983
 #, c-format
 msgid "Append messages to %s?"
 msgstr "Ajouter les messages à %s ?"
 
 # , c-format
-#: muttlib.c:2006
+#: muttlib.c:1996
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "%s n'est pas une boîte aux lettres !"
@@ -5349,7 +5358,7 @@ msgstr "La commande UIDL n'est pas supportée par le serveur."
 msgid "%d messages have been lost. Try reopening the mailbox."
 msgstr "%d messages ont été perdus. Essayez de rouvrir la boîte aux lettres."
 
-#: pop.c:439 pop.c:859
+#: pop.c:439 pop.c:882
 #, c-format
 msgid "%s is an invalid POP path"
 msgstr "%s est un chemin POP invalide"
@@ -5358,48 +5367,48 @@ msgstr "%s est un chemin POP invalide"
 msgid "Fetching list of messages..."
 msgstr "Récupération de la liste des messages..."
 
-#: pop.c:643
+#: pop.c:658
 msgid "Can't write message to temporary file!"
 msgstr "Impossible d'écrire le message dans le fichier temporaire !"
 
 # , c-format
-#: pop.c:720
+#: pop.c:743
 msgid "Marking messages deleted..."
 msgstr "Marquage des messages à effacer..."
 
-#: pop.c:798 pop.c:879
+#: pop.c:821 pop.c:902
 msgid "Checking for new messages..."
 msgstr "Recherche de nouveaux messages..."
 
-#: pop.c:843
+#: pop.c:866
 msgid "POP host is not defined."
 msgstr "Le serveur POP n'est pas défini."
 
-#: pop.c:907
+#: pop.c:930
 msgid "No new mail in POP mailbox."
 msgstr "Aucun nouveau message dans la boîte aux lettres POP."
 
-#: pop.c:914
+#: pop.c:937
 msgid "Delete messages from server?"
 msgstr "Effacer les messages sur le serveur ?"
 
 # , c-format
-#: pop.c:916
+#: pop.c:939
 #, c-format
 msgid "Reading new messages (%d bytes)..."
 msgstr "Lecture de nouveaux messages (%d octets)..."
 
-#: pop.c:958
+#: pop.c:981
 msgid "Error while writing mailbox!"
 msgstr "Erreur à l'écriture de la boîte aux lettres !"
 
 # , c-format
-#: pop.c:962
+#: pop.c:985
 #, c-format
 msgid "%s [%d of %d messages read]"
 msgstr "%s [%d messages lus sur %d]"
 
-#: pop.c:985 pop_lib.c:379
+#: pop.c:1008 pop_lib.c:379
 msgid "Server closed connection!"
 msgstr "Le serveur a fermé la connexion !"
 
