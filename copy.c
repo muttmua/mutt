@@ -485,7 +485,7 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 static int count_delete_lines (FILE *fp, BODY *b, LOFF_T *length, size_t datelen)
 {
   int dellines = 0;
-  long l;
+  LOFF_T l;
   int ch;
 
   if (b->deleted)

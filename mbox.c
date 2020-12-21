@@ -380,7 +380,7 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 	   */
 	  if (curhdr->lines == 0)
 	  {
-	    int cl = curhdr->content->length;
+	    LOFF_T cl = curhdr->content->length;
 
 	    /* count the number of lines in this message */
 	    if (fseeko (ctx->fp, loc, SEEK_SET) != 0)

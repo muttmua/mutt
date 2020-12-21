@@ -330,7 +330,7 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
   STATE s;
   struct stat st;
   FILE *fp = NULL;
-  long lng = 0;
+  LOFF_T lng = 0;
   int match = 0;
   HEADER *h = ctx->hdrs[msgno];
   char *buf;
@@ -380,7 +380,7 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
       fflush (fp);
       fseek (fp, 0, 0);
       fstat (fileno (fp), &st);
-      lng = (long) st.st_size;
+      lng = (LOFF_T) st.st_size;
     }
     else
     {

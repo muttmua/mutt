@@ -714,7 +714,7 @@ cleanup:
 /* Create a GPGME data object from the stream FP but limit the object
    to LENGTH bytes starting at OFFSET bytes from the beginning of the
    file. */
-static gpgme_data_t file_to_data_object (FILE *fp, long offset, long length)
+static gpgme_data_t file_to_data_object (FILE *fp, LOFF_T offset, long length)
 {
   int err = 0;
   gpgme_data_t data;
@@ -2756,8 +2756,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
 {
   int needpass = -1, pgp_keyblock = 0;
   int clearsign = 0;
-  long bytes;
-  LOFF_T last_pos, offset, block_begin, block_end;
+  LOFF_T bytes, last_pos, offset, block_begin, block_end;
   char buf[HUGE_STRING];
   FILE *pgpout = NULL;
 

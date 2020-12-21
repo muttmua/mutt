@@ -114,7 +114,7 @@ static void mutt_convert_to_state(iconv_t cd, char *bufi, size_t *l, STATE *s)
   *l = ibl;
 }
 
-static void mutt_decode_xbit (STATE *s, long len, int istext, iconv_t cd)
+static void mutt_decode_xbit (STATE *s, LOFF_T len, int istext, iconv_t cd)
 {
   int c, ch;
   char bufi[BUFI_SIZE];
@@ -230,7 +230,7 @@ static void qp_decode_line (char *dest, char *src, size_t *l,
  *
  */
 
-static void mutt_decode_quoted (STATE *s, long len, int istext, iconv_t cd)
+static void mutt_decode_quoted (STATE *s, LOFF_T len, int istext, iconv_t cd)
 {
   char line[STRING];
   char decline[2*STRING];
@@ -284,7 +284,7 @@ static void mutt_decode_quoted (STATE *s, long len, int istext, iconv_t cd)
   state_reset_prefix(s);
 }
 
-void mutt_decode_base64 (STATE *s, long len, int istext, iconv_t cd)
+void mutt_decode_base64 (STATE *s, LOFF_T len, int istext, iconv_t cd)
 {
   char buf[5];
   int c1, c2, c3, c4, ch, cr = 0, i;
@@ -375,7 +375,7 @@ static unsigned char decode_byte (char ch)
   return ch - 32;
 }
 
-static void mutt_decode_uuencoded (STATE *s, long len, int istext, iconv_t cd)
+static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
 {
   char tmps[SHORT_STRING];
   char linelen, c, l, out;
@@ -784,7 +784,7 @@ static int text_enriched_handler (BODY *a, STATE *s)
     TEXT, LANGLE, TAG, BOGUS_TAG, NEWLINE, ST_EOF, DONE
   } state = TEXT;
 
-  long bytes = a->length;
+  LOFF_T bytes = a->length;
   struct enriched_state stte;
   wchar_t wc = 0;
   int tag_len = 0;
@@ -1015,10 +1015,10 @@ static int alternative_handler (BODY *a, STATE *s)
     mustfree = 1;
     fstat (fileno (s->fpin), &st);
     b = mutt_new_body ();
-    b->length = (long) st.st_size;
+    b->length = (LOFF_T) st.st_size;
     b->parts = mutt_parse_multipart (s->fpin,
                                      mutt_get_parameter ("boundary", a->parameter),
-                                     (long) st.st_size,
+                                     (LOFF_T) st.st_size,
                                      ascii_strcasecmp ("digest", a->subtype) == 0);
   }
   else
@@ -1242,10 +1242,10 @@ static int multipart_handler (BODY *a, STATE *s)
   {
     fstat (fileno (s->fpin), &st);
     b = mutt_new_body ();
-    b->length = (long) st.st_size;
+    b->length = (LOFF_T) st.st_size;
     b->parts = mutt_parse_multipart (s->fpin,
                                      mutt_get_parameter ("boundary", a->parameter),
-                                     (long) st.st_size,
+                                     (LOFF_T) st.st_size,
                                      ascii_strcasecmp ("digest", a->subtype) == 0);
   }
   else

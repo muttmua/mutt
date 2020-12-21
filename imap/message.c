@@ -1235,7 +1235,7 @@ parsemsg:
       fgets (buf, sizeof (buf), msg->fp);
     }
 
-    h->content->length = ftell (msg->fp) - h->content->offset;
+    h->content->length = ftello (msg->fp) - h->content->offset;
   }
 
   /* This needs to be done in case this is a multipart message */
