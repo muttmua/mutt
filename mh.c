@@ -1811,8 +1811,8 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
   BUFFER *newpath = NULL;
   BUFFER *partpath = NULL;
 
-  long old_body_offset = h->content->offset;
-  long old_body_length = h->content->length;
+  LOFF_T old_body_offset = h->content->offset;
+  LOFF_T old_body_length = h->content->length;
   long old_hdr_lines = h->lines;
 
   if ((dest = mx_open_new_message (ctx, h, 0)) == NULL)

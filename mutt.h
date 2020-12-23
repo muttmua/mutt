@@ -782,7 +782,7 @@ typedef struct body
   PARAMETER *parameter;         /* parameters of the content-type */
   char *description;            /* content-description */
   char *form_name;		/* Content-Disposition form-data name param */
-  long hdr_offset;              /* offset in stream where the headers begin.
+  LOFF_T hdr_offset;            /* offset in stream where the headers begin.
 				 * this info is used when invoking metamail,
 				 * where we need to send the headers of the
 				 * attachment
