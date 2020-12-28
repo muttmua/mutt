@@ -1162,61 +1162,37 @@ then
     fi
 
     dnl -- BDB --
-    ac_bdb_prefix="$with_bdb"
     if test x$with_bdb != xno && test $db_found = no \
 	    && test "$db_requested" = auto -o "$db_requested" = bdb
     then
-        if test x$ac_bdb_prefix = xyes || test x$ac_bdb_prefix = x
+        if test -n "$with_bdb" && test "$with_bdb" != "yes"
         then
-          ac_bdb_prefix="$mutt_cv_prefix /opt/csw/bdb4 /opt /usr/local /usr"
+          CPPFLAGS="$CPPFLAGS -I$with_bdb/include"
+          LDFLAGS="$LDFLAGS -L$with_bdb/lib"
         fi
-        for d in $ac_bdb_prefix; do
-            bdbpfx="$bdbpfx $d"
-            for v in BerkeleyDB.4.3 BerkeleyDB.4.2 BerkeleyDB.4.1; do
-                bdbpfx="$bdbpfx $d/$v"
-            done
-        done
-        BDB_VERSIONS="db-4 db4 db-6 db6 db-6.2 db6.2 db62 db-6.1 db6.1 db61 db-6.0 db6.0 db60 db-5 db5 db-5.3 db5.3 db53 db-5.2 db5.2 db52 db-5.1 db5.1 db51 db-5.0 db5.0 db50 db-4.8 db4.8 db48 db-4.7 db4.7 db47 db-4.6 db4.6 db46 db-4.5 db4.5 db45 db-4.4 db4.4 db44 db-4.3 db4.3 db43 db-4.2 db4.2 db42 db-4.1 db4.1 db41 db ''"
-        AC_MSG_CHECKING([for BerkeleyDB > 4.0])
-        for d in $bdbpfx; do
-            BDB_INCLUDE_DIR=""
-            BDB_LIB_DIR=""
-            for v in / $BDB_VERSIONS; do
-                if test -r "$d/include/$v/db.h"; then
-                    BDB_INCLUDE_DIR="$d/include/$v"
-                    for bdblibdir in "$d/lib/$v" "$d/lib"; do
-                        test -d "$bdblibdir" || continue
-                        BDB_LIB_DIR="$bdblibdir"
-                        for l in `echo $BDB_VERSIONS`; do
-                            CPPFLAGS="$OLDCPPFLAGS -I$BDB_INCLUDE_DIR"
-                            LIBS="$OLDLIBS -L$BDB_LIB_DIR -l$l"
-                            AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-                                #include <stdlib.h>
-                                #include <db.h>
-                            ]], [[
-                                DB *db = NULL;
-                                db->open(db,NULL,NULL,NULL,0,0,0);
-                            ]])],[
-                                ac_cv_dbcreate=yes
-                                BDB_LIB="$l"
-                                break
-                            ],[])
-                        done
-                        test x$ac_cv_dbcreate = xyes && break 2
-                    done
-                fi
-            done
-            test x$BDB_LIB != x && break
-        done
-        if test x$ac_cv_dbcreate = xyes
+        saved_LIBS="$LIBS"
+        LIBS="$LIBS -ldb"
+        AC_CACHE_CHECK([for BerkeleyDB > 4.0], ac_cv_dbcreate, [
+          ac_cv_dbcreate=no
+          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+                          #include <stdlib.h>
+                          #include <db.h>
+                          ]], [[
+                          DB *db = NULL;
+                          db->open(db,NULL,NULL,NULL,0,0,0);
+                          ]])],[ac_cv_dbcreate=yes],[])
+
+          ])
+        LIBS="$saved_LIBS"
+        if test "x$ac_cv_dbcreate" = "xyes"
         then
-            AC_MSG_RESULT(yes)
-            CPPFLAGS="$OLDCPPFLAGS -I$BDB_INCLUDE_DIR"
-            LIBS="$OLDLIBS -L$BDB_LIB_DIR -l$BDB_LIB"
             AC_DEFINE(HAVE_DB4, 1, [Berkeley DB4 Support])
+            MUTTLIBS="$MUTTLIBS -ldb"
             db_found=bdb
-        else
-            AC_MSG_RESULT(no)
+        fi
+        if test "$db_requested" != auto && test "$db_found" != "$db_requested"
+        then
+          AC_MSG_ERROR([BDB could not be used. Check config.log for details.])
         fi
     fi
 
