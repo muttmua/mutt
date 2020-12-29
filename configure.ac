@@ -1137,7 +1137,7 @@ then
     if test x$with_gdbm != xno && test $db_found = no \
 	    && test "$db_requested" = auto -o "$db_requested" = gdbm
     then
-        if test "$with_gdbm" != "yes"
+        if test -n "$with_gdbm" && test "$with_gdbm" != "yes"
         then
           CPPFLAGS="$CPPFLAGS -I$with_gdbm/include"
           LDFLAGS="$LDFLAGS -L$with_gdbm/lib"
@@ -1200,7 +1200,7 @@ then
     if test x$with_lmdb != xno && test $db_found = no \
 	    && test "$db_requested" = auto -o "$db_requested" = lmdb
     then
-        if test "$with_lmdb" != "yes"
+        if test -n "$with_lmdb" && test "$with_lmdb" != "yes"
         then
           CPPFLAGS="$CPPFLAGS -I$with_lmdb/include"
           LDFLAGS="$LDFLAGS -L$with_lmdb/lib"
