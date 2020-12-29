@@ -1008,14 +1008,13 @@ dnl -- start cache --
 db_found=no
 db_requested=auto
 AC_ARG_ENABLE(hcache, AS_HELP_STRING([--enable-hcache],[Enable header caching]))
-AC_ARG_WITH(tokyocabinet, AS_HELP_STRING([--without-tokyocabinet],[Don't use tokyocabinet even if it is available]))
-AC_ARG_WITH(qdbm, AS_HELP_STRING([--without-qdbm],[Don't use qdbm even if it is available]))
-AC_ARG_WITH(gdbm, AS_HELP_STRING([--without-gdbm],[Don't use gdbm even if it is available]))
-AC_ARG_WITH(bdb, AS_HELP_STRING([--with-bdb@<:@=DIR@:>@],[Use BerkeleyDB4 if gdbm is not available]))
-AC_ARG_WITH(lmdb, AS_HELP_STRING([--with-lmdb@<:@=DIR@:>@],[Use LMDB if gdbm is not available]))
-AC_ARG_WITH(kyotocabinet, AS_HELP_STRING([--with-kyotocabinet@<:@=DIR@:>@],[Use kyotocabinet if gdbm is not available]))
+AC_ARG_WITH(kyotocabinet, AS_HELP_STRING([--with-kyotocabinet@<:@=DIR@:>@],[Use kyotocabinet hcache backend]))
+AC_ARG_WITH(tokyocabinet, AS_HELP_STRING([--with-tokyocabinet@<:@=DIR@:>@],[Use tokyocabinet hcache backend]))
+AC_ARG_WITH(lmdb, AS_HELP_STRING([--with-lmdb@<:@=DIR@:>@],[Use lmdb hcache backend]))
+AC_ARG_WITH(qdbm, AS_HELP_STRING([--with-qdbm@<:@=DIR@:>@],[Use qdbm hcache backend]))
+AC_ARG_WITH(gdbm, AS_HELP_STRING([--with-gdbm@<:@=DIR@:>@],[Use gdbm hcache backend]))
+AC_ARG_WITH(bdb, AS_HELP_STRING([--with-bdb@<:@=DIR@:>@],[Use bdb hcache backend]))
 
-db_found=no
 if test x$enable_hcache = xyes
 then
     AC_DEFINE(USE_HCACHE, 1, [Enable header caching])
@@ -1027,9 +1026,32 @@ then
 
     need_md5="yes"
 
+    if test -n "$with_kyotocabinet" && test "$with_kyotocabinet" != "no"
+    then
+      if test "$db_requested" != "auto"
+      then
+        AC_MSG_ERROR([more than one header cache engine requested.])
+      else
+        db_requested=kc
+      fi
+    fi
     if test -n "$with_tokyocabinet" && test "$with_tokyocabinet" != "no"
     then
-      db_requested=tc
+      if test "$db_requested" != "auto"
+      then
+        AC_MSG_ERROR([more than one header cache engine requested.])
+      else
+        db_requested=tc
+      fi
+    fi
+    if test -n "$with_lmdb" && test "$with_lmdb" != "no"
+    then
+      if test "$db_requested" != "auto"
+      then
+        AC_MSG_ERROR([more than one header cache engine requested.])
+      else
+        db_requested=lmdb
+      fi
     fi
     if test -n "$with_qdbm" && test "$with_qdbm" != "no"
     then
@@ -1058,27 +1080,32 @@ then
         db_requested=bdb
       fi
     fi
-    if test -n "$with_lmdb" && test "$with_lmdb" != "no"
+
+    dnl -- Kyoto Cabinet --
+    if test x$with_kyotocabinet != xno && test $db_found = no \
+	    && test "$db_requested" = auto -o "$db_requested" = kc
     then
-      if test "$db_requested" != "auto"
+      if test -n "$with_kyotocabinet" && test "$with_kyotocabinet" != "yes"
       then
-        AC_MSG_ERROR([more than one header cache engine requested.])
-      else
-        db_requested=lmdb
+        CPPFLAGS="$CPPFLAGS -I$with_kyotocabinet/include"
+        LDFLAGS="$LDFLAGS -L$with_kyotocabinet/lib"
       fi
-    fi
-    if test -n "$with_kyotocabinet" && test "$with_kyotocabinet" != "no"
-    then
-      if test "$db_requested" != "auto"
+
+      AC_CHECK_HEADER(kclangc.h,
+      AC_CHECK_LIB(kyotocabinet, kcdbopen,
+        [MUTTLIBS="$MUTTLIBS -lkyotocabinet"
+         AC_DEFINE(HAVE_KC, 1, [Kyoto Cabinet Support])
+         db_found=kc],
+        [CPPFLAGS="$OLDCPPFLAGS"
+         LDFLAGS="$OLDLDFLAGS"]))
+      if test "$db_requested" != auto && test "$db_found" != "$db_requested"
       then
-        AC_MSG_ERROR([more than one header cache engine requested.])
-      else
-        db_requested=kc
+        AC_MSG_ERROR([Kyoto Cabinet could not be used. Check config.log for details.])
       fi
     fi
 
     dnl -- Tokyo Cabinet --
-    if test "$with_tokyocabinet" != "no" \
+    if test "x$with_tokyocabinet" != "xno" && test $db_found = no \
 	    && test "$db_requested" = auto -o "$db_requested" = tc
     then
       if test -n "$with_tokyocabinet" && test "$with_tokyocabinet" != "yes"
@@ -1098,6 +1125,34 @@ then
       then
         AC_MSG_ERROR([Tokyo Cabinet could not be used. Check config.log for details.])
       fi
+    fi
+
+    dnl -- LMDB --
+    if test x$with_lmdb != xno && test $db_found = no \
+	    && test "$db_requested" = auto -o "$db_requested" = lmdb
+    then
+        if test -n "$with_lmdb" && test "$with_lmdb" != "yes"
+        then
+          CPPFLAGS="$CPPFLAGS -I$with_lmdb/include"
+          LDFLAGS="$LDFLAGS -L$with_lmdb/lib"
+        fi
+        saved_LIBS="$LIBS"
+        LIBS="$LIBS -llmdb"
+        AC_CACHE_CHECK(for mdb_env_create, ac_cv_mdbenvcreate,[
+            ac_cv_mdbenvcreate=no
+            AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <lmdb.h>]], [[mdb_env_create(0);]])],[ac_cv_mdbenvcreate=yes],[])
+        ])
+        LIBS="$saved_LIBS"
+        if test "$ac_cv_mdbenvcreate" = yes
+        then
+          AC_DEFINE(HAVE_LMDB, 1, [LMDB Support])
+          MUTTLIBS="$MUTTLIBS -llmdb"
+          db_found=lmdb
+        fi
+        if test "$db_requested" != auto && test "$db_found" != "$db_requested"
+        then
+          AC_MSG_ERROR([LMDB could not be used. Check config.log for details.])
+        fi
     fi
 
     dnl -- QDBM --
@@ -1172,7 +1227,7 @@ then
         fi
         saved_LIBS="$LIBS"
         LIBS="$LIBS -ldb"
-        AC_CACHE_CHECK([for BerkeleyDB > 4.0], ac_cv_dbcreate, [
+        AC_CACHE_CHECK([for BDB > 4.0], ac_cv_dbcreate, [
           ac_cv_dbcreate=no
           AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                           #include <stdlib.h>
@@ -1196,60 +1251,9 @@ then
         fi
     fi
 
-    dnl -- LMDB --
-    if test x$with_lmdb != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = lmdb
-    then
-        if test -n "$with_lmdb" && test "$with_lmdb" != "yes"
-        then
-          CPPFLAGS="$CPPFLAGS -I$with_lmdb/include"
-          LDFLAGS="$LDFLAGS -L$with_lmdb/lib"
-        fi
-        saved_LIBS="$LIBS"
-        LIBS="$LIBS -llmdb"
-        AC_CACHE_CHECK(for mdb_env_create, ac_cv_mdbenvcreate,[
-            ac_cv_mdbenvcreate=no
-            AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <lmdb.h>]], [[mdb_env_create(0);]])],[ac_cv_mdbenvcreate=yes],[])
-        ])
-        LIBS="$saved_LIBS"
-        if test "$ac_cv_mdbenvcreate" = yes
-        then
-          AC_DEFINE(HAVE_LMDB, 1, [LMDB Support])
-          MUTTLIBS="$MUTTLIBS -llmdb"
-          db_found=lmdb
-        fi
-        if test "$db_requested" != auto && test "$db_found" != "$db_requested"
-        then
-          AC_MSG_ERROR([LMDB could not be used. Check config.log for details.])
-        fi
-    fi
-
-    dnl -- Kyoto Cabinet --
-    if test x$with_kyotocabinet != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = kc
-    then
-      if test -n "$with_kyotocabinet" && test "$with_kyotocabinet" != "yes"
-      then
-        CPPFLAGS="$CPPFLAGS -I$with_kyotocabinet/include"
-        LDFLAGS="$LDFLAGS -L$with_kyotocabinet/lib"
-      fi
-
-      AC_CHECK_HEADER(kclangc.h,
-      AC_CHECK_LIB(kyotocabinet, kcdbopen,
-        [MUTTLIBS="$MUTTLIBS -lkyotocabinet"
-         AC_DEFINE(HAVE_KC, 1, [Kyoto Cabinet Support])
-         db_found=kc],
-        [CPPFLAGS="$OLDCPPFLAGS"
-         LDFLAGS="$OLDLDFLAGS"]))
-      if test "$db_requested" != auto && test "$db_found" != "$db_requested"
-      then
-        AC_MSG_ERROR([Kyoto Cabinet could not be used. Check config.log for details.])
-      fi
-    fi
-
     if test $db_found = no
     then
-        AC_MSG_ERROR([You need Tokyo Cabinet, Kyoto Cabinet, QDBM, GDBM, LMDB or Berkeley DB4 for hcache])
+        AC_MSG_ERROR([You need Kyoto Cabinet, Tokyo Cabinet, LMDB, QDBM, GDBM, or BDB for hcache])
     fi
 fi
 dnl -- end cache --

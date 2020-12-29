@@ -136,10 +136,11 @@ options are:
 	significantly more memory.
 
 --enable-hcache
-        Enable header caching support.  Mutt will scan for header
-        cache libraries in the order: tokyocabinet, qdbm, gdbm, bdb,
-        lmdb, kyotocabinet.  The library locations can be specified,
-        or disabled, via with --with/--without for each of those.
+        Enable header caching support.  If no backend library is
+        specified via a --with option (e.g. --with-kyotocabinet), Mutt
+        will scan in the order: kyotocabinet, tokyocabinet, lmdb,
+        qdbm, gdbm, bdb.  To skip scanning one or more of these
+        libraries, use the corresponding --without option.
 
 --disable-nls
 	This switch disables mutt's native language support.
