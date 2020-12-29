@@ -11,6 +11,7 @@ packages:
 - libidn2
 - libunistring
 - db5
+- kyotocabinet
 - libiconv
 - gettext-runtime
 sources:
@@ -26,6 +27,7 @@ tasks:
         --enable-smtp \
         --enable-hcache \
         --enable-sidebar \
+        --with-kyotocabinet=/usr/local \
         --with-mailpath=/var/spool/mail \
         --with-curses \
         --with-ssl \
