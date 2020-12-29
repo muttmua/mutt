@@ -606,7 +606,7 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
 
   if (rc != SASL_OK && rc != SASL_CONTINUE)
   {
-    dprint (2, (debugfile, "smtp_auth_sasl: %s unavailable\n", mech));
+    dprint (2, (debugfile, "smtp_auth_sasl: %s unavailable\n", NONULL (mechlist)));
     sasl_dispose (&saslconn);
     return SMTP_AUTH_UNAVAIL;
   }
