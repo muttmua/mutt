@@ -1,3 +1,94 @@
+2020-12-30 14:15:08 -0800  Kevin McCarthy  <kevin@8t8.us> (5cc62090)
+
+        * Bump copyright notices.
+        
+        I'll run the update tool on source files in master a bit later.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+
+2020-12-29 13:13:09 -0800  Kevin McCarthy  <kevin@8t8.us> (b23f900b)
+
+        * Fix smtp debug segfault on invalid SmtpAuthenticators list.
+        
+        sasl_client_start() sets the mech parameter only on success.  dprint()
+        the whole mechlist on failure.
+
+M	smtp.c
+
+2020-12-24 15:33:57 -0800  Kevin McCarthy  <kevin@8t8.us> (48d08860)
+
+        * Fix header cache BDB version checking.
+        
+        Update BDB versions up to 6.2.
+        
+        The scheme used here is, as Oswald nicely puts it, "totally insane",
+        and seems to come straight from the initial header cache commit in
+        c11667eaa3.
+        
+        For a stable release, I'm just going to add a few more Jenga pieces to
+        the top.
+        
+        However, going forward this is unmaintainable.  Oswald reports using a
+        simple check for "db.h" and "-ldb" for about two decades with no
+        issues.  I will make that change in master later this week.
+
+M	configure.ac
+
+2020-12-21 15:30:01 -0800  Kevin McCarthy  <kevin@8t8.us> (11b18027)
+
+        * Fix offset to use LOFF_T in a couple places.
+        
+        The BODY->hdr_offset was incorrectly of type long, which could result
+        in corrupted >2gb mbox files in some circumstances.
+        
+        The uses in mh_rewrite_message() are not as serious, but they should
+        still be of type LOFF_T.
+        
+        I found both of these fixes in a patch file,
+        bug-676388-largefile.patch, in the openSUSE mutt src rpm.  It looks
+        like Harald Koenig was the original author of a larger patch in that
+        openSUSE ticket, which was reduced over time as fixes were made to
+        Mutt.
+        
+        Note that patch file also incorrectly adjusted old_hdr_lines in mh.c.
+        I've removed that part, as HEADER->lines is type int.
+        
+        Unfortunately, the BODY->hdr_offset type change will result in a
+        header cache change (i.e. invalidation).  I'm not enthused about doing
+        that during a stable release, but the change is important enough to
+        merit it.
+
+M	mh.c
+M	mutt.h
+
+2020-12-07 14:47:22 -0800  Kevin McCarthy  <kevin@8t8.us> (a7b839e5)
+
+        * Ensure idata->check_status is cleared on mailbox close.
+        
+        I don't think this would cause any issues, but it should be cleared
+        here in any case.
+
+M	imap/imap.c
+
+2020-12-07 13:03:41 -0800  Kevin McCarthy  <kevin@8t8.us> (b5ef1155)
+
+        * Abort IMAP open if condstore/qresync updates fetch fails.
+        
+        An error in imap_cmd_step() was not being properly returned to the
+        caller.
+
+M	imap/message.c
+
+2020-12-04 10:54:21 -0800  Kevin McCarthy  <kevin@8t8.us> (a51f058f)
+
+        * automatic post-release commit for mutt-2.0.3
+
+M	ChangeLog
+M	VERSION
+
 2020-12-04 10:48:04 -0800  Kevin McCarthy  <kevin@8t8.us> (c6f114f8)
 
         * Update UPDATING file for 2.0.3 release.
