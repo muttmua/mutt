@@ -213,7 +213,7 @@ if test x$have_smime != xno ; then
 	SMIMEAUX_TARGET="smime_keys"
 fi
 
-AC_ARG_ENABLE(sidebar, AC_HELP_STRING([--enable-sidebar], [Enable Sidebar support]),
+AC_ARG_ENABLE(sidebar, AS_HELP_STRING([--enable-sidebar], [Enable Sidebar support]),
 [       if test x$enableval = xyes ; then
 		AC_DEFINE(USE_SIDEBAR, 1, [Define if you want support for the sidebar.])
 		OPS="$OPS \$(srcdir)/OPS.SIDEBAR"
@@ -221,7 +221,7 @@ AC_ARG_ENABLE(sidebar, AC_HELP_STRING([--enable-sidebar], [Enable Sidebar suppor
         fi
 ])
 
-AC_ARG_ENABLE(compressed, AC_HELP_STRING([--enable-compressed], [Enable compressed folders support]),
+AC_ARG_ENABLE(compressed, AS_HELP_STRING([--enable-compressed], [Enable compressed folders support]),
               enable_compressed=$enableval, enable_compressed=no
 )
 AS_IF([test x$enable_compressed = "xyes"], [

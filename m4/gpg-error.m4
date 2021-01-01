@@ -31,7 +31,7 @@ AC_DEFUN([AM_PATH_GPG_ERROR],
   dnl since that is consistent with how our three siblings use the directory/
   dnl package name in --with-$dir_name-prefix=PFX.
   AC_ARG_WITH(libgpg-error-prefix,
-              AC_HELP_STRING([--with-libgpg-error-prefix=PFX],
+              AS_HELP_STRING([--with-libgpg-error-prefix=PFX],
                              [prefix where GPG Error is installed (optional)]),
               [gpg_error_config_prefix="$withval"])
 
