@@ -69,8 +69,6 @@ fi
 
 AC_SUBST([DEBUGGER])
 
-AH_TEMPLATE([sig_atomic_t],
-            [/* Define to `int' if <signal.h> doesn't define.])
 AH_TEMPLATE([HAVE_START_COLOR],
             [Define if you have start_color, as a function or macro.])
 AH_TEMPLATE([HAVE_TYPEAHEAD],
@@ -395,7 +393,9 @@ AC_EGREP_HEADER(sig_atomic_t,signal.h,
   ],
   [
     AC_MSG_RESULT(no)
-    AC_CHECK_TYPE(sig_atomic_t, int)
+    AC_CHECK_TYPE(sig_atomic_t, [],
+                  [AC_DEFINE([sig_atomic_t], [int],
+                             [Define to `int' if <signal.h> does not define.])])
     is_sig_atomic_t_volatile=no
   ])
 if test $is_sig_atomic_t_volatile = 'yes'
@@ -414,7 +414,9 @@ AC_CHECK_DECLS([sys_siglist],[],[],[#include <signal.h>
 
 
 AC_TYPE_PID_T
-AC_CHECK_TYPE(ssize_t, int)
+AC_CHECK_TYPE(ssize_t, [],
+              [AC_DEFINE([ssize_t], [int],
+                         [Define to `int' if <sys/types.h> does not define.])])
 
 AC_CHECK_FUNCS(fgetpos memmove setegid srand48 strerror)
 
