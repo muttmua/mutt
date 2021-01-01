@@ -53,7 +53,7 @@ if test ".$ac_cv_func_initscr" != .yes ; then
 	do
 		AC_CHECK_LIB($cf_curs_lib,initscr,[break])
 	done
-	test $cf_curs_lib = unknown && AC_ERROR(no curses library found)
+	test $cf_curs_lib = unknown && AC_MSG_ERROR([no curses library found])
 
 	LIBS="-l$cf_curs_lib $cf_save_LIBS"
 	if test "$cf_term_lib" = unknown ; then
@@ -63,7 +63,7 @@ if test ".$ac_cv_func_initscr" != .yes ; then
 			[cf_result=yes],
 			[cf_result=no])
 		AC_MSG_RESULT($cf_result)
-		test $cf_result = no && AC_ERROR(Cannot link curses library)
+		test $cf_result = no && AC_MSG_ERROR([cannot link curses library])
 	elif test "$cf_term_lib" != predefined ; then
 		AC_MSG_CHECKING(if we need both $cf_curs_lib and $cf_term_lib libraries)
 		AC_TRY_LINK([#include <${cf_cv_ncurses_header-curses.h}>],
