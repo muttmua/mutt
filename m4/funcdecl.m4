@@ -11,14 +11,14 @@ AC_DEFUN([CF_CHECK_FUNCDECL],
 [
 AC_MSG_CHECKING([for $2 declaration])
 AC_CACHE_VAL(ac_cv_func_decl_$2,
-[AC_TRY_COMPILE([$1],
-[#ifndef ${ac_func}
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]],
+[[#ifndef ${ac_func}
 extern	int	${ac_func}();
-#endif],[
-AC_TRY_COMPILE([$1],
-[#ifndef ${ac_func}
+#endif]])],[
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]],
+[[#ifndef ${ac_func}
 int	(*p)() = ${ac_func};
-#endif],[
+#endif]])],[
 eval "ac_cv_func_decl_$2=yes"],[
 eval "ac_cv_func_decl_$2=no"])],[
 eval "ac_cv_func_decl_$2=yes"])])
