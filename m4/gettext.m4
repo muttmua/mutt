@@ -194,8 +194,8 @@ return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", ""
       dnl We need to process the po/ directory.
       POSUB=po
     fi
-    AC_OUTPUT_COMMANDS(
-     [for ac_file in $CONFIG_FILES; do
+    AC_CONFIG_COMMANDS([muttgettext],
+     [[for ac_file in $CONFIG_FILES; do
         # Support "outfile[:infile[:infile...]]"
         case "$ac_file" in
           *:*) ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
@@ -223,7 +223,7 @@ return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", ""
           fi
           ;;
         esac
-      done])
+      done]])
 
 
     dnl If this is used in GNU gettext we have to set BUILD_INCLUDED_LIBINTL
