@@ -71,7 +71,7 @@
 # define REGEX_MALLOC
 #endif
 
-#if defined(STDC_HEADERS) && !defined(emacs)
+#if !defined(emacs)
 #include <stddef.h>
 #else
 /* We need this for `regex.h', and perhaps for the Emacs include files.  */
@@ -115,12 +115,7 @@
    even if config.h says that we can.  */
 #undef REL_ALLOC
 
-#if defined (STDC_HEADERS) || defined (_LIBC)
 #include <stdlib.h>
-#else
-char *malloc ();	/* __MEM_CHECKED__ */
-char *realloc ();	/* __MEM_CHECKED__ */
-#endif
 
 /* When used in Emacs's lib-src, we need to get bzero and bcopy somehow.
    If nothing else has been done, use the method below.  */
@@ -136,7 +131,6 @@ char *realloc ();	/* __MEM_CHECKED__ */
    This is used in most programs--a few other programs avoid this
    by defining INHIBIT_STRING_HEADER.  */
 #ifndef INHIBIT_STRING_HEADER
-#if defined (HAVE_STRING_H) || defined (STDC_HEADERS) || defined (_LIBC)
 #include <string.h>
 #ifndef bcmp
 #define bcmp(s1, s2, n)	memcmp ((s1), (s2), (n))
@@ -146,9 +140,6 @@ char *realloc ();	/* __MEM_CHECKED__ */
 #endif
 #ifndef bzero
 #define bzero(s, n)	memset ((s), 0, (n))
-#endif
-#else
-#include <strings.h>
 #endif
 #endif
 
@@ -230,11 +221,7 @@ init_syntax_once ()
    Defining isascii to 1 should let any compiler worth its salt
    eliminate the && through constant folding."  */
 
-#if defined (STDC_HEADERS) || (!defined (isascii) && !defined (HAVE_ISASCII))
 #define ISASCII(c) 1
-#else
-#define ISASCII(c) isascii(c)
-#endif
 
 #ifdef isblank
 #define ISBLANK(c) (ISASCII (c) && isblank (c))
