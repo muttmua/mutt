@@ -58,21 +58,21 @@ if test ".$ac_cv_func_initscr" != .yes ; then
 	LIBS="-l$cf_curs_lib $cf_save_LIBS"
 	if test "$cf_term_lib" = unknown ; then
 		AC_MSG_CHECKING(if we can link with $cf_curs_lib library)
-		AC_TRY_LINK([#include <${cf_cv_ncurses_header-curses.h}>],
-			[initscr()],
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <${cf_cv_ncurses_header-curses.h}>]],
+			[[initscr()]])],
 			[cf_result=yes],
 			[cf_result=no])
 		AC_MSG_RESULT($cf_result)
 		test $cf_result = no && AC_MSG_ERROR([cannot link curses library])
 	elif test "$cf_term_lib" != predefined ; then
 		AC_MSG_CHECKING(if we need both $cf_curs_lib and $cf_term_lib libraries)
-		AC_TRY_LINK([#include <${cf_cv_ncurses_header-curses.h}>],
-			[initscr(); tgoto((char *)0, 0, 0);],
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <${cf_cv_ncurses_header-curses.h}>]],
+			[[initscr(); tgoto((char *)0, 0, 0);]])],
 			[cf_result=no],
 			[
 			LIBS="-l$cf_curs_lib -l$cf_term_lib $cf_save_LIBS"
-			AC_TRY_LINK([#include <${cf_cv_ncurses_header-curses.h}>],
-				[initscr()],
+			AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <${cf_cv_ncurses_header-curses.h}>]],
+				[[initscr()]])],
 				[cf_result=yes],
 				[cf_result=error])
 			])

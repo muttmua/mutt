@@ -84,24 +84,24 @@ AC_DEFUN([MUTT_AM_WITH_NLS],
 
 	AC_CHECK_HEADER(libintl.h,
 	  [AC_CACHE_CHECK([for GNU gettext in libc], gt_cv_func_gnugettext_libc,
-	    [AC_TRY_LINK([#include <libintl.h>
-extern int _nl_msg_cat_cntr;],
-	       [bindtextdomain ("", "");
-return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr],
-	       gt_cv_func_gnugettext_libc=yes,
-	       gt_cv_func_gnugettext_libc=no)])
+	    [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <libintl.h>
+extern int _nl_msg_cat_cntr;]],
+	       [[bindtextdomain ("", "");
+return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr]])],
+	       [gt_cv_func_gnugettext_libc=yes],
+	       [gt_cv_func_gnugettext_libc=no])])
 
 	   if test "$gt_cv_func_gnugettext_libc" != "yes"; then
 	     AC_CACHE_CHECK([for GNU gettext in libintl],
 	       gt_cv_func_gnugettext_libintl,
 	       [gt_save_LIBS="$LIBS"
 		LIBS="$LIBS -lintl $LIBICONV"
-		AC_TRY_LINK([#include <libintl.h>
-extern int _nl_msg_cat_cntr;],
-		  [bindtextdomain ("", "");
-return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr],
-		  gt_cv_func_gnugettext_libintl=yes,
-		  gt_cv_func_gnugettext_libintl=no)
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <libintl.h>
+extern int _nl_msg_cat_cntr;]],
+		  [[bindtextdomain ("", "");
+return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr]])],
+		  [gt_cv_func_gnugettext_libintl=yes],
+		  [gt_cv_func_gnugettext_libintl=no])
 		LIBS="$gt_save_LIBS"])
 	   fi
 
