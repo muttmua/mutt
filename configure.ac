@@ -742,7 +742,7 @@ then
     if test "$GSSAPI_IMPL" = "none"
     then
       AC_CACHE_SAVE
-      AC_MSG_RESULT([GSSAPI libraries not found])
+      AC_MSG_ERROR([GSSAPI libraries not found])
     fi
     if test "$GSSAPI_IMPL" = "Heimdal"
     then

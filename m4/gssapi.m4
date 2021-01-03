@@ -13,6 +13,7 @@ AC_DEFUN([MUTT_AM_PATH_GSSAPI],
   saved_CPPFLAGS="$CPPFLAGS"
   saved_LDFLAGS="$LDFLAGS"
   saved_LIBS="$LIBS"
+
   dnl First try krb5-config
   if test "$GSSAPI_PREFIX" != "yes"
   then
@@ -29,9 +30,13 @@ AC_DEFUN([MUTT_AM_PATH_GSSAPI],
       "Kerberos 5 "*)	GSSAPI_IMPL="MIT";;
       ?eimdal*)		GSSAPI_IMPL="Heimdal";;
       *)		GSSAPI_IMPL="Unknown";;
-   esac
+    esac
+    dnl check to make sure the library exists
+    LIBS="$saved_LIBS $GSSAPI_LIBS"
+    AC_CHECK_FUNC([gss_init_sec_context], [], [GSSAPI_IMPL="none"])
+
+  dnl No krb5-config, run the old code
   else
-    dnl No krb5-config, run the old code
     if test "$GSSAPI_PREFIX" != "yes"
     then
       GSSAPI_CFLAGS="-I$GSSAPI_PREFIX/include"
@@ -69,6 +74,17 @@ AC_DEFUN([MUTT_AM_PATH_GSSAPI],
         GSSAPI_LIBS="$GSSAPI_LDFLAGS -lgssapi_krb5 -lkrb5 -lcrypto -lcom_err"
         ],, -lkrb5 -lcrypto -lcom_err)
     fi
+  fi
+
+  dnl Check headers exist
+  if test "$GSSAPI_IMPL" != "none"
+  then
+    CPPFLAGS="$saved_CPPFLAGS $GSSAPI_CFLAGS"
+    if test "$GSSAPI_IMPL" != "Heimdal"
+    then
+      AC_CHECK_HEADER([gssapi/gssapi_generic.h], [], [GSSAPI_IMPL="none"], [])
+    fi
+    AC_CHECK_HEADER([gssapi/gssapi.h], [], [GSSAPI_IMPL="none"], [])
   fi
 
   CPPFLAGS="$saved_CPPFLAGS"
