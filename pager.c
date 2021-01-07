@@ -1030,14 +1030,14 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
 	a->pair = -1;
 	pos += 2;
       }
-      else if (buf[pos] == '3' && isdigit(buf[pos+1]))
+      else if (buf[pos] == '3' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
 	a->pair = -1;
 	a->attr |= ANSI_COLOR;
 	a->fg = buf[pos+1] - '0';
 	pos += 3;
       }
-      else if (buf[pos] == '4' && isdigit(buf[pos+1]))
+      else if (buf[pos] == '4' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
 	a->pair = -1;
 	a->attr |= ANSI_COLOR;
