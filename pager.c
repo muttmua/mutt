@@ -1030,12 +1030,28 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
 	a->pair = -1;
 	pos += 2;
       }
+      else if (mutt_strncmp("38;5;", (char *)&buf[pos], 5) == 0 && isdigit(buf[pos+5]))
+      {
+	char *end;
+	a->pair = -1;
+	a->attr |= ANSI_COLOR;
+	a->fg = (int)strtoul((char *)&buf[pos+5], &end, 10);
+	pos += end - (char *)&buf[pos];
+      }
       else if (buf[pos] == '3' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
 	a->pair = -1;
 	a->attr |= ANSI_COLOR;
 	a->fg = buf[pos+1] - '0';
 	pos += 3;
+      }
+      else if (mutt_strncmp("48;5;", (char *)&buf[pos], 5) == 0 && isdigit(buf[pos+5]))
+      {
+	char *end;
+	a->pair = -1;
+	a->attr |= ANSI_COLOR;
+	a->bg = (int)strtoul((char *)&buf[pos+5], &end, 10);
+	pos += end - (char *)&buf[pos];
       }
       else if (buf[pos] == '4' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
