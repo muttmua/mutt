@@ -295,14 +295,24 @@ void mutt_attrset_cursor (int source_pair, int cursor_pair)
 
 static int _mutt_alloc_color (int fg, int bg, int type)
 {
-  COLOR_LIST *p = ColorList, **last;
+  COLOR_LIST *p, **last;
   int index;
 
 #if defined (USE_SLANG_CURSES)
   char fgc[SHORT_STRING], bgc[SHORT_STRING];
 #endif
 
-  /* check to see if this color is already allocated to save space */
+  /* Check to see if this color is already allocated to save space.
+   *
+   * At the same time, find the lowest available index, and location
+   * in the list to store a new entry. The ColorList is sorted by
+   * index.  "last" points to &(previousentry->next), giving us the
+   * slot to store it in.
+   */
+  index = 1;
+  last = &ColorList;
+  p = *last;
+
   while (p)
   {
     if (p->fg == fg && p->bg == bg)
@@ -322,27 +332,18 @@ static int _mutt_alloc_color (int fg, int bg, int type)
 
       return p->pair;
     }
+
+    if (p->index <= index)
+    {
+      last = &p->next;
+      index = p->index + 1;
+    }
+
     p = p->next;
   }
 
   /* check to see if there are colors left */
   if (++UserColors > COLOR_PAIRS) return (A_NORMAL);
-
-
-  /* find the smallest available index (object).
-   * the list is kept in sorted order by index. */
-  index = 1;
-  last = &ColorList;
-  p = *last;
-
-  while (p)
-  {
-    if (p->index > index)
-      break;
-    index++;
-    last = &p->next;
-    p = *last;
-  }
 
   p = (COLOR_LIST *) safe_calloc (1, sizeof (COLOR_LIST));
   p->next = *last;
