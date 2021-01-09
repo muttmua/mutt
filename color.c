@@ -241,13 +241,19 @@ static COLOR_LIST *mutt_find_color_by_pair (int pair)
   return NULL;
 }
 
+#endif /* HAVE_COLOR */
+
 int mutt_merge_colors (int source_pair, int overlay_pair)
 {
+#ifdef HAVE_COLOR
   COLOR_LIST *source, *overlay;
-  int merged_pair, merged_fg, merged_bg;
+  int merged_fg, merged_bg;
+#endif
+  int merged_pair;
 
   merged_pair = overlay_pair;
 
+#ifdef HAVE_COLOR
   overlay = mutt_find_color_by_pair (overlay_pair & A_COLOR);
 
   if (overlay && (overlay->fg < 0 || overlay->bg < 0))
@@ -260,6 +266,7 @@ int mutt_merge_colors (int source_pair, int overlay_pair)
       merged_pair = mutt_alloc_color (merged_fg, merged_bg, 0);
     }
   }
+#endif /* HAVE_COLOR */
 
   merged_pair |= (source_pair & ATTR_MASK) | (overlay_pair & ATTR_MASK);
 
@@ -275,6 +282,8 @@ void mutt_attrset_cursor (int source_pair, int cursor_pair)
 
   ATTRSET (merged_pair);
 }
+
+#ifdef HAVE_COLOR
 
 int mutt_alloc_color (int fg, int bg, int ref)
 {
