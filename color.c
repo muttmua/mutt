@@ -51,11 +51,19 @@ typedef struct color_list
   short bg;
   short index;
   short count;
+  unsigned int ansi : 1;
+  unsigned int overlay : 1;
   struct color_list *next;
 } COLOR_LIST;
 
+/* color type for mutt_alloc_color() */
+#define MUTT_COLOR_TYPE_NORMAL     1
+#define MUTT_COLOR_TYPE_ANSI       2
+#define MUTT_COLOR_TYPE_OVERLAY    3
+
 static COLOR_LIST *ColorList = NULL;
 static int UserColors = 0;
+static int AnsiColors = 0;
 
 static const struct mapping_t Colors[] =
 {
@@ -263,7 +271,7 @@ int mutt_merge_colors (int source_pair, int overlay_pair)
     {
       merged_fg = overlay->fg < 0 ? source->fg : overlay->fg;
       merged_bg = overlay->bg < 0 ? source->bg : overlay->bg;
-      merged_pair = mutt_alloc_color (merged_fg, merged_bg, 0);
+      merged_pair = mutt_alloc_overlay_color (merged_fg, merged_bg);
     }
   }
 #endif /* HAVE_COLOR */
@@ -285,10 +293,10 @@ void mutt_attrset_cursor (int source_pair, int cursor_pair)
 
 #ifdef HAVE_COLOR
 
-int mutt_alloc_color (int fg, int bg, int ref)
+static int _mutt_alloc_color (int fg, int bg, int type)
 {
-  COLOR_LIST *p = ColorList;
-  int i;
+  COLOR_LIST *p = ColorList, **last;
+  int index;
 
 #if defined (USE_SLANG_CURSES)
   char fgc[SHORT_STRING], bgc[SHORT_STRING];
@@ -299,8 +307,19 @@ int mutt_alloc_color (int fg, int bg, int ref)
   {
     if (p->fg == fg && p->bg == bg)
     {
-      if (ref)
+      if (type == MUTT_COLOR_TYPE_ANSI)
+      {
+        if (!p->ansi)
+        {
+          p->ansi = 1;
+          AnsiColors++;
+        }
+      }
+      else if (type == MUTT_COLOR_TYPE_OVERLAY)
+        p->overlay = 1;
+      else
         (p->count)++;
+
       return p->pair;
     }
     p = p->next;
@@ -309,32 +328,42 @@ int mutt_alloc_color (int fg, int bg, int ref)
   /* check to see if there are colors left */
   if (++UserColors > COLOR_PAIRS) return (A_NORMAL);
 
-  /* find the smallest available index (object) */
-  i = 1;
-  FOREVER
+
+  /* find the smallest available index (object).
+   * the list is kept in sorted order by index. */
+  index = 1;
+  last = &ColorList;
+  p = *last;
+
+  while (p)
   {
-    p = ColorList;
-    while (p)
-    {
-      if (p->index == i) break;
-      p = p->next;
-    }
-    if (p == NULL) break;
-    i++;
+    if (p->index > index)
+      break;
+    index++;
+    last = &p->next;
+    p = *last;
   }
 
-  p = (COLOR_LIST *) safe_malloc (sizeof (COLOR_LIST));
-  p->next = ColorList;
-  ColorList = p;
+  p = (COLOR_LIST *) safe_calloc (1, sizeof (COLOR_LIST));
+  p->next = *last;
+  *last = p;
 
-  p->index = i;
-  p->count = 1;
+  p->index = index;
   p->bg = bg;
   p->fg = fg;
+  if (type == MUTT_COLOR_TYPE_ANSI)
+  {
+    p->ansi = 1;
+    AnsiColors++;
+  }
+  else if (type == MUTT_COLOR_TYPE_OVERLAY)
+    p->overlay = 1;
+  else
+    p->count = 1;
 
 #if defined (USE_SLANG_CURSES)
   if (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
-    SLtt_set_color (i, NULL, get_color_name (fgc, sizeof (fgc), fg), get_color_name (bgc, sizeof (bgc), bg));
+    SLtt_set_color (index, NULL, get_color_name (fgc, sizeof (fgc), fg), get_color_name (bgc, sizeof (bgc), bg));
   else
 #elif defined (HAVE_USE_DEFAULT_COLORS)
     if (fg == COLOR_DEFAULT)
@@ -343,7 +372,7 @@ int mutt_alloc_color (int fg, int bg, int ref)
     bg = -1;
 #endif
 
-  init_pair(i, fg, bg);
+  init_pair(index, fg, bg);
 
   dprint (3, (debugfile,"mutt_alloc_color(): Color pairs used so far: %d\n",
 	      UserColors));
@@ -353,42 +382,83 @@ int mutt_alloc_color (int fg, int bg, int ref)
   return p->pair;
 }
 
+int mutt_alloc_color (int fg, int bg)
+{
+  return _mutt_alloc_color (fg, bg, MUTT_COLOR_TYPE_NORMAL);
+}
+
+int mutt_alloc_ansi_color (int fg, int bg)
+{
+  return _mutt_alloc_color (fg, bg, MUTT_COLOR_TYPE_ANSI);
+}
+
+int mutt_alloc_overlay_color (int fg, int bg)
+{
+  return _mutt_alloc_color (fg, bg, MUTT_COLOR_TYPE_OVERLAY);
+}
+
+
+/* This is used to delete NORMAL type colors only.
+ * Overlay colors are currently allowed to accumulate.
+ * Ansi colors are deleted all at once, upon exiting the pager.
+ */
 void mutt_free_color (int fg, int bg)
 {
-  COLOR_LIST *p, *q;
+  COLOR_LIST *p, **last;
 
-  p = ColorList;
+  last = &ColorList;
+  p = *last;
+
   while (p)
   {
     if (p->fg == fg && p->bg == bg)
     {
       (p->count)--;
-      if (p->count > 0) return;
+
+      if (p->count > 0 || p->ansi || p->overlay)
+        return;
 
       UserColors--;
       dprint(1,(debugfile,"mutt_free_color(): Color pairs used so far: %d\n",
                 UserColors));
 
-      if (p == ColorList)
-      {
-	ColorList = ColorList->next;
-	FREE (&p);
-	return;
-      }
-      q = ColorList;
-      while (q)
-      {
-	if (q->next == p)
-	{
-	  q->next = p->next;
-	  FREE (&p);
-	  return;
-	}
-	q = q->next;
-      }
-      /* can't get here */
+      *last = p->next;
+      FREE (&p);
+      return;
     }
-    p = p->next;
+
+    last = &p->next;
+    p = *last;
+  }
+}
+
+void mutt_free_all_ansi_colors (void)
+{
+  COLOR_LIST *p, **last;
+
+  last = &ColorList;
+  p = *last;
+
+  while (p && AnsiColors > 0)
+  {
+    if (p->ansi)
+    {
+      p->ansi = 0;
+      AnsiColors--;
+
+      if (!p->count && !p->overlay)
+      {
+        UserColors--;
+
+        *last = p->next;
+        FREE (&p);
+        p = *last;
+        continue;
+      }
+    }
+
+    last = &p->next;
+    p = *last;
   }
 }
 
@@ -639,7 +709,7 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
 	mutt_free_color (tmp->fg, tmp->bg);
 	tmp->fg = fg;
 	tmp->bg = bg;
-	attr |= mutt_alloc_color (fg, bg, 1);
+	attr |= mutt_alloc_color (fg, bg);
       }
       else
 	attr |= (tmp->pair & ~A_BOLD);
@@ -679,7 +749,7 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
     {
       tmp->fg = fg;
       tmp->bg = bg;
-      attr |= mutt_alloc_color (fg, bg, 1);
+      attr |= mutt_alloc_color (fg, bg);
     }
 #endif
     tmp->pair = attr;
@@ -845,7 +915,7 @@ static int fgbgattr_to_color(int fg, int bg, int attr)
 {
 #ifdef HAVE_COLOR
   if (fg != -1 && bg != -1)
-    return attr | mutt_alloc_color(fg, bg, 1);
+    return attr | mutt_alloc_color(fg, bg);
   else
 #endif
     return attr;

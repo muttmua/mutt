@@ -273,14 +273,8 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 #ifdef HAVE_COLOR
   if ((a->attr & ANSI_COLOR) && !search)
   {
-    /* Note: we don't free ansi colors.  This used to be done in
-     * grok_ansi() but a color-pair in use on the screen can not be
-     * reallocated via init_pair() to another color. There are at
-     * most 64 ansi colors, so just let them accumulate.
-     * However, don't refcount since they aren't tracked.
-     */
     if (a->pair == -1)
-      a->pair = mutt_alloc_color (a->fg, a->bg, 0);
+      a->pair = mutt_alloc_ansi_color (a->fg, a->bg);
     color = a->pair;
   }
   else
@@ -3052,6 +3046,10 @@ search_next:
   FREE (&rd.index_window);
   FREE (&rd.pager_status_window);
   FREE (&rd.pager_window);
+
+#ifdef HAVE_COLOR
+  mutt_free_all_ansi_colors ();
+#endif
 
   return (rc != -1 ? rc : 0);
 }
