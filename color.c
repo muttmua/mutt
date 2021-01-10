@@ -342,8 +342,12 @@ static int _mutt_alloc_color (int fg, int bg, int type)
     p = p->next;
   }
 
-  /* check to see if there are colors left */
-  if (++UserColors > COLOR_PAIRS) return (A_NORMAL);
+  /* check to see if there are colors left.
+   * note: pair 0 is reserved for "default" so we actually only have access
+   * to COLOR_PAIRS-1 pairs. */
+  if (UserColors >= (COLOR_PAIRS - 1))
+    return (A_NORMAL);
+  UserColors++;
 
   p = (COLOR_LIST *) safe_calloc (1, sizeof (COLOR_LIST));
   p->next = *last;
