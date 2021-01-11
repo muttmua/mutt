@@ -426,8 +426,6 @@ if test $ac_cv_func_getopt = yes; then
         AC_CHECK_HEADERS(getopt.h)
 fi
 
-XIPH_FUNC_VA_COPY
-
 dnl SCO uses chsize() instead of ftruncate()
 AC_CHECK_FUNCS(ftruncate, , [AC_CHECK_LIB(x, chsize)])
 
