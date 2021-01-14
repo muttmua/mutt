@@ -2469,6 +2469,7 @@ int imap_complete(char* dest, size_t dlen, const char* path)
     return 0;
   }
 
+  FREE (&mx.mbox);
   return -1;
 }
 
@@ -2503,6 +2504,7 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
   {
     dprint (3, (debugfile, "imap_fast_trash: %s not same server as %s\n",
                 dest, ctx->path));
+    FREE (&mx.mbox);
     return 1;
   }
 
