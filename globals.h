@@ -92,6 +92,7 @@ WHERE long  HeaderCachePageSize;
 #endif /* HAVE_GDBM || HAVE_DB4 */
 #endif /* USE_HCACHE */
 WHERE char *MarkMacroPrefix;
+WHERE char *MessageIdFormat;
 WHERE char *MhFlagged;
 WHERE char *MhReplied;
 WHERE char *MhUnseen;
