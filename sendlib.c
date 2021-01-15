@@ -2410,34 +2410,6 @@ const char *mutt_fqdn(short may_hide_host)
   return p;
 }
 
-char *mutt_gen_msgid (void)
-{
-  char buf[SHORT_STRING];
-  time_t now = time (NULL);
-  char random_bytes[8];
-  char localpart[12]; /* = 32 bit timestamp, plus 64 bit randomness */
-  unsigned char localpart_B64[16+1]; /* = Base64 encoded value of localpart plus
-                                        terminating \0 */
-  const char *fqdn;
-
-  mutt_random_bytes (random_bytes, sizeof(random_bytes));
-
-  /* Convert the four least significant bytes of our timestamp and put it in
-     localpart, with proper endianness (for humans) taken into account. */
-  for (int i = 0; i < 4; i++)
-    localpart[i] = (uint8_t) (now >> (3-i)*8u);
-
-  memcpy (&localpart[4], &random_bytes, 8);
-
-  mutt_to_base64 (localpart_B64, (unsigned char *) localpart, 12, 17);
-
-  if (!(fqdn = mutt_fqdn (0)))
-    fqdn = NONULL (Hostname);
-
-  snprintf (buf, sizeof (buf), "<%s@%s>", localpart_B64, fqdn);
-  return (safe_strdup (buf));
-}
-
 static void alarm_handler (int sig)
 {
   SigAlrm = 1;

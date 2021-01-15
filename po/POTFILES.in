@@ -49,6 +49,7 @@ listmenu.c
 main.c
 mbox.c
 menu.c
+messageid.c
 mh.c
 mutt_lisp.c
 mutt_sasl.c

@@ -40,7 +40,7 @@ mutt_SOURCES = \
 	status.c system.c thread.c charset.c history.c lib.c \
 	mutt_lisp.c muttlib.c editmsg.c mbyte.c \
 	url.c ascii.c crypt-mod.c crypt-mod.h safe_asprintf.c \
-	mutt_random.c listmenu.c
+	mutt_random.c listmenu.c messageid.c
 
 nodist_mutt_SOURCES = $(BUILT_SOURCES)
 
