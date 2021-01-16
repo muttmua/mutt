@@ -35,6 +35,7 @@ typedef struct buffy_t
   int msg_unread;		/* number of unread messages */
   int msg_flagged;		/* number of flagged messages */
 
+  short nonotify;               /* if set, don't notify for new mail */
   short nopoll;                 /* if set, don't poll for new mail */
   short notified;		/* user has been notified */
   short magic;			/* mailbox type */
@@ -50,7 +51,7 @@ WHERE short BuffyCheckStatsInterval INITVAL (60);
 
 extern time_t BuffyDoneTime;	/* last time we knew for sure how much mail there was */
 
-void mutt_buffy_add (const char *path, const char *label, int nopoll);
+void mutt_buffy_add (const char *path, const char *label, int nopoll, int nonotify);
 void mutt_buffy_remove (const char *path);
 
 void mutt_buffer_buffy (BUFFER *);

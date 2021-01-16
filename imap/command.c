@@ -1037,7 +1037,7 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
   mailbox = mutt_buffer_pool_get ();
   url_ciss_tobuffer (&url, mailbox, 0);
 
-  mutt_buffy_add (mutt_b2s (mailbox), NULL, -1);
+  mutt_buffy_add (mutt_b2s (mailbox), NULL, -1, -1);
   mutt_buffer_pool_release (&mailbox);
 }
 

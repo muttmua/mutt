@@ -2282,7 +2282,7 @@ int imap_subscribe (char *path, int subscribe)
   if (option (OPTIMAPCHECKSUBSCRIBED))
   {
     if (subscribe)
-      mutt_buffy_add (path, NULL, -1);
+      mutt_buffy_add (path, NULL, -1, -1);
     else
       mutt_buffy_remove (path);
   }

@@ -3805,6 +3805,14 @@ to save read mail in more than a single mailbox).
 <arg choice="opt">
   <group choice="opt">
     <arg choice="plain">
+      <option>-notify</option>
+    </arg>
+    <arg choice="plain">
+      <option>-nonotify</option>
+    </arg>
+  </group>
+  <group choice="opt">
+    <arg choice="plain">
       <option>-poll</option>
     </arg>
     <arg choice="plain">
@@ -3840,6 +3848,14 @@ to save read mail in more than a single mailbox).
 <para>
 This command specifies folders which can receive mail and which will be
 checked for new messages periodically.
+</para>
+
+<para>
+Use <literal>-nonotify</literal> to disable notifying when new mail
+arrives.  The <literal>-notify</literal> argument can be used to reenable
+notifying for an existing mailbox.  If unspecified: a new
+mailbox will notify by default, while an existing mailbox will be
+unchanged.
 </para>
 
 <para>

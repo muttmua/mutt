@@ -360,7 +360,7 @@ The first matching \fBmbox-hook\fP applies.
 .
 .PP
 .nf
-\fBmailboxes\fP [[\fB-poll\fP | \fB-nopoll\fP] [[\fB-label\fP \fIlabel\fP] | \fB-nolabel\fP] \fIfilename\fP] [ ... ]
+\fBmailboxes\fP [[\fB-notify\fP | \fB-nonotify\fP] [\fB-poll\fP | \fB-nopoll\fP] [[\fB-label\fP \fIlabel\fP] | \fB-nolabel\fP] \fIfilename\fP] [ ... ]
 \fBunmailboxes\fP [ \fB*\fP | \fIfilename\fP ... ]
 .fi
 .IP

@@ -272,8 +272,9 @@ static BUFFY **find_buffy_slot (const char *path)
 /* To avoid overwriting existing values:
  * - label should be NULL if unspecified
  * - nopoll should be -1 if unspecified
+ * - nonotify should be -1 if unspecified
  */
-void mutt_buffy_add (const char *path, const char *label, int nopoll)
+void mutt_buffy_add (const char *path, const char *label, int nopoll, int nonotify)
 {
   BUFFY **tmp;
   struct stat sb;
@@ -313,6 +314,9 @@ void mutt_buffy_add (const char *path, const char *label, int nopoll)
       mutt_monitor_remove (*tmp);
 #endif
   }
+
+  if (nonotify != -1)
+      (*tmp)->nonotify = nonotify;
 
   (*tmp)->new = 0;
   (*tmp)->notified = 1;
@@ -371,7 +375,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
 {
   BUFFER *label = NULL;
   BUFFER *mailbox = NULL;
-  int nopoll = -1, rc = -1;
+  int nonotify = -1, nopoll = -1, rc = -1;
   int label_set = 0, mailbox_set = 0;
 
   mailbox = mutt_buffer_pool_get ();
@@ -387,6 +391,10 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
         nopoll = 0;
       else if (mutt_strcmp (mutt_b2s (path), "-nopoll") == 0)
         nopoll = 1;
+      else if (mutt_strcmp (mutt_b2s (path), "-notify") == 0)
+        nonotify = 0;
+      else if (mutt_strcmp (mutt_b2s (path), "-nonotify") == 0)
+        nonotify = 1;
       else if (mutt_strcmp (mutt_b2s (path), "-label") == 0)
       {
         if (!MoreArgs (s))
@@ -421,7 +429,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
     }
     else
       mutt_buffy_add (mutt_b2s (mailbox), label_set ? mutt_b2s (label) : NULL,
-                      nopoll);
+                      nopoll, nonotify);
 
     mutt_buffer_clear (mailbox);
     mutt_buffer_clear (label);
@@ -766,6 +774,8 @@ int mutt_buffy_check (int force)
 
     if (!tmp->new)
       tmp->notified = 0;
+    if (tmp->nonotify)
+      tmp->notified = 1;
     else if (!tmp->notified)
       BuffyNotify++;
   }
