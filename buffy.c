@@ -774,10 +774,14 @@ int mutt_buffy_check (int force)
 
     if (!tmp->new)
       tmp->notified = 0;
-    if (tmp->nonotify)
-      tmp->notified = 1;
-    else if (!tmp->notified)
-      BuffyNotify++;
+    else
+    {
+      /* pretend we've already notified for the mailbox */
+      if (tmp->nonotify)
+        tmp->notified = 1;
+      else if (!tmp->notified)
+        BuffyNotify++;
+    }
   }
 
   BuffyDoneTime = BuffyTime;

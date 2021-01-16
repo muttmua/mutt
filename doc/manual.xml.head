@@ -11838,6 +11838,14 @@ The following are the commands understood by Mutt:
 <arg choice="opt">
   <group choice="opt">
     <arg choice="plain">
+      <option>-notify</option>
+    </arg>
+    <arg choice="plain">
+      <option>-nonotify</option>
+    </arg>
+  </group>
+  <group choice="opt">
+    <arg choice="plain">
       <option>-poll</option>
     </arg>
     <arg choice="plain">
