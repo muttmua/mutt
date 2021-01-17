@@ -587,11 +587,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
 #endif
 
       /* add group terminator */
-      cur = rfc822_new_address ();
       if (last)
       {
-	last->next = cur;
-	last = cur;
+	last->next = rfc822_new_address ();
+	last = last->next;
       }
 
       phraselen = 0;
