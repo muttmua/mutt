@@ -656,6 +656,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
     last->val = mutt_substrdup (begin, s - nl < begin ? begin : s - nl);
 #endif
 
+  /* add group terminator, if it was left off */
+  if (last && in_group)
+    last->next = rfc822_new_address ();
+
   return top;
 }
 
