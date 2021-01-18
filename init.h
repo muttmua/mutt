@@ -2078,6 +2078,7 @@ struct option_t MuttVars[] = {
   ** .dt %r .dd 3 bytes of pseudorandom data encoded in Base64
   ** .dt %R .dd 3 bytes of /dev/urandom data encoded in Base64
   ** .dt %S .dd current second of the minute (GMT)
+  ** .dt %x .dd 1 byte of pseudorandom data hex encoded (example: '1b')
   ** .dt %Y .dd current year using 4 digits (GMT)
   ** .dt %z .dd 4 byte timestamp + 8 bytes of pseudorandom data encoded in Base64
   */

@@ -72,6 +72,14 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
       break;
     }
 
+    case 'x':
+    {
+      /* hex encoded random byte */
+      mutt_random_bytes ((char *)r_raw, sizeof(r_raw[0]));
+      snprintf (dest, destlen, "%02x", r_raw[0]);
+      break;
+    }
+
     case 'z':
     {
       /* Convert the four least significant bytes of our timestamp and put it in
