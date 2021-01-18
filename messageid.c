@@ -48,22 +48,6 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
 
   switch (op)
   {
-    case 'R':
-    {
-      random_dev = fopen ("/dev/urandom", "r");
-      if (random_dev)
-      {
-        if (fread (r_raw, 1, sizeof(r_raw), random_dev) > 0)
-        {
-          mutt_to_base64 (r_out, r_raw, sizeof(r_raw), sizeof(r_out));
-          mutt_format_s (dest, destlen, fmt, (const char *)r_out);
-          safe_fclose (&random_dev);
-          break;
-        }
-        safe_fclose (&random_dev);
-      }
-    }
-    /* fall through */
     case 'r':
     {
       mutt_random_bytes ((char *)r_raw, sizeof(r_raw));
