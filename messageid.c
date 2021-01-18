@@ -44,28 +44,22 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
   unsigned char r_out[4 + 1];
   unsigned char z_raw[12]; /* 32 bit timestamp, plus 64 bit randomness */
   unsigned char z_out[16 + 1];
-  FILE *random_dev;
 
   switch (op)
   {
     case 'r':
-    {
       mutt_random_bytes ((char *)r_raw, sizeof(r_raw));
       mutt_to_base64 (r_out, r_raw, sizeof(r_raw), sizeof(r_out));
       mutt_format_s (dest, destlen, fmt, (const char *)r_out);
       break;
-    }
 
     case 'x':
-    {
       /* hex encoded random byte */
       mutt_random_bytes ((char *)r_raw, sizeof(r_raw[0]));
       snprintf (dest, destlen, "%02x", r_raw[0]);
       break;
-    }
 
     case 'z':
-    {
       /* Convert the four least significant bytes of our timestamp and put it in
          localpart, with proper endianness (for humans) taken into account. */
       for (int i = 0; i < 4; i++)
@@ -74,7 +68,6 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
       mutt_to_base64 (z_out, z_raw, sizeof(z_raw), sizeof(z_out));
       mutt_format_s (dest, destlen, fmt, (const char *)z_out);
       break;
-    }
 
     case 'Y':
       snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
