@@ -84,7 +84,7 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
       break;
     }
 
-    case 'y':
+    case 'Y':
       snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
       snprintf (dest, destlen, tmp, id_data->tm.tm_year + 1900);
       break;

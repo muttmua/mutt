@@ -2064,7 +2064,7 @@ struct option_t MuttVars[] = {
   ** generally be left at %f.
   ** .pp
   ** The old Message-ID format can be used by setting this to:
-  ** ``\fC<%y%02m%02d%02H%02M%02S.G%c%p@%f>\fP''
+  ** ``\fC<%Y%02m%02d%02H%02M%02S.G%c%p@%f>\fP''
   ** .pp
   ** The following \fCprintf(3)\fP-style sequences are understood:
   ** .dl
@@ -2078,7 +2078,7 @@ struct option_t MuttVars[] = {
   ** .dt %r .dd 3 bytes of pseudorandom data encoded in Base64
   ** .dt %R .dd 3 bytes of /dev/urandom data encoded in Base64
   ** .dt %S .dd current second of the minute (GMT)
-  ** .dt %y .dd current year using 4 digits (GMT)
+  ** .dt %Y .dd current year using 4 digits (GMT)
   ** .dt %z .dd 4 byte timestamp + 8 bytes of pseudorandom data encoded in Base64
   */
   { "meta_key",		DT_BOOL, R_NONE, {.l=OPTMETAKEY}, {.l=0} },
