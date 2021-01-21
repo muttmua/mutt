@@ -1,3 +1,73 @@
+2021-01-21 12:27:50 -0800  Kevin McCarthy  <kevin@8t8.us> (dd66f4ae)
+
+        * Update UPDATING file for 2.0.5.
+
+M	UPDATING
+
+2021-01-17 10:40:37 -0800  Kevin McCarthy  <kevin@8t8.us> (4a2becbd)
+
+        * Fix memory leak parsing group addresses without a display name.
+        
+        When there was a group address terminator with no previous
+        addresses (including the group display-name), an address would be
+        allocated but not attached to the address list.
+        
+        Change this to only allocate when last exists.
+        
+        It would be more correct to not allocate at all unless we are inside a
+        group list, but I will address that in a separate commit to master.
+
+M	rfc822.c
+
+2020-12-01 14:21:31 -0800  Kevin McCarthy  <kevin@8t8.us> (464a9bc6)
+
+        * Fix memory leak in imap_copy_messages().
+        
+        mx.mbox (allocated by imap_parse_path) was not always freed before
+        return.
+        
+        The sync_cmd and cmd buffers were also not always freed.  One case was
+        on retrying after creating the mailbox, which would overwrite the
+        allocated pointers.
+        
+        As long as I'm touching the buffers, convert them to use the buffer
+        pool.  I think the mutt_buffer_clear() at the beginning of the retry
+        loop isn't necessary, but will keep it to make it clear any existing
+        values won't be reused a second time through the loop.
+
+M	imap/message.c
+
+2021-01-13 19:06:49 -0800  Kevin McCarthy  <kevin@8t8.us> (b40c7f6c)
+
+        * Fix imap memory leaks.
+        
+        The mx.mbox allocated by imap_parse_path() was not freed on error in a
+        couple places.
+        
+        There is also a leak in imap_copy_message(), but this was fixed in
+        master in commit 1ec642e2.  I'll cherry pick that into stable.
+
+M	imap/imap.c
+
+2021-01-08 19:04:18 -0800  Kevin McCarthy  <kevin@8t8.us> (b67ae9ce)
+
+        * Fix color overlay when HAVE_COLOR is unset.
+        
+        mutt_merge_colors() and mutt_attrset_cursor() were not defined in that
+        case, but are called in the menu and sidebar.
+        
+        Change mutt_merge_colors() to just combine attributes in that case.
+
+M	color.c
+
+2020-12-30 14:23:18 -0800  Kevin McCarthy  <kevin@8t8.us> (26f41dd1)
+
+        * automatic post-release commit for mutt-2.0.4
+
+M	ChangeLog
+M	UPDATING
+M	VERSION
+
 2020-12-30 14:15:08 -0800  Kevin McCarthy  <kevin@8t8.us> (5cc62090)
 
         * Bump copyright notices.
