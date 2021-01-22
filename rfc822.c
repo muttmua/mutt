@@ -547,21 +547,31 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
     }
     else if (*s == ':')
     {
-      cur = rfc822_new_address ();
-      terminate_buffer (phrase, phraselen);
-      cur->mailbox = safe_strdup (phrase);
-      cur->group = 1;
-      in_group = 1;
+      if (phraselen)
+      {
+        /* add group terminator, if one was missing */
+        if (last && in_group)
+        {
+          last->next = rfc822_new_address ();
+          last = last->next;
+        }
 
-      if (last)
-	last->next = cur;
-      else
-	top = cur;
-      last = cur;
+        cur = rfc822_new_address ();
+        terminate_buffer (phrase, phraselen);
+        cur->mailbox = safe_strdup (phrase);
+        cur->group = 1;
+        in_group = 1;
+
+        if (last)
+          last->next = cur;
+        else
+          top = cur;
+        last = cur;
 
 #ifdef EXACT_ADDRESS
-      last->val = mutt_substrdup (begin, s);
+        last->val = mutt_substrdup (begin, s);
 #endif
+      }
 
       phraselen = 0;
       commentlen = 0;
