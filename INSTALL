@@ -31,6 +31,9 @@ systems:
 
 - A C99 compiler (such as GCC) is required.
 
+- A C99 compliant libc is also required, starting with Mutt 2.1.0.
+  This means very old systems will likely not compile or work correctly.
+
 - You must also have a SysV compatible curses library, or you must
   install either
 
