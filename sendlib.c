@@ -2170,7 +2170,7 @@ out:
  * mode == MUTT_WRITE_HEADER_NORMAL    => normal mode.  write full header + MIME headers
  * mode == MUTT_WRITE_HEADER_FCC       => fcc mode, like normal mode but for Bcc header
  * mode == MUTT_WRITE_HEADER_POSTPONE  => write just the envelope info
- * mode == MUTT_WRITE_HEADER_MIME      => for writing protected headers
+ * mode == MUTT_WRITE_HEADER_MIME      => for writing protected headers and autocrypt
  *
  * privacy != 0 => will omit any headers which may identify the user.
  *               Output generated is suitable for being sent through
@@ -2190,7 +2190,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
   int has_agent = 0; /* user defined user-agent header field exists */
 
   if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC ||
-       mode == MUTT_WRITE_HEADER_POSTPONE || mode == MUTT_WRITE_HEADER_MIME) &&
+       mode == MUTT_WRITE_HEADER_POSTPONE) &&
       !privacy)
   {
     if (date)
@@ -2203,6 +2203,14 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
       mutt_buffer_pool_release (&datebuf);
     }
   }
+
+  /* The MIME header date is only set for protected headers, and
+   * should only be written for that case.  That is: don't generate
+   * and print a new date with Autocrypt if protected header writing
+   * is turned off.
+   */
+  if ((mode == MUTT_WRITE_HEADER_MIME) && !privacy && date)
+    fprintf (fp, "Date: %s\n", date);
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
    * field if the user sets it with the `my_hdr' command
