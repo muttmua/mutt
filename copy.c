@@ -231,14 +231,24 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       /* Find x -- the array entry where this header is to be saved */
       if (flags & CH_REORDER)
       {
+        int match = -1;
+        size_t match_len, hdr_order_len;
+
 	for (t = HeaderOrderList, x = 0 ; (t) ; t = t->next, x++)
 	{
-	  if (!ascii_strncasecmp (buf, t->data, mutt_strlen (t->data)))
+          hdr_order_len = mutt_strlen (t->data);
+	  if (!ascii_strncasecmp (buf, t->data, hdr_order_len))
 	  {
+            if ((match == -1) || (hdr_order_len > match_len))
+            {
+              match = x;
+              match_len = hdr_order_len;
+            }
 	    dprint(2, (debugfile, "Reorder: %s matches %s\n", t->data, buf));
-	    break;
 	  }
 	}
+        if (match != -1)
+          x = match;
       }
 
       ignore = 0;
