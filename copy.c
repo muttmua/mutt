@@ -884,6 +884,7 @@ static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout,
 
 static void format_address_header (char **h, ADDRESS *a)
 {
+  ADDRESS *prev;
   char buf[HUGE_STRING];
   char cbuf[STRING];
   char c2buf[STRING];
@@ -910,7 +911,12 @@ static void format_address_header (char **h, ADDRESS *a)
     }
     else
     {
-      if (a->mailbox)
+      /* NOTE: this logic is slightly different from
+       * mutt_write_address_list() because the h function parameter
+       * starts off without a trailing space.  e.g. "To:".  So this
+       * function prepends a space with the *first* address.
+       */
+      if (a->mailbox && (!count || !prev->group))
       {
 	strcpy (cbuf, " ");	/* __STRCPY_CHECKED__ */
 	linelen++;
@@ -923,6 +929,8 @@ static void format_address_header (char **h, ADDRESS *a)
       buflen++;
       strcpy (c2buf, ",");	/* __STRCPY_CHECKED__ */
     }
+
+    prev = a;
 
     cbuflen = mutt_strlen (cbuf);
     c2buflen = mutt_strlen (c2buf);

@@ -1733,7 +1733,7 @@ void mutt_make_date (BUFFER *s)
    recipient lists without needing a huge temporary buffer in memory */
 void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
 {
-  ADDRESS *tmp;
+  ADDRESS *tmp, *prev;
   char buf[LONG_STRING];
   int count = 0;
   int len;
@@ -1752,7 +1752,7 @@ void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
     }
     else
     {
-      if (count && adr->mailbox)
+      if (count && !prev->group && adr->mailbox)
       {
 	fputc (' ', fp);
 	linelen++;
@@ -1766,6 +1766,7 @@ void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
       linelen++;
       fputc (',', fp);
     }
+    prev = adr;
     adr = adr->next;
     count++;
   }
