@@ -753,7 +753,8 @@ static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
 #ifdef SUN_ATTACHMENT
         if (mutt_get_parameter ("content-lines", new->parameter))
         {
-	  mutt_atoi (mutt_get_parameter ("content-lines", new->parameter), &lines);
+	  mutt_atoi (mutt_get_parameter ("content-lines", new->parameter),
+                     &lines, 0);
 	  for ( ; lines; lines-- )
             if (ftello (fp) >= end_off || fgets (buffer, LONG_STRING, fp) == NULL)
               break;
@@ -941,7 +942,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
     switch (count)
     {
       case 0: /* day of the month */
-	if (mutt_atoi (t, &tm.tm_mday) < 0 || tm.tm_mday < 0)
+	if (mutt_atoi (t, &tm.tm_mday, 0) < 0 || tm.tm_mday < 0)
 	  return (-1);
 	if (tm.tm_mday > 31)
 	  return (-1);
@@ -954,7 +955,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
 	break;
 
       case 2: /* year */
-	if (mutt_atoi (t, &tm.tm_year) < 0 || tm.tm_year < 0)
+	if (mutt_atoi (t, &tm.tm_year, 0) < 0 || tm.tm_year < 0)
 	  return (-1);
         if (tm.tm_year < 50)
 	  tm.tm_year += 100;
@@ -1347,7 +1348,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
            * HACK - mutt has, for a very short time, produced negative
            * Lines header values.  Ignore them.
            */
-          if (mutt_atoi (p, &hdr->lines) < 0 || hdr->lines < 0)
+          if (mutt_atoi (p, &hdr->lines, 0) < 0 || hdr->lines < 0)
             hdr->lines = 0;
         }
 

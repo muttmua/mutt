@@ -931,7 +931,7 @@ int mutt_index_menu (void)
 	  break;
         }
 
-	if (mutt_atoi (buf, &i) < 0)
+	if (mutt_atoi (buf, &i, 0) < 0)
 	{
 	  mutt_error _("Argument must be a message number.");
 	  break;

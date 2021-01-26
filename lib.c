@@ -829,7 +829,28 @@ void mutt_debug_f (const char *file, const int line, const char *function, const
 
 #endif /* DEBUG */
 
-int mutt_atos (const char *str, short *dst)
+
+/**********************************************************************
+ * mutt_atoX functions
+ *
+ * By default these all operate in a "strict mode", returning:
+ *
+ * * -1 if input is NULL or "".
+ *   Pass flag MUTT_ATOI_ALLOW_EMPTY to return 0 in that case.
+ *
+ * * -1 if there is trailing input after the number.
+ *   Pass flag MUTT_ATOI_ALLOW_TRAILING to return 0 in that case.
+ *
+ * * -2 if the number is out of range
+ *
+ * Note that the dst parameter will be set to 0 on error.
+ *********************************************************************/
+
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
+ */
+int mutt_atos (const char *str, short *dst, int flags)
 {
   int rc;
   long res;
@@ -838,16 +859,20 @@ int mutt_atos (const char *str, short *dst)
 
   *t = 0;
 
-  if ((rc = mutt_atol (str, &res)) < 0)
+  if ((rc = mutt_atol (str, &res, flags)) < 0)
     return rc;
   if ((short) res != res)
     return -2;
 
   *t = (short) res;
-  return 0;
+  return rc;
 }
 
-int mutt_atoi (const char *str, int *dst)
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
+ */
+int mutt_atoi (const char *str, int *dst, int flags)
 {
   int rc;
   long res;
@@ -856,48 +881,78 @@ int mutt_atoi (const char *str, int *dst)
 
   *t = 0;
 
-  if ((rc = mutt_atol (str, &res)) < 0)
+  if ((rc = mutt_atol (str, &res, flags)) < 0)
     return rc;
   if ((int) res != res)
     return -2;
 
   *t = (int) res;
-  return 0;
+  return rc;
 }
 
-int mutt_atol (const char *str, long *dst)
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
+ */
+int mutt_atol (const char *str, long *dst, int flags)
 {
-  long r;
-  long *res = dst ? dst : &r;
+  long tmp, res;
+  long *t = dst ? dst : &tmp;
   char *e = NULL;
 
-  /* no input: 0 */
+  *t = 0;
+
   if (!str || !*str)
-  {
-    *res = 0;
-    return 0;
-  }
+    return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  *res = strtol (str, &e, 10);
-  if (e && *e != '\0')
-    return -1;
+  res = strtol (str, &e, 10);
+
   if (errno == ERANGE)
     return -2;
+  if (e == str)
+    return -1;
+  if ((*e != '\0') && !(flags & MUTT_ATOI_ALLOW_TRAILING))
+    return -1;
+
+  *t = res;
   return 0;
 }
 
-/* NOTE: this function's return value breaks with the above three functions.
- * The imap code lexes uint values out of a stream of characters without
- * tokenization.  The above functions return -1 if there is input beyond
- * the number.
- *
- * returns: 1 - successful conversion, with trailing characters
- *          0 - successful conversion
- *         -1 - invalid input
- *         -2 - input out of range
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
  */
-int mutt_atoui (const char *str, unsigned int *dst)
+int mutt_atoll (const char *str, long long *dst, int flags)
+{
+  long long tmp, res;
+  long long *t = dst ? dst : &tmp;
+  char *e = NULL;
+
+  *t = 0;
+
+  if (!str || !*str)
+    return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
+
+  errno = 0;
+  res = strtoll (str, &e, 10);
+
+  if (errno == ERANGE)
+    return -2;
+  if (e == str)
+    return -1;
+  if ((*e != '\0') && !(flags & MUTT_ATOI_ALLOW_TRAILING))
+    return -1;
+
+  *t = res;
+  return 0;
+}
+
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
+ */
+int mutt_atoui (const char *str, unsigned int *dst, int flags)
 {
   int rc;
   unsigned long res;
@@ -906,7 +961,7 @@ int mutt_atoui (const char *str, unsigned int *dst)
 
   *t = 0;
 
-  if ((rc = mutt_atoul (str, &res)) < 0)
+  if ((rc = mutt_atoul (str, &res, flags)) < 0)
     return rc;
   if ((unsigned int) res != res)
     return -2;
@@ -915,58 +970,60 @@ int mutt_atoui (const char *str, unsigned int *dst)
   return rc;
 }
 
-/* NOTE: this function's return value is different from mutt_atol.
- *
- * returns: 1 - successful conversion, with trailing characters
- *          0 - successful conversion
- *         -1 - invalid input
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
  */
-int mutt_atoul (const char *str, unsigned long *dst)
+int mutt_atoul (const char *str, unsigned long *dst, int flags)
 {
-  unsigned long r;
-  unsigned long *res = dst ? dst : &r;
+  unsigned long tmp, res;
+  unsigned long *t = dst ? dst : &tmp;
   char *e = NULL;
 
-  /* no input: 0 */
+  *t = 0;
+
   if (!str || !*str)
-  {
-    *res = 0;
-    return 0;
-  }
+    return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  *res = strtoul (str, &e, 10);
-  if (*res == ULONG_MAX && errno == ERANGE)
+  res = strtoul (str, &e, 10);
+
+  if (errno == ERANGE)
+    return -2;
+  if (e == str)
     return -1;
-  if (e && *e != '\0')
-    return 1;
+  if ((*e != '\0') && !(flags & MUTT_ATOI_ALLOW_TRAILING))
+    return -1;
+
+  *t = res;
   return 0;
 }
 
-/* NOTE: this function's return value is different from mutt_atol.
- *
- * returns: 1 - successful conversion, with trailing characters
- *          0 - successful conversion
- *         -1 - invalid input
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
  */
-int mutt_atoull (const char *str, unsigned long long *dst)
+int mutt_atoull (const char *str, unsigned long long *dst, int flags)
 {
-  unsigned long long r;
-  unsigned long long *res = dst ? dst : &r;
+  unsigned long long tmp, res;
+  unsigned long long *t = dst ? dst : &tmp;
   char *e = NULL;
 
-  /* no input: 0 */
+  *t = 0;
+
   if (!str || !*str)
-  {
-    *res = 0;
-    return 0;
-  }
+    return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  *res = strtoull (str, &e, 10);
-  if (*res == ULLONG_MAX && errno == ERANGE)
+  res = strtoull (str, &e, 10);
+
+  if (errno == ERANGE)
+    return -2;
+  if (e == str)
     return -1;
-  if (e && *e != '\0')
-    return 1;
+  if ((*e != '\0') && !(flags & MUTT_ATOI_ALLOW_TRAILING))
+    return -1;
+
+  *t = res;
   return 0;
 }

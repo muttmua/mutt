@@ -162,7 +162,7 @@ static int ciss_parse_userhost (ciss_url_t *ciss, char *src)
   {
     int t;
     *p++ = '\0';
-    if (mutt_atoi (p, &t) < 0 || t < 0 || t > 0xffff)
+    if (mutt_atoi (p, &t, MUTT_ATOI_ALLOW_EMPTY) < 0 || t < 0 || t > 0xffff)
       return -1;
     ciss->port = (unsigned short)t;
   }

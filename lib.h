@@ -184,18 +184,26 @@ char *safe_strcat (char *, size_t, const char *);
 char *safe_strncat (char *, size_t, const char *, size_t);
 char *safe_strdup (const char *);
 
+/* mutt_atoX() flags:
+ *
+ * Without the flag, the function will return -1, but the dst parameter
+ * will still be set to 0. */
+#define MUTT_ATOI_ALLOW_EMPTY     (1<<0)  /* allow NULL or "" */
+#define MUTT_ATOI_ALLOW_TRAILING  (1<<1)  /* allow values after the number */
+
 /* strtol() wrappers with range checking; they return
  * 	 0 success
  * 	-1 format error
- * 	-2 overflow (for int and short)
- * the int pointer may be NULL to test only without conversion
+ * 	-2 out of range
+ * the dst pointer may be NULL to test only without conversion
  */
-int mutt_atos (const char *, short *);
-int mutt_atoi (const char *, int *);
-int mutt_atol (const char *, long *);
-int mutt_atoui (const char *, unsigned int *);
-int mutt_atoul (const char *, unsigned long *);
-int mutt_atoull (const char *, unsigned long long *);
+int mutt_atos (const char *, short *, int);
+int mutt_atoi (const char *, int *, int);
+int mutt_atol (const char *, long *, int);
+int mutt_atoll (const char *, long long *, int);
+int mutt_atoui (const char *, unsigned int *, int);
+int mutt_atoul (const char *, unsigned long *, int);
+int mutt_atoull (const char *, unsigned long long *, int);
 
 const char *mutt_stristr (const char *, const char *);
 const char *mutt_basename (const char *);

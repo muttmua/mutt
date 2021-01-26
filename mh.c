@@ -154,12 +154,12 @@ static int mh_read_token (char *t, int *first, int *last)
   if ((p = strchr (t, '-')))
   {
     *p++ = '\0';
-    if (mutt_atoi (t, first) < 0 || mutt_atoi (p, last) < 0)
+    if (mutt_atoi (t, first, 0) < 0 || mutt_atoi (p, last, 0) < 0)
       return -1;
   }
   else
   {
-    if (mutt_atoi (t, first) < 0)
+    if (mutt_atoi (t, first, 0) < 0)
       return -1;
     *last = *first;
   }
@@ -512,7 +512,7 @@ static void mh_update_sequences (CONTEXT * ctx)
     else
       p = ctx->hdrs[l]->path;
 
-    if (mutt_atoi (p, &i) < 0)
+    if (mutt_atoi (p, &i, 0) < 0)
       continue;
 
     if (!ctx->hdrs[l]->read)
@@ -644,7 +644,7 @@ static void mh_update_maildir (struct maildir *md, struct mh_sequences *mhs)
     else
       p = md->h->path;
 
-    if (mutt_atoi (p, &i) < 0)
+    if (mutt_atoi (p, &i, 0) < 0)
       continue;
     f = mhs_check (mhs, i);
 

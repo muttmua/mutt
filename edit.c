@@ -156,7 +156,7 @@ be_include_messages (char *msg, char **buf, int *bufmax, int *buflen,
 
   while ((msg = strtok (msg, " ,")) != NULL)
   {
-    if (mutt_atoi (msg, &n) == 0 && n > 0 && n <= Context->msgcount)
+    if (mutt_atoi (msg, &n, 0) == 0 && n > 0 && n <= Context->msgcount)
     {
       n--;
 

@@ -117,7 +117,7 @@ int mutt_parse_score (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER
     ptr->exact = 1;
     pc++;
   }
-  if (mutt_atoi (pc, &ptr->val) < 0)
+  if (mutt_atoi (pc, &ptr->val, 0) < 0)
   {
     FREE (&pattern);
     strfcpy (err->data, _("Error: score: invalid number"), err->dsize);

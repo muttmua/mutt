@@ -2607,9 +2607,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
       s->dptr++;
 
       mutt_extract_token (tmp, s, 0);
-      rc = mutt_atos (tmp->data, (short *) &val);
-
-      if (rc < 0 || !*tmp->data)
+      rc = mutt_atos (tmp->data, (short *) &val, 0);
+      if (rc < 0)
       {
 	snprintf (err->data, err->dsize, _("%s: invalid value (%s)"), tmp->data,
 		  rc == -1 ? _("format error") : _("number overflow"));
@@ -2671,9 +2670,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
       s->dptr++;
 
       mutt_extract_token (tmp, s, 0);
-      rc = mutt_atol (tmp->data, (long *) &val);
-
-      if (rc < 0 || !*tmp->data)
+      rc = mutt_atol (tmp->data, (long *) &val, 0);
+      if (rc < 0)
       {
 	snprintf (err->data, err->dsize, _("%s: invalid value (%s)"), tmp->data,
 		  rc == -1 ? _("format error") : _("number overflow"));

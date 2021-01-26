@@ -682,7 +682,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
 
     fetch_buf = imap_next_word (fetch_buf);
     if (!isdigit ((unsigned char) *fetch_buf) ||
-        mutt_atoui (fetch_buf, &header_msn) < 0)
+        mutt_atoui (fetch_buf, &header_msn, MUTT_ATOI_ALLOW_TRAILING) < 0)
       continue;
 
     if (header_msn < 1 || header_msn > msn_end ||
@@ -1139,7 +1139,7 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 	if (ascii_strncasecmp ("UID", pc, 3) == 0)
 	{
 	  pc = imap_next_word (pc);
-	  if (mutt_atoui (pc, &uid) < 0)
+	  if (mutt_atoui (pc, &uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
             goto bail;
 	  if (uid != HEADER_DATA(h)->uid)
 	    mutt_error (_("The message index is incorrect. Try reopening the mailbox."));
@@ -1825,7 +1825,7 @@ static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
 
   /* skip to message number */
   buf = imap_next_word (buf);
-  if (mutt_atoui (buf, &h->data->msn) < 0)
+  if (mutt_atoui (buf, &h->data->msn, MUTT_ATOI_ALLOW_TRAILING) < 0)
     return rc;
 
   /* find FETCH tag */
@@ -1899,7 +1899,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     {
       s += 3;
       SKIPWS (s);
-      if (mutt_atoui (s, &h->data->uid) < 0)
+      if (mutt_atoui (s, &h->data->uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
         return -1;
 
       s = imap_next_word (s);
@@ -1939,7 +1939,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
         dlen--;
       }
       *ptmp = 0;
-      if (mutt_atol (tmp, &h->content_length) < 0)
+      if (mutt_atol (tmp, &h->content_length, 0) < 0)
         return -1;
     }
     else if (!ascii_strncasecmp ("BODY", s, 4) ||

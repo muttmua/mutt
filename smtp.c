@@ -89,7 +89,7 @@ static int smtp_code (char *buf, size_t len, int *n)
   code[1] = buf[1];
   code[2] = buf[2];
   code[3] = 0;
-  if (mutt_atoi (code, n) < 0)
+  if (mutt_atoi (code, n, 0) < 0)
     return -1;
   return 0;
 }

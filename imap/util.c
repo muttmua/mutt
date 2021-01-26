@@ -597,7 +597,7 @@ int imap_get_literal_count(const char *buf, unsigned int *bytes)
   while (isdigit ((unsigned char) *pc))
     pc++;
   *pc = 0;
-  if (mutt_atoui (pn, bytes) < 0)
+  if (mutt_atoui (pn, bytes, 0) < 0)
     return -1;
 
   return 0;
@@ -1048,11 +1048,11 @@ int mutt_seqset_iterator_next (SEQSET_ITERATOR *iter, unsigned int *next)
     if (range_sep)
       *range_sep++ = '\0';
 
-    if (mutt_atoui (iter->substr_cur, &iter->range_cur))
+    if (mutt_atoui (iter->substr_cur, &iter->range_cur, 0))
       return -1;
     if (range_sep)
     {
-      if (mutt_atoui (range_sep, &iter->range_end))
+      if (mutt_atoui (range_sep, &iter->range_end, 0))
         return -1;
     }
     else

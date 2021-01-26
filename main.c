@@ -743,7 +743,7 @@ int main (int argc, char **argv, char **environ)
 
         case 'd':
 #ifdef DEBUG
-          mutt_atoi (optarg, &debuglevel);
+          mutt_atoi (optarg, &debuglevel, 0);
           printf (_("Debugging at level %d.\n"), debuglevel);
 #else
           printf ("%s", _("DEBUG was not defined during compilation.  Ignored.\n"));

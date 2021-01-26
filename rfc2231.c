@@ -150,7 +150,7 @@ void rfc2231_decode_parameters (PARAMETER **headp)
          thus an overflow should never occur in a valid message, thus
          the value INT_MAX in case of overflow does not really matter
          (the goal is just to avoid undefined behavior). */
-      if (mutt_atoi (s, &index))
+      if (mutt_atoi (s, &index, 0) < 0)
         index = INT_MAX;
 
       conttmp = rfc2231_new_parameter ();

@@ -900,7 +900,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
       dprint (3, (debugfile, "Getting mailbox UIDVALIDITY\n"));
       pc += 3;
       pc = imap_next_word (pc);
-      if (mutt_atoui (pc, &idata->uid_validity) < 0)
+      if (mutt_atoui (pc, &idata->uid_validity, MUTT_ATOI_ALLOW_TRAILING) < 0)
         goto fail;
       status->uidvalidity = idata->uid_validity;
     }
@@ -909,7 +909,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
       dprint (3, (debugfile, "Getting mailbox UIDNEXT\n"));
       pc += 3;
       pc = imap_next_word (pc);
-      if (mutt_atoui (pc, &idata->uidnext) < 0)
+      if (mutt_atoui (pc, &idata->uidnext, MUTT_ATOI_ALLOW_TRAILING) < 0)
         goto fail;
       status->uidnext = idata->uidnext;
     }
@@ -918,7 +918,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
       dprint (3, (debugfile, "Getting mailbox HIGHESTMODSEQ\n"));
       pc += 3;
       pc = imap_next_word (pc);
-      if (mutt_atoull (pc, &idata->modseq) < 0)
+      if (mutt_atoull (pc, &idata->modseq, MUTT_ATOI_ALLOW_TRAILING) < 0)
         goto fail;
       status->modseq = idata->modseq;
     }
