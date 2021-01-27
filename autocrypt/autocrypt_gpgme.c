@@ -258,7 +258,7 @@ int mutt_autocrypt_gpgme_select_or_create_key (ADDRESS *addr, BUFFER *keyid, BUF
          for some reason, we prompt to see if they want to create a key instead.
       */
       if (mutt_yesorno (_("Create a new GPG key for this account, instead?"),
-                        MUTT_YES) == MUTT_NO)
+                        MUTT_YES) != MUTT_YES)
         break;
 
       /* fall through */
