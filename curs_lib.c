@@ -476,7 +476,7 @@ void mutt_query_exit (void)
     if (!(mutt_background_has_backgrounded () &&
           option (OPTBACKGROUNDCONFIRMQUIT) &&
           mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
-                        MUTT_NO) == MUTT_NO))
+                        MUTT_NO) != MUTT_YES))
     {
       endwin ();
       exit (1);

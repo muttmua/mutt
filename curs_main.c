@@ -1072,7 +1072,7 @@ int mutt_index_menu (void)
                  compose sessions in process.
               */
               mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
-                            MUTT_NO) == MUTT_NO)
+                            MUTT_NO) != MUTT_YES)
           {
             break;
           }
@@ -1500,7 +1500,7 @@ int mutt_index_menu (void)
           if (mutt_background_has_backgrounded () &&
               option (OPTBACKGROUNDCONFIRMQUIT) &&
               mutt_yesorno (_("There are $background_edit sessions. Really quit Mutt?"),
-                            MUTT_NO) == MUTT_NO)
+                            MUTT_NO) != MUTT_YES)
           {
             break;
           }
