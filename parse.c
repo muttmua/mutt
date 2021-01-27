@@ -1283,7 +1283,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
         {
           if (hdr)
           {
-            if ((hdr->content->length = (LOFF_T) atoll (p)) < 0)
+            if (mutt_atolofft (p, &hdr->content->length, 0) < 0)
               hdr->content->length = -1;
           }
           matched = 1;

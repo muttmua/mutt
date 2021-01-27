@@ -2397,6 +2397,28 @@ void mutt_encode_path (BUFFER *dest, const char *src)
   FREE (&p);
 }
 
+/* returns: 0 - successful conversion
+ *         -1 - error: invalid input
+ *         -2 - error: out of range
+ */
+int mutt_atolofft (const char *str, LOFF_T *dst, int flags)
+{
+  int rc;
+  long long res;
+  LOFF_T tmp;
+  LOFF_T *t = dst ? dst : &tmp;
+
+  *t = 0;
+
+  if ((rc = mutt_atoll (str, &res, flags)) < 0)
+    return rc;
+  if ((LOFF_T) res != res)
+    return -2;
+
+  *t = (LOFF_T) res;
+  return rc;
+}
+
 
 /************************************************************************
  * These functions are transplanted from lib.c, in order to modify them *

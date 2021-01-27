@@ -295,6 +295,7 @@ int mutt_addwch (wchar_t);
 int mutt_alias_complete (char *, size_t);
 void mutt_alias_add_reverse (ALIAS *t);
 void mutt_alias_delete_reverse (ALIAS *t);
+int mutt_atolofft (const char *, LOFF_T *, int);
 void mutt_attrset_cursor (int source_pair, int cursor_pair);
 int mutt_merge_colors (int source, int overlay);
 int mutt_alloc_color (int fg, int bg);
