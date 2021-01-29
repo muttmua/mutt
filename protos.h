@@ -421,6 +421,8 @@ pid_t mutt_create_filter_fd (const char *, FILE **, FILE **, FILE **, int, int, 
 
 ADDRESS *alias_reverse_lookup (ADDRESS *);
 
+ADDRESS *mutt_find_user_in_envelope (ENVELOPE *env);
+
 /* lib.c files transplanted to muttlib.c */
 int mutt_rmtree (const char *);
 FILE *safe_fopen (const char *, const char *);

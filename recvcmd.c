@@ -113,6 +113,49 @@ static short count_tagged_children (ATTACH_CONTEXT *actx, short i)
   return count;
 }
 
+/* Look through the recipients of the message we are replying to, and if
+ * we find an address that matches $alternates, we use that as the default
+ * from field.
+ *
+ * This is partically duplicated logic from set_reverse_name() but
+ * with with different data structures.  Also, in the attach case, we
+ * can have both cur and actx non-NULL in some cases.
+ */
+static ADDRESS *attach_set_reverse_name (HEADER *cur, ATTACH_CONTEXT *actx)
+{
+  ADDRESS *tmp = NULL;
+  int i;
+
+  if (cur)
+    tmp = mutt_find_user_in_envelope (cur->env);
+
+  /* Note that, for replying, we can have a case where both cur and act are
+   * not null, so don't use an 'else' for the second test */
+  if (!tmp && actx)
+  {
+    for (i = 0; i < actx->idxlen; i++)
+      if (actx->idx[i]->content->tagged && actx->idx[i]->content->hdr)
+        if ((tmp = mutt_find_user_in_envelope (actx->idx[i]->content->hdr->env)) != NULL)
+          break;
+  }
+
+  if (tmp)
+  {
+    tmp = rfc822_cpy_adr_real (tmp);
+    /* when $reverse_realname is not set, clear the personal name so that it
+     * may be set vi a reply- or send-hook.
+     */
+    if (!option (OPTREVREAL))
+    {
+      FREE (&tmp->personal);
+#ifdef EXACT_ADDRESS
+      FREE (&tmp->val);
+#endif
+    }
+  }
+  return (tmp);
+}
+
 
 
 /**
@@ -554,6 +597,9 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
 
   safe_fclose (&tmpfp);
 
+  if (option (OPTREVNAME))
+    tmphdr->env->from = attach_set_reverse_name (parent_hdr, NULL);
+
   /* now that we have the template, send it. */
   mutt_send_message (SENDBACKGROUNDEDIT, tmphdr, mutt_b2s (tmpbody), NULL,
                      parent_hdr);
@@ -685,6 +731,10 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
   else
     mutt_free_header (&tmphdr);
 
+  if (option (OPTREVNAME))
+    tmphdr->env->from = attach_set_reverse_name (cur ? curhdr : NULL,
+                                                 cur ? NULL : actx);
+
   mutt_send_message (SENDBACKGROUNDEDIT, tmphdr,
                      mutt_buffer_len (tmpbody) ? mutt_b2s (tmpbody) : NULL,
                      NULL, curhdr);
@@ -743,6 +793,11 @@ void mutt_attach_mail_sender (FILE *fp, HEADER *hdr, ATTACH_CONTEXT *actx,
 	return;
     }
   }
+
+  if (option (OPTREVNAME))
+    tmphdr->env->from = attach_set_reverse_name (cur ? cur->hdr : NULL,
+                                                 cur ? NULL : actx);
+
   mutt_send_message (SENDBACKGROUNDEDIT, tmphdr, NULL, NULL, NULL);
 }
 
@@ -991,6 +1046,11 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
   }
 
   safe_fclose (&tmpfp);
+
+  if (option (OPTREVNAME))
+    tmphdr->env->from = attach_set_reverse_name (parent_hdr ? parent_hdr :
+                                                 (cur ? cur->hdr : NULL),
+                                                 cur ? NULL : actx);
 
   if (mutt_send_message (flags, tmphdr, mutt_b2s (tmpbody), NULL,
                          parent_hdr ? parent_hdr : (cur ? cur->hdr : NULL)) == 0)

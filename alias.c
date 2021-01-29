@@ -682,3 +682,24 @@ int mutt_addr_is_user (ADDRESS *addr)
   dprint (5, (debugfile, "mutt_addr_is_user: no, all failed.\n"));
   return 0;
 }
+
+ADDRESS *mutt_find_user_in_envelope (ENVELOPE *env)
+{
+  ADDRESS *tmp;
+
+  if (!env)
+    return NULL;
+
+  for (tmp = env->to; tmp; tmp = tmp->next)
+    if (mutt_addr_is_user (tmp))
+      return tmp;
+
+  for (tmp = env->cc; tmp; tmp = tmp->next)
+    if (mutt_addr_is_user (tmp))
+      return tmp;
+
+  if (mutt_addr_is_user (env->from))
+    return env->from;
+
+  return NULL;
+}

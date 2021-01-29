@@ -1052,29 +1052,24 @@ void mutt_set_followup_to (ENVELOPE *e)
   }
 }
 
-
 /* look through the recipients of the message we are replying to, and if
    we find an address that matches $alternates, we use that as the default
    from field */
-static ADDRESS *set_reverse_name (ENVELOPE *env)
+static ADDRESS *set_reverse_name (SEND_CONTEXT *sctx, CONTEXT *ctx)
 {
-  ADDRESS *tmp;
+  ADDRESS *tmp = NULL;
+  int i;
 
-  for (tmp = env->to; tmp; tmp = tmp->next)
+  if (sctx->cur)
+    tmp = mutt_find_user_in_envelope (sctx->cur->env);
+  else if (ctx && ctx->tagged)
   {
-    if (mutt_addr_is_user (tmp))
-      break;
+    for (i = 0; i < ctx->vcount; i++)
+      if (ctx->hdrs[ctx->v2r[i]]->tagged)
+        if ((tmp = mutt_find_user_in_envelope (ctx->hdrs[ctx->v2r[i]]->env)) != NULL)
+          break;
   }
-  if (!tmp)
-  {
-    for (tmp = env->cc; tmp; tmp = tmp->next)
-    {
-      if (mutt_addr_is_user (tmp))
-	break;
-    }
-  }
-  if (!tmp && mutt_addr_is_user (env->from))
-    tmp = env->from;
+
   if (tmp)
   {
     tmp = rfc822_cpy_adr_real (tmp);
@@ -1956,7 +1951,8 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
   }
 
   /* this is handled here so that the user can match ~f in send-hook */
-  if (sctx->cur && option (OPTREVNAME) && !(sctx->flags & (SENDPOSTPONED|SENDRESEND)))
+  if (option (OPTREVNAME) && ctx &&
+      (sctx->flags & (SENDREPLY | SENDFORWARD | SENDTOSENDER)))
   {
     /* we shouldn't have to worry about freeing `sctx->msg->env->from' before
      * setting it here since this code will only execute when doing some
@@ -1970,7 +1966,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
      * have their aliases expanded.
      */
 
-    sctx->msg->env->from = set_reverse_name (sctx->cur->env);
+    sctx->msg->env->from = set_reverse_name (sctx, ctx);
   }
 
   if (! (sctx->flags & (SENDPOSTPONED|SENDRESEND)) &&
