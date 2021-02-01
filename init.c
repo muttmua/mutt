@@ -1716,29 +1716,28 @@ parse_unmy_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
   return 0;
 }
 
-static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+static int update_my_hdr (const char *my_hdr)
 {
   LIST *tmp;
   size_t keylen;
-  char *p;
+  const char *p;
 
-  mutt_extract_token (buf, s, MUTT_TOKEN_SPACE | MUTT_TOKEN_QUOTE);
-  if ((p = strpbrk (buf->data, ": \t")) == NULL || *p != ':')
-  {
-    strfcpy (err->data, _("invalid header field"), err->dsize);
-    return (-1);
-  }
-  keylen = p - buf->data + 1;
+  if (!my_hdr)
+    return -1;
+
+  if ((p = strpbrk (my_hdr, ": \t")) == NULL || *p != ':')
+    return -1;
+  keylen = p - my_hdr + 1;
 
   if (UserHeader)
   {
     for (tmp = UserHeader; ; tmp = tmp->next)
     {
       /* see if there is already a field by this name */
-      if (ascii_strncasecmp (buf->data, tmp->data, keylen) == 0)
+      if (ascii_strncasecmp (my_hdr, tmp->data, keylen) == 0)
       {
 	/* replace the old value */
-	mutt_str_replace (&tmp->data, mutt_b2s (buf));
+	mutt_str_replace (&tmp->data, my_hdr);
 	return 0;
       }
       if (!tmp->next)
@@ -1752,7 +1751,20 @@ static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUF
     tmp = mutt_new_list ();
     UserHeader = tmp;
   }
-  tmp->data = safe_strdup (mutt_b2s (buf));
+  tmp->data = safe_strdup (my_hdr);
+
+  return 0;
+}
+
+static int parse_my_hdr (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)
+{
+  mutt_extract_token (buf, s, MUTT_TOKEN_SPACE | MUTT_TOKEN_QUOTE);
+  if (update_my_hdr (mutt_b2s (buf)))
+  {
+    strfcpy (err->data, _("invalid header field"), err->dsize);
+    return -1;
+  }
+
   return 0;
 }
 
@@ -3753,15 +3765,8 @@ void mutt_init (int skip_sys_rc, LIST *commands)
 
   if ((p = getenv ("REPLYTO")) != NULL)
   {
-    BUFFER *token;
-    union pointer_long_t udata = {.l=0};
-
     mutt_buffer_printf (buffer, "Reply-To: %s", p);
-    mutt_buffer_rewind (buffer);
-
-    token = mutt_buffer_pool_get ();
-    parse_my_hdr (token, buffer, udata, &err);
-    mutt_buffer_pool_release (&token);
+    update_my_hdr (mutt_b2s (buffer));
   }
 
   if ((p = getenv ("EMAIL")) != NULL)
