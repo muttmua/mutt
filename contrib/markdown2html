@@ -160,7 +160,7 @@ def _identify_quotes_for_later(mdwn):
         # The lead-in to a quote is a single line immediately preceding the
         # quote, and ending with ':'. Note that there could be multiple of
         # these:
-        if re.match(r'^.+:\s*$', cur) and nxt.startswith('>'):
+        if nxt and re.match(r'^.+:\s*$', cur) and nxt.startswith('>'):
             ret.append(f'{{.quotelead}}{cur.strip()}')
             # pandoc needs an empty line before the blockquote, so
             # we enter one for the purpose of HTML rendition:
