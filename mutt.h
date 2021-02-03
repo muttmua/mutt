@@ -363,6 +363,7 @@ enum
 #define SENDTOSENDER            (1<<12)
 #define SENDGROUPCHATREPLY      (1<<13)
 #define SENDBACKGROUNDEDIT      (1<<14)  /* Allow background editing */
+#define SENDCHECKPOSTPONED      (1<<15)  /* Check for postponed messages */
 
 /* flags for mutt_edit_headers() */
 #define MUTT_EDIT_HEADERS_BACKGROUND  1

@@ -1848,8 +1848,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
   BUFFER *tmpbuffer;
 
   /* Prompt only for the <mail> operation. */
-  if ((sctx->flags == SENDBACKGROUNDEDIT) &&
-      !sctx->msg &&
+  if ((sctx->flags & SENDCHECKPOSTPONED) &&
       quadoption (OPT_RECALL) != MUTT_NO &&
       mutt_num_postponed (1))
   {

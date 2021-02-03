@@ -2728,7 +2728,8 @@ search_next:
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDBACKGROUNDEDIT, NULL, NULL, extra->ctx, NULL);
+	mutt_send_message (SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
+                           extra->ctx, NULL);
 	pager_menu->redraw = REDRAW_FULL;
 	break;
 
