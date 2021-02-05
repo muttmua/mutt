@@ -1154,7 +1154,8 @@ typedef struct
 #define MUTT_CHARCONV      (1<<4) /* Do character set conversions */
 #define MUTT_PRINTING      (1<<5) /* are we printing? - MUTT_DISPLAY "light" */
 #define MUTT_REPLYING      (1<<6) /* are we replying? */
-#define MUTT_FIRSTDONE     (1<<7) /* the first attachment has been done */
+#define MUTT_FORWARDING    (1<<7) /* are we inline forwarding? */
+#define MUTT_FIRSTDONE     (1<<8) /* the first attachment has been done */
 
 #define state_set_prefix(s) ((s)->flags |= MUTT_PENDINGPREFIX)
 #define state_reset_prefix(s) ((s)->flags &= ~MUTT_PENDINGPREFIX)

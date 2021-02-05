@@ -26,12 +26,13 @@
 #define MUTT_CM_CHARCONV        (1<<6)  /* perform character set conversions */
 #define MUTT_CM_PRINTING        (1<<7)  /* printing the message - display light */
 #define MUTT_CM_REPLYING        (1<<8)  /* replying the message */
+#define MUTT_CM_FORWARDING      (1<<9)  /* inline forwarding the message */
 
-#define MUTT_CM_DECODE_PGP      (1<<9)  /* used for decoding PGP messages */
-#define MUTT_CM_DECODE_SMIME    (1<<10) /* used for decoding S/MIME messages */
+#define MUTT_CM_DECODE_PGP      (1<<10)  /* used for decoding PGP messages */
+#define MUTT_CM_DECODE_SMIME    (1<<11) /* used for decoding S/MIME messages */
 #define MUTT_CM_DECODE_CRYPT    (MUTT_CM_DECODE_PGP | MUTT_CM_DECODE_SMIME)
 
-#define MUTT_CM_VERIFY          (1<<11) /* do signature verification */
+#define MUTT_CM_VERIFY          (1<<12) /* do signature verification */
 
 /* flags for mutt_copy_header() */
 #define CH_UPDATE         1       /* update the status and x-status fields? */

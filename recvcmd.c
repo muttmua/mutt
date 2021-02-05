@@ -546,7 +546,7 @@ static void attach_forward_bodies (FILE * fp, HEADER * hdr,
 
   if (option (OPTFORWQUOTE))
     st.prefix = prefix;
-  st.flags = MUTT_CHARCONV;
+  st.flags = MUTT_FORWARDING | MUTT_CHARCONV;
   if (option (OPTWEED))
     st.flags |= MUTT_WEED;
   st.fpout = tmpfp;
@@ -640,9 +640,6 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
   BUFFER *tmpbody = NULL;
   FILE *tmpfp = NULL;
 
-  int cmflags = 0;
-  int chflags = CH_XMIT;
-
   if (cur)
     curhdr = cur->hdr;
   else
@@ -665,6 +662,8 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
   if ((rc = query_quadoption (OPT_MIMEFWD,
                               _("Forward MIME encapsulated?"))) == MUTT_NO)
   {
+    int cmflags = MUTT_CM_FORWARDING;
+    int chflags = CH_XMIT;
 
     /* no MIME encapsulation */
 
@@ -899,7 +898,7 @@ attach_reply_envelope_defaults (ENVELOPE *env, ATTACH_CONTEXT *actx,
 
 static void attach_include_reply (FILE *fp, FILE *tmpfp, HEADER *cur, int flags)
 {
-  int cmflags = MUTT_CM_PREFIX | MUTT_CM_DECODE | MUTT_CM_CHARCONV;
+  int cmflags = MUTT_CM_PREFIX | MUTT_CM_DECODE | MUTT_CM_CHARCONV | MUTT_CM_REPLYING;
   int chflags = CH_DECODE;
 
   mutt_make_attribution (Context, cur, tmpfp);
@@ -908,7 +907,7 @@ static void attach_include_reply (FILE *fp, FILE *tmpfp, HEADER *cur, int flags)
     cmflags |= MUTT_CM_NOHEADER;
   if (option (OPTWEED))
   {
-    chflags |= CH_WEED;
+    chflags |= CH_WEED | CH_REORDER;
     cmflags |= MUTT_CM_WEED;
   }
 
@@ -1004,7 +1003,7 @@ void mutt_attach_reply (FILE * fp, HEADER * hdr,
       strfcpy (prefix, ">", sizeof (prefix));
 
     st.prefix = prefix;
-    st.flags  = MUTT_CHARCONV;
+    st.flags  = MUTT_CHARCONV | MUTT_REPLYING;
 
     if (option (OPTWEED))
       st.flags |= MUTT_WEED;

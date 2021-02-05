@@ -368,7 +368,7 @@ void mutt_forward_trailer (CONTEXT *ctx, HEADER *cur, FILE *fp)
 
 static int include_forward (CONTEXT *ctx, HEADER *cur, FILE *out)
 {
-  int chflags = CH_DECODE, cmflags = 0;
+  int chflags = CH_DECODE, cmflags = MUTT_CM_FORWARDING;
 
   mutt_parse_mime_message (ctx, cur);
   mutt_message_hook (ctx, cur, MUTT_MESSAGEHOOK);

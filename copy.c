@@ -670,6 +670,8 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
       s.flags |= MUTT_CHARCONV;
     if (flags & MUTT_CM_REPLYING)
       s.flags |= MUTT_REPLYING;
+    if (flags & MUTT_CM_FORWARDING)
+      s.flags |= MUTT_FORWARDING;
 
     if (WithCrypto && flags & MUTT_CM_VERIFY)
       s.flags |= MUTT_VERIFY;

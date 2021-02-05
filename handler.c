@@ -1378,55 +1378,52 @@ static int autoview_handler (BODY *a, STATE *s)
       goto bail;
     }
 
-    if (s->prefix)
+    /* Note: only replying and forwarding use s->prefix, but just to
+     * be safe, keep an explicit check for s->prefix too. */
+    if ((s->flags & (MUTT_REPLYING | MUTT_FORWARDING)) || s->prefix)
     {
-      /* Remove ansi and formatting from autoview output in replies only.
+      /* Remove ansi and formatting from autoview output.
        * The user may want to see the formatting in the pager, but it
-       * shouldn't be in their quoted reply text too.
+       * shouldn't be in their quoted reply or inline forward text too.
        */
       BUFFER *stripped = mutt_buffer_pool_get ();
       while (fgets (buffer, sizeof(buffer), fpout) != NULL)
       {
         mutt_buffer_strip_formatting (stripped, buffer, 0);
-        state_puts (s->prefix, s);
+        if (s->prefix)
+          state_puts (s->prefix, s);
         state_puts (mutt_b2s (stripped), s);
       }
       mutt_buffer_pool_release (&stripped);
+    }
+    else
+    {
+      mutt_copy_stream (fpout, s->fpout);
+    }
 
-      /* check for data on stderr */
-      if (fgets (buffer, sizeof(buffer), fperr))
+    /* Check for stderr messages */
+    if (fgets (buffer, sizeof(buffer), fperr))
+    {
+      if (s->flags & MUTT_DISPLAY)
       {
-	if (s->flags & MUTT_DISPLAY)
-	{
-	  state_mark_attach (s);
-	  state_printf (s, _("[-- Autoview stderr of %s --]\n"), mutt_b2s (command));
-	}
+        state_mark_attach (s);
+        state_printf (s, _("[-- Autoview stderr of %s --]\n"), mutt_b2s (command));
+      }
 
-	state_puts (s->prefix, s);
-	state_puts (buffer, s);
+      if (s->prefix)
+        state_puts (s->prefix, s);
+      state_puts (buffer, s);
+
+      if (s->prefix)
+      {
 	while (fgets (buffer, sizeof(buffer), fperr) != NULL)
 	{
 	  state_puts (s->prefix, s);
 	  state_puts (buffer, s);
 	}
       }
-    }
-    else
-    {
-      mutt_copy_stream (fpout, s->fpout);
-      /* Check for stderr messages */
-      if (fgets (buffer, sizeof(buffer), fperr))
-      {
-	if (s->flags & MUTT_DISPLAY)
-	{
-	  state_mark_attach (s);
-	  state_printf (s, _("[-- Autoview stderr of %s --]\n"),
-			mutt_b2s (command));
-	}
-
-	state_puts (buffer, s);
-	mutt_copy_stream (fperr, s->fpout);
-      }
+      else
+        mutt_copy_stream (fperr, s->fpout);
     }
 
   bail:
