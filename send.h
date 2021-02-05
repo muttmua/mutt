@@ -35,6 +35,7 @@ typedef struct send_scope
   char *maildir;  /* $folder */
   char *outbox;
   char *postponed;
+  char *cur_folder;  /* '^' mailbox shortcut expansion */
   ADDRESS *env_from;
   ADDRESS *from;
   char *sendmail;

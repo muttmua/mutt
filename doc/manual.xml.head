@@ -1823,7 +1823,9 @@ fo-table</literal> for details.
 </para>
 <para>
   Mutt will save all <literal>boolean</literal> and
-  <literal>quadoption</literal> configuration variables, along with
+  <literal>quadoption</literal> configuration variables,
+  the current folder (which will be used for <literal>^</literal>
+  mailbox shortcut expansion), along with:
   <link linkend="folder">$folder</link>,
   <link linkend="record">$record</link>,
   <link linkend="postponed">$postponed</link>,

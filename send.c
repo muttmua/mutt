@@ -1732,6 +1732,7 @@ static void scope_free (SEND_SCOPE **pscope)
   FREE (&scope->maildir);
   FREE (&scope->outbox);
   FREE (&scope->postponed);
+  FREE (&scope->cur_folder);
   rfc822_free_address (&scope->env_from);
   rfc822_free_address (&scope->from);
   FREE (&scope->sendmail);
@@ -1757,6 +1758,7 @@ static SEND_SCOPE *scope_save (void)
   scope->maildir = safe_strdup (Maildir);
   scope->outbox = safe_strdup (Outbox);
   scope->postponed = safe_strdup (Postponed);
+  scope->cur_folder = safe_strdup (CurrentFolder);
 
   scope->env_from = rfc822_cpy_adr (EnvFrom, 0);
   scope->from = rfc822_cpy_adr (From, 0);
@@ -1783,6 +1785,7 @@ static void scope_restore (SEND_SCOPE *scope)
   mutt_str_replace (&Maildir, scope->maildir);
   mutt_str_replace (&Outbox, scope->outbox);
   mutt_str_replace (&Postponed, scope->postponed);
+  mutt_str_replace (&CurrentFolder, scope->cur_folder);
 
   rfc822_free_address (&EnvFrom);
   EnvFrom = rfc822_cpy_adr (scope->env_from, 0);
