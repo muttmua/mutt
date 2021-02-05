@@ -663,7 +663,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
                               _("Forward MIME encapsulated?"))) == MUTT_NO)
   {
     int cmflags = MUTT_CM_FORWARDING;
-    int chflags = CH_XMIT;
+    int chflags = CH_DECODE;
 
     /* no MIME encapsulation */
 
