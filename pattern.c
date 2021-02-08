@@ -1251,6 +1251,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
 	  FREE (&buf);
 	  tmp->child = tmp2;
 	  ps.dptr = p + 1; /* restore location */
+          SKIPWS (ps.dptr);
 	  break;
 	}
         if (implicit && or)
@@ -1359,6 +1360,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
 	alladdr = 0;
 	isalias = 0;
 	ps.dptr = p + 1; /* restore location */
+        SKIPWS (ps.dptr);
 	break;
       default:
 	snprintf (err->data, err->dsize, _("error in pattern at: %s"), ps.dptr);
