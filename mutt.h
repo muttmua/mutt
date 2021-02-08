@@ -22,9 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
-# include <unistd.h> /* needed for SEEK_SET */
-#endif
+#include <unistd.h> /* needed for SEEK_SET */
 #ifdef HAVE_UNIX_H
 # include <unix.h>   /* needed for snprintf on QNX. */
 #endif

@@ -2,3 +2,30 @@ These files are used by a program called aclocal (part of the GNU automake
 package).  aclocal uses these files to create aclocal.m4 which is in turn
 used by autoconf to create the configure script at the the top level in
 this distribution.
+
+Used for gettext and iconv  (installed by gettextize):
+gettext.m4
+host-cpu-c-abi.m4
+iconv.m4
+intlmacosx.m4
+lib-ld.m4
+lib-link.m4
+lib-prefix.m4
+nls.m4
+po.m4
+progtest.m4
+
+Used for curses:
+curslib.m4
+funcdecl.m4
+
+Used for GPGME:
+gpgme.m4
+gpg-error.m4
+
+Used for GSSAPI (kerberos):
+gssapi.m4
+
+Used for integer types:
+types.m4   (should probably be pulled inside the main
+            configure.ac file instead.)

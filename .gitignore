@@ -63,6 +63,8 @@
 /doc/stamp-*
 /doc/smime_keys.1
 /po/mutt.pot
+/po/stamp-po
+/po/remove-potcdate.sed
 
 # xcode droppings
 /build/

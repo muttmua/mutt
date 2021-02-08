@@ -1219,7 +1219,8 @@ AC_ARG_ENABLE(iconv, AS_HELP_STRING([--disable-iconv],[Disable iconv support]),
         fi
 ])
 
-MUTT_AM_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
+AM_ICONV
 
 if test "$am_cv_func_iconv" != "yes"
 then
@@ -1293,17 +1294,10 @@ else
   AC_DEFINE(ICONV_NONTRANS, 0)
 fi
 
-CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/intl"
-
-if test "$BUILD_INCLUDED_LIBINTL" = "yes"; then
-  AC_DEFINE(HAVE_BIND_TEXTDOMAIN_CODESET,1,
-          [ Define if your gettext has bind_textdomain_codeset. ])
-else
-  mutt_save_LIBS="$LIBS"
-  LIBS="$LIBS $INTLLIBS"
-  AC_CHECK_FUNCS(bind_textdomain_codeset)
-  LIBS="$mutt_save_LIBS"
-fi
+mutt_save_LIBS="$LIBS"
+LIBS="$LIBS $LIBINTL"
+AC_CHECK_FUNCS(bind_textdomain_codeset)
+LIBS="$mutt_save_LIBS"
 
 fi # libiconv
 
@@ -1594,6 +1588,6 @@ if test x$full_doc != xno ; then
 fi
 
 AC_CONFIG_FILES(Makefile contrib/Makefile doc/Makefile imap/Makefile
-        intl/Makefile m4/Makefile po/Makefile.in autocrypt/Makefile
+        m4/Makefile po/Makefile.in autocrypt/Makefile
         doc/instdoc.sh)
 AC_OUTPUT

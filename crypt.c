@@ -44,9 +44,7 @@
 #include <errno.h>
 #include <ctype.h>
 
-#ifdef HAVE_LOCALE_H
 #include <locale.h>
-#endif
 
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>

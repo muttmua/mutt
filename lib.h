@@ -27,9 +27,7 @@
 
 # include <stdio.h>
 # include <string.h>
-# ifdef HAVE_UNISTD_H
-#  include <unistd.h> /* needed for SEEK_SET */
-# endif
+# include <unistd.h> /* needed for SEEK_SET */
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <time.h>
@@ -42,7 +40,7 @@
 # endif
 
 # ifdef ENABLE_NLS
-#  include <libintl.h>
+#  include "gettext.h"
 # define _(a) (gettext (a))
 #  ifdef gettext_noop
 #   define N_(a) gettext_noop (a)

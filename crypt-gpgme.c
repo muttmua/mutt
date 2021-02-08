@@ -46,9 +46,7 @@
 
 #include <gpgme.h>
 
-#ifdef HAVE_LOCALE_H
 #include <locale.h>
-#endif
 #ifdef HAVE_LANGINFO_D_T_FMT
 #include <langinfo.h>
 #endif

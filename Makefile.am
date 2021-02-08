@@ -15,7 +15,7 @@ AUTOCRYPT_SUBDIR = autocrypt
 AUTOCRYPT_INCLUDES = -I$(top_srcdir)/autocrypt
 endif
 
-SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR) $(AUTOCRYPT_SUBDIR)
+SUBDIRS = m4 po doc contrib $(IMAP_SUBDIR) $(AUTOCRYPT_SUBDIR)
 
 bin_SCRIPTS = muttbug flea $(SMIMEAUX_TARGET)
 
@@ -47,7 +47,7 @@ nodist_mutt_SOURCES = $(BUILT_SOURCES)
 mutt_LDADD = $(MUTT_LIB_OBJECTS) $(LIBOBJS) \
 	$(LIBIMAP) $(LIBAUTOCRYPT) \
 	$(MUTTLIBS) \
-	$(INTLLIBS) $(LIBICONV)  $(GPGME_LIBS) $(GPG_ERROR_LIBS)
+	$(LIBINTL) $(LIBICONV)  $(GPGME_LIBS) $(GPG_ERROR_LIBS)
 
 mutt_DEPENDENCIES = $(MUTT_LIB_OBJECTS) $(LIBOBJS) $(LIBIMAPDEPS) \
 	$(INTLDEPS) $(LIBAUTOCRYPTDEPS)
@@ -97,7 +97,7 @@ mutt_dotlock_LDADD = $(LIBOBJS)
 mutt_dotlock_DEPENDENCIES = $(LIBOBJS)
 
 mutt_pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5.c pgppacket.c ascii.c
-mutt_pgpring_LDADD = $(LIBOBJS) $(INTLLIBS)
+mutt_pgpring_LDADD = $(LIBOBJS) $(LIBINTL)
 mutt_pgpring_DEPENDENCIES = $(LIBOBJS) $(INTLDEPS)
 
 txt2c_SOURCES = txt2c.c
@@ -127,7 +127,7 @@ DISTCLEANFILES= flea smime_keys txt2c po/$(PACKAGE).pot
 
 ACLOCAL_AMFLAGS = -I m4
 
-LDADD = $(LIBOBJS) $(INTLLIBS)
+LDADD = $(LIBOBJS) $(LIBINTL)
 
 flea: $(srcdir)/muttbug
 	cp $(srcdir)/muttbug flea

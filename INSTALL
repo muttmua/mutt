@@ -194,13 +194,6 @@ options are:
 	mutt. SASL may also be able to encrypt your mail session even if
 	SSL is not available.
 
---with-included-gettext
-	Mutt will be built using the GNU gettext library included in
-	the intl/ sub-directory.  You may need to use this switch if
-	your machine has something which looks like gettext to the
-	configure script, but isn't able to cope with mutt's catalog
-	files.
-
 --with-bundled-regex
 	use bundled GNU regex instead of local regexp routines.  Many systems
 	don't have the POSIX compliant regcomp/regexec/regfree
