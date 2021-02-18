@@ -1220,6 +1220,7 @@ AC_ARG_ENABLE(iconv, AS_HELP_STRING([--disable-iconv],[Disable iconv support]),
 ])
 
 AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.21])
 AM_ICONV
 
 if test "$am_cv_func_iconv" != "yes"
