@@ -16,7 +16,7 @@ endif
 EXTRA_DIST = README TODO auth_anon.c auth_cram.c auth_gss.c auth_oauth.c \
 	auth_sasl.c
 
-AM_CPPFLAGS = -I$(top_srcdir) -I../intl
+AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LIBRARIES = libimap.a
 noinst_HEADERS = auth.h imap_private.h message.h

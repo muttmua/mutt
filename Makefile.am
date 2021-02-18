@@ -56,7 +56,7 @@ DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
 	-DHAVE_CONFIG_H=1
 
-AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS) -Iintl
+AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS)
 
 # This option allows `make distcheck` to run without encountering
 # setgid errors.
@@ -76,7 +76,7 @@ EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-c
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	configure account.h \
 	attach.h buffer.h buffy.h charset.h compress.h copy.h crypthash.h \
-	dotlock.h functions.h gen_defs \
+	dotlock.h functions.h gen_defs gettext.h \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mailbox.h mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_regex.h mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
@@ -121,7 +121,7 @@ conststrings.c: txt2c config.status
 	sed -e 's/^"//' -e 's/"$$//' | ${srcdir}/txt2c.sh configure_options >>conststrings_c
 	mv -f conststrings_c conststrings.c
 
-CLEANFILES = mutt_dotlock.c keymap_alldefs.h $(BUILT_SOURCES)
+CLEANFILES = mutt_dotlock.c $(BUILT_SOURCES)
 
 DISTCLEANFILES= flea smime_keys txt2c po/$(PACKAGE).pot
 
@@ -139,12 +139,6 @@ smime_keys: $(srcdir)/smime_keys.pl
 
 keymap_defs.h: $(OPS) $(srcdir)/gen_defs
 	$(srcdir)/gen_defs $(OPS) > keymap_defs.h
-
-keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME $(srcdir)/gen_defs
-	rm -f $@
-	$(srcdir)/gen_defs $(srcdir)/OPS $(srcdir)/OPS.SIDEBAR $(srcdir)/OPS.PGP \
-		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
-			> keymap_alldefs.h
 
 # If we have GNU make, we can use the FORCE target to enable
 # automatic rebuilding of version.h after a commit.

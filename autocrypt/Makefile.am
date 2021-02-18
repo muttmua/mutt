@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = 1.6 foreign
 
 EXTRA_DIST = README
 
-AM_CPPFLAGS = -I$(top_srcdir) -I../intl
+AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LIBRARIES = libautocrypt.a
 

@@ -12,8 +12,6 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
 
 AC_USE_SYSTEM_EXTENSIONS
 
-ALL_LINGUAS="de eu ru it es uk fr pl nl cs id sk ko el zh_TW zh_CN pt_BR eo gl sv da lt tr ja hu et ca bg ga fi"
-
 AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for prefix])
