@@ -1,7 +1,49 @@
-OP_MIX_USE "accept the chain constructed"
-OP_MIX_APPEND "append a remailer to the chain"
-OP_MIX_INSERT "insert a remailer into the chain"
-OP_MIX_DELETE "delete a remailer from the chain"
-OP_MIX_CHAIN_PREV "select the previous element of the chain"
-OP_MIX_CHAIN_NEXT "select the next element of the chain"
-OP_COMPOSE_MIX "send the message through a mixmaster remailer chain"
+/* This file is used to generate keymap_defs.h and the manual.
+ *
+ * The Mutt parser scripts scan lines that start with 'OP_'
+ * So please ensure multi-line comments have leading whitespace,
+ * or at least don't start with OP_.
+ *
+ * Gettext also scans this file for translation strings, so
+ * help strings should be surrounded by N_("....")
+ * and have a translator comment line above them.
+ *
+ * All OPS* files (but not keymap_defs.h) should be listed
+ * in po/POTFILES.in.
+ */
+
+/* L10N: Help screen description for OP_MIX_USE
+   mixmaster menu: <accept>
+ */
+OP_MIX_USE N_("accept the chain constructed")
+
+/* L10N: Help screen description for OP_MIX_APPEND
+   mixmaster menu: <append>
+ */
+OP_MIX_APPEND N_("append a remailer to the chain")
+
+/* L10N: Help screen description for OP_MIX_INSERT
+   mixmaster menu: <insert>
+ */
+OP_MIX_INSERT N_("insert a remailer into the chain")
+
+/* L10N: Help screen description for OP_MIX_DELETE
+   mixmaster menu: <delete>
+ */
+OP_MIX_DELETE N_("delete a remailer from the chain")
+
+/* L10N: Help screen description for OP_MIX_CHAIN_PREV
+   mixmaster menu: <chain-prev>
+ */
+OP_MIX_CHAIN_PREV N_("select the previous element of the chain")
+
+/* L10N: Help screen description for OP_MIX_CHAIN_NEXT
+   mixmaster menu: <chain-next>
+ */
+OP_MIX_CHAIN_NEXT N_("select the next element of the chain")
+
+/* L10N: Help screen description for OP_COMPOSE_MIX
+   compose menu: <mix>
+ */
+OP_COMPOSE_MIX N_("send the message through a mixmaster remailer chain")
+

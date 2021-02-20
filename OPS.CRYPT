@@ -1,4 +1,41 @@
-OP_DECRYPT_SAVE "make decrypted copy and delete"
-OP_DECRYPT_COPY "make decrypted copy"
-OP_FORGET_PASSPHRASE "wipe passphrase(s) from memory"
-OP_EXTRACT_KEYS "extract supported public keys"
+/* This file is used to generate keymap_defs.h and the manual.
+ *
+ * The Mutt parser scripts scan lines that start with 'OP_'
+ * So please ensure multi-line comments have leading whitespace,
+ * or at least don't start with OP_.
+ *
+ * Gettext also scans this file for translation strings, so
+ * help strings should be surrounded by N_("....")
+ * and have a translator comment line above them.
+ *
+ * All OPS* files (but not keymap_defs.h) should be listed
+ * in po/POTFILES.in.
+ */
+
+/* L10N: Help screen description for OP_DECRYPT_SAVE
+   index menu: <decrypt-save>
+   pager menu: <decrypt-save>
+ */
+OP_DECRYPT_SAVE N_("make decrypted copy and delete")
+
+/* L10N: Help screen description for OP_DECRYPT_COPY
+   index menu: <decrypt-copy>
+   pager menu: <decrypt-copy>
+ */
+OP_DECRYPT_COPY N_("make decrypted copy")
+
+/* L10N: Help screen description for OP_FORGET_PASSPHRASE
+   index menu: <forget-passphrase>
+   pager menu: <forget-passphrase>
+   attachment menu: <forget-passphrase>
+   compose menu: <forget-passphrase>
+ */
+OP_FORGET_PASSPHRASE N_("wipe passphrase(s) from memory")
+
+/* L10N: Help screen description for OP_EXTRACT_KEYS
+   index menu: <extract-keys>
+   pager menu: <extract-keys>
+   attachment menu: <extract-keys>
+ */
+OP_EXTRACT_KEYS N_("extract supported public keys")
+

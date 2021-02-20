@@ -1,3 +1,9 @@
+OPS
+OPS.CRYPT
+OPS.MIX
+OPS.PGP
+OPS.SIDEBAR
+OPS.SMIME
 account.c
 addrbook.c
 alias.c

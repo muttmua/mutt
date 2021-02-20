@@ -1,10 +1,74 @@
-OP_SIDEBAR_FIRST "move the highlight to the first mailbox"
-OP_SIDEBAR_LAST "move the highlight to the last mailbox"
-OP_SIDEBAR_NEXT "move the highlight to next mailbox"
-OP_SIDEBAR_NEXT_NEW "move the highlight to next mailbox with new mail"
-OP_SIDEBAR_OPEN "open highlighted mailbox"
-OP_SIDEBAR_PAGE_DOWN "scroll the sidebar down 1 page"
-OP_SIDEBAR_PAGE_UP "scroll the sidebar up 1 page"
-OP_SIDEBAR_PREV "move the highlight to previous mailbox"
-OP_SIDEBAR_PREV_NEW "move the highlight to previous mailbox with new mail"
-OP_SIDEBAR_TOGGLE_VISIBLE "make the sidebar (in)visible"
+/* This file is used to generate keymap_defs.h and the manual.
+ *
+ * The Mutt parser scripts scan lines that start with 'OP_'
+ * So please ensure multi-line comments have leading whitespace,
+ * or at least don't start with OP_.
+ *
+ * Gettext also scans this file for translation strings, so
+ * help strings should be surrounded by N_("....")
+ * and have a translator comment line above them.
+ *
+ * All OPS* files (but not keymap_defs.h) should be listed
+ * in po/POTFILES.in.
+ */
+
+/* L10N: Help screen description for OP_SIDEBAR_FIRST
+   index menu: <sidebar-first>
+   pager menu: <sidebar-first>
+ */
+OP_SIDEBAR_FIRST N_("move the highlight to the first mailbox")
+
+/* L10N: Help screen description for OP_SIDEBAR_LAST
+   index menu: <sidebar-last>
+   pager menu: <sidebar-last>
+ */
+OP_SIDEBAR_LAST N_("move the highlight to the last mailbox")
+
+/* L10N: Help screen description for OP_SIDEBAR_NEXT
+   index menu: <sidebar-next>
+   pager menu: <sidebar-next>
+ */
+OP_SIDEBAR_NEXT N_("move the highlight to next mailbox")
+
+/* L10N: Help screen description for OP_SIDEBAR_NEXT_NEW
+   index menu: <sidebar-next-new>
+   pager menu: <sidebar-next-new>
+ */
+OP_SIDEBAR_NEXT_NEW N_("move the highlight to next mailbox with new mail")
+
+/* L10N: Help screen description for OP_SIDEBAR_OPEN
+   index menu: <sidebar-open>
+   pager menu: <sidebar-open>
+ */
+OP_SIDEBAR_OPEN N_("open highlighted mailbox")
+
+/* L10N: Help screen description for OP_SIDEBAR_PAGE_DOWN
+   index menu: <sidebar-page-down>
+   pager menu: <sidebar-page-down>
+ */
+OP_SIDEBAR_PAGE_DOWN N_("scroll the sidebar down 1 page")
+
+/* L10N: Help screen description for OP_SIDEBAR_PAGE_UP
+   index menu: <sidebar-page-up>
+   pager menu: <sidebar-page-up>
+ */
+OP_SIDEBAR_PAGE_UP N_("scroll the sidebar up 1 page")
+
+/* L10N: Help screen description for OP_SIDEBAR_PREV
+   index menu: <sidebar-prev>
+   pager menu: <sidebar-prev>
+ */
+OP_SIDEBAR_PREV N_("move the highlight to previous mailbox")
+
+/* L10N: Help screen description for OP_SIDEBAR_PREV_NEW
+   index menu: <sidebar-prev-new>
+   pager menu: <sidebar-prev-new>
+ */
+OP_SIDEBAR_PREV_NEW N_("move the highlight to previous mailbox with new mail")
+
+/* L10N: Help screen description for OP_SIDEBAR_TOGGLE_VISIBLE
+   index menu: <sidebar-toggle-visible>
+   pager menu: <sidebar-toggle-visible>
+ */
+OP_SIDEBAR_TOGGLE_VISIBLE N_("make the sidebar (in)visible")
+

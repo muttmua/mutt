@@ -1,213 +1,1193 @@
-OP_NULL "null operation"
-OP_END_COND "end of conditional execution (noop)"
-OP_ATTACH_VIEW_MAILCAP "force viewing of attachment using mailcap"
-OP_ATTACH_VIEW_PAGER "view attachment in pager using copiousoutput mailcap"
-OP_ATTACH_VIEW_TEXT "view attachment as text"
-OP_ATTACH_COLLAPSE "Toggle display of subparts"
-OP_AUTOCRYPT_ACCT_MENU "manage autocrypt accounts"
-OP_AUTOCRYPT_CREATE_ACCT "create a new autocrypt account"
-OP_AUTOCRYPT_DELETE_ACCT "delete the current account"
-OP_AUTOCRYPT_TOGGLE_ACTIVE "toggle the current account active/inactive"
-OP_AUTOCRYPT_TOGGLE_PREFER "toggle the current account prefer-encrypt flag"
-OP_BACKGROUND_COMPOSE_MENU "list and select backgrounded compose sessions"
-OP_BOTTOM_PAGE "move to the bottom of the page"
-OP_BOUNCE_MESSAGE "remail a message to another user"
-OP_BROWSER_NEW_FILE "select a new file in this directory"
-OP_BROWSER_VIEW_FILE "view file"
-OP_BROWSER_TELL "display the currently selected file's name"
-OP_BROWSER_SUBSCRIBE "subscribe to current mailbox (IMAP only)"
-OP_BROWSER_UNSUBSCRIBE "unsubscribe from current mailbox (IMAP only)"
-OP_BROWSER_TOGGLE_LSUB "toggle view all/subscribed mailboxes (IMAP only)"
-OP_BUFFY_LIST "list mailboxes with new mail"
-OP_CHANGE_DIRECTORY "change directories"
-OP_CHECK_NEW "check mailboxes for new mail"
-OP_COMPOSE_ATTACH_FILE "attach file(s) to this message"
-OP_COMPOSE_ATTACH_MESSAGE "attach message(s) to this message"
-OP_COMPOSE_AUTOCRYPT_MENU "show autocrypt compose menu options"
-OP_COMPOSE_EDIT_BCC "edit the BCC list"
-OP_COMPOSE_EDIT_CC "edit the CC list"
-OP_COMPOSE_EDIT_DESCRIPTION "edit attachment description"
-OP_COMPOSE_EDIT_ENCODING "edit attachment transfer-encoding"
-OP_COMPOSE_EDIT_FCC "enter a file to save a copy of this message in"
-OP_COMPOSE_EDIT_FILE "edit the file to be attached"
-OP_COMPOSE_EDIT_FROM "edit the from field"
-OP_COMPOSE_EDIT_HEADERS "edit the message with headers"
-OP_COMPOSE_EDIT_MESSAGE "edit the message"
-OP_COMPOSE_EDIT_MIME "edit attachment using mailcap entry"
-OP_COMPOSE_EDIT_REPLY_TO "edit the Reply-To field"
-OP_COMPOSE_EDIT_SUBJECT "edit the subject of this message"
-OP_COMPOSE_EDIT_TO "edit the TO list"
-OP_CREATE_MAILBOX "create a new mailbox (IMAP only)"
-OP_EDIT_TYPE "edit attachment content type"
-OP_COMPOSE_GET_ATTACHMENT "get a temporary copy of an attachment"
-OP_COMPOSE_ISPELL "run ispell on the message"
-OP_COMPOSE_MOVE_DOWN "move attachment down in compose menu list"
-OP_COMPOSE_MOVE_UP "move attachment up in compose menu list"
-OP_COMPOSE_NEW_MIME "compose new attachment using mailcap entry"
-OP_COMPOSE_TOGGLE_RECODE "toggle recoding of this attachment"
-OP_COMPOSE_POSTPONE_MESSAGE "save this message to send later"
-OP_COMPOSE_RENAME_ATTACHMENT "send attachment with a different name"
-OP_COMPOSE_RENAME_FILE "rename/move an attached file"
-OP_COMPOSE_SEND_MESSAGE "send the message"
-OP_COMPOSE_TO_SENDER "compose new message to the current message sender"
-OP_COMPOSE_TOGGLE_DISPOSITION "toggle disposition between inline/attachment"
-OP_COMPOSE_TOGGLE_UNLINK "toggle whether to delete file after sending it"
-OP_COMPOSE_UPDATE_ENCODING "update an attachment's encoding info"
-OP_COMPOSE_VIEW_ALT "view multipart/alternative"
-OP_COMPOSE_VIEW_ALT_TEXT "view multipart/alternative as text"
-OP_COMPOSE_VIEW_ALT_MAILCAP "view multipart/alternative using mailcap"
-OP_COMPOSE_WRITE_MESSAGE "write the message to a folder"
-OP_COPY_MESSAGE "copy a message to a file/mailbox"
-OP_CREATE_ALIAS "create an alias from a message sender"
-OP_CURRENT_BOTTOM "move entry to bottom of screen"
-OP_CURRENT_MIDDLE "move entry to middle of screen"
-OP_CURRENT_TOP "move entry to top of screen"
-OP_DECODE_COPY "make decoded (text/plain) copy"
-OP_DECODE_SAVE "make decoded copy (text/plain) and delete"
-OP_DELETE "delete the current entry"
-OP_DELETE_MAILBOX "delete the current mailbox (IMAP only)"
-OP_DELETE_SUBTHREAD "delete all messages in subthread"
-OP_DELETE_THREAD "delete all messages in thread"
-OP_DISPLAY_ADDRESS "display full address of sender"
-OP_DISPLAY_HEADERS "display message and toggle header weeding"
-OP_DISPLAY_MESSAGE "display a message"
-OP_EDIT_LABEL "add, change, or delete a message's label"
-OP_EDIT_MESSAGE "edit the raw message"
-OP_EDITOR_BACKSPACE "delete the char in front of the cursor"
-OP_EDITOR_BACKWARD_CHAR "move the cursor one character to the left"
-OP_EDITOR_BACKWARD_WORD "move the cursor to the beginning of the word"
-OP_EDITOR_BOL "jump to the beginning of the line"
-OP_EDITOR_BUFFY_CYCLE "cycle among incoming mailboxes"
-OP_EDITOR_COMPLETE "complete filename or alias"
-OP_EDITOR_COMPLETE_QUERY "complete address with query"
-OP_EDITOR_DELETE_CHAR "delete the char under the cursor"
-OP_EDITOR_EOL "jump to the end of the line"
-OP_EDITOR_FORWARD_CHAR "move the cursor one character to the right"
-OP_EDITOR_FORWARD_WORD "move the cursor to the end of the word"
-OP_EDITOR_HISTORY_DOWN "scroll down through the history list"
-OP_EDITOR_HISTORY_UP "scroll up through the history list"
-OP_EDITOR_HISTORY_SEARCH "search through the history list"
-OP_EDITOR_KILL_EOL "delete chars from cursor to end of line"
-OP_EDITOR_KILL_EOW "delete chars from the cursor to the end of the word"
-OP_EDITOR_KILL_LINE "delete all chars on the line"
-OP_EDITOR_KILL_WORD "delete the word in front of the cursor"
-OP_EDITOR_QUOTE_CHAR "quote the next typed key"
-OP_EDITOR_TRANSPOSE_CHARS "transpose character under cursor with previous"
-OP_EDITOR_CAPITALIZE_WORD "capitalize the word"
-OP_EDITOR_DOWNCASE_WORD "convert the word to lower case"
-OP_EDITOR_UPCASE_WORD "convert the word to upper case"
-OP_ENTER_COMMAND "enter a muttrc command"
-OP_ENTER_MASK "enter a file mask"
-OP_ERROR_HISTORY "display recent history of error messages"
-OP_EXIT "exit this menu"
-OP_FILTER "filter attachment through a shell command"
-OP_FIRST_ENTRY "move to the first entry"
-OP_FLAG_MESSAGE "toggle a message's 'important' flag"
-OP_FORWARD_MESSAGE "forward a message with comments"
-OP_GENERIC_SELECT_ENTRY "select the current entry"
-OP_GROUP_CHAT_REPLY "reply to all recipients preserving To/Cc"
-OP_GROUP_REPLY "reply to all recipients"
-OP_HALF_DOWN "scroll down 1/2 page"
-OP_HALF_UP "scroll up 1/2 page"
-OP_HELP "this screen"
-OP_JUMP "jump to an index number"
-OP_LAST_ENTRY "move to the last entry"
-OP_LIST_ACTION "perform mailing list action"
-OP_LIST_ARCHIVE "retrieve list archive information"
-OP_LIST_HELP "retrieve list help"
-OP_LIST_OWNER "contact list owner"
-OP_LIST_POST "post to mailing list"
-OP_LIST_REPLY "reply to specified mailing list"
-OP_LIST_SUBSCRIBE "subscribe to mailing list"
-OP_LIST_UNSUBSCRIBE "unsubscribe from mailing list"
-OP_MACRO "execute a macro"
-OP_MAIL "compose a new mail message"
-OP_MAIN_BREAK_THREAD "break the thread in two"
-OP_MAIN_BROWSE_MAILBOXES "select a new mailbox from the browser"
-OP_MAIN_BROWSE_MAILBOXES_READONLY "select a new mailbox from the browser in read only mode"
-OP_MAIN_CHANGE_FOLDER "open a different folder"
-OP_MAIN_CHANGE_FOLDER_READONLY "open a different folder in read only mode"
-OP_MAIN_CLEAR_FLAG "clear a status flag from a message"
-OP_MAIN_DELETE_PATTERN "delete messages matching a pattern"
-OP_MAIN_IMAP_FETCH "force retrieval of mail from IMAP server"
-OP_MAIN_IMAP_LOGOUT_ALL "logout from all IMAP servers"
-OP_MAIN_FETCH_MAIL "retrieve mail from POP server"
-OP_MAIN_LIMIT "show only messages matching a pattern"
-OP_MAIN_LINK_THREADS "link tagged message to the current one"
-OP_MAIN_NEXT_UNREAD_MAILBOX "open next mailbox with new mail"
-OP_MAIN_NEXT_NEW "jump to the next new message"
-OP_MAIN_NEXT_NEW_THEN_UNREAD "jump to the next new or unread message"
-OP_MAIN_NEXT_SUBTHREAD "jump to the next subthread"
-OP_MAIN_NEXT_THREAD "jump to the next thread"
-OP_MAIN_NEXT_UNDELETED "move to the next undeleted message"
-OP_MAIN_NEXT_UNREAD "jump to the next unread message"
-OP_MAIN_PARENT_MESSAGE "jump to parent message in thread"
-OP_MAIN_PREV_THREAD "jump to previous thread"
-OP_MAIN_PREV_SUBTHREAD "jump to previous subthread"
-OP_MAIN_PREV_UNDELETED "move to the previous undeleted message"
-OP_MAIN_PREV_NEW "jump to the previous new message"
-OP_MAIN_PREV_NEW_THEN_UNREAD "jump to the previous new or unread message"
-OP_MAIN_PREV_UNREAD "jump to the previous unread message"
-OP_MAIN_READ_THREAD "mark the current thread as read"
-OP_MAIN_READ_SUBTHREAD "mark the current subthread as read"
-OP_MAIN_ROOT_MESSAGE "jump to root message in thread"
-OP_MAIN_SET_FLAG "set a status flag on a message"
-OP_MAIN_SYNC_FOLDER "save changes to mailbox"
-OP_MAIN_TAG_PATTERN "tag messages matching a pattern"
-OP_MAIN_UNDELETE_PATTERN "undelete messages matching a pattern"
-OP_MAIN_UNTAG_PATTERN "untag messages matching a pattern"
-OP_MARK_MSG "create a hotkey macro for the current message"
-OP_MIDDLE_PAGE "move to the middle of the page"
-OP_NEXT_ENTRY "move to the next entry"
-OP_NEXT_LINE "scroll down one line"
-OP_NEXT_PAGE "move to the next page"
-OP_PAGER_BOTTOM "jump to the bottom of the message"
-OP_PAGER_HIDE_QUOTED "toggle display of quoted text"
-OP_PAGER_SKIP_QUOTED "skip beyond quoted text"
-OP_PAGER_SKIP_HEADERS "skip beyond headers"
-OP_PAGER_TOP "jump to the top of the message"
-OP_PIPE "pipe message/attachment to a shell command"
-OP_PREV_ENTRY "move to the previous entry"
-OP_PREV_LINE "scroll up one line"
-OP_PREV_PAGE "move to the previous page"
-OP_PRINT "print the current entry"
-OP_PURGE_MESSAGE "delete the current entry, bypassing the trash folder"
-OP_QUERY "query external program for addresses"
-OP_QUERY_APPEND "append new query results to current results"
-OP_QUIT "save changes to mailbox and quit"
-OP_RECALL_MESSAGE "recall a postponed message"
-OP_REDRAW "clear and redraw the screen"
-OP_REFORMAT_WINCH "{internal}"
-OP_RENAME_MAILBOX "rename the current mailbox (IMAP only)"
-OP_REPLY "reply to a message"
-OP_RESEND "use the current message as a template for a new one"
-OP_SAVE "save message/attachment to a mailbox/file"
-OP_SEARCH "search for a regular expression"
-OP_SEARCH_REVERSE "search backwards for a regular expression"
-OP_SEARCH_NEXT "search for next match"
-OP_SEARCH_OPPOSITE "search for next match in opposite direction"
-OP_SEARCH_TOGGLE "toggle search pattern coloring"
-OP_SHELL_ESCAPE "invoke a command in a subshell"
-OP_SORT "sort messages"
-OP_SORT_REVERSE "sort messages in reverse order"
-OP_TAG "tag the current entry"
-OP_TAG_PREFIX "apply next function to tagged messages"
-OP_TAG_PREFIX_COND "apply next function ONLY to tagged messages"
-OP_TAG_SUBTHREAD "tag the current subthread"
-OP_TAG_THREAD "tag the current thread"
-OP_TOGGLE_NEW "toggle a message's 'new' flag"
-OP_TOGGLE_WRITE "toggle whether the mailbox will be rewritten"
-OP_TOGGLE_MAILBOXES "toggle whether to browse mailboxes or all files"
-OP_TOP_PAGE "move to the top of the page"
-OP_UNDELETE "undelete the current entry"
-OP_UNDELETE_THREAD "undelete all messages in thread"
-OP_UNDELETE_SUBTHREAD "undelete all messages in subthread"
-OP_VERSION "show the Mutt version number and date"
-OP_VIEW_ATTACH "view attachment using mailcap entry if necessary"
-OP_VIEW_ATTACHMENTS "show MIME attachments"
-OP_WHAT_KEY "display the keycode for a key press"
-OP_CHECK_STATS "calculate message statistics for all mailboxes"
-OP_MAIN_SHOW_LIMIT "show currently active limit pattern"
-OP_MAIN_COLLAPSE_THREAD "collapse/uncollapse current thread"
-OP_MAIN_COLLAPSE_ALL "collapse/uncollapse all threads"
-OP_DESCEND_DIRECTORY "descend into a directory"
+/* This file is used to generate keymap_defs.h and the manual.
+ *
+ * The Mutt parser scripts scan lines that start with 'OP_'
+ * So please ensure multi-line comments have leading whitespace,
+ * or at least don't start with OP_.
+ *
+ * Gettext also scans this file for translation strings, so
+ * help strings should be surrounded by N_("....")
+ * and have a translator comment line above them.
+ *
+ * All OPS* files (but not keymap_defs.h) should be listed
+ * in po/POTFILES.in.
+ */
+
+/* L10N: Help screen description for OP_NULL */
+OP_NULL N_("null operation")
+
+/* L10N: Help screen description for OP_END_COND
+   generic menu: <end-cond>
+ */
+OP_END_COND N_("end of conditional execution (noop)")
+
+/* L10N: Help screen description for OP_ATTACH_VIEW_MAILCAP
+   attachment menu: <view-mailcap>
+ */
+OP_ATTACH_VIEW_MAILCAP N_("force viewing of attachment using mailcap")
+
+/* L10N: Help screen description for OP_ATTACH_VIEW_PAGER
+   attachment menu: <view-pager>
+ */
+OP_ATTACH_VIEW_PAGER N_("view attachment in pager using copiousoutput mailcap")
+
+/* L10N: Help screen description for OP_ATTACH_VIEW_TEXT
+   attachment menu: <view-text>
+ */
+OP_ATTACH_VIEW_TEXT N_("view attachment as text")
+
+/* L10N: Help screen description for OP_ATTACH_COLLAPSE
+   attachment menu: <collapse-parts>
+ */
+OP_ATTACH_COLLAPSE N_("Toggle display of subparts")
+
+/* L10N: Help screen description for OP_AUTOCRYPT_ACCT_MENU
+   index menu: <autocrypt-acct-menu>
+ */
+OP_AUTOCRYPT_ACCT_MENU N_("manage autocrypt accounts")
+
+/* L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
+   autocrypt account menu: <create-account>
+ */
+OP_AUTOCRYPT_CREATE_ACCT N_("create a new autocrypt account")
+
+/* L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
+   autocrypt account menu: <delete-account>
+ */
+OP_AUTOCRYPT_DELETE_ACCT N_("delete the current account")
+
+/* L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_ACTIVE
+   autocrypt account menu: <toggle-active>
+ */
+OP_AUTOCRYPT_TOGGLE_ACTIVE N_("toggle the current account active/inactive")
+
+/* L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_PREFER
+   autocrypt account menu: <toggle-prefer-encrypt>
+ */
+OP_AUTOCRYPT_TOGGLE_PREFER N_("toggle the current account prefer-encrypt flag")
+
+/* L10N: Help screen description for OP_BACKGROUND_COMPOSE_MENU
+   index menu: <background-compose-menu>
+   pager menu: <background-compose-menu>
+ */
+OP_BACKGROUND_COMPOSE_MENU N_("list and select backgrounded compose sessions")
+
+/* L10N: Help screen description for OP_BOTTOM_PAGE
+   generic menu: <bottom-page>
+ */
+OP_BOTTOM_PAGE N_("move to the bottom of the page")
+
+/* L10N: Help screen description for OP_BOUNCE_MESSAGE
+   index menu: <bounce-message>
+   pager menu: <bounce-message>
+   attachment menu: <bounce-message>
+ */
+OP_BOUNCE_MESSAGE N_("remail a message to another user")
+
+/* L10N: Help screen description for OP_BROWSER_NEW_FILE
+   browser menu: <select-new>
+ */
+OP_BROWSER_NEW_FILE N_("select a new file in this directory")
+
+/* L10N: Help screen description for OP_BROWSER_VIEW_FILE
+   browser menu: <view-file>
+ */
+OP_BROWSER_VIEW_FILE N_("view file")
+
+/* L10N: Help screen description for OP_BROWSER_TELL
+   browser menu: <display-filename>
+ */
+OP_BROWSER_TELL N_("display the currently selected file's name")
+
+/* L10N: Help screen description for OP_BROWSER_SUBSCRIBE
+   browser menu: <subscribe>
+ */
+OP_BROWSER_SUBSCRIBE N_("subscribe to current mailbox (IMAP only)")
+
+/* L10N: Help screen description for OP_BROWSER_UNSUBSCRIBE
+   browser menu: <unsubscribe>
+ */
+OP_BROWSER_UNSUBSCRIBE N_("unsubscribe from current mailbox (IMAP only)")
+
+/* L10N: Help screen description for OP_BROWSER_TOGGLE_LSUB
+   browser menu: <toggle-subscribed>
+ */
+OP_BROWSER_TOGGLE_LSUB N_("toggle view all/subscribed mailboxes (IMAP only)")
+
+/* L10N: Help screen description for OP_BUFFY_LIST
+   index menu: <buffy-list>
+   pager menu: <buffy-list>
+   browser menu: <buffy-list>
+ */
+OP_BUFFY_LIST N_("list mailboxes with new mail")
+
+/* L10N: Help screen description for OP_CHANGE_DIRECTORY
+   browser menu: <change-dir>
+ */
+OP_CHANGE_DIRECTORY N_("change directories")
+
+/* L10N: Help screen description for OP_CHECK_NEW
+   browser menu: <check-new>
+ */
+OP_CHECK_NEW N_("check mailboxes for new mail")
+
+/* L10N: Help screen description for OP_COMPOSE_ATTACH_FILE
+   compose menu: <attach-file>
+ */
+OP_COMPOSE_ATTACH_FILE N_("attach file(s) to this message")
+
+/* L10N: Help screen description for OP_COMPOSE_ATTACH_MESSAGE
+   compose menu: <attach-message>
+ */
+OP_COMPOSE_ATTACH_MESSAGE N_("attach message(s) to this message")
+
+/* L10N: Help screen description for OP_COMPOSE_AUTOCRYPT_MENU
+   compose menu: <autocrypt-menu>
+ */
+OP_COMPOSE_AUTOCRYPT_MENU N_("show autocrypt compose menu options")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_BCC
+   compose menu: <edit-bcc>
+ */
+OP_COMPOSE_EDIT_BCC N_("edit the BCC list")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_CC
+   compose menu: <edit-cc>
+ */
+OP_COMPOSE_EDIT_CC N_("edit the CC list")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_DESCRIPTION
+   compose menu: <edit-description>
+ */
+OP_COMPOSE_EDIT_DESCRIPTION N_("edit attachment description")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_ENCODING
+   compose menu: <edit-encoding>
+ */
+OP_COMPOSE_EDIT_ENCODING N_("edit attachment transfer-encoding")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_FCC
+   compose menu: <edit-fcc>
+ */
+OP_COMPOSE_EDIT_FCC N_("enter a file to save a copy of this message in")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_FILE
+   compose menu: <edit-file>
+ */
+OP_COMPOSE_EDIT_FILE N_("edit the file to be attached")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_FROM
+   compose menu: <edit-from>
+ */
+OP_COMPOSE_EDIT_FROM N_("edit the from field")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_HEADERS
+   compose menu: <edit-headers>
+ */
+OP_COMPOSE_EDIT_HEADERS N_("edit the message with headers")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_MESSAGE
+   compose menu: <edit-message>
+ */
+OP_COMPOSE_EDIT_MESSAGE N_("edit the message")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_MIME
+   compose menu: <edit-mime>
+ */
+OP_COMPOSE_EDIT_MIME N_("edit attachment using mailcap entry")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_REPLY_TO
+   compose menu: <edit-reply-to>
+ */
+OP_COMPOSE_EDIT_REPLY_TO N_("edit the Reply-To field")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_SUBJECT
+   compose menu: <edit-subject>
+ */
+OP_COMPOSE_EDIT_SUBJECT N_("edit the subject of this message")
+
+/* L10N: Help screen description for OP_COMPOSE_EDIT_TO
+   compose menu: <edit-to>
+ */
+OP_COMPOSE_EDIT_TO N_("edit the TO list")
+
+/* L10N: Help screen description for OP_CREATE_MAILBOX
+   browser menu: <create-mailbox>
+ */
+OP_CREATE_MAILBOX N_("create a new mailbox (IMAP only)")
+
+/* L10N: Help screen description for OP_EDIT_TYPE
+   index menu: <edit-type>
+   pager menu: <edit-type>
+   attachment menu: <edit-type>
+   compose menu: <edit-type>
+ */
+OP_EDIT_TYPE N_("edit attachment content type")
+
+/* L10N: Help screen description for OP_COMPOSE_GET_ATTACHMENT
+   compose menu: <get-attachment>
+ */
+OP_COMPOSE_GET_ATTACHMENT N_("get a temporary copy of an attachment")
+
+/* L10N: Help screen description for OP_COMPOSE_ISPELL
+   compose menu: <ispell>
+ */
+OP_COMPOSE_ISPELL N_("run ispell on the message")
+
+/* L10N: Help screen description for OP_COMPOSE_MOVE_DOWN
+   compose menu: <move-down>
+ */
+OP_COMPOSE_MOVE_DOWN N_("move attachment down in compose menu list")
+
+/* L10N: Help screen description for OP_COMPOSE_MOVE_UP
+   compose menu: <move-up>
+ */
+OP_COMPOSE_MOVE_UP N_("move attachment up in compose menu list")
+
+/* L10N: Help screen description for OP_COMPOSE_NEW_MIME
+   compose menu: <new-mime>
+ */
+OP_COMPOSE_NEW_MIME N_("compose new attachment using mailcap entry")
+
+/* L10N: Help screen description for OP_COMPOSE_TOGGLE_RECODE
+   compose menu: <toggle-recode>
+ */
+OP_COMPOSE_TOGGLE_RECODE N_("toggle recoding of this attachment")
+
+/* L10N: Help screen description for OP_COMPOSE_POSTPONE_MESSAGE
+   compose menu: <postpone-message>
+ */
+OP_COMPOSE_POSTPONE_MESSAGE N_("save this message to send later")
+
+/* L10N: Help screen description for OP_COMPOSE_RENAME_ATTACHMENT
+   compose menu: <rename-attachment>
+ */
+OP_COMPOSE_RENAME_ATTACHMENT N_("send attachment with a different name")
+
+/* L10N: Help screen description for OP_COMPOSE_RENAME_FILE
+   compose menu: <rename-file>
+ */
+OP_COMPOSE_RENAME_FILE N_("rename/move an attached file")
+
+/* L10N: Help screen description for OP_COMPOSE_SEND_MESSAGE
+   compose menu: <send-message>
+ */
+OP_COMPOSE_SEND_MESSAGE N_("send the message")
+
+/* L10N: Help screen description for OP_COMPOSE_TO_SENDER
+   index menu: <compose-to-sender>
+   pager menu: <compose-to-sender>
+   attachment menu: <compose-to-sender>
+ */
+OP_COMPOSE_TO_SENDER N_("compose new message to the current message sender")
+
+/* L10N: Help screen description for OP_COMPOSE_TOGGLE_DISPOSITION
+   compose menu: <toggle-disposition>
+ */
+OP_COMPOSE_TOGGLE_DISPOSITION N_("toggle disposition between inline/attachment")
+
+/* L10N: Help screen description for OP_COMPOSE_TOGGLE_UNLINK
+   compose menu: <toggle-unlink>
+ */
+OP_COMPOSE_TOGGLE_UNLINK N_("toggle whether to delete file after sending it")
+
+/* L10N: Help screen description for OP_COMPOSE_UPDATE_ENCODING
+   compose menu: <update-encoding>
+ */
+OP_COMPOSE_UPDATE_ENCODING N_("update an attachment's encoding info")
+
+/* L10N: Help screen description for OP_COMPOSE_VIEW_ALT
+   compose menu: <view-alt>
+ */
+OP_COMPOSE_VIEW_ALT N_("view multipart/alternative")
+
+/* L10N: Help screen description for OP_COMPOSE_VIEW_ALT_TEXT
+   compose menu: <view-alt-text>
+ */
+OP_COMPOSE_VIEW_ALT_TEXT N_("view multipart/alternative as text")
+
+/* L10N: Help screen description for OP_COMPOSE_VIEW_ALT_MAILCAP
+   compose menu: <view-alt-mailcap>
+ */
+OP_COMPOSE_VIEW_ALT_MAILCAP N_("view multipart/alternative using mailcap")
+
+/* L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
+   compose menu: <write-fcc>
+ */
+OP_COMPOSE_WRITE_MESSAGE N_("write the message to a folder")
+
+/* L10N: Help screen description for OP_COPY_MESSAGE
+   index menu: <copy-message>
+   pager menu: <copy-message>
+ */
+OP_COPY_MESSAGE N_("copy a message to a file/mailbox")
+
+/* L10N: Help screen description for OP_CREATE_ALIAS
+   index menu: <create-alias>
+   pager menu: <create-alias>
+   query menu: <create-alias>
+ */
+OP_CREATE_ALIAS N_("create an alias from a message sender")
+
+/* L10N: Help screen description for OP_CURRENT_BOTTOM
+   generic menu: <current-bottom>
+ */
+OP_CURRENT_BOTTOM N_("move entry to bottom of screen")
+
+/* L10N: Help screen description for OP_CURRENT_MIDDLE
+   generic menu: <current-middle>
+ */
+OP_CURRENT_MIDDLE N_("move entry to middle of screen")
+
+/* L10N: Help screen description for OP_CURRENT_TOP
+   generic menu: <current-top>
+ */
+OP_CURRENT_TOP N_("move entry to top of screen")
+
+/* L10N: Help screen description for OP_DECODE_COPY
+   index menu: <decode-copy>
+   pager menu: <decode-copy>
+ */
+OP_DECODE_COPY N_("make decoded (text/plain) copy")
+
+/* L10N: Help screen description for OP_DECODE_SAVE
+   index menu: <decode-save>
+   pager menu: <decode-save>
+ */
+OP_DECODE_SAVE N_("make decoded copy (text/plain) and delete")
+
+/* L10N: Help screen description for OP_DELETE
+   index menu: <delete-message>
+   pager menu: <delete-message>
+   attachment menu: <delete-entry>
+   compose menu: <detach-file>
+   postpone menu: <delete-entry>
+   alias menu: <delete-entry>
+ */
+OP_DELETE N_("delete the current entry")
+
+/* L10N: Help screen description for OP_DELETE_MAILBOX
+   browser menu: <delete-mailbox>
+ */
+OP_DELETE_MAILBOX N_("delete the current mailbox (IMAP only)")
+
+/* L10N: Help screen description for OP_DELETE_SUBTHREAD
+   index menu: <delete-subthread>
+   pager menu: <delete-subthread>
+ */
+OP_DELETE_SUBTHREAD N_("delete all messages in subthread")
+
+/* L10N: Help screen description for OP_DELETE_THREAD
+   index menu: <delete-thread>
+   pager menu: <delete-thread>
+ */
+OP_DELETE_THREAD N_("delete all messages in thread")
+
+/* L10N: Help screen description for OP_DISPLAY_ADDRESS
+   index menu: <display-address>
+   pager menu: <display-address>
+ */
+OP_DISPLAY_ADDRESS N_("display full address of sender")
+
+/* L10N: Help screen description for OP_DISPLAY_HEADERS
+   index menu: <display-toggle-weed>
+   pager menu: <display-toggle-weed>
+   attachment menu: <display-toggle-weed>
+   compose menu: <display-toggle-weed>
+ */
+OP_DISPLAY_HEADERS N_("display message and toggle header weeding")
+
+/* L10N: Help screen description for OP_DISPLAY_MESSAGE
+   index menu: <display-message>
+ */
+OP_DISPLAY_MESSAGE N_("display a message")
+
+/* L10N: Help screen description for OP_EDIT_LABEL
+   index menu: <edit-label>
+   pager menu: <edit-label>
+ */
+OP_EDIT_LABEL N_("add, change, or delete a message's label")
+
+/* L10N: Help screen description for OP_EDIT_MESSAGE
+   index menu: <edit>
+   pager menu: <edit>
+ */
+OP_EDIT_MESSAGE N_("edit the raw message")
+
+/* L10N: Help screen description for OP_EDITOR_BACKSPACE
+   editor menu: <backspace>
+ */
+OP_EDITOR_BACKSPACE N_("delete the char in front of the cursor")
+
+/* L10N: Help screen description for OP_EDITOR_BACKWARD_CHAR
+   editor menu: <backward-char>
+ */
+OP_EDITOR_BACKWARD_CHAR N_("move the cursor one character to the left")
+
+/* L10N: Help screen description for OP_EDITOR_BACKWARD_WORD
+   editor menu: <backward-word>
+ */
+OP_EDITOR_BACKWARD_WORD N_("move the cursor to the beginning of the word")
+
+/* L10N: Help screen description for OP_EDITOR_BOL
+   editor menu: <bol>
+ */
+OP_EDITOR_BOL N_("jump to the beginning of the line")
+
+/* L10N: Help screen description for OP_EDITOR_BUFFY_CYCLE
+   editor menu: <buffy-cycle>
+ */
+OP_EDITOR_BUFFY_CYCLE N_("cycle among incoming mailboxes")
+
+/* L10N: Help screen description for OP_EDITOR_COMPLETE
+   editor menu: <complete>
+ */
+OP_EDITOR_COMPLETE N_("complete filename or alias")
+
+/* L10N: Help screen description for OP_EDITOR_COMPLETE_QUERY
+   editor menu: <complete-query>
+ */
+OP_EDITOR_COMPLETE_QUERY N_("complete address with query")
+
+/* L10N: Help screen description for OP_EDITOR_DELETE_CHAR
+   editor menu: <delete-char>
+ */
+OP_EDITOR_DELETE_CHAR N_("delete the char under the cursor")
+
+/* L10N: Help screen description for OP_EDITOR_EOL
+   editor menu: <eol>
+ */
+OP_EDITOR_EOL N_("jump to the end of the line")
+
+/* L10N: Help screen description for OP_EDITOR_FORWARD_CHAR
+   editor menu: <forward-char>
+ */
+OP_EDITOR_FORWARD_CHAR N_("move the cursor one character to the right")
+
+/* L10N: Help screen description for OP_EDITOR_FORWARD_WORD
+   editor menu: <forward-word>
+ */
+OP_EDITOR_FORWARD_WORD N_("move the cursor to the end of the word")
+
+/* L10N: Help screen description for OP_EDITOR_HISTORY_DOWN
+   editor menu: <history-down>
+ */
+OP_EDITOR_HISTORY_DOWN N_("scroll down through the history list")
+
+/* L10N: Help screen description for OP_EDITOR_HISTORY_UP
+   editor menu: <history-up>
+ */
+OP_EDITOR_HISTORY_UP N_("scroll up through the history list")
+
+/* L10N: Help screen description for OP_EDITOR_HISTORY_SEARCH
+   editor menu: <history-search>
+ */
+OP_EDITOR_HISTORY_SEARCH N_("search through the history list")
+
+/* L10N: Help screen description for OP_EDITOR_KILL_EOL
+   editor menu: <kill-eol>
+ */
+OP_EDITOR_KILL_EOL N_("delete chars from cursor to end of line")
+
+/* L10N: Help screen description for OP_EDITOR_KILL_EOW
+   editor menu: <kill-eow>
+ */
+OP_EDITOR_KILL_EOW N_("delete chars from the cursor to the end of the word")
+
+/* L10N: Help screen description for OP_EDITOR_KILL_LINE
+   editor menu: <kill-line>
+ */
+OP_EDITOR_KILL_LINE N_("delete all chars on the line")
+
+/* L10N: Help screen description for OP_EDITOR_KILL_WORD
+   editor menu: <kill-word>
+ */
+OP_EDITOR_KILL_WORD N_("delete the word in front of the cursor")
+
+/* L10N: Help screen description for OP_EDITOR_QUOTE_CHAR
+   editor menu: <quote-char>
+ */
+OP_EDITOR_QUOTE_CHAR N_("quote the next typed key")
+
+/* L10N: Help screen description for OP_EDITOR_TRANSPOSE_CHARS
+   editor menu: <transpose-chars>
+ */
+OP_EDITOR_TRANSPOSE_CHARS N_("transpose character under cursor with previous")
+
+/* L10N: Help screen description for OP_EDITOR_CAPITALIZE_WORD
+   editor menu: <capitalize-word>
+ */
+OP_EDITOR_CAPITALIZE_WORD N_("capitalize the word")
+
+/* L10N: Help screen description for OP_EDITOR_DOWNCASE_WORD
+   editor menu: <downcase-word>
+ */
+OP_EDITOR_DOWNCASE_WORD N_("convert the word to lower case")
+
+/* L10N: Help screen description for OP_EDITOR_UPCASE_WORD
+   editor menu: <upcase-word>
+ */
+OP_EDITOR_UPCASE_WORD N_("convert the word to upper case")
+
+/* L10N: Help screen description for OP_ENTER_COMMAND
+   generic menu: <enter-command>
+   pager menu: <enter-command>
+ */
+OP_ENTER_COMMAND N_("enter a muttrc command")
+
+/* L10N: Help screen description for OP_ENTER_MASK
+   browser menu: <enter-mask>
+ */
+OP_ENTER_MASK N_("enter a file mask")
+
+/* L10N: Help screen description for OP_ERROR_HISTORY
+   generic menu: <error-history>
+   pager menu: <error-history>
+ */
+OP_ERROR_HISTORY N_("display recent history of error messages")
+
+/* L10N: Help screen description for OP_EXIT
+   generic menu: <exit>
+   pager menu: <exit>
+ */
+OP_EXIT N_("exit this menu")
+
+/* L10N: Help screen description for OP_FILTER
+   compose menu: <filter-entry>
+ */
+OP_FILTER N_("filter attachment through a shell command")
+
+/* L10N: Help screen description for OP_FIRST_ENTRY
+   generic menu: <first-entry>
+ */
+OP_FIRST_ENTRY N_("move to the first entry")
+
+/* L10N: Help screen description for OP_FLAG_MESSAGE
+   index menu: <flag-message>
+   pager menu: <flag-message>
+ */
+OP_FLAG_MESSAGE N_("toggle a message's 'important' flag")
+
+/* L10N: Help screen description for OP_FORWARD_MESSAGE
+   index menu: <forward-message>
+   pager menu: <forward-message>
+   attachment menu: <forward-message>
+ */
+OP_FORWARD_MESSAGE N_("forward a message with comments")
+
+/* L10N: Help screen description for OP_GENERIC_SELECT_ENTRY
+   generic menu: <select-entry>
+ */
+OP_GENERIC_SELECT_ENTRY N_("select the current entry")
+
+/* L10N: Help screen description for OP_GROUP_CHAT_REPLY
+   index menu: <group-chat-reply>
+   pager menu: <group-chat-reply>
+   attachment menu: <group-chat-reply>
+ */
+OP_GROUP_CHAT_REPLY N_("reply to all recipients preserving To/Cc")
+
+/* L10N: Help screen description for OP_GROUP_REPLY
+   index menu: <group-reply>
+   pager menu: <group-reply>
+   attachment menu: <group-reply>
+ */
+OP_GROUP_REPLY N_("reply to all recipients")
+
+/* L10N: Help screen description for OP_HALF_DOWN
+   generic menu: <half-down>
+   pager menu: <half-down>
+ */
+OP_HALF_DOWN N_("scroll down 1/2 page")
+
+/* L10N: Help screen description for OP_HALF_UP
+   generic menu: <half-up>
+   pager menu: <half-up>
+ */
+OP_HALF_UP N_("scroll up 1/2 page")
+
+/* L10N: Help screen description for OP_HELP
+   generic menu: <help>
+   pager menu: <help>
+ */
+OP_HELP N_("this screen")
+
+/* L10N: Help screen description for OP_JUMP
+   generic menu: <jump>
+   pager menu: <jump>
+ */
+OP_JUMP N_("jump to an index number")
+
+/* L10N: Help screen description for OP_LAST_ENTRY
+   generic menu: <last-entry>
+ */
+OP_LAST_ENTRY N_("move to the last entry")
+
+/* L10N: Help screen description for OP_LIST_ACTION
+   index menu: <list-action>
+   pager menu: <list-action>
+ */
+OP_LIST_ACTION N_("perform mailing list action")
+
+/* L10N: Help screen description for OP_LIST_ARCHIVE
+   list menu: <list-archive>
+ */
+OP_LIST_ARCHIVE N_("retrieve list archive information")
+
+/* L10N: Help screen description for OP_LIST_HELP
+   list menu: <list-help>
+ */
+OP_LIST_HELP N_("retrieve list help")
+
+/* L10N: Help screen description for OP_LIST_OWNER
+   list menu: <list-owner>
+ */
+OP_LIST_OWNER N_("contact list owner")
+
+/* L10N: Help screen description for OP_LIST_POST
+   list menu: <list-post>
+ */
+OP_LIST_POST N_("post to mailing list")
+
+/* L10N: Help screen description for OP_LIST_REPLY
+   index menu: <list-reply>
+   pager menu: <list-reply>
+   attachment menu: <list-reply>
+ */
+OP_LIST_REPLY N_("reply to specified mailing list")
+
+/* L10N: Help screen description for OP_LIST_SUBSCRIBE
+   list menu: <list-subscribe>
+ */
+OP_LIST_SUBSCRIBE N_("subscribe to mailing list")
+
+/* L10N: Help screen description for OP_LIST_UNSUBSCRIBE
+   list menu: <list-unsubscribe>
+ */
+OP_LIST_UNSUBSCRIBE N_("unsubscribe from mailing list")
+
+/* L10N: Help screen description for OP_MACRO */
+OP_MACRO N_("execute a macro")
+
+/* L10N: Help screen description for OP_MAIL
+   index menu: <mail>
+   pager menu: <mail>
+   query menu: <mail>
+ */
+OP_MAIL N_("compose a new mail message")
+
+/* L10N: Help screen description for OP_MAIN_BREAK_THREAD
+   index menu: <break-thread>
+   pager menu: <break-thread>
+ */
+OP_MAIN_BREAK_THREAD N_("break the thread in two")
+
+/* L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES
+   index menu: <browse-mailboxes>
+   pager menu: <browse-mailboxes>
+ */
+OP_MAIN_BROWSE_MAILBOXES N_("select a new mailbox from the browser")
+
+/* L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
+   index menu: <browse-mailboxes-readonly>
+   pager menu: <browse-mailboxes-readonly>
+ */
+OP_MAIN_BROWSE_MAILBOXES_READONLY N_("select a new mailbox from the browser in read only mode")
+
+/* L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
+   index menu: <change-folder>
+   pager menu: <change-folder>
+ */
+OP_MAIN_CHANGE_FOLDER N_("open a different folder")
+
+/* L10N: Help screen description for OP_MAIN_CHANGE_FOLDER_READONLY
+   index menu: <change-folder-readonly>
+   pager menu: <change-folder-readonly>
+ */
+OP_MAIN_CHANGE_FOLDER_READONLY N_("open a different folder in read only mode")
+
+/* L10N: Help screen description for OP_MAIN_CLEAR_FLAG
+   index menu: <clear-flag>
+   pager menu: <clear-flag>
+ */
+OP_MAIN_CLEAR_FLAG N_("clear a status flag from a message")
+
+/* L10N: Help screen description for OP_MAIN_DELETE_PATTERN
+   index menu: <delete-pattern>
+ */
+OP_MAIN_DELETE_PATTERN N_("delete messages matching a pattern")
+
+/* L10N: Help screen description for OP_MAIN_IMAP_FETCH
+   index menu: <imap-fetch-mail>
+   pager menu: <imap-fetch-mail>
+ */
+OP_MAIN_IMAP_FETCH N_("force retrieval of mail from IMAP server")
+
+/* L10N: Help screen description for OP_MAIN_IMAP_LOGOUT_ALL
+   index menu: <imap-logout-all>
+   pager menu: <imap-logout-all>
+ */
+OP_MAIN_IMAP_LOGOUT_ALL N_("logout from all IMAP servers")
+
+/* L10N: Help screen description for OP_MAIN_FETCH_MAIL
+   index menu: <fetch-mail>
+ */
+OP_MAIN_FETCH_MAIL N_("retrieve mail from POP server")
+
+/* L10N: Help screen description for OP_MAIN_LIMIT
+   index menu: <limit>
+ */
+OP_MAIN_LIMIT N_("show only messages matching a pattern")
+
+/* L10N: Help screen description for OP_MAIN_LINK_THREADS
+   index menu: <link-threads>
+   pager menu: <link-threads>
+ */
+OP_MAIN_LINK_THREADS N_("link tagged message to the current one")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_UNREAD_MAILBOX
+   index menu: <next-unread-mailbox>
+   pager menu: <next-unread-mailbox>
+ */
+OP_MAIN_NEXT_UNREAD_MAILBOX N_("open next mailbox with new mail")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_NEW
+   index menu: <next-new>
+   pager menu: <next-new>
+ */
+OP_MAIN_NEXT_NEW N_("jump to the next new message")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_NEW_THEN_UNREAD
+   index menu: <next-new-then-unread>
+ */
+OP_MAIN_NEXT_NEW_THEN_UNREAD N_("jump to the next new or unread message")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_SUBTHREAD
+   index menu: <next-subthread>
+   pager menu: <next-subthread>
+ */
+OP_MAIN_NEXT_SUBTHREAD N_("jump to the next subthread")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_THREAD
+   index menu: <next-thread>
+   pager menu: <next-thread>
+ */
+OP_MAIN_NEXT_THREAD N_("jump to the next thread")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_UNDELETED
+   index menu: <next-undeleted>
+   pager menu: <next-undeleted>
+ */
+OP_MAIN_NEXT_UNDELETED N_("move to the next undeleted message")
+
+/* L10N: Help screen description for OP_MAIN_NEXT_UNREAD
+   index menu: <next-unread>
+   pager menu: <next-unread>
+ */
+OP_MAIN_NEXT_UNREAD N_("jump to the next unread message")
+
+/* L10N: Help screen description for OP_MAIN_PARENT_MESSAGE
+   index menu: <parent-message>
+   pager menu: <parent-message>
+ */
+OP_MAIN_PARENT_MESSAGE N_("jump to parent message in thread")
+
+/* L10N: Help screen description for OP_MAIN_PREV_THREAD
+   index menu: <previous-thread>
+   pager menu: <previous-thread>
+ */
+OP_MAIN_PREV_THREAD N_("jump to previous thread")
+
+/* L10N: Help screen description for OP_MAIN_PREV_SUBTHREAD
+   index menu: <previous-subthread>
+   pager menu: <previous-subthread>
+ */
+OP_MAIN_PREV_SUBTHREAD N_("jump to previous subthread")
+
+/* L10N: Help screen description for OP_MAIN_PREV_UNDELETED
+   index menu: <previous-undeleted>
+   pager menu: <previous-undeleted>
+ */
+OP_MAIN_PREV_UNDELETED N_("move to the previous undeleted message")
+
+/* L10N: Help screen description for OP_MAIN_PREV_NEW
+   index menu: <previous-new>
+   pager menu: <previous-new>
+ */
+OP_MAIN_PREV_NEW N_("jump to the previous new message")
+
+/* L10N: Help screen description for OP_MAIN_PREV_NEW_THEN_UNREAD
+   index menu: <previous-new-then-unread>
+ */
+OP_MAIN_PREV_NEW_THEN_UNREAD N_("jump to the previous new or unread message")
+
+/* L10N: Help screen description for OP_MAIN_PREV_UNREAD
+   index menu: <previous-unread>
+   pager menu: <previous-unread>
+ */
+OP_MAIN_PREV_UNREAD N_("jump to the previous unread message")
+
+/* L10N: Help screen description for OP_MAIN_READ_THREAD
+   index menu: <read-thread>
+   pager menu: <read-thread>
+ */
+OP_MAIN_READ_THREAD N_("mark the current thread as read")
+
+/* L10N: Help screen description for OP_MAIN_READ_SUBTHREAD
+   index menu: <read-subthread>
+   pager menu: <read-subthread>
+ */
+OP_MAIN_READ_SUBTHREAD N_("mark the current subthread as read")
+
+/* L10N: Help screen description for OP_MAIN_ROOT_MESSAGE
+   index menu: <root-message>
+   pager menu: <root-message>
+ */
+OP_MAIN_ROOT_MESSAGE N_("jump to root message in thread")
+
+/* L10N: Help screen description for OP_MAIN_SET_FLAG
+   index menu: <set-flag>
+   pager menu: <set-flag>
+ */
+OP_MAIN_SET_FLAG N_("set a status flag on a message")
+
+/* L10N: Help screen description for OP_MAIN_SYNC_FOLDER
+   index menu: <sync-mailbox>
+   pager menu: <sync-mailbox>
+ */
+OP_MAIN_SYNC_FOLDER N_("save changes to mailbox")
+
+/* L10N: Help screen description for OP_MAIN_TAG_PATTERN
+   index menu: <tag-pattern>
+ */
+OP_MAIN_TAG_PATTERN N_("tag messages matching a pattern")
+
+/* L10N: Help screen description for OP_MAIN_UNDELETE_PATTERN
+   index menu: <undelete-pattern>
+ */
+OP_MAIN_UNDELETE_PATTERN N_("undelete messages matching a pattern")
+
+/* L10N: Help screen description for OP_MAIN_UNTAG_PATTERN
+   index menu: <untag-pattern>
+ */
+OP_MAIN_UNTAG_PATTERN N_("untag messages matching a pattern")
+
+/* L10N: Help screen description for OP_MARK_MSG
+   index menu: <mark-message>
+ */
+OP_MARK_MSG N_("create a hotkey macro for the current message")
+
+/* L10N: Help screen description for OP_MIDDLE_PAGE
+   generic menu: <middle-page>
+ */
+OP_MIDDLE_PAGE N_("move to the middle of the page")
+
+/* L10N: Help screen description for OP_NEXT_ENTRY
+   generic menu: <next-entry>
+   pager menu: <next-entry>
+ */
+OP_NEXT_ENTRY N_("move to the next entry")
+
+/* L10N: Help screen description for OP_NEXT_LINE
+   generic menu: <next-line>
+   pager menu: <next-line>
+ */
+OP_NEXT_LINE N_("scroll down one line")
+
+/* L10N: Help screen description for OP_NEXT_PAGE
+   generic menu: <next-page>
+   pager menu: <next-page>
+ */
+OP_NEXT_PAGE N_("move to the next page")
+
+/* L10N: Help screen description for OP_PAGER_BOTTOM
+   pager menu: <bottom>
+ */
+OP_PAGER_BOTTOM N_("jump to the bottom of the message")
+
+/* L10N: Help screen description for OP_PAGER_HIDE_QUOTED
+   pager menu: <toggle-quoted>
+ */
+OP_PAGER_HIDE_QUOTED N_("toggle display of quoted text")
+
+/* L10N: Help screen description for OP_PAGER_SKIP_QUOTED
+   pager menu: <skip-quoted>
+ */
+OP_PAGER_SKIP_QUOTED N_("skip beyond quoted text")
+
+/* L10N: Help screen description for OP_PAGER_SKIP_HEADERS
+   pager menu: <skip-headers>
+ */
+OP_PAGER_SKIP_HEADERS N_("skip beyond headers")
+
+/* L10N: Help screen description for OP_PAGER_TOP
+   pager menu: <top>
+ */
+OP_PAGER_TOP N_("jump to the top of the message")
+
+/* L10N: Help screen description for OP_PIPE
+   index menu: <pipe-message>
+   pager menu: <pipe-message>
+   attachment menu: <pipe-entry>
+   compose menu: <pipe-entry>
+ */
+OP_PIPE N_("pipe message/attachment to a shell command")
+
+/* L10N: Help screen description for OP_PREV_ENTRY
+   generic menu: <previous-entry>
+   pager menu: <previous-entry>
+ */
+OP_PREV_ENTRY N_("move to the previous entry")
+
+/* L10N: Help screen description for OP_PREV_LINE
+   generic menu: <previous-line>
+   pager menu: <previous-line>
+ */
+OP_PREV_LINE N_("scroll up one line")
+
+/* L10N: Help screen description for OP_PREV_PAGE
+   generic menu: <previous-page>
+   pager menu: <previous-page>
+ */
+OP_PREV_PAGE N_("move to the previous page")
+
+/* L10N: Help screen description for OP_PRINT
+   index menu: <print-message>
+   pager menu: <print-message>
+   attachment menu: <print-entry>
+   compose menu: <print-entry>
+ */
+OP_PRINT N_("print the current entry")
+
+/* L10N: Help screen description for OP_PURGE_MESSAGE
+   index menu: <purge-message>
+   pager menu: <purge-message>
+ */
+OP_PURGE_MESSAGE N_("delete the current entry, bypassing the trash folder")
+
+/* L10N: Help screen description for OP_QUERY
+   index menu: <query>
+   query menu: <query>
+ */
+OP_QUERY N_("query external program for addresses")
+
+/* L10N: Help screen description for OP_QUERY_APPEND
+   query menu: <query-append>
+ */
+OP_QUERY_APPEND N_("append new query results to current results")
+
+/* L10N: Help screen description for OP_QUIT
+   index menu: <quit>
+   pager menu: <quit>
+ */
+OP_QUIT N_("save changes to mailbox and quit")
+
+/* L10N: Help screen description for OP_RECALL_MESSAGE
+   index menu: <recall-message>
+   pager menu: <recall-message>
+ */
+OP_RECALL_MESSAGE N_("recall a postponed message")
+
+/* L10N: Help screen description for OP_REDRAW
+   generic menu: <refresh>
+   pager menu: <redraw-screen>
+ */
+OP_REDRAW N_("clear and redraw the screen")
+
+/* L10N: Help screen description for OP_REFORMAT_WINCH */
+OP_REFORMAT_WINCH N_("{internal}")
+
+/* L10N: Help screen description for OP_RENAME_MAILBOX
+   browser menu: <rename-mailbox>
+ */
+OP_RENAME_MAILBOX N_("rename the current mailbox (IMAP only)")
+
+/* L10N: Help screen description for OP_REPLY
+   index menu: <reply>
+   pager menu: <reply>
+   attachment menu: <reply>
+ */
+OP_REPLY N_("reply to a message")
+
+/* L10N: Help screen description for OP_RESEND
+   index menu: <resend-message>
+   pager menu: <resend-message>
+   attachment menu: <resend-message>
+ */
+OP_RESEND N_("use the current message as a template for a new one")
+
+/* L10N: Help screen description for OP_SAVE
+   index menu: <save-message>
+   pager menu: <save-message>
+   attachment menu: <save-entry>
+   compose menu: <copy-file>
+ */
+OP_SAVE N_("save message/attachment to a mailbox/file")
+
+/* L10N: Help screen description for OP_SEARCH
+   generic menu: <search>
+   pager menu: <search>
+ */
+OP_SEARCH N_("search for a regular expression")
+
+/* L10N: Help screen description for OP_SEARCH_REVERSE
+   generic menu: <search-reverse>
+   pager menu: <search-reverse>
+ */
+OP_SEARCH_REVERSE N_("search backwards for a regular expression")
+
+/* L10N: Help screen description for OP_SEARCH_NEXT
+   generic menu: <search-next>
+   pager menu: <search-next>
+ */
+OP_SEARCH_NEXT N_("search for next match")
+
+/* L10N: Help screen description for OP_SEARCH_OPPOSITE
+   generic menu: <search-opposite>
+   pager menu: <search-opposite>
+ */
+OP_SEARCH_OPPOSITE N_("search for next match in opposite direction")
+
+/* L10N: Help screen description for OP_SEARCH_TOGGLE
+   pager menu: <search-toggle>
+ */
+OP_SEARCH_TOGGLE N_("toggle search pattern coloring")
+
+/* L10N: Help screen description for OP_SHELL_ESCAPE
+   generic menu: <shell-escape>
+   pager menu: <shell-escape>
+ */
+OP_SHELL_ESCAPE N_("invoke a command in a subshell")
+
+/* L10N: Help screen description for OP_SORT
+   index menu: <sort-mailbox>
+   pager menu: <sort-mailbox>
+   browser menu: <sort>
+ */
+OP_SORT N_("sort messages")
+
+/* L10N: Help screen description for OP_SORT_REVERSE
+   index menu: <sort-reverse>
+   pager menu: <sort-reverse>
+   browser menu: <sort-reverse>
+ */
+OP_SORT_REVERSE N_("sort messages in reverse order")
+
+/* L10N: Help screen description for OP_TAG
+   generic menu: <tag-entry>
+   pager menu: <tag-message>
+ */
+OP_TAG N_("tag the current entry")
+
+/* L10N: Help screen description for OP_TAG_PREFIX
+   generic menu: <tag-prefix>
+ */
+OP_TAG_PREFIX N_("apply next function to tagged messages")
+
+/* L10N: Help screen description for OP_TAG_PREFIX_COND
+   generic menu: <tag-prefix-cond>
+ */
+OP_TAG_PREFIX_COND N_("apply next function ONLY to tagged messages")
+
+/* L10N: Help screen description for OP_TAG_SUBTHREAD
+   index menu: <tag-subthread>
+ */
+OP_TAG_SUBTHREAD N_("tag the current subthread")
+
+/* L10N: Help screen description for OP_TAG_THREAD
+   index menu: <tag-thread>
+ */
+OP_TAG_THREAD N_("tag the current thread")
+
+/* L10N: Help screen description for OP_TOGGLE_NEW
+   index menu: <toggle-new>
+   pager menu: <mark-as-new>
+ */
+OP_TOGGLE_NEW N_("toggle a message's 'new' flag")
+
+/* L10N: Help screen description for OP_TOGGLE_WRITE
+   index menu: <toggle-write>
+   pager menu: <toggle-write>
+ */
+OP_TOGGLE_WRITE N_("toggle whether the mailbox will be rewritten")
+
+/* L10N: Help screen description for OP_TOGGLE_MAILBOXES
+   browser menu: <toggle-mailboxes>
+ */
+OP_TOGGLE_MAILBOXES N_("toggle whether to browse mailboxes or all files")
+
+/* L10N: Help screen description for OP_TOP_PAGE
+   generic menu: <top-page>
+ */
+OP_TOP_PAGE N_("move to the top of the page")
+
+/* L10N: Help screen description for OP_UNDELETE
+   index menu: <undelete-message>
+   pager menu: <undelete-message>
+   attachment menu: <undelete-entry>
+   postpone menu: <undelete-entry>
+   alias menu: <undelete-entry>
+ */
+OP_UNDELETE N_("undelete the current entry")
+
+/* L10N: Help screen description for OP_UNDELETE_THREAD
+   index menu: <undelete-thread>
+   pager menu: <undelete-thread>
+ */
+OP_UNDELETE_THREAD N_("undelete all messages in thread")
+
+/* L10N: Help screen description for OP_UNDELETE_SUBTHREAD
+   index menu: <undelete-subthread>
+   pager menu: <undelete-subthread>
+ */
+OP_UNDELETE_SUBTHREAD N_("undelete all messages in subthread")
+
+/* L10N: Help screen description for OP_VERSION
+   index menu: <show-version>
+   pager menu: <show-version>
+ */
+OP_VERSION N_("show the Mutt version number and date")
+
+/* L10N: Help screen description for OP_VIEW_ATTACH
+   attachment menu: <view-attach>
+   compose menu: <view-attach>
+ */
+OP_VIEW_ATTACH N_("view attachment using mailcap entry if necessary")
+
+/* L10N: Help screen description for OP_VIEW_ATTACHMENTS
+   index menu: <view-attachments>
+   pager menu: <view-attachments>
+ */
+OP_VIEW_ATTACHMENTS N_("show MIME attachments")
+
+/* L10N: Help screen description for OP_WHAT_KEY
+   generic menu: <what-key>
+   pager menu: <what-key>
+ */
+OP_WHAT_KEY N_("display the keycode for a key press")
+
+/* L10N: Help screen description for OP_CHECK_STATS
+   generic menu: <check-stats>
+   pager menu: <check-stats>
+ */
+OP_CHECK_STATS N_("calculate message statistics for all mailboxes")
+
+/* L10N: Help screen description for OP_MAIN_SHOW_LIMIT
+   index menu: <show-limit>
+ */
+OP_MAIN_SHOW_LIMIT N_("show currently active limit pattern")
+
+/* L10N: Help screen description for OP_MAIN_COLLAPSE_THREAD
+   index menu: <collapse-thread>
+ */
+OP_MAIN_COLLAPSE_THREAD N_("collapse/uncollapse current thread")
+
+/* L10N: Help screen description for OP_MAIN_COLLAPSE_ALL
+   index menu: <collapse-all>
+ */
+OP_MAIN_COLLAPSE_ALL N_("collapse/uncollapse all threads")
+
+/* L10N: Help screen description for OP_DESCEND_DIRECTORY
+   browser menu: <descend-directory>
+ */
+OP_DESCEND_DIRECTORY N_("descend into a directory")
+
