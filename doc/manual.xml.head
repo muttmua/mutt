@@ -6767,6 +6767,19 @@ to set <link linkend="record">$record</link>:
 </screen>
 
 <para>
+Note: the current mailbox shortcut,
+<quote><literal>^</literal></quote>, has no value in some cases.  No
+mailbox is opened when Mutt is invoked to send an email from the
+command-line.  In interactive mode, Mutt reads the muttrc before
+opening the mailbox, so immediate expansion won't work as expected
+either.  This can be an issue when trying to directly assign to <link
+linkend="record">$record</link>, but also affects the <link
+linkend="fcc-hook">fcc-hook</link> mailbox, which is expanded
+immediately too.  The folder-hook example above works because the
+command is executed later, when the folder-hook fires.
+</para>
+
+<para>
 Note: the <link linkend="record">$record</link> shortcut
 <quote><literal>&lt;</literal></quote> is substituted without any
 regard to multiple mailboxes and <link
