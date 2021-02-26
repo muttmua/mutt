@@ -2156,7 +2156,7 @@ static int parse_setenv(BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFF
     }
 
     snprintf (err->data, err->dsize, _("%s is unset"), tmp->data);
-    return -1;
+    return 0;
   }
 
   if (unset)
@@ -2180,7 +2180,9 @@ static int parse_setenv(BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFF
       envp++;
       count++;
     }
-    return -1;
+
+    snprintf (err->data, err->dsize, _("%s is unset"), tmp->data);
+    return 0;
   }
 
   /* set variable */
