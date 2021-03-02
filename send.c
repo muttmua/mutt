@@ -945,6 +945,11 @@ generate_body (FILE *tempfp,	/* stream for outgoing message */
       if (cur)
       {
 	tmp = mutt_make_message_attach (ctx, cur, 0);
+        if (!tmp)
+        {
+          mutt_error _("Could not include all requested messages!");
+          return -1;
+        }
 	if (last)
 	  last->next = tmp;
 	else
@@ -957,6 +962,11 @@ generate_body (FILE *tempfp,	/* stream for outgoing message */
 	  if (ctx->hdrs[ctx->v2r[i]]->tagged)
 	  {
 	    tmp = mutt_make_message_attach (ctx, ctx->hdrs[ctx->v2r[i]], 0);
+            if (!tmp)
+            {
+              mutt_error _("Could not include all requested messages!");
+              return -1;
+            }
 	    if (last)
 	    {
 	      last->next = tmp;

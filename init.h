@@ -1231,14 +1231,17 @@ struct option_t MuttVars[] = {
   { "forw_decode",	DT_SYN,  R_NONE, {.p="forward_decode"}, {.p=0} },
   /*
   */
-  { "forward_decrypt",	DT_BOOL, R_NONE, {.l=OPTFORWDECRYPT}, {.l=1} },
+  { "forward_decrypt",	DT_QUAD, R_NONE, {.l=OPT_FORWDECRYPT}, {.l=MUTT_YES} },
   /*
   ** .pp
-  ** Controls the handling of encrypted messages when forwarding a message.
-  ** When \fIset\fP, the outer layer of encryption is stripped off.  This
-  ** variable is only used if $$mime_forward is \fIset\fP and
-  ** $$mime_forward_decode is \fIunset\fP.
-  ** (PGP only)
+  ** This quadoption controls the handling of encrypted messages when
+  ** forwarding or attaching a message.  When set to or answered
+  ** ``yes'', the outer layer of encryption is stripped off.
+  ** .pp
+  ** This variable is used if $$mime_forward is \fIset\fP and
+  ** $$mime_forward_decode is \fIunset\fP.  It is also used when
+  ** attaching a message via \fC<attach-message>\fP in the compose
+  ** menu.  (PGP only)
   */
   { "forw_decrypt",	DT_SYN,  R_NONE, {.p="forward_decrypt"}, {.p=0} },
   /*
