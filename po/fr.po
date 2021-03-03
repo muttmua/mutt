@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2021-03-03 23:06+0100\n"
-"PO-Revision-Date: 2021-03-03 23:12+0100\n"
+"PO-Revision-Date: 2021-03-03 23:17+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -7841,10 +7841,8 @@ msgstr "Impossible d'ouvrir %s"
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
 #: sendlib.c:1315
-#, fuzzy
-#| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
-msgstr "Imprimer l(es) attachement(s) marqué(s) ?"
+msgstr "Déchiffrer l'attachement du message ?"
 
 #. L10N: Prompt when forwarding a message with
 #. $mime_forward_decode set, and there was a problem decoding
