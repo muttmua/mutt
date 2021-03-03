@@ -1412,6 +1412,7 @@ retry:
   }
   if (copy_rc < 0)
   {
+    safe_fclose (&fp);
     mutt_free_body (&body);
     return NULL;
   }
