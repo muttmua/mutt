@@ -92,7 +92,7 @@ install-data-local: makedoc-all instdoc
 	for f in $(srcdir_DOCFILES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	done
-	-if [ -f manual.txt ] ; then \
+	-if [ -s manual.txt ] ; then \
 	  $(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) ; \
 	fi
 	-for f in $(HTML_DOCFILES) ; do \
