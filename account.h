@@ -55,6 +55,8 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url);
 void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url);
 int mutt_account_getuser (ACCOUNT* account);
 int mutt_account_getlogin (ACCOUNT* account);
+int _mutt_account_getpass (ACCOUNT* account,
+                           void (*prompt_func) (char *, size_t, ACCOUNT *));
 int mutt_account_getpass (ACCOUNT* account);
 void mutt_account_unsetpass (ACCOUNT* account);
 int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoauth2);

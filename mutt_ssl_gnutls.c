@@ -245,9 +245,19 @@ int mutt_ssl_starttls (CONNECTION* conn)
 }
 
 /* Note: this function grabs the CN out of the client
- * cert but appears to do nothing with it.  It does contain a call
- * to mutt_account_getuser().
+ * cert but appears to do nothing with it.
+ *
+ * It does contain a call to mutt_account_getuser(), but this
+ * interferes with SMTP client-cert authentication that doesn't use
+ * AUTH EXTERNAL. (see gitlab #336)
+ *
+ * The mutt_sasl.c code sets up callbacks to get the login or user,
+ * and it looks like the Cyrus SASL external code calls those.
+ *
+ * Brendan doesn't recall if this really was necessary at one time, so
+ * I'm disabling it.
  */
+#if 0
 static void tls_get_client_cert (CONNECTION* conn)
 {
   tlssockdata *data = conn->sockdata;
@@ -292,6 +302,7 @@ err:
   FREE (&cn);
   gnutls_x509_crt_deinit (clientcrt);
 }
+#endif
 
 #if HAVE_GNUTLS_PRIORITY_SET_DIRECT
 static int tls_set_priority (tlssockdata *data)
@@ -496,7 +507,12 @@ static int tls_negotiate (CONNECTION * conn)
   /* NB: gnutls_cipher_get_key_size() returns key length in bytes */
   conn->ssf = gnutls_cipher_get_key_size (gnutls_cipher_get (data->state)) * 8;
 
+#if 0
+  /* See comment above the tls_get_client_cert() function for why this
+   * is ifdef'ed out.  Also note the SslClientCert is already set up
+   * above. */
   tls_get_client_cert (conn);
+#endif
 
   if (!option (OPTNOCURSES))
   {

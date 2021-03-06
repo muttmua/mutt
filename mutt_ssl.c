@@ -1399,22 +1399,44 @@ static void ssl_get_client_cert(sslsockdata *ssldata, CONNECTION *conn)
     SSL_CTX_use_certificate_file(ssldata->ctx, SslClientCert, SSL_FILETYPE_PEM);
     SSL_CTX_use_PrivateKey_file(ssldata->ctx, SslClientCert, SSL_FILETYPE_PEM);
 
+#if 0
+    /* This interferes with SMTP client-cert authentication that doesn't
+     * use AUTH EXTERNAL. (see gitlab #336)
+     *
+     * The mutt_sasl.c code sets up callbacks to get the login or
+     * user, and it looks like the Cyrus SASL external code calls
+     * those.
+     *
+     * Brendan doesn't recall if this really was necessary at one time, so
+     * I'm disabling it.
+     */
+
     /* if we are using a client cert, SASL may expect an external auth name */
     mutt_account_getuser (&conn->account);
+#endif
   }
+}
+
+static void client_cert_prompt (char *prompt, size_t prompt_size, ACCOUNT *account)
+{
+  /* L10N:
+     When using a $ssl_client_cert, OpenSSL may prompt for the password
+     to decrypt the cert.  %s is the hostname.
+  */
+  snprintf (prompt, prompt_size, _("Password for %s client cert: "),
+            account->host);
 }
 
 static int ssl_passwd_cb(char *buf, int size, int rwflag, void *userdata)
 {
-  ACCOUNT *account = (ACCOUNT*)userdata;
+  ACCOUNT *account;
 
-  if (mutt_account_getuser (account))
+  if (!buf || size <= 0 || !userdata)
     return 0;
 
-  dprint (2, (debugfile, "ssl_passwd_cb: getting password for %s@%s:%u\n",
-	      account->user, account->host, account->port));
+  account = (ACCOUNT *) userdata;
 
-  if (mutt_account_getpass (account))
+  if (_mutt_account_getpass (account, client_cert_prompt))
     return 0;
 
   return snprintf(buf, size, "%s", account->pass);

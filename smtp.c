@@ -489,17 +489,8 @@ static int smtp_open (CONNECTION* conn)
   }
 #endif
 
-  if (conn->account.flags & MUTT_ACCT_USER)
-  {
-    if (!mutt_bit_isset (Capabilities, AUTH))
-    {
-      mutt_error (_("SMTP server does not support authentication"));
-      mutt_sleep (1);
-      return -1;
-    }
-
+  if (mutt_bit_isset (Capabilities, AUTH))
     return smtp_auth (conn);
-  }
 
   return 0;
 }

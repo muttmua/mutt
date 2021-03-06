@@ -198,8 +198,19 @@ int mutt_account_getlogin (ACCOUNT* account)
   return 0;
 }
 
-/* mutt_account_getpass: fetch password into ACCOUNT, if necessary */
-int mutt_account_getpass (ACCOUNT* account)
+static void getpass_prompt (char *prompt, size_t prompt_size, ACCOUNT *account)
+{
+  /* L10N:
+     Prompt for an account password when connecting.
+     %s@%s is user@host
+  */
+  snprintf (prompt, prompt_size, _("Password for %s@%s: "),
+            account->flags & MUTT_ACCT_LOGIN ? account->login : account->user,
+            account->host);
+}
+
+int _mutt_account_getpass (ACCOUNT* account,
+                           void (*prompt_func) (char *, size_t, ACCOUNT *))
 {
   char prompt[SHORT_STRING];
 
@@ -221,9 +232,7 @@ int mutt_account_getpass (ACCOUNT* account)
     return -1;
   else
   {
-    snprintf (prompt, sizeof (prompt), _("Password for %s@%s: "),
-              account->flags & MUTT_ACCT_LOGIN ? account->login : account->user,
-              account->host);
+    prompt_func (prompt, sizeof(prompt), account);
     account->pass[0] = '\0';
     if (mutt_get_password (prompt, account->pass, sizeof (account->pass)))
       return -1;
@@ -232,6 +241,12 @@ int mutt_account_getpass (ACCOUNT* account)
   account->flags |= MUTT_ACCT_PASS;
 
   return 0;
+}
+
+/* mutt_account_getpass: fetch password into ACCOUNT, if necessary */
+int mutt_account_getpass (ACCOUNT *account)
+{
+  return _mutt_account_getpass (account, getpass_prompt);
 }
 
 void mutt_account_unsetpass (ACCOUNT* account)
