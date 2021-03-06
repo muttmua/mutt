@@ -1,3 +1,114 @@
+2021-03-06 11:12:08 -0800  Kevin McCarthy  <kevin@8t8.us> (814f6d20)
+
+        * Update UPDATING file for 2.0.6 release.
+
+M	UPDATING
+
+2021-02-25 14:19:19 -0800  Kevin McCarthy  <kevin@8t8.us> (de51ab4a)
+
+        * Fix (un)setenv to not return an error with unset env vars.
+        
+        The code was returning -1 in those cases.  This can cause hook
+        processors, such as send2-hook, to sleep 1 second without an error
+        message being set and displayed.  It also causes the hook processor to
+        abort executing subsequent matching commands.
+        
+        -1 should be reserved for syntax errors.  For setenv querying, change
+        the return value to 0.  For unsetenv, generate a message and also
+        change the return value to 0.
+        
+        <enter-command> checks if err->data is set to determine whether to
+        print anything, and the behavior is used in the 'set' commands, so
+        this is established correct behavior.
+
+M	init.c
+
+2021-02-05 15:34:37 -0800  Kevin McCarthy  <kevin@8t8.us> (0f8a2a13)
+
+        * Save CurrentFolder in background edit scope.
+        
+        The CurrentFolder can actually be used to resolve an fcc-hook at fcc
+        time.  We would want to use the folder they started composing in, to
+        be consistent with expectations.
+
+M	doc/manual.xml.head
+M	send.c
+M	send.h
+
+2021-02-07 19:41:21 -0800  Kevin McCarthy  <kevin@8t8.us> (564b515c)
+
+        * Fix pattern compilation error for ~( !~>(~P) )
+        
+        The problem is a nested recursive call followed by trailing
+        whitespace.  Other codepaths ensure trailng whitespaces are processed
+        when processing the argument, but the parenthesis calls did not.
+        
+        This meant the outer loop while check:
+          while (*ps.dptr)
+          {
+            SKIPWS (ps.dptr);
+            switch (*ps.dptr)
+            {
+              /* process (~P), for instance */
+            }
+          }
+        would return true for the trailing space(s), the SKIPWS would skip
+        over them, and then switch would try to evaluate '\0'.
+        
+        I think a better solution would be to rearrange the calls like:
+          SKIPWS (ps.dptr);
+          while (*ps.dptr)
+          {
+            switch (*ps.dptr)
+            {
+            }
+            SKIPWS(ps.dptr);
+          }
+        to ensure any trailing whitespace is removed.
+        
+        However, that's a bit risky for a stable branch commit.  So instead,
+        just explicitly add the SKIPWS for the ~() thread ops and for the ()
+        groupings after processing the inside expression.
+
+M	pattern.c
+
+2021-02-02 12:47:24 -0800  Kevin McCarthy  <kevin@8t8.us> (ca272c39)
+
+        * Fix contrib/markdown2html crash.
+        
+        The script crashes if the last line in the message ends with a colon.
+        
+        Thanks to Aitor Soroa (@asoroa) for the bug report and patch!
+
+M	contrib/markdown2html
+
+2021-01-27 14:55:35 -0800  Kevin McCarthy  <kevin@8t8.us> (6df1891b)
+
+        * Fix another yesorno prompt, for autocrypt account creation.
+        
+        I seem to have trouble remembering that ctrl-g is one of the
+        choices. :-(
+        
+        There is yet another autocrypt prompt for "enabling prefer-encryption"
+        that *could* abort on ctrl-g.  But, since it's not really an "action"
+        prompt, I'm keeping that one as a "no on ctrl-g".
+
+M	autocrypt/autocrypt_gpgme.c
+
+2021-01-27 09:31:58 +0100  Christopher Zimmermann  <madroach@gmerlin.de> (2342b4d1)
+
+        * Correctly handle CTRL-G on remaining background_edit sessions prompt
+
+M	curs_lib.c
+M	curs_main.c
+
+2021-01-21 12:31:43 -0800  Kevin McCarthy  <kevin@8t8.us> (da5e3282)
+
+        * automatic post-release commit for mutt-2.0.5
+
+M	ChangeLog
+M	VERSION
+
 2021-01-21 12:27:50 -0800  Kevin McCarthy  <kevin@8t8.us> (dd66f4ae)
 
         * Update UPDATING file for 2.0.5.
