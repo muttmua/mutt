@@ -1,9 +1,3 @@
-OPS
-OPS.CRYPT
-OPS.MIX
-OPS.PGP
-OPS.SIDEBAR
-OPS.SMIME
 account.c
 addrbook.c
 alias.c
@@ -91,3 +85,9 @@ smtp.c
 sort.c
 status.c
 thread.c
+OPS
+OPS.CRYPT
+OPS.MIX
+OPS.PGP
+OPS.SIDEBAR
+OPS.SMIME
