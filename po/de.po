@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.20\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-03-06 22:02+0100\n"
+"POT-Creation-Date: 2021-03-07 09:01+0100\n"
 "PO-Revision-Date: 2021-03-06 22:23+0100\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
@@ -83,8 +83,8 @@ msgstr "Auswählen"
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4565
 #: curs_main.c:555 history.c:78 listmenu.c:61 mutt_ssl.c:1328
-#: mutt_ssl_gnutls.c:1042 pager.c:2012 pattern.c:2144 pgpkey.c:523 postpone.c:45
-#: query.c:54 recvattach.c:63 smime.c:466
+#: mutt_ssl_gnutls.c:1042 pager.c:2012 pattern.c:2144 pgpkey.c:523
+#: postpone.c:45 query.c:54 recvattach.c:63 smime.c:466
 msgid "Help"
 msgstr "Hilfe"
 
@@ -565,7 +565,8 @@ msgstr "Warten, bis sich Editor beendet hat"
 #, c-format
 msgid "Type '%s' to background compose session."
 msgstr ""
-"Geben Sie „%s“ ein, um die Bearbeitungssitzung in den Hintergrund zu schieben."
+"Geben Sie „%s“ ein, um die Bearbeitungssitzung in den Hintergrund zu "
+"schieben."
 
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
@@ -1518,7 +1519,8 @@ msgstr "Inline PGP funktioniert nicht mit Anhängen. PGP/MIME verwenden?"
 
 #: crypt.c:194
 msgid "Mail not sent: inline PGP can't be used with attachments."
-msgstr "Nachricht nicht verschickt. Inline PGP funktioniert nicht mit Anhängen."
+msgstr ""
+"Nachricht nicht verschickt. Inline PGP funktioniert nicht mit Anhängen."
 
 #: crypt.c:202
 msgid "Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"
@@ -1732,11 +1734,11 @@ msgstr "Fingerabdruck: "
 
 #: crypt-gpgme.c:1598
 msgid ""
-"WARNING: We have NO indication whether the key belongs to the person named as "
-"shown above\n"
+"WARNING: We have NO indication whether the key belongs to the person named "
+"as shown above\n"
 msgstr ""
-"WARNUNG: Wir haben KEINEN Hinweis, ob der Schlüssel zur oben genannten Person "
-"gehört\n"
+"WARNUNG: Wir haben KEINEN Hinweis, ob der Schlüssel zur oben genannten "
+"Person gehört\n"
 
 #: crypt-gpgme.c:1605
 msgid "WARNING: The key does NOT BELONG to the person named as shown above\n"
@@ -2490,7 +2492,8 @@ msgstr "Diskussionsfaden unterbrochen."
 
 #: curs_main.c:1547
 msgid "Thread cannot be broken, message is not part of a thread"
-msgstr "Diskussionsfaden kann nicht zerteilt werden, Nachricht kein Teil davon."
+msgstr ""
+"Diskussionsfaden kann nicht zerteilt werden, Nachricht kein Teil davon."
 
 #. L10N: CHECK_ACL
 #: curs_main.c:1557
@@ -3524,8 +3527,8 @@ msgstr "----- Ende weitergeleitete Nachricht -----"
 #.
 #: init.h:4221
 msgid ""
-"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?"
-"%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
+"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
+"%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
 "(%P)---"
 msgstr ""
 
@@ -4411,7 +4414,8 @@ msgstr "%s ist kein Postfach!"
 #: mx.c:160
 #, c-format
 msgid "Lock count exceeded, remove lock for %s?"
-msgstr "Maximale Anzahl an Sprerren überschritten, Sperrdatei für %s entfernen?"
+msgstr ""
+"Maximale Anzahl an Sprerren überschritten, Sperrdatei für %s entfernen?"
 
 #: mx.c:172
 #, c-format
@@ -5141,7 +5145,8 @@ msgstr "vsabuuoi"
 #: pgp.c:1871
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr ""
-"PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, (u)nverschl., (o)ppenc Modus? "
+"PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, (u)nverschl., (o)ppenc "
+"Modus? "
 
 #: pgp.c:1872
 msgid "esabfco"
@@ -5171,7 +5176,8 @@ msgstr "PGP-Schlüssel wird geholt …"
 
 #: pgpkey.c:492
 msgid "All matching keys are expired, revoked, or disabled."
-msgstr "Alle passenden Schlüssel sind veraltet, zurückgezogen oder deaktiviert."
+msgstr ""
+"Alle passenden Schlüssel sind veraltet, zurückgezogen oder deaktiviert."
 
 #: pgpkey.c:534
 #, c-format
@@ -5558,7 +5564,8 @@ msgid "Mixmaster doesn't accept Cc or Bcc headers."
 msgstr "Mixmaster unterstützt weder Cc: noch Bcc:."
 
 #: remailer.c:737
-msgid "Please set the hostname variable to a proper value when using mixmaster!"
+msgid ""
+"Please set the hostname variable to a proper value when using mixmaster!"
 msgstr ""
 "Setzen Sie die Variable „hostname“ richtig, wenn Sie Mixmaster verwenden!"
 
@@ -5711,7 +5718,8 @@ msgstr "Fcc nach %s wird übersprungen."
 #: send.c:1301
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
-"Fcc fehlgeschlagen. E(r)neut versuchen, andere (M)ailbox oder über(s)pringen? "
+"Fcc fehlgeschlagen. E(r)neut versuchen, andere (M)ailbox oder "
+"über(s)pringen? "
 
 #. L10N:
 #. These correspond to the "Fcc failed" multi-choice prompt
@@ -5899,7 +5907,8 @@ msgstr "Fehlende Leerzeile als Trenner in Ausgabe von „%s“!"
 #.
 #: sendlib.c:1529
 msgid ""
-"$send_multipart_alternative_filter does not support multipart type generation."
+"$send_multipart_alternative_filter does not support multipart type "
+"generation."
 msgstr ""
 "$send_multipart_alternative_filter funktioniert nicht mit Typ „multipart“."
 
@@ -7759,7 +7768,8 @@ msgstr "Löschmarkierung von allen Nachrichten im Diskussionsfaden entfernen"
 #.
 #: OPS:1142
 msgid "undelete all messages in subthread"
-msgstr "Löschmarkierung von allen Nachrichten im Diskussionsfadenteil entfernen"
+msgstr ""
+"Löschmarkierung von allen Nachrichten im Diskussionsfadenteil entfernen"
 
 #. L10N: Help screen description for OP_VERSION
 #. index menu: <show-version>
