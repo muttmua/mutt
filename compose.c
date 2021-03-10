@@ -1727,6 +1727,24 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         break;
       }
 
+      case OP_ATTACH_VIEW_MAILCAP:
+	mutt_view_attachment (NULL, CURATTACH->content, MUTT_MAILCAP,
+			      NULL, actx);
+	menu->redraw = REDRAW_FULL;
+	break;
+
+      case OP_ATTACH_VIEW_TEXT:
+	mutt_view_attachment (NULL, CURATTACH->content, MUTT_AS_TEXT,
+			      NULL, actx);
+	menu->redraw = REDRAW_FULL;
+	break;
+
+      case OP_ATTACH_VIEW_PAGER:
+	mutt_view_attachment (NULL, CURATTACH->content, MUTT_VIEW_PAGER,
+			      NULL, actx);
+	menu->redraw = REDRAW_FULL;
+	break;
+
       case OP_VIEW_ATTACH:
       case OP_DISPLAY_HEADERS:
 	CHECK_COUNT;

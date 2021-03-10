@@ -22,16 +22,19 @@ OP_END_COND N_("end of conditional execution (noop)")
 
 /* L10N: Help screen description for OP_ATTACH_VIEW_MAILCAP
    attachment menu: <view-mailcap>
+   compose menu: <view-mailcap>
  */
 OP_ATTACH_VIEW_MAILCAP N_("force viewing of attachment using mailcap")
 
 /* L10N: Help screen description for OP_ATTACH_VIEW_PAGER
    attachment menu: <view-pager>
+   compose menu: <view-pager>
  */
 OP_ATTACH_VIEW_PAGER N_("view attachment in pager using copiousoutput mailcap")
 
 /* L10N: Help screen description for OP_ATTACH_VIEW_TEXT
    attachment menu: <view-text>
+   compose menu: <view-text>
  */
 OP_ATTACH_VIEW_TEXT N_("view attachment as text")
 
