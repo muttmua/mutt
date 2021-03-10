@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-03-03 23:06+0100\n"
-"PO-Revision-Date: 2021-03-03 23:17+0100\n"
+"POT-Creation-Date: 2021-03-10 18:55+0100\n"
+"PO-Revision-Date: 2021-03-10 18:57+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -44,1847 +44,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. L10N: Help screen description for OP_NULL
-#: OPS:16
-msgid "null operation"
-msgstr "opération nulle"
-
-#. L10N: Help screen description for OP_END_COND
-#. generic menu: <end-cond>
-#.
-#: OPS:21
-msgid "end of conditional execution (noop)"
-msgstr "fin d'exécution conditionnelle (noop)"
-
-#. L10N: Help screen description for OP_ATTACH_VIEW_MAILCAP
-#. attachment menu: <view-mailcap>
-#.
-#: OPS:26
-msgid "force viewing of attachment using mailcap"
-msgstr ""
-"forcer la visualisation d'un attachment en utilisant le fichier mailcap"
-
-#. L10N: Help screen description for OP_ATTACH_VIEW_PAGER
-#. attachment menu: <view-pager>
-#.
-#: OPS:31
-msgid "view attachment in pager using copiousoutput mailcap"
-msgstr ""
-"voir l'attachment dans le visionneur en utilisant le mailcap copiousoutput"
-
-#. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
-#. attachment menu: <view-text>
-#.
-#: OPS:36
-msgid "view attachment as text"
-msgstr "visualiser un attachment en tant que texte"
-
-#. L10N: Help screen description for OP_ATTACH_COLLAPSE
-#. attachment menu: <collapse-parts>
-#.
-#: OPS:41
-msgid "Toggle display of subparts"
-msgstr "Inverser l'affichage des sous-parties"
-
-#. L10N: Help screen description for OP_AUTOCRYPT_ACCT_MENU
-#. index menu: <autocrypt-acct-menu>
-#.
-#: OPS:46
-msgid "manage autocrypt accounts"
-msgstr "gérer les comptes Autocrypt"
-
-#. L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
-#. autocrypt account menu: <create-account>
-#.
-#: OPS:51
-msgid "create a new autocrypt account"
-msgstr "créer un nouveau compte Autocrypt"
-
-#. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
-#. autocrypt account menu: <delete-account>
-#.
-#: OPS:56
-msgid "delete the current account"
-msgstr "supprimer le compte courant"
-
-#. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_ACTIVE
-#. autocrypt account menu: <toggle-active>
-#.
-#: OPS:61
-msgid "toggle the current account active/inactive"
-msgstr "inverser l'état du compte courant en actif/inactif"
-
-#. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_PREFER
-#. autocrypt account menu: <toggle-prefer-encrypt>
-#.
-#: OPS:66
-msgid "toggle the current account prefer-encrypt flag"
-msgstr ""
-"inverser le drapeau de préférence du chiffrement pour le compte courant"
-
-#. L10N: Help screen description for OP_BACKGROUND_COMPOSE_MENU
-#. index menu: <background-compose-menu>
-#. pager menu: <background-compose-menu>
-#.
-#: OPS:72
-msgid "list and select backgrounded compose sessions"
-msgstr "lister et sélectionner les sessions de composition en arrière-plan"
-
-#. L10N: Help screen description for OP_BOTTOM_PAGE
-#. generic menu: <bottom-page>
-#.
-#: OPS:77
-msgid "move to the bottom of the page"
-msgstr "aller en bas de la page"
-
-#. L10N: Help screen description for OP_BOUNCE_MESSAGE
-#. index menu: <bounce-message>
-#. pager menu: <bounce-message>
-#. attachment menu: <bounce-message>
-#.
-#: OPS:84
-msgid "remail a message to another user"
-msgstr "renvoyer un message à un autre utilisateur"
-
-#. L10N: Help screen description for OP_BROWSER_NEW_FILE
-#. browser menu: <select-new>
-#.
-#: OPS:89
-msgid "select a new file in this directory"
-msgstr "sélectionner un nouveau fichier dans ce répertoire"
-
-#. L10N: Help screen description for OP_BROWSER_VIEW_FILE
-#. browser menu: <view-file>
-#.
-#: OPS:94
-msgid "view file"
-msgstr "visualiser le fichier"
-
-#. L10N: Help screen description for OP_BROWSER_TELL
-#. browser menu: <display-filename>
-#.
-#: OPS:99
-msgid "display the currently selected file's name"
-msgstr "afficher le nom du fichier sélectionné actuellement"
-
-#. L10N: Help screen description for OP_BROWSER_SUBSCRIBE
-#. browser menu: <subscribe>
-#.
-#: OPS:104
-msgid "subscribe to current mailbox (IMAP only)"
-msgstr "s'abonner à la BAL courante (IMAP seulement)"
-
-#. L10N: Help screen description for OP_BROWSER_UNSUBSCRIBE
-#. browser menu: <unsubscribe>
-#.
-#: OPS:109
-msgid "unsubscribe from current mailbox (IMAP only)"
-msgstr "se désabonner de la BAL courante (IMAP seulement)"
-
-#. L10N: Help screen description for OP_BROWSER_TOGGLE_LSUB
-#. browser menu: <toggle-subscribed>
-#.
-#: OPS:114
-msgid "toggle view all/subscribed mailboxes (IMAP only)"
-msgstr ""
-"changer entre voir toutes les BAL/voir les BAL abonnées (IMAP seulement)"
-
-#. L10N: Help screen description for OP_BUFFY_LIST
-#. index menu: <buffy-list>
-#. pager menu: <buffy-list>
-#. browser menu: <buffy-list>
-#.
-#: OPS:121
-msgid "list mailboxes with new mail"
-msgstr "lister les BAL ayant de nouveaux messages"
-
-#. L10N: Help screen description for OP_CHANGE_DIRECTORY
-#. browser menu: <change-dir>
-#.
-#: OPS:126
-msgid "change directories"
-msgstr "changer de répertoires"
-
-#. L10N: Help screen description for OP_CHECK_NEW
-#. browser menu: <check-new>
-#.
-#: OPS:131
-msgid "check mailboxes for new mail"
-msgstr "vérifier la présence de nouveaux messages dans les BAL"
-
-#. L10N: Help screen description for OP_COMPOSE_ATTACH_FILE
-#. compose menu: <attach-file>
-#.
-#: OPS:136
-msgid "attach file(s) to this message"
-msgstr "attacher des fichiers à ce message"
-
-#. L10N: Help screen description for OP_COMPOSE_ATTACH_MESSAGE
-#. compose menu: <attach-message>
-#.
-#: OPS:141
-msgid "attach message(s) to this message"
-msgstr "attacher des messages à ce message"
-
-#. L10N: Help screen description for OP_COMPOSE_AUTOCRYPT_MENU
-#. compose menu: <autocrypt-menu>
-#.
-#: OPS:146
-msgid "show autocrypt compose menu options"
-msgstr "afficher les options du menu de composition d'Autocrypt"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_BCC
-#. compose menu: <edit-bcc>
-#.
-#: OPS:151
-msgid "edit the BCC list"
-msgstr "éditer la liste BCC"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_CC
-#. compose menu: <edit-cc>
-#.
-#: OPS:156
-msgid "edit the CC list"
-msgstr "éditer la liste CC"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_DESCRIPTION
-#. compose menu: <edit-description>
-#.
-#: OPS:161
-msgid "edit attachment description"
-msgstr "éditer la description de l'attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_ENCODING
-#. compose menu: <edit-encoding>
-#.
-#: OPS:166
-msgid "edit attachment transfer-encoding"
-msgstr "éditer le transfer-encoding de l'attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_FCC
-#. compose menu: <edit-fcc>
-#.
-#: OPS:171
-msgid "enter a file to save a copy of this message in"
-msgstr "entrer le nom d'un fichier dans lequel sauver une copie de ce message"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_FILE
-#. compose menu: <edit-file>
-#.
-#: OPS:176
-msgid "edit the file to be attached"
-msgstr "éditer le fichier à attacher"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_FROM
-#. compose menu: <edit-from>
-#.
-#: OPS:181
-msgid "edit the from field"
-msgstr "éditer le champ from"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_HEADERS
-#. compose menu: <edit-headers>
-#.
-#: OPS:186
-msgid "edit the message with headers"
-msgstr "éditer le message avec ses en-têtes"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_MESSAGE
-#. compose menu: <edit-message>
-#.
-#: OPS:191
-msgid "edit the message"
-msgstr "éditer le message"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_MIME
-#. compose menu: <edit-mime>
-#.
-#: OPS:196
-msgid "edit attachment using mailcap entry"
-msgstr "éditer l'attachement en utilisant l'entrée mailcap"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_REPLY_TO
-#. compose menu: <edit-reply-to>
-#.
-#: OPS:201
-msgid "edit the Reply-To field"
-msgstr "éditer le champ Reply-To"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_SUBJECT
-#. compose menu: <edit-subject>
-#.
-#: OPS:206
-msgid "edit the subject of this message"
-msgstr "éditer l'objet (Subject) de ce message"
-
-#. L10N: Help screen description for OP_COMPOSE_EDIT_TO
-#. compose menu: <edit-to>
-#.
-#: OPS:211
-msgid "edit the TO list"
-msgstr "éditer la liste TO"
-
-#. L10N: Help screen description for OP_CREATE_MAILBOX
-#. browser menu: <create-mailbox>
-#.
-#: OPS:216
-msgid "create a new mailbox (IMAP only)"
-msgstr "créer une nouvelle BAL (IMAP seulement)"
-
-#. L10N: Help screen description for OP_EDIT_TYPE
-#. index menu: <edit-type>
-#. pager menu: <edit-type>
-#. attachment menu: <edit-type>
-#. compose menu: <edit-type>
-#.
-#: OPS:224
-msgid "edit attachment content type"
-msgstr "éditer le content-type de l'attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_GET_ATTACHMENT
-#. compose menu: <get-attachment>
-#.
-#: OPS:229
-msgid "get a temporary copy of an attachment"
-msgstr "obtenir une copie temporaire d'un attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_ISPELL
-#. compose menu: <ispell>
-#.
-#: OPS:234
-msgid "run ispell on the message"
-msgstr "lancer ispell sur le message"
-
-#. L10N: Help screen description for OP_COMPOSE_MOVE_DOWN
-#. compose menu: <move-down>
-#.
-#: OPS:239
-msgid "move attachment down in compose menu list"
-msgstr ""
-"déplacer l'attachement vers le bas dans la liste du menu de composition"
-
-#. L10N: Help screen description for OP_COMPOSE_MOVE_UP
-#. compose menu: <move-up>
-#.
-#: OPS:244
-msgid "move attachment up in compose menu list"
-msgstr ""
-"déplacer l'attachement vers le haut dans la liste du menu de composition"
-
-#. L10N: Help screen description for OP_COMPOSE_NEW_MIME
-#. compose menu: <new-mime>
-#.
-#: OPS:249
-msgid "compose new attachment using mailcap entry"
-msgstr "composer un nouvel attachement en utilisant l'entrée mailcap"
-
-#. L10N: Help screen description for OP_COMPOSE_TOGGLE_RECODE
-#. compose menu: <toggle-recode>
-#.
-#: OPS:254
-msgid "toggle recoding of this attachment"
-msgstr "inverser le recodage de cet attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_POSTPONE_MESSAGE
-#. compose menu: <postpone-message>
-#.
-#: OPS:259
-msgid "save this message to send later"
-msgstr "sauvegarder ce message pour l'envoyer plus tard"
-
-#. L10N: Help screen description for OP_COMPOSE_RENAME_ATTACHMENT
-#. compose menu: <rename-attachment>
-#.
-#: OPS:264
-msgid "send attachment with a different name"
-msgstr "envoyer l'attachement avec un nom différent"
-
-#. L10N: Help screen description for OP_COMPOSE_RENAME_FILE
-#. compose menu: <rename-file>
-#.
-#: OPS:269
-msgid "rename/move an attached file"
-msgstr "renommer/déplacer un fichier attaché"
-
-#. L10N: Help screen description for OP_COMPOSE_SEND_MESSAGE
-#. compose menu: <send-message>
-#.
-#: OPS:274
-msgid "send the message"
-msgstr "envoyer le message"
-
-#. L10N: Help screen description for OP_COMPOSE_TO_SENDER
-#. index menu: <compose-to-sender>
-#. pager menu: <compose-to-sender>
-#. attachment menu: <compose-to-sender>
-#.
-#: OPS:281
-msgid "compose new message to the current message sender"
-msgstr "composer un nouveau message pour l'expéditeur du message courant"
-
-#. L10N: Help screen description for OP_COMPOSE_TOGGLE_DISPOSITION
-#. compose menu: <toggle-disposition>
-#.
-#: OPS:286
-msgid "toggle disposition between inline/attachment"
-msgstr "changer la disposition (en ligne/attachement)"
-
-#. L10N: Help screen description for OP_COMPOSE_TOGGLE_UNLINK
-#. compose menu: <toggle-unlink>
-#.
-#: OPS:291
-msgid "toggle whether to delete file after sending it"
-msgstr "inverser l'option de suppression du fichier après envoi"
-
-#. L10N: Help screen description for OP_COMPOSE_UPDATE_ENCODING
-#. compose menu: <update-encoding>
-#.
-#: OPS:296
-msgid "update an attachment's encoding info"
-msgstr "mettre à jour les informations de codage d'un attachement"
-
-#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT
-#. compose menu: <view-alt>
-#.
-#: OPS:301
-msgid "view multipart/alternative"
-msgstr "visualiser multipart/alternative"
-
-#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_TEXT
-#. compose menu: <view-alt-text>
-#.
-#: OPS:306
-msgid "view multipart/alternative as text"
-msgstr "visualiser multipart/alternative en tant que texte"
-
-#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_MAILCAP
-#. compose menu: <view-alt-mailcap>
-#.
-#: OPS:311
-msgid "view multipart/alternative using mailcap"
-msgstr "visualiser multipart/alternative en utilisant mailcap"
-
-#. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
-#. compose menu: <write-fcc>
-#.
-#: OPS:316
-msgid "write the message to a folder"
-msgstr "écrire le message dans un dossier"
-
-#. L10N: Help screen description for OP_COPY_MESSAGE
-#. index menu: <copy-message>
-#. pager menu: <copy-message>
-#.
-#: OPS:322
-msgid "copy a message to a file/mailbox"
-msgstr "copier un message dans un fichier ou une BAL"
-
-#. L10N: Help screen description for OP_CREATE_ALIAS
-#. index menu: <create-alias>
-#. pager menu: <create-alias>
-#. query menu: <create-alias>
-#.
-#: OPS:329
-msgid "create an alias from a message sender"
-msgstr "créer un alias à partir de l'expéditeur d'un message"
-
-#. L10N: Help screen description for OP_CURRENT_BOTTOM
-#. generic menu: <current-bottom>
-#.
-#: OPS:334
-msgid "move entry to bottom of screen"
-msgstr "déplacer l'entrée au bas de l'écran"
-
-#. L10N: Help screen description for OP_CURRENT_MIDDLE
-#. generic menu: <current-middle>
-#.
-#: OPS:339
-msgid "move entry to middle of screen"
-msgstr "déplacer l'entrée au milieu de l'écran"
-
-#. L10N: Help screen description for OP_CURRENT_TOP
-#. generic menu: <current-top>
-#.
-#: OPS:344
-msgid "move entry to top of screen"
-msgstr "déplacer l'entrée en haut de l'écran"
-
-#. L10N: Help screen description for OP_DECODE_COPY
-#. index menu: <decode-copy>
-#. pager menu: <decode-copy>
-#.
-#: OPS:350
-msgid "make decoded (text/plain) copy"
-msgstr "faire une copie décodée (text/plain)"
-
-#. L10N: Help screen description for OP_DECODE_SAVE
-#. index menu: <decode-save>
-#. pager menu: <decode-save>
-#.
-#: OPS:356
-msgid "make decoded copy (text/plain) and delete"
-msgstr "faire une copie décodée (text/plain) et effacer"
-
-#. L10N: Help screen description for OP_DELETE
-#. index menu: <delete-message>
-#. pager menu: <delete-message>
-#. attachment menu: <delete-entry>
-#. compose menu: <detach-file>
-#. postpone menu: <delete-entry>
-#. alias menu: <delete-entry>
-#.
-#: OPS:366
-msgid "delete the current entry"
-msgstr "effacer l'entrée courante"
-
-#. L10N: Help screen description for OP_DELETE_MAILBOX
-#. browser menu: <delete-mailbox>
-#.
-#: OPS:371
-msgid "delete the current mailbox (IMAP only)"
-msgstr "supprimer la BAL courante (IMAP seulement)"
-
-#. L10N: Help screen description for OP_DELETE_SUBTHREAD
-#. index menu: <delete-subthread>
-#. pager menu: <delete-subthread>
-#.
-#: OPS:377
-msgid "delete all messages in subthread"
-msgstr "effacer tous les messages dans la sous-discussion"
-
-#. L10N: Help screen description for OP_DELETE_THREAD
-#. index menu: <delete-thread>
-#. pager menu: <delete-thread>
-#.
-#: OPS:383
-msgid "delete all messages in thread"
-msgstr "effacer tous les messages dans la discussion"
-
-#. L10N: Help screen description for OP_DISPLAY_ADDRESS
-#. index menu: <display-address>
-#. pager menu: <display-address>
-#.
-#: OPS:389
-msgid "display full address of sender"
-msgstr "afficher l'adresse complète de l'expéditeur"
-
-#. L10N: Help screen description for OP_DISPLAY_HEADERS
-#. index menu: <display-toggle-weed>
-#. pager menu: <display-toggle-weed>
-#. attachment menu: <display-toggle-weed>
-#. compose menu: <display-toggle-weed>
-#.
-#: OPS:397
-msgid "display message and toggle header weeding"
-msgstr "afficher le message et inverser la restriction des en-têtes"
-
-#. L10N: Help screen description for OP_DISPLAY_MESSAGE
-#. index menu: <display-message>
-#.
-#: OPS:402
-msgid "display a message"
-msgstr "afficher un message"
-
-#. L10N: Help screen description for OP_EDIT_LABEL
-#. index menu: <edit-label>
-#. pager menu: <edit-label>
-#.
-#: OPS:408
-msgid "add, change, or delete a message's label"
-msgstr "ajouter, changer ou supprimer le label d'un message"
-
-#. L10N: Help screen description for OP_EDIT_MESSAGE
-#. index menu: <edit>
-#. pager menu: <edit>
-#.
-#: OPS:414
-msgid "edit the raw message"
-msgstr "éditer le message brut"
-
-#. L10N: Help screen description for OP_EDITOR_BACKSPACE
-#. editor menu: <backspace>
-#.
-#: OPS:419
-msgid "delete the char in front of the cursor"
-msgstr "effacer le caractère situé devant le curseur"
-
-#. L10N: Help screen description for OP_EDITOR_BACKWARD_CHAR
-#. editor menu: <backward-char>
-#.
-#: OPS:424
-msgid "move the cursor one character to the left"
-msgstr "déplacer le curseur d'un caractère vers la gauche"
-
-#. L10N: Help screen description for OP_EDITOR_BACKWARD_WORD
-#. editor menu: <backward-word>
-#.
-#: OPS:429
-msgid "move the cursor to the beginning of the word"
-msgstr "déplacer le curseur au début du mot"
-
-#. L10N: Help screen description for OP_EDITOR_BOL
-#. editor menu: <bol>
-#.
-#: OPS:434
-msgid "jump to the beginning of the line"
-msgstr "aller au début de la ligne"
-
-#. L10N: Help screen description for OP_EDITOR_BUFFY_CYCLE
-#. editor menu: <buffy-cycle>
-#.
-#: OPS:439
-msgid "cycle among incoming mailboxes"
-msgstr "parcourir les boîtes aux lettres recevant du courrier"
-
-#. L10N: Help screen description for OP_EDITOR_COMPLETE
-#. editor menu: <complete>
-#.
-#: OPS:444
-msgid "complete filename or alias"
-msgstr "compléter un nom de fichier ou un alias"
-
-#. L10N: Help screen description for OP_EDITOR_COMPLETE_QUERY
-#. editor menu: <complete-query>
-#.
-#: OPS:449
-msgid "complete address with query"
-msgstr "compléter une adresse grâce à une requête"
-
-#. L10N: Help screen description for OP_EDITOR_DELETE_CHAR
-#. editor menu: <delete-char>
-#.
-#: OPS:454
-msgid "delete the char under the cursor"
-msgstr "effacer le caractère situé sous le curseur"
-
-#. L10N: Help screen description for OP_EDITOR_EOL
-#. editor menu: <eol>
-#.
-#: OPS:459
-msgid "jump to the end of the line"
-msgstr "aller à la fin de la ligne"
-
-#. L10N: Help screen description for OP_EDITOR_FORWARD_CHAR
-#. editor menu: <forward-char>
-#.
-#: OPS:464
-msgid "move the cursor one character to the right"
-msgstr "déplacer le curseur d'un caractère vers la droite"
-
-#. L10N: Help screen description for OP_EDITOR_FORWARD_WORD
-#. editor menu: <forward-word>
-#.
-#: OPS:469
-msgid "move the cursor to the end of the word"
-msgstr "déplacer le curseur à la fin du mot"
-
-#. L10N: Help screen description for OP_EDITOR_HISTORY_DOWN
-#. editor menu: <history-down>
-#.
-#: OPS:474
-msgid "scroll down through the history list"
-msgstr "redescendre dans l'historique"
-
-#. L10N: Help screen description for OP_EDITOR_HISTORY_UP
-#. editor menu: <history-up>
-#.
-#: OPS:479
-msgid "scroll up through the history list"
-msgstr "remonter dans l'historique"
-
-#. L10N: Help screen description for OP_EDITOR_HISTORY_SEARCH
-#. editor menu: <history-search>
-#.
-#: OPS:484
-msgid "search through the history list"
-msgstr "rechercher dans l'historique"
-
-#. L10N: Help screen description for OP_EDITOR_KILL_EOL
-#. editor menu: <kill-eol>
-#.
-#: OPS:489
-msgid "delete chars from cursor to end of line"
-msgstr "effacer la fin de la ligne à partir du curseur"
-
-#. L10N: Help screen description for OP_EDITOR_KILL_EOW
-#. editor menu: <kill-eow>
-#.
-#: OPS:494
-msgid "delete chars from the cursor to the end of the word"
-msgstr "effacer la fin du mot à partir du curseur"
-
-#. L10N: Help screen description for OP_EDITOR_KILL_LINE
-#. editor menu: <kill-line>
-#.
-#: OPS:499
-msgid "delete all chars on the line"
-msgstr "effacer tous les caractères de la ligne"
-
-#. L10N: Help screen description for OP_EDITOR_KILL_WORD
-#. editor menu: <kill-word>
-#.
-#: OPS:504
-msgid "delete the word in front of the cursor"
-msgstr "effacer le mot situé devant le curseur"
-
-#. L10N: Help screen description for OP_EDITOR_QUOTE_CHAR
-#. editor menu: <quote-char>
-#.
-#: OPS:509
-msgid "quote the next typed key"
-msgstr "entrer le caractère correspondant à la prochaine touche"
-
-#. L10N: Help screen description for OP_EDITOR_TRANSPOSE_CHARS
-#. editor menu: <transpose-chars>
-#.
-#: OPS:514
-msgid "transpose character under cursor with previous"
-msgstr "échanger le caractère situé sous le curseur avec le précédent"
-
-#. L10N: Help screen description for OP_EDITOR_CAPITALIZE_WORD
-#. editor menu: <capitalize-word>
-#.
-#: OPS:519
-msgid "capitalize the word"
-msgstr "capitaliser le mot"
-
-#. L10N: Help screen description for OP_EDITOR_DOWNCASE_WORD
-#. editor menu: <downcase-word>
-#.
-#: OPS:524
-msgid "convert the word to lower case"
-msgstr "convertir le mot en minuscules"
-
-#. L10N: Help screen description for OP_EDITOR_UPCASE_WORD
-#. editor menu: <upcase-word>
-#.
-#: OPS:529
-msgid "convert the word to upper case"
-msgstr "convertir le mot en majuscules"
-
-#. L10N: Help screen description for OP_ENTER_COMMAND
-#. generic menu: <enter-command>
-#. pager menu: <enter-command>
-#.
-#: OPS:535
-msgid "enter a muttrc command"
-msgstr "entrer une commande muttrc"
-
-#. L10N: Help screen description for OP_ENTER_MASK
-#. browser menu: <enter-mask>
-#.
-#: OPS:540
-msgid "enter a file mask"
-msgstr "entrer un masque de fichier"
-
-#. L10N: Help screen description for OP_ERROR_HISTORY
-#. generic menu: <error-history>
-#. pager menu: <error-history>
-#.
-#: OPS:546
-msgid "display recent history of error messages"
-msgstr "afficher un historique récent des messages d'erreur"
-
-#. L10N: Help screen description for OP_EXIT
-#. generic menu: <exit>
-#. pager menu: <exit>
-#.
-#: OPS:552
-msgid "exit this menu"
-msgstr "sortir de ce menu"
-
-#. L10N: Help screen description for OP_FILTER
-#. compose menu: <filter-entry>
-#.
-#: OPS:557
-msgid "filter attachment through a shell command"
-msgstr "filtrer un attachement au moyen d'une commande shell"
-
-#. L10N: Help screen description for OP_FIRST_ENTRY
-#. generic menu: <first-entry>
-#.
-#: OPS:562
-msgid "move to the first entry"
-msgstr "aller à la première entrée"
-
-#. L10N: Help screen description for OP_FLAG_MESSAGE
-#. index menu: <flag-message>
-#. pager menu: <flag-message>
-#.
-#: OPS:568
-msgid "toggle a message's 'important' flag"
-msgstr "inverser l'indicateur 'important' d'un message"
-
-#. L10N: Help screen description for OP_FORWARD_MESSAGE
-#. index menu: <forward-message>
-#. pager menu: <forward-message>
-#. attachment menu: <forward-message>
-#.
-#: OPS:575
-msgid "forward a message with comments"
-msgstr "transférer un message avec des commentaires"
-
-#. L10N: Help screen description for OP_GENERIC_SELECT_ENTRY
-#. generic menu: <select-entry>
-#.
-#: OPS:580
-msgid "select the current entry"
-msgstr "sélectionner l'entrée courante"
-
-#. L10N: Help screen description for OP_GROUP_CHAT_REPLY
-#. index menu: <group-chat-reply>
-#. pager menu: <group-chat-reply>
-#. attachment menu: <group-chat-reply>
-#.
-#: OPS:587
-msgid "reply to all recipients preserving To/Cc"
-msgstr "répondre à tous les destinataires en préservant À/Cc (To/Cc)"
-
-#. L10N: Help screen description for OP_GROUP_REPLY
-#. index menu: <group-reply>
-#. pager menu: <group-reply>
-#. attachment menu: <group-reply>
-#.
-#: OPS:594
-msgid "reply to all recipients"
-msgstr "répondre à tous les destinataires"
-
-#. L10N: Help screen description for OP_HALF_DOWN
-#. generic menu: <half-down>
-#. pager menu: <half-down>
-#.
-#: OPS:600
-msgid "scroll down 1/2 page"
-msgstr "descendre d'1/2 page"
-
-#. L10N: Help screen description for OP_HALF_UP
-#. generic menu: <half-up>
-#. pager menu: <half-up>
-#.
-#: OPS:606
-msgid "scroll up 1/2 page"
-msgstr "remonter d'1/2 page"
-
-#. L10N: Help screen description for OP_HELP
-#. generic menu: <help>
-#. pager menu: <help>
-#.
-#: OPS:612
-msgid "this screen"
-msgstr "cet écran"
-
-#. L10N: Help screen description for OP_JUMP
-#. generic menu: <jump>
-#. pager menu: <jump>
-#.
-#: OPS:618
-msgid "jump to an index number"
-msgstr "aller à un numéro d'index"
-
-#. L10N: Help screen description for OP_LAST_ENTRY
-#. generic menu: <last-entry>
-#.
-#: OPS:623
-msgid "move to the last entry"
-msgstr "aller à la dernière entrée"
-
-#. L10N: Help screen description for OP_LIST_ACTION
-#. index menu: <list-action>
-#. pager menu: <list-action>
-#.
-#: OPS:629
-msgid "perform mailing list action"
-msgstr "accomplir une action de liste de diffusion"
-
-#. L10N: Help screen description for OP_LIST_ARCHIVE
-#. list menu: <list-archive>
-#.
-#: OPS:634
-msgid "retrieve list archive information"
-msgstr "récupérer l'information de l'archive de la liste"
-
-#. L10N: Help screen description for OP_LIST_HELP
-#. list menu: <list-help>
-#.
-#: OPS:639
-msgid "retrieve list help"
-msgstr "récupérer l'aide de la liste"
-
-#. L10N: Help screen description for OP_LIST_OWNER
-#. list menu: <list-owner>
-#.
-#: OPS:644
-msgid "contact list owner"
-msgstr "contacter le propriétaire de la liste"
-
-#. L10N: Help screen description for OP_LIST_POST
-#. list menu: <list-post>
-#.
-#: OPS:649
-msgid "post to mailing list"
-msgstr "poster dans la liste de diffusion"
-
-#. L10N: Help screen description for OP_LIST_REPLY
-#. index menu: <list-reply>
-#. pager menu: <list-reply>
-#. attachment menu: <list-reply>
-#.
-#: OPS:656
-msgid "reply to specified mailing list"
-msgstr "répondre à la liste spécifiée"
-
-#. L10N: Help screen description for OP_LIST_SUBSCRIBE
-#. list menu: <list-subscribe>
-#.
-#: OPS:661
-msgid "subscribe to mailing list"
-msgstr "s'abonner à la liste de diffusion"
-
-# , c-format
-#. L10N: Help screen description for OP_LIST_UNSUBSCRIBE
-#. list menu: <list-unsubscribe>
-#.
-#: OPS:666
-msgid "unsubscribe from mailing list"
-msgstr "se désabonner de la liste de diffusion"
-
-#. L10N: Help screen description for OP_MACRO
-#: OPS:669
-msgid "execute a macro"
-msgstr "exécuter une macro"
-
-#. L10N: Help screen description for OP_MAIL
-#. index menu: <mail>
-#. pager menu: <mail>
-#. query menu: <mail>
-#.
-#: OPS:676
-msgid "compose a new mail message"
-msgstr "composer un nouveau message"
-
-#. L10N: Help screen description for OP_MAIN_BREAK_THREAD
-#. index menu: <break-thread>
-#. pager menu: <break-thread>
-#.
-#: OPS:682
-msgid "break the thread in two"
-msgstr "casser la discussion en deux"
-
-#. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES
-#. index menu: <browse-mailboxes>
-#. pager menu: <browse-mailboxes>
-#.
-#: OPS:688
-msgid "select a new mailbox from the browser"
-msgstr "sélectionner une nouvelle BAL depuis le navigateur"
-
-#. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
-#. index menu: <browse-mailboxes-readonly>
-#. pager menu: <browse-mailboxes-readonly>
-#.
-#: OPS:694
-msgid "select a new mailbox from the browser in read only mode"
-msgstr "sélectionner une nouvelle BAL depuis le navigateur en lecture seule"
-
-#. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
-#. index menu: <change-folder>
-#. pager menu: <change-folder>
-#.
-#: OPS:700
-msgid "open a different folder"
-msgstr "ouvrir un dossier différent"
-
-#. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER_READONLY
-#. index menu: <change-folder-readonly>
-#. pager menu: <change-folder-readonly>
-#.
-#: OPS:706
-msgid "open a different folder in read only mode"
-msgstr "ouvrir un dossier différent en lecture seule"
-
-#. L10N: Help screen description for OP_MAIN_CLEAR_FLAG
-#. index menu: <clear-flag>
-#. pager menu: <clear-flag>
-#.
-#: OPS:712
-msgid "clear a status flag from a message"
-msgstr "effacer un indicateur de statut d'un message"
-
-#. L10N: Help screen description for OP_MAIN_DELETE_PATTERN
-#. index menu: <delete-pattern>
-#.
-#: OPS:717
-msgid "delete messages matching a pattern"
-msgstr "effacer les messages correspondant à un motif"
-
-#. L10N: Help screen description for OP_MAIN_IMAP_FETCH
-#. index menu: <imap-fetch-mail>
-#. pager menu: <imap-fetch-mail>
-#.
-#: OPS:723
-msgid "force retrieval of mail from IMAP server"
-msgstr "forcer la récupération du courrier depuis un serveur IMAP"
-
-#. L10N: Help screen description for OP_MAIN_IMAP_LOGOUT_ALL
-#. index menu: <imap-logout-all>
-#. pager menu: <imap-logout-all>
-#.
-#: OPS:729
-msgid "logout from all IMAP servers"
-msgstr "se déconnecter de tous les serveurs IMAP"
-
-#. L10N: Help screen description for OP_MAIN_FETCH_MAIL
-#. index menu: <fetch-mail>
-#.
-#: OPS:734
-msgid "retrieve mail from POP server"
-msgstr "récupérer le courrier depuis un serveur POP"
-
-#. L10N: Help screen description for OP_MAIN_LIMIT
-#. index menu: <limit>
-#.
-#: OPS:739
-msgid "show only messages matching a pattern"
-msgstr "afficher seulement les messages correspondant à un motif"
-
-#. L10N: Help screen description for OP_MAIN_LINK_THREADS
-#. index menu: <link-threads>
-#. pager menu: <link-threads>
-#.
-#: OPS:745
-msgid "link tagged message to the current one"
-msgstr "lier le message marqué au message courant"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_UNREAD_MAILBOX
-#. index menu: <next-unread-mailbox>
-#. pager menu: <next-unread-mailbox>
-#.
-#: OPS:751
-msgid "open next mailbox with new mail"
-msgstr "ouvrir la boîte aux lettres avec de nouveaux messages suivante"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_NEW
-#. index menu: <next-new>
-#. pager menu: <next-new>
-#.
-#: OPS:757
-msgid "jump to the next new message"
-msgstr "aller au nouveau message suivant"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_NEW_THEN_UNREAD
-#. index menu: <next-new-then-unread>
-#.
-#: OPS:762
-msgid "jump to the next new or unread message"
-msgstr "aller au message nouveau ou non lu suivant"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_SUBTHREAD
-#. index menu: <next-subthread>
-#. pager menu: <next-subthread>
-#.
-#: OPS:768
-msgid "jump to the next subthread"
-msgstr "aller à la sous-discussion suivante"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_THREAD
-#. index menu: <next-thread>
-#. pager menu: <next-thread>
-#.
-#: OPS:774
-msgid "jump to the next thread"
-msgstr "aller à la discussion suivante"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_UNDELETED
-#. index menu: <next-undeleted>
-#. pager menu: <next-undeleted>
-#.
-#: OPS:780
-msgid "move to the next undeleted message"
-msgstr "aller au message non effacé suivant"
-
-#. L10N: Help screen description for OP_MAIN_NEXT_UNREAD
-#. index menu: <next-unread>
-#. pager menu: <next-unread>
-#.
-#: OPS:786
-msgid "jump to the next unread message"
-msgstr "aller au message non lu suivant"
-
-#. L10N: Help screen description for OP_MAIN_PARENT_MESSAGE
-#. index menu: <parent-message>
-#. pager menu: <parent-message>
-#.
-#: OPS:792
-msgid "jump to parent message in thread"
-msgstr "aller au message père dans la discussion"
-
-#. L10N: Help screen description for OP_MAIN_PREV_THREAD
-#. index menu: <previous-thread>
-#. pager menu: <previous-thread>
-#.
-#: OPS:798
-msgid "jump to previous thread"
-msgstr "aller à la discussion précédente"
-
-#. L10N: Help screen description for OP_MAIN_PREV_SUBTHREAD
-#. index menu: <previous-subthread>
-#. pager menu: <previous-subthread>
-#.
-#: OPS:804
-msgid "jump to previous subthread"
-msgstr "aller à la sous-discussion précédente"
-
-#. L10N: Help screen description for OP_MAIN_PREV_UNDELETED
-#. index menu: <previous-undeleted>
-#. pager menu: <previous-undeleted>
-#.
-#: OPS:810
-msgid "move to the previous undeleted message"
-msgstr "aller au message non effacé précédent"
-
-#. L10N: Help screen description for OP_MAIN_PREV_NEW
-#. index menu: <previous-new>
-#. pager menu: <previous-new>
-#.
-#: OPS:816
-msgid "jump to the previous new message"
-msgstr "aller au nouveau message précédent"
-
-#. L10N: Help screen description for OP_MAIN_PREV_NEW_THEN_UNREAD
-#. index menu: <previous-new-then-unread>
-#.
-#: OPS:821
-msgid "jump to the previous new or unread message"
-msgstr "aller au message nouveau ou non lu précédent"
-
-#. L10N: Help screen description for OP_MAIN_PREV_UNREAD
-#. index menu: <previous-unread>
-#. pager menu: <previous-unread>
-#.
-#: OPS:827
-msgid "jump to the previous unread message"
-msgstr "aller au message non lu précédent"
-
-#. L10N: Help screen description for OP_MAIN_READ_THREAD
-#. index menu: <read-thread>
-#. pager menu: <read-thread>
-#.
-#: OPS:833
-msgid "mark the current thread as read"
-msgstr "marquer la discussion courante comme lue"
-
-#. L10N: Help screen description for OP_MAIN_READ_SUBTHREAD
-#. index menu: <read-subthread>
-#. pager menu: <read-subthread>
-#.
-#: OPS:839
-msgid "mark the current subthread as read"
-msgstr "marquer la sous-discussion courante comme lue"
-
-#. L10N: Help screen description for OP_MAIN_ROOT_MESSAGE
-#. index menu: <root-message>
-#. pager menu: <root-message>
-#.
-#: OPS:845
-msgid "jump to root message in thread"
-msgstr "aller au message racine dans la discussion"
-
-#. L10N: Help screen description for OP_MAIN_SET_FLAG
-#. index menu: <set-flag>
-#. pager menu: <set-flag>
-#.
-#: OPS:851
-msgid "set a status flag on a message"
-msgstr "mettre un indicateur d'état sur un message"
-
-#. L10N: Help screen description for OP_MAIN_SYNC_FOLDER
-#. index menu: <sync-mailbox>
-#. pager menu: <sync-mailbox>
-#.
-#: OPS:857
-msgid "save changes to mailbox"
-msgstr "sauver les modifications de la boîte aux lettres"
-
-#. L10N: Help screen description for OP_MAIN_TAG_PATTERN
-#. index menu: <tag-pattern>
-#.
-#: OPS:862
-msgid "tag messages matching a pattern"
-msgstr "marquer les messages correspondant à un motif"
-
-#. L10N: Help screen description for OP_MAIN_UNDELETE_PATTERN
-#. index menu: <undelete-pattern>
-#.
-#: OPS:867
-msgid "undelete messages matching a pattern"
-msgstr "récupérer les messages correspondant à un motif"
-
-#. L10N: Help screen description for OP_MAIN_UNTAG_PATTERN
-#. index menu: <untag-pattern>
-#.
-#: OPS:872
-msgid "untag messages matching a pattern"
-msgstr "démarquer les messages correspondant à un motif"
-
-#. L10N: Help screen description for OP_MARK_MSG
-#. index menu: <mark-message>
-#.
-#: OPS:877
-msgid "create a hotkey macro for the current message"
-msgstr "créer une macro hotkey (marque-page) pour le message courant"
-
-#. L10N: Help screen description for OP_MIDDLE_PAGE
-#. generic menu: <middle-page>
-#.
-#: OPS:882
-msgid "move to the middle of the page"
-msgstr "aller au milieu de la page"
-
-#. L10N: Help screen description for OP_NEXT_ENTRY
-#. generic menu: <next-entry>
-#. pager menu: <next-entry>
-#.
-#: OPS:888
-msgid "move to the next entry"
-msgstr "aller à l'entrée suivante"
-
-#. L10N: Help screen description for OP_NEXT_LINE
-#. generic menu: <next-line>
-#. pager menu: <next-line>
-#.
-#: OPS:894
-msgid "scroll down one line"
-msgstr "descendre d'une ligne"
-
-#. L10N: Help screen description for OP_NEXT_PAGE
-#. generic menu: <next-page>
-#. pager menu: <next-page>
-#.
-#: OPS:900
-msgid "move to the next page"
-msgstr "aller à la page suivante"
-
-#. L10N: Help screen description for OP_PAGER_BOTTOM
-#. pager menu: <bottom>
-#.
-#: OPS:905
-msgid "jump to the bottom of the message"
-msgstr "aller à la fin du message"
-
-#. L10N: Help screen description for OP_PAGER_HIDE_QUOTED
-#. pager menu: <toggle-quoted>
-#.
-#: OPS:910
-msgid "toggle display of quoted text"
-msgstr "inverser l'affichage du texte cité"
-
-#. L10N: Help screen description for OP_PAGER_SKIP_QUOTED
-#. pager menu: <skip-quoted>
-#.
-#: OPS:915
-msgid "skip beyond quoted text"
-msgstr "sauter le texte cité"
-
-#. L10N: Help screen description for OP_PAGER_SKIP_HEADERS
-#. pager menu: <skip-headers>
-#.
-#: OPS:920
-msgid "skip beyond headers"
-msgstr "sauter les en-têtes"
-
-#. L10N: Help screen description for OP_PAGER_TOP
-#. pager menu: <top>
-#.
-#: OPS:925
-msgid "jump to the top of the message"
-msgstr "aller au début du message"
-
-#. L10N: Help screen description for OP_PIPE
-#. index menu: <pipe-message>
-#. pager menu: <pipe-message>
-#. attachment menu: <pipe-entry>
-#. compose menu: <pipe-entry>
-#.
-#: OPS:933
-msgid "pipe message/attachment to a shell command"
-msgstr "passer le message/l'attachement à une commande shell"
-
-#. L10N: Help screen description for OP_PREV_ENTRY
-#. generic menu: <previous-entry>
-#. pager menu: <previous-entry>
-#.
-#: OPS:939
-msgid "move to the previous entry"
-msgstr "aller à l'entrée précédente"
-
-#. L10N: Help screen description for OP_PREV_LINE
-#. generic menu: <previous-line>
-#. pager menu: <previous-line>
-#.
-#: OPS:945
-msgid "scroll up one line"
-msgstr "remonter d'une ligne"
-
-#. L10N: Help screen description for OP_PREV_PAGE
-#. generic menu: <previous-page>
-#. pager menu: <previous-page>
-#.
-#: OPS:951
-msgid "move to the previous page"
-msgstr "aller à la page précédente"
-
-#. L10N: Help screen description for OP_PRINT
-#. index menu: <print-message>
-#. pager menu: <print-message>
-#. attachment menu: <print-entry>
-#. compose menu: <print-entry>
-#.
-#: OPS:959
-msgid "print the current entry"
-msgstr "imprimer l'entrée courante"
-
-#. L10N: Help screen description for OP_PURGE_MESSAGE
-#. index menu: <purge-message>
-#. pager menu: <purge-message>
-#.
-#: OPS:965
-msgid "delete the current entry, bypassing the trash folder"
-msgstr "supprimer l'entrée courante, sans utiliser la corbeille"
-
-#. L10N: Help screen description for OP_QUERY
-#. index menu: <query>
-#. query menu: <query>
-#.
-#: OPS:971
-msgid "query external program for addresses"
-msgstr "demander des adresses à un programme externe"
-
-#. L10N: Help screen description for OP_QUERY_APPEND
-#. query menu: <query-append>
-#.
-#: OPS:976
-msgid "append new query results to current results"
-msgstr "ajouter les nouveaux résultats de la requête aux résultats courants"
-
-#. L10N: Help screen description for OP_QUIT
-#. index menu: <quit>
-#. pager menu: <quit>
-#.
-#: OPS:982
-msgid "save changes to mailbox and quit"
-msgstr "sauver les modifications de la boîte aux lettres et quitter"
-
-#. L10N: Help screen description for OP_RECALL_MESSAGE
-#. index menu: <recall-message>
-#. pager menu: <recall-message>
-#.
-#: OPS:988
-msgid "recall a postponed message"
-msgstr "rappeler un message ajourné"
-
-#. L10N: Help screen description for OP_REDRAW
-#. generic menu: <refresh>
-#. pager menu: <redraw-screen>
-#.
-#: OPS:994
-msgid "clear and redraw the screen"
-msgstr "effacer l'écran et réafficher"
-
-#. L10N: Help screen description for OP_REFORMAT_WINCH
-#: OPS:997
-msgid "{internal}"
-msgstr "{interne}"
-
-#. L10N: Help screen description for OP_RENAME_MAILBOX
-#. browser menu: <rename-mailbox>
-#.
-#: OPS:1002
-msgid "rename the current mailbox (IMAP only)"
-msgstr "renommer la BAL courante (IMAP seulement)"
-
-#. L10N: Help screen description for OP_REPLY
-#. index menu: <reply>
-#. pager menu: <reply>
-#. attachment menu: <reply>
-#.
-#: OPS:1009
-msgid "reply to a message"
-msgstr "répondre à un message"
-
-#. L10N: Help screen description for OP_RESEND
-#. index menu: <resend-message>
-#. pager menu: <resend-message>
-#. attachment menu: <resend-message>
-#.
-#: OPS:1016
-msgid "use the current message as a template for a new one"
-msgstr "utiliser le message courant comme modèle pour un nouveau message"
-
-#. L10N: Help screen description for OP_SAVE
-#. index menu: <save-message>
-#. pager menu: <save-message>
-#. attachment menu: <save-entry>
-#. compose menu: <copy-file>
-#.
-#: OPS:1024
-msgid "save message/attachment to a mailbox/file"
-msgstr ""
-"sauver le message/l'attachement dans une boîte aux lettres ou un fichier"
-
-#. L10N: Help screen description for OP_SEARCH
-#. generic menu: <search>
-#. pager menu: <search>
-#.
-#: OPS:1030
-msgid "search for a regular expression"
-msgstr "rechercher une expression rationnelle"
-
-#. L10N: Help screen description for OP_SEARCH_REVERSE
-#. generic menu: <search-reverse>
-#. pager menu: <search-reverse>
-#.
-#: OPS:1036
-msgid "search backwards for a regular expression"
-msgstr "rechercher en arrière une expression rationnelle"
-
-#. L10N: Help screen description for OP_SEARCH_NEXT
-#. generic menu: <search-next>
-#. pager menu: <search-next>
-#.
-#: OPS:1042
-msgid "search for next match"
-msgstr "rechercher la prochaine occurrence"
-
-#. L10N: Help screen description for OP_SEARCH_OPPOSITE
-#. generic menu: <search-opposite>
-#. pager menu: <search-opposite>
-#.
-#: OPS:1048
-msgid "search for next match in opposite direction"
-msgstr "rechercher la prochaine occurrence dans la direction opposée"
-
-#. L10N: Help screen description for OP_SEARCH_TOGGLE
-#. pager menu: <search-toggle>
-#.
-#: OPS:1053
-msgid "toggle search pattern coloring"
-msgstr "inverser la coloration du motif de recherche"
-
-#. L10N: Help screen description for OP_SHELL_ESCAPE
-#. generic menu: <shell-escape>
-#. pager menu: <shell-escape>
-#.
-#: OPS:1059
-msgid "invoke a command in a subshell"
-msgstr "exécuter une commande dans un sous-shell"
-
-#. L10N: Help screen description for OP_SORT
-#. index menu: <sort-mailbox>
-#. pager menu: <sort-mailbox>
-#. browser menu: <sort>
-#.
-#: OPS:1066
-msgid "sort messages"
-msgstr "trier les messages"
-
-#. L10N: Help screen description for OP_SORT_REVERSE
-#. index menu: <sort-reverse>
-#. pager menu: <sort-reverse>
-#. browser menu: <sort-reverse>
-#.
-#: OPS:1073
-msgid "sort messages in reverse order"
-msgstr "trier les messages dans l'ordre inverse"
-
-#. L10N: Help screen description for OP_TAG
-#. generic menu: <tag-entry>
-#. pager menu: <tag-message>
-#.
-#: OPS:1079
-msgid "tag the current entry"
-msgstr "marquer l'entrée courante"
-
-#. L10N: Help screen description for OP_TAG_PREFIX
-#. generic menu: <tag-prefix>
-#.
-#: OPS:1084
-msgid "apply next function to tagged messages"
-msgstr "appliquer la prochaine fonction aux messages marqués"
-
-#. L10N: Help screen description for OP_TAG_PREFIX_COND
-#. generic menu: <tag-prefix-cond>
-#.
-#: OPS:1089
-msgid "apply next function ONLY to tagged messages"
-msgstr "appliquer la prochaine fonction SEULEMENT aux messages marqués"
-
-#. L10N: Help screen description for OP_TAG_SUBTHREAD
-#. index menu: <tag-subthread>
-#.
-#: OPS:1094
-msgid "tag the current subthread"
-msgstr "marquer la sous-discussion courante"
-
-#. L10N: Help screen description for OP_TAG_THREAD
-#. index menu: <tag-thread>
-#.
-#: OPS:1099
-msgid "tag the current thread"
-msgstr "marquer la discussion courante"
-
-#. L10N: Help screen description for OP_TOGGLE_NEW
-#. index menu: <toggle-new>
-#. pager menu: <mark-as-new>
-#.
-#: OPS:1105
-msgid "toggle a message's 'new' flag"
-msgstr "inverser l'indicateur 'nouveau' d'un message"
-
-#. L10N: Help screen description for OP_TOGGLE_WRITE
-#. index menu: <toggle-write>
-#. pager menu: <toggle-write>
-#.
-#: OPS:1111
-msgid "toggle whether the mailbox will be rewritten"
-msgstr "inverser l'option de réécriture de la boîte aux lettres"
-
-#. L10N: Help screen description for OP_TOGGLE_MAILBOXES
-#. browser menu: <toggle-mailboxes>
-#.
-#: OPS:1116
-msgid "toggle whether to browse mailboxes or all files"
-msgstr "changer entre l'affichage des BAL et celui de tous les fichiers"
-
-#. L10N: Help screen description for OP_TOP_PAGE
-#. generic menu: <top-page>
-#.
-#: OPS:1121
-msgid "move to the top of the page"
-msgstr "aller en haut de la page"
-
-#. L10N: Help screen description for OP_UNDELETE
-#. index menu: <undelete-message>
-#. pager menu: <undelete-message>
-#. attachment menu: <undelete-entry>
-#. postpone menu: <undelete-entry>
-#. alias menu: <undelete-entry>
-#.
-#: OPS:1130
-msgid "undelete the current entry"
-msgstr "récupérer l'entrée courante"
-
-#. L10N: Help screen description for OP_UNDELETE_THREAD
-#. index menu: <undelete-thread>
-#. pager menu: <undelete-thread>
-#.
-#: OPS:1136
-msgid "undelete all messages in thread"
-msgstr "récupérer tous les messages de la discussion"
-
-#. L10N: Help screen description for OP_UNDELETE_SUBTHREAD
-#. index menu: <undelete-subthread>
-#. pager menu: <undelete-subthread>
-#.
-#: OPS:1142
-msgid "undelete all messages in subthread"
-msgstr "récupérer tous les messages de la sous-discussion"
-
-#. L10N: Help screen description for OP_VERSION
-#. index menu: <show-version>
-#. pager menu: <show-version>
-#.
-#: OPS:1148
-msgid "show the Mutt version number and date"
-msgstr "afficher la version de Mutt (numéro et date)"
-
-#. L10N: Help screen description for OP_VIEW_ATTACH
-#. attachment menu: <view-attach>
-#. compose menu: <view-attach>
-#.
-#: OPS:1154
-msgid "view attachment using mailcap entry if necessary"
-msgstr "visualiser l'attachement en utilisant l'entrée mailcap si nécessaire"
-
-#. L10N: Help screen description for OP_VIEW_ATTACHMENTS
-#. index menu: <view-attachments>
-#. pager menu: <view-attachments>
-#.
-#: OPS:1160
-msgid "show MIME attachments"
-msgstr "afficher les attachements MIME"
-
-#. L10N: Help screen description for OP_WHAT_KEY
-#. generic menu: <what-key>
-#. pager menu: <what-key>
-#.
-#: OPS:1166
-msgid "display the keycode for a key press"
-msgstr "afficher le code d'une touche enfoncée"
-
-#. L10N: Help screen description for OP_CHECK_STATS
-#. generic menu: <check-stats>
-#. pager menu: <check-stats>
-#.
-#: OPS:1172
-msgid "calculate message statistics for all mailboxes"
-msgstr ""
-"calculer les statistiques des messages pour toutes les boîtes aux lettres"
-
-#. L10N: Help screen description for OP_MAIN_SHOW_LIMIT
-#. index menu: <show-limit>
-#.
-#: OPS:1177
-msgid "show currently active limit pattern"
-msgstr "afficher le motif de limitation actuel"
-
-#. L10N: Help screen description for OP_MAIN_COLLAPSE_THREAD
-#. index menu: <collapse-thread>
-#.
-#: OPS:1182
-msgid "collapse/uncollapse current thread"
-msgstr "comprimer/décomprimer la discussion courante"
-
-#. L10N: Help screen description for OP_MAIN_COLLAPSE_ALL
-#. index menu: <collapse-all>
-#.
-#: OPS:1187
-msgid "collapse/uncollapse all threads"
-msgstr "comprimer/décomprimer toutes les discussions"
-
-# , c-format
-#. L10N: Help screen description for OP_DESCEND_DIRECTORY
-#. browser menu: <descend-directory>
-#.
-#: OPS:1192
-msgid "descend into a directory"
-msgstr "descendre dans un répertoire"
-
-#. L10N: Help screen description for OP_DECRYPT_SAVE
-#. index menu: <decrypt-save>
-#. pager menu: <decrypt-save>
-#.
-#: OPS.CRYPT:19
-msgid "make decrypted copy and delete"
-msgstr "faire une copie déchiffrée et effacer"
-
-#. L10N: Help screen description for OP_DECRYPT_COPY
-#. index menu: <decrypt-copy>
-#. pager menu: <decrypt-copy>
-#.
-#: OPS.CRYPT:25
-msgid "make decrypted copy"
-msgstr "faire une copie déchiffrée"
-
-#. L10N: Help screen description for OP_FORGET_PASSPHRASE
-#. index menu: <forget-passphrase>
-#. pager menu: <forget-passphrase>
-#. attachment menu: <forget-passphrase>
-#. compose menu: <forget-passphrase>
-#.
-#: OPS.CRYPT:33
-msgid "wipe passphrase(s) from memory"
-msgstr "effacer les phrases de passe de la mémoire"
-
-#. L10N: Help screen description for OP_EXTRACT_KEYS
-#. index menu: <extract-keys>
-#. pager menu: <extract-keys>
-#. attachment menu: <extract-keys>
-#.
-#: OPS.CRYPT:40
-msgid "extract supported public keys"
-msgstr "extraire les clés publiques supportées"
-
-#. L10N: Help screen description for OP_MIX_USE
-#. mixmaster menu: <accept>
-#.
-#: OPS.MIX:18
-msgid "accept the chain constructed"
-msgstr "accepter la chaîne construite"
-
-#. L10N: Help screen description for OP_MIX_APPEND
-#. mixmaster menu: <append>
-#.
-#: OPS.MIX:23
-msgid "append a remailer to the chain"
-msgstr "ajouter un redistributeur de courrier à la fin de la chaîne"
-
-#. L10N: Help screen description for OP_MIX_INSERT
-#. mixmaster menu: <insert>
-#.
-#: OPS.MIX:28
-msgid "insert a remailer into the chain"
-msgstr "insérer un redistributeur de courrier dans la chaîne"
-
-#. L10N: Help screen description for OP_MIX_DELETE
-#. mixmaster menu: <delete>
-#.
-#: OPS.MIX:33
-msgid "delete a remailer from the chain"
-msgstr "retirer un redistributeur de courrier de la chaîne"
-
-#. L10N: Help screen description for OP_MIX_CHAIN_PREV
-#. mixmaster menu: <chain-prev>
-#.
-#: OPS.MIX:38
-msgid "select the previous element of the chain"
-msgstr "sélectionner l'élément précédent de la chaîne"
-
-#. L10N: Help screen description for OP_MIX_CHAIN_NEXT
-#. mixmaster menu: <chain-next>
-#.
-#: OPS.MIX:43
-msgid "select the next element of the chain"
-msgstr "sélectionner l'élément suivant de la chaîne"
-
-#. L10N: Help screen description for OP_COMPOSE_MIX
-#. compose menu: <mix>
-#.
-#: OPS.MIX:48
-msgid "send the message through a mixmaster remailer chain"
-msgstr ""
-"envoyer le message dans une chaîne de redistributeurs de courrier mixmaster"
-
-#. L10N: Help screen description for OP_COMPOSE_ATTACH_KEY
-#. compose menu: <attach-key>
-#.
-#: OPS.PGP:18
-msgid "attach a PGP public key"
-msgstr "attacher une clé publique PGP"
-
-#. L10N: Help screen description for OP_COMPOSE_PGP_MENU
-#. compose menu: <pgp-menu>
-#.
-#: OPS.PGP:23
-msgid "show PGP options"
-msgstr "afficher les options PGP"
-
-#. L10N: Help screen description for OP_MAIL_KEY
-#. index menu: <mail-key>
-#. pager menu: <mail-key>
-#.
-#: OPS.PGP:29
-msgid "mail a PGP public key"
-msgstr "envoyer une clé publique PGP"
-
-#. L10N: Help screen description for OP_VERIFY_KEY
-#. pgp menu: <verify-key>
-#. smime menu: <verify-key>
-#.
-#: OPS.PGP:35
-msgid "verify a PGP public key"
-msgstr "vérifier une clé publique PGP"
-
-#. L10N: Help screen description for OP_VIEW_ID
-#. pgp menu: <view-name>
-#. smime menu: <view-name>
-#.
-#: OPS.PGP:41
-msgid "view the key's user id"
-msgstr "afficher le numéro d'utilisateur de la clé"
-
-#. L10N: Help screen description for OP_CHECK_TRADITIONAL
-#. index menu: <check-traditional-pgp>
-#. pager menu: <check-traditional-pgp>
-#. attachment menu: <check-traditional-pgp>
-#.
-#: OPS.PGP:48
-msgid "check for classic PGP"
-msgstr "reconnaissance PGP classique"
-
-#. L10N: Help screen description for OP_SIDEBAR_FIRST
-#. index menu: <sidebar-first>
-#. pager menu: <sidebar-first>
-#.
-#: OPS.SIDEBAR:19
-msgid "move the highlight to the first mailbox"
-msgstr "déplacer la marque sur la première boîte aux lettres"
-
-#. L10N: Help screen description for OP_SIDEBAR_LAST
-#. index menu: <sidebar-last>
-#. pager menu: <sidebar-last>
-#.
-#: OPS.SIDEBAR:25
-msgid "move the highlight to the last mailbox"
-msgstr "déplacer la marque sur la dernière boîte aux lettres"
-
-#. L10N: Help screen description for OP_SIDEBAR_NEXT
-#. index menu: <sidebar-next>
-#. pager menu: <sidebar-next>
-#.
-#: OPS.SIDEBAR:31
-msgid "move the highlight to next mailbox"
-msgstr "déplacer la marque sur la boîte aux lettres suivante"
-
-#. L10N: Help screen description for OP_SIDEBAR_NEXT_NEW
-#. index menu: <sidebar-next-new>
-#. pager menu: <sidebar-next-new>
-#.
-#: OPS.SIDEBAR:37
-msgid "move the highlight to next mailbox with new mail"
-msgstr "déplacer la marque sur la BAL avec de nouveaux messages suivante"
-
-#. L10N: Help screen description for OP_SIDEBAR_OPEN
-#. index menu: <sidebar-open>
-#. pager menu: <sidebar-open>
-#.
-#: OPS.SIDEBAR:43
-msgid "open highlighted mailbox"
-msgstr "ouvrir la boîte aux lettres marquée"
-
-#. L10N: Help screen description for OP_SIDEBAR_PAGE_DOWN
-#. index menu: <sidebar-page-down>
-#. pager menu: <sidebar-page-down>
-#.
-#: OPS.SIDEBAR:49
-msgid "scroll the sidebar down 1 page"
-msgstr "descendre la barre latérale d'une page"
-
-#. L10N: Help screen description for OP_SIDEBAR_PAGE_UP
-#. index menu: <sidebar-page-up>
-#. pager menu: <sidebar-page-up>
-#.
-#: OPS.SIDEBAR:55
-msgid "scroll the sidebar up 1 page"
-msgstr "remonter la barre latérale d'une page"
-
-#. L10N: Help screen description for OP_SIDEBAR_PREV
-#. index menu: <sidebar-prev>
-#. pager menu: <sidebar-prev>
-#.
-#: OPS.SIDEBAR:61
-msgid "move the highlight to previous mailbox"
-msgstr "déplacer la marque sur la boîte aux lettres précédente"
-
-#. L10N: Help screen description for OP_SIDEBAR_PREV_NEW
-#. index menu: <sidebar-prev-new>
-#. pager menu: <sidebar-prev-new>
-#.
-#: OPS.SIDEBAR:67
-msgid "move the highlight to previous mailbox with new mail"
-msgstr "déplacer la marque sur la BAL avec de nouveaux messages précédente"
-
-#. L10N: Help screen description for OP_SIDEBAR_TOGGLE_VISIBLE
-#. index menu: <sidebar-toggle-visible>
-#. pager menu: <sidebar-toggle-visible>
-#.
-#: OPS.SIDEBAR:73
-msgid "make the sidebar (in)visible"
-msgstr "rendre la barre latérale (in)visible"
-
-#. L10N: Help screen description for OP_COMPOSE_SMIME_MENU
-#. compose menu: <smime-menu>
-#.
-#: OPS.SMIME:18
-msgid "show S/MIME options"
-msgstr "afficher les options S/MIME"
-
 #: account.c:163
 #, c-format
 msgid "Username at %s: "
 msgstr "Nom d'utilisateur sur %s : "
 
 # , c-format
-#: account.c:224
+#. L10N:
+#. Prompt for an account password when connecting.
+#. %s@%s is user@host
+#.
+#: account.c:207
 #, c-format
 msgid "Password for %s@%s: "
 msgstr "Mot de passe pour %s@%s : "
@@ -1894,18 +64,18 @@ msgstr "Mot de passe pour %s@%s : "
 #. $*_oauth_refresh_command defined. So the message does not mean "None of
 #. your $*_oauth_refresh_command's are defined."
 #.
-#: account.c:285
+#: account.c:300
 msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
 msgstr ""
 "mutt_account_getoauthbearer: Commande de rafraîchissement OAUTH non définie"
 
-#: account.c:291
+#: account.c:306
 msgid "mutt_account_getoauthbearer: Unable to run refresh command"
 msgstr ""
 "mutt_account_getoauthbearer: Impossible d'exécuter la commande de "
 "rafraîchissement"
 
-#: account.c:302
+#: account.c:317
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
@@ -1931,7 +101,7 @@ msgstr "Sélectionner"
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4565
 #: curs_main.c:555 history.c:78 listmenu.c:61 mutt_ssl.c:1328
-#: mutt_ssl_gnutls.c:1042 pager.c:2012 pattern.c:2144 pgpkey.c:523
+#: mutt_ssl_gnutls.c:1058 pager.c:2012 pattern.c:2144 pgpkey.c:523
 #: postpone.c:45 query.c:54 recvattach.c:63 smime.c:466
 msgid "Help"
 msgstr "Aide"
@@ -3960,7 +2130,7 @@ msgstr "gpgme_op_keylist_next a échoué : %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4557 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1040 pgpkey.c:516
+#: crypt-gpgme.c:4557 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1056 pgpkey.c:516
 #: smime.c:461
 msgid "Exit  "
 msgstr "Quitter  "
@@ -4881,7 +3051,7 @@ msgstr "unhook : type hook inconnu : %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook : impossible de supprimer un %s à l'intérieur d'un %s."
 
-#: imap/auth.c:110 pop_auth.c:529 smtp.c:577
+#: imap/auth.c:110 pop_auth.c:529 smtp.c:568
 msgid "No authenticators available"
 msgstr "Pas d'authentificateurs disponibles"
 
@@ -4924,8 +3094,8 @@ msgstr "La connexion a échoué."
 #. L10N:
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
-#: imap/auth_oauth.c:39 imap/auth_sasl.c:109 pop_auth.c:332 smtp.c:615
-#: smtp.c:702
+#: imap/auth_oauth.c:39 imap/auth_sasl.c:109 pop_auth.c:332 smtp.c:606
+#: smtp.c:693
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Authentification (%s)..."
@@ -6091,7 +4261,7 @@ msgstr "Impossible de créer le contexte SSL"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:619 mutt_ssl_gnutls.c:456
+#: mutt_ssl.c:619 mutt_ssl_gnutls.c:467
 msgid "Warning: unable to set TLS SNI host name"
 msgstr "Attention : impossible de fixer le nom d'hôte TLS SNI"
 
@@ -6119,13 +4289,13 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 # , c-format
-#: mutt_ssl.c:792 mutt_ssl_gnutls.c:639
+#: mutt_ssl.c:792 mutt_ssl_gnutls.c:655
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[impossible de calculer]"
 
 # , c-format
-#: mutt_ssl.c:810 mutt_ssl_gnutls.c:662
+#: mutt_ssl.c:810 mutt_ssl_gnutls.c:678
 msgid "[invalid date]"
 msgstr "[date invalide]"
 
@@ -6155,38 +4325,39 @@ msgstr "le propriétaire du certificat ne correspond pas au nom %s"
 msgid "Certificate host check failed: %s"
 msgstr "Échec de vérification de machine : %s"
 
-#: mutt_ssl.c:1241 mutt_ssl_gnutls.c:909
+#: mutt_ssl.c:1241 mutt_ssl_gnutls.c:925
 msgid "This certificate belongs to:"
 msgstr "Ce certificat appartient à :"
 
-#: mutt_ssl.c:1250 mutt_ssl_gnutls.c:951
+#: mutt_ssl.c:1250 mutt_ssl_gnutls.c:967
 msgid "This certificate was issued by:"
 msgstr "Ce certificat a été émis par :"
 
-#: mutt_ssl.c:1259 mutt_ssl_gnutls.c:964
+#: mutt_ssl.c:1259 mutt_ssl_gnutls.c:980
 msgid "This certificate is valid"
 msgstr "Ce certificat est valide"
 
-#: mutt_ssl.c:1260 mutt_ssl_gnutls.c:967
+#: mutt_ssl.c:1260 mutt_ssl_gnutls.c:983
 #, c-format
 msgid "   from %s"
 msgstr "     de %s"
 
-#: mutt_ssl.c:1263 mutt_ssl_gnutls.c:972
+#: mutt_ssl.c:1263 mutt_ssl_gnutls.c:988
 #, c-format
 msgid "     to %s"
 msgstr "      à %s"
 
-#: mutt_ssl.c:1270 mutt_ssl_gnutls.c:979
+#: mutt_ssl.c:1270 mutt_ssl_gnutls.c:995
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Empreinte SHA1 : %s"
 
-#: mutt_ssl.c:1276 mutt_ssl.c:1279 mutt_ssl_gnutls.c:985 mutt_ssl_gnutls.c:988
+#: mutt_ssl.c:1276 mutt_ssl.c:1279 mutt_ssl_gnutls.c:1001
+#: mutt_ssl_gnutls.c:1004
 msgid "SHA256 Fingerprint: "
 msgstr "Empreinte SHA256 : "
 
-#: mutt_ssl.c:1283 mutt_ssl_gnutls.c:1009
+#: mutt_ssl.c:1283 mutt_ssl_gnutls.c:1025
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
@@ -6205,7 +4376,7 @@ msgstr "ruas"
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours, (s)auter"
 
-#: mutt_ssl.c:1315 mutt_ssl_gnutls.c:1018
+#: mutt_ssl.c:1315 mutt_ssl_gnutls.c:1034
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 
@@ -6213,67 +4384,77 @@ msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (s)auter"
 
-#: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1029
+#: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1045
 msgid "(r)eject, accept (o)nce"
 msgstr "(r)ejeter, accepter (u)ne fois"
 
-#: mutt_ssl.c:1360 mutt_ssl_gnutls.c:1092
+#: mutt_ssl.c:1360 mutt_ssl_gnutls.c:1108
 msgid "Warning: Couldn't save certificate"
 msgstr "Attention : le certificat n'a pas pu être sauvé"
 
-#: mutt_ssl.c:1365 mutt_ssl_gnutls.c:1097
+#: mutt_ssl.c:1365 mutt_ssl_gnutls.c:1113
 msgid "Certificate saved"
 msgstr "Certificat sauvé"
+
+# , c-format
+#. L10N:
+#. When using a $ssl_client_cert, OpenSSL may prompt for the password
+#. to decrypt the cert.  %s is the hostname.
+#.
+#: mutt_ssl.c:1426
+#, c-format
+msgid "Password for %s client cert: "
+msgstr "Mot de passe pour le certificat client %s : "
 
 #: mutt_ssl_gnutls.c:139 mutt_ssl_gnutls.c:167
 msgid "Error: no TLS socket open"
 msgstr "Erreur : pas de socket TLS ouverte"
 
-#: mutt_ssl_gnutls.c:338 mutt_ssl_gnutls.c:382
+#: mutt_ssl_gnutls.c:349 mutt_ssl_gnutls.c:393
 msgid "All available protocols for TLS/SSL connection disabled"
 msgstr ""
 "Tous les protocoles disponibles pour une connexion TLS/SSL sont désactivés"
 
-#: mutt_ssl_gnutls.c:388
+#: mutt_ssl_gnutls.c:399
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
 msgstr ""
 "Sélection de suite cryptographique explicite via $ssl_ciphers non supportée"
 
 # , c-format
-#: mutt_ssl_gnutls.c:503
+#: mutt_ssl_gnutls.c:519
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "Connexion SSL/TLS utilisant %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:733 mutt_ssl_gnutls.c:861
+#: mutt_ssl_gnutls.c:749 mutt_ssl_gnutls.c:877
 msgid "Error initialising gnutls certificate data"
 msgstr "Erreur d'initialisation des données du certificat gnutls"
 
-#: mutt_ssl_gnutls.c:740 mutt_ssl_gnutls.c:868
+#: mutt_ssl_gnutls.c:756 mutt_ssl_gnutls.c:884
 msgid "Error processing certificate data"
 msgstr "Erreur de traitement des données du certificat"
 
-#: mutt_ssl_gnutls.c:995
+#: mutt_ssl_gnutls.c:1011
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "ATTENTION ! Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl_gnutls.c:997
+#: mutt_ssl_gnutls.c:1013
 msgid "WARNING: Server certificate has expired"
 msgstr "ATTENTION ! Le certificat du serveur a expiré"
 
-#: mutt_ssl_gnutls.c:999
+#: mutt_ssl_gnutls.c:1015
 msgid "WARNING: Server certificate has been revoked"
 msgstr "ATTENTION ! Le certificat du serveur a été révoqué"
 
-#: mutt_ssl_gnutls.c:1001
+#: mutt_ssl_gnutls.c:1017
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "ATTENTION ! Le nom du serveur ne correspond pas au certificat"
 
-#: mutt_ssl_gnutls.c:1003
+#: mutt_ssl_gnutls.c:1019
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "ATTENTION ! Le signataire du certificat du serveur n'est pas un CA"
 
-#: mutt_ssl_gnutls.c:1006
+#: mutt_ssl_gnutls.c:1022
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 "Attention : le certificat du serveur a été signé avec un algorithme peu sûr"
@@ -6284,7 +4465,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1025
+#: mutt_ssl_gnutls.c:1041
 msgid "roa"
 msgstr "rua"
 
@@ -6294,15 +4475,15 @@ msgstr "rua"
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1036
+#: mutt_ssl_gnutls.c:1052
 msgid "ro"
 msgstr "ru"
 
-#: mutt_ssl_gnutls.c:1153 mutt_ssl_gnutls.c:1191
+#: mutt_ssl_gnutls.c:1169 mutt_ssl_gnutls.c:1207
 msgid "Unable to get certificate from peer"
 msgstr "Impossible d'obtenir le certificat de la machine distante"
 
-#: mutt_ssl_gnutls.c:1155
+#: mutt_ssl_gnutls.c:1171
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Erreur de vérification du certificat (%s)"
@@ -8160,25 +6341,21 @@ msgstr "Réponse du serveur invalide"
 msgid "Invalid SMTP URL: %s"
 msgstr "URL SMTP invalide : %s"
 
-#: smtp.c:496
-msgid "SMTP server does not support authentication"
-msgstr "Le serveur SMTP ne supporte pas l'authentification"
-
-#: smtp.c:540
+#: smtp.c:531
 #, c-format
 msgid "SMTP authentication method %s requires SASL"
 msgstr "La méthode d'authentification SMTP %s nécessite SASL"
 
-#: smtp.c:547
+#: smtp.c:538
 #, c-format
 msgid "%s authentication failed, trying next method"
 msgstr "L'authentification %s a échoué, essayons la méthode suivante"
 
-#: smtp.c:561
+#: smtp.c:552
 msgid "SMTP authentication requires SASL"
 msgstr "L'authentification SMTP nécessite SASL"
 
-#: smtp.c:572
+#: smtp.c:563
 msgid "SASL authentication failed"
 msgstr "L'authentification SASL a échoué"
 
@@ -8205,6 +6382,1843 @@ msgstr "Le message racine n'est pas visible dans cette vue limitée."
 #: thread.c:1110
 msgid "Parent message is not visible in this limited view."
 msgstr "Le message père n'est pas visible dans cette vue limitée."
+
+#. L10N: Help screen description for OP_NULL
+#: OPS:16
+msgid "null operation"
+msgstr "opération nulle"
+
+#. L10N: Help screen description for OP_END_COND
+#. generic menu: <end-cond>
+#.
+#: OPS:21
+msgid "end of conditional execution (noop)"
+msgstr "fin d'exécution conditionnelle (noop)"
+
+#. L10N: Help screen description for OP_ATTACH_VIEW_MAILCAP
+#. attachment menu: <view-mailcap>
+#.
+#: OPS:26
+msgid "force viewing of attachment using mailcap"
+msgstr ""
+"forcer la visualisation d'un attachment en utilisant le fichier mailcap"
+
+#. L10N: Help screen description for OP_ATTACH_VIEW_PAGER
+#. attachment menu: <view-pager>
+#.
+#: OPS:31
+msgid "view attachment in pager using copiousoutput mailcap"
+msgstr ""
+"voir l'attachment dans le visionneur en utilisant le mailcap copiousoutput"
+
+#. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
+#. attachment menu: <view-text>
+#.
+#: OPS:36
+msgid "view attachment as text"
+msgstr "visualiser un attachment en tant que texte"
+
+#. L10N: Help screen description for OP_ATTACH_COLLAPSE
+#. attachment menu: <collapse-parts>
+#.
+#: OPS:41
+msgid "Toggle display of subparts"
+msgstr "Inverser l'affichage des sous-parties"
+
+#. L10N: Help screen description for OP_AUTOCRYPT_ACCT_MENU
+#. index menu: <autocrypt-acct-menu>
+#.
+#: OPS:46
+msgid "manage autocrypt accounts"
+msgstr "gérer les comptes Autocrypt"
+
+#. L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
+#. autocrypt account menu: <create-account>
+#.
+#: OPS:51
+msgid "create a new autocrypt account"
+msgstr "créer un nouveau compte Autocrypt"
+
+#. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
+#. autocrypt account menu: <delete-account>
+#.
+#: OPS:56
+msgid "delete the current account"
+msgstr "supprimer le compte courant"
+
+#. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_ACTIVE
+#. autocrypt account menu: <toggle-active>
+#.
+#: OPS:61
+msgid "toggle the current account active/inactive"
+msgstr "inverser l'état du compte courant en actif/inactif"
+
+#. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_PREFER
+#. autocrypt account menu: <toggle-prefer-encrypt>
+#.
+#: OPS:66
+msgid "toggle the current account prefer-encrypt flag"
+msgstr ""
+"inverser le drapeau de préférence du chiffrement pour le compte courant"
+
+#. L10N: Help screen description for OP_BACKGROUND_COMPOSE_MENU
+#. index menu: <background-compose-menu>
+#. pager menu: <background-compose-menu>
+#.
+#: OPS:72
+msgid "list and select backgrounded compose sessions"
+msgstr "lister et sélectionner les sessions de composition en arrière-plan"
+
+#. L10N: Help screen description for OP_BOTTOM_PAGE
+#. generic menu: <bottom-page>
+#.
+#: OPS:77
+msgid "move to the bottom of the page"
+msgstr "aller en bas de la page"
+
+#. L10N: Help screen description for OP_BOUNCE_MESSAGE
+#. index menu: <bounce-message>
+#. pager menu: <bounce-message>
+#. attachment menu: <bounce-message>
+#.
+#: OPS:84
+msgid "remail a message to another user"
+msgstr "renvoyer un message à un autre utilisateur"
+
+#. L10N: Help screen description for OP_BROWSER_NEW_FILE
+#. browser menu: <select-new>
+#.
+#: OPS:89
+msgid "select a new file in this directory"
+msgstr "sélectionner un nouveau fichier dans ce répertoire"
+
+#. L10N: Help screen description for OP_BROWSER_VIEW_FILE
+#. browser menu: <view-file>
+#.
+#: OPS:94
+msgid "view file"
+msgstr "visualiser le fichier"
+
+#. L10N: Help screen description for OP_BROWSER_TELL
+#. browser menu: <display-filename>
+#.
+#: OPS:99
+msgid "display the currently selected file's name"
+msgstr "afficher le nom du fichier sélectionné actuellement"
+
+#. L10N: Help screen description for OP_BROWSER_SUBSCRIBE
+#. browser menu: <subscribe>
+#.
+#: OPS:104
+msgid "subscribe to current mailbox (IMAP only)"
+msgstr "s'abonner à la BAL courante (IMAP seulement)"
+
+#. L10N: Help screen description for OP_BROWSER_UNSUBSCRIBE
+#. browser menu: <unsubscribe>
+#.
+#: OPS:109
+msgid "unsubscribe from current mailbox (IMAP only)"
+msgstr "se désabonner de la BAL courante (IMAP seulement)"
+
+#. L10N: Help screen description for OP_BROWSER_TOGGLE_LSUB
+#. browser menu: <toggle-subscribed>
+#.
+#: OPS:114
+msgid "toggle view all/subscribed mailboxes (IMAP only)"
+msgstr ""
+"changer entre voir toutes les BAL/voir les BAL abonnées (IMAP seulement)"
+
+#. L10N: Help screen description for OP_BUFFY_LIST
+#. index menu: <buffy-list>
+#. pager menu: <buffy-list>
+#. browser menu: <buffy-list>
+#.
+#: OPS:121
+msgid "list mailboxes with new mail"
+msgstr "lister les BAL ayant de nouveaux messages"
+
+#. L10N: Help screen description for OP_CHANGE_DIRECTORY
+#. browser menu: <change-dir>
+#.
+#: OPS:126
+msgid "change directories"
+msgstr "changer de répertoires"
+
+#. L10N: Help screen description for OP_CHECK_NEW
+#. browser menu: <check-new>
+#.
+#: OPS:131
+msgid "check mailboxes for new mail"
+msgstr "vérifier la présence de nouveaux messages dans les BAL"
+
+#. L10N: Help screen description for OP_COMPOSE_ATTACH_FILE
+#. compose menu: <attach-file>
+#.
+#: OPS:136
+msgid "attach file(s) to this message"
+msgstr "attacher des fichiers à ce message"
+
+#. L10N: Help screen description for OP_COMPOSE_ATTACH_MESSAGE
+#. compose menu: <attach-message>
+#.
+#: OPS:141
+msgid "attach message(s) to this message"
+msgstr "attacher des messages à ce message"
+
+#. L10N: Help screen description for OP_COMPOSE_AUTOCRYPT_MENU
+#. compose menu: <autocrypt-menu>
+#.
+#: OPS:146
+msgid "show autocrypt compose menu options"
+msgstr "afficher les options du menu de composition d'Autocrypt"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_BCC
+#. compose menu: <edit-bcc>
+#.
+#: OPS:151
+msgid "edit the BCC list"
+msgstr "éditer la liste BCC"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_CC
+#. compose menu: <edit-cc>
+#.
+#: OPS:156
+msgid "edit the CC list"
+msgstr "éditer la liste CC"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_DESCRIPTION
+#. compose menu: <edit-description>
+#.
+#: OPS:161
+msgid "edit attachment description"
+msgstr "éditer la description de l'attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_ENCODING
+#. compose menu: <edit-encoding>
+#.
+#: OPS:166
+msgid "edit attachment transfer-encoding"
+msgstr "éditer le transfer-encoding de l'attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_FCC
+#. compose menu: <edit-fcc>
+#.
+#: OPS:171
+msgid "enter a file to save a copy of this message in"
+msgstr "entrer le nom d'un fichier dans lequel sauver une copie de ce message"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_FILE
+#. compose menu: <edit-file>
+#.
+#: OPS:176
+msgid "edit the file to be attached"
+msgstr "éditer le fichier à attacher"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_FROM
+#. compose menu: <edit-from>
+#.
+#: OPS:181
+msgid "edit the from field"
+msgstr "éditer le champ from"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_HEADERS
+#. compose menu: <edit-headers>
+#.
+#: OPS:186
+msgid "edit the message with headers"
+msgstr "éditer le message avec ses en-têtes"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_MESSAGE
+#. compose menu: <edit-message>
+#.
+#: OPS:191
+msgid "edit the message"
+msgstr "éditer le message"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_MIME
+#. compose menu: <edit-mime>
+#.
+#: OPS:196
+msgid "edit attachment using mailcap entry"
+msgstr "éditer l'attachement en utilisant l'entrée mailcap"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_REPLY_TO
+#. compose menu: <edit-reply-to>
+#.
+#: OPS:201
+msgid "edit the Reply-To field"
+msgstr "éditer le champ Reply-To"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_SUBJECT
+#. compose menu: <edit-subject>
+#.
+#: OPS:206
+msgid "edit the subject of this message"
+msgstr "éditer l'objet (Subject) de ce message"
+
+#. L10N: Help screen description for OP_COMPOSE_EDIT_TO
+#. compose menu: <edit-to>
+#.
+#: OPS:211
+msgid "edit the TO list"
+msgstr "éditer la liste TO"
+
+#. L10N: Help screen description for OP_CREATE_MAILBOX
+#. browser menu: <create-mailbox>
+#.
+#: OPS:216
+msgid "create a new mailbox (IMAP only)"
+msgstr "créer une nouvelle BAL (IMAP seulement)"
+
+#. L10N: Help screen description for OP_EDIT_TYPE
+#. index menu: <edit-type>
+#. pager menu: <edit-type>
+#. attachment menu: <edit-type>
+#. compose menu: <edit-type>
+#.
+#: OPS:224
+msgid "edit attachment content type"
+msgstr "éditer le content-type de l'attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_GET_ATTACHMENT
+#. compose menu: <get-attachment>
+#.
+#: OPS:229
+msgid "get a temporary copy of an attachment"
+msgstr "obtenir une copie temporaire d'un attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_ISPELL
+#. compose menu: <ispell>
+#.
+#: OPS:234
+msgid "run ispell on the message"
+msgstr "lancer ispell sur le message"
+
+#. L10N: Help screen description for OP_COMPOSE_MOVE_DOWN
+#. compose menu: <move-down>
+#.
+#: OPS:239
+msgid "move attachment down in compose menu list"
+msgstr ""
+"déplacer l'attachement vers le bas dans la liste du menu de composition"
+
+#. L10N: Help screen description for OP_COMPOSE_MOVE_UP
+#. compose menu: <move-up>
+#.
+#: OPS:244
+msgid "move attachment up in compose menu list"
+msgstr ""
+"déplacer l'attachement vers le haut dans la liste du menu de composition"
+
+#. L10N: Help screen description for OP_COMPOSE_NEW_MIME
+#. compose menu: <new-mime>
+#.
+#: OPS:249
+msgid "compose new attachment using mailcap entry"
+msgstr "composer un nouvel attachement en utilisant l'entrée mailcap"
+
+#. L10N: Help screen description for OP_COMPOSE_TOGGLE_RECODE
+#. compose menu: <toggle-recode>
+#.
+#: OPS:254
+msgid "toggle recoding of this attachment"
+msgstr "inverser le recodage de cet attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_POSTPONE_MESSAGE
+#. compose menu: <postpone-message>
+#.
+#: OPS:259
+msgid "save this message to send later"
+msgstr "sauvegarder ce message pour l'envoyer plus tard"
+
+#. L10N: Help screen description for OP_COMPOSE_RENAME_ATTACHMENT
+#. compose menu: <rename-attachment>
+#.
+#: OPS:264
+msgid "send attachment with a different name"
+msgstr "envoyer l'attachement avec un nom différent"
+
+#. L10N: Help screen description for OP_COMPOSE_RENAME_FILE
+#. compose menu: <rename-file>
+#.
+#: OPS:269
+msgid "rename/move an attached file"
+msgstr "renommer/déplacer un fichier attaché"
+
+#. L10N: Help screen description for OP_COMPOSE_SEND_MESSAGE
+#. compose menu: <send-message>
+#.
+#: OPS:274
+msgid "send the message"
+msgstr "envoyer le message"
+
+#. L10N: Help screen description for OP_COMPOSE_TO_SENDER
+#. index menu: <compose-to-sender>
+#. pager menu: <compose-to-sender>
+#. attachment menu: <compose-to-sender>
+#.
+#: OPS:281
+msgid "compose new message to the current message sender"
+msgstr "composer un nouveau message pour l'expéditeur du message courant"
+
+#. L10N: Help screen description for OP_COMPOSE_TOGGLE_DISPOSITION
+#. compose menu: <toggle-disposition>
+#.
+#: OPS:286
+msgid "toggle disposition between inline/attachment"
+msgstr "changer la disposition (en ligne/attachement)"
+
+#. L10N: Help screen description for OP_COMPOSE_TOGGLE_UNLINK
+#. compose menu: <toggle-unlink>
+#.
+#: OPS:291
+msgid "toggle whether to delete file after sending it"
+msgstr "inverser l'option de suppression du fichier après envoi"
+
+#. L10N: Help screen description for OP_COMPOSE_UPDATE_ENCODING
+#. compose menu: <update-encoding>
+#.
+#: OPS:296
+msgid "update an attachment's encoding info"
+msgstr "mettre à jour les informations de codage d'un attachement"
+
+#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT
+#. compose menu: <view-alt>
+#.
+#: OPS:301
+msgid "view multipart/alternative"
+msgstr "visualiser multipart/alternative"
+
+#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_TEXT
+#. compose menu: <view-alt-text>
+#.
+#: OPS:306
+msgid "view multipart/alternative as text"
+msgstr "visualiser multipart/alternative en tant que texte"
+
+#. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_MAILCAP
+#. compose menu: <view-alt-mailcap>
+#.
+#: OPS:311
+msgid "view multipart/alternative using mailcap"
+msgstr "visualiser multipart/alternative en utilisant mailcap"
+
+#. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
+#. compose menu: <write-fcc>
+#.
+#: OPS:316
+msgid "write the message to a folder"
+msgstr "écrire le message dans un dossier"
+
+#. L10N: Help screen description for OP_COPY_MESSAGE
+#. index menu: <copy-message>
+#. pager menu: <copy-message>
+#.
+#: OPS:322
+msgid "copy a message to a file/mailbox"
+msgstr "copier un message dans un fichier ou une BAL"
+
+#. L10N: Help screen description for OP_CREATE_ALIAS
+#. index menu: <create-alias>
+#. pager menu: <create-alias>
+#. query menu: <create-alias>
+#.
+#: OPS:329
+msgid "create an alias from a message sender"
+msgstr "créer un alias à partir de l'expéditeur d'un message"
+
+#. L10N: Help screen description for OP_CURRENT_BOTTOM
+#. generic menu: <current-bottom>
+#.
+#: OPS:334
+msgid "move entry to bottom of screen"
+msgstr "déplacer l'entrée au bas de l'écran"
+
+#. L10N: Help screen description for OP_CURRENT_MIDDLE
+#. generic menu: <current-middle>
+#.
+#: OPS:339
+msgid "move entry to middle of screen"
+msgstr "déplacer l'entrée au milieu de l'écran"
+
+#. L10N: Help screen description for OP_CURRENT_TOP
+#. generic menu: <current-top>
+#.
+#: OPS:344
+msgid "move entry to top of screen"
+msgstr "déplacer l'entrée en haut de l'écran"
+
+#. L10N: Help screen description for OP_DECODE_COPY
+#. index menu: <decode-copy>
+#. pager menu: <decode-copy>
+#.
+#: OPS:350
+msgid "make decoded (text/plain) copy"
+msgstr "faire une copie décodée (text/plain)"
+
+#. L10N: Help screen description for OP_DECODE_SAVE
+#. index menu: <decode-save>
+#. pager menu: <decode-save>
+#.
+#: OPS:356
+msgid "make decoded copy (text/plain) and delete"
+msgstr "faire une copie décodée (text/plain) et effacer"
+
+#. L10N: Help screen description for OP_DELETE
+#. index menu: <delete-message>
+#. pager menu: <delete-message>
+#. attachment menu: <delete-entry>
+#. compose menu: <detach-file>
+#. postpone menu: <delete-entry>
+#. alias menu: <delete-entry>
+#.
+#: OPS:366
+msgid "delete the current entry"
+msgstr "effacer l'entrée courante"
+
+#. L10N: Help screen description for OP_DELETE_MAILBOX
+#. browser menu: <delete-mailbox>
+#.
+#: OPS:371
+msgid "delete the current mailbox (IMAP only)"
+msgstr "supprimer la BAL courante (IMAP seulement)"
+
+#. L10N: Help screen description for OP_DELETE_SUBTHREAD
+#. index menu: <delete-subthread>
+#. pager menu: <delete-subthread>
+#.
+#: OPS:377
+msgid "delete all messages in subthread"
+msgstr "effacer tous les messages dans la sous-discussion"
+
+#. L10N: Help screen description for OP_DELETE_THREAD
+#. index menu: <delete-thread>
+#. pager menu: <delete-thread>
+#.
+#: OPS:383
+msgid "delete all messages in thread"
+msgstr "effacer tous les messages dans la discussion"
+
+#. L10N: Help screen description for OP_DISPLAY_ADDRESS
+#. index menu: <display-address>
+#. pager menu: <display-address>
+#.
+#: OPS:389
+msgid "display full address of sender"
+msgstr "afficher l'adresse complète de l'expéditeur"
+
+#. L10N: Help screen description for OP_DISPLAY_HEADERS
+#. index menu: <display-toggle-weed>
+#. pager menu: <display-toggle-weed>
+#. attachment menu: <display-toggle-weed>
+#. compose menu: <display-toggle-weed>
+#.
+#: OPS:397
+msgid "display message and toggle header weeding"
+msgstr "afficher le message et inverser la restriction des en-têtes"
+
+#. L10N: Help screen description for OP_DISPLAY_MESSAGE
+#. index menu: <display-message>
+#.
+#: OPS:402
+msgid "display a message"
+msgstr "afficher un message"
+
+#. L10N: Help screen description for OP_EDIT_LABEL
+#. index menu: <edit-label>
+#. pager menu: <edit-label>
+#.
+#: OPS:408
+msgid "add, change, or delete a message's label"
+msgstr "ajouter, changer ou supprimer le label d'un message"
+
+#. L10N: Help screen description for OP_EDIT_MESSAGE
+#. index menu: <edit>
+#. pager menu: <edit>
+#.
+#: OPS:414
+msgid "edit the raw message"
+msgstr "éditer le message brut"
+
+#. L10N: Help screen description for OP_EDITOR_BACKSPACE
+#. editor menu: <backspace>
+#.
+#: OPS:419
+msgid "delete the char in front of the cursor"
+msgstr "effacer le caractère situé devant le curseur"
+
+#. L10N: Help screen description for OP_EDITOR_BACKWARD_CHAR
+#. editor menu: <backward-char>
+#.
+#: OPS:424
+msgid "move the cursor one character to the left"
+msgstr "déplacer le curseur d'un caractère vers la gauche"
+
+#. L10N: Help screen description for OP_EDITOR_BACKWARD_WORD
+#. editor menu: <backward-word>
+#.
+#: OPS:429
+msgid "move the cursor to the beginning of the word"
+msgstr "déplacer le curseur au début du mot"
+
+#. L10N: Help screen description for OP_EDITOR_BOL
+#. editor menu: <bol>
+#.
+#: OPS:434
+msgid "jump to the beginning of the line"
+msgstr "aller au début de la ligne"
+
+#. L10N: Help screen description for OP_EDITOR_BUFFY_CYCLE
+#. editor menu: <buffy-cycle>
+#.
+#: OPS:439
+msgid "cycle among incoming mailboxes"
+msgstr "parcourir les boîtes aux lettres recevant du courrier"
+
+#. L10N: Help screen description for OP_EDITOR_COMPLETE
+#. editor menu: <complete>
+#.
+#: OPS:444
+msgid "complete filename or alias"
+msgstr "compléter un nom de fichier ou un alias"
+
+#. L10N: Help screen description for OP_EDITOR_COMPLETE_QUERY
+#. editor menu: <complete-query>
+#.
+#: OPS:449
+msgid "complete address with query"
+msgstr "compléter une adresse grâce à une requête"
+
+#. L10N: Help screen description for OP_EDITOR_DELETE_CHAR
+#. editor menu: <delete-char>
+#.
+#: OPS:454
+msgid "delete the char under the cursor"
+msgstr "effacer le caractère situé sous le curseur"
+
+#. L10N: Help screen description for OP_EDITOR_EOL
+#. editor menu: <eol>
+#.
+#: OPS:459
+msgid "jump to the end of the line"
+msgstr "aller à la fin de la ligne"
+
+#. L10N: Help screen description for OP_EDITOR_FORWARD_CHAR
+#. editor menu: <forward-char>
+#.
+#: OPS:464
+msgid "move the cursor one character to the right"
+msgstr "déplacer le curseur d'un caractère vers la droite"
+
+#. L10N: Help screen description for OP_EDITOR_FORWARD_WORD
+#. editor menu: <forward-word>
+#.
+#: OPS:469
+msgid "move the cursor to the end of the word"
+msgstr "déplacer le curseur à la fin du mot"
+
+#. L10N: Help screen description for OP_EDITOR_HISTORY_DOWN
+#. editor menu: <history-down>
+#.
+#: OPS:474
+msgid "scroll down through the history list"
+msgstr "redescendre dans l'historique"
+
+#. L10N: Help screen description for OP_EDITOR_HISTORY_UP
+#. editor menu: <history-up>
+#.
+#: OPS:479
+msgid "scroll up through the history list"
+msgstr "remonter dans l'historique"
+
+#. L10N: Help screen description for OP_EDITOR_HISTORY_SEARCH
+#. editor menu: <history-search>
+#.
+#: OPS:484
+msgid "search through the history list"
+msgstr "rechercher dans l'historique"
+
+#. L10N: Help screen description for OP_EDITOR_KILL_EOL
+#. editor menu: <kill-eol>
+#.
+#: OPS:489
+msgid "delete chars from cursor to end of line"
+msgstr "effacer la fin de la ligne à partir du curseur"
+
+#. L10N: Help screen description for OP_EDITOR_KILL_EOW
+#. editor menu: <kill-eow>
+#.
+#: OPS:494
+msgid "delete chars from the cursor to the end of the word"
+msgstr "effacer la fin du mot à partir du curseur"
+
+#. L10N: Help screen description for OP_EDITOR_KILL_LINE
+#. editor menu: <kill-line>
+#.
+#: OPS:499
+msgid "delete all chars on the line"
+msgstr "effacer tous les caractères de la ligne"
+
+#. L10N: Help screen description for OP_EDITOR_KILL_WORD
+#. editor menu: <kill-word>
+#.
+#: OPS:504
+msgid "delete the word in front of the cursor"
+msgstr "effacer le mot situé devant le curseur"
+
+#. L10N: Help screen description for OP_EDITOR_QUOTE_CHAR
+#. editor menu: <quote-char>
+#.
+#: OPS:509
+msgid "quote the next typed key"
+msgstr "entrer le caractère correspondant à la prochaine touche"
+
+#. L10N: Help screen description for OP_EDITOR_TRANSPOSE_CHARS
+#. editor menu: <transpose-chars>
+#.
+#: OPS:514
+msgid "transpose character under cursor with previous"
+msgstr "échanger le caractère situé sous le curseur avec le précédent"
+
+#. L10N: Help screen description for OP_EDITOR_CAPITALIZE_WORD
+#. editor menu: <capitalize-word>
+#.
+#: OPS:519
+msgid "capitalize the word"
+msgstr "capitaliser le mot"
+
+#. L10N: Help screen description for OP_EDITOR_DOWNCASE_WORD
+#. editor menu: <downcase-word>
+#.
+#: OPS:524
+msgid "convert the word to lower case"
+msgstr "convertir le mot en minuscules"
+
+#. L10N: Help screen description for OP_EDITOR_UPCASE_WORD
+#. editor menu: <upcase-word>
+#.
+#: OPS:529
+msgid "convert the word to upper case"
+msgstr "convertir le mot en majuscules"
+
+#. L10N: Help screen description for OP_ENTER_COMMAND
+#. generic menu: <enter-command>
+#. pager menu: <enter-command>
+#.
+#: OPS:535
+msgid "enter a muttrc command"
+msgstr "entrer une commande muttrc"
+
+#. L10N: Help screen description for OP_ENTER_MASK
+#. browser menu: <enter-mask>
+#.
+#: OPS:540
+msgid "enter a file mask"
+msgstr "entrer un masque de fichier"
+
+#. L10N: Help screen description for OP_ERROR_HISTORY
+#. generic menu: <error-history>
+#. pager menu: <error-history>
+#.
+#: OPS:546
+msgid "display recent history of error messages"
+msgstr "afficher un historique récent des messages d'erreur"
+
+#. L10N: Help screen description for OP_EXIT
+#. generic menu: <exit>
+#. pager menu: <exit>
+#.
+#: OPS:552
+msgid "exit this menu"
+msgstr "sortir de ce menu"
+
+#. L10N: Help screen description for OP_FILTER
+#. compose menu: <filter-entry>
+#.
+#: OPS:557
+msgid "filter attachment through a shell command"
+msgstr "filtrer un attachement au moyen d'une commande shell"
+
+#. L10N: Help screen description for OP_FIRST_ENTRY
+#. generic menu: <first-entry>
+#.
+#: OPS:562
+msgid "move to the first entry"
+msgstr "aller à la première entrée"
+
+#. L10N: Help screen description for OP_FLAG_MESSAGE
+#. index menu: <flag-message>
+#. pager menu: <flag-message>
+#.
+#: OPS:568
+msgid "toggle a message's 'important' flag"
+msgstr "inverser l'indicateur 'important' d'un message"
+
+#. L10N: Help screen description for OP_FORWARD_MESSAGE
+#. index menu: <forward-message>
+#. pager menu: <forward-message>
+#. attachment menu: <forward-message>
+#.
+#: OPS:575
+msgid "forward a message with comments"
+msgstr "transférer un message avec des commentaires"
+
+#. L10N: Help screen description for OP_GENERIC_SELECT_ENTRY
+#. generic menu: <select-entry>
+#.
+#: OPS:580
+msgid "select the current entry"
+msgstr "sélectionner l'entrée courante"
+
+#. L10N: Help screen description for OP_GROUP_CHAT_REPLY
+#. index menu: <group-chat-reply>
+#. pager menu: <group-chat-reply>
+#. attachment menu: <group-chat-reply>
+#.
+#: OPS:587
+msgid "reply to all recipients preserving To/Cc"
+msgstr "répondre à tous les destinataires en préservant À/Cc (To/Cc)"
+
+#. L10N: Help screen description for OP_GROUP_REPLY
+#. index menu: <group-reply>
+#. pager menu: <group-reply>
+#. attachment menu: <group-reply>
+#.
+#: OPS:594
+msgid "reply to all recipients"
+msgstr "répondre à tous les destinataires"
+
+#. L10N: Help screen description for OP_HALF_DOWN
+#. generic menu: <half-down>
+#. pager menu: <half-down>
+#.
+#: OPS:600
+msgid "scroll down 1/2 page"
+msgstr "descendre d'1/2 page"
+
+#. L10N: Help screen description for OP_HALF_UP
+#. generic menu: <half-up>
+#. pager menu: <half-up>
+#.
+#: OPS:606
+msgid "scroll up 1/2 page"
+msgstr "remonter d'1/2 page"
+
+#. L10N: Help screen description for OP_HELP
+#. generic menu: <help>
+#. pager menu: <help>
+#.
+#: OPS:612
+msgid "this screen"
+msgstr "cet écran"
+
+#. L10N: Help screen description for OP_JUMP
+#. generic menu: <jump>
+#. pager menu: <jump>
+#.
+#: OPS:618
+msgid "jump to an index number"
+msgstr "aller à un numéro d'index"
+
+#. L10N: Help screen description for OP_LAST_ENTRY
+#. generic menu: <last-entry>
+#.
+#: OPS:623
+msgid "move to the last entry"
+msgstr "aller à la dernière entrée"
+
+#. L10N: Help screen description for OP_LIST_ACTION
+#. index menu: <list-action>
+#. pager menu: <list-action>
+#.
+#: OPS:629
+msgid "perform mailing list action"
+msgstr "accomplir une action de liste de diffusion"
+
+#. L10N: Help screen description for OP_LIST_ARCHIVE
+#. list menu: <list-archive>
+#.
+#: OPS:634
+msgid "retrieve list archive information"
+msgstr "récupérer l'information de l'archive de la liste"
+
+#. L10N: Help screen description for OP_LIST_HELP
+#. list menu: <list-help>
+#.
+#: OPS:639
+msgid "retrieve list help"
+msgstr "récupérer l'aide de la liste"
+
+#. L10N: Help screen description for OP_LIST_OWNER
+#. list menu: <list-owner>
+#.
+#: OPS:644
+msgid "contact list owner"
+msgstr "contacter le propriétaire de la liste"
+
+#. L10N: Help screen description for OP_LIST_POST
+#. list menu: <list-post>
+#.
+#: OPS:649
+msgid "post to mailing list"
+msgstr "poster dans la liste de diffusion"
+
+#. L10N: Help screen description for OP_LIST_REPLY
+#. index menu: <list-reply>
+#. pager menu: <list-reply>
+#. attachment menu: <list-reply>
+#.
+#: OPS:656
+msgid "reply to specified mailing list"
+msgstr "répondre à la liste spécifiée"
+
+#. L10N: Help screen description for OP_LIST_SUBSCRIBE
+#. list menu: <list-subscribe>
+#.
+#: OPS:661
+msgid "subscribe to mailing list"
+msgstr "s'abonner à la liste de diffusion"
+
+# , c-format
+#. L10N: Help screen description for OP_LIST_UNSUBSCRIBE
+#. list menu: <list-unsubscribe>
+#.
+#: OPS:666
+msgid "unsubscribe from mailing list"
+msgstr "se désabonner de la liste de diffusion"
+
+#. L10N: Help screen description for OP_MACRO
+#: OPS:669
+msgid "execute a macro"
+msgstr "exécuter une macro"
+
+#. L10N: Help screen description for OP_MAIL
+#. index menu: <mail>
+#. pager menu: <mail>
+#. query menu: <mail>
+#.
+#: OPS:676
+msgid "compose a new mail message"
+msgstr "composer un nouveau message"
+
+#. L10N: Help screen description for OP_MAIN_BREAK_THREAD
+#. index menu: <break-thread>
+#. pager menu: <break-thread>
+#.
+#: OPS:682
+msgid "break the thread in two"
+msgstr "casser la discussion en deux"
+
+#. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES
+#. index menu: <browse-mailboxes>
+#. pager menu: <browse-mailboxes>
+#.
+#: OPS:688
+msgid "select a new mailbox from the browser"
+msgstr "sélectionner une nouvelle BAL depuis le navigateur"
+
+#. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
+#. index menu: <browse-mailboxes-readonly>
+#. pager menu: <browse-mailboxes-readonly>
+#.
+#: OPS:694
+msgid "select a new mailbox from the browser in read only mode"
+msgstr "sélectionner une nouvelle BAL depuis le navigateur en lecture seule"
+
+#. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
+#. index menu: <change-folder>
+#. pager menu: <change-folder>
+#.
+#: OPS:700
+msgid "open a different folder"
+msgstr "ouvrir un dossier différent"
+
+#. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER_READONLY
+#. index menu: <change-folder-readonly>
+#. pager menu: <change-folder-readonly>
+#.
+#: OPS:706
+msgid "open a different folder in read only mode"
+msgstr "ouvrir un dossier différent en lecture seule"
+
+#. L10N: Help screen description for OP_MAIN_CLEAR_FLAG
+#. index menu: <clear-flag>
+#. pager menu: <clear-flag>
+#.
+#: OPS:712
+msgid "clear a status flag from a message"
+msgstr "effacer un indicateur de statut d'un message"
+
+#. L10N: Help screen description for OP_MAIN_DELETE_PATTERN
+#. index menu: <delete-pattern>
+#.
+#: OPS:717
+msgid "delete messages matching a pattern"
+msgstr "effacer les messages correspondant à un motif"
+
+#. L10N: Help screen description for OP_MAIN_IMAP_FETCH
+#. index menu: <imap-fetch-mail>
+#. pager menu: <imap-fetch-mail>
+#.
+#: OPS:723
+msgid "force retrieval of mail from IMAP server"
+msgstr "forcer la récupération du courrier depuis un serveur IMAP"
+
+#. L10N: Help screen description for OP_MAIN_IMAP_LOGOUT_ALL
+#. index menu: <imap-logout-all>
+#. pager menu: <imap-logout-all>
+#.
+#: OPS:729
+msgid "logout from all IMAP servers"
+msgstr "se déconnecter de tous les serveurs IMAP"
+
+#. L10N: Help screen description for OP_MAIN_FETCH_MAIL
+#. index menu: <fetch-mail>
+#.
+#: OPS:734
+msgid "retrieve mail from POP server"
+msgstr "récupérer le courrier depuis un serveur POP"
+
+#. L10N: Help screen description for OP_MAIN_LIMIT
+#. index menu: <limit>
+#.
+#: OPS:739
+msgid "show only messages matching a pattern"
+msgstr "afficher seulement les messages correspondant à un motif"
+
+#. L10N: Help screen description for OP_MAIN_LINK_THREADS
+#. index menu: <link-threads>
+#. pager menu: <link-threads>
+#.
+#: OPS:745
+msgid "link tagged message to the current one"
+msgstr "lier le message marqué au message courant"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_UNREAD_MAILBOX
+#. index menu: <next-unread-mailbox>
+#. pager menu: <next-unread-mailbox>
+#.
+#: OPS:751
+msgid "open next mailbox with new mail"
+msgstr "ouvrir la boîte aux lettres avec de nouveaux messages suivante"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_NEW
+#. index menu: <next-new>
+#. pager menu: <next-new>
+#.
+#: OPS:757
+msgid "jump to the next new message"
+msgstr "aller au nouveau message suivant"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_NEW_THEN_UNREAD
+#. index menu: <next-new-then-unread>
+#.
+#: OPS:762
+msgid "jump to the next new or unread message"
+msgstr "aller au message nouveau ou non lu suivant"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_SUBTHREAD
+#. index menu: <next-subthread>
+#. pager menu: <next-subthread>
+#.
+#: OPS:768
+msgid "jump to the next subthread"
+msgstr "aller à la sous-discussion suivante"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_THREAD
+#. index menu: <next-thread>
+#. pager menu: <next-thread>
+#.
+#: OPS:774
+msgid "jump to the next thread"
+msgstr "aller à la discussion suivante"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_UNDELETED
+#. index menu: <next-undeleted>
+#. pager menu: <next-undeleted>
+#.
+#: OPS:780
+msgid "move to the next undeleted message"
+msgstr "aller au message non effacé suivant"
+
+#. L10N: Help screen description for OP_MAIN_NEXT_UNREAD
+#. index menu: <next-unread>
+#. pager menu: <next-unread>
+#.
+#: OPS:786
+msgid "jump to the next unread message"
+msgstr "aller au message non lu suivant"
+
+#. L10N: Help screen description for OP_MAIN_PARENT_MESSAGE
+#. index menu: <parent-message>
+#. pager menu: <parent-message>
+#.
+#: OPS:792
+msgid "jump to parent message in thread"
+msgstr "aller au message père dans la discussion"
+
+#. L10N: Help screen description for OP_MAIN_PREV_THREAD
+#. index menu: <previous-thread>
+#. pager menu: <previous-thread>
+#.
+#: OPS:798
+msgid "jump to previous thread"
+msgstr "aller à la discussion précédente"
+
+#. L10N: Help screen description for OP_MAIN_PREV_SUBTHREAD
+#. index menu: <previous-subthread>
+#. pager menu: <previous-subthread>
+#.
+#: OPS:804
+msgid "jump to previous subthread"
+msgstr "aller à la sous-discussion précédente"
+
+#. L10N: Help screen description for OP_MAIN_PREV_UNDELETED
+#. index menu: <previous-undeleted>
+#. pager menu: <previous-undeleted>
+#.
+#: OPS:810
+msgid "move to the previous undeleted message"
+msgstr "aller au message non effacé précédent"
+
+#. L10N: Help screen description for OP_MAIN_PREV_NEW
+#. index menu: <previous-new>
+#. pager menu: <previous-new>
+#.
+#: OPS:816
+msgid "jump to the previous new message"
+msgstr "aller au nouveau message précédent"
+
+#. L10N: Help screen description for OP_MAIN_PREV_NEW_THEN_UNREAD
+#. index menu: <previous-new-then-unread>
+#.
+#: OPS:821
+msgid "jump to the previous new or unread message"
+msgstr "aller au message nouveau ou non lu précédent"
+
+#. L10N: Help screen description for OP_MAIN_PREV_UNREAD
+#. index menu: <previous-unread>
+#. pager menu: <previous-unread>
+#.
+#: OPS:827
+msgid "jump to the previous unread message"
+msgstr "aller au message non lu précédent"
+
+#. L10N: Help screen description for OP_MAIN_READ_THREAD
+#. index menu: <read-thread>
+#. pager menu: <read-thread>
+#.
+#: OPS:833
+msgid "mark the current thread as read"
+msgstr "marquer la discussion courante comme lue"
+
+#. L10N: Help screen description for OP_MAIN_READ_SUBTHREAD
+#. index menu: <read-subthread>
+#. pager menu: <read-subthread>
+#.
+#: OPS:839
+msgid "mark the current subthread as read"
+msgstr "marquer la sous-discussion courante comme lue"
+
+#. L10N: Help screen description for OP_MAIN_ROOT_MESSAGE
+#. index menu: <root-message>
+#. pager menu: <root-message>
+#.
+#: OPS:845
+msgid "jump to root message in thread"
+msgstr "aller au message racine dans la discussion"
+
+#. L10N: Help screen description for OP_MAIN_SET_FLAG
+#. index menu: <set-flag>
+#. pager menu: <set-flag>
+#.
+#: OPS:851
+msgid "set a status flag on a message"
+msgstr "mettre un indicateur d'état sur un message"
+
+#. L10N: Help screen description for OP_MAIN_SYNC_FOLDER
+#. index menu: <sync-mailbox>
+#. pager menu: <sync-mailbox>
+#.
+#: OPS:857
+msgid "save changes to mailbox"
+msgstr "sauver les modifications de la boîte aux lettres"
+
+#. L10N: Help screen description for OP_MAIN_TAG_PATTERN
+#. index menu: <tag-pattern>
+#.
+#: OPS:862
+msgid "tag messages matching a pattern"
+msgstr "marquer les messages correspondant à un motif"
+
+#. L10N: Help screen description for OP_MAIN_UNDELETE_PATTERN
+#. index menu: <undelete-pattern>
+#.
+#: OPS:867
+msgid "undelete messages matching a pattern"
+msgstr "récupérer les messages correspondant à un motif"
+
+#. L10N: Help screen description for OP_MAIN_UNTAG_PATTERN
+#. index menu: <untag-pattern>
+#.
+#: OPS:872
+msgid "untag messages matching a pattern"
+msgstr "démarquer les messages correspondant à un motif"
+
+#. L10N: Help screen description for OP_MARK_MSG
+#. index menu: <mark-message>
+#.
+#: OPS:877
+msgid "create a hotkey macro for the current message"
+msgstr "créer une macro hotkey (marque-page) pour le message courant"
+
+#. L10N: Help screen description for OP_MIDDLE_PAGE
+#. generic menu: <middle-page>
+#.
+#: OPS:882
+msgid "move to the middle of the page"
+msgstr "aller au milieu de la page"
+
+#. L10N: Help screen description for OP_NEXT_ENTRY
+#. generic menu: <next-entry>
+#. pager menu: <next-entry>
+#.
+#: OPS:888
+msgid "move to the next entry"
+msgstr "aller à l'entrée suivante"
+
+#. L10N: Help screen description for OP_NEXT_LINE
+#. generic menu: <next-line>
+#. pager menu: <next-line>
+#.
+#: OPS:894
+msgid "scroll down one line"
+msgstr "descendre d'une ligne"
+
+#. L10N: Help screen description for OP_NEXT_PAGE
+#. generic menu: <next-page>
+#. pager menu: <next-page>
+#.
+#: OPS:900
+msgid "move to the next page"
+msgstr "aller à la page suivante"
+
+#. L10N: Help screen description for OP_PAGER_BOTTOM
+#. pager menu: <bottom>
+#.
+#: OPS:905
+msgid "jump to the bottom of the message"
+msgstr "aller à la fin du message"
+
+#. L10N: Help screen description for OP_PAGER_HIDE_QUOTED
+#. pager menu: <toggle-quoted>
+#.
+#: OPS:910
+msgid "toggle display of quoted text"
+msgstr "inverser l'affichage du texte cité"
+
+#. L10N: Help screen description for OP_PAGER_SKIP_QUOTED
+#. pager menu: <skip-quoted>
+#.
+#: OPS:915
+msgid "skip beyond quoted text"
+msgstr "sauter le texte cité"
+
+#. L10N: Help screen description for OP_PAGER_SKIP_HEADERS
+#. pager menu: <skip-headers>
+#.
+#: OPS:920
+msgid "skip beyond headers"
+msgstr "sauter les en-têtes"
+
+#. L10N: Help screen description for OP_PAGER_TOP
+#. pager menu: <top>
+#.
+#: OPS:925
+msgid "jump to the top of the message"
+msgstr "aller au début du message"
+
+#. L10N: Help screen description for OP_PIPE
+#. index menu: <pipe-message>
+#. pager menu: <pipe-message>
+#. attachment menu: <pipe-entry>
+#. compose menu: <pipe-entry>
+#.
+#: OPS:933
+msgid "pipe message/attachment to a shell command"
+msgstr "passer le message/l'attachement à une commande shell"
+
+#. L10N: Help screen description for OP_PREV_ENTRY
+#. generic menu: <previous-entry>
+#. pager menu: <previous-entry>
+#.
+#: OPS:939
+msgid "move to the previous entry"
+msgstr "aller à l'entrée précédente"
+
+#. L10N: Help screen description for OP_PREV_LINE
+#. generic menu: <previous-line>
+#. pager menu: <previous-line>
+#.
+#: OPS:945
+msgid "scroll up one line"
+msgstr "remonter d'une ligne"
+
+#. L10N: Help screen description for OP_PREV_PAGE
+#. generic menu: <previous-page>
+#. pager menu: <previous-page>
+#.
+#: OPS:951
+msgid "move to the previous page"
+msgstr "aller à la page précédente"
+
+#. L10N: Help screen description for OP_PRINT
+#. index menu: <print-message>
+#. pager menu: <print-message>
+#. attachment menu: <print-entry>
+#. compose menu: <print-entry>
+#.
+#: OPS:959
+msgid "print the current entry"
+msgstr "imprimer l'entrée courante"
+
+#. L10N: Help screen description for OP_PURGE_MESSAGE
+#. index menu: <purge-message>
+#. pager menu: <purge-message>
+#.
+#: OPS:965
+msgid "delete the current entry, bypassing the trash folder"
+msgstr "supprimer l'entrée courante, sans utiliser la corbeille"
+
+#. L10N: Help screen description for OP_QUERY
+#. index menu: <query>
+#. query menu: <query>
+#.
+#: OPS:971
+msgid "query external program for addresses"
+msgstr "demander des adresses à un programme externe"
+
+#. L10N: Help screen description for OP_QUERY_APPEND
+#. query menu: <query-append>
+#.
+#: OPS:976
+msgid "append new query results to current results"
+msgstr "ajouter les nouveaux résultats de la requête aux résultats courants"
+
+#. L10N: Help screen description for OP_QUIT
+#. index menu: <quit>
+#. pager menu: <quit>
+#.
+#: OPS:982
+msgid "save changes to mailbox and quit"
+msgstr "sauver les modifications de la boîte aux lettres et quitter"
+
+#. L10N: Help screen description for OP_RECALL_MESSAGE
+#. index menu: <recall-message>
+#. pager menu: <recall-message>
+#.
+#: OPS:988
+msgid "recall a postponed message"
+msgstr "rappeler un message ajourné"
+
+#. L10N: Help screen description for OP_REDRAW
+#. generic menu: <refresh>
+#. pager menu: <redraw-screen>
+#.
+#: OPS:994
+msgid "clear and redraw the screen"
+msgstr "effacer l'écran et réafficher"
+
+#. L10N: Help screen description for OP_REFORMAT_WINCH
+#: OPS:997
+msgid "{internal}"
+msgstr "{interne}"
+
+#. L10N: Help screen description for OP_RENAME_MAILBOX
+#. browser menu: <rename-mailbox>
+#.
+#: OPS:1002
+msgid "rename the current mailbox (IMAP only)"
+msgstr "renommer la BAL courante (IMAP seulement)"
+
+#. L10N: Help screen description for OP_REPLY
+#. index menu: <reply>
+#. pager menu: <reply>
+#. attachment menu: <reply>
+#.
+#: OPS:1009
+msgid "reply to a message"
+msgstr "répondre à un message"
+
+#. L10N: Help screen description for OP_RESEND
+#. index menu: <resend-message>
+#. pager menu: <resend-message>
+#. attachment menu: <resend-message>
+#.
+#: OPS:1016
+msgid "use the current message as a template for a new one"
+msgstr "utiliser le message courant comme modèle pour un nouveau message"
+
+#. L10N: Help screen description for OP_SAVE
+#. index menu: <save-message>
+#. pager menu: <save-message>
+#. attachment menu: <save-entry>
+#. compose menu: <copy-file>
+#.
+#: OPS:1024
+msgid "save message/attachment to a mailbox/file"
+msgstr ""
+"sauver le message/l'attachement dans une boîte aux lettres ou un fichier"
+
+#. L10N: Help screen description for OP_SEARCH
+#. generic menu: <search>
+#. pager menu: <search>
+#.
+#: OPS:1030
+msgid "search for a regular expression"
+msgstr "rechercher une expression rationnelle"
+
+#. L10N: Help screen description for OP_SEARCH_REVERSE
+#. generic menu: <search-reverse>
+#. pager menu: <search-reverse>
+#.
+#: OPS:1036
+msgid "search backwards for a regular expression"
+msgstr "rechercher en arrière une expression rationnelle"
+
+#. L10N: Help screen description for OP_SEARCH_NEXT
+#. generic menu: <search-next>
+#. pager menu: <search-next>
+#.
+#: OPS:1042
+msgid "search for next match"
+msgstr "rechercher la prochaine occurrence"
+
+#. L10N: Help screen description for OP_SEARCH_OPPOSITE
+#. generic menu: <search-opposite>
+#. pager menu: <search-opposite>
+#.
+#: OPS:1048
+msgid "search for next match in opposite direction"
+msgstr "rechercher la prochaine occurrence dans la direction opposée"
+
+#. L10N: Help screen description for OP_SEARCH_TOGGLE
+#. pager menu: <search-toggle>
+#.
+#: OPS:1053
+msgid "toggle search pattern coloring"
+msgstr "inverser la coloration du motif de recherche"
+
+#. L10N: Help screen description for OP_SHELL_ESCAPE
+#. generic menu: <shell-escape>
+#. pager menu: <shell-escape>
+#.
+#: OPS:1059
+msgid "invoke a command in a subshell"
+msgstr "exécuter une commande dans un sous-shell"
+
+#. L10N: Help screen description for OP_SORT
+#. index menu: <sort-mailbox>
+#. pager menu: <sort-mailbox>
+#. browser menu: <sort>
+#.
+#: OPS:1066
+msgid "sort messages"
+msgstr "trier les messages"
+
+#. L10N: Help screen description for OP_SORT_REVERSE
+#. index menu: <sort-reverse>
+#. pager menu: <sort-reverse>
+#. browser menu: <sort-reverse>
+#.
+#: OPS:1073
+msgid "sort messages in reverse order"
+msgstr "trier les messages dans l'ordre inverse"
+
+#. L10N: Help screen description for OP_TAG
+#. generic menu: <tag-entry>
+#. pager menu: <tag-message>
+#.
+#: OPS:1079
+msgid "tag the current entry"
+msgstr "marquer l'entrée courante"
+
+#. L10N: Help screen description for OP_TAG_PREFIX
+#. generic menu: <tag-prefix>
+#.
+#: OPS:1084
+msgid "apply next function to tagged messages"
+msgstr "appliquer la prochaine fonction aux messages marqués"
+
+#. L10N: Help screen description for OP_TAG_PREFIX_COND
+#. generic menu: <tag-prefix-cond>
+#.
+#: OPS:1089
+msgid "apply next function ONLY to tagged messages"
+msgstr "appliquer la prochaine fonction SEULEMENT aux messages marqués"
+
+#. L10N: Help screen description for OP_TAG_SUBTHREAD
+#. index menu: <tag-subthread>
+#.
+#: OPS:1094
+msgid "tag the current subthread"
+msgstr "marquer la sous-discussion courante"
+
+#. L10N: Help screen description for OP_TAG_THREAD
+#. index menu: <tag-thread>
+#.
+#: OPS:1099
+msgid "tag the current thread"
+msgstr "marquer la discussion courante"
+
+#. L10N: Help screen description for OP_TOGGLE_NEW
+#. index menu: <toggle-new>
+#. pager menu: <mark-as-new>
+#.
+#: OPS:1105
+msgid "toggle a message's 'new' flag"
+msgstr "inverser l'indicateur 'nouveau' d'un message"
+
+#. L10N: Help screen description for OP_TOGGLE_WRITE
+#. index menu: <toggle-write>
+#. pager menu: <toggle-write>
+#.
+#: OPS:1111
+msgid "toggle whether the mailbox will be rewritten"
+msgstr "inverser l'option de réécriture de la boîte aux lettres"
+
+#. L10N: Help screen description for OP_TOGGLE_MAILBOXES
+#. browser menu: <toggle-mailboxes>
+#.
+#: OPS:1116
+msgid "toggle whether to browse mailboxes or all files"
+msgstr "changer entre l'affichage des BAL et celui de tous les fichiers"
+
+#. L10N: Help screen description for OP_TOP_PAGE
+#. generic menu: <top-page>
+#.
+#: OPS:1121
+msgid "move to the top of the page"
+msgstr "aller en haut de la page"
+
+#. L10N: Help screen description for OP_UNDELETE
+#. index menu: <undelete-message>
+#. pager menu: <undelete-message>
+#. attachment menu: <undelete-entry>
+#. postpone menu: <undelete-entry>
+#. alias menu: <undelete-entry>
+#.
+#: OPS:1130
+msgid "undelete the current entry"
+msgstr "récupérer l'entrée courante"
+
+#. L10N: Help screen description for OP_UNDELETE_THREAD
+#. index menu: <undelete-thread>
+#. pager menu: <undelete-thread>
+#.
+#: OPS:1136
+msgid "undelete all messages in thread"
+msgstr "récupérer tous les messages de la discussion"
+
+#. L10N: Help screen description for OP_UNDELETE_SUBTHREAD
+#. index menu: <undelete-subthread>
+#. pager menu: <undelete-subthread>
+#.
+#: OPS:1142
+msgid "undelete all messages in subthread"
+msgstr "récupérer tous les messages de la sous-discussion"
+
+#. L10N: Help screen description for OP_VERSION
+#. index menu: <show-version>
+#. pager menu: <show-version>
+#.
+#: OPS:1148
+msgid "show the Mutt version number and date"
+msgstr "afficher la version de Mutt (numéro et date)"
+
+#. L10N: Help screen description for OP_VIEW_ATTACH
+#. attachment menu: <view-attach>
+#. compose menu: <view-attach>
+#.
+#: OPS:1154
+msgid "view attachment using mailcap entry if necessary"
+msgstr "visualiser l'attachement en utilisant l'entrée mailcap si nécessaire"
+
+#. L10N: Help screen description for OP_VIEW_ATTACHMENTS
+#. index menu: <view-attachments>
+#. pager menu: <view-attachments>
+#.
+#: OPS:1160
+msgid "show MIME attachments"
+msgstr "afficher les attachements MIME"
+
+#. L10N: Help screen description for OP_WHAT_KEY
+#. generic menu: <what-key>
+#. pager menu: <what-key>
+#.
+#: OPS:1166
+msgid "display the keycode for a key press"
+msgstr "afficher le code d'une touche enfoncée"
+
+#. L10N: Help screen description for OP_CHECK_STATS
+#. generic menu: <check-stats>
+#. pager menu: <check-stats>
+#.
+#: OPS:1172
+msgid "calculate message statistics for all mailboxes"
+msgstr ""
+"calculer les statistiques des messages pour toutes les boîtes aux lettres"
+
+#. L10N: Help screen description for OP_MAIN_SHOW_LIMIT
+#. index menu: <show-limit>
+#.
+#: OPS:1177
+msgid "show currently active limit pattern"
+msgstr "afficher le motif de limitation actuel"
+
+#. L10N: Help screen description for OP_MAIN_COLLAPSE_THREAD
+#. index menu: <collapse-thread>
+#.
+#: OPS:1182
+msgid "collapse/uncollapse current thread"
+msgstr "comprimer/décomprimer la discussion courante"
+
+#. L10N: Help screen description for OP_MAIN_COLLAPSE_ALL
+#. index menu: <collapse-all>
+#.
+#: OPS:1187
+msgid "collapse/uncollapse all threads"
+msgstr "comprimer/décomprimer toutes les discussions"
+
+# , c-format
+#. L10N: Help screen description for OP_DESCEND_DIRECTORY
+#. browser menu: <descend-directory>
+#.
+#: OPS:1192
+msgid "descend into a directory"
+msgstr "descendre dans un répertoire"
+
+#. L10N: Help screen description for OP_DECRYPT_SAVE
+#. index menu: <decrypt-save>
+#. pager menu: <decrypt-save>
+#.
+#: OPS.CRYPT:19
+msgid "make decrypted copy and delete"
+msgstr "faire une copie déchiffrée et effacer"
+
+#. L10N: Help screen description for OP_DECRYPT_COPY
+#. index menu: <decrypt-copy>
+#. pager menu: <decrypt-copy>
+#.
+#: OPS.CRYPT:25
+msgid "make decrypted copy"
+msgstr "faire une copie déchiffrée"
+
+#. L10N: Help screen description for OP_FORGET_PASSPHRASE
+#. index menu: <forget-passphrase>
+#. pager menu: <forget-passphrase>
+#. attachment menu: <forget-passphrase>
+#. compose menu: <forget-passphrase>
+#.
+#: OPS.CRYPT:33
+msgid "wipe passphrase(s) from memory"
+msgstr "effacer les phrases de passe de la mémoire"
+
+#. L10N: Help screen description for OP_EXTRACT_KEYS
+#. index menu: <extract-keys>
+#. pager menu: <extract-keys>
+#. attachment menu: <extract-keys>
+#.
+#: OPS.CRYPT:40
+msgid "extract supported public keys"
+msgstr "extraire les clés publiques supportées"
+
+#. L10N: Help screen description for OP_MIX_USE
+#. mixmaster menu: <accept>
+#.
+#: OPS.MIX:18
+msgid "accept the chain constructed"
+msgstr "accepter la chaîne construite"
+
+#. L10N: Help screen description for OP_MIX_APPEND
+#. mixmaster menu: <append>
+#.
+#: OPS.MIX:23
+msgid "append a remailer to the chain"
+msgstr "ajouter un redistributeur de courrier à la fin de la chaîne"
+
+#. L10N: Help screen description for OP_MIX_INSERT
+#. mixmaster menu: <insert>
+#.
+#: OPS.MIX:28
+msgid "insert a remailer into the chain"
+msgstr "insérer un redistributeur de courrier dans la chaîne"
+
+#. L10N: Help screen description for OP_MIX_DELETE
+#. mixmaster menu: <delete>
+#.
+#: OPS.MIX:33
+msgid "delete a remailer from the chain"
+msgstr "retirer un redistributeur de courrier de la chaîne"
+
+#. L10N: Help screen description for OP_MIX_CHAIN_PREV
+#. mixmaster menu: <chain-prev>
+#.
+#: OPS.MIX:38
+msgid "select the previous element of the chain"
+msgstr "sélectionner l'élément précédent de la chaîne"
+
+#. L10N: Help screen description for OP_MIX_CHAIN_NEXT
+#. mixmaster menu: <chain-next>
+#.
+#: OPS.MIX:43
+msgid "select the next element of the chain"
+msgstr "sélectionner l'élément suivant de la chaîne"
+
+#. L10N: Help screen description for OP_COMPOSE_MIX
+#. compose menu: <mix>
+#.
+#: OPS.MIX:48
+msgid "send the message through a mixmaster remailer chain"
+msgstr ""
+"envoyer le message dans une chaîne de redistributeurs de courrier mixmaster"
+
+#. L10N: Help screen description for OP_COMPOSE_ATTACH_KEY
+#. compose menu: <attach-key>
+#.
+#: OPS.PGP:18
+msgid "attach a PGP public key"
+msgstr "attacher une clé publique PGP"
+
+#. L10N: Help screen description for OP_COMPOSE_PGP_MENU
+#. compose menu: <pgp-menu>
+#.
+#: OPS.PGP:23
+msgid "show PGP options"
+msgstr "afficher les options PGP"
+
+#. L10N: Help screen description for OP_MAIL_KEY
+#. index menu: <mail-key>
+#. pager menu: <mail-key>
+#.
+#: OPS.PGP:29
+msgid "mail a PGP public key"
+msgstr "envoyer une clé publique PGP"
+
+#. L10N: Help screen description for OP_VERIFY_KEY
+#. pgp menu: <verify-key>
+#. smime menu: <verify-key>
+#.
+#: OPS.PGP:35
+msgid "verify a PGP public key"
+msgstr "vérifier une clé publique PGP"
+
+#. L10N: Help screen description for OP_VIEW_ID
+#. pgp menu: <view-name>
+#. smime menu: <view-name>
+#.
+#: OPS.PGP:41
+msgid "view the key's user id"
+msgstr "afficher le numéro d'utilisateur de la clé"
+
+#. L10N: Help screen description for OP_CHECK_TRADITIONAL
+#. index menu: <check-traditional-pgp>
+#. pager menu: <check-traditional-pgp>
+#. attachment menu: <check-traditional-pgp>
+#.
+#: OPS.PGP:48
+msgid "check for classic PGP"
+msgstr "reconnaissance PGP classique"
+
+#. L10N: Help screen description for OP_SIDEBAR_FIRST
+#. index menu: <sidebar-first>
+#. pager menu: <sidebar-first>
+#.
+#: OPS.SIDEBAR:19
+msgid "move the highlight to the first mailbox"
+msgstr "déplacer la marque sur la première boîte aux lettres"
+
+#. L10N: Help screen description for OP_SIDEBAR_LAST
+#. index menu: <sidebar-last>
+#. pager menu: <sidebar-last>
+#.
+#: OPS.SIDEBAR:25
+msgid "move the highlight to the last mailbox"
+msgstr "déplacer la marque sur la dernière boîte aux lettres"
+
+#. L10N: Help screen description for OP_SIDEBAR_NEXT
+#. index menu: <sidebar-next>
+#. pager menu: <sidebar-next>
+#.
+#: OPS.SIDEBAR:31
+msgid "move the highlight to next mailbox"
+msgstr "déplacer la marque sur la boîte aux lettres suivante"
+
+#. L10N: Help screen description for OP_SIDEBAR_NEXT_NEW
+#. index menu: <sidebar-next-new>
+#. pager menu: <sidebar-next-new>
+#.
+#: OPS.SIDEBAR:37
+msgid "move the highlight to next mailbox with new mail"
+msgstr "déplacer la marque sur la BAL avec de nouveaux messages suivante"
+
+#. L10N: Help screen description for OP_SIDEBAR_OPEN
+#. index menu: <sidebar-open>
+#. pager menu: <sidebar-open>
+#.
+#: OPS.SIDEBAR:43
+msgid "open highlighted mailbox"
+msgstr "ouvrir la boîte aux lettres marquée"
+
+#. L10N: Help screen description for OP_SIDEBAR_PAGE_DOWN
+#. index menu: <sidebar-page-down>
+#. pager menu: <sidebar-page-down>
+#.
+#: OPS.SIDEBAR:49
+msgid "scroll the sidebar down 1 page"
+msgstr "descendre la barre latérale d'une page"
+
+#. L10N: Help screen description for OP_SIDEBAR_PAGE_UP
+#. index menu: <sidebar-page-up>
+#. pager menu: <sidebar-page-up>
+#.
+#: OPS.SIDEBAR:55
+msgid "scroll the sidebar up 1 page"
+msgstr "remonter la barre latérale d'une page"
+
+#. L10N: Help screen description for OP_SIDEBAR_PREV
+#. index menu: <sidebar-prev>
+#. pager menu: <sidebar-prev>
+#.
+#: OPS.SIDEBAR:61
+msgid "move the highlight to previous mailbox"
+msgstr "déplacer la marque sur la boîte aux lettres précédente"
+
+#. L10N: Help screen description for OP_SIDEBAR_PREV_NEW
+#. index menu: <sidebar-prev-new>
+#. pager menu: <sidebar-prev-new>
+#.
+#: OPS.SIDEBAR:67
+msgid "move the highlight to previous mailbox with new mail"
+msgstr "déplacer la marque sur la BAL avec de nouveaux messages précédente"
+
+#. L10N: Help screen description for OP_SIDEBAR_TOGGLE_VISIBLE
+#. index menu: <sidebar-toggle-visible>
+#. pager menu: <sidebar-toggle-visible>
+#.
+#: OPS.SIDEBAR:73
+msgid "make the sidebar (in)visible"
+msgstr "rendre la barre latérale (in)visible"
+
+#. L10N: Help screen description for OP_COMPOSE_SMIME_MENU
+#. compose menu: <smime-menu>
+#.
+#: OPS.SMIME:18
+msgid "show S/MIME options"
+msgstr "afficher les options S/MIME"
+
+#~ msgid "SMTP server does not support authentication"
+#~ msgstr "Le serveur SMTP ne supporte pas l'authentification"
 
 #~ msgid "Error: value '%s' is invalid for -d.\n"
 #~ msgstr "Erreur : la valeur '%s' est invalide pour -d.\n"
