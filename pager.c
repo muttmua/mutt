@@ -767,7 +767,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 {
   COLOR_LINE *color_line, *color_list;
   regmatch_t pmatch[1];
-  int found, offset, null_rx, i;
+  int i;
 
   if (n == 0 || ISHEADER (lineInfo[n-1].type) ||
       (check_protected_header_marker (raw) == 0))
@@ -873,7 +873,8 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       (lineInfo[n].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
   {
     size_t buflen;
-    int has_nl = 0;
+    int has_nl = 0, found, offset, null_rx, has_reg_match;
+    regoff_t rm_so, rm_eo;
 
     /* don't consider line endings part of the buffer
      * for regex matching */
@@ -894,8 +895,10 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
     while (color_line)
     {
       color_line->stop_matching = 0;
+      color_line->cached = 0;
       color_line = color_line->next;
     }
+
     do
     {
       if (!buf[offset])
@@ -906,11 +909,31 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       color_line = color_list;
       while (color_line)
       {
-	if (!color_line->stop_matching &&
-            regexec (&color_line->rx, buf + offset, 1, pmatch,
-		     (offset ? REG_NOTBOL : 0)) == 0)
+        has_reg_match = 0;
+	if (!color_line->stop_matching)
+        {
+          if (color_line->cached)
+          {
+            has_reg_match = 1;
+            rm_so = color_line->cached_rm_so;
+            rm_eo = color_line->cached_rm_eo;
+          }
+          else
+          {
+            if (regexec (&color_line->rx, buf + offset, 1, pmatch,
+                         (offset ? REG_NOTBOL : 0)) == 0)
+            {
+              has_reg_match = 1;
+              color_line->cached = 1;
+              rm_so = color_line->cached_rm_so = (pmatch[0].rm_so + offset);
+              rm_eo = color_line->cached_rm_eo = (pmatch[0].rm_eo + offset);
+            }
+          }
+        }
+
+        if (has_reg_match)
 	{
-	  if (pmatch[0].rm_eo != pmatch[0].rm_so)
+	  if (rm_eo != rm_so)
 	  {
 	    if (!found)
 	    {
@@ -926,28 +949,29 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 			      (lineInfo[n].chunks) * sizeof (struct syntax_t));
 	    }
 	    i = lineInfo[n].chunks - 1;
-	    pmatch[0].rm_so += offset;
-	    pmatch[0].rm_eo += offset;
 	    if (!found ||
-		pmatch[0].rm_so < (lineInfo[n].syntax)[i].first ||
-		(pmatch[0].rm_so == (lineInfo[n].syntax)[i].first &&
-		 pmatch[0].rm_eo > (lineInfo[n].syntax)[i].last))
+		rm_so < (lineInfo[n].syntax)[i].first ||
+		(rm_so == (lineInfo[n].syntax)[i].first &&
+		 rm_eo > (lineInfo[n].syntax)[i].last))
 	    {
 	      (lineInfo[n].syntax)[i].color = color_line->pair;
-	      (lineInfo[n].syntax)[i].first = pmatch[0].rm_so;
-	      (lineInfo[n].syntax)[i].last = pmatch[0].rm_eo;
+	      (lineInfo[n].syntax)[i].first = rm_so;
+	      (lineInfo[n].syntax)[i].last = rm_eo;
 	    }
 	    found = 1;
 	    null_rx = 0;
 	  }
 	  else
-	    null_rx = 1; /* empty regexp; don't add it, but keep looking */
+            null_rx = 1; /* empty regexp; don't add it, but keep looking */
 	}
         /* Once a regexp fails to match, don't try matching it again.
          * On very long lines this can cause a performance issue if there
          * are other regexps that have many matches. */
         else
+        {
           color_line->stop_matching = 1;
+          color_line->cached = 0;
+        }
 	color_line = color_line->next;
       }
 
@@ -955,6 +979,18 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 	offset++; /* avoid degenerate cases */
       else
 	offset = (lineInfo[n].syntax)[i].last;
+
+      /* Removed cached matches that aren't later in the buffer */
+      color_line = color_list;
+      while (color_line)
+      {
+        if (color_line->cached &&
+            color_line->cached_rm_so < offset)
+        {
+          color_line->cached = 0;
+        }
+	color_line = color_line->next;
+      }
     } while (found || null_rx);
 
     if (has_nl)

@@ -154,9 +154,14 @@ typedef struct color_line
   int pair;
   struct color_line *next;
 
+  regoff_t cached_rm_so;
+  regoff_t cached_rm_eo;
+
   unsigned int stop_matching : 1; /* used by the pager for body patterns,
                                      to prevent the color from being retried
                                      once it fails. */
+  unsigned int cached : 1; /* indicates cached_rm_so and cached_rm_eo
+                            * hold the last match location */
 } COLOR_LINE;
 
 #define MUTT_PROGRESS_SIZE      (1<<0)  /* traffic-based progress */
