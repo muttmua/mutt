@@ -400,6 +400,7 @@ const struct binding_t OpCompose[] = { /* map: compose */
   { "view-alt",		OP_COMPOSE_VIEW_ALT,		"v" },
   { "view-alt-text",    OP_COMPOSE_VIEW_ALT_TEXT,       "\033v" },
   { "view-alt-mailcap", OP_COMPOSE_VIEW_ALT_MAILCAP,    "V" },
+  { "view-alt-pager",   OP_COMPOSE_VIEW_ALT_PAGER,      NULL },
   { "send-message",	OP_COMPOSE_SEND_MESSAGE,	"y" },
   { "pipe-entry",	OP_PIPE,			"|" },
   { "move-down",	OP_COMPOSE_MOVE_DOWN,		NULL },

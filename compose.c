@@ -1699,6 +1699,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
       case OP_COMPOSE_VIEW_ALT:
       case OP_COMPOSE_VIEW_ALT_TEXT:
       case OP_COMPOSE_VIEW_ALT_MAILCAP:
+      case OP_COMPOSE_VIEW_ALT_PAGER:
       {
         BODY *alternative;
 
@@ -1717,6 +1718,9 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	    break;
 	  case OP_COMPOSE_VIEW_ALT_MAILCAP:
 	    op = MUTT_MAILCAP;
+	    break;
+	  case OP_COMPOSE_VIEW_ALT_PAGER:
+	    op = MUTT_VIEW_PAGER;
 	    break;
 	  default:
 	    op = MUTT_REGULAR;
