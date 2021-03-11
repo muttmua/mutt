@@ -878,12 +878,16 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       lineInfo[n].type == MT_COLOR_QUOTED ||
       (lineInfo[n].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
   {
-    size_t nl;
+    size_t buflen;
+    int has_nl = 0;
 
     /* don't consider line endings part of the buffer
      * for regex matching */
-    if ((nl = mutt_strlen (buf)) > 0 && buf[nl-1] == '\n')
-      buf[nl-1] = 0;
+    if ((buflen = mutt_strlen (buf)) > 0 && buf[buflen - 1] == '\n')
+    {
+      has_nl = 1;
+      buf[buflen - 1] = 0;
+    }
 
     i = 0;
     offset = 0;
@@ -958,8 +962,9 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       else
 	offset = (lineInfo[n].syntax)[i].last;
     } while (found || null_rx);
-    if (nl > 0)
-      buf[nl] = '\n';
+
+    if (has_nl)
+      buf[buflen - 1] = '\n';
   }
 }
 
