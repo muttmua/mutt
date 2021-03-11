@@ -873,8 +873,9 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       (lineInfo[n].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
   {
     size_t buflen;
-    int has_nl = 0, found, offset, null_rx, has_reg_match;
+    int has_nl = 0, found, offset, has_reg_match;
     regoff_t rm_so, rm_eo;
+    short line_allocated_chunks;
 
     /* don't consider line endings part of the buffer
      * for regex matching */
@@ -886,17 +887,21 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 
     i = 0;
     offset = 0;
+
+    /* note: the lineInfo[n].syntax comes with one pre-allocated
+     *       during initialization. */
+    line_allocated_chunks = 1;
     lineInfo[n].chunks = 0;
+
     if (lineInfo[n].type == MT_COLOR_HDEFAULT)
       color_list = ColorHdrList;
     else
       color_list = ColorBodyList;
-    color_line = color_list;
-    while (color_line)
+
+    for (color_line = color_list; color_line; color_line = color_line->next)
     {
       color_line->stop_matching = 0;
       color_line->cached = 0;
-      color_line = color_line->next;
     }
 
     do
@@ -905,7 +910,6 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 	break;
 
       found = 0;
-      null_rx = 0;
       color_line = color_list;
       while (color_line)
       {
@@ -933,36 +937,31 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 
         if (has_reg_match)
 	{
-	  if (rm_eo != rm_so)
-	  {
-	    if (!found)
-	    {
-              /* Abort if we fill up chunks.
-               * Yes, this really happened. See #3888 */
-              if (lineInfo[n].chunks == SHRT_MAX)
-              {
-                null_rx = 0;
-                break;
-              }
-	      if (++(lineInfo[n].chunks) > 1)
-		safe_realloc (&(lineInfo[n].syntax),
-			      (lineInfo[n].chunks) * sizeof (struct syntax_t));
-	    }
-	    i = lineInfo[n].chunks - 1;
-	    if (!found ||
-		rm_so < (lineInfo[n].syntax)[i].first ||
-		(rm_so == (lineInfo[n].syntax)[i].first &&
-		 rm_eo > (lineInfo[n].syntax)[i].last))
-	    {
-	      (lineInfo[n].syntax)[i].color = color_line->pair;
-	      (lineInfo[n].syntax)[i].first = rm_so;
-	      (lineInfo[n].syntax)[i].last = rm_eo;
-	    }
-	    found = 1;
-	    null_rx = 0;
-	  }
-	  else
-            null_rx = 1; /* empty regexp; don't add it, but keep looking */
+          if (!found)
+          {
+            /* Abort if we fill up chunks.
+             * Yes, this really happened. See #3888 */
+            if (lineInfo[n].chunks == SHRT_MAX)
+              break;
+            lineInfo[n].chunks++;
+            if (lineInfo[n].chunks > line_allocated_chunks)
+            {
+              line_allocated_chunks = lineInfo[n].chunks;
+              safe_realloc (&(lineInfo[n].syntax),
+                            line_allocated_chunks * sizeof (struct syntax_t));
+            }
+          }
+          i = lineInfo[n].chunks - 1;
+          if (!found ||
+              rm_so < (lineInfo[n].syntax)[i].first ||
+              (rm_so == (lineInfo[n].syntax)[i].first &&
+               rm_eo > (lineInfo[n].syntax)[i].last))
+          {
+            (lineInfo[n].syntax)[i].color = color_line->pair;
+            (lineInfo[n].syntax)[i].first = rm_so;
+            (lineInfo[n].syntax)[i].last = rm_eo;
+          }
+          found = 1;
 	}
         /* Once a regexp fails to match, don't try matching it again.
          * On very long lines this can cause a performance issue if there
@@ -975,23 +974,23 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 	color_line = color_line->next;
       }
 
-      if (null_rx)
-	offset++; /* avoid degenerate cases */
-      else
-	offset = (lineInfo[n].syntax)[i].last;
-
-      /* Removed cached matches that aren't later in the buffer */
-      color_line = color_list;
-      while (color_line)
+      if (found)
       {
-        if (color_line->cached &&
-            color_line->cached_rm_so < offset)
+        /* Skip empty matches */
+        if ((lineInfo[n].syntax)[i].first == (lineInfo[n].syntax)[i].last)
         {
-          color_line->cached = 0;
+          lineInfo[n].chunks--;
+          offset = (lineInfo[n].syntax)[i].last + 1;
         }
-	color_line = color_line->next;
+        else
+          offset = (lineInfo[n].syntax)[i].last;
+
+        /* Remove cached matches that aren't later in the buffer */
+        for (color_line = color_list; color_line; color_line = color_line->next)
+          if (color_line->cached && color_line->cached_rm_so < offset)
+            color_line->cached = 0;
       }
-    } while (found || null_rx);
+    } while (found);
 
     if (has_nl)
       buf[buflen - 1] = '\n';
