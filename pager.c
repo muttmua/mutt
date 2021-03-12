@@ -765,7 +765,7 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
 {
   COLOR_LINE *color_line, *color_list;
   size_t buflen;
-  int has_nl = 0, i = 0, offset = 0, found, has_reg_match;
+  int has_nl = 0, i, offset = 0, found, has_reg_match;
   regmatch_t pmatch[1];
   regoff_t rm_so, rm_eo;
   short line_allocated_chunks;
@@ -796,7 +796,8 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
 
   do
   {
-    if (!buf[offset])
+    /* if has_nl, we've stripped off a trailing newline */
+    if (offset >= (buflen - has_nl))
       break;
 
     found = 0;
