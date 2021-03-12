@@ -761,11 +761,137 @@ mutt_is_quote_line (char *buf, regmatch_t *pmatch)
 }
 
 static void
+match_body_patterns (char *buf, struct line_t *lineInfo, int n)
+{
+  COLOR_LINE *color_line, *color_list;
+  size_t buflen;
+  int has_nl = 0, i = 0, offset = 0, found, has_reg_match;
+  regmatch_t pmatch[1];
+  regoff_t rm_so, rm_eo;
+  short line_allocated_chunks;
+
+  /* don't consider line endings part of the buffer
+   * for regex matching */
+  if ((buflen = mutt_strlen (buf)) > 0 && buf[buflen - 1] == '\n')
+  {
+    has_nl = 1;
+    buf[buflen - 1] = 0;
+  }
+
+  /* note: the lineInfo[n].syntax comes with one pre-allocated
+   *       during initialization. */
+  line_allocated_chunks = 1;
+  lineInfo[n].chunks = 0;
+
+  if (lineInfo[n].type == MT_COLOR_HDEFAULT)
+    color_list = ColorHdrList;
+  else
+    color_list = ColorBodyList;
+
+  for (color_line = color_list; color_line; color_line = color_line->next)
+  {
+    color_line->stop_matching = 0;
+    color_line->cached = 0;
+  }
+
+  do
+  {
+    if (!buf[offset])
+      break;
+
+    found = 0;
+    color_line = color_list;
+    while (color_line)
+    {
+      has_reg_match = 0;
+      if (!color_line->stop_matching)
+      {
+        if (color_line->cached)
+        {
+          has_reg_match = 1;
+          rm_so = color_line->cached_rm_so;
+          rm_eo = color_line->cached_rm_eo;
+        }
+        else
+        {
+          if (regexec (&color_line->rx, buf + offset, 1, pmatch,
+                       (offset ? REG_NOTBOL : 0)) == 0)
+          {
+            has_reg_match = 1;
+            color_line->cached = 1;
+            rm_so = color_line->cached_rm_so = (pmatch[0].rm_so + offset);
+            rm_eo = color_line->cached_rm_eo = (pmatch[0].rm_eo + offset);
+          }
+        }
+      }
+
+      if (has_reg_match)
+      {
+        if (!found)
+        {
+          /* Abort if we fill up chunks.
+           * Yes, this really happened. See #3888 */
+          if (lineInfo[n].chunks == SHRT_MAX)
+            break;
+          lineInfo[n].chunks++;
+          if (lineInfo[n].chunks > line_allocated_chunks)
+          {
+            line_allocated_chunks = lineInfo[n].chunks;
+            safe_realloc (&(lineInfo[n].syntax),
+                          line_allocated_chunks * sizeof (struct syntax_t));
+          }
+        }
+        i = lineInfo[n].chunks - 1;
+        if (!found ||
+            rm_so < (lineInfo[n].syntax)[i].first ||
+            (rm_so == (lineInfo[n].syntax)[i].first &&
+             rm_eo > (lineInfo[n].syntax)[i].last))
+        {
+          (lineInfo[n].syntax)[i].color = color_line->pair;
+          (lineInfo[n].syntax)[i].first = rm_so;
+          (lineInfo[n].syntax)[i].last = rm_eo;
+        }
+        found = 1;
+      }
+      /* Once a regexp fails to match, don't try matching it again.
+       * On very long lines this can cause a performance issue if there
+       * are other regexps that have many matches. */
+      else
+      {
+        color_line->stop_matching = 1;
+        color_line->cached = 0;
+      }
+      color_line = color_line->next;
+    }
+
+    if (found)
+    {
+      /* Skip empty matches */
+      if ((lineInfo[n].syntax)[i].first == (lineInfo[n].syntax)[i].last)
+      {
+        lineInfo[n].chunks--;
+        offset = (lineInfo[n].syntax)[i].last + 1;
+      }
+      else
+        offset = (lineInfo[n].syntax)[i].last;
+
+      /* Remove cached matches that aren't later in the buffer */
+      for (color_line = color_list; color_line; color_line = color_line->next)
+        if (color_line->cached && color_line->cached_rm_so < offset)
+          color_line->cached = 0;
+    }
+  } while (found);
+
+  if (has_nl)
+    buf[buflen - 1] = '\n';
+}
+
+static void
 resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
                struct q_class_t **QuoteList, int *q_level, int *force_redraw,
                int q_classify)
 {
-  COLOR_LINE *color_line, *color_list;
+  COLOR_LINE *color_line;
   regmatch_t pmatch[1];
   int i;
 
@@ -872,128 +998,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       lineInfo[n].type == MT_COLOR_QUOTED ||
       (lineInfo[n].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
   {
-    size_t buflen;
-    int has_nl = 0, found, offset, has_reg_match;
-    regoff_t rm_so, rm_eo;
-    short line_allocated_chunks;
-
-    /* don't consider line endings part of the buffer
-     * for regex matching */
-    if ((buflen = mutt_strlen (buf)) > 0 && buf[buflen - 1] == '\n')
-    {
-      has_nl = 1;
-      buf[buflen - 1] = 0;
-    }
-
-    i = 0;
-    offset = 0;
-
-    /* note: the lineInfo[n].syntax comes with one pre-allocated
-     *       during initialization. */
-    line_allocated_chunks = 1;
-    lineInfo[n].chunks = 0;
-
-    if (lineInfo[n].type == MT_COLOR_HDEFAULT)
-      color_list = ColorHdrList;
-    else
-      color_list = ColorBodyList;
-
-    for (color_line = color_list; color_line; color_line = color_line->next)
-    {
-      color_line->stop_matching = 0;
-      color_line->cached = 0;
-    }
-
-    do
-    {
-      if (!buf[offset])
-	break;
-
-      found = 0;
-      color_line = color_list;
-      while (color_line)
-      {
-        has_reg_match = 0;
-	if (!color_line->stop_matching)
-        {
-          if (color_line->cached)
-          {
-            has_reg_match = 1;
-            rm_so = color_line->cached_rm_so;
-            rm_eo = color_line->cached_rm_eo;
-          }
-          else
-          {
-            if (regexec (&color_line->rx, buf + offset, 1, pmatch,
-                         (offset ? REG_NOTBOL : 0)) == 0)
-            {
-              has_reg_match = 1;
-              color_line->cached = 1;
-              rm_so = color_line->cached_rm_so = (pmatch[0].rm_so + offset);
-              rm_eo = color_line->cached_rm_eo = (pmatch[0].rm_eo + offset);
-            }
-          }
-        }
-
-        if (has_reg_match)
-	{
-          if (!found)
-          {
-            /* Abort if we fill up chunks.
-             * Yes, this really happened. See #3888 */
-            if (lineInfo[n].chunks == SHRT_MAX)
-              break;
-            lineInfo[n].chunks++;
-            if (lineInfo[n].chunks > line_allocated_chunks)
-            {
-              line_allocated_chunks = lineInfo[n].chunks;
-              safe_realloc (&(lineInfo[n].syntax),
-                            line_allocated_chunks * sizeof (struct syntax_t));
-            }
-          }
-          i = lineInfo[n].chunks - 1;
-          if (!found ||
-              rm_so < (lineInfo[n].syntax)[i].first ||
-              (rm_so == (lineInfo[n].syntax)[i].first &&
-               rm_eo > (lineInfo[n].syntax)[i].last))
-          {
-            (lineInfo[n].syntax)[i].color = color_line->pair;
-            (lineInfo[n].syntax)[i].first = rm_so;
-            (lineInfo[n].syntax)[i].last = rm_eo;
-          }
-          found = 1;
-	}
-        /* Once a regexp fails to match, don't try matching it again.
-         * On very long lines this can cause a performance issue if there
-         * are other regexps that have many matches. */
-        else
-        {
-          color_line->stop_matching = 1;
-          color_line->cached = 0;
-        }
-	color_line = color_line->next;
-      }
-
-      if (found)
-      {
-        /* Skip empty matches */
-        if ((lineInfo[n].syntax)[i].first == (lineInfo[n].syntax)[i].last)
-        {
-          lineInfo[n].chunks--;
-          offset = (lineInfo[n].syntax)[i].last + 1;
-        }
-        else
-          offset = (lineInfo[n].syntax)[i].last;
-
-        /* Remove cached matches that aren't later in the buffer */
-        for (color_line = color_list; color_line; color_line = color_line->next)
-          if (color_line->cached && color_line->cached_rm_so < offset)
-            color_line->cached = 0;
-      }
-    } while (found);
-
-    if (has_nl)
-      buf[buflen - 1] = '\n';
+    match_body_patterns (buf, lineInfo, n);
   }
 }
 
