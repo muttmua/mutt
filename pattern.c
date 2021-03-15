@@ -336,7 +336,17 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
   char *buf;
   size_t blen;
 
-  if ((msg = mx_open_message (ctx, msgno, pat->op == MUTT_HEADER)) != NULL)
+  /* The third parameter is whether to download only headers.
+   * When the user has $message_cachedir set, they likely expect to
+   * "take the hit" once and have it be cached than ~h to bypass the
+   * message cache completely, since this was the previous behavior.
+   */
+  if ((msg = mx_open_message (ctx, msgno,
+                              (pat->op == MUTT_HEADER
+#if defined(USE_IMAP) || defined(USE_POP)
+                               && !MessageCachedir
+#endif
+                                ))) != NULL)
   {
     if (option (OPTTHOROUGHSRC))
     {
