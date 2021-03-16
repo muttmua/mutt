@@ -1868,7 +1868,7 @@ int mutt_pattern_func (int op, char *prompt)
   BUFFER *buf = NULL;
   char *simple = NULL;
   BUFFER err;
-  int i, rv = -1, padding;
+  int i, rv = -1, padding, interrupted = 0;
   progress_t progress;
 
   buf = mutt_buffer_pool_get ();
@@ -1913,6 +1913,12 @@ int mutt_pattern_func (int op, char *prompt)
 
     for (i = 0; i < Context->msgcount; i++)
     {
+      if (SigInt)
+      {
+        interrupted = 1;
+        SigInt = 0;
+        break;
+      }
       mutt_progress_update (&progress, i, -1);
       /* new limit pattern implicitly uncollapses all threads */
       Context->hdrs[i]->virtual = -1;
@@ -1936,6 +1942,12 @@ int mutt_pattern_func (int op, char *prompt)
   {
     for (i = 0; i < Context->vcount; i++)
     {
+      if (SigInt)
+      {
+        interrupted = 1;
+        SigInt = 0;
+        break;
+      }
       mutt_progress_update (&progress, i, -1);
       if (mutt_pattern_exec (pat, MUTT_MATCH_FULL_ADDRESS, Context, Context->hdrs[Context->v2r[i]], NULL))
       {
@@ -1984,6 +1996,9 @@ int mutt_pattern_func (int op, char *prompt)
       Context->limit_pattern = mutt_pattern_comp (buf->data, MUTT_FULL_MSG, &err);
     }
   }
+
+  if (interrupted)
+    mutt_error _("Search interrupted.");
 
   rv = 0;
 
