@@ -1123,7 +1123,21 @@ int main (int argc, char **argv, char **environ)
         }
         context_hdr->content->length = st.st_size;
 
-        mutt_prepare_template (fin, NULL, msg, context_hdr, 0);
+        if (mutt_prepare_template (fin, NULL, msg, context_hdr, 0) < 0)
+        {
+          if (!option (OPTNOCURSES))
+          {
+            mutt_endwin (NULL);
+            set_option (OPTNOCURSES);
+          }
+          /* L10N:
+             Error when using -H command line argument, but reading the draft
+             file fails for some reason.
+          */
+          fputs (_("Cannot parse draft file\n"), stderr);
+          goto cleanup_and_exit;
+        }
+
 
         /* Scan for mutt header to set OPTRESUMEDRAFTFILES */
         for (last_uhp = &msg->env->userhdrs, uh = *last_uhp;
