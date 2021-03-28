@@ -957,8 +957,8 @@ int main (int argc, char **argv, char **environ)
       mutt_flushinp ();
     mutt_send_message (SENDPOSTPONED, NULL, NULL, NULL, NULL);
   }
-  else if (subject || msg || sendflags || draftFile || includeFile || attach ||
-	   optind < argc)
+  else if (subject || msg || (sendflags & SENDMAILX) || draftFile ||
+           includeFile || attach || optind < argc)
   {
     FILE *fin = NULL;
     FILE *fout = NULL;
@@ -1279,6 +1279,14 @@ int main (int argc, char **argv, char **environ)
 
     if (rv)
       goto cleanup_and_exit;
+  }
+  /* This guards against invoking `mutt < /dev/null` and accidentally
+   * sending an email due to a my_hdr or other setting.
+   */
+  else if (sendflags & SENDBATCH)
+  {
+    fputs (_("No recipients specified.\n"), stderr);
+    goto cleanup_and_exit;
   }
   else
   {
