@@ -8187,7 +8187,7 @@ list of available expandos to format this display to your needs.
 To get most out of MIME, it's important that a MIME part's content type
 matches the content as closely as possible so that the recipient's
 client can automatically select the right viewer for the
-content. However, there's no reliable for Mutt to know how to detect
+content. However, there's no reliable way for Mutt to know how to detect
 every possible file type. Instead, it uses a simple plain text mapping
 file that specifies what file extension corresponds to what MIME
 type. This file is called <literal>mime.types</literal>.
