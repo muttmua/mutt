@@ -165,7 +165,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
   }
   else if (data & MUTT_FCCHOOK)
   {
-    /* Do not perform relative path expansion  "\^" can be expanded later:
+    /* Do not perform relative path expansion.  "\^" can be expanded later:
      *   mutt_select_fcc() => mutt_addr_hook() => mutt_make_string()
      * which will perform backslash expansion, converting "\^" to "^".
      * save_fcc_mailbox_part() then calls mutt_buffer_expand_path() on each part.
