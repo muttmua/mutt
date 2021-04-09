@@ -816,6 +816,11 @@ static int trash_append (CONTEXT *ctx)
         if (mutt_append_message (&ctx_trash, ctx, ctx->hdrs[i], 0, 0) == -1)
         {
           mx_close_mailbox (&ctx_trash, NULL);
+          /* L10N:
+             Displayed if appending to $trash fails when syncing or closing
+             a mailbox.
+          */
+          mutt_error _("Unable to append to trash folder");
           return -1;
         }
       }
