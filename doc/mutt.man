@@ -144,12 +144,14 @@ Use \fIrcfile\fP instead of the user configuration file.
 Display a short option summary and exit.
 .TP
 .BI \-H " draft"
-Specify a \fIdraft\fP file which contains header and body to use to send a
-message.
-If \fIdraft\fP is \*(lq\fB\-\fP\*(rq, then data is read from stdin.
-The draft file is expected to contain just an RFC822 email \(em headers and a body.
-Although it is not an mbox file, if an mbox "\fBFrom\~\fP" line is present,
-it will be silently discarded.
+Specify a \fIdraft\fP file which contains header and body to use to
+send a message.  If \fIdraft\fP is \*(lq\fB\-\fP\*(rq, then data is
+read from stdin.  The draft file is expected to contain just an RFC822
+email \(em headers and a body.  Although it is not an mbox file, if an
+mbox "\fBFrom\~\fP" line is present, it will be silently discarded.
+Draft files are processed the same in interactive and batch mode; they
+are not passed through untouched.  For example, encrypted draft files
+will be decrypted.
 .TP
 .BI \-i " include"
 Specify an \fIinclude\fP file to be inserted into the body of a message.
