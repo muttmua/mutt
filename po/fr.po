@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-03-20 18:29+0100\n"
-"PO-Revision-Date: 2021-03-20 18:32+0100\n"
+"POT-Creation-Date: 2021-04-10 11:31+0200\n"
+"PO-Revision-Date: 2021-04-10 11:32+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -2372,7 +2372,7 @@ msgstr "Aucune boîte aux lettres n'est ouverte."
 msgid "There are no messages."
 msgstr "Il n'y a pas de messages."
 
-#: curs_main.c:69 mx.c:1208 pager.c:59 recvattach.c:46
+#: curs_main.c:69 mx.c:1213 pager.c:59 recvattach.c:46
 msgid "Mailbox is read-only."
 msgstr "La boîte aux lettres est en lecture seule."
 
@@ -3319,7 +3319,7 @@ msgstr "Copie de %d messages dans %s..."
 msgid "Abort download and close mailbox?"
 msgstr "Abandonner le téléchargement et fermer la boîte aux lettres ?"
 
-#: imap/message.c:111 mx.c:1449
+#: imap/message.c:111 mx.c:1454
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Dépassement de capacité sur entier -- impossible d'allouer la mémoire."
 
@@ -3958,7 +3958,7 @@ msgstr "DEBUG n'a pas été défini à la compilation. Ignoré.\n"
 msgid "Failed to parse mailto: link\n"
 msgstr "Impossible d'analyser le lien mailto:\n"
 
-#: main.c:1004
+#: main.c:1004 main.c:1288
 msgid "No recipients specified.\n"
 msgstr "Pas de destinataire spécifié.\n"
 
@@ -3980,15 +3980,15 @@ msgstr "Impossible d'analyser le fichier de brouillon\n"
 msgid "%s: unable to attach file.\n"
 msgstr "%s : impossible d'attacher le fichier.\n"
 
-#: main.c:1297
+#: main.c:1305
 msgid "No mailbox with new mail."
 msgstr "Pas de boîte aux lettres avec des nouveaux messages."
 
-#: main.c:1311
+#: main.c:1319
 msgid "No incoming mailboxes defined."
 msgstr "Pas de boîtes aux lettres recevant du courrier définies."
 
-#: main.c:1339
+#: main.c:1347
 msgid "Mailbox is empty."
 msgstr "La boîte aux lettres est vide."
 
@@ -4603,68 +4603,76 @@ msgstr "Impossible d'écrire %s !"
 msgid "message(s) not deleted"
 msgstr "message(s) non effacé(s)"
 
+#. L10N:
+#. Displayed if appending to $trash fails when syncing or closing
+#. a mailbox.
+#.
+#: mx.c:823
+msgid "Unable to append to trash folder"
+msgstr "Impossible d'ajouter à la corbeille"
+
 # , c-format
-#: mx.c:827
+#: mx.c:832
 msgid "Can't open trash folder"
 msgstr "Impossible d'ouvrir la corbeille"
 
 # , c-format
-#: mx.c:896
+#: mx.c:901
 #, c-format
 msgid "Move %d read messages to %s?"
 msgstr "Déplacer %d messages lus dans %s ?"
 
 # , c-format
-#: mx.c:913 mx.c:1224
+#: mx.c:918 mx.c:1229
 #, c-format
 msgid "Purge %d deleted message?"
 msgstr "Effacer %d message marqué à effacer ?"
 
 # , c-format
-#: mx.c:913 mx.c:1224
+#: mx.c:918 mx.c:1229
 #, c-format
 msgid "Purge %d deleted messages?"
 msgstr "Effacer %d messages marqués à effacer ?"
 
 # , c-format
-#: mx.c:934
+#: mx.c:939
 #, c-format
 msgid "Moving read messages to %s..."
 msgstr "Déplacement des messages lus dans %s..."
 
-#: mx.c:995 mx.c:1215
+#: mx.c:1000 mx.c:1220
 msgid "Mailbox is unchanged."
 msgstr "La boîte aux lettres est inchangée."
 
 # , c-format
-#: mx.c:1051
+#: mx.c:1056
 #, c-format
 msgid "%d kept, %d moved, %d deleted."
 msgstr "%d gardé(s), %d déplacé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:1054 mx.c:1276
+#: mx.c:1059 mx.c:1281
 #, c-format
 msgid "%d kept, %d deleted."
 msgstr "%d gardé(s), %d effacé(s)."
 
 # , c-format
-#: mx.c:1199
+#: mx.c:1204
 #, c-format
 msgid " Press '%s' to toggle write"
 msgstr " Appuyez sur '%s' pour inverser l'écriture autorisée"
 
-#: mx.c:1201
+#: mx.c:1206
 msgid "Use 'toggle-write' to re-enable write!"
 msgstr "Utilisez 'toggle-write' pour réautoriser l'écriture !"
 
 # , c-format
-#: mx.c:1203
+#: mx.c:1208
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
 msgstr "La boîte aux lettres est protégée contre l'écriture. %s"
 
-#: mx.c:1270
+#: mx.c:1275
 msgid "Mailbox checkpointed."
 msgstr "Boîte aux lettres vérifiée."
 
