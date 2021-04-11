@@ -81,7 +81,7 @@ sub process_struct($$) {
     }
   }
 
-  if ($struct =~ /^(ADDRESS|LIST|BUFFER|PARAMETER|BODY|ENVELOPE|HEADER)$/) {
+  if ($struct =~ /^(ADDRESS|LIST|BUFFER|PARAMETER|BODY|ENVELOPE|HEADER|COLOR_ATTR)$/) {
     $bodytxt = join(" ", @body);
     print " * ${struct}: ${bodytxt}\n";
 

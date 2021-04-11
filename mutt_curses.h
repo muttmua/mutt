@@ -151,7 +151,7 @@ typedef struct color_line
                                calculation */
   short fg;
   short bg;
-  int pair;
+  COLOR_ATTR color;
   struct color_line *next;
 
   regoff_t cached_rm_so;
@@ -225,27 +225,44 @@ static inline int mutt_window_wrap_cols(mutt_window_t *win, short wrap)
     return win->cols;
 }
 
-extern int *ColorQuote;
+extern COLOR_ATTR *ColorQuote;
 extern int ColorQuoteUsed;
-extern int ColorDefs[];
+extern COLOR_ATTR ColorDefs[];
 extern COLOR_LINE *ColorHdrList;
 extern COLOR_LINE *ColorBodyList;
 extern COLOR_LINE *ColorIndexList;
 
-void ci_init_color (void);
 void ci_start_color (void);
+
+/* Prefer bkgrndset because it allows more color pairs to be used.
+ * COLOR_PAIR() returns at most 8-bits.
+ */
+#if defined(HAVE_COLOR) && defined(HAVE_SETCCHAR) && defined(HAVE_BKGRNDSET)
+static inline void ATTRSET (const COLOR_ATTR X)
+{
+  cchar_t cch;
+  setcchar(&cch, L" ", X.attrs, X.pair, NULL);
+  bkgrndset(&cch);
+}
 
 /* If the system has bkgdset() use it rather than attrset() so that the clr*()
  * functions will properly set the background attributes all the way to the
  * right column.
  */
-#if defined(HAVE_BKGDSET)
-#define SETCOLOR(X) bkgdset(ColorDefs[X] | ' ')
-#define ATTRSET(X) bkgdset(X | ' ')
+#elif defined(HAVE_BKGDSET) && defined(HAVE_COLOR)
+#define ATTRSET(X) bkgdset(COLOR_PAIR(X.pair) | X.attrs | ' ')
+
+#elif defined(HAVE_BKGDSET)
+#define ATTRSET(X) bkgdset(X.attrs | ' ')
+
+#elif defined (HAVE_COLOR)
+#define ATTRSET(X) attrset(COLOR_PAIR(X.pair) | X.attrs)
+
 #else
-#define SETCOLOR(X) attrset(ColorDefs[X])
-#define ATTRSET attrset
+#define ATTRSET(X) attrset(X.attrs)
 #endif
+
+#define SETCOLOR(X) ATTRSET(ColorDefs[X])
 
 /* reset the color to the normal terminal color as defined by 'color normal ...' */
 #define NORMAL_COLOR SETCOLOR(MT_COLOR_NORMAL)

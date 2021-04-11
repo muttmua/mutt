@@ -75,7 +75,7 @@ EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-c
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	configure account.h \
-	attach.h buffer.h buffy.h charset.h compress.h copy.h crypthash.h \
+	attach.h buffer.h buffy.h charset.h color.h compress.h copy.h crypthash.h \
 	dotlock.h functions.h gen_defs gettext.h \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mailbox.h mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
@@ -163,7 +163,7 @@ reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
 # If configured with --with-included-gettext this means that intl will
 # not have generated libintl.h yet, and mutt.h -> lib.h will generate
 # an error.
-hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h $(srcdir)/buffer.h config.h $(srcdir)/hcachever.pl
+hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h $(srcdir)/buffer.h config.h $(srcdir)/hcachever.pl $(srcdir)/color.h
 	( echo '#include "config.h"'; echo '#undef ENABLE_NLS'; echo '#include "mutt.h"'; ) \
 	| $(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) - | perl $(srcdir)/hcachever.pl > hcversion.h
 

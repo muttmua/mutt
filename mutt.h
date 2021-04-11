@@ -61,6 +61,7 @@
 #include "hash.h"
 #include "charset.h"
 #include "buffer.h"
+#include "color.h"
 
 #ifndef HAVE_WC_FUNCS
 # ifdef MB_LEN_MAX
@@ -910,7 +911,7 @@ typedef struct header
 
   short recipient;		/* user_is_recipient()'s return value, cached */
 
-  int pair; 			/* color-pair to use when displaying in the index */
+  COLOR_ATTR color; 		/* color-pair to use when displaying in the index */
 
   time_t date_sent;     	/* time when the message was sent (UTC) */
   time_t received;      	/* time when the message was placed in the mailbox */

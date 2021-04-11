@@ -717,7 +717,8 @@ mutt_hcache_dump(header_cache_t *h, HEADER * header, int *off,
   nh.limited = 0;
   nh.num_hidden = 0;
   nh.recipient = 0;
-  nh.pair = 0;
+  nh.color.pair = 0;
+  nh.color.attrs = 0;
   nh.attach_valid = 0;
   nh.path = NULL;
   nh.tree = NULL;

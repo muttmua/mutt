@@ -87,7 +87,7 @@ typedef struct menu_t
   /* color pair to be used for the requested element
    * (default function returns ColorDefs[MT_COLOR_NORMAL])
    */
-  int (*color) (int i);
+  COLOR_ATTR (*color) (int i);
 
   /* the following are used only by mutt_menuLoop() */
   int top;		/* entry that is the top of the current page */
@@ -141,6 +141,6 @@ int mutt_menuLoop (MUTTMENU *);
 
 /* used in both the index and pager index to make an entry. */
 void index_make_entry (char *, size_t, struct menu_t *, int);
-int index_color (int);
+COLOR_ATTR index_color (int);
 
 #endif /* _MUTT_MENU_H_ */

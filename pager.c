@@ -100,7 +100,7 @@ struct q_class_t
 {
   int length;
   int index;
-  int color;
+  COLOR_ATTR color;
   char *prefix;
   struct q_class_t *next, *prev;
   struct q_class_t *down, *up;
@@ -108,7 +108,7 @@ struct q_class_t
 
 struct syntax_t
 {
-  int color;
+  COLOR_ATTR color;
   int first;
   int last;
 };
@@ -200,14 +200,18 @@ static void
 resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
                ansi_attr *a)
 {
-  int def_color;		/* color without syntax highlight */
-  int color;			/* final color */
-  static int last_color;	/* last color set */
+  COLOR_ATTR def_color = {0};		/* color without syntax highlight */
+  COLOR_ATTR color = {0};		/* final color */
+  static COLOR_ATTR last_color = {0};	/* last color set */
   int search = 0, m;
   struct syntax_t *matching_chunk;
 
+  /* force attrset() */
   if (!cnt)
-    last_color = -1;		/* force attrset() */
+  {
+    last_color.pair = -1;
+    last_color.attrs = -1;
+  }
 
   if (lineInfo[n].continuation)
   {
@@ -275,48 +279,55 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   {
     if (a->pair == -1)
       a->pair = mutt_alloc_ansi_color (a->fg, a->bg);
-    color = a->pair;
+    color.pair = a->pair;
   }
   else
 #endif
     if (special)
     {
-      if ((special & A_BOLD) && ColorDefs[MT_COLOR_BOLD] && !search)
+      if ((special & A_BOLD) &&
+          (ColorDefs[MT_COLOR_BOLD].pair ||
+           ColorDefs[MT_COLOR_BOLD].attrs) &&
+          !search)
       {
         color = ColorDefs[MT_COLOR_BOLD];
         if (special & A_UNDERLINE)
-          color |= A_UNDERLINE;
+          color.attrs |= A_UNDERLINE;
       }
-      else if ((special & A_UNDERLINE) && ColorDefs[MT_COLOR_UNDERLINE] && !search)
+      else if ((special & A_UNDERLINE) &&
+               (ColorDefs[MT_COLOR_UNDERLINE].pair ||
+                ColorDefs[MT_COLOR_UNDERLINE].attrs) &&
+               !search)
       {
         color = ColorDefs[MT_COLOR_UNDERLINE];
         if (special & A_BOLD)
-          color |= A_BOLD;
+          color.attrs |= A_BOLD;
       }
       else
       {
         if (special & A_BOLD)
-          color |= A_BOLD;
+          color.attrs |= A_BOLD;
         if (special & A_UNDERLINE)
-          color |= A_UNDERLINE;
+          color.attrs |= A_UNDERLINE;
       }
     }
 
   if (a->attr)
   {
     if (a->attr & ANSI_BOLD)
-      color |= A_BOLD;
+      color.attrs |= A_BOLD;
     if (a->attr & ANSI_UNDERLINE)
-      color |= A_UNDERLINE;
+      color.attrs |= A_UNDERLINE;
     if (a->attr & ANSI_REVERSE)
-      color |= A_REVERSE;
+      color.attrs |= A_REVERSE;
     if (a->attr & ANSI_BLINK)
-      color |= A_BLINK;
+      color.attrs |= A_BLINK;
     if (a->attr == ANSI_OFF)
       a->attr = 0;
   }
 
-  if (color != last_color)
+  if (color.pair != last_color.pair ||
+      color.attrs != last_color.attrs)
   {
     ATTRSET (color);
     last_color = color;
@@ -848,7 +859,7 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
             (rm_so == (lineInfo[n].syntax)[i].first &&
              rm_eo > (lineInfo[n].syntax)[i].last))
         {
-          (lineInfo[n].syntax)[i].color = color_line->pair;
+          (lineInfo[n].syntax)[i].color = color_line->color;
           (lineInfo[n].syntax)[i].first = rm_so;
           (lineInfo[n].syntax)[i].last = rm_eo;
         }
@@ -933,7 +944,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
           if (REGEXEC (color_line->rx, buf) == 0)
           {
             lineInfo[n].type = MT_COLOR_HEADER;
-            lineInfo[n].syntax[0].color = color_line->pair;
+            lineInfo[n].syntax[0].color = color_line->color;
             if (lineInfo[n].is_cont_hdr)
             {
               /* adjust the previous continuation lines to reflect the color of this continuation line */
@@ -1401,7 +1412,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   int buf_ready = 0, change_last = 0;
   int special;
   int offset;
-  int def_color;
+  COLOR_ATTR def_color;
   int m;
   int rc = -1;
   ansi_attr a = {0,0,0,-1};

@@ -269,15 +269,15 @@ void index_make_entry (char *s, size_t l, MUTTMENU *menu, int num)
   _mutt_make_string (s, l, NONULL (HdrFmt), Context, h, flag);
 }
 
-int index_color (int index_no)
+COLOR_ATTR index_color (int index_no)
 {
   HEADER *h = Context->hdrs[Context->v2r[index_no]];
 
-  if (h && h->pair)
-    return h->pair;
+  if (h && (h->color.pair || h->color.attrs))
+    return h->color;
 
   mutt_set_header_color (Context, h);
-  return h->pair;
+  return h->color;
 }
 
 static int ci_next_undeleted (int msgno)
@@ -2657,7 +2657,7 @@ int mutt_index_menu (void)
 
 void mutt_set_header_color (CONTEXT *ctx, HEADER *curhdr)
 {
-  COLOR_LINE *color;
+  COLOR_LINE *color_line;
   pattern_cache_t cache;
 
   if (!curhdr)
@@ -2665,12 +2665,12 @@ void mutt_set_header_color (CONTEXT *ctx, HEADER *curhdr)
 
   memset (&cache, 0, sizeof (cache));
 
-  for (color = ColorIndexList; color; color = color->next)
-    if (mutt_pattern_exec (color->color_pattern, MUTT_MATCH_FULL_ADDRESS, ctx, curhdr,
-                           &cache))
+  for (color_line = ColorIndexList; color_line; color_line = color_line->next)
+    if (mutt_pattern_exec (color_line->color_pattern, MUTT_MATCH_FULL_ADDRESS,
+                           ctx, curhdr, &cache))
     {
-      curhdr->pair = color->pair;
+      curhdr->color = color_line->color;
       return;
     }
-  curhdr->pair = ColorDefs[MT_COLOR_NORMAL];
+  curhdr->color = ColorDefs[MT_COLOR_NORMAL];
 }

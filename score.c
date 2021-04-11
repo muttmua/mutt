@@ -58,7 +58,8 @@ void mutt_check_rescore (CONTEXT *ctx)
     for (i = 0; ctx && i < ctx->msgcount; i++)
     {
       mutt_score_message (ctx, ctx->hdrs[i], 1);
-      ctx->hdrs[i]->pair = 0;
+      ctx->hdrs[i]->color.pair = 0;
+      ctx->hdrs[i]->color.attrs = 0;
     }
   }
   unset_option (OPTNEEDRESCORE);

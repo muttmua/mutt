@@ -655,7 +655,8 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
       entry_color = MT_COLOR_NEW;
     else if (b->msg_flagged > 0)
       entry_color = MT_COLOR_FLAGGED;
-    else if ((ColorDefs[MT_COLOR_SB_SPOOLFILE] != 0) &&
+    else if ((ColorDefs[MT_COLOR_SB_SPOOLFILE].pair != 0 ||
+              ColorDefs[MT_COLOR_SB_SPOOLFILE].attrs != 0) &&
              (mutt_strcmp (mutt_b2s (b->pathbuf), Spoolfile) == 0))
       entry_color = MT_COLOR_SB_SPOOLFILE;
     else
@@ -663,7 +664,8 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
 
     if (entryidx == OpnIndex)
     {
-      if ((ColorDefs[MT_COLOR_SB_INDICATOR] != 0))
+      if ((ColorDefs[MT_COLOR_SB_INDICATOR].pair != 0 ||
+           ColorDefs[MT_COLOR_SB_INDICATOR].attrs != 0))
 	mutt_attrset_cursor (ColorDefs[entry_color],
 		ColorDefs[MT_COLOR_SB_INDICATOR]);
       else

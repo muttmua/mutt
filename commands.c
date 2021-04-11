@@ -287,7 +287,7 @@ int mutt_display_message (HEADER *cur)
 
     /* Remove color cache for this message, in case there
        are color patterns for both ~g and ~V */
-    cur->pair = 0;
+    cur->color.pair = cur->color.attrs = 0;
 
     /* Process protected headers and autocrypt gossip headers */
     process_protected_headers (cur);

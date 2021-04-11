@@ -35,13 +35,14 @@ static size_t MenuStackCount = 0;
 static size_t MenuStackLen = 0;
 static MUTTMENU **MenuStack = NULL;
 
-static void print_enriched_string (int base_color, unsigned char *s, int use_indicator)
+static void print_enriched_string (COLOR_ATTR base_color, unsigned char *s,
+                                   int use_indicator)
 {
   wchar_t wc;
   size_t k;
   size_t n = mutt_strlen ((char *)s);
   mbstate_t mbstate;
-  int tree_color;
+  COLOR_ATTR tree_color;
 
   if (option (OPTCURSOROVERLAY))
   {
@@ -272,7 +273,7 @@ void menu_redraw_index (MUTTMENU *menu)
 {
   char buf[LONG_STRING];
   int i;
-  int attr;
+  COLOR_ATTR attr;
 
   for (i = menu->top; i < menu->top + menu->pagelen; i++)
   {
@@ -320,7 +321,7 @@ void menu_redraw_index (MUTTMENU *menu)
 void menu_redraw_motion (MUTTMENU *menu)
 {
   char buf[LONG_STRING];
-  int old_color, cur_color;
+  COLOR_ATTR old_color, cur_color;
 
   if (menu->dialog)
   {
@@ -374,7 +375,7 @@ void menu_redraw_motion (MUTTMENU *menu)
 void menu_redraw_current (MUTTMENU *menu)
 {
   char buf[LONG_STRING];
-  int attr = menu->color (menu->current);
+  COLOR_ATTR attr = menu->color (menu->current);
 
   mutt_window_move (menu->indexwin, menu->current + menu->offset - menu->top, 0);
   menu_make_entry (buf, sizeof (buf), menu, menu->current);
@@ -705,7 +706,7 @@ static void menu_prev_entry (MUTTMENU *menu)
     mutt_error _("You are on the first entry.");
 }
 
-static int default_color (int i)
+static COLOR_ATTR default_color (int i)
 {
   return ColorDefs[MT_COLOR_NORMAL];
 }
