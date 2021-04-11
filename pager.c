@@ -1052,6 +1052,8 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
     {
       a->attr = ANSI_OFF;
       a->pair = -1;
+      a->fg = -1;
+      a->bg = -1;
     }
     while (pos < x)
     {
@@ -1079,6 +1081,8 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
       {
 	a->attr = ANSI_OFF;
 	a->pair = -1;
+        a->fg = -1;
+        a->bg = -1;
 	pos += 2;
       }
       else if (mutt_strncmp("38;5;", (char *)&buf[pos], 5) == 0 && isdigit(buf[pos+5]))
@@ -1415,7 +1419,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   COLOR_ATTR def_color;
   int m;
   int rc = -1;
-  ansi_attr a = {0,0,0,-1};
+  ansi_attr a = {0,-1,-1,-1};
   regmatch_t pmatch[1];
 
   if (n == *last)

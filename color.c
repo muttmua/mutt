@@ -40,6 +40,10 @@ COLOR_LINE *ColorIndexList = NULL;
 
 /* local to this file */
 static int ColorQuoteSize;
+#if defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS)
+static int HaveDefaultColors = 0;
+static int DefaultColorsInit = 0;
+#endif
 
 #ifdef HAVE_COLOR
 
@@ -171,6 +175,15 @@ static void mutt_free_color_line(COLOR_LINE **l,
   FREE (&tmp->pattern);
   FREE (l);		/* __FREE_CHECKED__ */
 }
+
+#if defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS)
+static void init_default_colors (void)
+{
+  DefaultColorsInit = 1;
+  if (use_default_colors () == OK)
+    HaveDefaultColors = 1;
+}
+#endif /* defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS) */
 
 void ci_start_color (void)
 {
@@ -378,16 +391,24 @@ static int _mutt_alloc_color (int fg, int bg, int type)
 
 #if defined (USE_SLANG_CURSES)
   if (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
-    SLtt_set_color (pair, NULL, get_color_name (fgc, sizeof (fgc), fg), get_color_name (bgc, sizeof (bgc), bg));
+  {
+    SLtt_set_color (pair, NULL,
+                    get_color_name (fgc, sizeof (fgc), fg),
+                    get_color_name (bgc, sizeof (bgc), bg));
+  }
   else
+
 #elif defined (HAVE_USE_DEFAULT_COLORS)
-    if (fg == COLOR_DEFAULT)
-      fg = -1;
+  if (fg == COLOR_DEFAULT)
+    fg = -1;
   if (bg == COLOR_DEFAULT)
     bg = -1;
 #endif
 
-  init_pair(p->pair, fg, bg);
+  /* NOTE: this may be the "else" clause of the SLANG #if block above. */
+  {
+    init_pair (p->pair, fg, bg);
+  }
 
   dprint (3, (debugfile,"mutt_alloc_color(): Color pairs used so far: %d\n",
 	      UserColors));
@@ -402,6 +423,24 @@ int mutt_alloc_color (int fg, int bg)
 
 int mutt_alloc_ansi_color (int fg, int bg)
 {
+  if (fg == -1 || bg == -1)
+  {
+#if defined (HAVE_USE_DEFAULT_COLORS)
+    if (!DefaultColorsInit)
+      init_default_colors ();
+
+    if (!HaveDefaultColors)
+      return 0;
+#elif !defined (USE_SLANG_CURSES)
+    return 0;
+#endif
+
+    if (fg == -1)
+      fg = COLOR_DEFAULT;
+    if (bg == -1)
+      bg = COLOR_DEFAULT;
+  }
+
   return _mutt_alloc_color (fg, bg, MUTT_COLOR_TYPE_ANSI);
 }
 
@@ -984,18 +1023,21 @@ _mutt_parse_color (BUFFER *buf, BUFFER *s, BUFFER *err,
   if (dry_run) return 0;
 
 
-#ifdef HAVE_COLOR
-# ifdef HAVE_USE_DEFAULT_COLORS
-  if (!option (OPTNOCURSES) && has_colors()
-      /* delay use_default_colors() until needed, since it initializes things */
-      && (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
-      && use_default_colors () != OK)
+#if defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS)
+  if (!option (OPTNOCURSES) &&
+      has_colors() &&
+      (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT))
   {
-    strfcpy (err->data, _("default colors not supported"), err->dsize);
-    return (-1);
+    /* delay use_default_colors() until needed, since it initializes things */
+    if (!DefaultColorsInit)
+      init_default_colors ();
+    if (!HaveDefaultColors)
+    {
+      strfcpy (err->data, _("default colors not supported"), err->dsize);
+      return (-1);
+    }
   }
-# endif /* HAVE_USE_DEFAULT_COLORS */
-#endif
+#endif  /* defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS) */
 
   if (object == MT_COLOR_HEADER)
     r = add_pattern (&ColorHdrList, buf->data, 0, fg, bg, attr, err,0);
