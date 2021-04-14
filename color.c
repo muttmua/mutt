@@ -370,6 +370,12 @@ static int _mutt_alloc_color (int fg, int bg, int type)
    * to COLOR_PAIRS-1 pairs. */
   if (UserColors >= (COLOR_PAIRS - 1))
     return (0);
+
+  /* Check for pair overflow too.  We are currently using init_pair(), which
+   * only accepts size short. */
+  if ((pair > SHRT_MAX) || (pair < 0))
+    return (0);
+
   UserColors++;
 
   p = (COLOR_LIST *) safe_calloc (1, sizeof (COLOR_LIST));
