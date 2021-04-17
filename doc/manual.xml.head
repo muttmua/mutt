@@ -5494,9 +5494,12 @@ The <literal>mailto_allow</literal> and <literal>unmailto_allow</literal>
 commands allow the user to modify the list of approved headers.
 </para>
 <para>
-Mutt initializes the default list to contain only the <literal>Subject</literal>
-and <literal>Body</literal> header fields, which are the only requirement specified
-by the <literal>mailto:</literal> specification in RFC2368.
+Mutt initializes the default list to contain the
+<literal>Subject</literal> and <literal>Body</literal> header fields,
+which are the only requirement specified by the
+<literal>mailto:</literal> specification in RFC2368, along with
+<literal>Cc</literal>, <literal>In-Reply-To</literal>, and
+<literal>References</literal>, to support mailing list URLs.
 </para>
 </sect1>
 
@@ -11017,10 +11020,13 @@ on screen carefully enough.
 
 <para>
 To prevent these issues, Mutt by default only accepts the
-<literal>Subject</literal> and <literal>Body</literal> headers.
-Allowed headers can be adjusted with the
-<link linkend="mailto-allow"><command>mailto_allow</command></link> and
-<link linkend="mailto-allow"><command>unmailto_allow</command></link> commands.
+<literal>Subject</literal>, <literal>Body</literal>,
+<literal>Cc</literal>, <literal>In-Reply-To</literal>, and
+<literal>References</literal> headers.  Allowed headers can be
+adjusted with the <link
+linkend="mailto-allow"><command>mailto_allow</command></link> and
+<link linkend="mailto-allow"><command>unmailto_allow</command></link>
+commands.
 </para>
 
 </sect2>
