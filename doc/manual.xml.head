@@ -858,6 +858,8 @@ linkend="tab-ansi-esc"/>.
 <row><entry>7</entry><entry>Reverse video on</entry></row>
 <row><entry>3<emphasis>&lt;color&gt;</emphasis></entry><entry>Foreground color is <emphasis>&lt;color&gt;</emphasis> (see <xref linkend="tab-color"/>)</entry></row>
 <row><entry>4<emphasis>&lt;color&gt;</emphasis></entry><entry>Background color is <emphasis>&lt;color&gt;</emphasis> (see <xref linkend="tab-color"/>)</entry></row>
+<row><entry>38;5;<emphasis>&lt;color&gt;</emphasis></entry><entry>Foreground color is an 8-bit <emphasis>&lt;color&gt;</emphasis></entry></row>
+<row><entry>48;5;<emphasis>&lt;color&gt;</emphasis></entry><entry>Background color is an 8-bit <emphasis>&lt;color&gt;</emphasis></entry></row>
 </tbody>
 </tgroup>
 </table>
