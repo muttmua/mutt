@@ -2398,7 +2398,7 @@ search_next:
 	  /* update the search pointers */
 	  i = 0;
 	  while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
-                               &rd.maxLine, MUTT_SEARCH | (flags & MUTT_PAGER_NSKIP) | (flags & MUTT_PAGER_NOWRAP),
+                               &rd.maxLine, MUTT_SEARCH | (flags & MUTT_PAGER_NSKIP) | (flags & MUTT_PAGER_NOWRAP) | rd.has_types,
                                &rd.QuoteList, &rd.q_level,
                                &rd.force_redraw, &rd.SearchRE, rd.pager_window) == 0)
 	    i++;
