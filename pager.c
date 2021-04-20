@@ -117,13 +117,15 @@ struct line_t
 {
   LOFF_T offset;
   short type;
-  short continuation;
   short chunks;
   short search_cnt;
+  unsigned int continuation : 1;
+  unsigned int is_cont_hdr  : 1; /* continuation of header line */
+  unsigned int show_patterns_done : 1; /* body patterns and quote type computed,
+                                        * as part of showing the line */
   struct syntax_t *syntax;
   struct syntax_t *search;
   struct q_class_t *quote;
-  unsigned int is_cont_hdr; /* this line is a continuation of the previous header line */
 };
 
 #define ANSI_OFF       (1<<0)
@@ -342,6 +344,7 @@ append_line (struct line_t *lineInfo, int n, int cnt)
   lineInfo[n+1].type = lineInfo[n].type;
   (lineInfo[n+1].syntax)[0].color = (lineInfo[n].syntax)[0].color;
   lineInfo[n+1].continuation = 1;
+  lineInfo[n+1].show_patterns_done = lineInfo[n].show_patterns_done;
 
   /* find the real start of the line */
   for (m = n; m >= 0; m--)
@@ -1004,14 +1007,6 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
   }
   else
     lineInfo[n].type = MT_COLOR_NORMAL;
-
-  /* body patterns */
-  if (lineInfo[n].type == MT_COLOR_NORMAL ||
-      lineInfo[n].type == MT_COLOR_QUOTED ||
-      (lineInfo[n].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
-  {
-    match_body_patterns (buf, lineInfo, n);
-  }
 }
 
 static int is_ansi (const char *buf)
@@ -1208,6 +1203,70 @@ fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
   return b_read;
 }
 
+/* These are patterns left until the MUTT_SHOWCOLOR stage.
+ * They are separated from resolve_types() to make operations that jump
+ * further down (e.g. <bottom> and <search>)) faster.
+ */
+static int resolve_show_patterns (FILE *f, LOFF_T *last_pos, struct line_t *lineInfo,
+                                  int n, char *fmt, struct q_class_t **QuoteList,
+                                  int *q_level, int *force_redraw)
+{
+  char *tmp_buf = NULL, *tmp_fmt = NULL;
+  size_t tmp_buflen = 0;
+  int tmp_buf_ready = 0, m, rc = -1;;
+  regmatch_t pmatch[1];
+
+  /* If it's a continuation, we need to perform quote and body_pattern
+   * matching on the original line.  append_line() conveniently stores
+   * that information in the syntax[0].first field.
+   */
+  if (lineInfo[n].continuation)
+  {
+    m = (lineInfo[n].syntax)[0].first;
+    if (lineInfo[m].show_patterns_done == 1)
+      goto done;
+    if (fill_buffer (f, last_pos, lineInfo[m].offset, (unsigned char **) &tmp_buf,
+                     (unsigned char **) &tmp_fmt, &tmp_buflen, &tmp_buf_ready) < 0)
+    {
+      goto bail;
+    }
+  }
+  else
+  {
+    m = n;
+    tmp_fmt = fmt;
+  }
+
+  if (lineInfo[m].type == MT_COLOR_NORMAL ||
+      lineInfo[m].type == MT_COLOR_QUOTED ||
+      (lineInfo[m].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
+  {
+    match_body_patterns (tmp_fmt, lineInfo, m);
+  }
+
+  if ((lineInfo[m].type == MT_COLOR_QUOTED) &&
+      (lineInfo[m].quote == NULL))
+  {
+    regexec ((regex_t *) QuoteRegexp.rx, tmp_fmt, 1, pmatch, 0);
+    lineInfo[m].quote = classify_quote (QuoteList,
+                                        tmp_fmt + pmatch[0].rm_so,
+                                        pmatch[0].rm_eo - pmatch[0].rm_so,
+                                        force_redraw, q_level);
+  }
+
+done:
+  lineInfo[n].show_patterns_done = 1;
+  rc = 0;
+
+bail:
+  if (lineInfo[n].continuation)
+  {
+    FREE (&tmp_buf);
+    FREE (&tmp_fmt);
+  }
+
+  return rc;
+}
 
 static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 			int flags, ansi_attr *pa, int cnt,
@@ -1467,27 +1526,27 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       flags = 0; /* MUTT_NOSHOW */
   }
 
-  /* At this point, (*lineInfo[n]).quote may still be undefined. We
-   * don't want to compute it every time MUTT_TYPES is set, since this
-   * would slow down the "bottom" function unacceptably. A compromise
-   * solution is hence to call regexec() again, just to find out the
-   * length of the quote prefix.
-   */
-  if ((flags & MUTT_SHOWCOLOR) && !(*lineInfo)[n].continuation &&
-      (*lineInfo)[n].type == MT_COLOR_QUOTED && (*lineInfo)[n].quote == NULL)
+  if ((flags & MUTT_SHOWCOLOR) &&
+      !(*lineInfo)[n].show_patterns_done)
   {
-    if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
+    if (!(*lineInfo)[n].continuation)
+    {
+      if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen,
+                       &buf_ready) < 0)
+      {
+        if (change_last)
+          (*last)--;
+        goto out;
+      }
+    }
+
+    if (resolve_show_patterns (f, last_pos, *lineInfo, n, (char *)fmt,
+                               QuoteList, q_level, force_redraw) < 0)
     {
       if (change_last)
-	(*last)--;
+        (*last)--;
       goto out;
     }
-    regexec ((regex_t *) QuoteRegexp.rx, (char *) fmt, 1, pmatch, 0);
-    (*lineInfo)[n].quote =
-      classify_quote (QuoteList,
-                      (char *) fmt + pmatch[0].rm_so,
-                      pmatch[0].rm_eo - pmatch[0].rm_so,
-                      force_redraw, q_level);
   }
 
   if ((flags & MUTT_SEARCH) && !(*lineInfo)[n].continuation && (*lineInfo)[n].search_cnt == -1)
@@ -1858,9 +1917,11 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       {
         rd->lineInfo[i].offset = 0;
         rd->lineInfo[i].type = -1;
-        rd->lineInfo[i].continuation = 0;
         rd->lineInfo[i].chunks = 0;
         rd->lineInfo[i].search_cnt = -1;
+        rd->lineInfo[i].continuation = 0;
+        rd->lineInfo[i].is_cont_hdr = 0;
+        rd->lineInfo[i].show_patterns_done = 0;
         rd->lineInfo[i].quote = NULL;
 
         safe_realloc (&(rd->lineInfo[i].syntax),
