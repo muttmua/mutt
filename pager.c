@@ -200,7 +200,7 @@ comp_syntax_t (const void *m1, const void *m2)
 
 static void
 resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
-               ansi_attr *a)
+               ansi_attr *a, int wrap_cols)
 {
   COLOR_ATTR def_color = {0};		/* color without syntax highlight */
   COLOR_ATTR color = {0};		/* final color */
@@ -217,7 +217,7 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 
   if (lineInfo[n].continuation)
   {
-    if (!cnt && option (OPTMARKERS))
+    if (!cnt && option (OPTMARKERS) && (wrap_cols > 1))
     {
       SETCOLOR (MT_COLOR_MARKERS);
       addch ('+');
@@ -1274,15 +1274,25 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
                         mutt_window_t *pager_window)
 {
   int space = -1; /* index of the last space or TAB */
-  int col = option (OPTMARKERS) ? (*lineInfo)[n].continuation : 0;
+  int col;
   size_t k;
   int ch, vch, last_special = -1, special = 0, t;
   wchar_t wc;
   mbstate_t mbstate;
-  int wrap_cols = mutt_window_wrap_cols (pager_window, (flags & MUTT_PAGER_NOWRAP) ? 0 : Wrap);
+  int wrap_cols;
 
-  if (check_attachment_marker ((char *)buf) == 0)
+  if ((flags & MUTT_PAGER_NOWRAP) ||
+      (check_attachment_marker ((char *)buf) == 0))
     wrap_cols = pager_window->cols;
+  else
+    wrap_cols = mutt_window_wrap_cols (pager_window, Wrap);
+
+  if (option (OPTMARKERS) &&
+      (*lineInfo)[n].continuation &&
+      (wrap_cols > 1))
+    col = 1;
+  else
+    col = 0;
 
   /* FIXME: this should come from lineInfo */
   memset(&mbstate, 0, sizeof(mbstate));
@@ -1384,7 +1394,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 	((flags & (MUTT_SHOWCOLOR | MUTT_SEARCH | MUTT_PAGER_MARKER)) ||
 	 special || last_special || pa->attr))
     {
-      resolve_color (*lineInfo, n, vch, flags, special, pa);
+      resolve_color (*lineInfo, n, vch, flags, special, pa, wrap_cols);
       last_special = special;
     }
 
@@ -1668,7 +1678,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       a.attr ||
       (col != pager_window->cols && (flags & (MUTT_SHOWCOLOR | MUTT_SEARCH))))
   {
-    resolve_color (*lineInfo, n, vch, flags, 0, &a);
+    resolve_color (*lineInfo, n, vch, flags, 0, &a, 0);
   }
 
   /*
