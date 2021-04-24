@@ -81,6 +81,9 @@ static void destroy_state (struct browser_state *state)
   FREE (&state->entry);
 }
 
+/* This is set by browser_sort() */
+static int sort_reverse_flag = 0;
+
 static int browser_compare_subject (const void *a, const void *b)
 {
   struct folder_file *pa = (struct folder_file *) a;
@@ -88,7 +91,7 @@ static int browser_compare_subject (const void *a, const void *b)
 
   int r = mutt_strcoll (pa->display_name, pb->display_name);
 
-  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+  return (sort_reverse_flag ? -r : r);
 }
 
 static int browser_compare_date (const void *a, const void *b)
@@ -98,7 +101,7 @@ static int browser_compare_date (const void *a, const void *b)
 
   int r = pa->mtime - pb->mtime;
 
-  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+  return (sort_reverse_flag ? -r : r);
 }
 
 static int browser_compare_size (const void *a, const void *b)
@@ -108,7 +111,7 @@ static int browser_compare_size (const void *a, const void *b)
 
   int r = pa->size - pb->size;
 
-  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+  return (sort_reverse_flag ? -r : r);
 }
 
 static int browser_compare_count (const void *a, const void *b)
@@ -118,7 +121,7 @@ static int browser_compare_count (const void *a, const void *b)
 
   int r = pa->msg_count - pb->msg_count;
 
-  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+  return (sort_reverse_flag ? -r : r);
 }
 
 static int browser_compare_unread (const void *a, const void *b)
@@ -128,14 +131,17 @@ static int browser_compare_unread (const void *a, const void *b)
 
   int r = pa->msg_unread - pb->msg_unread;
 
-  return ((BrowserSort & SORT_REVERSE) ? -r : r);
+  return (sort_reverse_flag ? -r : r);
 }
 
 static void browser_sort (struct browser_state *state)
 {
   int (*f) (const void *, const void *);
+  short sort_variable;
 
-  switch (BrowserSort & SORT_MASK)
+  sort_variable = state->buffy ? BrowserSortMailboxes : BrowserSort;
+
+  switch (sort_variable & SORT_MASK)
   {
     case SORT_ORDER:
       return;
@@ -156,7 +162,62 @@ static void browser_sort (struct browser_state *state)
       f = browser_compare_subject;
       break;
   }
+
+  sort_reverse_flag = (sort_variable & SORT_REVERSE) ? 1 : 0;
   qsort (state->entry, state->entrylen, sizeof (struct folder_file), f);
+}
+
+/* Returns 1 if a resort is required. */
+static int select_sort (struct browser_state *state, int reverse)
+{
+  int resort = 1;
+  int new_sort;
+
+  switch (mutt_multi_choice ((reverse) ?
+           _("Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? ") :
+           _("Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "),
+           _("dazcun")))
+  {
+    case 1: /* (d)ate */
+      new_sort = SORT_DATE;
+      break;
+
+    case 2: /* (a)lpha */
+      new_sort = SORT_SUBJECT;
+      break;
+
+    case 3: /* si(z)e */
+      new_sort = SORT_SIZE;
+      break;
+
+    case 4: /* (c)ount */
+      new_sort = SORT_COUNT;
+      break;
+
+    case 5: /* (u)nread */
+      new_sort = SORT_UNREAD;
+      break;
+
+    case 6: /* do(n)'t sort */
+      new_sort = SORT_ORDER;
+      resort = 0;
+      break;
+
+    case -1: /* abort */
+    default:
+      resort = 0;
+      goto bail;
+      break;
+  }
+
+  new_sort |= reverse ? SORT_REVERSE : 0;
+  if (state->buffy)
+    BrowserSortMailboxes = new_sort;
+  else
+    BrowserSort = new_sort;
+
+bail:
+  return resort;
 }
 
 static int link_is_dir (const char *full_path)
@@ -623,7 +684,7 @@ static void set_sticky_cursor (struct browser_state *state, MUTTMENU *menu, cons
 }
 
 static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
-		       size_t titlelen, int buffy, const char *defaultsel)
+		       size_t titlelen, const char *defaultsel)
 {
   BUFFER *path = NULL;
 
@@ -640,7 +701,7 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
 
   menu->tagged = 0;
 
-  if (buffy)
+  if (state->buffy)
     snprintf (title, titlelen, _("Mailboxes [%d]"), mutt_buffy_check (0));
   else
   {
@@ -725,6 +786,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
   memset (&state, 0, sizeof (struct browser_state));
 
+  state.buffy = buffy;
+
   if (!LastDir)
   {
     LastDir = mutt_buffer_new ();
@@ -792,7 +855,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
       mutt_buffer_strcpy (defaultsel, NONULL (Context->path));
 
 #ifdef USE_IMAP
-    if (!buffy && mx_is_imap (mutt_b2s (LastDir)))
+    if (!state.buffy && mx_is_imap (mutt_b2s (LastDir)))
     {
       init_state (&state, NULL);
       state.imap_browse = 1;
@@ -813,7 +876,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
   mutt_buffer_clear (f);
 
-  if (buffy)
+  if (state.buffy)
   {
     if (examine_mailboxes (NULL, &state) == -1)
       goto bail;
@@ -837,7 +900,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
                                   FolderHelp);
   mutt_push_current_menu (menu);
 
-  init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+  init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 
   FOREVER
   {
@@ -911,7 +974,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 		}
 	      }
 	    }
-	    else if (buffy)
+	    else if (state.buffy)
 	    {
 	      mutt_buffer_strcpy (LastDir, state.entry[menu->current].full_path);
 	    }
@@ -943,7 +1006,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	      mutt_buffer_clear (prefix);
 	      killPrefix = 0;
 	    }
-	    buffy = 0;
+	    state.buffy = 0;
 #ifdef USE_IMAP
 	    if (state.imap_browse)
 	    {
@@ -967,7 +1030,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
               }
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	    init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	    break;
 	  }
 	}
@@ -1050,7 +1113,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  menu->data = state.entry;
 	  menu->current = 0;
 	  menu->top = 0;
-	  init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	  init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	}
 	/* else leave error on screen */
 	break;
@@ -1072,7 +1135,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    menu->data = state.entry;
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	    init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	  }
 	}
 	break;
@@ -1110,7 +1173,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	      state.entrylen--;
 	      mutt_message _("Mailbox deleted.");
               mutt_buffer_clear (defaultsel);
-	      init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	      init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	    }
             else
               mutt_error _("Mailbox deletion failed.");
@@ -1140,7 +1203,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	if ((mutt_buffer_get_field (_("Chdir to: "), buf, MUTT_FILE) == 0) &&
 	    mutt_buffer_len (buf))
 	{
-	  buffy = 0;
+	  state.buffy = 0;
           /* no relative path expansion, because that should be compared
            * to LastDir, not cwd */
 	  mutt_buffer_expand_path_norel (buf);
@@ -1156,7 +1219,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	    menu->data = state.entry;
 	    menu->current = 0;
 	    menu->top = 0;
-	    init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	    init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	  }
 	  else
 #endif
@@ -1185,7 +1248,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 		}
 		menu->current = 0;
 		menu->top = 0;
-		init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+		init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	      }
 	      else
 		mutt_error (_("%s is not a directory."), mutt_b2s (buf));
@@ -1206,7 +1269,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	  const char *s = mutt_b2s (buf);
 	  int not = 0, err;
 
-	  buffy = 0;
+	  state.buffy = 0;
 	  /* assume that the user wants to see everything */
 	  if (!(mutt_buffer_len (buf)))
 	    mutt_buffer_strcpy (buf, ".");
@@ -1242,12 +1305,12 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	      imap_browse (mutt_b2s (LastDir), &state);
 	      browser_sort (&state);
 	      menu->data = state.entry;
-	      init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	      init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	    }
 	    else
 #endif
               if (examine_directory (menu, &state, mutt_b2s (LastDir), NULL) == 0)
-                init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+                init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
               else
               {
                 mutt_error _("Error scanning directory.");
@@ -1267,46 +1330,8 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
       case OP_SORT_REVERSE:
 
       {
-        int resort = 1;
-        int reverse = (op == OP_SORT_REVERSE);
-
-        switch (mutt_multi_choice ((reverse) ?
-            _("Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? ") :
-            _("Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "),
-            _("dazcun")))
+        if (select_sort (&state, op == OP_SORT_REVERSE) == 1)
         {
-          case -1: /* abort */
-            resort = 0;
-            break;
-
-          case 1: /* (d)ate */
-            BrowserSort = SORT_DATE;
-            break;
-
-          case 2: /* (a)lpha */
-            BrowserSort = SORT_SUBJECT;
-            break;
-
-          case 3: /* si(z)e */
-            BrowserSort = SORT_SIZE;
-            break;
-
-          case 4: /* (c)ount */
-            BrowserSort = SORT_COUNT;
-            break;
-
-          case 5: /* (u)nread */
-            BrowserSort = SORT_UNREAD;
-            break;
-
-          case 6: /* do(n)'t sort */
-            BrowserSort = SORT_ORDER;
-            resort = 0;
-            break;
-        }
-        if (resort)
-        {
-          BrowserSort |= reverse ? SORT_REVERSE : 0;
           browser_sort (&state);
           set_sticky_cursor (&state, menu, mutt_b2s (defaultsel));
           menu->redraw = REDRAW_FULL;
@@ -1315,7 +1340,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
       }
 
       case OP_TOGGLE_MAILBOXES:
-	buffy = 1 - buffy;
+	state.buffy = !state.buffy;
         menu->current = 0;
         /* fall through */
 
@@ -1324,7 +1349,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	mutt_buffer_clear (prefix);
 	killPrefix = 0;
 
-	if (buffy)
+	if (state.buffy)
 	{
 	  if (examine_mailboxes (menu, &state) == -1)
 	    goto bail;
@@ -1341,7 +1366,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #endif
 	else if (examine_directory (menu, &state, mutt_b2s (LastDir), mutt_b2s (prefix)) == -1)
 	  goto bail;
-	init_menu (&state, menu, title, sizeof (title), buffy, mutt_b2s (defaultsel));
+	init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel));
 	break;
 
       case OP_BUFFY_LIST:

@@ -4015,6 +4015,24 @@ struct option_t MuttVars[] = {
   ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
   ** order (example: ``\fCset sort_browser=reverse-date\fP'').
   */
+  { "sort_browser_mailboxes", DT_SORT|DT_SORT_BROWSER, R_NONE, {.p=&BrowserSortMailboxes}, {.l=SORT_ORDER} },
+  /*
+  ** .pp
+  ** Specifies how to sort entries in the mailbox browser.  By default, the
+  ** entries are unsorted, displayed in the same order as listed
+  ** in the ``mailboxes'' command.  Valid values:
+  ** .il
+  ** .dd alpha (alphabetically)
+  ** .dd count
+  ** .dd date
+  ** .dd size
+  ** .dd unread
+  ** .dd unsorted
+  ** .ie
+  ** .pp
+  ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
+  ** order (example: ``\fCset sort_browser_mailboxes=reverse-alpha\fP'').
+  */
   { "sort_re",		DT_BOOL, R_INDEX|R_RESORT|R_RESORT_INIT, {.l=OPTSORTRE}, {.l=1} },
   /*
   ** .pp

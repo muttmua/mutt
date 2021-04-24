@@ -52,6 +52,7 @@ struct browser_state
   struct folder_file *entry;
   unsigned int entrylen;	/* number of real entries */
   unsigned int entrymax;	/* max entry */
+  unsigned int buffy : 1;
 #ifdef USE_IMAP
   short imap_browse;
   char *folder;

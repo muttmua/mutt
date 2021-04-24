@@ -63,6 +63,7 @@ int mutt_select_sort (int);
 THREAD *mutt_sort_subthreads (THREAD *, int);
 
 WHERE short BrowserSort INITVAL (SORT_SUBJECT);
+WHERE short BrowserSortMailboxes INITVAL (SORT_ORDER);
 WHERE short Sort INITVAL (SORT_DATE);
 WHERE short SortAux INITVAL (SORT_DATE); /* auxiliary sorting method */
 WHERE short SortAlias INITVAL (SORT_ALIAS);
