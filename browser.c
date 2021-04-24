@@ -84,6 +84,16 @@ static void destroy_state (struct browser_state *state)
 /* This is set by browser_sort() */
 static int sort_reverse_flag = 0;
 
+static int browser_compare_order (const void *a, const void *b)
+{
+  struct folder_file *pa = (struct folder_file *) a;
+  struct folder_file *pb = (struct folder_file *) b;
+
+  int r = pa->number - pb->number;
+
+  return (sort_reverse_flag ? -r : r);
+}
+
 static int browser_compare_subject (const void *a, const void *b)
 {
   struct folder_file *pa = (struct folder_file *) a;
@@ -144,7 +154,8 @@ static void browser_sort (struct browser_state *state)
   switch (sort_variable & SORT_MASK)
   {
     case SORT_ORDER:
-      return;
+      f = browser_compare_order;
+      break;
     case SORT_DATE:
       f = browser_compare_date;
       break;
@@ -200,7 +211,6 @@ static int select_sort (struct browser_state *state, int reverse)
 
     case 6: /* do(n)'t sort */
       new_sort = SORT_ORDER;
-      resort = 0;
       break;
 
     case -1: /* abort */
@@ -473,6 +483,9 @@ static void add_folder (MUTTMENU *m, struct browser_state *state,
 
   (state->entry)[state->entrylen].display_name = safe_strdup (display_name);
   (state->entry)[state->entrylen].full_path = safe_strdup (full_path);
+
+  (state->entry)[state->entrylen].number = state->entrylen;
+
 #ifdef USE_IMAP
   (state->entry)[state->entrylen].imap = 0;
 #endif

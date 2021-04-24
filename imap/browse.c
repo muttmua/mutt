@@ -441,6 +441,8 @@ static void imap_add_folder (char delim, char *folder, int noselect,
 
   (state->entry)[state->entrylen].display_name = safe_strdup (relpath);
 
+  (state->entry)[state->entrylen].number = state->entrylen;
+
   (state->entry)[state->entrylen].imap = 1;
   /* delimiter at the root is useless. */
   if (folder[0] == '\0')

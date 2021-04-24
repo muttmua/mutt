@@ -30,6 +30,7 @@ struct folder_file
 
   char *display_name;
   char *full_path;
+  int number;              /* used for unordered sorting */
 
   short new;               /* true if mailbox has "new mail" */
   int msg_count;           /* total number of messages */
