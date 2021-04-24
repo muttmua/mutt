@@ -2,7 +2,7 @@ image: registry.gitlab.com/muttmua/mutt/ubuntu:18.04
 
 stages:
   - shellcheck
-  - pylint
+  # - pylint
   - build
   - deploy
 
@@ -11,13 +11,13 @@ shellcheck:
   script:
     - (find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
 
-pylint:
-  stage: pylint
-  image: python:3.8-slim
-  script:
-    - pip install flake8 pylint
-    - flake8 **/*.py --max-line-length=100
-    - pylint **/*.py
+# pylint:
+#   stage: pylint
+#   image: python:3.8-slim
+#   script:
+#     - pip install flake8 pylint
+#     - flake8 **/*.py --max-line-length=100
+#     - pylint **/*.py
 
 build:
   stage: build
