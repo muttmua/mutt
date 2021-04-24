@@ -189,9 +189,9 @@ static const char *cb_format_str(char *dest, size_t destlen, size_t col, int col
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, SidebarWidth, ifstring,   cb_format_str, sbe, flags);
+    mutt_FormatString (dest, destlen, col, cols, ifstring,   cb_format_str, sbe, flags);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, SidebarWidth, elsestring, cb_format_str, sbe, flags);
+    mutt_FormatString (dest, destlen, col, cols, elsestring, cb_format_str, sbe, flags);
 
   /* We return the format string, unchanged */
   return src;
@@ -499,7 +499,7 @@ static int draw_divider (int num_rows, int num_cols)
   int i;
   for (i = 0; i < num_rows; i++)
   {
-    mutt_window_move (MuttSidebarWindow, i, SidebarWidth - delim_len);	//RAR 0 for rhs
+    mutt_window_move (MuttSidebarWindow, i, num_cols - delim_len);	//RAR 0 for rhs
     addstr (NONULL(SidebarDividerChar));
   }
 
@@ -642,7 +642,7 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
   last_folder_name = mutt_buffer_pool_get ();
   indent_folder_name = mutt_buffer_pool_get ();
 
-  int w = MIN(num_cols, (SidebarWidth - div_width));
+  int w = num_cols - div_width;
   int row = 0;
   for (entryidx = TopIndex; (entryidx < EntryCount) && (row < num_rows); entryidx++)
   {
@@ -829,12 +829,15 @@ void mutt_sb_draw (void)
   int num_rows  = MuttSidebarWindow->rows;
   int num_cols  = MuttSidebarWindow->cols;
 
+  if (!num_cols)
+    return;
+
   int div_width = draw_divider (num_rows, num_cols);
-  if (div_width < 0)
+  if ((div_width < 0) || (div_width >= num_cols))
     return;
 
   if (!prepare_sidebar (num_rows))
-    fill_empty_space (0, num_rows, SidebarWidth - div_width);
+    fill_empty_space (0, num_rows, num_cols - div_width);
   else
     draw_sidebar (num_rows, num_cols, div_width);
 }

@@ -784,10 +784,14 @@ void mutt_reflow_windows (void)
   if (option (OPTSIDEBAR))
   {
     memcpy (MuttSidebarWindow, MuttIndexWindow, sizeof (mutt_window_t));
-    MuttSidebarWindow->cols = SidebarWidth;
+    MuttSidebarWindow->cols = MAX (SidebarWidth, 0);
+    /* Ensure the index window has at least one column, to prevent
+     * pager regressions. */
+    if (MuttSidebarWindow->cols >= MuttIndexWindow->cols)
+      MuttSidebarWindow->cols = MuttIndexWindow->cols - 1;
 
-    MuttIndexWindow->cols -= SidebarWidth;
-    MuttIndexWindow->col_offset += SidebarWidth;
+    MuttIndexWindow->cols -= MuttSidebarWindow->cols;
+    MuttIndexWindow->col_offset += MuttSidebarWindow->cols;
   }
 #endif
 
