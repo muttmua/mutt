@@ -4355,7 +4355,7 @@ struct option_t MuttVars[] = {
   { "thorough_search",	DT_BOOL, R_NONE, {.l=OPTTHOROUGHSRC}, {.l=1} },
   /*
   ** .pp
-  ** Affects the \fC~b\fP and \fC~h\fP search operations described in
+  ** Affects the \fC~b\fP, \fC~B\fP, and \fC~h\fP search operations described in
   ** section ``$patterns''.  If \fIset\fP, the headers and body/attachments of
   ** messages to be searched are decoded before searching. If \fIunset\fP,
   ** messages are searched as they appear in the folder.
