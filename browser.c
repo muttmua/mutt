@@ -148,6 +148,7 @@ static void browser_sort (struct browser_state *state)
 {
   int (*f) (const void *, const void *);
   short sort_variable;
+  unsigned int first_sort_index = 0;
 
   sort_variable = state->buffy ? BrowserSortMailboxes : BrowserSort;
 
@@ -175,7 +176,33 @@ static void browser_sort (struct browser_state *state)
   }
 
   sort_reverse_flag = (sort_variable & SORT_REVERSE) ? 1 : 0;
-  qsort (state->entry, state->entrylen, sizeof (struct folder_file), f);
+
+  /* Keep the ".." entry at the top in file mode. */
+  if (!state->buffy)
+  {
+    unsigned int i;
+    struct folder_file tmp;
+
+    for (i = 0; i < state->entrylen; i++)
+    {
+      if ((mutt_strcmp (state->entry[i].display_name, "..") == 0) ||
+          (mutt_strcmp (state->entry[i].display_name, "../") == 0))
+      {
+        first_sort_index = 1;
+        if (i != 0)
+        {
+          tmp = state->entry[0];
+          state->entry[0] = state->entry[i];
+          state->entry[i] = tmp;
+        }
+        break;
+      }
+    }
+  }
+
+  if (state->entrylen > first_sort_index)
+    qsort (state->entry + first_sort_index, state->entrylen - first_sort_index,
+           sizeof (struct folder_file), f);
 }
 
 /* Returns 1 if a resort is required. */
