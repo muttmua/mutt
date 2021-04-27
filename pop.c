@@ -54,7 +54,7 @@ static const char *cache_id(const char *id)
   static char clean[SHORT_STRING];
 
   strfcpy (clean, id, sizeof(clean));
-  mutt_sanitize_filename (clean, 1);
+  mutt_sanitize_filename (clean, 0);
 
   return clean;
 }

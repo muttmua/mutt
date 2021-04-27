@@ -170,6 +170,10 @@ void mutt_debug_f (const char *, const int, const char *, const char *, ...);
 #define MUTT_CONT		(1<<0)		/* \-continuation */
 #define MUTT_EOL		(1<<1)		/* don't strip \n/\r\n */
 
+/* Flags for mutt_sanitize_filename() and mutt_buffer_sanitize_filename() */
+#define MUTT_SANITIZE_ALLOW_SLASH   (1<<0)
+#define MUTT_SANITIZE_ALLOW_8BIT    (1<<1)
+
 /* The actual library functions. */
 
 char *mutt_concat_path (char *, const char *, const char *, size_t);
@@ -225,7 +229,7 @@ void *safe_calloc (size_t, size_t);
 void *safe_malloc (size_t);
 void mutt_nocurses_error (const char *, ...);
 void mutt_remove_trailing_ws (char *);
-void mutt_sanitize_filename (char *, short);
+void mutt_sanitize_filename (char *, int flags);
 void mutt_str_replace (char **p, const char *s);
 int mutt_mkdir (char *path, mode_t mode);
 void mutt_str_adjust (char **p);

@@ -572,15 +572,24 @@ success:
 }
 
 
-static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%/";
+static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%";
 
-void mutt_sanitize_filename (char *f, short slash)
+void mutt_sanitize_filename (char *f, int flags)
 {
+  int allow_slash, allow_8bit;
+
   if (!f) return;
+
+  allow_slash = flags & MUTT_SANITIZE_ALLOW_SLASH;
+  allow_8bit = flags & MUTT_SANITIZE_ALLOW_8BIT;
 
   for (; *f; f++)
   {
-    if ((slash && *f == '/') || !strchr (safe_chars, *f))
+    if ((allow_slash && *f == '/')  ||
+        (allow_8bit && (*f & 0x80)) ||
+        strchr (safe_chars, *f))
+      continue;
+    else
       *f = '_';
   }
 }

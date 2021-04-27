@@ -404,7 +404,9 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
     fname = safe_strdup (a->filename);
     /* In send mode (!fp), we allow slashes because those are part of
      * the tempfile.  The path will be removed in expand_filename */
-    mutt_sanitize_filename (fname, fp ? 1 : 0);
+    mutt_sanitize_filename (fname,
+                            (fp ? 0 : MUTT_SANITIZE_ALLOW_SLASH) |
+                            MUTT_SANITIZE_ALLOW_8BIT);
     mutt_rfc1524_expand_filename (entry->nametemplate, fname,
                                   tempfile);
     FREE (&fname);
