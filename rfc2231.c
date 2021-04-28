@@ -104,6 +104,9 @@ void rfc2231_decode_parameters (PARAMETER **headp)
   {
     q = p->next;
 
+    /* Single value, non encoded:
+     *   attr=value
+     */
     if (!(s = strchr (p->attribute, '*')))
     {
 
@@ -123,6 +126,9 @@ void rfc2231_decode_parameters (PARAMETER **headp)
       last = &p->next;
       p->next = NULL;
     }
+    /* Single value with encoding:
+     *   attr*=us-ascii''the%20value
+     */
     else if (*(s + 1) == '\0')
     {
       *s = '\0';
@@ -138,6 +144,11 @@ void rfc2231_decode_parameters (PARAMETER **headp)
 
       dirty = 1;
     }
+    /* A parameter continuation, which may or may not be encoded:
+     *   attr*0=value
+     *     -or-
+     *   attr*0*=us-ascii''the%20value
+     */
     else
     {
       *s = '\0'; s++; /* let s point to the first character of index. */
