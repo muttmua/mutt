@@ -306,7 +306,10 @@ static void rfc2231_join_continuations (PARAMETER **head,
     if (value)
     {
       if (encoded)
+      {
 	mutt_convert_string (&value, charset, Charset, MUTT_ICONV_HOOK_FROM);
+        mutt_filter_unprintable (&value);
+      }
       *head = mutt_new_parameter ();
       (*head)->attribute = safe_strdup (attribute);
       (*head)->value = value;
