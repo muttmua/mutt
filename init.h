@@ -88,6 +88,83 @@ struct option_t
 #define ISPELL "ispell"
 #endif
 
+/* Sort Maps: */
+
+const struct mapping_t SortMethods[] = {
+  { "date",		SORT_DATE },
+  { "date-sent",	SORT_DATE },
+  { "date-received",	SORT_RECEIVED },
+  { "mailbox-order",	SORT_ORDER },
+  { "subject",		SORT_SUBJECT },
+  { "from",		SORT_FROM },
+  { "size",		SORT_SIZE },
+  { "threads",		SORT_THREADS },
+  { "to",		SORT_TO },
+  { "score",		SORT_SCORE },
+  { "spam",		SORT_SPAM },
+  { "label",		SORT_LABEL },
+  { NULL,               0 }
+};
+
+/* same as SortMethods, but with "threads" replaced by "date" */
+
+const struct mapping_t SortAuxMethods[] = {
+  { "date",		SORT_DATE },
+  { "date-sent",	SORT_DATE },
+  { "date-received",	SORT_RECEIVED },
+  { "mailbox-order",	SORT_ORDER },
+  { "subject",		SORT_SUBJECT },
+  { "from",		SORT_FROM },
+  { "size",		SORT_SIZE },
+  { "threads",		SORT_DATE },	/* note: sort_aux == threads
+					 * isn't possible.
+					 */
+  { "to",		SORT_TO },
+  { "score",		SORT_SCORE },
+  { "spam",		SORT_SPAM },
+  { "label",		SORT_LABEL },
+  { NULL,               0 }
+};
+
+
+const struct mapping_t SortBrowserMethods[] = {
+  { "alpha",	SORT_SUBJECT },
+  { "count",	SORT_COUNT },
+  { "date",	SORT_DATE },
+  { "size",	SORT_SIZE },
+  { "unread",	SORT_UNREAD },
+  { "unsorted",	SORT_ORDER },
+  { NULL,       0 }
+};
+
+const struct mapping_t SortAliasMethods[] = {
+  { "alias",	SORT_ALIAS },
+  { "address",	SORT_ADDRESS },
+  { "unsorted", SORT_ORDER },
+  { NULL,       0 }
+};
+
+const struct mapping_t SortKeyMethods[] = {
+  { "address",	SORT_ADDRESS },
+  { "date",	SORT_DATE },
+  { "keyid",	SORT_KEYID },
+  { "trust",	SORT_TRUST },
+  { NULL,       0 }
+};
+
+const struct mapping_t SortSidebarMethods[] = {
+  { "alpha",		SORT_SUBJECT },
+  { "count",		SORT_COUNT },
+  { "flagged",		SORT_FLAGGED },
+  { "mailbox-order",	SORT_ORDER },
+  { "name",		SORT_SUBJECT },
+  { "new",		SORT_UNREAD },  /* kept for compatibility */
+  { "path",		SORT_PATH },
+  { "unread",		SORT_UNREAD },
+  { "unsorted",		SORT_ORDER },
+  { NULL,		0 }
+};
+
 struct option_t MuttVars[] = {
   /*++*/
   { "abort_noattach", DT_QUAD, R_NONE, {.l=OPT_ABORTNOATTACH}, {.l=MUTT_NO} },
@@ -4668,81 +4745,6 @@ struct option_t MuttVars[] = {
   */
   /*--*/
   { NULL, 0, 0, {.l=0}, {.l=0} }
-};
-
-const struct mapping_t SortMethods[] = {
-  { "date",		SORT_DATE },
-  { "date-sent",	SORT_DATE },
-  { "date-received",	SORT_RECEIVED },
-  { "mailbox-order",	SORT_ORDER },
-  { "subject",		SORT_SUBJECT },
-  { "from",		SORT_FROM },
-  { "size",		SORT_SIZE },
-  { "threads",		SORT_THREADS },
-  { "to",		SORT_TO },
-  { "score",		SORT_SCORE },
-  { "spam",		SORT_SPAM },
-  { "label",		SORT_LABEL },
-  { NULL,               0 }
-};
-
-/* same as SortMethods, but with "threads" replaced by "date" */
-
-const struct mapping_t SortAuxMethods[] = {
-  { "date",		SORT_DATE },
-  { "date-sent",	SORT_DATE },
-  { "date-received",	SORT_RECEIVED },
-  { "mailbox-order",	SORT_ORDER },
-  { "subject",		SORT_SUBJECT },
-  { "from",		SORT_FROM },
-  { "size",		SORT_SIZE },
-  { "threads",		SORT_DATE },	/* note: sort_aux == threads
-					 * isn't possible.
-					 */
-  { "to",		SORT_TO },
-  { "score",		SORT_SCORE },
-  { "spam",		SORT_SPAM },
-  { "label",		SORT_LABEL },
-  { NULL,               0 }
-};
-
-
-const struct mapping_t SortBrowserMethods[] = {
-  { "alpha",	SORT_SUBJECT },
-  { "count",	SORT_COUNT },
-  { "date",	SORT_DATE },
-  { "size",	SORT_SIZE },
-  { "unread",	SORT_UNREAD },
-  { "unsorted",	SORT_ORDER },
-  { NULL,       0 }
-};
-
-const struct mapping_t SortAliasMethods[] = {
-  { "alias",	SORT_ALIAS },
-  { "address",	SORT_ADDRESS },
-  { "unsorted", SORT_ORDER },
-  { NULL,       0 }
-};
-
-const struct mapping_t SortKeyMethods[] = {
-  { "address",	SORT_ADDRESS },
-  { "date",	SORT_DATE },
-  { "keyid",	SORT_KEYID },
-  { "trust",	SORT_TRUST },
-  { NULL,       0 }
-};
-
-const struct mapping_t SortSidebarMethods[] = {
-  { "alpha",		SORT_SUBJECT },
-  { "count",		SORT_COUNT },
-  { "flagged",		SORT_FLAGGED },
-  { "mailbox-order",	SORT_ORDER },
-  { "name",		SORT_SUBJECT },
-  { "new",		SORT_UNREAD },  /* kept for compatibility */
-  { "path",		SORT_PATH },
-  { "unread",		SORT_UNREAD },
-  { "unsorted",		SORT_ORDER },
-  { NULL,		0 }
 };
 
 
