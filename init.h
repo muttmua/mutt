@@ -88,21 +88,23 @@ struct option_t
 #define ISPELL "ispell"
 #endif
 
-/* Sort Maps: */
+/* Sort Maps:
+ * Value-to-name lookup uses the first match.  They are sorted by value
+ * to make the duplicate values more obvious. */
 
 const struct mapping_t SortMethods[] = {
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
-  { "date-received",	SORT_RECEIVED },
-  { "mailbox-order",	SORT_ORDER },
-  { "subject",		SORT_SUBJECT },
   { "from",		SORT_FROM },
+  { "label",		SORT_LABEL },
+  { "mailbox-order",	SORT_ORDER },
+  { "date-received",	SORT_RECEIVED },
+  { "score",		SORT_SCORE },
   { "size",		SORT_SIZE },
+  { "spam",		SORT_SPAM },
+  { "subject",		SORT_SUBJECT },
   { "threads",		SORT_THREADS },
   { "to",		SORT_TO },
-  { "score",		SORT_SCORE },
-  { "spam",		SORT_SPAM },
-  { "label",		SORT_LABEL },
   { NULL,               0 }
 };
 
@@ -111,35 +113,34 @@ const struct mapping_t SortMethods[] = {
 const struct mapping_t SortAuxMethods[] = {
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
-  { "date-received",	SORT_RECEIVED },
-  { "mailbox-order",	SORT_ORDER },
-  { "subject",		SORT_SUBJECT },
-  { "from",		SORT_FROM },
-  { "size",		SORT_SIZE },
   { "threads",		SORT_DATE },	/* note: sort_aux == threads
 					 * isn't possible.
 					 */
-  { "to",		SORT_TO },
-  { "score",		SORT_SCORE },
-  { "spam",		SORT_SPAM },
+  { "from",		SORT_FROM },
   { "label",		SORT_LABEL },
+  { "mailbox-order",	SORT_ORDER },
+  { "date-received",	SORT_RECEIVED },
+  { "score",		SORT_SCORE },
+  { "size",		SORT_SIZE },
+  { "spam",		SORT_SPAM },
+  { "subject",		SORT_SUBJECT },
+  { "to",		SORT_TO },
   { NULL,               0 }
 };
 
-
 const struct mapping_t SortBrowserMethods[] = {
-  { "alpha",	SORT_SUBJECT },
   { "count",	SORT_COUNT },
   { "date",	SORT_DATE },
-  { "size",	SORT_SIZE },
-  { "unread",	SORT_UNREAD },
   { "unsorted",	SORT_ORDER },
+  { "size",	SORT_SIZE },
+  { "alpha",	SORT_SUBJECT },
+  { "unread",	SORT_UNREAD },
   { NULL,       0 }
 };
 
 const struct mapping_t SortAliasMethods[] = {
-  { "alias",	SORT_ALIAS },
   { "address",	SORT_ADDRESS },
+  { "alias",	SORT_ALIAS },
   { "unsorted", SORT_ORDER },
   { NULL,       0 }
 };
@@ -153,15 +154,15 @@ const struct mapping_t SortKeyMethods[] = {
 };
 
 const struct mapping_t SortSidebarMethods[] = {
-  { "alpha",		SORT_SUBJECT },
   { "count",		SORT_COUNT },
   { "flagged",		SORT_FLAGGED },
-  { "mailbox-order",	SORT_ORDER },
-  { "name",		SORT_SUBJECT },
-  { "new",		SORT_UNREAD },  /* kept for compatibility */
-  { "path",		SORT_PATH },
-  { "unread",		SORT_UNREAD },
   { "unsorted",		SORT_ORDER },
+  { "mailbox-order",	SORT_ORDER },
+  { "path",		SORT_PATH },
+  { "alpha",		SORT_SUBJECT },
+  { "name",		SORT_SUBJECT },
+  { "unread",		SORT_UNREAD },
+  { "new",		SORT_UNREAD },  /* kept for compatibility */
   { NULL,		0 }
 };
 
