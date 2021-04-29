@@ -92,7 +92,8 @@ struct option_t
  * Value-to-name lookup uses the first match.  They are sorted by value
  * to make the duplicate values more obvious. */
 
-const struct mapping_t SortMethods[] = {
+/*+sort+*/
+const struct mapping_t SortMethods[] = {  /* DT_SORT */
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
   { "from",		SORT_FROM },
@@ -110,7 +111,7 @@ const struct mapping_t SortMethods[] = {
 
 /* same as SortMethods, but with "threads" replaced by "date" */
 
-const struct mapping_t SortAuxMethods[] = {
+const struct mapping_t SortAuxMethods[] = {  /* DT_SORT_AUX */
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
   { "threads",		SORT_DATE },	/* note: sort_aux == threads
@@ -128,7 +129,7 @@ const struct mapping_t SortAuxMethods[] = {
   { NULL,               0 }
 };
 
-const struct mapping_t SortBrowserMethods[] = {
+const struct mapping_t SortBrowserMethods[] = {  /* DT_SORT_BROWSER */
   { "count",	SORT_COUNT },
   { "date",	SORT_DATE },
   { "unsorted",	SORT_ORDER },
@@ -138,14 +139,14 @@ const struct mapping_t SortBrowserMethods[] = {
   { NULL,       0 }
 };
 
-const struct mapping_t SortAliasMethods[] = {
+const struct mapping_t SortAliasMethods[] = {  /* DT_SORT_ALIAS */
   { "address",	SORT_ADDRESS },
   { "alias",	SORT_ALIAS },
   { "unsorted", SORT_ORDER },
   { NULL,       0 }
 };
 
-const struct mapping_t SortKeyMethods[] = {
+const struct mapping_t SortKeyMethods[] = {  /* DT_SORT_KEYS */
   { "address",	SORT_ADDRESS },
   { "date",	SORT_DATE },
   { "keyid",	SORT_KEYID },
@@ -153,7 +154,7 @@ const struct mapping_t SortKeyMethods[] = {
   { NULL,       0 }
 };
 
-const struct mapping_t SortSidebarMethods[] = {
+const struct mapping_t SortSidebarMethods[] = {  /* DT_SORT_SIDEBAR */
   { "count",		SORT_COUNT },
   { "flagged",		SORT_FLAGGED },
   { "unsorted",		SORT_ORDER },
@@ -165,6 +166,8 @@ const struct mapping_t SortSidebarMethods[] = {
   { "new",		SORT_UNREAD },  /* kept for compatibility */
   { NULL,		0 }
 };
+/*-sort-*/
+
 
 struct option_t MuttVars[] = {
   /*++*/
@@ -4076,7 +4079,7 @@ struct option_t MuttVars[] = {
   ** order, $$sort_aux is reversed again (which is not the right thing to do,
   ** but kept to not break any existing configuration setting).
   */
-  { "sort_browser",	DT_SORT|DT_SORT_BROWSER, R_NONE, {.p=&BrowserSort}, {.l=SORT_ALPHA} },
+  { "sort_browser",	DT_SORT|DT_SORT_BROWSER, R_NONE, {.p=&BrowserSort}, {.l=SORT_SUBJECT} },
   /*
   ** .pp
   ** Specifies how to sort entries in the file browser.  By default, the
