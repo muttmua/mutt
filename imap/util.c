@@ -1036,13 +1036,11 @@ int mutt_seqset_iterator_next (SEQSET_ITERATOR *iter, unsigned int *next)
     if (iter->substr_cur == iter->eostr)
       return 1;
 
-    while (!*(iter->substr_cur))
-      iter->substr_cur++;
     iter->substr_end = strchr (iter->substr_cur, ',');
     if (!iter->substr_end)
       iter->substr_end = iter->eostr;
     else
-      *(iter->substr_end) = '\0';
+      *(iter->substr_end++) = '\0';
 
     range_sep = strchr (iter->substr_cur, ':');
     if (range_sep)
