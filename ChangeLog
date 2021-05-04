@@ -1,3 +1,88 @@
+2021-05-04 10:50:51 -0700  Kevin McCarthy  <kevin@8t8.us> (23ccbe39)
+
+        * Update UPDATING file for 2.0.7.
+
+M	UPDATING
+
+2021-05-03 13:11:30 -0700  Kevin McCarthy  <kevin@8t8.us> (7c4779ac)
+
+        * Fix seqset iterator when it ends in a comma.
+        
+        If the seqset ended with a comma, the substr_end marker would be just
+        before the trailing nul.  In the next call, the loop to skip the
+        marker would iterate right past the end of string too.
+        
+        The fix is simple: place the substr_end marker and skip past it
+        immediately.
+
+M	imap/util.c
+
+2021-04-28 10:59:03 -0700  Kevin McCarthy  <kevin@8t8.us> (e0f4d46b)
+
+        * Filter unprintables for 2231 encoded continuations too.
+        
+        Changeset de8d8e8f a long time ago added the filter for 2047 and 2231
+        encoded values, to prevent strange issues.  However, it looks like it
+        missed the case where the value is broken into continuations.  Those
+        are assembled and charset converted in rfc2231_join_continuations().
+        Add a filter there too.
+
+M	rfc2231.c
+
+2021-04-24 15:20:02 -0700  Kevin McCarthy  <kevin@8t8.us> (8801dfe9)
+
+        * Turn off pylint in gitlab-ci.
+        
+        It dynamically installs the latest pylint via pip, meaning it can
+        start failing arbitrarily.
+        
+        It also appears to halt the build even on warnings.
+        
+        Since this is just checking a single contrib script, it's not worth my
+        trouble.
+
+M	.gitlab-ci.yml
+
+2021-03-16 14:56:13 -0700  Kevin McCarthy  <kevin@8t8.us> (8eb29a4c)
+
+        * Check if mutt_prepare_template() fails for -H command line arg.
+        
+        If the function fails, it will free the envelope, leading to a segv
+        just below.
+        
+        Thanks to Phil Pennock for reporting the problem.
+
+M	main.c
+
+2021-03-10 18:31:42 -0800  Kevin McCarthy  <kevin@8t8.us> (dcf1d11f)
+
+        * Fix resolve_types() newline removal and restoration.
+        
+        If the line had a '\n', the previous code would leave it off.  The
+        "buf[nl] = '\n'" at the end of the function was overwriting the old
+        nul character, but there was a new one where the original newline was.
+        
+        However, if there was not a '\n', the code was removing the nul string
+        terminator, which could cause very bad things for searches, (which are
+        the only things that use fmt after resolve_types).  Since this bug has
+        been there for 12 years, I'm guessing the lines always contain a
+        trailing '\n'.
+        
+        Now, there is a potential problem with behavior changes here...  This
+        could have an effect on the QuoteRegexp or SearchRE matches.  It turns
+        out SearchRE is compiled with REG_NEWLINE, but the other isn't.  Since
+        QuoteRegexp is (typically) only looking at the start of a line, I'm
+        going to take the risk of restoring the '\n'.
+
+M	pager.c
+
+2021-03-06 11:15:07 -0800  Kevin McCarthy  <kevin@8t8.us> (98f8cb83)
+
+        * automatic post-release commit for mutt-2.0.6
+
+M	ChangeLog
+M	VERSION
+
 2021-03-06 11:12:08 -0800  Kevin McCarthy  <kevin@8t8.us> (814f6d20)
 
         * Update UPDATING file for 2.0.6 release.
