@@ -1759,8 +1759,18 @@ BODY *mutt_remove_multipart_alternative (BODY *b)
 void mutt_make_date (BUFFER *s)
 {
   time_t t = time (NULL);
-  struct tm *l = localtime (&t);
-  time_t tz = mutt_local_tz (t);
+  struct tm *l;
+  time_t tz = 0;
+
+  if (option (OPTLOCALDATEHEADER))
+  {
+    l = localtime (&t);
+    tz = mutt_local_tz (t);
+  }
+  else
+  {
+    l = gmtime (&t);
+  }
 
   tz /= 60;
 

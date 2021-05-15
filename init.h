@@ -1954,6 +1954,12 @@ struct option_t MuttVars[] = {
   ** from your spool mailbox to your $$mbox mailbox, or as a result of
   ** a ``$mbox-hook'' command.
   */
+  { "local_date_header", DT_BOOL, R_NONE, {.l=OPTLOCALDATEHEADER}, {.l=1} },
+  /*
+  ** .pp
+  ** If \fIset\fP, convert the date in the Date header of sent emails into local
+  ** (sender's) timezone.
+  */
   { "mail_check",	DT_NUM,  R_NONE, {.p=&BuffyTimeout}, {.l=5} },
   /*
   ** .pp
