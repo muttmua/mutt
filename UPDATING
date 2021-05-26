@@ -9,6 +9,55 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.1.0 (unreleased):
+
+  ! The -d option allows a negative number. If negative, debug files are
+    not rotated. The debug level is the absolute value.
+  + <view-pager> in the attachment menu uses a copiousoutput mailcap
+    entry, or falls back to raw text.
+  + <view-mailcap>, <view-pager>, and <view-text> functions added to the
+    compose menu.
+  + <view-alt-pager> in the compose menu allows previewing the output
+    of the $send_multipart_alternative_filter the way <view-pager> does.
+  + <list-action>, bound to Esc-L in the index and pager menu, brings
+    up a menu of operations to perform on mailing list emails, such as
+    subscribe/unsubscribe.
+  + <skip-headers>, bound to 'H' in the pager, will skip to the first
+    blank line following the headers.
+  ! ~h patterns over IMAP and POP3 will only download the headers of the
+    message.  However with message caching enabled (via $message_cachedir)
+    the whole message will still be downloaded.
+  + $ssl_verify_host_override allows manually specifying the host name
+    to verify a server certificate against.
+  ! --enable-hcache, with no particular backend enabled, will scan in
+    the order: kyotocabinet, tokyocabinet, lmdb, qdbm, gdbm, bdb.
+  ! $allow_ansi understands 256-color ANSI escape sequences.
+  + $message_id_format can be used to specify a custom message-id
+    format.  Since it's a format string, this can also use a filter.
+    Please use this option with care, as Mutt won't check if your
+    message-id is legal.
+  ! mailboxes -nonotify will poll a mailbox for new mail, but will not
+    trigger new mail notifications (e.g. $beep_new).
+  ! $reverse_name now affects tag actions in the attachment menu.
+  ! ANSI sequences are filtered for inline-forwarded autoview content,
+    in addition to replies.
+  ! $forward_decrypt is now a quadoption, defaulting 'yes' for backward
+    compatibility.
+  ! Pattern functions, (e.g. search and limit) can be interrupted with
+    ctrl-c.
+  ! The default mailto_allow list now includes cc, in-reply-to, and
+    references.
+  + $sort_browser_mailboxes controls mailbox browsing, and defaults
+    "unsorted".  $sort_browser now only controls directory browsing.
+  ! $sort_browser and $sort_browser_mailboxes "unsorted" now means the
+    order added (e.g. specified in the muttrc).  Switching back to
+    "unsorted" will now resort in that order (previously it was a no-op.)
+  ! In the browser ".." is excluded from sorting and kept at the top.
+  ! Temp filenames generated for mailcap invocation now allow non-ascii
+    characters.
+  + $local_date_header, when unset, causes the date in the Date header
+    to be formatted using the GMT timezone.
+
 2.0.7 (2021-05-04):
 
   ! Bug fix release.
