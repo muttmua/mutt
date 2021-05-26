@@ -3905,6 +3905,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
    */
   if (!Fqdn)
   {
+    dprint (1, (debugfile, "Setting $hostname\n"));
 #ifdef DOMAIN
     domain = safe_strdup (DOMAIN);
 #endif /* DOMAIN */
@@ -3931,6 +3932,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
        * network.
        */
       Fqdn = safe_strdup(utsname.nodename);
+    dprint (1, (debugfile, "$hostname set to \"%s\"\n", NONULL (Fqdn)));
   }
 
 
