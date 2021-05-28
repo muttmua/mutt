@@ -1964,6 +1964,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
 
   /* this is handled here so that the user can match ~f in send-hook */
   if (option (OPTREVNAME) && ctx &&
+      !(sctx->flags & (SENDPOSTPONED|SENDRESEND)) &&
       (sctx->flags & (SENDREPLY | SENDFORWARD | SENDTOSENDER)))
   {
     /* we shouldn't have to worry about freeing `sctx->msg->env->from' before
