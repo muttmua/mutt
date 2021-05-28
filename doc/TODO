@@ -30,10 +30,6 @@ Style/Technical
   perl already to build docs, think about/look for simple perl
   templating engine.
 
-* Find a way (XSLT?) to trim the TOC for the option reference; it's
-  ugly but we probably want to keep the TOC depth as-is for other
-  sections.
-
 Content
 -------
 
