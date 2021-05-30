@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.0.7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2021-05-28 09:35-0700\n"
-"PO-Revision-Date: 2021-05-29 12:40+0200\n"
+"PO-Revision-Date: 2021-05-30 07:49+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -30,7 +30,7 @@ msgstr ""
 # (to) tag → Auswählen
 # Art der Anführungszeichen: „“
 # Operation → Aktion (aber es gibt auch actions) oder Operation oder Funktion // Offen
-# FIXME Somtimes "folder" == "mailbox", but sometimes this seems different. Please check
+# "folder" == "mailbox" (confirmed by upstream), always use "postfach" 
 #: account.c:163
 #, c-format
 msgid "Username at %s: "
@@ -1333,7 +1333,7 @@ msgstr "Postfach %s kann nicht geöffnet werden."
 
 #: compose.c:1331
 msgid "No messages in that folder."
-msgstr "Keine Nachrichten in diesem Ordner."
+msgstr "Keine Nachrichten in diesem Postfach."
 
 #: compose.c:1340
 msgid "Tag the messages you want to attach!"
@@ -1397,7 +1397,7 @@ msgstr "Unbekannter Content-Type %s"
 msgid "Can't create file %s"
 msgstr "Datei %s kann nicht angelegt werden."
 
-# FIXME Better: Attachment can't be created
+# Upstream: This is a quote, may be translated freely (shorter)
 #: compose.c:1669
 msgid "What we have here is a failure to make an attachment"
 msgstr "Anhang kann nicht erzeugt werden"
@@ -2069,7 +2069,7 @@ msgstr "gpgme_op_keylist_next fehlgeschlagen: %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Alle passenden Schlüssel sind abgelaufen/zurückgezogen."
 
-# FIXME Oder »Verlassen«?
+# CHECK Oder »Verlassen«?
 #: crypt-gpgme.c:4557 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1056 pgpkey.c:516
 #: smime.c:461
 msgid "Exit  "
@@ -2336,14 +2336,13 @@ msgstr ""
 "Schreibschutz des Postfachs kann im schreibgeschützten Modus nicht "
 "aufgehoben werden."
 
-# CHECK: Folder → Postfach korrekt? Oft sonst Ordner Aber »folder exit«?
 #: curs_main.c:355
 msgid "Changes to folder will be written on folder exit."
-msgstr "Änderungen an diesem Ordner werden beim Verlassen geschrieben."
+msgstr "Änderungen an diesem Postfach werden beim Verlassen geschrieben."
 
 #: curs_main.c:360
 msgid "Changes to folder will not be written."
-msgstr "Änderungen an diesem Ordner werden nicht geschrieben."
+msgstr "Änderungen an diesem Postfach werden nicht geschrieben."
 
 #: curs_main.c:548
 msgid "Quit"
@@ -2593,13 +2592,12 @@ msgstr "Nachricht kann nicht bearbeitet werden"
 msgid "%d labels changed."
 msgstr "%d Label verändert."
 
-# FIXME Check
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
 #: curs_main.c:2288 pager.c:3077
 msgid "No labels changed."
-msgstr "Postfach unverändert."
+msgstr "Keine Labels verändert."
 
 #. L10N: CHECK_ACL
 #: curs_main.c:2381
@@ -2619,7 +2617,7 @@ msgstr "Makro-Tastenkürzel eingeben: "
 msgid "message hotkey"
 msgstr "Tastaturkürzel für Nachricht"
 
-# FIXME Check
+# CHECK translation
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
@@ -2734,17 +2732,17 @@ msgstr "%s: Unbekannter Editor-Befehl (~? für Hilfestellung)\n"
 #: editmsg.c:79
 #, c-format
 msgid "could not create temporary folder: %s"
-msgstr "Temporärer Ordner konnte nicht erzeugt werden: %s"
+msgstr "Temporäres Postfach konnte nicht erzeugt werden: %s"
 
 #: editmsg.c:92
 #, c-format
 msgid "could not write temporary mail folder: %s"
-msgstr "In temporäre Mail-Ordner konnte nicht geschrieben werden: %s"
+msgstr "In temporäres E-Mail-Postfch konnte nicht geschrieben werden: %s"
 
 #: editmsg.c:114
 #, c-format
 msgid "could not truncate temporary mail folder: %s"
-msgstr "Temporärer Mail-Ordner konnte nicht gekürzt werden: %s"
+msgstr "Temporäres E-Mail-Postfach konnte nicht gekürzt werden: %s"
 
 #: editmsg.c:143
 msgid "Message file is empty!"
@@ -2759,7 +2757,6 @@ msgstr "Nachricht nicht verändert!"
 msgid "Can't open message file: %s"
 msgstr "Nachrichtendatei kann nicht geöffnet werden: %s"
 
-# FIXME Folder -> Mailbox?
 #. L10N: %s is from strerror(errno)
 #: editmsg.c:166 editmsg.c:195
 #, c-format
@@ -3041,11 +3038,11 @@ msgstr "%s ist ein ungültiger IMAP-Pfad"
 
 #: imap/browse.c:85
 msgid "Getting folder list..."
-msgstr "Liste der Ordner wird geholt …"
+msgstr "Liste der Postfächer wird geholt …"
 
 #: imap/browse.c:209
 msgid "No such folder"
-msgstr "Ordner existiert nicht."
+msgstr "Postfach existiert nicht."
 
 #: imap/browse.c:262
 msgid "Create mailbox: "
@@ -3059,10 +3056,9 @@ msgstr "Postfach muss einen Namen haben."
 msgid "Mailbox created."
 msgstr "Postfach wurde erstellt."
 
-# Check: Folder → Postfach hier?
 #: imap/browse.c:310
 msgid "Cannot rename root folder"
-msgstr "Haupt-Ordner für Postfach kann nicht umbenannt werden."
+msgstr "Haupt-Postfach kann nicht umbenannt werden."
 
 #: imap/browse.c:314
 #, c-format
@@ -3767,7 +3763,7 @@ msgstr ""
 "  -d <Stufe>\tDebug-Informationen nach ~/.muttdebug0 schreiben\n"
 "\t\t0=> kein debug; <0 => .muttdebug-Datei erhalten"
 
-# FIXME: Übersetzung von -E
+# CHECK: Übersetzung von -E
 #: main.c:156
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
@@ -3790,7 +3786,6 @@ msgstr ""
 "  -n\t\tDas Muttrc des Systems ignorieren\n"
 "  -p\t\tEine zurückgestellte Nachricht zurückholen"
 
-# CHECK: Folder → Postfach korrekt? Oft sonst Ordner
 #: main.c:166
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
@@ -4793,13 +4788,12 @@ msgstr "gelesene Nachrichten"
 msgid "messages whose Subject header matches EXPR"
 msgstr "Nachrichten, deren Betreff-Kopfzeile auf AUSDR passt"
 
-# FIXME: What is this? Is the concept of "superseded messages" described somewhere?
 #. L10N:
 #. Pattern Completion Menu description for ~S
 #.
 #: pattern.c:221
 msgid "superseded messages"
-msgstr ""
+msgstr "ersetzte Nachrichten"
 
 #. L10N:
 #. Pattern Completion Menu description for ~t
@@ -4848,7 +4842,7 @@ msgstr "kryptographisch überprüfte Nachrichten"
 #.
 #: pattern.c:256
 msgid "messages whose References header matches EXPR"
-msgstr ""
+msgstr "Nachrichten, deren Referenz-Kopfzeilen auf AUSDR passen"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
@@ -6662,13 +6656,12 @@ msgstr "Ansicht des Anhangs mittels Mailcap"
 msgid "view multipart/alternative in pager using copiousoutput mailcap"
 msgstr "Ansicht von multipart/alternative in Seitenbetrachter mithilfe von Mailcaps copiousoutput"
 
-# CHECK: Folder → Postfach korrekt? Oft sonst Ordner
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
 #.
 #: OPS:324
 msgid "write the message to a folder"
-msgstr "Nachricht in Ordner schreiben"
+msgstr "Nachricht in Postfach schreiben"
 
 #. L10N: Help screen description for OP_COPY_MESSAGE
 #. index menu: <copy-message>
@@ -7193,7 +7186,6 @@ msgstr "Neues Postfach im Dateibrowser auswählen"
 msgid "select a new mailbox from the browser in read only mode"
 msgstr "Neues Postfach im Dateibrowser im nur-Lesen-Modus öffnen"
 
-# CHECK: folder → postfach?
 #. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
 #. index menu: <change-folder>
 #. pager menu: <change-folder>
