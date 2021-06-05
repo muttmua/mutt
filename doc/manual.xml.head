@@ -7110,7 +7110,9 @@ mail using the <literal>&lt;check-new&gt;</literal> function which is
 unbound by default. Pressing TAB will bring up a menu showing the files
 specified by the <command>mailboxes</command> command, and indicate
 which contain new messages. Mutt will automatically enter this mode when
-invoked from the command line with the <literal>-y</literal> option.
+invoked from the command line with the <literal>-y</literal> option,
+or from the index/pager via the <literal>&lt;browse-mailboxes&gt;</literal>
+function.
 </para>
 
 <para>
