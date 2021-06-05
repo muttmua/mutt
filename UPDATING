@@ -37,8 +37,9 @@ The keys used are:
     Please use this option with care, as Mutt won't check if your
     message-id is legal.
   ! mailboxes -nonotify will poll a mailbox for new mail, but will not
-    trigger new mail notifications (e.g. $beep_new).
-  ! $reverse_name now affects tag actions in the attachment menu.
+    trigger new mail notifications (e.g. $beep_new or $new_mail_command).
+  ! $reverse_name affects tagged reply/forward/compose-to-sender
+    actions too.
   ! ANSI sequences are filtered for inline-forwarded autoview content,
     in addition to replies.
   ! $forward_decrypt is now a quadoption, defaulting 'yes' for backward
