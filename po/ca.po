@@ -1,5 +1,5 @@
 # Catalan messages for mutt.
-# Ivan Vilata i Balaguer <ivan@selidor.net>, 2001-2004, 2006-2009, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Ivan Vilata i Balaguer <ivan@selidor.net>, 2001-2004, 2006-2009, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 #
 # Sóc Ivan, aquestes són les convencions que adopte per a la 1.5.22:
 #
@@ -51,10 +51,10 @@
 # <https://www.softcatala.org/recursos/quality/gnutools.html>.
 msgid ""
 msgstr ""
-"Project-Id-Version: mutt 2.0\n"
+"Project-Id-Version: mutt 2.1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-06-12 10:38-0700\n"
-"PO-Revision-Date: 2020-11-06 22:34+0100\n"
+"POT-Creation-Date: 2021-05-28 09:35-0700\n"
+"PO-Revision-Date: 2021-06-12 21:17+0200\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -1067,37 +1067,29 @@ msgstr "S’estan copiant els missatges marcats…"
 #. Message when an index/pager save operation fails for some reason.
 #.
 #: commands.c:1049
-#, fuzzy
-#| msgid "Error sending message."
 msgid "Error saving message"
-msgstr "Error en enviar el missatge."
+msgstr "Error en desar el missatge."
 
 #. L10N:
 #. Message when an index tagged save operation fails for some reason.
 #.
 #: commands.c:1054
-#, fuzzy
-#| msgid "Saving tagged messages..."
 msgid "Error saving tagged messages"
-msgstr "S’estan desant els missatges marcats…"
+msgstr "Error en desar els missatges marcats."
 
 #. L10N:
 #. Message when an index/pager copy operation fails for some reason.
 #.
 #: commands.c:1062
-#, fuzzy
-#| msgid "Error bouncing message!"
 msgid "Error copying message"
-msgstr "Error en redirigir el missatge."
+msgstr "Error en copiar el missatge."
 
 #. L10N:
 #. Message when an index tagged copy operation fails for some reason.
 #.
 #: commands.c:1067
-#, fuzzy
-#| msgid "Copying tagged messages..."
 msgid "Error copying tagged messages"
-msgstr "S’estan copiant els missatges marcats…"
+msgstr "Error en copiar els missatges marcats."
 
 # «%s» és un codi de caràcters.  ivb
 #: commands.c:1140
@@ -1385,7 +1377,7 @@ msgid "You are on the first entry."
 msgstr "Vos trobeu a la primera entrada."
 
 # El primer camp és una capçalera de correu.  ivb
-#: compose.c:1197 send.c:2460
+#: compose.c:1197 send.c:2459
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "L’IDN de «%s» no és vàlid: %s"
@@ -1634,7 +1626,7 @@ msgstr "S’està invocant PGP…"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "No s’ha pogut enviar el missatge en línia.  Emprar PGP/MIME?"
 
-#: crypt.c:223 send.c:2425
+#: crypt.c:223 send.c:2424
 msgid "Mail not sent."
 msgstr "No s’ha enviat el missatge."
 
@@ -3427,10 +3419,8 @@ msgstr "S’estan recollint els canvis als senyaladors…"
 #. using a normal download.
 #.
 #: imap/message.c:789
-#, fuzzy
-#| msgid "Reopening mailbox..."
 msgid "QRESYNC failed.  Reopening mailbox."
-msgstr "S’està reobrint la bústia…"
+msgstr "L’ordre «QRESYNC» ha fallat.  Es reobrirà la bústia."
 
 #: imap/message.c:844
 msgid "Unable to fetch headers from this IMAP server version."
@@ -3808,53 +3798,47 @@ msgstr "No resta memòria."
 
 #: listmenu.c:51 listmenu.c:62
 msgid "Post"
-msgstr ""
+msgstr "Enviar"
 
 #: listmenu.c:52 listmenu.c:63
-#, fuzzy
-#| msgid "Subscribed to %s"
 msgid "Subscribe"
-msgstr "S’ha subscrit a «%s»."
+msgstr "Subscriure"
 
 #: listmenu.c:53 listmenu.c:64
-#, fuzzy
-#| msgid "Unsubscribed from %s"
 msgid "Unsubscribe"
-msgstr "S’ha dessubscrit de «%s»."
+msgstr "Dessubscriure"
 
 #: listmenu.c:54 listmenu.c:66
 msgid "Owner"
-msgstr ""
+msgstr "Contactar amb propietari"
 
 #: listmenu.c:65
 msgid "Archives"
-msgstr ""
+msgstr "Veure arxius"
 
+# L’argument és una acció traduïda com «Subscriure» o «Arxius», sense cometes.  ivb
+# «Per a» és més neutre que «de».  ivb
 #. L10N: given when an rfc 2369 action is not specified by this message
 #: listmenu.c:208
-#, fuzzy, c-format
-#| msgid "No decryption engine available for message"
+#, c-format
 msgid "No list action available for %s."
-msgstr "No hi ha cap mecanisme disponible per a desxifrar el missatge."
+msgstr "No es troba l’acció «%s» per a la llista."
 
+# FIXME: Not very useful if the URI is not shown.  ivb
 #. L10N: given when a message's rfc 2369 action is not mailto:
 #: listmenu.c:215
 msgid "List actions only support mailto: URIs. (Try a browser?)"
-msgstr ""
+msgstr "Les accions de llista només admeten URI del tipus «mailto:».  Proveu amb un navegador."
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
 #: listmenu.c:224
-#, fuzzy
-#| msgid "Could not reopen mailbox!"
 msgid "Could not parse mailto: URI."
-msgstr "No s’ha pogut reobrir la bústia."
+msgstr "No s’ha pogut interpretar la URI del tipus «mailto:»."
 
 #. L10N: menu name for list actions
 #: listmenu.c:251
-#, fuzzy
-#| msgid "No mailing lists found!"
 msgid "Available mailing list actions"
-msgstr "No s’ha trobat cap llista de correu."
+msgstr "Accions de la llista de correu"
 
 #: main.c:79
 msgid ""
@@ -3870,22 +3854,15 @@ msgstr ""
 "<ivan@selidor.net>.\n"
 
 #: main.c:84
-#, fuzzy
-#| msgid ""
-#| "Copyright (C) 1996-2020 Michael R. Elkins and others.\n"
-#| "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
-#| "Mutt is free software, and you are welcome to redistribute it\n"
-#| "under certain conditions; type `mutt -vv' for details.\n"
 msgid ""
 "Copyright (C) 1996-2021 Michael R. Elkins and others.\n"
 "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
 "Mutt is free software, and you are welcome to redistribute it\n"
 "under certain conditions; type `mutt -vv' for details.\n"
 msgstr ""
-"Copyright © 1996‐2020 Michael R. Elkins i d’altres.\n"
+"Copyright © 1996‐2021 Michael R. Elkins i d’altres.\n"
 "Mutt s’ofereix SENSE CAP GARANTIA; empreu «mutt -vv» per a obtenir‐ne més\n"
-"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo "
-"sota\n"
+"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo sota\n"
 "certes condicions; empreu «mutt -vv» per a obtenir‐ne més detalls.\n"
 
 #: main.c:101
@@ -3977,13 +3954,13 @@ msgstr ""
 "                       estàndard."
 
 #: main.c:152
-#, fuzzy
-#| msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgid ""
 "  -d <level>\tlog debugging output to ~/.muttdebug0\n"
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
 msgstr ""
-"  -d NIVELL            Escriu els missatges de depuració a «~/.muttdebug0»."
+"  -d NIVELL            Escriu els missatges de depuració a «~/.muttdebug0».\n"
+"                       0 no produeix missatges, menor que 0 inhabilita la\n"
+"                       rotació de fitxers «.muttdebug»."
 
 #: main.c:156
 msgid ""
@@ -4074,10 +4051,8 @@ msgstr "No es pot emprar l’opció «-E» amb l’entrada estàndard.\n"
 #. file fails for some reason.
 #.
 #: main.c:1137
-#, fuzzy
-#| msgid "Cannot create filter"
 msgid "Cannot parse draft file\n"
-msgstr "No s’ha pogut crear el filtre."
+msgstr "No s’ha pogut interpretar el fitxer esborrany.\n"
 
 #: main.c:1208
 #, c-format
@@ -4514,10 +4489,9 @@ msgstr "S’ha desat el certificat."
 #. to decrypt the cert.  %s is the hostname.
 #.
 #: mutt_ssl.c:1426
-#, fuzzy, c-format
-#| msgid "Password for %s@%s: "
+#, c-format
 msgid "Password for %s client cert: "
-msgstr "Contrasenya per a «%s@%s»: "
+msgstr "Contrasenya del certificat de client per a «%s»: "
 
 #: mutt_ssl_gnutls.c:139 mutt_ssl_gnutls.c:167
 msgid "Error: no TLS socket open"
@@ -4714,10 +4688,8 @@ msgstr "No s’han pogut esborrar els missatges."
 #. a mailbox.
 #.
 #: mx.c:823
-#, fuzzy
-#| msgid "Unable to open temporary file!"
 msgid "Unable to append to trash folder"
-msgstr "No s’ha pogut obrir el fitxer temporal."
+msgstr "No s’ha pogut afegir a la carpeta paperera."
 
 # Condició d’error.  ivb
 #: mx.c:832
@@ -4833,7 +4805,7 @@ msgstr "No hi ha més text sense citar després del text citat."
 #.
 #: pager.c:2618
 msgid "Already skipped past headers."
-msgstr ""
+msgstr "Ja s’ha avançat fins a passar les capçaleres."
 
 #. L10N:
 #. Displayed if <skip-headers> is invoked in the pager, but there is
@@ -4843,7 +4815,7 @@ msgstr ""
 #.
 #: pager.c:2637
 msgid "No text past headers."
-msgstr ""
+msgstr "No hi ha cap text després de les capçaleres."
 
 #: parse.c:715
 msgid "multipart message has no boundary parameter!"
@@ -6084,59 +6056,59 @@ msgstr "No es pot postposar; $postponed no està establerta."
 msgid "Recall postponed message?"
 msgstr "Voleu recuperar un missatge posposat?"
 
-#: send.c:2179
+#: send.c:2178
 msgid "Edit forwarded message?"
 msgstr "Voleu editar el missatge a reenviar?"
 
-#: send.c:2243
+#: send.c:2242
 msgid "Abort unmodified message?"
 msgstr "Voleu avortar el missatge no modificat?"
 
-#: send.c:2245
+#: send.c:2244
 msgid "Aborted unmodified message."
 msgstr "S’avorta el missatge no modificat."
 
 # ABREUJAT!  ivb
 # No heu configurat cap implementació criptogràfica.  S’inhabilita l’opció de seguretat del missatge.
-#: send.c:2363
+#: send.c:2362
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Cal configurar implementació criptogràfica.  Es retira seguretat del "
 "missatge."
 
-#: send.c:2432
+#: send.c:2431
 msgid "Message postponed."
 msgstr "S’ha posposat el missatge."
 
-#: send.c:2448
+#: send.c:2447
 msgid "No recipients are specified!"
 msgstr "No s’ha indicat cap destinatari."
 
-#: send.c:2453
+#: send.c:2452
 msgid "No recipients were specified."
 msgstr "No s’ha indicat cap destinatari."
 
-#: send.c:2469
+#: send.c:2468
 msgid "No subject, abort sending?"
 msgstr "No hi ha assumpte; voleu avortar l’enviament?"
 
-#: send.c:2473
+#: send.c:2472
 msgid "No subject specified."
 msgstr "No s’ha indicat l’assumpte."
 
-#: send.c:2487
+#: send.c:2486
 msgid "No attachments, abort sending?"
 msgstr "No hi ha cap adjunció; voleu avortar l’enviament?"
 
-#: send.c:2490
+#: send.c:2489
 msgid "Attachment referenced in message is missing"
 msgstr "Manca l’adjunció esmentada en el missatge."
 
-#: send.c:2562 smtp.c:191
+#: send.c:2561 smtp.c:191
 msgid "Sending message..."
 msgstr "S’està enviant el missatge…"
 
-#: send.c:2605
+#: send.c:2604
 msgid "Could not send the message."
 msgstr "No s’ha pogut enviar el missatge."
 
@@ -6146,15 +6118,15 @@ msgstr "No s’ha pogut enviar el missatge."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2633 send.c:2659
+#: send.c:2632 send.c:2658
 msgid "Setting reply flags."
 msgstr "S’estan establint els senyaladors de missatge respost."
 
-#: send.c:2704
+#: send.c:2703
 msgid "Mail sent."
 msgstr "S’ha enviat el missatge."
 
-#: send.c:2704
+#: send.c:2703
 msgid "Sending in background."
 msgstr "S’està enviant en segon pla."
 
@@ -6162,7 +6134,7 @@ msgstr "S’està enviant en segon pla."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2769
+#: send.c:2768
 msgid "Editing backgrounded."
 msgstr "S’està editant en segon pla."
 
@@ -6188,10 +6160,8 @@ msgstr "No s’ha pogut obrir «%s»."
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
 #: sendlib.c:1315
-#, fuzzy
-#| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
-msgstr "Voleu imprimir les adjuncions seleccionades?"
+msgstr "Voleu desxifrar el missatge adjunt?"
 
 #. L10N: Prompt when forwarding a message with
 #. $mime_forward_decode set, and there was a problem decoding
@@ -6202,7 +6172,7 @@ msgstr "Voleu imprimir les adjuncions seleccionades?"
 msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
-msgstr ""
+msgstr "Ha ocorregut un problema en descodificar el missatge a adjuntar.  Voleu provar sense descodificar?"
 
 #. L10N: Prompt when attaching or forwarding a message with
 #. $forward_decrypt set, and there was a problem decrypting
@@ -6213,7 +6183,7 @@ msgstr ""
 msgid ""
 "There was a problem decrypting the message for attachment.  Try again with "
 "decryption turned off?"
-msgstr ""
+msgstr "Ha ocorregut un problema en desxifrar el missatge a adjuntar.  Voleu provar sense desxifrar?"
 
 #. L10N:
 #. The first line of output from $send_multipart_alternative_filter
@@ -6593,10 +6563,8 @@ msgstr "Força la visualització d’una adjunció emprant «mailcap»."
 #. compose menu: <view-pager>
 #.
 #: OPS:33
-#, fuzzy
-#| msgid "force viewing of attachment using mailcap"
 msgid "view attachment in pager using copiousoutput mailcap"
-msgstr "Força la visualització d’una adjunció emprant «mailcap»."
+msgstr "Mostra una adjunció en un visor emprant «mailcap» amb eixida copiosa."
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -6994,10 +6962,8 @@ msgstr "Mostra la part «multipart/alternative» emprant «mailcap»."
 #. compose menu: <view-alt-pager>
 #.
 #: OPS:319
-#, fuzzy
-#| msgid "view multipart/alternative using mailcap"
 msgid "view multipart/alternative in pager using copiousoutput mailcap"
-msgstr "Mostra la part «multipart/alternative» emprant «mailcap»."
+msgstr "Mostra la part «multipart/alternative» en un visor emprant «mailcap» amb eixida copiosa."
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
@@ -7433,40 +7399,36 @@ msgstr "Va a la darrera entrada."
 #. pager menu: <list-action>
 #.
 #: OPS:637
-#, fuzzy
-#| msgid "No mailing lists found!"
 msgid "perform mailing list action"
-msgstr "No s’ha trobat cap llista de correu."
+msgstr "Realitza una acció de la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_ARCHIVE
 #. list menu: <list-archive>
 #.
 #: OPS:642
 msgid "retrieve list archive information"
-msgstr ""
+msgstr "Obté informació sobre els arxius de la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_HELP
 #. list menu: <list-help>
 #.
 #: OPS:647
 msgid "retrieve list help"
-msgstr ""
+msgstr "Obté ajuda sobre la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_OWNER
 #. list menu: <list-owner>
 #.
 #: OPS:652
 msgid "contact list owner"
-msgstr ""
+msgstr "Contacta amb el propietari de la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_POST
 #. list menu: <list-post>
 #.
 #: OPS:657
-#, fuzzy
-#| msgid "reply to specified mailing list"
 msgid "post to mailing list"
-msgstr "Respon a la llista de correu indicada."
+msgstr "Envia a la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_REPLY
 #. index menu: <list-reply>
@@ -7481,19 +7443,15 @@ msgstr "Respon a la llista de correu indicada."
 #. list menu: <list-subscribe>
 #.
 #: OPS:669
-#, fuzzy
-#| msgid "reply to specified mailing list"
 msgid "subscribe to mailing list"
-msgstr "Respon a la llista de correu indicada."
+msgstr "Es subscriu a la llista de correu."
 
 #. L10N: Help screen description for OP_LIST_UNSUBSCRIBE
 #. list menu: <list-unsubscribe>
 #.
 #: OPS:674
-#, fuzzy
-#| msgid "Unsubscribed from %s"
 msgid "unsubscribe from mailing list"
-msgstr "S’ha dessubscrit de «%s»."
+msgstr "Es dessubscriu de la llista de correu."
 
 #. L10N: Help screen description for OP_MACRO
 #: OPS:677
@@ -7838,10 +7796,8 @@ msgstr "Avança fins al final del text citat."
 #. pager menu: <skip-headers>
 #.
 #: OPS:928
-#, fuzzy
-#| msgid "skip beyond quoted text"
 msgid "skip beyond headers"
-msgstr "Avança fins al final del text citat."
+msgstr "Avança fins a passar les capçaleres."
 
 #. L10N: Help screen description for OP_PAGER_TOP
 #. pager menu: <top>
@@ -8433,10 +8389,3 @@ msgstr "Mostra o amaga la llista de bústies."
 #: OPS.SMIME:18
 msgid "show S/MIME options"
 msgstr "Mostra les opcions de S/MIME."
-
-#, c-format
-#~ msgid "Error: value '%s' is invalid for -d.\n"
-#~ msgstr "Error: L’argument de l’opció «-d» no és vàlid: %s\n"
-
-#~ msgid "SMTP server does not support authentication"
-#~ msgstr "El servidor SMTP no admet autenticació."
