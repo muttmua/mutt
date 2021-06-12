@@ -9,7 +9,7 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
-2.1.0 (unreleased):
+2.1.0 (2021-06-12):
 
   ! The -d option allows a negative number. If negative, debug files are
     not rotated. The debug level is the absolute value.
