@@ -1,3 +1,2250 @@
+2021-06-12 10:40:18 -0700  Kevin McCarthy  <kevin@8t8.us> (bfccf9c6)
+
+        * Update UPDATING file for 2.1.0 release.
+
+M	UPDATING
+
+2021-06-07 10:15:24 -0700  Vsevolod Volkov  <vvv@mutt.org.ua> (0b2be236)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2021-06-07 10:14:14 -0700  Vsevolod Volkov  <vvv@mutt.org.ua> (6b458ebd)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2021-06-05 13:49:57 -0700  Kevin McCarthy  <kevin@8t8.us> (e8792708)
+
+        * Minor UPDATING file fixes.
+
+M	UPDATING
+
+2021-06-05 13:48:05 -0700  Kevin McCarthy  <kevin@8t8.us> (bab86bf4)
+
+        * Mention <browse-mailboxes> in the new-mail documentation.
+        
+        Add to the sentence mentioning '-y'.
+
+M	doc/manual.xml.head
+
+2021-06-03 10:40:22 +0200  Grzegorz Szymaszek  <gszymaszek@short.pl> (6a7f32a6)
+
+        * Update the Polish translation for Mutt 2.1
+
+M	po/pl.po
+
+2021-05-31 16:55:39 +0200  Petr Písař  <petr.pisar@atlas.cz> (732efe2e)
+
+        * Update Czech translatation for mutt-2.1.0
+
+M	po/cs.po
+
+2021-05-30 10:20:50 -0700  Helge Kreutzmann  <debian@helgefjell.de> (f0a64564)
+
+        * Update de.po.
+
+M	po/de.po
+
+2021-05-29 12:39:25 -0700  Helge Kreutzmann  <debian@helgefjell.de> (b37d5aa1)
+
+        * Update de.po.
+
+M	po/de.po
+
+2021-05-29 12:38:04 -0700  Kevin McCarthy  <kevin@8t8.us> (c728976c)
+
+        * Revert "Update de.po."
+        
+        This reverts commit e450615f5b0a77539916d9e8542c9a64bca73c09.
+        
+        Author was not properly attributed.  Will reapply with author set.
+
+M	po/de.po
+
+2021-05-29 12:14:30 -0700  Kevin McCarthy  <kevin@8t8.us> (e450615f)
+
+        * Update de.po.
+
+M	po/de.po
+
+2021-05-28 21:21:32 +0200  Flammie Pirinen  <flammie@iki.fi> (3d24855d)
+
+        * Update Finnish translation
+
+M	po/fi.po
+
+2021-05-28 20:48:58 +0200  Eike Rathke  <erack@erack.de> (36fb911f)
+
+        * Do not set From reverse name on postponed or to be resend messages
+        
+        Messages to be resend or resumed from postponed already had
+        reverse names and alternates evaluated the first time they entered
+        the compose menu and send-hook were already executed then. The
+        user may also had edited the From to any other content before
+        postponing or sending the message. Upon resuming, do not overwrite
+        with a reverse_name lookup and do not remove the real name if
+        reverse_realname=no is set.
+        
+        This restores the old behaviour and fixes the regression
+        introduced with
+        
+            commit 961cf4bed679d9495cc3682d18496a53061d4581
+            CommitDate: Mon Feb 1 14:00:56 2021 -0800
+        
+                Apply $reverse_name when tag-reply/forwarding too.
+
+M	send.c
+
+2021-05-28 20:29:03 +0300  Emir Sarı  <bitigchi@me.com> (ddd292b8)
+
+        * Update Turkish translations
+
+M	po/tr.po
+
+2021-05-28 14:23:37 +0200  Greg Kroah-Hartman  <greg@kroah.com> (88845a41)
+
+        * fix gcc-11 build warnings for H_TO_INTL()
+        
+        The macro H_TO_INTL() in mutt_idna.c, causes a lot of build warnings
+        about the indentation of the if () line to try to warn the developer
+        that it looks like this might be a bug:
+        
+        mutt_idna.c: In function ‘mutt_env_to_intl’:
+        mutt_idna.c:327:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+          327 |     if (tag) *tag = #a; e = 1; err = NULL;              \
+              |     ^~
+        mutt_idna.c:333:3: note: in expansion of macro ‘H_TO_INTL’
+          333 |   H_TO_INTL(return_path);
+              |   ^~~~~~~~~
+        mutt_idna.c:327:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+          327 |     if (tag) *tag = #a; e = 1; err = NULL;              \
+              |                         ^
+        mutt_idna.c:333:3: note: in expansion of macro ‘H_TO_INTL’
+          333 |   H_TO_INTL(return_path);
+              |   ^~~~~~~~~
+        
+        This goes on for many lines.
+        
+        Fix this up by properly indenting the lines so that gcc "knows" we mean
+        well here.
+
+M	mutt_idna.c
+
+2021-05-28 14:38:41 +0300  Maxim Tarasov  <mu@magi.net.ru> (76276257)
+
+        * Trim the ToC for the option list in the manual
+        
+        Currently, every variable is shown in the table of contents of the
+        reference manual. Variable list is over 400 items long. This makes the
+        ToC difficult to work with.
+        
+        Removing is done by adding an overwriting template for the parent of
+        variables section (that is sect1 tag with id="variables"). In the
+        DocBook source matching template calls another template named subtoc
+        with two parameters: context (self element) and nodes (child
+        sections). Normally a list of descendant nodes is passed here, but we
+        don't want that and instead call subtoc with no parameters.
+        
+        This approach results in semantically correct code being generated in
+        all modes.
+        
+        Note, that the ID (variables) will have to be kept in sync with XML
+        generating code, but that is already hardcoded elsewhere.
+
+M	doc/TODO
+M	doc/mutt.xsl
+
+2021-05-26 15:41:40 -0700  Kevin McCarthy  <kevin@8t8.us> (f60882fc)
+
+        * Add debug statements around $hostname setting.
+        
+        This will make slowdowns due to DNS issues more obvious.
+
+M	init.c
+
+2021-05-26 15:30:20 -0700  Kevin McCarthy  <kevin@8t8.us> (30aea067)
+
+        * Add draft 2.1.0 notes to UPDATING file.
+
+M	UPDATING
+
+2021-05-23 11:20:54 -0700  Kevin McCarthy  <kevin@8t8.us> (ff7c68cc)
+
+        * Merge branch 'stable'
+
+2021-05-23 11:19:02 -0700  Kevin McCarthy  <kevin@8t8.us> (9f40cc39)
+
+        * Update irc channel to libera.chat.
+
+M	doc/manual.xml.head
+
+2021-05-14 18:55:00 -0600  Gregory Anders  <greg@gpanders.com> (4c786d87)
+
+        * Add local_date_header option
+        
+        Add an option to convert the date used in the Date header into the local
+        (sender's) timezone. This is the current behavior and the option
+        defaults to true. Unsetting this option causes the date in the Date
+        header to be formatted using the GMT timezone.
+        
+        This option is useful for privacy-sensitive users who may not wish to
+        divulge their sending timezone.
+
+M	init.h
+M	mutt.h
+M	sendlib.c
+
+2021-05-04 11:03:32 -0700  Kevin McCarthy  <kevin@8t8.us> (791fc1c6)
+
+        * Merge branch 'stable'
+
+2021-05-04 10:55:15 -0700  Kevin McCarthy  <kevin@8t8.us> (481f3800)
+
+        * automatic post-release commit for mutt-2.0.7
+
+M	ChangeLog
+M	VERSION
+
+2021-05-04 10:38:24 -0700  Kevin McCarthy  <kevin@8t8.us> (bd29a9a0)
+
+        * Merge branch 'stable'
+
+2021-04-28 12:57:53 -0700  Kevin McCarthy  <kevin@8t8.us> (b24a1a25)
+
+        * Add comments to the 2231 decode blocks.
+
+M	rfc2231.c
+
+2021-04-30 18:55:37 -0700  Kevin McCarthy  <kevin@8t8.us> (a10d0bb5)
+
+        * Add sanitize call in print mailcap function.
+        
+        The mutt_rfc1524_expand_filename() function calls mutt_adv_mktemp(),
+        which also calls the sanitizer.
+        
+        However, if the recv-mode suggested filename has a slash, it's better
+        to sanitize before calling expand_filename() too, to preserve the
+        entire filename (albeit with the slashes sanitized out).
+        
+        For example (ignoring name templates) if the file were called
+        "either/or.pdf", pre-sanitizing would generate "either_or.pdf", while
+        not doing so would generate "or.pdf".
+
+M	attach.c
+
+2021-04-27 13:37:21 -0700  Kevin McCarthy  <kevin@8t8.us> (98f0ca6b)
+
+        * Add allow_8bit flag to sanitize_filename functions.
+        
+        This will allow "view" mailcap invocations and autoview invocations to
+        display something reasonable for international file names.  Also add
+        the flag to mutt_adv_mktemp(), which the mailcap viewer calls.
+        
+        Convert the 'slash parameter' to an ALLOW_SLASH flag.  This makes the
+        flags consistent (both "allow" something not permitted by default),
+        and invocations more readable.
+
+M	attach.c
+M	handler.c
+M	lib.c
+M	lib.h
+M	muttlib.c
+M	pop.c
+M	protos.h
+M	rfc1524.c
+
+2021-04-29 12:54:41 -0700  Kevin McCarthy  <kevin@8t8.us> (fdee288a)
+
+        * Modify makedoc.pl to read sort maps for the default value.
+        
+        Use the map tables to print out a correct default value for sort
+        types.
+        
+        Remove the unneeded SORT_ALPHA type, for $sort_browser documentation,
+        since we can do the lookup now.
+
+M	doc/makedoc.pl
+M	init.h
+M	sort.h
+
+2021-04-28 13:28:14 -0700  Kevin McCarthy  <kevin@8t8.us> (23b77a20)
+
+        * Arrange sort maps by value instead of name.
+        
+        The value-to-name mapping uses the first match.  Grouping by value
+        makes it more obvious when there are duplicates and which one will be
+        printed out, e.g. when querying the value of a variable.
+
+M	init.h
+
+2021-04-28 13:21:17 -0700  Kevin McCarthy  <kevin@8t8.us> (bee3474f)
+
+        * Move sort maps before vars in init.h.
+        
+        This is so makedoc.pl can read in the maps and use them to properly
+        print out default values for the sort options.
+
+M	init.h
+
+2021-04-28 11:16:50 -0700  Kevin McCarthy  <kevin@8t8.us> (acb2bdd4)
+
+        * Merge branch 'stable'
+
+2021-04-25 15:01:07 -0700  Kevin McCarthy  <kevin@8t8.us> (515a315c)
+
+        * Mention ~B in $thorough_search documentation.
+        
+        It affects ~b, ~B, and ~h.
+
+M	init.h
+
+2021-04-25 10:47:32 -0700  Kevin McCarthy  <kevin@8t8.us> (b2125bcd)
+
+        * Keep file browser '..' entries at the top.
+        
+        This makes it easier to navigate up a directory when the file browser
+        is sorted by a value other than "alpha".
+
+M	browser.c
+
+2021-04-24 15:10:22 -0700  Kevin McCarthy  <kevin@8t8.us> (2333015f)
+
+        * Change browser sort "unsorted" to preserve the original order.
+        
+        Record entry numbers as they are added to the list, so re-sorting by
+        "unsorted" can return to the original order.
+        
+        This is most useful for the mailboxes case, where "unsorted" should
+        mean the order listed in the muttrc.
+
+M	browser.c
+M	browser.h
+M	imap/browse.c
+
+2021-04-24 14:56:39 -0700  Kevin McCarthy  <kevin@8t8.us> (f8984468)
+
+        * Fix imap_add_folder() reallocation check.
+        
+        entrymax contains the number of slots allocated.  entrylen contains
+        the current number of slots used.
+        
+        Note: there isn't a memory access bug here - it was merely
+        reallocating too early.
+
+M	imap/browse.c
+
+2021-04-24 14:41:20 -0700  Kevin McCarthy  <kevin@8t8.us> (a877a29e)
+
+        * Add $sort_browser_mailboxes configuration variable.
+        
+        This allows to control file browser sorting and mailbox browser
+        sorting separately.
+
+M	browser.c
+M	browser.h
+M	init.h
+M	sort.h
+
+2021-04-24 15:23:49 -0700  Kevin McCarthy  <kevin@8t8.us> (8b7dd25b)
+
+        * Merge branch 'stable'
+
+2021-04-23 18:35:30 -0700  Kevin McCarthy  <kevin@8t8.us> (30e657d3)
+
+        * Improve sidebar drawing in small windows.
+        
+        Ensure the index window is given at least one column during reflow,
+        truncating the sidebar width as necessary.
+        
+        Change the sidebar to use MuttSidebarWindow->cols instead of directly
+        referencing SidebarWidth.
+
+M	curs_lib.c
+M	sidebar.c
+
+2021-04-22 15:42:14 -0700  Kevin McCarthy  <kevin@8t8.us> (fe866a19)
+
+        * Disable markers when wrap is at column 1.
+        
+        This can occur when the user resizes the window to a single column, or
+        if they 'set wrap=1'.
+        
+        In that case, Mutt was outputting the '+' and setting the initial
+        output to the second column.  However, if there is only one column,
+        nothing would then be printed.  When trying to search or jump to end,
+        Mutt would enter an infinite loop because no forward progress would be
+        made in the file with each line.
+        
+        Disable the markers if there is only a single column, so at least one
+        character of the message will get printed on each line.
+
+M	pager.c
+
+2021-04-19 18:53:30 -0700  Kevin McCarthy  <kevin@8t8.us> (8162c129)
+
+        * Improve body_pattern and quoting when skipping down.
+        
+        The previous commit added the MUTT_TYPES flag to the search operation.
+        However, adding the flag caused body_pattern and classify_quote
+        matching to occur, as part of searching.
+        
+        Separate those two to only be done when MUTT_SHOWCOLOR is passed.  Keep
+        the classify_quote() call in resolve_types(), since otherwise during a
+        normal display we would end up matching the regexps twice.
+        
+        Add a flag so the computation only occurs once, instead of each time
+        the line is shown.
+        
+        For continuation lines, we need to scan from the start of line.
+        Otherwise body_patterns and proper quote level coloring won't appear
+        if we jump down to the middle of a continuation line.
+        
+        As part of this commit, I noticed is_cont_hdr was not reset when
+        handling a REDRAW_FLOW.  I believe this also fixes the old trac ticket
+        issue 3744.
+
+M	pager.c
+
+2021-04-19 14:49:52 -0700  Kevin McCarthy  <kevin@8t8.us> (7bce3182)
+
+        * Add MUTT_TYPES flag for pager search operation.
+        
+        This allows the display_line() search scanner to also determine the
+        type of each line.  Without that, searching down would not be able to
+        properly highlight header lines or quote lines.
+
+M	pager.c
+
+2021-04-19 14:48:01 -0700  Kevin McCarthy  <kevin@8t8.us> (f8e405b3)
+
+        * Revert "Add type resolution when searching in the pager."
+        
+        This reverts commit aa308b67a983918eb59f1d7b5af543817c2cfd04.
+        
+        This may be what I want to push to master eventually, but this commit
+        was accidental.  I need to test it more on a branch and add a better
+        commit message before commiting to master.
+
+M	pager.c
+
+2021-04-19 14:45:01 -0700  Kevin McCarthy  <kevin@8t8.us> (aa308b67)
+
+        * Add type resolution when searching in the pager.
+
+M	pager.c
+
+2021-04-19 14:20:47 -0700  Kevin McCarthy  <kevin@8t8.us> (4b6cd846)
+
+        * Add a note about crypto operations being available interactively.
+        
+        They aren't available in batch mode.  This was mentioned in the "batch
+        compose flow" section, but should be mentioned a bit more prominently
+        in the manual.
+
+M	doc/manual.xml.head
+
+2021-04-18 14:54:02 -0700  Kevin McCarthy  <kevin@8t8.us> (10c66a53)
+
+        * Mention 8-bit ansi color support in manual.
+
+M	doc/manual.xml.head
+
+2021-04-17 09:34:16 -0700  Kevin McCarthy  <kevin@8t8.us> (36a704cf)
+
+        * Add cc, in-reply-to, and references to default mailto_allow list.
+        
+        Thanks to Gregory Anders for the ticket and suggested patch, which
+        this commit is based upon.
+
+M	doc/manual.xml.head
+M	init.c
+
+2021-04-13 18:02:31 -0700  Kevin McCarthy  <kevin@8t8.us> (0684a051)
+
+        * Add a check to make sure pair doesn't overflow.
+        
+        It's not clear if COLOR_PAIRS can be larger than SHRT_MAX + 1, so make
+        sure with a check.
+
+M	color.c
+
+2021-04-11 15:56:42 -0700  Kevin McCarthy  <kevin@8t8.us> (2d683201)
+
+        * Fix ansi colors to use default bg/fg when not set.
+        
+        Note the ColorList stores COLOR_DEFAULT (-2) not -1, so we need to
+        translate those values in mutt_alloc_ansi_color().  If the curses
+        backend doesn't support default colors, we abort and just return color
+        pair 0.
+
+M	color.c
+M	pager.c
+
+2021-04-11 14:19:33 -0700  Kevin McCarthy  <kevin@8t8.us> (c20a5169)
+
+        * Use bkgrndset() as ATTRSET() backend if available.
+        
+        This function allows more usable color pairs, because it passes the
+        pair parameter separately.  The COLOR_PAIR() macro only returns 8-bits
+        for a pair, limiting the total pairs used to 256 despite many systems
+        having much larger COLOR_PAIRS values.
+        
+        In order to do this, separate out the pair and attrs values, instead
+        of combining attr + COLOR_PAIR(pair) into a single value and storing
+        that inside Mutt.  For the older calls, bkgdset() and attrset(), we
+        call COLOR_PAIR() at the last minute.
+        
+        Add COLOR_ATTR to header cache sum calculation, since it is used in
+        the HEADER now.
+
+M	Makefile.am
+M	color.c
+A	color.h
+M	commands.c
+M	configure.ac
+M	curs_main.c
+M	hcache.c
+M	hcachever.pl
+M	menu.c
+M	mutt.h
+M	mutt_curses.h
+M	mutt_menu.h
+M	pager.c
+M	protos.h
+M	score.c
+M	sidebar.c
+M	thread.c
+
+2021-04-10 11:33:58 +0200  Vincent Lefevre  <vincent@vinc17.net> (869c6cc4)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-04-09 17:51:12 -0700  Kevin McCarthy  <kevin@8t8.us> (6a2e3dea)
+
+        * Clarify -H usage in batch mode is not a "pass through" option.
+        
+        Mutt runs the file through mutt_prepare_template() in both cases,
+        which will decrypt, remove signatures, strip multipart/alternatives.
+        
+        The documentation wasn't clear about this, and it might be
+        misunderstood that -H is a "pass through" option.
+
+M	doc/manual.xml.head
+M	doc/mutt.man
+
+2021-04-09 15:12:11 -0700  Kevin McCarthy  <kevin@8t8.us> (6c510773)
+
+        * Add user-friendly error message if append to $trash fails.
+        
+        For the maildir case, this will then be displayed instead of a raw
+        stat error message, in the case the mailbox disappears.
+
+M	mx.c
+
+2021-03-29 04:57:28 -0300  Marco Ippolito  <maroloccio@gmail.com> (9566a95c)
+
+        * Fix documentation typo
+
+M	doc/manual.xml.head
+
+2021-03-27 19:14:10 -0700  Kevin McCarthy  <kevin@8t8.us> (4e01ccdb)
+
+        * Stop batch mode emails with no argument or recipients.
+        
+        Closes #345.  There are checks in send.c to guard against a
+        no-recipient email being sent, but there might be a my_hdr or other
+        setting in the muttrc.  In that case, it would be surprising for an
+        email to be sent.
+
+M	main.c
+
+2021-03-20 18:33:01 +0100  Vincent Lefevre  <vincent@vinc17.net> (8ac730a1)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-03-19 14:35:53 -0700  Kevin McCarthy  <kevin@8t8.us> (5ee27795)
+
+        * Merge branch 'stable'
+
+2021-03-16 14:13:38 -0700  Kevin McCarthy  <kevin@8t8.us> (9b8cc85e)
+
+        * Add SigInt handler for pattern functions.
+        
+        Allow, for example, a ~B against a huge mailbox to be interruped via
+        ctrl-c.  This commit follows the same behavior as
+        mutt_search_command() - not prompting and just interrupting.  We could
+        add a prompt if it's really deemed necessary, but I think if they hit
+        ctrl-c they want to stop the pattern operation now.
+        
+        Since it's not practical to roll back, leave the Context in the "in
+        the middle" state too.  This may actually be desired.
+
+M	pattern.c
+
+2021-03-15 13:11:07 -0700  Kevin McCarthy  <kevin@8t8.us> (50f22244)
+
+        * Turn off ~h header-only download when $message_cachedir is set.
+        
+        The initial pattern match will be slow, but then the body will be in
+        the message cache.  This is the same as previous behavior, so a
+        message cache user should not notice any change.
+        
+        Those not using a message cache will see improvements from the
+        header-only download, but of course they will have to download the
+        full headers each time.
+
+M	pattern.c
+
+2021-03-13 18:51:34 +0100  Vincent Lefevre  <vincent@vinc17.net> (5eb9dec8)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-03-12 13:23:42 -0800  Kevin McCarthy  <kevin@8t8.us> (5cf52cd1)
+
+        * Minor fixes to match_body_patterns().
+        
+        Change the end condition to compare against buflen.  I prefer this
+        because we are not directly incrementing offset ourselves, but relying
+        on the rational return values from regexec.  If the regex library
+        (incorrectly) returned a nul-match at the '\0' terminator for
+        instance, the new nul-match logic would assign offset just past the
+        terminator.
+        
+        Remove the i=0 initialization during definition, because it doesn't
+        use or need it.
+
+M	pager.c
+
+2021-03-12 13:08:29 -0800  Kevin McCarthy  <kevin@8t8.us> (64dba506)
+
+        * Factor out match_body_patterns to make resolve_types() simpler.
+        
+        The body pattern matching part has been getting more complex, and is
+        now too big to have its details sit amongst the resolve_types()
+        logic.  Factor it out into a separate procedure.
+
+M	pager.c
+
+2021-03-10 18:10:39 -0800  Kevin McCarthy  <kevin@8t8.us> (63d29881)
+
+        * Fix body color null_rx handling.
+        
+        The existing code did not work properly.  If the null_rx occurred
+        before another matching entry in the list, it would be ignored.  If it
+        occurred afterward, it could cause the entries to be created
+        out-of-order which would affect the binary search later on when
+        rendering.
+        
+        Instead, use the normal "match assignment" code, but if the best
+        result is a null_rx match, simply discard it and increment the offset
+        past the end of the null match.
+
+M	pager.c
+
+2021-03-10 15:09:49 -0800  Kevin McCarthy  <kevin@8t8.us> (53ffdb93)
+
+        * Improve body color matching speed by caching future matches.
+        
+        On a *very* long body (or header_partial) lines with multiple color
+        lines that match, performance can be degraded.  For instance if there
+        were moderately expensive regexp matches against "A" "B" and "C".  A
+        line with:
+        
+          A A A A A B A A C A A A B A A A C
+        
+        The B and C regexps were scanned again after every "A" match, despite
+        that the result would be discarded again for the next A match.
+        
+        Change the color matching to cache the location of each color line
+        match.  Discard the cache once the match offset passes that point.
+
+M	mutt_curses.h
+M	pager.c
+
+2021-03-11 14:02:03 -0800  Kevin McCarthy  <kevin@8t8.us> (17774247)
+
+        * Merge branch 'stable'
+
+2021-03-09 18:19:21 -0800  Kevin McCarthy  <kevin@8t8.us> (847ce203)
+
+        * Add <view-alt-pager> to compose menu.
+        
+        This mirrors the <view-pager> in the attachment menu (and just added
+        to the compose menu), but adds it to the compose menu for alternative
+        generation.
+
+M	OPS
+M	compose.c
+M	doc/manual.xml.head
+M	functions.h
+
+2021-03-09 18:05:17 -0800  Kevin McCarthy  <kevin@8t8.us> (5a325ba4)
+
+        * Add view-mailcap, view-pager, view-text to compose menu.
+        
+        These are less commonly needed, so don't bind them to a key.  But for
+        those who need it, make them be available.
+
+M	OPS
+M	compose.c
+M	functions.h
+
+2021-03-10 18:58:22 +0100  Vincent Lefevre  <vincent@vinc17.net> (db80f61a)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-03-05 18:52:48 -0800  Kevin McCarthy  <kevin@8t8.us> (191b0513)
+
+        * Fix $ssl_client_cert usage with SMTP.
+        
+        The ssl and gnutls client-cert setup code was calling
+        mutt_account_getuser().  This caused two problems.  First, it's not
+        necessarily the case that there will be a username.  Second,
+        populating the user would cause smtp_open() to check for AUTH
+        capabilities and call smtp_auth - even if the user is already
+        authenticated by the cert.  The server won't advertize AUTH if they
+        already authenticated, causing a connection abort.
+        
+        Remove prompt for mutt_account_getuser() in the ssl and gnutls client
+        certificate connection code.  The SASL code has callbacks, so I don't
+        understand why it would need this.  Let's take it out and see if
+        anyone screams 8-P.  If necessary, we can add a mutt_account_getuser()
+        call to the very beginning of imap_auth_sasl().
+        
+        Revamp the openssl ssl_passwd_cb() prompt.  From the man pages, it
+        appears to be used for the cert decryption.  There's no need to call
+        mutt_account_getuser() and use the generic mutt_account_getpass() just
+        to read a password in.  Instead create a callback function version to
+        customize the prompt for a client cert with just the host.
+        
+        Change the SMTP authentication test to check if the AUTH capabilities
+        are set, instead of if the user field is set before calling
+        smtp_auth().
+
+M	account.c
+M	account.h
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+M	smtp.c
+
+2021-03-07 09:02:23 +0100  Olaf Hering  <olaf@aepfle.de> (fcc62991)
+
+        * refresh de.po
+        
+        align with result of make update-po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2021-03-06 13:59:54 -0800  Kevin McCarthy  <kevin@8t8.us> (2054ccf2)
+
+        * Relocate po OPS files to bottom of POTFILES.in.
+        
+        This matches the pre-0.21 migration order, and will reduce the size of
+        updates for the next release.
+
+M	po/POTFILES.in
+
+2021-03-06 22:26:21 +0100  Olaf Hering  <olaf@aepfle.de> (1267c1ca)
+
+        * refresh de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2021-03-06 11:22:19 -0800  Kevin McCarthy  <kevin@8t8.us> (8940dbe0)
+
+        * Merge branch 'stable'
+
+2021-03-04 12:24:42 -0800  Kevin McCarthy  <kevin@8t8.us> (a796a1bd)
+
+        * Add -nonumbers to lynx options.
+        
+        This will remove the useless link and field numbers from output in the
+        manual.txt.
+
+M	doc/Makefile.am
+
+2021-03-04 12:18:30 -0800  Kevin McCarthy  <kevin@8t8.us> (22bab8ff)
+
+        * Don't install an empty manual.txt file.
+        
+        Closes #334.
+        
+        If all the html to txt programs we use (lynx, elinks, w3m) are missing
+        from the system, the shell redirection willl create an empty file.
+        
+        Change the install step to use -s "FILE exists and has a size greater
+        than zero".
+        
+        Thanks to Mitchell Blank Jr for the ticket and suggested fix.
+
+M	doc/Makefile.am
+
+2021-03-03 23:17:55 +0100  Vincent Lefevre  <vincent@vinc17.net> (9e338a19)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-03-03 23:13:09 +0100  Vincent Lefevre  <vincent@vinc17.net> (fb5f052f)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-03-03 12:18:51 -0800  Kevin McCarthy  <kevin@8t8.us> (1d13381f)
+
+        * Don't leak fp when aborting mutt_make_message_attach().
+        
+        I forgot to close up the fp before returning.
+
+M	sendlib.c
+
+2021-03-01 18:19:08 -0800  Kevin McCarthy  <kevin@8t8.us> (16c381d8)
+
+        * Prompt for retry on decrypt failure for mime message attachments.
+        
+        Closes #331.
+        
+        Change $forward_decyrpt to a quadoption, defaulting 'yes' for backward
+        compatibility.  This will allow users to choose on a per-message
+        attachment basis if desired.
+        
+        If decoding from $mime_forward_decode fails or decrypting from
+        $forward_decrypt, notify the user and prompt to retry attaching
+        without the decode/decrypt.
+        
+        $forward_decrypt directly invokes decryption and returns -1 on error,
+        while $mime_forward_decode uses the handler rendering, which returns a
+        non-fatal 1 (to allow message display of failing encrypted message).
+        So prompt on either case.
+        
+        If they decline to retry, or the retry fails, return NULL only on a
+        hard-fail (-1) return code.  They've been warned and can peek at the
+        final result.
+        
+        The send generate_body() code was not checking for a NULL result.
+        This seems like a bad idea, so add a check and error message in that
+        case.
+
+M	init.h
+M	mutt.h
+M	send.c
+M	sendlib.c
+
+2021-02-26 14:34:10 -0800  Kevin McCarthy  <kevin@8t8.us> (ad14641e)
+
+        * Merge branch 'stable'
+
+2021-02-24 14:59:19 -0800  Kevin McCarthy  <kevin@8t8.us> (e0d08c59)
+
+        * Add a note about the '^' mailbox shortcut.
+        
+        Emphasize that it's not always set, for example in command-line mode,
+        or when evaluating the muttrc at startup.
+
+M	doc/manual.xml.head
+
+2021-02-23 14:41:47 -0800  Kevin McCarthy  <kevin@8t8.us> (b412d83b)
+
+        * Merge branch 'stable'
+
+2021-02-20 13:08:54 -0800  Kevin McCarthy  <kevin@8t8.us> (7fd331fd)
+
+        * Scan OPS files directly for gettext translation strings.
+        
+        Previously, gettext's po/Makefile.in.in was modified to separately
+        scan and merge a generated file: keymap_alldefs.h.  Gettext doesn't
+        recommend nor provide support for scanning generated files.
+        
+        However, there is no reason we have to scan the generated file.
+        Instead move the N_() markers and L10N comments into the OPS files.
+        Then simply add the OPS files to po/POTFILES.in.
+        
+        Add a '--language=C' option to xgettext to avoid a warning about the
+        OPS files not have any known language suffix.
+        
+        Modify gen_defs and doc/gen-map-doc to deal with the new format of the
+        OPS files.
+
+M	OPS
+M	OPS.CRYPT
+M	OPS.MIX
+M	OPS.PGP
+M	OPS.SIDEBAR
+M	OPS.SMIME
+M	doc/gen-map-doc
+M	gen_defs
+M	po/Makevars
+M	po/POTFILES.in
+
+2021-02-18 15:40:39 -0800  Kevin McCarthy  <kevin@8t8.us> (d4e13e4b)
+
+        * Fix gettext update problems.
+        
+        The keymap_alldefs.h file was previously generated and scanned inside
+        po/Makefile.in.in as an additional POTFILES files build dependency and
+        step.
+        
+        The file can't be scanned by just adding it to po/POTFILES.in because
+        it's a generated file that will be in the build directory.  The next
+        commit will instead add the OPS* files directly to POTFILES.in to be
+        scanned.
+        
+        For this commit, remove the generation of keymap_alldefs.h.
+        
+        Remove the redundant ALL_LINGUAS setting from configure.ac.  Reformat
+        the LINGUAS file to be on one line, as the documentation shows.  I
+        think it was okay before, but just to be safe.
+        
+        Fix L10N scanning by adding '--add-comments=L10N' to XGETTEXT_OPTIONS
+        in po/Makevars.
+        
+        Set MSGID_BUGS_ADDRESS to silence a warning.
+        
+        Add gettext.h to the Makefile.am EXTRA_DIST list.
+        
+        Remove -Iintl flags from all Makefile.am files, since the intl
+        directory is no longer bundled in Mutt.
+
+M	Makefile.am
+M	autocrypt/Makefile.am
+M	configure.ac
+M	imap/Makefile.am
+M	po/LINGUAS
+M	po/Makevars
+
+2021-02-19 00:20:42 +0100  Vincent Lefevre  <vincent@vinc17.net> (8d94928e)
+
+        * Remove the AM_GNU_GETTEXT_VERSION line as it makes autoreconf fail with gettext < 0.21 because autopoint complains that gettext is too old.
+        
+        Using this line with a version smaller than 0.21 makes autopoint itself
+        fail, thus does not solve the problem.
+
+M	configure.ac
+
+2021-02-19 00:02:15 +0100  Vincent Lefevre  <vincent@vinc17.net> (33fe78af)
+
+        * Add AM_GNU_GETTEXT_VERSION line to avoid a warning from autoreconf.
+
+M	configure.ac
+
+2021-02-07 18:27:47 -0800  Kevin McCarthy  <kevin@8t8.us> (ccc18061)
+
+        * Update gettext to version 0.21.
+        
+        Run 'gettextize -f --no-changelog' to update to 0.21.
+        
+        This removes the entire intl directory, and relies on an external
+        libintl only.
+        
+        $(INTLLIBS) should now be referred to as $(LIBINTL), so change all
+        references.
+        
+        Unfortunately, some of the gettext m4 files were modified and "mutt
+        customized" in the past.  I'm trying to keep them in a pristine state
+        after this upgrade.  glibc21.m4, lcmessage.m4, codeset.m4 have also
+        been removed.
+        
+        Manually call AM_ICONV in configure.ac.  This was previously called
+        in the modified "MUTT_AM_GNU_GETTEXT" but the result $am_cv_func_iconv
+        is tested just below.
+        
+        locale.h is a standard library defined by C99.  The gpgme and pgp code
+        wrapped those includes in HAVE_LOCALE_H checks, but that check was
+        performed inside of gettext.m4.  Remove the check inside those
+        files (locale.h is already included unconditionally elsewhere in
+        Mutt).
+        
+        Copy the sample gettext.h file and include that instead, as suggested
+        by the gettext documentation.
+        
+        unistd.h is also a standard posix header, so remove HAVE_UNISTD_H
+        checks inside mutt too.
+        
+        Create po/LINGUAS file listing available languages.
+        
+        Create po/Makevars from the template and customize for Mutt.
+        
+        Set PO_DEPENDS_ON_POT to no to prevent po file rebuilds.  According to
+        the gettext manual, with this set, "PO files can be accidentally
+        updated even if a POT file is not updated" when using git.
+
+M	.gitignore
+M	ABOUT-NLS
+M	INSTALL
+M	Makefile.am
+A	config.rpath
+M	configure.ac
+M	crypt-gpgme.c
+M	crypt.c
+A	gettext.h
+D	intl/COPYING.LIB-2
+D	intl/COPYING.LIB-2.1
+D	intl/ChangeLog
+D	intl/Makefile.in
+D	intl/VERSION
+D	intl/bindtextdom.c
+D	intl/cat-compat.c
+D	intl/config.charset
+D	intl/dcgettext.c
+D	intl/dcigettext.c
+D	intl/dcngettext.c
+D	intl/dgettext.c
+D	intl/dngettext.c
+D	intl/explodename.c
+D	intl/finddomain.c
+D	intl/gettext.c
+D	intl/gettext.h
+D	intl/gettextP.h
+D	intl/hash-string.h
+D	intl/intl-compat.c
+D	intl/l10nflist.c
+D	intl/libgettext.h
+D	intl/libgnuintl.h
+D	intl/libintl.glibc
+D	intl/linux-msg.sed
+D	intl/loadinfo.h
+D	intl/loadmsgcat.c
+D	intl/localcharset.c
+D	intl/locale.alias
+D	intl/localealias.c
+D	intl/ngettext.c
+D	intl/plural.c
+D	intl/plural.y
+D	intl/po2tbl.sed.in
+D	intl/ref-add.sin
+D	intl/ref-del.sin
+D	intl/textdomain.c
+D	intl/xopen-msg.sed
+M	lib.h
+M	m4/Makefile.am
+M	m4/README
+D	m4/codeset.m4
+M	m4/gettext.m4
+D	m4/glibc21.m4
+A	m4/host-cpu-c-abi.m4
+M	m4/iconv.m4
+A	m4/intlmacosx.m4
+D	m4/lcmessage.m4
+A	m4/lib-ld.m4
+A	m4/lib-link.m4
+A	m4/lib-prefix.m4
+A	m4/nls.m4
+A	m4/po.m4
+M	m4/progtest.m4
+M	mutt.h
+M	pgp.c
+A	po/LINGUAS
+M	po/Makefile.in.in
+A	po/Makevars
+A	po/Rules-quot
+A	po/boldquot.sed
+A	po/en@boldquot.header
+A	po/en@quot.header
+A	po/insert-header.sin
+A	po/quot.sed
+A	po/remove-potcdate.sin
+M	smime.c
+
+2021-02-17 15:47:49 -0800  Kevin McCarthy  <kevin@8t8.us> (9635fad4)
+
+        * Add backlinks for $fcc_before_send and self_encrypt options.
+        
+        Make sure the $fcc_before_send's behavior changes to $fcc_clear and
+        $fcc_attach is mentiond in those options too.
+        
+        Add a "see also" in $fcc_clear to the self_encrypt options.
+
+M	init.h
+
+2021-02-13 12:31:59 -0800  Helge Kreutzmann  <debian@helgefjell.de> (0ced35e0)
+
+        * Update de.po.
+
+M	po/de.po
+
+2021-02-07 19:51:34 -0800  Kevin McCarthy  <kevin@8t8.us> (106ff19a)
+
+        * Merge branch 'stable'
+
+2021-02-05 15:34:37 -0800  Kevin McCarthy  <kevin@8t8.us> (e5c6a054)
+
+        * Save CurrentFolder in background edit scope.
+        
+        The CurrentFolder can actually be used to resolve an fcc-hook at fcc
+        time.  We would want to use the folder they started composing in, to
+        be consistent with expectations.
+
+M	doc/manual.xml.head
+M	send.c
+M	send.h
+
+2021-02-05 14:09:28 -0800  Kevin McCarthy  <kevin@8t8.us> (56f4c0b8)
+
+        * Change attach inline forward messages default CH flag.
+        
+        Fix it to be CH_DECODE instead of CH_XMIT.
+        
+        I believe this was a mistake from a long time ago.  The CH_XMIT flag
+        is used in mutt for:
+        - mutt_save_message() -> set_copy_flags() when decoding
+        - pre-send conversion to 7 bit
+        - mutt_make_message_attach() (for index mime-forwarding)
+        - message bouncing
+        
+        Using it for *inline* forwarding in the attachment menu doesn't make
+        sense.  Both include_forward() in send.c, and include_header() in
+        recvcmd.c use CH_DECODE.  It seems reasonable to decode headers when
+        inline forwarding from the attachment menu (as is done from the
+        index), so I'm guessing that was what was meant here too.
+
+M	recvcmd.c
+
+2021-02-04 18:02:06 -0800  Kevin McCarthy  <kevin@8t8.us> (18c29a84)
+
+        * Filter ANSI sequences when forwarding too.
+        
+        Add a MUTT_CM_FORWARDING flag to correspond with the MUTT_CM_REPLYING
+        flag.  Check those to turn on ANSI filtering.
+        
+        In order to guard against other accidental prefix setting without one
+        of those flags, also check s->prefix to enable ANSI filtering (and
+        prefix printing) too.
+        
+        Add missing MUTT_CM_REPLYING flags to the recvcmd.c reply functions.
+        
+        While updating the recvcmd.c reply code, I noticed CH_REORDER wasn't
+        enabled with OPTWEED, like in the send.c code (and everywhere else),
+        so add the missing flag.
+
+M	copy.c
+M	copy.h
+M	handler.c
+M	mutt.h
+M	recvcmd.c
+M	send.c
+
+2021-02-03 15:50:49 -0800  Kevin McCarthy  <kevin@8t8.us> (1a9fea6f)
+
+        * Add explicit flag to check for postponed message on <mail>.
+        
+        This used to check for:
+          !flags && !msg
+        which was still relatively clear that it was a unique situation (just
+        for <mail> in the index and pager).
+        
+        With the addition of background editing, it became:
+          (sctx->flags == SENDBACKGROUNDEDIT) && !sctx->msg
+        This is less intuitively understood to be just for the <mail> case,
+        and thus perhaps easy to create a bug in the future.
+        
+        Create an explicit flag, SENDCHECKPOSTPONED to perform the check, and
+        enable for the <mail> operation in the index and pager.
+
+M	curs_main.c
+M	mutt.h
+M	pager.c
+M	send.c
+
+2021-02-02 12:56:33 -0800  Kevin McCarthy  <kevin@8t8.us> (acf11418)
+
+        * Merge branch 'stable'
+
+2021-02-01 15:15:17 -0800  Kevin McCarthy  <kevin@8t8.us> (09f077c9)
+
+        * Change REPLYTO handling to directly add the my_hdr.
+        
+        Don't send the header through the muttrc parser, to avoid issues with
+        unexpected evaluation of an environment variable.
+
+M	init.c
+
+2021-01-28 18:02:47 -0800  Kevin McCarthy  <kevin@8t8.us> (961cf4be)
+
+        * Apply $reverse_name when tag-reply/forwarding too.
+        
+        Enable $reverse_name for tag actions in the attach menu too.  Since
+        the ATTACH_CONTEXT is a different structure, move both single and
+        tagged action handling into recvcmd.c
+
+M	alias.c
+M	protos.h
+M	recvcmd.c
+M	send.c
+
+2021-01-27 15:02:10 -0800  Kevin McCarthy  <kevin@8t8.us> (ab6d0dc5)
+
+        * Merge branch 'stable'
+
+2021-01-27 13:38:53 -0800  Kevin McCarthy  <kevin@8t8.us> (3e35377e)
+
+        * Fix small error in mutt_resize_term().
+        
+        Commit 547b25a2 accidentally removed the default value setting if
+        LINES or COLUMNS are null.  Also, set default values if the atoi
+        fails.
+
+M	resize.c
+
+2021-01-26 18:36:20 -0800  Kevin McCarthy  <kevin@8t8.us> (d1729b7c)
+
+        * Create mutt_atolofft() to parse body->length field.
+        
+        This will allow proper range checking on the number, and set it to -1
+        if it's out of range.
+
+M	muttlib.c
+M	parse.c
+M	protos.h
+
+2021-01-26 12:58:54 -0800  Kevin McCarthy  <kevin@8t8.us> (5d73e4cf)
+
+        * Convert all mutt_atoX functions to behave strictly.
+        
+        * Remove the automatic conversion of NULL and '\0' to 0.  Add a flag
+          for the cases that require lax evaluation.
+        
+        * Make trailing characters generate an error by default for the
+          mutt_atouX functions.  Add a flag for that case.  Most of the IMAP
+          code parses numbers out of a stream, so add the flag to those
+          calls.
+        
+        * The mutt_atouX functions were also behaving incorrectly with
+          invalid input, e.g. "ABC", returning and setting 0.  Fix them to
+          return an error in those cases.
+        
+        * Add a mutt_atoll() function, to be used in the next commit.
+        
+        * Change converters to store 0 on error.  atos, atoi, and atoui were
+          already doing this, but the others were not.
+
+M	curs_main.c
+M	edit.c
+M	gnupgparse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	imap/util.c
+M	init.c
+M	lib.c
+M	lib.h
+M	main.c
+M	menu.c
+M	mh.c
+M	parse.c
+M	resize.c
+M	rfc2231.c
+M	score.c
+M	smtp.c
+M	url.c
+
+2021-01-27 07:27:31 -0800  Kevin McCarthy  <kevin@8t8.us> (7737b353)
+
+        * Merge branch 'stable'
+
+2021-01-24 15:01:33 -0800  Kevin McCarthy  <kevin@8t8.us> (3d6e7df7)
+
+        * Fix hdr_order to use the longest match.
+        
+        Previously, Mutt would find the first match and use that.
+        
+        However, the example shown in the manual:
+          hdr_order From Date: From: To: Cc: Subject:
+        gives the expectation that an mbox From_ line would print first, then
+        the Date:, and then the From: header.
+        
+        Change the matcher to scan all HeaderOrderList entries and use the
+        longest match.
+        
+        Update the documentation to make it clear From_ lines are printed out
+        with other "real" headers, and can be manipulated via ignore and
+        hdr_order commands.
+
+M	copy.c
+M	doc/manual.xml.head
+
+2021-01-23 18:14:02 -0800  Kevin McCarthy  <kevin@8t8.us> (c6700b05)
+
+        * Fix double spacing after group display-name in pager and message.
+        
+        Edit-headers and message writing uses mutt_write_rfc822_header() ->
+        mutt_write_address_list(), which renders each address one by one and
+        outputs to a file.  rfc822_write_address_single() already appends a
+        space after the group display-name colon delimiter.
+        
+        Rendering to the pager uses a different code path:
+        address_header_decode() -> format_address_header().  The logic is very
+        similar to mutt_write_address_list() except it renders to memory.  It
+        also needs to avoid re-appending a space after the group display-name.
+
+M	copy.c
+M	sendlib.c
+
+2021-01-23 15:00:12 -0800  Kevin McCarthy  <kevin@8t8.us> (075a4c70)
+
+        * Restrict mime header date writing to protected headers.
+        
+        The previous code would generate and print a date header for
+        autocrypt.  This wouldn't really cause a problem, but is incorrect.
+        
+        Check explicitly for a passed in date parameter in
+        MUTT_WRITE_HEADER_MIME mode.
+
+M	sendlib.c
+
+2021-01-23 14:31:19 -0800  Kevin McCarthy  <kevin@8t8.us> (94628052)
+
+        * Mention C99 libc requirement in INSTALL file.
+
+M	INSTALL
+
+2021-01-22 15:15:56 -0800  Kevin McCarthy  <kevin@8t8.us> (e72c8ce1)
+
+        * Tighten up group list parsing a bit more.
+        
+        The display-name is not optional for a group, so don't start a group
+        list if the display-name is empty.
+        
+        Groups can't be nested, so terminate a previous group list if the
+        terminator was left off.
+
+M	rfc822.c
+
+2021-01-16 15:46:54 -0800  Kevin McCarthy  <kevin@8t8.us> (46f86782)
+
+        * Make some small fixes to the -nonotify commit.
+        
+        Fix logic error in mutt_buffy_check().
+        
+        Add -nonotify flag to the configuration command list in the manual
+        too.
+        
+        Add line wraps to the muttrc.man mailboxes options, to make the
+        synopsis more readable within 80 columns.
+
+M	buffy.c
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+
+2021-01-16 20:53:57 +0100  Rene Kita  <git@rkta.de> (26770eac)
+
+        * Add -nonotify argument to mailboxes command
+        
+        -nonotify allows to disable notifications for mailboxes.
+        
+        -notify can be used to re-enable notifications for a previously disabled
+        mailbox.
+        
+        A typical use case are mailboxes for mailing lists. The User may want to
+        get notified about new mail in their work mailbox, but not get disrupted
+        by new mail received from the mailing list.
+        
+        This patch allows individual configuration for all mailboxes.
+
+M	buffy.c
+M	buffy.h
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+M	imap/command.c
+M	imap/imap.c
+
+2021-01-21 12:42:45 -0800  Kevin McCarthy  <kevin@8t8.us> (933f3462)
+
+        * Merge branch 'stable'
+
+2021-01-20 11:51:58 +0100  Vincent Lefevre  <vincent@vinc17.net> (d5a18cca)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2021-01-18 14:47:32 -0800  Kevin McCarthy  <kevin@8t8.us> (feb30961)
+
+        * Fix warning; minor code cleanup.
+        
+        random_dev isn't used anymore (after removing the %R expando).
+        
+        I originally had local variables in some of the case statements, and
+        forgot to pull out the curly brackets when I moved those to the top of
+        the function.
+
+M	messageid.c
+
+2021-01-18 14:02:37 -0500  Remco Rĳnders  <remco@webconquest.com> (8641fb2a)
+
+        * Remove %R format for $message_id_format
+
+M	init.h
+M	messageid.c
+
+2021-01-18 13:54:13 -0500  Remco Rĳnders  <remco@webconquest.com> (dadc0130)
+
+        * Provide %x format for $message_id_format
+        
+        The expando format %x generates one pseudorandom byte and puts the
+        output in a lowercase hex formatted string of length two.
+        
+        # Conflicts:
+        #	init.h
+        #	messageid.c
+
+M	init.h
+M	messageid.c
+
+2021-01-17 19:39:01 -0800  Kevin McCarthy  <kevin@8t8.us> (5f5d33f8)
+
+        * Change $message_id_format year expando from %y to %Y.
+        
+        So that it matches the strftime() 4-digit year.
+        
+        Thanks to Vincent Lefèvre for noting the discrepancy.
+
+M	init.h
+M	messageid.c
+
+2021-01-15 15:56:45 -0800  Kevin McCarthy  <kevin@8t8.us> (1f188287)
+
+        * Add $message_id_format for customizing generated Message-IDs.
+        
+        Provide expandos for the new (2.0+) format and the old format.  Add %r
+        and %R to generate fixed size 4-char Base64 blocks from the
+        pseudo-random generator, or from /dev/urandom.
+        
+        The format string allows external filters, for complete control.
+
+M	globals.h
+M	init.h
+M	messageid.c
+
+2021-01-15 13:21:27 -0800  Kevin McCarthy  <kevin@8t8.us> (b5a807ca)
+
+        * Move mutt_gen_msgid() over to messageid.c.
+
+M	Makefile.am
+A	messageid.c
+M	po/POTFILES.in
+M	sendlib.c
+
+2021-01-17 11:05:36 -0800  Kevin McCarthy  <kevin@8t8.us> (d4305208)
+
+        * Add group terminator if it is left off.
+        
+        If there is no terminating ";" add one to the list, to make the text
+        re-rendering correct.
+
+M	rfc822.c
+
+2021-01-17 10:53:19 -0800  Kevin McCarthy  <kevin@8t8.us> (939b02b3)
+
+        * Don't allocate a group terminator unless we are in a group-list.
+        
+        This will reduce memory allocation for garbage/spam address lists.
+        
+        It also makes no sense to store a terminator when there wasn't a
+        display-name indicating the start of a group.
+
+M	rfc822.c
+
+2021-01-17 13:05:46 -0800  Kevin McCarthy  <kevin@8t8.us> (59a09320)
+
+        * Merge branch 'stable'
+
+2021-01-10 19:48:17 -0800  Kevin McCarthy  <kevin@8t8.us> (53181e6b)
+
+        * Remove configure test for va_copy.
+        
+        Its presence is also dictated by the C99 specification.
+
+M	configure.ac
+D	m4/funcs.m4
+
+2021-01-10 14:25:23 -0800  Kevin McCarthy  <kevin@8t8.us> (73ee27cb)
+
+        * Remove snprintf and vsnprintf configure checks.
+        
+        There was a period of time where C99 was standardized but some systems
+        still didn't include a correctly working version of those two
+        functions.  But I think we are long past that point now.
+        
+        Remove the checks and replacement code.
+
+M	Makefile.am
+M	configure.ac
+M	dotlock.c
+M	protos.h
+D	snprintf.c
+
+2021-01-13 19:15:32 -0800  Kevin McCarthy  <kevin@8t8.us> (d35bee80)
+
+        * Merge branch 'stable'
+
+2021-01-10 10:25:06 -0800  Kevin McCarthy  <kevin@8t8.us> (564af512)
+
+        * Fix check for empty colors left.
+        
+        Because pair "0" is reserved (and we start searching at index 1), we
+        only have access to (COLOR_PAIRS - 1) pairs.
+        
+        Also, don't increment UserColors during the check, because that would
+        incorrectly inflate the number of color pairs allocated if none are
+        available.  That would delay or even remove the ability to reallocate
+        pairs after future color pair frees.
+        
+        It actually would make more sense to just check (index > COLOR_PAIRS -
+        1).  But since UserColors is incremented here, and is used in dprint
+        statements, keep the check consistent.
+
+M	color.c
+
+2021-01-09 09:42:51 -0800  Kevin McCarthy  <kevin@8t8.us> (1ffe93ef)
+
+        * Move empty color slot finding into initial compare loop.
+        
+        There is no need to scan the list again to find the place for a new
+        entry, since we already do to check for duplicates.
+        
+        Store the last pointer in the initial loop, and calculate the lowest
+        available index at the same time.
+
+M	color.c
+
+2021-01-08 18:23:09 -0800  Kevin McCarthy  <kevin@8t8.us> (7731d992)
+
+        * Add code to free ansi colors.
+        
+        The 256 color ansi-escape sequence commit can create many more
+        potential ansi colors than the 8-color version, so they shouldn't be
+        allowed to just accumulate.
+        
+        Free ansi colors when exiting the pager.  The pager can be called
+        nested, so this could prematurely free the colors, but they will be
+        automatically reallocated.
+        
+        Ansi and overlay colors shouldn't be refcounted like normal colors, so
+        add a bit field for both.
+        
+        For now, we just let overlay colors accumulate, as before.  If this
+        becomes a problem, we could periodically flush them, the same way as
+        ansi colors - perhaps when changing mailboxes.
+        
+        Change ColorList to be sorted by index.  This removes the O(n^2) loop
+        just to find the next available index.
+        
+        Likewise, improve the mutt_free_color() loop to keep track of the last
+        pointer instead of relooping.
+
+M	color.c
+M	pager.c
+M	protos.h
+
+2021-01-08 19:11:34 -0800  Kevin McCarthy  <kevin@8t8.us> (00b70ff0)
+
+        * Merge branch 'stable'
+
+2021-01-07 14:16:28 +0200  Matti Niemenmaa  <matti.niemenmaa+git@iki.fi> (b0bc42ff)
+
+        * pager: Parse 256-color "ANSI" escapes
+
+M	pager.c
+
+2021-01-07 14:20:42 +0200  Matti Niemenmaa  <matti.niemenmaa+git@iki.fi> (1b20dd42)
+
+        * pager: Don't accept color code 8
+        
+        38 and 48 are not valid color specifications: 30–37 and 40–47 specify
+        the eight foreground and background colors while 39 and 49 are used to
+        mean "reset to default".
+        
+        38 and 48 are in use to specify 8-bit or 24-bit colors, but those cases
+        require special handling.
+
+M	pager.c
+
+2021-01-03 15:33:46 -0800  Kevin McCarthy  <kevin@8t8.us> (a3db7ccb)
+
+        * Add configure checks for gssapi library and functions.
+        
+        rkta on irc reported a build failure because the gss headers were not
+        present.  Add explicit checks for the required headers.  Also add a
+        check for gss_init_sec_context() when using the output of krb-config
+        to configure flags.
+        
+        Abort configure if the library/header checks don't pass.  It would
+        previously continue on, setting USE_GSS and need_gss, which would just
+        result in a build error.
+
+M	configure.ac
+M	m4/gssapi.m4
+
+2021-01-01 18:51:32 -0800  Kevin McCarthy  <kevin@8t8.us> (e4a8abe8)
+
+        * Remove obsolete AC_HEADER_STDC and STDC_HEADERS checks.
+        
+        The autoconf macro is obsolete in 2.70.  Also, we now assume at least
+        C99 so there is no point in checking for ANSI C89 header files.
+        
+        Fix up code to assume STDC_HEADERS is always true, removing the
+        reference to it at the same time.
+
+M	configure.ac
+M	m4/gettext.m4
+M	mutt_curses.h
+M	protos.h
+M	regex.c
+
+2021-01-01 18:13:59 -0800  Kevin McCarthy  <kevin@8t8.us> (475e800f)
+
+        * Replace AC_OUTPUT_COMMANDS with AC_CONFIG_COMMANDS.
+
+M	m4/gettext.m4
+
+2021-01-01 18:05:04 -0800  Kevin McCarthy  <kevin@8t8.us> (b04bf448)
+
+        * Convert AC_TRY_LINK to AC_LINK_IFELSE.
+
+M	m4/codeset.m4
+M	m4/curslib.m4
+M	m4/funcs.m4
+M	m4/gettext.m4
+M	m4/iconv.m4
+M	m4/lcmessage.m4
+
+2021-01-01 15:49:05 -0800  Kevin McCarthy  <kevin@8t8.us> (a01316d9)
+
+        * Convert AC_TRY_COMPILE to AC_COMPILE_IFELSE.
+
+M	m4/funcdecl.m4
+M	m4/iconv.m4
+
+2021-01-01 14:04:01 -0800  Kevin McCarthy  <kevin@8t8.us> (9bb70dbc)
+
+        * Remove obsolete AC_ISC_POSIX call.
+
+M	m4/gettext.m4
+
+2021-01-01 12:51:17 -0800  Kevin McCarthy  <kevin@8t8.us> (47dc3b08)
+
+        * Replace AC_HELP_STRING with AS_HELP_STRING.
+
+M	configure.ac
+M	m4/gettext.m4
+M	m4/gpg-error.m4
+M	m4/gpgme.m4
+M	m4/iconv.m4
+
+2021-01-01 12:45:18 -0800  Kevin McCarthy  <kevin@8t8.us> (2754a057)
+
+        * Replace AC_ERROR with AC_MSG_ERROR.
+
+M	m4/curslib.m4
+
+2021-01-01 10:08:38 -0800  Kevin McCarthy  <kevin@8t8.us> (cbc0957e)
+
+        * Update deprecated AC_CHECK_TYPE usage.
+
+M	configure.ac
+
+2021-01-01 12:33:22 -0800  Kevin McCarthy  <kevin@8t8.us> (c58d307d)
+
+        * Update config.status invocation.
+        
+        The files are now specified on the command line, instead of via the
+        CONFIG_FILES env var.
+        
+        This is the first of a series of patches updating obsolete autoconf
+        macros and usages.  The 2.70 release sqawks very loudly at those
+        constructs, so best to start updating them.
+
+M	intl/Makefile.in
+M	po/Makefile.in.in
+
+2020-12-30 14:31:11 -0800  Kevin McCarthy  <kevin@8t8.us> (4c6a0954)
+
+        * Merge branch 'stable'
+
+2020-12-29 14:28:23 -0800  Kevin McCarthy  <kevin@8t8.us> (625666ef)
+
+        * Update header cache checking order and --with options.
+        
+        Automatically scan in the order: kyotocabinet, tokyocabinet, lmdb,
+        qdbm, gdbm, bdb.
+        
+        Turn all the backend options into '--with' options and add a dir
+        parameter.  Specifying a single --with option declares the desired
+        backend, turning off scanning.  Specifying --without skips scanning
+        for a backend.
+        
+        Update the INSTALL file to make that clear.  This actually wasn't even
+        clear to me until I studied it now, and for years I've been using an
+        obfuscated combination of --without and --with to specify the backend,
+        when I just needed to use --with.
+
+M	INSTALL
+M	configure.ac
+
+2020-12-29 13:28:30 -0800  Kevin McCarthy  <kevin@8t8.us> (d6c7a1a5)
+
+        * Merge branch 'stable'
+
+2020-12-28 18:39:19 -0800  Kevin McCarthy  <kevin@8t8.us> (7932020f)
+
+        * Fix freebsd build on srht.
+        
+        Looks like the db5 package does install in a wacky place.  For now,
+        just use kyotocabinet (which appears to install under /usr/local).
+
+M	.builds/freebsd.yml
+
+2020-12-28 18:24:10 -0800  Kevin McCarthy  <kevin@8t8.us> (a62d11d2)
+
+        * Add non-zero length for gdbm and lmdb configure tests.
+        
+        In $db_requested=auto mode, the variables may be unset.
+
+M	configure.ac
+
+2020-12-28 15:57:04 -0800  Kevin McCarthy  <kevin@8t8.us> (60bd4a85)
+
+        * Simplify BDB configure.ac check.
+        
+        Remove the long list of directory and library names to scan, and just
+        look for -ldb and db.h.  Use $with_bdb to search an alternative
+        directory, just as the other header cache library searches do.
+        
+        If someone screams, we can enhance a *little* bit, but I think this is
+        sufficient, and more important, maintainable.
+
+M	configure.ac
+
+2020-12-25 10:21:13 -0800  Kevin McCarthy  <kevin@8t8.us> (4032fd8a)
+
+        * Merge branch 'stable'
+
+2020-12-23 09:44:14 -0800  Kevin McCarthy  <kevin@8t8.us> (658d28b2)
+
+        * Fix declaration of mutt_decode_base64().
+        
+        Thanks to Charles for reporting the problem!
+
+M	protos.h
+
+2020-12-23 17:17:26 +0100  Olaf Hering  <olaf@aepfle.de> (3e24f802)
+
+        * refresh de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-12-21 15:34:58 -0800  Kevin McCarthy  <kevin@8t8.us> (03e17ef7)
+
+        * Correct length to use LOFF_T.
+        
+        This is a part two, made in master, to the stable branch commit
+        11b18027.  These are mostly length adjustments to use LOFF_T, matching the
+        BODY->length type.
+        
+        An argument could be made for size_t instead, and a few places in Mutt
+        do assign between those types.  I've used LOFF_T because off_t is a
+        signed integer.  Some changes in this commit affect loops that
+        decrement a length pointer while > 0.  Switching to a size_t could
+        create a wraparound infinite loop bug.
+        
+        This also changes the Content-Length header parser to use atoll()
+        intead of atol().  I noticed from the man page that atol() doesn't
+        seem to return -1 on error.  But I've kept the check anyway.
+
+M	copy.c
+M	crypt-gpgme.c
+M	edit.c
+M	handler.c
+M	imap/message.c
+M	mbox.c
+M	parse.c
+M	pattern.c
+M	pop.c
+
+2020-12-22 18:04:32 -0800  Kevin McCarthy  <kevin@8t8.us> (a4a2a1ed)
+
+        * Merge branch 'stable'
+
+2020-12-20 17:48:09 +0000  Christoph Berg  <cb@df7cb.de> (c1ae18c0)
+
+        * Fix a typo in de.po
+
+M	po/de.po
+
+2020-12-20 03:58:21 +0100  Vincent Lefevre  <vincent@vinc17.net> (ef4e63a5)
+
+        * Typo in a L10N text.
+
+M	imap/command.c
+
+2020-12-20 03:43:14 +0100  Vincent Lefevre  <vincent@vinc17.net> (7c6cbecc)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-12-18 10:15:24 -0800  Kevin McCarthy  <kevin@8t8.us> (1598baa2)
+
+        * Add a sanity check for qresync.
+        
+        If it fails, force a redownload without qresync, to set the uid_seqset
+        to a correct state.
+        
+        Note the headers should almost all be in the header cache, so this
+        isn't a huge penalty, but ensures no duplicates occur (the most common
+        issue if something goes wrong).
+
+M	imap/message.c
+
+2020-12-16 15:14:29 -0800  Kevin McCarthy  <kevin@8t8.us> (09a1abe3)
+
+        * Add a batch composition flow section to the manual.
+
+M	doc/manual.xml.head
+
+2020-12-15 12:58:24 -0800  Kevin McCarthy  <kevin@8t8.us> (a832cb5a)
+
+        * Create $ssl_verify_host_override.
+        
+        This allows manually specifying the host name to verify a server
+        certificate against.
+        
+        I'm not sure I like the idea, but since Mutt already allows turning
+        hostname verification off, it's not any worse to leave it on but
+        manually set the expected hostname in the certificate.
+        
+        Thanks to eudyptes-pachyrynchus for the merge request, which prompted
+        me to take another look at the ticket.
+
+M	globals.h
+M	init.h
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2020-12-10 14:07:19 -0800  Kevin McCarthy  <kevin@8t8.us> (b860ea2f)
+
+        * Add "headers" parameter to mx_open_message().
+        
+        This will allow some operations to retrieve only headers, such as ~h
+        pattern matching or the new list menu.
+        
+        Modify the IMAP and POP3 implementation to retrieve only headers when
+        the parameter is set.
+        
+        Headers-only will use the message cache if one exists, but will not
+        populate the message cache (since the body of the message is not
+        downloaded.)
+
+M	commands.c
+M	compress.c
+M	copy.c
+M	imap/imap_private.h
+M	imap/message.c
+M	listmenu.c
+M	mailbox.h
+M	mbox.c
+M	mh.c
+M	mutt.h
+M	mx.c
+M	parse.c
+M	pattern.c
+M	pop.c
+M	postpone.c
+M	recvattach.c
+M	send.c
+M	sendlib.c
+
+2020-12-10 20:19:08 +0100  Olaf Hering  <olaf@aepfle.de> (c6868e1f)
+
+        * mention system muttrc in man page
+        
+        mutt uses either the Muttrc owned by the sysadmin, or its own Muttrc.
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	doc/Makefile.am
+M	doc/mutt.man
+
+2020-12-09 15:08:31 -0800  Kevin McCarthy  <kevin@8t8.us> (c8663d49)
+
+        * Parse headers on demand for the list menu.
+        
+        This will be a bit slower over IMAP from the index, but it removes
+        storing all the new headers in the header cache.  Since those are not
+        used for anything except the list menu, and the list menu is
+        infrequently used, it's a bit wasteful to store them in the header
+        cache.
+
+M	hcache.c
+M	imap/message.c
+M	listmenu.c
+M	mutt.h
+M	muttlib.c
+M	parse.c
+M	protos.h
+
+2020-12-09 20:00:57 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (1f67773f)
+
+        * Improve the Polish translation of OP_TOGGLE_WRITE
+
+M	po/pl.po
+
+2020-12-07 14:59:10 -0800  Kevin McCarthy  <kevin@8t8.us> (f7b469ee)
+
+        * Merge branch 'stable'
+
+2020-12-07 13:18:16 -0800  Kevin McCarthy  <kevin@8t8.us> (8a34338a)
+
+        * Merge branch 'stable'
+
+2020-12-07 17:36:30 +0000  dgc  <dgc.gitlab@bikeshed.us> (59dc711f)
+
+        * Add manual xml for list menu
+
+M	doc/manual.xml.head
+
+2020-12-07 08:53:35 +0100  Olaf Hering  <olaf@aepfle.de> (25d2877f)
+
+        * refresh de.po
+        
+        Signed-off-by: Olaf Hering <olaf@aepfle.de>
+
+M	po/de.po
+
+2020-12-07 02:09:07 +0100  Vincent Lefevre  <vincent@vinc17.net> (b95a1d68)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-11-26 15:21:05 -0800  Kevin McCarthy  <kevin@8t8.us> (42331065)
+
+        * Add <skip-headers> to skip past message headers in pager.
+        
+        This is based on <skip-quoted>, and is bound to 'H' by default.
+        
+        I've added an error message in case there is no text past the headers,
+        just to cover the logical case.  I don't think Mutt allows that to
+        happen for text passed to the pager, but just in case.
+
+M	OPS
+M	doc/manual.xml.head
+M	functions.h
+M	pager.c
+
+2020-12-06 12:56:45 -0800  Kevin McCarthy  <kevin@8t8.us> (c23921bc)
+
+        * Fix list menu label alignment.
+        
+        Use mutt_strwidth() to find the maximum label length.
+        
+        Use mutt_FormatString() and mutt_format_s() to align the label.
+
+M	listmenu.c
+
+2020-12-06 21:47:35 +0100  Vincent Lefevre  <vincent@vinc17.net> (067d802c)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-12-06 11:20:06 -0800  Kevin McCarthy  <kevin@8t8.us> (aa85a70f)
+
+        * Add new listmenu.c to POTFILES.in.
+
+M	po/POTFILES.in
+
+2020-12-06 20:03:02 +0100  Vincent Lefevre  <vincent@vinc17.net> (64fce068)
+
+        * Updated French translation for the master branch.
+
+M	po/fr.po
+
+2020-12-06 02:14:27 +0000  dgc  <dgc.gitlab@bikeshed.us> (c92a06c0)
+
+        * abstract some List-* header processing
+        
+        List-Post parsing is inline in the List-Post header handler. This moves
+        it to some separate functions so that we can use it for other purposes.
+
+M	Makefile.am
+M	OPS
+M	curs_main.c
+M	doc/manual.xml.tail
+M	functions.h
+M	hcache.c
+M	imap/message.c
+M	keymap.c
+M	keymap.h
+A	listmenu.c
+M	mutt.h
+M	muttlib.c
+M	pager.c
+M	parse.c
+M	protos.h
+
+2020-12-04 11:05:35 -0800  Kevin McCarthy  <kevin@8t8.us> (6fe98cf5)
+
+        * Merge branch 'stable'
+
+2020-12-03 13:47:50 -0800  Kevin McCarthy  <kevin@8t8.us> (9518a0ab)
+
+        * Add a mutt_error() when copy/save messages fails.
+        
+        Avoid using "part" translations for the tag/untagged copy/save
+        combinations, even though that makes the code longer.
+
+M	commands.c
+
+2020-12-03 13:40:51 -0800  Kevin McCarthy  <kevin@8t8.us> (8d1f22a1)
+
+        * Refresh index if a tagged save aborts in the middle.
+        
+        Make the sure the index message flags and status line are properly
+        redrawn in that case.
+
+M	curs_main.c
+
+2020-12-02 13:22:52 -0800  Kevin McCarthy  <kevin@8t8.us> (d52b69bb)
+
+        * Merge branch 'stable'
+
+2020-12-01 14:21:31 -0800  Kevin McCarthy  <kevin@8t8.us> (1ec642e2)
+
+        * Fix memory leak in imap_copy_messages().
+        
+        mx.mbox (allocated by imap_parse_path) was not always freed before
+        return.
+        
+        The sync_cmd and cmd buffers were also not always freed.  One case was
+        on retrying after creating the mailbox, which would overwrite the
+        allocated pointers.
+        
+        As long as I'm touching the buffers, convert them to use the buffer
+        pool.  I think the mutt_buffer_clear() at the beginning of the retry
+        loop isn't necessary, but will keep it to make it clear any existing
+        values won't be reused a second time through the loop.
+
+M	imap/message.c
+
+2020-12-01 21:36:06 +0100  Vincent Lefevre  <vincent@vinc17.net> (0a836cee)
+
+        * Fix typos in the manual, found by codespell.
+
+M	doc/manual.xml.head
+
+2020-11-29 19:10:40 -0800  Kevin McCarthy  <kevin@8t8.us> (20334587)
+
+        * Add mutt_buffer_rewind() function.
+        
+        This makes it a bit clearer what the assignment is doing, and reduces
+        direct dptr manipulation a bit.
+
+M	buffer.c
+M	buffer.h
+M	init.c
+M	mutt_lisp.c
+M	muttlib.c
+
+2020-11-30 15:48:30 -0800  Kevin McCarthy  <kevin@8t8.us> (e1c962aa)
+
+        * Fix a few mutt_extract_token() callers dest parameters.
+        
+        Some callers performed a mutt_buffer_init(), called
+        mutt_extract_token() and then assumed that the buffer->data would
+        never be NULL.  Prior to the "fix" in commit f420be68, this was not
+        true, even if MoreArgs() returns true, because the argument could be
+        just ''.
+        
+        The parse_keymap() change fixed a possible segv.  Don't use the buffer
+        pool, because it returns buf->data to the caller.
+        
+        I don't believe the other two would segv, but they did still rely on
+        the old behavior where the the buffer would have a '\0' appended
+        always.  So, change them to use the buffer pool to be cleaner.
+
+M	init.c
+M	keymap.c
+
+2020-11-30 18:22:52 -0800  Kevin McCarthy  <kevin@8t8.us> (93a622ec)
+
+        * Merge branch 'stable'
+
+2020-11-29 15:34:33 -0800  Kevin McCarthy  <kevin@8t8.us> (25106303)
+
+        * Merge branch 'stable'
+
+2020-11-30 00:09:37 +0100  Vincent Lefevre  <vincent@vinc17.net> (0149944d)
+
+        * Updated Project-Id-Version to 2.0.2.
+
+M	po/fr.po
+
+2020-11-30 00:06:56 +0100  Vincent Lefevre  <vincent@vinc17.net> (679c8184)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2020-11-25 13:59:55 -0800  Kevin McCarthy  <kevin@8t8.us> (21ebc162)
+
+        * Merge branch 'stable'
+
+2020-11-25 10:24:22 -0800  Kevin McCarthy  <kevin@8t8.us> (239261b5)
+
+        * Surround new and old debug functions with #ifdef DEBUG.
+        
+        The new function directly references debugfile, so needs the ifdef.
+        The old function compiles fine, but since it's not used, put it inside
+        the ifdef too.
+        
+        Thanks to Ian Allen for reporting the problem.
+
+M	lib.c
+
+2020-11-20 09:33:41 -0800  David Champion  <dgc@extrahop.com> (a3011236)
+
+        * add dprintf(n, fmt, ...) debugging macro
+        
+        dprintf(n, fmt, ...) is a more natural form of
+        dprint(n, (debugfile, fmt, ...)). It prints code location in the debug
+        file where possible.
+        
+        I believe this approach, while common, was not previously used because
+        we were trying to be C90-compatible.  C90 doesn't provide variadic
+        macros.  Now we require C99, so it makes sense to add this pattern.
+
+M	lib.c
+M	lib.h
+
+2020-11-23 11:04:08 -0800  Kevin McCarthy  <kevin@8t8.us> (49545f61)
+
+        * Add configure error if C compiler doesn't support C99.
+        
+        We added the test, but did not check to ensure it was found.  Thanks
+        to Oswald Buddenhagen for pointing out the missing check.  He
+        suggested the AC_PROG_CC might be redundant, but the info page seems
+        to indicate AC_PROG_CC_C99 checks the properties of an already located
+        compiler, so I'm leaving AC_PROG_CC in.
+        
+        Also, remove the $U check just below.  Commit 64b1460a removed the
+        call to AM_C_PROTOTYPES, but forgot to remove the $U check too.
+
+M	configure.ac
+
+2020-11-18 15:49:44 -0800  Kevin McCarthy  <kevin@8t8.us> (474d368e)
+
+        * Add <view-pager> function to attachment menu.
+        
+        This uses a copiousoutput mailcap entry, or falls back to raw text.
+        
+        The existing functions do not provide a way to use copiousoutput
+        mailcap entries exclusively.  The default <view-attach> will use one
+        for internally supported types if auto_view is configured, but there
+        is no way to do so for other mime types (such as application/pdf).
+
+M	OPS
+M	attach.c
+M	doc/manual.xml.head
+M	functions.h
+M	mutt.h
+M	recvattach.c
+
+2020-11-19 19:04:52 -0800  David Champion  <dgc@extrahop.com> (03803e67)
+
+        * Allow debugging without debug file rotation.
+        
+        start_debug() takes a boolean indicating whether to rotate debug
+        files.
+        
+        The -d option allows a negative number. If negative, debug files
+        are not rotated. The debug level is the absolute value.
+        
+        This is useful for continuously watching (e.g. tail -f) the
+        .muttdebug0 file.
+
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	init.c
+M	main.c
+
+2020-11-22 20:22:23 +1100  Cameron Simpson  <cs@cskk.id.au> (bb0cd944)
+
+        * mutt.man: -H: clarify that a From_ line in the draft file is silently discarded
+
+M	doc/mutt.man
+
+2020-11-21 14:03:08 -0800  Kevin McCarthy  <kevin@8t8.us> (8c967ad5)
+
+        * Clean up labels in imap_open_connection().
+        
+        Commit 04b06aaa was purposely kept minimal, to aid backporting the
+        fix.  It kept the err_close_conn label, but there is no need for the
+        label anymore.  Change all goto's to use the bail label.
+
+M	imap/imap.c
+
+2020-11-20 09:32:41 -0800  Kevin McCarthy  <kevin@8t8.us> (3d362fa2)
+
+        * Merge branch 'stable'
+
+2020-11-19 15:10:48 -0800  Kevin McCarthy  <kevin@8t8.us> (452dee69)
+
+        * Merge branch 'stable'
+
+2020-11-18 14:17:00 -0800  Kevin McCarthy  <kevin@8t8.us> (1fccc7d1)
+
+        * Remove buffer_normalize_fullpath().
+        
+        This was supposed to normalize a path after relative path expansion.
+        However, as Oswald Buddenhagen pointed out just before the release,
+        its method of '..' expansion was incorrect with symlinks in play.
+        Furthermore, it turned out mutt_pretty_mailbox() deals with '.' and
+        '..'.
+        
+        The function was turned into a noop before the release, and I'm now
+        pulling it out.
+
+M	muttlib.c
+
+2020-11-14 13:46:57 -0800  Kevin McCarthy  <kevin@8t8.us> (8dbc3b8d)
+
+        * Merge branch 'stable'
+
+2020-11-10 15:56:44 -0800  Kevin McCarthy  <kevin@8t8.us> (e832240e)
+
+        * Fix IMAP UTF-7 for code points >= U+10000.
+        
+        The 20-year old utf7 conversion functions punted on those values,
+        which was understandable for when they were written.  We now have
+        emojis and increasing number of characters that might be used in a
+        mailbox.
+        
+        Add encode/decode logic using UTF-16 surrogate pairs.
+        
+        Thanks to Jeff Sipek for reporting this issue, and for giving pointers
+        about how the values should be handled.
+
+M	imap/utf7.c
+
 2021-05-04 10:50:51 -0700  Kevin McCarthy  <kevin@8t8.us> (23ccbe39)
 
         * Update UPDATING file for 2.0.7.

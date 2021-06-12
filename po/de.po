@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-05-28 09:35-0700\n"
+"POT-Creation-Date: 2021-06-12 10:38-0700\n"
 "PO-Revision-Date: 2021-05-30 07:49+0200\n"
 "Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
@@ -1308,7 +1308,7 @@ msgstr "Sie sind auf dem letzten Eintrag."
 msgid "You are on the first entry."
 msgstr "Sie sind auf dem ersten Eintrag."
 
-#: compose.c:1197 send.c:2459
+#: compose.c:1197 send.c:2460
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Ungültige IDN in „%s“: „%s“"
@@ -1539,7 +1539,7 @@ msgstr "PGP wird aufgerufen …"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Nachricht kann nicht inline verschickt werden. PGP/MIME verwenden?"
 
-#: crypt.c:223 send.c:2424
+#: crypt.c:223 send.c:2425
 msgid "Mail not sent."
 msgstr "Nachricht wurde nicht verschickt."
 
@@ -1662,7 +1662,6 @@ msgstr "Mehrdeutige Angabe des geheimen Schlüssels `%s'\n"
 #, c-format
 msgid "error setting secret key `%s': %s\n"
 msgstr "Fehler beim Setzen des geheimen Schlüssels `%s': %s\n"
-
 
 #: crypt-gpgme.c:1029
 #, c-format
@@ -2392,7 +2391,6 @@ msgstr "Keine ausgewählten Nachrichten."
 msgid "Nothing to do."
 msgstr "Nichts zu erledigen."
 
-
 #: curs_main.c:923
 msgid "Jump to message: "
 msgstr "Springe zu Nachricht: "
@@ -2897,7 +2895,6 @@ msgstr "FEHLER: Bitte melden Sie diesen Fehler."
 #: help.c:354
 msgid "<UNKNOWN>"
 msgstr "<UNBEKANNT>"
-
 
 #: help.c:367
 msgid ""
@@ -5327,7 +5324,6 @@ msgstr "Verbindung zum POP-Server wird beendet …"
 msgid "Verifying message indexes..."
 msgstr "Nachrichten-Indices werden überprüft …"
 
-
 #: pop_lib.c:594
 msgid "Connection lost. Reconnect to POP server?"
 msgstr "Verbindung unterbrochen. Verbindung zum POP-Server wiederherstellen?"
@@ -5763,57 +5759,57 @@ msgstr "Zurückstellen nicht möglich, $postponed ist nicht gesetzt"
 msgid "Recall postponed message?"
 msgstr "Zurückgestellte Nachricht weiterbearbeiten?"
 
-#: send.c:2178
+#: send.c:2179
 msgid "Edit forwarded message?"
 msgstr "Weitergeleitete Nachricht editieren?"
 
-#: send.c:2242
+#: send.c:2243
 msgid "Abort unmodified message?"
 msgstr "Unveränderte Nachricht verwerfen?"
 
-#: send.c:2244
+#: send.c:2245
 msgid "Aborted unmodified message."
 msgstr "Unveränderte Nachricht verworfen."
 
-#: send.c:2362
+#: send.c:2363
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Kein Krypto-Backend konfiguriert. Nachrichten-Sicherheitseinstellungen "
 "werden deaktivert."
 
-#: send.c:2431
+#: send.c:2432
 msgid "Message postponed."
 msgstr "Nachricht zurückgestellt."
 
-#: send.c:2447
+#: send.c:2448
 msgid "No recipients are specified!"
 msgstr "Es sind keine Empfänger angegeben!"
 
-#: send.c:2452
+#: send.c:2453
 msgid "No recipients were specified."
 msgstr "Es wurden keine Empfänger angegeben."
 
-#: send.c:2468
+#: send.c:2469
 msgid "No subject, abort sending?"
 msgstr "Kein Betreff, Versand abbrechen?"
 
-#: send.c:2472
+#: send.c:2473
 msgid "No subject specified."
 msgstr "Kein Betreff."
 
-#: send.c:2486
+#: send.c:2487
 msgid "No attachments, abort sending?"
 msgstr "Kein Anhang, Versand abbrechen?"
 
-#: send.c:2489
+#: send.c:2490
 msgid "Attachment referenced in message is missing"
 msgstr "Der in der Nachricht verwendete Anhang ist nicht vorhanden."
 
-#: send.c:2561 smtp.c:191
+#: send.c:2562 smtp.c:191
 msgid "Sending message..."
 msgstr "Nachricht wird versandt …"
 
-#: send.c:2604
+#: send.c:2605
 msgid "Could not send the message."
 msgstr "Nachricht konnte nicht verschickt werden."
 
@@ -5823,15 +5819,15 @@ msgstr "Nachricht konnte nicht verschickt werden."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2632 send.c:2658
+#: send.c:2633 send.c:2659
 msgid "Setting reply flags."
 msgstr "Antwortmarkierungen werden gesetzt."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Mail sent."
 msgstr "Nachricht verschickt."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Sending in background."
 msgstr "Wird im Hintergrund verschickt."
 
@@ -5839,7 +5835,7 @@ msgstr "Wird im Hintergrund verschickt."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2768
+#: send.c:2769
 msgid "Editing backgrounded."
 msgstr "Editor läuft jetzt im Hintergrund."
 
@@ -6654,7 +6650,9 @@ msgstr "Ansicht des Anhangs mittels Mailcap"
 #.
 #: OPS:319
 msgid "view multipart/alternative in pager using copiousoutput mailcap"
-msgstr "Ansicht von multipart/alternative in Seitenbetrachter mithilfe von Mailcaps copiousoutput"
+msgstr ""
+"Ansicht von multipart/alternative in Seitenbetrachter mithilfe von Mailcaps "
+"copiousoutput"
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
@@ -6768,9 +6766,7 @@ msgstr "Komplette Absenderadresse anzeigen"
 #.
 #: OPS:405
 msgid "display message and toggle header weeding"
-msgstr ""
-"Nachricht anzeigen und zwischen allen/wichtigen Kopfzeilen "
-"umschalten"
+msgstr "Nachricht anzeigen und zwischen allen/wichtigen Kopfzeilen umschalten"
 
 #. L10N: Help screen description for OP_DISPLAY_MESSAGE
 #. index menu: <display-message>
@@ -6848,7 +6844,7 @@ msgstr "Adresse mittels Abfrage (query) vervollständigen"
 #. L10N: Help screen description for OP_EDITOR_DELETE_CHAR
 #. editor menu: <delete-char>
 #.
-#: OPS:454
+#: OPS:462
 msgid "delete the char under the cursor"
 msgstr "Das Zeichen unter dem Cursor löschen"
 
@@ -7175,7 +7171,6 @@ msgstr "Diskussionsfaden in zwei zerlegen"
 #: OPS:696
 msgid "select a new mailbox from the browser"
 msgstr "Neues Postfach im Dateibrowser auswählen"
-
 
 # Check: Zu frei?
 #. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
@@ -7565,7 +7560,6 @@ msgstr "Externe Adressenabfrage"
 #: OPS:984
 msgid "append new query results to current results"
 msgstr "Neue Abfrageergebnisse anhängen"
-
 
 #. L10N: Help screen description for OP_QUIT
 #. index menu: <quit>

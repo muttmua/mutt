@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.10.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-05-28 09:35-0700\n"
+"POT-Creation-Date: 2021-06-12 10:38-0700\n"
 "PO-Revision-Date: 2021-05-28 21:20+0200\n"
 "Last-Translator: Flammie A Pirinen <flammie@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -998,7 +998,6 @@ msgstr "Kopioidaan tägättyjä viestejä..."
 #. Message when an index/pager save operation fails for some reason.
 #.
 #: commands.c:1049
-#| msgid "Error sending message."
 msgid "Error saving message"
 msgstr "Virhe viestin tallentamisessa"
 
@@ -1006,7 +1005,6 @@ msgstr "Virhe viestin tallentamisessa"
 #. Message when an index tagged save operation fails for some reason.
 #.
 #: commands.c:1054
-#| msgid "Saving tagged messages..."
 msgid "Error saving tagged messages"
 msgstr "Virhe merkittyjen viestien tallennuksessa"
 
@@ -1014,7 +1012,6 @@ msgstr "Virhe merkittyjen viestien tallennuksessa"
 #. Message when an index/pager copy operation fails for some reason.
 #.
 #: commands.c:1062
-#| msgid "Error bouncing message!"
 msgid "Error copying message"
 msgstr "Virhe viestin kopioinnissa"
 
@@ -1022,7 +1019,6 @@ msgstr "Virhe viestin kopioinnissa"
 #. Message when an index tagged copy operation fails for some reason.
 #.
 #: commands.c:1067
-#| msgid "Copying tagged messages..."
 msgid "Error copying tagged messages"
 msgstr "Virhe merkittyjen viestien kopioinnissa"
 
@@ -1300,7 +1296,7 @@ msgstr "Viimeisessä tietueessa."
 msgid "You are on the first entry."
 msgstr "Ensimmäisessä tietueessa."
 
-#: compose.c:1197 send.c:2459
+#: compose.c:1197 send.c:2460
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Toimimaton IDN kohteessa %s: %s"
@@ -1532,7 +1528,7 @@ msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr ""
 "Viestiä ei voi lähettää sisällytettynä, käytetäänkö sittenkin PGP/MIMEä?"
 
-#: crypt.c:223 send.c:2424
+#: crypt.c:223 send.c:2425
 msgid "Mail not sent."
 msgstr "Viestiä ei lähetetty."
 
@@ -3227,7 +3223,6 @@ msgstr "Haetaan uusia merkintöjä..."
 #. using a normal download.
 #.
 #: imap/message.c:789
-#| msgid "Reopening mailbox..."
 msgid "QRESYNC failed.  Reopening mailbox."
 msgstr "QRESYNC epäonnistui. Uudelleenavataan postilaatikkoa."
 
@@ -3590,12 +3585,10 @@ msgid "Post"
 msgstr "Viesti"
 
 #: listmenu.c:52 listmenu.c:63
-#| msgid "Subscribed to %s"
 msgid "Subscribe"
 msgstr "Tilaus"
 
 #: listmenu.c:53 listmenu.c:64
-#| msgid "Unsubscribed from %s"
 msgid "Unsubscribe"
 msgstr "Tilauksenpoisto"
 
@@ -3610,25 +3603,22 @@ msgstr "Arkistot"
 #. L10N: given when an rfc 2369 action is not specified by this message
 #: listmenu.c:208
 #, c-format
-#| msgid "No decryption engine available for message"
 msgid "No list action available for %s."
 msgstr "Postituslistalle ei ole määritelty toimintoa %s."
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
 #: listmenu.c:215
 msgid "List actions only support mailto: URIs. (Try a browser?)"
-msgstr "Postituslistakomennot toimivat vain mailto-URIen kanssa."
-" (Koeta selaimella.)"
+msgstr ""
+"Postituslistakomennot toimivat vain mailto-URIen kanssa. (Koeta selaimella.)"
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
 #: listmenu.c:224
-#| msgid "Could not reopen mailbox!"
 msgid "Could not parse mailto: URI."
 msgstr "Ei voitu jäsentää mailto-URIa."
 
 #. L10N: menu name for list actions
 #: listmenu.c:251
-#| msgid "No mailing lists found!"
 msgid "Available mailing list actions"
 msgstr "Postituslistatoiminnot saatavilla"
 
@@ -3643,11 +3633,6 @@ msgstr ""
 "    https://gitlab.com/muttmua/mutt/issues\n"
 
 #: main.c:84
-#| msgid ""
-#| "Copyright (C) 1996-2020 Michael R. Elkins and others.\n"
-#| "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
-#| "Mutt is free software, and you are welcome to redistribute it\n"
-#| "under certain conditions; type `mutt -vv' for details.\n"
 msgid ""
 "Copyright (C) 1996-2021 Michael R. Elkins and others.\n"
 "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
@@ -3742,7 +3727,6 @@ msgstr ""
 "  -D\t\ttulosta kaikki muuttujat vakiotulsteeseen"
 
 #: main.c:152
-#| msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgid ""
 "  -d <level>\tlog debugging output to ~/.muttdebug0\n"
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
@@ -3834,7 +3818,6 @@ msgstr "Valitsin -E ei toimi yhdessä vakiosyötteen kanssa\n"
 #. file fails for some reason.
 #.
 #: main.c:1137
-#| msgid "Cannot create filter"
 msgid "Cannot parse draft file\n"
 msgstr "Ei voitu jäsentää luonnostiedostoa\n"
 
@@ -4256,7 +4239,6 @@ msgstr "Sertifikaatti tallennettu"
 #.
 #: mutt_ssl.c:1426
 #, c-format
-#| msgid "Password for %s@%s: "
 msgid "Password for %s client cert: "
 msgstr "Salasana asiakassertifikaatille %s: "
 
@@ -4443,7 +4425,6 @@ msgstr "viestejä ei poistettu"
 #. a mailbox.
 #.
 #: mx.c:823
-#| msgid "Unable to open temporary file!"
 msgid "Unable to append to trash folder"
 msgstr "Ei voida jatkaa roskahakemistoa"
 
@@ -5738,56 +5719,56 @@ msgstr "Ei voida lähettää myöhemmin, koska $postponed on asettamatta."
 msgid "Recall postponed message?"
 msgstr "Palautetaanko lykätty viesti?"
 
-#: send.c:2178
+#: send.c:2179
 msgid "Edit forwarded message?"
 msgstr "Muokataanko edelleenlähetettävää viestiä?"
 
-#: send.c:2242
+#: send.c:2243
 msgid "Abort unmodified message?"
 msgstr "Perutaanko muokkaamaton viesti?"
 
-#: send.c:2244
+#: send.c:2245
 msgid "Aborted unmodified message."
 msgstr "Muokkaamaton viesti peruttu."
 
-#: send.c:2362
+#: send.c:2363
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Crypto-backend on asettamatta, joten turvallisuusasetukset on pois käytöstä."
 
-#: send.c:2431
+#: send.c:2432
 msgid "Message postponed."
 msgstr "Viesti lykätty."
 
-#: send.c:2447
+#: send.c:2448
 msgid "No recipients are specified!"
 msgstr "Ei vastaanottajia."
 
-#: send.c:2452
+#: send.c:2453
 msgid "No recipients were specified."
 msgstr "Ei vastaanottajia."
 
-#: send.c:2468
+#: send.c:2469
 msgid "No subject, abort sending?"
 msgstr "Ei aihetta, perutaanko lähetys?"
 
-#: send.c:2472
+#: send.c:2473
 msgid "No subject specified."
 msgstr "Ei aihetta."
 
-#: send.c:2486
+#: send.c:2487
 msgid "No attachments, abort sending?"
 msgstr "Ei liitteitä, perutaanko lähetys?"
 
-#: send.c:2489
+#: send.c:2490
 msgid "Attachment referenced in message is missing"
 msgstr "Viite, joka on mainittu viestin sisällössä, puuttuu"
 
-#: send.c:2561 smtp.c:191
+#: send.c:2562 smtp.c:191
 msgid "Sending message..."
 msgstr "Lähetetään viestiä..."
 
-#: send.c:2604
+#: send.c:2605
 msgid "Could not send the message."
 msgstr "Ei voitu lähettää viestiä."
 
@@ -5797,15 +5778,15 @@ msgstr "Ei voitu lähettää viestiä."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2632 send.c:2658
+#: send.c:2633 send.c:2659
 msgid "Setting reply flags."
 msgstr "Asetetaan vastauslippuja."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Mail sent."
 msgstr "Viesti lähetetty."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Sending in background."
 msgstr "Lähetetää taustalla."
 
@@ -5813,7 +5794,7 @@ msgstr "Lähetetää taustalla."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2768
+#: send.c:2769
 msgid "Editing backgrounded."
 msgstr "Muokkaus taustalla."
 
@@ -5839,7 +5820,6 @@ msgstr "Ei voitu avata tiedostoa %s"
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
 #: sendlib.c:1315
-#| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
 msgstr "Dekryptataanko viestin liite?"
 
@@ -5853,8 +5833,7 @@ msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
 msgstr ""
-"Viestin liitteen dekoodaus epäonnistui, kokeillaanko ilman "
-"dekoodausta?"
+"Viestin liitteen dekoodaus epäonnistui, kokeillaanko ilman dekoodausta?"
 
 #. L10N: Prompt when attaching or forwarding a message with
 #. $forward_decrypt set, and there was a problem decrypting
@@ -6222,7 +6201,6 @@ msgstr "näytä liitteet väkisin mailcapin perusteella"
 #. compose menu: <view-pager>
 #.
 #: OPS:33
-#| msgid "force viewing of attachment using mailcap"
 msgid "view attachment in pager using copiousoutput mailcap"
 msgstr "näytä liite sivuttimessa mailcapin copiousoutputin mukaan"
 
@@ -6619,7 +6597,6 @@ msgstr "näytä multipart/alternative mailcapin perusteella"
 #. compose menu: <view-alt-pager>
 #.
 #: OPS:319
-#| msgid "view multipart/alternative using mailcap"
 msgid "view multipart/alternative in pager using copiousoutput mailcap"
 msgstr "näytä multipart/alternative sivuttimessa mailcapin perusteella"
 
@@ -7052,7 +7029,6 @@ msgstr "siirry viimeiseen"
 #. pager menu: <list-action>
 #.
 #: OPS:637
-#| msgid "No mailing lists found!"
 msgid "perform mailing list action"
 msgstr "tee postitutslistatoiminto"
 
@@ -7081,7 +7057,6 @@ msgstr "ota yhteys listan omistajaan"
 #. list menu: <list-post>
 #.
 #: OPS:657
-#| msgid "reply to specified mailing list"
 msgid "post to mailing list"
 msgstr "lähetä postituslistalle"
 
@@ -7098,7 +7073,6 @@ msgstr "vastaa postituslistalle"
 #. list menu: <list-subscribe>
 #.
 #: OPS:669
-#| msgid "reply to specified mailing list"
 msgid "subscribe to mailing list"
 msgstr "kirjaudu postituslistalle"
 
@@ -7106,7 +7080,6 @@ msgstr "kirjaudu postituslistalle"
 #. list menu: <list-unsubscribe>
 #.
 #: OPS:674
-#| msgid "Unsubscribed from %s"
 msgid "unsubscribe from mailing list"
 msgstr "poistu postituslistalta"
 
@@ -7451,7 +7424,6 @@ msgstr "ohita lainatun tekstin ohi"
 #. pager menu: <skip-headers>
 #.
 #: OPS:928
-#| msgid "skip beyond quoted text"
 msgid "skip beyond headers"
 msgstr "ohita otsakkeet"
 

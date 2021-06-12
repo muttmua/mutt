@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-05-28 09:35-0700\n"
+"POT-Creation-Date: 2021-06-12 10:38-0700\n"
 "PO-Revision-Date: 2021-05-31 16:53+02:00\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -1295,7 +1295,7 @@ msgstr "Jste na poslední položce."
 msgid "You are on the first entry."
 msgstr "Jste na první položce."
 
-#: compose.c:1197 send.c:2459
+#: compose.c:1197 send.c:2460
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Neplatné IDN v \"%s\": „%s“"
@@ -1522,7 +1522,7 @@ msgstr "Spouští se PGP…"
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Zprávu nelze poslat vloženou do textu. Použít PGP/MIME?"
 
-#: crypt.c:223 send.c:2424
+#: crypt.c:223 send.c:2425
 msgid "Mail not sent."
 msgstr "Zpráva nebyla odeslána."
 
@@ -5729,56 +5729,56 @@ msgstr "Nelze odložit. $postponed není nastaveno"
 msgid "Recall postponed message?"
 msgstr "Vrátit se k odloženým zprávám?"
 
-#: send.c:2178
+#: send.c:2179
 msgid "Edit forwarded message?"
 msgstr "Upravit přeposílanou zprávu?"
 
-#: send.c:2242
+#: send.c:2243
 msgid "Abort unmodified message?"
 msgstr "Zahodit nezměněnou zprávu?"
 
-#: send.c:2244
+#: send.c:2245
 msgid "Aborted unmodified message."
 msgstr "Nezměněná zpráva byla zahozena."
 
-#: send.c:2362
+#: send.c:2363
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 "Žádná implementace kryptografie nenastavena. Zabezpečení zprávy vypnuto."
 
-#: send.c:2431
+#: send.c:2432
 msgid "Message postponed."
 msgstr "Zpráva byla odložena."
 
-#: send.c:2447
+#: send.c:2448
 msgid "No recipients are specified!"
 msgstr "Nejsou zadáni příjemci!"
 
-#: send.c:2452
+#: send.c:2453
 msgid "No recipients were specified."
 msgstr "Nebyli zadání příjemci."
 
-#: send.c:2468
+#: send.c:2469
 msgid "No subject, abort sending?"
 msgstr "Žádná věc, zrušit odeslání?"
 
-#: send.c:2472
+#: send.c:2473
 msgid "No subject specified."
 msgstr "Věc nebyla zadána."
 
-#: send.c:2486
+#: send.c:2487
 msgid "No attachments, abort sending?"
 msgstr "Žádné přílohy, zrušit odeslání?"
 
-#: send.c:2489
+#: send.c:2490
 msgid "Attachment referenced in message is missing"
 msgstr "Příloha odkazovaná ve zprávě chybí"
 
-#: send.c:2561 smtp.c:191
+#: send.c:2562 smtp.c:191
 msgid "Sending message..."
 msgstr "Posílám zprávu…"
 
-#: send.c:2604
+#: send.c:2605
 msgid "Could not send the message."
 msgstr "Zprávu nelze odeslat."
 
@@ -5788,15 +5788,15 @@ msgstr "Zprávu nelze odeslat."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2632 send.c:2658
+#: send.c:2633 send.c:2659
 msgid "Setting reply flags."
 msgstr "Nastavují se příznaky odpovězeno."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Mail sent."
 msgstr "Zpráva odeslána."
 
-#: send.c:2703
+#: send.c:2704
 msgid "Sending in background."
 msgstr "Zasílám na pozadí."
 
@@ -5804,7 +5804,7 @@ msgstr "Zasílám na pozadí."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2768
+#: send.c:2769
 msgid "Editing backgrounded."
 msgstr "Úprava přesunuta na pozadí."
 
