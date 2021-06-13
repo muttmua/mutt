@@ -4719,7 +4719,7 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
   *forced_valid = 0;
 
   if (a && a->mailbox)
-    hints = crypt_add_string_to_hints (hints, a->mailbox);
+    hints = mutt_add_list (hints, a->mailbox);
   if (a && a->personal)
     hints = crypt_add_string_to_hints (hints, a->personal);
 

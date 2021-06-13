@@ -833,7 +833,7 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
   pgp_uid_t *q;
 
   if (a && a->mailbox)
-    hints = pgp_add_string_to_hints (hints, a->mailbox);
+    hints = mutt_add_list (hints, a->mailbox);
   if (a && a->personal)
     hints = pgp_add_string_to_hints (hints, a->personal);
 
