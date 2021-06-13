@@ -30,7 +30,7 @@ OP_ATTACH_VIEW_MAILCAP N_("force viewing of attachment using mailcap")
    attachment menu: <view-pager>
    compose menu: <view-pager>
  */
-OP_ATTACH_VIEW_PAGER N_("view attachment in pager using copiousoutput mailcap")
+OP_ATTACH_VIEW_PAGER N_("view attachment in pager using copiousoutput mailcap entry")
 
 /* L10N: Help screen description for OP_ATTACH_VIEW_TEXT
    attachment menu: <view-text>
@@ -316,7 +316,7 @@ OP_COMPOSE_VIEW_ALT_MAILCAP N_("view multipart/alternative using mailcap")
 /* L10N: Help screen description for OP_COMPOSE_VIEW_ALT_PAGER
    compose menu: <view-alt-pager>
  */
-OP_COMPOSE_VIEW_ALT_PAGER N_("view multipart/alternative in pager using copiousoutput mailcap")
+OP_COMPOSE_VIEW_ALT_PAGER N_("view multipart/alternative in pager using copiousoutput mailcap entry")
 
 /* L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
    compose menu: <write-fcc>

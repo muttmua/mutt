@@ -321,7 +321,7 @@ static int pop_fetch_headers (CONTEXT *ctx)
     }
     if (deleted > 0)
     {
-      mutt_error (_("%d messages have been lost. Try reopening the mailbox."),
+      mutt_error (_("%d message(s) have been lost. Try reopening the mailbox."),
 		  deleted);
       mutt_sleep (2);
     }

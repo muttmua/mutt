@@ -184,7 +184,7 @@ int mutt_autocrypt_account_init (int prompt)
        if there is already an account in the database with the email address
        they just entered.
     */
-    mutt_error _("That email address already has an autocrypt account");
+    mutt_error _("That email address is already assigned to an autocrypt account");
     mutt_sleep (1);
     goto cleanup;
   }

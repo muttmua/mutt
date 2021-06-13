@@ -1666,6 +1666,10 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 
         if ((new->content = mutt_make_file_attach (mutt_b2s (fname))) == NULL)
         {
+          /* L10N:
+             This phrase is a modified quote originally from Cool Hand
+             Luke, intended to be somewhat humorous.
+          */
           mutt_error _("What we have here is a failure to make an attachment");
           FREE (&new);
           continue;

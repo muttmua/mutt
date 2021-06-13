@@ -217,6 +217,14 @@ Flags[] =
   { 'S', MUTT_SUPERSEDED, 0, 0,
     /* L10N:
        Pattern Completion Menu description for ~S
+
+       An email header, Supersedes: or Supercedes:, can specify a
+       message-id.  The intent is to say, "the original message with
+       this message-id should be considered incorrect or out of date,
+       and this email should be the actual email."
+
+       The ~S pattern will select those "out of date/incorrect" emails
+       referenced by another email's Supersedes header.
     */
     N_("superseded messages") },
   { 't', MUTT_TO, 0, EAT_REGEXP,

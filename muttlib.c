@@ -1987,7 +1987,7 @@ int mutt_save_confirm (const char *s, struct stat *st)
     if (option (OPTCONFIRMAPPEND))
     {
       tmp = mutt_buffer_pool_get ();
-      mutt_buffer_printf (tmp, _("Append messages to %s?"), s);
+      mutt_buffer_printf (tmp, _("Append message(s) to %s?"), s);
       if ((rc = mutt_yesorno (mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
 	ret = 1;
       else if (rc == -1)
