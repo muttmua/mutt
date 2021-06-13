@@ -4732,8 +4732,8 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
   if (!keys)
     return NULL;
 
-  dprint (5, (debugfile, "crypt_getkeybyaddr: looking for %s <%s>.",
-	      a->personal, a->mailbox));
+  dprint (5, (debugfile, "crypt_getkeybyaddr: looking for %s <%s>.\n",
+	      NONULL (a->personal), NONULL (a->mailbox)));
 
   for (k = keys; k; k = k->next)
     {
