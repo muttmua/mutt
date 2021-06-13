@@ -846,8 +846,8 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
   if (!keys)
     return NULL;
 
-  dprint (5, (debugfile, "pgp_getkeybyaddr: looking for %s <%s>.",
-	      a->personal, a->mailbox));
+  dprint (5, (debugfile, "pgp_getkeybyaddr: looking for %s <%s>.\n",
+	      NONULL (a->personal), NONULL (a->mailbox)));
 
 
   for (k = keys; k; k = kn)
