@@ -2573,33 +2573,65 @@ search_next:
 	{
 	  int dretval = 0;
 	  int new_topline = rd.topline;
+	  int num_quoted = 0;
 
-	  while ((new_topline < rd.lastLine ||
-		  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			 new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
-                         &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		 && rd.lineInfo[new_topline].type != MT_COLOR_QUOTED)
-	    new_topline++;
+          if (PagerSkipQuotedContext < 0)
+            PagerSkipQuotedContext = 0;
 
-	  if (dretval < 0)
-	  {
-	    mutt_error _("No more quoted text.");
-	    break;
+          /* Skip past previous "context" quoted lines */
+          if (PagerSkipQuotedContext > 0)
+          {
+	    while ((new_topline < rd.lastLine ||
+		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+		   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
+	    {
+	      new_topline++;
+	      num_quoted++;
+	    }
+
+	    if (dretval < 0)
+	    {
+	      mutt_error _("No more unquoted text after quoted text.");
+	      break;
+	    }
+          }
+
+          if (num_quoted <= PagerSkipQuotedContext)
+          {
+	    num_quoted = 0;
+	    while ((new_topline < rd.lastLine ||
+		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+		   && rd.lineInfo[new_topline].type != MT_COLOR_QUOTED)
+	      new_topline++;
+
+	    if (dretval < 0)
+	    {
+	      mutt_error _("No more quoted text.");
+	      break;
+	    }
+
+	    while ((new_topline < rd.lastLine ||
+		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+		   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
+	    {
+	      new_topline++;
+	      num_quoted++;
+	    }
+
+	    if (dretval < 0)
+	    {
+	      mutt_error _("No more unquoted text after quoted text.");
+	      break;
+	    }
 	  }
 
-	  while ((new_topline < rd.lastLine ||
-		  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			 new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
-                         &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		 && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
-	    new_topline++;
-
-	  if (dretval < 0)
-	  {
-	    mutt_error _("No more unquoted text after quoted text.");
-	    break;
-	  }
-	  rd.topline = new_topline;
+	  rd.topline = new_topline - MIN (PagerSkipQuotedContext, num_quoted);
 	}
 	break;
 

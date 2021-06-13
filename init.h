@@ -2386,6 +2386,15 @@ struct option_t MuttVars[] = {
   ** is less than $$pager_index_lines, then the index will only use as
   ** many lines as it needs.
   */
+  { "pager_skip_quoted_context", DT_NUM, R_NONE, {.p=&PagerSkipQuotedContext}, {.l=0} },
+  /*
+  ** .pp
+  ** Determines the number of lines of context to show before the
+  ** unquoted text when using \fC$<skip-quoted>\fP. When set to a
+  ** positive number at most that many lines of the previous quote are
+  ** displayed. If the previous quote is shorter the whole quote is
+  ** displayed.
+  */
   { "pager_stop",	DT_BOOL, R_NONE, {.l=OPTPAGERSTOP}, {.l=0} },
   /*
   ** .pp
