@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.0.3-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-06-12 10:38-0700\n"
-"PO-Revision-Date: 2021-04-10 11:32+0200\n"
+"POT-Creation-Date: 2021-06-17 01:46+0200\n"
+"PO-Revision-Date: 2021-06-17 02:06+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -81,7 +81,7 @@ msgstr "mutt_account_getoauthbearer: La commande a renvoyé une chaîne vide"
 
 #: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
 #: background.c:369 browser.c:46 history.c:75 listmenu.c:49 pager.c:1737
-#: pattern.c:2167 postpone.c:42 query.c:49 recvattach.c:59
+#: pattern.c:2175 postpone.c:42 query.c:49 recvattach.c:59
 msgid "Exit"
 msgstr "Quitter"
 
@@ -93,7 +93,7 @@ msgstr "Effacer"
 msgid "Undel"
 msgstr "Récup"
 
-#: addrbook.c:40 history.c:76 pattern.c:2168
+#: addrbook.c:40 history.c:76 pattern.c:2176
 msgid "Select"
 msgstr "Sélectionner"
 
@@ -101,7 +101,7 @@ msgstr "Sélectionner"
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
 #: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4565
 #: curs_main.c:555 history.c:78 listmenu.c:61 mutt_ssl.c:1328
-#: mutt_ssl_gnutls.c:1058 pager.c:2144 pattern.c:2169 pgpkey.c:523
+#: mutt_ssl_gnutls.c:1058 pager.c:2144 pattern.c:2177 pgpkey.c:523
 #: postpone.c:45 query.c:54 recvattach.c:63 smime.c:466
 msgid "Help"
 msgstr "Aide"
@@ -172,7 +172,7 @@ msgstr "Ne correspond pas au nametemplate, continuer ?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "L'entrée compose de mailcap nécessite %%s"
 
-#: attach.c:141 attach.c:274 background.c:342 commands.c:343 compose.c:1826
+#: attach.c:141 attach.c:274 background.c:342 commands.c:343 compose.c:1830
 #: compress.c:414 curs_lib.c:305 curs_lib.c:999 sendlib.c:1467 sendlib.c:1505
 #: sendlib.c:1568
 #, c-format
@@ -280,7 +280,7 @@ msgstr "Impossible de créer %s : %s."
 #.
 #: autocrypt/autocrypt.c:134
 msgid "Create an initial autocrypt account?"
-msgstr "Créer un compte Autocrypt initial ?"
+msgstr "Créer un compte autocrypt initial ?"
 
 #. L10N:
 #. Autocrypt is asking for the email address to use for the
@@ -289,7 +289,7 @@ msgstr "Créer un compte Autocrypt initial ?"
 #.
 #: autocrypt/autocrypt.c:161
 msgid "Autocrypt account address: "
-msgstr "Adresse du compte Autocrypt : "
+msgstr "Adresse du compte autocrypt : "
 
 #. L10N:
 #. Autocrypt prompts for an account email address, and requires
@@ -306,8 +306,8 @@ msgstr "Veuillez entrer une seule adresse e-mail"
 #. they just entered.
 #.
 #: autocrypt/autocrypt.c:187
-msgid "That email address already has an autocrypt account"
-msgstr "Cette adresse e-mail a déjà un compte Autocrypt"
+msgid "That email address is already assigned to an autocrypt account"
+msgstr "Cette adresse e-mail est déjà associée à un compte autocrypt"
 
 #. L10N:
 #. Autocrypt has a setting "prefer-encrypt".
@@ -327,14 +327,14 @@ msgstr "Préférer le chiffrement ?"
 #.
 #: autocrypt/autocrypt.c:218
 msgid "Autocrypt account creation aborted."
-msgstr "La création du compte Autocrypt a été interrompue."
+msgstr "La création du compte autocrypt a été interrompue."
 
 #. L10N:
 #. Message displayed after an autocrypt account is successfully created.
 #.
 #: autocrypt/autocrypt.c:223
 msgid "Autocrypt account creation succeeded"
-msgstr "La création du compte Autocrypt a réussi"
+msgstr "La création du compte autocrypt a réussi"
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
@@ -362,7 +362,7 @@ msgstr "Autocrypt n'est pas activé pour %s."
 #: autocrypt/autocrypt.c:591 autocrypt/autocrypt.c:619
 #, c-format
 msgid "No (valid) autocrypt key found for %s."
-msgstr "Pas de clé Autocrypt (valide) trouvée pour %s."
+msgstr "Pas de clé autocrypt (valide) trouvée pour %s."
 
 #. L10N:
 #. The first time autocrypt is enabled, Mutt will ask to scan
@@ -373,7 +373,7 @@ msgstr "Pas de clé Autocrypt (valide) trouvée pour %s."
 #.
 #: autocrypt/autocrypt.c:861
 msgid "Scan a mailbox for autocrypt headers?"
-msgstr "Lire une boîte aux lettres pour récupérer des en-têtes Autocrypt ?"
+msgstr "Lire une boîte aux lettres pour récupérer des en-têtes autocrypt ?"
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
@@ -392,7 +392,7 @@ msgstr "Lire la boîte aux lettres"
 #: autocrypt/autocrypt.c:890
 msgid "Scan another mailbox for autocrypt headers?"
 msgstr ""
-"Lire une autre boîte aux lettres pour récupérer des en-têtes Autocrypt ?"
+"Lire une autre boîte aux lettres pour récupérer des en-têtes autocrypt ?"
 
 # , c-format
 #. L10N: Autocrypt Account Menu Help line:
@@ -467,7 +467,7 @@ msgstr "inactif"
 #.
 #: autocrypt/autocrypt_acct_menu.c:147
 msgid "Autocrypt Accounts"
-msgstr "Comptes Autocrypt"
+msgstr "Comptes autocrypt"
 
 #. L10N:
 #. This error message is displayed if a database update of an
@@ -496,7 +496,7 @@ msgstr "Voulez-vous vraiment supprimer le compte \"%s\" ?"
 #: autocrypt/autocrypt_db.c:50 autocrypt/autocrypt_db.c:93
 #, c-format
 msgid "Unable to open autocrypt database %s"
-msgstr "Impossible d'ouvrir la base de données Autocrypt %s"
+msgstr "Impossible d'ouvrir la base de données autocrypt %s"
 
 # , c-format
 #: autocrypt/autocrypt_gpgme.c:41 crypt-gpgme.c:574
@@ -510,7 +510,7 @@ msgstr "erreur lors de la création du contexte gpgme : %s\n"
 #.
 #: autocrypt/autocrypt_gpgme.c:136
 msgid "Generating autocrypt key..."
-msgstr "Génération de la clé Autocrypt..."
+msgstr "Génération de la clé autocrypt..."
 
 #. L10N:
 #. GPGME was unable to generate a key for some reason.
@@ -519,7 +519,7 @@ msgstr "Génération de la clé Autocrypt..."
 #: autocrypt/autocrypt_gpgme.c:148 autocrypt/autocrypt_gpgme.c:169
 #, c-format
 msgid "Error creating autocrypt key: %s\n"
-msgstr "Erreur à la création de la clé Autocrypt : %s\n"
+msgstr "Erreur à la création de la clé autocrypt : %s\n"
 
 #. L10N:
 #. After selecting a key for an autocrypt account,
@@ -530,7 +530,7 @@ msgstr "Erreur à la création de la clé Autocrypt : %s\n"
 #: autocrypt/autocrypt_gpgme.c:213
 #, c-format
 msgid "The key %s is not usable for autocrypt"
-msgstr "La clé %s est inutilisable pour Autocrypt"
+msgstr "La clé %s est inutilisable pour autocrypt"
 
 #. L10N:
 #. During autocrypt account creation, this prompt asks the
@@ -565,7 +565,7 @@ msgstr "Créer une nouvelle clé GPG pour ce compte à la place ?"
 #.
 #: autocrypt/autocrypt_schema.c:116
 msgid "Autocrypt database version is too new"
-msgstr "La version de la base de données Autocrypt est trop récente"
+msgstr "La version de la base de données autocrypt est trop récente"
 
 #: background.c:181
 msgid "Redraw"
@@ -1440,45 +1440,49 @@ msgstr "Content-Type %s inconnu"
 msgid "Can't create file %s"
 msgstr "Impossible de créer le fichier %s"
 
-#: compose.c:1669
+#. L10N:
+#. This phrase is a modified quote originally from Cool Hand
+#. Luke, intended to be somewhat humorous.
+#.
+#: compose.c:1673
 msgid "What we have here is a failure to make an attachment"
-msgstr "Nous sommes en présence d'un échec de fabrication d'un attachement"
+msgstr "Impossible de créer un attachement"
 
-#: compose.c:1708
+#: compose.c:1712
 msgid "$send_multipart_alternative_filter is not set"
 msgstr "$send_multipart_alternative_filter n'est pas défini"
 
-#: compose.c:1783
+#: compose.c:1787
 msgid "Postpone this message?"
 msgstr "Ajourner ce message ?"
 
-#: compose.c:1844
+#: compose.c:1848
 msgid "Write message to mailbox"
 msgstr "Écrire le message dans la boîte aux lettres"
 
 # , c-format
-#: compose.c:1847
+#: compose.c:1851
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "Écriture du message dans %s ..."
 
-#: compose.c:1854
+#: compose.c:1858
 msgid "Message written."
 msgstr "Message écrit."
 
-#: compose.c:1867
+#: compose.c:1871
 msgid "No PGP backend configured"
 msgstr "Pas de backend PGP configuré"
 
-#: compose.c:1875 compose.c:1948
+#: compose.c:1879 compose.c:1952
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME déjà sélectionné. Effacer & continuer ? "
 
-#: compose.c:1903
+#: compose.c:1907
 msgid "No S/MIME backend configured"
 msgstr "Pas de backend S/MIME configuré"
 
-#: compose.c:1912
+#: compose.c:1916
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP déjà sélectionné. Effacer & continuer ? "
 
@@ -2594,11 +2598,11 @@ msgstr "Pas de message non effacé."
 msgid "You are on the first message."
 msgstr "Vous êtes sur le premier message."
 
-#: curs_main.c:1771 menu.c:919 pager.c:2365 pattern.c:2097
+#: curs_main.c:1771 menu.c:919 pager.c:2365 pattern.c:2105
 msgid "Search wrapped to top."
 msgstr "La recherche est repartie du début."
 
-#: curs_main.c:1780 pager.c:2387 pattern.c:2108
+#: curs_main.c:1780 pager.c:2387 pattern.c:2116
 msgid "Search wrapped to bottom."
 msgstr "La recherche est repartie de la fin."
 
@@ -2705,8 +2709,8 @@ msgstr "Impossible de récupérer le message"
 #: edit.c:42
 msgid ""
 "~~\t\tinsert a line beginning with a single ~\n"
-"~b users\tadd users to the Bcc: field\n"
-"~c users\tadd users to the Cc: field\n"
+"~b addresses\tadd addresses to the Bcc: field\n"
+"~c addresses\tadd addresses to the Cc: field\n"
 "~f messages\tinclude messages\n"
 "~F messages\tsame as ~f, except also include headers\n"
 "~h\t\tedit the message header\n"
@@ -2715,8 +2719,8 @@ msgid ""
 "~p\t\tprint the message\n"
 msgstr ""
 "~~\t\tinsère une ligne commençant par un unique ~\n"
-"~b utilisateurs\tajoute des utilisateurs au champ Bcc:\n"
-"~c utilisateurs\tajoute des utilisateurs au champ Cc:\n"
+"~b adresses\tajoute des adresses au champ Bcc:\n"
+"~c adresses\tajoute des adresses au champ Cc:\n"
 "~f messages\tinclut des messages\n"
 "~F messages\tidentique à ~f, mais inclut également les en-têtes\n"
 "~h\t\tédite l'en-tête du message\n"
@@ -4078,15 +4082,15 @@ msgstr "Vous êtes sur la première page."
 msgid "You are on the last page."
 msgstr "Vous êtes sur la dernière page."
 
-#: menu.c:893 pager.c:2410 pattern.c:2029
+#: menu.c:893 pager.c:2410 pattern.c:2037
 msgid "Search for: "
 msgstr "Rechercher : "
 
-#: menu.c:893 pager.c:2410 pattern.c:2029
+#: menu.c:893 pager.c:2410 pattern.c:2037
 msgid "Reverse search for: "
 msgstr "Rechercher en arrière : "
 
-#: menu.c:937 pager.c:2362 pager.c:2384 pager.c:2505 pattern.c:2151
+#: menu.c:937 pager.c:2362 pager.c:2384 pager.c:2505 pattern.c:2159
 msgid "Not found."
 msgstr "Non trouvé."
 
@@ -4551,8 +4555,8 @@ msgstr "Impossible de sauver le message dans la boîte aux lettres POP."
 # , c-format
 #: muttlib.c:1990
 #, c-format
-msgid "Append messages to %s?"
-msgstr "Ajouter les messages à %s ?"
+msgid "Append message(s) to %s?"
+msgstr "Ajouter le(s) message(s) à %s ?"
 
 # , c-format
 #: muttlib.c:2003
@@ -4947,118 +4951,126 @@ msgstr "messages dont l'en-tête Subject correspond à EXPR"
 #. L10N:
 #. Pattern Completion Menu description for ~S
 #.
-#: pattern.c:221
+#. An email header, Supersedes: or Supercedes:, can specify a
+#. message-id.  The intent is to say, "the original message with
+#. this message-id should be considered incorrect or out of date,
+#. and this email should be the actual email."
+#.
+#. The ~S pattern will select those "out of date/incorrect" emails
+#. referenced by another email's Supersedes header.
+#.
+#: pattern.c:229
 msgid "superseded messages"
 msgstr "messages remplacés"
 
 #. L10N:
 #. Pattern Completion Menu description for ~t
 #.
-#: pattern.c:226
+#: pattern.c:234
 msgid "messages whose To header matches EXPR"
 msgstr "messages dont l'en-tête To correspond à EXPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
 #.
-#: pattern.c:231
+#: pattern.c:239
 msgid "tagged messages"
 msgstr "messages marqués"
 
 #. L10N:
 #. Pattern Completion Menu description for ~u
 #.
-#: pattern.c:236
+#: pattern.c:244
 msgid "messages addressed to subscribed mailing lists"
 msgstr "messages adressés à des liste auxquelles vous êtes abonné"
 
 #. L10N:
 #. Pattern Completion Menu description for ~U
 #.
-#: pattern.c:241
+#: pattern.c:249
 msgid "unread messages"
 msgstr "messages non lus"
 
 #. L10N:
 #. Pattern Completion Menu description for ~v
 #.
-#: pattern.c:246
+#: pattern.c:254
 msgid "messages in collapsed threads"
 msgstr "messages dans des discussions comprimées"
 
 #. L10N:
 #. Pattern Completion Menu description for ~V
 #.
-#: pattern.c:251
+#: pattern.c:259
 msgid "cryptographically verified messages"
 msgstr "messages vérifiés cryptographiquement"
 
 #. L10N:
 #. Pattern Completion Menu description for ~x
 #.
-#: pattern.c:256
+#: pattern.c:264
 msgid "messages whose References header matches EXPR"
 msgstr "messages dont l'en-tête References correspond à EXPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
 #.
-#: pattern.c:261
+#: pattern.c:269
 msgid "messages with RANGE attachments"
 msgstr "messages avec MIN-MAX attachements"
 
 #. L10N:
 #. Pattern Completion Menu description for ~y
 #.
-#: pattern.c:266
+#: pattern.c:274
 msgid "messages whose X-Label header matches EXPR"
 msgstr "messages dont l'en-tête X-Label correspond à EXPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
 #.
-#: pattern.c:271
+#: pattern.c:279
 msgid "messages whose size is in RANGE"
 msgstr "messages dont la taille est dans MIN-MAX"
 
 #. L10N:
 #. Pattern Completion Menu description for ~=
 #.
-#: pattern.c:276
+#: pattern.c:284
 msgid "duplicated messages"
 msgstr "messages en double"
 
 #. L10N:
 #. Pattern Completion Menu description for ~$
 #.
-#: pattern.c:281
+#: pattern.c:289
 msgid "unreferenced messages"
 msgstr "messages non référencés"
 
 # , c-format
-#: pattern.c:529 pattern.c:1020
+#: pattern.c:537 pattern.c:1028
 #, c-format
 msgid "Error in expression: %s"
 msgstr "Erreur dans l'expression : %s"
 
-#: pattern.c:535 pattern.c:1025
+#: pattern.c:543 pattern.c:1033
 msgid "Empty expression"
 msgstr "Expression vide"
 
 # , c-format
-#: pattern.c:687 pattern.c:702
+#: pattern.c:695 pattern.c:710
 #, c-format
 msgid "Invalid day of month: %s"
 msgstr "Quantième invalide : %s"
 
 # , c-format
-#: pattern.c:692 pattern.c:716
+#: pattern.c:700 pattern.c:724
 #, c-format
 msgid "Invalid month: %s"
 msgstr "Mois invalide : %s"
 
 # , c-format
-#: pattern.c:878
+#: pattern.c:886
 #, c-format
 msgid "Invalid relative date: %s"
 msgstr "Date relative invalide : %s"
@@ -5068,7 +5080,7 @@ msgstr "Date relative invalide : %s"
 #. was invoked when Mutt was compiled without crypto support.
 #. %c is the pattern character, i.e. "g".
 #.
-#: pattern.c:1086
+#: pattern.c:1094
 #, c-format
 msgid "Pattern modifier '~%c' is disabled."
 msgstr "Le modificateur de motif '~%c' est désactivé."
@@ -5078,93 +5090,93 @@ msgstr "Le modificateur de motif '~%c' est désactivé."
 #. An unknown pattern modifier was somehow invoked.  This
 #. shouldn't be possible unless there is a bug.
 #.
-#: pattern.c:1094 pattern.c:1793
+#: pattern.c:1102 pattern.c:1801
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "erreur : opération inconnue %d (signalez cette erreur)."
 
-#: pattern.c:1160 pattern.c:1383
+#: pattern.c:1168 pattern.c:1391
 msgid "empty pattern"
 msgstr "motif vide"
 
 # , c-format
-#: pattern.c:1190 pattern.c:1376
+#: pattern.c:1198 pattern.c:1384
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "erreur dans le motif à : %s"
 
-#: pattern.c:1217
+#: pattern.c:1225
 #, c-format
 msgid "missing pattern: %s"
 msgstr "motif manquant : %s"
 
 # , c-format
-#: pattern.c:1236
+#: pattern.c:1244
 #, c-format
 msgid "mismatched brackets: %s"
 msgstr "parenthésage incorrect : %s"
 
 # , c-format
-#: pattern.c:1297
+#: pattern.c:1305
 #, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c : modificateur de motif invalide"
 
 # , c-format
-#: pattern.c:1303
+#: pattern.c:1311
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c : non supporté dans ce mode"
 
-#: pattern.c:1320
+#: pattern.c:1328
 msgid "missing parameter"
 msgstr "paramètre manquant"
 
 # , c-format
-#: pattern.c:1348
+#: pattern.c:1356
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "parenthésage incorrect : %s"
 
-#: pattern.c:1884 pattern.c:2052
+#: pattern.c:1892 pattern.c:2060
 msgid "Compiling search pattern..."
 msgstr "Compilation du motif de recherche..."
 
-#: pattern.c:1903
+#: pattern.c:1911
 msgid "Executing command on matching messages..."
 msgstr "Exécution de la commande sur les messages correspondants..."
 
-#: pattern.c:1986
+#: pattern.c:1994
 msgid "No messages matched criteria."
 msgstr "Aucun message ne correspond au critère."
 
-#: pattern.c:2001 pattern.c:2143
+#: pattern.c:2009 pattern.c:2151
 msgid "Search interrupted."
 msgstr "Recherche interrompue."
 
-#: pattern.c:2087
+#: pattern.c:2095
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: pattern.c:2100
+#: pattern.c:2108
 msgid "Search hit bottom without finding match"
 msgstr "Fin atteinte sans rien avoir trouvé"
 
-#: pattern.c:2111
+#: pattern.c:2119
 msgid "Search hit top without finding match"
 msgstr "Début atteint sans rien avoir trouvé"
 
 #. L10N:
 #. Pattern completion menu title
 #.
-#: pattern.c:2229
+#: pattern.c:2237
 msgid "Patterns"
 msgstr "Motifs"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a regular expression
 #.
-#: pattern.c:2251
+#: pattern.c:2259
 msgid "EXPR"
 msgstr "EXPR"
 
@@ -5172,7 +5184,7 @@ msgstr "EXPR"
 #. Pattern Completion Menu argument type: a numeric range.
 #. Used by ~m, ~n, ~X, ~z.
 #.
-#: pattern.c:2258
+#: pattern.c:2266
 msgid "RANGE"
 msgstr "MIN-MAX"
 
@@ -5180,7 +5192,7 @@ msgstr "MIN-MAX"
 #. Pattern Completion Menu argument type: a date range
 #. Used by ~d, ~r.
 #.
-#: pattern.c:2265
+#: pattern.c:2273
 msgid "DATERANGE"
 msgstr "MIN-MAX"
 
@@ -5188,28 +5200,28 @@ msgstr "MIN-MAX"
 #. Pattern Completion Menu argument type: a nested pattern.
 #. Used by ~(), ~<(), ~>().
 #.
-#: pattern.c:2281
+#: pattern.c:2289
 msgid "PATTERN"
 msgstr "MOTIF"
 
 #. L10N:
 #. Pattern Completion Menu description for ~()
 #.
-#: pattern.c:2290
+#: pattern.c:2298
 msgid "messages in threads containing messages matching PATTERN"
 msgstr "messages dans discussions avec messages correspondant à MOTIF"
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
 #.
-#: pattern.c:2300
+#: pattern.c:2308
 msgid "messages whose immediate parent matches PATTERN"
 msgstr "messages dont le parent immédiat correspond à MOTIF"
 
 #. L10N:
 #. Pattern Completion Menu description for ~>()
 #.
-#: pattern.c:2310
+#: pattern.c:2318
 msgid "messages having an immediate child matching PATTERN"
 msgstr "messages ayant un fils immédiat correspondant à MOTIF"
 
@@ -5386,8 +5398,9 @@ msgstr "La commande UIDL n'est pas supportée par le serveur."
 
 #: pop.c:324
 #, c-format
-msgid "%d messages have been lost. Try reopening the mailbox."
-msgstr "%d messages ont été perdus. Essayez de rouvrir la boîte aux lettres."
+msgid "%d message(s) have been lost. Try reopening the mailbox."
+msgstr ""
+"%d message(s) a/ont été perdu(s). Essayez de rouvrir la boîte aux lettres."
 
 #: pop.c:439 pop.c:882
 #, c-format
@@ -6424,8 +6437,9 @@ msgstr "forcer la visualisation d'un attachment en utilisant mailcap"
 #. compose menu: <view-pager>
 #.
 #: OPS:33
-msgid "view attachment in pager using copiousoutput mailcap"
-msgstr "voir l'attachment dans le visionneur avec le mailcap copiousoutput"
+msgid "view attachment in pager using copiousoutput mailcap entry"
+msgstr ""
+"voir l'attachment dans le visionneur avec l'entrée mailcap copiousoutput"
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -6447,14 +6461,14 @@ msgstr "Inverser l'affichage des sous-parties"
 #.
 #: OPS:49
 msgid "manage autocrypt accounts"
-msgstr "gérer les comptes Autocrypt"
+msgstr "gérer les comptes autocrypt"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
 #. autocrypt account menu: <create-account>
 #.
 #: OPS:54
 msgid "create a new autocrypt account"
-msgstr "créer un nouveau compte Autocrypt"
+msgstr "créer un nouveau compte autocrypt"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
 #. autocrypt account menu: <delete-account>
@@ -6587,7 +6601,7 @@ msgstr "attacher des messages à ce message"
 #.
 #: OPS:149
 msgid "show autocrypt compose menu options"
-msgstr "afficher les options du menu de composition d'Autocrypt"
+msgstr "afficher les options du menu de composition d'autocrypt"
 
 #. L10N: Help screen description for OP_COMPOSE_EDIT_BCC
 #. compose menu: <edit-bcc>
@@ -6824,9 +6838,10 @@ msgstr "visualiser multipart/alternative en utilisant mailcap"
 #. compose menu: <view-alt-pager>
 #.
 #: OPS:319
-msgid "view multipart/alternative in pager using copiousoutput mailcap"
+msgid "view multipart/alternative in pager using copiousoutput mailcap entry"
 msgstr ""
-"voir multipart/alternative dans le visionneur avec le mailcap copiousoutput"
+"voir multipart/alternative dans le visionneur avec entrée mailcap "
+"copiousoutput"
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
