@@ -96,6 +96,7 @@ static int tunnel_socket_open (CONNECTION *conn)
   if ((pid = fork ()) == 0)
   {
     mutt_unblock_signals_system (0);
+    mutt_reset_child_signals ();
     devnull = open ("/dev/null", O_RDWR);
     if (devnull < 0 ||
         dup2 (pout[0], STDIN_FILENO) < 0 ||

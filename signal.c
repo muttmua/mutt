@@ -322,6 +322,32 @@ void mutt_unblock_signals_system (int catch)
   }
 }
 
+/* Resets ignored signals back to the default.
+ *
+ * See sigaction(2):
+ *   A child created via fork(2) inherits a copy of its parent's
+ *   signal dispositions.  During an execve(2), the dispositions of
+ *   handled signals are reset to the default; the dispositions of
+ *   ignored signals are left unchanged.
+ */
+void mutt_reset_child_signals (void)
+{
+  struct sigaction act;
+
+  act.sa_handler = SIG_DFL;
+  act.sa_flags = 0;
+  sigemptyset (&act.sa_mask);
+
+  /* These signals are set to SIG_IGN and must be reset */
+  sigaction (SIGPIPE, &act, NULL);
+
+  /* These technically don't need to be reset, but the code has been
+   * doing so for a long time. */
+  sigaction (SIGTERM, &act, NULL);
+  sigaction (SIGTSTP, &act, NULL);
+  sigaction (SIGCONT, &act, NULL);
+}
+
 void mutt_allow_interrupt (int disposition)
 {
   struct sigaction sa;

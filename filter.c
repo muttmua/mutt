@@ -85,6 +85,7 @@ mutt_create_filter_fd (const char *cmd, FILE **in, FILE **out, FILE **err,
   if ((thepid = fork ()) == 0)
   {
     mutt_unblock_signals_system (0);
+    mutt_reset_child_signals ();
 
     if (in)
     {

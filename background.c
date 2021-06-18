@@ -128,7 +128,6 @@ int mutt_background_process_waitpid (void)
 
 static pid_t mutt_background_run (const char *cmd)
 {
-  struct sigaction act;
   pid_t thepid;
   int fd;
 
@@ -157,14 +156,8 @@ static pid_t mutt_background_run (const char *cmd)
     close (2);
 #endif
 
-    /* reset signals for the child; not really needed, but... */
     mutt_unblock_signals_system (0);
-    act.sa_handler = SIG_DFL;
-    act.sa_flags = 0;
-    sigemptyset (&act.sa_mask);
-    sigaction (SIGTERM, &act, NULL);
-    sigaction (SIGTSTP, &act, NULL);
-    sigaction (SIGCONT, &act, NULL);
+    mutt_reset_child_signals ();
 
     execle (EXECSHELL, "sh", "-c", cmd, NULL, mutt_envlist ());
     _exit (127); /* execl error */
