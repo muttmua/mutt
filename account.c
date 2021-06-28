@@ -25,6 +25,7 @@
 #include "mutt.h"
 #include "account.h"
 #include "url.h"
+#include "mutt_curses.h"
 
 /* mutt_account_match: compare account info (host/port/user) */
 int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
@@ -311,6 +312,10 @@ int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoaut
   token = mutt_read_line (NULL, &token_size, fp, NULL, 0);
   safe_fclose (&fp);
   mutt_wait_filter (pid);
+
+  /* The refresh cmd in some cases will invoke gpg to decrypt a token */
+  if (!option (OPTNOCURSES))
+    mutt_need_hard_redraw ();
 
   if (token == NULL || *token == '\0')
   {
