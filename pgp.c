@@ -998,7 +998,11 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   }
 
   safe_fclose (&pgpout);
+
   rv = mutt_wait_filter (thepid);
+  if (option (OPTUSEGPGAGENT))
+    mutt_need_hard_redraw ();
+
   mutt_unlink (mutt_b2s (pgptmpfile));
 
   fflush (pgperr);
@@ -1022,9 +1026,6 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
 
   fflush (fpout);
   rewind (fpout);
-
-  if (pgp_use_gpg_agent())
-    mutt_need_hard_redraw ();
 
   if (fgetc (fpout) == EOF)
   {
