@@ -128,6 +128,8 @@ void mutt_exit (int code)
 
 static void mutt_usage (void)
 {
+  errno = 0;
+
   puts (mutt_make_version ());
 
   puts _(
@@ -174,6 +176,8 @@ options:\n\
   -Z\t\topen the first folder with new message, exit immediately if none\n\
   -h\t\tthis help message");
 
+  if (errno && errno != EPIPE)
+    exit (1);
   exit (0);
 }
 
@@ -198,6 +202,8 @@ rstrip_in_place(char *s)
 static void show_version (void)
 {
   struct utsname uts;
+
+  errno = 0;
 
   puts (mutt_make_version());
   puts (_(Notice));
@@ -566,6 +572,8 @@ static void show_version (void)
 
   mutt_print_patchlist();
 
+  if (errno && errno != EPIPE)
+    exit (1);
   exit (0);
 }
 
@@ -830,6 +838,7 @@ int main (int argc, char **argv, char **environ)
       show_version ();
       break;
     default:
+      errno = 0;
       puts (mutt_make_version ());
       puts (Copyright);
       puts (_(Thanks));
@@ -837,6 +846,8 @@ int main (int argc, char **argv, char **environ)
       puts (_(Obtaining));
       puts (_(ReachingUs));
       mutt_buffer_free (&folder);
+      if (errno && errno != EPIPE)
+        exit (1);
       exit (0);
   }
 
