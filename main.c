@@ -847,6 +847,10 @@ int main (int argc, char **argv, char **environ)
     sendflags = SENDBATCH;
   }
 
+  /* Check to make sure stdout is available in curses mode. */
+  if (!option (OPTNOCURSES) && !isatty (1))
+    exit (1);
+
   /* Always create the mutt_windows because batch mode has some shared code
    * paths that end up referencing them. */
   mutt_init_windows ();
