@@ -176,7 +176,9 @@ options:\n\
   -Z\t\topen the first folder with new message, exit immediately if none\n\
   -h\t\tthis help message");
 
-  if (errno && errno != EPIPE)
+  fflush (stdout);
+
+  if (ferror (stdout) && errno && errno != EPIPE)
     exit (1);
   exit (0);
 }
@@ -572,7 +574,9 @@ static void show_version (void)
 
   mutt_print_patchlist();
 
-  if (errno && errno != EPIPE)
+  fflush (stdout);
+
+  if (ferror (stdout) && errno && errno != EPIPE)
     exit (1);
   exit (0);
 }
