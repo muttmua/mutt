@@ -176,7 +176,7 @@ options:\n\
 
   fflush (stdout);
 
-  if (ferror (stdout) && errno && errno != EPIPE)
+  if (ferror (stdout))
     exit (1);
   exit (0);
 }
@@ -572,7 +572,7 @@ static void show_version (void)
 
   fflush (stdout);
 
-  if (ferror (stdout) && errno && errno != EPIPE)
+  if (ferror (stdout))
     exit (1);
   exit (0);
 }
@@ -846,7 +846,7 @@ int main (int argc, char **argv, char **environ)
       puts (_(ReachingUs));
       mutt_buffer_free (&folder);
       fflush (stdout);
-      if (ferror (stdout) && errno && errno != EPIPE)
+      if (ferror (stdout))
         exit (1);
       exit (0);
   }
