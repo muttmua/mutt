@@ -410,6 +410,7 @@ int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *prot_headers)
   last = rfc822_append (&recips, env->to, 0);
   last = rfc822_append (last ? &last : &recips, env->cc, 0);
   rfc822_append (last ? &last : &recips, env->reply_to, 0);
+  recips = mutt_remove_adrlist_group_delimiters (recips);
   mutt_autocrypt_db_normalize_addrlist (recips);
 
   for (ac_hdr = prot_headers->autocrypt_gossip; ac_hdr; ac_hdr = ac_hdr->next)
@@ -573,6 +574,7 @@ autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr, char **keylist)
   last = rfc822_append (&recips, hdr->env->to, 0);
   last = rfc822_append (last ? &last : &recips, hdr->env->cc, 0);
   rfc822_append (last ? &last : &recips, hdr->env->bcc, 0);
+  recips = mutt_remove_adrlist_group_delimiters (recips);
 
   rv = AUTOCRYPT_REC_NO;
   if (!recips)
@@ -770,6 +772,7 @@ int mutt_autocrypt_generate_gossip_list (HEADER *hdr)
 
   last = rfc822_append (&recips, hdr->env->to, 0);
   last = rfc822_append (last ? &last : &recips, hdr->env->cc, 0);
+  recips = mutt_remove_adrlist_group_delimiters (recips);
 
   for (recip = recips; recip; recip = recip->next)
   {

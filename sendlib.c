@@ -3030,6 +3030,35 @@ ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
   return (top);
 }
 
+/* Given a list of addresses, remove group label and end delimiter
+ * entries.  This is useful when generating an encryption key list,
+ * as we don't want to scan the label and empty delimiter entries. */
+ADDRESS *mutt_remove_adrlist_group_delimiters (ADDRESS *addr)
+{
+  ADDRESS *top = addr;
+  ADDRESS **last = &top;
+
+  while (addr)
+  {
+    if (addr->group || !addr->mailbox)
+    {
+      *last = addr->next;
+
+      addr->next = NULL;
+      rfc822_free_address(&addr);
+
+      addr = *last;
+    }
+    else
+    {
+      last = &addr->next;
+      addr = addr->next;
+    }
+  }
+
+  return (top);
+}
+
 static void set_noconv_flags (BODY *b, short flag)
 {
   for (; b; b = b->next)

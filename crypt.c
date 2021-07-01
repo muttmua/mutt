@@ -941,6 +941,7 @@ int crypt_get_keys (HEADER *msg, char **keylist, int oppenc_mode)
   if (fqdn)
     rfc822_qualify (adrlist, fqdn);
   adrlist = mutt_remove_duplicates (adrlist);
+  adrlist = mutt_remove_adrlist_group_delimiters (adrlist);
 
   if (oppenc_mode || (msg->security & ENCRYPT))
   {
