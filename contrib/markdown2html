@@ -191,7 +191,7 @@ def _reformat_quotes(html):
     Earlier in the pipeline, we marked email quoting, using markers, which we
     now need to turn into HTML classes, so that we can use CSS to style them.
     '''
-    ret = html.replace('<p>{.quotelead}', '<p class="quotelead">')
+    ret = html.replace('{.quotelead}', '<p class="quotelead">')
     ret = re.sub(r'<blockquote>\n((?:<blockquote>\n)*)<p>(?:\{\.quote(\w+)\})',
                  r'<blockquote class="quote \g<2>">\n\g<1><p>', ret, flags=re.MULTILINE)
     return ret
