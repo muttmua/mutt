@@ -160,7 +160,7 @@ def _identify_quotes_for_later(mdwn):
         # The lead-in to a quote is a single line immediately preceding the
         # quote, and ending with ':'. Note that there could be multiple of
         # these:
-        if nxt is not None and re.match(r'^.+:\s*$', cur) and nxt.startswith('>'):
+        if nxt is not None and re.match(r'^\s*[^>].+:\s*$', cur) and nxt.startswith('>'):
             ret.append(f'{{.quotelead}}{cur.strip()}')
             # pandoc needs an empty line before the blockquote, so
             # we enter one for the purpose of HTML rendition:
@@ -169,7 +169,7 @@ def _identify_quotes_for_later(mdwn):
 
         # The first blockquote after such a lead-in gets marked as the
         # "initial" quote:
-        elif prev is not None and re.match(r'^.+:\s*$', prev) and cur.startswith('>'):
+        elif prev is not None and re.match(r'^\s*[^>].+:\s*$', prev) and cur.startswith('>'):
             ret.append(re.sub(r'^(\s*>\s*)+(.+)',
                               r'\g<1>{.quoteinitial}\g<2>',
                               cur, flags=re.MULTILINE))
