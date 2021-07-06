@@ -1406,7 +1406,7 @@ char *pgp_findKeys (ADDRESS *adrlist, int oppenc_mode)
         if (! oppenc_mode && option(OPTCRYPTCONFIRMHOOK))
         {
           snprintf (buf, sizeof (buf), _("Use keyID = \"%s\" for %s?"), keyID, p->mailbox);
-          r = mutt_yesorno (buf, MUTT_YES);
+          r = mutt_query_boolean (OPTCRYPTCONFIRMHOOK, buf, MUTT_YES);
         }
         if (r == MUTT_YES)
         {

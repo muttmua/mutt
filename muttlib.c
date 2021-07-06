@@ -1988,7 +1988,8 @@ int mutt_save_confirm (const char *s, struct stat *st)
     {
       tmp = mutt_buffer_pool_get ();
       mutt_buffer_printf (tmp, _("Append message(s) to %s?"), s);
-      if ((rc = mutt_yesorno (mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
+      if ((rc = mutt_query_boolean (OPTCONFIRMAPPEND,
+                                    mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
 	ret = 1;
       else if (rc == -1)
 	ret = -1;
@@ -2015,7 +2016,8 @@ int mutt_save_confirm (const char *s, struct stat *st)
       {
         tmp = mutt_buffer_pool_get ();
 	mutt_buffer_printf (tmp, _("Create %s?"), s);
-	if ((rc = mutt_yesorno (mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
+	if ((rc = mutt_query_boolean (OPTCONFIRMCREATE,
+                                      mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
 	  ret = 1;
 	else if (rc == -1)
 	  ret = -1;

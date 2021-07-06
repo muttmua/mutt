@@ -1547,7 +1547,8 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
         break;
       dprint (3, (debugfile, "imap_copy_messages: server suggests TRYCREATE\n"));
       snprintf (prompt, sizeof (prompt), _("Create %s?"), mbox);
-      if (option (OPTCONFIRMCREATE) && mutt_yesorno (prompt, 1) < 1)
+      if (option (OPTCONFIRMCREATE) &&
+          mutt_query_boolean (OPTCONFIRMCREATE, prompt, 1) < 1)
       {
         mutt_clear_error ();
         goto out;

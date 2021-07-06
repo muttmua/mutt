@@ -4994,7 +4994,7 @@ static char *find_keys (ADDRESS *adrlist, unsigned int app, int oppenc_mode)
               {
                 snprintf (buf, sizeof (buf), _("Use keyID = \"%s\" for %s?"),
                           crypt_hook_val, p->mailbox);
-                r = mutt_yesorno (buf, MUTT_YES);
+                r = mutt_query_boolean (OPTCRYPTCONFIRMHOOK, buf, MUTT_YES);
               }
             if (r == MUTT_YES)
               {

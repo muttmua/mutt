@@ -79,6 +79,7 @@ FILE *mutt_open_read (const char *, pid_t *);
 void set_quadoption (int, int);
 int query_quadoption (int, const char *);
 int quadoption (int);
+int mutt_query_boolean (int opt, const char *prompt, int def);
 
 char* mutt_extract_message_id (const char *, const char **, int);
 
@@ -405,6 +406,7 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value, const c
 int mutt_write_rfc822_header (FILE *, ENVELOPE *, BODY *, char *, mutt_write_header_mode, int, int);
 void mutt_write_references (LIST *, FILE *, int);
 int mutt_yesorno (const char *, int);
+int mutt_yesorno_with_help (const char *, int, const char *);
 void mutt_set_header_color(CONTEXT *, HEADER *);
 void mutt_sleep (short);
 int mutt_save_confirm (const char  *, struct stat *);

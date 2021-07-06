@@ -1049,7 +1049,8 @@ static int imap_open_mailbox_append (CONTEXT *ctx, int flags)
     return -1;
 
   snprintf (buf, sizeof (buf), _("Create %s?"), mailbox);
-  if (option (OPTCONFIRMCREATE) && mutt_yesorno (buf, 1) < 1)
+  if (option (OPTCONFIRMCREATE) &&
+      mutt_query_boolean (OPTCONFIRMCREATE, buf, 1) < 1)
     return -1;
 
   if (imap_create_mailbox (idata, mailbox) < 0)
@@ -2557,7 +2558,8 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
         break;
       dprint (3, (debugfile, "imap_fast_trash: server suggests TRYCREATE\n"));
       snprintf (prompt, sizeof (prompt), _("Create %s?"), mbox);
-      if (option (OPTCONFIRMCREATE) && mutt_yesorno (prompt, 1) < 1)
+      if (option (OPTCONFIRMCREATE) &&
+          mutt_query_boolean (OPTCONFIRMCREATE, prompt, 1) < 1)
       {
         mutt_clear_error ();
         goto out;

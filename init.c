@@ -104,6 +104,27 @@ int quadoption (int opt)
   return (QuadOptions[n] >> b) & 0x3;
 }
 
+static const char *option_type_name (int opt, int type)
+{
+  int i;
+
+  for (i = 0; MuttVars[i].option; i++)
+    if (MuttVars[i].type == type &&
+        MuttVars[i].data.l == opt)
+      return MuttVars[i].option;
+  return NULL;
+}
+
+static const char *quadoption_name (int opt)
+{
+  return option_type_name (opt, DT_QUAD);
+}
+
+static const char *boolean_name (int opt)
+{
+  return option_type_name (opt, DT_BOOL);
+}
+
 int query_quadoption (int opt, const char *prompt)
 {
   int v = quadoption (opt);
@@ -115,12 +136,26 @@ int query_quadoption (int opt, const char *prompt)
       return (v);
 
     default:
-      v = mutt_yesorno (prompt, (v == MUTT_ASKYES));
+      v = mutt_yesorno_with_help (prompt, (v == MUTT_ASKYES),
+                                  quadoption_name (opt));
       mutt_window_clearline (MuttMessageWindow, 0);
       return (v);
   }
 
   /* not reached */
+}
+
+/* This is slightly different from query_quadoption(), which only
+ * prompts when the quadoption is of type "ask-*".
+ *
+ * This function always prompts, but provides a help string listing
+ * the boolean name as a reference.  It should be used when displaying
+ * the mutt_yesorno() prompt depends on the setting of the boolean.
+ */
+int mutt_query_boolean (int opt, const char *prompt, int def)
+{
+  return mutt_yesorno_with_help (prompt, def,
+                                 boolean_name (opt));
 }
 
 /* given the variable ``s'', return the index into the rc_vars array which
