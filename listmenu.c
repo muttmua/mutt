@@ -91,7 +91,15 @@ static void parse_list_headers (CONTEXT *ctx, HEADER *hdr,
     while (*(line = mutt_read_rfc822_line (msg->fp, line, &linelen)) != 0)
     {
       if ((p = strpbrk (line, ": \t")) == NULL || *p != ':')
+      {
+        /* some bogus MTAs will quote the original "From " line */
+        if (mutt_strncmp (">From ", line, 6) == 0)
+          continue; /* just ignore */
+        else if (is_from (line, NULL, 0, NULL))
+          continue; /* just ignore */
+
         break; /* end of header */
+      }
 
       h = line;                    /* header */
       *p = 0;
