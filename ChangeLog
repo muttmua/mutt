@@ -1,3 +1,111 @@
+2021-07-12 10:47:48 -0700  Kevin McCarthy  <kevin@8t8.us> (878e0388)
+
+        * Update UPDATING file for 2.1.1 release.
+
+M	UPDATING
+
+2021-06-28 15:11:24 -0700  Kevin McCarthy  <kevin@8t8.us> (27f0a450)
+
+        * Add a hard redraw after oauth authentication.
+        
+        The sample contrib program can use gpg to decrypt a token.  This may
+        pop up a curses agent prompt, requiring a hard redraw.
+        
+        It may be that we should be calling a hard redraw after any fork/exec.
+        I don't know if this will cause more problems, so for now I'll just
+        patch this one place.  But that is something to consider.
+
+M	account.c
+
+2021-06-28 15:07:15 -0700  Kevin McCarthy  <kevin@8t8.us> (4035e100)
+
+        * Fix classic pgp decrypt_part() hard redraw on error.
+        
+        Ensure the hard redraw is set even if the decryption fails.  The agent
+        prompt still may have appeared.
+        
+        Since we don't need to set environment variables afterwards, directly
+        check the OPTUSEGPGAGENT option for the post-check.
+
+M	pgp.c
+
+2021-07-09 11:49:26 +0200  Alexander Sulfrian  <asulfrian@zedat.fu-berlin.de> (94f5f35a)
+
+        * listmenu: Fix parsing of list headers for mbox
+        
+        The parsing of the headers needs to skip the "From " lines at the start
+        of the messages in mbox format. This now uses the same logic like
+        mutt_read_rfc822_header in parse.c.
+
+M	listmenu.c
+
+2021-06-19 14:08:59 -0700  Kevin McCarthy  <kevin@8t8.us> (f5ccd687)
+
+        * Fix menu.c sigwinch handling order.
+        
+        This fixes problems with a sigwinch that occurs during an external
+        process, such as during a query menu lookup, or after exiting the
+        background-edit landing page.  Without this change, the user would see
+        a misdrawn screen and would need to press a key first.
+        
+        Change it so that the SigWinch flag is handled before reading input,
+        so that the page is automatically redrawn.  This matches the behavior
+        in the index, pager, and background-edit process list menu.
+
+M	menu.c
+
+2021-06-13 14:16:06 -0700  Kevin McCarthy  <kevin@8t8.us> (e1dfc2c4)
+
+        * Fix getkeybyaddr() debug output.
+        
+        Add a NONULL wrapper and a newline at the end.
+
+M	crypt-gpgme.c
+M	pgpkey.c
+
+2021-06-12 12:38:19 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net> (9629d5d6)
+
+        * Update Catalan translation.
+
+M	po/ca.po
+
+2021-06-12 10:48:43 -0700  Kevin McCarthy  <kevin@8t8.us> (4b100969)
+
+        * automatic post-release commit for mutt-2.1.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2021-06-12 10:40:18 -0700  Kevin McCarthy  <kevin@8t8.us> (bfccf9c6)
 
         * Update UPDATING file for 2.1.0 release.
