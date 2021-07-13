@@ -124,7 +124,7 @@ static void make_from (ENVELOPE *hdr, char *buf, size_t len, int do_lists)
   else if (me && hdr->bcc)
     snprintf (buf, len, "Bcc %s", mutt_get_name (hdr->bcc));
   else if (hdr->from)
-    strfcpy (buf, mutt_get_name (hdr->from), len);
+    snprintf (buf, len, "%s", mutt_get_name (hdr->from));
   else
     *buf = 0;
 }
@@ -148,7 +148,7 @@ static void make_from_addr (ENVELOPE *hdr, char *buf, size_t len, int do_lists)
   else if (me && hdr->cc)
     snprintf (buf, len, "%s", hdr->cc->mailbox);
   else if (hdr->from)
-    strfcpy (buf, hdr->from->mailbox, len);
+    snprintf (buf, len, "%s", hdr->from->mailbox);
   else
     *buf = 0;
 }
