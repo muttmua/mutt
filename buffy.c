@@ -65,7 +65,7 @@ static BUFFY* buffy_get (const char *path);
 static int fseek_last_message (FILE * f)
 {
   LOFF_T pos;
-  char buffer[BUFSIZ + 9];	/* 7 for "\n\nFrom " */
+  char buffer[BUFSIZ + 7];	/* 7 for "\n\nFrom " */
   int bytes_read;
   int i;			/* Index into `buffer' for scanning.  */
 
@@ -83,13 +83,13 @@ static int fseek_last_message (FILE * f)
   while ((pos -= bytes_read) >= 0)
   {
     /* we save in the buffer at the end the first 7 chars from the last read */
-    strncpy (buffer + BUFSIZ, buffer, 5+2); /* 2 == 2 * mutt_strlen(CRLF) */
+    memcpy (buffer + BUFSIZ, buffer, 7);
     fseeko (f, pos, SEEK_SET);
     bytes_read = fread (buffer, sizeof (char), bytes_read, f);
     if (bytes_read == -1)
       return -1;
     for (i = bytes_read; --i >= 0;)
-      if (!mutt_strncmp (buffer + i, "\n\nFrom ", mutt_strlen ("\n\nFrom ")))
+      if (!mutt_strncmp (buffer + i, "\n\nFrom ", 7))
       {				/* found it - go to the beginning of the From */
 	fseeko (f, pos + i + 2, SEEK_SET);
 	return 0;
