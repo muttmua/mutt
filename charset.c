@@ -316,11 +316,16 @@ char *mutt_get_default_charset ()
   static char fcharset[SHORT_STRING];
   const char *c = AssumedCharset;
   const char *c1;
+  size_t copysize;
 
   if (c)
   {
     c1 = strchr (c, ':');
-    strfcpy (fcharset, c, c1 ? (c1 - c + 1) : sizeof (fcharset));
+    if (c1)
+      copysize = MIN ((c1 - c + 1), sizeof (fcharset));
+    else
+      copysize = sizeof (fcharset);
+    strfcpy (fcharset, c, copysize);
     return fcharset;
   }
   return strcpy (fcharset, "us-ascii"); /* __STRCPY_CHECKED__ */
