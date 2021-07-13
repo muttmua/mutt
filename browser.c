@@ -998,7 +998,10 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 	      {
 		char *p = NULL;
                 if (lastdirlen > 1)
-                  p = strrchr (mutt_b2s (LastDir) + 1, '/');
+                {
+                  /* "mutt_b2s (LastDir) + 1" triggers a compiler warning */
+                  p = strrchr (LastDir->data + 1, '/');
+                }
 
 		if (p)
                 {
