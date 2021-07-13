@@ -1283,10 +1283,10 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 {
   IMAP_DATA* idata;
   FILE *fp = NULL;
+  BUFFER *internaldate;
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
   char mailbox[LONG_STRING];
-  char internaldate[IMAP_DATELEN];
   char imap_flags[SHORT_STRING];
   size_t len;
   progress_t progressbar;
@@ -1330,6 +1330,8 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
                         MUTT_PROGRESS_SIZE, NetInc, len);
 
   imap_munge_mbox_name (idata, mbox, sizeof (mbox), mailbox);
+
+  internaldate = mutt_buffer_pool_get ();
   imap_make_date (internaldate, msg->received);
 
   imap_flags[0] = imap_flags[1] = 0;
@@ -1344,8 +1346,9 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 
   snprintf (buf, sizeof (buf), "APPEND %s (%s) \"%s\" {%lu}", mbox,
             imap_flags + 1,
-	    internaldate,
+	    mutt_b2s (internaldate),
 	    (unsigned long) len);
+  mutt_buffer_pool_release (&internaldate);
 
   imap_cmd_start (idata, buf);
 
