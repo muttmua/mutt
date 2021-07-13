@@ -245,7 +245,7 @@ void mutt_canonical_charset (char *dest, size_t dlen, const char *name)
 {
   size_t i;
   char *p, *ext;
-  char in[LONG_STRING], scratch[LONG_STRING];
+  char in[LONG_STRING], scratch[LONG_STRING+10];
 
   strfcpy (in, name, sizeof (in));
   if ((ext = strchr (in, '/')))
