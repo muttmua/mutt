@@ -232,7 +232,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       if (flags & CH_REORDER)
       {
         int match = -1;
-        size_t match_len, hdr_order_len;
+        size_t match_len = 0, hdr_order_len;
 
 	for (t = HeaderOrderList, x = 0 ; (t) ; t = t->next, x++)
 	{

@@ -147,7 +147,7 @@ static unsigned int imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, int eval
   unsigned int max_headers_per_fetch = UINT_MAX;
   int first_chunk = 1;
   int state = 0;  /* 1: single msn, 2: range of msn */
-  unsigned int msn, range_begin, range_end, msn_count = 0;
+  unsigned int msn, range_begin, range_end = 0, msn_count = 0;
 
   mutt_buffer_clear (b);
   if (msn_end < msn_begin)
