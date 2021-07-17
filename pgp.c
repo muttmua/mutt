@@ -426,7 +426,7 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
   pgperrfile = mutt_buffer_pool_get ();
   tmpfname = mutt_buffer_pool_get ();
 
-  fseeko (s->fpin, m->offset, 0);
+  fseeko (s->fpin, m->offset, SEEK_SET);
   last_pos = m->offset;
 
   for (bytes = m->length; bytes > 0;)
@@ -822,7 +822,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
     goto cleanup;
   }
 
-  fseeko (s->fpin, sigbdy->offset, 0);
+  fseeko (s->fpin, sigbdy->offset, SEEK_SET);
   mutt_copy_bytes (s->fpin, fp, sigbdy->length);
   safe_fclose (&fp);
 
@@ -964,7 +964,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
    * the temporary file.
    */
 
-  fseeko (s->fpin, a->offset, 0);
+  fseeko (s->fpin, a->offset, SEEK_SET);
   mutt_copy_bytes (s->fpin, pgptmp, a->length);
   safe_fclose (&pgptmp);
 
@@ -1101,7 +1101,7 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
     }
     unlink (mutt_b2s (tempfile));
 
-    fseeko (s.fpin, b->offset, 0);
+    fseeko (s.fpin, b->offset, SEEK_SET);
     s.fpout = decoded_fp;
 
     mutt_decode_attachment (b, &s);

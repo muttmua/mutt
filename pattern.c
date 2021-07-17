@@ -390,13 +390,13 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
 	  goto cleanup;
 	}
 
-	fseeko (msg->fp, h->offset, 0);
+	fseeko (msg->fp, h->offset, SEEK_SET);
 	mutt_body_handler (h->content, &s);
       }
 
       fp = s.fpout;
       fflush (fp);
-      fseek (fp, 0, 0);
+      fseek (fp, 0, SEEK_SET);
       fstat (fileno (fp), &st);
       lng = (LOFF_T) st.st_size;
     }
@@ -406,13 +406,13 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
       fp = msg->fp;
       if (pat->op != MUTT_BODY)
       {
-	fseeko (fp, h->offset, 0);
+	fseeko (fp, h->offset, SEEK_SET);
 	lng = h->content->offset - h->offset;
       }
       if (pat->op != MUTT_HEADER)
       {
 	if (pat->op == MUTT_BODY)
-	  fseeko (fp, h->content->offset, 0);
+	  fseeko (fp, h->content->offset, SEEK_SET);
 	lng += h->content->length;
       }
     }
@@ -477,7 +477,7 @@ static int msg_search_sendmode (HEADER *h, pattern_t *pat)
                               MUTT_WRITE_HEADER_POSTPONE,
                               0, 0);
     fflush (fp);
-    fseek (fp, 0, 0);
+    fseek (fp, 0, SEEK_SET);
 
     while ((buf = mutt_read_line (buf, &blen, fp, NULL, 0)) != NULL)
     {

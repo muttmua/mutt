@@ -1179,7 +1179,7 @@ fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
   if (*buf_ready == 0)
   {
     if (offset != *last_pos)
-      fseeko (f, offset, 0);
+      fseeko (f, offset, SEEK_SET);
 
     if ((*buf = (unsigned char *) mutt_read_line ((char *) *buf, blen, f,
                                                   NULL, MUTT_EOL)) == NULL)

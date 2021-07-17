@@ -1131,7 +1131,7 @@ static int alternative_handler (BODY *a, STATE *s)
   {
     if (s->flags & MUTT_DISPLAY && !option (OPTWEED))
     {
-      fseeko (s->fpin, choice->hdr_offset, 0);
+      fseeko (s->fpin, choice->hdr_offset, SEEK_SET);
       mutt_copy_bytes(s->fpin, s->fpout, choice->offset-choice->hdr_offset);
     }
     mutt_body_handler (choice, s);
@@ -1272,7 +1272,7 @@ static int multipart_handler (BODY *a, STATE *s)
 		    TYPE (p), p->subtype, ENCODING (p->encoding), length);
       if (!option (OPTWEED))
       {
-	fseeko (s->fpin, p->hdr_offset, 0);
+	fseeko (s->fpin, p->hdr_offset, SEEK_SET);
 	mutt_copy_bytes(s->fpin, s->fpout, p->offset-p->hdr_offset);
       }
       else
@@ -1561,7 +1561,7 @@ void mutt_decode_attachment (BODY *b, STATE *s)
   else if (istext && b->charset)
     cd = mutt_iconv_open (Charset, b->charset, MUTT_ICONV_HOOK_FROM);
 
-  fseeko (s->fpin, b->offset, 0);
+  fseeko (s->fpin, b->offset, SEEK_SET);
   switch (b->encoding)
   {
     case ENCQUOTEDPRINTABLE:
@@ -1620,7 +1620,7 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
   int decode = 0;
   int rc = 0;
 
-  fseeko (s->fpin, b->offset, 0);
+  fseeko (s->fpin, b->offset, SEEK_SET);
 
   /* see if we need to decode this part before processing it */
   if (b->encoding == ENCBASE64 || b->encoding == ENCQUOTEDPRINTABLE ||
