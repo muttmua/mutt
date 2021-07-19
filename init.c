@@ -277,7 +277,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
       pid_t	pid;
       char	*cmd;
       BUFFER	expn;
-      int	line = 0;
+      int	line = 0, rc;
 
       pc = tok->dptr;
       do
@@ -306,7 +306,6 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
 	FREE (&cmd);
 	return (-1);
       }
-      FREE (&cmd);
 
       tok->dptr = pc + 1;
 
@@ -314,7 +313,10 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
       mutt_buffer_init (&expn);
       expn.data = mutt_read_line (NULL, &expn.dsize, fp, &line, 0);
       safe_fclose (&fp);
-      mutt_wait_filter (pid);
+      rc = mutt_wait_filter (pid);
+      if (rc != 0)
+        dprint (1, (debugfile, "mutt_extract_token: backticks exited code %d for command: %s\n", rc, cmd));
+      FREE (&cmd);
 
       /* If this is inside a quoted string, directly add output to
        * the token (dest) */
