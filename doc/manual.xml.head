@@ -2767,6 +2767,7 @@ addition, <emphasis>key</emphasis> may be a symbolic name as shown in
 <row><entry>&lt;insert&gt;</entry><entry>Insert</entry></row>
 <row><entry>&lt;enter&gt;</entry><entry>Enter</entry></row>
 <row><entry>&lt;return&gt;</entry><entry>Return</entry></row>
+<row><entry>&lt;keypadenter&gt;</entry><entry>Enter key on numeric keypad</entry></row>
 <row><entry>&lt;home&gt;</entry><entry>Home</entry></row>
 <row><entry>&lt;end&gt;</entry><entry>End</entry></row>
 <row><entry>&lt;space&gt;</entry><entry>Space bar</entry></row>
@@ -2831,6 +2832,32 @@ specified key sequence.
     (e.g, by placing that line in your .bashrc, or in a Mutt wrapper
     script/function) you can use the key sequence in your Mutt
     bindings.
+  </para>
+</sect2>
+
+<sect2 id="crlf">
+  <title>Enter versus Return</title>
+
+  <para>
+    Prior to version 2.2, Mutt used a default ncurses mode
+    (<quote><literal>nl()</literal></quote>).  This mode maps keyboard
+    input of either <literal>&lt;Enter&gt;</literal> or
+    <literal>&lt;Return&gt;</literal> to the same value, which Mutt
+    interpreted as <literal>&lt;Return&gt;</literal> internally.
+  </para>
+  <para>
+    However, starting in version 2.2, this mode is turned off,
+    allowing <literal>&lt;Return&gt;</literal> and
+    <literal>&lt;Enter&gt;</literal> to be mapped separately, if
+    desired.  The default keyboard mappings set both, but you can
+    override this or create new bindings with one or the other (or
+    both).
+  </para>
+  <para>
+    Note that in terminal application, such as Mutt,
+    <literal>&lt;Enter&gt;</literal> is the same as <quote>\n</quote>
+    and <literal>^J</literal>; while <literal>&lt;Return&gt;</literal>
+    is the same as <quote>\r</quote> and <literal>^M</literal>.
   </para>
 </sect2>
 

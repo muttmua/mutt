@@ -22,8 +22,9 @@
  *
  * Notes:
  *
- * - If you want to bind \n or \r, use MUTT_ENTER_S so that it will work
- * correctly under both ncurses and S-Lang
+ * - For "enter" bindings, add entries for "\n" and "\r" in the struct
+ *   binding_t below, and ALSO add a km_bindkey() call with
+ *   "<keypadenter>" inside km_init().
  *
  * - If you need to bind a control char, use the octal value because the \cX
  * construct does not work at this level.
@@ -70,7 +71,8 @@ const struct binding_t OpGeneric[] = { /* map: generic */
   { "tag-prefix-cond",	OP_TAG_PREFIX_COND,	NULL },
   { "end-cond",		OP_END_COND,		NULL },
   { "shell-escape",	OP_SHELL_ESCAPE,	"!" },
-  { "select-entry",	OP_GENERIC_SELECT_ENTRY,MUTT_ENTER_S },
+  { "select-entry",	OP_GENERIC_SELECT_ENTRY,"\r" },
+  { "select-entry",	OP_GENERIC_SELECT_ENTRY,"\n" },
   { "search",		OP_SEARCH,		"/" },
   { "search-reverse",	OP_SEARCH_REVERSE,	"\033/" },
   { "search-opposite",	OP_SEARCH_OPPOSITE,	NULL },
@@ -160,7 +162,8 @@ const struct binding_t OpMain[] = { /* map: index */
   { "show-version",		OP_VERSION,			"V" },
   { "set-flag",			OP_MAIN_SET_FLAG,		"w" },
   { "clear-flag",		OP_MAIN_CLEAR_FLAG,		"W" },
-  { "display-message",		OP_DISPLAY_MESSAGE,		MUTT_ENTER_S },
+  { "display-message",		OP_DISPLAY_MESSAGE,		"\r" },
+  { "display-message",		OP_DISPLAY_MESSAGE,	        "\n" },
   { "mark-message",		OP_MARK_MSG,			"~" },
   { "buffy-list",		OP_BUFFY_LIST,			"." },
   { "sync-mailbox",		OP_MAIN_SYNC_FOLDER,		"$" },
@@ -284,7 +287,8 @@ const struct binding_t OpPager[] = { /* map: pager */
   { "search",		OP_SEARCH,			"/" },
   { "search-reverse",	OP_SEARCH_REVERSE,		"\033/" },
   { "search-opposite",	OP_SEARCH_OPPOSITE,		NULL },
-  { "next-line",	OP_NEXT_LINE,			MUTT_ENTER_S },
+  { "next-line",	OP_NEXT_LINE,			"\r" },
+  { "next-line",	OP_NEXT_LINE,			"\n" },
   { "error-history",	OP_ERROR_HISTORY,		NULL },
   { "jump",		OP_JUMP,			NULL },
   { "next-unread",	OP_MAIN_NEXT_UNREAD,		NULL },
@@ -345,7 +349,8 @@ const struct binding_t OpAttach[] = { /* map: attachment */
   { "list-reply",	OP_LIST_REPLY, "L" },
   { "forward-message",	OP_FORWARD_MESSAGE,		"f" },
   { "view-text",	OP_ATTACH_VIEW_TEXT,		"T" },
-  { "view-attach",	OP_VIEW_ATTACH,			MUTT_ENTER_S },
+  { "view-attach",	OP_VIEW_ATTACH,			"\r" },
+  { "view-attach",	OP_VIEW_ATTACH,			"\n" },
   { "delete-entry",	OP_DELETE,			"d" },
   { "undelete-entry",	OP_UNDELETE,			"u" },
   { "collapse-parts",	OP_ATTACH_COLLAPSE,		"v" },
@@ -393,7 +398,8 @@ const struct binding_t OpCompose[] = { /* map: compose */
   { "toggle-unlink",	OP_COMPOSE_TOGGLE_UNLINK,	"u" },
   { "toggle-recode",    OP_COMPOSE_TOGGLE_RECODE,	NULL },
   { "update-encoding",	OP_COMPOSE_UPDATE_ENCODING,	"U" },
-  { "view-attach",	OP_VIEW_ATTACH,			MUTT_ENTER_S },
+  { "view-attach",	OP_VIEW_ATTACH,			"\r" },
+  { "view-attach",	OP_VIEW_ATTACH,			"\n" },
   { "view-mailcap",	OP_ATTACH_VIEW_MAILCAP,		NULL },
   { "view-pager",	OP_ATTACH_VIEW_PAGER,		NULL },
   { "view-text",	OP_ATTACH_VIEW_TEXT,		NULL },
@@ -528,7 +534,8 @@ const struct binding_t OpSmime[] = { /* map: smime */
 
 #ifdef MIXMASTER
 const struct binding_t OpMix[] = { /* map: mixmaster */
-  { "accept",		OP_MIX_USE,	MUTT_ENTER_S },
+  { "accept",		OP_MIX_USE,	"\r" },
+  { "accept",		OP_MIX_USE,	"\n" },
   { "append",		OP_MIX_APPEND,	"a"       },
   { "insert",		OP_MIX_INSERT,	"i"       },
   { "delete",		OP_MIX_DELETE,  "d"	  },
