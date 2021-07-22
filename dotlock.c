@@ -252,7 +252,7 @@ int dotlock_invoke (const char *path, int fd, int flags, int retry)
 
 static int dotlock_dispatch (const char *f, int fd)
 {
-  char realpath[_POSIX_PATH_MAX + 2];
+  char realpath[_POSIX_PATH_MAX];
 
   /* If dotlock_prepare () succeeds [return value == 0],
    * realpath contains the basename of f, and we have
@@ -443,7 +443,7 @@ static int
 dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
 {
   struct stat fsb, lsb;
-  char realpath[_POSIX_PATH_MAX + 1];
+  char realpath[_POSIX_PATH_MAX];
   char *basename, *dirname;
   char *p;
   int fd;
