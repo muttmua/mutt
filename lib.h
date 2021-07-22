@@ -75,7 +75,15 @@
 # define FREE(x) safe_free(x)
 # define NONULL(x) x?x:""
 # define ISSPACE(c) isspace((unsigned char)c)
-# define strfcpy(A,B,C) strncpy(A,B,C), *(A+(C)-1)=0
+
+#ifdef HAVE_MEMCCPY
+# define strfcpy(A,B,C) memccpy(A,B,0,(C)-1), *((A)+(C)-1)=0
+#else
+/* Note it would be technically more correct to strncpy with length
+ * (C)-1, as above.  But this tickles more compiler warnings.
+ */
+# define strfcpy(A,B,C) strncpy(A,B,C), *((A)+(C)-1)=0
+#endif
 
 # undef MAX
 # undef MIN

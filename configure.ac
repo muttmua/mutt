@@ -418,7 +418,7 @@ AC_CHECK_TYPE(ssize_t, [],
               [AC_DEFINE([ssize_t], [int],
                          [Define to `int' if <sys/types.h> does not define.])])
 
-AC_CHECK_FUNCS(fgetpos memmove setegid srand48 strerror)
+AC_CHECK_FUNCS(fgetpos memmove memccpy setegid srand48 strerror)
 
 AC_REPLACE_FUNCS([setenv strcasecmp strdup strsep strtok_r wcscasecmp])
 AC_REPLACE_FUNCS([strcasestr mkdtemp])
