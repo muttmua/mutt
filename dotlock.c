@@ -102,7 +102,7 @@ static gid_t UserGid;
 static gid_t MailGid;
 #endif
 
-static int dotlock_deference_symlink (char *, size_t, const char *);
+static int dotlock_dereference_symlink (char *, size_t, const char *);
 static int dotlock_prepare (char *, size_t, const char *, int fd);
 static int dotlock_check_stats (struct stat *, struct stat *);
 static int dotlock_dispatch (const char *, int fd);
@@ -377,7 +377,7 @@ usage (const char *av0)
  * To avoid this attack, we proceed as follows:
  *
  * - First, follow symbolic links a la
- *   dotlock_deference_symlink ().
+ *   dotlock_dereference_symlink ().
  *
  * - get the result's dirname.
  *
@@ -442,7 +442,7 @@ dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
   int fd;
   int r;
 
-  if (dotlock_deference_symlink (realpath, sizeof (realpath), f) == -1)
+  if (dotlock_dereference_symlink (realpath, sizeof (realpath), f) == -1)
     return -1;
 
   if ((p = strrchr (realpath, '/')))
@@ -522,14 +522,14 @@ dotlock_expand_link (char *newpath, const char *path, const char *link)
 
 
 /*
- * Deference a chain of symbolic links
+ * Dereference a chain of symbolic links
  *
  * The final path is written to d.
  *
  */
 
 static int
-dotlock_deference_symlink (char *d, size_t l, const char *path)
+dotlock_dereference_symlink (char *d, size_t l, const char *path)
 {
   struct stat sb;
   char realpath[_POSIX_PATH_MAX];
