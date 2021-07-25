@@ -94,36 +94,43 @@ extern int LastKey;
 
 extern const struct mapping_t Menus[];
 
-struct binding_t
+/* The function-op pairs available in a menu */
+struct menu_func_op_t
 {
   char *name;	/* name of the function */
   int op;	/* function id number */
-  char *seq;	/* default key binding */
 };
 
-const struct binding_t *km_get_table (int menu);
+/* The default bound key sequences in a menu */
+struct menu_op_seq_t
+{
+  int op;
+  char *seq;   /* default key binding */
+};
 
-extern const struct binding_t OpGeneric[];
-extern const struct binding_t OpPost[];
-extern const struct binding_t OpMain[];
-extern const struct binding_t OpAttach[];
-extern const struct binding_t OpPager[];
-extern const struct binding_t OpCompose[];
-extern const struct binding_t OpBrowser[];
-extern const struct binding_t OpEditor[];
-extern const struct binding_t OpQuery[];
-extern const struct binding_t OpAlias[];
+const struct menu_func_op_t *km_get_table (int menu);
 
-extern const struct binding_t OpPgp[];
+extern const struct menu_func_op_t OpGeneric[];
+extern const struct menu_func_op_t OpPost[];
+extern const struct menu_func_op_t OpMain[];
+extern const struct menu_func_op_t OpAttach[];
+extern const struct menu_func_op_t OpPager[];
+extern const struct menu_func_op_t OpCompose[];
+extern const struct menu_func_op_t OpBrowser[];
+extern const struct menu_func_op_t OpEditor[];
+extern const struct menu_func_op_t OpQuery[];
+extern const struct menu_func_op_t OpAlias[];
 
-extern const struct binding_t OpSmime[];
+extern const struct menu_func_op_t OpPgp[];
+
+extern const struct menu_func_op_t OpSmime[];
 
 #ifdef MIXMASTER
-extern const struct binding_t OpMix[];
+extern const struct menu_func_op_t OpMix[];
 #endif
 
 #ifdef USE_AUTOCRYPT
-extern const struct binding_t OpAutocryptAcct[];
+extern const struct menu_func_op_t OpAutocryptAcct[];
 #endif
 
 #include "keymap_defs.h"

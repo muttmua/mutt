@@ -3256,7 +3256,7 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
   }
   else if (!mutt_strncmp (buffer, "exec", 4))
   {
-    const struct binding_t *menu = km_get_table (CurrentMenu);
+    const struct menu_func_op_t *menu = km_get_table (CurrentMenu);
 
     if (!menu && CurrentMenu != MENU_PAGER)
       menu = OpGeneric;

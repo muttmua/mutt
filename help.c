@@ -31,10 +31,10 @@
 #include <ctype.h>
 #include <string.h>
 
-static const struct binding_t *help_lookupFunction (int op, int menu)
+static const struct menu_func_op_t *help_lookupFunction (int op, int menu)
 {
   int i;
-  const struct binding_t *map;
+  const struct menu_func_op_t *map;
 
   if (menu != MENU_PAGER)
   {
@@ -286,7 +286,7 @@ static void format_line (FILE *f, int ismacro,
 static void dump_menu (FILE *f, int menu)
 {
   struct keymap_t *map;
-  const struct binding_t *b;
+  const struct menu_func_op_t *b;
   char buf[SHORT_STRING];
 
   /* browse through the keymap table */
@@ -322,7 +322,7 @@ static int is_bound (struct keymap_t *map, int op)
 }
 
 static void dump_unbound (FILE *f,
-			  const struct binding_t *funcs,
+			  const struct menu_func_op_t *funcs,
 			  struct keymap_t *map,
 			  struct keymap_t *aux)
 {
@@ -342,7 +342,7 @@ void mutt_help (int menu)
   char buf[SHORT_STRING];
   const char *desc;
   FILE *f;
-  const struct binding_t *funcs;
+  const struct menu_func_op_t *funcs;
 
   /* We don't use the buffer pool because of the extended lifetime of t */
   t = mutt_buffer_new ();
