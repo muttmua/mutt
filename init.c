@@ -3272,7 +3272,7 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
       for (num = 0; menu[num].name; num++)
 	candidate (Completed, User_typed, menu[num].name, sizeof (Completed));
       /* try the generic menu */
-      if (Completed[0] == 0 && CurrentMenu != MENU_PAGER)
+      if (CurrentMenu != MENU_PAGER && CurrentMenu != MENU_GENERIC)
       {
 	menu = OpGeneric;
 	for (num = 0; menu[num].name; num++)

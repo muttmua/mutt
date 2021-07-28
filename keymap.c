@@ -499,7 +499,7 @@ int km_dokey (int menu)
       if (menu == MENU_EDITOR && get_func (OpEditor, tmp.op))
 	return tmp.op;
 
-      if (menu != MENU_EDITOR && menu != MENU_PAGER)
+      if (menu != MENU_EDITOR && menu != MENU_PAGER && menu != MENU_GENERIC)
       {
 	/* check generic menu */
 	bindings = OpGeneric;
@@ -1090,8 +1090,12 @@ int mutt_parse_exec (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
       bindings = OpGeneric;
 
     ops[nops] = get_op (bindings, function, mutt_strlen(function));
-    if (ops[nops] == OP_NULL && CurrentMenu != MENU_PAGER)
+    if (ops[nops] == OP_NULL &&
+        CurrentMenu != MENU_PAGER &&
+        CurrentMenu != MENU_GENERIC)
+    {
       ops[nops] = get_op (OpGeneric, function, mutt_strlen(function));
+    }
 
     if (ops[nops] == OP_NULL)
     {
