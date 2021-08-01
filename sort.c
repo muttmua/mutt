@@ -29,48 +29,25 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#define SORTCODE(x) ((option(OPTAUXSORT) ? SortAux : Sort) & SORT_REVERSE) ? -(x) : x
-
-/* function to use as discriminator when normal sort method is equal */
-static sort_t *AuxSort = NULL;
-
-#define AUXSORT(code,a,b)                                       \
-  if (!code && AuxSort && !option(OPTAUXSORT))                  \
-  {                                                             \
-    set_option(OPTAUXSORT);                                     \
-    code = AuxSort(a,b);                                        \
-    unset_option(OPTAUXSORT);                                   \
-    if (code)                                                   \
-      return (code);                                            \
-  }                                                             \
-  if (!code)                                                    \
-    code = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
-
 static int compare_score (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  int result = (*pb)->score - (*pa)->score; /* note that this is reverse */
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return (*pb)->score - (*pa)->score; /* note that this is reverse */
 }
 
 static int compare_size (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  int result = (*pa)->content->length - (*pb)->content->length;
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return (*pa)->content->length - (*pb)->content->length;
 }
 
 static int compare_date_sent (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  int result = (*pa)->date_sent - (*pb)->date_sent;
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return (*pa)->date_sent - (*pb)->date_sent;
 }
 
 static int compare_subject (const void *a, const void *b)
@@ -90,8 +67,7 @@ static int compare_subject (const void *a, const void *b)
     rc = 1;
   else
     rc = mutt_strcasecmp ((*pa)->env->real_subj, (*pb)->env->real_subj);
-  AUXSORT(rc,a,b);
-  return (SORTCODE (rc));
+  return rc;
 }
 
 const char *mutt_get_name (ADDRESS *a)
@@ -117,13 +93,10 @@ static int compare_to (const void *a, const void *b)
   HEADER **ppb = (HEADER **) b;
   char fa[SHORT_STRING];
   const char *fb;
-  int result;
 
   strfcpy (fa, mutt_get_name ((*ppa)->env->to), SHORT_STRING);
   fb = mutt_get_name ((*ppb)->env->to);
-  result = mutt_strncasecmp (fa, fb, SHORT_STRING);
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return mutt_strncasecmp (fa, fb, SHORT_STRING);
 }
 
 static int compare_from (const void *a, const void *b)
@@ -132,22 +105,17 @@ static int compare_from (const void *a, const void *b)
   HEADER **ppb = (HEADER **) b;
   char fa[SHORT_STRING];
   const char *fb;
-  int result;
 
   strfcpy (fa, mutt_get_name ((*ppa)->env->from), SHORT_STRING);
   fb = mutt_get_name ((*ppb)->env->from);
-  result = mutt_strncasecmp (fa, fb, SHORT_STRING);
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return mutt_strncasecmp (fa, fb, SHORT_STRING);
 }
 
 static int compare_date_received (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  int result = (*pa)->received - (*pb)->received;
-  AUXSORT(result,a,b);
-  return (SORTCODE (result));
+  return (*pa)->received - (*pb)->received;
 }
 
 static int compare_order (const void *a, const void *b)
@@ -155,8 +123,7 @@ static int compare_order (const void *a, const void *b)
   HEADER **ha = (HEADER **) a;
   HEADER **hb = (HEADER **) b;
 
-  /* no need to auxsort because you will never have equality here */
-  return (SORTCODE ((*ha)->index - (*hb)->index));
+  return (*ha)->index - (*hb)->index;
 }
 
 static int compare_spam (const void *a, const void *b)
@@ -175,16 +142,13 @@ static int compare_spam (const void *a, const void *b)
 
   /* If one msg has spam attr but other does not, sort the one with first. */
   if (ahas && !bhas)
-    return (SORTCODE(1));
+    return 1;
   if (!ahas && bhas)
-    return (SORTCODE(-1));
+    return -1;
 
   /* Else, if neither has a spam attr, presume equality. Fall back on aux. */
   if (!ahas && !bhas)
-  {
-    AUXSORT(result, a, b);
-    return (SORTCODE(result));
-  }
+    return 0;
 
 
   /* Both have spam attrs. */
@@ -193,31 +157,28 @@ static int compare_spam (const void *a, const void *b)
   difference = (strtod((*ppa)->env->spam->data, &aptr) -
                 strtod((*ppb)->env->spam->data, &bptr));
 
-  /* map double into comparison (-1, 0, or 1) */
-  result = (difference < 0.0 ? -1 : difference > 0.0 ? 1 : 0);
-
   /* If either aptr or bptr is equal to data, there is no numeric    */
   /* value for that spam attribute. In this case, compare lexically. */
   if ((aptr == (*ppa)->env->spam->data) || (bptr == (*ppb)->env->spam->data))
-    return (SORTCODE(strcmp(aptr, bptr)));
+    return (strcmp(aptr, bptr));
+
+  /* map double into comparison (-1, 0, or 1) */
+  result = (difference < 0.0 ? -1 : difference > 0.0 ? 1 : 0);
 
   /* Otherwise, we have numeric value for both attrs. If these values */
   /* are equal, then we first fall back upon string comparison, then  */
   /* upon auxiliary sort.                                             */
   if (result == 0)
-  {
-    result = strcmp(aptr, bptr);
-    AUXSORT(result, a, b);
-  }
+    return strcmp(aptr, bptr);
 
-  return (SORTCODE(result));
+  return result;
 }
 
-int compare_label (const void *a, const void *b)
+static int compare_label (const void *a, const void *b)
 {
   HEADER **ppa = (HEADER **) a;
   HEADER **ppb = (HEADER **) b;
-  int     ahas, bhas, result = 0;
+  int     ahas, bhas;
 
   /* As with compare_spam, not all messages will have the x-label
    * property.  Blank X-Labels are treated as null in the index
@@ -227,20 +188,16 @@ int compare_label (const void *a, const void *b)
 
   /* First we bias toward a message with a label, if the other does not. */
   if (ahas && !bhas)
-    return (SORTCODE(-1));
+    return -1;
   if (!ahas && bhas)
-    return (SORTCODE(1));
+    return 1;
 
   /* If neither has a label, use aux sort. */
   if (!ahas && !bhas)
-  {
-    AUXSORT(result, a, b);
-    return (SORTCODE(result));
-  }
+    return 0;
 
   /* If both have a label, we just do a lexical compare. */
-  result = mutt_strcasecmp((*ppa)->env->x_label, (*ppb)->env->x_label);
-  return (SORTCODE(result));
+  return mutt_strcasecmp((*ppa)->env->x_label, (*ppb)->env->x_label);
 }
 
 sort_t *mutt_get_sort_func (int method)
@@ -273,12 +230,52 @@ sort_t *mutt_get_sort_func (int method)
   /* not reached */
 }
 
+static int compare_unthreaded (const void *a, const void *b)
+{
+  static sort_t *sort_func = NULL;
+  static sort_t *aux_func = NULL;
+  int rc;
+
+  if (!(a && b))
+  {
+    sort_func = mutt_get_sort_func (Sort);
+    aux_func = mutt_get_sort_func (SortAux);
+    return (sort_func && aux_func ? 1 : 0);
+  }
+
+  rc = (*sort_func) (a, b);
+  if (rc)
+    return (Sort & SORT_REVERSE) ? -rc : rc;
+
+  rc = (*aux_func) (a, b);
+  if (rc)
+    return (SortAux & SORT_REVERSE) ? -rc : rc;
+
+  rc = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+  if (rc)
+    return (Sort & SORT_REVERSE) ? -rc : rc;
+
+  return rc;
+}
+
+static int sort_unthreaded (CONTEXT *ctx)
+{
+  if (!compare_unthreaded (NULL, NULL))
+  {
+    mutt_error _("Could not find sorting function! [report this bug]");
+    mutt_sleep (1);
+    return -1;
+  }
+
+  qsort ((void *) ctx->hdrs, ctx->msgcount, sizeof (HEADER *), compare_unthreaded);
+  return 0;
+}
+
 void mutt_sort_headers (CONTEXT *ctx, int init)
 {
   int i;
   HEADER *h;
   THREAD *thread, *top;
-  sort_t *sortfunc;
 
   unset_option (OPTNEEDRESORT);
 
@@ -318,29 +315,18 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
 
   if ((Sort & SORT_MASK) == SORT_THREADS)
   {
-    AuxSort = NULL;
     /* if $sort_aux changed after the mailbox is sorted, then all the
        subthreads need to be resorted */
     if (option (OPTSORTSUBTHREADS))
     {
-      i = Sort;
-      Sort = SortAux;
       if (ctx->tree)
 	ctx->tree = mutt_sort_subthreads (ctx->tree, 1);
-      Sort = i;
       unset_option (OPTSORTSUBTHREADS);
     }
     mutt_sort_threads (ctx, init);
   }
-  else if ((sortfunc = mutt_get_sort_func (Sort)) == NULL ||
-	   (AuxSort = mutt_get_sort_func (SortAux)) == NULL)
-  {
-    mutt_error _("Could not find sorting function! [report this bug]");
-    mutt_sleep (1);
+  else if (sort_unthreaded (ctx))
     return;
-  }
-  else
-    qsort ((void *) ctx->hdrs, ctx->msgcount, sizeof (HEADER *), sortfunc);
 
   /* adjust the virtual message numbers */
   ctx->vcount = 0;

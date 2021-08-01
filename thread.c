@@ -568,19 +568,25 @@ void mutt_clear_threads (CONTEXT *ctx)
 
 static int compare_threads (const void *a, const void *b)
 {
-  static sort_t *sort_func = NULL;
+  static sort_t *aux_func = NULL;
+  int rc;
 
-  if (a && b)
-    return ((*sort_func) (&(*((THREAD **) a))->sort_key,
-			  &(*((THREAD **) b))->sort_key));
-  /* a hack to let us reset sort_func even though we can't
-   * have extra arguments because of qsort
-   */
-  else
+  if (!(a && b))
   {
-    sort_func = mutt_get_sort_func (Sort);
-    return (sort_func ? 1 : 0);
+    aux_func = mutt_get_sort_func (SortAux);
+    return aux_func ? 1 : 0;
   }
+
+  rc = (*aux_func) (&(*((THREAD **) a))->sort_key,
+                    &(*((THREAD **) b))->sort_key);
+  if (rc)
+    return (SortAux & SORT_REVERSE) ? -rc : rc;
+
+  rc = (*((THREAD **)a))->sort_key->index - (*((THREAD **)b))->sort_key->index;
+  if (rc)
+    return (SortAux & SORT_REVERSE) ? -rc : rc;
+
+  return rc;
 }
 
 THREAD *mutt_sort_subthreads (THREAD *thread, int init)
@@ -589,14 +595,15 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
   HEADER *oldsort_key;
   int i, array_size, sort_top = 0;
 
+  if (!compare_threads (NULL, NULL))
+    return (thread);
+
   /* we put things into the array backwards to save some cycles,
    * but we want to have to move less stuff around if we're
    * resorting, so we sort backwards and then put them back
    * in reverse order so they're forwards
    */
-  Sort ^= SORT_REVERSE;
-  if (!compare_threads (NULL, NULL))
-    return (thread);
+  SortAux ^= SORT_REVERSE;
 
   top = thread;
 
@@ -671,7 +678,7 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 	if (!thread->sort_key || thread->sort_children)
 	{
 	  /* make sort_key the first or last sibling, as appropriate */
-	  sort_key = (!(Sort & SORT_LAST) ^ !(Sort & SORT_REVERSE)) ? thread->child : tmp;
+	  sort_key = (!(SortAux & SORT_LAST) ^ !(SortAux & SORT_REVERSE)) ? thread->child : tmp;
 
 	  /* we just sorted its children */
 	  thread->sort_children = 0;
@@ -679,10 +686,10 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 	  oldsort_key = thread->sort_key;
 	  thread->sort_key = thread->message;
 
-	  if (Sort & SORT_LAST)
+	  if (SortAux & SORT_LAST)
 	  {
 	    if (!thread->sort_key
-		|| ((((Sort & SORT_REVERSE) ? 1 : -1)
+		|| ((((SortAux & SORT_REVERSE) ? 1 : -1)
 		     * compare_threads ((void *) &thread,
 					(void *) &sort_key))
 		    > 0))
@@ -703,7 +710,7 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
       }
       else
       {
-	Sort ^= SORT_REVERSE;
+	SortAux ^= SORT_REVERSE;
 	FREE (&array);
 	return (top);
       }
@@ -748,16 +755,9 @@ static void check_subjects (CONTEXT *ctx, int init)
 void mutt_sort_threads (CONTEXT *ctx, int init)
 {
   HEADER *cur;
-  int i, oldsort, using_refs = 0;
+  int i, using_refs = 0;
   THREAD *thread, *new, *tmp, top;
   LIST *ref = NULL;
-
-  /* set Sort to the secondary method to support the set sort_aux=reverse-*
-   * settings.  The sorting functions just look at the value of
-   * SORT_REVERSE
-   */
-  oldsort = Sort;
-  Sort = SortAux;
 
   if (!ctx->thread_hash)
     init = 1;
@@ -959,9 +959,6 @@ void mutt_sort_threads (CONTEXT *ctx, int init)
   if (ctx->tree)
   {
     ctx->tree = mutt_sort_subthreads (ctx->tree, init);
-
-    /* restore the oldsort order. */
-    Sort = oldsort;
 
     /* Put the list into an array. */
     linearize_tree (ctx);
