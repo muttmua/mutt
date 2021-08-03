@@ -46,13 +46,14 @@
 #define DTYPE(x) ((x) & DT_MASK)
 
 /* subtypes */
-#define DT_SUBTYPE_MASK	0xff0
-#define DT_SORT_ALIAS	0x10
-#define DT_SORT_BROWSER 0x20
-#define DT_SORT_KEYS	0x40
-#define DT_SORT_AUX	0x80
-#define DT_SORT_SIDEBAR	0x100
-#define DT_L10N_STR     0x200
+#define DT_SUBTYPE_MASK       0xff0
+#define DT_SORT_ALIAS         0x10
+#define DT_SORT_BROWSER       0x20
+#define DT_SORT_KEYS          0x40
+#define DT_SORT_AUX           0x80
+#define DT_SORT_SIDEBAR       0x100
+#define DT_L10N_STR           0x200
+#define DT_SORT_THREAD_GROUPS 0x400
 
 /* flags to parse_set() */
 #define MUTT_SET_INV	(1<<0)	/* default is to invert all vars */
@@ -125,6 +126,24 @@ const struct mapping_t SortAuxMethods[] = {  /* DT_SORT_AUX */
   { "size",		SORT_SIZE },
   { "spam",		SORT_SPAM },
   { "subject",		SORT_SUBJECT },
+  { "to",		SORT_TO },
+  { NULL,               0 }
+};
+
+/* Used by $sort_thread_groups.  "aux" delegates to $sort_aux */
+const struct mapping_t SortThreadGroupsMethods[] = {  /* DT_SORT_THREAD_GROUPS */
+  { "aux",		SORT_AUX },
+  { "date",		SORT_DATE },
+  { "date-sent",	SORT_DATE },
+  { "from",		SORT_FROM },
+  { "label",		SORT_LABEL },
+  { "mailbox-order",	SORT_ORDER },
+  { "date-received",	SORT_RECEIVED },
+  { "score",		SORT_SCORE },
+  { "size",		SORT_SIZE },
+  { "spam",		SORT_SPAM },
+  { "subject",		SORT_SUBJECT },
+  { "threads",		SORT_THREADS },
   { "to",		SORT_TO },
   { NULL,               0 }
 };
@@ -4056,6 +4075,15 @@ struct option_t MuttVars[] = {
   ** .pp
   ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
   ** order (example: ``\fCset sort=reverse-date-sent\fP'').
+  ** .pp
+  ** For values except ``threads'', this provides the primary sort
+  ** method.  When two message sort values are equal, $$sort_aux will
+  ** be used for a secondary sort.
+  ** .pp
+  ** When set to ``threads'', Mutt threads messages in the index. It
+  ** uses the variable $$sort_thread_groups to sort between threads
+  ** (at the top/root level), and $$sort_aux to sort sub-threads and
+  ** children.
   */
   { "sort_alias",	DT_SORT|DT_SORT_ALIAS,	R_NONE,	{.p=&SortAlias}, {.l=SORT_ALIAS} },
   /*
@@ -4071,24 +4099,24 @@ struct option_t MuttVars[] = {
   { "sort_aux",		DT_SORT|DT_SORT_AUX, R_INDEX|R_RESORT_BOTH, {.p=&SortAux}, {.l=SORT_DATE} },
   /*
   ** .pp
-  ** This provides a secondary sort for messages in the ``index'' menu, used
-  ** when the $$sort value is equal for two messages.
+  ** For non-threaded mode, this provides a secondary sort for
+  ** messages in the ``index'' menu, used when the $$sort value is
+  ** equal for two messages.
   ** .pp
-  ** When sorting by threads, this variable controls how threads are sorted
-  ** in relation to other threads, and how the branches of the thread trees
-  ** are sorted.  This can be set to any value that $$sort can, except
-  ** ``threads'' (in that case, mutt will just use ``date-sent'').  You can also
-  ** specify the ``last-'' prefix in addition to the ``reverse-'' prefix, but ``last-''
-  ** must come after ``reverse-''.  The ``last-'' prefix causes messages to be
-  ** sorted against its siblings by which has the last descendant, using
-  ** the rest of $$sort_aux as an ordering.  For instance,
+  ** When sorting by threads, this variable controls how the branches
+  ** of the thread trees are sorted.  This can be set to any value
+  ** that $$sort can, except ``threads'' (in that case, mutt will just
+  ** use ``date-sent'').  You can also specify the ``last-'' prefix in
+  ** addition to the ``reverse-'' prefix, but ``last-'' must come
+  ** after ``reverse-''.  The ``last-'' prefix causes messages to be
+  ** sorted against its siblings by which has the last descendant,
+  ** using the rest of $$sort_aux as an ordering.  For instance,
   ** .ts
   ** set sort_aux=last-date-received
   ** .te
   ** .pp
-  ** would mean that if a new message is received in a
-  ** thread, that thread becomes the last one displayed (or the first, if
-  ** you have ``\fCset sort=reverse-threads\fP''.)
+  ** would mean that if a new message is received in a sub-thread,
+  ** that sub-thread becomes the last one displayed.
   ** .pp
   ** Note: For reversed-threads $$sort
   ** order, $$sort_aux is reversed again (which is not the right thing to do,
@@ -4140,6 +4168,27 @@ struct option_t MuttVars[] = {
   ** setting of $$reply_regexp.  With $$sort_re \fIunset\fP, mutt will attach
   ** the message whether or not this is the case, as long as the
   ** non-$$reply_regexp parts of both messages are identical.
+  */
+  { "sort_thread_groups", DT_SORT|DT_SORT_THREAD_GROUPS, R_INDEX|R_RESORT_BOTH, {.p=&SortThreadGroups}, {.l=SORT_AUX} },
+  /*
+  ** .pp
+  ** When sorting by threads, this variable controls how threads are
+  ** sorted in relation to other threads (at the top/root level).
+  ** This can be set to any value that $$sort can, except ``threads''.
+  ** You can also specify the ``last-'' prefix in addition to the
+  ** ``reverse-'' prefix, but ``last-'' must come after ``reverse-''.
+  ** The ``last-'' prefix causes messages to be sorted against its
+  ** siblings by which has the last descendant, using the rest of
+  ** $$sort_thread_groups as an ordering.
+  ** .pp
+  ** For backward compatibility, the default value is ``aux'', which
+  ** means to use $$sort_aux for top-level thread sorting too.  The
+  ** value ``aux'' does not respect ``last-'' or ``reverse-''
+  ** prefixes, it simply delegates sorting directly to $$sort_aux.
+  ** .pp
+  ** Note: For reversed-threads $$sort order, $$sort_thread_groups is
+  ** reversed again (which is not the right thing to do, but kept to
+  ** not break any existing configuration setting).
   */
   { "spam_separator",   DT_STR, R_NONE, {.p=&SpamSep}, {.p=","} },
   /*
@@ -4332,7 +4381,7 @@ struct option_t MuttVars[] = {
   /* L10N:
      $status_format default value
   */
-  { "status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&Status}, {.p=N_("-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-(%P)---")} },
+  { "status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&Status}, {.p=N_("-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?%S)-%>-(%P)---")} },
   /*
   ** .pp
   ** Controls the format of the status line displayed in the ``index''
@@ -4360,6 +4409,7 @@ struct option_t MuttVars[] = {
   ** .dt %s  .dd current sorting mode ($$sort)
   ** .dt %S  .dd current aux sorting method ($$sort_aux)
   ** .dt %t  .dd number of tagged messages *
+  ** .dt %S  .dd current thread group sorting method ($$sort_thread_groups) *
   ** .dt %u  .dd number of unread messages *
   ** .dt %v  .dd Mutt version string
   ** .dt %V  .dd currently active limit pattern, if any *

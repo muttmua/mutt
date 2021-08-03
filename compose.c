@@ -1037,7 +1037,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
   int fccSet = 0;	/* has the user edited the Fcc: field ? */
   CONTEXT *ctx = NULL, *this = NULL;
   /* Sort, SortAux could be changed in mutt_index_menu() */
-  int oldSort, oldSortAux;
+  int oldSort, oldSortAux, oldSortThreadGroups;
   struct stat st;
   compose_redraw_data_t rd = {0};
 
@@ -1333,7 +1333,9 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         }
 
         this = Context; /* remember current folder and sort methods*/
-        oldSort = Sort; oldSortAux = SortAux;
+        oldSort = Sort;
+        oldSortAux = SortAux;
+        oldSortThreadGroups = SortThreadGroups;
 
         Context = ctx;
         set_option(OPTATTACHMSG);
@@ -1348,6 +1350,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           /* Restore old $sort and $sort_aux */
           Sort = oldSort;
           SortAux = oldSortAux;
+          SortThreadGroups = oldSortThreadGroups;
           menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
           break;
         }
@@ -1381,6 +1384,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         /* Restore old $sort and $sort_aux */
         Sort = oldSort;
         SortAux = oldSortAux;
+        SortThreadGroups = oldSortThreadGroups;
       }
       mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
       break;

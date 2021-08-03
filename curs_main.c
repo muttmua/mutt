@@ -323,16 +323,34 @@ static int ci_first_message (void)
     if (old != -1)
       return (old);
 
-    /* If Sort is reverse and not threaded, the latest message is first.
-     * If Sort is threaded, the latest message is first iff exactly one
-     * of Sort and SortAux are reverse.
+    /* If Sort is threaded, the latest message is first iff exactly one
+     * of Sort and the top-level sorting method are reverse.
      */
-    if (((Sort & SORT_REVERSE) && (Sort & SORT_MASK) != SORT_THREADS) ||
-	((Sort & SORT_MASK) == SORT_THREADS &&
-	 ((Sort ^ SortAux) & SORT_REVERSE)))
-      return 0;
+    if ((Sort & SORT_MASK) == SORT_THREADS)
+    {
+      if ((SortThreadGroups & SORT_MASK) == SORT_AUX)
+      {
+        if ((Sort ^ SortAux) & SORT_REVERSE)
+          return 0;
+        else
+          return (Context->vcount ? Context->vcount - 1 : 0);
+      }
+      else
+      {
+        if ((Sort ^ SortThreadGroups) & SORT_REVERSE)
+          return 0;
+        else
+          return (Context->vcount ? Context->vcount - 1 : 0);
+      }
+    }
+    /* If Sort is reverse and not threaded, the latest message is first. */
     else
-      return (Context->vcount ? Context->vcount - 1 : 0);
+    {
+      if (Sort & SORT_REVERSE)
+        return 0;
+      else
+        return (Context->vcount ? Context->vcount - 1 : 0);
+    }
   }
   return 0;
 }

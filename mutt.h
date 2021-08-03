@@ -952,6 +952,8 @@ struct mutt_thread
   unsigned int fake_thread : 1;
   unsigned int duplicate_thread : 1;
   unsigned int sort_children : 1;
+  unsigned int recalc_aux_key : 1;
+  unsigned int recalc_group_key : 1;
   unsigned int check_subject : 1;
   unsigned int visible : 1;
   unsigned int deep : 1;
@@ -962,7 +964,8 @@ struct mutt_thread
   THREAD *next;
   THREAD *prev;
   HEADER *message;
-  HEADER *sort_key;
+  HEADER *sort_group_key;  /* $sort_thread_groups - for thread roots */
+  HEADER *sort_aux_key;    /* $sort_aux - for messages below the root */
 };
 
 

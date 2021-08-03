@@ -2796,6 +2796,9 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	case DT_SORT_SIDEBAR:
 	  map = SortSidebarMethods;
 	  break;
+	case DT_SORT_THREAD_GROUPS:
+	  map = SortThreadGroupsMethods;
+	  break;
 	default:
 	  map = SortMethods;
 	  break;
@@ -3432,6 +3435,9 @@ static int var_to_string (int idx, BUFFER *val)
           map = SortKeyMethods;
         else
           map = SortMethods;
+        break;
+      case DT_SORT_THREAD_GROUPS:
+        map = SortThreadGroupsMethods;
         break;
       default:
         map = SortMethods;

@@ -43,12 +43,19 @@ void mutt_check_rescore (CONTEXT *ctx)
 
   if (option (OPTNEEDRESCORE) && option (OPTSCORE))
   {
-    if ((Sort & SORT_MASK) == SORT_SCORE ||
-	(SortAux & SORT_MASK) == SORT_SCORE)
+    if ((Sort & SORT_MASK) == SORT_THREADS)
+    {
+      if ((SortThreadGroups & SORT_MASK) == SORT_SCORE ||
+          (SortAux & SORT_MASK) == SORT_SCORE)
+      {
+        set_option (OPTNEEDRESORT);
+	set_option (OPTSORTSUBTHREADS);
+      }
+    }
+    else if ((Sort & SORT_MASK) == SORT_SCORE ||
+             (SortAux & SORT_MASK) == SORT_SCORE)
     {
       set_option (OPTNEEDRESORT);
-      if ((Sort & SORT_MASK) == SORT_THREADS)
-	set_option (OPTSORTSUBTHREADS);
     }
 
     /* must redraw the index since the user might have %N in it */

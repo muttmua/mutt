@@ -465,11 +465,17 @@ static void unlink_message (THREAD **old, THREAD *cur)
   if (cur->next)
     cur->next->prev = cur->prev;
 
-  if (cur->sort_key)
+  if (cur->sort_aux_key)
   {
-    for (tmp = cur->parent; tmp && tmp->sort_key == cur->sort_key;
+    for (tmp = cur->parent; tmp && tmp->sort_aux_key == cur->sort_aux_key;
 	 tmp = tmp->parent)
-      tmp->sort_key = NULL;
+      tmp->sort_aux_key = NULL;
+  }
+  if (cur->sort_group_key)
+  {
+    for (tmp = cur->parent; tmp && tmp->sort_group_key == cur->sort_group_key;
+	 tmp = tmp->parent)
+      tmp->sort_group_key = NULL;
   }
 }
 
@@ -483,6 +489,13 @@ static void insert_message (THREAD **new, THREAD *newparent, THREAD *cur)
   cur->next = *new;
   cur->prev = NULL;
   *new = cur;
+
+  if (newparent)
+  {
+    newparent->recalc_aux_key = 1;
+    newparent->recalc_group_key = 1;
+    newparent->sort_children = 1;
+  }
 }
 
 /* thread by subject things that didn't get threaded by message-id */
@@ -503,7 +516,6 @@ static void pseudo_threads (CONTEXT *ctx)
       cur->fake_thread = 1;
       unlink_message (&top, cur);
       insert_message (&parent->child, parent, cur);
-      parent->sort_children = 1;
       tmp = cur;
       FOREVER
       {
@@ -566,7 +578,7 @@ void mutt_clear_threads (CONTEXT *ctx)
     hash_destroy (&ctx->thread_hash, *free);
 }
 
-static int compare_threads (const void *a, const void *b)
+static int compare_aux_threads (const void *a, const void *b)
 {
   static sort_t *aux_func = NULL;
   int rc;
@@ -577,26 +589,112 @@ static int compare_threads (const void *a, const void *b)
     return aux_func ? 1 : 0;
   }
 
-  rc = (*aux_func) (&(*((THREAD **) a))->sort_key,
-                    &(*((THREAD **) b))->sort_key);
+  rc = (*aux_func) (&(*((THREAD **) a))->sort_aux_key,
+                    &(*((THREAD **) b))->sort_aux_key);
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = (*((THREAD **)a))->sort_key->index - (*((THREAD **)b))->sort_key->index;
+  rc = (*((THREAD **)a))->sort_aux_key->index - (*((THREAD **)b))->sort_aux_key->index;
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
   return rc;
 }
 
+/* This is used to compare individual HEADERS for assigning to
+ * sort_aux_key of a parent.
+ *
+ * Note: the comparison for updating sortkeys does not take REVERSE into
+ * account.
+ */
+static int compare_aux_sortkeys (const void *a, const void *b)
+{
+  static sort_t *sort_func = NULL;
+  int rc;
+
+  if (!(a && b))
+  {
+    sort_func = mutt_get_sort_func (SortAux);
+    return sort_func ? 1 : 0;
+  }
+
+  rc = (*sort_func) (a, b);
+  if (rc)
+    return rc;
+
+  return (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+}
+
+static int compare_root_threads (const void *a, const void *b)
+{
+  static sort_t *sort_func = NULL;
+  static int reverse = 0;
+  int rc;
+
+  if (!(a && b))
+  {
+    /* Delegate to the $sort_aux function in this case. */
+    if ((SortThreadGroups & SORT_MASK) == SORT_AUX)
+    {
+      sort_func = mutt_get_sort_func (SortAux);
+      reverse = SortAux & SORT_REVERSE;
+    }
+    else
+    {
+      sort_func = mutt_get_sort_func (SortThreadGroups);
+      reverse = SortThreadGroups & SORT_REVERSE;
+    }
+    return sort_func ? 1 : 0;
+  }
+
+  rc = (*sort_func) (&(*((THREAD **) a))->sort_group_key,
+                     &(*((THREAD **) b))->sort_group_key);
+  if (rc)
+    return reverse ? -rc : rc;
+
+  rc = (*((THREAD **)a))->sort_group_key->index -
+    (*((THREAD **)b))->sort_group_key->index;
+  if (rc)
+    return reverse ? -rc : rc;
+
+  return rc;
+}
+
+/* This is used to compare individual HEADERS for assigning to
+ * sort_group_key of a parent.
+ *
+ * It isn't used when $sort_thread_groups is SORT_AUX, so we don't
+ * set up delegation for that case.
+ *
+ * Note: the comparison for updating sortkeys does not take REVERSE
+ * into account.
+ */
+static int compare_group_sortkeys (const void *a, const void *b)
+{
+  static sort_t *sort_func = NULL;
+  int rc;
+
+  if (!(a && b))
+  {
+    if ((SortThreadGroups & SORT_MASK) == SORT_AUX)
+      return 1;
+    sort_func = mutt_get_sort_func (SortThreadGroups);
+    return sort_func ? 1 : 0;
+  }
+
+  rc = (*sort_func) (a, b);
+  if (rc)
+    return rc;
+
+  return (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+}
+
 THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 {
-  THREAD **array, *sort_key, *top, *tmp;
-  HEADER *oldsort_key;
+  THREAD **array, *top, *last_child;
+  HEADER *new_sort_aux_key, *old_sort_aux_key;
+  HEADER *old_sort_group_key;
   int i, array_size, sort_top = 0;
-
-  if (!compare_threads (NULL, NULL))
-    return (thread);
 
   /* we put things into the array backwards to save some cycles,
    * but we want to have to move less stuff around if we're
@@ -604,20 +702,41 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
    * in reverse order so they're forwards
    */
   SortAux ^= SORT_REVERSE;
+  SortThreadGroups ^= SORT_REVERSE;
+
+  /* Init the comparison functions.  This is done after the above
+   * REVERSE flipping because some of these cache sort values. */
+  if (!compare_aux_threads (NULL, NULL) ||
+      !compare_aux_sortkeys (NULL, NULL) ||
+      !compare_root_threads (NULL, NULL) ||
+      !compare_group_sortkeys (NULL, NULL))
+  {
+    SortAux ^= SORT_REVERSE;
+    SortThreadGroups ^= SORT_REVERSE;
+    return (thread);
+  }
 
   top = thread;
 
   array = safe_calloc ((array_size = 256), sizeof (THREAD *));
   while (1)
   {
-    if (init || !thread->sort_key)
+    if (init)
     {
-      thread->sort_key = NULL;
-
+      thread->sort_aux_key = NULL;
+      thread->sort_group_key = NULL;
+    }
+    if (!thread->sort_aux_key && thread->parent)
+    {
+      thread->parent->recalc_aux_key = 1;
+      thread->parent->sort_children = 1;
+    }
+    if (!thread->sort_group_key)
+    {
       if (thread->parent)
-        thread->parent->sort_children = 1;
+        thread->parent->recalc_group_key = 1;
       else
-	sort_top = 1;
+        sort_top = 1;
     }
 
     if (thread->child)
@@ -628,7 +747,8 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
     else
     {
       /* if it has no children, it must be real. sort it on its own merits */
-      thread->sort_key = thread->message;
+      thread->sort_aux_key = thread->message;
+      thread->sort_group_key = thread->message;
 
       if (thread->next)
       {
@@ -642,6 +762,7 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
       /* if it has siblings and needs to be sorted, sort it... */
       if (thread->prev && (thread->parent ? thread->parent->sort_children : sort_top))
       {
+        int has_parent = (thread->parent != NULL);
 	/* put them into the array */
 	for (i = 0; thread; i++, thread = thread->prev)
 	{
@@ -651,7 +772,8 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 	  array[i] = thread;
 	}
 
-	qsort ((void *) array, i, sizeof (THREAD *), *compare_threads);
+	qsort ((void *) array, i, sizeof (THREAD *),
+               has_parent ? compare_aux_threads : compare_root_threads);
 
 	/* attach them back together.  make thread the last sibling. */
 	thread = array[0];
@@ -668,42 +790,101 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 	  array[i - 1]->prev = array[i];
 	  array[i]->next = array[i - 1];
 	}
+
+        if (thread->parent)
+          thread->parent->recalc_aux_key = 1;
       }
 
       if (thread->parent)
       {
-	tmp = thread;
+	last_child = thread;
 	thread = thread->parent;
+        /* we just sorted its children */
+        thread->sort_children = 0;
 
-	if (!thread->sort_key || thread->sort_children)
+	if (!thread->sort_aux_key || thread->recalc_aux_key)
 	{
-	  /* make sort_key the first or last sibling, as appropriate */
-	  sort_key = (!(SortAux & SORT_LAST) ^ !(SortAux & SORT_REVERSE)) ? thread->child : tmp;
+          thread->recalc_aux_key = 0;
+	  old_sort_aux_key = thread->sort_aux_key;
+	  thread->sort_aux_key = thread->message;
 
-	  /* we just sorted its children */
-	  thread->sort_children = 0;
+	  /* make sort_aux_key the first or last sibling, as appropriate.
+           * note that SortAux's SORT_REVERSE is flipped:
+           *   - if SORT_LAST, new_sort_aux_key will be the greatest value.
+           *   - otherwise, new_sort_aux_key will be the least value. */
+	  new_sort_aux_key = (!(SortAux & SORT_LAST) ^ !(SortAux & SORT_REVERSE)) ?
+            thread->child->sort_aux_key : last_child->sort_aux_key;
 
-	  oldsort_key = thread->sort_key;
-	  thread->sort_key = thread->message;
-
-	  if (SortAux & SORT_LAST)
+	  if (!thread->sort_aux_key)
+	    thread->sort_aux_key = new_sort_aux_key;
+	  else if (SortAux & SORT_LAST)
 	  {
-	    if (!thread->sort_key
-		|| ((((SortAux & SORT_REVERSE) ? 1 : -1)
-		     * compare_threads ((void *) &thread,
-					(void *) &sort_key))
-		    > 0))
-	      thread->sort_key = sort_key->sort_key;
+	    if (compare_aux_sortkeys (&thread->sort_aux_key,
+                                      &new_sort_aux_key) < 0)
+	      thread->sort_aux_key = new_sort_aux_key;
 	  }
-	  else if (!thread->sort_key)
-	    thread->sort_key = sort_key->sort_key;
 
-	  /* if its sort_key has changed, we need to resort it and siblings */
-	  if (oldsort_key != thread->sort_key)
+	  if ((old_sort_aux_key != thread->sort_aux_key) && thread->parent)
+	  {
+            thread->parent->recalc_aux_key = 1;
+            thread->parent->sort_children = 1;
+	  }
+        }
+
+	if (!thread->sort_group_key || thread->recalc_group_key)
+	{
+          thread->recalc_group_key = 0;
+	  old_sort_group_key = thread->sort_group_key;
+
+          /* If $sort_thread_groups is turned off, just use the result
+           * of $sort_aux.  If it's the same as $sort_aux, do the
+           * same.
+           *
+           * NOTE: SORT_REVERSE is ignored here because it just
+           * determines the order of the children, not the selection
+           * of least/greatest.
+           */
+          if (((SortThreadGroups & SORT_MASK) == SORT_AUX) ||
+              ((SortThreadGroups & ~SORT_REVERSE) == (SortAux & ~SORT_REVERSE)))
+            thread->sort_group_key = thread->sort_aux_key;
+          else
+          {
+            thread->sort_group_key = thread->message;
+            if (!thread->sort_group_key)
+            {
+              thread->sort_group_key = last_child->sort_group_key;
+
+              /* If SORT_LAST is unset, fill the placeholder thread key
+               * with the least value in the children, just like with $sort_aux.
+               */
+              if (!(SortThreadGroups & SORT_LAST))
+              {
+                for (THREAD *tmp = last_child->prev; tmp; tmp = tmp->prev)
+                {
+                  if (compare_group_sortkeys (&thread->sort_group_key,
+                                             &tmp->sort_group_key) > 0)
+                    thread->sort_group_key = tmp->sort_group_key;
+                }
+              }
+            }
+
+            /* Scan for the greatest value in the children */
+            if (SortThreadGroups & SORT_LAST)
+            {
+              for (THREAD *tmp = last_child; tmp; tmp = tmp->prev)
+              {
+                if (compare_group_sortkeys (&thread->sort_group_key,
+                                           &tmp->sort_group_key) < 0)
+                  thread->sort_group_key = tmp->sort_group_key;
+              }
+            }
+          }
+
+	  if (old_sort_group_key != thread->sort_group_key)
 	  {
 	    if (thread->parent)
-	      thread->parent->sort_children = 1;
-	    else
+              thread->parent->recalc_group_key = 1;
+            else
 	      sort_top = 1;
 	  }
 	}
@@ -711,6 +892,7 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
       else
       {
 	SortAux ^= SORT_REVERSE;
+	SortThreadGroups ^= SORT_REVERSE;
 	FREE (&array);
 	return (top);
       }
@@ -819,7 +1001,8 @@ void mutt_sort_threads (CONTEXT *ctx, int init)
 	    tmp = thread->parent;
 	    unlink_message (&tmp->child, thread);
 	    thread->parent = NULL;
-	    thread->sort_key = NULL;
+	    thread->sort_aux_key = NULL;
+	    thread->sort_group_key = NULL;
 	    thread->fake_thread = 0;
 	    thread = tmp;
 	  } while (thread != &top && !thread->child && !thread->message);
