@@ -93,6 +93,10 @@ static int tls_starttls_close (CONNECTION* conn);
 static int tls_init (void);
 static int tls_negotiate (CONNECTION* conn);
 static int tls_check_certificate (CONNECTION* conn);
+static int tls_passwd_cb (void* userdata, int attempt, const char* token_url,
+                          const char* token_label,
+                          unsigned int flags,
+                          char* pin, size_t pin_max);
 
 
 static int tls_init (void)
@@ -426,6 +430,8 @@ static int tls_negotiate (CONNECTION * conn)
     mutt_sleep (2);
     return -1;
   }
+  gnutls_certificate_set_pin_function (data->xcred, tls_passwd_cb,
+                                       &conn->account);
 
   gnutls_certificate_set_x509_trust_file (data->xcred, SslCertFile,
 					  GNUTLS_X509_FMT_PEM);
@@ -1261,4 +1267,33 @@ static int tls_check_certificate (CONNECTION* conn)
   }
 
   return rc;
+}
+
+static void client_cert_prompt (char *prompt, size_t prompt_size, ACCOUNT *account)
+{
+  /* L10N:
+     When using a $ssl_client_cert, GNUTLS may prompt for the password
+     to decrypt the cert.  %s is the hostname.
+  */
+  snprintf (prompt, prompt_size, _("Password for %s client cert: "),
+            account->host);
+}
+
+static int tls_passwd_cb (void* userdata, int attempt, const char* token_url,
+                          const char* token_label,
+                          unsigned int flags,
+                          char* buf, size_t size)
+{
+  ACCOUNT *account;
+
+  if (!buf || size <= 0 || !userdata)
+    return GNUTLS_E_INVALID_PASSWORD;
+
+  account = (ACCOUNT *) userdata;
+
+  if (_mutt_account_getpass (account, client_cert_prompt))
+    return GNUTLS_E_INVALID_PASSWORD;
+
+  snprintf(buf, size, "%s", account->pass);
+  return GNUTLS_E_SUCCESS;
 }
