@@ -26,12 +26,14 @@
 #include "sort.h"
 #include "mx.h"
 
-void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_ctx)
+void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
 {
   int changed = h->changed;
   int deleted = ctx->deleted;
   int tagged = ctx->tagged;
   int flagged = ctx->flagged;
+  int upd_ctx = (upd_flags & MUTT_SET_FLAG_UPDATE_CONTEXT);
+  int upd_color = (upd_flags & MUTT_SET_FLAG_UPDATE_COLOR);
   int update = 0;
 
   if (ctx->readonly && flag != MUTT_TAG)
@@ -272,7 +274,13 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_ctx)
 
   if (update)
   {
-    mutt_set_header_color(ctx, h);
+    if (upd_color)
+      mutt_set_header_color (ctx, h);
+    else
+    {
+      h->color.pair = 0;
+      h->color.attrs = 0;
+    }
 #ifdef USE_SIDEBAR
     mutt_set_current_menu_redraw (REDRAW_SIDEBAR);
 #endif
@@ -294,6 +302,7 @@ void mutt_tag_set_flag (int flag, int bf)
     if (Context->hdrs[Context->v2r[j]]->tagged)
       mutt_set_flag (Context, Context->hdrs[Context->v2r[j]], flag, bf);
 }
+
 int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
 {
   THREAD *start, *cur = hdr->thread;
@@ -309,8 +318,17 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
       cur = cur->parent;
   start = cur;
 
+  /* For thread flag setting, there are some corner cases that make it
+   * better to set the color values afterwards.  For example coloring
+   * collapsed threads with a deleted message in them '~v ~(~D)', if
+   * we <undelete-thread> it's better to determine the color lazily in the
+   * index after all the flag settings for the thread is done.
+   */
   if (cur->message)
-    mutt_set_flag (Context, cur->message, flag, bf);
+  {
+    _mutt_set_flag (Context, cur->message, flag, bf, MUTT_SET_FLAG_UPDATE_CONTEXT);
+    cur->message->color.pair = cur->message->color.attrs = 0;
+  }
 
   if ((cur = cur->child) == NULL)
     return (0);
@@ -318,7 +336,10 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
   FOREVER
   {
     if (cur->message)
-      mutt_set_flag (Context, cur->message, flag, bf);
+    {
+      _mutt_set_flag (Context, cur->message, flag, bf, MUTT_SET_FLAG_UPDATE_CONTEXT);
+      cur->message->color.pair = cur->message->color.attrs = 0;
+    }
 
     if (cur->child)
       cur = cur->child;

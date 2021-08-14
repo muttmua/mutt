@@ -378,6 +378,10 @@ enum
 #define MUTT_SPAM          1
 #define MUTT_NOSPAM        2
 
+/* flags for _mutt_set_flag() */
+#define MUTT_SET_FLAG_UPDATE_CONTEXT  (1<<0)
+#define MUTT_SET_FLAG_UPDATE_COLOR    (1<<1)
+
 /* boolean vars */
 enum
 {
