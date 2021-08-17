@@ -1261,6 +1261,8 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         for (i = 0; i < numfiles; i++)
         {
           char *att = files[i];
+          if (!att)
+            continue;
           new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
           new->unowned = 1;
           new->content = mutt_make_file_attach (att);
