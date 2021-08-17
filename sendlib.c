@@ -897,6 +897,8 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
   struct stat sb;
 
   if (b && !fname) fname = b->filename;
+  if (!fname)
+    return NULL;
 
   if (stat (fname, &sb) == -1)
   {
@@ -1587,6 +1589,9 @@ BODY *mutt_make_file_attach (const char *path)
 {
   BODY *att;
   CONTENT *info;
+
+  if (!(path && *path))
+    return NULL;
 
   att = mutt_new_body ();
   att->filename = safe_strdup (path);
