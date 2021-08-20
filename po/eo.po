@@ -3,14 +3,14 @@
 #
 # «The more people attain, the greater their inclination not to be satisfied.»
 #
-# Edmund GRIMLEY EVANS <edmundo@rano.org>, 2000, 2001, 2002, 2003, 2007.
+# Edmund GRIMLEY EVANS <edmundo@rano.org>, 2000, 2001, 2002, 2003, 2007, 2021.
 # Benno Schulenberg <benno@vertaalt.nl>, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.8.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2021-06-12 10:38-0700\n"
-"PO-Revision-Date: 2017-02-22 21:14+0100\n"
+"PO-Revision-Date: 2021-08-20 16:44+0100\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
 "Language: eo\n"
@@ -41,15 +41,15 @@ msgstr "Pasvorto por %s@%s: "
 #.
 #: account.c:300
 msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
-msgstr ""
+msgstr "mutt_account_getoauthbearer: Nenia OAUTH-refresh-komando difinita"
 
 #: account.c:306
 msgid "mutt_account_getoauthbearer: Unable to run refresh command"
-msgstr ""
+msgstr "mutt_account_getoauthbearer: Ne povis ruli refresh-komandon"
 
 #: account.c:317
 msgid "mutt_account_getoauthbearer: Command returned empty string"
-msgstr ""
+msgstr "mutt_account_getoauthbearer: Komando redonis malplenan signoĉenon"
 
 #: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
 #: background.c:369 browser.c:46 history.c:75 listmenu.c:49 pager.c:1737
@@ -250,7 +250,7 @@ msgstr "Ne eblas krei %s: %s."
 #.
 #: autocrypt/autocrypt.c:134
 msgid "Create an initial autocrypt account?"
-msgstr ""
+msgstr "Ĉu krei komencan autocrypt-konton?"
 
 #. L10N:
 #. Autocrypt is asking for the email address to use for the
@@ -259,7 +259,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:161
 msgid "Autocrypt account address: "
-msgstr ""
+msgstr "Retadreso de autocrypt-konto: "
 
 #. L10N:
 #. Autocrypt prompts for an account email address, and requires
@@ -268,7 +268,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:170
 msgid "Please enter a single email address"
-msgstr ""
+msgstr "Bonvolu doni unu retadreson"
 
 #. L10N:
 #. When creating an autocrypt account, this message will be displayed
@@ -277,7 +277,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:187
 msgid "That email address already has an autocrypt account"
-msgstr ""
+msgstr "Tiu retadreso jam havas autocrypt-konton"
 
 #. L10N:
 #. Autocrypt has a setting "prefer-encrypt".
@@ -288,9 +288,8 @@ msgstr ""
 #. will be required to enable encryption manually.
 #.
 #: autocrypt/autocrypt.c:203
-#, fuzzy
 msgid "Prefer encryption?"
-msgstr "ĉifrado"
+msgstr "Ĉu preferi ĉifradon?"
 
 #. L10N:
 #. Error message displayed if creating an autocrypt account failed
@@ -298,23 +297,22 @@ msgstr "ĉifrado"
 #.
 #: autocrypt/autocrypt.c:218
 msgid "Autocrypt account creation aborted."
-msgstr ""
+msgstr "Kreo de autocrypt-konto estas interrompita."
 
 #. L10N:
 #. Message displayed after an autocrypt account is successfully created.
 #.
 #: autocrypt/autocrypt.c:223
 msgid "Autocrypt account creation succeeded"
-msgstr ""
+msgstr "Kreo de autocrypt-konto sukcesis"
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
 #. email when the engine is not available.
 #.
 #: autocrypt/autocrypt.c:542 autocrypt/autocrypt.c:550
-#, fuzzy
 msgid "Autocrypt is not available."
-msgstr "Patra mesaĝo ne estas havebla."
+msgstr "Autocrypto ne estas disponata."
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
@@ -322,9 +320,9 @@ msgstr "Patra mesaĝo ne estas havebla."
 #. %s is the From email address used to look up the Autocrypt account.
 #.
 #: autocrypt/autocrypt.c:564
-#, fuzzy, c-format
+#, c-format
 msgid "Autocrypt is not enabled for %s."
-msgstr "Nenia (valida) atestilo trovita por %s."
+msgstr "Autocrypt ne estas aktiva por %s."
 
 #. L10N:
 #. %s is an email address.  Autocrypt is scanning for the keyids
@@ -332,9 +330,9 @@ msgstr "Nenia (valida) atestilo trovita por %s."
 #. The message is printed and they are returned to the compose menu.
 #.
 #: autocrypt/autocrypt.c:591 autocrypt/autocrypt.c:619
-#, fuzzy, c-format
+#, c-format
 msgid "No (valid) autocrypt key found for %s."
-msgstr "Nenia (valida) atestilo trovita por %s."
+msgstr "Nenia (valida) autocrypt-ŝlosilo trovita por %s."
 
 #. L10N:
 #. The first time autocrypt is enabled, Mutt will ask to scan
@@ -345,15 +343,14 @@ msgstr "Nenia (valida) atestilo trovita por %s."
 #.
 #: autocrypt/autocrypt.c:861
 msgid "Scan a mailbox for autocrypt headers?"
-msgstr ""
+msgstr "Ĉu traserĉi poŝtfakon pri autocrypt-kampoj?"
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
 #.
 #: autocrypt/autocrypt.c:868
-#, fuzzy
 msgid "Scan mailbox"
-msgstr "Malfermi poŝtfakon"
+msgstr "Traserĉi poŝtfakon"
 
 #. L10N:
 #. This is the second prompt to see if the user would like
@@ -364,15 +361,14 @@ msgstr "Malfermi poŝtfakon"
 #.
 #: autocrypt/autocrypt.c:890
 msgid "Scan another mailbox for autocrypt headers?"
-msgstr ""
+msgstr "Ĉu traserĉi alian poŝtfakon pri autocrypt-kampoj?"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. create new account
 #.
 #: autocrypt/autocrypt_acct_menu.c:43
-#, fuzzy
 msgid "Create"
-msgstr "Ĉu krei %s?"
+msgstr "Krei"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. delete account
@@ -389,7 +385,7 @@ msgstr "Forviŝi"
 #.
 #: autocrypt/autocrypt_acct_menu.c:54
 msgid "Tgl Active"
-msgstr ""
+msgstr "Inv Aktiva"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. toggle "prefer-encrypt" on an account
@@ -399,7 +395,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:61
 msgid "Prf Encr"
-msgstr ""
+msgstr "Pref Ĉifr"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -407,7 +403,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:93
 msgid "prefer encrypt"
-msgstr ""
+msgstr "preferi ĉifradon"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -416,7 +412,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:100
 msgid "manual encrypt"
-msgstr ""
+msgstr "laŭelekte ĉifrita"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -424,7 +420,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:108
 msgid "active"
-msgstr ""
+msgstr "aktiva"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -432,14 +428,14 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:114
 msgid "inactive"
-msgstr ""
+msgstr "malaktiva"
 
 #. L10N:
 #. Autocrypt Account Management Menu title
 #.
 #: autocrypt/autocrypt_acct_menu.c:147
 msgid "Autocrypt Accounts"
-msgstr ""
+msgstr "Autocrypt-kontoj"
 
 #. L10N:
 #. This error message is displayed if a database update of an
@@ -447,15 +443,15 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:203 autocrypt/autocrypt_acct_menu.c:213
 msgid "Error updating account record"
-msgstr ""
+msgstr "Eraro dum aktualigo de kontoregistro"
 
 #. L10N:
 #. Confirmation message when deleting an autocrypt account
 #.
 #: autocrypt/autocrypt_acct_menu.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete account \"%s\"?"
-msgstr "Ĉu vere forviŝi la poŝtfakon \"%s\"?"
+msgstr "Ĉu vere forviŝi la konton \"%s\"?"
 
 #. L10N:
 #. %s is the path to the database.  For some reason sqlite3 failed
@@ -466,9 +462,9 @@ msgstr "Ĉu vere forviŝi la poŝtfakon \"%s\"?"
 #. for some reason.  The %s is the full path of the database file.
 #.
 #: autocrypt/autocrypt_db.c:50 autocrypt/autocrypt_db.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open autocrypt database %s"
-msgstr "Ne eblas malfermi poŝtfakon %s"
+msgstr "Ne povas malfermi autocrypt-datenaron %s"
 
 #: autocrypt/autocrypt_gpgme.c:41 crypt-gpgme.c:574
 #, c-format
@@ -481,16 +477,16 @@ msgstr "eraro en kreado de gpgme-kunteksto: %s\n"
 #.
 #: autocrypt/autocrypt_gpgme.c:136
 msgid "Generating autocrypt key..."
-msgstr ""
+msgstr "Generas autocrypt-ŝlosilon..."
 
 #. L10N:
 #. GPGME was unable to generate a key for some reason.
 #. %s is the error message returned by GPGME.
 #.
 #: autocrypt/autocrypt_gpgme.c:148 autocrypt/autocrypt_gpgme.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating autocrypt key: %s\n"
-msgstr "Eraro dum eksportado de ŝlosilo: %s\n"
+msgstr "Eraro dum kreado de autocrypt-ŝlosilo: %s\n"
 
 #. L10N:
 #. After selecting a key for an autocrypt account,
@@ -501,7 +497,7 @@ msgstr "Eraro dum eksportado de ŝlosilo: %s\n"
 #: autocrypt/autocrypt_gpgme.c:213
 #, c-format
 msgid "The key %s is not usable for autocrypt"
-msgstr ""
+msgstr "La ŝlosilo %s ne estas uzebla por autocrypt"
 
 #. L10N:
 #. During autocrypt account creation, this prompt asks the
@@ -510,7 +506,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:241
 msgid "(c)reate new, or (s)elect existing GPG key? "
-msgstr ""
+msgstr "Ĉu (k)rei novan, aŭ (e)lekti ekzistantan GPG-ŝlosilon? "
 
 #. L10N:
 #. The letters corresponding to the
@@ -518,7 +514,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:246
 msgid "cs"
-msgstr ""
+msgstr "ke"
 
 #. L10N:
 #. During autocrypt account creation, if selecting an existing key fails
@@ -526,7 +522,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:260
 msgid "Create a new GPG key for this account, instead?"
-msgstr ""
+msgstr "Ĉu krei novan GPG-ŝlosilon por ĉi tiu konto anstataŭe?"
 
 #. L10N:
 #. The autocrypt database keeps track of schema version numbers.
@@ -536,20 +532,19 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_schema.c:116
 msgid "Autocrypt database version is too new"
-msgstr ""
+msgstr "Versio de autocrypt-datenaro estas tro nova"
 
 #: background.c:181
 msgid "Redraw"
-msgstr ""
+msgstr "Redesegni"
 
 #. L10N:
 #. Background Edit Landing Page message, first line.
 #. Displays while the editor is running.
 #.
 #: background.c:207 background.c:252 background.c:593
-#, fuzzy
 msgid "Waiting for editor to exit"
-msgstr "Atendas respondon..."
+msgstr "Atendas, ĝis redaktilo finos"
 
 #. L10N:
 #. Background Edit Landing Page message, second line.
@@ -559,14 +554,14 @@ msgstr "Atendas respondon..."
 #: background.c:223
 #, c-format
 msgid "Type '%s' to background compose session."
-msgstr ""
+msgstr "Tajpu '%s' por enfonigi redaktoseancon"
 
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
 #.
 #: background.c:373
 msgid "Resume"
-msgstr ""
+msgstr "Redaŭrigi"
 
 #. L10N:
 #. Background Compose menu
@@ -574,7 +569,7 @@ msgstr ""
 #.
 #: background.c:436
 msgid "finished"
-msgstr ""
+msgstr "finita"
 
 #. L10N:
 #. Background Compose menu
@@ -582,14 +577,14 @@ msgstr ""
 #.
 #: background.c:442
 msgid "running"
-msgstr ""
+msgstr "ruliĝas"
 
 #. L10N:
 #. Background Compose Menu title
 #.
 #: background.c:499
 msgid "Background Compose Menu"
-msgstr ""
+msgstr "Menuo de fona redaktado"
 
 #. L10N:
 #. Background Compose Menu:
@@ -598,7 +593,7 @@ msgstr ""
 #.
 #: background.c:547
 msgid "No backgrounded editing sessions."
-msgstr ""
+msgstr "Mankas fonaj redaktoseancoj."
 
 #. L10N:
 #. Background Compose menu:
@@ -608,7 +603,7 @@ msgstr ""
 #: background.c:590
 #, c-format
 msgid "Process is still running. Really select?"
-msgstr ""
+msgstr "Procezo ankoraŭ ruliĝas. Ĉu vere elekti?"
 
 #: browser.c:47
 msgid "Chdir"
@@ -619,19 +614,17 @@ msgid "Mask"
 msgstr "Masko"
 
 #: browser.c:215
-#, fuzzy
 msgid ""
 "Reverse sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
-msgstr "Inversa ordigo laŭ (d)ato, (a)lfabete, (g)rando, aŭ (n)e ordigi? "
+msgstr "Inversa ordigo laŭ (d)ato, (a)lfabete, (g)rando, (n)ombro, ne(l)egitaj, aŭ (s)en ordigo? "
 
 #: browser.c:216
-#, fuzzy
 msgid "Sort by (d)ate, (a)lpha, si(z)e, (c)ount, (u)nread, or do(n)'t sort? "
-msgstr "Ordigo laŭ (d)ato, (a)lfabete, (g)rando, aŭ (n)e ordigi? "
+msgstr "Ordigo laŭ (d)ato, (a)lfabete, (g)rando, (n)ombro, ne(l)egitaj, aŭ (s)en ordigo? "
 
 #: browser.c:217
 msgid "dazcun"
-msgstr ""
+msgstr "dagnls"
 
 #: browser.c:562 browser.c:1079 browser.c:1294
 #, c-format
@@ -687,9 +680,8 @@ msgid "Mailbox deleted."
 msgstr "Poŝtfako forviŝita."
 
 #: browser.c:1219
-#, fuzzy
 msgid "Mailbox deletion failed."
-msgstr "Poŝtfako forviŝita."
+msgstr "Forviŝo de poŝtfako malsukcesis."
 
 #: browser.c:1222
 msgid "Mailbox not deleted."
@@ -780,9 +772,8 @@ msgstr "implicitaj koloroj ne funkcias"
 
 #. L10N: Used for the $crypt_verify_sig prompt
 #: commands.c:189
-#, fuzzy
 msgid "Verify signature?"
-msgstr "Ĉu kontroli PGP-subskribon?"
+msgstr "Ĉu kontroli subskribon?"
 
 #: commands.c:215 mbox.c:904
 msgid "Could not create temporary file!"
@@ -805,7 +796,7 @@ msgstr "Ne eblis kopii mesaĝon"
 #.
 #: commands.c:274
 msgid "There was an error displaying all or part of the message"
-msgstr ""
+msgstr "Eraro dum vidigo de tuta mesaĝo aŭ parto de ĝi"
 
 #: commands.c:306
 msgid "S/MIME signature successfully verified."
@@ -984,51 +975,43 @@ msgstr "Kopias al %s..."
 #. Progress meter message when saving tagged messages
 #.
 #: commands.c:1005
-#, fuzzy
 msgid "Saving tagged messages..."
-msgstr "Skribas ŝanĝitajn mesaĝojn... [%d/%d]"
+msgstr "Skribas markitajn mesaĝojn..."
 
 #. L10N:
 #. Progress meter message when copying tagged messages
 #.
 #: commands.c:1009
-#, fuzzy
 msgid "Copying tagged messages..."
-msgstr "Mankas markitaj mesaĝoj."
+msgstr "Kopias markitajn mesaĝojn..."
 
 #. L10N:
 #. Message when an index/pager save operation fails for some reason.
 #.
 #: commands.c:1049
-#, fuzzy
-#| msgid "Error sending message."
 msgid "Error saving message"
-msgstr "Eraro dum sendado de mesaĝo."
+msgstr "Eraro dum skribado de mesaĝo"
 
 #. L10N:
 #. Message when an index tagged save operation fails for some reason.
 #.
 #: commands.c:1054
-#, fuzzy
 msgid "Error saving tagged messages"
-msgstr "Skribas ŝanĝitajn mesaĝojn... [%d/%d]"
+msgstr "Eraro dum skribado de markitaj mesaĝoj"
 
 #. L10N:
 #. Message when an index/pager copy operation fails for some reason.
 #.
 #: commands.c:1062
-#, fuzzy
-#| msgid "Error bouncing message!"
 msgid "Error copying message"
-msgstr "Eraro dum redirektado de mesaĝo!"
+msgstr "Eraro dum kopiado de mesaĝo"
 
 #. L10N:
 #. Message when an index tagged copy operation fails for some reason.
 #.
 #: commands.c:1067
-#, fuzzy
 msgid "Error copying tagged messages"
-msgstr "Mankas markitaj mesaĝoj."
+msgstr "Eraro dum kopiado de markitaj mesaĝoj"
 
 #: commands.c:1140
 #, c-format
@@ -1060,38 +1043,37 @@ msgstr "Mankas mesaĝopartoj."
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:95
 msgid "From: "
-msgstr ""
+msgstr "De: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:97 send.c:233
 msgid "To: "
-msgstr ""
+msgstr "Al: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:99 send.c:235
 msgid "Cc: "
-msgstr ""
+msgstr "Kopie-Al: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:101 send.c:237
 msgid "Bcc: "
-msgstr ""
+msgstr "Blinde-Kopie-Al: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:103 compose.c:1112 send.c:262
 msgid "Subject: "
-msgstr ""
+msgstr "Temo: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:105
-#, fuzzy
 msgid "Reply-To: "
-msgstr "Respondi"
+msgstr "Respondo-Al: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:107 compose.c:1129
 msgid "Fcc: "
-msgstr ""
+msgstr "Fcc: "
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
 #: compose.c:110
@@ -1101,7 +1083,7 @@ msgstr "Mix: "
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
 #: compose.c:113
 msgid "Security: "
-msgstr ""
+msgstr "Sekureco: "
 
 #. L10N:
 #. * This string is used by the compose menu.
@@ -1121,7 +1103,7 @@ msgstr "Subskribi kiel: "
 #.
 #: compose.c:128
 msgid "Autocrypt: "
-msgstr ""
+msgstr "Autocrypt: "
 
 #: compose.c:133
 msgid "Send"
@@ -1134,17 +1116,17 @@ msgstr "Interrompi"
 #. L10N: compose menu help line entry
 #: compose.c:136
 msgid "To"
-msgstr ""
+msgstr "Al"
 
 #. L10N: compose menu help line entry
 #: compose.c:138
 msgid "CC"
-msgstr ""
+msgstr "Kopie-Al"
 
 #. L10N: compose menu help line entry
 #: compose.c:140
 msgid "Subj"
-msgstr ""
+msgstr "Temo"
 
 #: compose.c:141 compose.c:1251
 msgid "Attach file"
@@ -1158,14 +1140,13 @@ msgstr "Priskribo"
 #. * This is displayed when Autocrypt is turned off.
 #: compose.c:151 compose.c:392
 msgid "Off"
-msgstr ""
+msgstr "Malaktiva"
 
 #. L10N: Autocrypt recommendation flag: no.
 #. * This is displayed when Autocrypt cannot encrypt to the recipients.
 #: compose.c:154
-#, fuzzy
 msgid "No"
-msgstr "Nenio"
+msgstr "Ne"
 
 #. L10N: Autocrypt recommendation flag: discouraged.
 #. * This is displayed when Autocrypt believes encryption should not be used.
@@ -1173,7 +1154,7 @@ msgstr "Nenio"
 #. * used recently, or if the only key available is a Gossip Header key.
 #: compose.c:159
 msgid "Discouraged"
-msgstr ""
+msgstr "Malrekomendita"
 
 #. L10N: Autocrypt recommendation flag: available.
 #. * This is displayed when Autocrypt believes encryption is possible, but
@@ -1181,15 +1162,14 @@ msgstr ""
 #. * is not set in both the sender and recipient keys.
 #: compose.c:164
 msgid "Available"
-msgstr ""
+msgstr "Disponata"
 
 #. L10N: Autocrypt recommendation flag: yes.
 #. * This is displayed when Autocrypt would normally enable encryption
 #. * automatically.
 #: compose.c:168
-#, fuzzy
 msgid "Yes"
-msgstr "jes"
+msgstr "Jes"
 
 #. L10N:
 #. The compose menu autocrypt prompt.
@@ -1199,7 +1179,7 @@ msgstr "jes"
 #.
 #: compose.c:254
 msgid "Autocrypt: (e)ncrypt, (c)lear, (a)utomatic? "
-msgstr ""
+msgstr "Autocrypt: (c)ĉifrita, (k)larteksto, (a)ŭtomate? "
 
 #. L10N:
 #. The letter corresponding to the compose menu autocrypt prompt
@@ -1207,7 +1187,7 @@ msgstr ""
 #.
 #: compose.c:260
 msgid "eca"
-msgstr ""
+msgstr "cka"
 
 #: compose.c:294
 msgid "Not supported"
@@ -1260,7 +1240,7 @@ msgstr "Ĉifri per: "
 #.
 #: compose.c:402
 msgid "Recommendation: "
-msgstr ""
+msgstr "Rekomendo: "
 
 #. L10N:
 #. This message is displayed in the compose menu when an attachment
@@ -1270,9 +1250,9 @@ msgstr ""
 #. error message.
 #.
 #: compose.c:505
-#, fuzzy, c-format
+#, c-format
 msgid "Attachment #%d no longer exists: %s"
-msgstr "%s [#%d] ne plu ekzistas!"
+msgstr "Parto #%d ne plu ekzistas: %s"
 
 #. L10N:
 #. This message is displayed in the compose menu when an attachment
@@ -1282,9 +1262,9 @@ msgstr "%s [#%d] ne plu ekzistas!"
 #. prompt question.
 #.
 #: compose.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "Attachment #%d modified. Update encoding for %s?"
-msgstr "%s [#%d] modifita.  Ĉu aktualigi kodadon?"
+msgstr "Parto #%d modifita. Ĉu aktualigi kodadon por %s?"
 
 #: compose.c:589
 msgid "-- Attachments"
@@ -1401,7 +1381,7 @@ msgstr "Malsukcesis krei kunsendaĵon"
 
 #: compose.c:1708
 msgid "$send_multipart_alternative_filter is not set"
-msgstr ""
+msgstr "$send_multipart_alternative_filter ne estas difinita"
 
 #: compose.c:1783
 msgid "Postpone this message?"
@@ -1422,7 +1402,7 @@ msgstr "Mesaĝo skribita."
 
 #: compose.c:1867
 msgid "No PGP backend configured"
-msgstr ""
+msgstr "PGP-modulo ne estas agordita"
 
 #: compose.c:1875 compose.c:1948
 msgid "S/MIME already selected. Clear & continue ? "
@@ -1430,7 +1410,7 @@ msgstr "S/MIME jam elektita.  Ĉu nuligi kaj daŭrigi? "
 
 #: compose.c:1903
 msgid "No S/MIME backend configured"
-msgstr ""
+msgstr "S/MIME-modulo ne estas agordita"
 
 #: compose.c:1912
 msgid "PGP already selected. Clear & continue ? "
@@ -1494,7 +1474,7 @@ msgstr "Densigo de %s"
 
 #: copy.c:706
 msgid "No decryption engine available for message"
-msgstr ""
+msgstr "Nenia malĉifroproceduro estas disponata por mesaĝo"
 
 #: crypt.c:70
 #, c-format
@@ -1519,14 +1499,12 @@ msgid "Mail not sent: inline PGP can't be used with attachments."
 msgstr "Mesaĝo ne sendita: ne eblas uzi enteksta PGP kun aldonaĵoj."
 
 #: crypt.c:202
-#, fuzzy
 msgid "Inline PGP can't be used with format=flowed.  Revert to PGP/MIME?"
-msgstr "Ne eblas uzi PGP kun aldonaĵoj.  Ĉu refali al PGP/MIME?"
+msgstr "Enteksta PGP ne eblas kun format=flowed. Ĉu refali al PGP/MIME?"
 
 #: crypt.c:204
-#, fuzzy
 msgid "Mail not sent: inline PGP can't be used with format=flowed."
-msgstr "Mesaĝo ne sendita: ne eblas uzi enteksta PGP kun aldonaĵoj."
+msgstr "Mesaĝo ne sendita: enteksta PGP ne eblas kun format=flowed."
 
 #: crypt.c:211 cryptglue.c:124 pgpkey.c:567 pgpkey.c:754
 msgid "Invoking PGP..."
@@ -1562,13 +1540,10 @@ msgstr ""
 "\n"
 
 #: crypt.c:1126
-#, fuzzy
 msgid ""
 "[-- Error: Missing or bad-format multipart/signed signature! --]\n"
 "\n"
-msgstr ""
-"[-- Eraro: malĝusta strukturo de multipart/signed! --]\n"
-"\n"
+msgstr "[-- Eraro: Mankanta aŭ misa multipart/signed-subskribo! --]\n\n"
 
 #: crypt.c:1167
 #, c-format
@@ -1757,7 +1732,7 @@ msgstr "alinome: "
 #.
 #: crypt-gpgme.c:1658
 msgid "no signature fingerprint available"
-msgstr ""
+msgstr "nenia subskribo-fingrospuro estas disponata"
 
 #: crypt-gpgme.c:1661
 msgid "KeyID "
@@ -1825,9 +1800,9 @@ msgid ""
 msgstr "[-- Eraro: malĉifrado fiaskis: %s --]\n"
 
 #: crypt-gpgme.c:2611
-#, fuzzy, c-format
+#, c-format
 msgid "error importing key: %s\n"
-msgstr "Eraro dum eksportado de ŝlosilo: %s\n"
+msgstr "eraro dum importo de ŝlosilo: %s\n"
 
 #: crypt-gpgme.c:2890
 #, c-format
@@ -1949,44 +1924,36 @@ msgstr "[Ne eblas montri ĉi tiun ID (nevalida DN)]"
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
 #: crypt-gpgme.c:3897
-#, fuzzy
 msgid "Name: "
-msgstr "Nomo ......: "
+msgstr "Nomo: "
 
 #: crypt-gpgme.c:3899
-#, fuzzy
 msgid "Valid From: "
-msgstr "Valida de .: %s\n"
+msgstr "Valida de: "
 
 #: crypt-gpgme.c:3900
-#, fuzzy
 msgid "Valid To: "
-msgstr "Valida ĝis : %s\n"
+msgstr "Valida ĝis: "
 
 #: crypt-gpgme.c:3901
-#, fuzzy
 msgid "Key Type: "
-msgstr "Ŝlosiluzado: "
+msgstr "Ŝlosilspeco: "
 
 #: crypt-gpgme.c:3902
-#, fuzzy
 msgid "Key Usage: "
 msgstr "Ŝlosiluzado: "
 
 #: crypt-gpgme.c:3904
-#, fuzzy
 msgid "Serial-No: "
-msgstr "Seri-numero: 0x%s\n"
+msgstr "Seri-numero: "
 
 #: crypt-gpgme.c:3905
-#, fuzzy
 msgid "Issued By: "
 msgstr "Eldonita de: "
 
 #: crypt-gpgme.c:3906
-#, fuzzy
 msgid "Subkey: "
-msgstr "Subŝlosilo : 0x%s"
+msgstr "Subŝlosilo: "
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
@@ -1997,9 +1964,9 @@ msgstr "[Nevalida]"
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
 #: crypt-gpgme.c:4009 crypt-gpgme.c:4168
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %lu bit %s\n"
-msgstr "Ŝlosilspeco: %s, %lu-bita %s\n"
+msgstr "%s, %lu-bita %s\n"
 
 #. L10N: value in Key Usage: field
 #: crypt-gpgme.c:4018 crypt-gpgme.c:4176
@@ -2158,9 +2125,8 @@ msgstr "Donu keyID por %s: "
 #. from.  This error is displayed if no results were found.
 #.
 #: crypt-gpgme.c:5171
-#, fuzzy
 msgid "No secret keys found"
-msgstr "sekreta ŝlosilo '%s' ne trovita: %s\n"
+msgstr "Neniu sekreta ŝlosilo trovita"
 
 #: crypt-gpgme.c:5205 pgpkey.c:731
 msgid "Please enter the key ID: "
@@ -2282,20 +2248,19 @@ msgstr "Ĉu eliri el Mutt?"
 #.
 #: curs_lib.c:478 curs_main.c:1074 curs_main.c:1502
 msgid "There are $background_edit sessions. Really quit Mutt?"
-msgstr ""
+msgstr "Funkcias $background_edit-seancoj. Ĉu vere eliri el Mutt?"
 
 #: curs_lib.c:548
 msgid "Error History is disabled."
-msgstr ""
+msgstr "Erarohistorio estas malaktiva."
 
 #: curs_lib.c:554
-#, fuzzy
 msgid "Error History is currently being shown."
-msgstr "Helpo estas nun montrata."
+msgstr "Erarohistorio estas nun montrata."
 
 #: curs_lib.c:569
 msgid "Error History"
-msgstr ""
+msgstr "Erarohistorio"
 
 #: curs_lib.c:950 mutt_socket.c:664 mutt_ssl.c:636
 msgid "unknown error"
@@ -2377,7 +2342,7 @@ msgstr "Poŝtfako estis modifita de ekstere.  Flagoj povas esti malĝustaj."
 #.
 #: curs_main.c:710
 msgid "Mailbox reconnected.  Some changes may have been lost."
-msgstr ""
+msgstr "Poŝtfako rekonektita. Ŝanĝoj eble estas perditaj."
 
 #: curs_main.c:714
 msgid "New mail in this mailbox."
@@ -2923,9 +2888,9 @@ msgid "Bad history file format (line %d)"
 msgstr "Malbona strukturo de histori-dosiero (linio %d)"
 
 #: history.c:527
-#, fuzzy, c-format
+#, c-format
 msgid "History '%s'"
-msgstr "Demando '%s'"
+msgstr "Historio '%s'"
 
 #: hook.c:111
 msgid "current mailbox shortcut '^' is unset"
@@ -3010,9 +2975,9 @@ msgstr "Rajtiĝas (%s)..."
 #. %s is the authentication type, for example OAUTHBEARER
 #.
 #: imap/auth_oauth.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s authentication failed."
-msgstr "SASL-rajtiĝo malsukcesis."
+msgstr "%s-rajtiĝo malsukcesis."
 
 #: imap/auth_sasl.c:236 pop_auth.c:185
 msgid "SASL authentication failed."
@@ -3062,9 +3027,9 @@ msgid "Mailbox renamed."
 msgstr "Poŝtfako renomita."
 
 #: imap/command.c:269 imap/command.c:350
-#, fuzzy, c-format
+#, c-format
 msgid "Connection to %s timed out"
-msgstr "Konekto al %s fermita"
+msgstr "Konekto al %s fermita pro tempopaso"
 
 #. L10N:
 #. When a fatal error occurs with the IMAP connection for
@@ -3074,12 +3039,12 @@ msgstr "Konekto al %s fermita"
 #.
 #: imap/command.c:492
 msgid "A fatal error occurred.  Will attempt reconnection."
-msgstr ""
+msgstr "Fatala eraro okazis. Klopodos rekonekti."
 
 #: imap/command.c:504
-#, fuzzy, c-format
+#, c-format
 msgid "Mailbox %s@%s closed"
-msgstr "Poŝtfako fermita"
+msgstr "Poŝtfako %s@%s fermita"
 
 #: imap/imap.c:128
 #, c-format
@@ -3112,26 +3077,23 @@ msgstr "Ĉifrata konekto ne disponeblas"
 #. tries to reconnect.
 #.
 #: imap/imap.c:593
-#, fuzzy
 msgid "Trying to reconnect..."
-msgstr "Atendas respondon..."
+msgstr "Klopodas rekonekti..."
 
 #. L10N:
 #. Message when Mutt tries to reconnect to an IMAP mailbox but is
 #. unable to.
 #.
 #: imap/imap.c:698
-#, fuzzy
 msgid "Reconnect failed.  Mailbox closed."
-msgstr "Antaŭkonekta komando malsukcesis."
+msgstr "Rekonekto malsukcesis. Poŝtfako fermita."
 
 #. L10N:
 #. Message when Mutt reconnects to an IMAP mailbox after a fatal error.
 #.
 #: imap/imap.c:709
-#, fuzzy
 msgid "Reconnect succeeded."
-msgstr "Antaŭkonekta komando malsukcesis."
+msgstr "Rekonekto sukcesis."
 
 #: imap/imap.c:819
 #, c-format
@@ -3215,7 +3177,7 @@ msgstr "Kopias %d mesaĝojn al %s..."
 #. * an IMAP mailbox
 #: imap/message.c:88
 msgid "Abort download and close mailbox?"
-msgstr ""
+msgstr "Ĉu interrompi elŝuton kaj fermi poŝtfakon?"
 
 #: imap/message.c:111 mx.c:1454
 msgid "Integer overflow -- can't allocate memory."
@@ -3230,9 +3192,8 @@ msgstr "Pritaksas staplon..."
 #. L10N:
 #. Fetching IMAP flag changes, using the CONDSTORE extension
 #: imap/message.c:653
-#, fuzzy
 msgid "Fetching flag updates..."
-msgstr "Prenas mesaĝoĉapojn..."
+msgstr "Prenas flago-aktualigojn..."
 
 #. L10N:
 #. After opening an IMAP mailbox using QRESYNC, Mutt performs
@@ -3240,10 +3201,8 @@ msgstr "Prenas mesaĝoĉapojn..."
 #. using a normal download.
 #.
 #: imap/message.c:789
-#, fuzzy
-#| msgid "Reopening mailbox..."
 msgid "QRESYNC failed.  Reopening mailbox."
-msgstr "Remalfermas poŝtfakon..."
+msgstr "QRESYNC malsukcesis. Remalfermas poŝtfakon."
 
 #: imap/message.c:844
 msgid "Unable to fetch headers from this IMAP server version."
@@ -3435,9 +3394,8 @@ msgid "source: error at %s"
 msgstr "source: eraro ĉe %s"
 
 #: init.c:2924
-#, fuzzy
 msgid "run: too many arguments"
-msgstr "push: tro da argumentoj"
+msgstr "run: tro da argumentoj"
 
 #: init.c:2947
 msgid "source: too many arguments"
@@ -3479,14 +3437,14 @@ msgstr "nesufiĉe da argumentoj"
 #: init.h:380
 #, c-format
 msgid "On %d, %n wrote:"
-msgstr ""
+msgstr "Je %d, %n skribis:"
 
 #. L10N:
 #. $compose_format default value
 #.
 #: init.h:646
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
-msgstr ""
+msgstr "-- Mutt: Verki  [Proks. mes-grando: %l   Partoj: %a]%>-"
 
 #. L10N:
 #. $forward_attribution_intro default value
@@ -3494,15 +3452,14 @@ msgstr ""
 #: init.h:1285
 #, c-format
 msgid "----- Forwarded message from %f -----"
-msgstr ""
+msgstr "----- Plusendita mesaĝo de %f -----"
 
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
 #: init.h:1296
-#, fuzzy
 msgid "----- End forwarded message -----"
-msgstr "Ĉu redakti plusendatan mesaĝon?"
+msgstr "----- Fino de plusendita mesaĝo -----"
 
 #. L10N:
 #. $status_format default value
@@ -3526,7 +3483,7 @@ msgstr ""
 #.
 #: init.h:4546
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
-msgstr ""
+msgstr "Mutt kun %?m?%m mesaĝoj&neniu mesaĝo?%?n? [%n NOVA]?"
 
 #: keymap.c:565
 msgid "Macro loop detected."
@@ -3599,83 +3556,68 @@ msgstr "Mankas sufiĉa memoro!"
 
 #: listmenu.c:51 listmenu.c:62
 msgid "Post"
-msgstr ""
+msgstr "Afiŝi"
 
 #: listmenu.c:52 listmenu.c:63
-#, fuzzy
-#| msgid "Subscribed to %s"
 msgid "Subscribe"
-msgstr "Abonas %s"
+msgstr "Aboni"
 
 #: listmenu.c:53 listmenu.c:64
-#, fuzzy
-#| msgid "Unsubscribed from %s"
 msgid "Unsubscribe"
-msgstr "Malabonis %s"
+msgstr "Malaboni"
 
 #: listmenu.c:54 listmenu.c:66
 msgid "Owner"
-msgstr ""
+msgstr "Estro"
 
 #: listmenu.c:65
 msgid "Archives"
-msgstr ""
+msgstr "Arkivoj"
 
 #. L10N: given when an rfc 2369 action is not specified by this message
 #: listmenu.c:208
 #, c-format
 msgid "No list action available for %s."
-msgstr ""
+msgstr "Nenia list-ago disponata por %s."
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
 #: listmenu.c:215
 msgid "List actions only support mailto: URIs. (Try a browser?)"
-msgstr ""
+msgstr "List-agoj funkcias nur kun \"mailto\"-URI. (Provu per navigilo?)"
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
 #: listmenu.c:224
-#, fuzzy
-#| msgid "Could not reopen mailbox!"
 msgid "Could not parse mailto: URI."
-msgstr "Ne eblis remalfermi poŝtfakon!"
+msgstr "Ne povis kompreni \"mailto\"-URI."
 
 #. L10N: menu name for list actions
 #: listmenu.c:251
-#, fuzzy
-#| msgid "No mailing lists found!"
 msgid "Available mailing list actions"
-msgstr "Neniu dissendolisto trovita!"
+msgstr "Disponataj dissendolisto-agoj"
 
 #: main.c:79
-#, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
 "To report a bug, please contact the Mutt maintainers via gitlab:\n"
 "    https://gitlab.com/muttmua/mutt/issues\n"
 msgstr ""
 "Por kontakti la kreantojn, bonvolu skribi al <mutt-dev@mutt.org>.\n"
-"Por raporti cimon, bonvolu iri al <https://gitlab.com/muttmua/mutt/issues>.\n"
+"Por raporti cimon, bonvolu kontakti la Mutt-vartantojn per gitlab:\n"
+"    https://gitlab.com/muttmua/mutt/issues\n"
 
 #: main.c:84
-#, fuzzy
-#| msgid ""
-#| "Copyright (C) 1996-2020 Michael R. Elkins and others.\n"
-#| "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
-#| "Mutt is free software, and you are welcome to redistribute it\n"
-#| "under certain conditions; type `mutt -vv' for details.\n"
 msgid ""
 "Copyright (C) 1996-2021 Michael R. Elkins and others.\n"
 "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
 "Mutt is free software, and you are welcome to redistribute it\n"
 "under certain conditions; type `mutt -vv' for details.\n"
 msgstr ""
-"Kopirajto (C) 1996-2020 Michael R. Elkins kaj aliaj.\n"
+"Kopirajto (C) 1996-2021 Michael R. Elkins kaj aliaj.\n"
 "Mutt venas kun ABSOLUTE NENIA GARANTIO; por detaloj tajpu 'mutt -vv'.\n"
 "Mutt estas libera programo, kaj vi rajtas pludoni kopiojn\n"
 "sub difinitaj kondiĉoj; tajpu 'mutt -vv' por detaloj.\n"
 
 #: main.c:101
-#, fuzzy
 msgid ""
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
@@ -3760,12 +3702,12 @@ msgstr ""
 "  -D             montri en ĉefeligujo la valorojn de ĉiuj variabloj"
 
 #: main.c:152
-#, fuzzy
-#| msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgid ""
 "  -d <level>\tlog debugging output to ~/.muttdebug0\n"
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
-msgstr "  -d <nivelo>    skribi sencimigan eligon al ~/.muttdebug0"
+msgstr ""
+"  -d <nivelo>\tskribi sencimigan eligon al ~/.muttdebug0\n"
+"\t\t0 => nenia sencimigo; <0 => ne rondirigi .muttdebug-dosieron"
 
 #: main.c:156
 msgid ""
@@ -3835,7 +3777,7 @@ msgstr "DEBUG ne estis difinita por la tradukado.  Ignoriĝas.\n"
 
 #: main.c:989
 msgid "Failed to parse mailto: link\n"
-msgstr "Malsukcesis analizi 'mailto:'-ligon\n"
+msgstr "Malsukcesis analizi \"mailto\"-ligon\n"
 
 #: main.c:1004 main.c:1288
 msgid "No recipients specified.\n"
@@ -3850,10 +3792,8 @@ msgstr "Ne eblas uzi opcio '-E' kun ĉefenigujo\n"
 #. file fails for some reason.
 #.
 #: main.c:1137
-#, fuzzy
-#| msgid "Cannot create filter"
 msgid "Cannot parse draft file\n"
-msgstr "Ne eblas krei filtrilon."
+msgstr "Ne povas analizi malnetodosieron\n"
 
 #: main.c:1208
 #, c-format
@@ -4002,7 +3942,7 @@ msgstr "_maildir_commit_message(): ne eblas ŝanĝi tempon de dosiero"
 #: mutt_lisp.c:62
 #, c-format
 msgid "MuttLisp: unclosed backticks: %s"
-msgstr ""
+msgstr "MuttLisp: nefermita `: %s"
 
 #. L10N:
 #. Printed when a MuttLisp list is missing a matching closing
@@ -4011,7 +3951,7 @@ msgstr ""
 #: mutt_lisp.c:123
 #, c-format
 msgid "MuttLisp: unclosed list: %s"
-msgstr ""
+msgstr "MuttList: nefermita listo: %s"
 
 #. L10N:
 #. An error printed for the 'if' function if the condition is missing.
@@ -4020,15 +3960,15 @@ msgstr ""
 #: mutt_lisp.c:399
 #, c-format
 msgid "MuttLisp: missing if condition: %s"
-msgstr ""
+msgstr "MuttLisp: mankas kondiĉo de \"if\": %s"
 
 #. L10N:
 #. Printed when a function is called that is not recognized by MuttLisp.
 #.
 #: mutt_lisp.c:447
-#, fuzzy, c-format
+#, c-format
 msgid "MuttLisp: no such function %s"
-msgstr "%s: funkcio ne ekzistas"
+msgstr "MuttLisp: ne ekzistas funkcio %s"
 
 #: mutt_sasl.c:196
 msgid "Unknown SASL profile"
@@ -4100,11 +4040,11 @@ msgstr "Ne eblis konektiĝi al %s (%s)."
 #.
 #: mutt_ssl.c:199 mutt_ssl_gnutls.c:228
 msgid "Warning: clearing unexpected server data before TLS negotiation"
-msgstr ""
+msgstr "Averto: forigas neatenditajn datenojn de servilo antaŭ TLS-negoco"
 
 #: mutt_ssl.c:274 mutt_ssl.c:556
 msgid "Warning: error enabling ssl_verify_partial_chains"
-msgstr ""
+msgstr "Averto: eraro dum funkciigo de ssl_verify_partial_chains"
 
 #: mutt_ssl.c:360
 msgid "Failed to find enough entropy on your system"
@@ -4137,7 +4077,7 @@ msgstr "Malsukcesis krei SSL-kuntekston"
 #. * the correct certificate if it supports multiple hosts.
 #: mutt_ssl.c:619 mutt_ssl_gnutls.c:467
 msgid "Warning: unable to set TLS SNI host name"
-msgstr ""
+msgstr "Averto: ne povas difini TLS-SNI-retnomon"
 
 #: mutt_ssl.c:630
 msgid "I/O error"
@@ -4225,9 +4165,8 @@ msgstr "SHA1-fingrospuro: %s"
 
 #: mutt_ssl.c:1276 mutt_ssl.c:1279 mutt_ssl_gnutls.c:1001
 #: mutt_ssl_gnutls.c:1004
-#, fuzzy
 msgid "SHA256 Fingerprint: "
-msgstr "SHA1-fingrospuro: %s"
+msgstr "SHA256-fingrospuro: "
 
 #: mutt_ssl.c:1283 mutt_ssl_gnutls.c:1025
 #, c-format
@@ -4242,21 +4181,19 @@ msgstr "Kontrolo de SSL-atestilo (%d de %d en ĉeno)"
 #.
 #: mutt_ssl.c:1309
 msgid "roas"
-msgstr "muas"
+msgstr "muap"
 
 #: mutt_ssl.c:1313
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
-msgstr "(m)alakcepti, akcepti (u)nufoje, (a)kcepti ĉiam, (s)kip"
+msgstr "(m)alakcepti, akcepti (u)nufoje, (a)kcepti ĉiam, (p)rokrasti"
 
 #: mutt_ssl.c:1315 mutt_ssl_gnutls.c:1034
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(m)alakcepti, akcepti (u)nufoje, (a)kcepti ĉiam"
 
 #: mutt_ssl.c:1320
-#, fuzzy
 msgid "(r)eject, accept (o)nce, (s)kip"
-msgstr "(m)alakcepti, akcepti (u)nufoje, (s)kip"
+msgstr "(m)alakcepti, akcepti (u)nufoje, (p)rokrasti"
 
 #: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1045
 msgid "(r)eject, accept (o)nce"
@@ -4275,10 +4212,9 @@ msgstr "Atestilo skribita"
 #. to decrypt the cert.  %s is the hostname.
 #.
 #: mutt_ssl.c:1426
-#, fuzzy, c-format
-#| msgid "Password for %s@%s: "
+#, c-format
 msgid "Password for %s client cert: "
-msgstr "Pasvorto por %s@%s: "
+msgstr "Pasvorto por klientatestilo de %s: "
 
 #: mutt_ssl_gnutls.c:139 mutt_ssl_gnutls.c:167
 msgid "Error: no TLS socket open"
@@ -4447,9 +4383,9 @@ msgstr "Atendas flock-ŝloson... %d"
 
 #. L10N: Displayed if a mailbox sync fails
 #: mx.c:761
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write %s!"
-msgstr "Ne eblas aldoni %s!"
+msgstr "Ne povas skribi %s!"
 
 #: mx.c:794
 msgid "message(s) not deleted"
@@ -4460,19 +4396,17 @@ msgstr "mesaĝo(j) ne forviŝiĝis"
 #. a mailbox.
 #.
 #: mx.c:823
-#, fuzzy
-#| msgid "Unable to open temporary file!"
 msgid "Unable to append to trash folder"
-msgstr "Ne eblas malfermi dumtempan dosieron!"
+msgstr "Ne povas aldoni al rubujo"
 
 #: mx.c:832
 msgid "Can't open trash folder"
 msgstr "Ne eblas malfermi rubujon"
 
 #: mx.c:901
-#, fuzzy, c-format
+#, c-format
 msgid "Move %d read messages to %s?"
-msgstr "Ĉu movi legitajn mesaĝojn al %s?"
+msgstr "Ĉu movi %d legitajn mesaĝojn al %s?"
 
 #: mx.c:918 mx.c:1229
 #, c-format
@@ -4563,7 +4497,7 @@ msgstr "Ne plu da necitita teksto post citita teksto."
 #.
 #: pager.c:2618
 msgid "Already skipped past headers."
-msgstr ""
+msgstr "Jam supersaltis ĉapaĵon."
 
 #. L10N:
 #. Displayed if <skip-headers> is invoked in the pager, but there is
@@ -4573,7 +4507,7 @@ msgstr ""
 #.
 #: pager.c:2637
 msgid "No text past headers."
-msgstr ""
+msgstr "Neniom da teksto post ĉapaĵo."
 
 #: parse.c:715
 msgid "multipart message has no boundary parameter!"
@@ -4583,321 +4517,302 @@ msgstr "Plurparta mesaĝo ne havas limparametron!"
 #. Pattern Completion Menu description for ~A
 #.
 #: pattern.c:71
-#, fuzzy
 msgid "all messages"
-msgstr "ordigi mesaĝojn"
+msgstr "ĉiuj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~b
 #.
 #: pattern.c:76
 msgid "messages whose body matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies korpo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~B
 #.
 #: pattern.c:81
 msgid "messages whose body or headers match EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies korpo aŭ ĉapaĵo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~c
 #.
 #: pattern.c:86
 msgid "messages whose CC header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies Kopie-Al-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~C
 #.
 #: pattern.c:91
 msgid "messages whose recipient matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies ricevonto konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~d
 #.
 #: pattern.c:96
 msgid "messages sent in DATERANGE"
-msgstr ""
+msgstr "mesaĝoj senditaj en DATOGAMO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~D
 #.
 #: pattern.c:101
-#, fuzzy
 msgid "deleted messages"
-msgstr "forviŝi mesaĝon"
+msgstr "forviŝitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~e
 #.
 #: pattern.c:106
 msgid "messages whose Sender header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies Sendinto-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~E
 #.
 #: pattern.c:111
-#, fuzzy
 msgid "expired messages"
-msgstr "redakti mesaĝon"
+msgstr "eksvalidiĝintaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~f
 #.
 #: pattern.c:116
 msgid "messages whose From header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies De-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~F
 #.
 #: pattern.c:121
-#, fuzzy
 msgid "flagged messages"
-msgstr "Mankas markitaj mesaĝoj."
+msgstr "flagitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~g
 #.
 #: pattern.c:126
-#, fuzzy
 msgid "cryptographically signed messages"
-msgstr "revoki prokrastitan mesaĝon"
+msgstr "kriptografie subskribitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~G
 #.
 #: pattern.c:131
-#, fuzzy
 msgid "cryptographically encrypted messages"
-msgstr "Ne eblas malĉifri ĉifritan mesaĝon!"
+msgstr "kriptografie ĉifritaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~h
 #.
 #: pattern.c:136
 msgid "messages whose header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies ĉapaĵo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~H
 #.
 #: pattern.c:141
 msgid "messages whose spam tag matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies spam-etikedo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~i
 #.
 #: pattern.c:146
 msgid "messages whose Message-ID matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies mesaĝidentigilo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~k
 #.
 #: pattern.c:151
-#, fuzzy
 msgid "messages which contain PGP key"
-msgstr "fulmklavo por mesaĝo"
+msgstr "mesaĝoj, kiuj enhavas PGP-ŝlosilon"
 
 #. L10N:
 #. Pattern Completion Menu description for ~l
 #.
 #: pattern.c:156
 msgid "messages addressed to known mailing lists"
-msgstr ""
+msgstr "mesaĝoj adresitaj al konataj dissendolistoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~L
 #.
 #: pattern.c:161
 msgid "messages whose From/Sender/To/CC matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies De/Sendinto/Al/Kopie-Al-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~m
 #.
 #: pattern.c:166
 msgid "messages whose number is in RANGE"
-msgstr ""
+msgstr "mesaĝoj, kies lininumero estas en GAMO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~M
 #.
 #: pattern.c:171
 msgid "messages with a Content-Type matching EXPR"
-msgstr ""
+msgstr "mesaĝoj kun Content-Type, kiu konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~n
 #.
 #: pattern.c:176
 msgid "messages whose score is in RANGE"
-msgstr ""
+msgstr "mesaĝoj, kies poentaro estas en GAMO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~N
 #.
 #: pattern.c:181
-#, fuzzy
 msgid "new messages"
-msgstr "Malestas novaj mesaĝoj."
+msgstr "novaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~O
 #.
 #: pattern.c:186
-#, fuzzy
 msgid "old messages"
-msgstr "ordigi mesaĝojn"
+msgstr "malnovaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~p
 #.
 #: pattern.c:191
 msgid "messages addressed to you"
-msgstr ""
+msgstr "mesaĝoj adresitaj al vi"
 
 #. L10N:
 #. Pattern Completion Menu description for ~P
 #.
 #: pattern.c:196
-#, fuzzy
 msgid "messages from you"
-msgstr "fulmklavo por mesaĝo"
+msgstr "mesaĝoj de vi"
 
 #. L10N:
 #. Pattern Completion Menu description for ~Q
 #.
 #: pattern.c:201
 msgid "messages which have been replied to"
-msgstr ""
+msgstr "mesaĝoj jam responditaj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~r
 #.
 #: pattern.c:206
 msgid "messages received in DATERANGE"
-msgstr ""
+msgstr "mesaĝoj ricevitaj en DATOGAMO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~R
 #.
 #: pattern.c:211
-#, fuzzy
 msgid "already read messages"
-msgstr "Malestas nelegitaj mesaĝoj."
+msgstr "jam legitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~s
 #.
 #: pattern.c:216
 msgid "messages whose Subject header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies Temo-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~S
 #.
 #: pattern.c:221
-#, fuzzy
 msgid "superseded messages"
-msgstr "ordigi mesaĝojn"
+msgstr "malaktualigitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~t
 #.
 #: pattern.c:226
 msgid "messages whose To header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies Al-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
 #.
 #: pattern.c:231
-#, fuzzy
 msgid "tagged messages"
-msgstr "Mankas markitaj mesaĝoj."
+msgstr "markitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~u
 #.
 #: pattern.c:236
-#, fuzzy
 msgid "messages addressed to subscribed mailing lists"
-msgstr "respondi al specifita dissendolisto"
+msgstr "mesaĝoj adresitaj al abonitaj dissendolistoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~U
 #.
 #: pattern.c:241
-#, fuzzy
 msgid "unread messages"
-msgstr "Malestas nelegitaj mesaĝoj."
+msgstr "nelegitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~v
 #.
 #: pattern.c:246
-#, fuzzy
 msgid "messages in collapsed threads"
-msgstr "(mal)kolapsigi ĉiujn fadenojn"
+msgstr "mesaĝoj en kolapsigitaj fadenoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~V
 #.
 #: pattern.c:251
 msgid "cryptographically verified messages"
-msgstr ""
+msgstr "kriptografie kontrolitaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~x
 #.
 #: pattern.c:256
 msgid "messages whose References header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies Referencas-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
 #.
 #: pattern.c:261
-#, fuzzy
 msgid "messages with RANGE attachments"
-msgstr "montri MIME-partojn"
+msgstr "mesaĝoj kun GAMO partoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~y
 #.
 #: pattern.c:266
 msgid "messages whose X-Label header matches EXPR"
-msgstr ""
+msgstr "mesaĝoj, kies X-Label-kampo konformas al ESPR"
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
 #.
 #: pattern.c:271
 msgid "messages whose size is in RANGE"
-msgstr ""
+msgstr "mesaĝoj, kies grando estas en GAMO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~=
 #.
 #: pattern.c:276
-#, fuzzy
 msgid "duplicated messages"
-msgstr "forviŝi mesaĝon"
+msgstr "pluroblaj mesaĝoj"
 
 #. L10N:
 #. Pattern Completion Menu description for ~$
 #.
 #: pattern.c:281
-#, fuzzy
 msgid "unreferenced messages"
-msgstr "Malestas nelegitaj mesaĝoj."
+msgstr "nereferencitaj mesaĝoj"
 
 #: pattern.c:529 pattern.c:1020
 #, c-format
@@ -4931,7 +4846,7 @@ msgstr "Nevalida relativa dato: %s"
 #: pattern.c:1086
 #, c-format
 msgid "Pattern modifier '~%c' is disabled."
-msgstr ""
+msgstr "La modifilo '~%c' ne estas disponata."
 
 #. L10N:
 #. An unknown pattern modifier was somehow invoked.  This
@@ -5013,14 +4928,14 @@ msgstr "Serĉo atingis la komencon sen trovi trafon"
 #.
 #: pattern.c:2229
 msgid "Patterns"
-msgstr ""
+msgstr "Ŝablonoj"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a regular expression
 #.
 #: pattern.c:2251
 msgid "EXPR"
-msgstr ""
+msgstr "ESPR"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a numeric range.
@@ -5028,7 +4943,7 @@ msgstr ""
 #.
 #: pattern.c:2258
 msgid "RANGE"
-msgstr ""
+msgstr "GAMO"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a date range
@@ -5036,7 +4951,7 @@ msgstr ""
 #.
 #: pattern.c:2265
 msgid "DATERANGE"
-msgstr ""
+msgstr "DATOGAMO"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a nested pattern.
@@ -5044,28 +4959,28 @@ msgstr ""
 #.
 #: pattern.c:2281
 msgid "PATTERN"
-msgstr ""
+msgstr "ŜABLONO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~()
 #.
 #: pattern.c:2290
 msgid "messages in threads containing messages matching PATTERN"
-msgstr ""
+msgstr "mesaĝoj en fadenoj, kiuj enhavas mesaĝon, kiu konformas al ŜABLONO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
 #.
 #: pattern.c:2300
 msgid "messages whose immediate parent matches PATTERN"
-msgstr ""
+msgstr "mesaĝoj, kies tuja gepatro konformas al ŜABLONO"
 
 #. L10N:
 #. Pattern Completion Menu description for ~>()
 #.
 #: pattern.c:2310
 msgid "messages having an immediate child matching PATTERN"
-msgstr ""
+msgstr "mesaĝoj, kiuj havas tujan idon, kiu konformas al ŜABLONO"
 
 #: pgp.c:89
 msgid "Enter PGP passphrase:"
@@ -5096,9 +5011,8 @@ msgstr "Ne eblis malĉifri PGP-mesaĝon"
 #. message does not mean "You failed to encrypt the message."
 #.
 #: pgp.c:669
-#, fuzzy
 msgid "PGP message is not encrypted."
-msgstr "PGP-mesaĝo estis sukcese malĉifrita."
+msgstr "PGP-mesaĝo ne estas ĉifrita."
 
 #: pgp.c:914
 msgid "Internal error.  Please submit a bug report."
@@ -5117,11 +5031,10 @@ msgid "Decryption failed"
 msgstr "Malĉifro malsukcesis"
 
 #: pgp.c:1226
-#, fuzzy
 msgid ""
 "[-- Error: decryption failed --]\n"
 "\n"
-msgstr "[-- Eraro: malĉifrado fiaskis: %s --]\n"
+msgstr "[-- Eraro: malĉifrado malsukcesis --]\n\n"
 
 #: pgp.c:1283
 msgid "Can't open PGP subprocess!"
@@ -5318,9 +5231,8 @@ msgid "Command USER is not supported by server."
 msgstr "Servilo ne havas la komandon USER."
 
 #: pop_auth.c:380
-#, fuzzy
 msgid "Authentication failed."
-msgstr "SASL-rajtiĝo malsukcesis."
+msgstr "Rajtiĝo malsukcesis."
 
 #: pop_lib.c:57
 #, c-format
@@ -5422,7 +5334,7 @@ msgstr "Parto skribita."
 #: recvattach.c:617
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
-msgstr ""
+msgstr "Ne povas skribi partojn al %s. Uzas cwd"
 
 #: recvattach.c:724
 #, c-format
@@ -5456,7 +5368,7 @@ msgstr "Ĉu presi parton?"
 
 #: recvattach.c:1053
 msgid "Structural changes to decrypted attachments are not supported"
-msgstr ""
+msgstr "Ne eblas strukturaj ŝanĝoj de malĉifritaj partoj"
 
 #: recvattach.c:1211
 msgid "Can't decrypt encrypted message!"
@@ -5525,9 +5437,8 @@ msgstr "Ne eblas krei %s."
 #. when you are on a normal attachment.
 #.
 #: recvcmd.c:773
-#, fuzzy
 msgid "You may only compose to sender with message/rfc822 parts."
-msgstr "Vi povas redirekti nur message/rfc822-partojn."
+msgstr "Eblas verki al sendinto nur ĉe message/rfc822-partoj."
 
 #: recvcmd.c:852
 msgid "Can't find any tagged messages."
@@ -5621,9 +5532,8 @@ msgstr "Malĝuste strukturita elemento por speco %s en \"%s\" linio %d"
 #. unset mailcap_path
 #.
 #: rfc1524.c:453
-#, fuzzy
 msgid "Neither mailcap_path nor MAILCAPS specified"
-msgstr "Neniu mailcap-vojo specifita"
+msgstr "Nek mailcap_path nek MAILCAPS estas specifita"
 
 #: rfc1524.c:484
 #, c-format
@@ -5659,9 +5569,8 @@ msgstr "Mankas temlinio; eliras."
 #. be added as attachments to the new mail, if this is answered yes.
 #.
 #: send.c:449
-#, fuzzy
 msgid "Forward attachments?"
-msgstr "Ĉu plusendi kiel kunsendaĵojn?"
+msgstr "Ĉu plusendi kunsendaĵojn?"
 
 #. L10N:
 #. Asks whether the user wishes respects the reply-to header when replying.
@@ -5707,7 +5616,7 @@ msgstr "Pretigas plusenditan mesaĝon..."
 #.
 #: send.c:1147
 msgid "Generate multipart/alternative content?"
-msgstr ""
+msgstr "Ĉu generi multipart/alternative-enhavon?"
 
 #. L10N:
 #. Message when saving fcc after sending.
@@ -5716,12 +5625,11 @@ msgstr ""
 #: send.c:1255
 #, c-format
 msgid "Saving Fcc to %s"
-msgstr ""
+msgstr "Skribas Fcc al %s"
 
 #: send.c:1277
-#, fuzzy
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "%c: ne funkcias en ĉi tiu reĝimo"
+msgstr "Averto: Fcc al IMAP-poŝtfako ne funkcias en stapla reĝimo"
 
 #. L10N:
 #. Printed after the "Fcc to an IMAP mailbox is not supported" message.
@@ -5732,7 +5640,7 @@ msgstr "%c: ne funkcias en ĉi tiu reĝimo"
 #: send.c:1284
 #, c-format
 msgid "Skipping Fcc to %s"
-msgstr ""
+msgstr "Preterlasas Fcc al %s"
 
 #. L10N:
 #. Called when saving to $record or Fcc failed after sending.
@@ -5742,7 +5650,7 @@ msgstr ""
 #.
 #: send.c:1301
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
-msgstr ""
+msgstr "Fcc malsukcesis: (r)eprovi, alternativa (p)oŝtfako, aŭ (n)e skribi? "
 
 #. L10N:
 #. These correspond to the "Fcc failed" multi-choice prompt
@@ -5751,24 +5659,23 @@ msgstr ""
 #.
 #: send.c:1307
 msgid "rms"
-msgstr ""
+msgstr "rpn"
 
 #. L10N:
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
 #: send.c:1315
-#, fuzzy
 msgid "Fcc mailbox"
-msgstr "Malfermi poŝtfakon"
+msgstr "Fcc-poŝtfako"
 
 #: send.c:1381
 msgid "Save attachments in Fcc?"
-msgstr "Ĉu konservi parton en Fcc?"
+msgstr "Ĉu konservi kunsendaĵojn en Fcc?"
 
 #: send.c:1628
 msgid "Cannot postpone.  $postponed is unset"
-msgstr ""
+msgstr "Ne povas prokrasti: $postponed ne estas difinita"
 
 #: send.c:1871
 msgid "Recall postponed message?"
@@ -5788,7 +5695,7 @@ msgstr "Nemodifita mesaĝon nuligita"
 
 #: send.c:2363
 msgid "No crypto backend configured.  Disabling message security setting."
-msgstr ""
+msgstr "Nenia kriptografia modulo estas difinita. Malaktivigas mesaĝosekurecon."
 
 #: send.c:2432
 msgid "Message postponed."
@@ -5811,13 +5718,12 @@ msgid "No subject specified."
 msgstr "Temlinio ne specifita."
 
 #: send.c:2487
-#, fuzzy
 msgid "No attachments, abort sending?"
-msgstr "Mankas temlinio; ĉu haltigi sendon?"
+msgstr "Mankas kunsendaĵoj; ĉu haltigi sendon?"
 
 #: send.c:2490
 msgid "Attachment referenced in message is missing"
-msgstr ""
+msgstr "Kunsendaĵo referencita en mesaĝo mankas"
 
 #: send.c:2562 smtp.c:191
 msgid "Sending message..."
@@ -5835,7 +5741,7 @@ msgstr "Ne eblis sendi la mesaĝon."
 #.
 #: send.c:2633 send.c:2659
 msgid "Setting reply flags."
-msgstr ""
+msgstr "Ŝaltas respondoflagojn."
 
 #: send.c:2704
 msgid "Mail sent."
@@ -5850,9 +5756,8 @@ msgstr "Sendas en fono."
 #. editing from the landing page.
 #.
 #: send.c:2769
-#, fuzzy
 msgid "Editing backgrounded."
-msgstr "Sendas en fono."
+msgstr "Redaktado fonigita."
 
 #: sendlib.c:455
 msgid "No boundary parameter found! [report this error]"
@@ -5876,10 +5781,8 @@ msgstr "Ne eblas malfermi %s"
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
 #: sendlib.c:1315
-#, fuzzy
-#| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
-msgstr "Ĉu presi markitajn partojn?"
+msgstr "Ĉu malĉifri kunsendaĵon?"
 
 #. L10N: Prompt when forwarding a message with
 #. $mime_forward_decode set, and there was a problem decoding
@@ -5890,7 +5793,7 @@ msgstr "Ĉu presi markitajn partojn?"
 msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
-msgstr ""
+msgstr "Problemo ĉe malkodado de mesaĝo por kunsendaĵo. Ĉu provi denove sen malkodado?"
 
 #. L10N: Prompt when attaching or forwarding a message with
 #. $forward_decrypt set, and there was a problem decrypting
@@ -5901,7 +5804,7 @@ msgstr ""
 msgid ""
 "There was a problem decrypting the message for attachment.  Try again with "
 "decryption turned off?"
-msgstr ""
+msgstr "Problemo ĉe malĉifrado de mesaĝo por kunsendaĵo. Ĉu provi denove sen malĉifrado?"
 
 #. L10N:
 #. The first line of output from $send_multipart_alternative_filter
@@ -5911,7 +5814,7 @@ msgstr ""
 #: sendlib.c:1483
 #, c-format
 msgid "Missing mime type from output of \"%s\"!"
-msgstr ""
+msgstr "Mankas MIME-speco en eligo de \"%s\"!"
 
 #. L10N:
 #. The second line of output from $send_multipart_alternative_filter
@@ -5921,7 +5824,7 @@ msgstr ""
 #: sendlib.c:1495
 #, c-format
 msgid "Missing blank line separator from output of \"%s\"!"
-msgstr ""
+msgstr "Mankas malplena linio (apartigilo) en eligo de \"%s\"!"
 
 #. L10N:
 #. Some clever people may try to generate a multipart/mixed
@@ -5935,7 +5838,7 @@ msgstr ""
 msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
-msgstr ""
+msgstr "$send_multipart_alternative_filter ne funkcias por generado de multipart-specoj."
 
 #: sendlib.c:2687
 msgid "$sendmail must be set in order to send mail."
@@ -5961,9 +5864,8 @@ msgstr "Malbona IDN %s dum kreado de resent-from."
 #. This is the first part of the string: note with a trailing space.
 #.
 #: signal.c:115
-#, fuzzy
 msgid "Caught signal "
-msgstr "Ricevis signalon %d...  Eliras.\n"
+msgstr "Ricevis signalon "
 
 #. L10N:
 #. This is printed in the exit handler when a signal is caught.
@@ -5972,9 +5874,8 @@ msgstr "Ricevis signalon %d...  Eliras.\n"
 #. signal number or name.
 #.
 #: signal.c:125
-#, fuzzy
 msgid "...  Exiting.\n"
-msgstr "%s...  Eliras.\n"
+msgstr "...  Eliras.\n"
 
 #: smime.c:154
 msgid "Enter S/MIME passphrase:"
@@ -6193,9 +6094,9 @@ msgid "Invalid SMTP URL: %s"
 msgstr "Nevalida SMTP-adreso: %s"
 
 #: smtp.c:531
-#, fuzzy, c-format
+#, c-format
 msgid "SMTP authentication method %s requires SASL"
-msgstr "SMTP-rajtiĝo bezonas SASL"
+msgstr "SMTP-rajtiĝo-metodo %s bezonas SASL"
 
 #: smtp.c:538
 #, c-format
@@ -6259,10 +6160,8 @@ msgstr "devigi vidigon de parto per mailcap"
 #. compose menu: <view-pager>
 #.
 #: OPS:33
-#, fuzzy
-#| msgid "force viewing of attachment using mailcap"
 msgid "view attachment in pager using copiousoutput mailcap"
-msgstr "devigi vidigon de parto per mailcap"
+msgstr "vidigi kunsendaĵon per copiousoutput mailcap"
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -6284,36 +6183,35 @@ msgstr "ŝalti aŭ malŝalti montradon de subpartoj"
 #.
 #: OPS:49
 msgid "manage autocrypt accounts"
-msgstr ""
+msgstr "administri autocrypt-kontojn"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
 #. autocrypt account menu: <create-account>
 #.
 #: OPS:54
 msgid "create a new autocrypt account"
-msgstr ""
+msgstr "krei novan autocrypt-konton"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
 #. autocrypt account menu: <delete-account>
 #.
 #: OPS:59
-#, fuzzy
 msgid "delete the current account"
-msgstr "forviŝi registron"
+msgstr "forviŝi ĉi tiun konton"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_ACTIVE
 #. autocrypt account menu: <toggle-active>
 #.
 #: OPS:64
 msgid "toggle the current account active/inactive"
-msgstr ""
+msgstr "(mal)aktivigi ĉi tiun konton"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_PREFER
 #. autocrypt account menu: <toggle-prefer-encrypt>
 #.
 #: OPS:69
 msgid "toggle the current account prefer-encrypt flag"
-msgstr ""
+msgstr "(mal)ŝalti la flagon \"preferi ĉifradon\""
 
 #. L10N: Help screen description for OP_BACKGROUND_COMPOSE_MENU
 #. index menu: <background-compose-menu>
@@ -6321,7 +6219,7 @@ msgstr ""
 #.
 #: OPS:75
 msgid "list and select backgrounded compose sessions"
-msgstr ""
+msgstr "listi kaj elekti fonajn verkadoseancojn"
 
 #. L10N: Help screen description for OP_BOTTOM_PAGE
 #. generic menu: <bottom-page>
@@ -6423,7 +6321,7 @@ msgstr "aldoni mesaĝo(j)n al ĉi tiu mesaĝo"
 #.
 #: OPS:149
 msgid "show autocrypt compose menu options"
-msgstr ""
+msgstr "montri menuopciojn de autocrypt-verkado"
 
 #. L10N: Help screen description for OP_COMPOSE_EDIT_BCC
 #. compose menu: <edit-bcc>
@@ -6552,15 +6450,14 @@ msgstr "apliki ispell al la mesaĝo"
 #.
 #: OPS:242
 msgid "move attachment down in compose menu list"
-msgstr ""
+msgstr "movi kunsendaĵon malsupren"
 
 #. L10N: Help screen description for OP_COMPOSE_MOVE_UP
 #. compose menu: <move-up>
 #.
 #: OPS:247
-#, fuzzy
 msgid "move attachment up in compose menu list"
-msgstr "redakti parton, uzante mailcap"
+msgstr "movi kunsendaĵon supren"
 
 #. L10N: Help screen description for OP_COMPOSE_NEW_MIME
 #. compose menu: <new-mime>
@@ -6610,9 +6507,8 @@ msgstr "sendi la mesaĝon"
 #. attachment menu: <compose-to-sender>
 #.
 #: OPS:284
-#, fuzzy
 msgid "compose new message to the current message sender"
-msgstr "ligi markitan mesaĝon al ĉi tiu"
+msgstr "verki novan mesaĝon al la aktuala sendinto"
 
 #. L10N: Help screen description for OP_COMPOSE_TOGGLE_DISPOSITION
 #. compose menu: <toggle-disposition>
@@ -6640,31 +6536,28 @@ msgstr "aktualigi la kodadon de parto"
 #.
 #: OPS:304
 msgid "view multipart/alternative"
-msgstr ""
+msgstr "vidigi multipart/alternative"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_TEXT
 #. compose menu: <view-alt-text>
 #.
 #: OPS:309
-#, fuzzy
 msgid "view multipart/alternative as text"
-msgstr "vidigi parton kiel tekston"
+msgstr "vidigi multipart/alternative-parton kiel tekston"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_MAILCAP
 #. compose menu: <view-alt-mailcap>
 #.
 #: OPS:314
-#, fuzzy
 msgid "view multipart/alternative using mailcap"
-msgstr "devigi vidigon de parto per mailcap"
+msgstr "vidigi multipart/alternative-parton per mailcap"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_PAGER
 #. compose menu: <view-alt-pager>
 #.
 #: OPS:319
-#, fuzzy
 msgid "view multipart/alternative in pager using copiousoutput mailcap"
-msgstr "devigi vidigon de parto per mailcap"
+msgstr "vidigi multipart/alternative per copiousoutput mailcap"
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
@@ -6898,9 +6791,8 @@ msgstr "rulumi supren tra la histori-listo"
 #. editor menu: <history-search>
 #.
 #: OPS:492
-#, fuzzy
 msgid "search through the history list"
-msgstr "rulumi supren tra la histori-listo"
+msgstr "traserĉi la historioliston"
 
 #. L10N: Help screen description for OP_EDITOR_KILL_EOL
 #. editor menu: <kill-eol>
@@ -6986,7 +6878,7 @@ msgstr "enigi dosierŝablonon"
 #.
 #: OPS:554
 msgid "display recent history of error messages"
-msgstr ""
+msgstr "montri lastan historion de eraromesaĝoj"
 
 #. L10N: Help screen description for OP_EXIT
 #. generic menu: <exit>
@@ -7040,9 +6932,8 @@ msgstr "elekti la aktualan registron"
 #. attachment menu: <group-chat-reply>
 #.
 #: OPS:595
-#, fuzzy
 msgid "reply to all recipients preserving To/Cc"
-msgstr "respondi al ĉiuj ricevintoj"
+msgstr "respondi al ĉiuj ricevintoj, konservante Al/Kopie-Al"
 
 #. L10N: Help screen description for OP_GROUP_REPLY
 #. index menu: <group-reply>
@@ -7097,40 +6988,36 @@ msgstr "iri al la lasta registro"
 #. pager menu: <list-action>
 #.
 #: OPS:637
-#, fuzzy
-#| msgid "No mailing lists found!"
 msgid "perform mailing list action"
-msgstr "Neniu dissendolisto trovita!"
+msgstr "fari dissendolisto-agon"
 
 #. L10N: Help screen description for OP_LIST_ARCHIVE
 #. list menu: <list-archive>
 #.
 #: OPS:642
 msgid "retrieve list archive information"
-msgstr ""
+msgstr "trovi informojn pri arkivado de dissendolisto"
 
 #. L10N: Help screen description for OP_LIST_HELP
 #. list menu: <list-help>
 #.
 #: OPS:647
 msgid "retrieve list help"
-msgstr ""
+msgstr "trovi helpon de dissendolisto"
 
 #. L10N: Help screen description for OP_LIST_OWNER
 #. list menu: <list-owner>
 #.
 #: OPS:652
 msgid "contact list owner"
-msgstr ""
+msgstr "kontakti estron de dissendolisto"
 
 #. L10N: Help screen description for OP_LIST_POST
 #. list menu: <list-post>
 #.
 #: OPS:657
-#, fuzzy
-#| msgid "reply to specified mailing list"
 msgid "post to mailing list"
-msgstr "respondi al specifita dissendolisto"
+msgstr "afiŝi al dissendolisto"
 
 #. L10N: Help screen description for OP_LIST_REPLY
 #. index menu: <list-reply>
@@ -7145,19 +7032,15 @@ msgstr "respondi al specifita dissendolisto"
 #. list menu: <list-subscribe>
 #.
 #: OPS:669
-#, fuzzy
-#| msgid "reply to specified mailing list"
 msgid "subscribe to mailing list"
-msgstr "respondi al specifita dissendolisto"
+msgstr "aboni dissendoliston"
 
 #. L10N: Help screen description for OP_LIST_UNSUBSCRIBE
 #. list menu: <list-unsubscribe>
 #.
 #: OPS:674
-#, fuzzy
-#| msgid "Unsubscribed from %s"
 msgid "unsubscribe from mailing list"
-msgstr "Malabonis %s"
+msgstr "malaboni dissendoliston"
 
 #. L10N: Help screen description for OP_MACRO
 #: OPS:677
@@ -7186,18 +7069,16 @@ msgstr "duigi la fadenon"
 #. pager menu: <browse-mailboxes>
 #.
 #: OPS:696
-#, fuzzy
 msgid "select a new mailbox from the browser"
-msgstr "elekti novan dosieron en ĉi tiu dosierujo"
+msgstr "elekti novan poŝtfakon de la navigilo"
 
 #. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
 #. index menu: <browse-mailboxes-readonly>
 #. pager menu: <browse-mailboxes-readonly>
 #.
 #: OPS:702
-#, fuzzy
 msgid "select a new mailbox from the browser in read only mode"
-msgstr "Malfermi poŝtfakon nurlege"
+msgstr "elekti novan poŝtfakon de la navigilo nurlege"
 
 #. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
 #. index menu: <change-folder>
@@ -7502,10 +7383,8 @@ msgstr "supersalti cititan tekston"
 #. pager menu: <skip-headers>
 #.
 #: OPS:928
-#, fuzzy
-#| msgid "skip beyond quoted text"
 msgid "skip beyond headers"
-msgstr "supersalti cititan tekston"
+msgstr "supersalti ĉapaĵon"
 
 #. L10N: Help screen description for OP_PAGER_TOP
 #. pager menu: <top>
@@ -7563,9 +7442,8 @@ msgstr "presi la aktualan registron"
 #. pager menu: <purge-message>
 #.
 #: OPS:973
-#, fuzzy
 msgid "delete the current entry, bypassing the trash folder"
-msgstr "vere forviŝi la nunan eron, preterpasante rubujon"
+msgstr "vere forviŝi ĉi tiun registron, preterpasante rubujon"
 
 #. L10N: Help screen description for OP_QUERY
 #. index menu: <query>
@@ -7841,9 +7719,8 @@ msgstr "montri la klavokodon por klavopremo"
 #. pager menu: <check-stats>
 #.
 #: OPS:1180
-#, fuzzy
 msgid "calculate message statistics for all mailboxes"
-msgstr "skribi mesaĝon/parton al poŝtfako/dosiero"
+msgstr "kalkuli mesaĝostatistikojn de ĉiuj poŝtfakoj"
 
 #. L10N: Help screen description for OP_MAIN_SHOW_LIMIT
 #. index menu: <show-limit>
@@ -7870,9 +7747,8 @@ msgstr "(mal)kolapsigi ĉiujn fadenojn"
 #. browser menu: <descend-directory>
 #.
 #: OPS:1200
-#, fuzzy
 msgid "descend into a directory"
-msgstr "%s ne estas dosierujo."
+msgstr "eniri en dosierujon"
 
 #. L10N: Help screen description for OP_DECRYPT_SAVE
 #. index menu: <decrypt-save>
@@ -8010,18 +7886,16 @@ msgstr "kontroli pri klasika PGP"
 #. pager menu: <sidebar-first>
 #.
 #: OPS.SIDEBAR:19
-#, fuzzy
 msgid "move the highlight to the first mailbox"
-msgstr "movi markilon al sekvan poŝtfakon"
+msgstr "movi markilon al la unua poŝtfako"
 
 #. L10N: Help screen description for OP_SIDEBAR_LAST
 #. index menu: <sidebar-last>
 #. pager menu: <sidebar-last>
 #.
 #: OPS.SIDEBAR:25
-#, fuzzy
 msgid "move the highlight to the last mailbox"
-msgstr "movi markilon al sekvan poŝtfakon"
+msgstr "movi markilon al la lasta poŝtfako"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT
 #. index menu: <sidebar-next>
@@ -8100,14 +7974,6 @@ msgstr "montri S/MIME-funkciojn"
 
 #~ msgid "SMTP server does not support authentication"
 #~ msgstr "SMTP-servilo ne akceptas rajtiĝon"
-
-#, fuzzy
-#~ msgid "Authenticating (OAUTHBEARER)..."
-#~ msgstr "Rajtiĝas (SASL)..."
-
-#, fuzzy
-#~ msgid "OAUTHBEARER authentication failed."
-#~ msgstr "SASL-rajtiĝo malsukcesis."
 
 #~ msgid "Certificate is not X.509"
 #~ msgstr "Atestilo ne estas X.509"
