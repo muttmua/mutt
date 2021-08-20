@@ -614,7 +614,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
   if (resend)
   {
     FREE (&newhdr->env->message_id);
-    FREE (&newhdr->env->mail_followup_to);
+    rfc822_free_address (&newhdr->env->mail_followup_to);
   }
 
   /* decrypt pgp/mime encoded messages */
