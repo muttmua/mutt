@@ -35,6 +35,7 @@
 #define SORT_FLAGGED	17
 #define SORT_PATH	18
 #define SORT_LABEL	19
+#define SORT_UID        20  /* used internally by the IMAP code */
 
 /* Sort and sort_aux are shorts, and are a composite of a
  * constant sort operation number and a set of compounded

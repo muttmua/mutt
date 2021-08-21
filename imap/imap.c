@@ -1129,7 +1129,15 @@ int imap_has_flag (LIST* flag_list, const char* flag)
   return 0;
 }
 
-/* Note: headers must be in SORT_ORDER. See imap_exec_msgset for args.
+static int compare_uid (const void *a, const void *b)
+{
+  HEADER **pa = (HEADER **) a;
+  HEADER **pb = (HEADER **) b;
+
+  return HEADER_DATA(*pa)->uid - HEADER_DATA(*pb)->uid;
+}
+
+/* Note: headers must be in SORT_UID. See imap_exec_msgset for args.
  * Pos is an opaque pointer a la strtok. It should be 0 at first call. */
 static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
                               int changed, int invert, int* pos)
@@ -1257,15 +1265,15 @@ int imap_exec_msgset (IMAP_DATA* idata, const char* pre, const char* post,
     reopen_set = 1;
   }
   oldsort = Sort;
-  if (Sort != SORT_ORDER)
+  if (Sort != SORT_UID)
   {
     hdrs = idata->ctx->hdrs;
     idata->ctx->hdrs = safe_malloc (idata->ctx->msgcount * sizeof (HEADER*));
     memcpy (idata->ctx->hdrs, hdrs, idata->ctx->msgcount * sizeof (HEADER*));
 
-    Sort = SORT_ORDER;
+    Sort = SORT_UID;
     qsort (idata->ctx->hdrs, idata->ctx->msgcount, sizeof (HEADER*),
-           mutt_get_sort_func (SORT_ORDER));
+           compare_uid);
   }
 
   pos = 0;
@@ -1570,9 +1578,8 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
    * the new messages.  For an expunge, the restored hdrs would point
    * to headers that have been freed.
    *
-   * Since reopen is allowed, we could change this to call
-   * mutt_sort_headers() before and after instead, but the double sort
-   * is noticeably slower.
+   * Since reopen is allowed, we could sort before and after but this
+   * is noticable slower.
    *
    * So instead, just turn off reopen_allow for the duration of the
    * swapped hdrs.  The imap_exec() below flushes the queue out,
@@ -1580,15 +1587,15 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
    */
   imap_disallow_reopen (ctx);
   oldsort = Sort;
-  if (Sort != SORT_ORDER)
+  if (Sort != SORT_UID)
   {
     hdrs = ctx->hdrs;
     ctx->hdrs = safe_malloc (ctx->msgcount * sizeof (HEADER*));
     memcpy (ctx->hdrs, hdrs, ctx->msgcount * sizeof (HEADER*));
 
-    Sort = SORT_ORDER;
+    Sort = SORT_UID;
     qsort (ctx->hdrs, ctx->msgcount, sizeof (HEADER*),
-           mutt_get_sort_func (SORT_ORDER));
+           compare_uid);
   }
 
   rc = sync_helper (idata, MUTT_ACL_DELETE, MUTT_DELETED, "\\Deleted");
