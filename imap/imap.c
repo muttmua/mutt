@@ -1212,9 +1212,8 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
       else if (n == idata->ctx->msgcount-1)
 	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n])->uid);
     }
-    /* End current set if message doesn't match or we've reached the end
-     * of the mailbox via inactive messages following the last match. */
-    else if (setstart && (hdrs[n]->active || n == idata->ctx->msgcount-1))
+    /* End current set if message doesn't match. */
+    else if (setstart)
     {
       if (HEADER_DATA (hdrs[n-1])->uid > setstart)
 	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n-1])->uid);
