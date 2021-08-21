@@ -240,6 +240,7 @@ int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int ms
   void *pmodseq = NULL;
   unsigned long long hc_modseq = 0;
   char *uid_seqset = NULL;
+  unsigned int msn_begin_original = msn_begin;
 #endif /* USE_HCACHE */
 
   ctx = idata->ctx;
@@ -357,6 +358,7 @@ retry:
       FREE (&uid_seqset);
       uid_validity = 0;
       uidnext = 0;
+      msn_begin = msn_begin_original;
 
       goto retry;
     }
