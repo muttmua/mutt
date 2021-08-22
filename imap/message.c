@@ -619,9 +619,9 @@ static int read_headers_qresync_eval_cache (IMAP_DATA *idata, char *uid_seqset)
 
       ctx->size += h->content->length;
       ctx->hdrs[ctx->msgcount++] = h;
-
-      msn++;
     }
+
+    msn++;
   }
 
   mutt_seqset_iterator_free (&iter);
