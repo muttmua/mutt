@@ -108,6 +108,10 @@ noinst_PROGRAMS = txt2c
 mutt_dotlock.c: dotlock.c
 	cp $(srcdir)/dotlock.c mutt_dotlock.c
 
+# With autoconf 2.71, the "ac_cs_config=" line in config.status may contain
+# sequences like '\'' when using a configure argument with spaces in it,
+# for instance CFLAGS with several options. Thus it is not sufficient to
+# get this line with grep; one needs to eval it and output the result.
 conststrings.c: txt2c config.status
 	( \
 		($(CC) -v >/dev/null 2>&1 && $(CC) -v) || \
@@ -116,9 +120,7 @@ conststrings.c: txt2c config.status
 		echo "unknown compiler"; \
 	) 2>&1 | ${srcdir}/txt2c.sh cc_version >conststrings_c
 	echo "$(CFLAGS)" | ${srcdir}/txt2c.sh cc_cflags >>conststrings_c
-	grep ac_cs_config= config.status | \
-	cut -d= -f2- | \
-	sed -e 's/^"//' -e 's/"$$//' | ${srcdir}/txt2c.sh configure_options >>conststrings_c
+	( eval "`grep '^ac_cs_config=' config.status`" && echo $$ac_cs_config; ) | ${srcdir}/txt2c.sh configure_options >>conststrings_c
 	mv -f conststrings_c conststrings.c
 
 CLEANFILES = mutt_dotlock.c $(BUILT_SOURCES)
