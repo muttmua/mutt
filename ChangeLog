@@ -1,3 +1,123 @@
+2021-08-24 12:54:51 -0700  Kevin McCarthy  <kevin@8t8.us> (a86338a8)
+
+        * Update UPDATING file for 2.1.2.
+
+M	UPDATING
+
+2021-08-21 18:42:33 -0700  Kevin McCarthy  <kevin@8t8.us> (74ce032f)
+
+        * Preserve QRESYNC seqset holes when restoring from header cache.
+        
+        It's possible for there to be holes in the MSN sequence, and also in
+        the header cache.  When iterating through the seqset, preserve those
+        by incrementing msn even if the result isn't found in the header
+        cache (because it is 0 or because the record is missing in the header
+        cache).
+
+M	imap/message.c
+
+2021-08-21 14:55:43 -0700  Kevin McCarthy  <kevin@8t8.us> (b0f54225)
+
+        * Don't include inactive messages in msgset generation.
+        
+        Currently only deleted messages that will be expunged are marked
+        inactive, so it shouldn't be an issue.  However, before the previous
+        commit (changing sorting by UID), I think there was a possibility for
+        a bug if trailing expunge-marked messages with MAXINT index were also
+        marked inactive.
+        
+        The sort change fixes that, but to make the code clearer just remove
+        the possibility of inactive messages being included.
+
+M	imap/imap.c
+
+2021-08-21 13:00:12 -0700  Kevin McCarthy  <kevin@8t8.us> (647efbd1)
+
+        * Sort headers by UID when generating a msgset sequence.
+        
+        When there is a hole in the header cache, the UID numbers are no
+        longer guaranteed to increase with the index.  This can result in
+        incorrect msgset values being sent to the server.
+        
+        Thanks to Pieter-Tjerk de Boer for reporting this problem, with a
+        detailed description of the problem, and a suggested patch.
+        
+        Note to backporters:
+        
+        * this patch depends on the imap_disallow_reopen() added in commit
+          6051760c2cf492ada1e06d910c0c2c05607c08bc for release 1.13.4.
+        
+        * the bug was introduced in release 1.9.0 so there is no need to
+          backport earlier than that.
+
+M	imap/imap.c
+M	sort.h
+
+2021-08-21 12:21:25 -0700  Pieter-Tjerk de Boer  <p.t.deboer@utwente.nl> (44f2619c)
+
+        * Reset msn_begin on a QRESYNC failure retry.
+        
+        Since the msn_index will be regenerated differently, Mutt needs to
+        scan for holes again.
+
+M	imap/message.c
+
+2021-08-20 13:28:55 -0700  Kevin McCarthy  <kevin@8t8.us> (a54bb201)
+
+        * Properly free mail_followup_to when resending a message.
+        
+        This one has been in the code for quite a while!  Use the address free
+        function to free all the parts instead of just FREE().
+
+M	postpone.c
+
+2021-08-16 18:31:11 -0700  Kevin McCarthy  <kevin@8t8.us> (eda54c6b)
+
+        * Improve attach files handling of empty value.
+        
+        Hitting enter at the attach files prompt will still allocate an entry
+        in the attachment array.  It might make sense to "abort" inside the
+        prompt for that case, but it's a change of behavior to have the prompt
+        do so.
+        
+        Instead, have the compose menu prompt skip NULL values.
+
+M	compose.c
+
+2021-07-13 14:44:29 -0700  Kevin McCarthy  <kevin@8t8.us> (6c0f75cc)
+
+        * Fix strfcpy copy size in mutt_get_default_charset().
+        
+        If AssumedCharset contained a ':', the value could be larger than
+        fcharset.  Ensure it's properly truncated.
+        
+        This also fixes a compiler warning.
+
+M	charset.c
+
+2021-07-13 14:30:33 -0700  Kevin McCarthy  <kevin@8t8.us> (19bdc79f)
+
+        * Use strfcpy for edit_envelope() user-header subject.
+        
+        strncpy could leave an untruncated string.
+
+M	send.c
+
+2021-07-13 14:22:38 -0700  Kevin McCarthy  <kevin@8t8.us> (6637beb9)
+
+        * Fix mutt_label_message to use strfcpy().
+        
+        strncpy could leave an unterminated string.
+
+M	headers.c
+
+2021-07-12 10:56:15 -0700  Kevin McCarthy  <kevin@8t8.us> (e2a89abc)
+
+        * automatic post-release commit for mutt-2.1.1
+
+M	ChangeLog
+M	VERSION
+
 2021-07-12 10:47:48 -0700  Kevin McCarthy  <kevin@8t8.us> (878e0388)
 
         * Update UPDATING file for 2.1.1 release.
