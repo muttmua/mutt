@@ -139,6 +139,10 @@ static void imap_alloc_uid_hash (IMAP_DATA *idata, unsigned int msn_count)
 
 /* Generates a more complicated sequence set after using the header cache,
  * in case there are missing MSNs in the middle.
+ *
+ * This can happen if during a sync/close, messages are deleted from
+ * the cache, but the server doesn't get the updates (via a dropped
+ * network connection, or just plain refusing the updates).
  */
 static unsigned int imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, int evalhc,
                                            unsigned int msn_begin, unsigned int msn_end,
@@ -1004,7 +1008,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
      * chunked FETCH commands).  We previously tried to be robust by
      * setting:
      *   msn_begin = idata->max_msn + 1;
-     * but with chunking (and the mythical header cache holes) this
+     * but with chunking and header cache holes this
      * may not be correct.  So here we must assume the msn values have
      * not been altered during or after the fetch.
      */
