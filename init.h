@@ -659,6 +659,18 @@ struct option_t MuttVars[] = {
   ** When \fIunset\fP, Mutt will not collapse a thread if it contains any
   ** unread messages.
   */
+  { "compose_confirm_detach_first", DT_BOOL, R_NONE, {.l=OPTCOMPOSECONFIRMDETACH}, {.l=1} },
+  /*
+  ** .pp
+  ** When \fIset\fP, Mutt will prompt for confirmation when trying to
+  ** use \fC<detach-file>\fP on the first entry in the compose menu.
+  ** This is to help prevent irreversible loss of the typed message by
+  ** accidentally hitting 'D' in the menu.
+  ** .pp
+  ** Note: Mutt only prompts for the first entry.  It doesn't keep
+  ** track of which message is the typed message if the entries are
+  ** reordered, or if the first entry was already deleted.
+  */
   /* L10N:
      $compose_format default value
   */

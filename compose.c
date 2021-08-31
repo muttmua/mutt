@@ -633,6 +633,24 @@ static int delete_attachment (ATTACH_CONTEXT *actx, int x)
     return (-1);
   }
 
+  if (rindex == 0 &&
+      option (OPTCOMPOSECONFIRMDETACH) &&
+      mutt_query_boolean (OPTCOMPOSECONFIRMDETACH,
+  /* L10N:
+     Prompt when trying to hit <detach-file> on the first entry in
+     the compose menu.  This entry is most likely the message they just
+     typed.  Hitting yes will remove the entry and unlink the file, so
+     it's worth confirming they really meant to do it.
+  */
+                          _("Really delete the main message?"), 0) < 1)
+  {
+    idx[rindex]->content->tagged = 0;
+    return (-1);
+  }
+
+  if (idx[rindex]->unowned)
+    idx[rindex]->content->unlink = 0;
+
   for (y = 0; y < actx->idxlen; y++)
   {
     if (idx[y]->content->next == idx[rindex]->content)
@@ -1393,8 +1411,6 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 
       case OP_DELETE:
 	CHECK_COUNT;
-        if (CURATTACH->unowned)
-          CURATTACH->content->unlink = 0;
 	if (delete_attachment (actx, menu->current) == -1)
 	  break;
 	mutt_update_compose_menu (actx, menu, 0);
