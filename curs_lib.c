@@ -509,7 +509,8 @@ int mutt_yesorno_with_help (const char *msg, int def, const char *var)
 
   if (def != -1)
   {
-    addstr ((char *) (def == MUTT_YES ? yes : no));
+    mutt_window_mvaddstr (MuttMessageWindow, 0, 0,
+                          def == MUTT_YES ? yes : no);
     mutt_refresh ();
   }
   else
