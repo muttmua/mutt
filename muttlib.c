@@ -666,6 +666,20 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
   mutt_buffer_pool_release (&tmp);
 }
 
+void mutt_buffer_remove_path_password (BUFFER *dest, const char *src)
+{
+  mutt_buffer_clear (dest);
+  if (!(src && *src))
+    return;
+
+#ifdef USE_IMAP
+  if (mx_is_imap (src))
+    imap_buffer_remove_path_password (dest, src);
+  else
+#endif
+    mutt_buffer_strcpy (dest, src);
+}
+
 /* Extract the real name from /etc/passwd's GECOS field.
  * When set, honor the regular expression in GecosMask,
  * otherwise assume that the GECOS field is a

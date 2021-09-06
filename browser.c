@@ -640,9 +640,13 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
       mutt_buffer_strcpy (mailbox, tmp->label);
     else
     {
-      mutt_buffer_strcpy (mailbox, mutt_b2s (tmp->pathbuf));
       if (option (OPTBROWSERABBRMAILBOXES))
+      {
+        mutt_buffer_strcpy (mailbox, mutt_b2s (tmp->pathbuf));
         mutt_buffer_pretty_mailbox (mailbox);
+      }
+      else
+        mutt_buffer_remove_path_password (mailbox, mutt_b2s (tmp->pathbuf));
     }
 
 #ifdef USE_IMAP
@@ -1116,7 +1120,13 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
       case OP_BROWSER_TELL:
         if (state.entrylen)
-	  mutt_message("%s", state.entry[menu->current].full_path);
+        {
+          BUFFER *clean = mutt_buffer_pool_get ();
+          mutt_buffer_remove_path_password (clean,
+                                            state.entry[menu->current].full_path);
+	  mutt_message("%s", mutt_b2s (clean));
+          mutt_buffer_pool_release (&clean);
+        }
         break;
 
 #ifdef USE_IMAP

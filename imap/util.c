@@ -71,6 +71,27 @@ int imap_expand_path (BUFFER* path)
   return rc;
 }
 
+int imap_buffer_remove_path_password (BUFFER *dest, const char *src)
+{
+  IMAP_MBOX mx;
+  ciss_url_t url;
+  int rc;
+
+  mutt_buffer_clear (dest);
+
+  if (imap_parse_path (src, &mx) < 0)
+    return -1;
+
+  mutt_account_tourl (&mx.account, &url);
+  url.path = mx.mbox;
+
+  /* flags = 0 will strip the password, if present */
+  rc = url_ciss_tobuffer (&url, dest, 0);
+  FREE (&mx.mbox);
+
+  return rc;
+}
+
 #ifdef USE_HCACHE
 
 /* Generates a seqseq of the UIDs in msn_index to persist in the header cache.
@@ -704,8 +725,13 @@ void imap_make_date (BUFFER *buf, time_t timestamp)
                       (int) tz / 60, (int) abs ((int) tz) % 60);
 }
 
-/* imap_qualify_path: make an absolute IMAP folder target, given IMAP_MBOX
- *   and relative path. */
+/* imap_qualify_path:
+ *
+ * Make an absolute IMAP folder target, given IMAP_MBOX and relative
+ * path.
+ *
+ * Note this will include the password in the URL.
+ */
 void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
 {
   ciss_url_t url;
@@ -713,7 +739,7 @@ void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
   mutt_account_tourl (&mx->account, &url);
   url.path = path;
 
-  url_ciss_tostring (&url, dest, len, 0);
+  url_ciss_tostring (&url, dest, len, U_DECODE_PASSWD);
 }
 
 void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char* path)
@@ -723,7 +749,7 @@ void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char* path)
   mutt_account_tourl (&mx->account, &url);
   url.path = path;
 
-  url_ciss_tobuffer (&url, dest, 0);
+  url_ciss_tobuffer (&url, dest, U_DECODE_PASSWD);
 }
 
 
