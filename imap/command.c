@@ -1032,11 +1032,13 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 
   mutt_account_tourl (&idata->conn->account, &url);
   url.path = list.name;
-  if (!mutt_strcmp (url.user, ImapUser))
-    url.user = NULL;
 
   mailbox = mutt_buffer_pool_get ();
-  url_ciss_tobuffer (&url, mailbox, 0);
+  /* Include password if it was part of the connection URL.
+   * This allows full connection using just the buffy url.
+   * It also helps with browser sticky-cursor and sidebar comparison,
+   * since the context->path will include the password too. */
+  url_ciss_tobuffer (&url, mailbox, U_DECODE_PASSWD);
 
   mutt_buffy_add (mutt_b2s (mailbox), NULL, -1, -1);
   mutt_buffer_pool_release (&mailbox);

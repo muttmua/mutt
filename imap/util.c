@@ -377,6 +377,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
       strfcpy (mx->account.user, tmp, sizeof (mx->account.user));
       strfcpy (tmp, c+1, sizeof (tmp));
       mx->account.flags |= MUTT_ACCT_USER;
+      mx->account.flags |= MUTT_ACCT_USER_FROM_URL;
     }
 
     if ((n = sscanf (tmp, "%127[^:/]%127s", mx->account.host, tmp)) < 1)
@@ -730,7 +731,8 @@ void imap_make_date (BUFFER *buf, time_t timestamp)
  * Make an absolute IMAP folder target, given IMAP_MBOX and relative
  * path.
  *
- * Note this will include the password in the URL.
+ * Note this will include the password in the URL, if it was present in the
+ * account connection URL.
  */
 void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
 {

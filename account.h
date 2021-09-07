@@ -38,6 +38,9 @@ enum
 #define MUTT_ACCT_LOGIN (1<<2)
 #define MUTT_ACCT_PASS  (1<<3)
 #define MUTT_ACCT_SSL   (1<<4)
+/* these are used to regenerate a URL in same form it was parsed */
+#define MUTT_ACCT_USER_FROM_URL (1<<5)
+#define MUTT_ACCT_PASS_FROM_URL (1<<6)
 
 typedef struct
 {

@@ -75,11 +75,13 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
   {
     strfcpy (account->user, url->user, sizeof (account->user));
     account->flags |= MUTT_ACCT_USER;
+    account->flags |= MUTT_ACCT_USER_FROM_URL;
   }
   if (url->pass)
   {
     strfcpy (account->pass, url->pass, sizeof (account->pass));
     account->flags |= MUTT_ACCT_PASS;
+    account->flags |= MUTT_ACCT_PASS_FROM_URL;
   }
   if (url->port)
   {
@@ -134,10 +136,16 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
   url->host = account->host;
   if (account->flags & MUTT_ACCT_PORT)
     url->port = account->port;
-  if (account->flags & MUTT_ACCT_USER)
+  if ((account->flags & MUTT_ACCT_USER) &&
+      (account->flags & MUTT_ACCT_USER_FROM_URL))
+  {
     url->user = account->user;
-  if (account->flags & MUTT_ACCT_PASS)
+  }
+  if ((account->flags & MUTT_ACCT_PASS) &&
+      (account->flags & MUTT_ACCT_PASS_FROM_URL))
+  {
     url->pass = account->pass;
+  }
 }
 
 /* mutt_account_getuser: retrieve username into ACCOUNT, if necessary */
@@ -253,6 +261,7 @@ int mutt_account_getpass (ACCOUNT *account)
 void mutt_account_unsetpass (ACCOUNT* account)
 {
   account->flags &= ~MUTT_ACCT_PASS;
+  account->flags &= ~MUTT_ACCT_PASS_FROM_URL;
 }
 
 /* mutt_account_getoauthbearer: call external command to generate the
