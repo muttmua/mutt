@@ -619,9 +619,22 @@ static int read_headers_qresync_eval_cache (IMAP_DATA *idata, char *uid_seqset)
 
       ctx->size += h->content->length;
       ctx->hdrs[ctx->msgcount++] = h;
-    }
 
-    msn++;
+      msn++;
+    }
+    /* A non-zero uid missing from the header cache is either the
+     * result of an expunged message (not recorded in the uid seqset)
+     * or a hole in the header cache.
+     *
+     * We have to assume it's an earlier expunge and compact the msn's
+     * in that case, because cmd_parse_vanished() won't find it in the
+     * uid_hash and decrement later msn's there.
+     *
+     * Thus we only increment the uid if the uid was 0: an actual
+     * stored "blank" in the uid seqset.
+     */
+    else if (!uid)
+      msn++;
   }
 
   mutt_seqset_iterator_free (&iter);
