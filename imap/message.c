@@ -782,6 +782,11 @@ fail:
 
   hash_destroy (&idata->uid_hash, NULL);
 
+  hash_destroy (&ctx->subj_hash, NULL);
+  hash_destroy (&ctx->id_hash, NULL);
+  hash_destroy (&ctx->label_hash, NULL);
+  mutt_clear_threads (ctx);
+
   for (i = 0; i < ctx->msgcount; i++)
   {
     if (ctx->hdrs[i] && ctx->hdrs[i]->data)
@@ -789,6 +794,7 @@ fail:
     mutt_free_header (&ctx->hdrs[i]);
   }
   ctx->msgcount = 0;
+  ctx->size = 0;
 
   mutt_hcache_delete (idata->hcache, "/MODSEQ", imap_hcache_keylen);
   imap_hcache_clear_uid_seqset (idata);
