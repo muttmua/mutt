@@ -32,6 +32,8 @@
 #include "mutt.h"
 #include "imap_private.h"
 #include "mx.h"
+#include "globals.h"
+#include "sort.h"
 
 #ifdef HAVE_PGP
 #include "pgp.h"
@@ -722,8 +724,13 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
   /* VANISHED handling: we need to empty out the messages */
   if (idata->reopen & IMAP_EXPUNGE_PENDING)
   {
+    short old_sort;
     imap_hcache_close (idata);
+
+    old_sort = Sort;
+    Sort = SORT_ORDER;
     imap_expunge_mailbox (idata);
+    Sort = old_sort;
 
     idata->hcache = imap_hcache_open (idata, NULL);
     idata->reopen &= ~IMAP_EXPUNGE_PENDING;
