@@ -32,6 +32,8 @@
 #include "mutt.h"
 #include "imap_private.h"
 #include "mx.h"
+#include "globals.h"
+#include "sort.h"
 
 #ifdef HAVE_PGP
 #include "pgp.h"
@@ -623,9 +625,22 @@ static int read_headers_qresync_eval_cache (IMAP_DATA *idata, char *uid_seqset)
 
       ctx->size += h->content->length;
       ctx->hdrs[ctx->msgcount++] = h;
-    }
 
-    msn++;
+      msn++;
+    }
+    /* A non-zero uid missing from the header cache is either the
+     * result of an expunged message (not recorded in the uid seqset)
+     * or a hole in the header cache.
+     *
+     * We have to assume it's an earlier expunge and compact the msn's
+     * in that case, because cmd_parse_vanished() won't find it in the
+     * uid_hash and decrement later msn's there.
+     *
+     * Thus we only increment the uid if the uid was 0: an actual
+     * stored "blank" in the uid seqset.
+     */
+    else if (!uid)
+      msn++;
   }
 
   mutt_seqset_iterator_free (&iter);
@@ -713,8 +728,13 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
   /* VANISHED handling: we need to empty out the messages */
   if (idata->reopen & IMAP_EXPUNGE_PENDING)
   {
+    short old_sort;
     imap_hcache_close (idata);
+
+    old_sort = Sort;
+    Sort = SORT_ORDER;
     imap_expunge_mailbox (idata);
+    Sort = old_sort;
 
     idata->hcache = imap_hcache_open (idata, NULL);
     idata->reopen &= ~IMAP_EXPUNGE_PENDING;
@@ -773,6 +793,11 @@ fail:
 
   hash_destroy (&idata->uid_hash, NULL);
 
+  hash_destroy (&ctx->subj_hash, NULL);
+  hash_destroy (&ctx->id_hash, NULL);
+  hash_destroy (&ctx->label_hash, NULL);
+  mutt_clear_threads (ctx);
+
   for (i = 0; i < ctx->msgcount; i++)
   {
     if (ctx->hdrs[i] && ctx->hdrs[i]->data)
@@ -780,6 +805,7 @@ fail:
     mutt_free_header (&ctx->hdrs[i]);
   }
   ctx->msgcount = 0;
+  ctx->size = 0;
 
   mutt_hcache_delete (idata->hcache, "/MODSEQ", imap_hcache_keylen);
   imap_hcache_clear_uid_seqset (idata);
