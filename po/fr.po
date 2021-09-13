@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.1.1-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-08-24 02:21+0200\n"
-"PO-Revision-Date: 2021-08-24 02:25+0200\n"
+"POT-Creation-Date: 2021-09-13 04:03+0200\n"
+"PO-Revision-Date: 2021-09-13 04:05+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -172,8 +172,8 @@ msgstr "Ne correspond pas au nametemplate, continuer ?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "L'entrée compose de mailcap nécessite %%s"
 
-#: attach.c:141 attach.c:274 background.c:335 commands.c:343 compose.c:1836
-#: compress.c:414 curs_lib.c:305 curs_lib.c:1063 sendlib.c:1469 sendlib.c:1507
+#: attach.c:141 attach.c:274 background.c:335 commands.c:343 compose.c:1852
+#: compress.c:414 curs_lib.c:305 curs_lib.c:1064 sendlib.c:1469 sendlib.c:1507
 #: sendlib.c:1570
 #, c-format
 msgid "Error running \"%s\"!"
@@ -1121,7 +1121,7 @@ msgid "Bcc: "
 msgstr "Cci : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:103 compose.c:1112 send.c:262
+#: compose.c:103 compose.c:1130 send.c:262
 msgid "Subject: "
 msgstr "Objet : "
 
@@ -1131,7 +1131,7 @@ msgid "Reply-To: "
 msgstr "Réponse à : "
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:107 compose.c:1129
+#: compose.c:107 compose.c:1147
 msgid "Fcc: "
 msgstr "Fcc : "
 
@@ -1188,7 +1188,7 @@ msgstr "CC"
 msgid "Subj"
 msgstr "Obj"
 
-#: compose.c:141 compose.c:1251
+#: compose.c:141 compose.c:1269
 msgid "Attach file"
 msgstr "Attacher fichier"
 
@@ -1341,101 +1341,111 @@ msgstr "Attention : '%s' est un mauvais IDN."
 msgid "You may not delete the only attachment."
 msgstr "Vous ne pouvez pas supprimer l'unique attachement."
 
-#: compose.c:728 compose.c:738 menu.c:695
+#. L10N:
+#. Prompt when trying to hit <detach-file> on the first entry in
+#. the compose menu.  This entry is most likely the message they just
+#. typed.  Hitting yes will remove the entry and unlink the file, so
+#. it's worth confirming they really meant to do it.
+#.
+#: compose.c:645
+msgid "Really delete the main message?"
+msgstr "Voulez-vous vraiment supprimer le message principal ?"
+
+#: compose.c:746 compose.c:756 menu.c:695
 msgid "You are on the last entry."
 msgstr "Vous êtes sur la dernière entrée."
 
-#: compose.c:773 menu.c:706
+#: compose.c:791 menu.c:706
 msgid "You are on the first entry."
 msgstr "Vous êtes sur la première entrée."
 
-#: compose.c:1197 send.c:2460
+#: compose.c:1215 send.c:2460
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "Mauvais IDN dans « %s » : '%s'"
 
-#: compose.c:1260
+#: compose.c:1278
 msgid "Attaching selected files..."
 msgstr "J'attache les fichiers sélectionnés..."
 
-#: compose.c:1274
+#: compose.c:1292
 #, c-format
 msgid "Unable to attach %s!"
 msgstr "Impossible d'attacher %s !"
 
-#: compose.c:1294
+#: compose.c:1312
 msgid "Open mailbox to attach message from"
 msgstr "Ouvrir une BAL d'où attacher un message"
 
-#: compose.c:1325
+#: compose.c:1343
 #, c-format
 msgid "Unable to open mailbox %s"
 msgstr "Impossible d'ouvrir la BAL %s"
 
-#: compose.c:1333
+#: compose.c:1351
 msgid "No messages in that folder."
 msgstr "Aucun message dans ce dossier."
 
-#: compose.c:1344
+#: compose.c:1362
 msgid "Tag the messages you want to attach!"
 msgstr "Marquez les messages que vous voulez attacher !"
 
-#: compose.c:1371
+#: compose.c:1389
 msgid "Unable to attach!"
 msgstr "Impossible d'attacher !"
 
-#: compose.c:1426
+#: compose.c:1442
 msgid "Recoding only affects text attachments."
 msgstr "Le recodage affecte uniquement les attachements textuels."
 
-#: compose.c:1431
+#: compose.c:1447
 msgid "The current attachment won't be converted."
 msgstr "L'attachement courant ne sera pas converti."
 
-#: compose.c:1433
+#: compose.c:1449
 msgid "The current attachment will be converted."
 msgstr "L'attachement courant sera converti."
 
-#: compose.c:1507
+#: compose.c:1523
 msgid "Invalid encoding."
 msgstr "Codage invalide."
 
-#: compose.c:1533
+#: compose.c:1549
 msgid "Save a copy of this message?"
 msgstr "Sauver une copie de ce message ?"
 
-#: compose.c:1587
+#: compose.c:1603
 msgid "Send attachment with name: "
 msgstr "Envoyer l'attachement avec le nom : "
 
-#: compose.c:1606
+#: compose.c:1622
 msgid "Rename to: "
 msgstr "Renommer en : "
 
 # , c-format
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1613 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:905
+#: compose.c:1629 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:905
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Impossible d'obtenir le statut de %s : %s"
 
-#: compose.c:1640
+#: compose.c:1656
 msgid "New file: "
 msgstr "Nouveau fichier : "
 
-#: compose.c:1653
+#: compose.c:1669
 msgid "Content-Type is of the form base/sub"
 msgstr "Content-Type est de la forme base/sous"
 
 # , c-format
-#: compose.c:1659
+#: compose.c:1675
 #, c-format
 msgid "Unknown Content-Type %s"
 msgstr "Content-Type %s inconnu"
 
 # , c-format
-#: compose.c:1667
+#: compose.c:1683
 #, c-format
 msgid "Can't create file %s"
 msgstr "Impossible de créer le fichier %s"
@@ -1444,45 +1454,45 @@ msgstr "Impossible de créer le fichier %s"
 #. This phrase is a modified quote originally from Cool Hand
 #. Luke, intended to be somewhat humorous.
 #.
-#: compose.c:1679
+#: compose.c:1695
 msgid "What we have here is a failure to make an attachment"
 msgstr "Impossible de créer un attachement"
 
-#: compose.c:1718
+#: compose.c:1734
 msgid "$send_multipart_alternative_filter is not set"
 msgstr "$send_multipart_alternative_filter n'est pas défini"
 
-#: compose.c:1793
+#: compose.c:1809
 msgid "Postpone this message?"
 msgstr "Ajourner ce message ?"
 
-#: compose.c:1854
+#: compose.c:1870
 msgid "Write message to mailbox"
 msgstr "Écrire le message dans la boîte aux lettres"
 
 # , c-format
-#: compose.c:1857
+#: compose.c:1873
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "Écriture du message dans %s ..."
 
-#: compose.c:1864
+#: compose.c:1880
 msgid "Message written."
 msgstr "Message écrit."
 
-#: compose.c:1877
+#: compose.c:1893
 msgid "No PGP backend configured"
 msgstr "Pas de backend PGP configuré"
 
-#: compose.c:1885 compose.c:1958
+#: compose.c:1901 compose.c:1974
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME déjà sélectionné. Effacer & continuer ? "
 
-#: compose.c:1913
+#: compose.c:1929
 msgid "No S/MIME backend configured"
 msgstr "Pas de backend S/MIME configuré"
 
-#: compose.c:1922
+#: compose.c:1938
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP déjà sélectionné. Effacer & continuer ? "
 
@@ -2348,36 +2358,36 @@ msgstr "non"
 msgid "See $%s for more information."
 msgstr "Voir $%s pour plus d'information."
 
-#: curs_lib.c:537
+#: curs_lib.c:538
 msgid "Exit Mutt?"
 msgstr "Quitter Mutt ?"
 
-#: curs_lib.c:542 curs_main.c:1093 curs_main.c:1522
+#: curs_lib.c:543 curs_main.c:1093 curs_main.c:1522
 msgid "There are $background_edit sessions. Really quit Mutt?"
 msgstr ""
 "Il y a des sessions $background_edit. Voulez-vous vraiment quitter Mutt ?"
 
-#: curs_lib.c:612
+#: curs_lib.c:613
 msgid "Error History is disabled."
 msgstr "L'historique des erreurs est désactivé."
 
-#: curs_lib.c:618
+#: curs_lib.c:619
 msgid "Error History is currently being shown."
 msgstr "L'historique des erreurs est actuellement affiché."
 
-#: curs_lib.c:633
+#: curs_lib.c:634
 msgid "Error History"
 msgstr "Historique des erreurs"
 
-#: curs_lib.c:1014 mutt_socket.c:664 mutt_ssl.c:636
+#: curs_lib.c:1015 mutt_socket.c:664 mutt_ssl.c:636
 msgid "unknown error"
 msgstr "erreur inconnue"
 
-#: curs_lib.c:1034
+#: curs_lib.c:1035
 msgid "Press any key to continue..."
 msgstr "Appuyez sur une touche pour continuer..."
 
-#: curs_lib.c:1082
+#: curs_lib.c:1083
 msgid " ('?' for list): "
 msgstr " ('?' pour avoir la liste) : "
 
@@ -3254,103 +3264,103 @@ msgid "Error opening mailbox"
 msgstr "Erreur à l'ouverture de la boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:1051 imap/imap.c:2560 imap/message.c:1552 muttlib.c:2008
+#: imap/imap.c:1051 imap/imap.c:2570 imap/message.c:1584 muttlib.c:2008
 #, c-format
 msgid "Create %s?"
 msgstr "Créer %s ?"
 
-#: imap/imap.c:1472
+#: imap/imap.c:1483
 msgid "Expunge failed"
 msgstr "Expunge a échoué"
 
 # , c-format
-#: imap/imap.c:1485
+#: imap/imap.c:1496
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Marquage de %d messages à effacer..."
 
 # , c-format
-#: imap/imap.c:1542
+#: imap/imap.c:1553
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Sauvegarde des messages changés... [%d/%d]"
 
-#: imap/imap.c:1624
+#: imap/imap.c:1634
 msgid "Error saving flags. Close anyway?"
 msgstr "Erreur en sauvant les indicateurs. Fermer tout de même ?"
 
-#: imap/imap.c:1632
+#: imap/imap.c:1642
 msgid "Error saving flags"
 msgstr "Erreur en sauvant les indicateurs"
 
-#: imap/imap.c:1656
+#: imap/imap.c:1666
 msgid "Expunging messages from server..."
 msgstr "Effacement des messages sur le serveur..."
 
-#: imap/imap.c:1662
+#: imap/imap.c:1672
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox : EXPUNGE a échoué"
 
-#: imap/imap.c:2204
+#: imap/imap.c:2214
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Recherche d'en-tête sans nom d'en-tête : %s"
 
-#: imap/imap.c:2273
+#: imap/imap.c:2283
 msgid "Bad mailbox name"
 msgstr "Mauvaise boîte aux lettres"
 
 # , c-format
-#: imap/imap.c:2292
+#: imap/imap.c:2302
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Abonnement à %s..."
 
 # , c-format
-#: imap/imap.c:2294
+#: imap/imap.c:2304
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Désabonnement de %s..."
 
 # , c-format
-#: imap/imap.c:2304
+#: imap/imap.c:2314
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Abonné à %s"
 
 # , c-format
-#: imap/imap.c:2306
+#: imap/imap.c:2316
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Désabonné de %s"
 
 # , c-format
-#: imap/imap.c:2545 imap/message.c:1516
+#: imap/imap.c:2555 imap/message.c:1548
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "Copie de %d messages dans %s..."
 
 #. L10N: This prompt is made if the user hits Ctrl-C when opening
 #. * an IMAP mailbox
-#: imap/message.c:88
+#: imap/message.c:90
 msgid "Abort download and close mailbox?"
 msgstr "Abandonner le téléchargement et fermer la boîte aux lettres ?"
 
-#: imap/message.c:111 mx.c:1454
+#: imap/message.c:113 mx.c:1454
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Dépassement de capacité sur entier -- impossible d'allouer la mémoire."
 
 # , c-format
 #. L10N:
 #. Comparing the cached data with the IMAP server's data
-#: imap/message.c:452
+#: imap/message.c:460
 msgid "Evaluating cache..."
 msgstr "Évaluation du cache..."
 
 # , c-format
 #. L10N:
 #. Fetching IMAP flag changes, using the CONDSTORE extension
-#: imap/message.c:653
+#: imap/message.c:674
 msgid "Fetching flag updates..."
 msgstr "Récupération de la mise à jour des indicateurs..."
 
@@ -3359,41 +3369,41 @@ msgstr "Récupération de la mise à jour des indicateurs..."
 #. a quick sanity check.  If that fails, Mutt reopens the mailbox
 #. using a normal download.
 #.
-#: imap/message.c:789
+#: imap/message.c:821
 msgid "QRESYNC failed.  Reopening mailbox."
 msgstr "QRESYNC a échoué. Réouverture de la boîte aux lettres."
 
-#: imap/message.c:844
+#: imap/message.c:876
 msgid "Unable to fetch headers from this IMAP server version."
 msgstr ""
 "Impossible de récupérer les en-têtes à partir de cette version du serveur "
 "IMAP."
 
-#: imap/message.c:857
+#: imap/message.c:889
 #, c-format
 msgid "Could not create temporary file %s"
 msgstr "Impossible de créer le fichier temporaire %s"
 
 # , c-format
-#: imap/message.c:865 pop.c:309
+#: imap/message.c:897 pop.c:309
 msgid "Fetching message headers..."
 msgstr "Récupération des en-têtes des messages..."
 
-#: imap/message.c:1081 imap/message.c:1160 pop.c:603
+#: imap/message.c:1113 imap/message.c:1192 pop.c:603
 msgid "Fetching message..."
 msgstr "Récupération du message..."
 
-#: imap/message.c:1145 pop.c:598
+#: imap/message.c:1177 pop.c:598
 msgid "The message index is incorrect. Try reopening the mailbox."
 msgstr ""
 "L'index du message est incorrect. Essayez de rouvrir la boîte aux lettres."
 
-#: imap/message.c:1329
+#: imap/message.c:1361
 msgid "Uploading message..."
 msgstr "Chargement du message..."
 
 # , c-format
-#: imap/message.c:1520
+#: imap/message.c:1552
 #, c-format
 msgid "Copying message %d to %s..."
 msgstr "Copie du message %d dans %s..."
@@ -3622,14 +3632,14 @@ msgstr "Le %d, %n a écrit :"
 #. L10N:
 #. $compose_format default value
 #.
-#: init.h:665
+#: init.h:677
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
 msgstr "-- Mutt: Composition  [Taille approx. msg: %l   Attach: %a]%>-"
 
 #. L10N:
 #. $forward_attribution_intro default value
 #.
-#: init.h:1304
+#: init.h:1316
 #, c-format
 msgid "----- Forwarded message from %f -----"
 msgstr "----- Message transféré de %f -----"
@@ -3637,14 +3647,14 @@ msgstr "----- Message transféré de %f -----"
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
-#: init.h:1315
+#: init.h:1327
 msgid "----- End forwarded message -----"
 msgstr "----- Fin du message transféré -----"
 
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4384
+#: init.h:4396
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
@@ -3657,14 +3667,14 @@ msgstr ""
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4588
+#: init.h:4600
 msgid "M%?n?AIL&ail?"
 msgstr "C%?n?OURRIER&ourrier?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4605
+#: init.h:4617
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt avec %?m?%m messages&aucun message?%?n? [%n NOUV.]?"
 
