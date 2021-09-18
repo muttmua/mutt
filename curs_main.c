@@ -2655,9 +2655,10 @@ int mutt_index_menu (void)
         break;
 #endif
 
-      default:
+      case OP_NULL:
 	if (!in_pager)
 	  km_error_key (MENU_MAIN);
+        break;
     }
 
     if (in_pager)
