@@ -1465,6 +1465,7 @@ int mutt_index_menu (void)
         break;
       }
 
+      case OP_GENERIC_SELECT_ENTRY:
       case OP_DISPLAY_MESSAGE:
       case OP_DISPLAY_HEADERS: /* don't weed the headers */
 
