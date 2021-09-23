@@ -1135,11 +1135,7 @@ static int compare_uid (const void *a, const void *b)
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
 
-  if (HEADER_DATA(*pa)->uid < HEADER_DATA(*pb)->uid)
-    return -1;
-  if (HEADER_DATA(*pa)->uid > HEADER_DATA(*pb)->uid)
-    return 1;
-  return 0;
+  return mutt_numeric_cmp (HEADER_DATA(*pa)->uid, HEADER_DATA(*pb)->uid);
 }
 
 /* Note: headers must be in SORT_UID. See imap_exec_msgset for args.

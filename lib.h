@@ -90,6 +90,8 @@
 # define MAX(a,b) ((a) < (b) ? (b) : (a))
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
 
+#define mutt_numeric_cmp(a,b) ((a) < (b) ? -1 : ((a) > (b) ? 1 : 0))
+
 /* Use this with care.  If the compiler can't see the array
  * definition, it obviously won't produce a correct result. */
 #define mutt_array_size(x)  (sizeof (x) / sizeof ((x)[0]))

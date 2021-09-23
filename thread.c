@@ -594,7 +594,8 @@ static int compare_aux_threads (const void *a, const void *b)
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = (*((THREAD **)a))->sort_aux_key->index - (*((THREAD **)b))->sort_aux_key->index;
+  rc = mutt_numeric_cmp ((*((THREAD **)a))->sort_aux_key->index,
+                         (*((THREAD **)b))->sort_aux_key->index);
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
@@ -622,7 +623,7 @@ static int compare_aux_sortkeys (const void *a, const void *b)
   if (rc)
     return rc;
 
-  return (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+  return mutt_numeric_cmp ((*((HEADER **)a))->index, (*((HEADER **)b))->index);
 }
 
 static int compare_root_threads (const void *a, const void *b)
@@ -652,8 +653,8 @@ static int compare_root_threads (const void *a, const void *b)
   if (rc)
     return reverse ? -rc : rc;
 
-  rc = (*((THREAD **)a))->sort_group_key->index -
-    (*((THREAD **)b))->sort_group_key->index;
+  rc = mutt_numeric_cmp ((*((THREAD **)a))->sort_group_key->index,
+                         (*((THREAD **)b))->sort_group_key->index);
   if (rc)
     return reverse ? -rc : rc;
 
@@ -686,7 +687,7 @@ static int compare_group_sortkeys (const void *a, const void *b)
   if (rc)
     return rc;
 
-  return (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+  return mutt_numeric_cmp ((*((HEADER **)a))->index, (*((HEADER **)b))->index);
 }
 
 THREAD *mutt_sort_subthreads (THREAD *thread, int init)

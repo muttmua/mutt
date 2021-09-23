@@ -33,21 +33,21 @@ static int compare_score (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return (*pb)->score - (*pa)->score; /* note that this is reverse */
+  return mutt_numeric_cmp ((*pb)->score, (*pa)->score); /* note that this is reverse */
 }
 
 static int compare_size (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return (*pa)->content->length - (*pb)->content->length;
+  return mutt_numeric_cmp ((*pa)->content->length, (*pb)->content->length);
 }
 
 static int compare_date_sent (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return (*pa)->date_sent - (*pb)->date_sent;
+  return mutt_numeric_cmp ((*pa)->date_sent, (*pb)->date_sent);
 }
 
 static int compare_subject (const void *a, const void *b)
@@ -115,7 +115,7 @@ static int compare_date_received (const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return (*pa)->received - (*pb)->received;
+  return mutt_numeric_cmp ((*pa)->received, (*pb)->received);
 }
 
 static int compare_order (const void *a, const void *b)
@@ -123,7 +123,7 @@ static int compare_order (const void *a, const void *b)
   HEADER **ha = (HEADER **) a;
   HEADER **hb = (HEADER **) b;
 
-  return (*ha)->index - (*hb)->index;
+  return mutt_numeric_cmp ((*ha)->index, (*hb)->index);
 }
 
 static int compare_spam (const void *a, const void *b)
@@ -251,7 +251,7 @@ static int compare_unthreaded (const void *a, const void *b)
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = (*((HEADER **)a))->index - (*((HEADER **)b))->index;
+  rc = mutt_numeric_cmp ((*((HEADER **)a))->index, (*((HEADER **)b))->index);
   if (rc)
     return (Sort & SORT_REVERSE) ? -rc : rc;
 
