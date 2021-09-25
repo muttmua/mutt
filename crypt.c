@@ -515,7 +515,7 @@ int mutt_is_malformed_multipart_pgp_encrypted (BODY *b)
 }
 
 
-int mutt_is_application_pgp (BODY *m)
+int mutt_is_application_pgp (const BODY *m)
 {
   int t = 0;
   char *p;

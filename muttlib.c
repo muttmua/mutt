@@ -804,7 +804,7 @@ int mutt_needs_mailcap (BODY *m)
   return 1;
 }
 
-int mutt_is_text_part (BODY *b)
+int mutt_is_text_part (const BODY *b)
 {
   int t = b->type;
   char *s = b->subtype;

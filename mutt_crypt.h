@@ -121,7 +121,7 @@ int mutt_is_malformed_multipart_pgp_encrypted (BODY *b);
 
 int mutt_is_multipart_signed (BODY *);
 
-int mutt_is_application_pgp (BODY *);
+int mutt_is_application_pgp (const BODY *);
 
 int mutt_is_application_smime (BODY *);
 
