@@ -2102,7 +2102,6 @@ int smime_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   STATE s;
   LOFF_T tmpoffset = b->offset;
   size_t tmplength = b->length;
-  int origType = b->type;
   FILE *tmpfp=NULL;
   int rv = -1;
 
@@ -2155,7 +2154,6 @@ int smime_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   (*cur)->badsig  = b->badsig;
 
 bail:
-  b->type = origType;
   b->length = tmplength;
   b->offset = tmpoffset;
   safe_fclose (&tmpfp);

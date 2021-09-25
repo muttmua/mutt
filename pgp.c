@@ -1061,7 +1061,6 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   STATE s;
   BODY *p = b;
   int need_decode = 0;
-  int saved_type;
   LOFF_T saved_offset;
   size_t saved_length;
   FILE *decoded_fp = NULL;
@@ -1089,7 +1088,6 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 
   if (need_decode)
   {
-    saved_type = b->type;
     saved_offset = b->offset;
     saved_length = b->length;
 
@@ -1129,7 +1127,6 @@ int pgp_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 bail:
   if (need_decode)
   {
-    b->type = saved_type;
     b->length = saved_length;
     b->offset = saved_offset;
     safe_fclose (&decoded_fp);

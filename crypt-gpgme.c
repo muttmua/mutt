@@ -2113,7 +2113,6 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   BODY *first_part = b;
   int is_signed = 0;
   int need_decode = 0;
-  int saved_type;
   LOFF_T saved_offset;
   size_t saved_length;
   FILE *decoded_fp = NULL;
@@ -2144,7 +2143,6 @@ int pgp_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
 
   if (need_decode)
   {
-    saved_type = b->type;
     saved_offset = b->offset;
     saved_length = b->length;
 
@@ -2196,7 +2194,6 @@ bail:
 
   if (need_decode)
   {
-    b->type = saved_type;
     b->length = saved_length;
     b->offset = saved_offset;
     safe_fclose (&decoded_fp);
@@ -2216,7 +2213,6 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   int is_signed;
   LOFF_T saved_b_offset;
   size_t saved_b_length;
-  int saved_b_type;
 
   if (!mutt_is_application_smime (b))
     return -1;
@@ -2231,7 +2227,6 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
      backend.  The backend allows for Base64 encoded data but it does
      not allow for QP which I have seen in some messages.  So better
      do it here. */
-  saved_b_type = b->type;
   saved_b_offset = b->offset;
   saved_b_length = b->length;
   memset (&s, 0, sizeof (s));
@@ -2266,7 +2261,6 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
   *cur = decrypt_part (b, &s, *fpout, 1, &is_signed);
   if (*cur)
     (*cur)->goodsig = is_signed > 0;
-  b->type = saved_b_type;
   b->length = saved_b_length;
   b->offset = saved_b_offset;
   safe_fclose (&tmpfp);
@@ -2285,7 +2279,6 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
       BODY *bb = *cur;
       BODY *tmp_b;
 
-      saved_b_type = bb->type;
       saved_b_offset = bb->offset;
       saved_b_length = bb->length;
       memset (&s, 0, sizeof (s));
@@ -2321,7 +2314,6 @@ int smime_gpgme_decrypt_mime (FILE *fpin, FILE **fpout, BODY *b, BODY **cur)
       tmp_b = decrypt_part (bb, &s, *fpout, 1, &is_signed);
       if (tmp_b)
         tmp_b->goodsig = is_signed > 0;
-      bb->type = saved_b_type;
       bb->length = saved_b_length;
       bb->offset = saved_b_offset;
       safe_fclose (&tmpfp);
