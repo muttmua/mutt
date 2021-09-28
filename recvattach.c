@@ -421,8 +421,9 @@ static void prepend_curdir (BUFFER *dst)
 }
 
 /* This is a proxy between the mutt_save_attachment_list() calls and
- * mutt_save_attachment().  It (currently) exists solely to unstuff
- * format=flowed text attachments.
+ * mutt_save_attachment().  It exists to support unstuffing
+ * format=flowed text attachments, and for quadoption prompting
+ * charset conversion of text attachments.
  *
  * Direct modification of mutt_save_attachment() wasn't easily possible
  * because:
@@ -434,11 +435,54 @@ static void prepend_curdir (BUFFER *dst)
  *
  * So, I apologize for this horrific proxy, but it was the most
  * straightforward method.
+ *
+ * Returns:
+ *   0 on success
+ *  -1 on an error inside mutt_save_attachment()
+ *  -2 if the convert prompt is aborted.
  */
-static int save_attachment_flowed_helper (FILE *fp, BODY *m, const char *path,
-                                          int flags, HEADER *hdr)
+static int save_attachment_helper (FILE *fp, BODY *m, const char *path,
+                                   int flags, HEADER *hdr)
 {
-  int rc = -1;
+  int rc = -1, charset_conv = 0;
+  BUFFER *prompt;
+
+  if (mutt_is_text_part (m))
+  {
+    const char *charset;
+    char fromcode[SHORT_STRING];
+    char tocode[SHORT_STRING];
+
+    charset = mutt_get_parameter ("charset", m->parameter);
+    if (!charset && AssumedCharset)
+      charset = mutt_get_default_charset ();
+    if (charset && Charset)
+    {
+      mutt_canonical_charset (fromcode, sizeof (fromcode), charset);
+      mutt_canonical_charset (tocode, sizeof (tocode), Charset);
+      if (mutt_strcmp (fromcode, tocode) &&
+          /* don't prompt converting ascii to extended-ascii: */
+          (mutt_strcmp (fromcode, "us-ascii") ||
+           (mutt_strcmp (tocode, "utf-8") &&
+            mutt_strncmp (tocode, "iso-8859-", 9))))
+      {
+        prompt = mutt_buffer_pool_get ();
+        mutt_buffer_printf (prompt,
+               /* L10N:
+                  Prompt to convert text attachments from the sent charset
+                  to the local $charset when saving them in the receive
+                  attachment menu.
+               */
+                            _("Convert attachment from %s to %s?"),
+                            fromcode, tocode);
+        charset_conv = query_quadoption (OPT_ATTACH_SAVE_CHARCONV,
+                                         mutt_b2s (prompt));
+        mutt_buffer_pool_release (&prompt);
+        if (charset_conv < 0)
+          return -2;
+      }
+    }
+  }
 
   if (mutt_rfc3676_is_format_flowed (m))
   {
@@ -449,7 +493,7 @@ static int save_attachment_flowed_helper (FILE *fp, BODY *m, const char *path,
     mutt_buffer_mktemp (tempfile);
 
     /* Pass flags=0 to force safe_fopen("w") */
-    rc = mutt_save_attachment (fp, m, mutt_b2s (tempfile), 0, hdr);
+    rc = mutt_save_attachment (fp, m, mutt_b2s (tempfile), 0, hdr, charset_conv);
     if (rc)
       goto cleanup;
 
@@ -459,7 +503,7 @@ static int save_attachment_flowed_helper (FILE *fp, BODY *m, const char *path,
      * so force send-mode. */
     memset (&fakebody, 0, sizeof (BODY));
     fakebody.filename = tempfile->data;
-    rc = mutt_save_attachment (NULL, &fakebody, path, flags, hdr);
+    rc = mutt_save_attachment (NULL, &fakebody, path, flags, hdr, 0);
 
     mutt_unlink (mutt_b2s (tempfile));
 
@@ -468,7 +512,7 @@ static int save_attachment_flowed_helper (FILE *fp, BODY *m, const char *path,
   }
   else
   {
-    rc = mutt_save_attachment (fp, m, path, flags, hdr);
+    rc = mutt_save_attachment (fp, m, path, flags, hdr, charset_conv);
   }
 
   return rc;
@@ -546,13 +590,19 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
     }
 
     mutt_message _("Saving...");
-    if (save_attachment_flowed_helper (fp, body, mutt_b2s (tfile), append,
-                                       (hdr || !is_message) ? hdr : body->hdr) == 0)
+    if ((rc = save_attachment_helper (fp, body, mutt_b2s (tfile), append,
+                                      (hdr || !is_message) ? hdr : body->hdr)) == 0)
     {
       mutt_message _("Attachment saved.");
-      rc = 0;
       goto cleanup;
     }
+    /* charset convert prompt abort: */
+    else if (rc == -2)
+    {
+      rc = -1;
+      goto cleanup;
+    }
+    /* some kind of save_attachment failure: */
     else
     {
       prompt = _("Save to file: ");
@@ -630,9 +680,11 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
     {
       if (!option (OPTATTACHSPLIT))
       {
+        int append = MUTT_SAVE_APPEND;
+
 	if (!mutt_buffer_len (buf))
 	{
-	  int append = 0;
+	  append = 0;
 
 	  mutt_buffer_strcpy (buf, mutt_basename (NONULL (top->filename)));
 	  prepend_curdir (buf);
@@ -645,27 +697,17 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 	  if (mutt_check_overwrite (top->filename, mutt_b2s (buf), tfile,
 				    &append, NULL))
 	    goto cleanup;
-	  rc = save_attachment_flowed_helper (fp, top, mutt_b2s (tfile), append, hdr);
-	  if (rc == 0 &&
-              AttachSep &&
-              (fpout = fopen (mutt_b2s (tfile), "a")) != NULL)
-	  {
-	    fprintf(fpout, "%s", AttachSep);
-	    safe_fclose (&fpout);
-	  }
 	}
-	else
-	{
-	  rc = save_attachment_flowed_helper (fp, top, mutt_b2s (tfile),
-                                              MUTT_SAVE_APPEND, hdr);
-	  if (rc == 0 &&
-              AttachSep &&
-              (fpout = fopen (mutt_b2s (tfile), "a")) != NULL)
-	  {
-	    fprintf(fpout, "%s", AttachSep);
-	    safe_fclose (&fpout);
-	  }
-	}
+
+        rc = save_attachment_helper (fp, top, mutt_b2s (tfile), append, hdr);
+        if (rc < 0)
+          goto cleanup;
+        if (AttachSep &&
+            (fpout = fopen (mutt_b2s (tfile), "a")) != NULL)
+        {
+          fprintf(fpout, "%s", AttachSep);
+          safe_fclose (&fpout);
+        }
       }
       else
       {
@@ -678,7 +720,7 @@ void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *t
 
 	  menu_redraw (menu);
 	}
-	if (mutt_query_save_attachment (fp, top, hdr, &directory) == -1)
+	if (mutt_query_save_attachment (fp, top, hdr, &directory) < 0)
 	  break;
       }
     }
@@ -805,7 +847,7 @@ static void pipe_attachment (FILE *fp, BODY *b, STATE *state)
 
     if (is_flowed)
     {
-      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL) == -1)
+      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL, 0) == -1)
         goto bail;
       unlink_unstuff = 1;
       mutt_rfc3676_space_unstuff_attachment (b, mutt_b2s (unstuff_tempfile));

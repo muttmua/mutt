@@ -411,7 +411,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
                                   tempfile);
     FREE (&fname);
 
-    if (mutt_save_attachment (fp, a, mutt_b2s (tempfile), 0, NULL) == -1)
+    if (mutt_save_attachment (fp, a, mutt_b2s (tempfile), 0, NULL, 0) == -1)
       goto return_error;
     unlink_tempfile = 1;
 
@@ -545,7 +545,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
 	 * mutt_decode_attachment() since it assumes the content-encoding has
 	 * already been applied
 	 */
-	if (mutt_save_attachment(fp, a, mutt_b2s (pagerfile), 0, NULL))
+	if (mutt_save_attachment (fp, a, mutt_b2s (pagerfile), 0, NULL, 0))
 	  goto return_error;
         unlink_pagerfile = 1;
       }
@@ -693,7 +693,7 @@ int mutt_pipe_attachment (FILE *fp, BODY *b, const char *path, const char *outfi
 
     if (is_flowed)
     {
-      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL) == -1)
+      if (mutt_save_attachment (fp, b, mutt_b2s (unstuff_tempfile), 0, NULL, 0) == -1)
         goto bail;
       unlink_unstuff = 1;
       mutt_rfc3676_space_unstuff_attachment (b, mutt_b2s (unstuff_tempfile));
@@ -755,7 +755,8 @@ mutt_save_attachment_open (const char *path, int flags)
 }
 
 /* returns 0 on success, -1 on error */
-int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER *hdr)
+int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER *hdr,
+                          int charset_conv)
 {
   if (fp)
   {
@@ -811,6 +812,9 @@ int mutt_save_attachment (FILE *fp, BODY *m, const char *path, int flags, HEADER
       STATE s;
 
       memset (&s, 0, sizeof (s));
+      if (charset_conv)
+        s.flags = MUTT_CHARCONV;
+
       if ((s.fpout = mutt_save_attachment_open (path, flags)) == NULL)
       {
 	mutt_perror ("fopen");
@@ -983,7 +987,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
                                   newfile);
     FREE (&sanitized_fname);
 
-    if (mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL) == -1)
+    if (mutt_save_attachment (fp, a, mutt_b2s (newfile), 0, NULL, 0) == -1)
       goto mailcap_cleanup;
     unlink_newfile = 1;
 

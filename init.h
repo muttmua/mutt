@@ -368,6 +368,14 @@ struct option_t MuttVars[] = {
   ** .pp
   ** For an explanation of ``soft-fill'', see the $$index_format documentation.
   */
+  { "attach_save_charset_convert", DT_QUAD, R_NONE, {.l=OPT_ATTACH_SAVE_CHARCONV}, {.l=MUTT_ASKYES} },
+  /*
+  ** .pp
+  ** When saving received text-type attachments, this quadoption
+  ** prompts to convert the character set if the encoding of the
+  ** attachment (or $$assumed_charset if none is specified) differs
+  ** from $charset.
+  */
   { "attach_save_dir",	DT_PATH, R_NONE, {.p=&AttachSaveDir}, {.p=0} },
   /*
   ** .pp
