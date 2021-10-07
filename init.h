@@ -2021,10 +2021,13 @@ struct option_t MuttVars[] = {
   ** .pp
   ** When \fIset\fP, mutt will periodically calculate message
   ** statistics of a mailbox while polling for new mail.  It will
-  ** check for unread, flagged, and total message counts.  Because
-  ** this operation is more performance intensive, it defaults to
-  ** \fIunset\fP, and has a separate option, $$mail_check_stats_interval, to
-  ** control how often to update these counts.
+  ** check for unread, flagged, and total message counts.
+  ** (Note: IMAP mailboxes only support unread and total counts).
+  ** .pp
+  ** Because this operation is more performance intensive, it defaults
+  ** to \fIunset\fP, and has a separate option,
+  ** $$mail_check_stats_interval, to control how often to update these
+  ** counts.
   ** .pp
   ** Message statistics can also be explicitly calculated by invoking the
   ** \fC<check-stats>\fP
