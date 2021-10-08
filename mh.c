@@ -1272,6 +1272,12 @@ static int mh_read_dir (CONTEXT * ctx, const char *subdir)
   int count;
   char msgbuf[STRING];
   progress_t progress;
+  size_t pathlen;
+
+  /* Clean up the path */
+  pathlen = mutt_strlen (ctx->path);
+  while ((pathlen > 1) && ctx->path[pathlen - 1] == '/')
+    ctx->path[--pathlen] = '\0';
 
   memset (&mhs, 0, sizeof (mhs));
   if (!ctx->quiet)
