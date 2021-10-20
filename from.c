@@ -24,6 +24,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 
 static const char *next_word (const char *s)
 {
@@ -195,4 +196,54 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
 
   if (tp) *tp = mutt_mktime (&tm, 0);
   return 1;
+}
+
+/* An internal implementation of the ctime() system call, which is
+ * marked obsolescent by POSIX.
+ *
+ * The snprintf format string is used in the POSIX guide ctime
+ * example, and also by glibc.
+ */
+const char *mutt_ctime (const time_t *t)
+{
+  static char result[42];
+  const struct tm *local_tp;
+  int rc;
+
+  if (!t)
+    goto bail;
+
+  local_tp = localtime (t);
+  if (!local_tp)
+    goto bail;
+
+  /* It's quite unlikely these values are illegal.  But for safety,
+   * make sure they don't address outside of arrays or generate a year
+   * addition overflow.
+   */
+  if ((local_tp->tm_wday < 0) ||
+      (local_tp->tm_wday > 6) ||
+      (local_tp->tm_mon < 0) ||
+      (local_tp->tm_mon > 11) ||
+      (local_tp->tm_year > (INT_MAX - 1900)))
+    goto bail;
+
+  rc = snprintf (result, sizeof(result),
+                 "%.3s %.3s%3d %.2d:%.2d:%.2d %d\n",
+                 Weekdays[local_tp->tm_wday],
+                 Months[local_tp->tm_mon],
+                 local_tp->tm_mday,
+                 local_tp->tm_hour,
+                 local_tp->tm_min,
+                 local_tp->tm_sec,
+                 1900 + local_tp->tm_year);
+
+  if (rc < 0 || rc >= sizeof(result))
+    goto bail;
+
+  return result;
+
+bail:
+  result[0] = '\0';
+  return result;
 }

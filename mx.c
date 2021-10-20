@@ -1375,7 +1375,8 @@ MESSAGE *mx_open_new_message (CONTEXT *dest, HEADER *hdr, int flags)
 	  p = hdr->env->from;
       }
 
-      fprintf (msg->fp, "From %s %s", p ? p->mailbox : NONULL(Username), ctime (&msg->received));
+      fprintf (msg->fp, "From %s %s", p ? p->mailbox : NONULL(Username),
+               mutt_ctime (&msg->received));
     }
   }
   else
