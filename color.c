@@ -636,14 +636,14 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse
     return (-1);
   }
 
-  if (mutt_strncmp (buf->data, "index", 5) == 0)
+  if (object == MT_COLOR_INDEX)
   {
     is_index = 1;
     list = &ColorIndexList;
   }
-  else if (mutt_strncmp (buf->data, "body", 4) == 0)
+  else if (object == MT_COLOR_BODY)
     list = &ColorBodyList;
-  else if (mutt_strncmp (buf->data, "header", 6) == 0)
+  else if (object == MT_COLOR_HEADER)
     list = &ColorHdrList;
   else
   {
@@ -847,7 +847,7 @@ parse_object(BUFFER *buf, BUFFER *s, int *o, int *ql, BUFFER *err)
   }
 
   mutt_extract_token(buf, s, 0);
-  if (!mutt_strncmp(buf->data, "quoted", 6))
+  if (!ascii_strncasecmp(buf->data, "quoted", 6))
   {
     if (buf->data[6])
     {
