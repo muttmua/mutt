@@ -611,7 +611,8 @@ struct option_t MuttVars[] = {
   ** .ts
   ** set certificate_file=~/.mutt/certificates
   ** .te
-  **
+  ** .pp
+  ** (OpenSSL and GnuTLS only)
   */
 #endif
   { "change_folder_next", DT_BOOL, R_NONE, {.l=OPTCHANGEFOLDERNEXT}, {.l=0} },
@@ -1154,7 +1155,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** The file which includes random data that is used to initialize SSL
-  ** library functions.
+  ** library functions. (OpenSSL only)
   */
 #endif
   { "envelope_from_address", DT_ADDR, R_NONE, {.p=&EnvFrom}, {.p=0} },
@@ -1447,7 +1448,7 @@ struct option_t MuttVars[] = {
   ** Header caching can greatly improve speed when opening POP, IMAP
   ** MH or Maildir folders, see ``$caching'' for details.
   */
-#if defined(HAVE_QDBM) || defined(HAVE_TC) || defined(HAVE_KC)
+# if defined(HAVE_QDBM) || defined(HAVE_TC) || defined(HAVE_KC)
   { "header_cache_compress", DT_BOOL, R_NONE, {.l=OPTHCACHECOMPRESS}, {.l=1} },
   /*
   ** .pp
@@ -1458,8 +1459,8 @@ struct option_t MuttVars[] = {
   ** slower opening of cached folder(s) which in general is still
   ** much faster than opening non header cached folders.
   */
-#endif /* HAVE_QDBM */
-#if defined(HAVE_GDBM) || defined(HAVE_DB4)
+# endif /* HAVE_QDBM */
+# if defined(HAVE_GDBM) || defined(HAVE_DB4)
   { "header_cache_pagesize", DT_LNUM, R_NONE, {.p=&HeaderCachePageSize}, {.l=16384} },
   /*
   ** .pp
@@ -1468,7 +1469,7 @@ struct option_t MuttVars[] = {
   ** values can waste space, memory, or CPU time. The default should be more
   ** or less optimal for most use cases.
   */
-#endif /* HAVE_GDBM || HAVE_DB4 */
+# endif /* HAVE_GDBM || HAVE_DB4 */
 #endif /* USE_HCACHE */
   { "header_color_partial", DT_BOOL, R_PAGER_FLOW, {.l=OPTHEADERCOLORPARTIAL}, {.l=0} },
   /*
@@ -2330,6 +2331,8 @@ struct option_t MuttVars[] = {
   ** .dt %s .dd The remailer's short name.
   ** .dt %a .dd The remailer's e-mail address.
   ** .de
+  ** .pp
+  ** (Mixmaster only)
   */
   { "mixmaster",	DT_CMD_PATH, R_NONE, {.p=&Mixmaster}, {.p=MIXMASTER} },
   /*
@@ -2337,7 +2340,7 @@ struct option_t MuttVars[] = {
   ** This variable contains the path to the Mixmaster binary on your
   ** system.  It is used with various sets of parameters to gather the
   ** list of known remailers, and to finally send a message through the
-  ** mixmaster chain.
+  ** mixmaster chain. (Mixmaster only)
   */
 #endif
   { "move",		DT_QUAD, R_NONE, {.l=OPT_MOVE}, {.l=MUTT_NO} },
@@ -4231,7 +4234,7 @@ struct option_t MuttVars[] = {
   ** variable \fC$$$MAIL\fP or \fC$$$MAILDIR\fP if either is defined.
   */
 #if defined(USE_SSL)
-#ifdef USE_SSL_GNUTLS
+# ifdef USE_SSL_GNUTLS
   { "ssl_ca_certificates_file", DT_PATH, R_NONE, {.p=&SslCACertFile}, {.p=0} },
   /*
   ** .pp
@@ -4244,7 +4247,7 @@ struct option_t MuttVars[] = {
   ** set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
   ** .te
   */
-#endif /* USE_SSL_GNUTLS */
+# endif /* USE_SSL_GNUTLS */
   { "ssl_client_cert", DT_PATH, R_NONE, {.p=&SslClientCert}, {.p=0} },
   /*
   ** .pp
