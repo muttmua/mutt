@@ -256,7 +256,7 @@ int mutt_monitor_poll (void)
 
   if (INotifyFd != -1)
   {
-    fds = poll (PollFds, PollFdsLen, MuttGetchTimeout);
+    fds = poll (PollFds, PollFdsCount, MuttGetchTimeout);
 
     if (fds == -1)
     {
