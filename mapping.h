@@ -28,6 +28,8 @@ struct mapping_t
 const char *mutt_getnamebyvalue (int, const struct mapping_t *);
 char *mutt_compile_help (char *, size_t, int, const struct mapping_t *);
 
+const struct mapping_t *mutt_get_mapentry_by_name (const char *,
+                                                   const struct mapping_t *);
 int mutt_getvaluebyname (const char *, const struct mapping_t *);
 
 #endif

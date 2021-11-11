@@ -3557,14 +3557,23 @@ const char *mutt_getnamebyvalue (int val, const struct mapping_t *map)
   return NULL;
 }
 
-int mutt_getvaluebyname (const char *name, const struct mapping_t *map)
+const struct mapping_t *mutt_get_mapentry_by_name (const char *name,
+                                                  const struct mapping_t *map)
 {
   int i;
 
   for (i = 0; map[i].name; i++)
     if (ascii_strcasecmp (map[i].name, name) == 0)
-      return (map[i].value);
-  return (-1);
+      return &map[i];
+  return NULL;
+}
+
+int mutt_getvaluebyname (const char *name, const struct mapping_t *map)
+{
+  const struct mapping_t *entry = mutt_get_mapentry_by_name (name, map);
+  if (entry)
+    return entry->value;
+  return -1;
 }
 
 #ifdef DEBUG

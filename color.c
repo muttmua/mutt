@@ -45,9 +45,11 @@ static int HaveDefaultColors = 0;
 static int DefaultColorsInit = 0;
 #endif
 
+#define COLOR_UNSET (-2)
+
 #ifdef HAVE_COLOR
 
-#define COLOR_DEFAULT (-2)
+#define COLOR_DEFAULT (-1)
 
 typedef struct color_list
 {
@@ -146,7 +148,7 @@ static COLOR_LINE *mutt_new_color_line (void)
 {
   COLOR_LINE *p = safe_calloc (1, sizeof (COLOR_LINE));
 
-  p->fg = p->bg = -1;
+  p->fg = p->bg = COLOR_UNSET;
 
   return (p);
 }
@@ -403,12 +405,6 @@ static int _mutt_alloc_color (int fg, int bg, int type)
                     get_color_name (bgc, sizeof (bgc), bg));
   }
   else
-
-#elif defined (HAVE_USE_DEFAULT_COLORS)
-  if (fg == COLOR_DEFAULT)
-    fg = -1;
-  if (bg == COLOR_DEFAULT)
-    bg = -1;
 #endif
 
   /* NOTE: this may be the "else" clause of the SLANG #if block above. */
@@ -429,7 +425,7 @@ int mutt_alloc_color (int fg, int bg)
 
 int mutt_alloc_ansi_color (int fg, int bg)
 {
-  if (fg == -1 || bg == -1)
+  if (fg == COLOR_DEFAULT || bg == COLOR_DEFAULT)
   {
 #if defined (HAVE_USE_DEFAULT_COLORS)
     if (!DefaultColorsInit)
@@ -440,11 +436,6 @@ int mutt_alloc_ansi_color (int fg, int bg)
 #elif !defined (USE_SLANG_CURSES)
     return 0;
 #endif
-
-    if (fg == -1)
-      fg = COLOR_DEFAULT;
-    if (bg == -1)
-      bg = COLOR_DEFAULT;
   }
 
   return _mutt_alloc_color (fg, bg, MUTT_COLOR_TYPE_ANSI);
@@ -556,10 +547,17 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
       return (-1);
     }
   }
-  else if ((*col = mutt_getvaluebyname (s, Colors)) == -1)
+  else
   {
-    snprintf (err->data, err->dsize, _("%s: no such color"), s);
-    return (-1);
+    /* Note: mutt_getvaluebyname() returns -1 for "not found".
+     * Since COLOR_DEFAULT is -1, we need to use this function instead. */
+    const struct mapping_t *entry = mutt_get_mapentry_by_name (s, Colors);
+    if (!entry)
+    {
+      snprintf (err->data, err->dsize, _("%s: no such color"), s);
+      return (-1);
+    }
+    *col = entry->value;
   }
 
   if (is_bright || is_light)
@@ -765,7 +763,7 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
   if (tmp)
   {
 #ifdef HAVE_COLOR
-    if (fg != -1 && bg != -1)
+    if (fg != COLOR_UNSET && bg != COLOR_UNSET)
     {
       if (tmp->fg != fg || tmp->bg != bg)
       {
@@ -808,7 +806,7 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
     tmp->next = *top;
     tmp->pattern = safe_strdup (s);
 #ifdef HAVE_COLOR
-    if (fg != -1 && bg != -1)
+    if (fg != COLOR_UNSET && bg != COLOR_UNSET)
     {
       tmp->fg = fg;
       tmp->bg = bg;
@@ -945,8 +943,8 @@ static int
 parse_attr_spec(BUFFER *buf, BUFFER *s, int *fg, int *bg, int *attr, BUFFER *err)
 {
 
-  if (fg) *fg = -1;
-  if (bg) *bg = -1;
+  if (fg) *fg = COLOR_UNSET;
+  if (bg) *bg = COLOR_UNSET;
 
   if (! MoreArgs (s))
   {
@@ -981,7 +979,7 @@ static COLOR_ATTR fgbgattr_to_color (int fg, int bg, int attr)
 {
   COLOR_ATTR color_attr = {0};
 #ifdef HAVE_COLOR
-  if (fg != -1 && bg != -1)
+  if (fg != COLOR_UNSET && bg != COLOR_UNSET)
     color_attr.pair = mutt_alloc_color (fg, bg);
 #endif
   color_attr.attrs = attr;
