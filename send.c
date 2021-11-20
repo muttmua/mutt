@@ -230,12 +230,17 @@ static int edit_envelope (ENVELOPE *en)
   char buf[HUGE_STRING];
   LIST *uh = UserHeader;
 
-  if (mutt_edit_address (&en->to, _("To: "), 1) == -1 || en->to == NULL)
+  if (mutt_edit_address (&en->to, _("To: "), 1) == -1)
     return (-1);
   if (option (OPTASKCC) && mutt_edit_address (&en->cc, _("Cc: "), 1) == -1)
     return (-1);
   if (option (OPTASKBCC) && mutt_edit_address (&en->bcc, _("Bcc: "), 1) == -1)
     return (-1);
+  if (!en->to && !en->cc && !en->bcc)
+  {
+    mutt_error _("No recipients were specified.");
+    return (-1);
+  }
 
   if (en->subject)
   {
