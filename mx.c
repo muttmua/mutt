@@ -1115,6 +1115,7 @@ void mx_update_tables(CONTEXT *ctx, int committing)
   ctx->vsize = 0;
   ctx->tagged = 0;
   ctx->deleted = 0;
+  ctx->trashed = 0;
   ctx->new = 0;
   ctx->unread = 0;
   ctx->changed = 0;
@@ -1153,6 +1154,8 @@ void mx_update_tables(CONTEXT *ctx, int committing)
       {
 	if (ctx->hdrs[j]->deleted)
 	  ctx->deleted++;
+        if (ctx->hdrs[j]->trash)
+          ctx->trashed++;
       }
 
       if (ctx->hdrs[j]->tagged)
@@ -1546,6 +1549,8 @@ void mx_update_context (CONTEXT *ctx, int new_messages)
       ctx->flagged++;
     if (h->deleted)
       ctx->deleted++;
+    if (h->trash)
+      ctx->trashed++;
     if (!h->read)
     {
       ctx->unread++;

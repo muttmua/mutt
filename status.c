@@ -238,11 +238,29 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
 
       if (Context)
       {
-	i = option(OPTATTACHMSG) ? 3 : ((Context->readonly ||
-          Context->dontwrite) ? 2 : (Context->changed ||
-          /* deleted doesn't necessarily mean changed in IMAP */
-          (Context->magic != MUTT_IMAP &&
-           Context->deleted)) ? 1 : 0);
+        if (option (OPTATTACHMSG))
+          i = 3;
+        else if (Context->readonly || Context->dontwrite)
+          i = 2;
+        else if (Context->changed)
+          i = 1;
+        else if (Context->magic == MUTT_MAILDIR &&
+                 option (OPTMAILDIRTRASH))
+        {
+          /* Undeleting a trashed message sets Context->changed.  (See
+           * _mutt_set_flag().)  So we can make this comparison to
+           * determine the modified flag.
+           */
+          if (Context->trashed != Context->deleted)
+            i = 1;
+          else
+            i = 0;
+        }
+        /* deleted doesn't necessarily mean changed in IMAP */
+        else if (Context->magic != MUTT_IMAP && Context->deleted)
+          i = 1;
+        else
+          i = 0;
       }
 
       if (!StChars || !StChars->len)

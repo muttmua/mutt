@@ -2070,7 +2070,7 @@ struct option_t MuttVars[] = {
   ** folders).
   */
 #endif
-  { "maildir_trash", DT_BOOL, R_NONE, {.l=OPTMAILDIRTRASH}, {.l=0} },
+  { "maildir_trash", DT_BOOL, R_BOTH, {.l=OPTMAILDIRTRASH}, {.l=0} },
   /*
   ** .pp
   ** If \fIset\fP, messages marked as deleted will be saved with the maildir

@@ -1109,6 +1109,10 @@ typedef struct _context
   int new;			/* how many new messages? */
   int unread;			/* how many unread messages? */
   int deleted;			/* how many deleted messages */
+  int trashed;			/* how many marked as trashed on disk.
+                                 * This flag is used by the maildir_trash
+                                 * option.
+                                 */
   int flagged;			/* how many flagged messages */
   int msgnotreadyet;		/* which msg "new" in pager, -1 if none */
 
