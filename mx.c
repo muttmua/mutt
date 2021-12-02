@@ -1232,7 +1232,7 @@ int mx_sync_mailbox (CONTEXT *ctx, int *index_hint)
     return (0);
   }
 
-  if (ctx->deleted)
+  if (ctx->deleted && !(ctx->magic == MUTT_MAILDIR && option (OPTMAILDIRTRASH)))
   {
     char buf[SHORT_STRING];
 

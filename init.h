@@ -1028,6 +1028,9 @@ struct option_t MuttVars[] = {
   ** synchronizing a mailbox.  If set to \fIyes\fP, messages marked for
   ** deleting will automatically be purged without prompting.  If set to
   ** \fIno\fP, messages marked for deletion will be kept in the mailbox.
+  ** .pp
+  ** This option is ignored for maildir-style mailboxes when $$maildir_trash
+  ** is set.
   */
   { "delete_untag",	DT_BOOL, R_NONE, {.l=OPTDELETEUNTAG}, {.l=1} },
   /*
