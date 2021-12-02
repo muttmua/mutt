@@ -1077,7 +1077,8 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
     mx_unlink_empty (ctx->path);
 
 #ifdef USE_SIDEBAR
-  if (purge && ctx->deleted)
+  if (purge && ctx->deleted &&
+      !(ctx->magic == MUTT_MAILDIR && option (OPTMAILDIRTRASH)))
   {
     int orig_msgcount = ctx->msgcount;
 
