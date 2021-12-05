@@ -2509,7 +2509,7 @@ msgstr "Bitte erst eine Nachricht zur Verknüpfung auswählen."
 
 #: curs_main.c:1576
 msgid "Threads linked"
-msgstr "Diskussionfäden verknüpfen"
+msgstr "Diskussionsfäden verknüpfen"
 
 #: curs_main.c:1579
 msgid "No thread linked"
@@ -7840,7 +7840,7 @@ msgstr "Derzeit aktives Begrenzungsmuster anzeigen"
 #.
 #: OPS:1190
 msgid "collapse/uncollapse current thread"
-msgstr "Aktuellen Diskussionfadens auf-/zuklappen"
+msgstr "Aktuellen Diskussionsfaden auf-/zuklappen"
 
 #. L10N: Help screen description for OP_MAIN_COLLAPSE_ALL
 #. index menu: <collapse-all>
