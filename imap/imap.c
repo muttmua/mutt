@@ -869,7 +869,9 @@ static int imap_open_mailbox (CONTEXT* ctx)
     if ((rc = imap_cmd_step (idata)) != IMAP_CMD_CONTINUE)
       break;
 
-    pc = idata->buf + 2;
+    if (ascii_strncmp (idata->buf, "* ", 2))
+      continue;
+    pc = imap_next_word (idata->buf);
 
     /* Obtain list of available flags here, may be overridden by a
      * PERMANENTFLAGS tag in the OK response */
