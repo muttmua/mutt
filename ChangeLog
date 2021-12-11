@@ -1,3 +1,37 @@
+2021-12-11 13:11:39 -0800  Kevin McCarthy  <kevin@8t8.us> (138abb63)
+
+        * Update UPDATING for 2.1.4.
+
+M	UPDATING
+
+2021-12-07 14:28:18 -0800  Kevin McCarthy  <kevin@8t8.us> (cc117960)
+
+        * Loosen imap_open_mailbox() SELECT response data parsing.
+        
+        DavMail is putting more than one space between '*' and the EXISTS
+        count, e.g. '*  5 EXISTS'
+        
+        Strictly speaking, this is disallowed by RFC3501 (see Section 9, Note
+        2).  However, there is also no good reason for imap_open_mailbox() to
+        be stricter than the untagged handler, which correctly extracts the
+        count.
+        
+        Add a check to make sure we are looking at an untagged response, and
+        then use imap_next_word() rather than just incrementing by two.
+        
+        Thank you to Michael Gernoth (@stargo) for debugging this issue,
+        creating a merge request with a possible fix, and helping to test this
+        commit.
+
+M	imap/imap.c
+
+2021-09-10 13:18:49 -0700  Kevin McCarthy  <kevin@8t8.us> (987dde4c)
+
+        * automatic post-release commit for mutt-2.1.3
+
+M	ChangeLog
+M	VERSION
+
 2021-09-10 13:12:50 -0700  Kevin McCarthy  <kevin@8t8.us> (a7d54a9f)
 
         * Update UPDATING for 2.1.3.
