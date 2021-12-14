@@ -1710,7 +1710,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           mutt_error _("$send_multipart_alternative_filter is not set");
           break;
         }
-        alternative = mutt_run_send_alternative_filter (msg->content);
+        alternative = mutt_run_send_alternative_filter (msg);
         if (!alternative)
           break;
 	switch (op)

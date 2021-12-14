@@ -1156,7 +1156,7 @@ static int generate_multipart_alternative (HEADER *msg, int flags)
     }
 
 
-  alternative = mutt_run_send_alternative_filter (msg->content);
+  alternative = mutt_run_send_alternative_filter (msg);
   if (!alternative)
     return -1;
 

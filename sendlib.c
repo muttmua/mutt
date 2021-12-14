@@ -27,6 +27,7 @@
 #include "mutt_curses.h"
 #include "rfc2047.h"
 #include "rfc2231.h"
+#include "rfc3676.h"
 #include "mx.h"
 #include "mime.h"
 #include "mailbox.h"
@@ -1434,19 +1435,25 @@ retry:
   return (body);
 }
 
-BODY *mutt_run_send_alternative_filter (BODY *b)
+BODY *mutt_run_send_alternative_filter (HEADER *h)
 {
   BUFFER *alt_file = NULL;
   FILE *b_fp = NULL, *alt_fp = NULL;
   FILE *filter_in = NULL, *filter_out = NULL, *filter_err = NULL;
-  BODY *alternative = NULL;
+  BODY *b, *alternative = NULL;
   pid_t thepid = 0;
   char *mime = NULL;
   char *buf = NULL;
   size_t buflen;
 
+  if (!h || !h->content)
+    return NULL;
+  b = h->content;
+
   if (!SendMultipartAltFilter)
     return NULL;
+
+  mutt_rfc3676_space_unstuff (h);
 
   if ((b_fp = safe_fopen (b->filename, "r")) == NULL)
   {
@@ -1534,6 +1541,7 @@ BODY *mutt_run_send_alternative_filter (BODY *b)
 
 cleanup:
   safe_fclose (&b_fp);
+  mutt_rfc3676_space_stuff (h);
   if (alt_fp)
   {
     safe_fclose (&alt_fp);
