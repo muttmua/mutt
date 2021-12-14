@@ -90,7 +90,7 @@ ADDRESS *mutt_remove_adrlist_group_delimiters (ADDRESS *);
 ADDRESS *mutt_expand_aliases (ADDRESS *);
 ADDRESS *mutt_parse_adrlist (ADDRESS *, const char *);
 
-BODY *mutt_run_send_alternative_filter (BODY *b);
+BODY *mutt_run_send_alternative_filter (HEADER *);
 BODY *mutt_make_file_attach (const char *);
 BODY *mutt_make_message_attach (CONTEXT *, HEADER *, int);
 BODY *mutt_remove_multipart (BODY *);
