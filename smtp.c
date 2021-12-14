@@ -489,8 +489,23 @@ static int smtp_open (CONNECTION* conn)
   }
 #endif
 
-  if (mutt_bit_isset (Capabilities, AUTH))
+  /* In some cases, the SMTP server will advertise AUTH even though
+   * it's not required.  Check if the username is explicitly in the
+   * URL to decide whether to call smtp_auth().
+   *
+   * For client certificates, we assume the server won't advertise
+   * AUTH if they are pre-authenticated, because we also need to
+   * handle the post-TLS authentication (AUTH EXTERNAL) case.
+   */
+  if (mutt_bit_isset (Capabilities, AUTH) &&
+      (conn->account.flags & MUTT_ACCT_USER
+#ifdef USE_SSL
+        || SslClientCert
+#endif
+        ))
+  {
     return smtp_auth (conn);
+  }
 
   return 0;
 }
