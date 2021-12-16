@@ -849,11 +849,55 @@ AC_ARG_WITH(sasl, AS_HELP_STRING([--with-sasl@<:@=PFX@:>@],[Use SASL network sec
           LIBS="$saved_LIBS"
 
           AC_DEFINE(USE_SASL,1,
-                  [ Define if want to use the SASL library for POP/IMAP authentication. ])
+                  [ Define if want support for SASL. ])
+          AC_DEFINE(USE_SASL_CYRUS,1,
+                  [ Define if want to use the Cyrus SASL library for POP/IMAP authentication. ])
           need_sasl=yes
+          need_sasl_cyrus=yes
         fi
         ])
-AM_CONDITIONAL(USE_SASL, test x$need_sasl = xyes)
+AC_ARG_WITH(gsasl, AS_HELP_STRING([--with-gsasl@<:@=PFX@:>@],[Use GNU SASL network security library]),
+        [
+        if test "$with_gsasl" != "no"
+        then
+          if test "$need_socket" != "yes"
+          then
+            AC_MSG_ERROR([GNU SASL support is only useful with POP or IMAP support])
+          fi
+
+          if test x"$need_sasl" = "xyes"
+          then
+            AC_MSG_ERROR([Both --with-gsasl and --with-sasl can not be enabled at the same time])
+          fi
+
+          if test "$with_gsasl" != "yes"
+          then
+            CPPFLAGS="$CPPFLAGS -I$with_gsasl/include"
+            LDFLAGS="$LDFLAGS -L$with_gsasl/lib"
+          fi
+
+          saved_LIBS="$LIBS"
+          LIBS=
+
+          AC_CHECK_HEADER(gsasl.h,
+              AC_CHECK_LIB(gsasl, gsasl_check_version,,
+                           AC_MSG_ERROR([GNU SASL library not found])),
+              AC_MSG_ERROR([GNU SASL headers not found]))
+
+          MUTTLIBS="$MUTTLIBS -lgsasl"
+          MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_sasl_gnu.o"
+          LIBS="$saved_LIBS"
+
+          AC_DEFINE(USE_SASL,1,
+                  [ Define if want support for SASL. ])
+          AC_DEFINE(USE_SASL_GNU,1,
+                  [ Define if want to use the GNU SASL library for POP/IMAP authentication. ])
+          need_sasl=yes
+          need_sasl_gnu=yes
+        fi
+        ])
+AM_CONDITIONAL(USE_SASL_CYRUS, test x$need_sasl_cyrus = xyes)
+AM_CONDITIONAL(USE_SASL_GNU, test x$need_sasl_gnu = xyes)
 
 dnl -- end socket --
 

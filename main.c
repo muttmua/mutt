@@ -38,8 +38,12 @@
 #include "sidebar.h"
 #endif
 
-#ifdef USE_SASL
+#ifdef USE_SASL_CYRUS
 #include "mutt_sasl.h"
+#endif
+
+#ifdef USE_SASL_GNU
+#include "mutt_sasl_gnu.h"
 #endif
 
 #ifdef USE_IMAP
@@ -339,10 +343,15 @@ static void show_version (void)
     "-USE_SSL_GNUTLS  "
 #endif
 
-#ifdef USE_SASL
+#ifdef USE_SASL_CYRUS
     "+USE_SASL  "
 #else
     "-USE_SASL  "
+#endif
+#ifdef USE_SASL_GNU
+    "+USE_GSASL  "
+#else
+    "-USE_GSASL  "
 #endif
 #ifdef USE_GSS
     "+USE_GSS  "
@@ -1394,8 +1403,11 @@ cleanup_and_exit:
 #ifdef USE_IMAP
   imap_logout_all ();
 #endif
-#ifdef USE_SASL
+#ifdef USE_SASL_CYRUS
   mutt_sasl_done ();
+#endif
+#ifdef USE_SASL_GNU
+  mutt_gsasl_done ();
 #endif
 #ifdef USE_AUTOCRYPT
   mutt_autocrypt_cleanup ();

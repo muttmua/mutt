@@ -7,14 +7,18 @@ if USE_GSS
 GSSSOURCES = auth_gss.c
 endif
 
-if USE_SASL
+if USE_SASL_CYRUS
 AUTHENTICATORS = auth_sasl.c
+else
+if USE_SASL_GNU
+AUTHENTICATORS = auth_sasl_gnu.c
 else
 AUTHENTICATORS = auth_anon.c auth_cram.c
 endif
+endif
 
 EXTRA_DIST = README TODO auth_anon.c auth_cram.c auth_gss.c auth_oauth.c \
-	auth_sasl.c
+	auth_sasl.c auth_sasl_gnu.c
 
 AM_CPPFLAGS = -I$(top_srcdir)
 

@@ -52,4 +52,17 @@ static inline char* ascii_strlower (char *s)
   return s;
 }
 
+static inline char* ascii_strupper (char *s)
+{
+  char *p = s;
+
+  while (*p)
+  {
+    *p = ascii_toupper ((unsigned int) *p);
+    p++;
+  }
+
+  return s;
+}
+
 #endif

@@ -66,7 +66,8 @@ AM_DISTCHECK_CONFIGURE_FLAGS = --with-homespool
 EXTRA_mutt_SOURCES = account.c bcache.c compress.c crypt-gpgme.c crypt-mod-pgp-classic.c \
 	crypt-mod-pgp-gpgme.c crypt-mod-smime-classic.c \
 	crypt-mod-smime-gpgme.c dotlock.c gnupgparse.c hcache.c md5.c monitor.c \
-	mutt_idna.c mutt_sasl.c mutt_socket.c mutt_ssl.c mutt_ssl_gnutls.c \
+	mutt_idna.c mutt_sasl.c mutt_sasl_gnu.c mutt_socket.c mutt_ssl.c \
+	mutt_ssl_gnutls.c \
 	mutt_tunnel.c pgp.c pgpinvoke.c pgpkey.c pgplib.c pgpmicalg.c \
 	pgppacket.c pop.c pop_auth.c pop_lib.c remailer.c resize.c sha1.c \
 	sidebar.c smime.c smtp.c utf8.c wcwidth.c mutt_zstrm.c \
@@ -79,7 +80,8 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
 	dotlock.h functions.h gen_defs gettext.h \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mailbox.h mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
-	mutt_regex.h mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
+	mutt_regex.h mutt_sasl.h mutt_sasl_gnu.h mutt_socket.h mutt_ssl.h \
+	mutt_tunnel.h \
 	mx.h pager.h pgp.h pop.h protos.h rfc1524.h rfc2047.h \
 	rfc2231.h rfc822.h rfc3676.h sha1.h sort.h mime.types VERSION prepare \
 	_mutt_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \

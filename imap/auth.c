@@ -32,7 +32,12 @@ static const imap_auth_t imap_authenticators[] = {
   { imap_auth_oauthbearer, "oauthbearer" },
   { imap_auth_xoauth2, "xoauth2" },
 #ifdef USE_SASL
+# ifdef USE_SASL_CYRUS
   { imap_auth_sasl, NULL },
+# endif
+# ifdef USE_SASL_GNU
+  { imap_auth_gsasl, NULL },
+# endif
 #else
   { imap_auth_anon, "anonymous" },
 #endif

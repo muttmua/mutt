@@ -28,14 +28,19 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef USE_SASL
+#ifdef USE_SASL_CYRUS
 #include <sasl/sasl.h>
 #include <sasl/saslutil.h>
 
 #include "mutt_sasl.h"
 #endif
 
-#ifdef USE_SASL
+#ifdef USE_SASL_GNU
+#include "mutt_sasl_gnu.h"
+#include <gsasl.h>
+#endif
+
+#ifdef USE_SASL_CYRUS
 /* SASL authenticator */
 static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
 {
@@ -188,6 +193,99 @@ bail:
   return POP_A_FAILURE;
 }
 #endif
+
+
+#ifdef USE_SASL_GNU
+static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
+{
+  Gsasl_session *gsasl_session = NULL;
+  const char *chosen_mech, *pop_auth_data;
+  BUFFER *output_buf = NULL, *input_buf = NULL;
+  char *gsasl_step_output = NULL;
+  int rc = POP_A_FAILURE, gsasl_rc = GSASL_OK;
+
+  chosen_mech = mutt_gsasl_get_mech (method, pop_data->auth_list);
+  if (!chosen_mech)
+  {
+    dprint (2, (debugfile, "mutt_gsasl_get_mech() returned no usable mech\n"));
+    return POP_A_UNAVAIL;
+  }
+
+  dprint (2, (debugfile, "pop_auth_gsasl: using mech %s\n", chosen_mech));
+
+  if (mutt_gsasl_client_new (pop_data->conn, chosen_mech, &gsasl_session) < 0)
+  {
+    dprint (1, (debugfile,
+                "pop_auth_gsasl: Error allocating GSASL connection.\n"));
+    return POP_A_UNAVAIL;
+  }
+
+  mutt_message (_("Authenticating (%s)..."), chosen_mech);
+
+  output_buf = mutt_buffer_pool_get ();
+  input_buf = mutt_buffer_pool_get ();
+  mutt_buffer_printf (output_buf, "AUTH %s\r\n", chosen_mech);
+
+  do
+  {
+    if (mutt_socket_write (pop_data->conn, mutt_b2s (output_buf)) < 0)
+    {
+      pop_data->status = POP_DISCONNECTED;
+      rc = POP_A_SOCKET;
+      goto fail;
+    }
+
+    if (mutt_socket_buffer_readln (input_buf, pop_data->conn) < 0)
+    {
+      pop_data->status = POP_DISCONNECTED;
+      rc = POP_A_SOCKET;
+      goto fail;
+    }
+
+    if (mutt_strncmp (mutt_b2s (input_buf), "+ ", 2))
+      break;
+
+    pop_auth_data = mutt_b2s (input_buf) + 2;
+    gsasl_rc = gsasl_step64 (gsasl_session, pop_auth_data, &gsasl_step_output);
+    if (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK)
+    {
+      mutt_buffer_strcpy (output_buf, gsasl_step_output);
+      mutt_buffer_addstr (output_buf, "\r\n");
+      gsasl_free (gsasl_step_output);
+    }
+    else
+    {
+      dprint (1, (debugfile, "gsasl_step64() failed (%d): %s\n", gsasl_rc,
+                  gsasl_strerror (gsasl_rc)));
+    }
+  }
+  while (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK);
+
+  if (!mutt_strncmp (mutt_b2s (input_buf), "+ ", 2))
+  {
+    mutt_socket_write (pop_data->conn, "*\r\n");
+    goto fail;
+  }
+
+  if (!mutt_strncmp (mutt_b2s (input_buf), "+OK", 3) && (gsasl_rc == GSASL_OK))
+    rc = POP_A_SUCCESS;
+
+fail:
+  mutt_buffer_pool_release (&input_buf);
+  mutt_buffer_pool_release (&output_buf);
+  mutt_gsasl_client_finish (&gsasl_session);
+
+  if (rc == POP_A_FAILURE)
+  {
+    dprint (2, (debugfile, "pop_auth_gsasl: %s failed\n", chosen_mech));
+    mutt_error _("SASL authentication failed.");
+    mutt_sleep (2);
+  }
+
+  return rc;
+}
+#endif
+
 
 /* Get the server timestamp for APOP authentication */
 void pop_apop_timestamp (POP_DATA *pop_data, char *buf)
@@ -410,8 +508,11 @@ static pop_auth_res_t pop_auth_xoauth2 (POP_DATA *pop_data, const char *method)
 static const pop_auth_t pop_authenticators[] = {
   { pop_auth_oauthbearer, "oauthbearer" },
   { pop_auth_xoauth2, "xoauth2" },
-#ifdef USE_SASL
+#ifdef USE_SASL_CYRUS
   { pop_auth_sasl, NULL },
+#endif
+#ifdef USE_SASL_GNU
+  { pop_auth_gsasl, NULL },
 #endif
   { pop_auth_apop, "apop" },
   { pop_auth_user, "user" },

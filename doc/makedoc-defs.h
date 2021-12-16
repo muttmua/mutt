@@ -61,6 +61,12 @@
 # ifndef USE_SASL
 #  define USE_SASL
 # endif
+# ifndef USE_SASL_CYRUS
+#  define USE_SASL_CYRUS
+# endif
+# ifndef USE_SASL_GNU
+#  define USE_SASL_GNU
+# endif
 # ifndef USE_SIDEBAR
 #  define USE_SIDEBAR
 # endif
