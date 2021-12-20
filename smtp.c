@@ -104,6 +104,7 @@ smtp_get_resp (CONNECTION * conn)
 {
   int n;
   char buf[1024];
+  char *smtp_response;
 
   do
   {
@@ -114,20 +115,26 @@ smtp_get_resp (CONNECTION * conn)
       return smtp_err_read;
     }
 
-    if (!ascii_strncasecmp ("8BITMIME", buf + 4, 8))
-      mutt_bit_set (Capabilities, EIGHTBITMIME);
-    else if (!ascii_strncasecmp ("AUTH ", buf + 4, 5))
+    smtp_response = buf + 3;
+    if (*smtp_response)
     {
-      mutt_bit_set (Capabilities, AUTH);
-      FREE (&AuthMechs);
-      AuthMechs = safe_strdup (buf + 9);
+      smtp_response++;
+
+      if (!ascii_strncasecmp ("8BITMIME", smtp_response, 8))
+        mutt_bit_set (Capabilities, EIGHTBITMIME);
+      else if (!ascii_strncasecmp ("AUTH ", smtp_response, 5))
+      {
+        mutt_bit_set (Capabilities, AUTH);
+        FREE (&AuthMechs);
+        AuthMechs = safe_strdup (smtp_response + 5);
+      }
+      else if (!ascii_strncasecmp ("DSN", smtp_response, 3))
+        mutt_bit_set (Capabilities, DSN);
+      else if (!ascii_strncasecmp ("STARTTLS", smtp_response, 8))
+        mutt_bit_set (Capabilities, STARTTLS);
+      else if (!ascii_strncasecmp ("SMTPUTF8", smtp_response, 8))
+        mutt_bit_set (Capabilities, SMTPUTF8);
     }
-    else if (!ascii_strncasecmp ("DSN", buf + 4, 3))
-      mutt_bit_set (Capabilities, DSN);
-    else if (!ascii_strncasecmp ("STARTTLS", buf + 4, 8))
-      mutt_bit_set (Capabilities, STARTTLS);
-    else if (!ascii_strncasecmp ("SMTPUTF8", buf + 4, 8))
-      mutt_bit_set (Capabilities, SMTPUTF8);
 
     if (smtp_code (buf, n, &n) < 0)
       return smtp_err_code;
@@ -595,7 +602,7 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
   const char* mech;
   const char* data = NULL;
   unsigned int len;
-  char *buf = NULL;
+  char *buf = NULL, *smtp_response;
   size_t bufsize = 0;
   int rc, saslrc;
 
@@ -648,7 +655,12 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
     if (rc != smtp_ready)
       break;
 
-    if (sasl_decode64 (buf+4, strlen (buf+4), buf, bufsize - 1, &len) != SASL_OK)
+    /* TODO: why aren't we handling multiline replies */
+    smtp_response = buf + 3;
+    if (*smtp_response)
+      smtp_response++;
+
+    if (sasl_decode64 (smtp_response, strlen (smtp_response), buf, bufsize - 1, &len) != SASL_OK)
     {
       dprint (1, (debugfile, "smtp_auth_sasl: error base64-decoding server response.\n"));
       goto fail;
