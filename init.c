@@ -2583,18 +2583,18 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	  regmatch_t pmatch[1];
 	  int i;
 
-#define CUR_ENV Context->hdrs[i]->env
 	  for (i = 0; i < Context->msgcount; i++)
 	  {
-	    if (CUR_ENV && CUR_ENV->subject)
+	    ENVELOPE *cur_env = Context->hdrs[i]->env;
+
+	    if (cur_env && cur_env->subject)
 	    {
-	      CUR_ENV->real_subj =
-                (regexec (ReplyRegexp.rx, CUR_ENV->subject, 1, pmatch, 0)) ?
-                CUR_ENV->subject :
-                CUR_ENV->subject + pmatch[0].rm_eo;
+	      cur_env->real_subj =
+                (regexec (ReplyRegexp.rx, cur_env->subject, 1, pmatch, 0)) ?
+                cur_env->subject :
+                cur_env->subject + pmatch[0].rm_eo;
 	    }
 	  }
-#undef CUR_ENV
 	}
       }
     }
