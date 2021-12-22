@@ -232,6 +232,38 @@ int mutt_socket_readln_d (char* buf, size_t buflen, CONNECTION* conn, int dbg)
   return i + 1;
 }
 
+int mutt_socket_buffer_readln_d (BUFFER *buf, CONNECTION *conn, int dbg)
+{
+  char ch;
+  int has_cr = 0;
+
+  mutt_buffer_clear (buf);
+
+  FOREVER
+  {
+    if (mutt_socket_readchar (conn, &ch) != 1)
+      return -1;
+
+    if (ch == '\n')
+      break;
+
+    if (has_cr)
+    {
+      mutt_buffer_addch (buf, '\r');
+      has_cr = 0;
+    }
+
+    if (ch == '\r')
+      has_cr = 1;
+    else
+      mutt_buffer_addch (buf, ch);
+  }
+
+  dprint (dbg, (debugfile, "%d< %s\n", conn->fd, mutt_b2s (buf)));
+
+  return 0;
+}
+
 CONNECTION* mutt_socket_head (void)
 {
   return Connections;

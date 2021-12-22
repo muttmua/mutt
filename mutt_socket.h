@@ -67,6 +67,8 @@ int mutt_socket_has_buffered_input (CONNECTION *conn);
 void mutt_socket_clear_buffered_input (CONNECTION *conn);
 int mutt_socket_poll (CONNECTION* conn, time_t wait_secs);
 int mutt_socket_readchar (CONNECTION *conn, char *c);
+#define mutt_socket_buffer_readln(A,B) mutt_socket_buffer_readln_d(A,B,MUTT_SOCK_LOG_CMD)
+int mutt_socket_buffer_readln_d (BUFFER *buf, CONNECTION *conn, int dbg);
 #define mutt_socket_readln(A,B,C) mutt_socket_readln_d(A,B,C,MUTT_SOCK_LOG_CMD)
 int mutt_socket_readln_d (char *buf, size_t buflen, CONNECTION *conn, int dbg);
 #define mutt_socket_write(A,B) mutt_socket_write_d(A,B,-1,MUTT_SOCK_LOG_CMD)
