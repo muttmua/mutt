@@ -179,9 +179,9 @@ short mutt_ts_capability(void)
 
   /* Check term types that are known to support the standard escape without
    * necessarily asserting it in terminfo. */
-  for (termp = known; termp; termp++)
+  for (termp = known; *termp; termp++)
   {
-    if (term && *termp && mutt_strncasecmp (term, *termp, strlen(*termp)))
+    if (term && !mutt_strncasecmp (term, *termp, strlen(*termp)))
       return 1;
   }
 
