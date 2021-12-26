@@ -57,12 +57,17 @@
 
 #endif /* USE_SLANG_CURSES */
 
-/* AIX defines ``lines'' in <term.h>, but it's used as a var name in
- * various places in Mutt
+/* Some older platforms include <term.h> when curses.h is included.
+ * ``lines'' and ``columns'' are #defined there, but are also used
+ * as a var name in various places in Mutt.
  */
 #ifdef lines
 #undef lines
 #endif /* lines */
+
+#ifdef columns
+#undef columns
+#endif /* columns */
 
 #define CLEARLINE(win,x) mutt_window_clearline(win, x)
 #define CENTERLINE(win,x,y) mutt_window_move(win, y, (win->cols-strlen(x))/2), addstr(x)
@@ -266,5 +271,9 @@ static inline void ATTRSET (const COLOR_ATTR X)
 
 /* reset the color to the normal terminal color as defined by 'color normal ...' */
 #define NORMAL_COLOR SETCOLOR(MT_COLOR_NORMAL)
+
+/* curs_ti_lib.c routines: */
+const char *mutt_tigetstr (const char *capname);
+int mutt_tigetflag (const char *capname);
 
 #endif /* _MUTT_CURSES_H_ */

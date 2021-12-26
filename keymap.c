@@ -725,7 +725,7 @@ void init_extended_keys(void)
 
       if (keyname)
       {
-        char *s = tigetstr((char *)keyname);
+        const char *s = mutt_tigetstr (keyname);
 	if (s && (long)(s) != -1)
 	{
 	  int code = key_defined(s);
