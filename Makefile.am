@@ -29,7 +29,8 @@ bin_PROGRAMS = mutt $(DOTLOCK_TARGET) $(PGPAUX_TARGET)
 mutt_SOURCES = \
 	addrbook.c alias.c attach.c background.c base64.c browser.c buffer.c \
 	buffy.c color.c crypt.c cryptglue.c \
-	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
+	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c \
+	curs_ti_lib.c date.c \
 	edit.c enter.c flags.c init.c filter.c from.c \
 	getdomain.c group.c \
 	handler.c hash.c hdrline.c headers.c help.c hook.c keymap.c \

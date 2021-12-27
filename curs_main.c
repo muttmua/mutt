@@ -138,8 +138,10 @@ static char *fsl = "\007";
 short mutt_ts_capability(void)
 {
   char *term = getenv("TERM");
-  char *tcaps;
+  const char *tcaps;
+#ifdef HAVE_USE_EXTENDED_NAMES
   int tcapi;
+#endif
   char **termp;
   char *known[] = {
     "color-xterm",
@@ -155,13 +157,13 @@ short mutt_ts_capability(void)
   };
 
   /* If tsl is set, then terminfo says that status lines work. */
-  tcaps = tigetstr("tsl");
+  tcaps = mutt_tigetstr ("tsl");
   if (tcaps && tcaps != (char *)-1 && *tcaps)
   {
     /* update the static defns of tsl/fsl from terminfo */
     tsl = safe_strdup(tcaps);
 
-    tcaps = tigetstr("fsl");
+    tcaps = mutt_tigetstr ("fsl");
     if (tcaps && tcaps != (char *)-1 && *tcaps)
       fsl = safe_strdup(tcaps);
 
@@ -172,7 +174,7 @@ short mutt_ts_capability(void)
   /* Beware: tigetflag returns -1 if XT is invalid or not a boolean. */
 #ifdef HAVE_USE_EXTENDED_NAMES
   use_extended_names (TRUE);
-  tcapi = tigetflag("XT");
+  tcapi = mutt_tigetflag ("XT");
   if (tcapi == 1)
     return 1;
 #endif /* HAVE_USE_EXTENDED_NAMES */

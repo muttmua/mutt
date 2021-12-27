@@ -21,6 +21,7 @@ cryptglue.c
 crypt-gpgme.c
 curs_lib.c
 curs_main.c
+curs_ti_lib.c
 edit.c
 editmsg.c
 flags.c

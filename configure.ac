@@ -355,6 +355,8 @@ main ()
                 [CF_CURSES_LIBS])
 		])
 
+        AC_CHECK_HEADERS(term.h)
+
         old_LIBS="$LIBS"
         LIBS="$LIBS $MUTTLIBS"
         CF_CHECK_FUNCDECLS([#include <${cf_cv_ncurses_header-curses.h}>],
