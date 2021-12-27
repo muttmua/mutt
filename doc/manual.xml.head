@@ -1901,10 +1901,13 @@ and <quote>f</quote> respectively.
 
 <para>
 Forwarding can be done by including the original message in the new
-message's body (surrounded by indicating lines) or including it as a
-MIME attachment, depending on the value of the <link
-linkend="mime-forward">$mime_forward</link> variable.  Decoding of
-attachments, like in the pager, can be controlled by the <link
+message's body (surrounded by indicating lines: see <link
+linkend="forward-attribution-intro">$forward_attribution_intro</link>
+and <link
+linkend="forward-attribution-trailer">$forward_attribution_trailer</link>)
+or including it as a MIME attachment, depending on the value of the
+<link linkend="mime-forward">$mime_forward</link> variable.  Decoding
+of attachments, like in the pager, can be controlled by the <link
 linkend="forward-decode">$forward_decode</link> and <link
 linkend="mime-forward-decode">$mime_forward_decode</link> variables,
 respectively.  The desired forwarding format may depend on the content,
@@ -1927,7 +1930,9 @@ linkend="forward-attachments">$forward_attachments</link>.
 <para>
 The inclusion of headers is controlled by the current setting of the
 <link linkend="weed">$weed</link> variable, unless <link
-linkend="mime-forward">$mime_forward</link> is set.
+linkend="mime-forward">$mime_forward</link> is set.  The subject of
+the email is controlled by <link
+linkend="forward-format">$forward_format</link>.
 </para>
 
 <para>
