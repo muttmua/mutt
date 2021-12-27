@@ -4683,7 +4683,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$copy_decode_weed, $$pipe_decode_weed, $$print_decode_weed.
   */
-  { "wrap",             DT_NUM,  R_PAGER, {.p=&Wrap}, {.l=0} },
+  { "wrap",             DT_NUM,  R_PAGER_FLOW, {.p=&Wrap}, {.l=0} },
   /*
   ** .pp
   ** When set to a positive value, mutt will wrap text at $$wrap characters.
@@ -4712,7 +4712,7 @@ struct option_t MuttVars[] = {
   ** When \fIset\fP, searches will wrap around the first (or last) item. When
   ** \fIunset\fP, incremental searches will not wrap.
   */
-  { "wrapmargin",	DT_NUM,	 R_PAGER, {.p=&Wrap}, {.l=0} },
+  { "wrapmargin",	DT_NUM,	 R_PAGER_FLOW, {.p=&Wrap}, {.l=0} },
   /*
   ** .pp
   ** (DEPRECATED) Equivalent to setting $$wrap with a negative value.
