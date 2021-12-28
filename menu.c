@@ -808,7 +808,10 @@ void mutt_pop_current_menu (MUTTMENU *menu)
   if (prev_menu)
   {
     CurrentMenu = prev_menu->menu;
-    prev_menu->redraw = REDRAW_FULL;
+    /* REDRAW_FLOW is for the pager, which needs to reflow if
+     * a window resize or setting change occurred.
+     */
+    prev_menu->redraw = REDRAW_FULL | REDRAW_FLOW;
   }
   else
   {

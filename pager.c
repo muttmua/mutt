@@ -2545,7 +2545,6 @@ search_next:
 	{
 	  InHelp = 1;
 	  mutt_help (MENU_PAGER);
-	  pager_menu->redraw = REDRAW_FULL;
 	  InHelp = 0;
 	}
 	else
@@ -2554,7 +2553,6 @@ search_next:
 
       case OP_ERROR_HISTORY:
         mutt_error_history_display ();
-        pager_menu->redraw = REDRAW_FULL;
         break;
 
       case OP_PAGER_HIDE_QUOTED:
@@ -2721,7 +2719,6 @@ search_next:
 			      extra->actx, extra->bdy);
         else
 	  mutt_resend_message (NULL, extra->ctx, extra->hdr);
-        pager_menu->redraw = REDRAW_FULL;
         break;
 
       case OP_CHECK_TRADITIONAL:
@@ -2744,7 +2741,6 @@ search_next:
 	else
 	  mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
                              NULL, NULL, extra->ctx, extra->hdr);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_CREATE_ALIAS:
@@ -2894,7 +2890,6 @@ search_next:
         CHECK_ATTACH;
 	mutt_send_message (SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
                            extra->ctx, NULL);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_REPLY:
@@ -2917,7 +2912,6 @@ search_next:
 			     extra->bdy, replyflags);
 	else
 	  mutt_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
       }
 
@@ -2931,7 +2925,6 @@ search_next:
         CHECK_ATTACH;
 	mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
                            NULL, NULL, extra->ctx, NULL);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_FORWARD_MESSAGE:
@@ -2943,7 +2936,6 @@ search_next:
         else
 	  mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
                              NULL, NULL, extra->ctx, extra->hdr);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_DECRYPT_SAVE:
@@ -3092,7 +3084,6 @@ search_next:
 	mutt_view_attachments (extra->hdr);
 	if (extra->hdr->attach_del)
 	  Context->changed = 1;
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
       case OP_EDIT_LABEL:
@@ -3119,7 +3110,6 @@ search_next:
 	CHECK_MODE(IsHeader(extra));
         CHECK_ATTACH;
 	mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, NULL);
-	pager_menu->redraw = REDRAW_FULL;
 	break;
 
 
