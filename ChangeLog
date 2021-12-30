@@ -1,3 +1,140 @@
+2021-12-30 12:47:09 -0800  Kevin McCarthy  <kevin@8t8.us> (6fbb59cf)
+
+        * Update UPDATING file for 2.1.5.
+
+M	UPDATING
+
+2021-12-27 13:45:21 -0800  Kevin McCarthy  <kevin@8t8.us> (a89a677c)
+
+        * Reflow pager when setting $wrap.
+        
+        I somehow missed $wrap when adding commit 0636c24b.
+        
+        Lineinfo needs to be recomputed since color matching can change with
+        the line wrapping change.
+
+M	init.h
+
+2021-12-26 15:43:27 -0800  Kevin McCarthy  <kevin@8t8.us> (c74cbba7)
+
+        * Include <term.h> before invoking tigetstr() and tigetflag().
+        
+        On NetBSD, a segv was occurring in mutt_ts_capability() because
+        tigetstr() was implicitly declared and thus defaulted to return type
+        int.  The 8-byte (char *) actually returned was being converted to a
+        4-byte int before being assigned to the (char *) variable.  This
+        resulted in a corrupted pointer, causing a segv when dereferenced.
+        
+        I thought C99+ should warn about implicit declarations.  Although
+        configure.ac AC_PROG_CC_C99 asserts the compiler can handle C99,
+        perhaps it doesn't put the compiler in the mode to strictly enforce
+        it.  (Thanks to rkta on IRC for the input).
+        
+        The solution, as the man page notes, is to include <term.h> before
+        invoking those functions.
+        
+        Unfortunately term.h pollutes the namespace with all sorts of defines.
+        Currently that include columns and lines, which are used inside Mutt.
+        
+        To help prevent issues, create Mutt wrappers for the functions and
+        split them into a separate file, curs_ti_lib.c, that #include
+        <term.h>, rather than just adding #include <term.h> to mutt_curses.h
+        
+        Apparently on some older platforms, #include <curses.h> would also
+        include term.h, so make sure columns in undef'ed in mutt_curses.h.  (I
+        think we would have heard about that problem already, but just in
+        case.)
+        
+        A huge thank you to rahl on IRC for debugging this issue, and working
+        with me over IRC to test various suggestions until the issue was
+        found.  I didn't have access to a NetBSD instance, so rahl saved me
+        much time and effort, and was crucial to fixing this bug.
+
+M	Makefile.am
+M	configure.ac
+M	curs_main.c
+A	curs_ti_lib.c
+M	keymap.c
+M	mutt_curses.h
+M	po/POTFILES.in
+
+2021-12-24 21:12:58 -0800  Kevin McCarthy  <kevin@8t8.us> (f58795c9)
+
+        * Fix mutt_ts_capability() fallback list loop.
+        
+        The for loop termination check should be '*termp', not 'termp'.  termp
+        starts as &known[0], so to check for the NULL terminator, we need to
+        look at *termp.
+        
+        Since *termp is now checked in each loop, it no longer needs to be in
+        the if check inside the loop, so remove it there.
+        
+        This hasn't been blowing up because the mutt_strncasecmp() check
+        inside the loop was also incorrect.  It should be scanning for a
+        matching entry, but was looking for non-zero (nonmatching) retval.
+        Since term can't match both the first and second entries, it would
+        always return 1 and would never get to the loop NULL terminator.
+
+M	curs_main.c
+
+2021-12-20 14:13:29 -0800  Kevin McCarthy  <kevin@8t8.us> (c60ffa27)
+
+        * Fix SMTP response text potential buffer overread.
+        
+        mutt_socket_readln() returns the number of bytes, including the '\0'.
+        smtp_code() only verifies 4 bytes (or a minimum strlen() of 3).
+        
+        The smtp_get_resp() and smtp_auth_sasl() were both looking at "buf+4"
+        without verifying the string went past "buf+3".
+        
+        Note RFC 4954 and 5321 say there should be a trailing space on a
+        response code with no text.  But if the server neglected that, buf+4
+        would try to read or decode past the read data.
+
+M	smtp.c
+
+2021-12-13 19:31:04 -0800  Kevin McCarthy  <kevin@8t8.us> (5b318bc8)
+
+        * Space unstuff flowed text for $send_multipart_alternative_filter.
+        
+        Mutt tries to hide the format=flowed stuff/unstuff processing from the
+        user in other cases (when editing, viewing, piping, and printing, for
+        instance).  It should also do this when piping the content to the
+        alternative filter.
+
+M	compose.c
+M	protos.h
+M	send.c
+M	sendlib.c
+
+2021-12-13 15:43:00 -0800  Kevin McCarthy  <kevin@8t8.us> (91474fdf)
+
+        * Don't force SMTP authentication without a username or client cert.
+        
+        See Debian bug 1001013.  This is a regression from commit 191b0513,
+        which fixed SMTP client certification authentication (see GitLab
+        ticket 336).  However, that commit assumed the server wouldn't
+        advertise AUTH if it wasn't needed, which the Debian ticket shows is
+        not always the case.
+        
+        Client certificate support still relies on AUTH properly being set.
+        
+        Add a check for either the username or a cert before calling
+        smtp_auth().  The username check was removed by the above mentioned
+        commit, but more importantly the username is no longer set by the
+        OpenSSL/GnuTLS client cert code.  (Which was the main problem
+        addressed by the commit).  So there shouldn't be an issue with adding
+        the username check back.
+
+M	smtp.c
+
+2021-12-11 13:15:27 -0800  Kevin McCarthy  <kevin@8t8.us> (93ef06ae)
+
+        * automatic post-release commit for mutt-2.1.4
+
+M	ChangeLog
+M	VERSION
+
 2021-12-11 13:11:39 -0800  Kevin McCarthy  <kevin@8t8.us> (138abb63)
 
         * Update UPDATING for 2.1.4.
