@@ -711,7 +711,7 @@ msgstr "Dosyayı görüntülemeye çalışırken hata oluştu"
 #: buffy.c:402 buffy.c:426 color.c:1014 hook.c:74 hook.c:93 hook.c:356
 #: init.c:2121 init.c:2198 init.c:2994 keymap.c:976
 msgid "too few arguments"
-msgstr "değişken sayısı pek az"
+msgstr "argüman sayısı pek az"
 
 #: buffy.c:804
 msgid "New mail in "
@@ -740,19 +740,19 @@ msgstr "%s: komut yalnızca indeks, gövde, üstbilgi nesneleri için geçerlidi
 #: color.c:659
 #, c-format
 msgid "%s: too few arguments"
-msgstr "%s: değişken sayısı pek az"
+msgstr "%s: Argüman sayısı pek az"
 
 #: color.c:845 color.c:870
 msgid "Missing arguments."
-msgstr "Eksik değişkenler."
+msgstr "Eksik argüman."
 
 #: color.c:902 color.c:930
 msgid "color: too few arguments"
-msgstr "renkli: değişken sayısı pek az"
+msgstr "renkli: Argüman sayısı pek az"
 
 #: color.c:953
 msgid "mono: too few arguments"
-msgstr "siyah-beyaz: değişken sayısı pek az"
+msgstr "siyah-beyaz: Argüman sayısı pek az"
 
 #: color.c:973
 #, c-format
@@ -761,7 +761,7 @@ msgstr "%s: böyle bir öznitelik yok"
 
 #: color.c:1023 hook.c:99 hook.c:363
 msgid "too many arguments"
-msgstr "değişken sayısı pek fazla"
+msgstr "argüman sayısı pek fazla"
 
 #: color.c:1042
 msgid "default colors not supported"
@@ -2920,7 +2920,7 @@ msgstr "hatalı biçimlendirilmiş komut dizisi"
 
 #: hook.c:340 init.c:728 init.c:808 init.c:816 init.c:839
 msgid "not enough arguments"
-msgstr "değişken sayısı pek az"
+msgstr "argüman sayısı pek az"
 
 #: hook.c:432
 msgid "unhook: Can't do unhook * from within a hook."
@@ -3330,7 +3330,7 @@ msgstr "%s ayarlanmadı"
 #: init.c:2257 init.c:2374
 #, c-format
 msgid "%s: unknown variable"
-msgstr "%s: bilinmeyen değişken"
+msgstr "%s: Bilinmeyen değişken"
 
 #: init.c:2266
 msgid "prefix is illegal with reset"
@@ -3357,12 +3357,12 @@ msgstr "%s seçeneği için geçersiz değer: \"%s\""
 #: init.c:2597
 #, c-format
 msgid "%s: invalid mailbox type"
-msgstr "%s: geçersiz posta kutusu türü"
+msgstr "%s: Geçersiz posta kutusu türü"
 
 #: init.c:2627 init.c:2690
 #, c-format
 msgid "%s: invalid value (%s)"
-msgstr "%s: geçersiz değer (%s)"
+msgstr "%s: Geçersiz değer (%s)"
 
 #: init.c:2628 init.c:2691
 msgid "format error"
@@ -3375,7 +3375,7 @@ msgstr "sayı taşması"
 #: init.c:2725
 #, c-format
 msgid "%s: invalid value"
-msgstr "%s: geçersiz değer"
+msgstr "%s: Geçersiz değer"
 
 #: init.c:2769
 #, c-format
@@ -3385,7 +3385,7 @@ msgstr "%s: Bilinmeyen tür."
 #: init.c:2796
 #, c-format
 msgid "%s: unknown type"
-msgstr "%s: bilinmeyen tür"
+msgstr "%s: Bilinmeyen tür"
 
 #: init.c:2876
 #, c-format
@@ -3406,20 +3406,20 @@ msgstr ""
 #: init.c:2919 init.c:2942
 #, c-format
 msgid "source: error at %s"
-msgstr "source: hata konumu: %s"
+msgstr "source: %s konumunda hata"
 
 #: init.c:2924
 msgid "run: too many arguments"
-msgstr "run: pek fazla değişken"
+msgstr "run: Pek fazla argüman"
 
 #: init.c:2947
 msgid "source: too many arguments"
-msgstr "source: pek fazla değişken"
+msgstr "source: Pek fazla argüman"
 
 #: init.c:3053
 #, c-format
 msgid "%s: unknown command"
-msgstr "%s: bilinmeyen komut"
+msgstr "%s: Bilinmeyen komut"
 
 #: init.c:3576
 #, c-format
@@ -3440,11 +3440,11 @@ msgstr "uç adı uname() ile belirlenemiyor"
 
 #: init.c:3962
 msgid "-group: no group name"
-msgstr "-group: grup adı yok"
+msgstr "-group: Grup adı yok"
 
 #: init.c:3972
 msgid "out of arguments"
-msgstr "değişkenler bitti"
+msgstr "argüman bitti"
 
 #. L10N:
 #. $attribution default value
@@ -3518,12 +3518,12 @@ msgstr "Düğme ayarlanmamış. Yardım için '%s' düğmesine basın."
 
 #: keymap.c:923
 msgid "push: too many arguments"
-msgstr "push: fazla değişken"
+msgstr "push: Pek fazla argüman"
 
 #: keymap.c:954
 #, c-format
 msgid "%s: no such menu"
-msgstr "%s: böyle bir menü yok"
+msgstr "%s: Böyle bir menü yok"
 
 #: keymap.c:969
 msgid "null key sequence"
@@ -3531,29 +3531,29 @@ msgstr "boş düğme dizisi"
 
 #: keymap.c:1063
 msgid "bind: too many arguments"
-msgstr "bind: değişken sayısı pek fazla"
+msgstr "bind: Pek fazla argüman"
 
 #: keymap.c:1086
 #, c-format
 msgid "%s: no such function in map"
-msgstr "%s: düğme eşleminde böyle bir işlev yok"
+msgstr "%s: Düğme eşlemde böyle bir işlev yok"
 
 #: keymap.c:1110
 msgid "macro: empty key sequence"
-msgstr "macro: boş düğme dizisi"
+msgstr "macro: Boş düğme dizisi"
 
 #: keymap.c:1121
 msgid "macro: too many arguments"
-msgstr "macro: fazla değişken"
+msgstr "macro: Pek fazla argüman"
 
 #: keymap.c:1157
 msgid "exec: no arguments"
-msgstr "exec: argüman değişken"
+msgstr "exec: Argüman yok"
 
 #: keymap.c:1177
 #, c-format
 msgid "%s: no such function"
-msgstr "%s: böyle bir işlev yok"
+msgstr "%s: Böyle bir işlev yok"
 
 #: keymap.c:1198
 msgid "Enter keys (^G to abort): "
@@ -3570,7 +3570,7 @@ msgstr "Tam sayı taşması -- bellek ayrılamıyor!"
 
 #: lib.c:138 lib.c:153 lib.c:185 safe_asprintf.c:42
 msgid "Out of memory!"
-msgstr "Yetersiz bellek!"
+msgstr "Bellek yetersiz!"
 
 #: listmenu.c:51 listmenu.c:62
 msgid "Post"
@@ -3692,15 +3692,15 @@ msgid ""
 "       mutt -v[v]\n"
 msgstr ""
 "kullanım: mutt [<seçenekler>] [-z] [-f <dosya> | -yZ]\n"
-"       mutt [<seçenekler>] [-Ex] [-Hi <dosya>] [-s <konu>] [-bc <adres>] [-a "
-"<dosya> [...] --] <adres> [...]\n"
-"       mutt [<seçenekler>] [-x] [-s <konu>] [-bc <adres>] [-a <dosya> [...] "
-"--] <adres> [...] < message\n"
-"       mutt [<seçenekler>] -p\n"
-"       mutt [<seçenekler>] -A <arma> [...]\n"
-"       mutt [<seçenekler>] -Q <sorgu> [...]\n"
-"       mutt [<seçenekler>] -D\n"
-"       mutt -v[v]\n"
+"          mutt [<seçenekler>] [-Ex] [-Hi <dosya>] [-s <konu>] [-bc <adres>]\n"
+"            [-a " "<dosya> [...] --] <adres> [...]\n"
+"          mutt [<seçenekler>] [-x] [-s <konu>] [-bc <adres>] [-a <dosya>\n"
+"            [...] --] <adres> [...] < message\n"
+"          mutt [<seçenekler>] -p\n"
+"          mutt [<seçenekler>] -A <arma> [...]\n"
+"          mutt [<seçenekler>] -Q <sorgu> [...]\n"
+"          mutt [<seçenekler>] -D\n"
+"          mutt -v[v]\n"
 
 #: main.c:143
 msgid ""
@@ -3816,7 +3816,7 @@ msgstr "Taslak dosyası ayrıştırılamıyor\n"
 #: main.c:1208
 #, c-format
 msgid "%s: unable to attach file.\n"
-msgstr "%s: dosya eklenemedi.\n"
+msgstr "%s: Dosya eklenemedi.\n"
 
 #: main.c:1305
 msgid "No mailbox with new mail."
@@ -3900,7 +3900,7 @@ msgstr "Öge yok."
 
 #: menu.c:498
 msgid "You cannot scroll down farther."
-msgstr "Daha aşağıya inemezsiniz."
+msgstr "Daha aşağı inemezsiniz."
 
 #: menu.c:516
 msgid "You cannot scroll up farther."
@@ -4875,7 +4875,7 @@ msgstr "Dizgi değiştiricisi '~%c' devre dışı."
 #: pattern.c:1094 pattern.c:1793
 #, c-format
 msgid "error: unknown op %d (report this error)."
-msgstr "hata: bilinmeyen işlem kodu %d (bu hatayı bildirin)."
+msgstr "hata: Bilinmeyen işlem kodu %d (bu hatayı bildirin)."
 
 #: pattern.c:1160 pattern.c:1383
 msgid "empty pattern"
@@ -4899,12 +4899,12 @@ msgstr "eşleşmeyen ayraçlar: %s"
 #: pattern.c:1297
 #, c-format
 msgid "%c: invalid pattern modifier"
-msgstr "%c: geçersiz dizgi değiştiricisi"
+msgstr "%c: Geçersiz dizgi değiştiricisi"
 
 #: pattern.c:1303
 #, c-format
 msgid "%c: not supported in this mode"
-msgstr "%c : bu kipte desteklenmiyor"
+msgstr "%c : Bu kipte desteklenmiyor"
 
 #: pattern.c:1320
 msgid "missing parameter"
@@ -5375,7 +5375,7 @@ msgstr "Süzgeç: "
 
 #: recvattach.c:878
 msgid "Pipe to: "
-msgstr "Borula: "
+msgstr "Kanalla: "
 
 #: recvattach.c:923
 #, c-format
@@ -5570,11 +5570,11 @@ msgstr "%s için mailcap kaydı bulunamadı"
 
 #: score.c:77
 msgid "score: too few arguments"
-msgstr "puan: değişken sayısı pek az"
+msgstr "puan: Argüman sayısı pek az"
 
 #: score.c:85
 msgid "score: too many arguments"
-msgstr "puan: değişken sayısı pek fazla"
+msgstr "puan: Argüman sayısı pek fazla"
 
 #: score.c:124
 msgid "Error: score: invalid number"
@@ -5792,7 +5792,7 @@ msgstr "Düzenleme ardalana alındı."
 
 #: sendlib.c:455
 msgid "No boundary parameter found! [report this error]"
-msgstr "Sınırlandırma değişkeni bulunamadı! [bu hatayı bildirin]"
+msgstr "Sınırlandırma parametresi bulunamadı! [bu hatayı bildirin]"
 
 #: sendlib.c:486
 #, c-format
@@ -6466,7 +6466,7 @@ msgstr "yeni bir posta kutusu oluştur (yalnızca IMAP)"
 #.
 #: OPS:227
 msgid "edit attachment content type"
-msgstr "ekin içerik ni düzenle"
+msgstr "ekin içeriğini düzenle"
 
 #. L10N: Help screen description for OP_COMPOSE_GET_ATTACHMENT
 #. compose menu: <get-attachment>
@@ -6817,7 +6817,7 @@ msgstr "imleci sözcük sonuna taşı"
 #.
 #: OPS:482
 msgid "scroll down through the history list"
-msgstr "tarihçe listesinde aşağıya in"
+msgstr "tarihçe listesinde aşağı in"
 
 #. L10N: Help screen description for OP_EDITOR_HISTORY_UP
 #. editor menu: <history-up>
@@ -6989,7 +6989,7 @@ msgstr "bütün alıcıları yanıtla"
 #.
 #: OPS:608
 msgid "scroll down 1/2 page"
-msgstr "yarım sayfa aşağıya in"
+msgstr "yarım sayfa aşağı in"
 
 #. L10N: Help screen description for OP_HALF_UP
 #. generic menu: <half-up>
@@ -7387,7 +7387,7 @@ msgstr "bir sonraki ögeye geç"
 #.
 #: OPS:902
 msgid "scroll down one line"
-msgstr "bir satır aşağıya in"
+msgstr "bir satır aşağı in"
 
 #. L10N: Help screen description for OP_NEXT_PAGE
 #. generic menu: <next-page>
@@ -8008,10 +8008,3 @@ msgstr "kenar çubuğunu görünür/görünmez yap"
 #: OPS.SMIME:18
 msgid "show S/MIME options"
 msgstr "S/MIME seçeneklerini göster"
-
-#, c-format
-#~ msgid "Error: value '%s' is invalid for -d.\n"
-#~ msgstr "Hata: '%s' değeri -d için geçersiz.\n"
-
-#~ msgid "SMTP server does not support authentication"
-#~ msgstr "SMTP sunucusu kimlik doğrulamayı desteklemiyor"
