@@ -582,8 +582,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    if (tempbuf && templen == state->lastchar - i &&
 		!memcmp (tempbuf, state->wbuf + i, (state->lastchar - i) * sizeof (wchar_t)))
 	    {
-	      mutt_select_file (buf, buflen,
-                                (flags & MUTT_MAILBOX) ? MUTT_SEL_FOLDER : 0);
+	      mutt_select_file (buf, buflen, 0);
 	      if (*buf)
 		replace_part (state, i, buf);
 	      rv = 1;
