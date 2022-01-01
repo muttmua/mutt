@@ -374,6 +374,8 @@ enum
 #define MUTT_SEL_BUFFY  (1<<0)
 #define MUTT_SEL_MULTI  (1<<1)
 #define MUTT_SEL_FOLDER (1<<2)
+#define MUTT_SEL_DIRECTORY (1<<3)  /* Allow directories to be selected
+                                    * via <view-file> */
 
 /* flags for parse_spam_list */
 #define MUTT_SPAM          1

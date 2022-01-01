@@ -1458,8 +1458,17 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
               (S_ISLNK (state.entry[menu->current].mode) &&
                link_is_dir (state.entry[menu->current].full_path)))
           {
-            mutt_error _("Can't view a directory");
-            break;
+            if (flags & MUTT_SEL_DIRECTORY)
+            {
+              mutt_buffer_strcpy (f, state.entry[menu->current].full_path);
+              destroy_state (&state);
+              goto bail;
+            }
+            else
+            {
+              mutt_error _("Can't view a directory");
+              break;
+            }
           }
           else
           {

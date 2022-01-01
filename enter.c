@@ -684,14 +684,35 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	  }
 	  else if (flags & MUTT_COMMAND)
 	  {
+            int complete_rv;
+
 	    my_wcstombs (buf, buflen, state->wbuf, state->curpos);
 	    i = strlen (buf);
 	    if (i && buf[i - 1] == '=' &&
 		mutt_var_value_complete (buf, buflen, i))
+            {
+              replace_part (state, 0, buf);
 	      state->tabs = 0;
-	    else if (!mutt_command_complete (buf, buflen, i, state->tabs))
-	      BEEP ();
-	    replace_part (state, 0, buf);
+            }
+	    else
+            {
+              complete_rv = mutt_command_complete (buf, buflen, i, state->tabs);
+              if (complete_rv > 0)
+              {
+                replace_part (state, 0, buf);
+                if (complete_rv == 2)
+                {
+                  state->tabs = 0;
+                  rv = 1;
+                  goto bye;
+                }
+              }
+              else
+              {
+                state->tabs = 0;
+                BEEP ();
+              }
+            }
 	  }
 	  else if (flags & (MUTT_FILE | MUTT_MAILBOX))
 	  {

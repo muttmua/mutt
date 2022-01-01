@@ -3156,6 +3156,12 @@ static void candidate (char *dest, char *try, const char *src, int len)
   }
 }
 
+/* Returns:
+ * 2 if the file browser was used.
+ *   in this case, the caller needs to redraw.
+ * 1 if there is a completion
+ * 0 on no completions
+ */
 int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
 {
   char *pt = buffer;
@@ -3306,6 +3312,47 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
 	       Matches[(numtabs - 2) % Num_matched]);
 
     strncpy (pt, Completed, buffer + len - pt - spaces);
+  }
+  else if (!mutt_strncmp (buffer, "cd", 2))
+  {
+    pt = buffer + 2;
+    SKIPWS (pt);
+    if (numtabs == 1)
+    {
+      if (mutt_complete (pt, buffer + len - pt - spaces))
+        return 0;
+    }
+    else
+    {
+      BUFFER *selectbuf;
+      char keybuf[SHORT_STRING];
+
+      if (!km_expand_key (keybuf, sizeof(keybuf),
+                          km_find_func (MENU_FOLDER, OP_BROWSER_VIEW_FILE)) ||
+          keybuf[0] == '\0')
+      {
+        strcpy (keybuf, "<view-file>");  /* __STRCPY_CHECKED__ */
+      }
+      /* L10N:
+         When tab completing the :cd path argument, the folder browser
+         will be invoked upon the second tab.  This message will be
+         printed below the folder browser, to instruct the user how to
+         select a directory for completion.
+
+         %s will print the key bound to <view-file>, which is
+         '<Space>' by default.  If no keys are bound to <view-file>
+         then %s will print the function name: '<view-file>'.
+       */
+      mutt_message (_("Use '%s' to select a directory"), keybuf);
+
+      selectbuf = mutt_buffer_pool_get ();
+      mutt_buffer_strcpy (selectbuf, pt);
+      mutt_buffer_select_file (selectbuf, MUTT_SEL_DIRECTORY);
+      if (mutt_buffer_len (selectbuf))
+        strfcpy (pt, mutt_b2s (selectbuf), buffer + len - pt - spaces);
+      mutt_buffer_pool_release (&selectbuf);
+      return 2;
+    }
   }
   else
     return 0;
