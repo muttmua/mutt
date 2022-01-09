@@ -3259,12 +3259,29 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$wrap.
   */
-  { "reply_regexp",	DT_RX,	 R_INDEX|R_RESORT, {.p=&ReplyRegexp}, {.p="^(re([\\[0-9\\]+])*|aw):[ \t]*"} },
+  { "reply_regexp",	DT_RX,	 R_INDEX|R_RESORT, {.p=&ReplyRegexp}, {.p="^(re|aw)(\\[[0-9]+\\])*:[ \t]*"} },
   /*
   ** .pp
   ** A regular expression used to recognize reply messages when threading
-  ** and replying. The default value corresponds to the English "Re:" and
-  ** the German "Aw:".
+  ** and replying. The default value corresponds to the standard Latin "Re:"
+  ** prefix or (for historical reasons) the German "Aw:".  You can add your
+  ** own prefixes by swapping out or appending to that list.  For example:
+  ** \fC"^(re|se)"\fP or \fC"^(re|aw|se)"\fP.
+  ** .pp
+  ** The second parenthesized expression matches zero or more
+  ** bracketed numbers following the prefix, such as \fC"Re[1]: "\fP.
+  ** The initial \fC"\\["\fP means a literal left-bracket character.
+  ** Note the backslash must be doubled when used inside a double
+  ** quoted string in the muttrc.  \fC"[0-9]+"\fP means one or more
+  ** numbers.  \fC"\\]"\fP means a literal right-bracket.  Finally the
+  ** whole parenthesized expression has a \fC"*"\fP suffix, meaning it
+  ** can occur zero or more times.
+  ** .pp
+  ** The last part matches a colon followed by an optional space or
+  ** tab.  Note \fC"\t"\fP is converted to a literal tab inside a
+  ** double quoted string.  If you use a single quoted string, you
+  ** would have to type an actual tab character, and would need to
+  ** convert the double-backslashes to single backslashes.
   */
   { "reply_self",	DT_BOOL, R_NONE, {.l=OPTREPLYSELF}, {.l=0} },
   /*
