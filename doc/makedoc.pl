@@ -389,6 +389,7 @@ sub string_unescape($) {
 sub string_escape($) {
   my ($val) = @_;
 
+  $val =~ s/\\/\\\\/g;
   $val =~ s/\r/\\r/g;
   $val =~ s/\n/\\n/g;
   $val =~ s/\t/\\t/g;
