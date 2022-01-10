@@ -134,6 +134,7 @@ WHERE char *NewMailCmd;
 WHERE char *QueryCmd;
 WHERE char *QueryFormat;
 WHERE char *Realname;
+WHERE char *ReplyPrefix;
 WHERE short SearchContext;
 WHERE char *SendCharset;
 WHERE char *SendMultipartAltFilter;

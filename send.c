@@ -771,11 +771,12 @@ void mutt_make_misc_reply_headers (ENVELOPE *env, CONTEXT *ctx,
   if (curenv->real_subj)
   {
     FREE (&env->subject);
-    env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
-    sprintf (env->subject, "Re: %s", curenv->real_subj);	/* __SPRINTF_CHECKED__ */
+    env->subject = safe_malloc (mutt_strlen (ReplyPrefix) +
+                                mutt_strlen (curenv->real_subj) + 1);
+    sprintf (env->subject, "%s%s", NONULL (ReplyPrefix), curenv->real_subj);	/* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
-    env->subject = safe_strdup ("Re:");
+    env->subject = safe_strdup (ReplyPrefix);
 }
 
 void mutt_add_to_reference_headers (ENVELOPE *env, ENVELOPE *curenv, LIST ***pp, LIST ***qq)
