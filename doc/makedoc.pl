@@ -109,7 +109,8 @@ my %type2human = ("DT_NONE"      => "-none-",
                   "DT_MAGIC"     => "folder magic",
                   "DT_ADDR"      => "e-mail address",
                   "DT_MBCHARTBL" => "string",
-                  "DT_L10N_STR"  => "string (localized)");
+                  "DT_L10N_STR"  => "string (localized)",
+                  "DT_L10N_RX"   => "regular expression (localized)");
 
 my %string_types = ("DT_STR"       => 1,
                     "DT_RX"        => 1,
@@ -117,7 +118,8 @@ my %string_types = ("DT_STR"       => 1,
                     "DT_PATH"      => 1,
                     "DT_CMD_PATH"  => 1,
                     "DT_MBCHARTBL" => 1,
-                    "DT_L10N_STR"  => 1);
+                    "DT_L10N_STR"  => 1,
+                    "DT_L10N_RX"   => 1);
 
 my %quad2human = ("MUTT_YES" => "yes",
                   "MUTT_NO"  => "no",
@@ -304,11 +306,21 @@ sub handle_confline($) {
 
   if ($type =~ /DT_L10N_STR/) {
     $localized = 1;
-    $type = "DT_L10N_STR";
   }
-  else {
-    $type =~ s/\|(.*)//;
-    $subtype = $1;
+
+  $type =~ s/\|(.*)//;
+  $subtype = $1;
+
+  if ($localized) {
+    if ($type eq "DT_STR") {
+      $type = "DT_L10N_STR";
+    }
+    elsif ($type eq "DT_RX") {
+      $type = "DT_L10N_RX";
+    }
+    else {
+      die "Unknown localized type: $type\n"
+    }
   }
 
   $val =~ s/^{\s*\.[lp]\s*=\s*"?//;

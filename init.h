@@ -3259,14 +3259,39 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$wrap.
   */
-  { "reply_regexp",	DT_RX,	 R_INDEX|R_RESORT, {.p=&ReplyRegexp}, {.p="^(re|aw)(\\[[0-9]+\\])*:[ \t]*"} },
+  /* L10N:
+     $reply_regexp default value.
+
+     This is a regular expression that matches reply subject lines.
+     By default, it only matches an initial "Re: ", which is the
+     standardized Latin prefix.
+
+     However, many locales have other prefixes that are commonly used
+     too, such as Aw in Germany.  To add other prefixes, modify the first
+     parenthesized expression, such as:
+        "^(re|aw)
+     you can add multiple values, for example:
+        "^(re|aw|se)
+
+     Important:
+     - Use all lower case letters.
+     - Don't remove the 're' prefix from the list of choices.
+     - Please test the value you use inside Mutt.  A mistake here
+       will break Mutt's threading behavior.  Note: the header cache
+       can interfere with testing, so be sure to test with $header_cache
+       unset.
+  */
+  { "reply_regexp",	DT_RX|DT_L10N_STR, R_INDEX|R_RESORT, {.p=&ReplyRegexp}, {.p=N_("^(re)(\\[[0-9]+\\])*:[ \t]*")} },
   /*
   ** .pp
-  ** A regular expression used to recognize reply messages when threading
-  ** and replying. The default value corresponds to the standard Latin "Re:"
-  ** prefix or (for historical reasons) the German "Aw:".  You can add your
-  ** own prefixes by swapping out or appending to that list.  For example:
-  ** \fC"^(re|se)"\fP or \fC"^(re|aw|se)"\fP.
+  ** A regular expression used to recognize reply messages when
+  ** threading and replying. The default value corresponds to the
+  ** standard Latin "Re:" prefix.
+  ** .pp
+  ** This value may have been localized by the translator for your
+  ** locale, adding other prefixes that are common in the locale. You
+  ** can add your own prefixes by appending inside \fC"^(re)"\fP.  For
+  ** example: \fC"^(re|se)"\fP or \fC"^(re|aw|se)"\fP.
   ** .pp
   ** The second parenthesized expression matches zero or more
   ** bracketed numbers following the prefix, such as \fC"Re[1]: "\fP.
@@ -3282,6 +3307,14 @@ struct option_t MuttVars[] = {
   ** double quoted string.  If you use a single quoted string, you
   ** would have to type an actual tab character, and would need to
   ** convert the double-backslashes to single backslashes.
+  ** .pp
+  ** Note: the result of this regexp match against the subject is
+  ** stored in the header cache.  Mutt isn't smart enough to
+  ** invalidate a header cache entry based on changing $$reply_regexp,
+  ** so if you aren't seeing correct values in the index, try
+  ** temporarily turning off the header cache.  If that fixes the
+  ** problem, then once the variable is set to your liking, remove
+  ** your stale header cache files and turn the header cache back on.
   */
   { "reply_self",	DT_BOOL, R_NONE, {.l=OPTREPLYSELF}, {.l=0} },
   /*

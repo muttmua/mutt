@@ -1859,6 +1859,8 @@ static void mutt_set_default (struct option_t *p)
       REGEXP *pp = (REGEXP *) p->data.p;
       if (!p->init.p && pp->pattern)
 	p->init.p = safe_strdup (pp->pattern);
+      else if (p->init.p && (p->type & DT_L10N_STR))
+        p->init.p = safe_strdup (_(p->init.p));
       break;
     }
   }
