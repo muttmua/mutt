@@ -3289,7 +3289,7 @@ struct option_t MuttVars[] = {
        can interfere with testing, so be sure to test with $header_cache
        unset.
   */
-  { "reply_regexp",	DT_RX|DT_L10N_STR, R_INDEX|R_RESORT, {.p=&ReplyRegexp}, {.p=N_("^(re)(\\[[0-9]+\\])*:[ \t]*")} },
+  { "reply_regexp",	DT_RX|DT_L10N_STR, R_INDEX|R_RESORT|R_RESORT_INIT, {.p=&ReplyRegexp}, {.p=N_("^(re)(\\[[0-9]+\\])*:[ \t]*")} },
   /*
   ** .pp
   ** A regular expression used to recognize reply messages when

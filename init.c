@@ -2585,6 +2585,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
 	  regmatch_t pmatch[1];
 	  int i;
 
+          hash_destroy (&Context->subj_hash, NULL);
 	  for (i = 0; i < Context->msgcount; i++)
 	  {
 	    ENVELOPE *cur_env = Context->hdrs[i]->env;
