@@ -142,7 +142,7 @@ smime_keys: $(srcdir)/smime_keys.pl
 	cp $(srcdir)/smime_keys.pl smime_keys
 	chmod +x smime_keys
 
-keymap_defs.h: $(OPS) $(srcdir)/gen_defs
+keymap_defs.h: $(OPS) config.h $(srcdir)/gen_defs
 	$(srcdir)/gen_defs $(OPS) > keymap_defs.h
 
 # If we have GNU make, we can use the FORCE target to enable
