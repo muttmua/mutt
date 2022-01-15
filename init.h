@@ -3259,14 +3259,6 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see $$wrap.
   */
-  { "reply_prefix", DT_STR, R_NONE, {.p=&ReplyPrefix}, {.p="Re: "} },
-  /*
-  ** .pp
-  ** This specifies the subject prefix to use when replying to emails.
-  ** The default value is the standardized Latin prefix specified in
-  ** RFC5322.
-  ** .pp
-  */
   /* L10N:
      $reply_regexp default value.
 
