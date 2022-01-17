@@ -69,6 +69,9 @@
 #include <assert.h>
 #endif
 
+/* For execvp environment setting in send_msg() */
+extern char **environ;
+
 extern char RFC822Specials[];
 
 const char MimeSpecials[] = "@.,;:<>[]\\\"()?/= \t";
@@ -2578,8 +2581,8 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
 
       mutt_reset_child_signals ();
 
-      /* execvpe is a glibc extension */
-      /* execvpe (path, args, mutt_envlist ()); */
+      /* execvpe is a glibc extension, so just manually set environ */
+      environ = mutt_envlist ();
       execvp (path, args);
       _exit (S_ERR);
     }
