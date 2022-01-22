@@ -3416,7 +3416,7 @@ struct option_t MuttVars[] = {
   ** In either case, a missing real name will be filled in afterwards
   ** using the value of $$realname.
   */
-  { "rfc2047_parameters", DT_BOOL, R_NONE, {.l=OPTRFC2047PARAMS}, {.l=0} },
+  { "rfc2047_parameters", DT_BOOL, R_NONE, {.l=OPTRFC2047PARAMS}, {.l=1} },
   /*
   ** .pp
   ** When this variable is \fIset\fP, Mutt will decode RFC2047-encoded MIME
