@@ -4488,7 +4488,7 @@ struct option_t MuttVars[] = {
   ** .dt %s  .dd current sorting mode ($$sort)
   ** .dt %S  .dd current aux sorting method ($$sort_aux)
   ** .dt %t  .dd number of tagged messages *
-  ** .dt %S  .dd current thread group sorting method ($$sort_thread_groups) *
+  ** .dt %T  .dd current thread group sorting method ($$sort_thread_groups) *
   ** .dt %u  .dd number of unread messages *
   ** .dt %v  .dd Mutt version string
   ** .dt %V  .dd currently active limit pattern, if any *
