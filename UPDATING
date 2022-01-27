@@ -9,6 +9,28 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.0 (unreleased):
+
+  + $pager_skip_quoted_context determines the number of lines to show
+    before unquoted text when using <skip-quoted> in the pager.
+  ! Quadoption prompts and a few boolean prompts now have a '?' choice,
+    which will display the associated configuration variable.
+  ! <enter>, <return>, and <keypadenter> can be bound to separate
+    functions/macros.
+  + $sort_thread_groups can be used to sort top-level thread groups differently
+    than subthreads.
+  ! contrib/smime.rc now uses the cms utility for SMIME encryption/decryption.
+  + $compose_confirm_detach_first helps prevent accidentally deleting your
+    typed message in the compose menu.
+  + The $attach_save_charset_convert quadoption prompts to allow charset
+    conversion of received text-type attachments when saving them to disk.
+  + --with-gsasl allows configuration with the GNU SASL library, as an
+    alternative to Cyrus.
+  ! $reply_regexp is now localizable by translators, to add other
+    non-standard prefixes used in the locale.  "aw" was removed from the
+    default value.
+  ! $rfc2047_parameters is enabled by default.
+
 2.1.5 (2021-12-30):
 
   ! Bug fix release.
