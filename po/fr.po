@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.1.5-dev\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2022-01-17 09:45+0100\n"
-"PO-Revision-Date: 2022-01-17 09:52+0100\n"
+"POT-Creation-Date: 2022-01-27 14:13+0100\n"
+"PO-Revision-Date: 2022-01-27 14:17+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -173,8 +173,8 @@ msgid "Mailcap compose entry requires %%s"
 msgstr "L'entrée compose de mailcap nécessite %%s"
 
 #: attach.c:141 attach.c:274 background.c:335 commands.c:343 compose.c:1852
-#: compress.c:414 curs_lib.c:305 curs_lib.c:1064 sendlib.c:1476 sendlib.c:1514
-#: sendlib.c:1578
+#: compress.c:414 curs_lib.c:305 curs_lib.c:1064 sendlib.c:1479 sendlib.c:1517
+#: sendlib.c:1581
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Erreur en exécutant \"%s\" !"
@@ -743,11 +743,11 @@ msgstr "Masque de fichier : "
 msgid "New file name: "
 msgstr "Nouveau nom de fichier : "
 
-#: browser.c:1461
+#: browser.c:1469
 msgid "Can't view a directory"
 msgstr "Impossible de visualiser un répertoire"
 
-#: browser.c:1476
+#: browser.c:1485
 msgid "Error trying to view file"
 msgstr "Erreur en essayant de visualiser le fichier"
 
@@ -1425,7 +1425,7 @@ msgstr "Renommer en : "
 # , c-format
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1629 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:906
+#: compose.c:1629 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:909
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "Impossible d'obtenir le statut de %s : %s"
@@ -3596,28 +3596,44 @@ msgid "%s: unknown command"
 msgstr "%s : commande inconnue"
 
 # , c-format
-#: init.c:3631
+#. L10N:
+#. When tab completing the :cd path argument, the folder browser
+#. will be invoked upon the second tab.  This message will be
+#. printed below the folder browser, to instruct the user how to
+#. select a directory for completion.
+#.
+#. %s will print the key bound to <view-file>, which is
+#. '<Space>' by default.  If no keys are bound to <view-file>
+#. then %s will print the function name: '<view-file>'.
+#.
+#: init.c:3346
+#, c-format
+msgid "Use '%s' to select a directory"
+msgstr "Utilisez '%s' pour sélectionner un répertoire"
+
+# , c-format
+#: init.c:3678
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Erreur dans la ligne de commande : %s\n"
 
-#: init.c:3735
+#: init.c:3782
 msgid "unable to determine home directory"
 msgstr "impossible de déterminer le répertoire personnel"
 
-#: init.c:3743
+#: init.c:3790
 msgid "unable to determine username"
 msgstr "impossible de déterminer le nom d'utilisateur"
 
-#: init.c:3778
+#: init.c:3825
 msgid "unable to determine nodename via uname()"
 msgstr "impossible de déterminer nodename via uname()"
 
-#: init.c:4017
+#: init.c:4064
 msgid "-group: no group name"
 msgstr "-group: pas de nom de groupe"
 
-#: init.c:4027
+#: init.c:4074
 msgid "out of arguments"
 msgstr "pas assez d'arguments"
 
@@ -6089,31 +6105,31 @@ msgstr "Envoi en tâche de fond."
 msgid "Editing backgrounded."
 msgstr "L'édition est passée en arrière-plan."
 
-#: sendlib.c:456
+#: sendlib.c:459
 msgid "No boundary parameter found! [report this error]"
 msgstr "Pas de paramètre boundary trouvé !  [signalez cette erreur]"
 
 # , c-format
-#: sendlib.c:487
+#: sendlib.c:490
 #, c-format
 msgid "%s no longer exists!"
 msgstr "%s n'existe plus !"
 
 # , c-format
-#: sendlib.c:912
+#: sendlib.c:915
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "%s n'est pas un fichier ordinaire."
 
 # , c-format
-#: sendlib.c:1083
+#: sendlib.c:1086
 #, c-format
 msgid "Could not open %s"
 msgstr "Impossible d'ouvrir %s"
 
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
-#: sendlib.c:1318
+#: sendlib.c:1321
 msgid "Decrypt message attachment?"
 msgstr "Déchiffrer l'attachement du message ?"
 
@@ -6122,7 +6138,7 @@ msgstr "Déchiffrer l'attachement du message ?"
 #. the message.  If they answer yes the message will be
 #. forwarded without decoding.
 #.
-#: sendlib.c:1399
+#: sendlib.c:1402
 msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
@@ -6135,7 +6151,7 @@ msgstr ""
 #. the message.  If they answer yes the message will be attached
 #. without decrypting it.
 #.
-#: sendlib.c:1407
+#: sendlib.c:1410
 msgid ""
 "There was a problem decrypting the message for attachment.  Try again with "
 "decryption turned off?"
@@ -6148,7 +6164,7 @@ msgstr ""
 #. should be a mime type, e.g. text/html.  This error is generated
 #. if that is missing.
 #.
-#: sendlib.c:1492
+#: sendlib.c:1495
 #, c-format
 msgid "Missing mime type from output of \"%s\"!"
 msgstr "Type MIME manquant dans la sortie de \"%s\" !"
@@ -6158,7 +6174,7 @@ msgstr "Type MIME manquant dans la sortie de \"%s\" !"
 #. should be a blank line.  This error is generated if the blank line
 #. is missing.
 #.
-#: sendlib.c:1504
+#: sendlib.c:1507
 #, c-format
 msgid "Missing blank line separator from output of \"%s\"!"
 msgstr "Ligne blanche de séparation manquante dans la sortie de \"%s\" !"
@@ -6171,7 +6187,7 @@ msgstr "Ligne blanche de séparation manquante dans la sortie de \"%s\" !"
 #. reports, this error is displayed, and the generation is blocked
 #. at the filter level.
 #.
-#: sendlib.c:1538
+#: sendlib.c:1541
 msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
@@ -6179,21 +6195,21 @@ msgstr ""
 "$send_multipart_alternative_filter ne supporte pas la génération de type "
 "multipart."
 
-#: sendlib.c:2702
+#: sendlib.c:2705
 msgid "$sendmail must be set in order to send mail."
 msgstr "$sendmail doit avoir une valeur pour pouvoir envoyer du courrier."
 
 # , c-format
-#: sendlib.c:2803
+#: sendlib.c:2806
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr "Erreur en envoyant le message, fils terminé avec le code %d (%s)."
 
-#: sendlib.c:2809
+#: sendlib.c:2812
 msgid "Output of the delivery process"
 msgstr "Sortie du processus de livraison"
 
-#: sendlib.c:2981
+#: sendlib.c:2984
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "Mauvais IDN %s lors de la préparation du resent-from."
@@ -8319,9 +8335,3 @@ msgstr "rendre la barre latérale (in)visible"
 #: OPS.SMIME:18
 msgid "show S/MIME options"
 msgstr "afficher les options S/MIME"
-
-#~ msgid "SMTP server does not support authentication"
-#~ msgstr "Le serveur SMTP ne supporte pas l'authentification"
-
-#~ msgid "Error: value '%s' is invalid for -d.\n"
-#~ msgstr "Erreur : la valeur '%s' est invalide pour -d.\n"
