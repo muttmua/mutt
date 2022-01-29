@@ -662,7 +662,7 @@ int main (int argc, char **argv, char **environ)
   if (getegid() != getgid())
   {
     fprintf(stderr, "%s: I don't want to run with privileges!\n",
-	    argv[0]);
+	    argc ? argv[0] : "mutt");
     exit(1);
   }
 

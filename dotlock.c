@@ -180,8 +180,8 @@ int main (int argc, char **argv)
     }
   }
 
-  if (optind == argc || Retry < 0)
-    usage (argv[0]);
+  if (optind >= argc || Retry < 0)
+    usage (argc ? argv[0] : "mutt_dotlock");
 
   return dotlock_dispatch (argv[optind], -1);
 }

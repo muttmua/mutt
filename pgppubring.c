@@ -141,7 +141,8 @@ int main (int argc, char * const argv[])
       snprintf (pgppath, sizeof (pgppath), "%s/.pgp", env_home);
     else
     {
-      fprintf (stderr, "%s: Can't determine your PGPPATH.\n", argv[0]);
+      fprintf (stderr, "%s: Can't determine your PGPPATH.\n",
+               argc ? argv[0] : "mutt_pgpring");
       exit (1);
     }
 
@@ -150,6 +151,10 @@ int main (int argc, char * const argv[])
     else
       snprintf (kring, sizeof (kring), "%s/pubring.%s", pgppath, version == 2 ? "pgp" : "pkr");
   }
+
+
+  if (optind > argc)
+    optind = argc;
 
   pgpring_find_candidates (kring, (const char**) argv + optind, argc - optind);
 
