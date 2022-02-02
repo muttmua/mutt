@@ -3550,7 +3550,7 @@ msgstr "----- Välitetty viesti loppuu -----"
 #.
 #: init.h:3284
 msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
-msgstr "^(re|vs|sv)(\\[0-9]+\\])*:[ \t]"
+msgstr "^(re|vs|sv)(\\[[0-9]+\\])*:[ \t]*"
 
 #. L10N:
 #. $status_format default value
