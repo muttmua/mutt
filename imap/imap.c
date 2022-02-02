@@ -1676,7 +1676,7 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
 
   if (expunge && ctx->closing)
   {
-    imap_exec (idata, "CLOSE", IMAP_CMD_QUEUE);
+    imap_exec (idata, "CLOSE", 0);
     idata->state = IMAP_AUTHENTICATED;
   }
 
@@ -1721,7 +1721,7 @@ int imap_close_mailbox (CONTEXT* ctx)
       /* mx_close_mailbox won't sync if there are no deleted messages
        * and the mailbox is unchanged, so we may have to close here */
       if (!ctx->deleted)
-        imap_exec (idata, "CLOSE", IMAP_CMD_QUEUE);
+        imap_exec (idata, "CLOSE", 0);
       idata->state = IMAP_AUTHENTICATED;
     }
 
