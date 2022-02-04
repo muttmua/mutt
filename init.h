@@ -2000,8 +2000,9 @@ struct option_t MuttVars[] = {
   { "local_date_header", DT_BOOL, R_NONE, {.l=OPTLOCALDATEHEADER}, {.l=1} },
   /*
   ** .pp
-  ** If \fIset\fP, convert the date in the Date header of sent emails into local
-  ** (sender's) timezone.
+  ** If \fIset\fP, the date in the Date header of emails that you send will be in
+  ** your local timezone. If unset a UTC date will be used instead to avoid
+  ** leaking information about your current location.
   */
   { "mail_check",	DT_NUM,  R_NONE, {.p=&BuffyTimeout}, {.l=5} },
   /*
