@@ -1031,7 +1031,11 @@ int main (int argc, char **argv, char **environ)
     }
 
     if (subject)
+    {
       msg->env->subject = safe_strdup (subject);
+      /* prevent header injection */
+      mutt_filter_commandline_header_value (msg->env->subject);
+    }
 
     if (draftFile)
     {

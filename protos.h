@@ -339,6 +339,8 @@ int mutt_get_field_unbuffered (char *, char *, size_t, int);
 #define mutt_get_password(A,B,C) mutt_get_field_unbuffered(A,B,C,MUTT_PASS)
 int mutt_get_postponed (CONTEXT *, SEND_CONTEXT *);
 int mutt_get_tmp_attachment (BODY *);
+void mutt_filter_commandline_header_tag (char *);
+void mutt_filter_commandline_header_value (char *);
 int mutt_index_menu (void);
 int mutt_invoke_sendmail (ADDRESS *, ADDRESS *, ADDRESS *, ADDRESS *, const char *, int);
 int mutt_is_mail_list (ADDRESS *);

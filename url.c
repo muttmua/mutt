@@ -315,6 +315,8 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
     if (url_pct_decode (value) < 0)
       goto out;
 
+    mutt_filter_commandline_header_tag (tag);
+
     /* Determine if this header field is on the allowed list.  Since Mutt
      * interprets some header fields specially (such as
      * "Attach: ~/.gnupg/secring.gpg"), care must be taken to ensure that
@@ -338,6 +340,7 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
       else if (!ascii_strcasecmp (tag, "in-reply-to"))
       {
         mutt_free_list (&e->in_reply_to);
+        mutt_filter_commandline_header_value (value);
         e->in_reply_to = mutt_parse_references (value, 1);
       }
       else
@@ -345,6 +348,7 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
 	char *scratch;
 	size_t taglen = mutt_strlen (tag);
 
+        mutt_filter_commandline_header_value (value);
 	safe_asprintf (&scratch, "%s: %s", tag, value);
 	scratch[taglen] = 0; /* overwrite the colon as mutt_parse_rfc822_line expects */
 	value = skip_email_wsp(&scratch[taglen + 1]);
