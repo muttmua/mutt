@@ -275,6 +275,21 @@ int url_ciss_tobuffer (ciss_url_t* ciss, BUFFER* dest, int flags)
   return 0;
 }
 
+/* This is similar to mutt_matches_ignore(), except that it
+ * doesn't allow prefix matches.
+ */
+static int url_mailto_header_allowed (const char *header)
+{
+  LIST *t = MailtoAllow;
+
+  for (; t; t = t->next)
+  {
+    if (!ascii_strcasecmp (header, t->data) || *t->data == '*')
+      return 1;
+  }
+  return 0;
+}
+
 int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
 {
   char *t, *p;
@@ -328,7 +343,7 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
      * choose to create a message with only a subset of the headers given in
      * the URL.
      */
-    if (mutt_matches_ignore(tag, MailtoAllow))
+    if (url_mailto_header_allowed (tag))
     {
       if (!ascii_strcasecmp (tag, "body"))
       {
