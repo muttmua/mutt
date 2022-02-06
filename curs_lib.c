@@ -1518,7 +1518,7 @@ void mutt_paddstr (int n, const char *s)
     {
       if (w > n)
 	break;
-      addnstr ((char *)s, k);
+      mutt_addwch (wc);
       n -= w;
     }
   }
