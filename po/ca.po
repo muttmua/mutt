@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.2.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2022-01-28 09:41-0800\n"
+"POT-Creation-Date: 2022-02-12 10:45-0800\n"
 "PO-Revision-Date: 2022-01-30 18:42+0100\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -3764,31 +3764,34 @@ msgstr "----- Fi del missatge reenviat -----"
 #. can interfere with testing, so be sure to test with $header_cache
 #. unset.
 #.
-#: init.h:3284
+#: init.h:3285
 msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
 msgstr "^(re)(\\[[0-9]+\\])*:[ \t]*"
 
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4463
+#: init.h:4464
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
 "%S)-%>-(%P)---"
-msgstr "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%?T?%T/?%S)-%>-(%P)---"
+msgstr ""
+"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:"
+"%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%?T?"
+"%T/?%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4667
+#: init.h:4668
 msgid "M%?n?AIL&ail?"
 msgstr "C%?n?ORREU&orreu?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4684
+#: init.h:4685
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt %?m?amb %m missatges&sense cap missatge?%?n? [%n NOUS]?"
 
@@ -3929,7 +3932,8 @@ msgid ""
 msgstr ""
 "Copyright © 1996‐2022 Michael R. Elkins i d’altres.\n"
 "Mutt s’ofereix SENSE CAP GARANTIA; empreu «mutt -vv» per a obtenir‐ne més\n"
-"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo sota\n"
+"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo "
+"sota\n"
 "certes condicions; empreu «mutt -vv» per a obtenir‐ne més detalls.\n"
 
 #: main.c:105
@@ -4105,11 +4109,11 @@ msgstr "No es va definir «DEBUG» a la compilació.  Es descarta l’opció.\n"
 msgid "Failed to parse mailto: link\n"
 msgstr "No s’ha pogut interpretar l’enllaç de tipus «mailto:».\n"
 
-#: main.c:1029 main.c:1313
+#: main.c:1029 main.c:1317
 msgid "No recipients specified.\n"
 msgstr "No s’ha indicat cap destinatari.\n"
 
-#: main.c:1055
+#: main.c:1059
 msgid "Cannot use -E flag with stdin\n"
 msgstr "No es pot emprar l’opció «-E» amb l’entrada estàndard.\n"
 
@@ -4117,24 +4121,24 @@ msgstr "No es pot emprar l’opció «-E» amb l’entrada estàndard.\n"
 #. Error when using -H command line argument, but reading the draft
 #. file fails for some reason.
 #.
-#: main.c:1162
+#: main.c:1166
 msgid "Cannot parse draft file\n"
 msgstr "No s’ha pogut interpretar el fitxer esborrany.\n"
 
-#: main.c:1233
+#: main.c:1237
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: No s’ha pogut adjuntar el fitxer.\n"
 
-#: main.c:1330
+#: main.c:1334
 msgid "No mailbox with new mail."
 msgstr "No hi ha cap bústia amb correu nou."
 
-#: main.c:1344
+#: main.c:1348
 msgid "No incoming mailboxes defined."
 msgstr "No s’ha definit cap bústia d’entrada."
 
-#: main.c:1372
+#: main.c:1376
 msgid "Mailbox is empty."
 msgstr "La bústia és buida."
 
@@ -6657,7 +6661,9 @@ msgstr "Força la visualització d’una adjunció emprant «mailcap»."
 #.
 #: OPS:33
 msgid "view attachment in pager using copiousoutput mailcap entry"
-msgstr "Mostra una adjunció en un visor emprant l’entrada de «mailcap» per a eixida copiosa."
+msgstr ""
+"Mostra una adjunció en un visor emprant l’entrada de «mailcap» per a eixida "
+"copiosa."
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -7056,7 +7062,9 @@ msgstr "Mostra la part «multipart/alternative» emprant «mailcap»."
 #.
 #: OPS:319
 msgid "view multipart/alternative in pager using copiousoutput mailcap entry"
-msgstr "Mostra la part «multipart/alternative» en un visor emprant l’entrada de «mailcap» per a eixida copiosa."
+msgstr ""
+"Mostra la part «multipart/alternative» en un visor emprant l’entrada de "
+"«mailcap» per a eixida copiosa."
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>

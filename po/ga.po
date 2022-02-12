@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.12\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2021-06-12 10:38-0700\n"
+"POT-Creation-Date: 2022-02-12 10:45-0800\n"
 "PO-Revision-Date: 2006-10-16 14:22-0500\n"
 "Last-Translator: Kevin Patrick Scannell <scannell@SLU.EDU>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: account.c:163
+#: account.c:172
 #, c-format
 msgid "Username at %s: "
 msgstr "Ainm úsáideora ag %s: "
@@ -24,7 +24,7 @@ msgstr "Ainm úsáideora ag %s: "
 #. Prompt for an account password when connecting.
 #. %s@%s is user@host
 #.
-#: account.c:207
+#: account.c:216
 #, c-format
 msgid "Password for %s@%s: "
 msgstr "Focal faire do %s@%s: "
@@ -34,41 +34,41 @@ msgstr "Focal faire do %s@%s: "
 #. $*_oauth_refresh_command defined. So the message does not mean "None of
 #. your $*_oauth_refresh_command's are defined."
 #.
-#: account.c:300
+#: account.c:310
 msgid "mutt_account_getoauthbearer: No OAUTH refresh command defined"
 msgstr ""
 
-#: account.c:306
+#: account.c:316
 msgid "mutt_account_getoauthbearer: Unable to run refresh command"
 msgstr ""
 
-#: account.c:317
+#: account.c:331
 msgid "mutt_account_getoauthbearer: Command returned empty string"
 msgstr ""
 
-#: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:180
-#: background.c:369 browser.c:46 history.c:75 listmenu.c:49 pager.c:1737
-#: pattern.c:2167 postpone.c:42 query.c:49 recvattach.c:59
+#: addrbook.c:37 autocrypt/autocrypt_acct_menu.c:39 background.c:173
+#: background.c:362 browser.c:46 history.c:75 listmenu.c:49 pager.c:1737
+#: pattern.c:2174 postpone.c:42 query.c:49 recvattach.c:59
 msgid "Exit"
 msgstr "Scoir"
 
-#: addrbook.c:38 curs_main.c:549 pager.c:1744 postpone.c:43
+#: addrbook.c:38 curs_main.c:569 pager.c:1744 postpone.c:43
 msgid "Del"
 msgstr "Scr"
 
-#: addrbook.c:39 curs_main.c:550 postpone.c:44
+#: addrbook.c:39 curs_main.c:570 postpone.c:44
 msgid "Undel"
 msgstr "DíScr"
 
-#: addrbook.c:40 history.c:76 pattern.c:2168
+#: addrbook.c:40 history.c:76 pattern.c:2175
 msgid "Select"
 msgstr "Roghnaigh"
 
 #. L10N: localized names of RFC 2369 list operations
-#: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:182
-#: background.c:374 browser.c:49 compose.c:143 crypt-gpgme.c:4565
-#: curs_main.c:555 history.c:78 listmenu.c:61 mutt_ssl.c:1328
-#: mutt_ssl_gnutls.c:1058 pager.c:2144 pattern.c:2169 pgpkey.c:523
+#: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:175
+#: background.c:367 browser.c:49 compose.c:143 crypt-gpgme.c:4557
+#: curs_main.c:575 history.c:78 listmenu.c:61 mutt_ssl.c:1330
+#: mutt_ssl_gnutls.c:1064 pager.c:2144 pattern.c:2176 pgpkey.c:523
 #: postpone.c:45 query.c:54 recvattach.c:63 smime.c:466
 msgid "Help"
 msgstr "Cabhair"
@@ -113,8 +113,8 @@ msgstr "Ainm pearsanta: "
 msgid "[%s = %s] Accept?"
 msgstr "[%s = %s] Glac Leis?"
 
-#: alias.c:360 recvattach.c:506 recvattach.c:529 recvattach.c:543
-#: recvattach.c:558 recvattach.c:640
+#: alias.c:360 recvattach.c:550 recvattach.c:573 recvattach.c:587
+#: recvattach.c:608 recvattach.c:692
 msgid "Save to file: "
 msgstr "Sábháil go comhad: "
 
@@ -141,9 +141,9 @@ msgstr "Ní féidir ainmtheimpléad comhoiriúnach a fháil; lean ar aghaidh?"
 msgid "Mailcap compose entry requires %%s"
 msgstr "Tá gá le %%s in iontráil chumtha Mailcap"
 
-#: attach.c:141 attach.c:274 background.c:342 commands.c:343 compose.c:1826
-#: compress.c:414 curs_lib.c:305 curs_lib.c:999 sendlib.c:1467 sendlib.c:1505
-#: sendlib.c:1568
+#: attach.c:141 attach.c:274 background.c:335 commands.c:343 compose.c:1852
+#: compress.c:414 curs_lib.c:305 curs_lib.c:1064 sendlib.c:1479 sendlib.c:1517
+#: sendlib.c:1581
 #, c-format
 msgid "Error running \"%s\"!"
 msgstr "Earráid agus \"%s\" á rith!"
@@ -207,16 +207,16 @@ msgstr "-- Iatáin"
 msgid "---Attachment: %s"
 msgstr "-- Iatáin"
 
-#: attach.c:642 attach.c:1008 attach.c:1065 handler.c:1371 pgpkey.c:575
+#: attach.c:642 attach.c:1012 attach.c:1069 handler.c:1371 pgpkey.c:575
 #: pgpkey.c:761
 msgid "Can't create filter"
 msgstr "Ní féidir an scagaire a chruthú"
 
-#: attach.c:852
+#: attach.c:856
 msgid "Write fault!"
 msgstr "Fadhb i rith scríofa!"
 
-#: attach.c:1088
+#: attach.c:1092
 msgid "I don't know how to print that!"
 msgstr "Ní fhéadaim priontáil!"
 
@@ -225,7 +225,7 @@ msgstr "Ní fhéadaim priontáil!"
 #. for some reason (e.g. autocrypt, header cache, bcache), but it
 #. doesn't exist.  The prompt is asking whether to create the directory
 #.
-#: autocrypt/autocrypt.c:56 main.c:944 recvattach.c:594
+#: autocrypt/autocrypt.c:56 main.c:969 recvattach.c:644
 #, c-format
 msgid "%s does not exist. Create it?"
 msgstr "Níl a leithéid de %s ann.  Cruthaigh?"
@@ -234,7 +234,7 @@ msgstr "Níl a leithéid de %s ann.  Cruthaigh?"
 #. mkdir() on the directory %s failed.  The second %s is the
 #. error message returned by libc
 #.
-#: autocrypt/autocrypt.c:65 main.c:948 recvattach.c:600
+#: autocrypt/autocrypt.c:65 main.c:973 recvattach.c:650
 #, c-format
 msgid "Can't create %s: %s."
 msgstr "Ní féidir %s a chruthú: %s."
@@ -272,7 +272,7 @@ msgstr ""
 #. they just entered.
 #.
 #: autocrypt/autocrypt.c:187
-msgid "That email address already has an autocrypt account"
+msgid "That email address is already assigned to an autocrypt account"
 msgstr ""
 
 #. L10N:
@@ -307,7 +307,7 @@ msgstr ""
 #. Error displayed if the user tries to force sending an Autocrypt
 #. email when the engine is not available.
 #.
-#: autocrypt/autocrypt.c:542 autocrypt/autocrypt.c:550
+#: autocrypt/autocrypt.c:543 autocrypt/autocrypt.c:551
 #, fuzzy
 msgid "Autocrypt is not available."
 msgstr "Níl an mháthair-theachtaireacht ar fáil."
@@ -317,7 +317,7 @@ msgstr "Níl an mháthair-theachtaireacht ar fáil."
 #. email when the account does not exist or is not enabled.
 #. %s is the From email address used to look up the Autocrypt account.
 #.
-#: autocrypt/autocrypt.c:564
+#: autocrypt/autocrypt.c:565
 #, fuzzy, c-format
 msgid "Autocrypt is not enabled for %s."
 msgstr "Níor aimsíodh aon teastas (bailí) do %s."
@@ -327,7 +327,7 @@ msgstr "Níor aimsíodh aon teastas (bailí) do %s."
 #. to use to encrypt, but it can't find a valid keyid for this address.
 #. The message is printed and they are returned to the compose menu.
 #.
-#: autocrypt/autocrypt.c:591 autocrypt/autocrypt.c:619
+#: autocrypt/autocrypt.c:593 autocrypt/autocrypt.c:621
 #, fuzzy, c-format
 msgid "No (valid) autocrypt key found for %s."
 msgstr "Níor aimsíodh aon teastas (bailí) do %s."
@@ -339,14 +339,14 @@ msgstr "Níor aimsíodh aon teastas (bailí) do %s."
 #. and used for encryption.
 #. If this is answered yes, they will be prompted for a mailbox.
 #.
-#: autocrypt/autocrypt.c:861
+#: autocrypt/autocrypt.c:864
 msgid "Scan a mailbox for autocrypt headers?"
 msgstr ""
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
 #.
-#: autocrypt/autocrypt.c:868
+#: autocrypt/autocrypt.c:871
 #, fuzzy
 msgid "Scan mailbox"
 msgstr "Oscail bosca poist"
@@ -358,7 +358,7 @@ msgstr "Oscail bosca poist"
 #. for a mailbox.  This is because this is a one-time operation
 #. and I don't want them to accidentally ctrl-g and abort it.
 #.
-#: autocrypt/autocrypt.c:890
+#: autocrypt/autocrypt.c:893
 msgid "Scan another mailbox for autocrypt headers?"
 msgstr ""
 
@@ -534,7 +534,7 @@ msgstr ""
 msgid "Autocrypt database version is too new"
 msgstr ""
 
-#: background.c:181
+#: background.c:174
 msgid "Redraw"
 msgstr ""
 
@@ -542,7 +542,7 @@ msgstr ""
 #. Background Edit Landing Page message, first line.
 #. Displays while the editor is running.
 #.
-#: background.c:207 background.c:252 background.c:593
+#: background.c:200 background.c:245 background.c:586
 #, fuzzy
 msgid "Waiting for editor to exit"
 msgstr "Ag feitheamh le freagra..."
@@ -552,7 +552,7 @@ msgstr "Ag feitheamh le freagra..."
 #. Displays while the editor is running.
 #. %s is the key binding for "<exit>", usually "q".
 #.
-#: background.c:223
+#: background.c:216
 #, c-format
 msgid "Type '%s' to background compose session."
 msgstr ""
@@ -560,7 +560,7 @@ msgstr ""
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
 #.
-#: background.c:373
+#: background.c:366
 msgid "Resume"
 msgstr ""
 
@@ -568,7 +568,7 @@ msgstr ""
 #. Background Compose menu
 #. flag that indicates the editor process has finished.
 #.
-#: background.c:436
+#: background.c:429
 msgid "finished"
 msgstr ""
 
@@ -576,14 +576,14 @@ msgstr ""
 #. Background Compose menu
 #. flag that indicates the editor process is still running.
 #.
-#: background.c:442
+#: background.c:435
 msgid "running"
 msgstr ""
 
 #. L10N:
 #. Background Compose Menu title
 #.
-#: background.c:499
+#: background.c:492
 msgid "Background Compose Menu"
 msgstr ""
 
@@ -592,7 +592,7 @@ msgstr ""
 #. displayed if there are no background processes and the
 #. user tries to bring up the background compose menu
 #.
-#: background.c:547
+#: background.c:540
 msgid "No backgrounded editing sessions."
 msgstr ""
 
@@ -601,7 +601,7 @@ msgstr ""
 #. Confirms if an unfinished process is selected
 #. to continue.
 #.
-#: background.c:590
+#: background.c:583
 #, c-format
 msgid "Process is still running. Really select?"
 msgstr ""
@@ -630,95 +630,95 @@ msgstr "Sórtáil de réir (d)áta, (a)ibítíre, (m)éid, nó (n)á sórtáil? "
 msgid "dazcun"
 msgstr ""
 
-#: browser.c:562 browser.c:1079 browser.c:1294
+#: browser.c:562 browser.c:1086 browser.c:1307
 #, c-format
 msgid "%s is not a directory."
 msgstr "Ní comhadlann í %s."
 
-#: browser.c:745
+#: browser.c:749
 #, c-format
 msgid "Mailboxes [%d]"
 msgstr "Boscaí Poist [%d]"
 
-#: browser.c:752
+#: browser.c:756
 #, c-format
 msgid "Subscribed [%s], File mask: %s"
 msgstr "Liostáilte [%s], Masc comhaid: %s"
 
-#: browser.c:756
+#: browser.c:760
 #, c-format
 msgid "Directory [%s], File mask: %s"
 msgstr "Comhadlann [%s], Masc comhaid: %s"
 
-#: browser.c:773
+#: browser.c:777
 msgid "Can't attach a directory!"
 msgstr "Ní féidir comhadlann a cheangal!"
 
-#: browser.c:959 browser.c:1362 browser.c:1431
+#: browser.c:963 browser.c:1375 browser.c:1444
 msgid "No files match the file mask"
 msgstr "Níl aon chomhad comhoiriúnach leis an mhasc chomhaid"
 
-#: browser.c:1140
+#: browser.c:1153
 msgid "Create is only supported for IMAP mailboxes"
 msgstr "Ní féidir cruthú ach le boscaí poist IMAP"
 
-#: browser.c:1163
+#: browser.c:1176
 msgid "Rename is only supported for IMAP mailboxes"
 msgstr "Ní féidir athainmniú ach le boscaí poist IMAP"
 
-#: browser.c:1185
+#: browser.c:1198
 msgid "Delete is only supported for IMAP mailboxes"
 msgstr "Ní féidir scriosadh ach le boscaí poist IMAP"
 
-#: browser.c:1195
+#: browser.c:1208
 #, fuzzy
 msgid "Cannot delete root folder"
 msgstr "Ní féidir an scagaire a chruthú"
 
-#: browser.c:1198
+#: browser.c:1211
 #, c-format
 msgid "Really delete mailbox \"%s\"?"
 msgstr "Scrios bosca poist \"%s\" i ndáiríre?"
 
-#: browser.c:1214
+#: browser.c:1227
 msgid "Mailbox deleted."
 msgstr "Scriosadh an bosca."
 
-#: browser.c:1219
+#: browser.c:1232
 #, fuzzy
 msgid "Mailbox deletion failed."
 msgstr "Scriosadh an bosca."
 
-#: browser.c:1222
+#: browser.c:1235
 msgid "Mailbox not deleted."
 msgstr "Níor scriosadh an bosca."
 
-#: browser.c:1243
+#: browser.c:1256
 msgid "Chdir to: "
 msgstr "Chdir go: "
 
-#: browser.c:1283 browser.c:1356
+#: browser.c:1296 browser.c:1369
 msgid "Error scanning directory."
 msgstr "Earráid agus comhadlann á scanadh."
 
-#: browser.c:1306
+#: browser.c:1319
 msgid "File Mask: "
 msgstr "Masc Comhaid: "
 
-#: browser.c:1420
+#: browser.c:1433
 msgid "New file name: "
 msgstr "Ainm comhaid nua: "
 
-#: browser.c:1448
+#: browser.c:1469
 msgid "Can't view a directory"
 msgstr "Ní féidir comhadlann a scrúdú"
 
-#: browser.c:1463
+#: browser.c:1485
 msgid "Error trying to view file"
 msgstr "Earráid ag iarraidh comhad a scrúdú"
 
-#: buffy.c:402 buffy.c:426 color.c:1014 hook.c:74 hook.c:93 hook.c:356
-#: init.c:2121 init.c:2198 init.c:2994 keymap.c:976
+#: buffy.c:402 buffy.c:426 color.c:1012 hook.c:74 hook.c:93 hook.c:356
+#: init.c:2160 init.c:2237 init.c:3037 keymap.c:898
 msgid "too few arguments"
 msgstr "níl go leor argóintí ann"
 
@@ -726,53 +726,53 @@ msgstr "níl go leor argóintí ann"
 msgid "New mail in "
 msgstr "Post nua i "
 
-#: color.c:555
+#: color.c:546
 #, c-format
 msgid "%s: color not supported by term"
 msgstr "%s: níl dathanna ar fáil leis an teirminéal seo"
 
-#: color.c:561
+#: color.c:557
 #, c-format
 msgid "%s: no such color"
 msgstr "%s: níl a leithéid de dhath ann"
 
-#: color.c:635 color.c:857 color.c:878 color.c:884
+#: color.c:633 color.c:855 color.c:876 color.c:882
 #, c-format
 msgid "%s: no such object"
 msgstr "%s: níl a leithéid de rud ann"
 
-#: color.c:651
+#: color.c:649
 #, fuzzy, c-format
 msgid "%s: command valid only for index, body, header objects"
 msgstr "%s: is féidir an t-ordú seo a úsáid le réada innéacs amháin"
 
-#: color.c:659
+#: color.c:657
 #, c-format
 msgid "%s: too few arguments"
 msgstr "%s: níl go leor argóintí ann"
 
-#: color.c:845 color.c:870
+#: color.c:843 color.c:868
 msgid "Missing arguments."
 msgstr "Argóintí ar iarraidh."
 
-#: color.c:902 color.c:930
+#: color.c:900 color.c:928
 msgid "color: too few arguments"
 msgstr "color: níl go leor argóintí ann"
 
-#: color.c:953
+#: color.c:951
 msgid "mono: too few arguments"
 msgstr "mono: níl go leor argóintí ann"
 
-#: color.c:973
+#: color.c:971
 #, c-format
 msgid "%s: no such attribute"
 msgstr "%s: níl a leithéid d'aitreabúid ann"
 
-#: color.c:1023 hook.c:99 hook.c:363
+#: color.c:1021 hook.c:99 hook.c:363
 msgid "too many arguments"
 msgstr "an iomarca argóintí"
 
-#: color.c:1042
+#: color.c:1040
 msgid "default colors not supported"
 msgstr "níl na dathanna réamhshocraithe ar fáil"
 
@@ -1081,7 +1081,7 @@ msgid "Bcc: "
 msgstr ""
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:103 compose.c:1112 send.c:262
+#: compose.c:103 compose.c:1130 send.c:267
 msgid "Subject: "
 msgstr ""
 
@@ -1092,7 +1092,7 @@ msgid "Reply-To: "
 msgstr "Freagair"
 
 #. L10N: Compose menu field.  May not want to translate.
-#: compose.c:107 compose.c:1129
+#: compose.c:107 compose.c:1147
 msgid "Fcc: "
 msgstr ""
 
@@ -1115,7 +1115,7 @@ msgstr ""
 #. * Since it shares the row with "Encrypt with:", it should not be longer
 #. * than 15-20 character cells.
 #.
-#: compose.c:123 crypt-gpgme.c:5401 pgp.c:1921 smime.c:2351
+#: compose.c:123 crypt-gpgme.c:5393 pgp.c:1919 smime.c:2325
 msgid "Sign as: "
 msgstr "Sínigh mar: "
 
@@ -1149,7 +1149,7 @@ msgstr ""
 msgid "Subj"
 msgstr ""
 
-#: compose.c:141 compose.c:1251
+#: compose.c:141 compose.c:1269
 msgid "Attach file"
 msgstr "Iatán"
 
@@ -1304,141 +1304,157 @@ msgstr "Rabhadh: is drochIDN '%s'."
 msgid "You may not delete the only attachment."
 msgstr "Ní féidir leat an t-iatán amháin a scriosadh."
 
-#: compose.c:728 compose.c:738 menu.c:695
+#. L10N:
+#. Prompt when trying to hit <detach-file> on the first entry in
+#. the compose menu.  This entry is most likely the message they just
+#. typed.  Hitting yes will remove the entry and unlink the file, so
+#. it's worth confirming they really meant to do it.
+#.
+#: compose.c:645
+#, fuzzy
+#| msgid "Really delete mailbox \"%s\"?"
+msgid "Really delete the main message?"
+msgstr "Scrios bosca poist \"%s\" i ndáiríre?"
+
+#: compose.c:746 compose.c:756 menu.c:695
 msgid "You are on the last entry."
 msgstr "Ar an iontráil dheireanach."
 
-#: compose.c:773 menu.c:706
+#: compose.c:791 menu.c:706
 msgid "You are on the first entry."
 msgstr "Ar an chéad iontráil."
 
-#: compose.c:1197 send.c:2460
+#: compose.c:1215 send.c:2465
 #, c-format
 msgid "Bad IDN in \"%s\": '%s'"
 msgstr "DrochIDN i \"%s\": '%s'"
 
-#: compose.c:1260
+#: compose.c:1278
 msgid "Attaching selected files..."
 msgstr "Comhaid roghnaithe á gceangal..."
 
-#: compose.c:1272
+#: compose.c:1292
 #, c-format
 msgid "Unable to attach %s!"
 msgstr "Ní féidir %s a cheangal!"
 
-#: compose.c:1292
+#: compose.c:1312
 msgid "Open mailbox to attach message from"
 msgstr "Oscail an bosca poist as a gceanglóidh tú teachtaireacht"
 
-#: compose.c:1323
+#: compose.c:1343
 #, fuzzy, c-format
 msgid "Unable to open mailbox %s"
 msgstr "Ní féidir an bosca poist a chur faoi ghlas!"
 
-#: compose.c:1331
+#: compose.c:1351
 msgid "No messages in that folder."
 msgstr "Níl aon teachtaireacht san fhillteán sin."
 
-#: compose.c:1340
+#: compose.c:1362
 msgid "Tag the messages you want to attach!"
 msgstr "Clibeáil na teachtaireachtaí le ceangal!"
 
-#: compose.c:1366
+#: compose.c:1389
 msgid "Unable to attach!"
 msgstr "Ní féidir a cheangal!"
 
-#: compose.c:1420
+#: compose.c:1442
 msgid "Recoding only affects text attachments."
 msgstr "Téann ath-ionchódú i bhfeidhm ar iatáin téacs amháin."
 
-#: compose.c:1425
+#: compose.c:1447
 msgid "The current attachment won't be converted."
 msgstr "Ní thiontófar an t-iatán reatha."
 
-#: compose.c:1427
+#: compose.c:1449
 msgid "The current attachment will be converted."
 msgstr "Tiontófar an t-iatán reatha."
 
-#: compose.c:1501
+#: compose.c:1523
 msgid "Invalid encoding."
 msgstr "Ionchódú neamhbhailí."
 
-#: compose.c:1527
+#: compose.c:1549
 msgid "Save a copy of this message?"
 msgstr "Sábháil cóip den teachtaireacht seo?"
 
-#: compose.c:1581
+#: compose.c:1603
 #, fuzzy
 msgid "Send attachment with name: "
 msgstr "féach ar an iatán mar théacs"
 
-#: compose.c:1600
+#: compose.c:1622
 msgid "Rename to: "
 msgstr "Athainmnigh go: "
 
 #. L10N:
 #. "stat" is a system call. Do "man 2 stat" for more information.
-#: compose.c:1607 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:903
+#: compose.c:1629 editmsg.c:98 editmsg.c:122 editmsg.c:137 sendlib.c:909
 #, c-format
 msgid "Can't stat %s: %s"
 msgstr "ní féidir %s a `stat': %s"
 
-#: compose.c:1634
+#: compose.c:1656
 msgid "New file: "
 msgstr "Comhad nua: "
 
-#: compose.c:1647
+#: compose.c:1669
 msgid "Content-Type is of the form base/sub"
 msgstr "Is san fhoirm base/sub é Content-Type"
 
-#: compose.c:1653
+#: compose.c:1675
 #, c-format
 msgid "Unknown Content-Type %s"
 msgstr "Content-Type anaithnid %s"
 
-#: compose.c:1661
+#: compose.c:1683
 #, c-format
 msgid "Can't create file %s"
 msgstr "Ní féidir an comhad %s a chruthú"
 
-#: compose.c:1669
+#. L10N:
+#. This phrase is a modified quote originally from Cool Hand
+#. Luke, intended to be somewhat humorous.
+#.
+#: compose.c:1695
 msgid "What we have here is a failure to make an attachment"
 msgstr "Ní féidir iatán a chruthú"
 
-#: compose.c:1708
+#: compose.c:1734
 msgid "$send_multipart_alternative_filter is not set"
 msgstr ""
 
-#: compose.c:1783
+#: compose.c:1809
 msgid "Postpone this message?"
 msgstr "Cuir an teachtaireacht ar athlá?"
 
-#: compose.c:1844
+#: compose.c:1870
 msgid "Write message to mailbox"
 msgstr "Scríobh teachtaireacht sa bhosca poist"
 
-#: compose.c:1847
+#: compose.c:1873
 #, c-format
 msgid "Writing message to %s ..."
 msgstr "Teachtaireacht á scríobh i %s ..."
 
-#: compose.c:1854
+#: compose.c:1880
 msgid "Message written."
 msgstr "Teachtaireacht scríofa."
 
-#: compose.c:1867
+#: compose.c:1893
 msgid "No PGP backend configured"
 msgstr ""
 
-#: compose.c:1875 compose.c:1948
+#: compose.c:1901 compose.c:1974
 msgid "S/MIME already selected. Clear & continue ? "
 msgstr "S/MIME roghnaithe cheana.  Glan agus lean ar aghaidh? "
 
-#: compose.c:1903
+#: compose.c:1929
 msgid "No S/MIME backend configured"
 msgstr ""
 
-#: compose.c:1912
+#: compose.c:1938
 msgid "PGP already selected. Clear & continue ? "
 msgstr "PGP roghnaithe cheana.  Glan agus lean ar aghaidh? "
 
@@ -1542,7 +1558,7 @@ msgstr "PGP á thosú..."
 msgid "Message can't be sent inline.  Revert to using PGP/MIME?"
 msgstr "Ní féidir an teachtaireacht a sheoladh inlíne.  Úsáid PGP/MIME?"
 
-#: crypt.c:223 send.c:2425
+#: crypt.c:223 send.c:2430
 msgid "Mail not sent."
 msgstr "Níor seoladh an post."
 
@@ -1559,7 +1575,7 @@ msgstr "Ag baint triail as eochracha PGP a bhaint amach...\n"
 msgid "Trying to extract S/MIME certificates...\n"
 msgstr "Ag baint triail as teastais S/MIME a bhaint amach...\n"
 
-#: crypt.c:1092
+#: crypt.c:1093
 #, c-format
 msgid ""
 "[-- Error: Unknown multipart/signed protocol %s! --]\n"
@@ -1568,7 +1584,7 @@ msgstr ""
 "[-- Earráid: Prótacal anaithnid multipart/signed %s! --]\n"
 "\n"
 
-#: crypt.c:1126
+#: crypt.c:1127
 #, fuzzy
 msgid ""
 "[-- Error: Missing or bad-format multipart/signed signature! --]\n"
@@ -1577,7 +1593,7 @@ msgstr ""
 "[-- Earráid: Struchtúr neamhréireach multipart/signed! --]\n"
 "\n"
 
-#: crypt.c:1167
+#: crypt.c:1168
 #, c-format
 msgid ""
 "[-- Warning: We can't verify %s/%s signatures. --]\n"
@@ -1586,7 +1602,7 @@ msgstr ""
 "[-- Rabhadh: Ní féidir %s/%s síniú a fhíorú. --]\n"
 "\n"
 
-#: crypt.c:1180
+#: crypt.c:1181
 msgid ""
 "[-- The following data is signed --]\n"
 "\n"
@@ -1594,7 +1610,7 @@ msgstr ""
 "[-- Is sínithe iad na sonraí seo a leanas --]\n"
 "\n"
 
-#: crypt.c:1187
+#: crypt.c:1188
 msgid ""
 "[-- Warning: Can't find any signatures. --]\n"
 "\n"
@@ -1602,7 +1618,7 @@ msgstr ""
 "[-- Rabhadh: Ní féidir aon síniú a aimsiú. --]\n"
 "\n"
 
-#: crypt.c:1193
+#: crypt.c:1194
 msgid ""
 "\n"
 "[-- End of signed data --]\n"
@@ -1629,7 +1645,7 @@ msgstr "earráid agus prótacal CMS á chumasú: %s\n"
 msgid "error creating gpgme data object: %s\n"
 msgstr "earráid agus réad gpgme á chruthú: %s\n"
 
-#: crypt-gpgme.c:699 crypt-gpgme.c:723 crypt-gpgme.c:1825 crypt-gpgme.c:2603
+#: crypt-gpgme.c:699 crypt-gpgme.c:723 crypt-gpgme.c:1825 crypt-gpgme.c:2595
 #, c-format
 msgid "error allocating data object: %s\n"
 msgstr "earráid agus réad á dháileadh: %s\n"
@@ -1644,7 +1660,7 @@ msgstr "earráid agus réad á atochras: %s\n"
 msgid "error reading data object: %s\n"
 msgstr "earráid agus réad á léamh: %s\n"
 
-#: crypt-gpgme.c:791 crypt-gpgme.c:4213 pgpkey.c:561 pgpkey.c:742
+#: crypt-gpgme.c:791 crypt-gpgme.c:4205 pgpkey.c:561 pgpkey.c:742
 msgid "Can't create temporary file"
 msgstr "Ní féidir comhad sealadach a chruthú"
 
@@ -1732,7 +1748,7 @@ msgstr "RABHADH: Níl óstainm an fhreastalaí comhoiriúnach leis an teastas."
 msgid "PKA verified signer's address is: "
 msgstr ""
 
-#: crypt-gpgme.c:1538 crypt-gpgme.c:3903
+#: crypt-gpgme.c:1538 crypt-gpgme.c:3895
 msgid "Fingerprint: "
 msgstr "Méarlorg: "
 
@@ -1755,7 +1771,7 @@ msgid ""
 msgstr ""
 "RABHADH: NÍL mé cinnte go bhfuil an eochair ag an duine ainmnithe thuas\n"
 
-#: crypt-gpgme.c:1639 crypt-gpgme.c:1644 crypt-gpgme.c:3898
+#: crypt-gpgme.c:1639 crypt-gpgme.c:1644 crypt-gpgme.c:3890
 msgid "aka: "
 msgstr ""
 
@@ -1803,7 +1819,7 @@ msgstr "Síniú maith ó: "
 msgid "               expires: "
 msgstr "ar a dtugtar freisin: "
 
-#: crypt-gpgme.c:1833 crypt-gpgme.c:2063 crypt-gpgme.c:2915
+#: crypt-gpgme.c:1833 crypt-gpgme.c:2063 crypt-gpgme.c:2907
 msgid "[-- Begin signature information --]\n"
 msgstr "[-- Tosú ar eolas faoin síniú --]\n"
 
@@ -1821,7 +1837,7 @@ msgstr "*** Tosú na Nodaireachta (sínithe ag: %s) ***\n"
 msgid "*** End Notation ***\n"
 msgstr "*** Deireadh na Nodaireachta ***\n"
 
-#: crypt-gpgme.c:1929 crypt-gpgme.c:2076 crypt-gpgme.c:2928
+#: crypt-gpgme.c:1929 crypt-gpgme.c:2076 crypt-gpgme.c:2920
 msgid ""
 "[-- End signature information --]\n"
 "\n"
@@ -1838,21 +1854,21 @@ msgstr ""
 "[-- Earráid: theip ar dhíchriptiú: %s --]\n"
 "\n"
 
-#: crypt-gpgme.c:2611
+#: crypt-gpgme.c:2603
 #, fuzzy, c-format
 msgid "error importing key: %s\n"
 msgstr "Earráid agus eolas faoin eochair á fháil: "
 
-#: crypt-gpgme.c:2890
+#: crypt-gpgme.c:2882
 #, c-format
 msgid "Error: decryption/verification failed: %s\n"
 msgstr "Earráid: theip ar dhíchriptiú/fhíorú: %s\n"
 
-#: crypt-gpgme.c:2936
+#: crypt-gpgme.c:2928
 msgid "Error: copy data failed\n"
 msgstr "Earráid: theip ar chóipeáil na sonraí\n"
 
-#: crypt-gpgme.c:2957 pgp.c:616
+#: crypt-gpgme.c:2949 pgp.c:616
 msgid ""
 "[-- BEGIN PGP MESSAGE --]\n"
 "\n"
@@ -1860,11 +1876,11 @@ msgstr ""
 "[-- TOSACH TEACHTAIREACHTA PGP --]\n"
 "\n"
 
-#: crypt-gpgme.c:2959 pgp.c:618
+#: crypt-gpgme.c:2951 pgp.c:618
 msgid "[-- BEGIN PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- TOSAIGH BLOC NA hEOCHRACH POIBLÍ PGP --]\n"
 
-#: crypt-gpgme.c:2962 pgp.c:620
+#: crypt-gpgme.c:2954 pgp.c:620
 msgid ""
 "[-- BEGIN PGP SIGNED MESSAGE --]\n"
 "\n"
@@ -1872,19 +1888,19 @@ msgstr ""
 "[-- TOSACH TEACHTAIREACHTA PGP SÍNITHE --]\n"
 "\n"
 
-#: crypt-gpgme.c:2991 pgp.c:661
+#: crypt-gpgme.c:2983 pgp.c:661
 msgid "[-- END PGP MESSAGE --]\n"
 msgstr "[-- DEIREADH TEACHTAIREACHTA PGP --]\n"
 
-#: crypt-gpgme.c:2993 pgp.c:674
+#: crypt-gpgme.c:2985 pgp.c:674
 msgid "[-- END PGP PUBLIC KEY BLOCK --]\n"
 msgstr "[-- CRÍOCH BHLOC NA hEOCHRACH POIBLÍ PGP --]\n"
 
-#: crypt-gpgme.c:2995 pgp.c:676
+#: crypt-gpgme.c:2987 pgp.c:676
 msgid "[-- END PGP SIGNED MESSAGE --]\n"
 msgstr "[-- DEIREADH NA TEACHTAIREACHTA SÍNITHE PGP --]\n"
 
-#: crypt-gpgme.c:3019 pgp.c:710
+#: crypt-gpgme.c:3011 pgp.c:710
 msgid ""
 "[-- Error: could not find beginning of PGP message! --]\n"
 "\n"
@@ -1892,11 +1908,11 @@ msgstr ""
 "[-- Earráid: níorbh fhéidir tosach na teachtaireachta PGP a aimsiú! --]\n"
 "\n"
 
-#: crypt-gpgme.c:3053 crypt-gpgme.c:3159 pgp.c:1157
+#: crypt-gpgme.c:3045 crypt-gpgme.c:3151 pgp.c:1155
 msgid "[-- Error: could not create temporary file! --]\n"
 msgstr "[-- Earráid: ní féidir comhad sealadach a chruthú! --]\n"
 
-#: crypt-gpgme.c:3067
+#: crypt-gpgme.c:3059
 msgid ""
 "[-- The following data is PGP/MIME signed and encrypted --]\n"
 "\n"
@@ -1904,7 +1920,7 @@ msgstr ""
 "[-- Is sínithe agus criptithe le PGP/MIME iad na sonraí seo a leanas --]\n"
 "\n"
 
-#: crypt-gpgme.c:3068 pgp.c:1173
+#: crypt-gpgme.c:3060 pgp.c:1171
 msgid ""
 "[-- The following data is PGP/MIME encrypted --]\n"
 "\n"
@@ -1912,19 +1928,19 @@ msgstr ""
 "[-- Is criptithe le PGP/MIME iad na sonraí seo a leanas --]\n"
 "\n"
 
-#: crypt-gpgme.c:3113
+#: crypt-gpgme.c:3105
 msgid "[-- End of PGP/MIME signed and encrypted data --]\n"
 msgstr "[-- Deireadh na sonraí sínithe agus criptithe le PGP/MIME --]\n"
 
-#: crypt-gpgme.c:3114 pgp.c:1216
+#: crypt-gpgme.c:3106 pgp.c:1214
 msgid "[-- End of PGP/MIME encrypted data --]\n"
 msgstr "[-- Deireadh na sonraí criptithe le PGP/MIME --]\n"
 
-#: crypt-gpgme.c:3119 pgp.c:671 pgp.c:1221
+#: crypt-gpgme.c:3111 pgp.c:671 pgp.c:1219
 msgid "PGP message successfully decrypted."
 msgstr "D'éirigh le díchriptiú na teachtaireachta PGP."
 
-#: crypt-gpgme.c:3173
+#: crypt-gpgme.c:3165
 msgid ""
 "[-- The following data is S/MIME signed --]\n"
 "\n"
@@ -1932,7 +1948,7 @@ msgstr ""
 "[-- Is sínithe le S/MIME iad na sonraí seo a leanas --]\n"
 "\n"
 
-#: crypt-gpgme.c:3174
+#: crypt-gpgme.c:3166
 msgid ""
 "[-- The following data is S/MIME encrypted --]\n"
 "\n"
@@ -1940,25 +1956,25 @@ msgstr ""
 "[-- Is criptithe le S/MIME iad na sonraí seo a leanas --]\n"
 "\n"
 
-#: crypt-gpgme.c:3227
+#: crypt-gpgme.c:3219
 msgid "[-- End of S/MIME signed data --]\n"
 msgstr "[-- Deireadh na sonraí sínithe le S/MIME --]\n"
 
-#: crypt-gpgme.c:3228
+#: crypt-gpgme.c:3220
 msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- Deireadh na sonraí criptithe le S/MIME --]\n"
 
-#: crypt-gpgme.c:3816
+#: crypt-gpgme.c:3808
 msgid "[Can't display this user ID (unknown encoding)]"
 msgstr ""
 "[Ní féidir an t-aitheantas úsáideora a thaispeáint (ionchódú anaithnid)]"
 
-#: crypt-gpgme.c:3818
+#: crypt-gpgme.c:3810
 msgid "[Can't display this user ID (invalid encoding)]"
 msgstr ""
 "[Ní féidir an t-aitheantas úsáideora a thaispeáint (ionchódú neamhbhailí)]"
 
-#: crypt-gpgme.c:3823
+#: crypt-gpgme.c:3815
 msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Ní féidir an t-aitheantas úsáideora a thaispeáint (DN neamhbhailí)]"
 
@@ -1966,153 +1982,153 @@ msgstr "[Ní féidir an t-aitheantas úsáideora a thaispeáint (DN neamhbhailí)]"
 #. * The following are the headers for the "verify key" output from the
 #. * GPGME key selection menu (bound to "c" in the key selection menu).
 #. * They will be automatically aligned.
-#: crypt-gpgme.c:3897
+#: crypt-gpgme.c:3889
 #, fuzzy
 msgid "Name: "
 msgstr "Ainm ......: "
 
-#: crypt-gpgme.c:3899
+#: crypt-gpgme.c:3891
 #, fuzzy
 msgid "Valid From: "
 msgstr "Bailí Ó : %s\n"
 
-#: crypt-gpgme.c:3900
+#: crypt-gpgme.c:3892
 #, fuzzy
 msgid "Valid To: "
 msgstr "Bailí Go ..: %s\n"
 
-#: crypt-gpgme.c:3901
+#: crypt-gpgme.c:3893
 #, fuzzy
 msgid "Key Type: "
 msgstr "Úsáid Eochrach .: "
 
-#: crypt-gpgme.c:3902
+#: crypt-gpgme.c:3894
 #, fuzzy
 msgid "Key Usage: "
 msgstr "Úsáid Eochrach .: "
 
-#: crypt-gpgme.c:3904
+#: crypt-gpgme.c:3896
 #, fuzzy
 msgid "Serial-No: "
 msgstr "Sraithuimhir .: 0x%s\n"
 
-#: crypt-gpgme.c:3905
+#: crypt-gpgme.c:3897
 #, fuzzy
 msgid "Issued By: "
 msgstr "Eisithe Ag .: "
 
-#: crypt-gpgme.c:3906
+#: crypt-gpgme.c:3898
 #, fuzzy
 msgid "Subkey: "
 msgstr "Fo-eochair ....: 0x%s"
 
 #. L10N: comes after the Name or aka if the key is invalid
 #. L10N: describes a subkey
-#: crypt-gpgme.c:3957 crypt-gpgme.c:4112
+#: crypt-gpgme.c:3949 crypt-gpgme.c:4104
 msgid "[Invalid]"
 msgstr "[Neamhbhailí]"
 
 #. L10N: This is printed after "Key Type: " and looks like this:
 #. *       PGP, 2048 bit RSA
-#: crypt-gpgme.c:4009 crypt-gpgme.c:4168
+#: crypt-gpgme.c:4001 crypt-gpgme.c:4160
 #, fuzzy, c-format
 msgid "%s, %lu bit %s\n"
 msgstr "Cineál na hEochrach ..: %s, %lu giotán %s\n"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:4018 crypt-gpgme.c:4176
+#: crypt-gpgme.c:4010 crypt-gpgme.c:4168
 msgid "encryption"
 msgstr "criptiúchán"
 
-#: crypt-gpgme.c:4019 crypt-gpgme.c:4025 crypt-gpgme.c:4031 crypt-gpgme.c:4177
-#: crypt-gpgme.c:4182 crypt-gpgme.c:4187
+#: crypt-gpgme.c:4011 crypt-gpgme.c:4017 crypt-gpgme.c:4023 crypt-gpgme.c:4169
+#: crypt-gpgme.c:4174 crypt-gpgme.c:4179
 msgid ", "
 msgstr ", "
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:4024 crypt-gpgme.c:4181
+#: crypt-gpgme.c:4016 crypt-gpgme.c:4173
 msgid "signing"
 msgstr "síniú"
 
 #. L10N: value in Key Usage: field
-#: crypt-gpgme.c:4030 crypt-gpgme.c:4186
+#: crypt-gpgme.c:4022 crypt-gpgme.c:4178
 msgid "certification"
 msgstr "deimhniú"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4106
+#: crypt-gpgme.c:4098
 msgid "[Revoked]"
 msgstr "[Cúlghairthe]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4118
+#: crypt-gpgme.c:4110
 msgid "[Expired]"
 msgstr "[As Feidhm]"
 
 #. L10N: describes a subkey
-#: crypt-gpgme.c:4124
+#: crypt-gpgme.c:4116
 msgid "[Disabled]"
 msgstr "[Díchumasaithe]"
 
-#: crypt-gpgme.c:4216
+#: crypt-gpgme.c:4208
 msgid "Collecting data..."
 msgstr "Sonraí á mbailiú..."
 
-#: crypt-gpgme.c:4234
+#: crypt-gpgme.c:4226
 #, c-format
 msgid "Error finding issuer key: %s\n"
 msgstr "Earráid agus eochair an eisitheora á aimsiú: %s\n"
 
-#: crypt-gpgme.c:4244
+#: crypt-gpgme.c:4236
 #, fuzzy
 msgid "Error: certification chain too long - stopping here\n"
 msgstr "Earráid: slabhra rófhada deimhnithe - á stopadh anseo\n"
 
-#: crypt-gpgme.c:4255 pgpkey.c:587
+#: crypt-gpgme.c:4247 pgpkey.c:587
 #, c-format
 msgid "Key ID: 0x%s"
 msgstr "Aitheantas na heochrach: 0x%s"
 
-#: crypt-gpgme.c:4373 crypt-gpgme.c:4426
+#: crypt-gpgme.c:4365 crypt-gpgme.c:4418
 #, c-format
 msgid "gpgme_op_keylist_start failed: %s"
 msgstr "theip ar gpgme_op_keylist_start: %s"
 
-#: crypt-gpgme.c:4413 crypt-gpgme.c:4457 crypt-gpgme.c:5162
+#: crypt-gpgme.c:4405 crypt-gpgme.c:4449 crypt-gpgme.c:5154
 #, c-format
 msgid "gpgme_op_keylist_next failed: %s"
 msgstr "theip ar gpgme_op_keylist_next: %s"
 
-#: crypt-gpgme.c:4528
+#: crypt-gpgme.c:4520
 msgid "All matching keys are marked expired/revoked."
 msgstr "Tá gach eochair chomhoiriúnach marcáilte mar as feidhm/cúlghairthe."
 
-#: crypt-gpgme.c:4557 mutt_ssl.c:1326 mutt_ssl_gnutls.c:1056 pgpkey.c:516
+#: crypt-gpgme.c:4549 mutt_ssl.c:1328 mutt_ssl_gnutls.c:1062 pgpkey.c:516
 #: smime.c:461
 msgid "Exit  "
 msgstr "Scoir   "
 
-#: crypt-gpgme.c:4559 pgpkey.c:518 smime.c:463
+#: crypt-gpgme.c:4551 pgpkey.c:518 smime.c:463
 msgid "Select  "
 msgstr "Roghnaigh  "
 
-#: crypt-gpgme.c:4562 pgpkey.c:521
+#: crypt-gpgme.c:4554 pgpkey.c:521
 msgid "Check key  "
 msgstr "Seiceáil eochair  "
 
-#: crypt-gpgme.c:4579
+#: crypt-gpgme.c:4571
 msgid "PGP and S/MIME keys matching"
 msgstr "Eochracha PGP agus S/MIME atá comhoiriúnach le"
 
-#: crypt-gpgme.c:4581
+#: crypt-gpgme.c:4573
 msgid "PGP keys matching"
 msgstr "Eochracha PGP atá comhoiriúnach le"
 
-#: crypt-gpgme.c:4583
+#: crypt-gpgme.c:4575
 msgid "S/MIME keys matching"
 msgstr "Eochracha S/MIME atá comhoiriúnach le"
 
-#: crypt-gpgme.c:4585
+#: crypt-gpgme.c:4577
 msgid "keys matching"
 msgstr "eochracha atá comhoiriúnach le"
 
@@ -2120,54 +2136,54 @@ msgstr "eochracha atá comhoiriúnach le"
 #. %1$s is one of the previous four entries.
 #. %2$s is an address.
 #. e.g. "S/MIME keys matching <me@mutt.org>."
-#: crypt-gpgme.c:4592
+#: crypt-gpgme.c:4584
 #, c-format
 msgid "%s <%s>."
 msgstr "%s <%s>."
 
 #. L10N:
 #. e.g. 'S/MIME keys matching "Michael Elkins".'
-#: crypt-gpgme.c:4596
+#: crypt-gpgme.c:4588
 #, c-format
 msgid "%s \"%s\"."
 msgstr "%s \"%s\"."
 
-#: crypt-gpgme.c:4623 pgpkey.c:608
+#: crypt-gpgme.c:4615 pgpkey.c:608
 msgid "This key can't be used: expired/disabled/revoked."
 msgstr "Ní féidir an eochair seo a úsáid: as feidhm/díchumasaithe/cúlghairthe."
 
-#: crypt-gpgme.c:4637 pgpkey.c:620 smime.c:494
+#: crypt-gpgme.c:4629 pgpkey.c:620 smime.c:494
 msgid "ID is expired/disabled/revoked."
 msgstr "Tá an t-aitheantas as feidhm/díchumasaithe/cúlghairthe."
 
-#: crypt-gpgme.c:4645 pgpkey.c:624 smime.c:497
+#: crypt-gpgme.c:4637 pgpkey.c:624 smime.c:497
 msgid "ID has undefined validity."
 msgstr "Aitheantas gan bailíocht chinnte."
 
-#: crypt-gpgme.c:4648 pgpkey.c:627
+#: crypt-gpgme.c:4640 pgpkey.c:627
 msgid "ID is not valid."
 msgstr "Níl an t-aitheantas bailí."
 
-#: crypt-gpgme.c:4651 pgpkey.c:630
+#: crypt-gpgme.c:4643 pgpkey.c:630
 msgid "ID is only marginally valid."
 msgstr "Is ar éigean atá an t-aitheantas bailí."
 
-#: crypt-gpgme.c:4660 pgpkey.c:634 smime.c:504
+#: crypt-gpgme.c:4652 pgpkey.c:634 smime.c:504
 #, c-format
 msgid "%s Do you really want to use the key?"
 msgstr "%s An bhfuil tú cinnte gur mhaith leat an eochair seo a úsáid?"
 
-#: crypt-gpgme.c:4727 crypt-gpgme.c:4844 pgpkey.c:841 pgpkey.c:969
+#: crypt-gpgme.c:4719 crypt-gpgme.c:4836 pgpkey.c:841 pgpkey.c:969
 #, c-format
 msgid "Looking for keys matching \"%s\"..."
 msgstr "Ag cuardach ar eochracha atá comhoiriúnach le \"%s\"..."
 
-#: crypt-gpgme.c:4995 pgp.c:1407
+#: crypt-gpgme.c:4987 pgp.c:1405
 #, c-format
 msgid "Use keyID = \"%s\" for %s?"
 msgstr "Úsáid aitheantas eochrach = \"%s\" le haghaidh %s?"
 
-#: crypt-gpgme.c:5048 pgp.c:1456 smime.c:829 smime.c:907
+#: crypt-gpgme.c:5040 pgp.c:1454 smime.c:829 smime.c:907
 #, c-format
 msgid "Enter keyID for %s: "
 msgstr "Iontráil aitheantas eochrach le haghaidh %s: "
@@ -2176,16 +2192,16 @@ msgstr "Iontráil aitheantas eochrach le haghaidh %s: "
 #. mutt_gpgme_select_secret_key() tries to list all secret keys to choose
 #. from.  This error is displayed if no results were found.
 #.
-#: crypt-gpgme.c:5171
+#: crypt-gpgme.c:5163
 #, fuzzy
 msgid "No secret keys found"
 msgstr "eochair rúnda `%s' gan aimsiú: %s\n"
 
-#: crypt-gpgme.c:5205 pgpkey.c:731
+#: crypt-gpgme.c:5197 pgpkey.c:731
 msgid "Please enter the key ID: "
 msgstr "Iontráil aitheantas na heochrach, le do thoil: "
 
-#: crypt-gpgme.c:5218
+#: crypt-gpgme.c:5210
 #, fuzzy, c-format
 msgid "Error exporting key: %s\n"
 msgstr "Earráid agus eolas faoin eochair á fháil: "
@@ -2194,20 +2210,20 @@ msgstr "Earráid agus eolas faoin eochair á fháil: "
 #. MIME description for exported (attached) keys.
 #. You can translate this entry to a non-ASCII string (it will be encoded),
 #. but it may be safer to keep it untranslated.
-#: crypt-gpgme.c:5238
+#: crypt-gpgme.c:5230
 #, fuzzy, c-format
 msgid "PGP Key 0x%s."
 msgstr "Eochair PGP %s."
 
-#: crypt-gpgme.c:5280
+#: crypt-gpgme.c:5272
 msgid "GPGME: OpenPGP protocol not available"
 msgstr ""
 
-#: crypt-gpgme.c:5288
+#: crypt-gpgme.c:5280
 msgid "GPGME: CMS protocol not available"
 msgstr ""
 
-#: crypt-gpgme.c:5328
+#: crypt-gpgme.c:5320
 #, fuzzy
 msgid "S/MIME (s)ign, sign (a)s, (p)gp, (c)lear, or (o)ppenc mode off? "
 msgstr "S/MIME (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, (p)gp, nó (g)lan?"
@@ -2216,115 +2232,128 @@ msgstr "S/MIME (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, (p)gp, nó (g)lan?"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: crypt-gpgme.c:5333
+#: crypt-gpgme.c:5325
 msgid "sapfco"
 msgstr ""
 
-#: crypt-gpgme.c:5338
+#: crypt-gpgme.c:5330
 #, fuzzy
 msgid "PGP (s)ign, sign (a)s, s/(m)ime, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, s/m(i)me, nó (g)lan?"
 
-#: crypt-gpgme.c:5339
+#: crypt-gpgme.c:5331
 msgid "samfco"
 msgstr ""
 
-#: crypt-gpgme.c:5351
+#: crypt-gpgme.c:5343
 #, fuzzy
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "S/MIME (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, (p)gp, nó (g)lan?"
 
-#: crypt-gpgme.c:5352
+#: crypt-gpgme.c:5344
 #, fuzzy
 msgid "esabpfco"
 msgstr "csmapg"
 
-#: crypt-gpgme.c:5357
+#: crypt-gpgme.c:5349
 #, fuzzy
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, s/m(i)me, nó (g)lan?"
 
-#: crypt-gpgme.c:5358
+#: crypt-gpgme.c:5350
 #, fuzzy
 msgid "esabmfco"
 msgstr "csmaig"
 
-#: crypt-gpgme.c:5369
+#: crypt-gpgme.c:5361
 #, fuzzy
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear? "
 msgstr "S/MIME (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, (p)gp, nó (g)lan?"
 
-#: crypt-gpgme.c:5370
+#: crypt-gpgme.c:5362
 msgid "esabpfc"
 msgstr "csmapg"
 
-#: crypt-gpgme.c:5375
+#: crypt-gpgme.c:5367
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, s/m(i)me, nó (g)lan?"
 
-#: crypt-gpgme.c:5376
+#: crypt-gpgme.c:5368
 msgid "esabmfc"
 msgstr "csmaig"
 
-#: crypt-gpgme.c:5534
+#: crypt-gpgme.c:5526
 msgid "Failed to verify sender"
 msgstr "Theip ar fhíorú an tseoltóra"
 
-#: crypt-gpgme.c:5537
+#: crypt-gpgme.c:5529
 msgid "Failed to figure out sender"
 msgstr "Theip ar dhéanamh amach an tseoltóra"
 
-#: curs_lib.c:321
+#: curs_lib.c:325
 msgid "yes"
 msgstr "is sea"
 
-#: curs_lib.c:322
+#: curs_lib.c:326
 msgid "no"
 msgstr "ní hea"
 
-#: curs_lib.c:474
+#. L10N:
+#. In the mutt_yesorno() prompt, some variables and all
+#. quadoptions provide a '?' choice to provide the name of the
+#. configuration variable this prompt is dependent on.
+#.
+#. For example, the prompt "Quit Mutt?" is dependent on the
+#. quadoption $quit.
+#.
+#. Typing '?' at those prompts will print this message above
+#. the prompt, where %s is the name of the configuration
+#. variable.
+#.
+#: curs_lib.c:484
+#, c-format
+msgid "See $%s for more information."
+msgstr ""
+
+#: curs_lib.c:538
 msgid "Exit Mutt?"
 msgstr "Scoir Mutt?"
 
-#. L10N:
-#. Prompt when trying to quit Mutt while there are backgrounded
-#. compose sessions in process.
-#.
-#: curs_lib.c:478 curs_main.c:1074 curs_main.c:1502
+#: curs_lib.c:543 curs_main.c:1095 curs_main.c:1525
 msgid "There are $background_edit sessions. Really quit Mutt?"
 msgstr ""
 
-#: curs_lib.c:548
+#: curs_lib.c:613
 msgid "Error History is disabled."
 msgstr ""
 
-#: curs_lib.c:554
+#: curs_lib.c:619
 #, fuzzy
 msgid "Error History is currently being shown."
 msgstr "Cabhair á taispeáint faoi láthair."
 
-#: curs_lib.c:569
+#: curs_lib.c:634
 msgid "Error History"
 msgstr ""
 
-#: curs_lib.c:950 mutt_socket.c:664 mutt_ssl.c:636
+#: curs_lib.c:1015 mutt_socket.c:696 mutt_ssl.c:638
 msgid "unknown error"
 msgstr "earráid anaithnid"
 
-#: curs_lib.c:970
+#: curs_lib.c:1035
 msgid "Press any key to continue..."
 msgstr "Brúigh eochair ar bith chun leanúint..."
 
-#: curs_lib.c:1018
+#: curs_lib.c:1083
 msgid " ('?' for list): "
 msgstr " ('?' le haghaidh liosta): "
 
-#: curs_main.c:67 curs_main.c:832
+#: curs_main.c:67 curs_main.c:852
 msgid "No mailbox is open."
 msgstr "Níl aon bhosca poist oscailte."
 
@@ -2332,11 +2361,11 @@ msgstr "Níl aon bhosca poist oscailte."
 msgid "There are no messages."
 msgstr "Níl aon teachtaireacht ann."
 
-#: curs_main.c:69 mx.c:1213 pager.c:59 recvattach.c:46
+#: curs_main.c:69 mx.c:1228 pager.c:59 recvattach.c:46
 msgid "Mailbox is read-only."
 msgstr "Tá an bosca poist inléite amháin."
 
-#: curs_main.c:70 pager.c:60 recvattach.c:1305
+#: curs_main.c:70 pager.c:60 recvattach.c:1347
 msgid "Function not permitted in attach-message mode."
 msgstr "Ní cheadaítear an fheidhm seo sa mhód iatáin."
 
@@ -2350,39 +2379,39 @@ msgstr "Níl aon teachtaireacht le feiceáil."
 msgid "%s: Operation not permitted by ACL"
 msgstr ""
 
-#: curs_main.c:348
+#: curs_main.c:368
 msgid "Cannot toggle write on a readonly mailbox!"
 msgstr "Ní féidir 'scríobh' a scoránú ar bhosca poist inléite amháin!"
 
-#: curs_main.c:355
+#: curs_main.c:375
 msgid "Changes to folder will be written on folder exit."
 msgstr "Scríobhfar na hathruithe agus an fillteán á dhúnadh."
 
-#: curs_main.c:360
+#: curs_main.c:380
 msgid "Changes to folder will not be written."
 msgstr "Ní scríobhfar na hathruithe."
 
-#: curs_main.c:548
+#: curs_main.c:568
 msgid "Quit"
 msgstr "Scoir"
 
-#: curs_main.c:551 recvattach.c:60
+#: curs_main.c:571 recvattach.c:60
 msgid "Save"
 msgstr "Sábháil"
 
-#: curs_main.c:552 query.c:50
+#: curs_main.c:572 query.c:50
 msgid "Mail"
 msgstr "Post"
 
-#: curs_main.c:553 listmenu.c:50 pager.c:1745
+#: curs_main.c:573 listmenu.c:50 pager.c:1745
 msgid "Reply"
 msgstr "Freagair"
 
-#: curs_main.c:554
+#: curs_main.c:574
 msgid "Group"
 msgstr "Grúpa"
 
-#: curs_main.c:703
+#: curs_main.c:723
 msgid "Mailbox was externally modified.  Flags may be wrong."
 msgstr ""
 "Mionathraíodh an bosca poist go seachtrach.  Is féidir go bhfuil bratacha "
@@ -2392,230 +2421,230 @@ msgstr ""
 #. Message printed on status line in index after mx_check_mailbox(),
 #. when IMAP has an error and Mutt successfully reconnects.
 #.
-#: curs_main.c:710
+#: curs_main.c:730
 msgid "Mailbox reconnected.  Some changes may have been lost."
 msgstr ""
 
-#: curs_main.c:714
+#: curs_main.c:734
 msgid "New mail in this mailbox."
 msgstr "Post nua sa bhosca seo."
 
-#: curs_main.c:725
+#: curs_main.c:745
 msgid "Mailbox was externally modified."
 msgstr "Mionathraíodh an bosca poist go seachtrach."
 
-#: curs_main.c:839
+#: curs_main.c:859
 msgid "No tagged messages."
 msgstr "Níl aon teachtaireacht chlibeáilte."
 
-#: curs_main.c:843 menu.c:1101
+#: curs_main.c:863 menu.c:1114
 msgid "Nothing to do."
 msgstr "Níl faic le déanamh."
 
-#: curs_main.c:923
+#: curs_main.c:943
 msgid "Jump to message: "
 msgstr "Léim go teachtaireacht: "
 
-#: curs_main.c:936
+#: curs_main.c:956
 msgid "Argument must be a message number."
 msgstr "Caithfidh an argóint a bheith ina huimhir theachtaireachta."
 
-#: curs_main.c:968
+#: curs_main.c:988
 msgid "That message is not visible."
 msgstr "Níl an teachtaireacht sin infheicthe."
 
-#: curs_main.c:971
+#: curs_main.c:991
 msgid "Invalid message number."
 msgstr "Uimhir neamhbhailí theachtaireachta."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:985 curs_main.c:2207 pager.c:2764
+#: curs_main.c:1005 curs_main.c:2230 pager.c:2792
 #, fuzzy
 msgid "Cannot delete message(s)"
 msgstr "Níl aon teachtaireacht nach scriosta."
 
-#: curs_main.c:988
+#: curs_main.c:1008
 msgid "Delete messages matching: "
 msgstr "Scrios teachtaireachtaí atá comhoiriúnach le: "
 
-#: curs_main.c:1016
+#: curs_main.c:1036
 msgid "No limit pattern is in effect."
 msgstr "Níl aon phatrún teorannaithe i bhfeidhm."
 
 #. L10N: ask for a limit to apply
-#: curs_main.c:1021
+#: curs_main.c:1041
 #, c-format
 msgid "Limit: %s"
 msgstr "Teorainn: %s"
 
-#: curs_main.c:1031
+#: curs_main.c:1051
 msgid "Limit to messages matching: "
 msgstr "Teorannaigh go teachtaireachtaí atá comhoiriúnach le: "
 
-#: curs_main.c:1052
+#: curs_main.c:1072
 msgid "To view all messages, limit to \"all\"."
 msgstr "Chun gach teachtaireacht a fheiceáil, socraigh teorainn mar \"all\"."
 
-#: curs_main.c:1064 pager.c:2246
+#: curs_main.c:1084 pager.c:2246
 msgid "Quit Mutt?"
 msgstr "Scoir Mutt?"
 
-#: curs_main.c:1167
+#: curs_main.c:1188
 msgid "Tag messages matching: "
 msgstr "Clibeáil teachtaireachtaí atá comhoiriúnach le: "
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1177 curs_main.c:2563 pager.c:3021
+#: curs_main.c:1198 curs_main.c:2586 pager.c:3045
 #, fuzzy
 msgid "Cannot undelete message(s)"
 msgstr "Níl aon teachtaireacht nach scriosta."
 
-#: curs_main.c:1179
+#: curs_main.c:1200
 msgid "Undelete messages matching: "
 msgstr "Díscrios teachtaireachtaí atá comhoiriúnach le: "
 
-#: curs_main.c:1187
+#: curs_main.c:1208
 msgid "Untag messages matching: "
 msgstr "Díchlibeáil teachtaireachtaí atá comhoiriúnach le: "
 
-#: curs_main.c:1218
+#: curs_main.c:1239
 msgid "Logged out of IMAP servers."
 msgstr ""
 
-#: curs_main.c:1316
+#: curs_main.c:1337
 msgid "Open mailbox in read-only mode"
 msgstr "Oscail bosca poist i mód inléite amháin"
 
-#: curs_main.c:1318
+#: curs_main.c:1339
 msgid "Open mailbox"
 msgstr "Oscail bosca poist"
 
-#: curs_main.c:1327
+#: curs_main.c:1348
 #, fuzzy
 msgid "No mailboxes have new mail"
 msgstr "Níl aon bhosca le ríomhphost nua."
 
-#: curs_main.c:1361 mx.c:535 mx.c:636
+#: curs_main.c:1382 mx.c:535 mx.c:636
 #, c-format
 msgid "%s is not a mailbox."
 msgstr "Ní bosca poist é %s."
 
-#: curs_main.c:1498
+#: curs_main.c:1520
 msgid "Exit Mutt without saving?"
 msgstr "Éirigh as Mutt gan sábháil?"
 
-#: curs_main.c:1524 curs_main.c:1560 curs_main.c:2041 curs_main.c:2073
-#: flags.c:303 thread.c:1026 thread.c:1082 thread.c:1150
+#: curs_main.c:1547 curs_main.c:1583 curs_main.c:2064 curs_main.c:2096
+#: flags.c:312 thread.c:1207 thread.c:1263 thread.c:1331
 msgid "Threading is not enabled."
 msgstr "Snáithe gan cumasú."
 
-#: curs_main.c:1536
+#: curs_main.c:1559
 msgid "Thread broken"
 msgstr "Snáithe briste"
 
-#: curs_main.c:1547
+#: curs_main.c:1570
 msgid "Thread cannot be broken, message is not part of a thread"
 msgstr ""
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1557
+#: curs_main.c:1580
 msgid "Cannot link threads"
 msgstr ""
 
-#: curs_main.c:1562
+#: curs_main.c:1585
 msgid "No Message-ID: header available to link thread"
 msgstr "Gan cheanntásc `Message-ID:'; ní féidir an snáithe a nasc"
 
-#: curs_main.c:1564
+#: curs_main.c:1587
 msgid "First, please tag a message to be linked here"
 msgstr "Ar dtús, clibeáil teachtaireacht le nascadh anseo"
 
-#: curs_main.c:1576
+#: curs_main.c:1599
 msgid "Threads linked"
 msgstr "Snáitheanna nasctha"
 
-#: curs_main.c:1579
+#: curs_main.c:1602
 msgid "No thread linked"
 msgstr "Níor nascadh snáithe"
 
-#: curs_main.c:1615 curs_main.c:1640
+#: curs_main.c:1638 curs_main.c:1663
 msgid "You are on the last message."
 msgstr "An teachtaireacht deiridh."
 
-#: curs_main.c:1622 curs_main.c:1666
+#: curs_main.c:1645 curs_main.c:1689
 msgid "No undeleted messages."
 msgstr "Níl aon teachtaireacht nach scriosta."
 
-#: curs_main.c:1659 curs_main.c:1683
+#: curs_main.c:1682 curs_main.c:1706
 msgid "You are on the first message."
 msgstr "An chéad teachtaireacht."
 
-#: curs_main.c:1771 menu.c:919 pager.c:2365 pattern.c:2097
+#: curs_main.c:1794 menu.c:922 pager.c:2365 pattern.c:2104
 msgid "Search wrapped to top."
 msgstr "Thimfhill an cuardach go dtí an barr."
 
-#: curs_main.c:1780 pager.c:2387 pattern.c:2108
+#: curs_main.c:1803 pager.c:2387 pattern.c:2115
 msgid "Search wrapped to bottom."
 msgstr "Thimfhill an cuardach go dtí an bun."
 
-#: curs_main.c:1824
+#: curs_main.c:1847
 #, fuzzy
 msgid "No new messages in this limited view."
 msgstr "Níl an mháthair-theachtaireacht infheicthe san amharc srianta seo."
 
-#: curs_main.c:1826
+#: curs_main.c:1849
 #, fuzzy
 msgid "No new messages."
 msgstr "Níl aon teachtaireacht nua"
 
-#: curs_main.c:1831
+#: curs_main.c:1854
 #, fuzzy
 msgid "No unread messages in this limited view."
 msgstr "Níl an mháthair-theachtaireacht infheicthe san amharc srianta seo."
 
-#: curs_main.c:1833
+#: curs_main.c:1856
 #, fuzzy
 msgid "No unread messages."
 msgstr "Níl aon teachtaireacht gan léamh"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1851
+#: curs_main.c:1874
 #, fuzzy
 msgid "Cannot flag message"
 msgstr "taispeáin teachtaireacht"
 
 #. L10N: CHECK_ACL
-#: curs_main.c:1889 pager.c:2984
+#: curs_main.c:1912 pager.c:3008
 msgid "Cannot toggle new"
 msgstr ""
 
-#: curs_main.c:1974
+#: curs_main.c:1997
 msgid "No more threads."
 msgstr "Níl aon snáithe eile."
 
-#: curs_main.c:1976
+#: curs_main.c:1999
 msgid "You are on the first thread."
 msgstr "Is é seo an chéad snáithe."
 
-#: curs_main.c:2059
+#: curs_main.c:2082
 msgid "Thread contains unread messages."
 msgstr "Tá teachtaireachtaí gan léamh sa snáithe seo."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2163 pager.c:2731
+#: curs_main.c:2186 pager.c:2759
 #, fuzzy
 msgid "Cannot delete message"
 msgstr "Níl aon teachtaireacht nach scriosta."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2244
+#: curs_main.c:2267
 #, fuzzy
 msgid "Cannot edit message"
 msgstr "Ní féidir teachtaireacht a scríobh "
 
 #. L10N: This is displayed when the x-label on one or more
 #. * messages is edited.
-#: curs_main.c:2281 pager.c:3073
+#: curs_main.c:2304 pager.c:3096
 #, fuzzy, c-format
 msgid "%d labels changed."
 msgstr "Bosca poist gan athrú."
@@ -2623,13 +2652,13 @@ msgstr "Bosca poist gan athrú."
 #. L10N: This is displayed when editing an x-label, but no messages
 #. * were updated.  Possibly due to canceling at the prompt or if the new
 #. * label is the same as the old label.
-#: curs_main.c:2288 pager.c:3077
+#: curs_main.c:2311 pager.c:3100
 #, fuzzy
 msgid "No labels changed."
 msgstr "Bosca poist gan athrú."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2381
+#: curs_main.c:2404
 #, fuzzy
 msgid "Cannot mark message(s) as read"
 msgstr "léim go máthair-theachtaireacht sa snáithe"
@@ -2637,14 +2666,14 @@ msgstr "léim go máthair-theachtaireacht sa snáithe"
 #. L10N: This is the prompt for <mark-message>.  Whatever they
 #. enter will be prefixed by $mark_macro_prefix and will become
 #. a macro hotkey to jump to the currently selected message.
-#: curs_main.c:2417
+#: curs_main.c:2440
 #, fuzzy
 msgid "Enter macro stroke: "
 msgstr "Iontráil aitheantas na heochrach: "
 
 #. L10N: "message hotkey" is the key bindings menu description of a
 #. macro created by <mark-message>.
-#: curs_main.c:2425
+#: curs_main.c:2448
 #, fuzzy
 msgid "message hotkey"
 msgstr "Cuireadh an teachtaireacht ar athlá."
@@ -2652,20 +2681,20 @@ msgstr "Cuireadh an teachtaireacht ar athlá."
 #. L10N: This is echoed after <mark-message> creates a new hotkey
 #. macro.  %s is the hotkey string ($mark_macro_prefix followed
 #. by whatever they typed at the prompt.)
-#: curs_main.c:2430
+#: curs_main.c:2453
 #, fuzzy, c-format
 msgid "Message bound to %s."
 msgstr "Scinneadh an teachtaireacht."
 
 #. L10N: This error is printed if <mark-message> cannot find a
 #. Message-ID for the currently selected message in the index.
-#: curs_main.c:2438
+#: curs_main.c:2461
 #, fuzzy
 msgid "No message ID to macro."
 msgstr "Níl aon teachtaireacht san fhillteán sin."
 
 #. L10N: CHECK_ACL
-#: curs_main.c:2533 pager.c:3004
+#: curs_main.c:2556 pager.c:3028
 #, fuzzy
 msgid "Cannot undelete message"
 msgstr "Níl aon teachtaireacht nach scriosta."
@@ -2674,8 +2703,8 @@ msgstr "Níl aon teachtaireacht nach scriosta."
 #, fuzzy
 msgid ""
 "~~\t\tinsert a line beginning with a single ~\n"
-"~b users\tadd users to the Bcc: field\n"
-"~c users\tadd users to the Cc: field\n"
+"~b addresses\tadd addresses to the Bcc: field\n"
+"~c addresses\tadd addresses to the Cc: field\n"
 "~f messages\tinclude messages\n"
 "~F messages\tsame as ~f, except also include headers\n"
 "~h\t\tedit the message header\n"
@@ -2793,11 +2822,11 @@ msgstr "Níorbh fhéidir an comhad teachtaireachta a oscailt: %s"
 msgid "Can't append to folder: %s"
 msgstr "Ní féidir aon rud a iarcheangal leis an fhillteán: %s"
 
-#: flags.c:347
+#: flags.c:368
 msgid "Set flag"
 msgstr "Socraigh bratach"
 
-#: flags.c:347
+#: flags.c:368
 msgid "Clear flag"
 msgstr "Glan bratach"
 
@@ -2981,7 +3010,7 @@ msgstr ""
 msgid "badly formatted command string"
 msgstr ""
 
-#: hook.c:340 init.c:728 init.c:808 init.c:816 init.c:839
+#: hook.c:340 init.c:765 init.c:845 init.c:853 init.c:876
 #, fuzzy
 msgid "not enough arguments"
 msgstr "níl go leor argóintí ann"
@@ -3000,7 +3029,7 @@ msgstr "unhook: cineál anaithnid crúca: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Ní féidir %s a scriosadh taobh istigh de %s."
 
-#: imap/auth.c:110 pop_auth.c:529 smtp.c:568
+#: imap/auth.c:115 pop_auth.c:630 smtp.c:636
 msgid "No authenticators available"
 msgstr "Níl aon fhíordheimhneoirí ar fáil"
 
@@ -3032,11 +3061,11 @@ msgstr "Theip ar fhíordheimhniú GSSAPI."
 msgid "LOGIN disabled on this server."
 msgstr "Díchumasaíodh LOGIN ar an fhreastalaí seo."
 
-#: imap/auth_login.c:47 pop_auth.c:271
+#: imap/auth_login.c:47 pop_auth.c:369
 msgid "Logging in..."
 msgstr "Logáil isteach..."
 
-#: imap/auth_login.c:70 pop_auth.c:314
+#: imap/auth_login.c:70 pop_auth.c:412
 msgid "Login failed."
 msgstr "Theip ar logáil isteach."
 
@@ -3044,8 +3073,8 @@ msgstr "Theip ar logáil isteach."
 #. L10N:
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
-#: imap/auth_oauth.c:39 imap/auth_sasl.c:109 pop_auth.c:332 smtp.c:606
-#: smtp.c:693
+#: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
+#: pop_auth.c:223 pop_auth.c:430 smtp.c:674 smtp.c:770 smtp.c:839
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Á fhíordheimhniú (%s)..."
@@ -3058,7 +3087,7 @@ msgstr "Á fhíordheimhniú (%s)..."
 msgid "%s authentication failed."
 msgstr "Theip ar fhíordheimhniú SASL."
 
-#: imap/auth_sasl.c:236 pop_auth.c:185
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
 msgid "SASL authentication failed."
 msgstr "Theip ar fhíordheimhniú SASL."
 
@@ -3140,11 +3169,11 @@ msgstr "Nasc le %s á dhúnadh..."
 msgid "This IMAP server is ancient. Mutt does not work with it."
 msgstr "Freastalaí ársa IMAP. Ní oibríonn Mutt leis."
 
-#: imap/imap.c:499 pop_lib.c:296 smtp.c:469
+#: imap/imap.c:499 pop_lib.c:296 smtp.c:518
 msgid "Secure connection with TLS?"
 msgstr "Nasc daingean le TLS?"
 
-#: imap/imap.c:509 pop_lib.c:316 smtp.c:481
+#: imap/imap.c:509 pop_lib.c:316 smtp.c:530
 msgid "Could not negotiate TLS connection"
 msgstr "Níorbh fhéidir nasc TLS a shocrú"
 
@@ -3183,99 +3212,99 @@ msgstr "Theip ar ordú réamhnaisc."
 msgid "Selecting %s..."
 msgstr "%s á roghnú..."
 
-#: imap/imap.c:999
+#: imap/imap.c:1001
 msgid "Error opening mailbox"
 msgstr "Earráid ag oscailt an bhosca poist"
 
-#: imap/imap.c:1051 imap/imap.c:2559 imap/message.c:1549 muttlib.c:2017
+#: imap/imap.c:1053 imap/imap.c:2568 imap/message.c:1584 muttlib.c:2022
 #, c-format
 msgid "Create %s?"
 msgstr "Cruthaigh %s?"
 
-#: imap/imap.c:1471
+#: imap/imap.c:1481
 msgid "Expunge failed"
 msgstr "Theip ar scriosadh"
 
-#: imap/imap.c:1484
+#: imap/imap.c:1494
 #, c-format
 msgid "Marking %d messages deleted..."
 msgstr "Ag marcáil %d teachtaireacht mar scriosta..."
 
-#: imap/imap.c:1541
+#: imap/imap.c:1551
 #, c-format
 msgid "Saving changed messages... [%d/%d]"
 msgstr "Teachtaireachtaí athraithe á sábháil... [%d/%d]"
 
-#: imap/imap.c:1623
+#: imap/imap.c:1632
 msgid "Error saving flags. Close anyway?"
 msgstr "Earráid agus bratacha á sábháil. Dún mar sin féin?"
 
-#: imap/imap.c:1631
+#: imap/imap.c:1640
 msgid "Error saving flags"
 msgstr "Earráid agus bratacha á sábháil"
 
-#: imap/imap.c:1655
+#: imap/imap.c:1664
 msgid "Expunging messages from server..."
 msgstr "Teachtaireachtaí á scriosadh ón fhreastalaí..."
 
-#: imap/imap.c:1661
+#: imap/imap.c:1670
 msgid "imap_sync_mailbox: EXPUNGE failed"
 msgstr "imap_sync_mailbox: Theip ar scriosadh"
 
-#: imap/imap.c:2203
+#: imap/imap.c:2212
 #, c-format
 msgid "Header search without header name: %s"
 msgstr "Cuardach ceanntáisc gan ainm an cheanntáisc: %s"
 
-#: imap/imap.c:2272
+#: imap/imap.c:2281
 msgid "Bad mailbox name"
 msgstr "Drochainm ar bhosca poist"
 
-#: imap/imap.c:2291
+#: imap/imap.c:2300
 #, c-format
 msgid "Subscribing to %s..."
 msgstr "Ag liostáil le %s..."
 
-#: imap/imap.c:2293
+#: imap/imap.c:2302
 #, c-format
 msgid "Unsubscribing from %s..."
 msgstr "Ag díliostáil ó %s..."
 
-#: imap/imap.c:2303
+#: imap/imap.c:2312
 #, c-format
 msgid "Subscribed to %s"
 msgstr "Liostáilte le %s"
 
-#: imap/imap.c:2305
+#: imap/imap.c:2314
 #, c-format
 msgid "Unsubscribed from %s"
 msgstr "Díliostáilte ó %s"
 
-#: imap/imap.c:2544 imap/message.c:1513
+#: imap/imap.c:2553 imap/message.c:1548
 #, c-format
 msgid "Copying %d messages to %s..."
 msgstr "%d teachtaireacht á gcóipeáil go %s..."
 
 #. L10N: This prompt is made if the user hits Ctrl-C when opening
 #. * an IMAP mailbox
-#: imap/message.c:88
+#: imap/message.c:90
 msgid "Abort download and close mailbox?"
 msgstr ""
 
-#: imap/message.c:111 mx.c:1454
+#: imap/message.c:113 mx.c:1470
 msgid "Integer overflow -- can't allocate memory."
 msgstr "Slánuimhir thar maoil -- ní féidir cuimhne a dháileadh."
 
 #. L10N:
 #. Comparing the cached data with the IMAP server's data
-#: imap/message.c:452
+#: imap/message.c:460
 #, fuzzy
 msgid "Evaluating cache..."
 msgstr "Taisce á scrúdú... [%d/%d]"
 
 #. L10N:
 #. Fetching IMAP flag changes, using the CONDSTORE extension
-#: imap/message.c:653
+#: imap/message.c:674
 #, fuzzy
 msgid "Fetching flag updates..."
 msgstr "Ceanntásca na dteachtaireachtaí á bhfáil... [%d/%d]"
@@ -3285,248 +3314,264 @@ msgstr "Ceanntásca na dteachtaireachtaí á bhfáil... [%d/%d]"
 #. a quick sanity check.  If that fails, Mutt reopens the mailbox
 #. using a normal download.
 #.
-#: imap/message.c:789
+#: imap/message.c:821
 #, fuzzy
 #| msgid "Reopening mailbox..."
 msgid "QRESYNC failed.  Reopening mailbox."
 msgstr "Bosca poist á athoscailt..."
 
-#: imap/message.c:844
+#: imap/message.c:876
 msgid "Unable to fetch headers from this IMAP server version."
 msgstr "Ní féidir na ceanntásca a fháil ó fhreastalaí IMAP den leagan seo."
 
-#: imap/message.c:857
+#: imap/message.c:889
 #, c-format
 msgid "Could not create temporary file %s"
 msgstr "Níorbh fhéidir comhad sealadach %s a chruthú"
 
-#: imap/message.c:865 pop.c:309
+#: imap/message.c:897 pop.c:309
 #, fuzzy
 msgid "Fetching message headers..."
 msgstr "Ceanntásca na dteachtaireachtaí á bhfáil... [%d/%d]"
 
-#: imap/message.c:1081 imap/message.c:1160 pop.c:603
+#: imap/message.c:1113 imap/message.c:1192 pop.c:603
 msgid "Fetching message..."
 msgstr "Teachtaireacht á fáil..."
 
-#: imap/message.c:1145 pop.c:598
+#: imap/message.c:1177 pop.c:598
 msgid "The message index is incorrect. Try reopening the mailbox."
 msgstr ""
 "Tá innéacs na dteachtaireachtaí mícheart. Bain triail as an mbosca poist a "
 "athoscailt."
 
-#: imap/message.c:1329
+#: imap/message.c:1361
 msgid "Uploading message..."
 msgstr "Teachtaireacht á huasluchtú..."
 
-#: imap/message.c:1517
+#: imap/message.c:1552
 #, c-format
 msgid "Copying message %d to %s..."
 msgstr "Teachtaireacht %d á cóipeáil go %s..."
 
-#: imap/util.c:478
+#: imap/util.c:500
 msgid "Continue?"
 msgstr "Lean ar aghaidh?"
 
-#: init.c:60 init.c:2280 pager.c:58
+#: init.c:60 init.c:2319 pager.c:58
 msgid "Not available in this menu."
 msgstr "Ní ar fáil sa roghchlár seo."
 
-#: init.c:492
+#: init.c:529
 #, c-format
 msgid "Bad regexp: %s"
 msgstr "Slonn ionadaíochta neamhbhailí: %s"
 
-#: init.c:549
+#: init.c:586
 msgid "Not enough subexpressions for template"
 msgstr ""
 
-#: init.c:898
+#: init.c:935
 msgid "spam: no matching pattern"
 msgstr "spam: níl aon phatrún comhoiriúnach ann"
 
-#: init.c:900
+#: init.c:937
 msgid "nospam: no matching pattern"
 msgstr "nospam: níl aon phatrún comhoiriúnach ann"
 
-#: init.c:1101
+#: init.c:1138
 #, fuzzy, c-format
 msgid "%sgroup: missing -rx or -addr."
 msgstr "-rx nó -addr ar iarraidh."
 
-#: init.c:1119
+#: init.c:1156
 #, fuzzy, c-format
 msgid "%sgroup: warning: bad IDN '%s'.\n"
 msgstr "Rabhadh: DrochIDN '%s'.\n"
 
-#: init.c:1338
+#: init.c:1375
 msgid "attachments: no disposition"
 msgstr "iatáin: gan chóiriú"
 
-#: init.c:1388
+#: init.c:1425
 msgid "attachments: invalid disposition"
 msgstr "iatáin: cóiriú neamhbhailí"
 
-#: init.c:1415
+#: init.c:1452
 msgid "unattachments: no disposition"
 msgstr "dí-iatáin: gan chóiriú"
 
-#: init.c:1462
+#: init.c:1499
 msgid "unattachments: invalid disposition"
 msgstr "dí-iatáin: cóiriú neamhbhailí"
 
-#: init.c:1591
+#: init.c:1628
 msgid "alias: no address"
 msgstr "ailias: gan seoladh"
 
-#: init.c:1639
+#: init.c:1676
 #, c-format
 msgid "Warning: Bad IDN '%s' in alias '%s'.\n"
 msgstr "Rabhadh: DrochIDN '%s' san ailias '%s'.\n"
 
-#: init.c:1764
+#: init.c:1801
 msgid "invalid header field"
 msgstr "réimse cheanntáisc neamhbhailí"
 
-#: init.c:1790
+#: init.c:1827
 #, c-format
 msgid "%s: unknown sorting method"
 msgstr "%s: modh shórtála anaithnid"
 
-#: init.c:1906
+#: init.c:1945
 #, c-format
 msgid "mutt_restore_default(%s): error in regexp: %s\n"
 msgstr "mutt_restore_default(%s): earráid i regexp: %s\n"
 
-#: init.c:2158 init.c:2184 init.c:2327
+#: init.c:2197 init.c:2223 init.c:2366
 #, c-format
 msgid "%s is unset"
 msgstr "%s gan socrú"
 
-#: init.c:2257 init.c:2374
+#: init.c:2296 init.c:2413
 #, c-format
 msgid "%s: unknown variable"
 msgstr "%s: athróg anaithnid"
 
-#: init.c:2266
+#: init.c:2305
 msgid "prefix is illegal with reset"
 msgstr "ní cheadaítear an réimír le hathshocrú"
 
-#: init.c:2272
+#: init.c:2311
 msgid "value is illegal with reset"
 msgstr "ní cheadaítear an luach le hathshocrú"
 
-#: init.c:2307 init.c:2319
+#: init.c:2346 init.c:2358
 msgid "Usage: set variable=yes|no"
 msgstr ""
 
-#: init.c:2327
+#: init.c:2366
 #, c-format
 msgid "%s is set"
 msgstr "%s socraithe"
 
-#: init.c:2455
+#: init.c:2494
 #, fuzzy, c-format
 msgid "Invalid value for option %s: \"%s\""
 msgstr "Lá neamhbhailí na míosa: %s"
 
-#: init.c:2597
+#: init.c:2637
 #, c-format
 msgid "%s: invalid mailbox type"
 msgstr "%s: cineál bosca poist neamhbhailí"
 
-#: init.c:2627 init.c:2690
+#: init.c:2667 init.c:2730
 #, fuzzy, c-format
 msgid "%s: invalid value (%s)"
 msgstr "%s: luach neamhbhailí"
 
-#: init.c:2628 init.c:2691
+#: init.c:2668 init.c:2731
 msgid "format error"
 msgstr ""
 
-#: init.c:2628 init.c:2691
+#: init.c:2668 init.c:2731
 msgid "number overflow"
 msgstr ""
 
-#: init.c:2725
+#: init.c:2765
 #, c-format
 msgid "%s: invalid value"
 msgstr "%s: luach neamhbhailí"
 
-#: init.c:2769
+#: init.c:2812
 #, c-format
 msgid "%s: Unknown type."
 msgstr "%s: Cineál anaithnid."
 
-#: init.c:2796
+#: init.c:2839
 #, c-format
 msgid "%s: unknown type"
 msgstr "%s: cineál anaithnid"
 
-#: init.c:2876
+#: init.c:2919
 #, c-format
 msgid "Error in %s, line %d: %s"
 msgstr "Earráid i %s, líne %d: %s"
 
-#: init.c:2900
+#: init.c:2943
 #, c-format
 msgid "source: errors in %s"
 msgstr "source: earráidí i %s"
 
-#: init.c:2901
+#: init.c:2944
 #, fuzzy, c-format
 msgid "source: reading aborted due to too many errors in %s"
 msgstr "source: an iomarca earráidí i %s, ag tobscor"
 
-#: init.c:2919 init.c:2942
+#: init.c:2962 init.c:2985
 #, c-format
 msgid "source: error at %s"
 msgstr "source: earráid ag %s"
 
-#: init.c:2924
+#: init.c:2967
 #, fuzzy
 msgid "run: too many arguments"
 msgstr "push: an iomarca argóintí"
 
-#: init.c:2947
+#: init.c:2990
 msgid "source: too many arguments"
 msgstr "source: an iomarca argóintí"
 
-#: init.c:3053
+#: init.c:3096
 #, c-format
 msgid "%s: unknown command"
 msgstr "%s: ordú anaithnid"
 
-#: init.c:3576
+#. L10N:
+#. When tab completing the :cd path argument, the folder browser
+#. will be invoked upon the second tab.  This message will be
+#. printed below the folder browser, to instruct the user how to
+#. select a directory for completion.
+#.
+#. %s will print the key bound to <view-file>, which is
+#. '<Space>' by default.  If no keys are bound to <view-file>
+#. then %s will print the function name: '<view-file>'.
+#.
+#: init.c:3346
+#, fuzzy, c-format
+#| msgid "%s is not a directory."
+msgid "Use '%s' to select a directory"
+msgstr "Ní comhadlann í %s."
+
+#: init.c:3678
 #, c-format
 msgid "Error in command line: %s\n"
 msgstr "Earráid ar líne ordaithe: %s\n"
 
-#: init.c:3680
+#: init.c:3782
 msgid "unable to determine home directory"
 msgstr "ní féidir an chomhadlann bhaile a aimsiú"
 
-#: init.c:3688
+#: init.c:3790
 msgid "unable to determine username"
 msgstr "ní féidir an t-ainm úsáideora a aimsiú"
 
-#: init.c:3723
+#: init.c:3825
 #, fuzzy
 msgid "unable to determine nodename via uname()"
 msgstr "ní féidir an t-ainm úsáideora a aimsiú"
 
-#: init.c:3962
+#: init.c:4064
 msgid "-group: no group name"
 msgstr "-group: gan ainm grúpa"
 
-#: init.c:3972
+#: init.c:4074
 msgid "out of arguments"
 msgstr "níl go leor argóintí ann"
 
 #. L10N:
 #. $attribution default value
 #.
-#: init.h:380
+#: init.h:407
 #, c-format
 msgid "On %d, %n wrote:"
 msgstr ""
@@ -3534,14 +3579,14 @@ msgstr ""
 #. L10N:
 #. $compose_format default value
 #.
-#: init.h:646
+#: init.h:686
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
 msgstr ""
 
 #. L10N:
 #. $forward_attribution_intro default value
 #.
-#: init.h:1285
+#: init.h:1328
 #, c-format
 msgid "----- Forwarded message from %f -----"
 msgstr ""
@@ -3549,92 +3594,118 @@ msgstr ""
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
-#: init.h:1296
+#: init.h:1339
 #, fuzzy
 msgid "----- End forwarded message -----"
 msgstr "Cuir teachtaireacht in eagar roimh é a chur ar aghaidh?"
 
 #. L10N:
+#. $reply_regexp default value.
+#.
+#. This is a regular expression that matches reply subject lines.
+#. By default, it only matches an initial "Re: ", which is the
+#. standardized Latin prefix.
+#.
+#. However, many locales have other prefixes that are commonly used
+#. too, such as Aw in Germany.  To add other prefixes, modify the first
+#. parenthesized expression, such as:
+#. "^(re|aw)
+#. you can add multiple values, for example:
+#. "^(re|aw|se)
+#.
+#. Important:
+#. - Use all lower case letters.
+#. - Don't remove the 're' prefix from the list of choices.
+#. - Please test the value you use inside Mutt.  A mistake here
+#. will break Mutt's threading behavior.  Note: the header cache
+#. can interfere with testing, so be sure to test with $header_cache
+#. unset.
+#.
+#: init.h:3285
+msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
+msgstr ""
+
+#. L10N:
 #. $status_format default value
 #.
-#: init.h:4326
+#: init.h:4464
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
-"%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%S)-%>-"
-"(%P)---"
+"%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
+"%S)-%>-(%P)---"
 msgstr ""
 
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4529
+#: init.h:4668
 msgid "M%?n?AIL&ail?"
 msgstr ""
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4546
+#: init.h:4685
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr ""
 
-#: keymap.c:565
+#: keymap.c:568
 msgid "Macro loop detected."
 msgstr "Braitheadh lúb i macraí."
 
-#: keymap.c:872 keymap.c:907
+#: keymap.c:794 keymap.c:829
 msgid "Key is not bound."
 msgstr "Eochair gan cheangal."
 
-#: keymap.c:912
+#: keymap.c:834
 #, c-format
 msgid "Key is not bound.  Press '%s' for help."
 msgstr "Eochair gan cheangal.  Brúigh '%s' chun cabhrú a fháil."
 
-#: keymap.c:923
+#: keymap.c:845
 msgid "push: too many arguments"
 msgstr "push: an iomarca argóintí"
 
-#: keymap.c:954
+#: keymap.c:876
 #, c-format
 msgid "%s: no such menu"
 msgstr "%s: níl a leithéid de roghchlár ann"
 
-#: keymap.c:969
+#: keymap.c:891
 msgid "null key sequence"
 msgstr "seicheamh neamhbhailí"
 
-#: keymap.c:1063
+#: keymap.c:985
 msgid "bind: too many arguments"
 msgstr "bind: an iomarca argóintí"
 
-#: keymap.c:1086
+#: keymap.c:1008
 #, c-format
 msgid "%s: no such function in map"
 msgstr "%s: níl a leithéid d'fheidhm sa mhapa"
 
-#: keymap.c:1110
+#: keymap.c:1032
 msgid "macro: empty key sequence"
 msgstr "macra: seicheamh folamh eochrach"
 
-#: keymap.c:1121
+#: keymap.c:1043
 msgid "macro: too many arguments"
 msgstr "macro: an iomarca argóintí"
 
-#: keymap.c:1157
+#: keymap.c:1079
 msgid "exec: no arguments"
 msgstr "exec: níl aon argóint"
 
-#: keymap.c:1177
+#: keymap.c:1103
 #, c-format
 msgid "%s: no such function"
 msgstr "%s: níl a leithéid d'fheidhm ann"
 
-#: keymap.c:1198
+#: keymap.c:1124
 msgid "Enter keys (^G to abort): "
 msgstr "Iontráil eochracha (^G chun scor):"
 
-#: keymap.c:1204
+#: keymap.c:1130
 #, c-format
 msgid "Char = %s, Octal = %o, Decimal = %d"
 msgstr "Car = %s, Ochtnártha = %o, Deachúlach = %d"
@@ -3672,31 +3743,31 @@ msgid "Archives"
 msgstr ""
 
 #. L10N: given when an rfc 2369 action is not specified by this message
-#: listmenu.c:208
+#: listmenu.c:216
 #, c-format
 msgid "No list action available for %s."
 msgstr ""
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
-#: listmenu.c:215
+#: listmenu.c:223
 msgid "List actions only support mailto: URIs. (Try a browser?)"
 msgstr ""
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
-#: listmenu.c:224
+#: listmenu.c:232
 #, fuzzy
 #| msgid "Could not reopen mailbox!"
 msgid "Could not parse mailto: URI."
 msgstr "Níorbh fhéidir an bosca poist a athoscailt!"
 
 #. L10N: menu name for list actions
-#: listmenu.c:251
+#: listmenu.c:259
 #, fuzzy
 #| msgid "No mailing lists found!"
 msgid "Available mailing list actions"
 msgstr "Níor aimsíodh aon liosta postála!"
 
-#: main.c:79
+#: main.c:83
 #, fuzzy
 msgid ""
 "To contact the developers, please mail to <mutt-dev@mutt.org>.\n"
@@ -3708,7 +3779,7 @@ msgstr ""
 "a chur in iúl dúinn, tabhair cuairt ar <https://gitlab.com/muttmua/mutt/"
 "issues>.\n"
 
-#: main.c:84
+#: main.c:88
 #, fuzzy
 msgid ""
 "Copyright (C) 1996-2022 Michael R. Elkins and others.\n"
@@ -3722,14 +3793,14 @@ msgstr ""
 "a athdháileadh, agus fáilte, ach de réir coinníollacha áirithe.\n"
 "Iontráil `mutt -vv' chun tuilleadh eolais a fháil.\n"
 
-#: main.c:101
+#: main.c:105
 #, fuzzy
 msgid ""
 "Many others not mentioned here contributed code, fixes,\n"
 "and suggestions.\n"
 msgstr "Thug neart daoine eile cód, ceartúcháin, agus moltaí dúinn.\n"
 
-#: main.c:105
+#: main.c:109
 msgid ""
 "    This program is free software; you can redistribute it and/or modify\n"
 "    it under the terms of the GNU General Public License as published by\n"
@@ -3753,7 +3824,7 @@ msgstr ""
 "    AR LEITH.  Féach ar an GNU General Public License chun níos mó\n"
 "    sonraí a fháil.\n"
 
-#: main.c:115
+#: main.c:119
 msgid ""
 "    You should have received a copy of the GNU General Public License\n"
 "    along with this program; if not, write to the Free Software\n"
@@ -3765,7 +3836,7 @@ msgstr ""
 "    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
 "    Boston, MA 02110-1301 USA.\n"
 
-#: main.c:134
+#: main.c:138
 msgid ""
 "usage: mutt [<options>] [-z] [-f <file> | -yZ]\n"
 "       mutt [<options>] [-Ex] [-Hi <file>] [-s <subj>] [-bc <addr>] [-a "
@@ -3779,7 +3850,7 @@ msgid ""
 "       mutt -v[v]\n"
 msgstr ""
 
-#: main.c:143
+#: main.c:147
 #, fuzzy
 msgid ""
 "options:\n"
@@ -3797,7 +3868,7 @@ msgstr ""
 "  -c <seoladh>\tsonraigh seoladh CC\n"
 "  -D\t\tpriontáil luach de gach athróg go stdout"
 
-#: main.c:152
+#: main.c:156
 #, fuzzy
 #| msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgid ""
@@ -3805,7 +3876,7 @@ msgid ""
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
 msgstr "  -d <leibhéal>\tscríobh aschur dífhabhtaithe i ~/.muttdebug0"
 
-#: main.c:156
+#: main.c:160
 #, fuzzy
 msgid ""
 "  -E\t\tedit the draft (-H) or include (-i) file\n"
@@ -3827,7 +3898,7 @@ msgstr ""
 "  -n\t\tná léigh Muttrc an chórais\n"
 "  -p\t\tathghair teachtaireacht atá ar athlá"
 
-#: main.c:166
+#: main.c:170
 msgid ""
 "  -Q <variable>\tquery a configuration variable\n"
 "  -R\t\topen mailbox in read-only mode\n"
@@ -3850,7 +3921,7 @@ msgstr ""
 "  -Z\t\toscail an chéad fhillteán le tcht nua, scoir mura bhfuil ceann ann\n"
 "  -h\t\tan chabhair seo"
 
-#: main.c:252
+#: main.c:260
 msgid ""
 "\n"
 "Compile options:"
@@ -3858,30 +3929,30 @@ msgstr ""
 "\n"
 "Roghanna tiomsaithe:"
 
-#: main.c:590
+#: main.c:607
 msgid "Error initializing terminal."
 msgstr "Earráid agus teirminéal á thúsú."
 
-#: main.c:747
+#: main.c:765
 #, c-format
 msgid "Debugging at level %d.\n"
 msgstr "Leibhéal dífhabhtaithe = %d.\n"
 
-#: main.c:749
+#: main.c:767
 msgid "DEBUG was not defined during compilation.  Ignored.\n"
 msgstr ""
 "Níor sonraíodh an athróg DEBUG le linn tiomsaithe.  Rinneadh neamhshuim "
 "air.\n"
 
-#: main.c:989
+#: main.c:1014
 msgid "Failed to parse mailto: link\n"
 msgstr ""
 
-#: main.c:1004 main.c:1288
+#: main.c:1029 main.c:1317
 msgid "No recipients specified.\n"
 msgstr "Níor sonraíodh aon fhaighteoir.\n"
 
-#: main.c:1030
+#: main.c:1059
 msgid "Cannot use -E flag with stdin\n"
 msgstr ""
 
@@ -3889,30 +3960,30 @@ msgstr ""
 #. Error when using -H command line argument, but reading the draft
 #. file fails for some reason.
 #.
-#: main.c:1137
+#: main.c:1166
 #, fuzzy
 #| msgid "Cannot create filter"
 msgid "Cannot parse draft file\n"
 msgstr "Ní féidir an scagaire a chruthú"
 
-#: main.c:1208
+#: main.c:1237
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: ní féidir an comhad a cheangal.\n"
 
-#: main.c:1305
+#: main.c:1334
 msgid "No mailbox with new mail."
 msgstr "Níl aon bhosca le ríomhphost nua."
 
-#: main.c:1319
+#: main.c:1348
 msgid "No incoming mailboxes defined."
 msgstr "Níl aon bhosca isteach socraithe agat."
 
-#: main.c:1347
+#: main.c:1376
 msgid "Mailbox is empty."
 msgstr "Tá an bosca poist folamh."
 
-#: mbox.c:131 mbox.c:294 mh.c:1299 mx.c:654
+#: mbox.c:131 mbox.c:294 mh.c:1305 mx.c:657
 #, c-format
 msgid "Reading %s..."
 msgstr "%s á léamh..."
@@ -3945,7 +4016,7 @@ msgstr ""
 "tuairisc fhabht)"
 
 #. L10N: Displayed before/as a mailbox is being synced
-#: mbox.c:945 mh.c:2012 mx.c:754
+#: mbox.c:945 mh.c:2018 mx.c:763
 #, c-format
 msgid "Writing %s..."
 msgstr "%s á scríobh..."
@@ -3976,7 +4047,7 @@ msgid "Invalid index number."
 msgstr "Uimhir innéacs neamhbhailí."
 
 #: menu.c:479 menu.c:501 menu.c:566 menu.c:609 menu.c:625 menu.c:636 menu.c:647
-#: menu.c:658 menu.c:671 menu.c:684 menu.c:1232
+#: menu.c:658 menu.c:671 menu.c:684 menu.c:1236
 msgid "No entries."
 msgstr "Níl aon iontráil ann."
 
@@ -3996,45 +4067,45 @@ msgstr "Ar an chéad leathanach."
 msgid "You are on the last page."
 msgstr "Ar an leathanach deireanach."
 
-#: menu.c:893 pager.c:2410 pattern.c:2029
+#: menu.c:896 pager.c:2410 pattern.c:2036
 msgid "Search for: "
 msgstr "Déan cuardach ar: "
 
-#: menu.c:893 pager.c:2410 pattern.c:2029
+#: menu.c:896 pager.c:2410 pattern.c:2036
 msgid "Reverse search for: "
 msgstr "Déan cuardach droim ar ais ar: "
 
-#: menu.c:937 pager.c:2362 pager.c:2384 pager.c:2505 pattern.c:2151
+#: menu.c:940 pager.c:2362 pager.c:2384 pager.c:2505 pattern.c:2158
 msgid "Not found."
 msgstr "Ar iarraidh."
 
-#: menu.c:1095
+#: menu.c:1108
 msgid "No tagged entries."
 msgstr "Níl aon iontráil chlibeáilte."
 
-#: menu.c:1196
+#: menu.c:1200
 msgid "Search is not implemented for this menu."
 msgstr "Níl cuardach le fáil sa roghchlár seo."
 
-#: menu.c:1201
+#: menu.c:1205
 msgid "Jumping is not implemented for dialogs."
 msgstr "Ní féidir a léim i ndialóga."
 
-#: menu.c:1235
+#: menu.c:1239
 msgid "Tagging is not supported."
 msgstr "Níl clibeáil le fáil."
 
-#: mh.c:1279
+#: mh.c:1285
 #, fuzzy, c-format
 msgid "Scanning %s..."
 msgstr "%s á roghnú..."
 
-#: mh.c:1624 mh.c:1721
+#: mh.c:1630 mh.c:1727
 #, fuzzy
 msgid "Could not flush message to disk"
 msgstr "Níorbh fhéidir an teachtaireacht a sheoladh."
 
-#: mh.c:1675
+#: mh.c:1681
 #, fuzzy
 msgid "_maildir_commit_message(): unable to set time on file"
 msgstr "maildir_commit_message(): ní féidir an t-am a shocrú ar chomhad"
@@ -4073,24 +4144,24 @@ msgstr ""
 msgid "MuttLisp: no such function %s"
 msgstr "%s: níl a leithéid d'fheidhm ann"
 
-#: mutt_sasl.c:196
+#: mutt_sasl.c:199
 msgid "Unknown SASL profile"
 msgstr ""
 
-#: mutt_sasl.c:232
+#: mutt_sasl.c:235
 #, fuzzy
 msgid "Error allocating SASL connection"
 msgstr "earráid agus réad á dháileadh: %s\n"
 
-#: mutt_sasl.c:243
+#: mutt_sasl.c:246
 msgid "Error setting SASL security properties"
 msgstr ""
 
-#: mutt_sasl.c:254
+#: mutt_sasl.c:257
 msgid "Error setting SASL external security strength"
 msgstr ""
 
-#: mutt_sasl.c:264
+#: mutt_sasl.c:267
 msgid "Error setting SASL external user name"
 msgstr ""
 
@@ -4099,40 +4170,40 @@ msgstr ""
 msgid "Connection to %s closed"
 msgstr "Nasc le %s dúnta"
 
-#: mutt_socket.c:311
+#: mutt_socket.c:343
 msgid "SSL is unavailable."
 msgstr "Níl SSL ar fáil."
 
-#: mutt_socket.c:343
+#: mutt_socket.c:375
 msgid "Preconnect command failed."
 msgstr "Theip ar ordú réamhnaisc."
 
-#: mutt_socket.c:449 mutt_socket.c:472
+#: mutt_socket.c:481 mutt_socket.c:504
 #, c-format
 msgid "Error talking to %s (%s)"
 msgstr "Earráid i rith déanamh teagmháil le %s (%s)"
 
-#: mutt_socket.c:556 mutt_socket.c:615
+#: mutt_socket.c:588 mutt_socket.c:647
 #, c-format
 msgid "Bad IDN \"%s\"."
 msgstr "DrochIDN \"%s\"."
 
-#: mutt_socket.c:564 mutt_socket.c:623
+#: mutt_socket.c:596 mutt_socket.c:655
 #, c-format
 msgid "Looking up %s..."
 msgstr "%s á chuardach..."
 
-#: mutt_socket.c:574 mutt_socket.c:633
+#: mutt_socket.c:606 mutt_socket.c:665
 #, c-format
 msgid "Could not find the host \"%s\""
 msgstr "Níorbh fhéidir dul i dteagmháil leis an óstríomhaire \"%s\""
 
-#: mutt_socket.c:580 mutt_socket.c:639
+#: mutt_socket.c:612 mutt_socket.c:671
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Ag dul i dteagmháil le %s..."
 
-#: mutt_socket.c:663
+#: mutt_socket.c:695
 #, c-format
 msgid "Could not connect to %s (%s)."
 msgstr "Níorbh fhéidir dul i dteagmháil le %s (%s)."
@@ -4142,29 +4213,29 @@ msgstr "Níorbh fhéidir dul i dteagmháil le %s (%s)."
 #. confirming STARTTLS.  This warns the user that something
 #. weird is going on.
 #.
-#: mutt_ssl.c:199 mutt_ssl_gnutls.c:228
+#: mutt_ssl.c:201 mutt_ssl_gnutls.c:232
 msgid "Warning: clearing unexpected server data before TLS negotiation"
 msgstr ""
 
-#: mutt_ssl.c:274 mutt_ssl.c:556
+#: mutt_ssl.c:276 mutt_ssl.c:558
 msgid "Warning: error enabling ssl_verify_partial_chains"
 msgstr ""
 
-#: mutt_ssl.c:360
+#: mutt_ssl.c:362
 msgid "Failed to find enough entropy on your system"
 msgstr "Níl go leor eantrópacht ar fáil ar do chóras-sa"
 
-#: mutt_ssl.c:389
+#: mutt_ssl.c:391
 #, c-format
 msgid "Filling entropy pool: %s...\n"
 msgstr "Linn eantrópachta á líonadh: %s...\n"
 
-#: mutt_ssl.c:397
+#: mutt_ssl.c:399
 #, c-format
 msgid "%s has insecure permissions!"
 msgstr "Ceadanna neamhdhaingne ar %s!"
 
-#: mutt_ssl.c:413
+#: mutt_ssl.c:415
 #, fuzzy
 msgid "SSL disabled due to the lack of entropy"
 msgstr "Díchumasaíodh SSL de bharr easpa eantrópachta"
@@ -4173,7 +4244,7 @@ msgstr "Díchumasaíodh SSL de bharr easpa eantrópachta"
 #. *       function SSL_CTX_new().  In this case it returned NULL: an
 #. *       error condition.
 #.
-#: mutt_ssl.c:493
+#: mutt_ssl.c:495
 #, fuzzy
 msgid "Unable to create SSL context"
 msgstr "Earráid: ní féidir fo-phróiseas OpenSSL a chruthú!"
@@ -4181,15 +4252,15 @@ msgstr "Earráid: ní féidir fo-phróiseas OpenSSL a chruthú!"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:619 mutt_ssl_gnutls.c:467
+#: mutt_ssl.c:621 mutt_ssl_gnutls.c:473
 msgid "Warning: unable to set TLS SNI host name"
 msgstr ""
 
-#: mutt_ssl.c:630
+#: mutt_ssl.c:632
 msgid "I/O error"
 msgstr "Earráid I/A"
 
-#: mutt_ssl.c:639
+#: mutt_ssl.c:641
 #, c-format
 msgid "SSL failed: %s"
 msgstr "Theip ar SSL: %s"
@@ -4198,86 +4269,86 @@ msgstr "Theip ar SSL: %s"
 #. %1$s is version (e.g. "TLSv1.2")
 #. %2$s is cipher_version (e.g. "TLSv1/SSLv3")
 #. %3$s is cipher_name (e.g. "ECDHE-RSA-AES128-GCM-SHA256")
-#: mutt_ssl.c:649
+#: mutt_ssl.c:651
 #, fuzzy, c-format
 msgid "%s connection using %s (%s)"
 msgstr "Nasc SSL le %s (%s)"
 
-#: mutt_ssl.c:779
+#: mutt_ssl.c:781
 msgid "Unknown"
 msgstr "Anaithnid"
 
-#: mutt_ssl.c:792 mutt_ssl_gnutls.c:655
+#: mutt_ssl.c:794 mutt_ssl_gnutls.c:661
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[ní féidir a ríomh]"
 
-#: mutt_ssl.c:810 mutt_ssl_gnutls.c:678
+#: mutt_ssl.c:812 mutt_ssl_gnutls.c:684
 msgid "[invalid date]"
 msgstr "[dáta neamhbhailí]"
 
-#: mutt_ssl.c:879
+#: mutt_ssl.c:881
 msgid "Server certificate is not yet valid"
 msgstr "Tá an teastas neamhbhailí fós"
 
-#: mutt_ssl.c:889
+#: mutt_ssl.c:891
 msgid "Server certificate has expired"
 msgstr "Tá an teastas as feidhm"
 
-#: mutt_ssl.c:1038
+#: mutt_ssl.c:1040
 #, fuzzy
 msgid "cannot get certificate subject"
 msgstr "Níorbh fhéidir an teastas a fháil ón gcomhghleacaí"
 
-#: mutt_ssl.c:1048 mutt_ssl.c:1057
+#: mutt_ssl.c:1050 mutt_ssl.c:1059
 #, fuzzy
 msgid "cannot get certificate common name"
 msgstr "Níorbh fhéidir an teastas a fháil ón gcomhghleacaí"
 
-#: mutt_ssl.c:1072
+#: mutt_ssl.c:1074
 #, fuzzy, c-format
 msgid "certificate owner does not match hostname %s"
 msgstr "Níl úinéir an teastais S/MIME comhoiriúnach leis an seoltóir."
 
-#: mutt_ssl.c:1179
+#: mutt_ssl.c:1181
 #, fuzzy, c-format
 msgid "Certificate host check failed: %s"
 msgstr "Sábháladh an teastas"
 
-#: mutt_ssl.c:1241 mutt_ssl_gnutls.c:925
+#: mutt_ssl.c:1243 mutt_ssl_gnutls.c:931
 msgid "This certificate belongs to:"
 msgstr "Tá an teastas seo ag:"
 
-#: mutt_ssl.c:1250 mutt_ssl_gnutls.c:967
+#: mutt_ssl.c:1252 mutt_ssl_gnutls.c:973
 msgid "This certificate was issued by:"
 msgstr "Bhí an teastas seo eisithe ag:"
 
-#: mutt_ssl.c:1259 mutt_ssl_gnutls.c:980
+#: mutt_ssl.c:1261 mutt_ssl_gnutls.c:986
 msgid "This certificate is valid"
 msgstr "Tá an teastas bailí"
 
-#: mutt_ssl.c:1260 mutt_ssl_gnutls.c:983
+#: mutt_ssl.c:1262 mutt_ssl_gnutls.c:989
 #, c-format
 msgid "   from %s"
 msgstr "   ó %s"
 
-#: mutt_ssl.c:1263 mutt_ssl_gnutls.c:988
+#: mutt_ssl.c:1265 mutt_ssl_gnutls.c:994
 #, c-format
 msgid "     to %s"
 msgstr "     go %s"
 
-#: mutt_ssl.c:1270 mutt_ssl_gnutls.c:995
+#: mutt_ssl.c:1272 mutt_ssl_gnutls.c:1001
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Méarlorg SHA1: %s"
 
-#: mutt_ssl.c:1276 mutt_ssl.c:1279 mutt_ssl_gnutls.c:1001
-#: mutt_ssl_gnutls.c:1004
+#: mutt_ssl.c:1278 mutt_ssl.c:1281 mutt_ssl_gnutls.c:1007
+#: mutt_ssl_gnutls.c:1010
 #, fuzzy
 msgid "SHA256 Fingerprint: "
 msgstr "Méarlorg SHA1: %s"
 
-#: mutt_ssl.c:1283 mutt_ssl_gnutls.c:1025
+#: mutt_ssl.c:1285 mutt_ssl_gnutls.c:1031
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr ""
@@ -4288,31 +4359,31 @@ msgstr ""
 #. * These prompts are the interactive certificate confirmation prompts for
 #. * an OpenSSL connection.
 #.
-#: mutt_ssl.c:1309
+#: mutt_ssl.c:1311
 msgid "roas"
 msgstr ""
 
-#: mutt_ssl.c:1313
+#: mutt_ssl.c:1315
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr ""
 
-#: mutt_ssl.c:1315 mutt_ssl_gnutls.c:1034
+#: mutt_ssl.c:1317 mutt_ssl_gnutls.c:1040
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr ""
 
-#: mutt_ssl.c:1320
+#: mutt_ssl.c:1322
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr ""
 
-#: mutt_ssl.c:1322 mutt_ssl_gnutls.c:1045
+#: mutt_ssl.c:1324 mutt_ssl_gnutls.c:1051
 msgid "(r)eject, accept (o)nce"
 msgstr ""
 
-#: mutt_ssl.c:1360 mutt_ssl_gnutls.c:1108
+#: mutt_ssl.c:1362 mutt_ssl_gnutls.c:1114
 msgid "Warning: Couldn't save certificate"
 msgstr "Rabhadh: Ní féidir an teastas a shábháil"
 
-#: mutt_ssl.c:1365 mutt_ssl_gnutls.c:1113
+#: mutt_ssl.c:1367 mutt_ssl_gnutls.c:1119
 msgid "Certificate saved"
 msgstr "Sábháladh an teastas"
 
@@ -4320,58 +4391,62 @@ msgstr "Sábháladh an teastas"
 #. When using a $ssl_client_cert, OpenSSL may prompt for the password
 #. to decrypt the cert.  %s is the hostname.
 #.
-#: mutt_ssl.c:1426
+#. L10N:
+#. When using a $ssl_client_cert, GNUTLS may prompt for the password
+#. to decrypt the cert.  %s is the hostname.
+#.
+#: mutt_ssl.c:1428 mutt_ssl_gnutls.c:1278
 #, fuzzy, c-format
 #| msgid "Password for %s@%s: "
 msgid "Password for %s client cert: "
 msgstr "Focal faire do %s@%s: "
 
-#: mutt_ssl_gnutls.c:139 mutt_ssl_gnutls.c:167
+#: mutt_ssl_gnutls.c:143 mutt_ssl_gnutls.c:171
 msgid "Error: no TLS socket open"
 msgstr "Earráid: níl aon soicéad oscailte TLS"
 
-#: mutt_ssl_gnutls.c:349 mutt_ssl_gnutls.c:393
+#: mutt_ssl_gnutls.c:353 mutt_ssl_gnutls.c:397
 msgid "All available protocols for TLS/SSL connection disabled"
 msgstr "Díchumasaíodh gach prótacal atá le fáil le haghaidh naisc TLS/SSL"
 
-#: mutt_ssl_gnutls.c:399
+#: mutt_ssl_gnutls.c:403
 msgid "Explicit ciphersuite selection via $ssl_ciphers not supported"
 msgstr ""
 
-#: mutt_ssl_gnutls.c:519
+#: mutt_ssl_gnutls.c:525
 #, c-format
 msgid "SSL/TLS connection using %s (%s/%s/%s)"
 msgstr "Nasc SSL/TLS le %s (%s/%s/%s)"
 
-#: mutt_ssl_gnutls.c:749 mutt_ssl_gnutls.c:877
+#: mutt_ssl_gnutls.c:755 mutt_ssl_gnutls.c:883
 msgid "Error initialising gnutls certificate data"
 msgstr "Earráid agus sonraí teastais gnutls á dtúsú"
 
-#: mutt_ssl_gnutls.c:756 mutt_ssl_gnutls.c:884
+#: mutt_ssl_gnutls.c:762 mutt_ssl_gnutls.c:890
 msgid "Error processing certificate data"
 msgstr "Earráid agus sonraí an teastais á bpróiseáil"
 
-#: mutt_ssl_gnutls.c:1011
+#: mutt_ssl_gnutls.c:1017
 msgid "WARNING: Server certificate is not yet valid"
 msgstr "RABHADH: Níl teastas an fhreastalaí bailí fós"
 
-#: mutt_ssl_gnutls.c:1013
+#: mutt_ssl_gnutls.c:1019
 msgid "WARNING: Server certificate has expired"
 msgstr "RABHADH: Tá teastas an fhreastalaí as feidhm"
 
-#: mutt_ssl_gnutls.c:1015
+#: mutt_ssl_gnutls.c:1021
 msgid "WARNING: Server certificate has been revoked"
 msgstr "RABHADH: Cúlghaireadh an teastas freastalaí"
 
-#: mutt_ssl_gnutls.c:1017
+#: mutt_ssl_gnutls.c:1023
 msgid "WARNING: Server hostname does not match certificate"
 msgstr "RABHADH: Níl óstainm an fhreastalaí comhoiriúnach leis an teastas."
 
-#: mutt_ssl_gnutls.c:1019
+#: mutt_ssl_gnutls.c:1025
 msgid "WARNING: Signer of server certificate is not a CA"
 msgstr "RABHADH: Ní CA é sínitheoir an teastais"
 
-#: mutt_ssl_gnutls.c:1022
+#: mutt_ssl_gnutls.c:1028
 msgid "Warning: Server certificate was signed using an insecure algorithm"
 msgstr ""
 
@@ -4381,7 +4456,7 @@ msgstr ""
 #. * This is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1041
+#: mutt_ssl_gnutls.c:1047
 msgid "roa"
 msgstr ""
 
@@ -4391,15 +4466,15 @@ msgstr ""
 #. * These is an interactive certificate confirmation prompt for
 #. * a GNUTLS connection.
 #.
-#: mutt_ssl_gnutls.c:1052
+#: mutt_ssl_gnutls.c:1058
 msgid "ro"
 msgstr ""
 
-#: mutt_ssl_gnutls.c:1169 mutt_ssl_gnutls.c:1207
+#: mutt_ssl_gnutls.c:1175 mutt_ssl_gnutls.c:1213
 msgid "Unable to get certificate from peer"
 msgstr "Níorbh fhéidir an teastas a fháil ón gcomhghleacaí"
 
-#: mutt_ssl_gnutls.c:1171
+#: mutt_ssl_gnutls.c:1177
 #, c-format
 msgid "Certificate verification error (%s)"
 msgstr "Earráid agus teastas á fhíorú (%s)"
@@ -4409,12 +4484,12 @@ msgstr "Earráid agus teastas á fhíorú (%s)"
 msgid "Connecting with \"%s\"..."
 msgstr "Ag dul i dteagmháil le \"%s\"..."
 
-#: mutt_tunnel.c:154
+#: mutt_tunnel.c:155
 #, c-format
 msgid "Tunnel to %s returned error %d (%s)"
 msgstr "D'fhill tollán %s earráid %d (%s)"
 
-#: mutt_tunnel.c:176 mutt_tunnel.c:200
+#: mutt_tunnel.c:177 mutt_tunnel.c:201
 #, c-format
 msgid "Tunnel error talking to %s: %s"
 msgstr "Earráid tolláin i rith déanamh teagmháil le %s: %s"
@@ -4422,45 +4497,46 @@ msgstr "Earráid tolláin i rith déanamh teagmháil le %s: %s"
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1268
+#: muttlib.c:1282
 msgid "File is a directory, save under it? [(y)es, (n)o, (a)ll]"
 msgstr ""
 "Is comhadlann é an comhad seo, sábháil fúithi? [(s)ábháil, (n)á sábháil, "
 "(u)ile]"
 
-#: muttlib.c:1268
+#: muttlib.c:1282
 msgid "yna"
 msgstr "snu"
 
 #. L10N:
 #. Means "The path you specified as the destination file is a directory."
 #. See the msgid "Save to file: " (alias.c, recvattach.c)
-#: muttlib.c:1287
+#: muttlib.c:1301
 msgid "File is a directory, save under it?"
 msgstr "Is comhadlann í an comhad seo, sábháil fúithi?"
 
-#: muttlib.c:1292
+#: muttlib.c:1306
 msgid "File under directory: "
 msgstr "Comhad faoin chomhadlann: "
 
-#: muttlib.c:1306
+#: muttlib.c:1320
 msgid "File exists, (o)verwrite, (a)ppend, or (c)ancel?"
 msgstr "Tá an comhad ann cheana, (f)orscríobh, c(u)ir leis, nó (c)ealaigh?"
 
-#: muttlib.c:1306
+#: muttlib.c:1320
 msgid "oac"
 msgstr "fuc"
 
-#: muttlib.c:1980
+#: muttlib.c:1984
 msgid "Can't save message to POP mailbox."
 msgstr "Ní féidir teachtaireacht a shábháil i mbosca poist POP."
 
-#: muttlib.c:1990
-#, c-format
-msgid "Append messages to %s?"
+#: muttlib.c:1994
+#, fuzzy, c-format
+#| msgid "Append messages to %s?"
+msgid "Append message(s) to %s?"
 msgstr "Iarcheangail teachtaireachtaí le %s?"
 
-#: muttlib.c:2003
+#: muttlib.c:2008
 #, c-format
 msgid "%s is not a mailbox!"
 msgstr "Ní bosca poist %s!"
@@ -4494,12 +4570,12 @@ msgid "Waiting for flock attempt... %d"
 msgstr "Ag feitheamh le hiarracht flock... %d"
 
 #. L10N: Displayed if a mailbox sync fails
-#: mx.c:761
+#: mx.c:770
 #, fuzzy, c-format
 msgid "Unable to write %s!"
 msgstr "Ní féidir %s a cheangal!"
 
-#: mx.c:794
+#: mx.c:805
 #, fuzzy
 msgid "message(s) not deleted"
 msgstr "Ag marcáil %d teachtaireacht mar scriosta..."
@@ -4508,66 +4584,66 @@ msgstr "Ag marcáil %d teachtaireacht mar scriosta..."
 #. Displayed if appending to $trash fails when syncing or closing
 #. a mailbox.
 #.
-#: mx.c:823
+#: mx.c:834
 #, fuzzy
 #| msgid "Unable to open temporary file!"
 msgid "Unable to append to trash folder"
 msgstr "Níorbh fhéidir an comhad sealadach a oscailt!"
 
-#: mx.c:832
+#: mx.c:843
 #, fuzzy
 msgid "Can't open trash folder"
 msgstr "Ní féidir aon rud a iarcheangal leis an fhillteán: %s"
 
-#: mx.c:901
+#: mx.c:912
 #, fuzzy, c-format
 msgid "Move %d read messages to %s?"
 msgstr "Bog na teachtaireachtaí léite go %s?"
 
-#: mx.c:918 mx.c:1229
+#: mx.c:929 mx.c:1244
 #, c-format
 msgid "Purge %d deleted message?"
 msgstr "Glan %d teachtaireacht scriosta?"
 
-#: mx.c:918 mx.c:1229
+#: mx.c:929 mx.c:1244
 #, c-format
 msgid "Purge %d deleted messages?"
 msgstr "Glan %d teachtaireacht scriosta?"
 
-#: mx.c:939
+#: mx.c:950
 #, c-format
 msgid "Moving read messages to %s..."
 msgstr "Teachtaireachtaí léite á mbogadh go %s..."
 
-#: mx.c:1000 mx.c:1220
+#: mx.c:1011 mx.c:1235
 msgid "Mailbox is unchanged."
 msgstr "Bosca poist gan athrú."
 
-#: mx.c:1056
+#: mx.c:1067
 #, c-format
 msgid "%d kept, %d moved, %d deleted."
 msgstr "%d coinnithe, %d aistrithe, %d scriosta."
 
-#: mx.c:1059 mx.c:1281
+#: mx.c:1070 mx.c:1296
 #, c-format
 msgid "%d kept, %d deleted."
 msgstr "%d coinnithe, %d scriosta."
 
-#: mx.c:1204
+#: mx.c:1219
 #, c-format
 msgid " Press '%s' to toggle write"
 msgstr " Brúigh '%s' chun mód scríofa a scoránú"
 
-#: mx.c:1206
+#: mx.c:1221
 msgid "Use 'toggle-write' to re-enable write!"
 msgstr "Bain úsáid as 'toggle-write' chun an mód scríofa a athchumasú!"
 
-#: mx.c:1208
+#: mx.c:1223
 #, c-format
 msgid "Mailbox is marked unwritable. %s"
 msgstr "Tá an bosca poist marcáilte \"neamh-inscríofa\". %s"
 
-#: mx.c:1275
+#: mx.c:1290
 msgid "Mailbox checkpointed."
 msgstr "Seicphointeáladh an bosca poist."
 
@@ -4587,7 +4663,7 @@ msgstr "Iatáin"
 msgid "Next"
 msgstr "Ar Aghaidh"
 
-#: pager.c:2262 pager.c:2293 pager.c:2326 pager.c:2657
+#: pager.c:2262 pager.c:2293 pager.c:2326 pager.c:2687
 msgid "Bottom of message is shown."
 msgstr "Seo é bun na teachtaireachta."
 
@@ -4595,23 +4671,23 @@ msgstr "Seo é bun na teachtaireachta."
 msgid "Top of message is shown."
 msgstr "Seo é barr na teachtaireachta."
 
-#: pager.c:2552
+#: pager.c:2551
 msgid "Help is currently being shown."
 msgstr "Cabhair á taispeáint faoi láthair."
 
-#: pager.c:2586
-msgid "No more quoted text."
-msgstr "Níl a thuilleadh téacs athfhriotail ann."
-
-#: pager.c:2599
+#: pager.c:2594 pager.c:2627
 msgid "No more unquoted text after quoted text."
 msgstr "Níl a thuilleadh téacs gan athfhriotal tar éis téacs athfhriotail."
+
+#: pager.c:2611
+msgid "No more quoted text."
+msgstr "Níl a thuilleadh téacs athfhriotail ann."
 
 #. L10N:
 #. Displayed if <skip-headers> is invoked in the pager, but we are
 #. already past the headers
 #.
-#: pager.c:2618
+#: pager.c:2648
 msgid "Already skipped past headers."
 msgstr ""
 
@@ -4621,7 +4697,7 @@ msgstr ""
 #. (I don't think this is actually possible in Mutt's code, but
 #. display some kind of message in case it somehow occurs.)
 #.
-#: pager.c:2637
+#: pager.c:2667
 msgid "No text past headers."
 msgstr ""
 
@@ -4853,7 +4929,15 @@ msgstr ""
 #. L10N:
 #. Pattern Completion Menu description for ~S
 #.
-#: pattern.c:221
+#. An email header, Supersedes: or Supercedes:, can specify a
+#. message-id.  The intent is to say, "the original message with
+#. this message-id should be considered incorrect or out of date,
+#. and this email should be the actual email."
+#.
+#. The ~S pattern will select those "out of date/incorrect" emails
+#. referenced by another email's Supersedes header.
+#.
+#: pattern.c:229
 #, fuzzy
 msgid "superseded messages"
 msgstr "sórtáil teachtaireachtaí"
@@ -4861,14 +4945,14 @@ msgstr "sórtáil teachtaireachtaí"
 #. L10N:
 #. Pattern Completion Menu description for ~t
 #.
-#: pattern.c:226
+#: pattern.c:234
 msgid "messages whose To header matches EXPR"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
 #.
-#: pattern.c:231
+#: pattern.c:239
 #, fuzzy
 msgid "tagged messages"
 msgstr "Níl aon teachtaireacht chlibeáilte."
@@ -4876,7 +4960,7 @@ msgstr "Níl aon teachtaireacht chlibeáilte."
 #. L10N:
 #. Pattern Completion Menu description for ~u
 #.
-#: pattern.c:236
+#: pattern.c:244
 #, fuzzy
 msgid "messages addressed to subscribed mailing lists"
 msgstr "seol freagra chuig liosta sonraithe ríomhphoist"
@@ -4884,7 +4968,7 @@ msgstr "seol freagra chuig liosta sonraithe ríomhphoist"
 #. L10N:
 #. Pattern Completion Menu description for ~U
 #.
-#: pattern.c:241
+#: pattern.c:249
 #, fuzzy
 msgid "unread messages"
 msgstr "Níl aon teachtaireacht gan léamh"
@@ -4892,7 +4976,7 @@ msgstr "Níl aon teachtaireacht gan léamh"
 #. L10N:
 #. Pattern Completion Menu description for ~v
 #.
-#: pattern.c:246
+#: pattern.c:254
 #, fuzzy
 msgid "messages in collapsed threads"
 msgstr "laghdaigh/leathnaigh gach snáithe"
@@ -4900,21 +4984,21 @@ msgstr "laghdaigh/leathnaigh gach snáithe"
 #. L10N:
 #. Pattern Completion Menu description for ~V
 #.
-#: pattern.c:251
+#: pattern.c:259
 msgid "cryptographically verified messages"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~x
 #.
-#: pattern.c:256
+#: pattern.c:264
 msgid "messages whose References header matches EXPR"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
 #.
-#: pattern.c:261
+#: pattern.c:269
 #, fuzzy
 msgid "messages with RANGE attachments"
 msgstr "taispeáin iatáin MIME"
@@ -4922,21 +5006,21 @@ msgstr "taispeáin iatáin MIME"
 #. L10N:
 #. Pattern Completion Menu description for ~y
 #.
-#: pattern.c:266
+#: pattern.c:274
 msgid "messages whose X-Label header matches EXPR"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
 #.
-#: pattern.c:271
+#: pattern.c:279
 msgid "messages whose size is in RANGE"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~=
 #.
-#: pattern.c:276
+#: pattern.c:284
 #, fuzzy
 msgid "duplicated messages"
 msgstr "Níl aon teachtaireacht nach scriosta."
@@ -4944,31 +5028,31 @@ msgstr "Níl aon teachtaireacht nach scriosta."
 #. L10N:
 #. Pattern Completion Menu description for ~$
 #.
-#: pattern.c:281
+#: pattern.c:289
 #, fuzzy
 msgid "unreferenced messages"
 msgstr "Níl aon teachtaireacht gan léamh"
 
-#: pattern.c:529 pattern.c:1020
+#: pattern.c:537 pattern.c:1028
 #, c-format
 msgid "Error in expression: %s"
 msgstr "Earráid i slonn: %s"
 
-#: pattern.c:535 pattern.c:1025
+#: pattern.c:543 pattern.c:1033
 msgid "Empty expression"
 msgstr "Slonn folamh"
 
-#: pattern.c:687 pattern.c:702
+#: pattern.c:695 pattern.c:710
 #, c-format
 msgid "Invalid day of month: %s"
 msgstr "Lá neamhbhailí na míosa: %s"
 
-#: pattern.c:692 pattern.c:716
+#: pattern.c:700 pattern.c:724
 #, c-format
 msgid "Invalid month: %s"
 msgstr "Mí neamhbhailí: %s"
 
-#: pattern.c:878
+#: pattern.c:886
 #, c-format
 msgid "Invalid relative date: %s"
 msgstr "Dáta coibhneasta neamhbhailí: %s"
@@ -4978,7 +5062,7 @@ msgstr "Dáta coibhneasta neamhbhailí: %s"
 #. was invoked when Mutt was compiled without crypto support.
 #. %c is the pattern character, i.e. "g".
 #.
-#: pattern.c:1086
+#: pattern.c:1094
 #, c-format
 msgid "Pattern modifier '~%c' is disabled."
 msgstr ""
@@ -4987,89 +5071,89 @@ msgstr ""
 #. An unknown pattern modifier was somehow invoked.  This
 #. shouldn't be possible unless there is a bug.
 #.
-#: pattern.c:1094 pattern.c:1793
+#: pattern.c:1102 pattern.c:1800
 #, c-format
 msgid "error: unknown op %d (report this error)."
 msgstr "earráid: op anaithnid %d (seol tuairisc fhabht)."
 
-#: pattern.c:1160 pattern.c:1383
+#: pattern.c:1168 pattern.c:1390
 msgid "empty pattern"
 msgstr "slonn folamh"
 
-#: pattern.c:1190 pattern.c:1376
+#: pattern.c:1198 pattern.c:1382
 #, c-format
 msgid "error in pattern at: %s"
 msgstr "earráid i slonn ag: %s"
 
-#: pattern.c:1217
+#: pattern.c:1225
 #, fuzzy, c-format
 msgid "missing pattern: %s"
 msgstr "paraiméadar ar iarraidh"
 
-#: pattern.c:1236
+#: pattern.c:1244
 #, fuzzy, c-format
 msgid "mismatched brackets: %s"
 msgstr "lúibín gan meaitseáil: %s"
 
-#: pattern.c:1297
+#: pattern.c:1304
 #, fuzzy, c-format
 msgid "%c: invalid pattern modifier"
 msgstr "%c: ordú neamhbhailí"
 
-#: pattern.c:1303
+#: pattern.c:1310
 #, c-format
 msgid "%c: not supported in this mode"
 msgstr "%c: níl sé ar fáil sa mhód seo"
 
-#: pattern.c:1320
+#: pattern.c:1327
 msgid "missing parameter"
 msgstr "paraiméadar ar iarraidh"
 
-#: pattern.c:1348
+#: pattern.c:1355
 #, c-format
 msgid "mismatched parenthesis: %s"
 msgstr "lúibín gan meaitseáil: %s"
 
-#: pattern.c:1884 pattern.c:2052
+#: pattern.c:1891 pattern.c:2059
 msgid "Compiling search pattern..."
 msgstr "Patrún cuardaigh á thiomsú..."
 
-#: pattern.c:1903
+#: pattern.c:1910
 msgid "Executing command on matching messages..."
 msgstr "Ordú á rith ar theachtaireachtaí comhoiriúnacha..."
 
-#: pattern.c:1986
+#: pattern.c:1993
 msgid "No messages matched criteria."
 msgstr "Ní raibh aon teachtaireacht chomhoiriúnach."
 
-#: pattern.c:2001 pattern.c:2143
+#: pattern.c:2008 pattern.c:2150
 msgid "Search interrupted."
 msgstr "Idirbhriseadh an cuardach."
 
-#: pattern.c:2087
+#: pattern.c:2094
 #, fuzzy
 msgid "Searching..."
 msgstr "Á Shábháil..."
 
-#: pattern.c:2100
+#: pattern.c:2107
 msgid "Search hit bottom without finding match"
 msgstr "Bhuail an cuardach an bun gan teaghrán comhoiriúnach"
 
-#: pattern.c:2111
+#: pattern.c:2118
 msgid "Search hit top without finding match"
 msgstr "Bhuail an cuardach an barr gan teaghrán comhoiriúnach"
 
 #. L10N:
 #. Pattern completion menu title
 #.
-#: pattern.c:2229
+#: pattern.c:2236
 msgid "Patterns"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu argument type: a regular expression
 #.
-#: pattern.c:2251
+#: pattern.c:2258
 msgid "EXPR"
 msgstr ""
 
@@ -5077,7 +5161,7 @@ msgstr ""
 #. Pattern Completion Menu argument type: a numeric range.
 #. Used by ~m, ~n, ~X, ~z.
 #.
-#: pattern.c:2258
+#: pattern.c:2265
 msgid "RANGE"
 msgstr ""
 
@@ -5085,7 +5169,7 @@ msgstr ""
 #. Pattern Completion Menu argument type: a date range
 #. Used by ~d, ~r.
 #.
-#: pattern.c:2265
+#: pattern.c:2272
 msgid "DATERANGE"
 msgstr ""
 
@@ -5093,28 +5177,28 @@ msgstr ""
 #. Pattern Completion Menu argument type: a nested pattern.
 #. Used by ~(), ~<(), ~>().
 #.
-#: pattern.c:2281
+#: pattern.c:2288
 msgid "PATTERN"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~()
 #.
-#: pattern.c:2290
+#: pattern.c:2297
 msgid "messages in threads containing messages matching PATTERN"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
 #.
-#: pattern.c:2300
+#: pattern.c:2307
 msgid "messages whose immediate parent matches PATTERN"
 msgstr ""
 
 #. L10N:
 #. Pattern Completion Menu description for ~>()
 #.
-#: pattern.c:2310
+#: pattern.c:2317
 msgid "messages having an immediate child matching PATTERN"
 msgstr ""
 
@@ -5130,7 +5214,7 @@ msgstr "Rinneadh dearmad ar an bhfrása faire PGP."
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
 msgstr "[-- Earráid: ní féidir fo-phróiseas PGP a chruthú! --]\n"
 
-#: pgp.c:580 pgp.c:862 pgp.c:1167
+#: pgp.c:580 pgp.c:862 pgp.c:1165
 msgid ""
 "[-- End of PGP output --]\n"
 "\n"
@@ -5163,11 +5247,11 @@ msgstr ""
 "[-- Earráid: ní féidir fo-phróiseas PGP a chruthú! --]\n"
 "\n"
 
-#: pgp.c:1008 pgp.c:1031 smime.c:1988
+#: pgp.c:1012 pgp.c:1032 smime.c:1964
 msgid "Decryption failed"
 msgstr "Theip ar dhíchriptiú"
 
-#: pgp.c:1226
+#: pgp.c:1224
 #, fuzzy
 msgid ""
 "[-- Error: decryption failed --]\n"
@@ -5176,24 +5260,24 @@ msgstr ""
 "[-- Earráid: theip ar dhíchriptiú: %s --]\n"
 "\n"
 
-#: pgp.c:1283
+#: pgp.c:1281
 msgid "Can't open PGP subprocess!"
 msgstr "Ní féidir fo-phróiseas PGP a oscailt!"
 
-#: pgp.c:1722
+#: pgp.c:1720
 msgid "Can't invoke PGP"
 msgstr "Ní féidir PGP a thosú"
 
-#: pgp.c:1833
+#: pgp.c:1831
 #, fuzzy, c-format
 msgid "PGP (s)ign, sign (a)s, %s format, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1834 pgp.c:1864 pgp.c:1886
+#: pgp.c:1832 pgp.c:1862 pgp.c:1884
 msgid "PGP/M(i)ME"
 msgstr "PGP/M(i)ME"
 
-#: pgp.c:1834 pgp.c:1864 pgp.c:1886
+#: pgp.c:1832 pgp.c:1862 pgp.c:1884
 msgid "(i)nline"
 msgstr "(i)nlíne"
 
@@ -5201,57 +5285,57 @@ msgstr "(i)nlíne"
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the five following letter sequences.
-#: pgp.c:1840
+#: pgp.c:1838
 msgid "safcoi"
 msgstr ""
 
-#: pgp.c:1845
+#: pgp.c:1843
 #, fuzzy
 msgid "PGP (s)ign, sign (a)s, (c)lear, or (o)ppenc mode off? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1846
+#: pgp.c:1844
 msgid "safco"
 msgstr ""
 
-#: pgp.c:1863
+#: pgp.c:1861
 #, fuzzy, c-format
 msgid ""
 "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, (c)lear, or (o)ppenc "
 "mode? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1866
+#: pgp.c:1864
 #, fuzzy
 msgid "esabfcoi"
 msgstr "csmapg"
 
-#: pgp.c:1871
+#: pgp.c:1869
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, (c)lear, or (o)ppenc mode? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1872
+#: pgp.c:1870
 #, fuzzy
 msgid "esabfco"
 msgstr "csmapg"
 
-#: pgp.c:1885
+#: pgp.c:1883
 #, fuzzy, c-format
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, %s format, or (c)lear? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1888
+#: pgp.c:1886
 #, fuzzy
 msgid "esabfci"
 msgstr "csmapg"
 
-#: pgp.c:1893
+#: pgp.c:1891
 #, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (c)lear? "
 msgstr "PGP (c)ript, (s)ínigh, sínigh (m)ar, (a)raon, %s, nó (n)á déan? "
 
-#: pgp.c:1894
+#: pgp.c:1892
 #, fuzzy
 msgid "esabfc"
 msgstr "csmapg"
@@ -5298,7 +5382,7 @@ msgstr "Ní ghlacann an freastalaí leis an ordú UIDL."
 
 #: pop.c:324
 #, fuzzy, c-format
-msgid "%d messages have been lost. Try reopening the mailbox."
+msgid "%d message(s) have been lost. Try reopening the mailbox."
 msgstr ""
 "Tá innéacs na dteachtaireachtaí mícheart. Bain triail as an mbosca poist a "
 "athoscailt."
@@ -5355,27 +5439,27 @@ msgstr "%s [léadh %d as %d teachtaireacht]"
 msgid "Server closed connection!"
 msgstr "Dhún an freastalaí an nasc!"
 
-#: pop_auth.c:88
+#: pop_auth.c:93
 msgid "Authenticating (SASL)..."
 msgstr "Á fhíordheimhniú (SASL)..."
 
-#: pop_auth.c:224
+#: pop_auth.c:322
 msgid "POP timestamp is invalid!"
 msgstr ""
 
-#: pop_auth.c:229
+#: pop_auth.c:327
 msgid "Authenticating (APOP)..."
 msgstr "Á fhíordheimhniú (APOP)..."
 
-#: pop_auth.c:252
+#: pop_auth.c:350
 msgid "APOP authentication failed."
 msgstr "Theip ar fhíordheimhniú APOP."
 
-#: pop_auth.c:291
+#: pop_auth.c:389
 msgid "Command USER is not supported by server."
 msgstr "Ní ghlacann an freastalaí leis an ordú USER."
 
-#: pop_auth.c:380
+#: pop_auth.c:478
 #, fuzzy
 msgid "Authentication failed."
 msgstr "Theip ar fhíordheimhniú SASL."
@@ -5463,11 +5547,22 @@ msgstr "Píopa"
 msgid "Print"
 msgstr "Priontáil"
 
-#: recvattach.c:548
+#. L10N:
+#. Prompt to convert text attachments from the sent charset
+#. to the local $charset when saving them in the receive
+#. attachment menu.
+#.
+#: recvattach.c:476
+#, fuzzy, c-format
+#| msgid "Can't delete attachment from POP server."
+msgid "Convert attachment from %s to %s?"
+msgstr "Ní féidir an t-iatán a scriosadh ón fhreastalaí POP."
+
+#: recvattach.c:592
 msgid "Saving..."
 msgstr "Á Shábháil..."
 
-#: recvattach.c:552 recvattach.c:700
+#: recvattach.c:596 recvattach.c:742
 msgid "Attachment saved."
 msgstr "Sábháladh an t-iatán."
 
@@ -5477,72 +5572,72 @@ msgstr "Sábháladh an t-iatán."
 #. doesn't point to a directory, or the value didn't exist but
 #. couldn't be created.
 #.
-#: recvattach.c:617
+#: recvattach.c:667
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
 msgstr ""
 
-#: recvattach.c:724
+#: recvattach.c:766
 #, c-format
 msgid "WARNING!  You are about to overwrite %s, continue?"
 msgstr "RABHADH!  Tá tú ar tí %s a fhorscríobh, lean ar aghaidh?"
 
-#: recvattach.c:741
+#: recvattach.c:783
 msgid "Attachment filtered."
 msgstr "Scagadh an t-iatán."
 
-#: recvattach.c:878
+#: recvattach.c:920
 msgid "Filter through: "
 msgstr "Scagaire: "
 
-#: recvattach.c:878
+#: recvattach.c:920
 msgid "Pipe to: "
 msgstr "Píopa go: "
 
-#: recvattach.c:923
+#: recvattach.c:965
 #, fuzzy, c-format
 msgid "I don't know how to print %s attachments!"
 msgstr "Ní eol dom conas a phriontáil iatáin %s!"
 
-#: recvattach.c:993
+#: recvattach.c:1035
 msgid "Print tagged attachment(s)?"
 msgstr "Priontáil iatá(i)n c(h)libeáilte?"
 
-#: recvattach.c:993
+#: recvattach.c:1035
 msgid "Print attachment?"
 msgstr "Priontáil iatán?"
 
-#: recvattach.c:1053
+#: recvattach.c:1095
 msgid "Structural changes to decrypted attachments are not supported"
 msgstr ""
 
-#: recvattach.c:1211
+#: recvattach.c:1253
 msgid "Can't decrypt encrypted message!"
 msgstr "Ní féidir teachtaireacht chriptithe a dhíchriptiú!"
 
-#: recvattach.c:1338
+#: recvattach.c:1380
 msgid "Attachments"
 msgstr "Iatáin"
 
-#: recvattach.c:1382
+#: recvattach.c:1424
 msgid "There are no subparts to show!"
 msgstr "Níl aon fopháirt le taispeáint!"
 
-#: recvattach.c:1437
+#: recvattach.c:1479
 msgid "Can't delete attachment from POP server."
 msgstr "Ní féidir an t-iatán a scriosadh ón fhreastalaí POP."
 
-#: recvattach.c:1445
+#: recvattach.c:1487
 msgid "Deletion of attachments from encrypted messages is unsupported."
 msgstr "Ní cheadaítear iatáin a bheith scriosta ó theachtaireachtaí criptithe."
 
-#: recvattach.c:1451
+#: recvattach.c:1493
 #, fuzzy
 msgid ""
 "Deletion of attachments from signed messages may invalidate the signature."
 msgstr "Ní cheadaítear iatáin a bheith scriosta ó theachtaireachtaí criptithe."
 
-#: recvattach.c:1468 recvattach.c:1485
+#: recvattach.c:1510 recvattach.c:1527
 msgid "Only deletion of multipart attachments is supported."
 msgstr "Ní cheadaítear ach iatáin ilpháirt a bheith scriosta."
 
@@ -5594,7 +5689,7 @@ msgstr "Ní cheadaítear ach páirteanna message/rfc822 a scinneadh."
 msgid "Can't find any tagged messages."
 msgstr "Ní féidir aon teachtaireacht chlibeáilte a aimsiú."
 
-#: recvcmd.c:873 send.c:878
+#: recvcmd.c:873 send.c:883
 msgid "No mailing lists found!"
 msgstr "Níor aimsíodh aon liosta postála!"
 
@@ -5694,23 +5789,27 @@ msgstr "Níor sonraíodh conair mailcap"
 msgid "mailcap entry for type %s not found"
 msgstr "níor aimsíodh iontráil mailcap don chineál %s"
 
-#: score.c:77
+#: score.c:84
 msgid "score: too few arguments"
 msgstr "score: níl go leor argóintí ann"
 
-#: score.c:85
+#: score.c:92
 msgid "score: too many arguments"
 msgstr "score: an iomarca argóintí"
 
-#: score.c:124
+#: score.c:131
 msgid "Error: score: invalid number"
 msgstr ""
 
-#: send.c:263
+#: send.c:241 send.c:2458
+msgid "No recipients were specified."
+msgstr "Níor sonraíodh aon fhaighteoir."
+
+#: send.c:268
 msgid "No subject, abort?"
 msgstr "Níor sonraíodh aon ábhar, tobscoir?"
 
-#: send.c:265
+#: send.c:270
 msgid "No subject, aborting."
 msgstr "Gan ábhar, á thobscor."
 
@@ -5722,7 +5821,7 @@ msgstr "Gan ábhar, á thobscor."
 #. message contents, but other attachment, such as PDF files, will also
 #. be added as attachments to the new mail, if this is answered yes.
 #.
-#: send.c:449
+#: send.c:454
 #, fuzzy
 msgid "Forward attachments?"
 msgstr "Seol iad ar aghaidh mar iatáin?"
@@ -5730,37 +5829,37 @@ msgstr "Seol iad ar aghaidh mar iatáin?"
 #. L10N:
 #. Asks whether the user wishes respects the reply-to header when replying.
 #.
-#: send.c:636
+#: send.c:641
 #, c-format
 msgid "Reply to %s%s?"
 msgstr "Tabhair freagra ar %s%s?"
 
-#: send.c:668
+#: send.c:673
 #, c-format
 msgid "Follow-up to %s%s?"
 msgstr "Teachtaireacht leantach go %s%s?"
 
-#: send.c:853
+#: send.c:858
 msgid "No tagged messages are visible!"
 msgstr "Níl aon teachtaireacht chlibeáilte le feiceáil!"
 
-#: send.c:907
+#: send.c:912
 msgid "Include message in reply?"
 msgstr "Cuir an teachtaireacht isteach sa fhreagra?"
 
-#: send.c:912
+#: send.c:917
 msgid "Including quoted message..."
 msgstr "Teachtaireacht athfhriotail san áireamh..."
 
-#: send.c:922 send.c:950 send.c:967
+#: send.c:927 send.c:955 send.c:972
 msgid "Could not include all requested messages!"
 msgstr "Níorbh fhéidir gach teachtaireacht iarrtha a chur sa fhreagra!"
 
-#: send.c:936
+#: send.c:941
 msgid "Forward as attachment?"
 msgstr "Seol é ar aghaidh mar iatán?"
 
-#: send.c:940
+#: send.c:945
 msgid "Preparing forwarded message..."
 msgstr "Teachtaireacht curtha ar aghaidh á hullmhú..."
 
@@ -5769,7 +5868,7 @@ msgstr "Teachtaireacht curtha ar aghaidh á hullmhú..."
 #. Answering yes generates an alternative content using
 #. $send_multipart_alternative_filter
 #.
-#: send.c:1147
+#: send.c:1152
 msgid "Generate multipart/alternative content?"
 msgstr ""
 
@@ -5777,12 +5876,12 @@ msgstr ""
 #. Message when saving fcc after sending.
 #. %s is the mailbox name.
 #.
-#: send.c:1255
+#: send.c:1260
 #, c-format
 msgid "Saving Fcc to %s"
 msgstr ""
 
-#: send.c:1277
+#: send.c:1282
 #, fuzzy
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
 msgstr "%c: níl sé ar fáil sa mhód seo"
@@ -5793,7 +5892,7 @@ msgstr "%c: níl sé ar fáil sa mhód seo"
 #. sending the mail too.
 #. %s is the full mailbox URL, including imap(s)://
 #.
-#: send.c:1284
+#: send.c:1289
 #, c-format
 msgid "Skipping Fcc to %s"
 msgstr ""
@@ -5804,7 +5903,7 @@ msgstr ""
 #. alternate (m)ailbox prompts for a different mailbox to try.
 #. (s)kip aborts saving.
 #.
-#: send.c:1301
+#: send.c:1306
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
 
@@ -5813,7 +5912,7 @@ msgstr ""
 #. (r)etry, alternate (m)ailbox, or (s)kip.
 #. Any similarity to famous leaders of the FSF is coincidental.
 #.
-#: send.c:1307
+#: send.c:1312
 msgid "rms"
 msgstr ""
 
@@ -5821,74 +5920,70 @@ msgstr ""
 #. This is the prompt to enter an "alternate (m)ailbox" when the
 #. initial Fcc fails.
 #.
-#: send.c:1315
+#: send.c:1320
 #, fuzzy
 msgid "Fcc mailbox"
 msgstr "Oscail bosca poist"
 
-#: send.c:1381
+#: send.c:1386
 #, fuzzy
 msgid "Save attachments in Fcc?"
 msgstr "féach ar an iatán mar théacs"
 
-#: send.c:1628
+#: send.c:1633
 msgid "Cannot postpone.  $postponed is unset"
 msgstr ""
 
-#: send.c:1871
+#: send.c:1876
 msgid "Recall postponed message?"
 msgstr "Athghlaoigh teachtaireacht a bhí curtha ar athlá?"
 
-#: send.c:2179
+#: send.c:2184
 msgid "Edit forwarded message?"
 msgstr "Cuir teachtaireacht in eagar roimh é a chur ar aghaidh?"
 
-#: send.c:2243
+#: send.c:2248
 msgid "Abort unmodified message?"
 msgstr "Tobscoir an teachtaireacht seo (gan athrú)?"
 
-#: send.c:2245
+#: send.c:2250
 msgid "Aborted unmodified message."
 msgstr "Tobscoireadh teachtaireacht gan athrú."
 
-#: send.c:2363
+#: send.c:2368
 msgid "No crypto backend configured.  Disabling message security setting."
 msgstr ""
 
-#: send.c:2432
+#: send.c:2437
 msgid "Message postponed."
 msgstr "Cuireadh an teachtaireacht ar athlá."
 
-#: send.c:2448
+#: send.c:2453
 msgid "No recipients are specified!"
 msgstr "Níl aon fhaighteoir ann!"
 
-#: send.c:2453
-msgid "No recipients were specified."
-msgstr "Níor sonraíodh aon fhaighteoir."
-
-#: send.c:2469
+#: send.c:2474
 msgid "No subject, abort sending?"
 msgstr "Níor sonraíodh aon ábhar, tobscoir?"
 
-#: send.c:2473
+#: send.c:2478
 msgid "No subject specified."
 msgstr "Níor sonraíodh aon ábhar."
 
-#: send.c:2487
+#: send.c:2492
 #, fuzzy
 msgid "No attachments, abort sending?"
 msgstr "Níor sonraíodh aon ábhar, tobscoir?"
 
-#: send.c:2490
+#: send.c:2495
 msgid "Attachment referenced in message is missing"
 msgstr ""
 
-#: send.c:2562 smtp.c:191
+#: send.c:2567 smtp.c:240
 msgid "Sending message..."
 msgstr "Teachtaireacht á seoladh..."
 
-#: send.c:2605
+#: send.c:2610
 msgid "Could not send the message."
 msgstr "Níorbh fhéidir an teachtaireacht a sheoladh."
 
@@ -5898,15 +5993,15 @@ msgstr "Níorbh fhéidir an teachtaireacht a sheoladh."
 #. Background sending may cause the original mailbox to be reopened,
 #. so this message was added in case that takes some time.
 #.
-#: send.c:2633 send.c:2659
+#: send.c:2638 send.c:2664
 msgid "Setting reply flags."
 msgstr ""
 
-#: send.c:2704
+#: send.c:2709
 msgid "Mail sent."
 msgstr "Seoladh an teachtaireacht."
 
-#: send.c:2704
+#: send.c:2709
 msgid "Sending in background."
 msgstr "Á seoladh sa chúlra."
 
@@ -5914,33 +6009,33 @@ msgstr "Á seoladh sa chúlra."
 #. Message displayed when the user chooses to background
 #. editing from the landing page.
 #.
-#: send.c:2769
+#: send.c:2774
 #, fuzzy
 msgid "Editing backgrounded."
 msgstr "Á seoladh sa chúlra."
 
-#: sendlib.c:455
+#: sendlib.c:459
 msgid "No boundary parameter found! [report this error]"
 msgstr "Níor aimsíodh paraiméadar teorann! [seol tuairisc fhabht]"
 
-#: sendlib.c:486
+#: sendlib.c:490
 #, c-format
 msgid "%s no longer exists!"
 msgstr "Níl %s ann níos mó!"
 
-#: sendlib.c:909
+#: sendlib.c:915
 #, c-format
 msgid "%s isn't a regular file."
 msgstr "Ní gnáthchomhad %s."
 
-#: sendlib.c:1080
+#: sendlib.c:1086
 #, c-format
 msgid "Could not open %s"
 msgstr "Níorbh fhéidir %s a oscailt"
 
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
-#: sendlib.c:1315
+#: sendlib.c:1321
 #, fuzzy
 #| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
@@ -5951,7 +6046,7 @@ msgstr "Priontáil iatá(i)n c(h)libeáilte?"
 #. the message.  If they answer yes the message will be
 #. forwarded without decoding.
 #.
-#: sendlib.c:1396
+#: sendlib.c:1402
 msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
@@ -5962,7 +6057,7 @@ msgstr ""
 #. the message.  If they answer yes the message will be attached
 #. without decrypting it.
 #.
-#: sendlib.c:1404
+#: sendlib.c:1410
 msgid ""
 "There was a problem decrypting the message for attachment.  Try again with "
 "decryption turned off?"
@@ -5973,7 +6068,7 @@ msgstr ""
 #. should be a mime type, e.g. text/html.  This error is generated
 #. if that is missing.
 #.
-#: sendlib.c:1483
+#: sendlib.c:1495
 #, c-format
 msgid "Missing mime type from output of \"%s\"!"
 msgstr ""
@@ -5983,7 +6078,7 @@ msgstr ""
 #. should be a blank line.  This error is generated if the blank line
 #. is missing.
 #.
-#: sendlib.c:1495
+#: sendlib.c:1507
 #, c-format
 msgid "Missing blank line separator from output of \"%s\"!"
 msgstr ""
@@ -5996,28 +6091,28 @@ msgstr ""
 #. reports, this error is displayed, and the generation is blocked
 #. at the filter level.
 #.
-#: sendlib.c:1529
+#: sendlib.c:1541
 msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
 msgstr ""
 
-#: sendlib.c:2687
+#: sendlib.c:2705
 msgid "$sendmail must be set in order to send mail."
 msgstr ""
 
-#: sendlib.c:2786
+#: sendlib.c:2806
 #, c-format
 msgid "Error sending message, child exited %d (%s)."
 msgstr ""
 "Earráid agus teachtaireacht á seoladh, scoir an macphróiseas le stádas %d "
 "(%s)."
 
-#: sendlib.c:2792
+#: sendlib.c:2812
 msgid "Output of the delivery process"
 msgstr "Aschur an phróisis seolta"
 
-#: sendlib.c:2964
+#: sendlib.c:2984
 #, c-format
 msgid "Bad IDN %s while preparing resent-from."
 msgstr "DrochIDN %s agus resent-from á ullmhú."
@@ -6123,7 +6218,7 @@ msgstr "Ní féidir é a shíniú: Níor sonraíodh eochair. Úsáid \"Sínigh Mar\"."
 msgid "Can't open OpenSSL subprocess!"
 msgstr "Ní féidir fo-phróiseas OpenSSL a oscailt!"
 
-#: smime.c:1846 smime.c:1970
+#: smime.c:1827 smime.c:1946
 msgid ""
 "[-- End of OpenSSL output --]\n"
 "\n"
@@ -6131,19 +6226,19 @@ msgstr ""
 "[-- Deireadh an aschuir OpenSSL --]\n"
 "\n"
 
-#: smime.c:1930 smime.c:1940
+#: smime.c:1906 smime.c:1916
 msgid "[-- Error: unable to create OpenSSL subprocess! --]\n"
 msgstr "[-- Earráid: ní féidir fo-phróiseas OpenSSL a chruthú! --]\n"
 
-#: smime.c:1974
+#: smime.c:1950
 msgid "[-- The following data is S/MIME encrypted --]\n"
 msgstr "[-- Is criptithe mar S/MIME iad na sonraí seo a leanas --]\n"
 
-#: smime.c:1977
+#: smime.c:1953
 msgid "[-- The following data is S/MIME signed --]\n"
 msgstr "[-- Is sínithe mar S/MIME iad na sonraí seo a leanas --]\n"
 
-#: smime.c:2074
+#: smime.c:2050
 msgid ""
 "\n"
 "[-- End of S/MIME encrypted data. --]\n"
@@ -6151,7 +6246,7 @@ msgstr ""
 "\n"
 "[-- Deireadh na sonraí criptithe mar S/MIME. --]\n"
 
-#: smime.c:2076
+#: smime.c:2052
 msgid ""
 "\n"
 "[-- End of S/MIME signed data. --]\n"
@@ -6159,7 +6254,7 @@ msgstr ""
 "\n"
 "[-- Deireadh na sonraí sínithe mar S/MIME. --]\n"
 
-#: smime.c:2233
+#: smime.c:2207
 #, fuzzy
 msgid ""
 "S/MIME (s)ign, encrypt (w)ith, sign (a)s, (c)lear, or (o)ppenc mode off? "
@@ -6171,11 +6266,11 @@ msgstr ""
 #. 'clear'.  Please use a corresponding letter in your language.
 #. Alternatively, you may duplicate the letter 'c' is translated to.
 #. This comment also applies to the two following letter sequences.
-#: smime.c:2238
+#: smime.c:2212
 msgid "swafco"
 msgstr ""
 
-#: smime.c:2247
+#: smime.c:2221
 #, fuzzy
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, (c)lear, or "
@@ -6184,127 +6279,127 @@ msgstr ""
 "S/MIME (c)riptigh, (s)ínigh, criptigh (l)e, sínigh (m)ar, (a)raon, (n)á "
 "déan? "
 
-#: smime.c:2248
+#: smime.c:2222
 #, fuzzy
 msgid "eswabfco"
 msgstr "cslmafn"
 
-#: smime.c:2256
+#: smime.c:2230
 msgid ""
 "S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, or (c)lear? "
 msgstr ""
 "S/MIME (c)riptigh, (s)ínigh, criptigh (l)e, sínigh (m)ar, (a)raon, (n)á "
 "déan? "
 
-#: smime.c:2257
+#: smime.c:2231
 msgid "eswabfc"
 msgstr "cslmafn"
 
-#: smime.c:2278
+#: smime.c:2252
 msgid "Choose algorithm family: 1: DES, 2: RC2, 3: AES, or (c)lear? "
 msgstr "Roghnaigh clann algartaim: 1: DES, 2: RC2, 3: AES, or (g)lan? "
 
-#: smime.c:2281
+#: smime.c:2255
 msgid "drac"
 msgstr "drag"
 
-#: smime.c:2284
+#: smime.c:2258
 msgid "1: DES, 2: Triple-DES "
 msgstr "1: DES, 2: Triple-DES "
 
-#: smime.c:2285
+#: smime.c:2259
 msgid "dt"
 msgstr "dt"
 
-#: smime.c:2297
+#: smime.c:2271
 msgid "1: RC2-40, 2: RC2-64, 3: RC2-128 "
 msgstr "1: RC2-40, 2: RC2-64, 3: RC2-128 "
 
-#: smime.c:2298
+#: smime.c:2272
 msgid "468"
 msgstr "468"
 
-#: smime.c:2313
+#: smime.c:2287
 msgid "1: AES128, 2: AES192, 3: AES256 "
 msgstr "1: AES128, 2: AES192, 3: AES256 "
 
-#: smime.c:2314
+#: smime.c:2288
 msgid "895"
 msgstr "895"
 
-#: smtp.c:140
+#: smtp.c:159
 #, fuzzy, c-format
 msgid "SMTP session failed: %s"
 msgstr "Theip ar athainmniú: %s"
 
-#: smtp.c:186
+#: smtp.c:235
 #, fuzzy, c-format
 msgid "SMTP session failed: unable to open %s"
 msgstr "Theip ar athainmniú: %s"
 
-#: smtp.c:297
+#: smtp.c:346
 msgid "No from address given"
 msgstr ""
 
-#: smtp.c:359
+#: smtp.c:408
 msgid "SMTP session failed: read error"
 msgstr ""
 
-#: smtp.c:361
+#: smtp.c:410
 msgid "SMTP session failed: write error"
 msgstr ""
 
-#: smtp.c:363
+#: smtp.c:412
 msgid "Invalid server response"
 msgstr ""
 
-#: smtp.c:386
+#: smtp.c:435
 #, fuzzy, c-format
 msgid "Invalid SMTP URL: %s"
 msgstr "Neamhbhailí  "
 
-#: smtp.c:531
+#: smtp.c:597
 #, fuzzy, c-format
 msgid "SMTP authentication method %s requires SASL"
 msgstr "Theip ar fhíordheimhniú GSSAPI."
 
-#: smtp.c:538
+#: smtp.c:604
 #, fuzzy, c-format
 msgid "%s authentication failed, trying next method"
 msgstr "Theip ar fhíordheimhniú SASL."
 
-#: smtp.c:552
+#: smtp.c:620
 #, fuzzy
 msgid "SMTP authentication requires SASL"
 msgstr "Theip ar fhíordheimhniú GSSAPI."
 
-#: smtp.c:563
+#: smtp.c:631
 #, fuzzy
 msgid "SASL authentication failed"
 msgstr "Theip ar fhíordheimhniú SASL."
 
-#: sort.c:301
-msgid "Sorting mailbox..."
-msgstr "Bosca poist á shórtáil..."
-
-#: sort.c:338
+#: sort.c:265
 msgid "Could not find sorting function! [report this bug]"
 msgstr "Níorbh fhéidir feidhm shórtála a aimsiú! [seol tuairisc fhabht]"
 
-#: status.c:127
+#: sort.c:298
+msgid "Sorting mailbox..."
+msgstr "Bosca poist á shórtáil..."
+
+#: status.c:128
 msgid "(no mailbox)"
 msgstr "(gan bosca poist)"
 
-#: thread.c:1102
+#: thread.c:1283
 msgid "Parent message is not available."
 msgstr "Níl an mháthair-theachtaireacht ar fáil."
 
-#: thread.c:1108
+#: thread.c:1289
 #, fuzzy
 msgid "Root message is not visible in this limited view."
 msgstr "Níl an mháthair-theachtaireacht infheicthe san amharc srianta seo."
 
-#: thread.c:1110
+#: thread.c:1291
 msgid "Parent message is not visible in this limited view."
 msgstr "Níl an mháthair-theachtaireacht infheicthe san amharc srianta seo."
 
@@ -6335,7 +6430,7 @@ msgstr "amharc ar iatán trí úsáid mailcap"
 #: OPS:33
 #, fuzzy
 #| msgid "force viewing of attachment using mailcap"
-msgid "view attachment in pager using copiousoutput mailcap"
+msgid "view attachment in pager using copiousoutput mailcap entry"
 msgstr "amharc ar iatán trí úsáid mailcap"
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
@@ -6743,7 +6838,7 @@ msgstr "amharc ar iatán trí úsáid mailcap"
 #.
 #: OPS:319
 #, fuzzy
-msgid "view multipart/alternative in pager using copiousoutput mailcap"
+msgid "view multipart/alternative in pager using copiousoutput mailcap entry"
 msgstr "amharc ar iatán trí úsáid mailcap"
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE

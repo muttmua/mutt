@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2022-01-30 13:16+0200\n"
+"POT-Creation-Date: 2022-02-12 10:45-0800\n"
 "PO-Revision-Date: 2022-01-30 16:08+0200\n"
 "Last-Translator: Vsevolod Volkov <vvv@mutt.org.ua>\n"
 "Language-Team: \n"
@@ -3525,14 +3525,14 @@ msgstr "----- End forwarded message -----"
 #. can interfere with testing, so be sure to test with $header_cache
 #. unset.
 #.
-#: init.h:3284
+#: init.h:3285
 msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
 msgstr "^(re|ha|на)(\\[[0-9]+\\])*:[ \t]*"
 
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4463
+#: init.h:4464
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
@@ -3545,14 +3545,14 @@ msgstr ""
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4667
+#: init.h:4668
 msgid "M%?n?AIL&ail?"
 msgstr "M%?n?AIL&ail?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4684
+#: init.h:4685
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt: %?m?повідомлення: %m&немає повідомлень?%?n? [НОВІ: %n]?"
 
@@ -3850,11 +3850,11 @@ msgstr "DEBUG не вказано під час компіляції. Ігнор
 msgid "Failed to parse mailto: link\n"
 msgstr "Неможливо розібрати почилання mailto:\n"
 
-#: main.c:1029 main.c:1313
+#: main.c:1029 main.c:1317
 msgid "No recipients specified.\n"
 msgstr "Отримувачів не вказано.\n"
 
-#: main.c:1055
+#: main.c:1059
 msgid "Cannot use -E flag with stdin\n"
 msgstr "Неможливо використовувати -E з stdin\n"
 
@@ -3862,24 +3862,24 @@ msgstr "Неможливо використовувати -E з stdin\n"
 #. Error when using -H command line argument, but reading the draft
 #. file fails for some reason.
 #.
-#: main.c:1162
+#: main.c:1166
 msgid "Cannot parse draft file\n"
 msgstr "Не вдалось розпізнати файл чернетки\n"
 
-#: main.c:1233
+#: main.c:1237
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: неможливо додати файл.\n"
 
-#: main.c:1330
+#: main.c:1334
 msgid "No mailbox with new mail."
 msgstr "Немає поштової скриньки з новою поштою."
 
-#: main.c:1344
+#: main.c:1348
 msgid "No incoming mailboxes defined."
 msgstr "Вхідних поштових скриньок не вказано."
 
-#: main.c:1372
+#: main.c:1376
 msgid "Mailbox is empty."
 msgstr "Поштова скринька порожня."
 
