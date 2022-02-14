@@ -4547,11 +4547,11 @@ msgstr "Posta kutusu denetlendi."
 
 #: pager.c:1738
 msgid "PrevPg"
-msgstr "SyfAşğ"
+msgstr "ÖnckSyf"
 
 #: pager.c:1739
 msgid "NextPg"
-msgstr "SyfYuk"
+msgstr "SonrSyf"
 
 #: pager.c:1743
 msgid "View Attachm."
