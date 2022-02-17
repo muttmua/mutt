@@ -1030,7 +1030,7 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 
   dprint (3, (debugfile, "Subscribing to %s\n", list.name));
 
-  mutt_account_tourl (&idata->conn->account, &url);
+  mutt_account_tourl (&idata->conn->account, &url, 0);
   url.path = list.name;
 
   mailbox = mutt_buffer_pool_get ();

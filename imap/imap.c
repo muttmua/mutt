@@ -2367,7 +2367,7 @@ imap_complete_hosts (char *dest, size_t len)
     if (conn->account.type != MUTT_ACCT_TYPE_IMAP)
       continue;
 
-    mutt_account_tourl (&conn->account, &url);
+    mutt_account_tourl (&conn->account, &url, 0);
     /* FIXME: how to handle multiple users on the same host? */
     url.user = NULL;
     url.path = NULL;

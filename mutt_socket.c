@@ -310,7 +310,7 @@ CONNECTION* mutt_conn_find (const CONNECTION* start, const ACCOUNT* account)
   char hook[LONG_STRING];
 
   /* account isn't actually modified, since url isn't either */
-  mutt_account_tourl ((ACCOUNT*) account, &url);
+  mutt_account_tourl ((ACCOUNT*) account, &url, 0);
   url.path = NULL;
   url_ciss_tostring (&url, hook, sizeof (hook), 0);
   mutt_account_hook (hook);

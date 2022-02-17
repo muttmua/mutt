@@ -92,11 +92,20 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
   return 0;
 }
 
-/* mutt_account_tourl: fill URL with info from account. The URL information
- *   is a set of pointers into account - don't free or edit account until
- *   you've finished with url (make a copy of account if you need it for
- *   a while). */
-void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
+/* Fill URL with info from account. The URL information
+ * is a set of pointers into account - don't free or edit account until
+ * you've finished with url (make a copy of account if you need it for
+ * a while).
+ *
+ * By default "url" will be populated with the same data that was in
+ * the URL which "account" was parsed from.  That is, user and
+ * password won't be assigned unless they were in the URL too.
+ *
+ * However, for header and body cache, we always want to include the username
+ * to prevent cross-muttrc name collisions.  For that case, pass 1 to
+ * force_users
+ */
+void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url, int force_user)
 {
   url->scheme = U_UNKNOWN;
   url->user = NULL;
@@ -136,10 +145,10 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
   url->host = account->host;
   if (account->flags & MUTT_ACCT_PORT)
     url->port = account->port;
-  if ((account->flags & MUTT_ACCT_USER) &&
-      (account->flags & MUTT_ACCT_USER_FROM_URL))
+  if (account->flags & MUTT_ACCT_USER)
   {
-    url->user = account->user;
+    if (force_user || (account->flags & MUTT_ACCT_USER_FROM_URL))
+      url->user = account->user;
   }
   if ((account->flags & MUTT_ACCT_PASS) &&
       (account->flags & MUTT_ACCT_PASS_FROM_URL))
