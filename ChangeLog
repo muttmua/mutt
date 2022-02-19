@@ -1,3 +1,74 @@
+2022-02-19 10:42:53 -0800  Kevin McCarthy  <kevin@8t8.us> (58b6b76a)
+
+        * Update UPDATING file for 2.2.1 release.
+
+M	UPDATING
+
+2022-02-17 14:38:04 -0800  Kevin McCarthy  <kevin@8t8.us> (30d18234)
+
+        * Make sure username is included in header and body cache paths.
+        
+        Commit 960afab4 changed URL generation to preserve the data originally
+        in the mailbox URL, to fix some internal comparison problems.
+        
+        Unfortunately, it also affected header and body cache generation.
+        Since those could easily be shared across multi-muttrc situations,
+        it's important the username be part of the pathname.
+        
+        Thanks to exg on the #mutt IRC channel for reporting the regression!
+
+M	account.c
+M	account.h
+M	bcache.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/util.c
+M	mutt_socket.c
+M	pop.c
+
+2022-02-15 00:15:28 +0300  Emir SARI  <emir_sari@icloud.com> (6457ac67)
+
+        * Fix ambiguity in translation
+
+M	po/tr.po
+
+2022-02-12 10:57:33 -0800  Kevin McCarthy  <kevin@8t8.us> (7160e05a)
+
+        * automatic post-release commit for mutt-2.2.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2022-02-12 10:49:21 -0800  Kevin McCarthy  <kevin@8t8.us> (a5175478)
 
         * Set release date for 2.2.0 in UPDATING file.
