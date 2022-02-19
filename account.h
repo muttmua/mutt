@@ -55,7 +55,7 @@ typedef struct
 
 int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* m2);
 int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url);
-void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url);
+void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url, int force_user);
 int mutt_account_getuser (ACCOUNT* account);
 int mutt_account_getlogin (ACCOUNT* account);
 int _mutt_account_getpass (ACCOUNT* account,

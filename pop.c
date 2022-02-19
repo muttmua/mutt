@@ -246,7 +246,8 @@ static header_cache_t *pop_hcache_open (POP_DATA *pop_data, const char *path)
   if (!pop_data || !pop_data->conn)
     return mutt_hcache_open (HeaderCache, path, NULL);
 
-  mutt_account_tourl (&pop_data->conn->account, &url);
+  /* force username in the url to ensure uniqueness */
+  mutt_account_tourl (&pop_data->conn->account, &url, 1);
   url.path = HC_FNAME;
   url_ciss_tostring (&url, p, sizeof (p), U_PATH);
   return mutt_hcache_open (HeaderCache, p, pop_hcache_namer);
@@ -441,7 +442,7 @@ static int pop_open_mailbox (CONTEXT *ctx)
     return -1;
   }
 
-  mutt_account_tourl (&acct, &url);
+  mutt_account_tourl (&acct, &url, 0);
   url.path = NULL;
   url_ciss_tostring (&url, buf, sizeof (buf), 0);
   conn = mutt_conn_find (NULL, &acct);

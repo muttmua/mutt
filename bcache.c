@@ -48,7 +48,8 @@ static int bcache_path(ACCOUNT *account, const char *mailbox, body_cache_t *bcac
 
   /* make up a ciss_url_t we can turn into a string */
   memset (&url, 0, sizeof (ciss_url_t));
-  mutt_account_tourl (account, &url);
+  /* force username in the url to ensure uniqueness */
+  mutt_account_tourl (account, &url, 1);
   /*
    * mutt_account_tourl() just sets up some pointers;
    * if this ever changes, we have a memleak here
