@@ -1144,7 +1144,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 	break;
       case OP_COMPOSE_EDIT_FCC:
 	mutt_buffer_strcpy (fname, mutt_b2s (sctx->fcc));
-	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_FILE | MUTT_CLEAR) == 0)
+	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_MAILBOX | MUTT_CLEAR) == 0)
 	{
 	  mutt_buffer_strcpy (sctx->fcc, mutt_b2s (fname));
 	  mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);

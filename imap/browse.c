@@ -259,7 +259,7 @@ int imap_mailbox_create (const char* folder, BUFFER *result)
     buf[n] = '\0';
   }
 
-  if (mutt_get_field (_("Create mailbox: "), buf, sizeof (buf), MUTT_FILE) < 0)
+  if (mutt_get_field (_("Create mailbox: "), buf, sizeof (buf), MUTT_MAILBOX) < 0)
     goto fail;
 
   if (!mutt_strlen (buf))
@@ -314,7 +314,7 @@ int imap_mailbox_rename(const char* mailbox, BUFFER *result)
   snprintf(buf, sizeof (buf), _("Rename mailbox %s to: "), mx.mbox);
   strfcpy (newname, mx.mbox, sizeof (newname));
 
-  if (mutt_get_field (buf, newname, sizeof (newname), MUTT_FILE) < 0)
+  if (mutt_get_field (buf, newname, sizeof (newname), MUTT_MAILBOX) < 0)
     goto fail;
 
   if (!mutt_strlen (newname))
