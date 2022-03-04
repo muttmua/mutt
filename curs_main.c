@@ -1360,7 +1360,7 @@ int mutt_index_menu (void)
 
         else if ((op == OP_MAIN_BROWSE_MAILBOXES) ||
                  (op == OP_MAIN_BROWSE_MAILBOXES_READONLY))
-          mutt_buffer_select_file (folderbuf, MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
+          mutt_buffer_select_file (folderbuf, MUTT_SEL_MAILBOX | MUTT_SEL_BUFFY);
 
 	else
 	{

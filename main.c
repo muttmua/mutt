@@ -1356,7 +1356,7 @@ int main (int argc, char **argv, char **environ)
 	goto cleanup_and_exit;
       }
       mutt_buffer_clear (folder);
-      mutt_buffer_select_file (folder, MUTT_SEL_FOLDER | MUTT_SEL_BUFFY);
+      mutt_buffer_select_file (folder, MUTT_SEL_MAILBOX | MUTT_SEL_BUFFY);
       if (!mutt_buffer_len (folder))
       {
         exit_code = 0;

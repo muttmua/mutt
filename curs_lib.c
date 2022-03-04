@@ -1093,11 +1093,19 @@ static int _enter_fname (const char *prompt, BUFFER *fname, int flags,
   }
   else if (ch.ch == '?')
   {
+    int sel_flags = 0;
+
+    if (flags & MUTT_MAILBOX)
+      sel_flags |= MUTT_SEL_MAILBOX;
+    else if (flags & MUTT_FILE)
+      sel_flags |= MUTT_SEL_FILE;
+
+    if (multiple)
+      sel_flags |= MUTT_SEL_MULTI;
+
     mutt_refresh ();
     mutt_buffer_clear (fname);
-    _mutt_buffer_select_file (fname,
-                              MUTT_SEL_FOLDER | (multiple ? MUTT_SEL_MULTI : 0),
-                              files, numfiles);
+    _mutt_buffer_select_file (fname, sel_flags, files, numfiles);
   }
   else
   {
