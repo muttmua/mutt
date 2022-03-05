@@ -100,12 +100,12 @@ Separating \fIfile\fP and \fIto-addr\fP arguments with \*(lq\fB\-\-\fP\*(rq is
 mandatory.
 For example:
 .sp
+.in +4m
 .nf
-.ft C
-\&    mutt \-a image.jpg \-\- to-addr
-\&    mutt \-a img.jpg *.png \-\- to-addr-1 to-addr-2
-.ft R
+mutt \-a image.jpg \-\- to-addr
+mutt \-a img.jpg *.png \-\- to-addr-1 to-addr-2
 .fi
+.in
 .sp
 The \fB\-a\fP option must be placed at the end of command line options.
 .TP
