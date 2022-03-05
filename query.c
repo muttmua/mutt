@@ -521,7 +521,7 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
 	    ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
 	    mutt_addrlist_to_local (tmpa);
 	    strcat (buf, ", ");	/* __STRCAT_CHECKED__ */
-	    rfc822_write_address ((char *) buf + curpos + 1, buflen - curpos - 1,
+	    rfc822_write_address ((char *) buf + curpos + 2, buflen - curpos - 2,
 				  tmpa, 0);
 	    curpos = mutt_strlen (buf);
 	    rfc822_free_address (&tmpa);
