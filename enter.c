@@ -592,7 +592,8 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    {
 	      templen = state->lastchar - i;
 	      safe_realloc (&tempbuf, templen * sizeof (wchar_t));
-	      memcpy (tempbuf, state->wbuf + i, templen * sizeof (wchar_t));
+              if (tempbuf)
+                memcpy (tempbuf, state->wbuf + i, templen * sizeof (wchar_t));
 	    }
 	    else
 	      BEEP ();
@@ -749,7 +750,8 @@ int _mutt_enter_string (char *buf, size_t buflen, int col,
 	    {
 	      templen = state->lastchar;
 	      safe_realloc (&tempbuf, templen * sizeof (wchar_t));
-	      memcpy (tempbuf, state->wbuf, templen * sizeof (wchar_t));
+              if (tempbuf)
+                memcpy (tempbuf, state->wbuf, templen * sizeof (wchar_t));
 	    }
 	    else
 	      BEEP (); /* let the user know that nothing matched */
