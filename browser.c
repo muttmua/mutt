@@ -903,7 +903,12 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
   else
   {
     if (!*(mutt_b2s (working_dir)))
-      mutt_buffer_strcpy (working_dir, NONULL(Maildir));
+    {
+      if (flags & MUTT_SEL_MAILBOX)
+        mutt_buffer_strcpy (working_dir, NONULL(Maildir));
+      else
+        mutt_getcwd (working_dir);
+    }
 
     if (Context)
       mutt_buffer_strcpy (defaultsel, NONULL (Context->path));
