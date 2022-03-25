@@ -1,3 +1,81 @@
+2022-03-25 12:58:51 -0700  Kevin McCarthy  <kevin@8t8.us> (dcfbfb16)
+
+        * Update UPDATING file for 2.2.2 release.
+
+M	UPDATING
+
+2022-03-05 11:17:40 -0800  Kevin McCarthy  <kevin@8t8.us> (8babf6c0)
+
+        * Protect prompt completion memcpy() calls with a NULL check.
+        
+        The behavior of memcpy() is undefined when dest is NULL, even if n is
+        0.  It's possible to trigger this, somewhat deliberately, for these
+        two cases, so add a guard check.
+
+M	enter.c
+
+2022-03-05 09:31:21 -0800  Kevin McCarthy  <kevin@8t8.us> (7c8992aa)
+
+        * Fix mutt.man formatting.
+        
+        Thanks for the fix from Mario Blättermann and the manpages-l10n
+        project.
+
+M	doc/mutt.man
+
+2022-03-05 09:12:53 -0800  Kevin McCarthy  <kevin@8t8.us> (e65fdf56)
+
+        * Fix query menu tagging behavior.
+        
+        rfc822_write_address() will automatically prepend ", " to the buf
+        parameter if it is non-empty.  Since query_menu() just appended ", "
+        to buf, the '\0' marker is at "curpos + 2", and that should be passed
+        as the offset instead.
+        
+        Prior to this fix, tagging would result in two comma-space separators
+        between each tagged entry.
+        
+        Since rfc822_write_address() does the work too, we could just change
+        query_menu() to pass rfc822_write_address(buf, buflen, tmpa, 0) each
+        time.  But for a stable-branch fix I'll make the smallest change.
+        
+        As a note, I presume this hasn't been reported because (almost) no one
+        uses tagging in this menu.  That may be because it requires hitting
+        <select-entry> after tagging, which is non-intuitive.  I think it
+        would be worth changing to allow tagging and then hitting <exit> too.
+
+M	query.c
+
+2022-02-21 12:19:30 -0800  Kevin McCarthy  <kevin@8t8.us> (bce2c294)
+
+        * Fix some mailbox prompts to use mailbox history ring.
+        
+        Commit b0570d76, in the 2.0 release, improved some of the mailbox
+        prompt flow and logic, creating a separate function for mailbox
+        prompting.  At the same time it changed "save/copy to mailbox" to use
+        that function and thus the mailbox history ring.
+        
+        Unfortunately, this created a partition between some other prompts
+        that used the filename history ring but were actually prompting for
+        mailboxes.
+        
+        Change those prompts: edit-fcc, and imap create/rename mailbox to use
+        the mailbox history ring.  This will allow values to be shared between
+        them and prompts such as "open mailbox" and "save/copy to mailbox".
+        
+        Ordinarily I wouldn't commit this to stable, but that change broke at
+        least one person's workflow badly.
+
+M	compose.c
+M	imap/browse.c
+
+2022-02-19 10:48:43 -0800  Kevin McCarthy  <kevin@8t8.us> (c8109e14)
+
+        * automatic post-release commit for mutt-2.2.1
+
+M	ChangeLog
+M	VERSION
+
 2022-02-19 10:42:53 -0800  Kevin McCarthy  <kevin@8t8.us> (58b6b76a)
 
         * Update UPDATING file for 2.2.1 release.
