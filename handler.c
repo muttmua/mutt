@@ -389,7 +389,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
   while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
-      return;
+      goto cleanup;
     len -= mutt_strlen(tmps);
     if ((!mutt_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
       break;
@@ -397,7 +397,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
   while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
-      return;
+      goto cleanup;
     len -= mutt_strlen(tmps);
     if (!mutt_strncmp (tmps, "end", 3))
       break;
@@ -421,6 +421,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
     }
   }
 
+cleanup:
   mutt_convert_to_state (cd, bufi, &k, s);
   mutt_convert_to_state (cd, 0, 0, s);
 
