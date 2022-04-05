@@ -404,9 +404,9 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
     pt = tmps;
     linelen = decode_byte (*pt);
     pt++;
-    for (c = 0; c < linelen;)
+    for (c = 0; c < linelen && *pt;)
     {
-      for (l = 2; l <= 6; l += 2)
+      for (l = 2; l <= 6 && *pt && *(pt + 1); l += 2)
       {
 	out = decode_byte (*pt) << l;
 	pt++;
