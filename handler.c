@@ -911,7 +911,7 @@ static int text_enriched_handler (BODY *a, STATE *s)
 static int is_mmnoask (const char *buf)
 {
   char tmp[LONG_STRING], *p, *q;
-  int lng;
+  size_t lng;
 
   if ((p = getenv ("MM_NOASK")) != NULL && *p)
   {
@@ -1032,7 +1032,7 @@ static int alternative_handler (BODY *a, STATE *s)
   while (t && !choice)
   {
     char *c;
-    int btlen;  /* length of basetype */
+    size_t btlen;  /* length of basetype */
     int wild;	/* do we have a wildcard to match all subtypes? */
 
     c = strchr (t->data, '/');

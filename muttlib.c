@@ -1940,7 +1940,9 @@ FILE *mutt_open_read (const char *path, pid_t *thepid)
   FILE *f;
   struct stat s;
 
-  int len = mutt_strlen (path);
+  size_t len = mutt_strlen (path);
+  if (!len)
+    return NULL;
 
   if (path[len - 1] == '|')
   {

@@ -2396,7 +2396,7 @@ int imap_complete(char* dest, size_t dlen, const char* path)
   char buf[LONG_STRING*2];
   IMAP_LIST listresp;
   char completion[LONG_STRING];
-  int clen;
+  size_t clen;
   size_t matchlen = 0;
   int completions = 0;
   IMAP_MBOX mx;

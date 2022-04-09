@@ -1195,7 +1195,7 @@ static int parse_attach_list (BUFFER *buf, BUFFER *s, LIST **ldata, BUFFER *err)
   LIST *listp, *lastp;
   char *p;
   char *tmpminor;
-  int len;
+  size_t len;
   int ret;
 
   /* Find the last item in the list that data points to. */
@@ -2111,7 +2111,8 @@ void mutt_envlist_set (const char *name, const char *value, int overwrite)
 {
   char **envp = envlist;
   char work[LONG_STRING];
-  int count, len;
+  int count;
+  size_t len;
 
   len = mutt_strlen (name);
 
@@ -2147,7 +2148,8 @@ void mutt_envlist_set (const char *name, const char *value, int overwrite)
 
 static int parse_setenv(BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER *err)
 {
-  int query, unset, len;
+  int query, unset;
+  size_t len;
   char *name, **save, **envp = envlist;
   int count = 0;
   long data = udata.l;

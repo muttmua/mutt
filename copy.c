@@ -171,7 +171,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
 	  headers[x] = this_one;
 	else
 	{
-	  int hlen = mutt_strlen (headers[x]);
+	  size_t hlen = mutt_strlen (headers[x]);
 
 	  safe_realloc (&headers[x], hlen + this_one_len + sizeof (char));
 	  strcat (headers[x] + hlen, this_one); /* __STRCAT_CHECKED__ */
@@ -264,7 +264,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       }
       else
       {
-	int blen = mutt_strlen (buf);
+	size_t blen = mutt_strlen (buf);
 
 	safe_realloc (&this_one, this_one_len + blen + sizeof (char));
 	strcat (this_one + this_one_len, buf); /* __STRCAT_CHECKED__ */
@@ -287,7 +287,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       headers[x] = this_one;
     else
     {
-      int hlen = mutt_strlen (headers[x]);
+      size_t hlen = mutt_strlen (headers[x]);
 
       safe_realloc (&headers[x], hlen + this_one_len + sizeof (char));
       strcat (headers[x] + hlen, this_one); /* __STRCAT_CHECKED__ */

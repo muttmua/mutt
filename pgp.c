@@ -936,7 +936,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   FILE *pgpin, *pgpout, *pgperr, *pgptmp;
   struct stat info;
   BODY *tattach = NULL;
-  int len;
+  size_t len;
   BUFFER *pgperrfile = NULL, *pgptmpfile = NULL;
   pid_t thepid;
   int rv;

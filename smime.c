@@ -1402,7 +1402,8 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
   char *cert_start, *cert_end;
   FILE *smimein = NULL, *smimeerr = NULL, *fpout = NULL, *fptmp = NULL;
   BODY *t = NULL;
-  int err = 0, empty, off;
+  int err = 0, empty;
+  size_t off;
   pid_t thepid;
 
   tempfile = mutt_buffer_pool_get ();
@@ -1848,7 +1849,7 @@ signedfile_cleanup:
 
 static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
 {
-  int len=0;
+  size_t len=0;
   int c;
   char buf[HUGE_STRING];
   BUFFER *outfile = NULL, *errfile = NULL, *tmpfname = NULL;

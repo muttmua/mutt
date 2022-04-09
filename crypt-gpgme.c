@@ -2346,7 +2346,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
   gpgme_user_id_t uid;
   gpgme_subkey_t subkey;
   const char* shortid;
-  int len;
+  size_t len;
   char date[STRING];
   int more;
   int rc = -1;

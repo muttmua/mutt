@@ -67,7 +67,7 @@ be_snarf_data (FILE *f, char **buf, int *bufmax, int *buflen, LOFF_T offset,
 {
   char tmp[HUGE_STRING];
   char *p = tmp;
-  int tmplen = sizeof (tmp);
+  size_t tmplen = sizeof (tmp);
 
   tmp[sizeof (tmp) - 1] = 0;
   if (prefix)

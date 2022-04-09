@@ -295,7 +295,7 @@ out:
 int mutt_chscmp (const char *s, const char *chs)
 {
   char buffer[STRING];
-  int a, b;
+  size_t a, b;
 
   if (!s) return 0;
 
@@ -451,7 +451,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
       iconv (cd, 0, 0, &ob, &obl);
       if (obl)
       {
-	int n = strlen (outrepl);
+	size_t n = strlen (outrepl);
 	if (n > obl)
 	{
 	  outrepl = "?";
