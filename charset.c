@@ -515,6 +515,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
     ob = buf = safe_malloc (obl + 1);
 
     mutt_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
+    iconv (cd, 0, 0, &ob, &obl);
     iconv_close (cd);
 
     *ob = '\0';
