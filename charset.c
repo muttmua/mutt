@@ -33,6 +33,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include "mutt.h"
 #include "charset.h"
@@ -489,7 +490,6 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
 
   if (to && from && (cd = mutt_iconv_open (to, from, flags)) != (iconv_t)-1)
   {
-    int len;
     ICONV_CONST char *ib;
     char *buf, *ob;
     size_t ibl, obl;
@@ -503,8 +503,14 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
     else
       outrepl = "?";
 
-    len = strlen (s);
-    ib = s, ibl = len + 1;
+    ib = s;
+    ibl = strlen (s);
+    if (ibl >= SIZE_MAX / MB_LEN_MAX)
+    {
+      iconv_close (cd);
+      return -1;
+    }
+
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);
 
