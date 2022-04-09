@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 /* If you are debugging this file, comment out the following line. */
 /*#define NDEBUG*/
@@ -65,8 +66,15 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
   cd = mutt_iconv_open (to, from, 0);
   if (cd == (iconv_t)(-1))
     return (size_t)(-1);
-  obl = 4 * flen + 1;
-  ob = buf = safe_malloc (obl);
+
+  if (flen >= SIZE_MAX / MB_LEN_MAX)
+  {
+    iconv_close (cd);
+    return (size_t)(-1);
+  }
+
+  obl = MB_LEN_MAX * flen;
+  ob = buf = safe_malloc (obl + 1);
   n = iconv (cd, &f, &flen, &ob, &obl);
   if (n == (size_t)(-1) || iconv (cd, 0, 0, &ob, &obl) == (size_t)(-1))
   {
