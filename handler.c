@@ -939,7 +939,8 @@ static int is_mmnoask (const char *buf)
       else
       {
 	lng = mutt_strlen (p);
-	if (buf[lng] == '/' && mutt_strncasecmp (buf, p, lng) == 0)
+	if (mutt_strncasecmp (buf, p, lng) == 0 &&
+            buf[lng] == '/')
 	  return (1);
       }
 
