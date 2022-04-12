@@ -1,3 +1,143 @@
+2022-04-12 11:14:38 -0700  Kevin McCarthy  <kevin@8t8.us> (03f8c660)
+
+        * Update UPDATING file for 2.2.3.
+
+M	UPDATING
+
+2022-04-10 11:05:48 -0700  Kevin McCarthy  <kevin@8t8.us> (efe4186a)
+
+        * Fix read past end of buf in is_mmnoask().
+        
+        buf is size STRING while the environment variable is copied into a
+        LONG_STRING, so lng can be past the end of buf.  Swap the comparison
+        order to make sure they match (and thus ensuring buf[lng] isn't
+        outside the buffer).
+
+M	handler.c
+
+2022-04-09 13:32:33 -0700  Kevin McCarthy  <kevin@8t8.us> (f8264135)
+
+        * Fix strlen() assigns to be of type size_t where obvious.
+        
+        Ticket 405 had an almost-exploit enabled by sloppy assignment of
+        strlen().  There were more details involved, of course, but this
+        served as encouragement to clean up obvious "strlen assignment to int"
+        in the rest of the code.
+        
+        Note this is not *all* cases, only those that were simple and obvious.
+        In some cases, the code assigns strlen() to an int but also uses that
+        variable to hold negative values for another reason.  In other cases,
+        an API is involved (e.g. SASL) that make changing potentially
+        dangerous.  And lastly, some functions were just a bit too complicated
+        to risk introducing a bug.
+
+M	charset.c
+M	compose.c
+M	copy.c
+M	crypt-gpgme.c
+M	edit.c
+M	handler.c
+M	hcache.c
+M	imap/auth_cram.c
+M	imap/imap.c
+M	init.c
+M	muttlib.c
+M	parse.c
+M	pgp.c
+M	sendlib.c
+M	smime.c
+
+2022-04-09 09:54:38 -0700  Kevin McCarthy  <kevin@8t8.us> (195bcad0)
+
+        * Flush iconv() in mutt_convert_string().
+        
+        The man page says this ought to be done, and other places in Mutt do
+        so.
+
+M	charset.c
+
+2022-04-08 21:07:46 -0700  Kevin McCarthy  <kevin@8t8.us> (f58a25cc)
+
+        * Add convert_string() size check.
+        
+        This is similar to the mutt_convert_string() fix in the last commit.
+        In this case there was no integer overflow issue, but there was still
+        a (remote) possibility of obl wrapping, so add a check.
+        
+        Also, ensure there is at least one byte to terminate ob by allocating "obl
+        + 1" size buffer, but passing obl to iconv().
+        
+        Note that mutt_convert_string() uses a multiplier of MB_LEN_MAX, while
+        this function used 4.  I thought MB_LEN_MAX might be too large, but
+        Tavis Ormandy was able to give a counter-example (0x82 in TSCII (Tamil
+        SCII) requires 4 3-byte UTF-8 codepoints).  Convert this function to
+        use MB_LEN_MAX, like mutt_convert_string().
+
+M	rfc2047.c
+
+2022-04-08 20:19:27 -0700  Kevin McCarthy  <kevin@8t8.us> (f26d304b)
+
+        * Fix integer overflow in mutt_convert_string().
+        
+        In the case of a *very* large message header (which is possible via a
+        compressed encrypted message) it's possible to overflow the incorrect
+        assignment of strlen() to an int local variable.
+        
+        Thanks to Tavis Ormandy for the bug report and patch, which this
+        commit is based upon.
+        
+        Although Tavis wasn't able to find an exploit, it was almost possible
+        to make ob small and obl big, which would have allowed attacker
+        control of a heap corruption.
+        
+        Change the strlen() to assign directly to ibl (of type size_t).  This
+        prevents signed to unsigned conversion of len to ibl, which make the
+        attack almost possible.
+        
+        Note that ibl should reflect the number of bytes to be converted by
+        iconv(), so the change of ibl to strlen() instead of (strlen() + 1) is
+        intentional, and correct.
+        
+        ob is allocated with an additional byte for a trailing nul, which is
+        appended after the conversion.
+
+M	charset.c
+
+2022-04-05 13:14:47 -0700  Kevin McCarthy  <kevin@8t8.us> (4ae494ca)
+
+        * Fix uudecode cleanup on unexpected eof.
+        
+        Clean up iconv state and state->prefix handling instead of just
+        returning.  This is done for the other encoding handlers.
+
+M	handler.c
+
+2022-04-05 11:05:52 -0700  Kevin McCarthy  <kevin@8t8.us> (e5ed080c)
+
+        * Fix uudecode buffer overflow.
+        
+        mutt_decode_uuencoded() used each line's initial "length character"
+        without any validation.  It would happily read past the end of the
+        input line, and with a suitable value even past the length of the
+        input buffer.
+        
+        As I noted in ticket 404, there are several other changes that could
+        be added to make the parser more robust.  However, to avoid
+        accidentally introducing another bug or regression, I'm restricting
+        this patch to simply addressing the overflow.
+        
+        Thanks to Tavis Ormandy for reporting the issue, along with a sample
+        message demonstrating the problem.
+
+M	handler.c
+
+2022-03-25 13:07:34 -0700  Kevin McCarthy  <kevin@8t8.us> (aa28abe8)
+
+        * automatic post-release commit for mutt-2.2.2
+
+M	ChangeLog
+M	VERSION
+
 2022-03-25 12:58:51 -0700  Kevin McCarthy  <kevin@8t8.us> (dcfbfb16)
 
         * Update UPDATING file for 2.2.2 release.

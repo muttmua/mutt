@@ -33,6 +33,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include "mutt.h"
 #include "charset.h"
@@ -294,7 +295,7 @@ out:
 int mutt_chscmp (const char *s, const char *chs)
 {
   char buffer[STRING];
-  int a, b;
+  size_t a, b;
 
   if (!s) return 0;
 
@@ -450,7 +451,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
       iconv (cd, 0, 0, &ob, &obl);
       if (obl)
       {
-	int n = strlen (outrepl);
+	size_t n = strlen (outrepl);
 	if (n > obl)
 	{
 	  outrepl = "?";
@@ -489,7 +490,6 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
 
   if (to && from && (cd = mutt_iconv_open (to, from, flags)) != (iconv_t)-1)
   {
-    int len;
     ICONV_CONST char *ib;
     char *buf, *ob;
     size_t ibl, obl;
@@ -503,12 +503,19 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
     else
       outrepl = "?";
 
-    len = strlen (s);
-    ib = s, ibl = len + 1;
+    ib = s;
+    ibl = strlen (s);
+    if (ibl >= SIZE_MAX / MB_LEN_MAX)
+    {
+      iconv_close (cd);
+      return -1;
+    }
+
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);
 
     mutt_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
+    iconv (cd, 0, 0, &ob, &obl);
     iconv_close (cd);
 
     *ob = '\0';

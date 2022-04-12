@@ -306,8 +306,8 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   char buffer[STRING];
   char *t;
   char *fn;
-  int len;
-  int tmplen;
+  size_t len;
+  size_t tmplen;
 
   fprintf (f, "Content-Type: %s/%s", TYPE (a), a->subtype);
 
@@ -976,7 +976,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
   char buf[LONG_STRING];
   char subtype[STRING], xtype[STRING];
   int count;
-  int szf, sze, cur_sze;
+  size_t szf, sze, cur_sze;
   int type;
 
   *subtype = '\0';

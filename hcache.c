@@ -605,7 +605,8 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
   struct stat sb;
   unsigned char md5sum[16];
   char* s;
-  int ret, plen;
+  int ret;
+  size_t plen;
 #ifndef HAVE_ICONV
   const char *chs = Charset ? Charset : mutt_get_default_charset ();
 #endif

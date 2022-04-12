@@ -704,10 +704,10 @@ static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
 #ifdef SUN_ATTACHMENT
   int lines;
 #endif
-  int blen, len, crlf = 0;
+  size_t blen, len, i;
+  int crlf = 0;
   char buffer[LONG_STRING];
   BODY *head = 0, *last = 0, *new = 0;
-  int i;
   int final = 0; /* did we see the ending boundary? */
 
   if (!boundary)

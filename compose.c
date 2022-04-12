@@ -447,7 +447,7 @@ static void update_crypt_info (compose_redraw_data_t *rd)
 
 static void redraw_mix_line (LIST *chain)
 {
-  int c;
+  size_t c;
   char *t;
 
   SETCOLOR (MT_COLOR_COMPOSE_HEADER);

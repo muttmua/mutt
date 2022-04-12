@@ -389,7 +389,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
   while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
-      return;
+      goto cleanup;
     len -= mutt_strlen(tmps);
     if ((!mutt_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
       break;
@@ -397,16 +397,16 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
   while (len > 0)
   {
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
-      return;
+      goto cleanup;
     len -= mutt_strlen(tmps);
     if (!mutt_strncmp (tmps, "end", 3))
       break;
     pt = tmps;
     linelen = decode_byte (*pt);
     pt++;
-    for (c = 0; c < linelen;)
+    for (c = 0; c < linelen && *pt;)
     {
-      for (l = 2; l <= 6; l += 2)
+      for (l = 2; l <= 6 && *pt && *(pt + 1); l += 2)
       {
 	out = decode_byte (*pt) << l;
 	pt++;
@@ -421,6 +421,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
     }
   }
 
+cleanup:
   mutt_convert_to_state (cd, bufi, &k, s);
   mutt_convert_to_state (cd, 0, 0, s);
 
@@ -910,7 +911,7 @@ static int text_enriched_handler (BODY *a, STATE *s)
 static int is_mmnoask (const char *buf)
 {
   char tmp[LONG_STRING], *p, *q;
-  int lng;
+  size_t lng;
 
   if ((p = getenv ("MM_NOASK")) != NULL && *p)
   {
@@ -938,7 +939,8 @@ static int is_mmnoask (const char *buf)
       else
       {
 	lng = mutt_strlen (p);
-	if (buf[lng] == '/' && mutt_strncasecmp (buf, p, lng) == 0)
+	if (mutt_strncasecmp (buf, p, lng) == 0 &&
+            buf[lng] == '/')
 	  return (1);
       }
 
@@ -1031,7 +1033,7 @@ static int alternative_handler (BODY *a, STATE *s)
   while (t && !choice)
   {
     char *c;
-    int btlen;  /* length of basetype */
+    size_t btlen;  /* length of basetype */
     int wild;	/* do we have a wildcard to match all subtypes? */
 
     c = strchr (t->data, '/');
