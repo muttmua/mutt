@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2022-02-12 10:45-0800\n"
-"PO-Revision-Date: 2022-01-28 23:00+0300\n"
+"PO-Revision-Date: 2022-04-21 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://gitlab.com/bitigchi/mutt\n"
 "Language: tr\n"
@@ -3791,7 +3791,7 @@ msgid ""
 "  -d <level>\tlog debugging output to ~/.muttdebug0\n"
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
 msgstr ""
-"  -d <düzey>\thata ayıklama bilgisini ~/.muttdebug0 dosyasına günlükle\n"
+"  -d <düzey> \thata ayıklama bilgisini ~/.muttdebug0 dosyasına günlükle\n"
 "\t\t0 => hata ayıklama yok; <0 => .muttdebug dosyalarını döndürme"
 
 #: main.c:160
@@ -3828,7 +3828,7 @@ msgid ""
 "  -Z\t\topen the first folder with new message, exit immediately if none\n"
 "  -h\t\tthis help message"
 msgstr ""
-"  -Q <değişken>\tyapılandırma değişkenini sorgula\n"
+"  -Q <değişken> yapılandırma değişkenini sorgula\n"
 "  -R\t\tposta kutusunu saltokunur aç\n"
 "  -s <konu>\tileti konusu (boşluk içeriyorsa çift tırnak içine alınmalı)\n"
 "  -v\t\tsürüm ve inşa bilgilerini gösterir\n"
@@ -7875,10 +7875,8 @@ msgstr "bütün ilmekleri aç/sar"
 #. browser menu: <descend-directory>
 #.
 #: OPS:1200
-#, fuzzy
-#| msgid "%s is not a directory."
 msgid "descend into a directory"
-msgstr "%s bir dizin değil."
+msgstr "bir dizine in"
 
 #. L10N: Help screen description for OP_DECRYPT_SAVE
 #. index menu: <decrypt-save>
