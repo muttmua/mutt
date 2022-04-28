@@ -649,17 +649,30 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
   else
 #endif
     if (expand_relative &&
-        (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN) &&
-        mutt_buffer_len (src) &&
-        *mutt_b2s (src) != '/')
+        (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN))
     {
-      if (mutt_getcwd (tmp))
+      if (mutt_buffer_len (src) &&
+          *mutt_b2s (src) != '/')
       {
-        /* Note, mutt_pretty_mailbox() does '..' and '.' handling. */
-        if (mutt_buffer_len (tmp) > 1)
-          mutt_buffer_addch (tmp, '/');
-        mutt_buffer_addstr (tmp, mutt_b2s (src));
-        mutt_buffer_strcpy (src, mutt_b2s (tmp));
+        if (mutt_getcwd (tmp))
+        {
+          /* Note, mutt_pretty_mailbox() does '..' and '.' handling. */
+          if (mutt_buffer_len (tmp) > 1)
+            mutt_buffer_addch (tmp, '/');
+          mutt_buffer_addstr (tmp, mutt_b2s (src));
+          mutt_buffer_strcpy (src, mutt_b2s (tmp));
+        }
+      }
+
+      /* Normalize paths to not end in a trailing '/', to make
+       * string comparisons more reliable.  Note we only do this when
+       * expand_relative is set - other cases can include DT_CMD_PATH,
+       * which can have arbitrary "non-path" arguments after the path!
+       */
+      while ((mutt_buffer_len (src) > 1) &&
+             *(src->dptr - 1) == '/')
+      {
+        *(--src->dptr) = '\0';
       }
     }
 
