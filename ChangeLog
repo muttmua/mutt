@@ -1,3 +1,65 @@
+2022-04-30 12:38:09 -0700  Kevin McCarthy  <kevin@8t8.us> (4d082513)
+
+        * Update UPDATING file for 2.2.4 release.
+
+M	UPDATING
+
+2022-04-30 11:11:04 -0700  Kevin McCarthy  <kevin@8t8.us> (7dec694f)
+
+        * Document $header_cache behavior change wrt directories.
+        
+        Although not documented, Mutt would previously intepret a
+        $header_cache value ending in '/' as a directory even if it didn't
+        exist.  The new DT_PATH normalization prevents this possibility, so a
+        directory will need to be created in advance.
+        
+        I'm not fond of "fixing" regressions with documentation, but I believe
+        this is a small issue, easily worked around for first-time use, and
+        the benefits of the normalization are worth this small change.
+
+M	doc/manual.xml.head
+M	init.h
+
+2022-04-28 12:48:09 -0700  Kevin McCarthy  <kevin@8t8.us> (a20ed9b4)
+
+        * When expanding local paths, normalize to remove a trailing '/'.
+        
+        Commit 986e9e74 normalized Maildir/mh paths upon opening, to aid in
+        mailbox comparison issues that can crop up (as the IMAP path
+        normalization does).
+        
+        Unfortunately, this caused other problems in cases where users were
+        explicitly adding a trailing '/' to their config settings, such as
+        with buffy mailboxes, or with $spoolfile.
+        
+        To normalize properly, we need to do as the IMAP code does - both on
+        the context opening, and expand_path (as imap_expand_path() and
+        imap_fix_path() do).
+        
+        This also helps other cases; for example, the file browser returns
+        entries without a trailing '/', while tab completion in the editor
+        menu appends a trailing '/'.
+        
+        Right now the only regression I'm aware of is with $header_cache on
+        first use, which I will document in the next commit.  If it turns out
+        there are more important regressions I may have to back this and the
+        original commit out.
+
+M	muttlib.c
+
+2022-04-21 22:58:48 +0300  Emir SARI  <emir_sari@icloud.com> (b69aed8e)
+
+        * Minor translation fixes
+
+M	po/tr.po
+
+2022-04-12 11:23:07 -0700  Kevin McCarthy  <kevin@8t8.us> (d9199322)
+
+        * automatic post-release commit for mutt-2.2.3
+
+M	ChangeLog
+M	VERSION
+
 2022-04-12 11:14:38 -0700  Kevin McCarthy  <kevin@8t8.us> (03f8c660)
 
         * Update UPDATING file for 2.2.3.

@@ -9910,7 +9910,8 @@ If enabled, <link linkend="header-cache">$header_cache</link> can be
 used to either point to a file or a directory. If set to point to a
 file, one database file for all folders will be used (which may result
 in lower performance), but one file per folder if it points to a
-directory.
+directory.  When pointing to a directory, be sure to create the directory
+in advance, or Mutt will interpret it as a file to be created.
 </para>
 
 </sect2>

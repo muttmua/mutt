@@ -1446,7 +1446,8 @@ struct option_t MuttVars[] = {
   ** If pointing to a directory Mutt will contain a header cache
   ** database file per folder, if pointing to a file that file will
   ** be a single global header cache. By default it is \fIunset\fP so no header
-  ** caching will be used.
+  ** caching will be used.  If pointing to a directory, it must be
+  ** created in advance.
   ** .pp
   ** Header caching can greatly improve speed when opening POP, IMAP
   ** MH or Maildir folders, see ``$caching'' for details.

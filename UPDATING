@@ -9,6 +9,12 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.4 (2022-04-30):
+
+  ! Path variables (DT_PATH) are normalized to remove a trailing '/'.
+  ! If $header_cache is used as a directory, the directory must already exist or
+    else it will be interpreted as a file.
+
 2.2.3 (2022-04-12):
 
   ! Bug fix release.
