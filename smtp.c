@@ -772,7 +772,29 @@ static int smtp_auth_gsasl (CONNECTION *conn, const char *method)
   input_buf = mutt_buffer_pool_get ();
   output_buf = mutt_buffer_pool_get ();
   smtp_response_buf = mutt_buffer_pool_get ();
-  mutt_buffer_printf (output_buf, "AUTH %s\r\n", chosen_mech);
+
+  mutt_buffer_printf (output_buf, "AUTH %s", chosen_mech);
+
+  /* Work around broken SMTP servers. See Debian #1010658.
+   * The msmtp source also forces IR for PLAIN because the author
+   * encountered difficulties with a server requiring it.
+   */
+  if (!mutt_strcmp (chosen_mech, "PLAIN"))
+  {
+    gsasl_rc = gsasl_step64 (gsasl_session, "", &gsasl_step_output);
+    if (gsasl_rc != GSASL_NEEDS_MORE && gsasl_rc != GSASL_OK)
+    {
+      dprint (1, (debugfile, "gsasl_step64() failed (%d): %s\n", gsasl_rc,
+                  gsasl_strerror (gsasl_rc)));
+      goto fail;
+    }
+
+    mutt_buffer_addch (output_buf, ' ');
+    mutt_buffer_addstr (output_buf, gsasl_step_output);
+    gsasl_free (gsasl_step_output);
+  }
+
+  mutt_buffer_addstr (output_buf, "\r\n");
 
   do
   {
