@@ -219,6 +219,11 @@ static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
       rc = GSASL_OK;
       break;
 
+    case GSASL_HOSTNAME:
+      gsasl_property_set (sctx, GSASL_HOSTNAME, conn->account.host);
+      rc = GSASL_OK;
+      break;
+
     default:
       break;
   }
