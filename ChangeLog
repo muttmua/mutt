@@ -1,3 +1,48 @@
+2022-05-16 10:16:07 -0700  Kevin McCarthy  <kevin@8t8.us> (c94b511a)
+
+        * Update UPDATING file for 2.2.5.
+
+M	UPDATING
+
+2022-05-13 15:37:58 -0700  Kevin McCarthy  <kevin@8t8.us> (6688bfbf)
+
+        * Set gsasl hostname callback value.
+        
+        This is needed for GSSAPI, and apparently DIGEST-MD5 too.
+        
+        The gsasl documentation is a little confusing, saying it "should be
+        the local host name of the machine", however the imap/auth_gss.c code
+        seems to be using the server name, and the msmtp source also uses the
+        server name for this callback.
+        
+        Thanks to brian m. carlson and Gábor Gombás for reporting this issue
+        in Debian ticket 1010915, and an additional thanks to brian for
+        quickly testing the fix.
+
+M	mutt_sasl_gnu.c
+
+2022-05-06 12:51:56 -0700  Kevin McCarthy  <kevin@8t8.us> (9d5db7cb)
+
+        * Force IR with gsasl SMTP PLAIN authentication.
+        
+        Debian ticket 1010658 showed a server violating RFC 4954 by sending
+        non-base64 data in the 334 response when Mutt sends "AUTH PLAIN"
+        (without IR).
+        
+        The msmtp source also seems to force IR with PLAIN because it found
+        other broken servers.
+        
+        So the best option seems to be just handling PLAIN specially for now.
+
+M	smtp.c
+
+2022-04-30 12:41:43 -0700  Kevin McCarthy  <kevin@8t8.us> (c3baa83e)
+
+        * automatic post-release commit for mutt-2.2.4
+
+M	ChangeLog
+M	VERSION
+
 2022-04-30 12:38:09 -0700  Kevin McCarthy  <kevin@8t8.us> (4d082513)
 
         * Update UPDATING file for 2.2.4 release.
