@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2022-02-12 10:45-0800\n"
-"PO-Revision-Date: 2022-01-29 20:19+0100\n"
-"Last-Translator: Olaf Hering <olaf@aepfle.de>\n"
+"PO-Revision-Date: 2022-05-16 22:09+0200\n"
+"Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -850,11 +850,11 @@ msgstr "Warnung: Nachricht enthält keine Von:-Kopfzeile."
 
 #: commands.c:398 recvcmd.c:213
 msgid "Bounce message to: "
-msgstr "Nachricht weiterleiten an: "
+msgstr "Nachricht weitersenden (bounce) an: "
 
 #: commands.c:400 recvcmd.c:215
 msgid "Bounce tagged messages to: "
-msgstr "Ausgewählte Nachrichten weiterleiten an: "
+msgstr "Ausgewählte Nachrichten weitersenden an: "
 
 #: commands.c:408 recvcmd.c:224
 msgid "Error parsing address!"
@@ -868,28 +868,28 @@ msgstr "Ungültige IDN: „%s“"
 #: commands.c:427 recvcmd.c:246
 #, c-format
 msgid "Bounce message to %s"
-msgstr "Nachricht an %s weiterleiten"
+msgstr "Nachricht an %s weitersenden"
 
 #: commands.c:427 recvcmd.c:246
 #, c-format
 msgid "Bounce messages to %s"
-msgstr "Nachrichten an %s weiterleiten"
+msgstr "Nachrichten an %s weitersenden"
 
 #: commands.c:443 recvcmd.c:262
 msgid "Message not bounced."
-msgstr "Nachricht nicht weitergeleitet."
+msgstr "Nachricht nicht weitergesandt."
 
 #: commands.c:443 recvcmd.c:262
 msgid "Messages not bounced."
-msgstr "Nachrichten nicht weitergeleitet."
+msgstr "Nachrichten nicht weitergesandt."
 
 #: commands.c:453 recvcmd.c:281
 msgid "Message bounced."
-msgstr "Nachricht weitergeleitet."
+msgstr "Nachricht weitergesandt."
 
 #: commands.c:453 recvcmd.c:281
 msgid "Messages bounced."
-msgstr "Nachrichten weitergeleitet."
+msgstr "Nachrichten weitergesandt."
 
 #: commands.c:537 commands.c:573 commands.c:592
 msgid "Can't create filter process"
@@ -1078,7 +1078,7 @@ msgstr "CC: "
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:101 send.c:237
 msgid "Bcc: "
-msgstr "Bcc: "
+msgstr "BCC: "
 
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:103 compose.c:1130 send.c:267
@@ -1093,7 +1093,7 @@ msgstr "Antworten an: "
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:107 compose.c:1147
 msgid "Fcc: "
-msgstr "Fcc: "
+msgstr "FCC: "
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
 #: compose.c:110
@@ -5562,15 +5562,15 @@ msgstr "Nur mehrteilige Anhänge können gelöscht werden."
 
 #: recvcmd.c:44
 msgid "You may only bounce message/rfc822 parts."
-msgstr "Sie können nur message/rfc822-Anhänge weiterleiten."
+msgstr "Sie können nur message/rfc822-Anhänge weitersenden."
 
 #: recvcmd.c:283
 msgid "Error bouncing message!"
-msgstr "Fehler beim Weiterleiten der Nachricht!"
+msgstr "Fehler beim Weitersenden der Nachricht!"
 
 #: recvcmd.c:283
 msgid "Error bouncing messages!"
-msgstr "Fehler beim Weiterleiten der Nachrichten!"
+msgstr "Fehler beim Weitersenden der Nachrichten!"
 
 #: recvcmd.c:492
 #, c-format
@@ -5796,11 +5796,11 @@ msgstr "multipart/alternative-Inhalt erzeugen?"
 #: send.c:1260
 #, c-format
 msgid "Saving Fcc to %s"
-msgstr "Fcc wird in %s gespeichert"
+msgstr "FCC wird in %s gespeichert"
 
 #: send.c:1282
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "Warnung: Fcc in einem IMAP-Postfach funktioniert im Stapel-Modus nicht"
+msgstr "Warnung: FCC in einem IMAP-Postfach funktioniert im Stapel-Modus nicht"
 
 #. L10N:
 #. Printed after the "Fcc to an IMAP mailbox is not supported" message.
@@ -5811,7 +5811,7 @@ msgstr "Warnung: Fcc in einem IMAP-Postfach funktioniert im Stapel-Modus nicht"
 #: send.c:1289
 #, c-format
 msgid "Skipping Fcc to %s"
-msgstr "Fcc nach %s wird übersprungen."
+msgstr "FCC nach %s wird übersprungen."
 
 #. L10N:
 #. Called when saving to $record or Fcc failed after sending.
@@ -5822,7 +5822,7 @@ msgstr "Fcc nach %s wird übersprungen."
 #: send.c:1306
 msgid "Fcc failed. (r)etry, alternate (m)ailbox, or (s)kip? "
 msgstr ""
-"Fcc fehlgeschlagen. E(r)neut versuchen, anderes (P)ostfach oder "
+"FCC fehlgeschlagen. E(r)neut versuchen, anderes (P)ostfach oder "
 "über(s)pringen? "
 
 #. L10N:
@@ -5840,11 +5840,11 @@ msgstr "rps"
 #.
 #: send.c:1320
 msgid "Fcc mailbox"
-msgstr "Fcc-Postfach"
+msgstr "FCC-Postfach"
 
 #: send.c:1386
 msgid "Save attachments in Fcc?"
-msgstr "Anhänge in Fcc-Postfach speichern?"
+msgstr "Anhänge in FCC-Postfach speichern?"
 
 #: send.c:1633
 msgid "Cannot postpone.  $postponed is unset"
@@ -6593,7 +6593,7 @@ msgstr "Betreff dieser Nachricht (Subject) bearbeiten"
 #.
 #: OPS:214
 msgid "edit the TO list"
-msgstr "Empfängerliste (To) bearbeiten"
+msgstr "Empfängerliste (An) bearbeiten"
 
 #. L10N: Help screen description for OP_CREATE_MAILBOX
 #. browser menu: <create-mailbox>
