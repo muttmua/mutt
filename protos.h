@@ -145,7 +145,7 @@ char *mutt_charset_hook (const char *);
 char *mutt_iconv_hook (const char *);
 void mutt_buffer_expand_path (BUFFER *);
 void mutt_buffer_expand_path_norel (BUFFER *);
-void _mutt_buffer_expand_path (BUFFER *, int, int);
+void _mutt_buffer_expand_path (BUFFER *, int);
 void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter);
 void mutt_buffer_expand_multi_path_norel (BUFFER *src, const char *delimiter);
 void mutt_buffer_remove_path_password (BUFFER *dest, const char *src);

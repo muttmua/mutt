@@ -115,7 +115,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     tmp = mutt_buffer_pool_get ();
     mutt_buffer_strcpy (tmp, mutt_b2s (pattern));
     /* expand_relative off because this is a regexp also */
-    _mutt_buffer_expand_path (tmp, 1, 0);
+    _mutt_buffer_expand_path (tmp, MUTT_EXPAND_PATH_RX);
 
     /* Check for other mailbox shortcuts that expand to the empty string.
      * This is likely a mistake too */
