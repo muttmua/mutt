@@ -462,23 +462,32 @@ void mutt_buffer_expand_multi_path_norel (BUFFER *src, const char *delimiter)
   delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path_norel);
 }
 
+/* By default this will expand relative paths and remove trailing slashes */
 void mutt_buffer_expand_path (BUFFER *src)
 {
-  _mutt_buffer_expand_path (src, 0, 1);
+  _mutt_buffer_expand_path (src,
+                            MUTT_EXPAND_PATH_EXPAND_RELATIVE |
+                            MUTT_EXPAND_PATH_REMOVE_TRAILING_SLASH);
 }
 
-/* Does expansion without relative path expansion */
+/* Does expansion without relative path expansion or trailing slashes
+ * removal.  This is because this is used for DT_CMD_PATH types which
+ * can have arguments and non-path stuff after an initial command.
+ */
 void mutt_buffer_expand_path_norel (BUFFER *src)
 {
-  _mutt_buffer_expand_path (src, 0, 0);
+  _mutt_buffer_expand_path (src, 0);
 }
 
-void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
+void _mutt_buffer_expand_path (BUFFER *src, int flags)
 {
   BUFFER *p, *q, *tmp;
   const char *s, *tail = "";
   char *t;
   int recurse = 0;
+  int rx = flags & MUTT_EXPAND_PATH_RX;
+  int expand_relative = flags & MUTT_EXPAND_PATH_EXPAND_RELATIVE;
+  int remove_trailing_slash = flags & MUTT_EXPAND_PATH_REMOVE_TRAILING_SLASH;
 
   p = mutt_buffer_pool_get ();
   q = mutt_buffer_pool_get ();
@@ -648,10 +657,10 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
     imap_expand_path (src);
   else
 #endif
-    if (expand_relative &&
-        (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN))
+    if (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN)
     {
-      if (mutt_buffer_len (src) &&
+      if (expand_relative &&
+          mutt_buffer_len (src) &&
           *mutt_b2s (src) != '/')
       {
         if (mutt_getcwd (tmp))
@@ -664,15 +673,13 @@ void _mutt_buffer_expand_path (BUFFER *src, int rx, int expand_relative)
         }
       }
 
-      /* Normalize paths to not end in a trailing '/', to make
-       * string comparisons more reliable.  Note we only do this when
-       * expand_relative is set - other cases can include DT_CMD_PATH,
-       * which can have arbitrary "non-path" arguments after the path!
-       */
-      while ((mutt_buffer_len (src) > 1) &&
-             *(src->dptr - 1) == '/')
+      if (remove_trailing_slash)
       {
-        *(--src->dptr) = '\0';
+        while ((mutt_buffer_len (src) > 1) &&
+               *(src->dptr - 1) == '/')
+        {
+          *(--src->dptr) = '\0';
+        }
       }
     }
 
