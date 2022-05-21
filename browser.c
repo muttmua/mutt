@@ -845,7 +845,14 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 
   if (*(mutt_b2s (f)))
   {
-    mutt_buffer_expand_path (f);
+    /* Note we use _norel because:
+     * 1) The code below already handles relative path expansion.
+     * 2) Browser completion listing handles 'dir/' differently from
+     *    'dir'.  The former will list the content of the directory.
+     *    The latter will list current directory completions with
+     *    prefix 'dir'.
+     */
+    mutt_buffer_expand_path_norel (f);
 #ifdef USE_IMAP
     if (mx_is_imap (mutt_b2s (f)))
     {
