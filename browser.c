@@ -89,7 +89,7 @@ static int browser_compare_order (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = pa->number - pb->number;
+  int r = mutt_numeric_cmp (pa->number, pb->number);
 
   return (sort_reverse_flag ? -r : r);
 }
@@ -109,7 +109,7 @@ static int browser_compare_date (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = pa->mtime - pb->mtime;
+  int r = mutt_numeric_cmp (pa->mtime, pb->mtime);
 
   return (sort_reverse_flag ? -r : r);
 }
@@ -119,7 +119,7 @@ static int browser_compare_size (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = pa->size - pb->size;
+  int r = mutt_numeric_cmp (pa->size, pb->size);
 
   return (sort_reverse_flag ? -r : r);
 }
@@ -129,7 +129,7 @@ static int browser_compare_count (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = pa->msg_count - pb->msg_count;
+  int r = mutt_numeric_cmp (pa->msg_count, pb->msg_count);
 
   return (sort_reverse_flag ? -r : r);
 }
@@ -139,7 +139,7 @@ static int browser_compare_unread (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = pa->msg_unread - pb->msg_unread;
+  int r = mutt_numeric_cmp (pa->msg_unread, pb->msg_unread);
 
   return (sort_reverse_flag ? -r : r);
 }

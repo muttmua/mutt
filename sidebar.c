@@ -258,14 +258,15 @@ static int cb_qsort_sbe (const void *a, const void *b)
 
   switch ((SidebarSortMethod & SORT_MASK))
   {
+    /* Note: the three numeric counts below are reversed on purpose. */
     case SORT_COUNT:
-      result = (b2->msg_count - b1->msg_count);
+      result = mutt_numeric_cmp (b2->msg_count, b1->msg_count);
       break;
     case SORT_UNREAD:
-      result = (b2->msg_unread - b1->msg_unread);
+      result = mutt_numeric_cmp (b2->msg_unread, b1->msg_unread);
       break;
     case SORT_FLAGGED:
-      result = (b2->msg_flagged - b1->msg_flagged);
+      result = mutt_numeric_cmp (b2->msg_flagged, b1->msg_flagged);
       break;
     case SORT_PATH:
       result = mutt_strcasecmp (mutt_b2s (b1->pathbuf), mutt_b2s (b2->pathbuf));
