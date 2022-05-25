@@ -534,7 +534,8 @@ int is_display_corrupting_utf8 (wchar_t wc)
       (wc >= (wchar_t)0x2066 &&  /* misc directional markers */
        wc <= (wchar_t)0x2069) ||
       (wc >= (wchar_t)0x202a &&  /* misc directional markers: #3854 */
-       wc <= (wchar_t)0x202e))
+       wc <= (wchar_t)0x202e) ||
+      wc == (wchar_t)0x061c)     /* arabic letter mark: gitlab #413 */
     return 1;
   else
     return 0;
