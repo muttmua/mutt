@@ -1884,25 +1884,27 @@ static const char *find_word (const char *src)
 static int my_width (const char *p, int col, int flags)
 {
   wchar_t wc;
-  int l, w = 0, nl = 0, consumed;
-  size_t n;
+  int l, w = 0, nl = 0;
+  size_t n, consumed;
+  mbstate_t mbstate;
 
   if (!p)
     return 0;
 
-  mbtowc (NULL, NULL, 0);
+  memset (&mbstate, 0, sizeof (mbstate));
   n = mutt_strlen (p);
 
   while (*p && n)
   {
-    consumed = mbtowc (&wc, p, n);
+    consumed = mbrtowc (&wc, p, n, &mbstate);
     if (!consumed)
       break;
-    if (consumed < 0)
+    if (consumed == (size_t)(-1) || consumed == (size_t)(-2))
     {
-      mbtowc (NULL, NULL, 0);
+      if (consumed == (size_t)(-1))
+        memset (&mbstate, 0, sizeof (mbstate));
       wc = replacement_char ();
-      consumed = 1;
+      consumed = (consumed == (size_t)(-1)) ? 1 : n;
     }
 
     l = wcwidth (wc);
