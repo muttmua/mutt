@@ -1881,36 +1881,51 @@ static const char *find_word (const char *src)
 }
 
 /* like wcwidth(), but gets const char* not wchar_t* */
-static int my_width (const char *str, int col, int flags)
+static int my_width (const char *p, int col, int flags)
 {
   wchar_t wc;
   int l, w = 0, nl = 0;
-  const char *p = str;
+  size_t n, consumed;
+  mbstate_t mbstate;
 
-  while (p && *p)
+  if (!p)
+    return 0;
+
+  memset (&mbstate, 0, sizeof (mbstate));
+  n = mutt_strlen (p);
+
+  while (*p && n)
   {
-    if (mbtowc (&wc, p, MB_CUR_MAX) >= 0)
+    consumed = mbrtowc (&wc, p, n, &mbstate);
+    if (!consumed)
+      break;
+    if (consumed == (size_t)(-1) || consumed == (size_t)(-2))
     {
-      l = wcwidth (wc);
-      if (l < 0)
-	l = 1;
-      /* correctly calc tab stop, even for sending as the
-       * line should look pretty on the receiving end */
-      if (wc == L'\t' || (nl && wc == L' '))
-      {
-	nl = 0;
-	l = 8 - (col % 8);
-      }
-      /* track newlines for display-case: if we have a space
-       * after a newline, assume 8 spaces as for display we
-       * always tab-fold */
-      else if ((flags & CH_DISPLAY) && wc == '\n')
-	nl = 1;
+      if (consumed == (size_t)(-1))
+        memset (&mbstate, 0, sizeof (mbstate));
+      wc = replacement_char ();
+      consumed = (consumed == (size_t)(-1)) ? 1 : n;
     }
-    else
+
+    l = wcwidth (wc);
+    if (l < 0)
       l = 1;
+    /* correctly calc tab stop, even for sending as the
+     * line should look pretty on the receiving end */
+    if (wc == L'\t' || (nl && wc == L' '))
+    {
+      nl = 0;
+      l = 8 - (col % 8);
+    }
+    /* track newlines for display-case: if we have a space
+     * after a newline, assume 8 spaces as for display we
+     * always tab-fold */
+    else if ((flags & CH_DISPLAY) && wc == '\n')
+      nl = 1;
+
     w += l;
-    p++;
+    p += consumed;
+    n -= consumed;
   }
   return w;
 }

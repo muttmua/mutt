@@ -425,16 +425,17 @@ static int check_alias_name (const char *s, BUFFER *dest)
 {
   wchar_t wc;
   mbstate_t mb;
-  size_t l;
+  size_t l, n;
   int rv = 0, bad = 0, dry = !dest;
 
   memset (&mb, 0, sizeof (mbstate_t));
+  n = mutt_strlen (s);
 
   if (!dry)
     mutt_buffer_clear (dest);
-  for (; s && *s &&
-         (l = mbrtowc (&wc, s, MB_CUR_MAX, &mb)) != 0;
-       s += l)
+  for (; s && *s && n &&
+         (l = mbrtowc (&wc, s, n, &mb)) != 0;
+       s += l, n-= l)
   {
     bad = l == (size_t)(-1) || l == (size_t)(-2); /* conversion error */
     if (l == 1)
@@ -446,7 +447,12 @@ static int check_alias_name (const char *s, BUFFER *dest)
       if (dry)
 	return -1;
       if (l == (size_t)(-1))
+      {
         memset (&mb, 0, sizeof (mbstate_t));
+        l = 1;
+      }
+      if (l == (size_t)(-2))
+        l = n;
       mutt_buffer_addch (dest, '_');
       rv = -1;
     }
