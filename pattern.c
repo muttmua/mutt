@@ -313,15 +313,14 @@ int mutt_which_case (const char *s)
 {
   wchar_t w;
   mbstate_t mb;
-  size_t l;
+  size_t l, n;
 
   memset (&mb, 0, sizeof (mb));
+  n = mutt_strlen (s);
 
-  for (; (l = mbrtowc (&w, s, MB_CUR_MAX, &mb)) != 0; s += l)
+  for (; n && *s && (l = mbrtowc (&w, s, n, &mb)) != 0; s += l, n -= l)
   {
-    if (l == (size_t) -2)
-      continue; /* shift sequences */
-    if (l == (size_t) -1)
+    if (l == (size_t)(-1) || l == (size_t)(-2))
       return 0; /* error; assume case-sensitive */
     if (iswalpha ((wint_t) w) && iswupper ((wint_t) w))
       return 0; /* case-sensitive */
