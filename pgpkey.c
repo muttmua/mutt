@@ -304,10 +304,10 @@ static int _pgp_compare_address (const void *a, const void *b)
   pgp_uid_t **t = (pgp_uid_t **) b;
 
   if ((r = mutt_strcasecmp ((*s)->addr, (*t)->addr)))
-    return r > 0;
+    return r;
   else
-    return (mutt_strcasecmp (pgp_fpr_or_lkeyid ((*s)->parent),
-			     pgp_fpr_or_lkeyid ((*t)->parent)) > 0);
+    return mutt_strcasecmp (pgp_fpr_or_lkeyid ((*s)->parent),
+                            pgp_fpr_or_lkeyid ((*t)->parent));
 }
 
 static int pgp_compare_address (const void *a, const void *b)
@@ -327,9 +327,9 @@ static int _pgp_compare_keyid (const void *a, const void *b)
 
   if ((r = mutt_strcasecmp (pgp_fpr_or_lkeyid ((*s)->parent),
 			    pgp_fpr_or_lkeyid ((*t)->parent))))
-    return r > 0;
+    return r;
   else
-    return (mutt_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
+    return (mutt_strcasecmp ((*s)->addr, (*t)->addr));
 }
 
 static int pgp_compare_keyid (const void *a, const void *b)
@@ -344,9 +344,9 @@ static int _pgp_compare_date (const void *a, const void *b)
   pgp_uid_t **s = (pgp_uid_t **) a;
   pgp_uid_t **t = (pgp_uid_t **) b;
 
-  if ((r = ((*s)->parent->gen_time - (*t)->parent->gen_time)))
-    return r > 0;
-  return (mutt_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
+  if ((r = mutt_numeric_cmp ((*s)->parent->gen_time, (*t)->parent->gen_time)))
+    return r;
+  return (mutt_strcasecmp ((*s)->addr, (*t)->addr));
 }
 
 static int pgp_compare_date (const void *a, const void *b)
@@ -362,19 +362,22 @@ static int _pgp_compare_trust (const void *a, const void *b)
   pgp_uid_t **s = (pgp_uid_t **) a;
   pgp_uid_t **t = (pgp_uid_t **) b;
 
-  if ((r = (((*s)->parent->flags & (KEYFLAG_RESTRICTIONS))
-	    - ((*t)->parent->flags & (KEYFLAG_RESTRICTIONS)))))
-    return r > 0;
-  if ((r = ((*s)->trust - (*t)->trust)))
-    return r < 0;
-  if ((r = ((*s)->parent->keylen - (*t)->parent->keylen)))
-    return r < 0;
-  if ((r = ((*s)->parent->gen_time - (*t)->parent->gen_time)))
-    return r < 0;
+  if ((r = mutt_numeric_cmp (((*s)->parent->flags & (KEYFLAG_RESTRICTIONS)),
+                             ((*t)->parent->flags & (KEYFLAG_RESTRICTIONS)))))
+    return r;
+  /* Note: reversed */
+  if ((r = mutt_numeric_cmp ((*t)->trust, (*s)->trust)))
+    return r;
+  /* Note: reversed */
+  if ((r = mutt_numeric_cmp ((*t)->parent->keylen, (*s)->parent->keylen)))
+    return r;
+  /* Note: reversed */
+  if ((r = mutt_numeric_cmp ((*t)->parent->gen_time, (*s)->parent->gen_time)))
+    return r;
   if ((r = mutt_strcasecmp ((*s)->addr, (*t)->addr)))
-    return r > 0;
+    return r;
   return (mutt_strcasecmp (pgp_fpr_or_lkeyid ((*s)->parent),
-			   pgp_fpr_or_lkeyid ((*t)->parent))) > 0;
+			   pgp_fpr_or_lkeyid ((*t)->parent)));
 }
 
 static int pgp_compare_trust (const void *a, const void *b)
