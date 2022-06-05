@@ -1,3 +1,178 @@
+2022-06-05 11:13:47 -0700  Kevin McCarthy  <kevin@8t8.us> (42c9d1ea)
+
+        * Update UPDATING file for 2.2.6 release.
+
+M	UPDATING
+
+2022-05-27 14:58:23 -0700  Kevin McCarthy  <kevin@8t8.us> (44636260)
+
+        * Fix $pgp_sort_keys sorting.
+        
+        Both gpgme and pgpkey used nonsensical comparison return values, for
+        example: "return r > 0".
+        
+        Adjust numeric comparisons to use mutt_numeric_cmp() and have the
+        comparator return the result of the actual comparison.
+        
+        Adjust the "trust" sorting of gpgme to be the same as classic-pgp:
+        putting restrictions at the bottom, but reverse sorting validity,
+        length and timestamp values so they come first in the list.
+
+M	crypt-gpgme.c
+M	pgpkey.c
+
+2022-05-22 19:03:33 -0700  Kevin McCarthy  <kevin@8t8.us> (818ea32c)
+
+        * Adjust browser and sidebar numeric sorting to use mutt_numeric_cmp()
+        
+        Large values shouldn't use subtraction into an integer return type, so
+        just convert all of them to use the macro, to be safe.
+
+M	browser.c
+M	sidebar.c
+
+2022-05-27 13:24:11 -0700  Kevin McCarthy  <kevin@8t8.us> (f8336984)
+
+        * Fix mbrtowc() error handling in mutt_which_case().
+        
+        The function did not reset the increment value on a -2 return value.
+        
+        Increase the maximum conversion size to the string length, and check
+        for -2.  Since we're looking at the whole string, we can then just
+        terminate the loop on either value, assuming a case-sensitive search.
+        
+        mbrtowc() will return -2 if passed n==0, so add an explicit check for
+        the end of string and a positive n count.
+
+M	pattern.c
+
+2022-05-27 13:22:22 -0700  Kevin McCarthy  <kevin@8t8.us> (def28317)
+
+        * Fix mbrtowc() error handling in check_alias_name().
+        
+        The function did not reset the increment value on any error.  Increase
+        the maximum conversion size to the string length, and check for -2.
+        Since we're looking at the whole string, we can then just terminate
+        the loop on a -2 return value.
+
+M	alias.c
+
+2022-05-26 11:29:15 -0700  Kevin McCarthy  <kevin@8t8.us> (51c67ba9)
+
+        * Convert my_width() to use mbrtowc().
+        
+        This allows handling a single corrupted character vs an incomplete
+        multibyte character differently, as other parts of Mutt do.
+
+M	sendlib.c
+
+2022-05-25 20:59:39 -0700  Kevin McCarthy  <kevin@8t8.us> (ca960228)
+
+        * Fix header folding my_width() calculation.
+        
+        After calculating the width of a character, the routine would only
+        increment the string pointer by one byte.  Any errors returned by
+        mbtowc() would also increment the width by one.  This means multibyte
+        characters would overcount width by the number of bytes minus one.
+        
+        Change it to check the return value and use that value to increment
+        the string pointer.
+        
+        Change mbtowc() to look at the whole rest of the string instead of
+        just MB_CUR_MAX, as the manpage says even MB_CUR_MAX may not be enough
+        in some circumstances.
+        
+        Since we calculate strlen, use that as well as '\0' for the loop
+        termination check.  Also check for mbtowc() returning 0 just for extra
+        safety.
+        
+        Reset the internal mbstate_t before converting, and on any error.
+        
+        If mbtowc() returns an error, use replacment_char() as a substitue for
+        width calcluation, as mutt_strwidth() and other parts of Mutt do.
+
+M	sendlib.c
+
+2022-05-25 09:53:07 -0700  Kevin McCarthy  <kevin@8t8.us> (67bb3d35)
+
+        * Filter Arabic Letter Mark due to display corruption.
+        
+        Under GNU Screen, the directional marker causes display corruption in
+        the index.
+        
+        This (along with past filters added) should perhaps be considered GNU
+        Screen bugs.  They've been reported upstream a while ago, but so far
+        not received any attention.  So for Mutt users' benefit it's better to
+        filter them out for now.
+        
+        Thanks to Vincent Lefèvre for debugging and reporting the problem,
+        along with providing historical information from similar past issues.
+
+M	mbyte.c
+
+2022-05-21 09:18:04 -0700  Kevin McCarthy  <kevin@8t8.us> (ceb6c4fc)
+
+        * Fix browser completion path expansion to preserve a trailing slash.
+        
+        The browser lists the contents of a directory passed as 'f' when it
+        has a trailing slash; without, it lists everything matching that name
+        in the parent directory.
+        
+        Since the browser does its own relative path expansion, we can just
+        use mutt_buffer_path_norel() to keep a trailing slash in 'f'.
+
+M	browser.c
+
+2022-05-21 09:07:23 -0700  Kevin McCarthy  <kevin@8t8.us> (599806a0)
+
+        * Decouple expand_path() relpath vs trailing slash handling.
+        
+        This change was originally done for the next commit, to fix browser
+        completion handling.  However, I discovered the browser does its own
+        relative path expansion, and could just be fixed by using the _norel()
+        version.
+        
+        Still, I think this change is a good idea in any case.  There may be a
+        few more fixes needed that require relpath expansion while keeping
+        trailing slashes.
+        
+        Since the number of flag parameters to expand_path would become
+        excessive by adding a "remove_trailing_slash" paremeter, convert it to
+        use a single 'flags' parameter instead.
+
+M	hook.c
+M	mutt.h
+M	muttlib.c
+M	protos.h
+
+2022-05-20 08:51:05 -0700  Helge Kreutzmann  <debian@helgefjell.de> (5006b546)
+
+        * Update de.po.
+
+M	po/de.po
+
+2022-05-19 12:36:06 -0700  Kevin McCarthy  <kevin@8t8.us> (80d90e0c)
+
+        * Document $sendmail invocation behavior.
+        
+        This variable is handled differently from other "command" variables in
+        Mutt.  It's tokenized by space and then executed via execvp().  This
+        means spaces in command/arguments are not supported, and neither is
+        shell quoting.
+        
+        I don't know if it was done this way out of some security concern, but
+        it seems like using mutt_system() and mutt_buffer_quote_filename() for
+        recipient arguments should at least be investigated.
+
+M	init.h
+
+2022-05-16 10:20:30 -0700  Kevin McCarthy  <kevin@8t8.us> (a8c7fba1)
+
+        * automatic post-release commit for mutt-2.2.5
+
+M	ChangeLog
+M	VERSION
+
 2022-05-16 10:16:07 -0700  Kevin McCarthy  <kevin@8t8.us> (c94b511a)
 
         * Update UPDATING file for 2.2.5.
