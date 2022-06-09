@@ -1383,8 +1383,8 @@ retry:
     else if ((WithCrypto & APPLICATION_SMIME) &&
              ((mutt_is_application_smime (hdr->content) & SMIMEENCRYPT) == SMIMEENCRYPT))
     {
-      chflags |= CH_MIME | CH_TXTPLAIN;
-      cmflags = MUTT_CM_DECODE | MUTT_CM_CHARCONV;
+      chflags |= CH_MIME | CH_NONEWLINE;
+      cmflags = MUTT_CM_DECODE_SMIME;
       pgp &= ~SMIMEENCRYPT;
     }
   }
