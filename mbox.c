@@ -247,7 +247,8 @@ int mbox_parse_mailbox (CONTEXT *ctx)
   char buf[HUGE_STRING], return_path[STRING];
   HEADER *curhdr;
   time_t t;
-  int count = 0, lines = 0;
+  int count = 0, lines = 0, has_mbox_sep = 0;
+  int expect_from_line = 1;
   LOFF_T loc;
 #ifdef NFS_ATTRIBUTE_HACK
 #ifdef HAVE_UTIMENSAT
@@ -305,6 +306,12 @@ int mbox_parse_mailbox (CONTEXT *ctx)
       {
 #define PREV ctx->hdrs[ctx->msgcount-1]
 
+        if (!has_mbox_sep)
+        {
+          dprint (1, (debugfile, "mbox_parse_mailbox: missing separator at location: "
+                      OFF_T_FMT "\n", loc));
+        }
+
 	if (PREV->content->length < 0)
 	{
 	  PREV->content->length = loc - PREV->content->offset - 1;
@@ -316,6 +323,7 @@ int mbox_parse_mailbox (CONTEXT *ctx)
       }
 
       count++;
+      expect_from_line = 0;
 
       if (!ctx->quiet)
 	mutt_progress_update (&progress, count,
@@ -392,9 +400,11 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 	    }
 	  }
 
-	  /* return to the offset of the next message separator */
-	  if (fseeko (ctx->fp, tmploc, SEEK_SET) != 0)
+	  /* return to the offset of the next *mbox* separator */
+	  if (fseeko (ctx->fp, tmploc - 1, SEEK_SET) != 0)
 	    dprint (1, (debugfile, "mbox_parse_mailbox: fseek() failed\n"));
+
+          expect_from_line = 1;
 	}
       }
 
@@ -407,9 +417,20 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 	curhdr->env->from = rfc822_cpy_adr (curhdr->env->return_path, 0);
 
       lines = 0;
+      has_mbox_sep = 0;
     }
     else
+    {
       lines++;
+      has_mbox_sep = !mutt_strcmp (MBOX_SEP, buf);
+      if (expect_from_line && !has_mbox_sep)
+      {
+        dprint (1, (debugfile, "mbox_parse_mailbox: missing From_ line at location: "
+                    OFF_T_FMT "\n", loc));
+        mutt_error _("Mailbox is corrupt!");
+        return (-1);
+      }
+    }
 
     loc = ftello (ctx->fp);
   }
@@ -422,6 +443,12 @@ int mbox_parse_mailbox (CONTEXT *ctx)
    */
   if (count > 0)
   {
+    if (!has_mbox_sep)
+    {
+      dprint (1, (debugfile, "mbox_parse_mailbox: missing separator at location: "
+                      OFF_T_FMT "\n", loc));
+    }
+
     if (PREV->content->length < 0)
     {
       PREV->content->length = ftello (ctx->fp) - PREV->content->offset - 1;

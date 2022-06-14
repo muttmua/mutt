@@ -45,6 +45,7 @@ enum
 WHERE short DefaultMagic INITVAL (MUTT_MBOX);
 
 #define MMDF_SEP "\001\001\001\001\n"
+#define MBOX_SEP "\n"
 #define MAXLOCKATTEMPT 5
 
 int mbox_lock_mailbox (CONTEXT *, int, int);
