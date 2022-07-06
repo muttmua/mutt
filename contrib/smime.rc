@@ -4,20 +4,20 @@
 
 # If you compiled mutt with support for both PGP and S/MIME, PGP
 # will be the default method unless the following option is set
-set smime_is_default
+# set smime_is_default
 
 # Uncomment this if you don't want to set labels for certificates you add.
 # unset smime_ask_cert_label
 
 # Passphrase expiration
-set smime_timeout=300
+# set smime_timeout=300
 
 # Global crypto options -- these affect PGP operations as well.
-set crypt_autosign = yes
-set crypt_replyencrypt = yes
-set crypt_replysign = yes
-set crypt_replysignencrypted = yes
-set crypt_verify_sig = yes
+# set crypt_autosign = yes
+# set crypt_replyencrypt = yes
+# set crypt_replysign = yes
+# set crypt_replysignencrypted = yes
+# set crypt_verify_sig = yes
 
 
 # Section A: Key Management
