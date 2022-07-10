@@ -15,7 +15,9 @@ version=`echo $latesttag | sed -e s/mutt-// -e s/-rel// -e s/-/./g`
 distance=`git rev-list --count $latesttag..`
 commitid=`git rev-parse --short HEAD`
 
-if [ $distance -eq 0 ]; then
+[ x = "x$distance" ] && exec cat VERSION
+
+if [ 0 -eq "$distance" ]; then
   distance=
 else
   distance="+$distance"
