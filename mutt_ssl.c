@@ -92,7 +92,7 @@ static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len);
 static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs);
 static int ssl_socket_open (CONNECTION * conn);
 static int ssl_socket_close (CONNECTION * conn);
-static int tls_close (CONNECTION* conn);
+static int starttls_close (CONNECTION* conn);
 static void ssl_err (sslsockdata *data, int err);
 static void ssl_dprint_err_stack (void);
 static int ssl_cache_trusted_cert (X509 *cert);
@@ -204,44 +204,33 @@ static void reset_allowed_proto_version_range (sslsockdata *ssldata)
 #endif
 }
 
-/* mutt_ssl_starttls: Negotiate TLS over an already opened connection.
- *   TODO: Merge this code better with ssl_socket_open. */
-int mutt_ssl_starttls (CONNECTION* conn)
+/* mutt_ssl_setup_common: common code paths for Implicit TLS and in-band STARTTLS (STLS) modes */
+static int mutt_ssl_setup_common (CONNECTION *conn, long ssl_options)
 {
-  sslsockdata* ssldata;
+  sslsockdata *data;
   int maxbits;
-  long ssl_options = 0;
 
-  if (mutt_socket_has_buffered_input (conn))
-  {
-    /* L10N:
-       The server is not supposed to send data immediately after
-       confirming STARTTLS.  This warns the user that something
-       weird is going on.
-    */
-    mutt_error _("Warning: clearing unexpected server data before TLS negotiation");
-    mutt_sleep (0);
-    mutt_socket_clear_buffered_input (conn);
-  }
-
-  if (ssl_init())
+  if (ssl_init ())
     goto bail;
 
-  ssldata = (sslsockdata*) safe_calloc (1, sizeof (sslsockdata));
-  /* the ssl_use_xxx protocol options don't apply. We must use TLS in TLS.
+  data = (sslsockdata*) safe_calloc (1, sizeof (sslsockdata));
+  /* the ssl_use_sslxxx protocol options don't apply to starttls,
+   * we must use TLS in TLS, so we do not refactor these.
    *
    * However, we need to be able to negotiate amongst various TLS versions,
    * which at present can only be done with the SSLv23_client_method;
    * TLSv1_client_method gives us explicitly TLSv1.0, not 1.1 or 1.2 (True as
-   * of OpenSSL 1.0.1c)
+   * of OpenSSL 1.0.1c ... 3.0.x)
    */
-  if (! (ssldata->ctx = SSL_CTX_new (SSLv23_client_method())))
+  if (! (data->ctx = SSL_CTX_new (SSLv23_client_method())))
   {
     dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL_CTX\n"));
+    mutt_error (_("Unable to create SSL context"));
+    ssl_dprint_err_stack ();
     goto bail_ssldata;
   }
 
-  reset_allowed_proto_version_range (ssldata);
+  reset_allowed_proto_version_range (data);
 
 #ifdef SSL_OP_NO_TLSv1_3
   if (!option(OPTTLSV1_3))
@@ -259,6 +248,93 @@ int mutt_ssl_starttls (CONNECTION* conn)
   if (!option(OPTTLSV1))
     ssl_options |= SSL_OP_NO_TLSv1;
 #endif
+  (void)SSL_CTX_set_options (data->ctx, ssl_options); /* would only return new values -> discard */
+
+  if (option (OPTSSLSYSTEMCERTS))
+  {
+    if (! SSL_CTX_set_default_verify_paths (data->ctx))
+    {
+      dprint (1, (debugfile, "mutt_ssl_starttls: Error setting default verify paths\n"));
+      goto bail_ctx;
+    }
+  }
+
+  if (SslCertFile && !ssl_load_certificates (data->ctx))
+    dprint (1, (debugfile, "mutt_ssl_setup_common: Error loading trusted certificates\n"));
+
+  ssl_get_client_cert (data, conn);
+
+  if (SslCiphers)
+  {
+    if (!SSL_CTX_set_cipher_list (data->ctx, SslCiphers))
+    {
+      dprint (1, (debugfile, "mutt_ssl_setup_common: Could not select preferred ciphers\n"));
+      goto bail_ctx;
+    }
+  }
+
+  if (ssl_set_verify_partial (data->ctx))
+  {
+    mutt_error (_("Warning: error enabling ssl_verify_partial_chains"));
+    mutt_sleep (2);
+  }
+
+  if (! (data->ssl = SSL_new (data->ctx)))
+  {
+    dprint (1, (debugfile, "mutt_ssl_setup_common: Error allocating SSL\n"));
+    goto bail_ctx;
+  }
+
+  if (SSL_set_fd (data->ssl, conn->fd) != 1)
+  {
+    dprint (1, (debugfile, "mutt_ssl_setup_common: Error setting fd\n"));
+    goto bail_ssl;
+  }
+
+  if (ssl_negotiate (conn, data))
+    goto bail_ssl;
+
+  conn->ssf = SSL_CIPHER_get_bits (SSL_get_current_cipher (data->ssl),
+                                   &maxbits);
+
+  data->isopen = 1;
+
+  /* hmm. watch out if we're starting TLS over any method other than raw,
+  because close will reset to the raw_* methods. */
+  conn->sockdata = data;
+
+  /* success */
+  return 0;
+
+bail_ssl:
+  SSL_free (data->ssl);
+  data->ssl = 0;
+bail_ctx:
+  SSL_CTX_free (data->ctx);
+  data->ctx = 0;
+bail_ssldata:
+  FREE (&data);
+bail:
+  return -1;
+}
+
+/* mutt_ssl_starttls: Negotiate TLS over an already opened connection. */
+int mutt_ssl_starttls (CONNECTION* conn)
+{
+  long ssl_options = 0;
+
+  if (mutt_socket_has_buffered_input (conn))
+  {
+    /* L10N:
+       The server is not supposed to send data immediately after
+       confirming STARTTLS.  This warns the user that something
+       weird is going on.
+    */
+    mutt_error _("Warning: clearing unexpected server data before TLS negotiation");
+    mutt_sleep (0);
+    mutt_socket_clear_buffered_input (conn);
+  }
+
   /* these are always set */
 #ifdef SSL_OP_NO_SSLv3
   ssl_options |= SSL_OP_NO_SSLv3;
@@ -266,80 +342,16 @@ int mutt_ssl_starttls (CONNECTION* conn)
 #ifdef SSL_OP_NO_SSLv2
   ssl_options |= SSL_OP_NO_SSLv2;
 #endif
-  if (! SSL_CTX_set_options(ssldata->ctx, ssl_options))
-  {
-    dprint(1, (debugfile, "mutt_ssl_starttls: Error setting options to %ld\n", ssl_options));
-    goto bail_ctx;
-  }
 
-  if (option (OPTSSLSYSTEMCERTS))
-  {
-    if (! SSL_CTX_set_default_verify_paths (ssldata->ctx))
-    {
-      dprint (1, (debugfile, "mutt_ssl_starttls: Error setting default verify paths\n"));
-      goto bail_ctx;
-    }
-  }
+  if (mutt_ssl_setup_common (conn, ssl_options))
+    return -1;
 
-  if (SslCertFile && !ssl_load_certificates (ssldata->ctx))
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error loading trusted certificates\n"));
-
-  ssl_get_client_cert(ssldata, conn);
-
-  if (SslCiphers)
-  {
-    if (!SSL_CTX_set_cipher_list (ssldata->ctx, SslCiphers))
-    {
-      dprint (1, (debugfile, "mutt_ssl_starttls: Could not select preferred ciphers\n"));
-      goto bail_ctx;
-    }
-  }
-
-  if (ssl_set_verify_partial (ssldata->ctx))
-  {
-    mutt_error (_("Warning: error enabling ssl_verify_partial_chains"));
-    mutt_sleep (2);
-  }
-
-  if (! (ssldata->ssl = SSL_new (ssldata->ctx)))
-  {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL\n"));
-    goto bail_ctx;
-  }
-
-  if (SSL_set_fd (ssldata->ssl, conn->fd) != 1)
-  {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error setting fd\n"));
-    goto bail_ssl;
-  }
-
-  if (ssl_negotiate (conn, ssldata))
-    goto bail_ssl;
-
-  ssldata->isopen = 1;
-
-  /* hmm. watch out if we're starting TLS over any method other than raw. */
-  conn->sockdata = ssldata;
   conn->conn_read = ssl_socket_read;
   conn->conn_write = ssl_socket_write;
-  conn->conn_close = tls_close;
+  conn->conn_close = starttls_close;
   conn->conn_poll = ssl_socket_poll;
 
-  conn->ssf = SSL_CIPHER_get_bits (SSL_get_current_cipher (ssldata->ssl),
-                                   &maxbits);
-
   return 0;
-
-bail_ssl:
-  SSL_free (ssldata->ssl);
-  ssldata->ssl = 0;
-bail_ctx:
-  SSL_CTX_free (ssldata->ctx);
-  ssldata->ctx = 0;
-bail_ssldata:
-  FREE (&ssldata);
-bail:
-  return -1;
 }
 
 /*
@@ -501,103 +513,27 @@ static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs)
 
 static int ssl_socket_open (CONNECTION * conn)
 {
-  sslsockdata *data;
-  int maxbits;
+  long ssl_options = 0;
 
   if (raw_socket_open (conn) < 0)
     return -1;
 
-  data = (sslsockdata *) safe_calloc (1, sizeof (sslsockdata));
-  conn->sockdata = data;
-
-  if (! (data->ctx = SSL_CTX_new (SSLv23_client_method ())))
-  {
-    /* L10N: an SSL context is a data structure returned by the OpenSSL
-     *       function SSL_CTX_new().  In this case it returned NULL: an
-     *       error condition.
-     */
-    mutt_error (_("Unable to create SSL context"));
-    ssl_dprint_err_stack ();
-    mutt_socket_close (conn);
-    return -1;
-  }
-
-  reset_allowed_proto_version_range (data);
-
-  /* disable SSL protocols as needed */
-  if (!option(OPTTLSV1))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1);
-  }
-  /* TLSv1.1/1.2 support was added in OpenSSL 1.0.1, but some OS distros such
-   * as Fedora 17 are on OpenSSL 1.0.0.
-   */
-#ifdef SSL_OP_NO_TLSv1_1
-  if (!option(OPTTLSV1_1))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1_1);
-  }
-#endif
-#ifdef SSL_OP_NO_TLSv1_2
-  if (!option(OPTTLSV1_2))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1_2);
-  }
-#endif
-#ifdef SSL_OP_NO_TLSv1_3
-  if (!option(OPTTLSV1_3))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_TLSv1_3);
-  }
-#endif
+  /* these are specific for the older Implicit SSL (SSL-wrapped)
+     mode and do not apply to STARTTLS, which requires TLS v1.0 or newer */
+#ifdef SSL_OP_NO_SSLv2
   if (!option(OPTSSLV2))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_SSLv2);
-  }
+    ssl_options |= SSL_OP_NO_SSLv2;
+#endif
+#ifdef SSL_OP_NO_SSLv3
   if (!option(OPTSSLV3))
-  {
-    SSL_CTX_set_options(data->ctx, SSL_OP_NO_SSLv3);
-  }
+    ssl_options |= SSL_OP_NO_SSLv3;
+#endif
 
-  if (option (OPTSSLSYSTEMCERTS))
-  {
-    if (! SSL_CTX_set_default_verify_paths (data->ctx))
-    {
-      dprint (1, (debugfile, "ssl_socket_open: Error setting default verify paths\n"));
-      mutt_socket_close (conn);
-      return -1;
-    }
-  }
-
-  if (SslCertFile && !ssl_load_certificates (data->ctx))
-    dprint (1, (debugfile, "ssl_socket_open: Error loading trusted certificates\n"));
-
-  ssl_get_client_cert(data, conn);
-
-  if (SslCiphers)
-  {
-    SSL_CTX_set_cipher_list (data->ctx, SslCiphers);
-  }
-
-  if (ssl_set_verify_partial (data->ctx))
-  {
-    mutt_error (_("Warning: error enabling ssl_verify_partial_chains"));
-    mutt_sleep (2);
-  }
-
-  data->ssl = SSL_new (data->ctx);
-  SSL_set_fd (data->ssl, conn->fd);
-
-  if (ssl_negotiate(conn, data))
+  if (mutt_ssl_setup_common (conn, ssl_options))
   {
     mutt_socket_close (conn);
     return -1;
   }
-
-  data->isopen = 1;
-
-  conn->ssf = SSL_CIPHER_get_bits (SSL_get_current_cipher (data->ssl),
-                                   &maxbits);
 
   return 0;
 }
@@ -699,7 +635,7 @@ static int ssl_socket_close (CONNECTION * conn)
   return raw_socket_close (conn);
 }
 
-static int tls_close (CONNECTION* conn)
+static int starttls_close (CONNECTION* conn)
 {
   int rc;
 
