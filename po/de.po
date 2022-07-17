@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2022-02-12 10:45-0800\n"
-"PO-Revision-Date: 2022-05-16 22:09+0200\n"
+"PO-Revision-Date: 2022-07-10 20:51+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -4272,7 +4272,7 @@ msgstr "Dieses Zertifikat wurde ausgegeben von:"
 
 #: mutt_ssl.c:1261 mutt_ssl_gnutls.c:986
 msgid "This certificate is valid"
-msgstr "Dieses Zertifikat ist gültig."
+msgstr "Dieses Zertifikat ist gültig"
 
 #: mutt_ssl.c:1262 mutt_ssl_gnutls.c:989
 #, c-format
@@ -4282,7 +4282,7 @@ msgstr "    von %s"
 #: mutt_ssl.c:1265 mutt_ssl_gnutls.c:994
 #, c-format
 msgid "     to %s"
-msgstr "     an %s"
+msgstr "    bis %s"
 
 #: mutt_ssl.c:1272 mutt_ssl_gnutls.c:1001
 #, c-format
@@ -4292,7 +4292,7 @@ msgstr "SHA1-Fingerabdruck: %s"
 #: mutt_ssl.c:1278 mutt_ssl.c:1281 mutt_ssl_gnutls.c:1007
 #: mutt_ssl_gnutls.c:1010
 msgid "SHA256 Fingerprint: "
-msgstr "SHA1-Fingerabdruck: "
+msgstr "SHA256-Fingerabdruck: "
 
 #: mutt_ssl.c:1285 mutt_ssl_gnutls.c:1031
 #, c-format
