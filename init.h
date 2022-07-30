@@ -2393,6 +2393,13 @@ struct option_t MuttVars[] = {
   ** variable should specify the pathname of the external pager you would
   ** like to use.
   ** .pp
+  ** The string may contain a ``%s'', which will be substituted with
+  ** the generated message filename.  Mutt will add quotes around the
+  ** string substituted for ``%s'' automatically according to shell
+  ** quoting rules, so you should avoid adding your own.  If no ``%s''
+  ** is found in the string, Mutt will append the message filename to
+  ** the end of the string.
+  ** .pp
   ** Using an external pager may have some disadvantages: Additional
   ** keystrokes are necessary because you can't call mutt functions
   ** directly from the pager, and screen resizes cause lines longer than

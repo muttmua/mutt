@@ -338,7 +338,7 @@ int mutt_display_message (HEADER *cur)
     mutt_endwin (NULL);
 
     cmd = mutt_buffer_pool_get ();
-    mutt_buffer_printf (cmd, "%s %s", NONULL(Pager), mutt_b2s (tempfile));
+    mutt_expand_file_fmt (cmd, NONULL (Pager), mutt_b2s (tempfile));
     if ((r = mutt_system (mutt_b2s (cmd))) == -1)
       mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
     unlink (mutt_b2s (tempfile));
