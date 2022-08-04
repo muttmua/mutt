@@ -80,7 +80,6 @@ typedef struct
 {
   SSL_CTX *ctx;
   SSL *ssl;
-  X509 *cert;
   unsigned char isopen;
 }
 sslsockdata;
@@ -692,11 +691,6 @@ static int ssl_socket_close (CONNECTION * conn)
     if (data->isopen)
       SSL_shutdown (data->ssl);
 
-    /* hold onto this for the life of mutt, in case we want to reconnect.
-     * The purist in me wants a mutt_exit hook. */
-#if 0
-    X509_free (data->cert);
-#endif
     SSL_free (data->ssl);
     SSL_CTX_free (data->ctx);
     FREE (&conn->sockdata);
