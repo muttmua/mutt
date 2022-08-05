@@ -58,7 +58,7 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
   FOREVER
   {
     if (fgets (buf, *linelen - offset, f) == NULL ||	/* end of file or */
-	(ISSPACE (*line) && !offset))			/* end of headers */
+	(is_email_wsp (*line) && !offset))		/* end of headers */
     {
       *line = 0;
       return (line);
@@ -72,7 +72,7 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
     if (*buf == '\n')
     {
       /* we did get a full line. remove trailing space */
-      while (ISSPACE (*buf))
+      while (is_email_wsp (*buf))
 	*buf-- = 0;	/* we cannot come beyond line's beginning because
 			 * it begins with a non-space */
 
