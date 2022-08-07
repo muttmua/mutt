@@ -9,6 +9,13 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.7 (2022-08-07):
+
+  ! Bug fix release.
+  ! $query_command output is more strictly parsed, with one tab expected
+    between fields.  This allows the name field to be empty.
+  ! $pager may contain a %s to specify the argument placement.
+
 2.2.6 (2022-06-05):
 
   ! Bug fix release.

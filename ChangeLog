@@ -1,3 +1,151 @@
+2022-08-07 10:15:32 -0700  Kevin McCarthy  <kevin@8t8.us> (7b41537e)
+
+        * Update UPDATING file for 2.2.7 release.
+
+M	UPDATING
+
+2022-08-02 20:51:17 -0700  Kevin McCarthy  <kevin@8t8.us> (40228035)
+
+        * Fix mutt_read_rfc822_line() to use is_email_wsp().
+        
+        ISSPACE() uses isspace() which is locale-dependent.  On some
+        platforms, unexpected 8-bit chars, such as 0xa0 or 0x85 return true.
+        
+        When using $edit_headers, this can result in Subject: lines being
+        truncated if a multi-byte character ending in one of these values is
+        at the end of a line.
+        
+        There are probably other bugs that could be triggered by this, such as
+        in IMAP parsing.  However, I need more time to investigate before
+        making large-scale changes that could introduce new bugs.
+
+M	parse.c
+
+2022-08-04 10:25:26 +0200  Matthias Andree  <matthias.andree@gmx.de> (4d2b33ba)
+
+        * Drop X509 *cert from sslsockdata, unused.
+        
+        Signed-off-by: Matthias Andree <matthias.andree@gmx.de>
+        (cherry picked from commit 0d03501ac9ddd1a4a62a7274651d64da0c4c3865)
+
+M	mutt_ssl.c
+
+2022-07-29 19:52:45 -0700  Kevin McCarthy  <kevin@8t8.us> (a1a08067)
+
+        * Change mutt_display_message() $pager to use %s if present.
+        
+        Other places in the code all use mutt_do_pager(), which uses
+        mutt_expand_file_fmt().
+        
+        The use of %s was not documented (and likely not used since it's
+        broken when displaying messages), so add documentation to the $pager
+        option.
+
+M	commands.c
+M	init.h
+
+2022-07-29 10:40:33 -0700  Kevin McCarthy  <kevin@8t8.us> (4f672027)
+
+        * Overide SSL_CTX min/max protocol versions.
+        
+        Newer versions of OpenSSL disable old (insecure) protocols by default.
+        Reset the allowed versions, so that Mutt's configuration variables
+        enabling old protocols actually work if needed.
+        
+        Thanks to Matthias Andree for the patch, which this commit is based
+        upon.
+
+M	mutt_ssl.c
+
+2022-03-04 15:26:56 -0800  Kevin McCarthy  <kevin@8t8.us> (b022931d)
+
+        * Tighten $query_command parsing to allow empty name field.
+        
+        The documentation writes the output should be "each line containing a
+        tab separated address then name then some other optional information".
+        The wiki page at
+        <https://gitlab.com/muttmua/mutt/-/wikis/MuttGuide/Aliases> also
+        implies a single tab between each field.
+        
+        Since the function used strtok, consecutive tab delimeters were
+        treated as a single delimiter.  This caused a missing name field to
+        use the comment field as the name.
+        
+        Change the function to use strchr instead.  This is not without risk,
+        as the functionality is old.  Who knows what all programs have been
+        written that might assume initial, or multiple delimiters are
+        acceptable...
+        
+        Thanks to Magnus Groß for reporting the problem along with a patch,
+        which this commit is derived from.
+
+M	query.c
+
+2022-07-10 14:58:40 +0200  Matthias Andree  <matthias.andree@gmx.de> (135fb67e)
+
+        * version.sh: fix robustness on git failure
+        
+        for instance, with untrusted directory under sudo.
+        
+        Signed-off-by: Matthias Andree <matthias.andree@gmx.de>
+
+M	version.sh
+
+2022-07-17 22:20:12 +0200  Matthias Andree  <matthias.andree@gmx.de> (607efef7)
+
+        * de.po: Fix German certificate dialog translation.
+        
+        Remove the full-stop to ensure reader will continue reading rather
+        than mistake this as a conclusion.
+        
+        Also, from: to: here translate to von: bis: (not an: which would be
+        spatial not temporal).
+        
+        Finally, fix a mistranslation where SHA256 was translated as SHA1
+        
+        Reviewed by: Helge Kreutzmann <debian@helgefjell.de>
+        Signed-off-by: Matthias Andree <matthias.andree@gmx.de>
+
+M	po/de.po
+
+2022-07-06 14:39:42 -0700  Kevin McCarthy  <kevin@8t8.us> (0614c38c)
+
+        * Comment out undesirable default settings in smime.rc.
+        
+        Some distributions, such as Debian, use the contrib/smime.rc as a
+        default system configuration file (under /etc/Muttrc.d).  However
+        settings such as $smime_is_default and $crypt_autosign should not be
+        enabled by default for everyone.
+        
+        Debian previously maintained a patch against the file, commenting out
+        those settings, but the patch somehow got dropped and is causing
+        confusion for Debian users.
+        
+        Since the settings aren't necessarily desirable for anyone who wants
+        to use S/MIME, comment them out in the contrib file.
+
+M	contrib/smime.rc
+
+2022-06-09 09:22:03 -0700  Kevin McCarthy  <kevin@8t8.us> (97f8eee2)
+
+        * Decrypt S/MIME when mime-forwarding with $forward_decrypt set.
+        
+        The code was performing a decode for S/MIME, but this had the effect
+        of running attachments through the autoview routines.
+        
+        Change so it only performs a decrypt.  This is also how copying is
+        handled in set_copy_flags(), so I believe the decode was just a
+        mistake.
+
+M	sendlib.c
+
+2022-06-05 11:20:00 -0700  Kevin McCarthy  <kevin@8t8.us> (d1ee1314)
+
+        * automatic post-release commit for mutt-2.2.6
+
+M	ChangeLog
+M	VERSION
+
 2022-06-05 11:13:47 -0700  Kevin McCarthy  <kevin@8t8.us> (42c9d1ea)
 
         * Update UPDATING file for 2.2.6 release.
