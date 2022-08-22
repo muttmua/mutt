@@ -53,8 +53,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.2.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2022-02-12 10:45-0800\n"
-"PO-Revision-Date: 2022-01-30 18:42+0100\n"
+"POT-Creation-Date: 2022-01-28 09:41-0800\n"
+"PO-Revision-Date: 2022-08-22 17:56+0200\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -962,7 +962,7 @@ msgstr "Voleu imprimir el missatge?"
 
 #: commands.c:651
 msgid "Print tagged messages?"
-msgstr "Voleu imprimir els misatges marcats?"
+msgstr "Voleu imprimir els missatges marcats?"
 
 #: commands.c:660
 msgid "Message printed"
@@ -1646,7 +1646,7 @@ msgstr "No s’ha enviat el missatge."
 
 #: crypt.c:602
 msgid "S/MIME messages with no hints on content are unsupported."
-msgstr "No es permeten els misatges S/MIME sense pistes sobre el contingut."
+msgstr "No es permeten els missatges S/MIME sense pistes sobre el contingut."
 
 #: crypt.c:824 crypt.c:867
 msgid "Trying to extract PGP keys...\n"
@@ -3702,7 +3702,7 @@ msgstr "No s’ha pogut determinar el nom de l’usuari."
 
 #: init.c:3825
 msgid "unable to determine nodename via uname()"
-msgstr "No s’ha pogut determinar el nom de l’estació amb uname()."
+msgstr "No s’ha pogut determinar el nom de l’amfitrió amb uname()."
 
 #: init.c:4064
 msgid "-group: no group name"
@@ -3764,34 +3764,31 @@ msgstr "----- Fi del missatge reenviat -----"
 #. can interfere with testing, so be sure to test with $header_cache
 #. unset.
 #.
-#: init.h:3285
+#: init.h:3284
 msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
 msgstr "^(re)(\\[[0-9]+\\])*:[ \t]*"
 
 #. L10N:
 #. $status_format default value
 #.
-#: init.h:4464
+#: init.h:4463
 msgid ""
 "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:"
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
 "%S)-%>-(%P)---"
-msgstr ""
-"-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:"
-"%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%?T?"
-"%T/?%S)-%>-(%P)---"
+msgstr "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? Nou:%n?%?o? Vell:%o?%?d? Esb:%d?%?F? Imp:%F?%?t? Marc:%t?%?p? Posp:%p?%?b? Entr:%b?%?B? 2pla:%B?%?l? %l?]---(%s/%?T?%T/?%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
 #.
-#: init.h:4668
+#: init.h:4667
 msgid "M%?n?AIL&ail?"
 msgstr "C%?n?ORREU&orreu?"
 
 #. L10N:
 #. $ts_status_format default value
 #.
-#: init.h:4685
+#: init.h:4684
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt %?m?amb %m missatges&sense cap missatge?%?n? [%n NOUS]?"
 
@@ -3932,8 +3929,7 @@ msgid ""
 msgstr ""
 "Copyright © 1996‐2022 Michael R. Elkins i d’altres.\n"
 "Mutt s’ofereix SENSE CAP GARANTIA; empreu «mutt -vv» per a obtenir‐ne més\n"
-"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo "
-"sota\n"
+"detalls.  Mutt és programari lliure, i podeu, si voleu, redistribuir‐lo sota\n"
 "certes condicions; empreu «mutt -vv» per a obtenir‐ne més detalls.\n"
 
 #: main.c:105
@@ -4109,11 +4105,11 @@ msgstr "No es va definir «DEBUG» a la compilació.  Es descarta l’opció.\n"
 msgid "Failed to parse mailto: link\n"
 msgstr "No s’ha pogut interpretar l’enllaç de tipus «mailto:».\n"
 
-#: main.c:1029 main.c:1317
+#: main.c:1029 main.c:1313
 msgid "No recipients specified.\n"
 msgstr "No s’ha indicat cap destinatari.\n"
 
-#: main.c:1059
+#: main.c:1055
 msgid "Cannot use -E flag with stdin\n"
 msgstr "No es pot emprar l’opció «-E» amb l’entrada estàndard.\n"
 
@@ -4121,24 +4117,24 @@ msgstr "No es pot emprar l’opció «-E» amb l’entrada estàndard.\n"
 #. Error when using -H command line argument, but reading the draft
 #. file fails for some reason.
 #.
-#: main.c:1166
+#: main.c:1162
 msgid "Cannot parse draft file\n"
 msgstr "No s’ha pogut interpretar el fitxer esborrany.\n"
 
-#: main.c:1237
+#: main.c:1233
 #, c-format
 msgid "%s: unable to attach file.\n"
 msgstr "%s: No s’ha pogut adjuntar el fitxer.\n"
 
-#: main.c:1334
+#: main.c:1330
 msgid "No mailbox with new mail."
 msgstr "No hi ha cap bústia amb correu nou."
 
-#: main.c:1348
+#: main.c:1344
 msgid "No incoming mailboxes defined."
 msgstr "No s’ha definit cap bústia d’entrada."
 
-#: main.c:1376
+#: main.c:1372
 msgid "Mailbox is empty."
 msgstr "La bústia és buida."
 
@@ -4359,7 +4355,7 @@ msgstr "S’està cercant «%s»…"
 #: mutt_socket.c:606 mutt_socket.c:665
 #, c-format
 msgid "Could not find the host \"%s\""
-msgstr "No s’ha pogut trobar l’estació «%s»."
+msgstr "No s’ha pogut trobar l’amfitrió «%s»."
 
 #: mutt_socket.c:612 mutt_socket.c:671
 #, c-format
@@ -4418,7 +4414,7 @@ msgstr "No s’ha pogut crear el context SSL."
 #. * the correct certificate if it supports multiple hosts.
 #: mutt_ssl.c:621 mutt_ssl_gnutls.c:473
 msgid "Warning: unable to set TLS SNI host name"
-msgstr "Avís: No s’ha pogut establir el nom d’estació per a SNI de TLS."
+msgstr "Avís: No s’ha pogut establir el nom d’amfitrió per a SNI de TLS."
 
 #: mutt_ssl.c:632
 msgid "I/O error"
@@ -4608,7 +4604,7 @@ msgstr "Avís: El certificat del servidor ha estat revocat."
 
 #: mutt_ssl_gnutls.c:1023
 msgid "WARNING: Server hostname does not match certificate"
-msgstr "Avís: El nom d’estació del servidor no concorda amb el del certificat."
+msgstr "Avís: El nom d’amfitrió del servidor no concorda amb el del certificat."
 
 #: mutt_ssl_gnutls.c:1025
 msgid "WARNING: Signer of server certificate is not a CA"
@@ -6369,7 +6365,7 @@ msgstr "Confiat     "
 
 #: smime.c:409
 msgid "Verified  "
-msgstr "Verficat    "
+msgstr "Verificat   "
 
 #: smime.c:412
 msgid "Unverified"
@@ -6432,7 +6428,7 @@ msgstr "No hi ha bústia."
 
 #: smime.c:1490 smime.c:1664
 msgid "No output from OpenSSL..."
-msgstr "OpenSSL no ha produit cap eixida…"
+msgstr "OpenSSL no ha produït cap eixida…"
 
 # Encara no s’ha signat.  ivb
 #: smime.c:1575
@@ -6661,9 +6657,7 @@ msgstr "Força la visualització d’una adjunció emprant «mailcap»."
 #.
 #: OPS:33
 msgid "view attachment in pager using copiousoutput mailcap entry"
-msgstr ""
-"Mostra una adjunció en un visor emprant l’entrada de «mailcap» per a eixida "
-"copiosa."
+msgstr "Mostra una adjunció en un visor emprant l’entrada de «mailcap» per a eixida copiosa."
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -7062,9 +7056,7 @@ msgstr "Mostra la part «multipart/alternative» emprant «mailcap»."
 #.
 #: OPS:319
 msgid "view multipart/alternative in pager using copiousoutput mailcap entry"
-msgstr ""
-"Mostra la part «multipart/alternative» en un visor emprant l’entrada de "
-"«mailcap» per a eixida copiosa."
+msgstr "Mostra la part «multipart/alternative» en un visor emprant l’entrada de «mailcap» per a eixida copiosa."
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
@@ -8077,7 +8069,7 @@ msgstr "Cerca la concordança anterior."
 #.
 #: OPS:1061
 msgid "toggle search pattern coloring"
-msgstr "Estableix si cal resaltar les concordances trobades."
+msgstr "Estableix si cal ressaltar les concordances trobades."
 
 #. L10N: Help screen description for OP_SHELL_ESCAPE
 #. generic menu: <shell-escape>
