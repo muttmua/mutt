@@ -877,6 +877,13 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
                           &savedcert))
     return 1;
 
+  if (option (OPTNOCURSES))
+  {
+    dprint (1, (debugfile, "tls_check_one_certificate: unable to prompt for certificate in batch mode\n"));
+    mutt_error _("Untrusted server certificate");
+    return 0;
+  }
+
   /* interactive check from user */
   if (gnutls_x509_crt_init (&cert) < 0)
   {
