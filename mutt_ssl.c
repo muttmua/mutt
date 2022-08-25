@@ -1250,13 +1250,21 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   char helpstr[LONG_STRING];
   char buf[STRING];
   char title[STRING];
-  MUTTMENU *menu = mutt_new_menu (MENU_GENERIC);
+  MUTTMENU *menu;
   int done;
   BUFFER *drow = NULL;
   unsigned u;
   FILE *fp;
   int allow_skip = 0, reset_ignoremacro = 0;
 
+  if (option (OPTNOCURSES))
+  {
+    dprint (1, (debugfile, "interactive_check_cert: unable to prompt for certificate in batch mode\n"));
+    mutt_error _("Untrusted server certificate");
+    return 0;
+  }
+
+  menu = mutt_new_menu (MENU_GENERIC);
   mutt_push_current_menu (menu);
 
   drow = mutt_buffer_pool_get ();
