@@ -516,6 +516,20 @@ static void pop_clear_cache (POP_DATA *pop_data)
   }
 }
 
+static void pop_free_pop_data (POP_DATA **p_pop_data)
+{
+  POP_DATA *pop_data;
+
+  if (!p_pop_data || !*p_pop_data)
+    return;
+
+  pop_data = *p_pop_data;
+
+  FREE (&pop_data->auth_list);
+  FREE (&pop_data->timestamp);
+  FREE (p_pop_data);    /* __FREE_CHECKED__ */
+}
+
 /* close POP mailbox */
 int pop_close_mailbox (CONTEXT *ctx)
 {
@@ -534,10 +548,15 @@ int pop_close_mailbox (CONTEXT *ctx)
   pop_data->clear_cache = 1;
   pop_clear_cache (pop_data);
 
+  mutt_bcache_close (&pop_data->bcache);
+
   if (!pop_data->conn->data)
     mutt_socket_free (pop_data->conn);
+  else
+    pop_data->conn->data = NULL;
 
-  mutt_bcache_close (&pop_data->bcache);
+  pop_free_pop_data (&pop_data);
+  ctx->data = NULL;
 
   return 0;
 }
@@ -894,7 +913,7 @@ void pop_fetch_mail (void)
   if (pop_open_connection (pop_data) < 0)
   {
     mutt_socket_free (pop_data->conn);
-    FREE (&pop_data);
+    pop_free_pop_data (&pop_data);
     return;
   }
 
@@ -1002,13 +1021,15 @@ finish:
   if (pop_query (pop_data, buffer, sizeof (buffer)) == -1)
     goto fail;
   mutt_socket_close (conn);
-  FREE (&pop_data);
+  conn->data = NULL;
+  pop_free_pop_data (&pop_data);
   return;
 
 fail:
   mutt_error _("Server closed connection!");
   mutt_socket_close (conn);
-  FREE (&pop_data);
+  conn->data = NULL;
+  pop_free_pop_data (&pop_data);
 }
 
 struct mx_ops mx_pop_ops = {
