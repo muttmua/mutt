@@ -2161,6 +2161,44 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
   {
     mutt_curs_set (0);
 
+#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+    if (SigWinch)
+    {
+      do
+      {
+        SigWinch = 0;
+        mutt_resize_screen ();
+      }
+      while (SigWinch);
+
+      clearok(stdscr,TRUE);/*force complete redraw*/
+
+      if (flags & MUTT_PAGER_RETWINCH)
+      {
+        /* A SigWinch could occur while in the RETWINCH handler, so
+         * just keep the previously stored values */
+        if (!Resize)
+        {
+          /* Store current position. */
+          rd.lines = -1;
+          for (i = 0; i <= rd.topline; i++)
+            if (!rd.lineInfo[i].continuation)
+              rd.lines++;
+
+          Resize = safe_malloc (sizeof (struct resize));
+
+          Resize->line = rd.lines;
+          Resize->SearchCompiled = rd.SearchCompiled;
+          Resize->SearchBack = rd.SearchBack;
+        }
+
+	ch = -1;
+	rc = OP_REFORMAT_WINCH;
+        continue;
+      }
+    }
+#endif
+
     pager_menu_redraw (pager_menu);
 
     if (option(OPTBRAILLEFRIENDLY))
@@ -2187,40 +2225,6 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     }
     else
       OldHdr = NULL;
-
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-    if (SigWinch)
-    {
-      SigWinch = 0;
-      mutt_resize_screen ();
-      clearok(stdscr,TRUE);/*force complete redraw*/
-
-      if (flags & MUTT_PAGER_RETWINCH)
-      {
-        /* Store current position. */
-        rd.lines = -1;
-        for (i = 0; i <= rd.topline; i++)
-          if (!rd.lineInfo[i].continuation)
-            rd.lines++;
-
-	Resize = safe_malloc (sizeof (struct resize));
-
-	Resize->line = rd.lines;
-	Resize->SearchCompiled = rd.SearchCompiled;
-	Resize->SearchBack = rd.SearchBack;
-
-	ch = -1;
-	rc = OP_REFORMAT_WINCH;
-      }
-      else
-      {
-        /* note: mutt_resize_screen() -> mutt_reflow_windows() sets
-         * REDRAW_FULL and REDRAW_FLOW */
-	ch = 0;
-      }
-      continue;
-    }
-#endif
 
     ch = km_dokey (MENU_PAGER);
     if (ch >= 0)

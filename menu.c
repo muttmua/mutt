@@ -1047,6 +1047,20 @@ int mutt_menuLoop (MUTTMENU *menu)
 
     mutt_curs_set (0);
 
+#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+    if (SigWinch)
+    {
+      do
+      {
+        SigWinch = 0;
+        mutt_resize_screen ();
+      }
+      while (SigWinch);
+
+      clearok(stdscr,TRUE);/*force complete redraw*/
+    }
+#endif
+
     if (menu->custom_menu_update)
       menu->custom_menu_update (menu);
 
@@ -1073,16 +1087,6 @@ int mutt_menuLoop (MUTTMENU *menu)
                         menu->indexwin->cols - 1);
 
     mutt_refresh ();
-
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-    if (SigWinch)
-    {
-      SigWinch = 0;
-      mutt_resize_screen ();
-      clearok(stdscr,TRUE);/*force complete redraw*/
-      continue;
-    }
-#endif
 
     /* try to catch dialog keys before ops */
     if (menu->dialog && menu_dialog_dokey (menu, &i) == 0)

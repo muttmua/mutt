@@ -784,6 +784,26 @@ int mutt_index_menu (void)
 
     if (!in_pager)
     {
+
+#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+      while (SigWinch)
+      {
+        do
+        {
+          SigWinch = 0;
+          mutt_resize_screen ();
+        }
+        while (SigWinch);
+
+	menu->top = 0; /* so we scroll the right amount */
+	/*
+	 * force a real complete redraw.  clrtobot() doesn't seem to be able
+	 * to handle every case without this.
+	 */
+	clearok(stdscr,TRUE);
+      }
+#endif
+
       index_menu_redraw (menu);
 
       /* give visual indication that the next command is a tag- command */
@@ -806,21 +826,6 @@ int mutt_index_menu (void)
         mutt_window_move (MuttIndexWindow, menu->current - menu->top + menu->offset,
                           MuttIndexWindow->cols - 1);
       mutt_refresh ();
-
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-      if (SigWinch)
-      {
-	SigWinch = 0;
-	mutt_resize_screen ();
-	menu->top = 0; /* so we scroll the right amount */
-	/*
-	 * force a real complete redraw.  clrtobot() doesn't seem to be able
-	 * to handle every case without this.
-	 */
-	clearok(stdscr,TRUE);
-	continue;
-      }
-#endif
 
       op = km_dokey (MENU_MAIN);
 
