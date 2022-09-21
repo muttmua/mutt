@@ -402,7 +402,7 @@ execute_command (CONTEXT *ctx, const char *command, const char *progress)
     mutt_message (progress, ctx->realpath);
 
   mutt_block_signals();
-  endwin();
+  mutt_endwin (NULL);
   fflush (stdout);
 
   expand_command_str (ctx, command, sys_cmd, sizeof (sys_cmd));

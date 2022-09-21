@@ -490,7 +490,7 @@ static void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
   {
     if (!crypt_valid_passphrase(h->security))
       return;
-    endwin ();
+    mutt_endwin (NULL);
   }
 
   if (decode)
