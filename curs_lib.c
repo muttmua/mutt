@@ -995,6 +995,7 @@ void mutt_endwin (const char *msg)
      */
     mutt_refresh();
     endwin ();
+    SigWinch = 1;
   }
 
   if (msg && *msg)
