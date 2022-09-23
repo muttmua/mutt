@@ -598,6 +598,13 @@ static void start_curses (void)
   SLutf8_enable(-1);
 #endif
 #else
+
+# if defined(HAVE_RESIZETERM) && defined(HAVE_USE_TIOCTL)
+  /* mutt_resize_screen() shouldn't be fighting with ncurses */
+  use_env (0);
+  use_tioctl (1);
+# endif
+
   /* should come before initscr() so that ncurses 4.2 doesn't try to install
      its own SIGWINCH handler */
   mutt_signal_init ();

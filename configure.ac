@@ -85,6 +85,8 @@ AH_TEMPLATE([HAVE_SETCCHAR],
             [Define if you have setcchar, as a function or macro.])
 AH_TEMPLATE([HAVE_BKGRNDSET],
             [Define if you have bkgrndset, as a function or macro.])
+AH_TEMPLATE([HAVE_USE_TIOCTL],
+            [Define if you have use_tioctl, as a function or macro.])
 AH_TEMPLATE([SIG_ATOMIC_VOLATILE_T],
             [Some systems declare sig_atomic_t as volatile, some others -- no.
              This define will have value `sig_atomic_t' or
@@ -360,7 +362,7 @@ main ()
         old_LIBS="$LIBS"
         LIBS="$LIBS $MUTTLIBS"
         CF_CHECK_FUNCDECLS([#include <${cf_cv_ncurses_header-curses.h}>],
-                           [start_color typeahead bkgdset curs_set meta use_default_colors resizeterm setcchar bkgrndset])
+                           [start_color typeahead bkgdset curs_set meta use_default_colors resizeterm setcchar bkgrndset use_tioctl])
         if test "$ac_cv_func_decl_start_color" = yes; then
                 AC_DEFINE(HAVE_COLOR,1,[ Define if your curses library supports color. ])
         fi
