@@ -305,12 +305,6 @@ void mutt_edit_file (const char *editor, const char *data)
     mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
     mutt_sleep (2);
   }
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-  /* the terminal may have been resized while the editor owned it */
-  mutt_resize_screen ();
-#endif
-  keypad (stdscr, TRUE);
-  clearok (stdscr, TRUE);
 
   mutt_buffer_pool_release (&cmd);
 }
@@ -995,6 +989,7 @@ void mutt_endwin (const char *msg)
      */
     mutt_refresh();
     endwin ();
+    SigWinch = 1;
   }
 
   if (msg && *msg)
