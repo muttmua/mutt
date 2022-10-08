@@ -74,7 +74,7 @@ options are:
 
 --enable-autocrypt
         enable autocrypt 1.1 <https://autocrypt.org/> support.
-        Requires sqlite3.
+        Requires sqlite3 (via the --with-sqlite3 option).
 
 --enable-gpgme
         enable GPGME crypt backend support.
@@ -162,6 +162,10 @@ options are:
 	work better for some people because it is less picky about proper
 	termcap entries than ncurses.  It is recommended that you use at
 	*least* version 0.99-38 with Mutt.
+
+--with-sqlite3[=DIR]
+	use the sqlite3 lib in DIR/lib.  This is currently only needed
+	by the --enable-autocrypt option.
 
 --with-mailpath=DIR
 	specify where the spool mailboxes are located on your system
