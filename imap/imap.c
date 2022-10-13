@@ -1050,10 +1050,15 @@ static int imap_open_mailbox_append (CONTEXT *ctx, int flags)
   if (rc == -1)
     return -1;
 
-  snprintf (buf, sizeof (buf), _("Create %s?"), mailbox);
-  if (option (OPTCONFIRMCREATE) &&
-      mutt_query_boolean (OPTCONFIRMCREATE, buf, 1) < 1)
-    return -1;
+  if (option (OPTCONFIRMCREATE))
+  {
+    if (option (OPTNOCURSES))
+      return -1;
+
+    snprintf (buf, sizeof (buf), _("Create %s?"), mailbox);
+    if (mutt_query_boolean (OPTCONFIRMCREATE, buf, 1) < 1)
+      return -1;
+  }
 
   if (imap_create_mailbox (idata, mailbox) < 0)
     return -1;

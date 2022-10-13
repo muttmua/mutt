@@ -1266,31 +1266,6 @@ static int save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
         mutt_strcmp ("/dev/null", mutt_b2s (fcc_mailbox))))
     return 0;
 
-  /* Don't save a copy when we are in batch-mode, and the FCC
-   * folder is on an IMAP server: This would involve possibly lots
-   * of user interaction, which is not available in batch mode.
-   *
-   * Note: A patch to fix the problems with the use of IMAP servers
-   * from non-curses mode is available from Brendan Cully.  However,
-   * I'd like to think a bit more about this before including it.
-   */
-#ifdef USE_IMAP
-  if ((flags & SENDBATCH) &&
-      mx_is_imap (mutt_b2s (fcc_mailbox)))
-  {
-    mutt_sleep (1);
-    mutt_error _("Warning: Fcc to an IMAP mailbox is not supported in batch mode");
-    /* L10N:
-       Printed after the "Fcc to an IMAP mailbox is not supported" message.
-       To make it clearer that the message doesn't mean Mutt is aborting
-       sending the mail too.
-       %s is the full mailbox URL, including imap(s)://
-    */
-    mutt_error (_("Skipping Fcc to %s"), mutt_b2s (fcc_mailbox));
-    return 0;
-  }
-#endif
-
   rc = mutt_write_fcc (mutt_b2s (fcc_mailbox), sctx, NULL, 0, NULL);
   if (rc && (flags & SENDBATCH))
   {
