@@ -1246,7 +1246,7 @@ cleanup:
   return (i);
 }
 
-static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
+static int save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
                                    int flags)
 {
   int rc, choice;
@@ -1264,7 +1264,7 @@ static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
 
   if (!(mutt_buffer_len (fcc_mailbox) &&
         mutt_strcmp ("/dev/null", mutt_b2s (fcc_mailbox))))
-    return;
+    return 0;
 
   /* Don't save a copy when we are in batch-mode, and the FCC
    * folder is on an IMAP server: This would involve possibly lots
@@ -1287,12 +1287,23 @@ static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
        %s is the full mailbox URL, including imap(s)://
     */
     mutt_error (_("Skipping Fcc to %s"), mutt_b2s (fcc_mailbox));
-    return;
+    return 0;
   }
 #endif
 
   rc = mutt_write_fcc (mutt_b2s (fcc_mailbox), sctx, NULL, 0, NULL);
-  while (rc && !(flags & SENDBATCH))
+  if (rc && (flags & SENDBATCH))
+  {
+    /* L10N:
+       Printed when a FCC in batch mode fails.  Batch mode will abort
+       if $fcc_before_send is set.
+       %s is the mailbox name.
+    */
+    mutt_error (_("Warning: Fcc to %s failed"), mutt_b2s (fcc_mailbox));
+    return rc;
+  }
+
+  while (rc)
   {
     mutt_sleep (1);
     mutt_clear_error ();
@@ -1336,7 +1347,7 @@ static void save_fcc_mailbox_part (BUFFER *fcc_mailbox, SEND_CONTEXT *sctx,
     }
   }
 
-  return;
+  return 0;
 }
 
 static int save_fcc (SEND_CONTEXT *sctx,
@@ -1438,7 +1449,7 @@ full_fcc:
     /* Split fcc into comma separated mailboxes */
     delim_size = mutt_strlen (FccDelimiter);
     if (!delim_size)
-      save_fcc_mailbox_part (sctx->fcc, sctx, flags);
+      rc = save_fcc_mailbox_part (sctx->fcc, sctx, flags);
     else
     {
       BUFFER *fcc_mailbox;
@@ -1459,7 +1470,7 @@ full_fcc:
           mutt_buffer_strcpy (fcc_mailbox, mb_beg);
 
         if (mutt_buffer_len (fcc_mailbox))
-          save_fcc_mailbox_part (fcc_mailbox, sctx, flags);
+          rc |= save_fcc_mailbox_part (fcc_mailbox, sctx, flags);
 
         mb_beg = mb_end;
       }
@@ -2569,7 +2580,18 @@ main_loop:
   mutt_prepare_envelope (sctx->msg->env, 1);
 
   if (option (OPTFCCBEFORESEND))
-    save_fcc (sctx, clear_content, pgpkeylist, sctx->flags);
+  {
+    if (save_fcc (sctx, clear_content, pgpkeylist, sctx->flags) &&
+        (sctx->flags & SENDBATCH))
+    {
+      /* L10N:
+         In batch mode with $fcc_before_send set, Mutt will abort if any of
+         the Fcc's fails.
+      */
+      puts _("Fcc failed.  Aborting sending.");
+      goto cleanup;
+    }
+  }
 
   if ((mta_rc = invoke_mta (sctx)) < 0)
   {
