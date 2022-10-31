@@ -2386,6 +2386,12 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
       dprint (1, (debugfile, "Error setting GPGME context home\n"));
       goto err_tmpdir;
     }
+
+    if ((err = gpgme_op_import (tmpctx, keydata)) != GPG_ERR_NO_ERROR)
+    {
+      dprint (1, (debugfile, "Error importing key\n"));
+      goto err_tmpdir;
+    }
   }
 
   tmpfile = mutt_buffer_pool_get ();
