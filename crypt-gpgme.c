@@ -915,7 +915,7 @@ static gpgme_key_t *create_recipient_set (const char *keylist, int use_smime)
             buf[i-1] = 0;
 
             err = gpgme_get_key (context, buf, &key, 0);
-            if (! err)
+            if (! err && key->uids)
               key->uids->validity = GPGME_VALIDITY_FULL;
             buf[i-1] = '!';
           }
