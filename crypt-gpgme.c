@@ -915,7 +915,7 @@ static gpgme_key_t *create_recipient_set (const char *keylist, int use_smime)
             buf[i-1] = 0;
 
             err = gpgme_get_key (context, buf, &key, 0);
-            if (! err)
+            if (! err && key->uids)
               key->uids->validity = GPGME_VALIDITY_FULL;
             buf[i-1] = '!';
           }
@@ -2386,6 +2386,12 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
       dprint (1, (debugfile, "Error setting GPGME context home\n"));
       goto err_tmpdir;
     }
+
+    if ((err = gpgme_op_import (tmpctx, keydata)) != GPG_ERR_NO_ERROR)
+    {
+      dprint (1, (debugfile, "Error importing key\n"));
+      goto err_tmpdir;
+    }
   }
 
   tmpfile = mutt_buffer_pool_get ();
@@ -2422,14 +2428,18 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
       tt = subkey->timestamp;
       strftime (date, sizeof (date), "%Y-%m-%d", localtime (&tt));
 
+      fprintf (*fp, "%s %5.5s %d/%8s %s\n",
+               more ? "sub" : "pub",
+               gpgme_pubkey_algo_name (subkey->pubkey_algo), subkey->length,
+               shortid, date);
       if (!more)
-        fprintf (*fp, "%s %5.5s %d/%8s %s %s\n", more ? "sub" : "pub",
-                 gpgme_pubkey_algo_name (subkey->pubkey_algo), subkey->length,
-                 shortid, date, uid->uid);
-      else
-        fprintf (*fp, "%s %5.5s %d/%8s %s\n", more ? "sub" : "pub",
-                 gpgme_pubkey_algo_name (subkey->pubkey_algo), subkey->length,
-                 shortid, date);
+      {
+        while (uid)
+        {
+          fprintf (*fp, "uid %s\n", NONULL (uid->uid));
+          uid = uid->next;
+        }
+      }
       subkey = subkey->next;
       more = 1;
     }
