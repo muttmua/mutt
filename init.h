@@ -4746,10 +4746,11 @@ struct option_t MuttVars[] = {
   { "uncollapse_new", 	DT_BOOL, R_NONE, {.l=OPTUNCOLLAPSENEW}, {.l=1} },
   /*
   ** .pp
-  ** When \fIset\fP, Mutt will automatically uncollapse any collapsed thread
-  ** that receives a new message. When \fIunset\fP, collapsed threads will
-  ** remain collapsed. the presence of the new message will still affect
-  ** index sorting, though.
+  ** When \fIset\fP, Mutt will automatically uncollapse any collapsed
+  ** thread that receives a newly delivered message.  When
+  ** \fIunset\fP, collapsed threads will remain collapsed. The
+  ** presence of the newly delivered message will still affect index
+  ** sorting, though.
   */
   { "use_8bitmime",	DT_BOOL, R_NONE, {.l=OPTUSE8BITMIME}, {.l=0} },
   /*
