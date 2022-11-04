@@ -467,7 +467,7 @@ static void update_bg_menu (MUTTMENU *menu)
   }
 }
 
-static MUTTMENU *create_bg_menu ()
+static MUTTMENU *create_bg_menu (void)
 {
   MUTTMENU *menu = NULL;
   BACKGROUND_PROCESS *process;

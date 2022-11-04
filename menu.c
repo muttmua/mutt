@@ -859,7 +859,7 @@ void mutt_set_menu_redraw_full (int menu_type)
     mutt_set_current_menu_redraw_full ();
 }
 
-void mutt_current_menu_redraw ()
+void mutt_current_menu_redraw (void)
 {
   MUTTMENU *current_menu;
 
