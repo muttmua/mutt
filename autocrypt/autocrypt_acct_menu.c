@@ -127,7 +127,7 @@ static void account_entry (char *s, size_t slen, MUTTMENU *m, int num)
 		     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
-static MUTTMENU *create_menu ()
+static MUTTMENU *create_menu (void)
 {
   MUTTMENU *menu = NULL;
   AUTOCRYPT_ACCOUNT **accounts = NULL;

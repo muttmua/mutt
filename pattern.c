@@ -2212,7 +2212,7 @@ static void make_pattern_entry (char *s, size_t slen, MUTTMENU *menu, int num)
 		     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
-static MUTTMENU *create_pattern_menu ()
+static MUTTMENU *create_pattern_menu (void)
 {
   MUTTMENU *menu = NULL;
   PATTERN_ENTRY *entries = NULL;
