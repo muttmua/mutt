@@ -1,3 +1,252 @@
+2022-11-05 12:37:33 -0700  Kevin McCarthy  <kevin@8t8.us> (44b9bd4f)
+
+        * Update UPDATING file for 2.2.8 release.
+
+M	UPDATING
+
+2022-11-04 13:18:51 -0700  Kevin McCarthy  <kevin@8t8.us> (db16ce47)
+
+        * Add explicit void to 0-parameter function definitions.
+        
+        These are the errors output with:
+          -Werror=implicit-int -Werror=implicit-function-declaration
+          -Werror=int-conversion -Werror=strict-prototypes
+          -Werror=old-style-definition
+
+M	autocrypt/autocrypt_acct_menu.c
+M	background.c
+M	charset.c
+M	curs_lib.c
+M	menu.c
+M	monitor.c
+M	pattern.c
+
+2022-11-03 14:01:12 -0700  Kevin McCarthy  <kevin@8t8.us> (0838a8f4)
+
+        * Clarify $uncollapse_new documentation.
+        
+        Indicate more clearly it is talking about "delivered" messages that
+        arrive in a thread, not about the unread-status of those messages.
+
+M	init.h
+
+2022-11-01 20:22:06 -0700  Kevin McCarthy  <kevin@8t8.us> (b254f2fb)
+
+        * Add a check for key->uids in create_recipient_set.
+        
+        For gpgme < 1.11.0, it used this function to create the encryption key
+        list.  The '!' was interpreted differently back then, and it
+        apparently didn't check if the returned key had any uids before
+        referencing it.  Add a check to prevent a segv as in the public key
+        block fix.
+
+M	crypt-gpgme.c
+
+2022-10-31 15:06:51 -0700  Kevin McCarthy  <kevin@8t8.us> (f0eb3586)
+
+        * Fix public key block listing for old versions of gpgme.
+        
+        Commit 382355a5 accidentally removed the data import for legacy mode,
+        which would cause it to produce empty output.
+
+M	crypt-gpgme.c
+
+2022-10-31 15:02:57 -0700  Kevin McCarthy  <kevin@8t8.us> (48b6ea32)
+
+        * Fix gpgme crash when listing keys in a public key block.
+        
+        The gpgme code handling classic application/pgp assumed each key would
+        have a uid.  Change it to check for a missing uid list.
+        
+        Also change it to list every uid (instead of only the first), and to
+        put each one on a "uid" line in the output.
+        
+        The output is only for display, so the format change won't affect
+        other parts of the code.
+        
+        Thanks to Mikko Lehto for the high quality bug report, detailing the
+        exact place of the crash with a reproducing example and a workaround
+        patch.
+
+M	crypt-gpgme.c
+
+2022-10-13 13:25:51 -0700  Kevin McCarthy  <kevin@8t8.us> (25b69530)
+
+        * Allow Fcc'ing to IMAP in batch mode.
+        
+        There are some prompts that can cause it to abruptly fail, but it
+        turns out SMTP has some of those too.
+        
+        For now, abort if $confirmcreate is set.
+        
+        Certificate prompts were fixed in commit c46db2be for 2.2.7.
+
+M	imap/imap.c
+M	send.c
+
+2022-10-13 13:18:55 -0700  Kevin McCarthy  <kevin@8t8.us> (a1c86bd2)
+
+        * Add fcc error handling in batch mode.
+        
+        If $fcc_before_send is set, then abort with an error message.
+        
+        If it's not set (the default), then continue on, as the message is
+        already sent.
+
+M	send.c
+
+2022-10-09 11:13:15 -0700  Kevin McCarthy  <kevin@8t8.us> (9cfa36ea)
+
+        * Fix scrolling when handling SIGWINCH in the index.
+        
+        The index had some (very very old) code which reset the scroll top
+        during SIGWINCH handling.  This caused a recomputation of the top,
+        which caused the index to jumble around randomly during resizing.
+        
+        The last few commits added SigWinch flag setting whenever
+        mutt_endwin() was called, which meant this jumbling would occur much
+        more often.  (For example when piping a message.)
+        
+        After looking more closely, this top reset seems to be unnecessary.  A
+        full redraw needs to properly handle the case where "current" is
+        outside the visible range, because a resize could occur in a called
+        menu.  Additionally, the menu.c code does just fine without this, and
+        is used for all the other standard menus in Mutt.
+        
+        Thanks to Vincent Lefèvre for helping test the SigWinch changes, and
+        reporting this regression.
+
+M	curs_main.c
+
+2022-10-08 13:47:15 -0700  Kevin McCarthy  <kevin@8t8.us> (082ed14e)
+
+        * Explicitly mention --with-sqlite3 in the INSTALL file.
+
+M	INSTALL
+
+2022-09-23 13:05:59 +0800  Kevin McCarthy  <kevin@8t8.us> (5649e381)
+
+        * Set the curses resize policy to use tioctl()
+        
+        mutt_resize_screen() calls mutt_reflow_windows(), which records window
+        sizes in those data structures.  After a endwin(), curses will also
+        check the terminal size, but it if uses a different policy than Mutt,
+        the screen will be drawn incorrectly.
+        
+        I looked into adding a config option to change this, but ran into a
+        chicken-egg problem.  initscr() must be called before the config is
+        processed, to allow for color setting.  However, use_env() must be
+        called before initscr().  So for now, just set to policy to ignore the
+        env vars, except as a fallback.
+
+M	configure.ac
+M	main.c
+
+2022-09-21 13:03:22 +0800  Kevin McCarthy  <kevin@8t8.us> (fede64d0)
+
+        * Remove unneeded calls in mutt_edit_file().
+        
+        The mutt_resize_screen() is no longer needed now that mutt_endwin()
+        sets SigWinch.
+        
+        The keypad() and clearok() calls are generally only needed if a
+        program takes over the screen unexpectedly (without Mutt having run
+        endwin()).
+
+M	curs_lib.c
+
+2022-09-21 13:02:40 +0800  Kevin McCarthy  <kevin@8t8.us> (9fb2755d)
+
+        * Change a few cases of endwin() to call mutt_endwin().
+        
+        The remaining cases in the Mutt code are special cases, but these two
+        should be fixed.  This ensures SigWinch is set.
+
+M	commands.c
+M	compress.c
+
+2022-09-21 13:00:44 +0800  Kevin McCarthy  <kevin@8t8.us> (619db54f)
+
+        * Add SigWinch = 1 to mutt_endwin().
+        
+        Since mutt_reflow_window() needs to be called on a resize, and it's
+        possible for programs to block SIGWINCH being sent to Mutt, this is a
+        fail-safe to ensure it's run.
+        
+        The previous commit moved SigWinch handling before refresh() in the
+        menus, which should prevent double-refresh issues.
+
+M	curs_lib.c
+
+2022-09-19 18:41:48 +0800  Kevin McCarthy  <kevin@8t8.us> (925a2927)
+
+        * Move SigWinch handling before refresh in menus.
+        
+        This will prevent an unneeded double-refresh after an endwin() when we
+        set SigWinch in the next commit.
+        
+        In the pager, change RETWINCH handling to account for a sigwinch while
+        in the handler.  Previously a redraw would occur and use/free the
+        Resize data, but since the SigWinch check now occurs before the
+        redraw, keep existing data.
+
+M	curs_main.c
+M	menu.c
+M	pager.c
+
+2022-08-30 15:31:24 -0700  Kevin McCarthy  <kevin@8t8.us> (e43a42bf)
+
+        * Ensure pop_data is freed for mailbox and fetch-mail usage.
+        
+        <fetch-mail> was only free'ing the container and not the auth_list or
+        timestamp used in authentication.
+        
+        Mailbox usage was never free'ing the pop_data object.
+        
+        Create a pop_free_pop_data() helper and use that in <fetch-mail>
+        usage where the pop_data was being free'd before.
+        
+        Since the pop code always allocates and assigns a new pop_data object
+        after each mutt_conn_find(), add a call to pop_close_mailbox() too.
+        
+        Just to make sure, reset connection->data before free'ing the pop_data
+        in each case.
+
+M	pop.c
+
+2022-08-25 13:23:43 -0700  Kevin McCarthy  <kevin@8t8.us> (c46db2be)
+
+        * Add error handling for cert prompts in batch mode.
+        
+        It looks like there are no batch mode checks before trying to throw up
+        a curses menu for certificate prompts.
+        
+        This currently affects SMTP, and I guess either hasn't been an issue
+        or people just learned to work around it.
+        
+        Mutt has no great way to deal with this, so at least for now display
+        an error and abort verification gracefully as opposed to whatever was
+        happening before (which could not have been pretty).
+        
+        Alas, this breaks my rule of adding translation strings in stable, but
+        I couldn't find another appropriate string.
+
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+
+2022-08-22 09:24:19 -0700  Ivan Vilata i Balaguer  <ivan@selidor.net> (56f1d398)
+
+        * Updated Catalan translation.
+
+M	po/ca.po
+
+2022-08-07 10:20:17 -0700  Kevin McCarthy  <kevin@8t8.us> (4927240d)
+
+        * automatic post-release commit for mutt-2.2.7
+
+M	ChangeLog
+M	VERSION
+
 2022-08-07 10:15:32 -0700  Kevin McCarthy  <kevin@8t8.us> (7b41537e)
 
         * Update UPDATING file for 2.2.7 release.
