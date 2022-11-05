@@ -9,6 +9,19 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.8 (2022-11-05):
+
+  ! Bug fix release.
+  ! Ncurses now uses ioctl for window size calculation.  Previously, Mutt
+    and ncurses differed on this, which could result in screen corruption
+    in some cases.
+  ! The index now handles resizes without recalculating the top line,
+    as other menus in Mutt do.  This should reduce the "jumbling around"
+    visual effect during resizes.
+  + IMAP Fcc is now supported in batch mode.
+  ! In batch mode with $fcc_before_send set, Mutt will abort sending if
+    one or more of the Fcc's fails.
+
 2.2.7 (2022-08-07):
 
   ! Bug fix release.
