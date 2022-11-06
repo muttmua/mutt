@@ -7502,8 +7502,7 @@ macro index ,a "&lt;save-message&gt;=archive&lt;enter&gt;&lt;enter-command&gt;ec
 
   <para>
     In batch mode, Mutt performs less steps than interactive mode.
-    Encryption and Signing are not supported.  Fcc'ing to an IMAP
-    mailbox is not supported.
+    Encryption and Signing are not supported.
   </para>
 
   <itemizedlist>
