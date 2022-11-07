@@ -180,6 +180,7 @@ fi
 AC_MSG_CHECKING([whether to build with GPGME support])
 if test x"$mutt_enable_gpgme" = xyes; then
    AC_MSG_RESULT(yes)
+   AM_PATH_GPG_ERROR(1.33)
    AM_PATH_GPGME([$mutt_gpgme_version], AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
 		 [Defined, if GPGME support is enabled]),
 		 [gpgme_found=no])
@@ -187,7 +188,6 @@ if test x"$mutt_enable_gpgme" = xyes; then
       AC_MSG_ERROR([*** GPGME not found or version is older than $mutt_gpgme_version ***])
    else
       MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS crypt-gpgme.o crypt-mod-pgp-gpgme.o crypt-mod-smime-gpgme.o"
-      AM_PATH_GPG_ERROR(1.33)
    fi
 else
    AC_MSG_RESULT([no])
