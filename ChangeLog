@@ -1,3 +1,66 @@
+2022-11-12 12:44:13 -0800  Kevin McCarthy  <kevin@8t8.us> (b40c28ce)
+
+        * Update UPDATING file for 2.2.9.
+
+M	UPDATING
+
+2022-11-12 12:39:11 -0800  Kevin McCarthy  <kevin@8t8.us> (a5296bcd)
+
+        * Document the <1234> key syntax for bind.
+        
+        This is useful for octal values of greater (or less) than three
+        digits.
+
+M	doc/manual.xml.head
+
+2022-11-06 19:19:40 -0800  Kevin McCarthy  <kevin@8t8.us> (3c0f8597)
+
+        * Fix non-printable keyname printing to use <octal> syntax.
+        
+        The IsPrint() was grabbing values outside the range of a char.
+        Instead, restrict the range and fall back to the <octal> syntax, which
+        the muttrc actually accepts.
+
+M	keymap.c
+
+2022-11-07 14:32:59 -0800  Kevin McCarthy  <kevin@8t8.us> (52753702)
+
+        * Move AM_PATH_GPG_ERROR before AM_PATH_GPGME.
+        
+        The former sets $GPGRT_CONFIG which the latter needs to find and use
+        gpgrt-config instead of gpgme-config.
+
+M	configure.ac
+
+2022-11-07 09:01:58 -0800  Kevin McCarthy  <kevin@8t8.us> (012981e8)
+
+        * Update gpgme autoconf files to the latest versions.
+        
+        GPGME is transitioning away from gpgme-config, to gpgrt-config, and
+        the new autoconf files are required to make the transition.
+        
+        Thanks to Vincent Lefèvre for reporting the problem and helping test
+        the required fixes.
+
+M	m4/gpg-error.m4
+M	m4/gpgme.m4
+
+2022-11-06 08:48:32 -0800  Kevin McCarthy  <kevin@8t8.us> (80e79060)
+
+        * Adjust manual concerning IMAP Fcc in batch mode.
+        
+        Remove the sentence saying it isn't supported from the Batch
+        Composition Flow section of the manual.
+
+M	doc/manual.xml.head
+
+2022-11-05 13:14:09 -0700  Kevin McCarthy  <kevin@8t8.us> (57e3de6d)
+
+        * automatic post-release commit for mutt-2.2.8
+
+M	ChangeLog
+M	VERSION
+
 2022-11-05 12:37:33 -0700  Kevin McCarthy  <kevin@8t8.us> (44b9bd4f)
 
         * Update UPDATING file for 2.2.8 release.
