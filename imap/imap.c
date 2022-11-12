@@ -2519,6 +2519,25 @@ int imap_fast_trash (CONTEXT* ctx, char* dest)
     return 1;
   }
 
+  /* Scan if any of the messages were previously checkpoint-deleted
+   * on the server, by answering "no" to $delete for instance.
+   * In that case, doing a UID COPY would also copy the deleted flag, which
+   * is probably not desired.  Trying to work around that leads to all sorts
+   * of headaches, so just force a manual append.
+   */
+  for (n = 0; n < ctx->msgcount; n++)
+  {
+    if (ctx->hdrs[n]->active &&
+        ctx->hdrs[n]->deleted && !ctx->hdrs[n]->purge &&
+        HEADER_DATA(ctx->hdrs[n])->deleted)
+    {
+      dprint (1, (debugfile,
+                  "imap_fast_trash: server-side delete flag set. aborting.\n"));
+      rc = -1;
+      goto out;
+    }
+  }
+
   imap_fix_path (idata, mx.mbox, mbox, sizeof (mbox));
   if (!*mbox)
     strfcpy (mbox, "INBOX", sizeof (mbox));
