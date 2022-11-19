@@ -159,16 +159,13 @@ void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
 
   if (hdr->score <= ScoreThresholdDelete)
     _mutt_set_flag (ctx, hdr, MUTT_DELETE, 1,
-                    (upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0) |
-                    MUTT_SET_FLAG_UPDATE_COLOR);
+                    upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0);
   if (hdr->score <= ScoreThresholdRead)
     _mutt_set_flag (ctx, hdr, MUTT_READ, 1,
-                    (upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0) |
-                    MUTT_SET_FLAG_UPDATE_COLOR);
+                    upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0);
   if (hdr->score >= ScoreThresholdFlag)
     _mutt_set_flag (ctx, hdr, MUTT_FLAG, 1,
-                    (upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0) |
-                    MUTT_SET_FLAG_UPDATE_COLOR);
+                    upd_ctx ? MUTT_SET_FLAG_UPDATE_CONTEXT : 0);
 }
 
 int mutt_parse_unscore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *err)

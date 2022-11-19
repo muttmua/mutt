@@ -33,7 +33,6 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
   int tagged = ctx->tagged;
   int flagged = ctx->flagged;
   int upd_ctx = (upd_flags & MUTT_SET_FLAG_UPDATE_CONTEXT);
-  int upd_color = (upd_flags & MUTT_SET_FLAG_UPDATE_COLOR);
   int update = 0;
 
   if (ctx->readonly && flag != MUTT_TAG)
@@ -274,13 +273,8 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
 
   if (update)
   {
-    if (upd_color)
-      mutt_set_header_color (ctx, h);
-    else
-    {
-      h->color.pair = 0;
-      h->color.attrs = 0;
-    }
+    h->color.pair = 0;
+    h->color.attrs = 0;
 #ifdef USE_SIDEBAR
     mutt_set_current_menu_redraw (REDRAW_SIDEBAR);
 #endif
@@ -326,7 +320,7 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
    */
   if (cur->message)
   {
-    _mutt_set_flag (Context, cur->message, flag, bf, MUTT_SET_FLAG_UPDATE_CONTEXT);
+    mutt_set_flag (Context, cur->message, flag, bf);
     cur->message->color.pair = cur->message->color.attrs = 0;
   }
 
@@ -337,7 +331,7 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
   {
     if (cur->message)
     {
-      _mutt_set_flag (Context, cur->message, flag, bf, MUTT_SET_FLAG_UPDATE_CONTEXT);
+      mutt_set_flag (Context, cur->message, flag, bf);
       cur->message->color.pair = cur->message->color.attrs = 0;
     }
 

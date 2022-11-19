@@ -275,7 +275,7 @@ void _mutt_buffer_select_file (BUFFER *, int, char ***, int *);
 void mutt_message_hook (CONTEXT *, HEADER *, int);
 void mutt_reset_child_signals (void);
 void _mutt_set_flag (CONTEXT *, HEADER *, int, int, int);
-#define mutt_set_flag(a,b,c,d) _mutt_set_flag(a,b,c,d,MUTT_SET_FLAG_UPDATE_CONTEXT|MUTT_SET_FLAG_UPDATE_COLOR)
+#define mutt_set_flag(a,b,c,d) _mutt_set_flag(a,b,c,d,MUTT_SET_FLAG_UPDATE_CONTEXT)
 void mutt_shell_escape (void);
 void mutt_show_error (void);
 void mutt_signal_init (void);
