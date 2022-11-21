@@ -383,7 +383,6 @@ enum
 
 /* flags for _mutt_set_flag() */
 #define MUTT_SET_FLAG_UPDATE_CONTEXT  (1<<0)
-#define MUTT_SET_FLAG_UPDATE_COLOR    (1<<1)
 
 /* flags for _mutt_buffer_expand_path() */
 #define MUTT_EXPAND_PATH_RX                     (1<<0)
