@@ -4150,6 +4150,22 @@ struct option_t MuttVars[] = {
   ** Also see $$write_bcc.
   */
 #endif /* USE_SMTP */
+#ifdef USE_SOCKET
+  { "socket_receive_timeout",  DT_NUM, R_NONE, {.p=&SocketReceiveTimeout}, {.l=0} },
+  /*
+  ** .pp
+  ** Causes Mutt to timeout any socket read operation (e.g. SSL_read) after
+  ** this many seconds.  A zero (default) or negative value causes Mutt to wait
+  ** indefinitely for the read to complete.
+  */
+  { "socket_send_timeout",  DT_NUM, R_NONE, {.p=&SocketSendTimeout}, {.l=0} },
+  /*
+  ** .pp
+  ** Causes Mutt to timeout any socket write operation (e.g. SSL_write) after
+  ** this many seconds.  A zero (default) or negative value causes Mutt to wait
+  ** indefinitely for the write to complete.
+  */
+#endif /* USE_SOCKET */
   { "sort",		DT_SORT, R_INDEX|R_RESORT, {.p=&Sort}, {.l=SORT_DATE} },
   /*
   ** .pp

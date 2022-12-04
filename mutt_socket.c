@@ -433,6 +433,22 @@ static int socket_connect (int fd, struct sockaddr* sa)
 
   save_errno = 0;
 
+  if (SocketReceiveTimeout > 0)
+  {
+    struct timeval tv = { SocketReceiveTimeout, 0 };
+    if (setsockopt (fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv)) < 0)
+      dprint (1, (debugfile, "socket_connect: error setting receive timeout (%s)\n",
+                  strerror(errno)));
+  }
+
+  if (SocketSendTimeout > 0)
+  {
+    struct timeval tv = { SocketSendTimeout, 0 };
+    if (setsockopt (fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv, sizeof(tv)) < 0)
+      dprint (1, (debugfile, "socket_connect: error setting send timeout (%s)\n",
+                  strerror(errno)));
+  }
+
   if (connect (fd, sa, sa_size) < 0)
   {
     save_errno = errno;

@@ -103,6 +103,8 @@ WHERE char *MsgFmt;
 WHERE char *Preconnect;
 WHERE char *Tunnel;
 WHERE short NetInc;
+WHERE short SocketReceiveTimeout;
+WHERE short SocketSendTimeout;
 #endif /* USE_SOCKET */
 
 #ifdef MIXMASTER
