@@ -2334,9 +2334,20 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
         if (ctx->hdrs[i]->deleted != p->h->deleted)
         {
           ctx->hdrs[i]->deleted = p->h->deleted;
+          if (ctx->hdrs[i]->deleted)
+            ctx->deleted++;
+          else
+            ctx->deleted--;
           flags_changed = 1;
         }
-      ctx->hdrs[i]->trash = p->h->trash;
+      if (ctx->hdrs[i]->trash != p->h->trash)
+      {
+        ctx->hdrs[i]->trash = p->h->trash;
+        if (ctx->hdrs[i]->trash)
+          ctx->trashed++;
+        else
+          ctx->trashed--;
+      }
 
       /* this is a duplicate of an existing header, so remove it */
       mutt_free_header (&p->h);
