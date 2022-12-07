@@ -2018,9 +2018,6 @@ struct option_t MuttVars[] = {
   ** since the last time you opened the mailbox.  When \fIunset\fP, Mutt will notify you
   ** if any new mail exists in the mailbox, regardless of whether you have visited it
   ** recently.
-  ** .pp
-  ** When \fI$$mark_old\fP is set, Mutt does not consider the mailbox to contain new
-  ** mail if only old messages exist.
   */
   { "mail_check_stats", DT_BOOL, R_NONE, {.l=OPTMAILCHECKSTATS}, {.l=0} },
   /*
