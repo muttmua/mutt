@@ -7767,25 +7767,6 @@ echo (equal "one two" "`echo one two`")
   ==> "t"
   note: backticks inside double quotes generates a single argument: "one two"
 </screen>
-      <para>
-        Note that boolean configuration variables evaluate to the strings
-        &quot;yes&quot; or &quot;no&quot;.  You can see the value of other
-        kinds of configuration variables using the
-        <link linkend="echo">echo</link> command.
-      </para>
-<screen>
-unset allow_ansi
-echo $allow_ansi
-  ===> "no"
-
-# the correct way to test a boolean:
-echo (if (equal $allow_ansi "yes") "set" "unset")
-  ===> "unset"
-
-# the incorrect way to test a boolean:
-echo (if $allow_ansi "set" "unset")
-  ===> "set"
-</screen>
     </sect3>
 
     <sect3 id="muttlisp-not">
@@ -7863,6 +7844,25 @@ echo (if "" one two)
 set spoolfile = "/var/mail/user"
 echo (if (equal $spoolfile "/var/mail/user") yes no)
   ==> "yes"
+</screen>
+      <para>
+        Note that boolean configuration variables evaluate to the strings
+        &quot;yes&quot; or &quot;no&quot;.  You can see the value of other
+        kinds of configuration variables using the
+        <link linkend="echo">echo</link> command.
+      </para>
+<screen>
+unset allow_ansi
+echo $allow_ansi
+  ===> "no"
+
+# the correct way to test a boolean:
+echo (if (equal $allow_ansi "yes") "set" "unset")
+  ===> "unset"
+
+# the incorrect way to test a boolean:
+echo (if $allow_ansi "set" "unset")
+  ===> "set"
 </screen>
     </sect3>
   </sect2>
