@@ -432,6 +432,7 @@ int safe_symlink (const char *, const char *);
 
 /* base64.c */
 void mutt_to_base64 (unsigned char*, const unsigned char*, size_t, size_t);
+void mutt_to_base64_safeurl (unsigned char*, const unsigned char*, size_t, size_t);
 int mutt_from_base64 (char*, const char*, size_t);
 void mutt_buffer_to_base64 (BUFFER *, const unsigned char *, size_t);
 int mutt_buffer_from_base64 (BUFFER *, const char *);

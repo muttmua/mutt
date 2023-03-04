@@ -63,6 +63,7 @@ enum
 extern const int Index_hex[];
 extern const int Index_64[];
 extern const char B64Chars[];
+extern const char B64Chars_urlsafe[];
 #endif
 
 #define hexval(c) Index_hex[(unsigned int)(c)]
