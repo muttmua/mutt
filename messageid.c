@@ -49,7 +49,7 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
   {
     case 'r':
       mutt_random_bytes ((char *)r_raw, sizeof(r_raw));
-      mutt_to_base64 (r_out, r_raw, sizeof(r_raw), sizeof(r_out));
+      mutt_to_base64_safeurl (r_out, r_raw, sizeof(r_raw), sizeof(r_out));
       mutt_format_s (dest, destlen, fmt, (const char *)r_out);
       break;
 
@@ -65,7 +65,7 @@ static const char *id_format_str (char *dest, size_t destlen, size_t col,
       for (int i = 0; i < 4; i++)
         z_raw[i] = (uint8_t) (id_data->now >> (3-i)*8u);
       mutt_random_bytes ((char *)z_raw + 4, sizeof(z_raw) - 4);
-      mutt_to_base64 (z_out, z_raw, sizeof(z_raw), sizeof(z_out));
+      mutt_to_base64_safeurl (z_out, z_raw, sizeof(z_raw), sizeof(z_out));
       mutt_format_s (dest, destlen, fmt, (const char *)z_out);
       break;
 
