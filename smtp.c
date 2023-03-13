@@ -849,8 +849,9 @@ fail:
 /* smtp_auth_oauth: AUTH=OAUTHBEARER support. See RFC 7628 */
 static int smtp_auth_oauth (CONNECTION* conn, int xoauth2)
 {
-  int rc = SMTP_AUTH_FAIL;
+  int rc = SMTP_AUTH_FAIL, smtp_rc;
   BUFFER *bearertoken = NULL, *authline = NULL;
+  BUFFER *input_buf = NULL, *smtp_response_buf = NULL;
   const char *authtype;
 
   authtype = xoauth2 ? "XOAUTH2" : "OAUTHBEARER";
@@ -862,16 +863,41 @@ static int smtp_auth_oauth (CONNECTION* conn, int xoauth2)
 
   bearertoken = mutt_buffer_pool_get ();
   authline = mutt_buffer_pool_get ();
+  input_buf = mutt_buffer_pool_get ();
+  smtp_response_buf = mutt_buffer_pool_get ();
 
   /* We get the access token from the smtp_oauth_refresh_command */
   if (mutt_account_getoauthbearer (&conn->account, bearertoken, xoauth2))
     goto cleanup;
 
-  mutt_buffer_printf (authline, "AUTH %s %s\r\n", authtype, mutt_b2s (bearertoken));
+  if (xoauth2)
+  {
+    mutt_buffer_printf (authline, "AUTH %s\r\n", authtype);
+    if (mutt_socket_write (conn, mutt_b2s (authline)) == -1)
+      goto cleanup;
+    if (smtp_get_auth_response (conn, input_buf, &smtp_rc, smtp_response_buf) < 0)
+      goto saslcleanup;
+    if (smtp_rc != smtp_ready)
+      goto saslcleanup;
+
+    mutt_buffer_printf (authline, "%s\r\n", mutt_b2s (bearertoken));
+  }
+  else
+  {
+    mutt_buffer_printf (authline, "AUTH %s %s\r\n", authtype, mutt_b2s (bearertoken));
+  }
 
   if (mutt_socket_write (conn, mutt_b2s (authline)) == -1)
     goto cleanup;
-  if (smtp_get_resp (conn) != 0)
+  if (smtp_get_auth_response (conn, input_buf, &smtp_rc, smtp_response_buf) < 0)
+    goto saslcleanup;
+  if (!smtp_success (smtp_rc))
+    goto saslcleanup;
+
+  rc = SMTP_AUTH_SUCCESS;
+
+saslcleanup:
+  if (rc != SMTP_AUTH_SUCCESS)
   {
     /* The error response was in SASL continuation, so continue the SASL
      * to cause a failure and exit SASL input.  See RFC 7628 3.2.3
@@ -879,13 +905,12 @@ static int smtp_auth_oauth (CONNECTION* conn, int xoauth2)
      */
     mutt_socket_write (conn, "AQ==\r\n");
     smtp_get_resp (conn);
-    goto cleanup;
   }
-
-  rc = SMTP_AUTH_SUCCESS;
 
 cleanup:
   mutt_buffer_pool_release (&bearertoken);
   mutt_buffer_pool_release (&authline);
+  mutt_buffer_pool_release (&input_buf);
+  mutt_buffer_pool_release (&smtp_response_buf);
   return rc;
 }
