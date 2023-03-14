@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1996-2000,2013 Michael R. Elkins <me@mutt.org>
- * Copyright (C) 2020-2021 Kevin J. McCarthy <kevin@8t8.us>
+ * Copyright (C) 2020-2022 Kevin J. McCarthy <kevin@8t8.us>
  *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
