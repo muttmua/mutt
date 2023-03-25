@@ -1,3 +1,223 @@
+2023-03-25 13:03:39 -0700  Kevin McCarthy  <kevin@8t8.us> (9138232d)
+
+        * Update UPDATING files for 2.2.10 release.
+
+M	UPDATING
+
+2023-03-13 18:24:31 -0700  Kevin McCarthy  <kevin@8t8.us> (33f8b7ce)
+
+        * Update copyright notices.
+        
+        This is generated from the copyright-updater script, with manual
+        updates for the main.c and documentation, and po files.
+
+M	COPYRIGHT
+M	background.c
+M	buffy.c
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+M	mutt_sasl_gnu.c
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+M	sidebar.c
+
+2022-11-12 10:02:01 -0800  Kevin McCarthy  <kevin@8t8.us> (9f01d4ab)
+
+        * Abort imap_fast_trash() if previously checkpointed.
+        
+        We don't want to copy the deleted flag over to the trash folder too.
+        
+        I looked into various ways to keep the UID COPY, but they lead to
+        niggling issues with error handling along with handling if the server
+        sends flag updates back to the client.
+        
+        So for that (hopefully rare) case, abort the fast trash and just use a
+        regular copy.
+
+M	imap/imap.c
+
+2023-03-06 18:55:06 -0800  Kevin McCarthy  <kevin@8t8.us> (216dd145)
+
+        * Improve smtp oauth authentication.
+        
+        Split XOAUTH2 to use two steps.
+        
+        This follows the microsoft.com documentation example for smtp.  Since
+        office365 is the main site using XOAUTH2 now, it's better to match
+        their documentation.
+        
+        It also matches msmtp's behavior, which probably means somewhere or
+        another needs it that way.
+        
+        At the same time, improve response code checking.  Mutt was using
+        smtp_get_resp() before, which returns 0 for both a ready and success
+        response code.  Make sure it's a success response code when done
+        authenticating.
+
+M	smtp.c
+
+2023-03-04 18:33:35 +0100  Sebastian Andrzej Siewior  <sebastian@breakpoint.cc> (5df86199)
+
+        * Use base64 URL safe alphabet for message id generation.
+        
+        The character '/' from base64 alphabet breaks web redirectors if the
+        message-id from an email is used as part of the URL for redirectors and/
+        or automatic pointers to an email.
+        
+        Use the URL safe alphabet from RFC4648 section 5 for message id
+        generation.
+        
+        Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+
+M	base64.c
+M	messageid.c
+M	mime.h
+M	protos.h
+M	sendlib.c
+
+2023-03-04 18:33:34 +0100  Sebastian Andrzej Siewior  <sebastian@breakpoint.cc> (cecddeac)
+
+        * base64val: Add support to decode base64 safe URL.
+        
+        In the base64 safe URL dictionary the characters '+' and '/' are
+        replaced by '-' and '_'.
+        Add the characters to Index_64 to allow decoding if needed.
+        
+        Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+
+M	handler.c
+
+2022-12-19 18:53:43 -0800  Cline, Wade  <wade.cline@intel.com> (7c4fa478)
+
+        * mutt_oauth2: Print access token request message
+        
+        There are cases when using the 'authcode' grant where the authorization
+        request will succeed but the access token request will fail (for
+        example: if the user's web browser and terminal use different proxy
+        settings).  The current implementation of the script does not inform
+        the user that the authorization token is being exchanged for an access
+        code, with the result that it can appear that a request has both
+        succeeded (according to the browser) and failed (according to the
+        terminal output) simultaneously.  Add a message to inform the user that
+        a second request is being made so there is less potential for confusion.
+
+M	contrib/mutt_oauth2.py
+
+2022-12-12 15:05:18 -0800  Kevin McCarthy  <kevin@8t8.us> (16d8ad64)
+
+        * Move MuttLisp boolean config note.
+        
+        I think it probably makes more sense to be inside the (if) function
+        documentation than (equal).
+
+M	doc/manual.xml.head
+
+2022-12-07 15:51:36 -0800  Kevin McCarthy  <kevin@8t8.us> (ef2abed2)
+
+        * Fix counters for external maildir 'T' flag changes.
+        
+        The maildir_check_mailbox() code was not updating the context deleted
+        and trashed counts in those cases.  This could lead to messages marked
+        as deleted, but no action being taken on a mailbox sync/close.
+        
+        wip: fix ctx counts for maildir 'T' flags updates.
+
+M	mh.c
+
+2022-12-07 12:58:40 -0800  Kevin McCarthy  <kevin@8t8.us> (d0faf2d4)
+
+        * Remove reference to $mark_old inside $mail_check_recent.
+        
+        There doesn't appear to be any relationship between $mark_old and "new
+        mail" status any more.
+        
+        Commit c26c2531 (from 2002) is the most recent commit that talked
+        about reducing the meaning of $mark_old, and may have been the commit
+        to make that separation.
+
+M	init.h
+
+2022-12-07 12:53:51 -0800  Kevin McCarthy  <kevin@8t8.us> (ba5e0dc2)
+
+        * Add doc note to MuttLisp about boolean config vars.
+        
+        They evaluate to "yes" and "no", and so need an explicit comparison to
+        those values when using the equal function.
+
+M	doc/manual.xml.head
+
+2022-11-19 13:20:25 -0800  Kevin McCarthy  <kevin@8t8.us> (2f35d2fd)
+
+        * Reset header color after mutt_set_flag().
+        
+        I partially changed this to lazily update after a thread update in
+        commit c9fa0414, but unfortunately didn't investigate the reason for
+        the color update while setting a flag.  Since it was that way, I
+        assumed it was for a purpose.
+        
+        However, it turns out there is no need to actively set the header
+        color in that function.  Many places in Mutt already simply reset the
+        color values to 0 to invalidate and cause a recheck later.
+        
+        Setting the color there so can even be detrimental, if the user has
+        slow 'color index' lines.  For example doing a <tag-pattern>~A will
+        cause the color to be computed for the *entire* mailbox.  Now, the
+        user ought to not have a slow color index line, but if they do, this
+        causes unnecessary pain.
+        
+        Note that the header->color doesn't have an actual "unset" value,
+        which could also help performance.  Maybe in the future in master
+        branch.
+
+M	flags.c
+M	mutt.h
+M	protos.h
+M	score.c
+
+2020-04-26 10:43:24 -0700  Kevin McCarthy  <kevin@8t8.us> (a60b22fe)
+
+        * Filter U+200C in pager.
+        
+        "U+200C ZERO WIDTH NON-JOINER" is generating '?' on some systems.
+
+M	pager.c
+
+2022-11-12 12:50:23 -0800  Kevin McCarthy  <kevin@8t8.us> (00093fd7)
+
+        * automatic post-release commit for mutt-2.2.9
+
+M	ChangeLog
+M	VERSION
+
 2022-11-12 12:44:13 -0800  Kevin McCarthy  <kevin@8t8.us> (b40c28ce)
 
         * Update UPDATING file for 2.2.9.

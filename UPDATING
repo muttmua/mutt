@@ -9,6 +9,12 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.10 (2023-03-25):
+
+  ! Bug fix release.
+  ! $message_id_format %r and %z expandos use a URL-safe Base64 encoding:
+    '-' and '_' instead of '+' and '/'.
+
 2.2.9 (2022-11-12):
 
   ! Bug fix release.
