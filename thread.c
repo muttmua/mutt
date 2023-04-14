@@ -1321,7 +1321,7 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
 {
   THREAD *thread, *top;
   HEADER *roothdr = NULL;
-  int final, reverse = (Sort & SORT_REVERSE), minmsgno;
+  int final;
   int num_hidden = 0, new = 0, old = 0;
   int min_unread_msgno = INT_MAX, min_unread = cur->virtual;
 #define CHECK_LIMIT (!ctx->pattern || cur->limited)
@@ -1340,7 +1340,6 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
   while (!thread->message)
     thread = thread->child;
   cur = thread->message;
-  minmsgno = cur->msgno;
 
   if (!cur->read && CHECK_LIMIT)
   {
@@ -1399,12 +1398,6 @@ int _mutt_traverse_thread (CONTEXT *ctx, HEADER *cur, int flag)
 	  roothdr = cur;
 	  if (flag & MUTT_THREAD_COLLAPSE)
 	    final = roothdr->virtual;
-	}
-
-	if (reverse && (flag & MUTT_THREAD_COLLAPSE) && (cur->msgno < minmsgno) && CHECK_LIMIT)
-	{
-	  minmsgno = cur->msgno;
-	  final = cur->virtual;
 	}
 
 	if (flag & MUTT_THREAD_COLLAPSE)

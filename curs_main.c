@@ -2071,6 +2071,11 @@ int mutt_index_menu (void)
 
 	if (CURHDR->collapsed)
 	{
+          /* Note this returns the *old* virtual index of the root message.
+           *
+           * For sort=reverse-threads this trick allows uncollapsing a
+           * single thread to position on the first (not root) message
+           * in the thread */
 	  menu->current = mutt_uncollapse_thread (Context, CURHDR);
 	  mutt_set_virtual (Context);
 	  if (option (OPTUNCOLLAPSEJUMP))
@@ -2078,8 +2083,22 @@ int mutt_index_menu (void)
 	}
 	else if (option (OPTCOLLAPSEUNREAD) || !UNREAD (CURHDR))
 	{
-	  menu->current = mutt_collapse_thread (Context, CURHDR);
+	  HEADER *base;
+	  int final;
+          /* This also returns the *old* virtual index of the root, but now
+           * we have to find the new position of the root, which isn't
+           * the same for sort=reverse-threads. */
+          final = mutt_collapse_thread (Context, CURHDR);
+	  base = Context->hdrs[Context->v2r[final]];
 	  mutt_set_virtual (Context);
+	  for (j = 0; j < Context->vcount; j++)
+	  {
+	    if (Context->hdrs[Context->v2r[j]]->index == base->index)
+	    {
+	      menu->current = j;
+	      break;
+	    }
+	  }
 	}
 	else
 	{
