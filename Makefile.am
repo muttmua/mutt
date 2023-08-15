@@ -57,7 +57,7 @@ DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
 	-DHAVE_CONFIG_H=1
 
-AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS)
+AM_CPPFLAGS=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(AUTOCRYPT_INCLUDES) $(GPGME_CFLAGS) $(GPG_ERROR_CFLAGS)
 
 # This option allows `make distcheck` to run without encountering
 # setgid errors.
