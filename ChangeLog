@@ -1,3 +1,66 @@
+2023-08-18 11:07:42 +0800  Kevin McCarthy  <kevin@8t8.us> (d619496e)
+
+        * Update UPDATING file for 2.2.11 release.
+
+M	UPDATING
+
+2023-08-15 12:34:05 +0800  Kevin McCarthy  <kevin@8t8.us> (d52c6115)
+
+        * Fix GPGME build failure on MacOS.
+        
+        Commit 012981e8 (in release 2.2.9) updated the GPGME autoconf files,
+        to fix a build issue with newer GPGME releases.
+        
+        Unfortunatley that caused a build issue for hosts where the gpg-error
+        header files aren't in the include path.  The newer autoconf file
+        expect GPG_ERROR_CFLAGS to be added to the list of flags for the
+        compiler.
+        
+        Thanks to Will Yardley for reporting the issue and quickly testing the
+        proposed fix.
+
+M	Makefile.am
+
+2023-06-05 18:53:55 +0800  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp> (a5423c40)
+
+        * Updated Japanese translation.
+
+M	po/ja.po
+
+2023-04-14 15:57:07 -0700  Kevin McCarthy  <kevin@8t8.us> (50954c4a)
+
+        * Fix <collapse-all> behavior for sort=reverse-threads.
+        
+        When uncollapsing, _mutt_traverse_thread() returns the virtual number
+        of the root message in the thread.  <collapse-thread> directly sets
+        menu->current to this value to cause the cursor to be on the *first*
+        message of the thread (which isn't the same as the root message when
+        sort=reverse-threads).  <collapse-all> finds the corresponding message
+        by searching for it after re-indexing.
+        
+        However, when collapsing, _mutt_traverse_thread() had code to try and
+        find the *first* message in the thread and return that virtual number.
+        <collapse-thread> then did the same trick, because the old first
+        message is now the new root message for sort=reverse-threads.
+        
+        However, that cleverness caused a bug for <collapse-all> - it can't
+        use that virtual number directly, and it can't "find" the message at
+        the index after reindexing.
+        
+        To fix this, remove the cleverness from _mutt_traverse_thread() when
+        collapsing.  Return the virtual number of the root.  Add searching
+        behavior for <collapse-thread> to fix its behavior.
+
+M	curs_main.c
+M	thread.c
+
+2023-03-25 13:07:19 -0700  Kevin McCarthy  <kevin@8t8.us> (e0e92c31)
+
+        * automatic post-release commit for mutt-2.2.10
+
+M	ChangeLog
+M	VERSION
+
 2023-03-25 13:03:39 -0700  Kevin McCarthy  <kevin@8t8.us> (9138232d)
 
         * Update UPDATING files for 2.2.10 release.
