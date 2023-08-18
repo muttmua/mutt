@@ -9,6 +9,10 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.11 (2023-08-18):
+
+  ! Bug fix release.
+
 2.2.10 (2023-03-25):
 
   ! Bug fix release.
