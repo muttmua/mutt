@@ -2130,7 +2130,7 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
   else
   {
     t = strchr (start, ':');
-    if (!t || t > end)
+    if (!t || t >= end)
     {
       dprint (1, (debugfile, "mwoh: warning: header not in "
 		  "'key: value' format!\n"));
@@ -2418,7 +2418,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
   /* Add any user defined headers */
   for (; tmp; tmp = tmp->next)
   {
-    if ((p = strchr (tmp->data, ':')))
+    if ((p = strchr (NONULL (tmp->data), ':')))
     {
       q = p;
 
@@ -2466,7 +2466,7 @@ static void encode_headers (LIST *h)
 
   for (; h; h = h->next)
   {
-    if (!(p = strchr (h->data, ':')))
+    if (!(p = strchr (NONULL (h->data), ':')))
       continue;
 
     i = p - h->data;

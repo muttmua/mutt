@@ -1,3 +1,91 @@
+2023-09-09 14:42:14 +0800  Kevin McCarthy  <kevin@8t8.us> (6a155b49)
+
+        * Update UPDATING file for 2.2.12 release.
+
+M	UPDATING
+
+2023-09-03 14:11:48 +0800  Kevin McCarthy  <kevin@8t8.us> (a4752eb0)
+
+        * Fix write_one_header() illegal header check.
+        
+        This is another crash caused by the rfc2047 decoding bug fixed in the
+        second prior commit.
+        
+        In this case, an empty header line followed by a header line starting
+        with ":", would result in t==end.
+        
+        The mutt_substrdup() further below would go very badly at that point,
+        with t >= end+1.  This could result in either a memcpy onto NULL or a
+        huge malloc call.
+        
+        Thanks to Chenyuan Mi (@morningbread) for giving a working example
+        draft message of the rfc2047 decoding flaw.  This allowed me, with
+        further testing, to discover this additional crash bug.
+
+M	sendlib.c
+
+2023-09-04 12:50:07 +0800  Kevin McCarthy  <kevin@8t8.us> (4cc3128a)
+
+        * Check for NULL userhdrs.
+        
+        When composing an email, miscellaneous extra headers are stored in a
+        userhdrs list.  Mutt first checks to ensure each header contains at
+        least a colon character, passes the entire userhdr field (name, colon,
+        and body) to the rfc2047 decoder, and safe_strdup()'s the result on
+        the userhdrs list.  An empty result would from the decode would result
+        in a NULL headers being added to list.
+        
+        The previous commit removed the possibility of the decoded header
+        field being empty, but it's prudent to add a check to the strchr
+        calls, in case there is another unexpected bug resulting in one.
+        
+        Thanks to Chenyuan Mi (@morningbread) for discovering the two strchr
+        crashes, giving a working example draft message, and providing the
+        stack traces for the two NULL derefences.
+
+M	sendlib.c
+
+2023-09-03 12:22:01 +0800  Kevin McCarthy  <kevin@8t8.us> (452ee330)
+
+        * Fix rfc2047 base64 decoding to abort on illegal characters.
+        
+        For some reason, the rfc2047 base64 decoder ignored illegal
+        characters, instead of aborting.  This seems innocuous, but in fact
+        leads to at least three crash-bugs elsewhere in Mutt.
+        
+        These stem from Mutt, in some cases, passing an entire header
+        field (name, colon, and body) to the rfc2047 decoder.  (It is
+        technically incorrect to do so, by the way, but is beyond scope for
+        these fixes in stable).  Mutt then assumes the result can't be empty
+        because of a previous check that the header contains at least a colon.
+        
+        This commit takes care of the source of the crashes, by aborting the
+        rfc2047 decode.  The following two commits add protective fixes to the
+        specific crash points.
+        
+        Thanks to Chenyuan Mi (@morningbread) for discovering the strchr
+        crashes, giving a working example draft message, and providing the
+        stack traces for the two NULL derefences.
+
+M	rfc2047.c
+
+2023-08-23 15:40:19 +0800  Kevin McCarthy  <kevin@8t8.us> (7eb9c18f)
+
+        * Add a documentation note that aliases are case insensitive.
+        
+        It's very old behavior, but doesn't seem to be documented anywhere.
+        
+        Thanks to Charles for pointing that out.
+
+M	doc/manual.xml.head
+
+2023-08-18 11:17:23 +0800  Kevin McCarthy  <kevin@8t8.us> (6b538297)
+
+        * automatic post-release commit for mutt-2.2.11
+
+M	ChangeLog
+M	VERSION
+
 2023-08-18 11:07:42 +0800  Kevin McCarthy  <kevin@8t8.us> (d619496e)
 
         * Update UPDATING file for 2.2.11 release.

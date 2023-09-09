@@ -724,7 +724,7 @@ static int rfc2047_decode_word (BUFFER *d, const char *s, char **charset)
 	    if (*pp == '=')
 	      break;
 	    if ((*pp & ~127) || (c = base64val(*pp)) == -1)
-	      continue;
+              goto error_out_0;
 	    if (k + 6 >= 8)
 	    {
 	      k -= 2;
