@@ -1325,10 +1325,10 @@ AC_CACHE_CHECK([whether iconv is non-transcribing], mutt_cv_iconv_nontrans,
 int main()
 {
   iconv_t cd;
-  const char *ib;
+  char *ib;
   char *ob;
   size_t ibl, obl;
-  const char *s = "\304\211";
+  char *s = (char *) "\304\211";
 changequote(, )dnl
   char t[3];
 changequote([, ])dnl
