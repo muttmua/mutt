@@ -343,9 +343,9 @@ mutt_smtp_send (const ADDRESS* from, const ADDRESS* to, const ADDRESS* cc,
 
   /* it might be better to synthesize an envelope from from user and host
    * but this condition is most likely arrived at accidentally */
-  if (EnvFrom)
+  if (option (OPTENVFROM) && EnvFrom && EnvFrom->mailbox)
     envfrom = EnvFrom->mailbox;
-  else if (from)
+  else if (from && from->mailbox)
     envfrom = from->mailbox;
   else
   {
