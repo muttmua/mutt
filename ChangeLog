@@ -1,3 +1,40 @@
+2024-03-09 18:24:58 +0800  Kevin McCarthy  <kevin@8t8.us> (ceecc40b)
+
+        * Update UPDATING file for 2.2.13 release.
+
+M	UPDATING
+
+2024-03-09 18:01:11 +0800  Kevin McCarthy  <kevin@8t8.us> (9b967f07)
+
+        * Fix smtp client to respect $use_envelope_from option.
+        
+        The code was only looking to see if $envelope_from_address had a
+        value, not if $use_envelope_from was set.
+        
+        Add extra safety checks to make sure the mailbox value isn't NULL.
+
+M	smtp.c
+
+2024-03-09 17:54:34 +0800  Kevin McCarthy  <kevin@8t8.us> (039cc521)
+
+        * Fix smtp client $envelope_from_address possible dangling pointer.
+        
+        If the account-hook invoked by mutt_conn_find() modifies
+        $envelope_from_address, envfrom could point no longer point to the
+        address.
+        
+        Move the mutt_conn_find() before the code that determines the envelope
+        from address.
+
+M	smtp.c
+
+2023-09-09 14:45:24 +0800  Kevin McCarthy  <kevin@8t8.us> (0a81a2a7)
+
+        * automatic post-release commit for mutt-2.2.12
+
+M	ChangeLog
+M	VERSION
+
 2023-09-09 14:42:14 +0800  Kevin McCarthy  <kevin@8t8.us> (6a155b49)
 
         * Update UPDATING file for 2.2.12 release.
