@@ -335,23 +335,24 @@ mutt_smtp_send (const ADDRESS* from, const ADDRESS* to, const ADDRESS* cc,
   char buf[1024];
   int ret = -1;
 
-  /* it might be better to synthesize an envelope from from user and host
-   * but this condition is most likely arrived at accidentally */
-  if (EnvFrom)
-    envfrom = EnvFrom->mailbox;
-  else if (from)
-    envfrom = from->mailbox;
-  else
-  {
-    mutt_error (_("No from address given"));
-    return -1;
-  }
-
   if (smtp_fill_account (&account) < 0)
     return ret;
 
   if (!(conn = mutt_conn_find (NULL, &account)))
     return -1;
+
+  /* it might be better to synthesize an envelope from from user and host
+   * but this condition is most likely arrived at accidentally */
+  if (option (OPTENVFROM) && EnvFrom && EnvFrom->mailbox)
+    envfrom = EnvFrom->mailbox;
+  else if (from && from->mailbox)
+    envfrom = from->mailbox;
+  else
+  {
+    mutt_error (_("No from address given"));
+    mutt_socket_close (conn);
+    return -1;
+  }
 
   Esmtp = eightbit;
 
