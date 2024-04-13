@@ -610,9 +610,14 @@ int mutt_is_application_smime (BODY *m)
     {
       len++;
       if (!ascii_strcasecmp ((t+len), "p7m"))
-        /* Not sure if this is the correct thing to do, but
-           it's required for compatibility with Outlook */
-        return (SMIMESIGN|SMIMEOPAQUE);
+      {
+        if (!ascii_strcasecmp (SmimePkcs7DefaultSmimeType, "signed"))
+          return (SMIMESIGN|SMIMEOPAQUE);
+	else if (!ascii_strcasecmp (SmimePkcs7DefaultSmimeType, "enveloped"))
+	  return SMIMEENCRYPT;
+        else
+          return 0;
+      }
       else if (!ascii_strcasecmp ((t+len), "p7s"))
 	return (SMIMESIGN|SMIMEOPAQUE);
     }

@@ -4016,6 +4016,20 @@ struct option_t MuttVars[] = {
   ** edited. This option points to the location of the private keys.
   ** (S/MIME only)
   */
+  { "smime_pkcs7_default_smime_type", 	DT_STR, R_NONE, {.p=&SmimePkcs7DefaultSmimeType}, {.p="signed"} },
+  /*
+  ** .pp
+  ** The application/pkcs7-mime ``.p7m'' type can contain EnvelopedData
+  ** (encrypted) or SignedData.  Senders should add a ``smime-type''
+  ** parameter to the content type, to help receiving MUAs correctly
+  ** handle the data.  Unfortunately, some clients (e.g. Outlook)
+  ** don't add this parameter.
+  ** .pp
+  ** This option is used to determine which type to assume when the
+  ** ``smime-type'' parameter is missing for ``.p7m'' file types.
+  ** .pp
+  ** Accepted values are ``enveloped'' and ``signed''.
+  */
   { "smime_pk7out_command", 	DT_STR, R_NONE, {.p=&SmimePk7outCommand}, {.p=0} },
   /*
   ** .pp
