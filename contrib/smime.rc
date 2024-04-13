@@ -104,6 +104,14 @@ set smime_verify_opaque_command="\
 openssl smime -verify -inform DER -in %s %C || \
 openssl smime -verify -inform DER -in %s -noverify 2>/dev/null"
 
+# application/pkcs7-mime ".p7m" messages should have a smime-type
+# parameter to tell Mutt whether it's signed or encrypted data.
+#
+# If the parameter is missing, Mutt by default assumes it's SignedData.
+# This can be used to change Mutt's assumption to EnvelopedData (encrypted).
+#
+# set smime_pkcs7_default_smime_type="enveloped"
+
 
 
 # Section D: Alternatives
