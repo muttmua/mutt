@@ -2013,7 +2013,7 @@ restart:
 	  gpgme_decrypt_result_t result;
 
 	  result = gpgme_op_decrypt_result (ctx);
-	  if (!result->unsupported_algorithm)
+	  if (result && !result->unsupported_algorithm)
             {
               maybe_signed = 1;
               gpgme_data_release (plaintext);
