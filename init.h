@@ -4324,10 +4324,13 @@ struct option_t MuttVars[] = {
   { "spoolfile",	DT_PATH, R_NONE, {.p=&Spoolfile}, {.p=0} },
   /*
   ** .pp
-  ** If your spool mailbox is in a non-default place where Mutt cannot find
-  ** it, you can specify its location with this variable.  Mutt will
+  ** If your default mailbox or spool file is in a non-default place where Mutt
+  ** cannot find it, you can specify its location with this variable. Mutt will
   ** initially set this variable to the value of the environment
   ** variable \fC$$$MAIL\fP or \fC$$$MAILDIR\fP if either is defined.
+  ** .pp
+  ** Note: Despite the name, this can refer to a local or remote mailbox, e.g.,
+  ** "+INBOX".
   */
 #if defined(USE_SSL)
 # ifdef USE_SSL_GNUTLS
