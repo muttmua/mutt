@@ -1272,7 +1272,7 @@ AC_ARG_ENABLE(iconv, AS_HELP_STRING([--disable-iconv],[Disable iconv support]),
 AM_GNU_GETTEXT([external])
 AM_ICONV
 
-if test "$am_cv_func_iconv" != "yes"
+if test "$am_func_iconv" != "yes"
 then
   AC_MSG_WARN([Configuring without iconv support. See INSTALL for details])
 else
@@ -1356,7 +1356,7 @@ dnl -- IDN depends on iconv
 dnl mutt_idna.c will perform charset transformations (for smtputf8
 dnl support) as long as at least iconv is installed.  If there is no
 dnl iconv, then it doesn't need to be included in the build.
-if test "$am_cv_func_iconv" = yes; then
+if test "$am_func_iconv" = yes; then
   MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_idna.o"
 fi
 
@@ -1391,7 +1391,7 @@ AC_ARG_WITH(idn2, AS_HELP_STRING([--with-idn2=@<:@PFX@:>@],[Use GNU libidn2 for 
         [with_idn2=no])
 
 if test "x$with_idn" != "xno"; then
-  if test "$am_cv_func_iconv" != "yes"; then
+  if test "$am_func_iconv" != "yes"; then
     if test "$with_idn" != "auto"; then
       AC_MSG_ERROR([IDN requested but iconv is disabled or unavailable])
     fi
@@ -1431,7 +1431,7 @@ fi
 
 dnl idna2
 if test "x$with_idn2" != "xno"; then
-  if test "$am_cv_func_iconv" != "yes"; then
+  if test "$am_func_iconv" != "yes"; then
     AC_MSG_ERROR([IDN2 requested but iconv is disabled or unavailable])
   else
     dnl Solaris 11 has /usr/include/idn
