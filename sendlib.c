@@ -74,7 +74,9 @@ extern char **environ;
 
 extern char RFC822Specials[];
 
-const char MimeSpecials[] = "@.,;:<>[]\\\"()?/= \t";
+/* This corresponds to RFC2045 tspecials, along with space/tab.
+ * Note that it does not contain ".", which is in RFC822Specials */
+const char MimeSpecials[] = "@,;:<>[]\\\"()?/= \t";
 
 const char B64Chars[64] = {
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',

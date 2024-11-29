@@ -51,6 +51,22 @@
 
 extern char RFC822Specials[];
 
+/* RFC2047Specials is basically MimeSpecials with "." added back in.
+ *
+ * RFC2047 encoded-words are different from RFC2045 tokens, because
+ * they are used in non-MIME headers outside of double quotes, such as
+ * To/Cc/Bcc/From display-name.
+ *
+ * As such, their "specials" have to be a superset of RFC822Specials.
+ * RFC2045 tspecials (MimeSpecials in mutt) are insufficient, because
+ * it doesn't contain ".".
+ *
+ * Without the ".", an unencoded "." in a Q encoded-word would be
+ * double-quoted when generating the email, breaking the RFC2047
+ * declaration that an encoded-word cannot appear in a quoted-string.
+ */
+const char RFC2047Specials[] = "@.,;:<>[]\\\"()?/= \t";
+
 typedef size_t (*encoder_t) (char *, ICONV_CONST char *, size_t,
 			     const char *);
 
@@ -252,7 +268,7 @@ static size_t q_encoder (char *s, ICONV_CONST char *d, size_t dlen,
     unsigned char c = *d++;
     if (c == ' ')
       *s++ = '_';
-    else if (c >= 0x7f || c < 0x20 || c == '_' ||  strchr (MimeSpecials, c))
+    else if (c >= 0x7f || c < 0x20 || c == '_' ||  strchr (RFC2047Specials, c))
     {
       *s++ = '=';
       *s++ = hex[(c & 0xf0) >> 4];
@@ -312,9 +328,9 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
   for (p = buf1; p < ob; p++)
   {
     unsigned char c = *p;
-    assert (strchr (MimeSpecials, '?'));
+    assert (strchr (RFC2047Specials, '?'));
     if (c >= 0x7f || c < 0x20 || *p == '_' ||
-	(c != ' ' && strchr (MimeSpecials, *p)))
+	(c != ' ' && strchr (RFC2047Specials, *p)))
       ++count;
   }
 
