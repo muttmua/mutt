@@ -471,7 +471,7 @@ int safe_rename (const char *src, const char *target)
         (compare_stat (&ssb, &tsb) == 0))
     {
       dprint (1, (debugfile,
-                  "safe_rename: link (%s, %s) reported failure: %s (%d) but actually succeded\n",
+                  "safe_rename: link (%s, %s) reported failure: %s (%d) but actually succeeded\n",
                   src, target, strerror (errno), errno));
       goto success;
     }
