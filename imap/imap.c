@@ -1069,15 +1069,18 @@ static int imap_open_mailbox_append (CONTEXT *ctx, int flags)
 /* imap_logout: Gracefully log out of server. */
 void imap_logout (IMAP_DATA** idata)
 {
-  /* we set status here to let imap_handle_untagged know we _expect_ to
-   * receive a bye response (so it doesn't freak out and close the conn) */
-  (*idata)->status = IMAP_BYE;
-  imap_cmd_start (*idata, "LOGOUT");
-  if (ImapPollTimeout <= 0 ||
-      mutt_socket_poll ((*idata)->conn, ImapPollTimeout) != 0)
+  if ((*idata)->status != IMAP_FATAL)
   {
-    while (imap_cmd_step (*idata) == IMAP_CMD_CONTINUE)
-      ;
+    /* we set status here to let imap_handle_untagged know we _expect_ to
+     * receive a bye response (so it doesn't freak out and close the conn) */
+    (*idata)->status = IMAP_BYE;
+    imap_cmd_start (*idata, "LOGOUT");
+    if (ImapPollTimeout <= 0 ||
+	mutt_socket_poll ((*idata)->conn, ImapPollTimeout) != 0)
+    {
+      while (imap_cmd_step (*idata) == IMAP_CMD_CONTINUE)
+	;
+    }
   }
 
   mutt_socket_close ((*idata)->conn);
