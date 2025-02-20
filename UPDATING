@@ -9,6 +9,14 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.2.14 (2025-02-20):
+
+  ! Bug fix release.
+  + $smime_pkcs7_default_smime_type controls whether a S/MIME pkcs7
+    message missing the "smime-type" parameter is assumed to be
+    "signed" or "encrypted" data.  Various versions of Outlook appear
+    to send one or the other.
+
 2.2.13 (2024-03-09):
 
   ! Bug fix release.
