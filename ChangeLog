@@ -1,3 +1,172 @@
+2025-02-20 10:20:51 +0800  Kevin McCarthy  <kevin@8t8.us> (59908c2b)
+
+        * Update UPDATING file for 2.2.14 release.
+
+M	UPDATING
+
+2025-02-08 11:20:38 +0800  Kevin McCarthy  <kevin@8t8.us> (aa1bc169)
+
+        * Update copyrights to 2025.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
+2025-02-05 18:09:37 +0800  Kevin McCarthy  <kevin@8t8.us> (0ac64bf3)
+
+        * Fix NULL pointer dereference when calling imap_logout_all().
+        
+        When idata->status is set to IMAP_FATAL, it signals the connection is
+        in an unusable state that can't be resolved.  While doing cleanup,
+        imap_close_mailbox() will leave the idata->state unchanged, and will
+        set idata->ctx to NULL.
+        
+        So this could result in a situation where
+          idata->status == IMAP_FATAL
+          idata->state == IMAP_SELECTED
+          idata->ctx == NULL.
+        
+        Normally when idata->state == IMAP_SELECTED (or higher), Mutt assumes
+        a mailbox is selected and the ctx should be set to the open mailbox
+        CONTEXT.  However, when the status is IMAP_FATAL, mutt aborts trying
+        to do anything with that connection.  So there is no issue.
+        
+        When exiting mutt, imap_logout_all() is called, which loops through
+        any unclosed connections and calls imap_logout() for each.
+        Unfortunately, imap_logout() was overwriting idata->status to IMAP_BYE
+        without checking if it was previously set to IMAP_FATAL, and then
+        sending a "LOGOUT" commmand.
+        
+        This could result in
+          idata->status == IMAP_BYE
+          idata->state == IMAP_SELECTED
+          idata->ctx == NULL
+        in which case the IMAP code assumes a ctx will be present, because status
+        is no longer set to IMAP_FATAL.
+        
+        This commit checks for an existing IMAP_FATAL status, and skips
+        trying to reset the status and send "LOGOUT" in that case.
+        
+        Many thanks to Roberto Ricci for reporting the bug along with a stack
+        trace, and working with me as I slowly found the problem.
+
+M	imap/imap.c
+
+2024-11-29 11:40:05 +0800  Kevin McCarthy  <kevin@8t8.us> (cba1fc27)
+
+        * Remove "." from MimeSpecials (RFC2045 tspecials).
+        
+        RFC2045 declares tspecials to not include a period.  So encoding it
+        inside 2231 parameter values, or adding double quotes to MIME
+        parameter values (such as in Content-Type and Content-Disposition)
+        because of the presence of a period, while not illegal, is
+        unnecessary.
+        
+        Ticket 491 reported a case where some Android clients were not
+        decoding the "." in an attachment filename extension for some unknown
+        reason.  While this is clearly a bug in the Android client, it's also
+        true that the period need not have been encoded in the first place.
+        
+        However, "." couldn't simply be removed from MIMESpecials, because it
+        was also used for RFC2047 encoding.  RFC2047 encoded-words are used in
+        non-MIME headers, and cannot be double quoted.
+        
+        Create a third "specials" list, RFC2047Specials, adding back in the
+        ".", to keep RFC2047 encoding the same as it was.  Add a comment as to
+        why it exists, to prevent someone from making the unfortunate mistake
+        of thinking it can just be changed back to use MIMESpecials.
+        
+        Thanks to Peter Seiderer for reporting the issue and suggesting a fix,
+        which this patch is based upon.
+
+M	rfc2047.c
+M	sendlib.c
+
+2024-10-29 13:15:12 +0800  Kevin McCarthy  <kevin@8t8.us> (a5bd9821)
+
+        * Fix configure.ac AM_ICONV result checking.
+        
+        --disable-iconv seeds the cache value variable, $am_cv_func_iconv, to
+        "no" to skip the test and disable iconv.
+        
+        However, the result of an existing and *working* AM_ICONV test is
+        stored in $am_func_iconv.  The call to AC_DEFINE(HAVE_ICONV) depends
+        on that variable.
+        
+        Mutt was improperly checking $am_cv_func_iconv below.
+        
+        In the event of an existing but broken iconv, this would result in
+        HAVE_ICONV being undefined, but mutt_idna.o being added to
+        MUTT_LIB_OBJECTS.  This would cause both the stub functions in
+        mutt_idna.h and the full functions in mutt_idna.c to be defined,
+        giving a compilation error.
+        
+        Thanks to @juanitotc for the bug report and helping to test the fix.
+
+M	configure.ac
+
+2024-04-19 22:30:54 +0200  Alejandro Colomar  <alx@kernel.org> (0af8a6fc)
+
+        * crypt-gpgme.c: Fix NULL dereference
+        
+        Fixes: 1afaa74a19ee ("gpgme integration.  See documentation for $crypt_use_gpgme, and http://www.gnupg.org/aegypten2/.")
+
+M	crypt-gpgme.c
+
+2024-04-13 13:22:11 +0800  Kevin McCarthy  <kevin@8t8.us> (0d75d71a)
+
+        * Add $smime_pkcs7_default_smime_type config option.
+        
+        This works around Outlook sending application/pkcs7-mime ".p7m" parts
+        without a smime-type parameter.
+        
+        Mutt previously hardcoded an assumption that these were SignedData to
+        work around an old Outlook book.  However Outlook now appears to also
+        send EnvelopedData in this form.
+
+M	contrib/smime.rc
+M	crypt.c
+M	globals.h
+M	init.h
+
+2024-03-09 18:29:03 +0800  Kevin McCarthy  <kevin@8t8.us> (00d56288)
+
+        * automatic post-release commit for mutt-2.2.13
+
+M	ChangeLog
+M	VERSION
+
 2024-03-09 18:24:58 +0800  Kevin McCarthy  <kevin@8t8.us> (ceecc40b)
 
         * Update UPDATING file for 2.2.13 release.
