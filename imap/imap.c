@@ -2257,6 +2257,12 @@ int imap_search (CONTEXT* ctx, const pattern_t* pat)
   for (i = 0; i < ctx->msgcount; i++)
     ctx->hdrs[i]->matched = 0;
 
+  /* This function is shared by mutt_search_command() and mutt_pattern_func().
+   * mutt_search_command()'s cached "searched" flags will no longer be correct,
+   * and neither will the results of its imap_search(), so invalidate any searches.
+   */
+  set_option (OPTSEARCHINVALID);
+
   if (!do_search (pat, 1))
     return 0;
 
