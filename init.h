@@ -1820,6 +1820,19 @@ struct option_t MuttVars[] = {
   ** strange behavior, such as duplicate or missing messages please
   ** file a bug report to let us know.
   */
+  { "imap_reconnect_sleep", DT_NUM,  R_NONE, {.p=&ImapReconnectSleep}, {.l=5} },
+  /*
+  ** .pp
+  ** When mutt fails to reconnect to a lost IMAP server connection, it
+  ** will sleep this many seconds before trying again.
+  */
+  { "imap_reconnect_tries", DT_NUM,  R_NONE, {.p=&ImapReconnectTries}, {.l=3} },
+  /*
+  ** .pp
+  ** When mutt loses its connection with the IMAP server, it will try
+  ** to reconnect this many times before giving up and closing the
+  ** connection.
+  */
   { "imap_servernoise",		DT_BOOL, R_NONE, {.l=OPTIMAPSERVERNOISE}, {.l=1} },
   /*
   ** .pp

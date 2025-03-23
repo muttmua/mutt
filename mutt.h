@@ -650,6 +650,7 @@ enum
   OPTIGNOREMACROEVENTS, /* (pseudo) don't process macro/push/exec events while set */
   OPTAUTOCRYPTGPGME,    /* (pseudo) use Autocrypt context inside crypt-gpgme.c */
   OPTMENUPOPCLEARSCREEN, /* (pseudo) clear the screen when popping the last menu. */
+  OPTMANUALABORT,       /* (pseudo) indicates user manually aborted an operation */
 
   OPTMAX
 };

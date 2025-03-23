@@ -90,6 +90,8 @@ static int query_abort_header_download (IMAP_DATA *idata)
   if (mutt_yesorno (_("Abort download and close mailbox?"), MUTT_YES) == MUTT_YES)
   {
     abort = 1;
+    /* this is set to avoid trying to reconnect again */
+    set_option (OPTMANUALABORT);
     imap_close_connection (idata);
   }
   SigInt = 0;

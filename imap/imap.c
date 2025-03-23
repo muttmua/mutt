@@ -582,7 +582,7 @@ void imap_close_connection(IMAP_DATA* idata)
 int imap_reconnect (IMAP_DATA **p_idata)
 {
   CONTEXT *orig_ctx, new_ctx;
-  int rc = -1, i;
+  int rc = -1, i, attempt = 1;
   IMAP_DATA *idata = *p_idata;
   HEADER *old_hdr, *new_hdr;
 
@@ -597,10 +597,32 @@ int imap_reconnect (IMAP_DATA **p_idata)
   if (!orig_ctx)
     goto cleanup;
 
-  if (mx_open_mailbox (orig_ctx->path,
-                       orig_ctx->readonly ? MUTT_READONLY : 0,
-                       &new_ctx) == NULL)
-    goto cleanup;
+  unset_option (OPTMANUALABORT);
+  while (mx_open_mailbox (orig_ctx->path,
+			  orig_ctx->readonly ? MUTT_READONLY : 0,
+			  &new_ctx) == NULL)
+  {
+    if ((attempt >= ImapReconnectTries) || (option (OPTMANUALABORT)))
+      goto cleanup;
+  /* L10N:
+     Message displayed when IMAP connection is lost and Mutt
+     tries to reconnect but fails.  Mutt will try imap_reconnect_tries times
+     and sleep imap_reconnect_sleep seconds between each retry.
+  */
+    mutt_message (_("Reconnect failed. Sleeping %d seconds."), ImapReconnectSleep);
+    if (ImapReconnectSleep > 0)
+    {
+      SigInt = 0;
+      sleep (ImapReconnectSleep);
+      if (SigInt)
+      {
+	SigInt = 0;
+	goto cleanup;
+      }
+    }
+    mutt_message _("Trying to reconnect...");
+    attempt++;
+  }
 
   new_ctx.dontwrite = orig_ctx->dontwrite;
   new_ctx.pattern = orig_ctx->pattern;
@@ -1823,7 +1845,8 @@ errcleanup:
   {
     if ((idata->reopen & IMAP_REOPEN_ALLOW) &&
         Context &&
-        idata->ctx == Context)
+        (idata->ctx == Context) &&
+	(ImapReconnectTries > 0))
     {
       if (imap_reconnect (&idata) == 0)
       {

@@ -262,6 +262,8 @@ WHERE long  ImapFetchChunkSize;
 WHERE short ImapKeepalive;
 WHERE short ImapPipelineDepth;
 WHERE short ImapPollTimeout;
+WHERE short ImapReconnectSleep;
+WHERE short ImapReconnectTries;
 #endif
 
 /* flags for received signals */
