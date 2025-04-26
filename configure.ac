@@ -23,7 +23,6 @@ fi
 AC_MSG_RESULT($mutt_cv_prefix)
 
 AC_PROG_CC
-AC_PROG_CC_C99
 if test "x$ac_cv_prog_cc_c99" = "xno"; then
   AC_MSG_ERROR(A C99 compliant compiler is required)
 fi
