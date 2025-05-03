@@ -11,7 +11,7 @@ packages:
 - openssl-dev
 - perl
 sources:
-- https://git.sr.ht/~kevin8t8/mutt
+- https://git.sr.ht/~mutt/mutt
 tasks:
 - configure: |
     cd mutt
