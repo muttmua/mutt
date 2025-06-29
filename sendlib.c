@@ -2157,9 +2157,18 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
 
       valbuf = mutt_substrdup (t, end);
     }
-    dprint(4,(debugfile,"mwoh: buf[%s%s] too long, "
-              "max width = %d > %d\n",
-              NONULL(pfx), valbuf, max, wraplen));
+    if (flags & CH_DISPLAY)
+    {
+      dprint(4,(debugfile,"mwoh: buf[%s%s] for display, "
+                "max width = %d, wrap length = %d\n",
+                NONULL(pfx), valbuf, max, wraplen));
+    }
+    else
+    {
+      dprint(4,(debugfile,"mwoh: buf[%s%s] too long, "
+                "max width = %d > %d\n",
+                NONULL(pfx), valbuf, max, wraplen));
+    }
     if (fold_one_header (fp, tagbuf, valbuf, pfx, wraplen, flags) < 0)
       return -1;
     FREE (&tagbuf);
