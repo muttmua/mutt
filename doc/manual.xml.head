@@ -550,7 +550,7 @@ linkend="tab-keys-nav-page"/> for page-based menus.
 <para>
 Mutt has a built-in line editor for inputting text, e.g. email addresses
 or filenames. The keys used to manipulate text input are very similar to
-those of Emacs. See <xref linkend="tab-keys-editor"/> for a full
+those of Emacs. See <xref linkend="editor-map"/> for a full
 reference of available functions, their default key bindings, and short
 descriptions.
 </para>
@@ -565,6 +565,7 @@ descriptions.
 <row><entry>^A or &lt;Home&gt;</entry><entry><literal>&lt;bol&gt;</literal></entry><entry>move to the start of the line</entry></row>
 <row><entry>^B or &lt;Left&gt;</entry><entry><literal>&lt;backward-char&gt;</literal></entry><entry>move back one char</entry></row>
 <row><entry>Esc B</entry><entry><literal>&lt;backward-word&gt;</literal></entry><entry>move back one word</entry></row>
+<row><entry>&lt;Space&gt;</entry><entry><literal>&lt;buffy-cycle&gt;</literal></entry><entry>cycle among incoming mailboxes</entry></row>
 <row><entry>^D or &lt;Delete&gt;</entry><entry><literal>&lt;delete-char&gt;</literal></entry><entry>delete the char under the cursor</entry></row>
 <row><entry>^E or &lt;End&gt;</entry><entry><literal>&lt;eol&gt;</literal></entry><entry>move to the end of the line</entry></row>
 <row><entry>^F or &lt;Right&gt;</entry><entry><literal>&lt;forward-char&gt;</literal></entry><entry>move forward one char</entry></row>
@@ -607,6 +608,37 @@ rather than under, you could use:
 bind editor &lt;delete&gt; backspace
 </screen>
 
+</sect2>
+
+<sect2 id="editing-buffy-cycle">
+<title>Buffy Cycle</title>
+
+<para>
+The <literal>&lt;buffy-cycle&gt;</literal> function key binding is
+enabled in the prompt for <literal>&lt;change-folder&gt;</literal> or
+<literal>&lt;change-folder-readonly&gt;</literal>.  Typing the key
+will cycle through mailboxes with new mail.
+</para>
+
+<para>
+In other prompts for a mailbox or a file (such as for saving an
+attachment), the key binding instead invokes the
+<literal>&lt;complete&gt;</literal> function.
+</para>
+
+<para>
+In either case, if you need to type the key literally (e.g. you need
+to enter a file name with a space in it), use the
+<literal>&lt;quote-char&gt;</literal> function.  For example, with the
+default key bindings, by typing <quote><literal>^V</literal></quote>
+and then <quote><literal>&lt;Space&gt;</literal></quote>.
+</para>
+
+<para>
+In all other input fields, the <literal>&lt;buffy-cycle&gt;</literal>
+key binding is ignored; typing the key simply adds it to the input
+field text.
+</para>
 </sect2>
 
 <sect2 id="editing-history">
