@@ -1011,7 +1011,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 
 static int is_ansi (const char *buf)
 {
-  while (*buf && (isdigit(*buf) || *buf == ';'))
+  while (*buf && (isdigit((unsigned char) *buf) || *buf == ';'))
     buf++;
   return (*buf == 'm');
 }
