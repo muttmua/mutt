@@ -427,7 +427,7 @@ int mutt_write_mime_header (BODY *a, FILE *f)
     }
     else
     {
-      dprint(1, (debugfile, "ERROR: invalid content-disposition %d\n", a->disposition));
+      dprintf(1, "ERROR: invalid content-disposition %d", a->disposition);
     }
   }
 
@@ -466,7 +466,7 @@ int mutt_write_mime_body (BODY *a, FILE *f)
     /* First, find the boundary to use */
     if (!(p = mutt_get_parameter ("boundary", a->parameter)))
     {
-      dprint (1, (debugfile, "mutt_write_mime_body(): no boundary parameter found!\n"));
+      dprintf(1, "no boundary parameter found!");
       mutt_error _("No boundary parameter found! [report this error]");
       return (-1);
     }
@@ -497,7 +497,7 @@ int mutt_write_mime_body (BODY *a, FILE *f)
 
   if ((fpin = fopen (a->filename, "r")) == NULL)
   {
-    dprint(1,(debugfile, "write_mime_body: %s no longer exists!\n",a->filename));
+    dprintf(1, "write_mime_body: %s no longer exists!", a->filename);
     mutt_error (_("%s no longer exists!"), a->filename);
     return -1;
   }
@@ -929,8 +929,8 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
 
   if ((fp = fopen (fname, "r")) == NULL)
   {
-    dprint (1, (debugfile, "mutt_get_content_info: %s: %s (errno %d).\n",
-                fname, strerror (errno), errno));
+    dprintf(1, "%s: %s (errno %d).",
+                fname, strerror (errno), errno);
     return (NULL);
   }
 
@@ -1015,7 +1015,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
         strfcpy (buf, PKGDATADIR"/mime.types", sizeof (buf));
         break;
       default:
-        dprint (1, (debugfile, "mutt_lookup_mime_type: Internal error, count = %d.\n", count));
+        dprintf(1, "Internal error, count = %d.", count);
         goto bye;       /* shouldn't happen */
     }
 
@@ -1983,8 +1983,8 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
   char buf[HUGE_STRING] = "";
   int first = 1, enc, col = 0, w, l = 0, fold;
 
-  dprint(4,(debugfile,"mwoh: pfx=[%s], tag=[%s], flags=%d value=[%s]\n",
-            NONULL (pfx), tag, flags, value));
+  dprintf(4, "mwoh: pfx=[%s], tag=[%s], flags=%d value=[%s]",
+            NONULL (pfx), tag, flags, value);
 
   if (tag && *tag && fprintf (fp, "%s%s: ", NONULL (pfx), tag) < 0)
     return -1;
@@ -2006,8 +2006,8 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
     w = my_width (buf, col, flags);
     enc = mutt_strncmp (buf, "=?", 2) == 0;
 
-    dprint(5,(debugfile,"mwoh: word=[%s], col=%d, w=%d, next=[0x0%x]\n",
-              buf, col, w, *next));
+    dprintf(5, "mwoh: word=[%s], col=%d, w=%d, next=[0x0%x]",
+              buf, col, w, *next);
 
     /* insert a folding \n before the current word's lwsp except for
      * header name, first word on a line (word longer than wrap width)
@@ -2110,16 +2110,15 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
   if (!(flags & CH_DISPLAY) && (pfxw + max <= wraplen || is_from))
   {
     valbuf = mutt_substrdup (start, end);
-    dprint(4,(debugfile,"mwoh: buf[%s%s] short enough, "
-              "max width = %d <= %d\n",
-              NONULL(pfx), valbuf, max, wraplen));
+    dprintf(4, "mwoh: buf[%s%s] short enough, "
+              "max width = %d <= %d",
+              NONULL(pfx), valbuf, max, wraplen);
     if (pfx && *pfx)
       if (fputs (pfx, fp) == EOF)
         return -1;
     if (!(t = strchr (valbuf, ':')))
     {
-      dprint (1, (debugfile, "mwoh: warning: header not in "
-                  "'key: value' format!\n"));
+      dprintf(1, "mwoh: warning: header not in 'key: value' format!");
       return 0;
     }
     if (print_val (fp, pfx, valbuf, flags, mutt_strlen (pfx)) < 0)
@@ -2134,8 +2133,7 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
     t = strchr (start, ':');
     if (!t || t >= end)
     {
-      dprint (1, (debugfile, "mwoh: warning: header not in "
-                  "'key: value' format!\n"));
+      dprintf(1, "mwoh: warning: header not in 'key: value' format!");
       return 0;
     }
     if (is_from)
@@ -2159,15 +2157,13 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
     }
     if (flags & CH_DISPLAY)
     {
-      dprint(4,(debugfile,"mwoh: buf[%s%s] for display, "
-                "max width = %d, wrap length = %d\n",
-                NONULL(pfx), valbuf, max, wraplen));
+      dprintf(4, "mwoh: buf[%s%s] for display, max width = %d, wrap length = %d",
+              NONULL(pfx), valbuf, max, wraplen);
     }
     else
     {
-      dprint(4,(debugfile,"mwoh: buf[%s%s] too long, "
-                "max width = %d > %d\n",
-                NONULL(pfx), valbuf, max, wraplen));
+      dprintf(4, "mwoh: buf[%s%s] too long, max width = %d > %d",
+              NONULL(pfx), valbuf, max, wraplen);
     }
     if (fold_one_header (fp, tagbuf, valbuf, pfx, wraplen, flags) < 0)
       return -1;
@@ -2207,8 +2203,8 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
     if (!(flags & CH_DISPLAY) && mutt_strwidth (tag) + 2 + pfxw +
         mutt_strwidth (v) <= wraplen)
     {
-      dprint(4,(debugfile,"mwoh: buf[%s%s: %s] is short enough\n",
-                NONULL(pfx), tag, v));
+      dprintf(4, "mwoh: buf[%s%s: %s] is short enough",
+                NONULL(pfx), tag, v);
       if (fprintf (fp, "%s%s: %s\n", NONULL(pfx), tag, v) <= 0)
         goto out;
       rc = 0;
@@ -3063,8 +3059,7 @@ ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
 
     if (dup)
     {
-      dprint (2, (debugfile, "mutt_remove_duplicates: Removing %s\n",
-                  addr->mailbox));
+      dprintf(2, "Removing %s", addr->mailbox);
 
       *last = addr->next;
 
@@ -3146,8 +3141,7 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
 
   if (mx_open_mailbox (path, MUTT_APPEND | MUTT_QUIET, &f) == NULL)
   {
-    dprint (1, (debugfile, "mutt_write_fcc(): unable to open mailbox %s in append-mode, aborting.\n",
-                path));
+    dprintf(1, "unable to open mailbox %s in append-mode, aborting.", path);
     goto cleanup;
   }
 
@@ -3294,7 +3288,7 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
     fflush (tempfp);
     if (ferror (tempfp))
     {
-      dprint (1, (debugfile, "mutt_write_fcc(): %s: write failed.\n", mutt_b2s (tempfile)));
+      dprintf(1, "%s: write failed.", mutt_b2s (tempfile));
       safe_fclose (&tempfp);
       unlink (mutt_b2s (tempfile));
       mx_commit_message (msg, &f);      /* XXX - really? */

@@ -400,7 +400,7 @@ int mutt_copy_bytes (FILE *in, FILE *out, size_t size)
       break;
     if (fwrite (buf, 1, chunk, out) != chunk)
     {
-      /* dprint (1, (debugfile, "mutt_copy_bytes(): fwrite() returned short byte count\n")); */
+      /* dprintf(1, "fwrite() returned short byte count"); */
       return (-1);
     }
     size -= chunk;
@@ -470,9 +470,9 @@ int safe_rename (const char *src, const char *target)
         (lstat (target, &tsb) == 0) &&
         (compare_stat (&ssb, &tsb) == 0))
     {
-      dprint (1, (debugfile,
-                  "safe_rename: link (%s, %s) reported failure: %s (%d) but actually succeeded\n",
-                  src, target, strerror (errno), errno));
+      dprintf(1, "link (%s, %s) reported failure: "
+                 "%s (%d) but actually succeeded",
+                 src, target, strerror (errno), errno);
       goto success;
     }
 
@@ -490,7 +490,8 @@ int safe_rename (const char *src, const char *target)
      *
      */
 
-    dprint (1, (debugfile, "safe_rename: link (%s, %s) failed: %s (%d)\n", src, target, strerror (errno), errno));
+    dprintf(1, "link (%s, %s) failed: %s (%d)",
+               src, target, strerror (errno), errno);
 
     /*
      * FUSE may return ENOSYS. VFAT may return EPERM. FreeBSD's
@@ -505,13 +506,13 @@ int safe_rename (const char *src, const char *target)
 #endif
       )
     {
-      dprint (1, (debugfile, "safe_rename: trying rename...\n"));
+      dprintf(1, "trying rename...");
       if (rename (src, target) == -1)
       {
-        dprint (1, (debugfile, "safe_rename: rename (%s, %s) failed: %s (%d)\n", src, target, strerror (errno), errno));
+        dprintf(1, "rename (%s, %s) failed: %s (%d)", src, target, strerror (errno), errno);
         return -1;
       }
-      dprint (1, (debugfile, "safe_rename: rename succeeded.\n"));
+      dprintf(1, "rename succeeded.");
 
       return 0;
     }
@@ -532,15 +533,15 @@ int safe_rename (const char *src, const char *target)
    */
   if (lstat (src, &ssb) == -1)
   {
-    dprint (1, (debugfile, "safe_rename: can't stat %s: %s (%d)\n",
-                src, strerror (errno), errno));
+    dprintf(1, "can't stat %s: %s (%d)",
+                src, strerror (errno), errno);
     return -1;
   }
 
   if (lstat (target, &tsb) == -1)
   {
-    dprint (1, (debugfile, "safe_rename: can't stat %s: %s (%d)\n",
-                src, strerror (errno), errno));
+    dprintf(1, "can't stat %s: %s (%d)",
+                src, strerror (errno), errno);
     return -1;
   }
 
@@ -550,7 +551,7 @@ int safe_rename (const char *src, const char *target)
    */
   if (compare_stat (&ssb, &tsb) == -1)
   {
-    dprint (1, (debugfile, "safe_rename: stat blocks for %s and %s diverge; pretending EEXIST.\n", src, target));
+    dprintf(1, "stat blocks for %s and %s diverge; pretending EEXIST.", src, target);
     errno = EEXIST;
     return -1;
   }
@@ -563,8 +564,8 @@ success:
    */
   if (unlink (src) == -1)
   {
-    dprint (1, (debugfile, "safe_rename: unlink (%s) failed: %s (%d)\n",
-                src, strerror (errno), errno));
+    dprintf(1, "unlink (%s) failed: %s (%d)",
+                src, strerror (errno), errno);
   }
 
 
@@ -790,24 +791,6 @@ mutt_strsysexit(int e)
 }
 
 #ifdef DEBUG
-
-void mutt_debug (FILE *fp, const char *fmt, ...)
-{
-  va_list ap;
-  time_t now = time (NULL);
-  static char buf[23] = "";
-  static time_t last = 0;
-
-  if (now > last)
-  {
-    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", localtime (&now));
-    last = now;
-  }
-  fprintf (fp, "[%s] ", buf);
-  va_start (ap, fmt);
-  vfprintf (fp, fmt, ap);
-  va_end (ap);
-}
 
 void mutt_debug_f (const char *file, const int line, const char *function, const char *fmt, ...)
 {

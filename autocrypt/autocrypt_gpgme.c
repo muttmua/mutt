@@ -153,7 +153,7 @@ int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keyda
   if (!keyresult->fpr)
     goto cleanup;
   mutt_buffer_strcpy (keyid, keyresult->fpr);
-  dprint (1, (debugfile, "Generated key with id %s\n", mutt_b2s (keyid)));
+  dprintf (1, "Generated key with id %s", mutt_b2s (keyid));
 
   /* Get gpgme_key_t to create the secondary key and export keydata */
   err = gpgme_get_key (ctx, mutt_b2s (keyid), &primary_key, 0);
@@ -174,7 +174,7 @@ int mutt_autocrypt_gpgme_create_key (ADDRESS *addr, BUFFER *keyid, BUFFER *keyda
   /* get keydata */
   if (export_keydata (ctx, primary_key, keydata))
     goto cleanup;
-  dprint (1, (debugfile, "key has keydata *%s*\n", mutt_b2s (keydata)));
+  dprintf (1, "key has keydata *%s*", mutt_b2s (keydata));
 
   rv = 0;
 

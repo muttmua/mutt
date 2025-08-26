@@ -67,8 +67,8 @@ int mutt_socket_open (CONNECTION* conn)
 
   rc = conn->conn_open (conn);
 
-  dprint (2, (debugfile, "Connected to %s:%d on fd=%d\n",
-              NONULL (conn->account.host), conn->account.port, conn->fd));
+  dprintf(2, "Connected to %s:%d on fd=%d",
+              NONULL (conn->account.host), conn->account.port, conn->fd);
 
   return rc;
 }
@@ -78,7 +78,7 @@ int mutt_socket_close (CONNECTION* conn)
   int rc = -1;
 
   if (conn->fd < 0)
-    dprint (1, (debugfile, "mutt_socket_close: Attempt to close closed connection.\n"));
+    dprintf(1, "Attempt to close closed connection.");
   else
     rc = conn->conn_close (conn);
 
@@ -95,11 +95,11 @@ int mutt_socket_write_d (CONNECTION *conn, const char *buf, int len, int dbg)
   int rc;
   int sent = 0;
 
-  dprint (dbg, (debugfile,"%d> %s", conn->fd, buf));
+  dprintf(dbg, "%d> %s", conn->fd, buf);
 
   if (conn->fd < 0)
   {
-    dprint (1, (debugfile, "mutt_socket_write: attempt to write to closed connection\n"));
+    dprintf(1, "mutt_socket_write: attempt to write to closed connection");
     return -1;
   }
 
@@ -110,18 +110,16 @@ int mutt_socket_write_d (CONNECTION *conn, const char *buf, int len, int dbg)
   {
     if ((rc = conn->conn_write (conn, buf + sent, len - sent)) < 0)
     {
-      dprint (1, (debugfile,
-                  "mutt_socket_write: error writing (%s), closing socket\n",
-                  strerror(errno)));
+      dprintf(1, "mutt_socket_write: error writing (%s), closing socket",
+                  strerror(errno));
       mutt_socket_close (conn);
 
       return -1;
     }
 
     if (rc < len - sent)
-      dprint (3, (debugfile,
-                  "mutt_socket_write: short write (%d of %d bytes)\n", rc,
-                  len - sent));
+      dprintf(3, "mutt_socket_write: short write (%d of %d bytes)", rc,
+                  len - sent);
 
     sent += rc;
   }
@@ -183,7 +181,7 @@ int mutt_socket_readchar (CONNECTION *conn, char *c)
       conn->available = conn->conn_read (conn, conn->inbuf, sizeof (conn->inbuf));
     else
     {
-      dprint (1, (debugfile, "mutt_socket_readchar: attempt to read from closed connection.\n"));
+      dprintf(1, "attempt to read from closed connection.");
       return -1;
     }
     conn->bufpos = 0;
@@ -226,7 +224,7 @@ int mutt_socket_readln_d (char* buf, size_t buflen, CONNECTION* conn, int dbg)
     i--;
   buf[i] = '\0';
 
-  dprint (dbg, (debugfile, "%d< %s\n", conn->fd, buf));
+  dprintf(dbg, "%d< %s", conn->fd, buf);
 
   /* number of bytes read, not strlen */
   return i + 1;
@@ -259,7 +257,7 @@ int mutt_socket_buffer_readln_d (BUFFER *buf, CONNECTION *conn, int dbg)
       mutt_buffer_addch (buf, ch);
   }
 
-  dprint (dbg, (debugfile, "%d< %s\n", conn->fd, mutt_b2s (buf)));
+  dprintf(dbg, "%d< %s", conn->fd, mutt_b2s (buf));
 
   return 0;
 }
@@ -366,9 +364,9 @@ static int socket_preconnect (void)
 
   if (mutt_strlen (Preconnect))
   {
-    dprint (2, (debugfile, "Executing preconnect: %s\n", Preconnect));
+    dprintf(2, "Executing preconnect: %s", Preconnect);
     rc = mutt_system (Preconnect);
-    dprint (2, (debugfile, "Preconnect result: %d\n", rc));
+    dprintf(2, "Preconnect result: %d", rc);
     if (rc)
     {
       save_errno = errno;
@@ -403,7 +401,7 @@ static int socket_connect (int fd, struct sockaddr* sa)
 #endif
   else
   {
-    dprint (1, (debugfile, "Unknown address family!\n"));
+    dprintf(1, "Unknown address family!");
     return -1;
   }
 
@@ -437,23 +435,23 @@ static int socket_connect (int fd, struct sockaddr* sa)
   {
     struct timeval tv = { SocketReceiveTimeout, 0 };
     if (setsockopt (fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv)) < 0)
-      dprint (1, (debugfile, "socket_connect: error setting receive timeout (%s)\n",
-                  strerror(errno)));
+      dprintf(1, "error setting receive timeout (%s)",
+                  strerror(errno));
   }
 
   if (SocketSendTimeout > 0)
   {
     struct timeval tv = { SocketSendTimeout, 0 };
     if (setsockopt (fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv, sizeof(tv)) < 0)
-      dprint (1, (debugfile, "socket_connect: error setting send timeout (%s)\n",
-                  strerror(errno)));
+      dprintf(1, "error setting send timeout (%s)",
+                  strerror(errno));
   }
 
   if (connect (fd, sa, sa_size) < 0)
   {
     save_errno = errno;
-    dprint (2, (debugfile, "Connection failed. errno: %d...\n", errno));
-    SigInt = 0; /* reset in case we caught SIGINTR while in connect() */
+    dprintf(2, "Connection failed. errno: %d...", errno);
+    SigInt = 0;         /* reset in case we caught SIGINTR while in connect() */
   }
 
   if (ConnectTimeout > 0)

@@ -460,7 +460,7 @@ static int smtp_fill_account (ACCOUNT* account)
           SmtpPort = ntohs (service->s_port);
         else
           SmtpPort = SMTP_PORT;
-        dprint (3, (debugfile, "Using default SMTP port %d\n", SmtpPort));
+        dprintf(3, "Using default SMTP port %d", SmtpPort);
       }
       account->port = SmtpPort;
     }
@@ -583,7 +583,7 @@ static int smtp_auth (CONNECTION* conn)
       if (! method[0])
         continue;
 
-      dprint (2, (debugfile, "smtp_authenticate: Trying method %s\n", method));
+      dprintf(2, "smtp_authenticate: Trying method %s", method);
 
       if (!ascii_strcasecmp (method, "oauthbearer"))
       {
@@ -671,7 +671,7 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
 
   if (sasl_rc != SASL_OK && sasl_rc != SASL_CONTINUE)
   {
-    dprint (2, (debugfile, "smtp_auth_sasl: %s unavailable\n", NONULL (mechlist)));
+    dprintf(2, "%s unavailable", NONULL (mechlist));
     sasl_dispose (&saslconn);
     return SMTP_AUTH_UNAVAIL;
   }
@@ -705,7 +705,7 @@ static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
 
     if (mutt_buffer_from_base64 (temp_buf, mutt_b2s (smtp_response_buf)) < 0)
     {
-      dprint (1, (debugfile, "smtp_auth_sasl: error base64-decoding server response.\n"));
+      dprintf(1, "error base64-decoding server response.");
       goto fail;
     }
 
@@ -759,16 +759,15 @@ static int smtp_auth_gsasl (CONNECTION *conn, const char *method)
   chosen_mech = mutt_gsasl_get_mech (method, AuthMechs);
   if (!chosen_mech)
   {
-    dprint (2, (debugfile, "mutt_gsasl_get_mech() returned no usable mech\n"));
+    dprintf(2, "mutt_gsasl_get_mech() returned no usable mech");
     return SMTP_AUTH_UNAVAIL;
   }
 
-  dprint (2, (debugfile, "smtp_auth_gsasl: using mech %s\n", chosen_mech));
+  dprintf(2, "using mech %s", chosen_mech);
 
   if (mutt_gsasl_client_new (conn, chosen_mech, &gsasl_session) < 0)
   {
-    dprint (1, (debugfile,
-                "smtp_auth_gsasl: Error allocating GSASL connection.\n"));
+    dprintf(1, "Error allocating GSASL connection.");
     return SMTP_AUTH_UNAVAIL;
   }
 
@@ -791,8 +790,8 @@ static int smtp_auth_gsasl (CONNECTION *conn, const char *method)
     gsasl_rc = gsasl_step64 (gsasl_session, "", &gsasl_step_output);
     if (gsasl_rc != GSASL_NEEDS_MORE && gsasl_rc != GSASL_OK)
     {
-      dprint (1, (debugfile, "gsasl_step64() failed (%d): %s\n", gsasl_rc,
-                  gsasl_strerror (gsasl_rc)));
+      dprintf(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+                  gsasl_strerror (gsasl_rc));
       goto fail;
     }
 
@@ -837,8 +836,8 @@ static int smtp_auth_gsasl (CONNECTION *conn, const char *method)
     }
     else
     {
-      dprint (1, (debugfile, "gsasl_step64() failed (%d): %s\n", gsasl_rc,
-                  gsasl_strerror (gsasl_rc)));
+      dprintf(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+                  gsasl_strerror (gsasl_rc));
     }
   }
   while (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK);
@@ -859,7 +858,7 @@ fail:
   mutt_gsasl_client_finish (&gsasl_session);
 
   if (rc == SMTP_AUTH_FAIL)
-    dprint (2, (debugfile, "smtp_auth_gsasl: %s failed\n", chosen_mech));
+    dprintf(2, "%s failed", chosen_mech);
 
   return rc;
 }

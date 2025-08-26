@@ -121,7 +121,7 @@ static int is_from_forward_scan (const char *s,
       p = strchr(p + 4, ' ');
       if (!p)
       {
-        dprint (1, (debugfile, "is_from_forward_scan(): error parsing what appears to be a pipermail-style obscured return_path: %s\n", s));
+        dprintf(1, "error parsing what appears to be a pipermail-style obscured return_path: %s", s);
         return 0;
       }
     }
@@ -133,7 +133,7 @@ static int is_from_forward_scan (const char *s,
         len = pathsize - 1;
       memcpy (path, s, len);
       path[len] = 0;
-      dprint (3, (debugfile, "is_from_forward_scan(): got return path: %s\n", path));
+      dprintf(3, "got return path: %s", path);
     }
 
     s = p + 1;
@@ -143,7 +143,7 @@ static int is_from_forward_scan (const char *s,
 
     if (!is_day_name (s))
     {
-      dprint(1, (debugfile, "is_from_forward_scan():  expected weekday, got: %s\n", s));
+      dprintf(1, "expected weekday, got: %s", s);
       return 0;
     }
   }
@@ -263,8 +263,7 @@ static int is_from_reverse_scan (const char * const bos,
   cur = prev_word (bos, cur);
   if (!is_day_name (cur))
   {
-    dprint(1, (debugfile,
-               "is_from_reverse_scan():  expected weekday, got: %s\n", cur));
+    dprintf (1, "expected weekday, got: %s", cur);
     return 0;
   }
 
@@ -280,7 +279,7 @@ static int is_from_reverse_scan (const char * const bos,
       len = pathsize - 1;
     memcpy (path, bos, len);
     path[len] = 0;
-    dprint (3, (debugfile, "is_from_reverse_scan(): got return path: %s\n", path));
+    dprintf (3, "got return path: %s", path);
   }
 
   return 1;
@@ -311,7 +310,7 @@ int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mo
   if ((mode == MUTT_IS_FROM_PREFIX) && !(path || tp))
     return 1;
 
-  dprint (3, (debugfile, "\nis_from(): parsing: %s", s));
+  dprintf (3, "parsing: %s", s);
 
   switch (mode)
   {
@@ -334,9 +333,8 @@ int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mo
       return 0;
   }
 
-  dprint (3, (debugfile,
-              "is_from(): month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.\n",
-              tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year));
+  dprintf (3, "month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.",
+           tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year);
 
   if (tp)
   {

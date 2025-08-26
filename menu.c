@@ -799,7 +799,7 @@ void mutt_pop_current_menu (MUTTMENU *menu)
   if (!MenuStackCount ||
       (MenuStack[MenuStackCount - 1] != menu))
   {
-    dprint (1, (debugfile, "mutt_pop_current_menu() called with inactive menu\n"));
+    dprintf(1, "mutt_pop_current_menu() called with inactive menu");
     return;
   }
 

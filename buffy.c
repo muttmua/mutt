@@ -283,7 +283,7 @@ void mutt_buffy_add (const char *path, const char *label, int nopoll, int nonoti
   if (!path || !*path)
     return;
 
-  dprint (3, (debugfile, "mutt_buffy_add: %s\n", path));
+  dprintf(3, path);
 
   tmp = find_buffy_slot (path);
   if (!*tmp)
@@ -363,7 +363,7 @@ void mutt_buffy_remove (const char *path)
   if (!path || !*path)
     return;
 
-  dprint (3, (debugfile, "mutt_buffy_remove: %s\n", path));
+  dprintf(3, path);
 
   pbuffy = find_buffy_slot (path);
   if (*pbuffy)

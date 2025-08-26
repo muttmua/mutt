@@ -53,7 +53,7 @@ int mutt_complete (char *s, size_t slen)
   BUFFER *imap_path = NULL;
   int rc;
 
-  dprint (2, (debugfile, "mutt_complete: completing %s\n", s));
+  dprintf(2, "completing %s", s);
 
   imap_path = mutt_buffer_pool_get ();
   /* we can use '/' as a delimiter, imap_complete rewrites it */
@@ -134,8 +134,8 @@ int mutt_complete (char *s, size_t slen)
 
   if (dirp == NULL)
   {
-    dprint (1, (debugfile, "mutt_complete(): %s: %s (errno %d).\n",
-                mutt_b2s (exp_dirpart), strerror (errno), errno));
+    dprintf(1, "%s: %s (errno %d).",
+                mutt_b2s (exp_dirpart), strerror (errno), errno);
     goto cleanup;
   }
 

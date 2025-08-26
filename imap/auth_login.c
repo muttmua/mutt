@@ -52,10 +52,11 @@ imap_auth_res_t imap_auth_login (IMAP_DATA* idata, const char* method)
 #ifdef DEBUG
   /* don't print the password unless we're at the ungodly debugging level
    * of 5 or higher */
+  /* XXX what am I missing? This only prints the user, and doesn't need
+   * additional protection */
 
   if (debuglevel < IMAP_LOG_PASS)
-    dprint (2, (debugfile, "Sending LOGIN command for %s...\n",
-                idata->conn->account.user));
+    dprintf (2, "Sending LOGIN command for %s...", idata->conn->account.user);
 #endif
 
   snprintf (buf, sizeof (buf), "LOGIN %s %s", q_user, q_pass);

@@ -57,7 +57,7 @@ static int bcache_path(ACCOUNT *account, const char *mailbox, body_cache_t *bcac
   url.path = NULL;
   if (url_ciss_tostring (&url, host, sizeof (host), U_PATH) < 0)
   {
-    dprint (1, (debugfile, "bcache_path: URL to string failed\n"));
+    dprintf(1, "URL to string failed");
     return -1;
   }
 
@@ -69,7 +69,7 @@ static int bcache_path(ACCOUNT *account, const char *mailbox, body_cache_t *bcac
   if (*(dst->dptr - 1) != '/')
     mutt_buffer_addch (dst, '/');
 
-  dprint (3, (debugfile, "bcache_path: path: '%s'\n", mutt_b2s (dst)));
+  dprintf(3, "path: '%s'", mutt_b2s (dst));
   bcache->path = safe_strdup (mutt_b2s (dst));
 
   mutt_buffer_pool_release (&path);
@@ -117,8 +117,8 @@ FILE* mutt_bcache_get(body_cache_t *bcache, const char *id)
 
   fp = safe_fopen (mutt_b2s (path), "r");
 
-  dprint (3, (debugfile, "bcache: get: '%s': %s\n", mutt_b2s (path),
-              fp == NULL ? "no" : "yes"));
+  dprintf(3, "bcache: get: '%s': %s", mutt_b2s (path),
+              fp == NULL ? "no" : "yes");
 
   mutt_buffer_pool_release (&path);
   return fp;
@@ -159,7 +159,7 @@ FILE* mutt_bcache_put(body_cache_t *bcache, const char *id, int tmp)
   }
 
 out:
-  dprint (3, (debugfile, "bcache: put: '%s'\n", mutt_b2s (path)));
+  dprintf(3, "bcache: put: '%s'", mutt_b2s (path));
   mutt_buffer_pool_release (&path);
   return fp;
 }
@@ -192,8 +192,7 @@ int mutt_bcache_move(body_cache_t* bcache, const char* id, const char* newid)
   mutt_buffer_printf (path, "%s%s", bcache->path, id);
   mutt_buffer_printf (newpath, "%s%s", bcache->path, newid);
 
-  dprint (3, (debugfile, "bcache: mv: '%s' '%s'\n",
-              mutt_b2s (path), mutt_b2s (newpath)));
+  dprintf(3, "bcache: mv: '%s' '%s'", mutt_b2s (path), mutt_b2s (newpath));
 
   rv = rename (mutt_b2s (path), mutt_b2s (newpath));
 
@@ -214,7 +213,7 @@ int mutt_bcache_del(body_cache_t *bcache, const char *id)
   mutt_buffer_addstr (path, bcache->path);
   mutt_buffer_addstr (path, id);
 
-  dprint (3, (debugfile, "bcache: del: '%s'\n", mutt_b2s (path)));
+  dprintf(3, "bcache: del: '%s'", mutt_b2s (path));
 
   rv = unlink (mutt_b2s (path));
 
@@ -240,8 +239,8 @@ int mutt_bcache_exists(body_cache_t *bcache, const char *id)
   else
     rc = S_ISREG(st.st_mode) && st.st_size != 0 ? 0 : -1;
 
-  dprint (3, (debugfile, "bcache: exists: '%s': %s\n",
-              mutt_b2s (path), rc == 0 ? "yes" : "no"));
+  dprintf(3, "bcache: exists: '%s': %s",
+              mutt_b2s (path), rc == 0 ? "yes" : "no");
 
   mutt_buffer_pool_release (&path);
   return rc;
@@ -260,7 +259,7 @@ int mutt_bcache_list(body_cache_t *bcache,
 
   rc = 0;
 
-  dprint (3, (debugfile, "bcache: list: dir: '%s'\n", bcache->path));
+  dprintf(3, "bcache: list: dir: '%s'", bcache->path);
 
   while ((de = readdir (d)))
   {
@@ -268,7 +267,7 @@ int mutt_bcache_list(body_cache_t *bcache,
         mutt_strncmp (de->d_name, "..", 2) == 0)
       continue;
 
-    dprint (3, (debugfile, "bcache: list: dir: '%s', id :'%s'\n", bcache->path, de->d_name));
+    dprintf(3, "bcache: list: dir: '%s', id :'%s'", bcache->path, de->d_name);
 
     if (want_id && want_id (de->d_name, bcache, data) != 0)
       goto out;
@@ -282,6 +281,6 @@ out:
     if (closedir (d) < 0)
       rc = -1;
   }
-  dprint (3, (debugfile, "bcache: list: did %d entries\n", rc));
+  dprintf(3, "bcache: list: did %d entries", rc);
   return rc;
 }

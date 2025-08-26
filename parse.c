@@ -167,7 +167,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
   if (allow_value_spaces)
     mutt_buffer_increase_size (buffer, mutt_strlen (s));
 
-  dprint (2, (debugfile, "parse_parameters: `%s'\n", s));
+  dprintf(2, "`%s'", s);
 
   while (*s)
   {
@@ -175,7 +175,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
 
     if ((p = strpbrk (s, "=;")) == NULL)
     {
-      dprint(1, (debugfile, "parse_parameters: malformed parameter: %s\n", s));
+      dprintf(1, "malformed parameter: %s", s);
       goto bail;
     }
 
@@ -192,7 +192,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
        */
       if (i == 0)
       {
-        dprint(1, (debugfile, "parse_parameters: missing attribute: %s\n", s));
+        dprintf(1, "missing attribute: %s", s);
         new = NULL;
       }
       else
@@ -254,9 +254,9 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
       {
         new->value = safe_strdup (mutt_b2s (buffer));
 
-        dprint (2, (debugfile, "parse_parameter: `%s' = `%s'\n",
+        dprintf(2, "parse_parameter: `%s' = `%s'",
                     new->attribute ? new->attribute : "",
-                    new->value ? new->value : ""));
+                    new->value ? new->value : "");
 
         /* Add this parameter to the list */
         if (head)
@@ -270,7 +270,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
     }
     else
     {
-      dprint (1, (debugfile, "parse_parameters(): parameter with no value: %s\n", s));
+      dprintf(1, "parameter with no value: %s", s);
       s = p;
     }
 
@@ -534,13 +534,13 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
       c = skip_email_wsp(c + 1);
       if (!*c)
       {
-        dprint (1, (debugfile, "mutt_read_mime_header(): skipping empty header field: %s\n", line));
+        dprintf(1, "skipping empty header field: %s", line);
         continue;
       }
     }
     else
     {
-      dprint (1, (debugfile, "read_mime_header: bogus MIME header: %s\n", line));
+      dprintf(1, "read_mime_header: bogus MIME header: %s", line);
       break;
     }
 
@@ -603,7 +603,7 @@ static void _parse_part (FILE *fp, BODY *b, int *counter)
 
   if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
-    dprint (1, (debugfile, "mutt_parse_part(): recurse level too deep. giving up!\n"));
+    dprintf(1, "recurse level too deep. giving up!");
     return;
   }
   recurse_level++;
@@ -970,7 +970,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
           sec = 0;
         else
         {
-          dprint(1, (debugfile, "parse_date: could not process time format: %s\n", t));
+          dprintf(1, "parse_date: could not process time format: %s", t);
           return(-1);
         }
         tm.tm_hour = hour;
@@ -1035,7 +1035,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
 
   if (count < 4) /* don't check for missing timezone */
   {
-    dprint(1,(debugfile, "parse_date(): error parsing date format, using received time\n"));
+    dprintf(1, "error parsing date format, using received time");
     return (-1);
   }
 
@@ -1653,7 +1653,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
         }
 
         if (e->spam && e->spam->data)
-          dprint(5, (debugfile, "p822: spam = %s\n", e->spam->data));
+          dprintf(5, "p822: spam = %s", e->spam->data);
       }
     }
 
@@ -1686,14 +1686,14 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
 
     if (hdr->received < 0)
     {
-      dprint(1,(debugfile,"read_rfc822_header(): resetting invalid received time to 0\n"));
+      dprintf(1, "read_rfc822_header(): resetting invalid received time to 0");
       hdr->received = 0;
     }
 
     /* check for missing or invalid date */
     if (hdr->date_sent <= 0)
     {
-      dprint(1,(debugfile,"read_rfc822_header(): no date found, using received time from msg separator\n"));
+      dprintf(1, "read_rfc822_header(): no date found, using received time from msg separator");
       hdr->date_sent = hdr->received;
     }
 
@@ -1752,18 +1752,19 @@ static int count_body_parts_check(LIST **checklist, BODY *b, int dflt)
   for (type = *checklist; type; type = type->next)
   {
     a = (ATTACH_MATCH *)type->data;
-    dprint(5, (debugfile, "cbpc: %s %d/%s ?? %s/%s [%d]... ",
-               dflt ? "[OK]   " : "[EXCL] ",
-               b->type, b->subtype, a->major, a->minor, a->major_int));
     if ((a->major_int == TYPEANY || a->major_int == b->type) &&
         !regexec(&a->minor_rx, b->subtype, 0, NULL, 0))
     {
-      dprint(5, (debugfile, "yes\n"));
+      dprintf(5, "cbpc: %s %d/%s ?? %s/%s [%d]... yes",
+                 dflt ? "[OK]   " : "[EXCL] ",
+                 b->type, b->subtype, a->major, a->minor, a->major_int);
       return 1;
     }
     else
     {
-      dprint(5, (debugfile, "no\n"));
+      dprintf(5, "cbpc: %s %d/%s ?? %s/%s [%d]... no",
+                 dflt ? "[OK]   " : "[EXCL] ",
+                 b->type, b->subtype, a->major, a->minor, a->major_int);
     }
   }
 
@@ -1788,11 +1789,11 @@ static int count_body_parts (BODY *body, int flags)
     AT_COUNT("default");
     shallrecurse = 0;
 
-    dprint(5, (debugfile, "bp: desc=\"%s\"; fn=\"%s\", type=\"%d/%s\"\n",
+    dprintf(5, "bp: desc=\"%s\"; fn=\"%s\", type=\"%d/%s\"",
                bp->description ? bp->description : ("none"),
                bp->filename ? bp->filename :
                bp->d_filename ? bp->d_filename : "(none)",
-               bp->type, bp->subtype ? bp->subtype : "*"));
+               bp->type, bp->subtype ? bp->subtype : "*");
 
     if (bp->type == TYPEMESSAGE)
     {
@@ -1874,18 +1875,18 @@ static int count_body_parts (BODY *body, int flags)
       count++;
     bp->attach_qualifies = shallcount ? 1 : 0;
 
-    dprint(5, (debugfile, "cbp: %p shallcount = %d\n", (void *)bp, shallcount));
+    dprintf(5, "cbp: %p shallcount = %d", (void *)bp, shallcount);
 
     if (shallrecurse)
     {
-      dprint(5, (debugfile, "cbp: %p pre count = %d\n", (void *)bp, count));
+      dprintf(5, "cbp: %p pre count = %d", (void *)bp, count);
       bp->attach_count = count_body_parts(bp->parts, recurse_flags);
       count += bp->attach_count;
-      dprint(5, (debugfile, "cbp: %p post count = %d\n", (void *)bp, count));
+      dprintf(5, "cbp: %p post count = %d", (void *)bp, count);
     }
   }
 
-  dprint(5, (debugfile, "bp: return %d\n", count < 0 ? 0 : count));
+  dprintf(5, "bp: return %d", count < 0 ? 0 : count);
   return count < 0 ? 0 : count;
 }
 

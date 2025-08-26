@@ -113,14 +113,14 @@ static int monitor_init (void)
     INotifyFd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
     if (INotifyFd == -1)
     {
-      dprint (2, (debugfile, "monitor: inotify_init1 failed, errno=%d %s\n", errno, strerror(errno)));
+      dprintf(2, "monitor: inotify_init1 failed, errno=%d %s", errno, strerror(errno));
       return -1;
     }
 #else
     INotifyFd = inotify_init();
     if (INotifyFd == -1)
     {
-      dprint (2, (debugfile, "monitor: inotify_init failed, errno=%d %s\n", errno, strerror(errno)));
+      dprintf(2, "monitor: inotify_init failed, errno=%d %s", errno, strerror(errno));
       return -1;
     }
     fcntl(INotifyFd, F_SETFL, O_NONBLOCK);
@@ -205,10 +205,10 @@ static int monitor_handle_ignore (int descr)
     if (iter->magic == MUTT_MH && stat (iter->mh_backup_path, &sb) == 0)
     {
       if ((new_descr = inotify_add_watch (INotifyFd, iter->mh_backup_path, INOTIFY_MASK_FILE)) == -1)
-        dprint (2, (debugfile, "monitor: inotify_add_watch failed for '%s', errno=%d %s\n", iter->mh_backup_path, errno, strerror(errno)));
+        dprintf(2, "monitor: inotify_add_watch failed for '%s', errno=%d %s", iter->mh_backup_path, errno, strerror(errno));
       else
       {
-        dprint (3, (debugfile, "monitor: inotify_add_watch descriptor=%d for '%s'\n", descr, iter->mh_backup_path));
+        dprintf(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, iter->mh_backup_path);
         iter->st_dev = sb.st_dev;
         iter->st_ino = sb.st_ino;
         iter->descr = new_descr;
@@ -216,7 +216,7 @@ static int monitor_handle_ignore (int descr)
     }
     else
     {
-      dprint (3, (debugfile, "monitor: cleanup watch (implicitly removed) - descriptor=%d\n", descr));
+      dprintf(3, "monitor: cleanup watch (implicitly removed) - descriptor=%d", descr);
     }
 
     if (MonitorContextDescriptor == descr)
@@ -263,7 +263,7 @@ int mutt_monitor_poll (void)
       rc = -1;
       if (errno != EINTR)
       {
-        dprint (2, (debugfile, "monitor: poll() failed, errno=%d %s\n", errno, strerror(errno)));
+        dprintf(2, "monitor: poll() failed, errno=%d %s", errno, strerror(errno));
       }
     }
     else
@@ -281,7 +281,7 @@ int mutt_monitor_poll (void)
           else if (PollFds[i].fd == INotifyFd)
           {
             MonitorFilesChanged = 1;
-            dprint (3, (debugfile, "monitor: file change(s) detected\n"));
+            dprintf(3, "monitor: file change(s) detected");
             int len;
             char *ptr = buf;
             const struct inotify_event *event;
@@ -292,16 +292,16 @@ int mutt_monitor_poll (void)
               if (len == -1)
               {
                 if (errno != EAGAIN)
-                  dprint (2, (debugfile, "monitor: read inotify events failed, errno=%d %s\n",
-                              errno, strerror(errno)));
+                  dprintf(2, "monitor: read inotify events failed, errno=%d %s",
+                              errno, strerror(errno));
                 break;
               }
 
               while (ptr < buf + len)
               {
                 event = (const struct inotify_event *) ptr;
-                dprint (5, (debugfile, "monitor:  + detail: descriptor=%d mask=0x%x\n",
-                            event->wd, event->mask));
+                dprintf(5, "monitor:  + detail: descriptor=%d mask=0x%x",
+                            event->wd, event->mask);
                 if (event->mask & IN_IGNORED)
                   monitor_handle_ignore (event->wd);
                 else if (event->wd == MonitorContextDescriptor)
@@ -420,12 +420,12 @@ int mutt_monitor_add (BUFFY *buffy)
   if ((INotifyFd == -1 && monitor_init () == -1)
       || (descr = inotify_add_watch (INotifyFd, info.path, mask)) == -1)
   {
-    dprint (2, (debugfile, "monitor: inotify_add_watch failed for '%s', errno=%d %s\n", info.path, errno, strerror(errno)));
+    dprintf(2, "monitor: inotify_add_watch failed for '%s', errno=%d %s", info.path, errno, strerror(errno));
     rc = -1;
     goto cleanup;
   }
 
-  dprint (3, (debugfile, "monitor: inotify_add_watch descriptor=%d for '%s'\n", descr, info.path));
+  dprintf(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, info.path);
   if (!buffy)
     MonitorContextDescriptor = descr;
 
@@ -485,7 +485,7 @@ int mutt_monitor_remove (BUFFY *buffy)
   }
 
   inotify_rm_watch(info.monitor->descr, INotifyFd);
-  dprint (3, (debugfile, "monitor: inotify_rm_watch for '%s' descriptor=%d\n", info.path, info.monitor->descr));
+  dprintf(3, "monitor: inotify_rm_watch for '%s' descriptor=%d", info.path, info.monitor->descr);
 
   monitor_delete (info.monitor);
   monitor_check_free ();

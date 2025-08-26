@@ -247,9 +247,8 @@ void mutt_buffer_pool_init (void)
 
 void mutt_buffer_pool_free (void)
 {
-  dprint (1, (debugfile,
-              "mutt_buffer_pool_free: %zu of %zu returned to pool\n",
-              BufferPoolCount, BufferPoolLen));
+  dprintf(1, "%zu of %zu returned to pool",
+             BufferPoolCount, BufferPoolLen);
 
   while (BufferPoolCount)
     mutt_buffer_free (&BufferPool[--BufferPoolCount]);
@@ -273,7 +272,7 @@ void mutt_buffer_pool_release (BUFFER **pbuf)
 
   if (BufferPoolCount >= BufferPoolLen)
   {
-    dprint (1, (debugfile, "Internal buffer pool error\n"));
+    dprintf(1, "Internal buffer pool error");
     mutt_buffer_free (pbuf);
     return;
   }

@@ -80,7 +80,7 @@ int mutt_autocrypt_schema_init (void)
 
   if (sqlite3_exec (AutocryptDB, schema, NULL, NULL, &errmsg) != SQLITE_OK)
   {
-    dprint (1, (debugfile, "mutt_autocrypt_schema_init() returned %s\n", errmsg));
+    dprintf (1, "mutt_autocrypt_schema_init() returned %s", errmsg);
     sqlite3_free (errmsg);
     return -1;
   }

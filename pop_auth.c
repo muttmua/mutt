@@ -60,7 +60,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
 
   if (mutt_sasl_client_new (pop_data->conn, &saslconn) < 0)
   {
-    dprint (1, (debugfile, "pop_auth_sasl: Error allocating SASL connection.\n"));
+    dprintf(1, "Error allocating SASL connection.");
     return POP_A_FAILURE;
   }
 
@@ -77,7 +77,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
 
   if (rc != SASL_OK && rc != SASL_CONTINUE)
   {
-    dprint (1, (debugfile, "pop_auth_sasl: Failure starting authentication exchange. No shared mechanisms?\n"));
+    dprintf(1, "Failure starting authentication exchange. No shared mechanisms?");
 
     /* SASL doesn't support suggested mechanisms, so fall back */
     sasl_dispose (&saslconn);
@@ -122,7 +122,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     if (!mutt_strncmp (inbuf, "+ ", 2)
         && sasl_decode64 (inbuf+2, strlen (inbuf+2), buf, bufsize - 1, &len) != SASL_OK)
     {
-      dprint (1, (debugfile, "pop_auth_sasl: error base64-decoding server response.\n"));
+      dprintf(1, "error base64-decoding server response.");
 
       /* Some server implementations may send non-base64-encoded challenge,
        * which is against RFC 5034. However, for certain SASL mechanism, e.g.
@@ -168,7 +168,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
       }
       if (sasl_encode64 (pc, olen, buf, bufsize, &olen) != SASL_OK)
       {
-        dprint (1, (debugfile, "pop_auth_sasl: error base64-encoding client response.\n"));
+        dprintf(1, "error base64-encoding client response.");
         goto bail;
       }
     }
@@ -219,16 +219,15 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
   chosen_mech = mutt_gsasl_get_mech (method, pop_data->auth_list);
   if (!chosen_mech)
   {
-    dprint (2, (debugfile, "mutt_gsasl_get_mech() returned no usable mech\n"));
+    dprintf(2, "mutt_gsasl_get_mech() returned no usable mech");
     return POP_A_UNAVAIL;
   }
 
-  dprint (2, (debugfile, "pop_auth_gsasl: using mech %s\n", chosen_mech));
+  dprintf(2, "using mech %s", chosen_mech);
 
   if (mutt_gsasl_client_new (pop_data->conn, chosen_mech, &gsasl_session) < 0)
   {
-    dprint (1, (debugfile,
-                "pop_auth_gsasl: Error allocating GSASL connection.\n"));
+    dprintf(1, "Error allocating GSASL connection.");
     return POP_A_UNAVAIL;
   }
 
@@ -278,8 +277,8 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
     }
     else
     {
-      dprint (1, (debugfile, "gsasl_step64() failed (%d): %s\n", gsasl_rc,
-                  gsasl_strerror (gsasl_rc)));
+      dprintf(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+                  gsasl_strerror (gsasl_rc));
     }
   }
   while (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK);
@@ -300,7 +299,7 @@ fail:
 
   if (rc == POP_A_FAILURE)
   {
-    dprint (2, (debugfile, "pop_auth_gsasl: %s failed\n", chosen_mech));
+    dprintf(2, "%s failed", chosen_mech);
     mutt_error _("SASL authentication failed.");
     mutt_sleep (2);
   }
@@ -400,14 +399,14 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
     {
       pop_data->cmd_user = 1;
 
-      dprint (1, (debugfile, "pop_auth_user: set USER capability\n"));
+      dprintf(1, "set USER capability");
     }
 
     if (ret == -2)
     {
       pop_data->cmd_user = 0;
 
-      dprint (1, (debugfile, "pop_auth_user: unset USER capability\n"));
+      dprintf(1, "unset USER capability");
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
                 _("Command USER is not supported by server."));
     }
@@ -573,7 +572,7 @@ int pop_authenticate (POP_DATA* pop_data)
       comma = strchr (method, ':');
       if (comma)
         *comma++ = '\0';
-      dprint (2, (debugfile, "pop_authenticate: Trying method %s\n", method));
+      dprintf(2, "Trying method %s", method);
       authenticator = pop_authenticators;
 
       while (authenticator->authenticate)
@@ -614,7 +613,7 @@ int pop_authenticate (POP_DATA* pop_data)
   else
   {
     /* Fall back to default: any authenticator */
-    dprint (2, (debugfile, "pop_authenticate: Using any available method.\n"));
+    dprintf(2, "Using any available method.");
     authenticator = pop_authenticators;
 
     while (authenticator->authenticate)

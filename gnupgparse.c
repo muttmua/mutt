@@ -139,7 +139,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
   else
     memset (&tmp, 0, sizeof (tmp));
 
-  dprint (2, (debugfile, "parse_pub_line: buf = `%s'\n", buf));
+  dprintf(2, "buf = `%s'", buf);
 
   for (p = buf; p; p = pend)
   {
@@ -156,7 +156,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
     {
       case 1:                   /* record type */
       {
-        dprint (2, (debugfile, "record type: %s\n", p));
+        dprintf(2, "record type: %s", p);
 
         if (!mutt_strcmp (p, "pub"))
           is_pub = 1;
@@ -180,7 +180,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       }
       case 2:                   /* trust info */
       {
-        dprint (2, (debugfile, "trust info: %s\n", p));
+        dprintf(2, "trust info: %s", p);
 
         switch (*p)
         {                               /* look only at the first letter */
@@ -214,7 +214,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       }
       case 3:                   /* key length  */
       {
-        dprint (2, (debugfile, "key len: %s\n", p));
+        dprintf(2, "key len: %s", p);
 
         if (!(*is_subkey && option (OPTPGPIGNORESUB)) &&
             mutt_atos (p, &tmp.keylen, MUTT_ATOI_ALLOW_EMPTY) < 0)
@@ -223,7 +223,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       }
       case 4:                   /* pubkey algo */
       {
-        dprint (2, (debugfile, "pubkey algorithm: %s\n", p));
+        dprintf(2, "pubkey algorithm: %s", p);
 
         if (!(*is_subkey && option (OPTPGPIGNORESUB)))
         {
@@ -237,7 +237,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       }
       case 5:                   /* 16 hex digits with the long keyid. */
       {
-        dprint (2, (debugfile, "key id: %s\n", p));
+        dprintf(2, "key id: %s", p);
 
         if (!(*is_subkey && option (OPTPGPIGNORESUB)))
           mutt_str_replace (&tmp.keyid, p);
@@ -246,7 +246,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       }
       case 6:                   /* timestamp (1998-02-28) */
       {
-        dprint (2, (debugfile, "time stamp: %s\n", p));
+        dprintf(2, "time stamp: %s", p);
 
         if (strchr (p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
         {
@@ -317,7 +317,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         if (!is_uid && (*is_subkey && option (OPTPGPIGNORESUB)))
           break;
 
-        dprint (2, (debugfile, "user ID: %s\n", NONULL (p)));
+        dprintf(2, "user ID: %s", NONULL (p));
 
         uid = safe_calloc (sizeof (pgp_uid_t), 1);
         fix_uid (p);
@@ -337,7 +337,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       case 11:                  /* signature class  */
         break;
       case 12:                  /* key capabilities */
-        dprint (2, (debugfile, "capabilities info: %s\n", p));
+        dprintf(2, "capabilities info: %s", p);
 
         while (*p)
         {
@@ -386,7 +386,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
   return k;
 
 bail:
-  dprint(5,(debugfile,"parse_pub_line: invalid number: '%s'\n", p));
+  dprintf(5, "invalid number: '%s'", p);
   return NULL;
 }
 

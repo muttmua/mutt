@@ -277,12 +277,12 @@ static void tls_get_client_cert (CONNECTION* conn)
 
   if (gnutls_x509_crt_init (&clientcrt) < 0)
   {
-    dprint (1, (debugfile, "Failed to init gnutls crt\n"));
+    dprintf(1, "Failed to init gnutls crt");
     return;
   }
   if (gnutls_x509_crt_import (clientcrt, crtdata, GNUTLS_X509_FMT_DER) < 0)
   {
-    dprint (1, (debugfile, "Failed to import gnutls client crt\n"));
+    dprintf(1, "Failed to import gnutls client crt");
     goto err;
   }
 
@@ -296,7 +296,7 @@ static void tls_get_client_cert (CONNECTION* conn)
     if (gnutls_x509_crt_get_dn_by_oid (clientcrt, GNUTLS_OID_X520_COMMON_NAME,
                                        0, 0, cn, &cnlen) < 0)
       goto err;
-    dprint (2, (debugfile, "client certificate CN: %s\n", cn));
+    dprintf(2, "client certificate CN: %s", cn);
 
     /* if we are using a client cert, SASL may expect an external auth name */
     mutt_account_getuser (&conn->account);
@@ -445,7 +445,7 @@ static int tls_negotiate (CONNECTION * conn)
 
   if (SslClientCert)
   {
-    dprint (2, (debugfile, "Using client certificate %s\n", SslClientCert));
+    dprintf(2, "Using client certificate %s", SslClientCert);
     gnutls_certificate_set_x509_key_file (data->xcred, SslClientCert,
                                           SslClientCert, GNUTLS_X509_FMT_PEM);
   }
@@ -879,7 +879,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
 
   if (option (OPTNOCURSES))
   {
-    dprint (1, (debugfile, "tls_check_one_certificate: unable to prompt for certificate in batch mode\n"));
+    dprintf(1, "unable to prompt for certificate in batch mode");
     mutt_error _("Untrusted server certificate");
     return 0;
   }
@@ -1260,7 +1260,7 @@ static int tls_check_certificate (CONNECTION* conn)
                                                           &cert_list[i],
                                                           GNUTLS_X509_FMT_DER);
       if (rcsettrust != 1)
-        dprint (1, (debugfile, "error trusting certificate %d: %d\n", i, rcsettrust));
+        dprintf(1, "error trusting certificate %d: %d", i, rcsettrust);
 
       if (tls_verify_peers (state, &certstat) != 0)
         return 0;

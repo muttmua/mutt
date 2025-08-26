@@ -107,7 +107,7 @@ int mutt_edit_headers (const char *editor,
     stat (mutt_b2s (sctx->tempfile), &st);
     if (sctx->tempfile_mtime == st.st_mtime)
     {
-      dprint (1, (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
+      dprintf(1, "temp file was not modified.");
       /* the file has not changed! */
       mutt_unlink (mutt_b2s (sctx->tempfile));
       goto cleanup;

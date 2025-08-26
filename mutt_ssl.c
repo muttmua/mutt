@@ -118,7 +118,7 @@ static int ssl_load_certificates (SSL_CTX *ctx)
   char buf[STRING];
 #endif
 
-  dprint (2, (debugfile, "ssl_load_certificates: loading trusted certificates\n"));
+  dprintf(2, "loading trusted certificates");
   store = SSL_CTX_get_cert_store (ctx);
   if (!store)
   {
@@ -134,8 +134,8 @@ static int ssl_load_certificates (SSL_CTX *ctx)
     if ((X509_cmp_current_time (X509_get0_notBefore (cert)) >= 0) ||
         (X509_cmp_current_time (X509_get0_notAfter (cert)) <= 0))
     {
-      dprint (2, (debugfile, "ssl_load_certificates: filtering expired cert: %s\n",
-                  X509_NAME_oneline (X509_get_subject_name (cert), buf, sizeof (buf))));
+      dprintf(2, "filtering expired cert: %s",
+                  X509_NAME_oneline (X509_get_subject_name (cert), buf, sizeof (buf)));
     }
     else
     {
@@ -167,14 +167,14 @@ static int ssl_set_verify_partial (SSL_CTX *ctx)
       X509_VERIFY_PARAM_set_flags(param, X509_V_FLAG_PARTIAL_CHAIN);
       if (0 == SSL_CTX_set1_param(ctx, param))
       {
-        dprint (2, (debugfile, "ssl_set_verify_partial: SSL_CTX_set1_param() failed."));
+        dprintf(2, "SSL_CTX_set1_param() failed.");
         rv = -1;
       }
       X509_VERIFY_PARAM_free(param);
     }
     else
     {
-      dprint (2, (debugfile, "ssl_set_verify_partial: X509_VERIFY_PARAM_new() failed."));
+      dprintf(2, "X509_VERIFY_PARAM_new() failed.");
       rv = -1;
     }
   }
@@ -224,7 +224,7 @@ static int mutt_ssl_setup_common (CONNECTION *conn, long ssl_options)
    */
   if (! (data->ctx = SSL_CTX_new (SSLv23_client_method())))
   {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL_CTX\n"));
+    dprintf(1, "mutt_ssl_starttls: Error allocating SSL_CTX");
     mutt_error (_("Unable to create SSL context"));
     ssl_dprint_err_stack ();
     goto bail_ssldata;
@@ -254,13 +254,13 @@ static int mutt_ssl_setup_common (CONNECTION *conn, long ssl_options)
   {
     if (! SSL_CTX_set_default_verify_paths (data->ctx))
     {
-      dprint (1, (debugfile, "mutt_ssl_starttls: Error setting default verify paths\n"));
+      dprintf(1, "mutt_ssl_starttls: Error setting default verify paths");
       goto bail_ctx;
     }
   }
 
   if (SslCertFile && !ssl_load_certificates (data->ctx))
-    dprint (1, (debugfile, "mutt_ssl_setup_common: Error loading trusted certificates\n"));
+    dprintf(1, "Error loading trusted certificates");
 
   ssl_get_client_cert (data, conn);
 
@@ -268,7 +268,7 @@ static int mutt_ssl_setup_common (CONNECTION *conn, long ssl_options)
   {
     if (!SSL_CTX_set_cipher_list (data->ctx, SslCiphers))
     {
-      dprint (1, (debugfile, "mutt_ssl_setup_common: Could not select preferred ciphers\n"));
+      dprintf(1, "Could not select preferred ciphers");
       goto bail_ctx;
     }
   }
@@ -281,13 +281,13 @@ static int mutt_ssl_setup_common (CONNECTION *conn, long ssl_options)
 
   if (! (data->ssl = SSL_new (data->ctx)))
   {
-    dprint (1, (debugfile, "mutt_ssl_setup_common: Error allocating SSL\n"));
+    dprintf(1, "Error allocating SSL");
     goto bail_ctx;
   }
 
   if (SSL_set_fd (data->ssl, conn->fd) != 1)
   {
-    dprint (1, (debugfile, "mutt_ssl_setup_common: Error setting fd\n"));
+    dprintf(1, "Error setting fd");
     goto bail_ssl;
   }
 
@@ -552,14 +552,14 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
   {
     if ((HostExDataIndex = SSL_get_ex_new_index (0, "host", NULL, NULL, NULL)) == -1)
     {
-      dprint (1, (debugfile, "failed to get index for application specific data\n"));
+      dprintf(1, "failed to get index for application specific data");
       return -1;
     }
   }
 
   if (! SSL_set_ex_data (ssldata->ssl, HostExDataIndex, hostname))
   {
-    dprint (1, (debugfile, "failed to save hostname in SSL structure\n"));
+    dprintf(1, "failed to save hostname in SSL structure");
     return -1;
   }
 
@@ -567,14 +567,14 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
   {
     if ((SkipModeExDataIndex = SSL_get_ex_new_index (0, "skip", NULL, NULL, NULL)) == -1)
     {
-      dprint (1, (debugfile, "failed to get index for application specific data\n"));
+      dprintf(1, "failed to get index for application specific data");
       return -1;
     }
   }
 
   if (! SSL_set_ex_data (ssldata->ssl, SkipModeExDataIndex, NULL))
   {
-    dprint (1, (debugfile, "failed to save skip mode in SSL structure\n"));
+    dprintf(1, "failed to save skip mode in SSL structure");
     return -1;
   }
 
@@ -708,7 +708,7 @@ static void ssl_err (sslsockdata *data, int err)
       errmsg = "unknown error";
   }
 
-  dprint (1, (debugfile, "SSL error: %s\n", errmsg));
+  dprintf(1, "SSL error: %s", errmsg);
 }
 
 static void ssl_dprint_err_stack (void)
@@ -727,7 +727,7 @@ static void ssl_dprint_err_stack (void)
     output = safe_malloc (buflen + 1);
     memcpy (output, buf, buflen);
     output[buflen] = '\0';
-    dprint (1, (debugfile, "SSL error stack: %s\n", output));
+    dprintf(1, "SSL error stack: %s", output);
     FREE (&output);
   }
   BIO_free (bio);
@@ -840,7 +840,7 @@ static int check_certificate_expiration (X509 *peercert, int silent)
     {
       if (!silent)
       {
-        dprint (2, (debugfile, "Server certificate is not yet valid\n"));
+        dprintf(2, "Server certificate is not yet valid");
         mutt_error (_("Server certificate is not yet valid"));
         mutt_sleep (2);
       }
@@ -850,7 +850,7 @@ static int check_certificate_expiration (X509 *peercert, int silent)
     {
       if (!silent)
       {
-        dprint (2, (debugfile, "Server certificate has expired\n"));
+        dprintf(2, "Server certificate has expired");
         mutt_error (_("Server certificate has expired"));
         mutt_sleep (2);
       }
@@ -1050,7 +1050,7 @@ out:
 
 static int ssl_cache_trusted_cert (X509 *c)
 {
-  dprint (1, (debugfile, "ssl_cache_trusted_cert: trusted\n"));
+  dprintf(1, "trusted");
   if (!SslSessionCerts)
     SslSessionCerts = sk_X509_new_null();
   return (sk_X509_push (SslSessionCerts, X509_dup(c)));
@@ -1076,12 +1076,12 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
 
   if (! (ssl = X509_STORE_CTX_get_ex_data (ctx, SSL_get_ex_data_X509_STORE_CTX_idx ())))
   {
-    dprint (1, (debugfile, "ssl_verify_callback: failed to retrieve SSL structure from X509_STORE_CTX\n"));
+    dprintf(1, "failed to retrieve SSL structure from X509_STORE_CTX");
     return 0;
   }
   if (! (host = SSL_get_ex_data (ssl, HostExDataIndex)))
   {
-    dprint (1, (debugfile, "ssl_verify_callback: failed to retrieve hostname from SSL structure\n"));
+    dprintf(1, "failed to retrieve hostname from SSL structure");
     return 0;
   }
 
@@ -1097,10 +1097,9 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
   pos = X509_STORE_CTX_get_error_depth (ctx);
   len = sk_X509_num (X509_STORE_CTX_get0_chain (ctx));
 
-  dprint (1, (debugfile,
-              "ssl_verify_callback: checking cert chain entry %s (preverify: %d skipmode: %d)\n",
+  dprintf(1, "checking cert chain entry %s (preverify: %d skipmode: %d)",
               X509_NAME_oneline (X509_get_subject_name (cert), buf, sizeof (buf)),
-              preverify_ok, skip_mode));
+              preverify_ok, skip_mode);
 
 #ifdef HAVE_SSL_PARTIAL_CHAIN
   /* Sometimes, when a certificate is (s)kipped, OpenSSL will pass it
@@ -1114,8 +1113,7 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
       if (X509_digest (last_cert, EVP_sha256(), last_cert_md, &last_cert_mdlen) &&
           !compare_certificates (cert, last_cert, last_cert_md, last_cert_mdlen))
       {
-        dprint (2, (debugfile,
-                    "ssl_verify_callback: ignoring duplicate skipped certificate.\n"));
+        dprintf(2, "ignoring duplicate skipped certificate.");
         return 1;
       }
     }
@@ -1130,7 +1128,7 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
   /* check session cache first */
   if (check_certificate_cache (cert))
   {
-    dprint (2, (debugfile, "ssl_verify_callback: using cached certificate\n"));
+    dprintf(2, "using cached certificate");
     SSL_set_ex_data (ssl, SkipModeExDataIndex, NULL);
     return 1;
   }
@@ -1147,7 +1145,7 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
        * for hostname mismatches. */
       return interactive_check_cert (cert, pos, len, ssl, 0);
     }
-    dprint (2, (debugfile, "ssl_verify_callback: hostname check passed\n"));
+    dprintf(2, "hostname check passed");
   }
 
   if (!preverify_ok || skip_mode)
@@ -1155,7 +1153,7 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
     /* automatic check from user's database */
     if (SslCertFile && check_certificate_by_digest (cert))
     {
-      dprint (2, (debugfile, "ssl_verify_callback: digest check passed\n"));
+      dprintf(2, "digest check passed");
       SSL_set_ex_data (ssl, SkipModeExDataIndex, NULL);
       return 1;
     }
@@ -1166,7 +1164,7 @@ static int ssl_verify_callback (int preverify_ok, X509_STORE_CTX *ctx)
       int err = X509_STORE_CTX_get_error (ctx);
       snprintf (buf, sizeof (buf), "%s (%d)",
                 X509_verify_cert_error_string (err), err);
-      dprint (2, (debugfile, "X509_verify_cert: %s\n", buf));
+      dprintf(2, "X509_verify_cert: %s", buf);
     }
 #endif
 
@@ -1201,7 +1199,7 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
 
   if (option (OPTNOCURSES))
   {
-    dprint (1, (debugfile, "interactive_check_cert: unable to prompt for certificate in batch mode\n"));
+    dprintf(1, "unable to prompt for certificate in batch mode");
     mutt_error _("Untrusted server certificate");
     return 0;
   }
@@ -1358,7 +1356,7 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   mutt_buffer_pool_release (&drow);
   mutt_pop_current_menu (menu);
   mutt_menuDestroy (&menu);
-  dprint (2, (debugfile, "ssl interactive_check_cert: done=%d\n", done));
+  dprintf(2, "ssl interactive_check_cert: done=%d", done);
   return (done == 2);
 }
 
@@ -1366,7 +1364,7 @@ static void ssl_get_client_cert(sslsockdata *ssldata, CONNECTION *conn)
 {
   if (SslClientCert)
   {
-    dprint (2, (debugfile, "Using client certificate %s\n", SslClientCert));
+    dprintf(2, "Using client certificate %s", SslClientCert);
     SSL_CTX_set_default_passwd_cb_userdata(ssldata->ctx, &conn->account);
     SSL_CTX_set_default_passwd_cb(ssldata->ctx, ssl_passwd_cb);
     SSL_CTX_use_certificate_file(ssldata->ctx, SslClientCert, SSL_FILETYPE_PEM);

@@ -61,7 +61,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
         {
           if (mutt_strcmp (a->mailbox, u->data) == 0) /* alias already found */
           {
-            dprint (1, (debugfile, "mutt_expand_aliases_r(): loop in alias found for '%s'\n", a->mailbox));
+            dprintf(1, "loop in alias found for '%s'", a->mailbox);
             i = 1;
             break;
           }
@@ -638,54 +638,54 @@ int mutt_addr_is_user (ADDRESS *addr)
 
   if (!addr)
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: no, NULL address\n"));
+    dprintf(5, "no, NULL address");
     return 0;
   }
   if (!addr->mailbox)
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: no, no mailbox\n"));
+    dprintf(5, "no, no mailbox");
     return 0;
   }
 
   if (ascii_strcasecmp (addr->mailbox, Username) == 0)
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s = %s\n", addr->mailbox, Username));
+    dprintf(5, "yes, %s = %s", addr->mailbox, Username);
     return 1;
   }
   if (string_is_address(addr->mailbox, Username, Hostname))
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s = %s @ %s \n", addr->mailbox, Username, Hostname));
+    dprintf(5, "yes, %s = %s @ %s ", addr->mailbox, Username, Hostname);
     return 1;
   }
   fqdn = mutt_fqdn (0);
   if (string_is_address(addr->mailbox, Username, fqdn))
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s = %s @ %s \n", addr->mailbox, Username, NONULL(fqdn)));
+    dprintf(5, "yes, %s = %s @ %s ", addr->mailbox, Username, NONULL(fqdn));
     return 1;
   }
   fqdn = mutt_fqdn (1);
   if (string_is_address(addr->mailbox, Username, fqdn))
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s = %s @ %s \n", addr->mailbox, Username, NONULL(fqdn)));
+    dprintf(5, "yes, %s = %s @ %s ", addr->mailbox, Username, NONULL(fqdn));
     return 1;
   }
 
   if (From && !ascii_strcasecmp (From->mailbox, addr->mailbox))
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s = %s\n", addr->mailbox, From->mailbox));
+    dprintf(5, "yes, %s = %s", addr->mailbox, From->mailbox);
     return 1;
   }
 
   if (mutt_match_rx_list (addr->mailbox, Alternates))
   {
-    dprint (5, (debugfile, "mutt_addr_is_user: yes, %s matched by alternates.\n", addr->mailbox));
+    dprintf(5, "yes, %s matched by alternates.", addr->mailbox);
     if (mutt_match_rx_list (addr->mailbox, UnAlternates))
-      dprint (5, (debugfile, "mutt_addr_is_user: but, %s matched by unalternates.\n", addr->mailbox));
+      dprintf(5, "but, %s matched by unalternates.", addr->mailbox);
     else
       return 1;
   }
 
-  dprint (5, (debugfile, "mutt_addr_is_user: no, all failed.\n"));
+  dprintf(5, "no, all failed.");
   return 0;
 }
 

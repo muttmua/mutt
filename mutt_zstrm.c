@@ -66,12 +66,12 @@ static int mutt_zstrm_close (CONNECTION* conn)
   zstrmctx* zctx = conn->sockdata;
   int rc = zctx->next_conn.conn_close (&zctx->next_conn);
 
-  dprint (4, (debugfile, "zstrm_close: read %llu->%llu (%.1fx) "
-        "wrote %llu<-%llu (%.1fx)\n",
+  dprintf(4, "zstrm_close: read %llu->%llu (%.1fx) "
+        "wrote %llu<-%llu (%.1fx)",
         zctx->read.z.total_in, zctx->read.z.total_out,
         (float)zctx->read.z.total_out / (float)zctx->read.z.total_in,
         zctx->write.z.total_in, zctx->write.z.total_out,
-        (float)zctx->write.z.total_in / (float)zctx->write.z.total_out));
+        (float)zctx->write.z.total_in / (float)zctx->write.z.total_out);
 
   conn->sockdata   = zctx->next_conn.sockdata;
   conn->conn_open  = zctx->next_conn.conn_open;
@@ -107,8 +107,7 @@ retry:
   {
     rc = zctx->next_conn.conn_read (&zctx->next_conn,
         zctx->read.buf, zctx->read.len);
-    dprint (4, (debugfile, "zstrm_read: consuming data from next "
-        "stream: %d bytes\n", rc));
+    dprintf(4, "zstrm_read: consuming data from next stream: %d bytes", rc);
     if (rc < 0)
       return rc;
     else if (rc == 0)
@@ -123,10 +122,9 @@ retry:
   zctx->read.z.next_out = (Bytef*) buf;
 
   zrc = inflate (&zctx->read.z, Z_SYNC_FLUSH);
-  dprint (4, (debugfile, "zstrm_read: rc=%d, "
-        "consumed %u/%u bytes, produced %u/%u bytes\n", zrc,
-        zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
-        len - zctx->read.z.avail_out, len));
+  dprintf(4, "zstrm_read: rc=%d, consumed %u/%u bytes, produced %u/%u bytes",
+          zrc, zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
+          len - zctx->read.z.avail_out, len);
 
   /* shift any remaining input data to the front of the buffer */
   if ((Bytef*) zctx->read.buf != zctx->read.z.next_in)
@@ -142,26 +140,26 @@ retry:
       if (zrc == 0)
       {
         /* there was progress, so must have been reading input */
-        dprint (4, (debugfile, "zstrm_read: inflate just consumed\n"));
+        dprintf(4, "zstrm_read: inflate just consumed");
         goto retry;
       }
       break;
     case Z_STREAM_END:  /* everything flushed, nothing remaining */
-      dprint (4, (debugfile, "zstrm_read: inflate returned Z_STREAM_END.\n"));
+      dprintf(4, "zstrm_read: inflate returned Z_STREAM_END.");
       zrc = len - zctx->read.z.avail_out;  /* "returned" bytes */
       zctx->read.stream_eof = 1;
       break;
     case Z_BUF_ERROR:  /* no progress was possible */
       if (!zctx->read.conn_eof)
       {
-        dprint (5, (debugfile, "zstrm_read: inflate returned Z_BUF_ERROR. retrying.\n"));
+        dprintf(5, "zstrm_read: inflate returned Z_BUF_ERROR. retrying.");
         goto retry;
       }
       zrc = 0;
       break;
     default:
       /* bail on other rcs, such as Z_DATA_ERROR, or Z_MEM_ERROR */
-      dprint (4, (debugfile, "zstrm_read: inflate returned %d. aborting.\n", zrc));
+      dprintf(4, "zstrm_read: inflate returned %d. aborting.", zrc);
       zrc = -1;
       break;
   }
@@ -173,9 +171,9 @@ static int mutt_zstrm_poll (CONNECTION* conn, time_t wait_secs)
 {
   zstrmctx* zctx = conn->sockdata;
 
-  dprint (4, (debugfile, "zstrm_poll: %s\n",
-        zctx->read.z.avail_out == 0 || zctx->read.pos > 0 ?
-        "last read wrote full buffer" : "falling back on next stream"));
+  dprintf(4, "zstrm_poll: %s",
+          zctx->read.z.avail_out == 0 || zctx->read.pos > 0 ?
+          "last read wrote full buffer" : "falling back on next stream");
   if (zctx->read.z.avail_out == 0 || zctx->read.pos > 0)
     return 1;
   else
@@ -202,14 +200,13 @@ static int mutt_zstrm_write (CONNECTION* conn, const char* buf, size_t count)
       /* push out produced data to the underlying stream */
       zctx->write.pos = zctx->write.len - zctx->write.z.avail_out;
       wbufp = zctx->write.buf;
-      dprint (4, (debugfile, "zstrm_write: deflate consumed %d/%d bytes\n",
-          count - zctx->write.z.avail_in, count));
+      dprintf(4, "zstrm_write: deflate consumed %d/%d bytes",
+          count - zctx->write.z.avail_in, count);
       while (zctx->write.pos > 0)
       {
         rc = zctx->next_conn.conn_write (&zctx->next_conn,
             wbufp, zctx->write.pos);
-        dprint (4, (debugfile, "zstrm_write: next stream wrote: %d bytes\n",
-            rc));
+        dprintf(4, "zstrm_write: next stream wrote: %d bytes", rc);
         if (rc < 0)
           return -1;  /* we can't recover from write failure */
 
