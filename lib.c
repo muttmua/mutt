@@ -509,7 +509,7 @@ int safe_rename (const char *src, const char *target)
       dprintf(1, "trying rename...");
       if (rename (src, target) == -1)
       {
-        dprintf(1, "rename (%s, %s) failed: %s (%d)", src, target, strerror (errno), errno);
+        deprintf(1, "rename (%s, %s) failed", src, target);
         return -1;
       }
       dprintf(1, "rename succeeded.");
@@ -792,7 +792,7 @@ mutt_strsysexit(int e)
 
 #ifdef DEBUG
 
-void mutt_debug_f (const char *file, const int line, const char *function, const char *fmt, ...)
+void mutt_debug_f (const char *file, const int line, const char *function, const int err, const char *fmt, ...)
 {
   va_list ap;
   time_t now = time (NULL);
@@ -813,6 +813,10 @@ void mutt_debug_f (const char *file, const int line, const char *function, const
   va_start (ap, fmt);
   vfprintf (debugfile, fmt, ap);
   va_end (ap);
+
+  /* include passed errno? */
+  if (err)
+    fprintf (debugfile, " [errno %d %s]", err, strerror(err));
 
   /* because we always print a line header, in dprintf() we auto-newline */
   if (strchr(fmt, '\n') == NULL)

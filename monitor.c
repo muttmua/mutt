@@ -113,14 +113,14 @@ static int monitor_init (void)
     INotifyFd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
     if (INotifyFd == -1)
     {
-      dprintf(2, "monitor: inotify_init1 failed, errno=%d %s", errno, strerror(errno));
+      deprintf(2, "monitor: inotify_init1 failed");
       return -1;
     }
 #else
     INotifyFd = inotify_init();
     if (INotifyFd == -1)
     {
-      dprintf(2, "monitor: inotify_init failed, errno=%d %s", errno, strerror(errno));
+      deprintf(2, "monitor: inotify_init failed");
       return -1;
     }
     fcntl(INotifyFd, F_SETFL, O_NONBLOCK);
@@ -205,7 +205,7 @@ static int monitor_handle_ignore (int descr)
     if (iter->magic == MUTT_MH && stat (iter->mh_backup_path, &sb) == 0)
     {
       if ((new_descr = inotify_add_watch (INotifyFd, iter->mh_backup_path, INOTIFY_MASK_FILE)) == -1)
-        dprintf(2, "monitor: inotify_add_watch failed for '%s', errno=%d %s", iter->mh_backup_path, errno, strerror(errno));
+        deprintf(2, "monitor: inotify_add_watch failed for '%s'", iter->mh_backup_path);
       else
       {
         dprintf(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, iter->mh_backup_path);
@@ -263,7 +263,7 @@ int mutt_monitor_poll (void)
       rc = -1;
       if (errno != EINTR)
       {
-        dprintf(2, "monitor: poll() failed, errno=%d %s", errno, strerror(errno));
+        deprintf(2, "monitor: poll() failed");
       }
     }
     else
@@ -292,8 +292,7 @@ int mutt_monitor_poll (void)
               if (len == -1)
               {
                 if (errno != EAGAIN)
-                  dprintf(2, "monitor: read inotify events failed, errno=%d %s",
-                              errno, strerror(errno));
+                  deprintf(2, "monitor: read inotify events failed");
                 break;
               }
 
@@ -420,7 +419,7 @@ int mutt_monitor_add (BUFFY *buffy)
   if ((INotifyFd == -1 && monitor_init () == -1)
       || (descr = inotify_add_watch (INotifyFd, info.path, mask)) == -1)
   {
-    dprintf(2, "monitor: inotify_add_watch failed for '%s', errno=%d %s", info.path, errno, strerror(errno));
+    deprintf(2, "monitor: inotify_add_watch failed for '%s'", info.path);
     rc = -1;
     goto cleanup;
   }

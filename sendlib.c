@@ -929,8 +929,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
 
   if ((fp = fopen (fname, "r")) == NULL)
   {
-    dprintf(1, "%s: %s (errno %d).",
-                fname, strerror (errno), errno);
+    deprintf(1, fname);
     return (NULL);
   }
 

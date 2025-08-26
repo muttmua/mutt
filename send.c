@@ -1947,8 +1947,8 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
 
     if (!tempfp)
     {
-      dprintf(1, "newsend_message: can't create tempfile %s (errno=%d)",
-                 sctx->msg->content->filename, errno);
+      deprintf(1, "newsend_message: can't create tempfile %s",
+                 sctx->msg->content->filename);
       mutt_perror (sctx->msg->content->filename);
       goto cleanup;
     }

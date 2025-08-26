@@ -521,8 +521,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
         decode_state.fpout = safe_fopen(mutt_b2s (pagerfile), "w");
         if (!decode_state.fpout)
         {
-          dprintf(1, "safe_fopen(%s) errno=%d %s",
-                mutt_b2s (pagerfile), errno, strerror(errno));
+          deprintf(1, "safe_fopen(%s)", mutt_b2s (pagerfile));
           mutt_perror(mutt_b2s (pagerfile));
           mutt_sleep(1);
           goto return_error;
@@ -533,8 +532,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
         decode_state.flags = MUTT_CHARCONV;
         mutt_decode_attachment(a, &decode_state);
         if (fclose(decode_state.fpout) == EOF)
-          dprintf(1, "fclose errno=%d %s",
-                 mutt_b2s (pagerfile), errno, strerror(errno));
+          deprintf(1, "fclose", mutt_b2s (pagerfile));
       }
       else
       {

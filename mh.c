@@ -1485,8 +1485,7 @@ static int maildir_mh_open_message (CONTEXT *ctx, MESSAGE *msg, int msgno,
   if (!msg->fp)
   {
     mutt_perror (mutt_b2s (path));
-    dprintf(1, "fopen: %s: %s (errno %d).",
-                mutt_b2s (path), strerror (errno), errno);
+    deprintf(1, "fopen: %s", mutt_b2s (path));
     rc = -1;
   }
 

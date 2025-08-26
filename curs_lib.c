@@ -639,7 +639,7 @@ static void curses_message (int error, const char *fmt, va_list ap)
   vsnprintf (scratch, sizeof (scratch), fmt, ap);
   error_history_add (scratch);
 
-  dprintf(1, scratch);
+  deprintf(1, scratch);
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
                       0, MuttMessageWindow->cols, FMT_LEFT, 0, scratch, sizeof (scratch), 0);
 
@@ -712,7 +712,7 @@ void mutt_progress_init (progress_t* progress, const char *msg,
     return;
   }
   if (gettimeofday (&tv, NULL) < 0)
-    dprintf(1, "gettimeofday failed: %d", errno);
+    deprintf(1, "gettimeofday failed");
   /* if timestamp is 0 no time-based suppression is done */
   if (TimeInc)
     progress->timestamp_millis = ((unsigned long long) tv.tv_sec * 1000ULL)
@@ -1005,8 +1005,7 @@ void mutt_perror (const char *s)
 {
   const char *p = strerror (errno);
 
-  dprintf(1, "%s: %s (errno = %d)", s,
-              p ? p : "unknown error", errno);
+  deprintf(1, s);
   mutt_error ("%s: %s (errno = %d)", s, p ? p : _("unknown error"), errno);
 }
 

@@ -64,11 +64,11 @@ static int getnameinfo_err(int ret)
       err=SASL_FAIL; /* no real equivalent */
       break;
     case EAI_SYSTEM:
-      dprintf(1, "A system error occurred.  The error code can be found in errno(%d,%s)).",errno,strerror(errno));
+      deprintf(1, "A system error occurred.");
       err=SASL_FAIL; /* no real equivalent */
       break;
     default:
-      dprintf(1, "Unknown error %d",ret);
+      dprintf(1, "Unknown error %d", ret);
       err=SASL_FAIL; /* no real equivalent */
       break;
   }

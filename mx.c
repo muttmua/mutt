@@ -208,7 +208,7 @@ int mx_lock_file (const char *path, int fd, int excl, int dot, int timeout)
   attempt = 0;
   while (fcntl (fd, F_SETLK, &lck) == -1)
   {
-    dprintf(1, "fcntl errno %d.", errno);
+    deprintf(1, "fcntl");
     if (errno != EAGAIN && errno != EACCES)
     {
       mutt_perror ("fcntl");
@@ -405,8 +405,7 @@ int mx_get_magic (const char *path)
 
   if (stat (path, &st) == -1)
   {
-    dprintf(1, "unable to stat %s: %s (errno %d).",
-                path, strerror (errno), errno);
+    deprintf(1, "unable to stat %s", path);
     return (-1);
   }
 

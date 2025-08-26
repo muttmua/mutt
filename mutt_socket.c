@@ -450,7 +450,7 @@ static int socket_connect (int fd, struct sockaddr* sa)
   if (connect (fd, sa, sa_size) < 0)
   {
     save_errno = errno;
-    dprintf(2, "Connection failed. errno: %d...", errno);
+    deprintf(2, "Connection failed");
     SigInt = 0;         /* reset in case we caught SIGINTR while in connect() */
   }
 

@@ -970,8 +970,7 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
                       suffix ? "." : "", NONULL (suffix));
   dprintf(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
   if (unlink (mutt_b2s (buf)) && errno != ENOENT)
-    dprintf(1, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)",
-                src, line, mutt_b2s (buf), strerror (errno), errno);
+    deprintf(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
 }
 
 void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
@@ -990,8 +989,7 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                src, line, slen, n);
   dprintf(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, s);
   if (unlink (s) && errno != ENOENT)
-    dprintf(1, "%s:%d: ERROR: unlink(\"%s\"): %s (errno %d)",
-               src, line, s, strerror (errno), errno);
+    deprintf(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, s);
 }
 
 /* these characters must be escaped in regular expressions */
@@ -1670,7 +1668,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
         else
         {
           /* read error */
-          dprintf(1, "error reading from fmtpipe: %s (errno=%d)", strerror(errno), errno);
+          deprintf(1, "error reading from fmtpipe");
           *wptr = 0;
         }
       }

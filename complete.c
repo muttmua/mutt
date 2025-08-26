@@ -134,8 +134,7 @@ int mutt_complete (char *s, size_t slen)
 
   if (dirp == NULL)
   {
-    dprintf(1, "%s: %s (errno %d).",
-                mutt_b2s (exp_dirpart), strerror (errno), errno);
+    deprintf(1, mutt_b2s (exp_dirpart));
     goto cleanup;
   }
 
