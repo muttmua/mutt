@@ -639,7 +639,7 @@ static void curses_message (int error, const char *fmt, va_list ap)
   vsnprintf (scratch, sizeof (scratch), fmt, ap);
   error_history_add (scratch);
 
-  deprintf(1, scratch);
+  deprintf(1, "%s", scratch);
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
                       0, MuttMessageWindow->cols, FMT_LEFT, 0, scratch, sizeof (scratch), 0);
 

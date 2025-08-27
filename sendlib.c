@@ -929,7 +929,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
 
   if ((fp = fopen (fname, "r")) == NULL)
   {
-    deprintf(1, fname);
+    deprintf(1, "%s", fname);
     return (NULL);
   }
 
