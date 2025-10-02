@@ -1,3 +1,116 @@
+2025-10-02 13:18:22 +0800  Kevin McCarthy  <kevin@8t8.us> (b2db4087)
+
+        * Update UPDATING file for 2.2.15 release.
+
+M	UPDATING
+
+2025-09-20 10:41:24 +0800  Kevin McCarthy  <kevin@8t8.us> (b363b602)
+
+        * Add SMTP gsasl auth workaround for broken Microsoft servers.
+        
+        It appears some Microsoft servers append a non-BASE64 encoded response
+        to what should be an empty challenge to the initial AUTH sent by the
+        client.
+        
+        It's not RFC compliant, so gsasl rightly rejects the response.
+        However, this doesn't help poor mutt users to authenticate.
+        
+        To work around this, check the response for the initial reply only,
+        and if it's not BASE64 decodable, just drop the response.  It is
+        mostly likely meaningless, and would have resulted in the AUTH failing
+        regardless.
+        
+        Thanks to Frank Reker for the bug report and proposed patch, which
+        this is based upon.
+
+M	smtp.c
+
+2025-08-26 13:30:32 +0800  Kevin McCarthy  <kevin@8t8.us> (b4771a9d)
+
+        * Add documentation about <buffy-cycle> and its keybinding.
+        
+        Add a subsection to the "Editing Input Fields" section of the manual,
+        explaining about the <buffy-cycle> function, and when it is used.
+        
+        Also, add an explanation for a previously undocumented behavior: in
+        other filename and mailbox prompts, typing the <buffy-cycle> key
+        binding falls back and invokes the <complete> function.
+        
+        Mention the <quote-char> function, as a useful way to enter a literal
+        space, instead of invoking <buffy-cycle> or <complete> when typing
+        space.
+
+M	doc/manual.xml.head
+
+2025-08-26 10:32:22 +0800  Kevin McCarthy  <kevin@8t8.us> (467e919f)
+
+        * Fix isdigit() argument to unsigned char in pager is_ansi() call.
+        
+        In a refactor, in commit 0ac6b609cd9e4588f00221b5c66e0fd5f584da88 a
+        few years ago, I inadvertantly changed the type of the is_ansi()
+        parameter, and thus changed the isdigit() argument to char.
+        
+        This is not allowed, and needs to be cast to (unsigned char) for
+        correct behavior on some platforms.
+        
+        Thanks to Thomas Klausner (@_wiz_) for pointing out the bug and for
+        the patch.
+
+M	pager.c
+
+2025-05-03 19:24:57 +0800  Kevin McCarthy  <kevin@8t8.us> (47ed1d21)
+
+        * Fix .builds files to reference new srht repository.
+
+M	.builds/alpine.yml
+M	.builds/debian.yml
+M	.builds/freebsd.yml
+
+2025-05-03 19:06:44 +0800  Kevin McCarthy  <kevin@8t8.us> (42d9a016)
+
+        * Improve the my_hdr documentation.
+        
+        Try to make it clearer that it can only be used for custom header
+        fields and a certain set of standard header fields.
+
+M	doc/manual.xml.head
+
+2025-04-26 11:42:21 +0800  Kevin McCarthy  <kevin@8t8.us> (61a66d03)
+
+        * Remove deprecated AC_PROG_CC_C99 call.
+        
+        The test and setting of $ac_cv_prog_cc_c99 is done by AC_PROG_CC now.
+
+M	configure.ac
+
+2025-03-13 15:28:55 +0800  Kevin McCarthy  <kevin@8t8.us> (dacd6a50)
+
+        * Fix interleaved search/limit for IMAP mailboxes.
+        
+        mutt_search_command() and mutt_pattern_func() both invoke
+        imap_search() for IMAP mailboxes.  Additionally, mutt_search_command()
+        uses the header->searched flag to cache search results for faster
+        repeated matching.
+        
+        Interleaving a search, followed by a limit, followed by another search
+        (with the exact same pattern) did not invalidate the previous search.
+        The limit imap_search() cleared all the match flags, and set them to
+        the results of the limit imap_search().  The second search for the
+        same pattern tried to use the matched flag for headers with cached
+        results, resulting in incorrect search results.
+        
+        Many thanks to Mikhail (@MikZyth) for the very detailed bug report,
+        allowing me to easily track down the bug.
+
+M	imap/imap.c
+
+2025-02-20 10:58:56 +0800  Kevin McCarthy  <kevin@8t8.us> (516568dc)
+
+        * automatic post-release commit for mutt-2.2.14
+
+M	ChangeLog
+M	VERSION
+
 2025-02-20 10:20:51 +0800  Kevin McCarthy  <kevin@8t8.us> (59908c2b)
 
         * Update UPDATING file for 2.2.14 release.
