@@ -612,10 +612,13 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
 
   hostname = SslVerifyHostOverride ? SslVerifyHostOverride : conn->account.host;
 
-  if ((HostExDataIndex = SSL_get_ex_new_index (0, "host", NULL, NULL, NULL)) == -1)
+  if (HostExDataIndex == -1)
   {
-    dprint (1, (debugfile, "failed to get index for application specific data\n"));
-    return -1;
+    if ((HostExDataIndex = SSL_get_ex_new_index (0, "host", NULL, NULL, NULL)) == -1)
+    {
+      dprint (1, (debugfile, "failed to get index for application specific data\n"));
+      return -1;
+    }
   }
 
   if (! SSL_set_ex_data (ssldata->ssl, HostExDataIndex, hostname))
@@ -624,10 +627,13 @@ static int ssl_negotiate (CONNECTION *conn, sslsockdata* ssldata)
     return -1;
   }
 
-  if ((SkipModeExDataIndex = SSL_get_ex_new_index (0, "skip", NULL, NULL, NULL)) == -1)
+  if (SkipModeExDataIndex == -1)
   {
-    dprint (1, (debugfile, "failed to get index for application specific data\n"));
-    return -1;
+    if ((SkipModeExDataIndex = SSL_get_ex_new_index (0, "skip", NULL, NULL, NULL)) == -1)
+    {
+      dprint (1, (debugfile, "failed to get index for application specific data\n"));
+      return -1;
+    }
   }
 
   if (! SSL_set_ex_data (ssldata->ssl, SkipModeExDataIndex, NULL))
