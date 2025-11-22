@@ -1,3 +1,25 @@
+2025-11-22 10:55:45 +0800  Kevin McCarthy  <kevin@8t8.us> (8b81a856)
+
+        * Update UPDATING file for 2.2.16 release.
+
+M	UPDATING
+
+2025-11-08 21:28:50 +1000  Jonathan Matthew  <jmatthew@openbsd.org> (49aad685)
+
+        * mutt_ssl: only allocate exdata indices once
+        
+        We don't need a new index for each connection, so allocating a new
+        one each time is at best a memory leak.
+
+M	mutt_ssl.c
+
+2025-10-02 13:34:15 +0800  Kevin McCarthy  <kevin@8t8.us> (2b349c5e)
+
+        * automatic post-release commit for mutt-2.2.15
+
+M	ChangeLog
+M	VERSION
+
 2025-10-02 13:18:22 +0800  Kevin McCarthy  <kevin@8t8.us> (b2db4087)
 
         * Update UPDATING file for 2.2.15 release.
