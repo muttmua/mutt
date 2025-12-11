@@ -212,7 +212,12 @@ smtp_rcpt_to (CONNECTION * conn, const ADDRESS * a)
     if (mutt_socket_write (conn, buf) == -1)
       return smtp_err_write;
     if ((r = smtp_get_resp (conn)))
+    {
+      mutt_sleep (2);
+      mutt_error (_("SMTP session failed: cannot add recipient <%s>"),
+                  a->mailbox);
       return r;
+    }
     a = a->next;
   }
 
