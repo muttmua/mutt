@@ -1,6 +1,6 @@
 # French messages for Mutt.
-# Copyright (C) 1998-2025 Marc Baudoin <babafou@babafou.eu.org>, Vincent Lefevre <vincent@vinc17.net>
-# Marc Baudoin <babafou@babafou.eu.org>, Vincent Lefevre <vincent@vinc17.net>, 1998-2025
+# Copyright (C) 1998-2026 Marc Baudoin <babafou@babafou.eu.org>, Vincent Lefevre <vincent@vinc17.net>
+# Marc Baudoin <babafou@babafou.eu.org>, Vincent Lefevre <vincent@vinc17.net>, 1998-2026
 #
 # Traductions possibles de "timestamp":
 # _ horodatage
@@ -33,10 +33,10 @@
 # , fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 2.2.15\n"
+"Project-Id-Version: Mutt 2.2.16\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2025-10-03 12:18+0200\n"
-"PO-Revision-Date: 2025-10-03 13:10+0200\n"
+"POT-Creation-Date: 2026-01-07 16:28+0100\n"
+"PO-Revision-Date: 2026-01-07 16:32+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language: fr\n"
@@ -100,7 +100,7 @@ msgstr "Sélectionner"
 #. L10N: localized names of RFC 2369 list operations
 #: addrbook.c:41 autocrypt/autocrypt_acct_menu.c:62 background.c:175
 #: background.c:367 browser.c:49 compose.c:143 crypt-gpgme.c:4568
-#: curs_main.c:575 history.c:78 listmenu.c:61 mutt_ssl.c:1295
+#: curs_main.c:575 history.c:78 listmenu.c:61 mutt_ssl.c:1301
 #: mutt_ssl_gnutls.c:1071 pager.c:2144 pattern.c:2175 pgpkey.c:526
 #: postpone.c:45 query.c:54 recvattach.c:63 smime.c:466
 msgid "Help"
@@ -2144,7 +2144,7 @@ msgstr "gpgme_op_keylist_next a échoué : %s"
 msgid "All matching keys are marked expired/revoked."
 msgstr "Toutes les clés correspondantes sont marquées expirées/révoquées."
 
-#: crypt-gpgme.c:4560 mutt_ssl.c:1293 mutt_ssl_gnutls.c:1069 pgpkey.c:519
+#: crypt-gpgme.c:4560 mutt_ssl.c:1299 mutt_ssl_gnutls.c:1069 pgpkey.c:519
 #: smime.c:461
 msgid "Exit  "
 msgstr "Quitter  "
@@ -2379,7 +2379,7 @@ msgstr "L'historique des erreurs est actuellement affiché."
 msgid "Error History"
 msgstr "Historique des erreurs"
 
-#: curs_lib.c:1010 mutt_socket.c:712 mutt_ssl.c:600
+#: curs_lib.c:1010 mutt_socket.c:712 mutt_ssl.c:606
 msgid "unknown error"
 msgstr "erreur inconnue"
 
@@ -3078,7 +3078,7 @@ msgstr "unhook : type hook inconnu : %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook : impossible de supprimer un %s à l'intérieur d'un %s."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:637
+#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
 msgid "No authenticators available"
 msgstr "Pas d'authentificateurs disponibles"
 
@@ -3122,7 +3122,7 @@ msgstr "La connexion a échoué."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:675 smtp.c:771 smtp.c:877
+#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Authentification (%s)..."
@@ -3218,11 +3218,11 @@ msgstr "Fermeture de la connexion à %s..."
 msgid "This IMAP server is ancient. Mutt does not work with it."
 msgstr "Ce serveur IMAP est trop ancien. Mutt ne marche pas avec."
 
-#: imap/imap.c:499 pop_lib.c:296 smtp.c:519
+#: imap/imap.c:499 pop_lib.c:296 smtp.c:524
 msgid "Secure connection with TLS?"
 msgstr "Connexion sécurisée avec TLS ?"
 
-#: imap/imap.c:509 pop_lib.c:316 smtp.c:531
+#: imap/imap.c:509 pop_lib.c:316 smtp.c:536
 msgid "Could not negotiate TLS connection"
 msgstr "Impossible de négocier la connexion TLS"
 
@@ -4344,15 +4344,15 @@ msgstr "SSL désactivé par manque d'entropie"
 #. L10N: This is a warning when trying to set the host name for
 #. * TLS Server Name Indication (SNI).  This allows the server to present
 #. * the correct certificate if it supports multiple hosts.
-#: mutt_ssl.c:583 mutt_ssl_gnutls.c:473
+#: mutt_ssl.c:589 mutt_ssl_gnutls.c:473
 msgid "Warning: unable to set TLS SNI host name"
 msgstr "Attention : impossible de fixer le nom d'hôte TLS SNI"
 
-#: mutt_ssl.c:594
+#: mutt_ssl.c:600
 msgid "I/O error"
 msgstr "erreur d'E/S"
 
-#: mutt_ssl.c:603
+#: mutt_ssl.c:609
 #, c-format
 msgid "SSL failed: %s"
 msgstr "SSL a échoué : %s"
@@ -4362,89 +4362,89 @@ msgstr "SSL a échoué : %s"
 #. %1$s is version (e.g. "TLSv1.2")
 #. %2$s is cipher_version (e.g. "TLSv1/SSLv3")
 #. %3$s is cipher_name (e.g. "ECDHE-RSA-AES128-GCM-SHA256")
-#: mutt_ssl.c:613
+#: mutt_ssl.c:619
 #, c-format
 msgid "%s connection using %s (%s)"
 msgstr "Connexion %s utilisant %s (%s)"
 
-#: mutt_ssl.c:738
+#: mutt_ssl.c:744
 msgid "Unknown"
 msgstr "Inconnu"
 
 # , c-format
-#: mutt_ssl.c:751 mutt_ssl_gnutls.c:661
+#: mutt_ssl.c:757 mutt_ssl_gnutls.c:661
 #, c-format
 msgid "[unable to calculate]"
 msgstr "[impossible de calculer]"
 
 # , c-format
-#: mutt_ssl.c:769 mutt_ssl_gnutls.c:684
+#: mutt_ssl.c:775 mutt_ssl_gnutls.c:684
 msgid "[invalid date]"
 msgstr "[date invalide]"
 
-#: mutt_ssl.c:838
+#: mutt_ssl.c:844
 msgid "Server certificate is not yet valid"
 msgstr "Le certificat du serveur n'est pas encore valide"
 
-#: mutt_ssl.c:848
+#: mutt_ssl.c:854
 msgid "Server certificate has expired"
 msgstr "Le certificat du serveur a expiré"
 
-#: mutt_ssl.c:997
+#: mutt_ssl.c:1003
 msgid "cannot get certificate subject"
 msgstr "impossible d'obtenir le détenteur du certificat (subject)"
 
-#: mutt_ssl.c:1007 mutt_ssl.c:1016
+#: mutt_ssl.c:1013 mutt_ssl.c:1022
 msgid "cannot get certificate common name"
 msgstr "impossible d'obtenir le nom du détenteur du certificat (CN)"
 
-#: mutt_ssl.c:1031
+#: mutt_ssl.c:1037
 #, c-format
 msgid "certificate owner does not match hostname %s"
 msgstr "le propriétaire du certificat ne correspond pas au nom %s"
 
-#: mutt_ssl.c:1138
+#: mutt_ssl.c:1144
 #, c-format
 msgid "Certificate host check failed: %s"
 msgstr "Échec de vérification de machine : %s"
 
-#: mutt_ssl.c:1199 mutt_ssl_gnutls.c:883
+#: mutt_ssl.c:1205 mutt_ssl_gnutls.c:883
 msgid "Untrusted server certificate"
 msgstr "Certificat du serveur sans confiance"
 
-#: mutt_ssl.c:1208 mutt_ssl_gnutls.c:938
+#: mutt_ssl.c:1214 mutt_ssl_gnutls.c:938
 msgid "This certificate belongs to:"
 msgstr "Ce certificat appartient à :"
 
-#: mutt_ssl.c:1217 mutt_ssl_gnutls.c:980
+#: mutt_ssl.c:1223 mutt_ssl_gnutls.c:980
 msgid "This certificate was issued by:"
 msgstr "Ce certificat a été émis par :"
 
-#: mutt_ssl.c:1226 mutt_ssl_gnutls.c:993
+#: mutt_ssl.c:1232 mutt_ssl_gnutls.c:993
 msgid "This certificate is valid"
 msgstr "Ce certificat est valide"
 
-#: mutt_ssl.c:1227 mutt_ssl_gnutls.c:996
+#: mutt_ssl.c:1233 mutt_ssl_gnutls.c:996
 #, c-format
 msgid "   from %s"
 msgstr "     de %s"
 
-#: mutt_ssl.c:1230 mutt_ssl_gnutls.c:1001
+#: mutt_ssl.c:1236 mutt_ssl_gnutls.c:1001
 #, c-format
 msgid "     to %s"
 msgstr "      à %s"
 
-#: mutt_ssl.c:1237 mutt_ssl_gnutls.c:1008
+#: mutt_ssl.c:1243 mutt_ssl_gnutls.c:1008
 #, c-format
 msgid "SHA1 Fingerprint: %s"
 msgstr "Empreinte SHA1 : %s"
 
-#: mutt_ssl.c:1243 mutt_ssl.c:1246 mutt_ssl_gnutls.c:1014
+#: mutt_ssl.c:1249 mutt_ssl.c:1252 mutt_ssl_gnutls.c:1014
 #: mutt_ssl_gnutls.c:1017
 msgid "SHA256 Fingerprint: "
 msgstr "Empreinte SHA256 : "
 
-#: mutt_ssl.c:1250 mutt_ssl_gnutls.c:1038
+#: mutt_ssl.c:1256 mutt_ssl_gnutls.c:1038
 #, c-format
 msgid "SSL Certificate check (certificate %d of %d in chain)"
 msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
@@ -4455,31 +4455,31 @@ msgstr "Vérification du certificat SSL (certificat %d sur %d dans la chaîne)"
 #. * These prompts are the interactive certificate confirmation prompts for
 #. * an OpenSSL connection.
 #.
-#: mutt_ssl.c:1276
+#: mutt_ssl.c:1282
 msgid "roas"
 msgstr "ruas"
 
-#: mutt_ssl.c:1280
+#: mutt_ssl.c:1286
 msgid "(r)eject, accept (o)nce, (a)ccept always, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours, (s)auter"
 
-#: mutt_ssl.c:1282 mutt_ssl_gnutls.c:1047
+#: mutt_ssl.c:1288 mutt_ssl_gnutls.c:1047
 msgid "(r)eject, accept (o)nce, (a)ccept always"
 msgstr "(r)ejeter, accepter (u)ne fois, (a)ccepter toujours"
 
-#: mutt_ssl.c:1287
+#: mutt_ssl.c:1293
 msgid "(r)eject, accept (o)nce, (s)kip"
 msgstr "(r)ejeter, accepter (u)ne fois, (s)auter"
 
-#: mutt_ssl.c:1289 mutt_ssl_gnutls.c:1058
+#: mutt_ssl.c:1295 mutt_ssl_gnutls.c:1058
 msgid "(r)eject, accept (o)nce"
 msgstr "(r)ejeter, accepter (u)ne fois"
 
-#: mutt_ssl.c:1327 mutt_ssl_gnutls.c:1121
+#: mutt_ssl.c:1333 mutt_ssl_gnutls.c:1121
 msgid "Warning: Couldn't save certificate"
 msgstr "Attention : le certificat n'a pas pu être sauvé"
 
-#: mutt_ssl.c:1332 mutt_ssl_gnutls.c:1126
+#: mutt_ssl.c:1338 mutt_ssl_gnutls.c:1126
 msgid "Certificate saved"
 msgstr "Certificat sauvé"
 
@@ -4492,7 +4492,7 @@ msgstr "Certificat sauvé"
 #. When using a $ssl_client_cert, GNUTLS may prompt for the password
 #. to decrypt the cert.  %s is the hostname.
 #.
-#: mutt_ssl.c:1393 mutt_ssl_gnutls.c:1285
+#: mutt_ssl.c:1399 mutt_ssl_gnutls.c:1285
 #, c-format
 msgid "Password for %s client cert: "
 msgstr "Mot de passe pour le certificat client %s : "
@@ -6075,7 +6075,7 @@ msgstr "Pas d'attachements, abandonner l'envoi ?"
 msgid "Attachment referenced in message is missing"
 msgstr "L'attachement référencé dans le message est manquant"
 
-#: send.c:2553 smtp.c:240
+#: send.c:2553 smtp.c:245
 msgid "Sending message..."
 msgstr "Envoi du message..."
 
@@ -6434,48 +6434,53 @@ msgstr "895"
 msgid "SMTP session failed: %s"
 msgstr "La session SMTP a échoué : %s"
 
-#: smtp.c:235
+#: smtp.c:217
+#, c-format
+msgid "SMTP session failed: cannot add recipient <%s>"
+msgstr "La session SMTP a échoué : impossible d'ajouter le destinataire <%s>"
+
+#: smtp.c:240
 #, c-format
 msgid "SMTP session failed: unable to open %s"
 msgstr "La session SMTP a échoué : impossible d'ouvrir %s"
 
-#: smtp.c:352
+#: smtp.c:357
 msgid "No from address given"
 msgstr "Pas d'adresse from donnée"
 
-#: smtp.c:409
+#: smtp.c:414
 msgid "SMTP session failed: read error"
 msgstr "La session SMTP a échoué : erreur de lecture"
 
-#: smtp.c:411
+#: smtp.c:416
 msgid "SMTP session failed: write error"
 msgstr "La session SMTP a échoué : erreur d'écriture"
 
-#: smtp.c:413
+#: smtp.c:418
 msgid "Invalid server response"
 msgstr "Réponse du serveur invalide"
 
 # , c-format
-#: smtp.c:436
+#: smtp.c:441
 #, c-format
 msgid "Invalid SMTP URL: %s"
 msgstr "URL SMTP invalide : %s"
 
-#: smtp.c:598
+#: smtp.c:603
 #, c-format
 msgid "SMTP authentication method %s requires SASL"
 msgstr "La méthode d'authentification SMTP %s nécessite SASL"
 
-#: smtp.c:605
+#: smtp.c:610
 #, c-format
 msgid "%s authentication failed, trying next method"
 msgstr "L'authentification %s a échoué, essayons la méthode suivante"
 
-#: smtp.c:621
+#: smtp.c:626
 msgid "SMTP authentication requires SASL"
 msgstr "L'authentification SMTP nécessite SASL"
 
-#: smtp.c:632
+#: smtp.c:637
 msgid "SASL authentication failed"
 msgstr "L'authentification SASL a échoué"
 
