@@ -247,7 +247,7 @@ msgstr "无法创建 %s: %s。"
 #.
 #: autocrypt/autocrypt.c:134
 msgid "Create an initial autocrypt account?"
-msgstr ""
+msgstr "创建最初的 autocrypt 账号？"
 
 #. L10N:
 #. Autocrypt is asking for the email address to use for the
@@ -256,7 +256,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:161
 msgid "Autocrypt account address: "
-msgstr ""
+msgstr "autocrypt 账号地址："
 
 #. L10N:
 #. Autocrypt prompts for an account email address, and requires
@@ -265,7 +265,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:170
 msgid "Please enter a single email address"
-msgstr ""
+msgstr "请输入单一电子邮件地址"
 
 #. L10N:
 #. When creating an autocrypt account, this message will be displayed
@@ -274,7 +274,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt.c:187
 msgid "That email address is already assigned to an autocrypt account"
-msgstr ""
+msgstr "该电子邮件地址已经指派给一个 autocrypt 账号了"
 
 #. L10N:
 #. Autocrypt has a setting "prefer-encrypt".
@@ -285,9 +285,8 @@ msgstr ""
 #. will be required to enable encryption manually.
 #.
 #: autocrypt/autocrypt.c:203
-#, fuzzy
 msgid "Prefer encryption?"
-msgstr "加密"
+msgstr "偏好加密吗？"
 
 #. L10N:
 #. Error message displayed if creating an autocrypt account failed
@@ -295,23 +294,22 @@ msgstr "加密"
 #.
 #: autocrypt/autocrypt.c:218
 msgid "Autocrypt account creation aborted."
-msgstr ""
+msgstr "已中止创建 autocrypt 账号。"
 
 #. L10N:
 #. Message displayed after an autocrypt account is successfully created.
 #.
 #: autocrypt/autocrypt.c:223
 msgid "Autocrypt account creation succeeded"
-msgstr ""
+msgstr "已成功创建 autocrypt 账号"
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
 #. email when the engine is not available.
 #.
 #: autocrypt/autocrypt.c:543 autocrypt/autocrypt.c:551
-#, fuzzy
 msgid "Autocrypt is not available."
-msgstr "父邮件不可用。"
+msgstr "autocrypt 不可用。"
 
 #. L10N:
 #. Error displayed if the user tries to force sending an Autocrypt
@@ -319,9 +317,9 @@ msgstr "父邮件不可用。"
 #. %s is the From email address used to look up the Autocrypt account.
 #.
 #: autocrypt/autocrypt.c:565
-#, fuzzy, c-format
+#, c-format
 msgid "Autocrypt is not enabled for %s."
-msgstr "未找到可用于 %s 的(有效)证书。"
+msgstr "%s 未启用 autocrypt。"
 
 #. L10N:
 #. %s is an email address.  Autocrypt is scanning for the keyids
@@ -329,9 +327,9 @@ msgstr "未找到可用于 %s 的(有效)证书。"
 #. The message is printed and they are returned to the compose menu.
 #.
 #: autocrypt/autocrypt.c:593 autocrypt/autocrypt.c:621
-#, fuzzy, c-format
+#, c-format
 msgid "No (valid) autocrypt key found for %s."
-msgstr "未找到可用于 %s 的(有效)证书。"
+msgstr "未找到可用于 %s 的（有效）autocrypt 密钥。"
 
 #. L10N:
 #. The first time autocrypt is enabled, Mutt will ask to scan
@@ -342,15 +340,14 @@ msgstr "未找到可用于 %s 的(有效)证书。"
 #.
 #: autocrypt/autocrypt.c:864
 msgid "Scan a mailbox for autocrypt headers?"
-msgstr ""
+msgstr "要扫描邮箱以寻找 autocrypt 标头吗？"
 
 #. L10N:
 #. The prompt for a mailbox to scan for Autocrypt: headers
 #.
 #: autocrypt/autocrypt.c:871
-#, fuzzy
 msgid "Scan mailbox"
-msgstr "Fcc 邮箱"
+msgstr "扫描邮箱"
 
 #. L10N:
 #. This is the second prompt to see if the user would like
@@ -361,15 +358,14 @@ msgstr "Fcc 邮箱"
 #.
 #: autocrypt/autocrypt.c:893
 msgid "Scan another mailbox for autocrypt headers?"
-msgstr ""
+msgstr "要扫描另一个邮箱以寻找 autocrypt 标头吗？"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. create new account
 #.
 #: autocrypt/autocrypt_acct_menu.c:43
-#, fuzzy
 msgid "Create"
-msgstr "创建 %s 吗？"
+msgstr "创建"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. delete account
@@ -386,7 +382,7 @@ msgstr "删除"
 #.
 #: autocrypt/autocrypt_acct_menu.c:54
 msgid "Tgl Active"
-msgstr ""
+msgstr "切换激活状态"
 
 #. L10N: Autocrypt Account Menu Help line:
 #. toggle "prefer-encrypt" on an account
@@ -396,7 +392,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:61
 msgid "Prf Encr"
-msgstr ""
+msgstr "偏好加密"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -404,7 +400,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:93
 msgid "prefer encrypt"
-msgstr ""
+msgstr "偏好加密"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -413,7 +409,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:100
 msgid "manual encrypt"
-msgstr ""
+msgstr "手动加密"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -421,7 +417,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:108
 msgid "active"
-msgstr ""
+msgstr "已激活"
 
 #. L10N:
 #. Autocrypt Account menu.
@@ -429,14 +425,14 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:114
 msgid "inactive"
-msgstr ""
+msgstr "未激活"
 
 #. L10N:
 #. Autocrypt Account Management Menu title
 #.
 #: autocrypt/autocrypt_acct_menu.c:147
 msgid "Autocrypt Accounts"
-msgstr ""
+msgstr "autocrypt 账号"
 
 #. L10N:
 #. This error message is displayed if a database update of an
@@ -444,15 +440,15 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_acct_menu.c:203 autocrypt/autocrypt_acct_menu.c:213
 msgid "Error updating account record"
-msgstr ""
+msgstr "更新账号记录出错"
 
 #. L10N:
 #. Confirmation message when deleting an autocrypt account
 #.
 #: autocrypt/autocrypt_acct_menu.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete account \"%s\"?"
-msgstr "真的要删除 \"%s\" 邮箱吗？"
+msgstr "真的要删除账号 \"%s\" 吗？"
 
 #. L10N:
 #. %s is the path to the database.  For some reason sqlite3 failed
@@ -463,9 +459,9 @@ msgstr "真的要删除 \"%s\" 邮箱吗？"
 #. for some reason.  The %s is the full path of the database file.
 #.
 #: autocrypt/autocrypt_db.c:50 autocrypt/autocrypt_db.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open autocrypt database %s"
-msgstr "无法打开邮箱 %s"
+msgstr "无法打开 autocrypt 数据库 %s"
 
 #: autocrypt/autocrypt_gpgme.c:41 crypt-gpgme.c:574
 #, c-format
@@ -478,16 +474,16 @@ msgstr "创建 gpgme 上下文出错：%s\n"
 #.
 #: autocrypt/autocrypt_gpgme.c:136
 msgid "Generating autocrypt key..."
-msgstr ""
+msgstr "正在生成 autocrypt 密钥……"
 
 #. L10N:
 #. GPGME was unable to generate a key for some reason.
 #. %s is the error message returned by GPGME.
 #.
 #: autocrypt/autocrypt_gpgme.c:148 autocrypt/autocrypt_gpgme.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating autocrypt key: %s\n"
-msgstr "导出密钥出错：%s\n"
+msgstr "创建 autocrypt 密钥出错：%s\n"
 
 #. L10N:
 #. After selecting a key for an autocrypt account,
@@ -498,7 +494,7 @@ msgstr "导出密钥出错：%s\n"
 #: autocrypt/autocrypt_gpgme.c:213
 #, c-format
 msgid "The key %s is not usable for autocrypt"
-msgstr ""
+msgstr "这个密钥 %s 不能用于 autocrypt"
 
 #. L10N:
 #. During autocrypt account creation, this prompt asks the
@@ -507,7 +503,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:241
 msgid "(c)reate new, or (s)elect existing GPG key? "
-msgstr ""
+msgstr "创建(c)新的、还是选择(s)已有的 GPG 密钥？"
 
 #. L10N:
 #. The letters corresponding to the
@@ -515,7 +511,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:246
 msgid "cs"
-msgstr ""
+msgstr "cs"
 
 #. L10N:
 #. During autocrypt account creation, if selecting an existing key fails
@@ -523,7 +519,7 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_gpgme.c:260
 msgid "Create a new GPG key for this account, instead?"
-msgstr ""
+msgstr "改成为该账号创建新的 GPG 密钥吗？"
 
 #. L10N:
 #. The autocrypt database keeps track of schema version numbers.
@@ -533,20 +529,19 @@ msgstr ""
 #.
 #: autocrypt/autocrypt_schema.c:116
 msgid "Autocrypt database version is too new"
-msgstr ""
+msgstr "autocrypt 数据库太新"
 
 #: background.c:174
 msgid "Redraw"
-msgstr ""
+msgstr "重绘"
 
 #. L10N:
 #. Background Edit Landing Page message, first line.
 #. Displays while the editor is running.
 #.
 #: background.c:200 background.c:245 background.c:586
-#, fuzzy
 msgid "Waiting for editor to exit"
-msgstr "正在等待回应..."
+msgstr "正在等待编辑器退出"
 
 #. L10N:
 #. Background Edit Landing Page message, second line.
@@ -556,14 +551,14 @@ msgstr "正在等待回应..."
 #: background.c:216
 #, c-format
 msgid "Type '%s' to background compose session."
-msgstr ""
+msgstr "按 '%s' 将撰写会话切到后台。"
 
 #. L10N: Background Compose Menu Help line:
 #. resume composing the mail
 #.
 #: background.c:366
 msgid "Resume"
-msgstr ""
+msgstr "恢复"
 
 #. L10N:
 #. Background Compose menu
@@ -571,7 +566,7 @@ msgstr ""
 #.
 #: background.c:429
 msgid "finished"
-msgstr ""
+msgstr "已完成"
 
 #. L10N:
 #. Background Compose menu
@@ -579,14 +574,14 @@ msgstr ""
 #.
 #: background.c:435
 msgid "running"
-msgstr ""
+msgstr "正在运行"
 
 #. L10N:
 #. Background Compose Menu title
 #.
 #: background.c:492
 msgid "Background Compose Menu"
-msgstr ""
+msgstr "后台撰写菜单"
 
 #. L10N:
 #. Background Compose Menu:
@@ -595,7 +590,7 @@ msgstr ""
 #.
 #: background.c:540
 msgid "No backgrounded editing sessions."
-msgstr ""
+msgstr "没有后台运行的编辑会话。"
 
 #. L10N:
 #. Background Compose menu:
@@ -605,7 +600,7 @@ msgstr ""
 #: background.c:583
 #, c-format
 msgid "Process is still running. Really select?"
-msgstr ""
+msgstr "进程仍在运行。真的要选择吗？"
 
 #: browser.c:47
 msgid "Chdir"
@@ -799,7 +794,7 @@ msgstr "无法复制邮件"
 #.
 #: commands.c:274
 msgid "There was an error displaying all or part of the message"
-msgstr ""
+msgstr "显示全部或者部分邮件时出现错误"
 
 #: commands.c:306
 msgid "S/MIME signature successfully verified."
@@ -980,51 +975,45 @@ msgstr "正在复制到 %s..."
 #. Progress meter message when saving tagged messages
 #.
 #: commands.c:1005
-#, fuzzy
 msgid "Saving tagged messages..."
-msgstr "正在保存已改变的邮件... [%d/%d]"
+msgstr "正在保存已标记的邮件……"
 
 #. L10N:
 #. Progress meter message when copying tagged messages
 #.
 #: commands.c:1009
-#, fuzzy
 msgid "Copying tagged messages..."
-msgstr "没有已标记的邮件。"
+msgstr "正在复制已标记的邮件……"
 
 #. L10N:
 #. Message when an index/pager save operation fails for some reason.
 #.
 #: commands.c:1049
-#, fuzzy
 #| msgid "Error sending message."
 msgid "Error saving message"
-msgstr "发送邮件出错。"
+msgstr "保存邮件时出错"
 
 #. L10N:
 #. Message when an index tagged save operation fails for some reason.
 #.
 #: commands.c:1054
-#, fuzzy
 msgid "Error saving tagged messages"
-msgstr "正在保存已改变的邮件... [%d/%d]"
+msgstr "保存已标记的邮件时出错"
 
 #. L10N:
 #. Message when an index/pager copy operation fails for some reason.
 #.
 #: commands.c:1062
-#, fuzzy
 #| msgid "Error bouncing message!"
 msgid "Error copying message"
-msgstr "重发邮件出错！"
+msgstr "复制邮件时出错"
 
 #. L10N:
 #. Message when an index tagged copy operation fails for some reason.
 #.
 #: commands.c:1067
-#, fuzzy
 msgid "Error copying tagged messages"
-msgstr "没有已标记的邮件。"
+msgstr "复制已标记的邮件时出错"
 
 #: commands.c:1140
 #, c-format
@@ -1086,12 +1075,12 @@ msgstr "回复到: "
 #. L10N: Compose menu field.  May not want to translate.
 #: compose.c:107 compose.c:1147
 msgid "Fcc: "
-msgstr ""
+msgstr "Fcc: "
 
 #. L10N: "Mix" refers to the MixMaster chain for anonymous email
 #: compose.c:110
 msgid "Mix: "
-msgstr ""
+msgstr "Mix: "
 
 #. L10N: Compose menu field.  Holds "Encrypt", "Sign" related information
 #: compose.c:113
@@ -1116,7 +1105,7 @@ msgstr "选择身份签名："
 #.
 #: compose.c:128
 msgid "Autocrypt: "
-msgstr ""
+msgstr "autocrypt："
 
 #: compose.c:133
 msgid "Send"
@@ -1153,12 +1142,11 @@ msgstr "描述"
 #. * This is displayed when Autocrypt is turned off.
 #: compose.c:151 compose.c:392
 msgid "Off"
-msgstr ""
+msgstr "关闭"
 
 #. L10N: Autocrypt recommendation flag: no.
 #. * This is displayed when Autocrypt cannot encrypt to the recipients.
 #: compose.c:154
-#, fuzzy
 msgid "No"
 msgstr "无"
 
@@ -1168,7 +1156,7 @@ msgstr "无"
 #. * used recently, or if the only key available is a Gossip Header key.
 #: compose.c:159
 msgid "Discouraged"
-msgstr ""
+msgstr "不鼓励"
 
 #. L10N: Autocrypt recommendation flag: available.
 #. * This is displayed when Autocrypt believes encryption is possible, but
@@ -1176,15 +1164,14 @@ msgstr ""
 #. * is not set in both the sender and recipient keys.
 #: compose.c:164
 msgid "Available"
-msgstr ""
+msgstr "可用"
 
 #. L10N: Autocrypt recommendation flag: yes.
 #. * This is displayed when Autocrypt would normally enable encryption
 #. * automatically.
 #: compose.c:168
-#, fuzzy
 msgid "Yes"
-msgstr "yes"
+msgstr "是"
 
 #. L10N:
 #. The compose menu autocrypt prompt.
@@ -1194,7 +1181,7 @@ msgstr "yes"
 #.
 #: compose.c:254
 msgid "Autocrypt: (e)ncrypt, (c)lear, (a)utomatic? "
-msgstr ""
+msgstr "autocrypt：加密(e)、明文(c)、自动(a)"
 
 #. L10N:
 #. The letter corresponding to the compose menu autocrypt prompt
@@ -1202,7 +1189,7 @@ msgstr ""
 #.
 #: compose.c:260
 msgid "eca"
-msgstr ""
+msgstr "eca"
 
 #: compose.c:294
 msgid "Not supported"
@@ -1255,7 +1242,7 @@ msgstr "加密采用："
 #.
 #: compose.c:402
 msgid "Recommendation: "
-msgstr ""
+msgstr "建议："
 
 #. L10N:
 #. This message is displayed in the compose menu when an attachment
@@ -1265,9 +1252,9 @@ msgstr ""
 #. error message.
 #.
 #: compose.c:505
-#, fuzzy, c-format
+#, c-format
 msgid "Attachment #%d no longer exists: %s"
-msgstr "%s [#%d] 已不存在!"
+msgstr "附件 #%d 已不存在：%s"
 
 #. L10N:
 #. This message is displayed in the compose menu when an attachment
@@ -1277,9 +1264,9 @@ msgstr "%s [#%d] 已不存在!"
 #. prompt question.
 #.
 #: compose.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "Attachment #%d modified. Update encoding for %s?"
-msgstr "%s [#%d] 已修改。更新编码？"
+msgstr "附件 #%d 已修改。更新 %s 的编码？"
 
 #: compose.c:589
 msgid "-- Attachments"
@@ -1301,10 +1288,9 @@ msgstr "您不可以删除唯一的附件。"
 #. it's worth confirming they really meant to do it.
 #.
 #: compose.c:645
-#, fuzzy
 #| msgid "Really delete mailbox \"%s\"?"
 msgid "Really delete the main message?"
-msgstr "真的要删除 \"%s\" 邮箱吗？"
+msgstr "真的要删除主消息吗？"
 
 #: compose.c:746 compose.c:756 menu.c:695
 msgid "You are on the last entry."
@@ -1412,7 +1398,7 @@ msgstr "目前的情况是我们无法生成附件"
 
 #: compose.c:1734
 msgid "$send_multipart_alternative_filter is not set"
-msgstr ""
+msgstr "$send_multipart_alternative_filter 未设置"
 
 #: compose.c:1809
 msgid "Postpone this message?"
@@ -1505,7 +1491,7 @@ msgstr "正在压缩 %s"
 
 #: copy.c:706
 msgid "No decryption engine available for message"
-msgstr ""
+msgstr "邮件没有可用的解密引擎"
 
 #: crypt.c:70
 #, c-format
@@ -2157,9 +2143,8 @@ msgstr "请输入 %s 的 keyID："
 #. from.  This error is displayed if no results were found.
 #.
 #: crypt-gpgme.c:5163
-#, fuzzy
 msgid "No secret keys found"
-msgstr "未找到私钥“%s”：%s\n"
+msgstr "未找到私钥"
 
 #: crypt-gpgme.c:5197 pgpkey.c:731
 msgid "Please enter the key ID: "
@@ -2280,7 +2265,7 @@ msgstr "no"
 #: curs_lib.c:484
 #, c-format
 msgid "See $%s for more information."
-msgstr ""
+msgstr "更多信息参见 $%s。"
 
 #: curs_lib.c:538
 msgid "Exit Mutt?"
@@ -2288,7 +2273,7 @@ msgstr "退出 Mutt？"
 
 #: curs_lib.c:543 curs_main.c:1095 curs_main.c:1525
 msgid "There are $background_edit sessions. Really quit Mutt?"
-msgstr ""
+msgstr "有 $background_edit 会话。真的要退出 Mutt 吗？"
 
 #: curs_lib.c:613
 msgid "Error History is disabled."
@@ -2382,7 +2367,7 @@ msgstr "邮箱已有外部修改。标记可能有错误。"
 #.
 #: curs_main.c:730
 msgid "Mailbox reconnected.  Some changes may have been lost."
-msgstr ""
+msgstr "已重新连接邮箱。某些变更可能已经丢失。"
 
 #: curs_main.c:734
 msgid "New mail in this mailbox."
@@ -2643,7 +2628,6 @@ msgid "Cannot undelete message"
 msgstr "无法撤销删除邮件"
 
 #: edit.c:42
-#, fuzzy
 #| msgid ""
 #| "~~\t\tinsert a line beginning with a single ~\n"
 #| "~b users\tadd users to the Bcc: field\n"
@@ -2666,8 +2650,8 @@ msgid ""
 "~p\t\tprint the message\n"
 msgstr ""
 "~~\t\t插入以一个 ~ 符号开头的一行\n"
-"~b 用户\t添加用户到 Bcc（密送）域\n"
-"~c 用户\t添加用户到 Cc（抄送）域\n"
+"~b 地址\t添加地址到 Bcc（密送）域\n"
+"~c 地址\t添加地址到 Cc（抄送）域\n"
 "~f 邮件\t包含邮件\n"
 "~F 邮件\t类似 ~f，但同时包含邮件头\n"
 "~h\t\t编辑邮件头\n"
@@ -2983,23 +2967,23 @@ msgstr "认证中 (匿名)..."
 
 #: imap/auth_anon.c:73
 msgid "Anonymous authentication failed."
-msgstr "匿名认证失败。"
+msgstr "匿名鉴权失败。"
 
 #: imap/auth_cram.c:48
 msgid "Authenticating (CRAM-MD5)..."
-msgstr "认证中 (CRAM-MD5)..."
+msgstr "鉴权中 (CRAM-MD5)..."
 
 #: imap/auth_cram.c:128
 msgid "CRAM-MD5 authentication failed."
-msgstr "CRAM-MD5 认证失败。"
+msgstr "CRAM-MD5 鉴权失败。"
 
 #: imap/auth_gss.c:165
 msgid "Authenticating (GSSAPI)..."
-msgstr "认证中 (GSSAPI)..."
+msgstr "鉴权中 (GSSAPI)..."
 
 #: imap/auth_gss.c:342
 msgid "GSSAPI authentication failed."
-msgstr "GSSAPI 认证失败。"
+msgstr "GSSAPI 鉴权失败。"
 
 #: imap/auth_login.c:38
 msgid "LOGIN disabled on this server."
@@ -3020,19 +3004,19 @@ msgstr "登录失败。"
 #: pop_auth.c:223 pop_auth.c:430 smtp.c:674 smtp.c:770 smtp.c:839
 #, c-format
 msgid "Authenticating (%s)..."
-msgstr "认证中 (%s)..."
+msgstr "鉴权中 (%s)..."
 
 #. L10N:
 #. %s is the authentication type, for example OAUTHBEARER
 #.
 #: imap/auth_oauth.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s authentication failed."
-msgstr "认证失败。"
+msgstr "%s 鉴权失败。"
 
 #: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
 msgid "SASL authentication failed."
-msgstr "SASL 认证失败。"
+msgstr "SASL 鉴权失败。"
 
 #: imap/browse.c:60 imap/imap.c:786
 #, c-format
@@ -3090,7 +3074,7 @@ msgstr "到 %s 的连接已超时"
 #.
 #: imap/command.c:492
 msgid "A fatal error occurred.  Will attempt reconnection."
-msgstr ""
+msgstr "发生致命错误。将尝试重新连接。"
 
 #: imap/command.c:504
 #, c-format
@@ -3128,26 +3112,23 @@ msgstr "加密连接不可用"
 #. tries to reconnect.
 #.
 #: imap/imap.c:593
-#, fuzzy
 msgid "Trying to reconnect..."
-msgstr "正在等待回应..."
+msgstr "正在尝试重新连接……"
 
 #. L10N:
 #. Message when Mutt tries to reconnect to an IMAP mailbox but is
 #. unable to.
 #.
 #: imap/imap.c:698
-#, fuzzy
 msgid "Reconnect failed.  Mailbox closed."
-msgstr "预连接命令失败。"
+msgstr "重新连接失败。邮箱已关闭。"
 
 #. L10N:
 #. Message when Mutt reconnects to an IMAP mailbox after a fatal error.
 #.
 #: imap/imap.c:709
-#, fuzzy
 msgid "Reconnect succeeded."
-msgstr "预连接命令失败。"
+msgstr "重新连接成功。"
 
 #: imap/imap.c:819
 #, c-format
@@ -3255,10 +3236,9 @@ msgstr "正在获取标记更新..."
 #. using a normal download.
 #.
 #: imap/message.c:821
-#, fuzzy
 #| msgid "Reopening mailbox..."
 msgid "QRESYNC failed.  Reopening mailbox."
-msgstr "正在重新打开邮箱..."
+msgstr "QRESYNC 失败。正重新打开邮箱。"
 
 #: imap/message.c:876
 msgid "Unable to fetch headers from this IMAP server version."
@@ -3450,9 +3430,8 @@ msgid "source: error at %s"
 msgstr "source：%s 有错误"
 
 #: init.c:2967
-#, fuzzy
 msgid "run: too many arguments"
-msgstr "push：参数太多"
+msgstr "run：参数太多"
 
 #: init.c:2990
 msgid "source: too many arguments"
@@ -3474,10 +3453,10 @@ msgstr "%s：未知命令"
 #. then %s will print the function name: '<view-file>'.
 #.
 #: init.c:3346
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s is not a directory."
 msgid "Use '%s' to select a directory"
-msgstr "%s 不是目录"
+msgstr "使用 '%s' 来选择目录"
 
 #: init.c:3678
 #, c-format
@@ -3510,14 +3489,14 @@ msgstr "参数不够用"
 #: init.h:407
 #, c-format
 msgid "On %d, %n wrote:"
-msgstr ""
+msgstr "在 %d，%n 写道："
 
 #. L10N:
 #. $compose_format default value
 #.
 #: init.h:686
 msgid "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
-msgstr ""
+msgstr "-- Mutt: 撰写  [邮件大概大小：%l   属性：%a]%>-"
 
 #. L10N:
 #. $forward_attribution_intro default value
@@ -3525,15 +3504,14 @@ msgstr ""
 #: init.h:1328
 #, c-format
 msgid "----- Forwarded message from %f -----"
-msgstr ""
+msgstr "----- 从 %f 转发的邮件 -----"
 
 #. L10N:
 #. $forward_attribution_trailer default value
 #.
 #: init.h:1339
-#, fuzzy
 msgid "----- End forwarded message -----"
-msgstr "编辑已转发的邮件吗？"
+msgstr "----- 邮件转发结束 -----"
 
 #. L10N:
 #. $reply_regexp default value.
@@ -3559,7 +3537,7 @@ msgstr "编辑已转发的邮件吗？"
 #.
 #: init.h:3285
 msgid "^(re)(\\[[0-9]+\\])*:[ \t]*"
-msgstr ""
+msgstr "^(re|回复)(\\[[0-9]+\\])*[:：][ \t]*"
 
 #. L10N:
 #. $status_format default value
@@ -3570,6 +3548,9 @@ msgid ""
 "%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?"
 "%S)-%>-(%P)---"
 msgstr ""
+"-%r-Mutt: %f [总数:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删:%d?%?F? 标志:"
+"%F?%?t? 标记:%t?%?p? 延:%p?%?b? 邮箱新:%b?%?B? 后台:%B?%?l? %l?]---(%s/%?T?%T/?"
+"%S)-%>-(%P)---"
 
 #. L10N:
 #. $ts_icon_format default value
@@ -3583,7 +3564,7 @@ msgstr ""
 #.
 #: init.h:4685
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
-msgstr ""
+msgstr "Mutt %?m?%m邮件&无邮件?%?n? [%n新]?"
 
 #: keymap.c:568
 msgid "Macro loop detected."
@@ -3656,52 +3637,48 @@ msgstr "内存不足！"
 
 #: listmenu.c:51 listmenu.c:62
 msgid "Post"
-msgstr ""
+msgstr "发件"
 
 #: listmenu.c:52 listmenu.c:63
-#, fuzzy
 #| msgid "Subscribed to %s"
 msgid "Subscribe"
-msgstr "已订阅 %s..."
+msgstr "订阅"
 
 #: listmenu.c:53 listmenu.c:64
-#, fuzzy
 #| msgid "Unsubscribed from %s"
 msgid "Unsubscribe"
-msgstr "已退订 %s..."
+msgstr "退订"
 
 #: listmenu.c:54 listmenu.c:66
 msgid "Owner"
-msgstr ""
+msgstr "所有者"
 
 #: listmenu.c:65
 msgid "Archives"
-msgstr ""
+msgstr "存档"
 
 #. L10N: given when an rfc 2369 action is not specified by this message
 #: listmenu.c:216
 #, c-format
 msgid "No list action available for %s."
-msgstr ""
+msgstr "%s 没有可用的列表动作。"
 
 #. L10N: given when a message's rfc 2369 action is not mailto:
 #: listmenu.c:223
 msgid "List actions only support mailto: URIs. (Try a browser?)"
-msgstr ""
+msgstr "列表动作只支持 mailto: 地址。（试试浏览器？）"
 
 #. L10N: given when mailto: URI was unparsable while trying to execute it
 #: listmenu.c:232
-#, fuzzy
 #| msgid "Could not reopen mailbox!"
 msgid "Could not parse mailto: URI."
-msgstr "无法重新打开邮箱！"
+msgstr "无法解析 mailto: 地址。"
 
 #. L10N: menu name for list actions
 #: listmenu.c:259
-#, fuzzy
 #| msgid "No mailing lists found!"
 msgid "Available mailing list actions"
-msgstr "没有找到邮件列表！"
+msgstr "可用的邮件列表动作"
 
 #: main.c:83
 msgid ""
@@ -3714,7 +3691,6 @@ msgstr ""
 "    https://gitlab.com/muttmua/mutt/issues\n"
 
 #: main.c:88
-#, fuzzy
 #| msgid ""
 #| "Copyright (C) 1996-2022 Michael R. Elkins and others.\n"
 #| "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
@@ -3728,7 +3704,7 @@ msgid ""
 msgstr ""
 "Copyright (C) 1996-2026 Michael R. Elkins 及其他人。\n"
 "Mutt 不提供任何保证：请键入“mutt -vv”以获取详细信息。\n"
-"Mutt 是自由软件, 欢迎您在遵守指定条款的前提下再次发布；\n"
+"Mutt 是自由软件, 欢迎您在遵守指定条款的前提下分发；\n"
 "请键入“mutt -vv”以获取详细信息。\n"
 
 #: main.c:105
@@ -3809,12 +3785,12 @@ msgstr ""
 "  -D\t\t打印所有变量的值到标准输出"
 
 #: main.c:156
-#, fuzzy
 #| msgid "  -d <level>\tlog debugging output to ~/.muttdebug0"
 msgid ""
 "  -d <level>\tlog debugging output to ~/.muttdebug0\n"
 "\t\t0 => no debugging; <0 => do not rotate .muttdebug files"
-msgstr "  -d <级别>\t将调试输出记录到 ~/.muttdebug0"
+msgstr "  -d <级别>\t将调试输出记录到 ~/.muttdebug0\n"
+"\t\t0 => 不调试; <0 => 不要轮换 .muttdebug 文件"
 
 #: main.c:160
 msgid ""
@@ -3898,10 +3874,9 @@ msgstr "无法将 -E 标志用于标准输入\n"
 #. file fails for some reason.
 #.
 #: main.c:1166
-#, fuzzy
 #| msgid "Cannot create filter"
 msgid "Cannot parse draft file\n"
-msgstr "无法创建过滤器"
+msgstr "无法解析草稿文件\n"
 
 #: main.c:1237
 #, c-format
@@ -4049,7 +4024,7 @@ msgstr "_maildir_commit_message(): 无法给文件设置时间"
 #: mutt_lisp.c:62
 #, c-format
 msgid "MuttLisp: unclosed backticks: %s"
-msgstr ""
+msgstr "MuttLisp：未闭合的反引号：%s"
 
 #. L10N:
 #. Printed when a MuttLisp list is missing a matching closing
@@ -4058,7 +4033,7 @@ msgstr ""
 #: mutt_lisp.c:123
 #, c-format
 msgid "MuttLisp: unclosed list: %s"
-msgstr ""
+msgstr "MuttLisp：未闭合的列表：%s"
 
 #. L10N:
 #. An error printed for the 'if' function if the condition is missing.
@@ -4067,15 +4042,15 @@ msgstr ""
 #: mutt_lisp.c:399
 #, c-format
 msgid "MuttLisp: missing if condition: %s"
-msgstr ""
+msgstr "MuttLisp：缺少 if 条件：%s"
 
 #. L10N:
 #. Printed when a function is called that is not recognized by MuttLisp.
 #.
 #: mutt_lisp.c:447
-#, fuzzy, c-format
+#, c-format
 msgid "MuttLisp: no such function %s"
-msgstr "%s：没有此函数"
+msgstr "MuttLisp：没有此函数 %s"
 
 #: mutt_sasl.c:199
 msgid "Unknown SASL profile"
@@ -4147,7 +4122,7 @@ msgstr "无法连接到 %s (%s)"
 #.
 #: mutt_ssl.c:201 mutt_ssl_gnutls.c:232
 msgid "Warning: clearing unexpected server data before TLS negotiation"
-msgstr ""
+msgstr "警告：清除未预期的 TLS 协商前服务器数据"
 
 #: mutt_ssl.c:276 mutt_ssl.c:558
 msgid "Warning: error enabling ssl_verify_partial_chains"
@@ -4323,10 +4298,10 @@ msgstr "证书已保存"
 #. to decrypt the cert.  %s is the hostname.
 #.
 #: mutt_ssl.c:1428 mutt_ssl_gnutls.c:1278
-#, fuzzy, c-format
+#, c-format
 #| msgid "Password for %s@%s: "
 msgid "Password for %s client cert: "
-msgstr "%s@%s 的密码："
+msgstr "%s 客户端证书的密码："
 
 #: mutt_ssl_gnutls.c:143 mutt_ssl_gnutls.c:171
 msgid "Error: no TLS socket open"
@@ -4456,10 +4431,10 @@ msgid "Can't save message to POP mailbox."
 msgstr "无法将邮件保存到 POP 邮箱。"
 
 #: muttlib.c:1994
-#, fuzzy, c-format
+#, c-format
 #| msgid "Append messages to %s?"
 msgid "Append message(s) to %s?"
-msgstr "追加邮件到 %s 末尾?"
+msgstr "追加邮件到 %s？"
 
 #: muttlib.c:2008
 #, c-format
@@ -4509,10 +4484,9 @@ msgstr "邮件没有删除"
 #. a mailbox.
 #.
 #: mx.c:834
-#, fuzzy
 #| msgid "Unable to open temporary file!"
 msgid "Unable to append to trash folder"
-msgstr "无法打开临时文件！"
+msgstr "无法附加到垃圾箱"
 
 #: mx.c:843
 msgid "Can't open trash folder"
@@ -4612,7 +4586,7 @@ msgstr "无更多引用文本。"
 #.
 #: pager.c:2648
 msgid "Already skipped past headers."
-msgstr ""
+msgstr "已经跳过标头。"
 
 #. L10N:
 #. Displayed if <skip-headers> is invoked in the pager, but there is
@@ -4622,7 +4596,7 @@ msgstr ""
 #.
 #: pager.c:2667
 msgid "No text past headers."
-msgstr ""
+msgstr "标头后无文本。"
 
 #: parse.c:715
 msgid "multipart message has no boundary parameter!"
@@ -4632,222 +4606,211 @@ msgstr "多部份邮件没有边界参数！"
 #. Pattern Completion Menu description for ~A
 #.
 #: pattern.c:71
-#, fuzzy
 msgid "all messages"
-msgstr "排序邮件"
+msgstr "所有邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~b
 #.
 #: pattern.c:76
 msgid "messages whose body matches EXPR"
-msgstr ""
+msgstr "正文匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~B
 #.
 #: pattern.c:81
 msgid "messages whose body or headers match EXPR"
-msgstr ""
+msgstr "正文或者标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~c
 #.
 #: pattern.c:86
 msgid "messages whose CC header matches EXPR"
-msgstr ""
+msgstr "CC 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~C
 #.
 #: pattern.c:91
 msgid "messages whose recipient matches EXPR"
-msgstr ""
+msgstr "收件人匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~d
 #.
 #: pattern.c:96
 msgid "messages sent in DATERANGE"
-msgstr ""
+msgstr "在 DATERANGE 发送的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~D
 #.
 #: pattern.c:101
-#, fuzzy
 msgid "deleted messages"
-msgstr "没有要撤销删除的邮件。"
+msgstr "已删除的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~e
 #.
 #: pattern.c:106
 msgid "messages whose Sender header matches EXPR"
-msgstr ""
+msgstr "Sender 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~E
 #.
 #: pattern.c:111
-#, fuzzy
 msgid "expired messages"
-msgstr "排序邮件"
+msgstr "过期的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~f
 #.
 #: pattern.c:116
 msgid "messages whose From header matches EXPR"
-msgstr ""
+msgstr "From 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~F
 #.
 #: pattern.c:121
-#, fuzzy
 msgid "flagged messages"
-msgstr "没有已标记的邮件。"
+msgstr "已标记的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~g
 #.
 #: pattern.c:126
-#, fuzzy
 msgid "cryptographically signed messages"
-msgstr "重新叫出一封被延迟寄出的邮件"
+msgstr "以密码学签名的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~G
 #.
 #: pattern.c:131
-#, fuzzy
 msgid "cryptographically encrypted messages"
-msgstr "无法解密已加密邮件！"
+msgstr "以密码学加密的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~h
 #.
 #: pattern.c:136
 msgid "messages whose header matches EXPR"
-msgstr ""
+msgstr "标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~H
 #.
 #: pattern.c:141
 msgid "messages whose spam tag matches EXPR"
-msgstr ""
+msgstr "spam 标记匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~i
 #.
 #: pattern.c:146
 msgid "messages whose Message-ID matches EXPR"
-msgstr ""
+msgstr "Message-ID 匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~k
 #.
 #: pattern.c:151
-#, fuzzy
 msgid "messages which contain PGP key"
-msgstr "邮件热键"
+msgstr "包含 PGP 密钥的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~l
 #.
 #: pattern.c:156
 msgid "messages addressed to known mailing lists"
-msgstr ""
+msgstr "发往已知邮件列表的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~L
 #.
 #: pattern.c:161
 msgid "messages whose From/Sender/To/CC matches EXPR"
-msgstr ""
+msgstr "From/Sender/To/CC 匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~m
 #.
 #: pattern.c:166
 msgid "messages whose number is in RANGE"
-msgstr ""
+msgstr "编号在 RANGE 内的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~M
 #.
 #: pattern.c:171
 msgid "messages with a Content-Type matching EXPR"
-msgstr ""
+msgstr "有一 Content-Type 匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~n
 #.
 #: pattern.c:176
 msgid "messages whose score is in RANGE"
-msgstr ""
+msgstr "分数在 RANGE 内的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~N
 #.
 #: pattern.c:181
-#, fuzzy
 msgid "new messages"
-msgstr "没有新邮件。"
+msgstr "新邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~O
 #.
 #: pattern.c:186
-#, fuzzy
 msgid "old messages"
-msgstr "排序邮件"
+msgstr "旧邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~p
 #.
 #: pattern.c:191
 msgid "messages addressed to you"
-msgstr ""
+msgstr "发给你的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~P
 #.
 #: pattern.c:196
-#, fuzzy
 msgid "messages from you"
-msgstr "邮件热键"
+msgstr "你发送的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~Q
 #.
 #: pattern.c:201
 msgid "messages which have been replied to"
-msgstr ""
+msgstr "已被回复的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~r
 #.
 #: pattern.c:206
 msgid "messages received in DATERANGE"
-msgstr ""
+msgstr "在 DATERANGE 收到的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~R
 #.
 #: pattern.c:211
-#, fuzzy
 msgid "already read messages"
-msgstr "没有未读邮件。"
+msgstr "已读邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~s
 #.
 #: pattern.c:216
 msgid "messages whose Subject header matches EXPR"
-msgstr ""
+msgstr "Subject 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~S
@@ -4861,100 +4824,92 @@ msgstr ""
 #. referenced by another email's Supersedes header.
 #.
 #: pattern.c:229
-#, fuzzy
 msgid "superseded messages"
-msgstr "排序邮件"
+msgstr "被取代的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~t
 #.
 #: pattern.c:234
 msgid "messages whose To header matches EXPR"
-msgstr ""
+msgstr "To 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~T
 #.
 #: pattern.c:239
-#, fuzzy
 msgid "tagged messages"
-msgstr "没有已标记的邮件。"
+msgstr "已标记的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~u
 #.
 #: pattern.c:244
-#, fuzzy
 msgid "messages addressed to subscribed mailing lists"
-msgstr "回复给指定的邮件列表"
+msgstr "发往已订阅的邮件列表的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~U
 #.
 #: pattern.c:249
-#, fuzzy
 msgid "unread messages"
-msgstr "没有未读邮件。"
+msgstr "未读邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~v
 #.
 #: pattern.c:254
-#, fuzzy
 msgid "messages in collapsed threads"
-msgstr "折叠/展开所有线索"
+msgstr "被折叠的线索里的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~V
 #.
 #: pattern.c:259
 msgid "cryptographically verified messages"
-msgstr ""
+msgstr "经过密码学验证的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~x
 #.
 #: pattern.c:264
 msgid "messages whose References header matches EXPR"
-msgstr ""
+msgstr "References 匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~X
 #.
 #: pattern.c:269
-#, fuzzy
 msgid "messages with RANGE attachments"
-msgstr "显示 MIME 附件"
+msgstr "附件在 RANGE 内的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~y
 #.
 #: pattern.c:274
 msgid "messages whose X-Label header matches EXPR"
-msgstr ""
+msgstr "X-Label 标头匹配 EXPR 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~z
 #.
 #: pattern.c:279
 msgid "messages whose size is in RANGE"
-msgstr ""
+msgstr "大小在 RANGE 内的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~=
 #.
 #: pattern.c:284
-#, fuzzy
 msgid "duplicated messages"
-msgstr "编辑邮件"
+msgstr "重复的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~$
 #.
 #: pattern.c:289
-#, fuzzy
 msgid "unreferenced messages"
-msgstr "没有未读邮件。"
+msgstr "未被引用的邮件"
 
 #: pattern.c:537 pattern.c:1028
 #, c-format
@@ -4986,9 +4941,9 @@ msgstr "无效的相对日期：%s"
 #. %c is the pattern character, i.e. "g".
 #.
 #: pattern.c:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Pattern modifier '~%c' is disabled."
-msgstr "错误历史已禁用。"
+msgstr "模式修饰符 '~%c' 已被禁用。"
 
 #. L10N:
 #. An unknown pattern modifier was somehow invoked.  This
@@ -5070,7 +5025,7 @@ msgstr "已搜索至开头而未发现匹配"
 #.
 #: pattern.c:2236
 msgid "Patterns"
-msgstr ""
+msgstr "模式"
 
 #. L10N:
 #. Pattern Completion Menu argument type: a regular expression
@@ -5108,21 +5063,21 @@ msgstr ""
 #.
 #: pattern.c:2297
 msgid "messages in threads containing messages matching PATTERN"
-msgstr ""
+msgstr "包含匹配 PATTERN 的邮件的线索中的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~<()
 #.
 #: pattern.c:2307
 msgid "messages whose immediate parent matches PATTERN"
-msgstr ""
+msgstr "直接父邮件匹配 PATTERN 的邮件"
 
 #. L10N:
 #. Pattern Completion Menu description for ~>()
 #.
 #: pattern.c:2317
 msgid "messages having an immediate child matching PATTERN"
-msgstr ""
+msgstr "任一直接子邮件匹配 PATTERN 的邮件"
 
 #: pgp.c:89
 msgid "Enter PGP passphrase:"
@@ -5173,12 +5128,11 @@ msgid "Decryption failed"
 msgstr "解密失败。"
 
 #: pgp.c:1224
-#, fuzzy
 msgid ""
 "[-- Error: decryption failed --]\n"
 "\n"
 msgstr ""
-"[-- 错误：解密失败：%s --]\n"
+"[-- 错误：解密失败 --]\n"
 "\n"
 
 #: pgp.c:1281
@@ -5297,7 +5251,7 @@ msgid "Command UIDL is not supported by server."
 msgstr "服务器不支持 UIDL 命令。"
 
 #: pop.c:324
-#, fuzzy, c-format
+#, c-format
 #| msgid "%d messages have been lost. Try reopening the mailbox."
 msgid "%d message(s) have been lost. Try reopening the mailbox."
 msgstr "%d 个邮件已丢失。请尝试重新打开邮箱。"
@@ -5355,7 +5309,7 @@ msgstr "服务器关闭了连接！"
 
 #: pop_auth.c:93
 msgid "Authenticating (SASL)..."
-msgstr "正在验证(SASL)..."
+msgstr "正在鉴权（SASL）……"
 
 #: pop_auth.c:322
 msgid "POP timestamp is invalid!"
@@ -5363,11 +5317,11 @@ msgstr "POP 时间戳无效！"
 
 #: pop_auth.c:327
 msgid "Authenticating (APOP)..."
-msgstr "正在验证(APOP)..."
+msgstr "正在鉴权（APOP）"
 
 #: pop_auth.c:350
 msgid "APOP authentication failed."
-msgstr "APOP 验证失败。"
+msgstr "APOP 鉴权失败。"
 
 #: pop_auth.c:389
 msgid "Command USER is not supported by server."
@@ -5375,7 +5329,7 @@ msgstr "服务器不支持 USER 命令。"
 
 #: pop_auth.c:478
 msgid "Authentication failed."
-msgstr "认证失败。"
+msgstr "鉴权失败。"
 
 #: pop_lib.c:57
 #, c-format
@@ -5466,10 +5420,10 @@ msgstr "打印"
 #. attachment menu.
 #.
 #: recvattach.c:476
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can't delete attachment from POP server."
 msgid "Convert attachment from %s to %s?"
-msgstr "无法从 POP 服务器上删除附件"
+msgstr "将附件从 %s 转换到 %s？"
 
 #: recvattach.c:592
 msgid "Saving..."
@@ -5488,7 +5442,7 @@ msgstr "附件已保存。"
 #: recvattach.c:667
 #, c-format
 msgid "Unable to save attachments to %s.  Using cwd"
-msgstr ""
+msgstr "无法保存附件到 %s。使用当前目录"
 
 #: recvattach.c:766
 #, c-format
@@ -5686,9 +5640,8 @@ msgstr "在 \"%2$s\" 的第 %3$d 行发现类型 %1$s 为错误的格式记录"
 #. unset mailcap_path
 #.
 #: rfc1524.c:453
-#, fuzzy
 msgid "Neither mailcap_path nor MAILCAPS specified"
-msgstr "没有指定 mailcap 路径"
+msgstr "没有指定 mailcap_path 或者 MAILCAPS"
 
 #: rfc1524.c:484
 #, c-format
@@ -5775,7 +5728,7 @@ msgstr "正在准备转发邮件..."
 #.
 #: send.c:1152
 msgid "Generate multipart/alternative content?"
-msgstr ""
+msgstr "生成 multipart/alternative 内容吗？"
 
 #. L10N:
 #. Message when saving fcc after sending.
@@ -5784,12 +5737,11 @@ msgstr ""
 #: send.c:1260
 #, c-format
 msgid "Saving Fcc to %s"
-msgstr ""
+msgstr "保存 Fcc 到 %s"
 
 #: send.c:1282
-#, fuzzy
 msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
-msgstr "在批量模式下不支持 Fcc 到 IMAP 邮箱"
+msgstr "警告：在批量模式下不支持 Fcc 到 IMAP 邮箱"
 
 #. L10N:
 #. Printed after the "Fcc to an IMAP mailbox is not supported" message.
@@ -5800,7 +5752,7 @@ msgstr "在批量模式下不支持 Fcc 到 IMAP 邮箱"
 #: send.c:1289
 #, c-format
 msgid "Skipping Fcc to %s"
-msgstr ""
+msgstr "跳过 Fcc 到 %s"
 
 #. L10N:
 #. Called when saving to $record or Fcc failed after sending.
@@ -5897,7 +5849,7 @@ msgstr "无法发送此邮件。"
 #.
 #: send.c:2638 send.c:2664
 msgid "Setting reply flags."
-msgstr ""
+msgstr "正在设置回复标志。"
 
 #: send.c:2709
 msgid "Mail sent."
@@ -5912,9 +5864,8 @@ msgstr "正在后台发送。"
 #. editing from the landing page.
 #.
 #: send.c:2774
-#, fuzzy
 msgid "Editing backgrounded."
-msgstr "正在后台发送。"
+msgstr "正在后台编辑。"
 
 #: sendlib.c:459
 msgid "No boundary parameter found! [report this error]"
@@ -5938,10 +5889,9 @@ msgstr "无法打开 %s"
 #. L10N: Prompt for $forward_decrypt when attaching or forwarding
 #. a message
 #: sendlib.c:1321
-#, fuzzy
 #| msgid "Print tagged attachment(s)?"
 msgid "Decrypt message attachment?"
-msgstr "打印已标记的附件？"
+msgstr "解密邮件附件吗？"
 
 #. L10N: Prompt when forwarding a message with
 #. $mime_forward_decode set, and there was a problem decoding
@@ -5952,7 +5902,7 @@ msgstr "打印已标记的附件？"
 msgid ""
 "There was a problem decoding the message for attachment.  Try again with "
 "decoding turned off?"
-msgstr ""
+msgstr "解码邮件附件时出现问题。不解码并重新尝试吗？"
 
 #. L10N: Prompt when attaching or forwarding a message with
 #. $forward_decrypt set, and there was a problem decrypting
@@ -5963,7 +5913,7 @@ msgstr ""
 msgid ""
 "There was a problem decrypting the message for attachment.  Try again with "
 "decryption turned off?"
-msgstr ""
+msgstr "解密邮件附件时出现问题。不解密并重新尝试吗？"
 
 #. L10N:
 #. The first line of output from $send_multipart_alternative_filter
@@ -5973,7 +5923,7 @@ msgstr ""
 #: sendlib.c:1495
 #, c-format
 msgid "Missing mime type from output of \"%s\"!"
-msgstr ""
+msgstr "\"%s\" 的输出中缺少 MIME 类型！"
 
 #. L10N:
 #. The second line of output from $send_multipart_alternative_filter
@@ -5983,7 +5933,7 @@ msgstr ""
 #: sendlib.c:1507
 #, c-format
 msgid "Missing blank line separator from output of \"%s\"!"
-msgstr ""
+msgstr "\"%s\" 的输出中缺少空行分隔！"
 
 #. L10N:
 #. Some clever people may try to generate a multipart/mixed
@@ -5997,7 +5947,7 @@ msgstr ""
 msgid ""
 "$send_multipart_alternative_filter does not support multipart type "
 "generation."
-msgstr ""
+msgstr "$send_multipart_alternative_filter 不支持生成 multipart 类型。"
 
 #: sendlib.c:2705
 msgid "$sendmail must be set in order to send mail."
@@ -6023,9 +5973,8 @@ msgstr "当准备 resent-from 时发生错误的 IDN %s。"
 #. This is the first part of the string: note with a trailing space.
 #.
 #: signal.c:115
-#, fuzzy
 msgid "Caught signal "
-msgstr "捕捉到信号 %d...  正在退出。\n"
+msgstr "捕获到信号 "
 
 #. L10N:
 #. This is printed in the exit handler when a signal is caught.
@@ -6034,9 +5983,8 @@ msgstr "捕捉到信号 %d...  正在退出。\n"
 #. signal number or name.
 #.
 #: signal.c:125
-#, fuzzy
 msgid "...  Exiting.\n"
-msgstr "%s...  正在退出。\n"
+msgstr "……正在退出。\n"
 
 #: smime.c:154
 msgid "Enter S/MIME passphrase:"
@@ -6254,20 +6202,20 @@ msgstr "无效的 SMTP URL：%s"
 #: smtp.c:597
 #, c-format
 msgid "SMTP authentication method %s requires SASL"
-msgstr "SMTP 认证方法 %s 需要 SASL"
+msgstr "SMTP 鉴权方法 %s 需要 SASL"
 
 #: smtp.c:604
 #, c-format
 msgid "%s authentication failed, trying next method"
-msgstr "%s 认证失败，正在尝试下一个方法"
+msgstr "%s 鉴权失败，正在尝试下一个方法"
 
 #: smtp.c:620
 msgid "SMTP authentication requires SASL"
-msgstr "SMTP 认证需要 SASL"
+msgstr "SMTP 鉴权需要 SASL"
 
 #: smtp.c:631
 msgid "SASL authentication failed"
-msgstr "SASL 认证失败。"
+msgstr "SASL 鉴权失败。"
 
 #: sort.c:265
 msgid "Could not find sorting function! [report this bug]"
@@ -6318,10 +6266,9 @@ msgstr "强制使用 mailcap 查看附件"
 #. compose menu: <view-pager>
 #.
 #: OPS:33
-#, fuzzy
 #| msgid "force viewing of attachment using mailcap"
 msgid "view attachment in pager using copiousoutput mailcap entry"
-msgstr "强制使用 mailcap 查看附件"
+msgstr "在翻页器中使用 copiousoutput mailcap 项查看附件"
 
 #. L10N: Help screen description for OP_ATTACH_VIEW_TEXT
 #. attachment menu: <view-text>
@@ -6343,36 +6290,35 @@ msgstr "切换子部分的显示"
 #.
 #: OPS:49
 msgid "manage autocrypt accounts"
-msgstr ""
+msgstr "管理 autocrypt 账号"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_CREATE_ACCT
 #. autocrypt account menu: <create-account>
 #.
 #: OPS:54
 msgid "create a new autocrypt account"
-msgstr ""
+msgstr "创建新的 autocrypt 账号"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_DELETE_ACCT
 #. autocrypt account menu: <delete-account>
 #.
 #: OPS:59
-#, fuzzy
 msgid "delete the current account"
-msgstr "删除当前条目"
+msgstr "删除当前账号"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_ACTIVE
 #. autocrypt account menu: <toggle-active>
 #.
 #: OPS:64
 msgid "toggle the current account active/inactive"
-msgstr ""
+msgstr "切换当前账号的激活状态"
 
 #. L10N: Help screen description for OP_AUTOCRYPT_TOGGLE_PREFER
 #. autocrypt account menu: <toggle-prefer-encrypt>
 #.
 #: OPS:69
 msgid "toggle the current account prefer-encrypt flag"
-msgstr ""
+msgstr "切换当前账号的偏好加密（prefer-encrypt）标志"
 
 #. L10N: Help screen description for OP_BACKGROUND_COMPOSE_MENU
 #. index menu: <background-compose-menu>
@@ -6380,7 +6326,7 @@ msgstr ""
 #.
 #: OPS:75
 msgid "list and select backgrounded compose sessions"
-msgstr ""
+msgstr "列出并选择已置于后台的撰写会话"
 
 #. L10N: Help screen description for OP_BOTTOM_PAGE
 #. generic menu: <bottom-page>
@@ -6482,7 +6428,7 @@ msgstr "将邮件作为附件添加到此邮件"
 #.
 #: OPS:149
 msgid "show autocrypt compose menu options"
-msgstr ""
+msgstr "显示 autocrypt 撰写菜单选项"
 
 #. L10N: Help screen description for OP_COMPOSE_EDIT_BCC
 #. compose menu: <edit-bcc>
@@ -6611,15 +6557,14 @@ msgstr "对这封邮件运行 ispell"
 #.
 #: OPS:242
 msgid "move attachment down in compose menu list"
-msgstr ""
+msgstr "在撰写菜单列表中下移附件"
 
 #. L10N: Help screen description for OP_COMPOSE_MOVE_UP
 #. compose menu: <move-up>
 #.
 #: OPS:247
-#, fuzzy
 msgid "move attachment up in compose menu list"
-msgstr "使用 mailcap 条目编辑附件"
+msgstr "在撰写菜单列表中上移附件"
 
 #. L10N: Help screen description for OP_COMPOSE_NEW_MIME
 #. compose menu: <new-mime>
@@ -6698,31 +6643,28 @@ msgstr "更新附件的编码信息"
 #.
 #: OPS:304
 msgid "view multipart/alternative"
-msgstr ""
+msgstr "查看 multipart/alternative"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_TEXT
 #. compose menu: <view-alt-text>
 #.
 #: OPS:309
-#, fuzzy
 msgid "view multipart/alternative as text"
-msgstr "作为文本查看附件"
+msgstr "作为文本查看 multipart/alternative"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_MAILCAP
 #. compose menu: <view-alt-mailcap>
 #.
 #: OPS:314
-#, fuzzy
 msgid "view multipart/alternative using mailcap"
-msgstr "强制使用 mailcap 查看附件"
+msgstr "使用 mailcap 查看 multipart/alternative"
 
 #. L10N: Help screen description for OP_COMPOSE_VIEW_ALT_PAGER
 #. compose menu: <view-alt-pager>
 #.
 #: OPS:319
-#, fuzzy
 msgid "view multipart/alternative in pager using copiousoutput mailcap entry"
-msgstr "强制使用 mailcap 查看附件"
+msgstr "在翻页器中使用 copiousoutput mailcap 项查看 multipart/alternative"
 
 #. L10N: Help screen description for OP_COMPOSE_WRITE_MESSAGE
 #. compose menu: <write-fcc>
@@ -7153,40 +7095,38 @@ msgstr "移动到最后一项"
 #. pager menu: <list-action>
 #.
 #: OPS:637
-#, fuzzy
 #| msgid "No mailing lists found!"
 msgid "perform mailing list action"
-msgstr "没有找到邮件列表！"
+msgstr "执行邮件列表动作"
 
 #. L10N: Help screen description for OP_LIST_ARCHIVE
 #. list menu: <list-archive>
 #.
 #: OPS:642
 msgid "retrieve list archive information"
-msgstr ""
+msgstr "获取列表存档信息"
 
 #. L10N: Help screen description for OP_LIST_HELP
 #. list menu: <list-help>
 #.
 #: OPS:647
 msgid "retrieve list help"
-msgstr ""
+msgstr "获取列表帮助"
 
 #. L10N: Help screen description for OP_LIST_OWNER
 #. list menu: <list-owner>
 #.
 #: OPS:652
 msgid "contact list owner"
-msgstr ""
+msgstr "联系列表所有者"
 
 #. L10N: Help screen description for OP_LIST_POST
 #. list menu: <list-post>
 #.
 #: OPS:657
-#, fuzzy
 #| msgid "reply to specified mailing list"
 msgid "post to mailing list"
-msgstr "回复给指定的邮件列表"
+msgstr "发送到邮件列表"
 
 #. L10N: Help screen description for OP_LIST_REPLY
 #. index menu: <list-reply>
@@ -7201,19 +7141,17 @@ msgstr "回复给指定的邮件列表"
 #. list menu: <list-subscribe>
 #.
 #: OPS:669
-#, fuzzy
 #| msgid "reply to specified mailing list"
 msgid "subscribe to mailing list"
-msgstr "回复给指定的邮件列表"
+msgstr "订阅邮件列表"
 
 #. L10N: Help screen description for OP_LIST_UNSUBSCRIBE
 #. list menu: <list-unsubscribe>
 #.
 #: OPS:674
-#, fuzzy
 #| msgid "Unsubscribed from %s"
 msgid "unsubscribe from mailing list"
-msgstr "已退订 %s..."
+msgstr "退订邮件列表"
 
 #. L10N: Help screen description for OP_MACRO
 #: OPS:677
@@ -7242,18 +7180,16 @@ msgstr "将线索拆为两个"
 #. pager menu: <browse-mailboxes>
 #.
 #: OPS:696
-#, fuzzy
 msgid "select a new mailbox from the browser"
-msgstr "请选择本目录中一个新的文件"
+msgstr "从浏览器中打开一个新邮箱"
 
 #. L10N: Help screen description for OP_MAIN_BROWSE_MAILBOXES_READONLY
 #. index menu: <browse-mailboxes-readonly>
 #. pager menu: <browse-mailboxes-readonly>
 #.
 #: OPS:702
-#, fuzzy
 msgid "select a new mailbox from the browser in read only mode"
-msgstr "用只读模式打开邮箱"
+msgstr "从浏览器中以只读模式打开一个新邮箱"
 
 #. L10N: Help screen description for OP_MAIN_CHANGE_FOLDER
 #. index menu: <change-folder>
@@ -7558,10 +7494,9 @@ msgstr "跳过引用"
 #. pager menu: <skip-headers>
 #.
 #: OPS:928
-#, fuzzy
 #| msgid "skip beyond quoted text"
 msgid "skip beyond headers"
-msgstr "跳过引用"
+msgstr "跳过标头"
 
 #. L10N: Help screen description for OP_PAGER_TOP
 #. pager menu: <top>
@@ -8063,18 +7998,16 @@ msgstr "检查经典 PGP"
 #. pager menu: <sidebar-first>
 #.
 #: OPS.SIDEBAR:19
-#, fuzzy
 msgid "move the highlight to the first mailbox"
-msgstr "移动高亮到下一邮箱"
+msgstr "移动高亮到第一个邮箱"
 
 #. L10N: Help screen description for OP_SIDEBAR_LAST
 #. index menu: <sidebar-last>
 #. pager menu: <sidebar-last>
 #.
 #: OPS.SIDEBAR:25
-#, fuzzy
 msgid "move the highlight to the last mailbox"
-msgstr "移动高亮到下一邮箱"
+msgstr "移动高亮到最后一个邮箱"
 
 #. L10N: Help screen description for OP_SIDEBAR_NEXT
 #. index menu: <sidebar-next>
