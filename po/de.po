@@ -7,7 +7,7 @@
 # Max Görner <max@familie-goerner.eu>, 2018.
 # Christoph Berg <myon@debian.org>, 2021.
 # Olaf Hering <olaf@aepfle.de>, 2017-2021.
-# Helge Kreutzmann <debian@helgefjell.de>, 2021,2022.
+# Helge Kreutzmann <debian@helgefjell.de>, 2021,2022,2026.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2021.
 #
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2022-02-12 10:45-0800\n"
-"PO-Revision-Date: 2022-07-10 20:51+0200\n"
+"PO-Revision-Date: 2026-01-09 09:04+0100\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -3593,7 +3593,7 @@ msgstr ""
 #.
 #: init.h:4668
 msgid "M%?n?AIL&ail?"
-msgstr ""
+msgstr "M%?n?AIL&ail?"
 
 #. L10N:
 #. $ts_status_format default value
