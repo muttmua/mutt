@@ -10,10 +10,10 @@ packages:
 - libassuan
 - libidn2
 - libunistring
-- db5
 - kyotocabinet
 - libiconv
 - gettext-runtime
+- gettext-tools
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
