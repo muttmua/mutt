@@ -1,15 +1,14 @@
 # Swedish messages for Mutt.
-# This file is distributed under the same license as the Mutt package.
-# Johan Svedberg 2004-2007 <johan@svedberg.com>
+# Copyright (C) Johan Svedberg 2004-2007 <johan@svedberg.com>
 # Daniel Nylander <po@danielnylander.se>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Mutt 2.2.16\n"
+"Project-Id-Version: Mutt 2.3.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2025-12-11 15:06+0100\n"
-"PO-Revision-Date: 2025-12-11 16:40+0100\n"
-"Last-Translator: Daniel Nylander <github@danielnylander.se>\n"
-"Language-Team: Swedish <sv@li.org>\n"
+"POT-Creation-Date: 2026-01-09 12:45+0800\n"
+"PO-Revision-Date: 2026-01-09 07:04+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2955,7 +2954,7 @@ msgstr "\"unhook\": okänd \"hook\"-typ: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "\"unhook\": Kan inte ta bort en %s inifrån en %s."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:637
+#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
 msgid "No authenticators available"
 msgstr "Ingen verifieringsmetod tillgänglig"
 
@@ -2999,7 +2998,7 @@ msgstr "Inloggning misslyckades."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:675 smtp.c:771 smtp.c:877
+#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Verifierar (%s)..."
@@ -3093,11 +3092,11 @@ msgstr "Stänger anslutning till %s..."
 msgid "This IMAP server is ancient. Mutt does not work with it."
 msgstr "Den här IMAP-servern är uråldrig. Mutt fungerar inte med den."
 
-#: imap/imap.c:499 pop_lib.c:296 smtp.c:519
+#: imap/imap.c:499 pop_lib.c:296 smtp.c:524
 msgid "Secure connection with TLS?"
 msgstr "Säker anslutning med TLS?"
 
-#: imap/imap.c:509 pop_lib.c:316 smtp.c:531
+#: imap/imap.c:509 pop_lib.c:316 smtp.c:536
 msgid "Could not negotiate TLS connection"
 msgstr "Kunde inte förhandla fram TLS-anslutning"
 
@@ -3700,8 +3699,8 @@ msgid ""
 "under certain conditions; type `mutt -vv' for details.\n"
 msgstr ""
 "Copyright (C) 1996-2026 Michael R. Elkins och andra.\n"
-"Mutt levereras UTAN NÅGON SOM HELST GARANTI; för mer information,\n"
-"skriv `mutt -vv'.\n"
+"Mutt levereras UTAN NÅGON SOM HELST GARANTI; för mer information, skriv "
+"`mutt -vv'.\n"
 "Mutt är fri programvara och du är välkommen att distribuera den under\n"
 "vissa villkor; skriv `mutt -vv' för mer information.\n"
 
@@ -5844,7 +5843,7 @@ msgstr "Inga bilagor, avbryta sändningen?"
 msgid "Attachment referenced in message is missing"
 msgstr "Bilagan som nämns i meddelandet saknas"
 
-#: send.c:2553 smtp.c:240
+#: send.c:2553 smtp.c:245
 msgid "Sending message..."
 msgstr "Skickar meddelande..."
 
@@ -6202,47 +6201,52 @@ msgstr "895"
 msgid "SMTP session failed: %s"
 msgstr "SMTP-session misslyckades: %s"
 
-#: smtp.c:235
+#: smtp.c:217
+#, c-format
+msgid "SMTP session failed: cannot add recipient <%s>"
+msgstr "SMTP-session misslyckades: kan inte lägga till mottagare <%s>"
+
+#: smtp.c:240
 #, c-format
 msgid "SMTP session failed: unable to open %s"
 msgstr "SMTP-session misslyckades: kunde inte öppna %s"
 
-#: smtp.c:352
+#: smtp.c:357
 msgid "No from address given"
 msgstr "Ingen avsändaradress angiven"
 
-#: smtp.c:409
+#: smtp.c:414
 msgid "SMTP session failed: read error"
 msgstr "SMTP-session misslyckades: läsfel"
 
-#: smtp.c:411
+#: smtp.c:416
 msgid "SMTP session failed: write error"
 msgstr "SMTP-session misslyckades: skrivfel"
 
-#: smtp.c:413
+#: smtp.c:418
 msgid "Invalid server response"
 msgstr "Ogiltigt svar från servern"
 
-#: smtp.c:436
+#: smtp.c:441
 #, c-format
 msgid "Invalid SMTP URL: %s"
 msgstr "Ogiltig SMTP-URL: %s"
 
-#: smtp.c:598
+#: smtp.c:603
 #, c-format
 msgid "SMTP authentication method %s requires SASL"
 msgstr "SMTP-autentiseringsmetod %s kräver SASL"
 
-#: smtp.c:605
+#: smtp.c:610
 #, c-format
 msgid "%s authentication failed, trying next method"
 msgstr "%s autentisering misslyckades, försöker nästa metod"
 
-#: smtp.c:621
+#: smtp.c:626
 msgid "SMTP authentication requires SASL"
 msgstr "SMTP-autentisering kräver SASL"
 
-#: smtp.c:632
+#: smtp.c:637
 msgid "SASL authentication failed"
 msgstr "SASL-autentisering misslyckades"
 
@@ -8103,6 +8107,18 @@ msgstr "göra sidofältet (o)synligt"
 #: OPS.SMIME:18
 msgid "show S/MIME options"
 msgstr "visa S/MIME-flaggor"
+
+#~ msgid ""
+#~ "Copyright (C) 1996-2025 Michael R. Elkins and others.\n"
+#~ "Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n"
+#~ "Mutt is free software, and you are welcome to redistribute it\n"
+#~ "under certain conditions; type `mutt -vv' for details.\n"
+#~ msgstr ""
+#~ "Copyright (C) 1996-2025 Michael R. Elkins och andra.\n"
+#~ "Mutt levereras UTAN NÅGON SOM HELST GARANTI; för mer information,\n"
+#~ "skriv `mutt -vv'.\n"
+#~ "Mutt är fri programvara och du är välkommen att distribuera den under\n"
+#~ "vissa villkor; skriv `mutt -vv' för mer information.\n"
 
 #, fuzzy
 #~ msgid "Warning: Fcc to an IMAP mailbox is not supported in batch mode"
