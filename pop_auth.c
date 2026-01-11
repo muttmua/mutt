@@ -214,7 +214,7 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
   const char *chosen_mech, *pop_auth_data;
   BUFFER *output_buf = NULL, *input_buf = NULL;
   char *gsasl_step_output = NULL;
-  int rc = POP_A_FAILURE, gsasl_rc = GSASL_OK;
+  int rc = POP_A_FAILURE, gsasl_rc = GSASL_OK, first_challenge = 1;
 
   chosen_mech = mutt_gsasl_get_mech (method, pop_data->auth_list);
   if (!chosen_mech)
@@ -258,6 +258,17 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
       break;
 
     pop_auth_data = mutt_b2s (input_buf) + 2;
+
+    /* Workaround for broken POP3 servers. See pop_auth_sasl() above.
+     * Ignore the first challenge if it's not BASE64. */
+    if (first_challenge)
+    {
+      first_challenge = 0;
+      /* Use output_buf as a temp buffer. */
+      if (mutt_buffer_from_base64 (output_buf, pop_auth_data) < 0)
+        pop_auth_data = "";
+    }
+
     gsasl_rc = gsasl_step64 (gsasl_session, pop_auth_data, &gsasl_step_output);
     if (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK)
     {
