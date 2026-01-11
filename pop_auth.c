@@ -46,7 +46,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
 {
   sasl_conn_t *saslconn;
   sasl_interact_t *interaction = NULL;
-  int rc;
+  int rc, first_challenge = 1;
   char *buf = NULL;
   size_t bufsize = 0;
   char inbuf[LONG_STRING];
@@ -123,8 +123,20 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
         && sasl_decode64 (inbuf+2, strlen (inbuf+2), buf, bufsize - 1, &len) != SASL_OK)
     {
       dprint (1, (debugfile, "pop_auth_sasl: error base64-decoding server response.\n"));
-      goto bail;
+
+      /* Some server implementations may send non-base64-encoded challenge,
+       * which is against RFC 5034. However, for certain SASL mechanism, e.g.
+       * PLAIN, the content of challenge doesn't really matter, thus we try to
+       * keep going to improve compatibility if the first challenge fails to
+       * decode.
+       */
+      if (first_challenge)
+        len = 0;
+      else
+        goto bail;
     }
+
+    first_challenge = 0;
 
     if (!client_start)
       FOREVER
