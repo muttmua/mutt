@@ -551,7 +551,7 @@ static int mbox_close_message (CONTEXT *ctx, MESSAGE *msg)
 
 static int mbox_commit_message (CONTEXT *ctx, MESSAGE *msg)
 {
-  if (fputc ('\n', msg->fp) == EOF)
+  if (fputs (MBOX_SEP, msg->fp) == EOF)
     return -1;
 
   if ((fflush (msg->fp) == EOF) ||
@@ -1039,7 +1039,7 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
 	  }
 	  break;
 	default:
-	  if (fputs("\n", fp) == EOF)
+	  if (fputs (MBOX_SEP, fp) == EOF)
 	  {
 	    mutt_perror (mutt_b2s (tempfile));
 	    mutt_sleep (5);
