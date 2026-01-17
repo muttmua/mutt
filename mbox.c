@@ -314,7 +314,8 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 
 	if (PREV->content->length < 0)
 	{
-	  PREV->content->length = loc - PREV->content->offset - 1;
+	  PREV->content->length = loc - PREV->content->offset -
+                                  (has_mbox_sep ? 1 : 0);
 	  if (PREV->content->length < 0)
 	    PREV->content->length = 0;
 	}
@@ -451,7 +452,8 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 
     if (PREV->content->length < 0)
     {
-      PREV->content->length = ftello (ctx->fp) - PREV->content->offset - 1;
+      PREV->content->length = ftello (ctx->fp) - PREV->content->offset -
+                              (has_mbox_sep ? 1 : 0);
       if (PREV->content->length < 0)
 	PREV->content->length = 0;
     }
