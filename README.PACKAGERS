@@ -1,0 +1,32 @@
+Notice to Packagers regarding Licensing and SSL Bindings
+
+We (the Mutt team) are not lawyers; this notice is intended to alert
+package maintainers to potential licensing issues regarding Mutt's
+distribution.
+
+* License Overview:
+
+Mutt is licensed under GPLv2 or any later version (GPLv2+). However,
+it includes bindings for OpenSSL and LibreSSL.
+
+* Incompatibility with OpenSSL (pre-3.0) and LibreSSL:
+
+According to the Free Software Foundation (FSF), the licenses for
+SSLeay, LibreSSL, and OpenSSL (versions prior to 3.0) are incompatible
+with the GNU GPL. This is primarily due to "advertising requirements"
+that constitute additional restrictions not permitted by the GPL.
+
+It appears Mutt cannot be easily redistributed in binary form when
+built with these libraries, unless they are considered "System
+Libraries" of the operating system under the terms of the GPL.
+
+* OpenSSL 3.0 and GPLv3:
+
+OpenSSL 3.0 is licensed under the Apache Software License 2.0. The FSF
+states that the Apache 2.0 license is compatible with GPLv3, but not
+GPLv2.
+
+Since Mutt is GPLv2+, it can be distributed alongside OpenSSL 3.0,
+provided the resulting binary is distributed under the terms of the
+GPLv3. This utilizes the "any later version" clause of Mutt's license
+to resolve the Apache 2.0 compatibility conflict.
