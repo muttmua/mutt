@@ -306,6 +306,9 @@ for one of the functions listed while Mutt is running.
 .PP
 For a more up-to-date list of bugs, errm, fleas, please visit the
 mutt project's bug tracking system under https://gitlab.com/muttmua/mutt/issues.
+NOTE: The bug tracking system is not meant for feature requests.
+These should go to the mutt-dev mailing list,
+see section 1.2 Mailing Lists of the manual for details.
 .SH NO WARRANTIES
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of

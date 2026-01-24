@@ -60,14 +60,13 @@ announcements
 <listitem>
 
 <para>
-<email>mutt-users-request@mutt.org</email> &mdash; help, bug reports and
-feature requests
+<email>mutt-users-request@mutt.org</email> &mdash; users help users
 </para>
 </listitem>
 <listitem>
 
 <para>
-<email>mutt-dev-request@mutt.org</email> &mdash; development mailing list
+<email>mutt-dev-request@mutt.org</email> &mdash; patches, bug reports, feature requests
 </para>
 </listitem>
 
@@ -77,6 +76,14 @@ feature requests
 All messages posted to <emphasis>mutt-announce</emphasis> are
 automatically forwarded to <emphasis>mutt-users</emphasis>, so you do
 not need to be subscribed to both lists.
+</para>
+
+<para>
+NOTE: You MUST be subscribed to a list in order to post to it.
+This is not to make your life harder,
+but to reduce SPAM and/or UCE.
+The mailing list software being used is GNU Mailman,
+with its implied deficiencies.
 </para>
 
 </sect1>
@@ -107,7 +114,7 @@ For version control access, please refer to the
 <term>Bug Tracking System</term>
 <listitem>
 <para>
-The official Mutt bug tracking system can be found at
+The official Mutt bug tracking system (not for feature requests) can be found at
 <ulink url="https://gitlab.com/muttmua/mutt/issues">https://gitlab.com/muttmua/mutt/issues</ulink>
 </para>
 </listitem>
