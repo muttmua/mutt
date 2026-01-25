@@ -9,6 +9,21 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.3.0 (2026-01-25):
+
+  + $socket_receive_timeout and $socket_send_timeout cause mutt to
+    timeout on a network read/write operation, respectively.  These
+    could be useful if you have an unreliable connection and
+    frequently find mutt gets stuck in a read.
+  ! The folder browser now differentiates browsing for a file versus a
+    mailbox.  For IMAP users, this means when attaching a file to an
+    email, mutt will browse your local computer by default.
+  ! <edit-label> no longer untags messages.  This is consistent with
+    other operations inside of mutt.
+  + $imap_reconnect_tries and $imap_reconnect_sleep control the number
+    of times mutt will try to reconnect when a connection is lost, and
+    how long to sleep between each retry.
+
 2.2.16 (2025-11-22):
 
   ! Bug fix release.
