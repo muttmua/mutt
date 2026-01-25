@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-01-09 07:45+0300\n"
+"POT-Creation-Date: 2026-01-11 21:00+0800\n"
 "PO-Revision-Date: 2026-01-09 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://gitlab.com/bitigchi/mutt\n"
@@ -2962,7 +2962,7 @@ msgstr "unhook: Bilinmeyen kanca: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: %s bir %s içindeyken silinemez."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
+#: imap/auth.c:115 pop_auth.c:653 smtp.c:642
 msgid "No authenticators available"
 msgstr "Kullanılabilir bir kimlik doğrulayıcı yok"
 
@@ -2994,11 +2994,11 @@ msgstr "GSSAPI doğrulaması başarısız."
 msgid "LOGIN disabled on this server."
 msgstr "Bu sunucuda LOGIN devre dışı."
 
-#: imap/auth_login.c:47 pop_auth.c:369
+#: imap/auth_login.c:47 pop_auth.c:392
 msgid "Logging in..."
 msgstr "Giriş yapılıyor..."
 
-#: imap/auth_login.c:70 pop_auth.c:412
+#: imap/auth_login.c:70 pop_auth.c:435
 msgid "Login failed."
 msgstr "Giriş başarısız."
 
@@ -3006,7 +3006,7 @@ msgstr "Giriş başarısız."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
+#: pop_auth.c:235 pop_auth.c:453 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Kimlik doğrulanıyor (%s)..."
@@ -3019,7 +3019,7 @@ msgstr "Kimlik doğrulanıyor (%s)..."
 msgid "%s authentication failed."
 msgstr "%s kimlik doğrulaması başarısız."
 
-#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:202 pop_auth.c:304
 msgid "SASL authentication failed."
 msgstr "SASL kimlik doğrulaması başarısız oldu."
 
@@ -5327,23 +5327,23 @@ msgstr "Sunucu bağlantıyı kesti!"
 msgid "Authenticating (SASL)..."
 msgstr "Doğrulanıyor (SASL)..."
 
-#: pop_auth.c:322
+#: pop_auth.c:345
 msgid "POP timestamp is invalid!"
 msgstr "POP zaman damgası geçersiz!"
 
-#: pop_auth.c:327
+#: pop_auth.c:350
 msgid "Authenticating (APOP)..."
 msgstr "Doğrulanıyor (APOP)..."
 
-#: pop_auth.c:350
+#: pop_auth.c:373
 msgid "APOP authentication failed."
 msgstr "APOP doğrulaması başarısız oldu."
 
-#: pop_auth.c:389
+#: pop_auth.c:412
 msgid "Command USER is not supported by server."
 msgstr "Sunucu USER komutunu desteklemiyor."
 
-#: pop_auth.c:478
+#: pop_auth.c:501
 msgid "Authentication failed."
 msgstr "Kimlik doğrulaması başarısız."
 

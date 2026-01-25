@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.2.16\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-01-07 16:28+0100\n"
+"POT-Creation-Date: 2026-01-11 21:00+0800\n"
 "PO-Revision-Date: 2026-01-07 16:32+0100\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
@@ -3078,7 +3078,7 @@ msgstr "unhook : type hook inconnu : %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook : impossible de supprimer un %s à l'intérieur d'un %s."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
+#: imap/auth.c:115 pop_auth.c:653 smtp.c:642
 msgid "No authenticators available"
 msgstr "Pas d'authentificateurs disponibles"
 
@@ -3110,11 +3110,11 @@ msgstr "L'authentification GSSAPI a échoué."
 msgid "LOGIN disabled on this server."
 msgstr "LOGIN désactivée sur ce serveur."
 
-#: imap/auth_login.c:47 pop_auth.c:369
+#: imap/auth_login.c:47 pop_auth.c:392
 msgid "Logging in..."
 msgstr "Connexion..."
 
-#: imap/auth_login.c:70 pop_auth.c:412
+#: imap/auth_login.c:70 pop_auth.c:435
 msgid "Login failed."
 msgstr "La connexion a échoué."
 
@@ -3122,7 +3122,7 @@ msgstr "La connexion a échoué."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
+#: pop_auth.c:235 pop_auth.c:453 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Authentification (%s)..."
@@ -3135,7 +3135,7 @@ msgstr "Authentification (%s)..."
 msgid "%s authentication failed."
 msgstr "L'authentification %s a échoué."
 
-#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:202 pop_auth.c:304
 msgid "SASL authentication failed."
 msgstr "L'authentification SASL a échoué."
 
@@ -5539,23 +5539,23 @@ msgstr "Le serveur a fermé la connexion !"
 msgid "Authenticating (SASL)..."
 msgstr "Authentification (SASL)..."
 
-#: pop_auth.c:322
+#: pop_auth.c:345
 msgid "POP timestamp is invalid!"
 msgstr "L'horodatage POP est invalide !"
 
-#: pop_auth.c:327
+#: pop_auth.c:350
 msgid "Authenticating (APOP)..."
 msgstr "Authentification (APOP)..."
 
-#: pop_auth.c:350
+#: pop_auth.c:373
 msgid "APOP authentication failed."
 msgstr "L'authentification APOP a échoué."
 
-#: pop_auth.c:389
+#: pop_auth.c:412
 msgid "Command USER is not supported by server."
 msgstr "La commande USER n'est pas supportée par le serveur."
 
-#: pop_auth.c:478
+#: pop_auth.c:501
 msgid "Authentication failed."
 msgstr "L'authentification a échoué."
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.3.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-01-09 11:59+0200\n"
+"POT-Creation-Date: 2026-01-11 21:00+0800\n"
 "PO-Revision-Date: 2026-01-09 14:12+0200\n"
 "Last-Translator: Vsevolod Volkov <mutt@vvv.kyiv.ua>\n"
 "Language-Team: \n"
@@ -2968,7 +2968,7 @@ msgstr "unhook: неизвестный тип события: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Невозможно удалить %s из команды %s."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
+#: imap/auth.c:115 pop_auth.c:653 smtp.c:642
 msgid "No authenticators available"
 msgstr "Нет доступных методов аутентификации."
 
@@ -3000,11 +3000,11 @@ msgstr "Ошибка GSSAPI-аутентификации."
 msgid "LOGIN disabled on this server."
 msgstr "Команда LOGIN запрещена на этом сервере."
 
-#: imap/auth_login.c:47 pop_auth.c:369
+#: imap/auth_login.c:47 pop_auth.c:392
 msgid "Logging in..."
 msgstr "Регистрация..."
 
-#: imap/auth_login.c:70 pop_auth.c:412
+#: imap/auth_login.c:70 pop_auth.c:435
 msgid "Login failed."
 msgstr "Регистрация не удалась."
 
@@ -3012,7 +3012,7 @@ msgstr "Регистрация не удалась."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
+#: pop_auth.c:235 pop_auth.c:453 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Аутентификация (%s)..."
@@ -3025,7 +3025,7 @@ msgstr "Аутентификация (%s)..."
 msgid "%s authentication failed."
 msgstr "Ошибка %s-аутентификации."
 
-#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:202 pop_auth.c:304
 msgid "SASL authentication failed."
 msgstr "Ошибка SASL-аутентификации."
 
@@ -5337,23 +5337,23 @@ msgstr "Сервер закрыл соединение!"
 msgid "Authenticating (SASL)..."
 msgstr "Аутентификация (SASL)..."
 
-#: pop_auth.c:322
+#: pop_auth.c:345
 msgid "POP timestamp is invalid!"
 msgstr "APOP: неверное значение времени"
 
-#: pop_auth.c:327
+#: pop_auth.c:350
 msgid "Authenticating (APOP)..."
 msgstr "Аутентификация (APOP)..."
 
-#: pop_auth.c:350
+#: pop_auth.c:373
 msgid "APOP authentication failed."
 msgstr "Ошибка APOP-аутентификации."
 
-#: pop_auth.c:389
+#: pop_auth.c:412
 msgid "Command USER is not supported by server."
 msgstr "Команда USER сервером не поддерживается."
 
-#: pop_auth.c:478
+#: pop_auth.c:501
 msgid "Authentication failed."
 msgstr "Ошибка аутентификации."
 

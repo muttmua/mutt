@@ -1,3 +1,708 @@
+2026-01-25 10:55:27 +0800  Kevin J. McCarthy  <kevin@8t8.us> (6d9cf2fb)
+
+        * Update UPDATING file for 2.3.0 release.
+
+M	UPDATING
+
+2026-01-24 13:54:37 +0100  Rene Kita  <mail@rkta.de> (8fa41ae2)
+
+        * Make clear issues are not for feature requests
+        
+        As discussed in [0] feature requests should be discussed on the mailing
+        list before being added to the issue tracker. Add some notes to make
+        this more clear to the user.
+        
+        As discussed in [1] it makes more sense to send feature requests and bug
+        reports to the dev ML. Update the manual to reflect that. Change wording
+        to keep the list entries under 80 chars.
+        
+        While at it, copy a NOTE from the web site about the need to be
+        subscribed in order to post to a ML.
+        
+        [0]: https://marc.info/?l=mutt-dev&m=176822608723403&w=2
+        [1]: https://marc.info/?l=mutt-dev&m=176925724408475&w=2
+
+M	doc/manual.xml.head
+M	doc/mutt.man
+
+2026-01-18 13:40:11 +0800  Kevin J. McCarthy  <kevin@8t8.us> (301067e4)
+
+        * Add README.PACKAGERS file.
+        
+        This notes potential distribution issues of Mutt with
+        OpenSSL (pre-3.0) and LibreSSL.
+
+M	Makefile.am
+A	README.PACKAGERS
+
+2026-01-12 09:36:23 +0100  Grzegorz Szymaszek  <gszymaszek@short.pl> (5854039b)
+
+        * Update the Polish translation for Mutt 2.3.0
+
+M	po/pl.po
+
+2026-01-12 10:06:00 +0800  Ivan Vilata i Balaguer  <ivan@selidor.net> (0224e9fb)
+
+        * Update Catalan translation.
+
+M	po/ca.po
+
+2026-01-11 20:35:40 +0800  Kevin McCarthy  <kevin@8t8.us> (12f17ce7)
+
+        * Add POP3 non-base64 workaround to gsasl code too.
+        
+        As described in the previous commit, some servers send a non-base64
+        encoded challenge in the initial response.
+        
+        Ignore the base64 decode failure for the first challenge, to improve
+        compatibility in the gsasl authentication code too.
+        
+        This is modeled after the same gsasl fix in smtp.c.
+
+M	pop_auth.c
+
+2026-01-11 20:09:49 +0800  Yao Zi  <me@ziyao.cc> (0746ae48)
+
+        * pop_auth: Don't bail out when failing to decode the first SASL challenge
+        
+        RFC 5034 requires data in SASL server challenges to be encoded in base64
+        when integrating with POP3,
+        
+        > A server challenge is sent as a line consisting of a "+" character,
+        > followed by a single space and a string encoded using Base64, as
+        > specified in Section 4 of [RFC4648].  This line MUST NOT contain any
+        > text other than the BASE64-encoded challenge.
+        
+        However, some mail providers put raw text instead of base64-encoded
+        data in the challenge. Mutt always bails out when encountering them,
+        
+        [2026-01-08 05:02:31] Authenticating (SASL)...
+        [2026-01-08 05:02:31] 6> AUTH PLAIN
+        [2026-01-08 05:02:31] 6< + Ready for additional text
+        [2026-01-08 05:02:31] pop_auth_sasl: error base64-decoding server response.
+        [2026-01-08 05:02:31] 6> *
+        [2026-01-08 05:02:32] 6< -ERR Au
+        [2026-01-08 05:02:32] SASL authentication failed.
+        
+        while some other POP3 clients, e.g. cURL, accept them,
+        
+        > AUTH PLAIN
+        < + Ready for additional text
+        > dGVzdHRlc3R0ZXN0Cg==
+        < +OK
+        > LIST
+        < +OK 223 messages (1256448 octets)
+        
+        which might work since some SASL mechanisms, e.g. PLAIN, don't care
+        about the challenge responsed by server.
+        
+        Let's stop bailing out early when failing to decode the first SASL
+        challenge as base64. Instead, print a debug message and then try to
+        continue the authentication process for better compatibility with these
+        quirky service providers. This takes a similar workaround to
+        b363b602e179 ("Add SMTP gsasl auth workaround for broken Microsoft
+        servers.")
+        
+        Link: https://datatracker.ietf.org/doc/html/rfc5034
+        Signed-off-by: Yao Zi <me@ziyao.cc>
+
+M	pop_auth.c
+
+2026-01-10 10:59:31 +0100  Petr Písař  <petr.pisar@atlas.cz> (11bf4bbb)
+
+        * Update Czech translation for mutt 2.2.16
+
+M	po/cs.po
+
+2026-01-10 07:26:11 +0800  lilydjwg  <lilydjwg@gmail.com> (8ddd7be5)
+
+        * Update zh_CN.po translations.
+
+M	po/zh_CN.po
+
+2026-01-10 07:17:51 +0800  Emir SARI  <emir_sari@icloud.com> (9d11ccac)
+
+        * Update Turkish translations
+
+M	po/tr.po
+
+2026-01-09 18:27:49 +0800  Kevin McCarthy  <kevin@8t8.us> (0908474f)
+
+        * Fix sr.ht freebsd build system deps.
+        
+        db5 is not needed.
+        
+        The latest version running there appears to need gettext-tools
+        installed in order to run autoreconf.
+
+M	.builds/freebsd.yml
+
+2026-01-09 21:15:24 +0800  Vsevolod Volkov  <mutt@vvv.kyiv.ua> (5ee1275b)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2026-01-09 21:13:07 +0800  Vsevolod Volkov  <mutt@vvv.kyiv.ua> (f0c48b91)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2026-01-09 17:59:20 +0800  Helge Kreutzmann  <debian@helgefjell.de> (4b79ae7a)
+
+        * Update de.po.
+
+M	po/de.po
+
+2026-01-09 15:28:17 +0800  Daniel Nylander  <po@danielnylander.se> (f3733d23)
+
+        * Updated Swedish translation.
+
+M	po/sv.po
+
+2026-01-09 12:45:29 +0800  Kevin McCarthy  <kevin@8t8.us> (f0092d23)
+
+        * Update copyrights to 2026.
+
+M	COPYRIGHT
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	main.c
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
+2026-01-07 16:38:40 +0100  Vincent Lefevre  <vincent@vinc17.net> (33c58fb2)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2025-12-14 14:26:41 +0800  Daniel Nylander  <po@danielnylander.se> (074eb728)
+
+        * Updated Swedish translation.
+
+M	po/sv.po
+
+2025-12-11 15:24:08 +0000  Yao Zi via Mutt-dev  <mutt-dev@mutt.org> (c8425a77)
+
+        * Display the address when failing to add an SMTP recipient
+        
+        Some providers are picky about recipient addresses, they may refuse to
+        send mails to an address to which mails have previously been rejected
+        for "550 5.1.1 Bad destination mailbox address".
+        
+        Sending an RCPT TO command with such an address will fail with these
+        providers, and result in a non-standard enhanced status code. In this
+        case, mutt only emits an error like "SMTP session failed: 550 ..."
+        without mentioning the address associated with the failed command, which
+        doesn't help much if there are many recipients.
+        
+        This patch adds extra error log about the recipient address when an RCPT
+        TO command fails. Users then could easily distinguish the problematic
+        recipient, and remove it or contact the provider for support.
+        
+        Signed-off-by: Yao Zi <me@ziyao.cc>
+
+M	smtp.c
+
+2025-11-22 11:07:18 +0800  Kevin McCarthy  <kevin@8t8.us> (597b2970)
+
+        * Merge branch 'stable'
+
+2025-11-22 10:59:52 +0800  Kevin McCarthy  <kevin@8t8.us> (7b98015d)
+
+        * automatic post-release commit for mutt-2.2.16
+
+M	ChangeLog
+M	VERSION
+
+2025-11-09 12:52:41 +0800  Kevin McCarthy  <kevin@8t8.us> (58e9dca4)
+
+        * Merge branch 'stable'
+
+2025-10-03 13:17:07 +0200  Vincent Lefevre  <vincent@vinc17.net> (ba36b184)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2025-10-02 13:44:26 +0800  Kevin McCarthy  <kevin@8t8.us> (4bdfed9f)
+
+        * Merge branch 'stable'
+
+2025-09-23 14:01:32 +0800  Kevin McCarthy  <kevin@8t8.us> (a5e1f207)
+
+        * Merge branch 'stable'
+
+2025-08-26 19:07:40 +0800  Kevin McCarthy  <kevin@8t8.us> (0742c5d5)
+
+        * Merge branch 'stable'
+
+2025-08-26 10:44:13 +0800  Kevin McCarthy  <kevin@8t8.us> (3728efe6)
+
+        * Merge branch 'stable'
+
+2025-05-03 19:25:34 +0800  Kevin McCarthy  <kevin@8t8.us> (5fd040e3)
+
+        * Merge branch 'stable'
+
+2025-05-03 19:08:26 +0800  Kevin McCarthy  <kevin@8t8.us> (fb494674)
+
+        * Merge branch 'stable'
+
+2025-04-26 11:44:47 +0800  Kevin McCarthy  <kevin@8t8.us> (b2a0ef71)
+
+        * Merge branch 'stable'
+
+2025-03-23 13:43:26 +0800  Kevin McCarthy  <kevin@8t8.us> (2efcabc4)
+
+        * Add $imap_reconnect_tries and $imap_reconnect_sleep.
+        
+        Try to make imap_reconnect() work a little harder by introducing
+        options to control the number of reconnect attempts, and how long to
+        sleep between each attempt.
+
+M	globals.h
+M	imap/imap.c
+M	imap/message.c
+M	init.h
+M	mutt.h
+
+2025-03-15 11:29:15 +0800  Kevin McCarthy  <kevin@8t8.us> (6fef346a)
+
+        * Merge branch 'stable'
+
+2025-02-20 12:23:41 +0800  Kevin McCarthy  <kevin@8t8.us> (5c8e775f)
+
+        * Merge branch 'stable'
+
+2025-02-08 11:23:30 +0800  Kevin McCarthy  <kevin@8t8.us> (bb2064ae)
+
+        * Merge branch 'stable'
+
+2025-02-06 11:43:35 +0800  Kevin McCarthy  <kevin@8t8.us> (22e0caf0)
+
+        * Merge branch 'stable'
+
+2025-01-21 10:13:39 -0500  Daniel Kahn Gillmor  <dkg@fifthhorseman.net> (caa8e5e7)
+
+        * fix spelling
+
+M	lib.c
+
+2024-12-02 11:38:38 +0800  Kevin McCarthy  <kevin@8t8.us> (423f5002)
+
+        * Merge branch 'stable'
+
+2024-11-04 11:15:11 +0800  Kevin McCarthy  <kevin@8t8.us> (f87ab401)
+
+        * Merge branch 'stable'
+
+2024-06-20 11:29:12 -0700  William Yardley  <wyardley@users.noreply.github.com> (9dc98409)
+
+        * Add note about remote mailboxes to `$spoolfile` docs
+
+M	init.h
+
+2024-04-20 11:46:40 +0800  Kevin McCarthy  <kevin@8t8.us> (1f3da810)
+
+        * Merge branch 'stable'
+
+2024-04-13 13:47:34 +0800  Kevin McCarthy  <kevin@8t8.us> (762590bb)
+
+        * Don't untag after edit-label.
+        
+        Mutt is pretty consistent about NOT untagging automatically after an
+        operation.  The only place where it does so is when deleting, but even
+        this is configurable via $delete_untag.
+
+M	headers.c
+
+2024-04-13 18:31:59 +0800  Kevin McCarthy  <kevin@8t8.us> (680042df)
+
+        * Merge branch 'stable'
+
+2024-03-09 18:35:21 +0800  Kevin McCarthy  <kevin@8t8.us> (3c98bfa8)
+
+        * Merge branch 'stable'
+
+2024-03-09 18:16:00 +0800  Kevin McCarthy  <kevin@8t8.us> (e2d23514)
+
+        * Merge branch 'stable'
+
+2023-12-06 21:54:19 +0000  Norman Wood  <normw013@fastmail.fm> (354c5b11)
+
+        * Use readline to overcome macOS input() restrictions
+        
+        Under macOS, for a python script launched in a terminal, input() accepts only 1024 characters.  In the authcode flow, the authorization code that is read by the call to input() around line 200 is longer than this and will be truncated, causing token retrieval to fail.  Importing readline resolves this, allowing input() to accept a longer character string.
+M	contrib/mutt_oauth2.py
+
+2023-12-07 19:39:06 +0100  Florian Weimer  <fweimer@redhat.com> (563c5f60)
+
+        * configure.ac: Fix ICONV_NONTRANS probe
+        
+        The standard iconv function uses char ** even for its input argument.
+        With a const char ** argument, ICONV_NONTRANS is incorrectly set to 1
+        if the compiler produces an error for such incompatible pointer types.
+        
+        Although as far as I can see, the only thing that accomplishes is
+        disabling an assert, so it probably does not matter much.
+
+M	configure.ac
+
+2023-09-09 14:55:00 +0800  Kevin McCarthy  <kevin@8t8.us> (757ca3b3)
+
+        * Merge branch 'stable'
+
+2023-08-23 15:42:19 +0800  Kevin McCarthy  <kevin@8t8.us> (b85b0dbf)
+
+        * Merge branch 'stable'
+
+2023-08-18 11:25:06 +0800  Kevin McCarthy  <kevin@8t8.us> (45bfedaf)
+
+        * Merge branch 'stable'
+
+2023-08-15 13:15:49 +0800  Kevin McCarthy  <kevin@8t8.us> (1480121f)
+
+        * Merge branch 'stable'
+
+2023-07-18 19:03:05 +0000  Aram Hamo  <contact@aramhamo.me> (bf988762)
+
+        * Update smime_keys.pl accepting old/insecure smime certificates
+
+M	smime_keys.pl
+
+2023-06-05 18:55:17 +0800  Kevin McCarthy  <kevin@8t8.us> (b470a9ad)
+
+        * Merge branch 'stable'
+
+2023-04-15 12:46:04 -0700  Kevin McCarthy  <kevin@8t8.us> (5347d1c5)
+
+        * Merge branch 'stable'
+
+2023-03-25 13:20:30 -0700  Kevin McCarthy  <kevin@8t8.us> (d2ed5d18)
+
+        * Merge branch 'stable'
+
+2023-03-13 18:27:45 -0700  Kevin McCarthy  <kevin@8t8.us> (caea3018)
+
+        * Merge branch 'stable'
+
+2023-03-12 19:54:44 -0700  Kevin McCarthy  <kevin@8t8.us> (3263c953)
+
+        * Merge branch 'stable'
+
+2023-03-12 19:41:08 -0700  Kevin McCarthy  <kevin@8t8.us> (277a12d1)
+
+        * Merge branch 'stable'
+
+2023-03-06 15:04:59 -0800  Kevin McCarthy  <kevin@8t8.us> (cf88e6d8)
+
+        * Merge branch 'stable'
+
+2022-12-20 09:16:42 -0800  Kevin McCarthy  <kevin@8t8.us> (90236f5a)
+
+        * Merge branch 'stable'
+
+2022-12-12 15:06:34 -0800  Kevin McCarthy  <kevin@8t8.us> (9917c0ea)
+
+        * Merge branch 'stable'
+
+2022-12-07 13:09:30 -0800  Kevin McCarthy  <kevin@8t8.us> (db429b21)
+
+        * Merge branch 'stable'
+
+2022-07-10 14:57:11 +0200  Matthias Andree  <matthias.andree@gmx.de> (af2080d3)
+
+        * mutt_ssl: refactor Implicit TLS and STARTTLS code
+        
+        Signed-off-by: Matthias Andree <matthias.andree@gmx.de>
+
+M	mutt_ssl.c
+
+2022-03-11 09:12:07 -0800  Kevin McCarthy  <kevin@8t8.us> (2f077d72)
+
+        * Change the initial browser file to to cwd.
+        
+        If the working_dir was empty, it would be set to $folder, which isn't
+        helpful if it's a IMAP directory.  Instead set it to cwd.
+
+M	browser.c
+
+2022-03-04 14:27:53 -0800  Kevin McCarthy  <kevin@8t8.us> (946bf5b2)
+
+        * Divide browser "LastDir" into separate file and mailbox locations.
+        
+        Previously there was only one "last" location stored, shared between
+        file and mailbox operations when the MUTT_SEL_FOLDER flags was passed.
+        
+        This meant adding attachments to a composed message would start in the
+        "mailbox" place (which could be an IMAP folder).  Then, a subsequent
+        change-folder would start in the attachment directory browsed to.
+        
+        Create two different flags, MUTT_SEL_MAILBOX and MUTT_SEL_FILE and use
+        those to use the corresponding "last" variable.
+        
+        Change the browser function to use a temporary buffer, working_dir,
+        instead of directly manipulating LastDir.
+        
+        Change callers to use the appropriate flag based on their usage.
+
+M	browser.c
+M	curs_lib.c
+M	curs_main.c
+M	enter.c
+M	main.c
+M	mutt.h
+
+2022-12-03 17:55:36 -0800  Matthew Sotoudeh  <matthew@masot.net> (185346ad)
+
+        * Add socket send/receive timeout options
+        
+        On an unreliable connection (e.g., laptop put to sleep and changing wifi
+        networks) I've had mutt fairly regularly become stuck in SSL_read and
+        have to be killed.
+        
+        Per some of the comments on
+        https://stackoverflow.com/questions/46517875/ssl-read-blocks-indefinitely
+        adding a timeout to the socket should carry over to the SSL_read call.
+        
+        Using this socket_receive_timeout option appears to resolve the issue
+        for me.
+
+M	globals.h
+M	init.h
+M	mutt_socket.c
+
+2022-11-21 12:48:46 -0800  Kevin McCarthy  <kevin@8t8.us> (c79959e1)
+
+        * Merge branch 'stable'
+
+2022-11-19 12:43:20 -0800  Kevin McCarthy  <kevin@8t8.us> (67517850)
+
+        * Merge branch 'stable'
+
+2022-11-12 13:02:50 -0800  Kevin McCarthy  <kevin@8t8.us> (f65467b0)
+
+        * Merge branch 'stable'
+
+2022-11-07 14:48:57 -0800  Kevin McCarthy  <kevin@8t8.us> (040ba998)
+
+        * Merge branch 'stable'
+
+2022-11-06 08:51:26 -0800  Kevin McCarthy  <kevin@8t8.us> (c11015d0)
+
+        * Merge branch 'stable'
+
+2022-11-05 13:25:15 -0700  Kevin McCarthy  <kevin@8t8.us> (0d2fb7c9)
+
+        * Merge branch 'stable'
+
+2022-11-04 13:31:45 -0700  Kevin McCarthy  <kevin@8t8.us> (39972738)
+
+        * Merge branch 'stable'
+
+2022-11-03 14:02:36 -0700  Kevin McCarthy  <kevin@8t8.us> (9d5489a5)
+
+        * Merge branch 'stable'
+
+2022-11-03 13:16:48 -0700  Kevin McCarthy  <kevin@8t8.us> (4ee5fcc4)
+
+        * Merge branch 'stable'
+
+2022-10-21 21:51:52 +0200  Vincent Lefevre  <vincent@vinc17.net> (a318ca5a)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2022-10-14 12:58:38 -0700  Kevin McCarthy  <kevin@8t8.us> (3c48d727)
+
+        * Merge branch 'stable'
+
+2022-10-09 19:31:41 -0700  Kevin McCarthy  <kevin@8t8.us> (8681885b)
+
+        * Merge branch 'stable'
+
+2022-10-08 13:51:04 -0700  Kevin McCarthy  <kevin@8t8.us> (590ec8e9)
+
+        * Merge branch 'stable'
+
+2022-10-08 12:45:54 -0700  Kevin McCarthy  <kevin@8t8.us> (f005b034)
+
+        * Merge branch 'stable'
+
+2022-09-02 13:12:10 +0200  Vincent Lefevre  <vincent@vinc17.net> (a90f69b9)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2022-08-30 18:20:42 -0700  Kevin McCarthy  <kevin@8t8.us> (578f3ae1)
+
+        * Merge branch 'stable'
+
+2022-08-25 13:32:12 -0700  Kevin McCarthy  <kevin@8t8.us> (c06f789b)
+
+        * Merge branch 'stable'
+
+2022-08-22 09:28:03 -0700  Kevin McCarthy  <kevin@8t8.us> (d84696f2)
+
+        * Merge branch 'stable'
+
+2022-08-07 10:28:10 -0700  Kevin McCarthy  <kevin@8t8.us> (1fccbbf8)
+
+        * Merge branch 'stable'
+
+2022-08-05 12:36:49 -0700  Kevin McCarthy  <kevin@8t8.us> (537cc1e4)
+
+        * Merge branch 'stable'
+
+2022-08-05 10:25:40 -0700  Kevin McCarthy  <kevin@8t8.us> (01a6e037)
+
+        * Merge branch 'stable'
+
+2022-07-31 11:11:16 -0700  Kevin McCarthy  <kevin@8t8.us> (76e93dd3)
+
+        * Merge branch 'stable'
+
+2022-07-28 13:05:26 -0700  Kevin McCarthy  <kevin@8t8.us> (05af53f1)
+
+        * Merge branch 'stable'
+
+2022-07-28 12:59:26 -0700  Kevin McCarthy  <kevin@8t8.us> (fa154e55)
+
+        * Merge branch 'stable'
+
+2022-07-06 14:46:15 -0700  Kevin McCarthy  <kevin@8t8.us> (7d9df177)
+
+        * Merge branch 'stable'
+
+2022-06-11 13:11:57 -0700  Kevin McCarthy  <kevin@8t8.us> (25743053)
+
+        * Merge branch 'stable'
+
+2022-06-05 12:27:16 -0700  Kevin McCarthy  <kevin@8t8.us> (74ce6f5a)
+
+        * Merge branch 'stable'
+
+2022-05-28 11:09:59 -0700  Kevin McCarthy  <kevin@8t8.us> (f582b526)
+
+        * Merge branch 'stable'
+
+2022-05-27 14:18:02 -0700  Kevin McCarthy  <kevin@8t8.us> (0a36fe5f)
+
+        * Merge branch 'stable'
+
+2022-05-25 10:02:13 -0700  Kevin McCarthy  <kevin@8t8.us> (e1058b2a)
+
+        * Merge branch 'stable'
+
+2022-05-21 09:35:27 -0700  Kevin McCarthy  <kevin@8t8.us> (1066be97)
+
+        * Merge branch 'stable'
+
+2022-05-20 08:51:45 -0700  Kevin McCarthy  <kevin@8t8.us> (188ece9a)
+
+        * Merge branch 'stable'
+
+2022-05-19 12:40:52 -0700  Kevin McCarthy  <kevin@8t8.us> (caf1d53e)
+
+        * Merge branch 'stable'
+
+2022-05-16 10:34:13 -0700  Kevin McCarthy  <kevin@8t8.us> (5e31bc48)
+
+        * Merge branch 'stable'
+
+2022-05-14 12:28:46 -0700  Kevin McCarthy  <kevin@8t8.us> (5cc97c19)
+
+        * Merge branch 'stable'
+
+2022-05-08 11:07:46 -0700  Kevin McCarthy  <kevin@8t8.us> (d448c911)
+
+        * Merge branch 'stable'
+
+2022-04-30 12:52:54 -0700  Kevin McCarthy  <kevin@8t8.us> (448b2574)
+
+        * Merge branch 'stable'
+
+2022-04-21 14:37:45 -0700  Kevin McCarthy  <kevin@8t8.us> (377f8c16)
+
+        * Merge branch 'stable'
+
+2022-04-12 12:34:29 -0700  Kevin McCarthy  <kevin@8t8.us> (6e7437c4)
+
+        * Merge branch 'stable'
+
+2022-03-25 13:23:16 -0700  Kevin McCarthy  <kevin@8t8.us> (f082dd14)
+
+        * Merge branch 'stable'
+
+2022-03-05 11:22:01 -0800  Kevin McCarthy  <kevin@8t8.us> (1ba319cf)
+
+        * Merge branch 'stable'
+
+2022-03-05 09:34:21 -0800  Kevin McCarthy  <kevin@8t8.us> (d1f297b5)
+
+        * Merge branch 'stable'
+
+2022-03-05 09:23:41 -0800  Kevin McCarthy  <kevin@8t8.us> (4797afee)
+
+        * Merge branch 'stable'
+
+2022-02-21 15:36:58 -0800  Kevin McCarthy  <kevin@8t8.us> (14187faf)
+
+        * Merge branch 'stable'
+
+2022-02-19 10:59:23 -0800  Kevin McCarthy  <kevin@8t8.us> (a102f762)
+
+        * Merge branch 'stable'
+
+2022-02-19 09:08:04 -0800  Kevin McCarthy  <kevin@8t8.us> (657210ed)
+
+        * Merge branch 'stable'
+
+2022-02-14 13:23:16 -0800  Kevin McCarthy  <kevin@8t8.us> (bfa075a3)
+
+        * Merge branch 'stable'
+
+2021-04-08 22:01:19 +0200  Paweł Zuzelski  <pawelz@execve.pl> (955d281f)
+
+        * Add missing period in a comment.
+        
+        That comment was a bit confusing without the punctuation.
+
+M	hook.c
+
 2025-11-22 10:55:45 +0800  Kevin McCarthy  <kevin@8t8.us> (8b81a856)
 
         * Update UPDATING file for 2.2.16 release.

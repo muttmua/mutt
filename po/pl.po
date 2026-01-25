@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 1.5.17\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-01-09 12:45+0800\n"
+"POT-Creation-Date: 2026-01-11 21:00+0800\n"
 "PO-Revision-Date: 2026-01-12 09:34+0100\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
@@ -2962,7 +2962,7 @@ msgstr "unhook: nieznany typ polecenia hook: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: Nie można skasować %s z wewnątrz %s."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
+#: imap/auth.c:115 pop_auth.c:653 smtp.c:642
 msgid "No authenticators available"
 msgstr "Żadna z metod uwierzytelniania nie jest dostępna"
 
@@ -2994,11 +2994,11 @@ msgstr "Uwierzytelnianie GSSAPI nie powiodło się."
 msgid "LOGIN disabled on this server."
 msgstr "LOGIN został wyłączony na tym serwerze."
 
-#: imap/auth_login.c:47 pop_auth.c:369
+#: imap/auth_login.c:47 pop_auth.c:392
 msgid "Logging in..."
 msgstr "Logowanie…"
 
-#: imap/auth_login.c:70 pop_auth.c:412
+#: imap/auth_login.c:70 pop_auth.c:435
 msgid "Login failed."
 msgstr "Zalogowanie nie powiodło się."
 
@@ -3006,7 +3006,7 @@ msgstr "Zalogowanie nie powiodło się."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
+#: pop_auth.c:235 pop_auth.c:453 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Uwierzytelnianie (%s)…"
@@ -3019,7 +3019,7 @@ msgstr "Uwierzytelnianie (%s)…"
 msgid "%s authentication failed."
 msgstr "Uwierzytelnienie %s nie powiodło się."
 
-#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:202 pop_auth.c:304
 msgid "SASL authentication failed."
 msgstr "Uwierzytelnienie SASL nie powiodło się."
 
@@ -5334,23 +5334,23 @@ msgstr "Serwer zamknął połączenie!"
 msgid "Authenticating (SASL)..."
 msgstr "Uwierzytelnianie (SASL)…"
 
-#: pop_auth.c:322
+#: pop_auth.c:345
 msgid "POP timestamp is invalid!"
 msgstr "POP: błedna sygnatura czasu!"
 
-#: pop_auth.c:327
+#: pop_auth.c:350
 msgid "Authenticating (APOP)..."
 msgstr "Uwierzytelnianie (APOP)…"
 
-#: pop_auth.c:350
+#: pop_auth.c:373
 msgid "APOP authentication failed."
 msgstr "Uwierzytelnianie APOP nie powiodło się."
 
-#: pop_auth.c:389
+#: pop_auth.c:412
 msgid "Command USER is not supported by server."
 msgstr "Polecenie USER nie jest obsługiwane przez serwer."
 
-#: pop_auth.c:478
+#: pop_auth.c:501
 msgid "Authentication failed."
 msgstr "Uwierzytelnianie nie powiodło się."
 

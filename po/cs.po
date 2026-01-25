@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.2.16\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-01-09 12:45+0800\n"
+"POT-Creation-Date: 2026-01-11 21:00+0800\n"
 "PO-Revision-Date: 2026-01-10 10:56+01:00\n"
 "Last-Translator: Petr Písař <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -2970,7 +2970,7 @@ msgstr "unhook: neznámý typ háčku: %s"
 msgid "unhook: Can't delete a %s from within a %s."
 msgstr "unhook: %s nelze z %s smazat."
 
-#: imap/auth.c:115 pop_auth.c:630 smtp.c:642
+#: imap/auth.c:115 pop_auth.c:653 smtp.c:642
 msgid "No authenticators available"
 msgstr "Nejsou k dispozici žádné autentizační metody"
 
@@ -3002,11 +3002,11 @@ msgstr "Přihlášení pomocí GSSAPI se nezdařilo."
 msgid "LOGIN disabled on this server."
 msgstr "Metoda autentizace LOGIN je na tomto serveru zakázána"
 
-#: imap/auth_login.c:47 pop_auth.c:369
+#: imap/auth_login.c:47 pop_auth.c:392
 msgid "Logging in..."
 msgstr "Probíhá přihlašování…"
 
-#: imap/auth_login.c:70 pop_auth.c:412
+#: imap/auth_login.c:70 pop_auth.c:435
 msgid "Login failed."
 msgstr "Přihlášení se nezdařilo."
 
@@ -3014,7 +3014,7 @@ msgstr "Přihlášení se nezdařilo."
 #. %s is the authentication type, such as XOAUTH2 or OAUTHBEARER
 #.
 #: imap/auth_oauth.c:39 imap/auth_sasl.c:109 imap/auth_sasl_gnu.c:55
-#: pop_auth.c:223 pop_auth.c:430 smtp.c:680 smtp.c:776 smtp.c:882
+#: pop_auth.c:235 pop_auth.c:453 smtp.c:680 smtp.c:776 smtp.c:882
 #, c-format
 msgid "Authenticating (%s)..."
 msgstr "Přihlašuje se (%s)…"
@@ -3027,7 +3027,7 @@ msgstr "Přihlašuje se (%s)…"
 msgid "%s authentication failed."
 msgstr "Autentizace %s se nezdařila."
 
-#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:190 pop_auth.c:281
+#: imap/auth_sasl.c:236 imap/auth_sasl_gnu.c:135 pop_auth.c:202 pop_auth.c:304
 msgid "SASL authentication failed."
 msgstr "Přihlášení pomocí SASL se nezdařilo."
 
@@ -3128,12 +3128,12 @@ msgstr "Šifrované spojení není k dispozici"
 msgid "Trying to reconnect..."
 msgstr "Pokus znovu se připojit…"
 
+# TODO: plurals
 #. L10N:
 #. Message displayed when IMAP connection is lost and Mutt
 #. tries to reconnect but fails.  Mutt will try imap_reconnect_tries times
 #. and sleep imap_reconnect_sleep seconds between each retry.
 #.
-# TODO: plurals
 #: imap/imap.c:612
 #, c-format
 msgid "Reconnect failed. Sleeping %d seconds."
@@ -3585,10 +3585,10 @@ msgstr ""
 msgid "M%?n?AIL&ail?"
 msgstr "M%?n?AIL&ail?"
 
+# TODO: plurals
 #. L10N:
 #. $ts_status_format default value
 #.
-# TODO: plurals
 #: init.h:4743
 msgid "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 msgstr "Mutt %?m?s %m zprávami&bez zpráv?%?n? [NOVÉ: %n]?"
@@ -5351,23 +5351,23 @@ msgstr "Server uzavřel spojení!"
 msgid "Authenticating (SASL)..."
 msgstr "Ověřuje se (SASL)…"
 
-#: pop_auth.c:322
+#: pop_auth.c:345
 msgid "POP timestamp is invalid!"
 msgstr "Časové razítko POP protokolu není platné!"
 
-#: pop_auth.c:327
+#: pop_auth.c:350
 msgid "Authenticating (APOP)..."
 msgstr "Ověřuje se (APOP)…"
 
-#: pop_auth.c:350
+#: pop_auth.c:373
 msgid "APOP authentication failed."
 msgstr "APOP ověření se nezdařilo."
 
-#: pop_auth.c:389
+#: pop_auth.c:412
 msgid "Command USER is not supported by server."
 msgstr "Server nepodporuje příkaz USER."
 
-#: pop_auth.c:478
+#: pop_auth.c:501
 msgid "Authentication failed."
 msgstr "Ověření se nezdařilo."
 
