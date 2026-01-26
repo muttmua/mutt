@@ -270,6 +270,14 @@ int iswspace (wint_t wc)
     return (0 <= wc && wc < 256) ? isspace (wc) : 0;
 }
 
+int iswblank (wint_t wc)
+{
+  if (Charset_is_utf8 || charset_is_ja)
+    return wc == 9 || wc == 32;
+  else
+    return (0 <= wc && wc < 256) ? isblank (wc) : 0;
+}
+
 static wint_t towupper_ucs (wint_t x)
 {
   /* Only works for x < 0x130 */

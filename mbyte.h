@@ -23,6 +23,9 @@
 #ifdef iswspace
 # undef iswspace
 #endif
+#ifdef iswblank
+# undef iswblank
+#endif
 #ifdef iswalnum
 # undef iswalnum
 #endif
@@ -36,6 +39,7 @@ size_t wcrtomb (char *s, wchar_t wc, mbstate_t *ps);
 size_t mbrtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *ps);
 int iswprint (wint_t wc);
 int iswspace (wint_t wc);
+int iswblank (wint_t wc);
 int iswalnum (wint_t wc);
 int iswalpha (wint_t wc);
 int iswupper (wint_t wc);

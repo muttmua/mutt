@@ -1562,7 +1562,7 @@ if test "$wc_funcs" != yes && test "$wc_funcs" != no; then
 #endif
 #ifdef HAVE_WCTYPE_H
 #include <wctype.h>
-#endif]], [[mbrtowc(0, 0, 0, 0); wctomb(0, 0); wcwidth(0);
+#endif]], [[mbrtowc(0, 0, 0, 0); wctomb(0, 0); wcwidth(0); iswblank(0);
         iswprint(0); iswspace(0); towlower(0); towupper(0); iswalnum(0)]])],[mutt_cv_wc_funcs=yes],[]))
         wc_funcs=$mutt_cv_wc_funcs
 fi
