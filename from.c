@@ -34,6 +34,17 @@ static const char *next_word (const char *s)
   return s;
 }
 
+static const char *prev_word (const char * const bos, const char *cur)
+{
+  if (cur <= bos)
+    return bos;
+  while (cur > bos && ISSPACE (*(cur-1)))
+    cur--;
+  while (cur > bos && !ISSPACE (*(cur-1)))
+    cur--;
+  return cur;
+}
+
 int mutt_check_month (const char *s)
 {
   int i;
@@ -191,6 +202,86 @@ static int is_from_forward_scan (const char *s,
   /* year */
   if ((tm->tm_year = check_year (s)) < 0)
     return 0;
+
+  return 1;
+}
+
+static int is_from_reverse_scan (const char * const bos,
+                                 char *path, size_t pathlen,
+                                 struct tm *tm)
+{
+  const char *cur = bos + strlen (bos);
+
+  /* year */
+  cur = prev_word (bos, cur);
+  if (cur == bos)
+    return 0;
+  if ((tm->tm_year = check_year (cur)) < 0)
+    return 0;
+
+  /* timezone? */
+  cur = prev_word (bos, cur);
+  if (cur == bos)
+    return 0;
+  if (isalpha ((unsigned char) *cur) || *cur == '+' || *cur == '-')
+  {
+    cur = prev_word (bos, cur);
+    if (cur == bos)
+      return 0;
+
+    /*
+     * some places have two timezone fields after the time, e.g.
+     *      From xxxx@yyyyyyy.fr Wed Aug  2 00:39:12 MET DST 1995
+     */
+    if (isalpha ((unsigned char) *cur))
+    {
+      cur = prev_word (bos, cur);
+      if (cur == bos)
+        return 0;
+    }
+  }
+
+  /* time */
+  if (check_time (cur, tm) < 0)
+    return 0;
+
+  /* day */
+  cur = prev_word (bos, cur);
+  if (cur == bos)
+    return 0;
+  if (sscanf (cur, "%d", &tm->tm_mday) != 1)
+    return 0;
+
+  /* month */
+  cur = prev_word (bos, cur);
+  if (cur == bos)
+    return 0;
+  if ((tm->tm_mon = mutt_check_month (cur)) < 0)
+    return 0;
+
+  /* day name */
+  cur = prev_word (bos, cur);
+  if (!is_day_name (cur))
+  {
+    dprint(1, (debugfile,
+               "is_from_reverse_scan():  expected weekday, got: %s\n", cur));
+    return 0;
+  }
+
+  /* return path? */
+  while (cur > bos && ISSPACE (*(cur-1)))
+    cur--;
+  if (cur != bos && path)
+  {
+    size_t len;
+
+    len = (size_t) (cur - bos);
+    if (len + 1 > pathlen)
+      len = pathlen - 1;
+    memcpy (path, bos, len);
+    path[len] = 0;
+    dprint (3, (debugfile, "is_from_reverse_scan(): got return path: %s\n", path));
+  }
 
   return 1;
 }
