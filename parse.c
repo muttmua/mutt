@@ -1598,13 +1598,12 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
   {
     if ((p = strpbrk (line, ": \t")) == NULL || *p != ':')
     {
-      char return_path[LONG_STRING];
       time_t t;
 
       /* some bogus MTAs will quote the original "From " line */
       if (mutt_strncmp (">From ", line, 6) == 0)
 	continue; /* just ignore */
-      else if (is_from (line, return_path, sizeof (return_path), &t))
+      else if (is_from (line, NULL, 0, &t))
       {
 	/* MH sometimes has the From_ line in the middle of the header! */
 	if (hdr && !hdr->received)
