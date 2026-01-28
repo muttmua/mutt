@@ -180,11 +180,11 @@ static int pop_capabilities (POP_DATA *pop_data, int mode)
     {
       case 0:
       {
-	pop_data->cmd_capa = 1;
-	break;
+        pop_data->cmd_capa = 1;
+        break;
       }
       case -1:
-	return -1;
+        return -1;
     }
   }
 
@@ -295,39 +295,39 @@ int pop_open_connection (POP_DATA *pop_data)
       ret = query_quadoption (OPT_SSLSTARTTLS,
                               _("Secure connection with TLS?"));
       if (ret == -1)
-	return -2;
+        return -2;
       pop_data->use_stls = 1;
       if (ret == MUTT_YES)
-	pop_data->use_stls = 2;
+        pop_data->use_stls = 2;
     }
     if (pop_data->use_stls == 2)
     {
       strfcpy (buf, "STLS\r\n", sizeof (buf));
       ret = pop_query (pop_data, buf, sizeof (buf));
       if (ret == -1)
-	goto err_conn;
+        goto err_conn;
       if (ret != 0)
       {
-	mutt_error ("%s", pop_data->err_msg);
-	mutt_sleep (2);
+        mutt_error ("%s", pop_data->err_msg);
+        mutt_sleep (2);
       }
       else if (mutt_ssl_starttls (pop_data->conn))
       {
-	mutt_error (_("Could not negotiate TLS connection"));
-	mutt_sleep (2);
-	return -2;
+        mutt_error (_("Could not negotiate TLS connection"));
+        mutt_sleep (2);
+        return -2;
       }
       else
       {
-	/* recheck capabilities after STLS completes */
-	ret = pop_capabilities (pop_data, 1);
-	if (ret == -1)
-	  goto err_conn;
-	if (ret == -2)
-	{
-	  mutt_sleep (2);
-	  return -2;
-	}
+        /* recheck capabilities after STLS completes */
+        ret = pop_capabilities (pop_data, 1);
+        if (ret == -1)
+          goto err_conn;
+        if (ret == -2)
+        {
+          mutt_sleep (2);
+          return -2;
+        }
       }
     }
   }
@@ -462,7 +462,7 @@ int pop_query_d (POP_DATA *pop_data, char *buf, size_t buflen, char *msg)
  * -3 - error in funct(*line, *data)
  */
 int pop_fetch_data (POP_DATA *pop_data, char *query, progress_t *progressbar,
-		    int (*funct) (char *, void *), void *data)
+                    int (*funct) (char *, void *), void *data)
 {
   char buf[LONG_STRING];
   char *inbuf;
@@ -492,7 +492,7 @@ int pop_fetch_data (POP_DATA *pop_data, char *query, progress_t *progressbar,
     if (!lenbuf && buf[0] == '.')
     {
       if (buf[1] != '.')
-	break;
+        break;
       p++;
     }
 
@@ -507,9 +507,9 @@ int pop_fetch_data (POP_DATA *pop_data, char *query, progress_t *progressbar,
     else
     {
       if (progressbar)
-	mutt_progress_update (progressbar, pos, -1);
+        mutt_progress_update (progressbar, pos, -1);
       if (ret == 0 && funct (inbuf, data) < 0)
-	ret = -3;
+        ret = -3;
       lenbuf = 0;
     }
 
@@ -570,10 +570,10 @@ int pop_reconnect (CONTEXT *ctx)
       int i;
 
       mutt_progress_init (&progressbar, _("Verifying message indexes..."),
-			  MUTT_PROGRESS_SIZE, NetInc, 0);
+                          MUTT_PROGRESS_SIZE, NetInc, 0);
 
       for (i = 0; i < ctx->msgcount; i++)
-	ctx->hdrs[i]->refno = -1;
+        ctx->hdrs[i]->refno = -1;
 
       ret = pop_fetch_data (pop_data, "UIDL\r\n", &progressbar, check_uidl, ctx);
       if (ret == -2)

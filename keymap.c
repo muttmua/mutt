@@ -207,18 +207,18 @@ static int parsekeys (const char *str, keycode_t *d, int max)
 
       if ((n = mutt_getvaluebyname (s, KeyNames)) != -1)
       {
-	s = t;
-	*d = n;
+        s = t;
+        *d = n;
       }
       else if ((n = parse_fkey(s)) > 0)
       {
-	s = t;
-	*d = KEY_F (n);
+        s = t;
+        *d = KEY_F (n);
       }
       else if ((n = parse_keycode(s)) > 0)
       {
-	s = t;
-	*d = n;
+        s = t;
+        *d = n;
       }
 
       *t = c;
@@ -261,13 +261,13 @@ void km_bind (char *s, int menu, int op, char *macro, char *descr)
       /* map and tmp match, but have different lengths, so overwrite */
       do
       {
-	len = tmp->eq;
-	next = tmp->next;
-	FREE (&tmp->macro);
-	FREE (&tmp->keys);
-	FREE (&tmp->descr);
-	FREE (&tmp);
-	tmp = next;
+        len = tmp->eq;
+        next = tmp->next;
+        FREE (&tmp->macro);
+        FREE (&tmp->keys);
+        FREE (&tmp->descr);
+        FREE (&tmp);
+        tmp = next;
       }
       while (tmp && len >= pos);
       map->eq = len;
@@ -286,7 +286,7 @@ void km_bind (char *s, int menu, int op, char *macro, char *descr)
       last = tmp;
       lastpos = pos;
       if (pos > tmp->eq)
-	pos = tmp->eq;
+        pos = tmp->eq;
       tmp = tmp->next;
     }
   }
@@ -313,7 +313,7 @@ static int get_op (const struct menu_func_op_t *bindings, const char *start, siz
   for (i = 0; bindings[i].name; i++)
   {
     if (!ascii_strncasecmp (start, bindings[i].name, len) &&
-	mutt_strlen (bindings[i].name) == len)
+        mutt_strlen (bindings[i].name) == len)
       return bindings[i].op;
   }
 
@@ -350,49 +350,49 @@ static void generic_tokenize_push_string (char *s, void (*generic_push) (int, in
     if (*p == '>')
     {
       for (pp = p - 1; pp >= s && *pp != '<'; pp--)
-	;
+        ;
       if (pp >= s)
       {
-	if ((i = parse_fkey (pp)) > 0)
-	{
-	  generic_push (KEY_F (i), 0);
-	  p = pp - 1;
-	  continue;
-	}
+        if ((i = parse_fkey (pp)) > 0)
+        {
+          generic_push (KEY_F (i), 0);
+          p = pp - 1;
+          continue;
+        }
 
-	l = p - pp + 1;
-	for (i = 0; KeyNames[i].name; i++)
-	{
-	  if (!ascii_strncasecmp (pp, KeyNames[i].name, l))
-	    break;
-	}
-	if (KeyNames[i].name)
-	{
-	  /* found a match */
-	  generic_push (KeyNames[i].value, 0);
-	  p = pp - 1;
-	  continue;
-	}
+        l = p - pp + 1;
+        for (i = 0; KeyNames[i].name; i++)
+        {
+          if (!ascii_strncasecmp (pp, KeyNames[i].name, l))
+            break;
+        }
+        if (KeyNames[i].name)
+        {
+          /* found a match */
+          generic_push (KeyNames[i].value, 0);
+          p = pp - 1;
+          continue;
+        }
 
-	/* See if it is a valid command
-	 * skip the '<' and the '>' when comparing */
-	for (i = 0; Menus[i].name; i++)
-	{
-	  const struct menu_func_op_t *binding = km_get_table (Menus[i].value);
-	  if (binding)
-	  {
-	    op = get_op (binding, pp + 1, l - 2);
-	    if (op != OP_NULL)
-	      break;
-	  }
-	}
+        /* See if it is a valid command
+         * skip the '<' and the '>' when comparing */
+        for (i = 0; Menus[i].name; i++)
+        {
+          const struct menu_func_op_t *binding = km_get_table (Menus[i].value);
+          if (binding)
+          {
+            op = get_op (binding, pp + 1, l - 2);
+            if (op != OP_NULL)
+              break;
+          }
+        }
 
-	if (op != OP_NULL)
-	{
-	  generic_push (0, op);
-	  p = pp - 1;
-	  continue;
-	}
+        if (op != OP_NULL)
+        {
+          generic_push (0, op);
+          p = pp - 1;
+          continue;
+        }
       }
     }
     generic_push ((unsigned char)*p--, 0);	/* independent 8 bits chars */
@@ -447,26 +447,26 @@ int km_dokey (int menu)
     if (ImapKeepalive)
     {
       if (ImapKeepalive >= i)
-      	imap_keepalive ();
+        imap_keepalive ();
       else
-	while (ImapKeepalive && ImapKeepalive < i)
-	{
-	  mutt_getch_timeout (ImapKeepalive * 1000);
-	  tmp = mutt_getch ();
-	  mutt_getch_timeout (-1);
-	  /* If a timeout was not received, or the window was resized, exit the
-	   * loop now.  Otherwise, continue to loop until reaching a total of
-	   * $timeout seconds.
-	   */
+        while (ImapKeepalive && ImapKeepalive < i)
+        {
+          mutt_getch_timeout (ImapKeepalive * 1000);
+          tmp = mutt_getch ();
+          mutt_getch_timeout (-1);
+          /* If a timeout was not received, or the window was resized, exit the
+           * loop now.  Otherwise, continue to loop until reaching a total of
+           * $timeout seconds.
+           */
 #ifdef USE_INOTIFY
-	  if (tmp.ch != -2 || SigWinch || MonitorFilesChanged)
+          if (tmp.ch != -2 || SigWinch || MonitorFilesChanged)
 #else
-	  if (tmp.ch != -2 || SigWinch)
+          if (tmp.ch != -2 || SigWinch)
 #endif
-	    goto gotkey;
-	  i -= ImapKeepalive;
-	  imap_keepalive ();
-	}
+            goto gotkey;
+          i -= ImapKeepalive;
+          imap_keepalive ();
+        }
     }
 #endif
 
@@ -493,47 +493,47 @@ int km_dokey (int menu)
 
       /* is this a valid op for this menu? */
       if ((bindings = km_get_table (menu)) &&
-	  (func = get_func (bindings, tmp.op)))
-	return tmp.op;
+          (func = get_func (bindings, tmp.op)))
+        return tmp.op;
 
       if (menu == MENU_EDITOR && get_func (OpEditor, tmp.op))
-	return tmp.op;
+        return tmp.op;
 
       if (menu != MENU_EDITOR && menu != MENU_PAGER && menu != MENU_GENERIC)
       {
-	/* check generic menu */
-	bindings = OpGeneric;
-	if ((func = get_func (bindings, tmp.op)))
-	  return tmp.op;
+        /* check generic menu */
+        bindings = OpGeneric;
+        if ((func = get_func (bindings, tmp.op)))
+          return tmp.op;
       }
 
       /* Sigh. Valid function but not in this context.
        * Find the literal string and push it back */
       for (i = 0; Menus[i].name; i++)
       {
-	bindings = km_get_table (Menus[i].value);
-	if (bindings)
-	{
-	  func = get_func (bindings, tmp.op);
-	  if (func)
-	  {
-	    mutt_unget_event ('>', 0);
-	    mutt_unget_string (func);
-	    mutt_unget_event ('<', 0);
-	    break;
-	  }
-	}
+        bindings = km_get_table (Menus[i].value);
+        if (bindings)
+        {
+          func = get_func (bindings, tmp.op);
+          if (func)
+          {
+            mutt_unget_event ('>', 0);
+            mutt_unget_string (func);
+            mutt_unget_event ('<', 0);
+            break;
+          }
+        }
       }
       /* continue to chew */
       if (func)
-	continue;
+        continue;
     }
 
     /* Nope. Business as usual */
     while (LastKey > map->keys[pos])
     {
       if (pos > map->eq || !map->next)
-	return (retry_generic (menu, map->keys, pos, LastKey));
+        return (retry_generic (menu, map->keys, pos, LastKey));
       map = map->next;
     }
 
@@ -544,7 +544,7 @@ int km_dokey (int menu)
     {
 
       if (map->op != OP_MACRO)
-	return map->op;
+        return map->op;
 
       /* OPTIGNOREMACROEVENTS turns off processing the MacroEvents buffer
        * in mutt_getch().  Generating new macro events during that time would
@@ -559,14 +559,14 @@ int km_dokey (int menu)
        */
       if (option (OPTIGNOREMACROEVENTS))
       {
-	return OP_NULL;
+        return OP_NULL;
       }
 
       if (n++ == 10)
       {
-	mutt_flushinp ();
-	mutt_error _("Macro loop detected.");
-	return -1;
+        mutt_flushinp ();
+        mutt_error _("Macro loop detected.");
+        return -1;
       }
 
       tokenize_push_macro_string (map->macro);
@@ -729,12 +729,12 @@ void init_extended_keys(void)
       if (keyname)
       {
         const char *s = mutt_tigetstr (keyname);
-	if (s && (long)(s) != -1)
-	{
-	  int code = key_defined(s);
-	  if (code > 0)
-	    KeyNames[j].value = code;
-	}
+        if (s && (long)(s) != -1)
+        {
+          int code = key_defined(s);
+          if (code > 0)
+            KeyNames[j].value = code;
+        }
       }
     }
   }
@@ -975,7 +975,7 @@ int mutt_parse_bind (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
   int menu[sizeof(Menus)/sizeof(struct mapping_t)-1], r = 0, nummenus, i;
 
   if ((key = parse_keymap (menu, s, sizeof (menu)/sizeof (menu[0]),
-			   &nummenus, err)) == NULL)
+                           &nummenus, err)) == NULL)
     return (-1);
 
   /* function to execute */
@@ -999,7 +999,7 @@ int mutt_parse_bind (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
       /* First check the "generic" list of commands */
       if (menu[i] == MENU_PAGER || menu[i] == MENU_EDITOR ||
           menu[i] == MENU_GENERIC ||
-	  try_bind (key, menu[i], buf->data, OpGeneric) != 0)
+          try_bind (key, menu[i], buf->data, OpGeneric) != 0)
       {
         /* Now check the menu-specific list of commands (if they exist) */
         bindings = km_get_table (menu[i]);
@@ -1040,7 +1040,7 @@ int mutt_parse_macro (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER
 
       if (MoreArgs (s))
       {
-	strfcpy (err->data, _("macro: too many arguments"), err->dsize);
+        strfcpy (err->data, _("macro: too many arguments"), err->dsize);
       }
       else
       {
@@ -1086,7 +1086,7 @@ int mutt_parse_exec (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
     function = buf->data;
 
     if ((bindings = km_get_table (CurrentMenu)) == NULL
-	&& CurrentMenu != MENU_PAGER)
+        && CurrentMenu != MENU_PAGER)
       bindings = OpGeneric;
 
     ops[nops] = get_op (bindings, function, mutt_strlen(function));

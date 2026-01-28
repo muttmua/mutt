@@ -175,7 +175,7 @@ static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len)
   if (rc < 0)
   {
     mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
-		strerror (errno));
+                strerror (errno));
     mutt_sleep (1);
     return -1;
   }

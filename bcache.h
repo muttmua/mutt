@@ -72,7 +72,7 @@ int mutt_bcache_exists(body_cache_t *bcache, const char *id);
  * otherwise.
  */
 int mutt_bcache_list(body_cache_t *bcache,
-		     int (*want_id)(const char *id, body_cache_t *bcache,
-				    void *data), void *data);
+                     int (*want_id)(const char *id, body_cache_t *bcache,
+                                    void *data), void *data);
 
 #endif /* _BCACHE_H_ */

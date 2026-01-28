@@ -53,7 +53,7 @@
 static char* imap_get_flags (LIST** hflags, char* s);
 static int imap_check_capabilities (IMAP_DATA* idata);
 static void imap_set_flag (IMAP_DATA* idata, int aclbit, int flag,
-			   const char* str, char* flags, size_t flsize);
+                           const char* str, char* flags, size_t flsize);
 
 /* imap_access: Check permissions on an IMAP mailbox.
  * TODO: ACL checks. Right now we assume if it exists we can
@@ -289,10 +289,10 @@ void imap_expunge_mailbox (IMAP_DATA* idata)
       /* free cached body from disk, if necessary */
       cacheno = HEADER_DATA(h)->uid % IMAP_CACHE_LEN;
       if (idata->cache[cacheno].uid == HEADER_DATA(h)->uid &&
-	  idata->cache[cacheno].path)
+          idata->cache[cacheno].path)
       {
-	unlink (idata->cache[cacheno].path);
-	FREE (&idata->cache[cacheno].path);
+        unlink (idata->cache[cacheno].path);
+        FREE (&idata->cache[cacheno].path);
       }
 
       int_hash_delete (idata->uid_hash, HEADER_DATA(h)->uid, h, NULL);
@@ -418,8 +418,8 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
       FREE (&idata->capstr);
       new = 1;
       if (idata->conn->ssf)
-	dprint (2, (debugfile, "Communication encrypted at %d bits\n",
-		    idata->conn->ssf));
+        dprint (2, (debugfile, "Communication encrypted at %d bits\n",
+                    idata->conn->ssf));
     }
     else
       mutt_account_unsetpass (&idata->conn->account);
@@ -434,8 +434,8 @@ IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags)
     if (mutt_bit_isset (idata->capabilities, COMPRESS_DEFLATE))
     {
       if (option (OPTIMAPDEFLATE) &&
-	  imap_exec (idata, "COMPRESS DEFLATE", IMAP_CMD_FAIL_OK) == 0)
-	mutt_zstrm_wrap_conn (idata->conn);
+          imap_exec (idata, "COMPRESS DEFLATE", IMAP_CMD_FAIL_OK) == 0)
+        mutt_zstrm_wrap_conn (idata->conn);
     }
 #endif
 
@@ -497,26 +497,26 @@ int imap_open_connection (IMAP_DATA* idata)
         rc = MUTT_YES;
       else if ((rc = query_quadoption (OPT_SSLSTARTTLS,
                                        _("Secure connection with TLS?"))) == -1)
-	goto bail;
+        goto bail;
       if (rc == MUTT_YES)
       {
-	if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
-	  goto bail;
-	if (rc != -2)
-	{
-	  if (mutt_ssl_starttls (idata->conn))
-	  {
-	    mutt_error (_("Could not negotiate TLS connection"));
-	    mutt_sleep (1);
-	    goto bail;
-	  }
-	  else
-	  {
-	    /* RFC 2595 demands we recheck CAPABILITY after TLS completes. */
-	    if (imap_exec (idata, "CAPABILITY", 0))
-	      goto bail;
-	  }
-	}
+        if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
+          goto bail;
+        if (rc != -2)
+        {
+          if (mutt_ssl_starttls (idata->conn))
+          {
+            mutt_error (_("Could not negotiate TLS connection"));
+            mutt_sleep (1);
+            goto bail;
+          }
+          else
+          {
+            /* RFC 2595 demands we recheck CAPABILITY after TLS completes. */
+            if (imap_exec (idata, "CAPABILITY", 0))
+              goto bail;
+          }
+        }
       }
     }
 
@@ -599,8 +599,8 @@ int imap_reconnect (IMAP_DATA **p_idata)
 
   unset_option (OPTMANUALABORT);
   while (mx_open_mailbox (orig_ctx->path,
-			  orig_ctx->readonly ? MUTT_READONLY : 0,
-			  &new_ctx) == NULL)
+                          orig_ctx->readonly ? MUTT_READONLY : 0,
+                          &new_ctx) == NULL)
   {
     if ((attempt >= ImapReconnectTries) || (option (OPTMANUALABORT)))
       goto cleanup;
@@ -616,8 +616,8 @@ int imap_reconnect (IMAP_DATA **p_idata)
       sleep (ImapReconnectSleep);
       if (SigInt)
       {
-	SigInt = 0;
-	goto cleanup;
+        SigInt = 0;
+        goto cleanup;
       }
     }
     mutt_message _("Trying to reconnect...");
@@ -902,9 +902,9 @@ static int imap_open_mailbox (CONTEXT* ctx)
       /* don't override PERMANENTFLAGS */
       if (!idata->flags)
       {
-	dprint (3, (debugfile, "Getting mailbox FLAGS\n"));
-	if ((pc = imap_get_flags (&(idata->flags), pc)) == NULL)
-	  goto fail;
+        dprint (3, (debugfile, "Getting mailbox FLAGS\n"));
+        if ((pc = imap_get_flags (&(idata->flags), pc)) == NULL)
+          goto fail;
       }
     }
     /* PERMANENTFLAGS are massaged to look like FLAGS, then override FLAGS */
@@ -916,7 +916,7 @@ static int imap_open_mailbox (CONTEXT* ctx)
       /* skip "OK [PERMANENT" so syntax is the same as FLAGS */
       pc += 13;
       if ((pc = imap_get_flags (&(idata->flags), pc)) == NULL)
-	goto fail;
+        goto fail;
     }
     /* save UIDVALIDITY for the header cache */
     else if (ascii_strncasecmp ("OK [UIDVALIDITY", pc, 14) == 0)
@@ -956,8 +956,8 @@ static int imap_open_mailbox (CONTEXT* ctx)
       pc = imap_next_word (pc);
       if (!ascii_strncasecmp ("EXISTS", pc, 6))
       {
-	count = idata->newMailCount;
-	idata->newMailCount = 0;
+        count = idata->newMailCount;
+        idata->newMailCount = 0;
       }
     }
   }
@@ -1098,10 +1098,10 @@ void imap_logout (IMAP_DATA** idata)
     (*idata)->status = IMAP_BYE;
     imap_cmd_start (*idata, "LOGOUT");
     if (ImapPollTimeout <= 0 ||
-	mutt_socket_poll ((*idata)->conn, ImapPollTimeout) != 0)
+        mutt_socket_poll ((*idata)->conn, ImapPollTimeout) != 0)
     {
       while (imap_cmd_step (*idata) == IMAP_CMD_CONTINUE)
-	;
+        ;
     }
   }
 
@@ -1199,32 +1199,32 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
         case MUTT_DELETED:
           if (hdrs[n]->deleted != HEADER_DATA(hdrs[n])->deleted)
             match = invert ^ hdrs[n]->deleted;
-	  break;
+          break;
         case MUTT_FLAG:
           if (hdrs[n]->flagged != HEADER_DATA(hdrs[n])->flagged)
             match = invert ^ hdrs[n]->flagged;
-	  break;
+          break;
         case MUTT_OLD:
           if (hdrs[n]->old != HEADER_DATA(hdrs[n])->old)
             match = invert ^ hdrs[n]->old;
-	  break;
+          break;
         case MUTT_READ:
           if (hdrs[n]->read != HEADER_DATA(hdrs[n])->read)
             match = invert ^ hdrs[n]->read;
-	  break;
+          break;
         case MUTT_REPLIED:
           if (hdrs[n]->replied != HEADER_DATA(hdrs[n])->replied)
             match = invert ^ hdrs[n]->replied;
-	  break;
+          break;
 
         case MUTT_TAG:
-	  if (hdrs[n]->tagged)
-	    match = 1;
-	  break;
+          if (hdrs[n]->tagged)
+            match = 1;
+          break;
         case MUTT_TRASH:
           if (hdrs[n]->deleted && !hdrs[n]->purge)
             match = 1;
-	  break;
+          break;
       }
 
     if (match && (!changed || hdrs[n]->changed))
@@ -1234,22 +1234,22 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
       {
         setstart = HEADER_DATA (hdrs[n])->uid;
         if (started == 0)
-	{
-	  mutt_buffer_add_printf (buf, "%u", HEADER_DATA (hdrs[n])->uid);
-	  started = 1;
-	}
+        {
+          mutt_buffer_add_printf (buf, "%u", HEADER_DATA (hdrs[n])->uid);
+          started = 1;
+        }
         else
-	  mutt_buffer_add_printf (buf, ",%u", HEADER_DATA (hdrs[n])->uid);
+          mutt_buffer_add_printf (buf, ",%u", HEADER_DATA (hdrs[n])->uid);
       }
       /* tie up if the last message also matches */
       else if (n == idata->ctx->msgcount-1)
-	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n])->uid);
+        mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n])->uid);
     }
     /* End current set if message doesn't match. */
     else if (setstart)
     {
       if (HEADER_DATA (hdrs[n-1])->uid > setstart)
-	mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n-1])->uid);
+        mutt_buffer_add_printf (buf, ":%u", HEADER_DATA (hdrs[n-1])->uid);
       setstart = 0;
     }
   }
@@ -1388,13 +1388,13 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   flags[0] = '\0';
 
   imap_set_flag (idata, MUTT_ACL_SEEN, hdr->read, "\\Seen ",
-		 flags, sizeof (flags));
+                 flags, sizeof (flags));
   imap_set_flag (idata, MUTT_ACL_WRITE, hdr->old,
                  "Old ", flags, sizeof (flags));
   imap_set_flag (idata, MUTT_ACL_WRITE, hdr->flagged,
-		 "\\Flagged ", flags, sizeof (flags));
+                 "\\Flagged ", flags, sizeof (flags));
   imap_set_flag (idata, MUTT_ACL_WRITE, hdr->replied,
-		 "\\Answered ", flags, sizeof (flags));
+                 "\\Answered ", flags, sizeof (flags));
   imap_set_flag (idata, MUTT_ACL_DELETE, HEADER_DATA(hdr)->deleted,
                  "\\Deleted ", flags, sizeof (flags));
 
@@ -1431,7 +1431,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
       err_continue && (*err_continue != MUTT_YES))
   {
     *err_continue = imap_continue ("imap_sync_message: STORE failed",
-				   idata->buf);
+                                   idata->buf);
     if (*err_continue != MUTT_YES)
       return -1;
   }
@@ -1580,12 +1580,12 @@ int imap_sync_mailbox (CONTEXT* ctx, int expunge, int* index_hint)
         if (!ctx->quiet)
           mutt_message (_("Saving changed messages... [%d/%d]"), n+1,
                         ctx->msgcount);
-	if (!appendctx)
-	  appendctx = mx_open_mailbox (ctx->path, MUTT_APPEND | MUTT_QUIET, NULL);
-	if (!appendctx)
-	  dprint (1, (debugfile, "imap_sync_mailbox: Error opening mailbox in append mode\n"));
-	else
-	  _mutt_save_message (h, appendctx, 1, 0, 0);
+        if (!appendctx)
+          appendctx = mx_open_mailbox (ctx->path, MUTT_APPEND | MUTT_QUIET, NULL);
+        if (!appendctx)
+          dprint (1, (debugfile, "imap_sync_mailbox: Error opening mailbox in append mode\n"));
+        else
+          _mutt_save_message (h, appendctx, 1, 0, 0);
         /* TODO: why the check for h->env?  Is this possible? */
         if (h->env)
           h->env->changed = 0;
@@ -1846,7 +1846,7 @@ errcleanup:
     if ((idata->reopen & IMAP_REOPEN_ALLOW) &&
         Context &&
         (idata->ctx == Context) &&
-	(ImapReconnectTries > 0))
+        (ImapReconnectTries > 0))
     {
       if (imap_reconnect (&idata) == 0)
       {
@@ -2040,7 +2040,7 @@ int imap_status (const char* path, int queue)
   if (idata->ctx && !imap_mxcmp (buf, idata->mailbox))
     return idata->ctx->msgcount;
   else if (mutt_bit_isset(idata->capabilities,IMAP4REV1) ||
-	   mutt_bit_isset(idata->capabilities,STATUS))
+           mutt_bit_isset(idata->capabilities,STATUS))
   {
     imap_munge_mbox_name (idata, mbox, sizeof(mbox), buf);
     snprintf (buf, sizeof (buf), "STATUS %s (%s)", mbox, "MESSAGES");

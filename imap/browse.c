@@ -153,8 +153,8 @@ int imap_browse (const char* path, struct browser_state* state)
 
       if (showparents)
       {
-	dprint (3, (debugfile, "imap_init_browse: adding parent %s\n", mbox));
-	imap_add_folder (list.delim, mbox, 1, 0, state, 1);
+        dprint (3, (debugfile, "imap_init_browse: adding parent %s\n", mbox));
+        imap_add_folder (list.delim, mbox, 1, 0, state, 1);
       }
 
       /* if our target isn't a folder, we are in our superior */
@@ -213,7 +213,7 @@ int imap_browse (const char* path, struct browser_state* state)
   mutt_clear_error ();
 
   qsort(&(state->entry[nsup]),state->entrylen-nsup,sizeof(state->entry[0]),
-	(int (*)(const void*,const void*)) compare_names);
+        (int (*)(const void*,const void*)) compare_names);
 
   if (save_lsub)
     set_option (OPTIMAPCHECKSUBSCRIBED);

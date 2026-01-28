@@ -89,12 +89,12 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
     {
       if (*p == '\\')
       {
-	if (*++p == '\0')
-	  return 0;
+        if (*++p == '\0')
+          return 0;
       }
       else if (*p == '"')
       {
-	q = !q;
+        q = !q;
       }
     }
 
@@ -106,8 +106,8 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
       p = strchr(p + 4, ' ');
       if (!p)
       {
-	dprint (1, (debugfile, "is_from(): error parsing what appears to be a pipermail-style obscured return_path: %s\n", s));
-	return 0;
+        dprint (1, (debugfile, "is_from(): error parsing what appears to be a pipermail-style obscured return_path: %s\n", s));
+        return 0;
       }
     }
 
@@ -115,7 +115,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
     {
       len = (size_t) (p - s);
       if (len + 1 > pathlen)
-	len = pathlen - 1;
+        len = pathlen - 1;
       memcpy (path, s, len);
       path[len] = 0;
       dprint (3, (debugfile, "is_from(): got return path: %s\n", path));
@@ -190,7 +190,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
   tm.tm_year = yr > 1900 ? yr - 1900 : (yr < 70 ? yr + 100 : yr);
 
   dprint (3,(debugfile, "is_from(): month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.\n",
-	     tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year));
+             tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year));
 
   tm.tm_isdst = -1;
 

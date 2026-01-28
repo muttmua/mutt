@@ -112,7 +112,7 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
   {
     rc = -1;
     mutt_error (_("could not truncate temporary mail folder: %s"),
-		strerror (errno));
+                strerror (errno));
     goto bail;
   }
 
@@ -245,7 +245,7 @@ int mutt_edit_message (CONTEXT *ctx, HEADER *hdr)
     if (ctx->hdrs[j]->tagged)
     {
       if (edit_one_message (ctx, ctx->hdrs[j]) == -1)
-	return -1;
+        return -1;
     }
   }
 

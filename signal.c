@@ -149,13 +149,13 @@ static void sighandler (int sig)
       IsEndwin = isendwin ();
       curs_set (1);
       if (!IsEndwin)
-	endwin ();
+        endwin ();
       kill (0, SIGSTOP);
       /* fall through */
 
     case SIGCONT:
       if (!IsEndwin)
-	refresh ();
+        refresh ();
       mutt_curs_set (-1);
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
       /* We don't receive SIGWINCH when suspended; however, no harm is done by

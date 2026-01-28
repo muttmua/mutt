@@ -199,7 +199,7 @@ static void make_entry (char *b, size_t blen, MUTTMENU *menu, int num)
   md->num = num;
   mutt_FormatString (b, blen, 0, MuttIndexWindow->cols,
                      md->fmt, list_format_str, md,
-		     MUTT_FORMAT_ARROWCURSOR);
+                     MUTT_FORMAT_ARROWCURSOR);
 }
 
 static int list_action (CONTEXT *ctx, struct list_headers *lhdrs,

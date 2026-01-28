@@ -230,17 +230,17 @@ static void show_version (void)
 
 #ifdef _LIBICONV_VERSION
   printf ("\nlibiconv: %d.%d", _LIBICONV_VERSION >> 8,
-	  _LIBICONV_VERSION & 0xff);
+          _LIBICONV_VERSION & 0xff);
 #endif
 
 #ifdef HAVE_LIBIDN
   printf ("\nlibidn: %s (compiled with %s)", stringprep_check_version (NULL),
-	  STRINGPREP_VERSION);
+          STRINGPREP_VERSION);
 #endif
 
 #ifdef HAVE_LIBIDN2
   printf ("\nlibidn2: %s (compiled with %s)", idn2_check_version (NULL),
-	  IDN2_VERSION);
+          IDN2_VERSION);
 #endif
 
 #ifdef USE_HCACHE
@@ -669,7 +669,7 @@ int main (int argc, char **argv, char **environ)
   if (getegid() != getgid())
   {
     fprintf(stderr, "%s: I don't want to run with privileges!\n",
-	    argc ? argv[0] : "mutt");
+            argc ? argv[0] : "mutt");
     exit(1);
   }
 
@@ -928,14 +928,14 @@ int main (int argc, char **argv, char **environ)
     {
       if ((a = mutt_lookup_alias (alias_queries->data)))
       {
-	/* output in machine-readable form */
-	mutt_addrlist_to_intl (a, NULL);
-	mutt_write_address_list (a, stdout, 0, 0);
+        /* output in machine-readable form */
+        mutt_addrlist_to_intl (a, NULL);
+        mutt_write_address_list (a, stdout, 0, 0);
       }
       else
       {
         exit_code = 1;
-	printf ("%s\n", alias_queries->data);
+        printf ("%s\n", alias_queries->data);
       }
     }
     mutt_free_list (&alias_queries);
@@ -1059,31 +1059,31 @@ int main (int argc, char **argv, char **environ)
       /* Prepare fin and expanded_infile. */
       if (infile)
       {
-	if (mutt_strcmp ("-", infile) == 0)
+        if (mutt_strcmp ("-", infile) == 0)
         {
           if (edit_infile)
           {
             fputs (_("Cannot use -E flag with stdin\n"), stderr);
             goto cleanup_and_exit;
           }
-	  fin = stdin;
+          fin = stdin;
         }
-	else
-	{
+        else
+        {
           expanded_infile = mutt_buffer_new ();
-	  mutt_buffer_strcpy (expanded_infile, infile);
-	  mutt_buffer_expand_path (expanded_infile);
-	  if ((fin = fopen (mutt_b2s (expanded_infile), "r")) == NULL)
-	  {
-	    if (!option (OPTNOCURSES))
+          mutt_buffer_strcpy (expanded_infile, infile);
+          mutt_buffer_expand_path (expanded_infile);
+          if ((fin = fopen (mutt_b2s (expanded_infile), "r")) == NULL)
+          {
+            if (!option (OPTNOCURSES))
             {
-	      mutt_endwin (NULL);
+              mutt_endwin (NULL);
               set_option (OPTNOCURSES);
             }
-	    perror (mutt_b2s (expanded_infile));
+            perror (mutt_b2s (expanded_infile));
             goto cleanup_and_exit;
-	  }
-	}
+          }
+        }
       }
 
       /* Copy input to a tempfile, and re-point fin to the tempfile.
@@ -1227,25 +1227,25 @@ int main (int argc, char **argv, char **environ)
 
       while (t)
       {
-	if (a)
-	{
-	  a->next = mutt_make_file_attach (t->data);
-	  a = a->next;
-	}
-	else
-	  msg->content = a = mutt_make_file_attach (t->data);
-	if (!a)
-	{
-	  if (!option (OPTNOCURSES))
+        if (a)
+        {
+          a->next = mutt_make_file_attach (t->data);
+          a = a->next;
+        }
+        else
+          msg->content = a = mutt_make_file_attach (t->data);
+        if (!a)
+        {
+          if (!option (OPTNOCURSES))
           {
-	    mutt_endwin (NULL);
+            mutt_endwin (NULL);
             set_option (OPTNOCURSES);
           }
-	  fprintf (stderr, _("%s: unable to attach file.\n"), t->data);
-	  mutt_free_list (&attach);
-	  goto cleanup_and_exit;
-	}
-	t = t->next;
+          fprintf (stderr, _("%s: unable to attach file.\n"), t->data);
+          mutt_free_list (&attach);
+          goto cleanup_and_exit;
+        }
+        t = t->next;
       }
       mutt_free_list (&attach);
     }
@@ -1353,14 +1353,14 @@ int main (int argc, char **argv, char **environ)
       if (!Incoming)
       {
         exit_endwin_msg = _("No incoming mailboxes defined.");
-	goto cleanup_and_exit;
+        goto cleanup_and_exit;
       }
       mutt_buffer_clear (folder);
       mutt_buffer_select_file (folder, MUTT_SEL_MAILBOX | MUTT_SEL_BUFFY);
       if (!mutt_buffer_len (folder))
       {
         exit_code = 0;
-	goto cleanup_and_exit;
+        goto cleanup_and_exit;
       }
     }
 
@@ -1376,12 +1376,12 @@ int main (int argc, char **argv, char **environ)
       /* check to see if there are any messages in the folder */
       switch (mx_check_empty (mutt_b2s (folder)))
       {
-	case -1:
+        case -1:
           exit_endwin_msg = strerror (errno);
           goto cleanup_and_exit;
-	case 1:
+        case 1:
           exit_endwin_msg = _("Mailbox is empty.");
-	  goto cleanup_and_exit;
+          goto cleanup_and_exit;
       }
     }
 
@@ -1399,7 +1399,7 @@ int main (int argc, char **argv, char **environ)
 #endif
       mutt_index_menu ();
       if (Context)
-	FREE (&Context);
+        FREE (&Context);
     }
 
     exit_endwin_msg = Errorbuf;

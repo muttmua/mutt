@@ -63,28 +63,28 @@ int mutt_copy_hdr (FILE *, FILE *, LOFF_T, LOFF_T, int, const char *);
 int mutt_copy_header (FILE *, HEADER *, FILE *, int, const char *);
 
 int _mutt_copy_message (FILE *fpout,
-			FILE *fpin,
-			HEADER *hdr,
-			BODY *body,
-			int flags,
-			int chflags);
+                        FILE *fpin,
+                        HEADER *hdr,
+                        BODY *body,
+                        int flags,
+                        int chflags);
 
 int mutt_copy_message (FILE *fpout,
-		       CONTEXT *src,
-		       HEADER *hdr,
-		       int flags,
-		       int chflags);
+                       CONTEXT *src,
+                       HEADER *hdr,
+                       int flags,
+                       int chflags);
 
 int _mutt_append_message (CONTEXT *dest,
-			  FILE *fpin,
-			  CONTEXT *src,
-			  HEADER *hdr,
-			  BODY *body,
-			  int flags,
-			  int chflags);
+                          FILE *fpin,
+                          CONTEXT *src,
+                          HEADER *hdr,
+                          BODY *body,
+                          int flags,
+                          int chflags);
 
 int mutt_append_message (CONTEXT *dest,
-			 CONTEXT *src,
-			 HEADER *hdr,
-			 int cmflags,
-			 int chflags);
+                         CONTEXT *src,
+                         HEADER *hdr,
+                         int cmflags,
+                         int chflags);

@@ -141,10 +141,10 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     if (!client_start)
       FOREVER
       {
-	rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
-	if (rc != SASL_INTERACT)
-	  break;
-	mutt_sasl_interact (interaction);
+        rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
+        if (rc != SASL_INTERACT)
+          break;
+        mutt_sasl_interact (interaction);
       }
     else
     {
@@ -168,8 +168,8 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
       }
       if (sasl_encode64 (pc, olen, buf, bufsize, &olen) != SASL_OK)
       {
-	dprint (1, (debugfile, "pop_auth_sasl: error base64-encoding client response.\n"));
-	goto bail;
+        dprint (1, (debugfile, "pop_auth_sasl: error base64-encoding client response.\n"));
+        goto bail;
       }
     }
   }
@@ -353,7 +353,7 @@ static pop_auth_res_t pop_auth_apop (POP_DATA *pop_data, const char *method)
   md5_init_ctx (&ctx);
   md5_process_bytes (pop_data->timestamp, strlen (pop_data->timestamp), &ctx);
   md5_process_bytes (pop_data->conn->account.pass,
-		     strlen (pop_data->conn->account.pass), &ctx);
+                     strlen (pop_data->conn->account.pass), &ctx);
   md5_finish_ctx (&ctx, digest);
 
   for (i = 0; i < sizeof (digest); i++)
@@ -572,38 +572,38 @@ int pop_authenticate (POP_DATA* pop_data)
     {
       comma = strchr (method, ':');
       if (comma)
-	*comma++ = '\0';
+        *comma++ = '\0';
       dprint (2, (debugfile, "pop_authenticate: Trying method %s\n", method));
       authenticator = pop_authenticators;
 
       while (authenticator->authenticate)
       {
-	if (!authenticator->method ||
-	    !ascii_strcasecmp (authenticator->method, method))
-	{
-	  ret = authenticator->authenticate (pop_data, method);
-	  if (ret == POP_A_SOCKET)
-	    switch (pop_connect (pop_data))
-	    {
-	      case 0:
-	      {
-		ret = authenticator->authenticate (pop_data, method);
-		break;
-	      }
-	      case -2:
-		ret = POP_A_FAILURE;
-	    }
+        if (!authenticator->method ||
+            !ascii_strcasecmp (authenticator->method, method))
+        {
+          ret = authenticator->authenticate (pop_data, method);
+          if (ret == POP_A_SOCKET)
+            switch (pop_connect (pop_data))
+            {
+              case 0:
+              {
+                ret = authenticator->authenticate (pop_data, method);
+                break;
+              }
+              case -2:
+                ret = POP_A_FAILURE;
+            }
 
-	  if (ret != POP_A_UNAVAIL)
-	    attempts++;
-	  if (ret == POP_A_SUCCESS || ret == POP_A_SOCKET ||
-	      (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
-	  {
-	    comma = NULL;
-	    break;
-	  }
-	}
-	authenticator++;
+          if (ret != POP_A_UNAVAIL)
+            attempts++;
+          if (ret == POP_A_SUCCESS || ret == POP_A_SOCKET ||
+              (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
+          {
+            comma = NULL;
+            break;
+          }
+        }
+        authenticator++;
       }
 
       method = comma;
@@ -621,22 +621,22 @@ int pop_authenticate (POP_DATA* pop_data)
     {
       ret = authenticator->authenticate (pop_data, NULL);
       if (ret == POP_A_SOCKET)
-	switch (pop_connect (pop_data))
-	{
-	  case 0:
-	  {
-	    ret = authenticator->authenticate (pop_data, NULL);
-	    break;
-	  }
-	  case -2:
-	    ret = POP_A_FAILURE;
-	}
+        switch (pop_connect (pop_data))
+        {
+          case 0:
+          {
+            ret = authenticator->authenticate (pop_data, NULL);
+            break;
+          }
+          case -2:
+            ret = POP_A_FAILURE;
+        }
 
       if (ret != POP_A_UNAVAIL)
-	attempts++;
+        attempts++;
       if (ret == POP_A_SUCCESS || ret == POP_A_SOCKET ||
-	  (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
-	break;
+          (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
+        break;
 
       authenticator++;
     }
@@ -650,7 +650,7 @@ int pop_authenticate (POP_DATA* pop_data)
       return -1;
     case POP_A_UNAVAIL:
       if (!attempts)
-	mutt_error (_("No authenticators available"));
+        mutt_error (_("No authenticators available"));
   }
 
   return -2;

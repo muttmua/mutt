@@ -95,7 +95,7 @@ static void init_history (struct history *h)
     if (h->hist)
     {
       for (i = 0 ; i <= OldSize ; i ++)
-	FREE (&h->hist[i]);
+        FREE (&h->hist[i]);
       FREE (&h->hist);
     }
   }
@@ -254,7 +254,7 @@ static void shrink_histfile (void)
         goto cleanup;
       }
       if (hclass >= HC_LAST)
-	continue;
+        continue;
       *p = '\0';
       if (option (OPTHISTREMOVEDUPS) &&
           (dup_hash_dec (dup_hashes[hclass], linebuf + read) > 0))
@@ -410,7 +410,7 @@ void mutt_history_add (history_class_t hclass, const char *s, int save)
         save_history (hclass, s);
       mutt_str_replace (&h->hist[h->last++], s);
       if (h->last > HistSize)
-	h->last = 0;
+        h->last = 0;
     }
   }
   h->cur = h->last; /* reset to the last entry */
@@ -514,7 +514,7 @@ static void history_entry (char *s, size_t slen, MUTTMENU *m, int num)
   char *entry = ((char **)m->data)[num];
 
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, "%s", history_format_str,
-		     entry, MUTT_FORMAT_ARROWCURSOR);
+                     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static void history_menu (char *buf, size_t buflen, char **matches, int match_count)

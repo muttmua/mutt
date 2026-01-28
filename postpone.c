@@ -92,11 +92,11 @@ int mutt_num_postponed (int force)
       newpc = imap_status (Postponed, 0);
       if (newpc >= 0)
       {
-	PostCount = newpc;
-	dprint (3, (debugfile, "mutt_num_postponed: %d postponed IMAP messages found.\n", PostCount));
+        PostCount = newpc;
+        dprint (3, (debugfile, "mutt_num_postponed: %d postponed IMAP messages found.\n", PostCount));
       }
       else
-	dprint (3, (debugfile, "mutt_num_postponed: using old IMAP postponed count.\n"));
+        dprint (3, (debugfile, "mutt_num_postponed: using old IMAP postponed count.\n"));
     }
     return PostCount;
   }
@@ -155,7 +155,7 @@ static void post_entry (char *s, size_t slen, MUTTMENU *menu, int entry)
   CONTEXT *ctx = (CONTEXT *) menu->data;
 
   _mutt_make_string (s, slen, NONULL (HdrFmt), ctx, ctx->hdrs[entry],
-		     MUTT_FORMAT_ARROWCURSOR);
+                     MUTT_FORMAT_ARROWCURSOR);
 }
 
 static HEADER *select_msg (void)
@@ -186,32 +186,32 @@ static HEADER *select_msg (void)
       case OP_DELETE:
       case OP_UNDELETE:
         /* should deleted draft messages be saved in the trash folder? */
-	mutt_set_flag (PostContext, PostContext->hdrs[menu->current], MUTT_DELETE, (i == OP_DELETE) ? 1 : 0);
-	PostCount = PostContext->msgcount - PostContext->deleted;
-	if (option (OPTRESOLVE) && menu->current < menu->max - 1)
-	{
-	  menu->oldcurrent = menu->current;
-	  menu->current++;
-	  if (menu->current >= menu->top + menu->pagelen)
-	  {
-	    menu->top = menu->current;
-	    menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
-	  }
-	  else
-	    menu->redraw |= REDRAW_MOTION_RESYNCH;
-	}
-	else
-	  menu->redraw |= REDRAW_CURRENT;
-	break;
+        mutt_set_flag (PostContext, PostContext->hdrs[menu->current], MUTT_DELETE, (i == OP_DELETE) ? 1 : 0);
+        PostCount = PostContext->msgcount - PostContext->deleted;
+        if (option (OPTRESOLVE) && menu->current < menu->max - 1)
+        {
+          menu->oldcurrent = menu->current;
+          menu->current++;
+          if (menu->current >= menu->top + menu->pagelen)
+          {
+            menu->top = menu->current;
+            menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
+          }
+          else
+            menu->redraw |= REDRAW_MOTION_RESYNCH;
+        }
+        else
+          menu->redraw |= REDRAW_CURRENT;
+        break;
 
       case OP_GENERIC_SELECT_ENTRY:
-	r = menu->current;
-	done = 1;
-	break;
+        r = menu->current;
+        done = 1;
+        break;
 
       case OP_EXIT:
-	done = 1;
-	break;
+        done = 1;
+        break;
     }
   }
 
@@ -309,12 +309,12 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
     {
       if (ctx)
       {
-	/* if a mailbox is currently open, look to see if the original message
-	   the user attempted to reply to is in this mailbox */
-	p = skip_email_wsp(tmp->data + 18);
-	if (!ctx->id_hash)
-	  ctx->id_hash = mutt_make_id_hash (ctx);
-	sctx->cur = hash_find (ctx->id_hash, p);
+        /* if a mailbox is currently open, look to see if the original message
+           the user attempted to reply to is in this mailbox */
+        p = skip_email_wsp(tmp->data + 18);
+        if (!ctx->id_hash)
+          ctx->id_hash = mutt_make_id_hash (ctx);
+        sctx->cur = hash_find (ctx->id_hash, p);
         if (sctx->cur)
         {
           sctx->has_cur = 1;
@@ -327,9 +327,9 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       /* Remove the X-Mutt-References: header field. */
       next = tmp->next;
       if (last)
-	last->next = tmp->next;
+        last->next = tmp->next;
       else
-	sctx->msg->env->userhdrs = tmp->next;
+        sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -343,9 +343,9 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       /* remove the X-Mutt-Fcc: header field */
       next = tmp->next;
       if (last)
-	last->next = tmp->next;
+        last->next = tmp->next;
       else
-	sctx->msg->env->userhdrs = tmp->next;
+        sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -369,9 +369,9 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       /* remove the pgp field */
       next = tmp->next;
       if (last)
-	last->next = tmp->next;
+        last->next = tmp->next;
       else
-	sctx->msg->env->userhdrs = tmp->next;
+        sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -386,9 +386,9 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       /* remove the smime field */
       next = tmp->next;
       if (last)
-	last->next = tmp->next;
+        last->next = tmp->next;
       else
-	sctx->msg->env->userhdrs = tmp->next;
+        sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -403,15 +403,15 @@ int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
       t = strtok (tmp->data + 11, " \t\n");
       while (t)
       {
-	sctx->msg->chain = mutt_add_list (sctx->msg->chain, t);
-	t = strtok (NULL, " \t\n");
+        sctx->msg->chain = mutt_add_list (sctx->msg->chain, t);
+        t = strtok (NULL, " \t\n");
       }
 
       next = tmp->next;
       if (last)
-	last->next = tmp->next;
+        last->next = tmp->next;
       else
-	sctx->msg->env->userhdrs = tmp->next;
+        sctx->msg->env->userhdrs = tmp->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
       tmp = next;
@@ -481,9 +481,9 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app,
         if (*(p+1) == '<')
         {
           for (p += 2;
-	       *p && *p != '>' && q < sign_as + sizeof (sign_as) - 1;
+               *p && *p != '>' && q < sign_as + sizeof (sign_as) - 1;
                *q++ = *p++)
-	    ;
+            ;
 
           if (*p!='>')
           {
@@ -504,42 +504,42 @@ int mutt_parse_crypt_hdr (const char *p, int set_empty_signas, int crypt_app,
       case 'M':
         if (*(p+1) == '<')
         {
-	  for (p += 2; *p && *p != '>'; p++)
-	    ;
-	  if (*p != '>')
-	  {
-	    mutt_error _("Illegal crypto header");
-	    return 0;
-	  }
-	}
+          for (p += 2; *p && *p != '>'; p++)
+            ;
+          if (*p != '>')
+          {
+            mutt_error _("Illegal crypto header");
+            return 0;
+          }
+        }
 
-	break;
+        break;
 
 
       case 'c':
       case 'C':
-   	q = smime_cryptalg;
+        q = smime_cryptalg;
 
         if (*(p+1) == '<')
-	{
-	  for (p += 2; *p && *p != '>' && q < smime_cryptalg + sizeof(smime_cryptalg) - 1;
+        {
+          for (p += 2; *p && *p != '>' && q < smime_cryptalg + sizeof(smime_cryptalg) - 1;
                *q++ = *p++)
-	    ;
+            ;
 
-	  if (*p != '>')
-	  {
-	    mutt_error _("Illegal S/MIME header");
-	    return 0;
-	  }
-	}
+          if (*p != '>')
+          {
+            mutt_error _("Illegal S/MIME header");
+            return 0;
+          }
+        }
 
-	*q = '\0';
-	break;
+        *q = '\0';
+        break;
 
       case 'i':
       case 'I':
-	flags |= INLINE;
-	break;
+        flags |= INLINE;
+        break;
 
       default:
         mutt_error _("Illegal crypto header");
@@ -628,7 +628,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
     mutt_message _("Decrypting message...");
     if ((crypt_pgp_decrypt_mime (fp, &bfp, newhdr->content, &b) == -1)
-	|| b == NULL)
+        || b == NULL)
     {
       mutt_error _("Decryption failed.");
       goto bail;
@@ -719,11 +719,11 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
     if (b->type == TYPETEXT)
     {
       if (!ascii_strcasecmp ("yes", mutt_get_parameter ("x-mutt-noconv", b->parameter)))
-	b->noconv = 1;
+        b->noconv = 1;
       else
       {
-	s.flags |= MUTT_CHARCONV;
-	b->noconv = 0;
+        s.flags |= MUTT_CHARCONV;
+        b->noconv = 0;
       }
 
       mutt_delete_parameter ("x-mutt-noconv", &b->parameter);
@@ -735,7 +735,7 @@ int mutt_prepare_template (FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
 
     if ((WithCrypto & APPLICATION_PGP) &&
-	((sec_type = mutt_is_application_pgp (b)) & (ENCRYPT|SIGN)))
+        ((sec_type = mutt_is_application_pgp (b)) & (ENCRYPT|SIGN)))
     {
       if (sec_type & ENCRYPT)
       {

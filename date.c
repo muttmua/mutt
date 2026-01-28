@@ -37,7 +37,7 @@ static time_t compute_tz (time_t g, struct tm *utc)
   {
     /* This code is optimized to negative timezones (West of Greenwich) */
     if (yday == -1 ||	/* UTC passed midnight before localtime */
-	yday > 1)	/* UTC passed new year before localtime */
+        yday > 1)	/* UTC passed new year before localtime */
       t -= 24 * 60 * 60;
     else
       t += 24 * 60 * 60;

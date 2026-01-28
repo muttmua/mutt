@@ -57,7 +57,7 @@ void mutt_buffer_to_base64 (BUFFER *out, const unsigned char *in, size_t len)
 }
 
 static void to_base64 (unsigned char *out, const unsigned char *in, size_t len,
-		     size_t olen, const char *dict)
+                     size_t olen, const char *dict)
 {
   while (len >= 3 && olen > 4)
   {
@@ -89,13 +89,13 @@ static void to_base64 (unsigned char *out, const unsigned char *in, size_t len,
 
 /* raw bytes to null-terminated base 64 string */
 void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
-		     size_t olen)
+                     size_t olen)
 {
   to_base64 (out, in, len, olen, B64Chars);
 }
 
 void mutt_to_base64_safeurl (unsigned char *out, const unsigned char *in,
-			     size_t len, size_t olen)
+                             size_t len, size_t olen)
 {
   to_base64 (out, in, len, olen, B64Chars_urlsafe);
 }
@@ -153,8 +153,8 @@ int mutt_from_base64 (char *out, const char *in, size_t olen)
       {
         if (len == olen)
           return len;
-	*out++ = ((base64val(digit3) << 6) & 0xc0) | base64val(digit4);
-	len++;
+        *out++ = ((base64val(digit3) << 6) & 0xc0) | base64val(digit4);
+        len++;
       }
     }
   }

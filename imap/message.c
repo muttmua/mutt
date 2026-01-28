@@ -388,7 +388,7 @@ retry:
   }
   if (idata->uidnext > 1)
     mutt_hcache_store_raw (idata->hcache, "/UIDNEXT", &idata->uidnext,
-			   sizeof (idata->uidnext), imap_hcache_keylen);
+                           sizeof (idata->uidnext), imap_hcache_keylen);
 
   /* We currently only sync CONDSTORE and QRESYNC on the initial download.
    * To do it more often, we'll need to deal with flag updates combined with
@@ -1167,52 +1167,52 @@ int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
     {
       while (*pc)
       {
-	pc = imap_next_word (pc);
-	if (pc[0] == '(')
-	  pc++;
-	if (ascii_strncasecmp ("UID", pc, 3) == 0)
-	{
-	  pc = imap_next_word (pc);
-	  if (mutt_atoui (pc, &uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
+        pc = imap_next_word (pc);
+        if (pc[0] == '(')
+          pc++;
+        if (ascii_strncasecmp ("UID", pc, 3) == 0)
+        {
+          pc = imap_next_word (pc);
+          if (mutt_atoui (pc, &uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
             goto bail;
-	  if (uid != HEADER_DATA(h)->uid)
-	    mutt_error (_("The message index is incorrect. Try reopening the mailbox."));
-	}
-	else if ((ascii_strncasecmp ("RFC822", pc, 6) == 0) ||
-		 (ascii_strncasecmp ("RFC822.HEADER", pc, 13) == 0) ||
-		 (ascii_strncasecmp ("BODY[]", pc, 6) == 0) ||
-		 (ascii_strncasecmp ("BODY[HEADER]", pc, 12) == 0))
-	{
-	  pc = imap_next_word (pc);
-	  if (imap_get_literal_count(pc, &bytes) < 0)
-	  {
-	    imap_error ("imap_fetch_message()", buf);
-	    goto bail;
-	  }
+          if (uid != HEADER_DATA(h)->uid)
+            mutt_error (_("The message index is incorrect. Try reopening the mailbox."));
+        }
+        else if ((ascii_strncasecmp ("RFC822", pc, 6) == 0) ||
+                 (ascii_strncasecmp ("RFC822.HEADER", pc, 13) == 0) ||
+                 (ascii_strncasecmp ("BODY[]", pc, 6) == 0) ||
+                 (ascii_strncasecmp ("BODY[HEADER]", pc, 12) == 0))
+        {
+          pc = imap_next_word (pc);
+          if (imap_get_literal_count(pc, &bytes) < 0)
+          {
+            imap_error ("imap_fetch_message()", buf);
+            goto bail;
+          }
           if (output_progress)
           {
             mutt_progress_init (&progressbar, _("Fetching message..."),
                                 MUTT_PROGRESS_SIZE, NetInc, bytes);
           }
-	  if (imap_read_literal (msg->fp, idata, bytes,
+          if (imap_read_literal (msg->fp, idata, bytes,
                                  output_progress ? &progressbar : NULL) < 0)
-	    goto bail;
-	  /* pick up trailing line */
-	  if ((rc = imap_cmd_step (idata)) != IMAP_CMD_CONTINUE)
-	    goto bail;
-	  pc = idata->buf;
+            goto bail;
+          /* pick up trailing line */
+          if ((rc = imap_cmd_step (idata)) != IMAP_CMD_CONTINUE)
+            goto bail;
+          pc = idata->buf;
 
-	  fetched = 1;
-	}
-	/* UW-IMAP will provide a FLAGS update here if the FETCH causes a
-	 * change (eg from \Unseen to \Seen).
-	 * Uncommitted changes in mutt take precedence. If we decide to
-	 * incrementally update flags later, this won't stop us syncing */
-	else if ((ascii_strncasecmp ("FLAGS", pc, 5) == 0) && !h->changed)
-	{
-	  if ((pc = imap_set_flags (idata, h, pc, NULL)) == NULL)
-	    goto bail;
-	}
+          fetched = 1;
+        }
+        /* UW-IMAP will provide a FLAGS update here if the FETCH causes a
+         * change (eg from \Unseen to \Seen).
+         * Uncommitted changes in mutt take precedence. If we decide to
+         * incrementally update flags later, this won't stop us syncing */
+        else if ((ascii_strncasecmp ("FLAGS", pc, 5) == 0) && !h->changed)
+        {
+          if ((pc = imap_set_flags (idata, h, pc, NULL)) == NULL)
+            goto bail;
+        }
       }
     }
   }
@@ -1380,8 +1380,8 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 
   snprintf (buf, sizeof (buf), "APPEND %s (%s) \"%s\" {%lu}", mbox,
             imap_flags + 1,
-	    mutt_b2s (internaldate),
-	    (unsigned long) len);
+            mutt_b2s (internaldate),
+            (unsigned long) len);
   mutt_buffer_pool_release (&internaldate);
 
   imap_cmd_start (idata, buf);

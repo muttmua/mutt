@@ -527,9 +527,9 @@ check_attachments(ATTACH_CONTEXT *actx)
                           i+1, mutt_b2s (pretty));
 
       if ((r = mutt_yesorno (mutt_b2s (msg), MUTT_YES)) == MUTT_YES)
-	mutt_update_encoding (actx->idx[i]->content);
+        mutt_update_encoding (actx->idx[i]->content);
       else if (r == -1)
-	goto cleanup;
+        goto cleanup;
     }
   }
 
@@ -899,15 +899,15 @@ static unsigned long cum_attachs_size (MUTTMENU *menu)
     {
       switch (b->encoding)
       {
-	case ENCQUOTEDPRINTABLE:
-	  s += 3 * (info->lobin + info->hibin) + info->ascii + info->crlf;
-	  break;
-	case ENCBASE64:
-	  s += (4 * (info->lobin + info->hibin + info->ascii + info->crlf)) / 3;
-	  break;
-	default:
-	  s += info->lobin + info->hibin + info->ascii + info->crlf;
-	  break;
+        case ENCQUOTEDPRINTABLE:
+          s += 3 * (info->lobin + info->hibin) + info->ascii + info->crlf;
+          break;
+        case ENCBASE64:
+          s += (4 * (info->lobin + info->hibin + info->ascii + info->crlf)) / 3;
+          break;
+        default:
+          s += info->lobin + info->hibin + info->ascii + info->crlf;
+          break;
       }
     }
   }
@@ -1103,60 +1103,60 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
     switch (op = mutt_menuLoop (menu))
     {
       case OP_COMPOSE_EDIT_FROM:
-	edit_address_list (HDR_FROM, &msg->env->from);
+        edit_address_list (HDR_FROM, &msg->env->from);
         update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
       case OP_COMPOSE_EDIT_TO:
-	edit_address_list (HDR_TO, &msg->env->to);
+        edit_address_list (HDR_TO, &msg->env->to);
         update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_BCC:
-	edit_address_list (HDR_BCC, &msg->env->bcc);
+        edit_address_list (HDR_BCC, &msg->env->bcc);
         update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
       case OP_COMPOSE_EDIT_CC:
-	edit_address_list (HDR_CC, &msg->env->cc);
+        edit_address_list (HDR_CC, &msg->env->cc);
         update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_SUBJECT:
-	if (msg->env->subject)
-	  strfcpy (buf, msg->env->subject, sizeof (buf));
-	else
-	  buf[0] = 0;
-	if (mutt_get_field (_("Subject: "), buf, sizeof (buf), 0) == 0)
-	{
-	  mutt_str_replace (&msg->env->subject, buf);
-	  mutt_window_move (MuttIndexWindow, HDR_SUBJECT, HDR_XOFFSET);
-	  if (msg->env->subject)
-	    mutt_paddstr (W, msg->env->subject);
-	  else
-	    mutt_window_clrtoeol(MuttIndexWindow);
-	}
+        if (msg->env->subject)
+          strfcpy (buf, msg->env->subject, sizeof (buf));
+        else
+          buf[0] = 0;
+        if (mutt_get_field (_("Subject: "), buf, sizeof (buf), 0) == 0)
+        {
+          mutt_str_replace (&msg->env->subject, buf);
+          mutt_window_move (MuttIndexWindow, HDR_SUBJECT, HDR_XOFFSET);
+          if (msg->env->subject)
+            mutt_paddstr (W, msg->env->subject);
+          else
+            mutt_window_clrtoeol(MuttIndexWindow);
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_REPLY_TO:
-	edit_address_list (HDR_REPLYTO, &msg->env->reply_to);
+        edit_address_list (HDR_REPLYTO, &msg->env->reply_to);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
       case OP_COMPOSE_EDIT_FCC:
-	mutt_buffer_strcpy (fname, mutt_b2s (sctx->fcc));
-	if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_MAILBOX | MUTT_CLEAR) == 0)
-	{
-	  mutt_buffer_strcpy (sctx->fcc, mutt_b2s (fname));
-	  mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
-	  mutt_window_move (MuttIndexWindow, HDR_FCC, HDR_XOFFSET);
-	  mutt_paddstr (W, mutt_b2s (sctx->fcc));
-	  fccSet = 1;
-	}
+        mutt_buffer_strcpy (fname, mutt_b2s (sctx->fcc));
+        if (mutt_buffer_get_field (_("Fcc: "), fname, MUTT_MAILBOX | MUTT_CLEAR) == 0)
+        {
+          mutt_buffer_strcpy (sctx->fcc, mutt_b2s (fname));
+          mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
+          mutt_window_move (MuttIndexWindow, HDR_FCC, HDR_XOFFSET);
+          mutt_paddstr (W, mutt_b2s (sctx->fcc));
+          fccSet = 1;
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       case OP_COMPOSE_EDIT_MESSAGE:
-	if (Editor && (mutt_strcmp ("builtin", Editor) != 0) && !option (OPTEDITHDRS))
-	{
+        if (Editor && (mutt_strcmp ("builtin", Editor) != 0) && !option (OPTEDITHDRS))
+        {
           mutt_rfc3676_space_unstuff (msg);
 
           if ((sctx->flags & SENDBACKGROUNDEDIT) && option (OPTBACKGROUNDEDIT))
@@ -1175,21 +1175,21 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         edit_message_resume:
           sctx->state = 0;
           mutt_rfc3676_space_stuff (msg);
-	  mutt_update_encoding (msg->content);
-	  menu->redraw = REDRAW_FULL;
-	  mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	  break;
-	}
-	/* fall through */
+          mutt_update_encoding (msg->content);
+          menu->redraw = REDRAW_FULL;
+          mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
+          break;
+        }
+        /* fall through */
       case OP_COMPOSE_EDIT_HEADERS:
         mutt_rfc3676_space_unstuff (msg);
 
-	if (mutt_strcmp ("builtin", Editor) != 0 &&
-	    (op == OP_COMPOSE_EDIT_HEADERS ||
+        if (mutt_strcmp ("builtin", Editor) != 0 &&
+            (op == OP_COMPOSE_EDIT_HEADERS ||
              (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS))))
-	{
-	  char *tag = NULL, *err = NULL;
-	  mutt_env_to_local (msg->env);
+        {
+          char *tag = NULL, *err = NULL;
+          mutt_env_to_local (msg->env);
 
           if ((sctx->flags & SENDBACKGROUNDEDIT) && option (OPTBACKGROUNDEDIT))
           {
@@ -1210,35 +1210,35 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
             mutt_edit_headers (Editor, sctx, MUTT_EDIT_HEADERS_RESUME);
             sctx->state = 0;
           }
-	  if (mutt_env_to_intl (msg->env, &tag, &err))
-	  {
-	    mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
-	    FREE (&err);
-	  }
+          if (mutt_env_to_intl (msg->env, &tag, &err))
+          {
+            mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
+            FREE (&err);
+          }
           update_crypt_info (&rd);
-	}
-	else
-	{
-	  /* this is grouped with OP_COMPOSE_EDIT_HEADERS because the
-	     attachment list could change if the user invokes ~v to edit
-	     the message with headers, in which we need to execute the
-	     code below to regenerate the index array */
-	  mutt_builtin_editor (sctx);
-	}
+        }
+        else
+        {
+          /* this is grouped with OP_COMPOSE_EDIT_HEADERS because the
+             attachment list could change if the user invokes ~v to edit
+             the message with headers, in which we need to execute the
+             code below to regenerate the index array */
+          mutt_builtin_editor (sctx);
+        }
 
         mutt_rfc3676_space_stuff (msg);
-	mutt_update_encoding (msg->content);
+        mutt_update_encoding (msg->content);
 
-	/* attachments may have been added */
-	if (actx->idxlen && actx->idx[actx->idxlen - 1]->content->next)
-	{
+        /* attachments may have been added */
+        if (actx->idxlen && actx->idx[actx->idxlen - 1]->content->next)
+        {
           mutt_actx_free_entries (actx);
           mutt_update_compose_menu (actx, menu, 1);
-	}
+        }
 
         menu->redraw = REDRAW_FULL;
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
 
 
 
@@ -1246,16 +1246,16 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         if (!(WithCrypto & APPLICATION_PGP))
           break;
 
-	new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
-	if ((new->content = crypt_pgp_make_key_attachment()) != NULL)
-	{
-	  update_idx (menu, actx, new);
-	  menu->redraw |= REDRAW_INDEX;
-	}
-	else
-	  FREE (&new);
+        new = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+        if ((new->content = crypt_pgp_make_key_attachment()) != NULL)
+        {
+          update_idx (menu, actx, new);
+          menu->redraw |= REDRAW_INDEX;
+        }
+        else
+          FREE (&new);
 
-	menu->redraw |= REDRAW_STATUS;
+        menu->redraw |= REDRAW_STATUS;
 
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
@@ -1410,12 +1410,12 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
       break;
 
       case OP_DELETE:
-	CHECK_COUNT;
-	if (delete_attachment (actx, menu->current) == -1)
-	  break;
-	mutt_update_compose_menu (actx, menu, 0);
-	if (menu->current == 0)
-	  msg->content = actx->idx[0]->content;
+        CHECK_COUNT;
+        if (delete_attachment (actx, menu->current) == -1)
+          break;
+        mutt_update_compose_menu (actx, menu, 0);
+        if (menu->current == 0)
+          msg->content = actx->idx[0]->content;
 
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
@@ -1424,14 +1424,14 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         CHECK_COUNT;
         if (move_attachment_down (actx, menu) == -1)
           break;
-	mutt_update_compose_menu (actx, menu, 0);
+        mutt_update_compose_menu (actx, menu, 0);
         break;
 
       case OP_COMPOSE_MOVE_UP:
         CHECK_COUNT;
         if (move_attachment_up (actx, menu) == -1)
           break;
-	mutt_update_compose_menu (actx, menu, 0);
+        mutt_update_compose_menu (actx, menu, 0);
         break;
 
       case OP_COMPOSE_TOGGLE_RECODE:
@@ -1439,31 +1439,31 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         CHECK_COUNT;
         if (!mutt_is_text_part (CURATTACH->content))
         {
-	  mutt_error (_("Recoding only affects text attachments."));
-	  break;
-	}
+          mutt_error (_("Recoding only affects text attachments."));
+          break;
+        }
         CURATTACH->content->noconv = !CURATTACH->content->noconv;
         if (CURATTACH->content->noconv)
-	  mutt_message (_("The current attachment won't be converted."));
+          mutt_message (_("The current attachment won't be converted."));
         else
-	  mutt_message (_("The current attachment will be converted."));
-	menu->redraw = REDRAW_CURRENT;
+          mutt_message (_("The current attachment will be converted."));
+        menu->redraw = REDRAW_CURRENT;
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
       }
 
       case OP_COMPOSE_EDIT_DESCRIPTION:
-	CHECK_COUNT;
-	strfcpy (buf,
-		 CURATTACH->content->description ?
-		 CURATTACH->content->description : "",
-		 sizeof (buf));
-	/* header names should not be translated */
-	if (mutt_get_field ("Description: ", buf, sizeof (buf), 0) == 0)
-	{
-	  mutt_str_replace (&CURATTACH->content->description, buf);
-	  menu->redraw = REDRAW_CURRENT;
-	}
+        CHECK_COUNT;
+        strfcpy (buf,
+                 CURATTACH->content->description ?
+                 CURATTACH->content->description : "",
+                 sizeof (buf));
+        /* header names should not be translated */
+        if (mutt_get_field ("Description: ", buf, sizeof (buf), 0) == 0)
+        {
+          mutt_str_replace (&CURATTACH->content->description, buf);
+          menu->redraw = REDRAW_CURRENT;
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1471,120 +1471,120 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         CHECK_COUNT;
         if (menu->tagprefix)
         {
-	  BODY *top;
-	  for (top = msg->content; top; top = top->next)
-	  {
-	    if (top->tagged)
-	      mutt_update_encoding (top);
-	  }
-	  menu->redraw = REDRAW_FULL;
-	}
+          BODY *top;
+          for (top = msg->content; top; top = top->next)
+          {
+            if (top->tagged)
+              mutt_update_encoding (top);
+          }
+          menu->redraw = REDRAW_FULL;
+        }
         else
         {
           mutt_update_encoding(CURATTACH->content);
-	  menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
-	}
+          menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
       case OP_COMPOSE_TOGGLE_DISPOSITION:
-	/* toggle the content-disposition between inline/attachment */
-	CURATTACH->content->disposition = (CURATTACH->content->disposition == DISPINLINE) ? DISPATTACH : DISPINLINE;
-	menu->redraw = REDRAW_CURRENT;
-	break;
+        /* toggle the content-disposition between inline/attachment */
+        CURATTACH->content->disposition = (CURATTACH->content->disposition == DISPINLINE) ? DISPATTACH : DISPINLINE;
+        menu->redraw = REDRAW_CURRENT;
+        break;
 
       case OP_EDIT_TYPE:
-	CHECK_COUNT;
+        CHECK_COUNT;
         {
-	  mutt_edit_content_type (NULL, CURATTACH->content, NULL);
+          mutt_edit_content_type (NULL, CURATTACH->content, NULL);
 
-	  /* this may have been a change to text/something */
-	  mutt_update_encoding (CURATTACH->content);
+          /* this may have been a change to text/something */
+          mutt_update_encoding (CURATTACH->content);
 
-	  menu->redraw = REDRAW_CURRENT;
-	}
+          menu->redraw = REDRAW_CURRENT;
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
       case OP_COMPOSE_EDIT_ENCODING:
-	CHECK_COUNT;
-	strfcpy (buf, ENCODING (CURATTACH->content->encoding),
+        CHECK_COUNT;
+        strfcpy (buf, ENCODING (CURATTACH->content->encoding),
                  sizeof (buf));
-	if (mutt_get_field ("Content-Transfer-Encoding: ", buf,
+        if (mutt_get_field ("Content-Transfer-Encoding: ", buf,
                             sizeof (buf), 0) == 0 && buf[0])
-	{
-	  if ((i = mutt_check_encoding (buf)) != ENCOTHER && i != ENCUUENCODED)
-	  {
-	    CURATTACH->content->encoding = i;
-	    menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
-	    mutt_clear_error();
-	  }
-	  else
-	    mutt_error _("Invalid encoding.");
-	}
+        {
+          if ((i = mutt_check_encoding (buf)) != ENCOTHER && i != ENCUUENCODED)
+          {
+            CURATTACH->content->encoding = i;
+            menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
+            mutt_clear_error();
+          }
+          else
+            mutt_error _("Invalid encoding.");
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
       case OP_COMPOSE_SEND_MESSAGE:
 
         /* Note: We don't invoke send2-hook here, since we want to leave
-	 * users an opportunity to change settings from the ":" prompt.
-	 */
+         * users an opportunity to change settings from the ":" prompt.
+         */
 
         if (check_attachments(actx) != 0)
         {
-	  menu->redraw = REDRAW_FULL;
-	  break;
-	}
+          menu->redraw = REDRAW_FULL;
+          break;
+        }
 
 
 #ifdef MIXMASTER
         if (msg->chain && mix_check_message (msg) != 0)
-	  break;
+          break;
 #endif
 
-	if (!fccSet && mutt_buffer_len (sctx->fcc))
-	{
-	  if ((i = query_quadoption (OPT_COPY,
+        if (!fccSet && mutt_buffer_len (sctx->fcc))
+        {
+          if ((i = query_quadoption (OPT_COPY,
                                      _("Save a copy of this message?"))) == -1)
-	    break;
-	  else if (i == MUTT_NO)
-	    mutt_buffer_clear (sctx->fcc);
-	}
+            break;
+          else if (i == MUTT_NO)
+            mutt_buffer_clear (sctx->fcc);
+        }
 
-	loop = 0;
-	r = 0;
-	break;
+        loop = 0;
+        r = 0;
+        break;
 
       case OP_COMPOSE_EDIT_FILE:
-	CHECK_COUNT;
-	mutt_edit_file (NONULL(Editor), CURATTACH->content->filename);
-	mutt_update_encoding (CURATTACH->content);
-	menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
+        CHECK_COUNT;
+        mutt_edit_file (NONULL(Editor), CURATTACH->content->filename);
+        mutt_update_encoding (CURATTACH->content);
+        menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
 
       case OP_COMPOSE_TOGGLE_UNLINK:
-	CHECK_COUNT;
-	CURATTACH->content->unlink = !CURATTACH->content->unlink;
-	menu->redraw = REDRAW_INDEX;
+        CHECK_COUNT;
+        CURATTACH->content->unlink = !CURATTACH->content->unlink;
+        menu->redraw = REDRAW_INDEX;
         /* No send2hook since this doesn't change the message. */
-	break;
+        break;
 
       case OP_COMPOSE_GET_ATTACHMENT:
         CHECK_COUNT;
         if (menu->tagprefix)
         {
-	  BODY *top;
-	  for (top = msg->content; top; top = top->next)
-	  {
-	    if (top->tagged)
-	      mutt_get_tmp_attachment(top);
-	  }
-	  menu->redraw = REDRAW_FULL;
-	}
+          BODY *top;
+          for (top = msg->content; top; top = top->next)
+          {
+            if (top->tagged)
+              mutt_get_tmp_attachment(top);
+          }
+          menu->redraw = REDRAW_FULL;
+        }
         else if (mutt_get_tmp_attachment(CURATTACH->content) == 0)
-	  menu->redraw = REDRAW_CURRENT;
+          menu->redraw = REDRAW_CURRENT;
 
         /* No send2hook since this doesn't change the message. */
         break;
@@ -1615,11 +1615,11 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
       break;
 
       case OP_COMPOSE_RENAME_FILE:
-	CHECK_COUNT;
-	mutt_buffer_strcpy (fname, CURATTACH->content->filename);
-	mutt_buffer_pretty_mailbox (fname);
+        CHECK_COUNT;
+        mutt_buffer_strcpy (fname, CURATTACH->content->filename);
+        mutt_buffer_pretty_mailbox (fname);
 
-	if ((mutt_buffer_get_field (_("Rename to: "), fname, MUTT_FILE) == 0) &&
+        if ((mutt_buffer_get_field (_("Rename to: "), fname, MUTT_FILE) == 0) &&
             mutt_buffer_len (fname))
         {
           if (stat(CURATTACH->content->filename, &st) == -1)
@@ -1713,12 +1713,12 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
       break;
 
       case OP_COMPOSE_EDIT_MIME:
-	CHECK_COUNT;
-	if (mutt_edit_attachment (CURATTACH->content))
-	{
-	  mutt_update_encoding (CURATTACH->content);
-	  menu->redraw = REDRAW_FULL;
-	}
+        CHECK_COUNT;
+        if (mutt_edit_attachment (CURATTACH->content))
+        {
+          mutt_update_encoding (CURATTACH->content);
+          menu->redraw = REDRAW_FULL;
+        }
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1737,77 +1737,77 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         alternative = mutt_run_send_alternative_filter (msg);
         if (!alternative)
           break;
-	switch (op)
-	{
-	  case OP_COMPOSE_VIEW_ALT_TEXT:
-	    op = MUTT_AS_TEXT;
-	    break;
-	  case OP_COMPOSE_VIEW_ALT_MAILCAP:
-	    op = MUTT_MAILCAP;
-	    break;
-	  case OP_COMPOSE_VIEW_ALT_PAGER:
-	    op = MUTT_VIEW_PAGER;
-	    break;
-	  default:
-	    op = MUTT_REGULAR;
-	    break;
-	}
+        switch (op)
+        {
+          case OP_COMPOSE_VIEW_ALT_TEXT:
+            op = MUTT_AS_TEXT;
+            break;
+          case OP_COMPOSE_VIEW_ALT_MAILCAP:
+            op = MUTT_MAILCAP;
+            break;
+          case OP_COMPOSE_VIEW_ALT_PAGER:
+            op = MUTT_VIEW_PAGER;
+            break;
+          default:
+            op = MUTT_REGULAR;
+            break;
+        }
         mutt_view_attachment (NULL, alternative, op, NULL, actx);
         mutt_free_body (&alternative);
         break;
       }
 
       case OP_ATTACH_VIEW_MAILCAP:
-	mutt_view_attachment (NULL, CURATTACH->content, MUTT_MAILCAP,
-			      NULL, actx);
-	menu->redraw = REDRAW_FULL;
-	break;
+        mutt_view_attachment (NULL, CURATTACH->content, MUTT_MAILCAP,
+                              NULL, actx);
+        menu->redraw = REDRAW_FULL;
+        break;
 
       case OP_ATTACH_VIEW_TEXT:
-	mutt_view_attachment (NULL, CURATTACH->content, MUTT_AS_TEXT,
-			      NULL, actx);
-	menu->redraw = REDRAW_FULL;
-	break;
+        mutt_view_attachment (NULL, CURATTACH->content, MUTT_AS_TEXT,
+                              NULL, actx);
+        menu->redraw = REDRAW_FULL;
+        break;
 
       case OP_ATTACH_VIEW_PAGER:
-	mutt_view_attachment (NULL, CURATTACH->content, MUTT_VIEW_PAGER,
-			      NULL, actx);
-	menu->redraw = REDRAW_FULL;
-	break;
+        mutt_view_attachment (NULL, CURATTACH->content, MUTT_VIEW_PAGER,
+                              NULL, actx);
+        menu->redraw = REDRAW_FULL;
+        break;
 
       case OP_VIEW_ATTACH:
       case OP_DISPLAY_HEADERS:
-	CHECK_COUNT;
-	mutt_attach_display_loop (menu, op, NULL, actx, 0);
-	menu->redraw = REDRAW_FULL;
+        CHECK_COUNT;
+        mutt_attach_display_loop (menu, op, NULL, actx, 0);
+        menu->redraw = REDRAW_FULL;
         /* no send2hook, since this doesn't modify the message */
-	break;
+        break;
 
       case OP_SAVE:
-	CHECK_COUNT;
-	mutt_save_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content, NULL, menu);
+        CHECK_COUNT;
+        mutt_save_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content, NULL, menu);
         /* no send2hook, since this doesn't modify the message */
-	break;
+        break;
 
       case OP_PRINT:
-	CHECK_COUNT;
-	mutt_print_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content);
+        CHECK_COUNT;
+        mutt_print_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content);
         /* no send2hook, since this doesn't modify the message */
-	break;
+        break;
 
       case OP_PIPE:
       case OP_FILTER:
         CHECK_COUNT;
-	mutt_pipe_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content, op == OP_FILTER);
-	if (op == OP_FILTER) /* cte might have changed */
-	  menu->redraw = menu->tagprefix ? REDRAW_FULL : REDRAW_CURRENT;
+        mutt_pipe_attachment_list (actx, NULL, menu->tagprefix, CURATTACH->content, op == OP_FILTER);
+        if (op == OP_FILTER) /* cte might have changed */
+          menu->redraw = menu->tagprefix ? REDRAW_FULL : REDRAW_CURRENT;
         menu->redraw |= REDRAW_STATUS;
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
-	break;
+        break;
 
       case OP_EXIT:
-	if ((i = query_quadoption (OPT_POSTPONE, _("Postpone this message?"))) == MUTT_NO)
-	{
+        if ((i = query_quadoption (OPT_POSTPONE, _("Postpone this message?"))) == MUTT_NO)
+        {
           for (i = 0; i < actx->idxlen; i++)
             if (actx->idx[i]->unowned)
               actx->idx[i]->content->unlink = 0;
@@ -1824,38 +1824,38 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
               mutt_free_body (&actx->idx[i]->content);
             }
           }
-	  r = -1;
-	  loop = 0;
-	  break;
-	}
-	else if (i == -1)
-	  break; /* abort */
+          r = -1;
+          loop = 0;
+          break;
+        }
+        else if (i == -1)
+          break; /* abort */
 
-	/* fall through */
+        /* fall through */
 
       case OP_COMPOSE_POSTPONE_MESSAGE:
 
         if (check_attachments(actx) != 0)
         {
-	  menu->redraw = REDRAW_FULL;
-	  break;
-	}
+          menu->redraw = REDRAW_FULL;
+          break;
+        }
 
-	loop = 0;
-	r = 1;
-	break;
+        loop = 0;
+        r = 1;
+        break;
 
       case OP_COMPOSE_ISPELL:
-	endwin ();
-	snprintf (buf, sizeof (buf), "%s -x %s", NONULL(Ispell), msg->content->filename);
-	if (mutt_system (buf) == -1)
-	  mutt_error (_("Error running \"%s\"!"), buf);
-	else
+        endwin ();
+        snprintf (buf, sizeof (buf), "%s -x %s", NONULL(Ispell), msg->content->filename);
+        if (mutt_system (buf) == -1)
+          mutt_error (_("Error running \"%s\"!"), buf);
+        else
         {
-	  mutt_update_encoding (msg->content);
-	  menu->redraw |= REDRAW_STATUS;
-	}
-	break;
+          mutt_update_encoding (msg->content);
+          menu->redraw |= REDRAW_STATUS;
+        }
+        break;
 
       case OP_COMPOSE_WRITE_MESSAGE:
 
@@ -1893,9 +1893,9 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           mutt_error _("No PGP backend configured");
           break;
         }
-	if ((WithCrypto & APPLICATION_SMIME)
+        if ((WithCrypto & APPLICATION_SMIME)
             && (msg->security & APPLICATION_SMIME))
-	{
+        {
           if (msg->security & (ENCRYPT | SIGN))
           {
             if (mutt_yesorno (_("S/MIME already selected. Clear & continue ? "),
@@ -1906,19 +1906,19 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
             }
             msg->security &= ~(ENCRYPT | SIGN);
           }
-	  msg->security &= ~APPLICATION_SMIME;
-	  msg->security |= APPLICATION_PGP;
+          msg->security &= ~APPLICATION_SMIME;
+          msg->security |= APPLICATION_PGP;
           update_crypt_info (&rd);
-	}
-	crypt_pgp_send_menu (sctx);
-	update_crypt_info (&rd);
+        }
+        crypt_pgp_send_menu (sctx);
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
 
       case OP_FORGET_PASSPHRASE:
-	crypt_forget_passphrase ();
-	break;
+        crypt_forget_passphrase ();
+        break;
 
 
       case OP_COMPOSE_SMIME_MENU:
@@ -1930,9 +1930,9 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
           break;
         }
 
-	if ((WithCrypto & APPLICATION_PGP)
+        if ((WithCrypto & APPLICATION_PGP)
             && (msg->security & APPLICATION_PGP))
-	{
+        {
           if (msg->security & (ENCRYPT | SIGN))
           {
             if (mutt_yesorno (_("PGP already selected. Clear & continue ? "),
@@ -1943,12 +1943,12 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
             }
             msg->security &= ~(ENCRYPT | SIGN);
           }
-	  msg->security &= ~APPLICATION_PGP;
-	  msg->security |= APPLICATION_SMIME;
+          msg->security &= ~APPLICATION_PGP;
+          msg->security |= APPLICATION_SMIME;
           update_crypt_info (&rd);
-	}
-	crypt_smime_send_menu (sctx);
-	update_crypt_info (&rd);
+        }
+        crypt_smime_send_menu (sctx);
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 
@@ -1956,7 +1956,7 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
 #ifdef MIXMASTER
       case OP_COMPOSE_MIX:
 
-      	mix_make_chain (&msg->chain);
+        mix_make_chain (&msg->chain);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 #endif
@@ -1966,9 +1966,9 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
         if (!option (OPTAUTOCRYPT))
           break;
 
-	if ((WithCrypto & APPLICATION_SMIME)
+        if ((WithCrypto & APPLICATION_SMIME)
             && (msg->security & APPLICATION_SMIME))
-	{
+        {
           if (msg->security & (ENCRYPT | SIGN))
           {
             if (mutt_yesorno (_("S/MIME already selected. Clear & continue ? "),
@@ -1979,12 +1979,12 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
             }
             msg->security &= ~(ENCRYPT | SIGN);
           }
-	  msg->security &= ~APPLICATION_SMIME;
-	  msg->security |= APPLICATION_PGP;
+          msg->security &= ~APPLICATION_SMIME;
+          msg->security |= APPLICATION_PGP;
           update_crypt_info (&rd);
-	}
-	autocrypt_compose_menu (msg);
-	update_crypt_info (&rd);
+        }
+        autocrypt_compose_menu (msg);
+        update_crypt_info (&rd);
         mutt_message_hook (NULL, msg, MUTT_SEND2HOOK);
         break;
 #endif

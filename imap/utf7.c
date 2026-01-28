@@ -93,38 +93,38 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
 
       if (u7len && *u7 == '-')
       {
-	*p++ = '&';
-	continue;
+        *p++ = '&';
+        continue;
       }
 
       ch = 0;
       k = 10;
       for (; u7len; u7++, u7len--)
       {
-	if ((*u7 & 0x80) || (b = Index_64[(int)*u7]) == -1)
-	  break;
-	if (k > 0)
-	{
-	  ch |= b << k;
-	  k -= 6;
-	}
-	else
-	{
-	  ch |= b >> (-k);
-	  if (ch < 0x80)
-	  {
-	    if (0x20 <= ch && ch < 0x7f)
-	      /* Printable US-ASCII */
-	      goto bail;
-	    *p++ = ch;
-	  }
-	  else if (ch < 0x800)
-	  {
-	    *p++ = 0xc0 | (ch >> 6);
-	    *p++ = 0x80 | (ch & 0x3f);
-	  }
-	  else
-	  {
+        if ((*u7 & 0x80) || (b = Index_64[(int)*u7]) == -1)
+          break;
+        if (k > 0)
+        {
+          ch |= b << k;
+          k -= 6;
+        }
+        else
+        {
+          ch |= b >> (-k);
+          if (ch < 0x80)
+          {
+            if (0x20 <= ch && ch < 0x7f)
+              /* Printable US-ASCII */
+              goto bail;
+            *p++ = ch;
+          }
+          else if (ch < 0x800)
+          {
+            *p++ = 0xc0 | (ch >> 6);
+            *p++ = 0x80 | (ch & 0x3f);
+          }
+          else
+          {
             /* High surrogate pair */
             if ((ch & ~0x3ff) == 0xd800)
             {
@@ -160,21 +160,21 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
                 *p++ = 0x80 | (ch & 0x3f);
               }
             }
-	  }
+          }
 
-	  ch = (b << (16 + k)) & 0xffff;
-	  k += 10;
-	}
+          ch = (b << (16 + k)) & 0xffff;
+          k += 10;
+        }
       }
       if (ch || k < 6)
-	/* Non-zero or too many extra bits */
-	goto bail;
+        /* Non-zero or too many extra bits */
+        goto bail;
       if (!u7len || *u7 != '-')
-	/* BASE64 not properly terminated */
-	goto bail;
+        /* BASE64 not properly terminated */
+        goto bail;
       if (u7len > 2 && u7[1] == '&' && u7[2] != '-')
-	/* Adjacent BASE64 sections */
-	goto bail;
+        /* Adjacent BASE64 sections */
+        goto bail;
     }
     else if (*u7 < 0x20 || *u7 >= 0x7f)
       /* Not printable US-ASCII */
@@ -244,7 +244,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
     for (i = 0; i < n; i++)
     {
       if ((u8[i] & 0xc0) != 0x80)
-	goto bail;
+        goto bail;
       ch = (ch << 6) | (u8[i] & 0x3f);
     }
     if (n > 1 && !(ch >> (n * 5 + 1)))
@@ -255,10 +255,10 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
     {
       if (!base64)
       {
-	*p++ = '&';
-	base64 = 1;
-	b = 0;
-	k = 10;
+        *p++ = '&';
+        base64 = 1;
+        b = 0;
+        k = 10;
       }
 
       /* For code points >= 0x10000 we need to use a UTF-16 surrogate pair.
@@ -286,7 +286,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
       *p++ = B64Chars[b | ch >> k];
       k -= 6;
       for (; k >= 0; k -= 6)
-	*p++ = B64Chars[(ch >> k) & 0x3f];
+        *p++ = B64Chars[(ch >> k) & 0x3f];
       b = (ch << (-k)) & 0x3f;
       k += 16;
     }
@@ -294,14 +294,14 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
     {
       if (base64)
       {
-	if (k > 10)
-	  *p++ = B64Chars[b];
-	*p++ = '-';
-	base64 = 0;
+        if (k > 10)
+          *p++ = B64Chars[b];
+        *p++ = '-';
+        base64 = 0;
       }
       *p++ = ch;
       if (ch == '&')
-	*p++ = '-';
+        *p++ = '-';
     }
   }
 

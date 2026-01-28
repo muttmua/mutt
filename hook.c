@@ -177,29 +177,29 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
   for (ptr = Hooks; ptr; ptr = ptr->next)
   {
     if (ptr->type == data &&
-	ptr->rx.not == not &&
-	!mutt_strcmp (mutt_b2s (pattern), ptr->rx.pattern))
+        ptr->rx.not == not &&
+        !mutt_strcmp (mutt_b2s (pattern), ptr->rx.pattern))
     {
       if (data & (MUTT_FOLDERHOOK | MUTT_SENDHOOK | MUTT_SEND2HOOK | MUTT_MESSAGEHOOK | MUTT_ACCOUNTHOOK | MUTT_REPLYHOOK | MUTT_CRYPTHOOK))
       {
-	/* these hooks allow multiple commands with the same
-	 * pattern, so if we've already seen this pattern/command pair, just
-	 * ignore it instead of creating a duplicate */
-	if (!mutt_strcmp (ptr->command, mutt_b2s (command)))
-	{
+        /* these hooks allow multiple commands with the same
+         * pattern, so if we've already seen this pattern/command pair, just
+         * ignore it instead of creating a duplicate */
+        if (!mutt_strcmp (ptr->command, mutt_b2s (command)))
+        {
           rc = 0;
           goto cleanup;
-	}
+        }
       }
       else
       {
-	/* other hooks only allow one command per pattern, so update the
-	 * entry with the new command.  this currently does not change the
-	 * order of execution of the hooks, which i think is desirable since
-	 * a common action to perform is to change the default (.) entry
-	 * based upon some other information. */
-	FREE (&ptr->command);
-	ptr->command = safe_strdup (mutt_b2s (command));
+        /* other hooks only allow one command per pattern, so update the
+         * entry with the new command.  this currently does not change the
+         * order of execution of the hooks, which i think is desirable since
+         * a common action to perform is to change the default (.) entry
+         * based upon some other information. */
+        FREE (&ptr->command);
+        ptr->command = safe_strdup (mutt_b2s (command));
         rc = 0;
         goto cleanup;
       }
@@ -221,7 +221,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
 
     if ((pat = mutt_pattern_comp (pattern->data,
                                   comp_flags,
-				  err)) == NULL)
+                                  err)) == NULL)
       goto cleanup;
   }
   else
@@ -428,9 +428,9 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFE
     {
       if (current_hook_type)
       {
-	snprintf (err->data, err->dsize, "%s",
-		  _("unhook: Can't do unhook * from within a hook."));
-	return -1;
+        snprintf (err->data, err->dsize, "%s",
+                  _("unhook: Can't do unhook * from within a hook."));
+        return -1;
       }
       delete_hooks (0);
       delete_idxfmt_hooks ();
@@ -441,16 +441,16 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFE
 
       if (!type)
       {
-	snprintf (err->data, err->dsize,
+        snprintf (err->data, err->dsize,
                   _("unhook: unknown hook type: %s"), buf->data);
-	return (-1);
+        return (-1);
       }
       if (current_hook_type == type)
       {
-	snprintf (err->data, err->dsize,
-		  _("unhook: Can't delete a %s from within a %s."),
-		  buf->data, buf->data);
-	return -1;
+        snprintf (err->data, err->dsize,
+                  _("unhook: Can't delete a %s from within a %s."),
+                  buf->data, buf->data);
+        return -1;
       }
       if (type == MUTT_IDXFMTHOOK)
         delete_idxfmt_hooks ();
@@ -480,15 +480,15 @@ void mutt_folder_hook (const char *path)
     {
       if ((regexec (tmp->rx.rx, path, 0, NULL, 0) == 0) ^ tmp->rx.not)
       {
-	if (mutt_parse_rc_line (tmp->command, &err) == -1)
-	{
-	  mutt_error ("%s", err.data);
-	  mutt_sleep (1);	/* pause a moment to let the user see the error */
-	  current_hook_type = 0;
-	  FREE (&err.data);
+        if (mutt_parse_rc_line (tmp->command, &err) == -1)
+        {
+          mutt_error ("%s", err.data);
+          mutt_sleep (1);	/* pause a moment to let the user see the error */
+          current_hook_type = 0;
+          FREE (&err.data);
 
-	  return;
-	}
+          return;
+        }
       }
     }
   }
@@ -505,7 +505,7 @@ char *mutt_find_hook (int type, const char *pat)
     if (tmp->type & type)
     {
       if (regexec (tmp->rx.rx, pat, 0, NULL, 0) == 0)
-	return (tmp->command);
+        return (tmp->command);
     }
   return (NULL);
 }
@@ -530,15 +530,15 @@ void mutt_message_hook (CONTEXT *ctx, HEADER *hdr, int type)
     if (hook->type & type)
       if ((mutt_pattern_exec (hook->pattern, 0, ctx, hdr, &cache) > 0) ^ hook->rx.not)
       {
-	if (mutt_parse_rc_line (hook->command, &err) != 0)
-	{
-	  mutt_error ("%s", err.data);
-	  mutt_sleep (1);
-	  current_hook_type = 0;
-	  FREE (&err.data);
+        if (mutt_parse_rc_line (hook->command, &err) != 0)
+        {
+          mutt_error ("%s", err.data);
+          mutt_sleep (1);
+          current_hook_type = 0;
+          FREE (&err.data);
 
-	  return;
-	}
+          return;
+        }
         /* Executing arbitrary commands could affect the pattern results,
          * so the cache has to be wiped */
         memset (&cache, 0, sizeof (cache));
@@ -565,8 +565,8 @@ mutt_addr_hook (char *path, size_t pathlen, int type, CONTEXT *ctx, HEADER *hdr)
     if (hook->type & type)
       if ((mutt_pattern_exec (hook->pattern, 0, ctx, hdr, &cache) > 0) ^ hook->rx.not)
       {
-	mutt_make_string (path, pathlen, hook->command, ctx, hdr);
-	return 0;
+        mutt_make_string (path, pathlen, hook->command, ctx, hdr);
+        return 0;
       }
   }
 
@@ -614,7 +614,7 @@ void mutt_select_fcc (BUFFER *path, HEADER *hdr)
   if (mutt_addr_hook (path->data, path->dsize, MUTT_FCCHOOK, NULL, hdr) != 0)
   {
     if ((option (OPTSAVENAME) || option (OPTFORCENAME)) &&
-	(env->to || env->cc || env->bcc))
+        (env->to || env->cc || env->bcc))
     {
       adr = env->to ? env->to : (env->cc ? env->cc : env->bcc);
       buf = mutt_buffer_pool_get ();
@@ -622,7 +622,7 @@ void mutt_select_fcc (BUFFER *path, HEADER *hdr)
       mutt_buffer_concat_path (path, NONULL(Maildir), mutt_b2s (buf));
       mutt_buffer_pool_release (&buf);
       if (!option (OPTFORCENAME) && mx_access (mutt_b2s (path), W_OK) != 0)
-	mutt_buffer_strcpy (path, NONULL (Outbox));
+        mutt_buffer_strcpy (path, NONULL (Outbox));
     }
     else
       mutt_buffer_strcpy (path, NONULL (Outbox));
@@ -704,12 +704,12 @@ void mutt_account_hook (const char* url)
 
       if (mutt_parse_rc_line (hook->command, &err) == -1)
       {
-	mutt_error ("%s", err.data);
-	FREE (&err.data);
-	mutt_sleep (1);
+        mutt_error ("%s", err.data);
+        FREE (&err.data);
+        mutt_sleep (1);
 
         inhook = 0;
-	return;
+        return;
       }
 
       inhook = 0;

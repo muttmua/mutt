@@ -44,8 +44,8 @@ static const struct mapping_t AliasHelp[] = {
 
 static const char *
 alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
-		  const char *fmt, const char *ifstring, const char *elsestring,
-		  void *data, format_flag flags)
+                  const char *fmt, const char *ifstring, const char *elsestring,
+                  void *data, format_flag flags)
 {
   char tmp[SHORT_STRING], adr[SHORT_STRING];
   ALIAS *alias = (ALIAS *) data;
@@ -197,28 +197,28 @@ new_aliases:
       case OP_UNDELETE:
         if (menu->tagprefix)
         {
-	  for (i = 0; i < menu->max; i++)
-	    if (AliasTable[i]->tagged)
-	      AliasTable[i]->del = (op == OP_DELETE) ? 1 : 0;
-	  menu->redraw |= REDRAW_INDEX;
-	}
+          for (i = 0; i < menu->max; i++)
+            if (AliasTable[i]->tagged)
+              AliasTable[i]->del = (op == OP_DELETE) ? 1 : 0;
+          menu->redraw |= REDRAW_INDEX;
+        }
         else
         {
-	  AliasTable[menu->current]->self->del = (op == OP_DELETE) ? 1 : 0;
-	  menu->redraw |= REDRAW_CURRENT;
-	  if (option (OPTRESOLVE) && menu->current < menu->max - 1)
-	  {
-	    menu->current++;
-	    menu->redraw |= REDRAW_INDEX;
-	  }
-	}
+          AliasTable[menu->current]->self->del = (op == OP_DELETE) ? 1 : 0;
+          menu->redraw |= REDRAW_CURRENT;
+          if (option (OPTRESOLVE) && menu->current < menu->max - 1)
+          {
+            menu->current++;
+            menu->redraw |= REDRAW_INDEX;
+          }
+        }
         break;
       case OP_GENERIC_SELECT_ENTRY:
         t = menu->current;
         /* fall through */
       case OP_EXIT:
-	done = 1;
-	break;
+        done = 1;
+        break;
     }
   }
 

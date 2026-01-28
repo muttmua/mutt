@@ -153,30 +153,30 @@ md5_stream (FILE *stream, void *resblock)
 
       /* Read block.  Take care for partial reads.  */
       while (1)
-	{
-	  n = fread (buffer + sum, 1, BLOCKSIZE - sum, stream);
+        {
+          n = fread (buffer + sum, 1, BLOCKSIZE - sum, stream);
 
-	  sum += n;
+          sum += n;
 
-	  if (sum == BLOCKSIZE)
-	    break;
+          if (sum == BLOCKSIZE)
+            break;
 
-	  if (n == 0)
-	    {
-	      /* Check for the error flag IFF N == 0, so that we don't
-	         exit the loop after a partial read due to e.g., EAGAIN
-	         or EWOULDBLOCK.  */
-	      if (ferror (stream))
-		return 1;
-	      goto process_partial_block;
-	    }
+          if (n == 0)
+            {
+              /* Check for the error flag IFF N == 0, so that we don't
+                 exit the loop after a partial read due to e.g., EAGAIN
+                 or EWOULDBLOCK.  */
+              if (ferror (stream))
+                return 1;
+              goto process_partial_block;
+            }
 
-	  /* We've read at least one byte, so ignore errors.  But always
-	     check for EOF, since feof may be true even though N > 0.
-	     Otherwise, we could end up calling fread after EOF.  */
-	  if (feof (stream))
-	    goto process_partial_block;
-	}
+          /* We've read at least one byte, so ignore errors.  But always
+             check for EOF, since feof may be true even though N > 0.
+             Otherwise, we could end up calling fread after EOF.  */
+          if (feof (stream))
+            goto process_partial_block;
+        }
 
       /* Process buffer with BLOCKSIZE bytes.  Note that
          BLOCKSIZE % 64 == 0
@@ -229,15 +229,15 @@ md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
       ctx->buflen += add;
 
       if (ctx->buflen > 64)
-	{
-	  md5_process_block (ctx->buffer, ctx->buflen & ~63, ctx);
+        {
+          md5_process_block (ctx->buffer, ctx->buflen & ~63, ctx);
 
-	  ctx->buflen &= 63;
-	  /* The regions in the following copy operation cannot overlap.  */
-	  memcpy (ctx->buffer,
-		  &((char *) ctx->buffer)[(left_over + add) & ~63],
-		  ctx->buflen);
-	}
+          ctx->buflen &= 63;
+          /* The regions in the following copy operation cannot overlap.  */
+          memcpy (ctx->buffer,
+                  &((char *) ctx->buffer)[(left_over + add) & ~63],
+                  ctx->buflen);
+        }
 
       buffer = (const char *) buffer + add;
       len -= add;
@@ -250,19 +250,19 @@ md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
 # define alignof(type) offsetof (struct { char c; type x; }, x)
 # define UNALIGNED_P(p) (((size_t) p) % alignof (md5_uint32) != 0)
       if (UNALIGNED_P (buffer))
-	while (len > 64)
-	  {
-	    md5_process_block (memcpy (ctx->buffer, buffer, 64), 64, ctx);
-	    buffer = (const char *) buffer + 64;
-	    len -= 64;
-	  }
+        while (len > 64)
+          {
+            md5_process_block (memcpy (ctx->buffer, buffer, 64), 64, ctx);
+            buffer = (const char *) buffer + 64;
+            len -= 64;
+          }
       else
 #endif
-	{
-	  md5_process_block (buffer, len & ~63, ctx);
-	  buffer = (const char *) buffer + (len & ~63);
-	  len &= 63;
-	}
+        {
+          md5_process_block (buffer, len & ~63, ctx);
+          buffer = (const char *) buffer + (len & ~63);
+          len &= 63;
+        }
     }
 
   /* Move remaining bytes in internal buffer.  */
@@ -273,11 +273,11 @@ md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
       memcpy (&((char *) ctx->buffer)[left_over], buffer, len);
       left_over += len;
       if (left_over >= 64)
-	{
-	  md5_process_block (ctx->buffer, 64, ctx);
-	  left_over -= 64;
-	  memcpy (ctx->buffer, &ctx->buffer[16], left_over);
-	}
+        {
+          md5_process_block (ctx->buffer, 64, ctx);
+          left_over -= 64;
+          memcpy (ctx->buffer, &ctx->buffer[16], left_over);
+        }
       ctx->buflen = left_over;
     }
 }
@@ -334,10 +334,10 @@ md5_process_block (const void *buffer, size_t len, struct md5_ctx *ctx)
 #define OP(a, b, c, d, s, T)						\
       do								\
         {								\
-	  a += FF (b, c, d) + (*cwp++ = SWAP (*words)) + T;		\
-	  ++words;							\
-	  CYCLIC (a, s);						\
-	  a += b;							\
+          a += FF (b, c, d) + (*cwp++ = SWAP (*words)) + T;		\
+          ++words;							\
+          CYCLIC (a, s);						\
+          a += b;							\
         }								\
       while (0)
 
@@ -379,11 +379,11 @@ md5_process_block (const void *buffer, size_t len, struct md5_ctx *ctx)
 #undef OP
 #define OP(f, a, b, c, d, k, s, T)					\
       do								\
-	{								\
-	  a += f (b, c, d) + correct_words[k] + T;			\
-	  CYCLIC (a, s);						\
-	  a += b;							\
-	}								\
+        {								\
+          a += f (b, c, d) + correct_words[k] + T;			\
+          CYCLIC (a, s);						\
+          a += b;							\
+        }								\
       while (0)
 
       /* Round 2.  */

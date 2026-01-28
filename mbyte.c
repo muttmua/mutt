@@ -153,7 +153,7 @@ size_t wcrtomb (char *s, wchar_t wc, mbstate_t *ps)
 }
 
 size_t mbrtowc_iconv (wchar_t *pwc, const char *s, size_t n,
-		      mbstate_t *ps, iconv_t cd)
+                      mbstate_t *ps, iconv_t cd)
 {
   static mbstate_t mbstate;
   ICONV_CONST char *ib, *ibmax;
@@ -200,23 +200,23 @@ size_t mbrtowc_iconv (wchar_t *pwc, const char *s, size_t n,
     else if (!r || (r == (size_t)(-1) && errno == EINVAL))
     {
       if (ib + ibl < ibmax)
-	/* try using more input */
-	++ibl;
+        /* try using more input */
+        ++ibl;
       else if (k && ib > bufi + k && bufi + k + n > ibmax)
       {
-	/* switch to using real input */
-	ib = (ICONV_CONST char*) s + (ib - bufi - k);
-	ibmax = (ICONV_CONST char*) s + n;
-	k = 0;
-	++ibl;
+        /* switch to using real input */
+        ib = (ICONV_CONST char*) s + (ib - bufi - k);
+        ibmax = (ICONV_CONST char*) s + n;
+        k = 0;
+        ++ibl;
       }
       else
       {
-	/* save the state and give up */
-	memset (ps, 0, sizeof (*ps));
-	if (ibl <= sizeof (mbstate_t)) /* need extra condition here! */
-	  memcpy (ps, ib, ibl);
-	return (size_t)(-2);
+        /* save the state and give up */
+        memset (ps, 0, sizeof (*ps));
+        if (ibl <= sizeof (mbstate_t)) /* need extra condition here! */
+          memcpy (ps, ib, ibl);
+        return (size_t)(-2);
       }
     }
     else
@@ -422,18 +422,18 @@ int wcwidth (wchar_t wc)
     {
       /* 8-bit case */
       if (!wc)
-	return 0;
+        return 0;
       else if ((0 <= wc && wc < 256) && IsPrint (wc))
-	return 1;
+        return 1;
       else
-	return -1;
+        return -1;
     }
     else
     {
       /* Japanese */
       int k = wcwidth_ja (wc);
       if (k != -1)
-	return k;
+        return k;
     }
   }
   return wcwidth_ucs (wc);
@@ -465,7 +465,7 @@ size_t utf8rtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps)
     if (c < 0x80)
     {
       if (pwc)
-	*pwc = c;
+        *pwc = c;
       return (c != 0);
     }
     else if (c < 0xc2)
@@ -504,16 +504,16 @@ size_t utf8rtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps)
       wc |= (c & 0x3f) << (6 * count);
       if (!count)
       {
-	if (pwc)
-	  *pwc = wc;
-	*ps = 0;
-	return wc ? k : 0;
+        if (pwc)
+          *pwc = wc;
+        *ps = 0;
+        return wc ? k : 0;
       }
       --count, --wc;
       if (!(wc >> (11+count*5)))
       {
-	errno = count < 4 ? EILSEQ : EINVAL;
-	return (size_t)-1;
+        errno = count < 4 ? EILSEQ : EINVAL;
+        return (size_t)-1;
       }
     }
     else

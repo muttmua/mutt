@@ -37,9 +37,9 @@
 static char *get_sort_str (char *buf, size_t buflen, int method)
 {
   snprintf (buf, buflen, "%s%s%s",
-	    (method & SORT_REVERSE) ? "reverse-" : "",
-	    (method & SORT_LAST) ? "last-" : "",
-	    mutt_getnamebyvalue (method & SORT_MASK, SortMethods));
+            (method & SORT_REVERSE) ? "reverse-" : "",
+            (method & SORT_LAST) ? "last-" : "",
+            mutt_getnamebyvalue (method & SORT_MASK, SortMethods));
   return buf;
 }
 
@@ -68,9 +68,9 @@ static void _menu_status_line (char *buf, size_t buflen, size_t col, int cols, M
  * %V = currently active limit pattern [option] */
 static const char *
 status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, const char *src,
-		   const char *prefix, const char *ifstring,
-		   const char *elsestring,
-		   void *data, format_flag flags)
+                   const char *prefix, const char *ifstring,
+                   const char *elsestring,
+                   void *data, format_flag flags)
 {
   char fmt[SHORT_STRING], tmp[SHORT_STRING], *cp;
   int count, optional = (flags & MUTT_FORMAT_OPTIONAL);
@@ -82,31 +82,31 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
     case 'b':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, mutt_buffy_check (0));
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, mutt_buffy_check (0));
       }
       else if (!mutt_buffy_check (0))
-	optional = 0;
+        optional = 0;
       break;
 
     case 'B':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, BackgroundProcessCount);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, BackgroundProcessCount);
       }
       else if (!BackgroundProcessCount)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'd':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->deleted : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->deleted : 0);
       }
       else if (!Context || !Context->deleted)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'f':
@@ -132,11 +132,11 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
     case 'F':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->flagged : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->flagged : 0);
       }
       else if (!Context || !Context->flagged)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'h':
@@ -147,86 +147,86 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
     case 'l':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	mutt_pretty_size (tmp, sizeof (tmp), Context ? Context->size : 0);
-	snprintf (buf, buflen, fmt, tmp);
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        mutt_pretty_size (tmp, sizeof (tmp), Context ? Context->size : 0);
+        snprintf (buf, buflen, fmt, tmp);
       }
       else if (!Context || !Context->size)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'L':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	mutt_pretty_size (tmp, sizeof (tmp), Context ? Context->vsize: 0);
-	snprintf (buf, buflen, fmt, tmp);
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        mutt_pretty_size (tmp, sizeof (tmp), Context ? Context->vsize: 0);
+        snprintf (buf, buflen, fmt, tmp);
       }
       else if (!Context || !Context->pattern)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'm':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->msgcount : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->msgcount : 0);
       }
       else if (!Context || !Context->msgcount)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'M':
       if (!optional)
       {
-	snprintf (fmt, sizeof(fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->vcount : 0);
+        snprintf (fmt, sizeof(fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->vcount : 0);
       }
       else if (!Context || !Context->pattern)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'n':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->new : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->new : 0);
       }
       else if (!Context || !Context->new)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'o':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->unread - Context->new : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->unread - Context->new : 0);
       }
       else if (!Context || !(Context->unread - Context->new))
-	optional = 0;
+        optional = 0;
       break;
 
     case 'p':
       count = mutt_num_postponed (0);
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, count);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, count);
       }
       else if (!count)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'P':
       if (!menu)
-	break;
+        break;
       if (menu->top + menu->pagelen >= menu->max)
-	cp = menu->top ? "end" : "all";
+        cp = menu->top ? "end" : "all";
       else
       {
-	count = (100 * (menu->top + menu->pagelen)) / menu->max;
-	snprintf (tmp, sizeof (tmp), "%d%%", count);
-	cp = tmp;
+        count = (100 * (menu->top + menu->pagelen)) / menu->max;
+        snprintf (tmp, sizeof (tmp), "%d%%", count);
+        cp = tmp;
       }
       snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
       snprintf (buf, buflen, fmt, cp);
@@ -264,7 +264,7 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
       }
 
       if (!StChars || !StChars->len)
-	buf[0] = 0;
+        buf[0] = 0;
       else if (i >= StChars->len)
         snprintf (buf, buflen, "%s", StChars->chars[0]);
       else
@@ -278,34 +278,34 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
 
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, read);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, read);
       }
       else if (!read)
-	optional = 0;
+        optional = 0;
       break;
     }
 
     case 's':
       snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
       snprintf (buf, buflen, fmt,
-		get_sort_str (tmp, sizeof (tmp), Sort));
+                get_sort_str (tmp, sizeof (tmp), Sort));
       break;
 
     case 'S':
       snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
       snprintf (buf, buflen, fmt,
-		get_sort_str (tmp, sizeof (tmp), SortAux));
+                get_sort_str (tmp, sizeof (tmp), SortAux));
       break;
 
     case 't':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->tagged : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->tagged : 0);
       }
       else if (!Context || !Context->tagged)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'T':
@@ -317,17 +317,17 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
       }
       else if ((Sort & SORT_MASK) != SORT_THREADS ||
                (SortThreadGroups & SORT_MASK) == SORT_AUX)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'u':
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->unread : 0);
+        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+        snprintf (buf, buflen, fmt, Context ? Context->unread : 0);
       }
       else if (!Context || !Context->unread)
-	optional = 0;
+        optional = 0;
       break;
 
     case 'v':
@@ -338,11 +338,11 @@ status_format_str (char *buf, size_t buflen, size_t col, int cols, char op, cons
     case 'V':
       if (!optional)
       {
-	snprintf (fmt, sizeof(fmt), "%%%ss", prefix);
-	snprintf (buf, buflen, fmt, (Context && Context->pattern) ? Context->pattern : "");
+        snprintf (fmt, sizeof(fmt), "%%%ss", prefix);
+        snprintf (buf, buflen, fmt, (Context && Context->pattern) ? Context->pattern : "");
       }
       else if (!Context || !Context->pattern)
-	optional = 0;
+        optional = 0;
       break;
 
     case 0:

@@ -44,7 +44,7 @@ static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout, const char *dat
  */
 int
 mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
-	       const char *prefix)
+               const char *prefix)
 {
   int from = 0;
   int this_is_from;
@@ -75,39 +75,39 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       nl = strchr (buf, '\n');
 
       if ((fgets (buf, sizeof (buf), in)) == NULL)
-	break;
+        break;
 
       /* Is it the beginning of a header? */
       if (nl && buf[0] != ' ' && buf[0] != '\t')
       {
-	ignore = 1;
-	if (!from && mutt_strncmp ("From ", buf, 5) == 0)
-	{
-	  if ((flags & CH_FROM) == 0)
-	    continue;
-	  from = 1;
-	}
-	else if (flags & (CH_NOQFROM) &&
+        ignore = 1;
+        if (!from && mutt_strncmp ("From ", buf, 5) == 0)
+        {
+          if ((flags & CH_FROM) == 0)
+            continue;
+          from = 1;
+        }
+        else if (flags & (CH_NOQFROM) &&
                  ascii_strncasecmp (">From ", buf, 6) == 0)
           continue;
 
-	else if (buf[0] == '\n' || (buf[0] == '\r' && buf[1] == '\n'))
-	  break; /* end of header */
+        else if (buf[0] == '\n' || (buf[0] == '\r' && buf[1] == '\n'))
+          break; /* end of header */
 
-	if ((flags & (CH_UPDATE | CH_XMIT | CH_NOSTATUS)) &&
-	    (ascii_strncasecmp ("Status:", buf, 7) == 0 ||
-	     ascii_strncasecmp ("X-Status:", buf, 9) == 0))
-	  continue;
-	if ((flags & (CH_UPDATE_LEN | CH_XMIT | CH_NOLEN)) &&
-	    (ascii_strncasecmp ("Content-Length:", buf, 15) == 0 ||
-	     ascii_strncasecmp ("Lines:", buf, 6) == 0))
-	  continue;
-	if ((flags & CH_UPDATE_REFS) &&
-	    ascii_strncasecmp ("References:", buf, 11) == 0)
-	  continue;
-	if ((flags & CH_UPDATE_IRT) &&
-	    ascii_strncasecmp ("In-Reply-To:", buf, 12) == 0)
-	  continue;
+        if ((flags & (CH_UPDATE | CH_XMIT | CH_NOSTATUS)) &&
+            (ascii_strncasecmp ("Status:", buf, 7) == 0 ||
+             ascii_strncasecmp ("X-Status:", buf, 9) == 0))
+          continue;
+        if ((flags & (CH_UPDATE_LEN | CH_XMIT | CH_NOLEN)) &&
+            (ascii_strncasecmp ("Content-Length:", buf, 15) == 0 ||
+             ascii_strncasecmp ("Lines:", buf, 6) == 0))
+          continue;
+        if ((flags & CH_UPDATE_REFS) &&
+            ascii_strncasecmp ("References:", buf, 11) == 0)
+          continue;
+        if ((flags & CH_UPDATE_IRT) &&
+            ascii_strncasecmp ("In-Reply-To:", buf, 12) == 0)
+          continue;
         if ((flags & CH_UPDATE_LABEL) &&
             ascii_strncasecmp ("X-Label:", buf, 8) == 0)
           continue;
@@ -115,11 +115,11 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
             ascii_strncasecmp ("Subject:", buf, 8) == 0)
           continue;
 
-	ignore = 0;
+        ignore = 0;
       }
 
       if (!ignore && fputs (buf, out) == EOF)
-	return (-1);
+        return (-1);
     }
     return 0;
   }
@@ -160,67 +160,67 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       /* Do we have anything pending? */
       if (this_one)
       {
-	if (flags & CH_DECODE)
-	{
-	  if (!address_header_decode (&this_one))
-	    rfc2047_decode (&this_one);
-	  this_one_len = mutt_strlen (this_one);
-	}
+        if (flags & CH_DECODE)
+        {
+          if (!address_header_decode (&this_one))
+            rfc2047_decode (&this_one);
+          this_one_len = mutt_strlen (this_one);
+        }
 
-	if (!headers[x])
-	  headers[x] = this_one;
-	else
-	{
-	  size_t hlen = mutt_strlen (headers[x]);
+        if (!headers[x])
+          headers[x] = this_one;
+        else
+        {
+          size_t hlen = mutt_strlen (headers[x]);
 
-	  safe_realloc (&headers[x], hlen + this_one_len + sizeof (char));
-	  strcat (headers[x] + hlen, this_one); /* __STRCAT_CHECKED__ */
-	  FREE (&this_one);
-	}
+          safe_realloc (&headers[x], hlen + this_one_len + sizeof (char));
+          strcat (headers[x] + hlen, this_one); /* __STRCAT_CHECKED__ */
+          FREE (&this_one);
+        }
 
-	this_one = NULL;
+        this_one = NULL;
       }
 
       ignore = 1;
       this_is_from = 0;
       if (!from && mutt_strncmp ("From ", buf, 5) == 0)
       {
-	if ((flags & CH_FROM) == 0)
-	  continue;
-	this_is_from = from = 1;
+        if ((flags & CH_FROM) == 0)
+          continue;
+        this_is_from = from = 1;
       }
       else if (buf[0] == '\n' || (buf[0] == '\r' && buf[1] == '\n'))
-	break; /* end of header */
+        break; /* end of header */
 
       /* note: CH_FROM takes precedence over header weeding. */
       if (!((flags & CH_FROM) && (flags & CH_FORCE_FROM) && this_is_from) &&
-	  (flags & CH_WEED) &&
-	  mutt_matches_ignore (buf, Ignore) &&
-	  !mutt_matches_ignore (buf, UnIgnore))
-	continue;
+          (flags & CH_WEED) &&
+          mutt_matches_ignore (buf, Ignore) &&
+          !mutt_matches_ignore (buf, UnIgnore))
+        continue;
       if ((flags & CH_WEED_DELIVERED) &&
-	  ascii_strncasecmp ("Delivered-To:", buf, 13) == 0)
-	continue;
+          ascii_strncasecmp ("Delivered-To:", buf, 13) == 0)
+        continue;
       if ((flags & (CH_UPDATE | CH_XMIT | CH_NOSTATUS)) &&
-	  (ascii_strncasecmp ("Status:", buf, 7) == 0 ||
-	   ascii_strncasecmp ("X-Status:", buf, 9) == 0))
-	continue;
+          (ascii_strncasecmp ("Status:", buf, 7) == 0 ||
+           ascii_strncasecmp ("X-Status:", buf, 9) == 0))
+        continue;
       if ((flags & (CH_UPDATE_LEN | CH_XMIT | CH_NOLEN)) &&
-	  (ascii_strncasecmp ("Content-Length:", buf, 15) == 0 ||
-	   ascii_strncasecmp ("Lines:", buf, 6) == 0))
-	continue;
+          (ascii_strncasecmp ("Content-Length:", buf, 15) == 0 ||
+           ascii_strncasecmp ("Lines:", buf, 6) == 0))
+        continue;
       if ((flags & CH_MIME) &&
-	  ((ascii_strncasecmp ("content-", buf, 8) == 0 &&
-	    (ascii_strncasecmp ("transfer-encoding:", buf + 8, 18) == 0 ||
-	     ascii_strncasecmp ("type:", buf + 8, 5) == 0)) ||
-	   ascii_strncasecmp ("mime-version:", buf, 13) == 0))
-	continue;
+          ((ascii_strncasecmp ("content-", buf, 8) == 0 &&
+            (ascii_strncasecmp ("transfer-encoding:", buf + 8, 18) == 0 ||
+             ascii_strncasecmp ("type:", buf + 8, 5) == 0)) ||
+           ascii_strncasecmp ("mime-version:", buf, 13) == 0))
+        continue;
       if ((flags & CH_UPDATE_REFS) &&
-	  ascii_strncasecmp ("References:", buf, 11) == 0)
-	continue;
+          ascii_strncasecmp ("References:", buf, 11) == 0)
+        continue;
       if ((flags & CH_UPDATE_IRT) &&
-	  ascii_strncasecmp ("In-Reply-To:", buf, 12) == 0)
-	continue;
+          ascii_strncasecmp ("In-Reply-To:", buf, 12) == 0)
+        continue;
       if ((flags & CH_UPDATE_LABEL) &&
           ascii_strncasecmp ("X-Label:", buf, 8) == 0)
         continue;
@@ -234,19 +234,19 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
         int match = -1;
         size_t match_len = 0, hdr_order_len;
 
-	for (t = HeaderOrderList, x = 0 ; (t) ; t = t->next, x++)
-	{
+        for (t = HeaderOrderList, x = 0 ; (t) ; t = t->next, x++)
+        {
           hdr_order_len = mutt_strlen (t->data);
-	  if (!ascii_strncasecmp (buf, t->data, hdr_order_len))
-	  {
+          if (!ascii_strncasecmp (buf, t->data, hdr_order_len))
+          {
             if ((match == -1) || (hdr_order_len > match_len))
             {
               match = x;
               match_len = hdr_order_len;
             }
-	    dprint(2, (debugfile, "Reorder: %s matches %s\n", t->data, buf));
-	  }
-	}
+            dprint(2, (debugfile, "Reorder: %s matches %s\n", t->data, buf));
+          }
+        }
         if (match != -1)
           x = match;
       }
@@ -259,16 +259,16 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
       dprint (2, (debugfile, "Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
       if (!this_one)
       {
-	this_one = safe_strdup (buf);
-	this_one_len = mutt_strlen (this_one);
+        this_one = safe_strdup (buf);
+        this_one_len = mutt_strlen (this_one);
       }
       else
       {
-	size_t blen = mutt_strlen (buf);
+        size_t blen = mutt_strlen (buf);
 
-	safe_realloc (&this_one, this_one_len + blen + sizeof (char));
-	strcat (this_one + this_one_len, buf); /* __STRCAT_CHECKED__ */
-	this_one_len += blen;
+        safe_realloc (&this_one, this_one_len + blen + sizeof (char));
+        strcat (this_one + this_one_len, buf); /* __STRCAT_CHECKED__ */
+        this_one_len += blen;
       }
     }
   } /* while (ftello (in) < off_end) */
@@ -279,7 +279,7 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
     if (flags & CH_DECODE)
     {
       if (!address_header_decode (&this_one))
-	rfc2047_decode (&this_one);
+        rfc2047_decode (&this_one);
       this_one_len = mutt_strlen (this_one);
     }
 
@@ -308,21 +308,21 @@ mutt_copy_hdr (FILE *in, FILE *out, LOFF_T off_start, LOFF_T off_end, int flags,
 
       if (flags & (CH_DECODE|CH_PREFIX))
       {
-	if (mutt_write_one_header (out, 0, headers[x],
-				   flags & CH_PREFIX ? prefix : 0,
+        if (mutt_write_one_header (out, 0, headers[x],
+                                   flags & CH_PREFIX ? prefix : 0,
                                    mutt_window_wrap_cols (MuttIndexWindow, Wrap), flags) == -1)
-	{
-	  error = TRUE;
-	  break;
-	}
+        {
+          error = TRUE;
+          break;
+        }
       }
       else
       {
-	if (fputs (headers[x], out) == EOF)
-	{
-	  error = TRUE;
-	  break;
-	}
+        if (fputs (headers[x], out) == EOF)
+        {
+          error = TRUE;
+          break;
+        }
       }
     }
   }
@@ -414,9 +414,9 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
     {
       fputs ("Status: ", out);
       if (h->read)
-	fputs ("RO", out);
+        fputs ("RO", out);
       else if (h->old)
-	fputc ('O', out);
+        fputc ('O', out);
       fputc ('\n', out);
     }
 
@@ -424,9 +424,9 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
     {
       fputs ("X-Status: ", out);
       if (h->replied)
-	fputc ('A', out);
+        fputc ('A', out);
       if (h->flagged)
-	fputc ('F', out);
+        fputc ('F', out);
       fputc ('\n', out);
     }
   }
@@ -505,9 +505,9 @@ static int count_delete_lines (FILE *fp, BODY *b, LOFF_T *length, size_t datelen
     {
       ch = getc (fp);
       if (ch == EOF)
-	break;
+        break;
       if (ch == '\n')
-	dellines ++;
+        dellines ++;
     }
     /* 3 and 89 come from the added header of three lines in
      * copy_delete_attach().  89 is the size of the header (including
@@ -547,7 +547,7 @@ static int count_delete_lines (FILE *fp, BODY *b, LOFF_T *length, size_t datelen
 
 int
 _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
-		    int flags, int chflags)
+                    int flags, int chflags)
 {
   char prefix[SHORT_STRING];
   STATE s;
@@ -581,61 +581,61 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
       /* Count the number of lines and bytes to be deleted */
       fseeko (fpin, body->offset, SEEK_SET);
       new_lines = hdr->lines -
-	count_delete_lines (fpin, body, &new_length, mutt_buffer_len (quoted_date));
+        count_delete_lines (fpin, body, &new_length, mutt_buffer_len (quoted_date));
 
       /* Copy the headers */
       if (mutt_copy_header (fpin, hdr, fpout,
-			    chflags | CH_NOLEN | CH_NONEWLINE, NULL))
-	goto attach_del_cleanup;
+                            chflags | CH_NOLEN | CH_NONEWLINE, NULL))
+        goto attach_del_cleanup;
       fprintf (fpout, "Content-Length: " OFF_T_FMT "\n", new_length);
       if (new_lines <= 0)
-	new_lines = 0;
+        new_lines = 0;
       else
-	fprintf (fpout, "Lines: %d\n", new_lines);
+        fprintf (fpout, "Lines: %d\n", new_lines);
 
       putc ('\n', fpout);
       if (ferror (fpout) || feof (fpout))
-	goto attach_del_cleanup;
+        goto attach_del_cleanup;
       new_offset = ftello (fpout);
 
       /* Copy the body */
       fseeko (fpin, body->offset, SEEK_SET);
       if (copy_delete_attach (body, fpin, fpout, mutt_b2s (quoted_date)))
-	goto attach_del_cleanup;
+        goto attach_del_cleanup;
 
       mutt_buffer_pool_release (&quoted_date);
 
 #ifdef DEBUG
       {
-	LOFF_T fail = ((ftello (fpout) - new_offset) - new_length);
+        LOFF_T fail = ((ftello (fpout) - new_offset) - new_length);
 
-	if (fail)
-	{
-	  mutt_error ("The length calculation was wrong by %ld bytes", fail);
-	  new_length += fail;
-	  mutt_sleep (1);
-	}
+        if (fail)
+        {
+          mutt_error ("The length calculation was wrong by %ld bytes", fail);
+          new_length += fail;
+          mutt_sleep (1);
+        }
       }
 #endif
 
       /* Update original message if we are sync'ing a mailfolder */
       if (flags & MUTT_CM_UPDATE)
       {
-	hdr->attach_del = 0;
-	hdr->lines = new_lines;
-	body->offset = new_offset;
+        hdr->attach_del = 0;
+        hdr->lines = new_lines;
+        body->offset = new_offset;
 
-	/* update the total size of the mailbox to reflect this deletion */
-	Context->size -= body->length - new_length;
-	/*
-	 * if the message is visible, update the visible size of the mailbox
-	 * as well.
-	 */
-	if (Context->v2r[hdr->msgno] != -1)
-	  Context->vsize -= body->length - new_length;
+        /* update the total size of the mailbox to reflect this deletion */
+        Context->size -= body->length - new_length;
+        /*
+         * if the message is visible, update the visible size of the mailbox
+         * as well.
+         */
+        if (Context->v2r[hdr->msgno] != -1)
+          Context->vsize -= body->length - new_length;
 
-	body->length = new_length;
-	mutt_free_body (&body->parts);
+        body->length = new_length;
+        mutt_free_body (&body->parts);
       }
 
       attach_del_rc = 0;
@@ -646,7 +646,7 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
     }
 
     if (mutt_copy_header (fpin, hdr, fpout, chflags,
-			  (chflags & CH_PREFIX) ? prefix : NULL) == -1)
+                          (chflags & CH_PREFIX) ? prefix : NULL) == -1)
       return -1;
 
     new_offset = ftello (fpout);
@@ -686,10 +686,10 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
     if ((WithCrypto & APPLICATION_PGP)
         && (flags & MUTT_CM_DECODE_PGP) && (hdr->security & APPLICATION_PGP) &&
-	hdr->content->type == TYPEMULTIPART)
+        hdr->content->type == TYPEMULTIPART)
     {
       if (crypt_pgp_decrypt_mime (fpin, &fp, hdr->content, &cur))
-	return (-1);
+        return (-1);
       fputs ("MIME-Version: 1.0\n", fpout);
     }
 
@@ -698,7 +698,7 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
         && hdr->content->type == TYPEAPPLICATION)
     {
       if (crypt_smime_decrypt_mime (fpin, &fp, hdr->content, &cur))
-	return (-1);
+        return (-1);
     }
 
     if (!cur)
@@ -732,11 +732,11 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
       while ((c = fgetc(fpin)) != EOF && bytes--)
       {
-	fputc(c, fpout);
-	if (c == '\n')
-	{
-	  fputs(prefix, fpout);
-	}
+        fputc(c, fpout);
+        if (c == '\n')
+        {
+          fputs(prefix, fpout);
+        }
       }
     }
     else if (mutt_copy_bytes (fpin, fpout, body->length) == -1)
@@ -763,7 +763,7 @@ _mutt_copy_message (FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
  */
 int
 mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
-		   int chflags)
+                   int chflags)
 {
   MESSAGE *msg;
   int r;
@@ -793,7 +793,7 @@ mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
 
 int
 _mutt_append_message (CONTEXT *dest, FILE *fpin, CONTEXT *src, HEADER *hdr,
-		      BODY *body, int flags, int chflags)
+                      BODY *body, int flags, int chflags)
 {
   char buf[STRING];
   MESSAGE *msg;
@@ -821,7 +821,7 @@ _mutt_append_message (CONTEXT *dest, FILE *fpin, CONTEXT *src, HEADER *hdr,
 
 int
 mutt_append_message (CONTEXT *dest, CONTEXT *src, HEADER *hdr, int cmflags,
-		     int chflags)
+                     int chflags)
 {
   MESSAGE *msg;
   int r;
@@ -851,29 +851,29 @@ static int copy_delete_attach (BODY *b, FILE *fpin, FILE *fpout,
     {
       /* Copy till start of this part */
       if (mutt_copy_bytes (fpin, fpout, part->hdr_offset - ftello (fpin)))
-	return -1;
+        return -1;
 
       if (part->deleted)
       {
         /* If this is modified, count_delete_lines() needs to be changed too */
-	fprintf (fpout,
-		 "Content-Type: message/external-body; access-type=x-mutt-deleted;\n"
-		 "\texpiration=%s; length=" OFF_T_FMT "\n"
-		 "\n", quoted_date, part->length);
-	if (ferror (fpout))
-	  return -1;
+        fprintf (fpout,
+                 "Content-Type: message/external-body; access-type=x-mutt-deleted;\n"
+                 "\texpiration=%s; length=" OFF_T_FMT "\n"
+                 "\n", quoted_date, part->length);
+        if (ferror (fpout))
+          return -1;
 
-	/* Copy the original mime headers */
-	if (mutt_copy_bytes (fpin, fpout, part->offset - ftello (fpin)))
-	  return -1;
+        /* Copy the original mime headers */
+        if (mutt_copy_bytes (fpin, fpout, part->offset - ftello (fpin)))
+          return -1;
 
-	/* Skip the deleted body */
-	fseeko (fpin, part->offset + part->length, SEEK_SET);
+        /* Skip the deleted body */
+        fseeko (fpin, part->offset + part->length, SEEK_SET);
       }
       else
       {
-	if (copy_delete_attach (part, fpin, fpout, quoted_date))
-	  return -1;
+        if (copy_delete_attach (part, fpin, fpout, quoted_date))
+          return -1;
       }
     }
   }
@@ -930,8 +930,8 @@ static void format_address_header (char **h, ADDRESS *a)
        */
       if (a->mailbox && (!count || !prev->group))
       {
-	strcpy (cbuf, " ");	/* __STRCPY_CHECKED__ */
-	linelen++;
+        strcpy (cbuf, " ");	/* __STRCPY_CHECKED__ */
+        linelen++;
       }
       linelen += l;
     }
@@ -975,28 +975,28 @@ static int address_header_decode (char **h)
     {
       if (ascii_strncasecmp (s, "return-path:", 12) == 0)
       {
-	l = 12;
-	rp = 1;
-	break;
+        l = 12;
+        rp = 1;
+        break;
       }
       else if (ascii_strncasecmp (s, "reply-to:", 9) == 0)
       {
-	l = 9;
-	break;
+        l = 9;
+        break;
       }
       return 0;
     }
     case 'f':
     {
       if (ascii_strncasecmp (s, "from:", 5))
-	return 0;
+        return 0;
       l = 5;
       break;
     }
     case 'c':
     {
       if (ascii_strncasecmp (s, "cc:", 3))
-	return 0;
+        return 0;
       l = 3;
       break;
 
@@ -1004,28 +1004,28 @@ static int address_header_decode (char **h)
     case 'b':
     {
       if (ascii_strncasecmp (s, "bcc:", 4))
-	return 0;
+        return 0;
       l = 4;
       break;
     }
     case 's':
     {
       if (ascii_strncasecmp (s, "sender:", 7))
-	return 0;
+        return 0;
       l = 7;
       break;
     }
     case 't':
     {
       if (ascii_strncasecmp (s, "to:", 3))
-	return 0;
+        return 0;
       l = 3;
       break;
     }
     case 'm':
     {
       if (ascii_strncasecmp (s, "mail-followup-to:", 17))
-	return 0;
+        return 0;
       l = 17;
       break;
     }

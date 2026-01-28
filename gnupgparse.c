@@ -105,11 +105,11 @@ static void fix_uid (char *uid)
     {
       if (ob-buf < n)
       {
-	memcpy (uid, buf, ob-buf);
-	uid[ob-buf] = '\0';
+        memcpy (uid, buf, ob-buf);
+        uid[ob-buf] = '\0';
       }
       else if (n >= 0 && ob-buf == n && (buf[n] = 0, strlen (buf) < (size_t)n))
-	memcpy (uid, buf, n);
+        memcpy (uid, buf, n);
     }
     FREE (&buf);
     iconv_close (cd);
@@ -156,97 +156,97 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
     {
       case 1:			/* record type */
       {
-	dprint (2, (debugfile, "record type: %s\n", p));
+        dprint (2, (debugfile, "record type: %s\n", p));
 
-	if (!mutt_strcmp (p, "pub"))
-	  is_pub = 1;
-	else if (!mutt_strcmp (p, "sub"))
-	  *is_subkey = 1;
-	else if (!mutt_strcmp (p, "sec"))
-	  ;
-	else if (!mutt_strcmp (p, "ssb"))
-	  *is_subkey = 1;
-	else if (!mutt_strcmp (p, "uid"))
-	  is_uid = 1;
-	else if (!mutt_strcmp (p, "fpr"))
-	  is_fpr = 1;
-	else
-	  return NULL;
+        if (!mutt_strcmp (p, "pub"))
+          is_pub = 1;
+        else if (!mutt_strcmp (p, "sub"))
+          *is_subkey = 1;
+        else if (!mutt_strcmp (p, "sec"))
+          ;
+        else if (!mutt_strcmp (p, "ssb"))
+          *is_subkey = 1;
+        else if (!mutt_strcmp (p, "uid"))
+          is_uid = 1;
+        else if (!mutt_strcmp (p, "fpr"))
+          is_fpr = 1;
+        else
+          return NULL;
 
-	if (!(is_uid || is_fpr || (*is_subkey && option (OPTPGPIGNORESUB))))
-	  memset (&tmp, 0, sizeof (tmp));
+        if (!(is_uid || is_fpr || (*is_subkey && option (OPTPGPIGNORESUB))))
+          memset (&tmp, 0, sizeof (tmp));
 
-	break;
+        break;
       }
       case 2:			/* trust info */
       {
-	dprint (2, (debugfile, "trust info: %s\n", p));
+        dprint (2, (debugfile, "trust info: %s\n", p));
 
-	switch (*p)
-	{				/* look only at the first letter */
-	  case 'e':
-	    flags |= KEYFLAG_EXPIRED;
-	    break;
-	  case 'r':
-	    flags |= KEYFLAG_REVOKED;
-	    break;
-	  case 'd':
-	    flags |= KEYFLAG_DISABLED;
-	    break;
-	  case 'n':
-	    trust = 1;
-	    break;
-	  case 'm':
-	    trust = 2;
-	    break;
-	  case 'f':
-	    trust = 3;
-	    break;
-	  case 'u':
-	    trust = 3;
-	    break;
-	}
+        switch (*p)
+        {				/* look only at the first letter */
+          case 'e':
+            flags |= KEYFLAG_EXPIRED;
+            break;
+          case 'r':
+            flags |= KEYFLAG_REVOKED;
+            break;
+          case 'd':
+            flags |= KEYFLAG_DISABLED;
+            break;
+          case 'n':
+            trust = 1;
+            break;
+          case 'm':
+            trust = 2;
+            break;
+          case 'f':
+            trust = 3;
+            break;
+          case 'u':
+            trust = 3;
+            break;
+        }
 
         if (!is_uid && !(*is_subkey && option (OPTPGPIGNORESUB)))
-	  tmp.flags |= flags;
+          tmp.flags |= flags;
 
-	break;
+        break;
       }
       case 3:			/* key length  */
       {
-	dprint (2, (debugfile, "key len: %s\n", p));
+        dprint (2, (debugfile, "key len: %s\n", p));
 
-	if (!(*is_subkey && option (OPTPGPIGNORESUB)) &&
-	    mutt_atos (p, &tmp.keylen, MUTT_ATOI_ALLOW_EMPTY) < 0)
-	  goto bail;
-	break;
+        if (!(*is_subkey && option (OPTPGPIGNORESUB)) &&
+            mutt_atos (p, &tmp.keylen, MUTT_ATOI_ALLOW_EMPTY) < 0)
+          goto bail;
+        break;
       }
       case 4:			/* pubkey algo */
       {
-	dprint (2, (debugfile, "pubkey algorithm: %s\n", p));
+        dprint (2, (debugfile, "pubkey algorithm: %s\n", p));
 
-	if (!(*is_subkey && option (OPTPGPIGNORESUB)))
-	{
-	  int x = 0;
-	  if (mutt_atoi (p, &x, MUTT_ATOI_ALLOW_EMPTY) < 0)
-	    goto bail;
-	  tmp.numalg = x;
-	  tmp.algorithm = pgp_pkalgbytype (x);
-	}
-	break;
+        if (!(*is_subkey && option (OPTPGPIGNORESUB)))
+        {
+          int x = 0;
+          if (mutt_atoi (p, &x, MUTT_ATOI_ALLOW_EMPTY) < 0)
+            goto bail;
+          tmp.numalg = x;
+          tmp.algorithm = pgp_pkalgbytype (x);
+        }
+        break;
       }
       case 5:			/* 16 hex digits with the long keyid. */
       {
-	dprint (2, (debugfile, "key id: %s\n", p));
+        dprint (2, (debugfile, "key id: %s\n", p));
 
-	if (!(*is_subkey && option (OPTPGPIGNORESUB)))
-	  mutt_str_replace (&tmp.keyid, p);
-	break;
+        if (!(*is_subkey && option (OPTPGPIGNORESUB)))
+          mutt_str_replace (&tmp.keyid, p);
+        break;
 
       }
       case 6:			/* timestamp (1998-02-28) */
       {
-	dprint (2, (debugfile, "time stamp: %s\n", p));
+        dprint (2, (debugfile, "time stamp: %s\n", p));
 
         if (strchr (p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
         {
@@ -303,7 +303,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
          * use the key in mutt.
          */
         if (!(pend && (*p || is_pub)))
-	  break;
+          break;
 
         if (is_fpr)
         {
@@ -313,33 +313,33 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
           break;
         }
 
-	/* ignore user IDs on subkeys */
-	if (!is_uid && (*is_subkey && option (OPTPGPIGNORESUB)))
-	  break;
+        /* ignore user IDs on subkeys */
+        if (!is_uid && (*is_subkey && option (OPTPGPIGNORESUB)))
+          break;
 
-	dprint (2, (debugfile, "user ID: %s\n", NONULL (p)));
+        dprint (2, (debugfile, "user ID: %s\n", NONULL (p)));
 
-	uid = safe_calloc (sizeof (pgp_uid_t), 1);
-	fix_uid (p);
-	uid->addr = safe_strdup (p);
-	uid->trust = trust;
-	uid->flags |= flags;
-	uid->next = tmp.address;
-	tmp.address = uid;
+        uid = safe_calloc (sizeof (pgp_uid_t), 1);
+        fix_uid (p);
+        uid->addr = safe_strdup (p);
+        uid->trust = trust;
+        uid->flags |= flags;
+        uid->next = tmp.address;
+        tmp.address = uid;
 
-	if (strstr (p, "ENCR"))
-	  tmp.flags |= KEYFLAG_PREFER_ENCRYPTION;
-	if (strstr (p, "SIGN"))
-	  tmp.flags |= KEYFLAG_PREFER_SIGNING;
+        if (strstr (p, "ENCR"))
+          tmp.flags |= KEYFLAG_PREFER_ENCRYPTION;
+        if (strstr (p, "SIGN"))
+          tmp.flags |= KEYFLAG_PREFER_SIGNING;
 
-	break;
+        break;
       }
       case 11:			/* signature class  */
         break;
       case 12:			/* key capabilities */
-	dprint (2, (debugfile, "capabilities info: %s\n", p));
+        dprint (2, (debugfile, "capabilities info: %s\n", p));
 
-	while (*p)
+        while (*p)
         {
           switch (*p++)
           {
@@ -358,13 +358,13 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         }
 
         if (!is_uid &&
-	    (!*is_subkey || !option (OPTPGPIGNORESUB)
-	     || !((flags & KEYFLAG_DISABLED)
-		  || (flags & KEYFLAG_REVOKED)
-		  || (flags & KEYFLAG_EXPIRED))))
-	  tmp.flags |= flags;
+            (!*is_subkey || !option (OPTPGPIGNORESUB)
+             || !((flags & KEYFLAG_DISABLED)
+                  || (flags & KEYFLAG_REVOKED)
+                  || (flags & KEYFLAG_EXPIRED))))
+          tmp.flags |= flags;
 
-	break;
+        break;
 
       default:
         break;
@@ -405,7 +405,7 @@ pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
   mutt_str_replace (&_chs, Charset);
 
   thepid = pgp_invoke_list_keys (NULL, &fp, NULL, -1, -1, devnull,
-				 keyring, hints);
+                                 keyring, hints);
   if (thepid == -1)
   {
     close (devnull);
@@ -423,21 +423,21 @@ pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
     if (kk != k)
     {
       if (k)
-	kend = &k->next;
+        kend = &k->next;
       *kend = k = kk;
 
       if (is_sub)
       {
-	pgp_uid_t **l;
+        pgp_uid_t **l;
 
-	k->flags  |= KEYFLAG_SUBKEY;
-	k->parent  = mainkey;
-	for (l = &k->address; *l; l = &(*l)->next)
-	  ;
-	*l = pgp_copy_uids (mainkey->address, k);
+        k->flags  |= KEYFLAG_SUBKEY;
+        k->parent  = mainkey;
+        for (l = &k->address; *l; l = &(*l)->next)
+          ;
+        *l = pgp_copy_uids (mainkey->address, k);
       }
       else
-	mainkey = k;
+        mainkey = k;
     }
   }
 

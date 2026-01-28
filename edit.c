@@ -63,7 +63,7 @@ static char* EditorHelp2 = N_("\
 
 static char **
 be_snarf_data (FILE *f, char **buf, int *bufmax, int *buflen, LOFF_T offset,
-	       LOFF_T bytes, int prefix)
+               LOFF_T bytes, int prefix)
 {
   char tmp[HUGE_STRING];
   char *p = tmp;
@@ -148,7 +148,7 @@ static void be_free_memory (char **buf, int buflen)
 
 static char **
 be_include_messages (char *msg, char **buf, int *bufmax, int *buflen,
-		     int pfx, int inc_hdrs)
+                     int pfx, int inc_hdrs)
 {
   LOFF_T offset, bytes;
   int n;
@@ -164,28 +164,28 @@ be_include_messages (char *msg, char **buf, int *bufmax, int *buflen,
       if (Attribution)
       {
         setlocale (LC_TIME, NONULL (AttributionLocale));
-	mutt_make_string (tmp, sizeof (tmp) - 1, Attribution, Context, Context->hdrs[n]);
+        mutt_make_string (tmp, sizeof (tmp) - 1, Attribution, Context, Context->hdrs[n]);
         setlocale (LC_TIME, "");
-	strcat (tmp, "\n");	/* __STRCAT_CHECKED__ */
+        strcat (tmp, "\n");	/* __STRCAT_CHECKED__ */
       }
 
       if (*bufmax == *buflen)
-	safe_realloc ( &buf, sizeof (char *) * (*bufmax += 25));
+        safe_realloc ( &buf, sizeof (char *) * (*bufmax += 25));
       buf[(*buflen)++] = safe_strdup (tmp);
 
       bytes = Context->hdrs[n]->content->length;
       if (inc_hdrs)
       {
-	offset = Context->hdrs[n]->offset;
-	bytes += Context->hdrs[n]->content->offset - offset;
+        offset = Context->hdrs[n]->offset;
+        bytes += Context->hdrs[n]->content->offset - offset;
       }
       else
-	offset = Context->hdrs[n]->content->offset;
+        offset = Context->hdrs[n]->content->offset;
       buf = be_snarf_data (Context->fp, buf, bufmax, buflen, offset, bytes,
-			   pfx);
+                           pfx);
 
       if (*bufmax == *buflen)
-	safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
+        safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
       buf[(*buflen)++] = safe_strdup ("\n");
     }
     else
@@ -361,131 +361,131 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
       /* remove trailing whitespace from the line */
       p = tmp + mutt_strlen (tmp) - 1;
       while (p >= tmp && ISSPACE (*p))
-	*p-- = 0;
+        *p-- = 0;
 
       p = tmp + 2;
       SKIPWS (p);
 
       switch (tmp[1])
       {
-	case '?':
-	  addstr (_(EditorHelp1));
+        case '?':
+          addstr (_(EditorHelp1));
           addstr (_(EditorHelp2));
-	  break;
-	case 'b':
-	  msg->env->bcc = mutt_parse_adrlist (msg->env->bcc, p);
-	  msg->env->bcc = mutt_expand_aliases (msg->env->bcc);
-	  break;
-	case 'c':
-	  msg->env->cc = mutt_parse_adrlist (msg->env->cc, p);
-	  msg->env->cc = mutt_expand_aliases (msg->env->cc);
-	  break;
-	case 'h':
-	  be_edit_header (msg->env, 1);
-	  break;
-	case 'F':
-	case 'f':
-	case 'm':
-	case 'M':
-	  if (Context)
-	  {
-	    if (!*p && cur)
- 	    {
-	      /* include the current message */
-	      p = tmp + mutt_strlen (tmp) + 1;
-	      snprintf (tmp + mutt_strlen (tmp), sizeof (tmp) - mutt_strlen (tmp), " %d",
+          break;
+        case 'b':
+          msg->env->bcc = mutt_parse_adrlist (msg->env->bcc, p);
+          msg->env->bcc = mutt_expand_aliases (msg->env->bcc);
+          break;
+        case 'c':
+          msg->env->cc = mutt_parse_adrlist (msg->env->cc, p);
+          msg->env->cc = mutt_expand_aliases (msg->env->cc);
+          break;
+        case 'h':
+          be_edit_header (msg->env, 1);
+          break;
+        case 'F':
+        case 'f':
+        case 'm':
+        case 'M':
+          if (Context)
+          {
+            if (!*p && cur)
+            {
+              /* include the current message */
+              p = tmp + mutt_strlen (tmp) + 1;
+              snprintf (tmp + mutt_strlen (tmp), sizeof (tmp) - mutt_strlen (tmp), " %d",
                         cur->msgno + 1);
-	    }
-	    buf = be_include_messages (p, buf, &bufmax, &buflen,
-				       (ascii_tolower (tmp[1]) == 'm'),
-				       (ascii_isupper ((unsigned char) tmp[1])));
-	  }
-	  else
-	    addstr (_("No mailbox.\n"));
-	  break;
-	case 'p':
-	  addstr ("-----\n");
-	  addstr (_("Message contains:\n"));
-	  be_print_header (msg->env);
-	  for (i = 0; i < buflen; i++)
-	    addstr (buf[i]);
+            }
+            buf = be_include_messages (p, buf, &bufmax, &buflen,
+                                       (ascii_tolower (tmp[1]) == 'm'),
+                                       (ascii_isupper ((unsigned char) tmp[1])));
+          }
+          else
+            addstr (_("No mailbox.\n"));
+          break;
+        case 'p':
+          addstr ("-----\n");
+          addstr (_("Message contains:\n"));
+          be_print_header (msg->env);
+          for (i = 0; i < buflen; i++)
+            addstr (buf[i]);
           /* L10N:
              This entry is shown AFTER the message content,
              not IN the middle of the content.
              So it doesn't mean "(message will continue)"
              but means "(press any key to continue using mutt)". */
-	  addstr (_("(continue)\n"));
-	  break;
-	case 'q':
-	  done = 1;
-	  break;
-	case 'r':
-	  if (*p)
+          addstr (_("(continue)\n"));
+          break;
+        case 'q':
+          done = 1;
+          break;
+        case 'r':
+          if (*p)
           {
             BUFFER *filename = mutt_buffer_pool_get ();
-	    mutt_buffer_strcpy (filename, p);
-	    mutt_buffer_expand_path (filename);
-	    buf = be_snarf_file (mutt_b2s (filename), buf, &bufmax, &buflen, 1);
+            mutt_buffer_strcpy (filename, p);
+            mutt_buffer_expand_path (filename);
+            buf = be_snarf_file (mutt_b2s (filename), buf, &bufmax, &buflen, 1);
             mutt_buffer_pool_release (&filename);
           }
-	  else
-	    addstr (_("missing filename.\n"));
-	  break;
-	case 's':
-	  mutt_str_replace (&msg->env->subject, p);
-	  break;
-	case 't':
-	  msg->env->to = rfc822_parse_adrlist (msg->env->to, p);
-	  msg->env->to = mutt_expand_aliases (msg->env->to);
-	  break;
-	case 'u':
-	  if (buflen)
-	  {
-	    buflen--;
-	    strfcpy (tmp, buf[buflen], sizeof (tmp));
-	    tmp[mutt_strlen (tmp)-1] = 0;
-	    FREE (&buf[buflen]);
-	    buf[buflen] = NULL;
-	    continue;
-	  }
-	  else
-	    addstr (_("No lines in message.\n"));
-	  break;
+          else
+            addstr (_("missing filename.\n"));
+          break;
+        case 's':
+          mutt_str_replace (&msg->env->subject, p);
+          break;
+        case 't':
+          msg->env->to = rfc822_parse_adrlist (msg->env->to, p);
+          msg->env->to = mutt_expand_aliases (msg->env->to);
+          break;
+        case 'u':
+          if (buflen)
+          {
+            buflen--;
+            strfcpy (tmp, buf[buflen], sizeof (tmp));
+            tmp[mutt_strlen (tmp)-1] = 0;
+            FREE (&buf[buflen]);
+            buf[buflen] = NULL;
+            continue;
+          }
+          else
+            addstr (_("No lines in message.\n"));
+          break;
 
-	case 'e':
-	case 'v':
-	  if (be_barf_file (path, buf, buflen) == 0)
-	  {
-	    char *tag, *err;
-	    be_free_memory (buf, buflen);
-	    buf = NULL;
-	    bufmax = buflen = 0;
+        case 'e':
+        case 'v':
+          if (be_barf_file (path, buf, buflen) == 0)
+          {
+            char *tag, *err;
+            be_free_memory (buf, buflen);
+            buf = NULL;
+            bufmax = buflen = 0;
 
-	    if (option (OPTEDITHDRS))
-	    {
-	      mutt_env_to_local (msg->env);
-	      mutt_edit_headers (NONULL(Visual), sctx, 0);
-	      if (mutt_env_to_intl (msg->env, &tag, &err))
-		printw (_("Bad IDN in %s: '%s'\n"), tag, err);
-	    }
-	    else
-	      mutt_edit_file (NONULL(Visual), path);
+            if (option (OPTEDITHDRS))
+            {
+              mutt_env_to_local (msg->env);
+              mutt_edit_headers (NONULL(Visual), sctx, 0);
+              if (mutt_env_to_intl (msg->env, &tag, &err))
+                printw (_("Bad IDN in %s: '%s'\n"), tag, err);
+            }
+            else
+              mutt_edit_file (NONULL(Visual), path);
 
-	    buf = be_snarf_file (path, buf, &bufmax, &buflen, 0);
+            buf = be_snarf_file (path, buf, &bufmax, &buflen, 0);
 
-	    addstr (_("(continue)\n"));
-	  }
-	  break;
-	case 'w':
-	  be_barf_file (*p ? p : path, buf, buflen);
-	  break;
-	case 'x':
-	  abort = 1;
-	  done = 1;
-	  break;
-	default:
-	  printw (_("%s: unknown editor command (~? for help)\n"), tmp);
-	  break;
+            addstr (_("(continue)\n"));
+          }
+          break;
+        case 'w':
+          be_barf_file (*p ? p : path, buf, buflen);
+          break;
+        case 'x':
+          abort = 1;
+          done = 1;
+          break;
+        default:
+          printw (_("%s: unknown editor command (~? for help)\n"), tmp);
+          break;
       }
     }
     else if (mutt_strcmp (".", tmp) == 0)
@@ -494,7 +494,7 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
     {
       safe_strcat (tmp, sizeof (tmp), "\n");
       if (buflen == bufmax)
-	safe_realloc (&buf, sizeof (char *) * (bufmax += 25));
+        safe_realloc (&buf, sizeof (char *) * (bufmax += 25));
       buf[buflen++] = safe_strdup (tmp[1] == '~' ? tmp + 1 : tmp);
     }
 

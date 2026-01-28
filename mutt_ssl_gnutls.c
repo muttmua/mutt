@@ -434,7 +434,7 @@ static int tls_negotiate (CONNECTION * conn)
                                        &conn->account);
 
   gnutls_certificate_set_x509_trust_file (data->xcred, SslCertFile,
-					  GNUTLS_X509_FMT_PEM);
+                                          GNUTLS_X509_FMT_PEM);
   /* ignore errors, maybe file doesn't exist yet */
 
   if (SslCACertFile)
@@ -632,10 +632,10 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
     {
       if (memcmp (cert.data, peercert->data, cert.size) == 0)
       {
-	/* match found */
+        /* match found */
         gnutls_free (cert.data);
-	FREE (&b64_data_data);
-	return 1;
+        FREE (&b64_data_data);
+        return 1;
       }
     }
 
@@ -678,8 +678,8 @@ static char *tls_make_date (time_t t, char *s, size_t len)
 
   if (l)
     snprintf (s, len,  "%s, %d %s %d %02d:%02d:%02d UTC",
-	      Weekdays[l->tm_wday], l->tm_mday, Months[l->tm_mon],
-	      l->tm_year + 1900, l->tm_hour, l->tm_min, l->tm_sec);
+              Weekdays[l->tm_wday], l->tm_mday, Months[l->tm_mon],
+              l->tm_year + 1900, l->tm_hour, l->tm_min, l->tm_sec);
   else
     strfcpy (s, _("[invalid date]"), len);
 
@@ -994,12 +994,12 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
 
   t = gnutls_x509_crt_get_activation_time (cert);
   mutt_buffer_printf (drow, _("   from %s"),
-	    tls_make_date (t, datestr, 30));
+            tls_make_date (t, datestr, 30));
   mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
 
   t = gnutls_x509_crt_get_expiration_time (cert);
   mutt_buffer_printf (drow, _("     to %s"),
-	    tls_make_date (t, datestr, 30));
+            tls_make_date (t, datestr, 30));
   mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
 
 
@@ -1090,42 +1090,42 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
       case OP_MAX + 3:		/* accept always */
         done = 0;
         if ((fp = fopen (SslCertFile, "a")))
-	{
-	  /* save hostname if necessary */
-	  if (certerr & CERTERR_HOSTNAME)
-	  {
+        {
+          /* save hostname if necessary */
+          if (certerr & CERTERR_HOSTNAME)
+          {
             fpbuf[0] = '\0';
             tls_fingerprint (GNUTLS_DIG_MD5, fpbuf, sizeof (fpbuf), certdata);
-	    fprintf (fp, "#H %s %s\n", hostname, fpbuf);
-	    done = 1;
-	  }
+            fprintf (fp, "#H %s %s\n", hostname, fpbuf);
+            done = 1;
+          }
           /* Save the cert for all other errors */
-	  if (certerr ^ CERTERR_HOSTNAME)
-	  {
+          if (certerr ^ CERTERR_HOSTNAME)
+          {
             done = 0;
-	    ret = gnutls_pem_base64_encode_alloc ("CERTIFICATE", certdata,
+            ret = gnutls_pem_base64_encode_alloc ("CERTIFICATE", certdata,
                                                   &pemdata);
-	    if (ret == 0)
-	    {
-	      if (fwrite (pemdata.data, pemdata.size, 1, fp) == 1)
-	      {
-		done = 1;
-	      }
+            if (ret == 0)
+            {
+              if (fwrite (pemdata.data, pemdata.size, 1, fp) == 1)
+              {
+                done = 1;
+              }
               gnutls_free (pemdata.data);
-	    }
-	  }
-	  safe_fclose (&fp);
-	}
-	if (!done)
+            }
+          }
+          safe_fclose (&fp);
+        }
+        if (!done)
         {
-	  mutt_error (_("Warning: Couldn't save certificate"));
-	  mutt_sleep (2);
-	}
-	else
+          mutt_error (_("Warning: Couldn't save certificate"));
+          mutt_sleep (2);
+        }
+        else
         {
-	  mutt_message (_("Certificate saved"));
-	  mutt_sleep (0);
-	}
+          mutt_message (_("Certificate saved"));
+          mutt_sleep (0);
+        }
         /* fall through */
       case OP_MAX + 2:		/* accept once */
         done = 2;

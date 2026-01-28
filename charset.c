@@ -151,9 +151,9 @@ PreferredMIMENames[] =
   { "csShiftJis",	"Shift_JIS"	},
 
   { "Extended_UNIX_Code_Packed_Format_for_Japanese",
-      			"euc-jp"	},
+                        "euc-jp"	},
   { "csEUCPkdFmtJapanese",
-      			"euc-jp"	},
+                        "euc-jp"	},
 
   { "csGB2312",		"gb2312"	},
   { "csbig5",		"big5"		},
@@ -272,7 +272,7 @@ void mutt_canonical_charset (char *dest, size_t dlen, const char *name)
 
   for (i = 0; PreferredMIMENames[i].key; i++)
     if (!ascii_strcasecmp (scratch, PreferredMIMENames[i].key) ||
-	!mutt_strcasecmp (scratch, PreferredMIMENames[i].key))
+        !mutt_strcasecmp (scratch, PreferredMIMENames[i].key))
     {
       strfcpy (dest, PreferredMIMENames[i].pref, dlen);
       goto out;
@@ -309,7 +309,7 @@ int mutt_chscmp (const char *s, const char *chs)
   a = mutt_strlen (buffer);
   b = mutt_strlen (chs);
   return !ascii_strncasecmp (a > b ? buffer : chs,
-			     a > b ? chs : buffer, MIN(a,b));
+                             a > b ? chs : buffer, MIN(a,b));
 }
 
 char *mutt_get_default_charset (void)
@@ -340,7 +340,7 @@ iconv_t iconv_open (const char *tocode, const char *fromcode)
 }
 
 size_t iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
-	      char **outbuf, size_t *outbytesleft)
+              char **outbuf, size_t *outbytesleft)
 {
   return 0;
 }
@@ -407,8 +407,8 @@ iconv_t mutt_iconv_open (const char *tocode, const char *fromcode, int flags)
  */
 
 size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
-		   char **outbuf, size_t *outbytesleft,
-		   ICONV_CONST char **inrepls, const char *outrepl)
+                   char **outbuf, size_t *outbytesleft,
+                   ICONV_CONST char **inrepls, const char *outrepl)
 {
   size_t ret = 0, ret1;
   ICONV_CONST char *ib = *inbuf;
@@ -425,44 +425,44 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
     {
       if (inrepls)
       {
-	/* Try replacing the input */
-	ICONV_CONST char **t;
-	for (t = inrepls; *t; t++)
-	{
-	  ICONV_CONST char *ib1 = *t;
-	  size_t ibl1 = strlen (*t);
-	  char *ob1 = ob;
-	  size_t obl1 = obl;
-	  iconv (cd, &ib1, &ibl1, &ob1, &obl1);
-	  if (!ibl1)
-	  {
-	    ++ib, --ibl;
-	    ob = ob1, obl = obl1;
-	    ++ret;
-	    break;
-	  }
-	}
-	if (*t)
-	  continue;
+        /* Try replacing the input */
+        ICONV_CONST char **t;
+        for (t = inrepls; *t; t++)
+        {
+          ICONV_CONST char *ib1 = *t;
+          size_t ibl1 = strlen (*t);
+          char *ob1 = ob;
+          size_t obl1 = obl;
+          iconv (cd, &ib1, &ibl1, &ob1, &obl1);
+          if (!ibl1)
+          {
+            ++ib, --ibl;
+            ob = ob1, obl = obl1;
+            ++ret;
+            break;
+          }
+        }
+        if (*t)
+          continue;
       }
       /* Replace the output */
       if (!outrepl)
-	outrepl = "?";
+        outrepl = "?";
       iconv (cd, 0, 0, &ob, &obl);
       if (obl)
       {
-	size_t n = strlen (outrepl);
-	if (n > obl)
-	{
-	  outrepl = "?";
-	  n = 1;
-	}
-	memcpy (ob, outrepl, n);
-	++ib, --ibl;
-	ob += n, obl -= n;
-	++ret;
-	iconv (cd, 0, 0, 0, 0); /* for good measure */
-	continue;
+        size_t n = strlen (outrepl);
+        if (n > obl)
+        {
+          outrepl = "?";
+          n = 1;
+        }
+        memcpy (ob, outrepl, n);
+        ++ib, --ibl;
+        ob += n, obl -= n;
+        ++ret;
+        iconv (cd, 0, 0, 0, 0); /* for good measure */
+        continue;
       }
     }
     *inbuf = ib, *inbytesleft = ibl;
@@ -647,7 +647,7 @@ int fgetconv (FGETCONV *_fc)
   {
     size_t obl = sizeof (fc->bufo);
     mutt_iconv (fc->cd, (ICONV_CONST char **)&fc->ib, &fc->ibl, &fc->ob, &obl,
-		fc->inrepls, 0);
+                fc->inrepls, 0);
     if (fc->p < fc->ob)
       return (unsigned char)*(fc->p)++;
   }
@@ -678,8 +678,8 @@ int mutt_check_charset (const char *s, int strict)
     for (i = 0; PreferredMIMENames[i].key; i++)
     {
       if (ascii_strcasecmp (PreferredMIMENames[i].key, s) == 0 ||
-	  ascii_strcasecmp (PreferredMIMENames[i].pref, s) == 0)
-	return 0;
+          ascii_strcasecmp (PreferredMIMENames[i].pref, s) == 0)
+        return 0;
     }
 
   if ((cd = mutt_iconv_open (s, s, 0)) != (iconv_t)(-1))

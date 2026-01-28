@@ -41,14 +41,14 @@ static const struct menu_func_op_t *help_lookupFunction (int op, int menu)
     /* first look in the generic map for the function */
     for (i = 0; OpGeneric[i].name; i++)
       if (OpGeneric[i].op == op)
-	return (&OpGeneric[i]);
+        return (&OpGeneric[i]);
   }
 
   if ((map = km_get_table(menu)))
   {
     for (i = 0; map[i].name; i++)
       if (map[i].op == op)
-	return (&map[i]);
+        return (&map[i]);
   }
 
   return (NULL);
@@ -112,36 +112,36 @@ static int print_macro (FILE *f, int maxwidth, const char **macro)
     if (IsWPrint (wc) && (w = wcwidth (wc)) >= 0)
     {
       if (w > n)
-	break;
+        break;
       n -= w;
       {
-	char buf[MB_LEN_MAX*2];
-	size_t n1, n2;
-	if ((n1 = wcrtomb (buf, wc, &mbstate2)) != (size_t)(-1) &&
-	    (n2 = wcrtomb (buf + n1, 0, &mbstate2)) != (size_t)(-1))
-	  fputs (buf, f);
+        char buf[MB_LEN_MAX*2];
+        size_t n1, n2;
+        if ((n1 = wcrtomb (buf, wc, &mbstate2)) != (size_t)(-1) &&
+            (n2 = wcrtomb (buf + n1, 0, &mbstate2)) != (size_t)(-1))
+          fputs (buf, f);
       }
     }
     else if (wc < 0x20 || wc == 0x7f)
     {
       if (2 > n)
-	break;
+        break;
       n -= 2;
       if (wc == '\033')
-	fprintf (f, "\\e");
+        fprintf (f, "\\e");
       else if (wc == '\n')
-	fprintf (f, "\\n");
+        fprintf (f, "\\n");
       else if (wc == '\r')
-	fprintf (f, "\\r");
+        fprintf (f, "\\r");
       else if (wc == '\t')
-	fprintf (f, "\\t");
+        fprintf (f, "\\t");
       else
-	fprintf (f, "^%c", (char)((wc + '@') & 0x7f));
+        fprintf (f, "^%c", (char)((wc + '@') & 0x7f));
     }
     else
     {
       if (1 > n)
-	break;
+        break;
       n -= 1;
       fprintf (f, "?");
     }
@@ -198,7 +198,7 @@ static int pad (FILE *f, int col, int i)
 }
 
 static void format_line (FILE *f, int ismacro,
-			 const char *t1, const char *t2, const char *t3)
+                         const char *t1, const char *t2, const char *t3)
 {
   int col;
   int col_a, col_b;
@@ -233,7 +233,7 @@ static void format_line (FILE *f, int ismacro,
     {
       col += print_macro (f, col_b - col - 4, &t2);
       if (mutt_strwidth (t2) > col_b - col)
-	t2 = "...";
+        t2 = "...";
     }
   }
 
@@ -256,8 +256,8 @@ static void format_line (FILE *f, int ismacro,
 
       if (ismacro >= 0)
       {
-	SKIPWS(t3);
-	n = get_wrapped_width (t3, n);
+        SKIPWS(t3);
+        n = get_wrapped_width (t3, n);
       }
 
       n = print_macro (f, n, &t3);
@@ -265,17 +265,17 @@ static void format_line (FILE *f, int ismacro,
       if (*t3)
       {
         if (Pager && mutt_strcmp (Pager, "builtin"))
-	{
-	  fputc ('\n', f);
-	  n = 0;
-	}
-	else
-	{
-	  n += col - MuttIndexWindow->cols;
-	  if (option (OPTMARKERS))
-	    ++n;
-	}
-	col = pad (f, n, col_b);
+        {
+          fputc ('\n', f);
+          n = 0;
+        }
+        else
+        {
+          n += col - MuttIndexWindow->cols;
+          if (option (OPTMARKERS))
+            ++n;
+        }
+        col = pad (f, n, col_b);
       }
     }
   }
@@ -298,15 +298,15 @@ static void dump_menu (FILE *f, int menu)
 
       if (map->op == OP_MACRO)
       {
-	if (map->descr == NULL)
-	  format_line (f, -1, buf, "macro", map->macro);
+        if (map->descr == NULL)
+          format_line (f, -1, buf, "macro", map->macro);
         else
-	  format_line (f, 1, buf, map->macro, map->descr);
+          format_line (f, 1, buf, map->macro, map->descr);
       }
       else
       {
-	b = help_lookupFunction (map->op, menu);
-	format_line (f, 0, buf, b ? b->name : "UNKNOWN",
+        b = help_lookupFunction (map->op, menu);
+        format_line (f, 0, buf, b ? b->name : "UNKNOWN",
                      b ? _(HelpStrings[b->op]) : _("ERROR: please report this bug"));
       }
     }
@@ -322,16 +322,16 @@ static int is_bound (struct keymap_t *map, int op)
 }
 
 static void dump_unbound (FILE *f,
-			  const struct menu_func_op_t *funcs,
-			  struct keymap_t *map,
-			  struct keymap_t *aux)
+                          const struct menu_func_op_t *funcs,
+                          struct keymap_t *map,
+                          struct keymap_t *aux)
 {
   int i;
 
   for (i = 0; funcs[i].name; i++)
   {
     if (! is_bound (map, funcs[i].op) &&
-	(!aux || ! is_bound (aux, funcs[i].op)))
+        (!aux || ! is_bound (aux, funcs[i].op)))
       format_line (f, 0, funcs[i].name, "", _(HelpStrings[funcs[i].op]));
   }
 }
@@ -380,8 +380,8 @@ void mutt_help (int menu)
   }
   while
     (mutt_do_pager (buf, mutt_b2s (t),
-		    MUTT_PAGER_RETWINCH | MUTT_PAGER_MARKER | MUTT_PAGER_NSKIP | MUTT_PAGER_NOWRAP,
-		    NULL)
+                    MUTT_PAGER_RETWINCH | MUTT_PAGER_MARKER | MUTT_PAGER_NSKIP | MUTT_PAGER_NOWRAP,
+                    NULL)
      == OP_REFORMAT_WINCH);
 
 cleanup:

@@ -431,21 +431,21 @@ int mutt_yesorno_with_help (const char *msg, int def, const char *var)
 #ifdef HAVE_LANGINFO_YESEXPR
     answer[0] = ch.ch;
     if (reyes_ok ?
-	(regexec (& reyes, answer, 0, 0, 0) == 0) :
+        (regexec (& reyes, answer, 0, 0, 0) == 0) :
 #else
     if (
 #endif
-	(tolower (ch.ch) == 'y'))
+        (tolower (ch.ch) == 'y'))
     {
       def = MUTT_YES;
       break;
     }
     else if (
 #ifdef HAVE_LANGINFO_YESEXPR
-	     reno_ok ?
-	     (regexec (& reno, answer, 0, 0, 0) == 0) :
+             reno_ok ?
+             (regexec (& reno, answer, 0, 0, 0) == 0) :
 #endif
-	     (tolower (ch.ch) == 'n'))
+             (tolower (ch.ch) == 'n'))
     {
       def = MUTT_NO;
       break;
@@ -641,7 +641,7 @@ static void curses_message (int error, const char *fmt, va_list ap)
 
   dprint (1, (debugfile, "%s\n", scratch));
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
-		      0, MuttMessageWindow->cols, FMT_LEFT, 0, scratch, sizeof (scratch), 0);
+                      0, MuttMessageWindow->cols, FMT_LEFT, 0, scratch, sizeof (scratch), 0);
 
   if (!option (OPTKEEPQUIET))
   {
@@ -679,8 +679,8 @@ void mutt_curses_message (const char *fmt, ...)
 }
 
 void mutt_progress_init (progress_t* progress, const char *msg,
-			 unsigned short flags, unsigned short inc,
-			 long size)
+                         unsigned short flags, unsigned short inc,
+                         long size)
 {
   struct timeval tv = { 0, 0 };
 
@@ -698,10 +698,10 @@ void mutt_progress_init (progress_t* progress, const char *msg,
   {
     if (progress->flags & MUTT_PROGRESS_SIZE)
       mutt_pretty_size (progress->sizestr, sizeof (progress->sizestr),
-			progress->size);
+                        progress->size);
     else
       snprintf (progress->sizestr, sizeof (progress->sizestr), "%ld",
-		progress->size);
+                progress->size);
   }
   if (!inc)
   {
@@ -773,15 +773,15 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     if (progress->size > 0)
     {
       mutt_message ("%s %s/%s (%d%%)", progress->msg, posstr, progress->sizestr,
-		    percent > 0 ? percent :
+                    percent > 0 ? percent :
                     (int) (100.0 * (double) progress->pos / progress->size));
     }
     else
     {
       if (percent > 0)
-	mutt_message ("%s %s (%d%%)", progress->msg, posstr, percent);
+        mutt_message ("%s %s (%d%%)", progress->msg, posstr, percent);
       else
-	mutt_message ("%s %s", progress->msg, posstr);
+        mutt_message ("%s %s", progress->msg, posstr);
     }
   }
 
@@ -835,7 +835,7 @@ void mutt_reflow_windows (void)
 
   memcpy (MuttIndexWindow, MuttStatusWindow, sizeof (mutt_window_t));
   MuttIndexWindow->rows = MAX(LINES - MuttStatusWindow->rows -
-			      MuttHelpWindow->rows - MuttMessageWindow->rows, 0);
+                              MuttHelpWindow->rows - MuttMessageWindow->rows, 0);
   MuttIndexWindow->row_offset = option (OPTSTATUSONTOP) ? MuttStatusWindow->rows :
                                                           MuttHelpWindow->rows;
 
@@ -870,7 +870,7 @@ static void reflow_message_window_rows (int mw_rows)
     MuttHelpWindow->row_offset = option (OPTSTATUSONTOP) ? LINES - mw_rows - 1 : 0;
 
   MuttIndexWindow->rows = MAX(LINES - MuttStatusWindow->rows -
-			      MuttHelpWindow->rows - MuttMessageWindow->rows, 0);
+                              MuttHelpWindow->rows - MuttMessageWindow->rows, 0);
 
 #ifdef USE_SIDEBAR
   if (option (OPTSIDEBAR))
@@ -1039,9 +1039,9 @@ int mutt_any_key_to_continue (const char *s)
 }
 
 int mutt_do_pager (const char *banner,
-		   const char *tempfile,
-		   int do_color,
-		   pager_t *info)
+                   const char *tempfile,
+                   int do_color,
+                   pager_t *info)
 {
   int rc;
 
@@ -1300,14 +1300,14 @@ int mutt_multi_choice (char *prompt, char *letters)
       p = strchr (letters, ch.ch);
       if (p)
       {
-	choice = p - letters + 1;
-	break;
+        choice = p - letters + 1;
+        break;
       }
       else if (ch.ch <= '9' && ch.ch > '0')
       {
-	choice = ch.ch - '0';
-	if (choice <= mutt_strlen (letters))
-	  break;
+        choice = ch.ch - '0';
+        if (choice <= mutt_strlen (letters))
+          break;
       }
     }
     BEEP ();
@@ -1350,10 +1350,10 @@ int mutt_addwch (wchar_t wc)
  */
 
 void mutt_format_string (char *dest, size_t destlen,
-			 int min_width, int max_width,
-			 int justify, char m_pad_char,
-			 const char *s, size_t n,
-			 int arboreal)
+                         int min_width, int max_width,
+                         int justify, char m_pad_char,
+                         const char *s, size_t n,
+                         int arboreal)
 {
   char *p;
   wchar_t wc;
@@ -1371,7 +1371,7 @@ void mutt_format_string (char *dest, size_t destlen,
     if (k == (size_t)(-1) || k == (size_t)(-2))
     {
       if (k == (size_t)(-1) && errno == EILSEQ)
-	memset (&mbstate1, 0, sizeof (mbstate1));
+        memset (&mbstate1, 0, sizeof (mbstate1));
 
       k = (k == (size_t)(-1)) ? 1 : n;
       wc = replacement_char ();
@@ -1381,7 +1381,7 @@ void mutt_format_string (char *dest, size_t destlen,
     else
     {
       if (iswblank (wc))
-	wc = ' ';
+        wc = ' ';
       else
         if (!IsWPrint (wc))
           wc = '?';
@@ -1390,7 +1390,7 @@ void mutt_format_string (char *dest, size_t destlen,
     if (w >= 0)
     {
       if (w > max_width || (k2 = wcrtomb (scratch, wc, &mbstate2)) > destlen)
-	break;
+        break;
       min_width -= w;
       max_width -= w;
       strncpy (p, scratch, k2);
@@ -1446,10 +1446,10 @@ void mutt_format_string (char *dest, size_t destlen,
  */
 
 static void mutt_format_s_x (char *dest,
-			     size_t destlen,
-			     const char *prefix,
-			     const char *s,
-			     int arboreal)
+                             size_t destlen,
+                             const char *prefix,
+                             const char *s,
+                             int arboreal)
 {
   int justify = FMT_RIGHT;
   char *p;
@@ -1470,21 +1470,21 @@ static void mutt_format_s_x (char *dest,
   }
 
   mutt_format_string (dest, destlen, min_width, max_width,
-		      justify, ' ', s, mutt_strlen (s), arboreal);
+                      justify, ' ', s, mutt_strlen (s), arboreal);
 }
 
 void mutt_format_s (char *dest,
-		    size_t destlen,
-		    const char *prefix,
-		    const char *s)
+                    size_t destlen,
+                    const char *prefix,
+                    const char *s)
 {
   mutt_format_s_x (dest, destlen, prefix, s, 0);
 }
 
 void mutt_format_s_tree (char *dest,
-			 size_t destlen,
-			 const char *prefix,
-			 const char *s)
+                         size_t destlen,
+                         const char *prefix,
+                         const char *s)
 {
   mutt_format_s_x (dest, destlen, prefix, s, 1);
 }
@@ -1508,7 +1508,7 @@ void mutt_paddstr (int n, const char *s)
     if (k == (size_t)(-1) || k == (size_t)(-2))
     {
       if (k == (size_t) (-1))
-	memset (&mbstate, 0, sizeof (mbstate));
+        memset (&mbstate, 0, sizeof (mbstate));
       k = (k == (size_t)(-1)) ? 1 : len;
       wc = replacement_char ();
     }
@@ -1518,7 +1518,7 @@ void mutt_paddstr (int n, const char *s)
     if (w >= 0)
     {
       if (w > n)
-	break;
+        break;
       mutt_addwch (wc);
       n -= w;
     }

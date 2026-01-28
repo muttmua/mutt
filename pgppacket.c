@@ -106,54 +106,54 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
     {
       if (fread (&b, 1, 1, fp) < 1)
       {
-	perror ("fread");
-	goto bail;
+        perror ("fread");
+        goto bail;
       }
 
       if (b < 192)
       {
-	material = b;
-	partial = 0;
-	/* material -= 1; */
+        material = b;
+        partial = 0;
+        /* material -= 1; */
       }
       else if (192 <= b && b <= 223)
       {
-	material = (b - 192) * 256;
-	if (fread (&b, 1, 1, fp) < 1)
-	{
-	  perror ("fread");
-	  goto bail;
-	}
-	material += b + 192;
-	partial = 0;
-	/* material -= 2; */
+        material = (b - 192) * 256;
+        if (fread (&b, 1, 1, fp) < 1)
+        {
+          perror ("fread");
+          goto bail;
+        }
+        material += b + 192;
+        partial = 0;
+        /* material -= 2; */
       }
       else if (b < 255)
       {
-	material = 1 << (b & 0x1f);
-	partial = 1;
-	/* material -= 1; */
+        material = 1 << (b & 0x1f);
+        partial = 1;
+        /* material -= 1; */
       }
       else
-	/* b == 255 */
+        /* b == 255 */
       {
-	unsigned char buf[4];
-	if (fread (buf, 4, 1, fp) < 1)
-	{
-	  perror ("fread");
-	  goto bail;
-	}
-	/*assert( sizeof(material) >= 4 ); */
-	material = buf[0] << 24;
-	material |= buf[1] << 16;
-	material |= buf[2] << 8;
-	material |= buf[3];
-	partial = 0;
-	/* material -= 5; */
+        unsigned char buf[4];
+        if (fread (buf, 4, 1, fp) < 1)
+        {
+          perror ("fread");
+          goto bail;
+        }
+        /*assert( sizeof(material) >= 4 ); */
+        material = buf[0] << 24;
+        material |= buf[1] << 16;
+        material |= buf[2] << 8;
+        material |= buf[3];
+        partial = 0;
+        /* material -= 5; */
       }
 
       if (read_material (material, &used, fp) == -1)
-	goto bail;
+        goto bail;
 
     }
     while (partial);
@@ -169,14 +169,14 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
     {
       case 0:
       {
-	if (fread (&b, 1, 1, fp) < 1)
-	{
-	  perror ("fread");
-	  goto bail;
-	}
+        if (fread (&b, 1, 1, fp) < 1)
+        {
+          perror ("fread");
+          goto bail;
+        }
 
-	material = b;
-	break;
+        material = b;
+        break;
       }
 
       case 1:
@@ -185,24 +185,24 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
 
       case 2:
       {
-	int i;
+        int i;
 
-	if (!bytes)
-	  bytes = 4;
+        if (!bytes)
+          bytes = 4;
 
-	material = 0;
+        material = 0;
 
-	for (i = 0; i < bytes; i++)
-	{
-	  if (fread (&b, 1, 1, fp) < 1)
-	  {
-	    perror ("fread");
-	    goto bail;
-	  }
+        for (i = 0; i < bytes; i++)
+        {
+          if (fread (&b, 1, 1, fp) < 1)
+          {
+            perror ("fread");
+            goto bail;
+          }
 
-	  material = (material << 8) + b;
-	}
-	break;
+          material = (material << 8) + b;
+        }
+        break;
       }
 
       default:

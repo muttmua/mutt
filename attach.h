@@ -62,7 +62,7 @@ int mutt_view_attachment (FILE*, BODY *, int, HEADER *, ATTACH_CONTEXT *);
 
 int mutt_tag_attach (MUTTMENU *menu, int n, int m);
 int mutt_attach_display_loop (MUTTMENU *menu, int op, HEADER *hdr,
-			      ATTACH_CONTEXT *acvtx, int recv);
+                              ATTACH_CONTEXT *acvtx, int recv);
 
 
 void mutt_save_attachment_list (ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu);

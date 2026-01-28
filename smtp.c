@@ -378,10 +378,10 @@ mutt_smtp_send (const ADDRESS* from, const ADDRESS* to, const ADDRESS* cc,
     if (DsnReturn && mutt_bit_isset (Capabilities, DSN))
       ret += snprintf (buf + ret, sizeof (buf) - ret, " RET=%s", DsnReturn);
     if (mutt_bit_isset (Capabilities, SMTPUTF8) &&
-	(address_uses_unicode(envfrom) ||
-	 addresses_use_unicode(to) ||
-	 addresses_use_unicode(cc) ||
-	 addresses_use_unicode(bcc)))
+        (address_uses_unicode(envfrom) ||
+         addresses_use_unicode(to) ||
+         addresses_use_unicode(cc) ||
+         addresses_use_unicode(bcc)))
       ret += snprintf (buf + ret, sizeof (buf) - ret, " SMTPUTF8");
     safe_strncat (buf, sizeof (buf), "\r\n", 3);
     if (mutt_socket_write (conn, buf) == -1)
@@ -579,39 +579,39 @@ static int smtp_auth (CONNECTION* conn)
     {
       delim = strchr (method, ':');
       if (delim)
-	*delim++ = '\0';
+        *delim++ = '\0';
       if (! method[0])
-	continue;
+        continue;
 
       dprint (2, (debugfile, "smtp_authenticate: Trying method %s\n", method));
 
       if (!ascii_strcasecmp (method, "oauthbearer"))
       {
-	r = smtp_auth_oauth (conn, 0);
+        r = smtp_auth_oauth (conn, 0);
       }
       else if (!ascii_strcasecmp (method, "xoauth2"))
       {
-	r = smtp_auth_oauth (conn, 1);
+        r = smtp_auth_oauth (conn, 1);
       }
       else
       {
 #if defined(USE_SASL_CYRUS)
-	r = smtp_auth_sasl (conn, method);
+        r = smtp_auth_sasl (conn, method);
 #elif defined(USE_SASL_GNU)
-	r = smtp_auth_gsasl (conn, method);
+        r = smtp_auth_gsasl (conn, method);
 #else
-	mutt_error (_("SMTP authentication method %s requires SASL"), method);
-	mutt_sleep (1);
-	continue;
+        mutt_error (_("SMTP authentication method %s requires SASL"), method);
+        mutt_sleep (1);
+        continue;
 #endif
       }
       if (r == SMTP_AUTH_FAIL && delim)
       {
-	mutt_error (_("%s authentication failed, trying next method"), method);
-	mutt_sleep (1);
+        mutt_error (_("%s authentication failed, trying next method"), method);
+        mutt_sleep (1);
       }
       else if (r != SMTP_AUTH_UNAVAIL)
-	break;
+        break;
     }
 
     FREE (&methods);
@@ -619,9 +619,9 @@ static int smtp_auth (CONNECTION* conn)
   else
   {
 #if defined(USE_SASL_CYRUS)
-	r = smtp_auth_sasl (conn, AuthMechs);
+        r = smtp_auth_sasl (conn, AuthMechs);
 #elif defined(USE_SASL_GNU)
-	r = smtp_auth_gsasl (conn, NULL);
+        r = smtp_auth_gsasl (conn, NULL);
 #else
     mutt_error (_("SMTP authentication requires SASL"));
     mutt_sleep (1);
@@ -824,7 +824,7 @@ static int smtp_auth_gsasl (CONNECTION *conn, const char *method)
       first_response = 0;
       /* Use input_buf as a temp buffer. We've already processed the input */
       if (mutt_buffer_from_base64 (input_buf, mutt_b2s (smtp_response_buf)) < 0)
-	mutt_buffer_clear (smtp_response_buf);
+        mutt_buffer_clear (smtp_response_buf);
     }
 
     gsasl_rc = gsasl_step64 (gsasl_session, mutt_b2s (smtp_response_buf),

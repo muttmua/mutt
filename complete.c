@@ -110,18 +110,18 @@ int mutt_complete (char *s, size_t slen)
     {
       if (p == s) /* absolute path */
       {
-	p = s + 1;
-	mutt_buffer_strcpy (dirpart, "/");
-	mutt_buffer_strcpy (filepart, p);
-	dirp = opendir (mutt_b2s (dirpart));
+        p = s + 1;
+        mutt_buffer_strcpy (dirpart, "/");
+        mutt_buffer_strcpy (filepart, p);
+        dirp = opendir (mutt_b2s (dirpart));
       }
       else
       {
-	mutt_buffer_substrcpy (dirpart, s, p);
-	mutt_buffer_strcpy (filepart, p + 1);
-	mutt_buffer_strcpy (exp_dirpart, mutt_b2s (dirpart));
-	mutt_buffer_expand_path (exp_dirpart);
-	dirp = opendir (mutt_b2s (exp_dirpart));
+        mutt_buffer_substrcpy (dirpart, s, p);
+        mutt_buffer_strcpy (filepart, p + 1);
+        mutt_buffer_strcpy (exp_dirpart, mutt_b2s (dirpart));
+        mutt_buffer_expand_path (exp_dirpart);
+        dirp = opendir (mutt_b2s (exp_dirpart));
       }
     }
     else
@@ -149,9 +149,9 @@ int mutt_complete (char *s, size_t slen)
     {
       if (mutt_strcmp (".", de->d_name) != 0 && mutt_strcmp ("..", de->d_name) != 0)
       {
-	mutt_buffer_strcpy (filepart, de->d_name);
-	init++;
-	break;
+        mutt_buffer_strcpy (filepart, de->d_name);
+        init++;
+        break;
       }
     }
   }
@@ -164,32 +164,32 @@ int mutt_complete (char *s, size_t slen)
       {
         char *fpch;
 
-	for (i=0, fpch = filepart->data; *fpch && de->d_name[i]; i++, fpch++)
-	{
-	  if (*fpch != de->d_name[i])
-	    break;
-	}
+        for (i=0, fpch = filepart->data; *fpch && de->d_name[i]; i++, fpch++)
+        {
+          if (*fpch != de->d_name[i])
+            break;
+        }
         *fpch = 0;
         mutt_buffer_fix_dptr (filepart);
       }
       else
       {
-	struct stat st;
+        struct stat st;
 
-	mutt_buffer_strcpy (filepart, de->d_name);
+        mutt_buffer_strcpy (filepart, de->d_name);
 
-	/* check to see if it is a directory */
-	if (mutt_buffer_len (dirpart))
-	{
-	  mutt_buffer_strcpy (buf, mutt_b2s (exp_dirpart));
-	  mutt_buffer_addch (buf, '/');
-	}
-	else
-	  mutt_buffer_clear (buf);
-	mutt_buffer_addstr (buf, mutt_b2s (filepart));
-	if (stat (mutt_b2s (buf), &st) != -1 && (st.st_mode & S_IFDIR))
+        /* check to see if it is a directory */
+        if (mutt_buffer_len (dirpart))
+        {
+          mutt_buffer_strcpy (buf, mutt_b2s (exp_dirpart));
+          mutt_buffer_addch (buf, '/');
+        }
+        else
+          mutt_buffer_clear (buf);
+        mutt_buffer_addstr (buf, mutt_b2s (filepart));
+        if (stat (mutt_b2s (buf), &st) != -1 && (st.st_mode & S_IFDIR))
           mutt_buffer_addch (filepart, '/');
-	init = 1;
+        init = 1;
       }
     }
   }

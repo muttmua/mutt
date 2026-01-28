@@ -68,7 +68,7 @@ int mutt_socket_open (CONNECTION* conn)
   rc = conn->conn_open (conn);
 
   dprint (2, (debugfile, "Connected to %s:%d on fd=%d\n",
-	      NONULL (conn->account.host), conn->account.port, conn->fd));
+              NONULL (conn->account.host), conn->account.port, conn->fd));
 
   return rc;
 }
@@ -495,7 +495,7 @@ int raw_socket_read (CONNECTION* conn, char* buf, size_t len)
   if (rc < 0)
   {
     mutt_error (_("Error talking to %s (%s)"), conn->account.host,
-		strerror (errno));
+                strerror (errno));
     mutt_sleep (2);
     return -1;
   }
@@ -635,12 +635,12 @@ int raw_socket_open (CONNECTION* conn)
     {
       if ((rc = socket_connect (fd, cur->ai_addr)) == 0)
       {
-	fcntl (fd, F_SETFD, FD_CLOEXEC);
-	conn->fd = fd;
-	break;
+        fcntl (fd, F_SETFD, FD_CLOEXEC);
+        conn->fd = fd;
+        break;
       }
       else
-	close (fd);
+        close (fd);
     }
   }
 
@@ -697,11 +697,11 @@ int raw_socket_open (CONNECTION* conn)
       if ((rc = socket_connect (fd, (struct sockaddr*) &sin)) == 0)
       {
         fcntl (fd, F_SETFD, FD_CLOEXEC);
-	conn->fd = fd;
-	break;
+        conn->fd = fd;
+        break;
       }
       else
-	close (fd);
+        close (fd);
     }
   }
 

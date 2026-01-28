@@ -33,7 +33,7 @@
 #  define blk0(i) block->l[i]
 #else
 #  define blk0(i) (block->l[i] = (rol(block->l[i],24)&0xFF00FF00) \
-		    |(rol(block->l[i],8)&0x00FF00FF))
+                    |(rol(block->l[i],8)&0x00FF00FF))
 #endif
 
 #define blk(i) (block->l[i&15] = rol(block->l[(i+13)&15]^block->l[(i+8)&15] \
@@ -131,7 +131,7 @@ uint32_t j;
 
     j = context->count[0];
     if ((context->count[0] += len << 3) < j)
-	context->count[1]++;
+        context->count[1]++;
     context->count[1] += (len>>29);
     j = (j >> 3) & 63;
     if ((j + len) > 63) {
@@ -165,11 +165,11 @@ unsigned char c;
 
     for (i = 0; i < 2; i++)
     {
-	uint32_t t = context->count[i];
-	int j;
+        uint32_t t = context->count[i];
+        int j;
 
-	for (j = 0; j < 4; t >>= 8, j++)
-	    *--fcp = (unsigned char) t
+        for (j = 0; j < 4; t >>= 8, j++)
+            *--fcp = (unsigned char) t
     }
 #else
     for (i = 0; i < 8; i++) {
@@ -180,7 +180,7 @@ unsigned char c;
     c = 0200;
     SHA1Update(context, &c, 1);
     while ((context->count[0] & 504) != 448) {
-	c = 0000;
+        c = 0000;
         SHA1Update(context, &c, 1);
     }
     SHA1Update(context, finalcount, 8);  /* Should cause a SHA1Transform() */

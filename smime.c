@@ -170,16 +170,16 @@ int smime_valid_passphrase (void)
 /* This is almost identical to ppgp's invoking interface. */
 
 static const char *_mutt_fmt_smime_command (char *dest,
-					    size_t destlen,
-					    size_t col,
+                                            size_t destlen,
+                                            size_t col,
                                             int cols,
-					    char op,
-					    const char *src,
-					    const char *prefix,
-					    const char *ifstring,
-					    const char *elsestring,
-					    void *data,
-					    format_flag flags)
+                                            char op,
+                                            const char *src,
+                                            const char *prefix,
+                                            const char *ifstring,
+                                            const char *elsestring,
+                                            void *data,
+                                            format_flag flags)
 {
   char fmt[16];
   struct smime_command_context *cctx = (struct smime_command_context *) data;
@@ -191,32 +191,32 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {
       if (!optional)
       {
-	BUFFER *path, *buf1, *buf2;
-	struct stat sb;
+        BUFFER *path, *buf1, *buf2;
+        struct stat sb;
 
         path = mutt_buffer_pool_get ();
         buf1 = mutt_buffer_pool_get ();
         buf2 = mutt_buffer_pool_get ();
 
-	mutt_buffer_strcpy (path, NONULL (SmimeCALocation));
-	mutt_buffer_expand_path (path);
-	mutt_buffer_quote_filename (buf1, mutt_b2s (path));
+        mutt_buffer_strcpy (path, NONULL (SmimeCALocation));
+        mutt_buffer_expand_path (path);
+        mutt_buffer_quote_filename (buf1, mutt_b2s (path));
 
-	if (stat (mutt_b2s (path), &sb) != 0 ||
+        if (stat (mutt_b2s (path), &sb) != 0 ||
             !S_ISDIR (sb.st_mode))
-	  mutt_buffer_printf (buf2, "-CAfile %s", mutt_b2s (buf1));
-	else
-	  mutt_buffer_printf (buf2, "-CApath %s", mutt_b2s (buf1));
+          mutt_buffer_printf (buf2, "-CAfile %s", mutt_b2s (buf1));
+        else
+          mutt_buffer_printf (buf2, "-CApath %s", mutt_b2s (buf1));
 
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, mutt_b2s (buf2));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, mutt_b2s (buf2));
 
         mutt_buffer_pool_release (&path);
         mutt_buffer_pool_release (&buf1);
         mutt_buffer_pool_release (&buf2);
       }
       else if (!SmimeCALocation)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -224,11 +224,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* certificate (list) */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL(cctx->certificates));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL(cctx->certificates));
       }
       else if (!cctx->certificates)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -236,11 +236,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* intermediate certificates  */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL(cctx->intermediates));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL(cctx->intermediates));
       }
       else if (!cctx->intermediates)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -248,11 +248,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* detached signature */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL (cctx->sig_fname));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL (cctx->sig_fname));
       }
       else if (!cctx->sig_fname)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -260,11 +260,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* private key */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL (cctx->key));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL (cctx->key));
       }
       else if (!cctx->key)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -272,11 +272,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* algorithm for encryption */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL (cctx->cryptalg));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL (cctx->cryptalg));
       }
       else if (!cctx->key)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -284,11 +284,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* file to process */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL (cctx->fname));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL (cctx->fname));
       }
       else if (!cctx->fname)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -296,11 +296,11 @@ static const char *_mutt_fmt_smime_command (char *dest,
     {           /* algorithm for the signature message digest */
       if (!optional)
       {
-	snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-	snprintf (dest, destlen, fmt, NONULL (cctx->digestalg));
+        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+        snprintf (dest, destlen, fmt, NONULL (cctx->digestalg));
       }
       else if (!cctx->key)
-	optional = 0;
+        optional = 0;
       break;
     }
 
@@ -311,10 +311,10 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
   if (optional)
     mutt_FormatString (dest, destlen, col, cols, ifstring, _mutt_fmt_smime_command,
-		       data, 0);
+                       data, 0);
   else if (flags & MUTT_FORMAT_OPTIONAL)
     mutt_FormatString (dest, destlen, col, cols, elsestring, _mutt_fmt_smime_command,
-		       data, 0);
+                       data, 0);
 
   return (src);
 }
@@ -322,7 +322,7 @@ static const char *_mutt_fmt_smime_command (char *dest,
 
 
 static void mutt_smime_command (char *d, size_t dlen,
-				struct smime_command_context *cctx, const char *fmt)
+                                struct smime_command_context *cctx, const char *fmt)
 {
   mutt_FormatString (d, dlen, 0, MuttIndexWindow->cols, NONULL(fmt), _mutt_fmt_smime_command,
                      cctx, 0);
@@ -333,15 +333,15 @@ static void mutt_smime_command (char *d, size_t dlen,
 
 
 static pid_t smime_invoke (FILE **smimein, FILE **smimeout, FILE **smimeerr,
-			   int smimeinfd, int smimeoutfd, int smimeerrfd,
-			   const char *fname,
-			   const char *sig_fname,
-			   const char *cryptalg,
-			   const char *digestalg,
-			   const char *key,
-			   const char *certificates,
-			   const char *intermediates,
-			   const char *format)
+                           int smimeinfd, int smimeoutfd, int smimeerrfd,
+                           const char *fname,
+                           const char *sig_fname,
+                           const char *cryptalg,
+                           const char *digestalg,
+                           const char *key,
+                           const char *certificates,
+                           const char *intermediates,
+                           const char *format)
 {
   struct smime_command_context cctx;
   char cmd[HUGE_STRING];
@@ -362,7 +362,7 @@ static pid_t smime_invoke (FILE **smimein, FILE **smimeout, FILE **smimeerr,
   mutt_smime_command (cmd, sizeof (cmd), &cctx, format);
 
   return mutt_create_filter_fd (cmd, smimein, smimeout, smimeerr,
-				smimeinfd, smimeoutfd, smimeerrfd);
+                                smimeinfd, smimeoutfd, smimeerrfd);
 }
 
 
@@ -827,7 +827,7 @@ void _smime_getkeys (char *mailbox)
   if (!key)
   {
     snprintf(buf, sizeof(buf), _("Enter keyID for %s: "),
-	     mailbox);
+             mailbox);
     key = smime_ask_for_key (buf, KEYFLAG_CANENCRYPT, 0);
   }
 
@@ -853,10 +853,10 @@ void smime_getkeys (ENVELOPE *env)
   if (option (OPTSDEFAULTDECRYPTKEY) && SmimeDefaultKey)
   {
     mutt_buffer_printf (SmimeKeyToUse, "%s/%s",
-	      NONULL (SmimeKeys), SmimeDefaultKey);
+              NONULL (SmimeKeys), SmimeDefaultKey);
 
     mutt_buffer_printf (SmimeCertToUse, "%s/%s",
-	      NONULL(SmimeCertificates), SmimeDefaultKey);
+              NONULL(SmimeCertificates), SmimeDefaultKey);
 
     return;
   }
@@ -904,8 +904,8 @@ char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode)
     if ((key == NULL) && (! oppenc_mode))
     {
       snprintf(buf, sizeof(buf),
-	       _("Enter keyID for %s: "),
-	       q->mailbox);
+               _("Enter keyID for %s: "),
+               q->mailbox);
       key = smime_ask_for_key (buf, KEYFLAG_CANENCRYPT, 1);
     }
     if (!key)
@@ -964,9 +964,9 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
   mutt_buffer_pool_release (&tmpfname);
 
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
-			       -1, fileno (fpout), fileno (fperr),
-			       certificate, NULL, NULL, NULL, NULL, NULL, NULL,
-			       SmimeGetCertEmailCommand))== -1)
+                               -1, fileno (fpout), fileno (fperr),
+                               certificate, NULL, NULL, NULL, NULL, NULL, NULL,
+                               SmimeGetCertEmailCommand))== -1)
   {
     mutt_message (_("Error: unable to create OpenSSL subprocess!"));
     safe_fclose (&fperr);
@@ -1063,9 +1063,9 @@ static char *smime_extract_certificate (const char *infile)
      extract the full set of certificates directly.
   */
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
-			       -1, fileno (fppk7out), fileno (fperr),
-			       infile, NULL, NULL, NULL, NULL, NULL, NULL,
-			       SmimePk7outCommand))== -1)
+                               -1, fileno (fppk7out), fileno (fperr),
+                               infile, NULL, NULL, NULL, NULL, NULL, NULL,
+                               SmimePk7outCommand))== -1)
   {
     mutt_any_key_to_continue (_("Error: unable to create OpenSSL subprocess!"));
     goto cleanup;
@@ -1099,9 +1099,9 @@ static char *smime_extract_certificate (const char *infile)
   /* Step 2: Extract the certificates from a PKCS#7 structure.
    */
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
-			       -1, fileno (fpcertfile), fileno (fperr),
-			       mutt_b2s (pk7out), NULL, NULL, NULL, NULL, NULL, NULL,
-			       SmimeGetCertCommand))== -1)
+                               -1, fileno (fpcertfile), fileno (fperr),
+                               mutt_b2s (pk7out), NULL, NULL, NULL, NULL, NULL, NULL,
+                               SmimeGetCertCommand))== -1)
   {
     mutt_any_key_to_continue (_("Error: unable to create OpenSSL subprocess!"));
     mutt_unlink (mutt_b2s (pk7out));
@@ -1174,10 +1174,10 @@ static char *smime_extract_signer_certificate (const char *infile)
   /* Extract signer's certificate
    */
   if ((thepid =  smime_invoke (NULL, NULL, NULL,
-			       -1, -1, fileno (fperr),
-			       infile, NULL, NULL, NULL, NULL,
+                               -1, -1, fileno (fperr),
+                               infile, NULL, NULL, NULL, NULL,
                                mutt_b2s (certfile), NULL,
-			       SmimeGetSignerCertCommand))== -1)
+                               SmimeGetSignerCertCommand))== -1)
   {
     mutt_any_key_to_continue (_("Error: unable to create OpenSSL subprocess!"));
     goto cleanup;
@@ -1257,9 +1257,9 @@ void smime_invoke_import (const char *infile, const char *mailbox)
     mutt_endwin (NULL);
 
     if ((thepid =  smime_invoke (&smimein, NULL, NULL,
-				 -1, fileno(fpout), fileno(fperr),
-				 certfile, NULL, NULL, NULL, NULL, NULL, NULL,
-				 SmimeImportCertCommand))== -1)
+                                 -1, fileno(fpout), fileno(fperr),
+                                 certfile, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 SmimeImportCertCommand))== -1)
     {
       mutt_message (_("Error: unable to create OpenSSL subprocess!"));
       return;
@@ -1306,8 +1306,8 @@ int smime_verify_sender(HEADER *h)
 
   if (h->security & ENCRYPT)
     mutt_copy_message (fpout, Context, h,
-		       MUTT_CM_DECODE_CRYPT & MUTT_CM_DECODE_SMIME,
-		       CH_MIME|CH_WEED|CH_NONEWLINE);
+                       MUTT_CM_DECODE_CRYPT & MUTT_CM_DECODE_SMIME,
+                       CH_MIME|CH_WEED|CH_NONEWLINE);
   else
     mutt_copy_message (fpout, Context, h, 0, 0);
 
@@ -1332,11 +1332,11 @@ int smime_verify_sender(HEADER *h)
       mutt_unlink(mutt_b2s (tempfname));
       if (smime_handle_cert_email (certfile, mbox, 0, NULL, NULL))
       {
-	if (isendwin())
+        if (isendwin())
           mutt_any_key_to_continue(NULL);
       }
       else
-	retval = 0;
+        retval = 0;
       mutt_unlink(certfile);
       FREE (&certfile);
     }
@@ -1370,26 +1370,26 @@ cleanup:
 
 static
 pid_t smime_invoke_encrypt (FILE **smimein, FILE **smimeout, FILE **smimeerr,
-			    int smimeinfd, int smimeoutfd, int smimeerrfd,
-			    const char *fname, const char *uids)
+                            int smimeinfd, int smimeoutfd, int smimeerrfd,
+                            const char *fname, const char *uids)
 {
   return smime_invoke (smimein, smimeout, smimeerr,
-		       smimeinfd, smimeoutfd, smimeerrfd,
-		       fname, NULL, SmimeCryptAlg, NULL, NULL, uids, NULL,
-		       SmimeEncryptCommand);
+                       smimeinfd, smimeoutfd, smimeerrfd,
+                       fname, NULL, SmimeCryptAlg, NULL, NULL, uids, NULL,
+                       SmimeEncryptCommand);
 }
 
 
 static
 pid_t smime_invoke_sign (FILE **smimein, FILE **smimeout, FILE **smimeerr,
-			 int smimeinfd, int smimeoutfd, int smimeerrfd,
-			 const char *fname)
+                         int smimeinfd, int smimeoutfd, int smimeerrfd,
+                         const char *fname)
 {
   return smime_invoke (smimein, smimeout, smimeerr, smimeinfd, smimeoutfd,
-		       smimeerrfd, fname, NULL, NULL, SmimeDigestAlg,
+                       smimeerrfd, fname, NULL, NULL, SmimeDigestAlg,
                        mutt_b2s (SmimeKeyToUse),
-		       mutt_b2s (SmimeCertToUse), mutt_b2s (SmimeIntermediateToUse),
-		       SmimeSignCommand);
+                       mutt_b2s (SmimeCertToUse), mutt_b2s (SmimeIntermediateToUse),
+                       SmimeSignCommand);
 }
 
 
@@ -1455,8 +1455,8 @@ BODY *smime_build_smime_entity (BODY *a, char *certlist)
 
   if ((thepid =
        smime_invoke_encrypt (&smimein, NULL, NULL, -1,
-			     fileno (fpout), fileno (smimeerr),
-			     mutt_b2s (smimeinfile), certfile)) == -1)
+                             fileno (fpout), fileno (smimeerr),
+                             mutt_b2s (smimeinfile), certfile)) == -1)
   {
     mutt_unlink (mutt_b2s (smimeinfile));
     goto cleanup;
@@ -1729,23 +1729,23 @@ cleanup:
 
 static
 pid_t smime_invoke_verify (FILE **smimein, FILE **smimeout, FILE **smimeerr,
-			   int smimeinfd, int smimeoutfd, int smimeerrfd,
-			   const char *fname, const char *sig_fname, int opaque)
+                           int smimeinfd, int smimeoutfd, int smimeerrfd,
+                           const char *fname, const char *sig_fname, int opaque)
 {
   return smime_invoke (smimein, smimeout, smimeerr, smimeinfd, smimeoutfd,
-		       smimeerrfd, fname, sig_fname, NULL, NULL, NULL, NULL, NULL,
-		       (opaque ? SmimeVerifyOpaqueCommand : SmimeVerifyCommand));
+                       smimeerrfd, fname, sig_fname, NULL, NULL, NULL, NULL, NULL,
+                       (opaque ? SmimeVerifyOpaqueCommand : SmimeVerifyCommand));
 }
 
 
 static
 pid_t smime_invoke_decrypt (FILE **smimein, FILE **smimeout, FILE **smimeerr,
-			    int smimeinfd, int smimeoutfd, int smimeerrfd,
-			    const char *fname)
+                            int smimeinfd, int smimeoutfd, int smimeerrfd,
+                            const char *fname)
 {
   return smime_invoke (smimein, smimeout, smimeerr, smimeinfd, smimeoutfd,
-		       smimeerrfd, fname, NULL, NULL, NULL, mutt_b2s (SmimeKeyToUse),
-		       mutt_b2s (SmimeCertToUse), NULL, SmimeDecryptCommand);
+                       smimeerrfd, fname, NULL, NULL, NULL, mutt_b2s (SmimeKeyToUse),
+                       mutt_b2s (SmimeCertToUse), NULL, SmimeDecryptCommand);
 }
 
 
@@ -1814,7 +1814,7 @@ int smime_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
 
       line = mutt_read_line (line, &linelen, smimeerr, &lineno, 0);
       if (linelen && !ascii_strcasecmp (line, "verification successful"))
-	badsig = 0;
+        badsig = 0;
 
       FREE (&line);
     }
@@ -1899,7 +1899,7 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
 
   if ((type & ENCRYPT) &&
       (thepid = smime_invoke_decrypt (&smimein, NULL, NULL, -1,
-				      fileno (smimeout),  fileno (smimeerr),
+                                      fileno (smimeout),  fileno (smimeerr),
                                       mutt_b2s (tmpfname))) == -1)
   {
     mutt_unlink (mutt_b2s (tmpfname));
@@ -1908,9 +1908,9 @@ static BODY *smime_handle_entity (BODY *m, STATE *s, FILE *outFile)
     goto cleanup;
   }
   else if ((type & SIGNOPAQUE) &&
-	   (thepid = smime_invoke_verify (&smimein, NULL, NULL, -1,
-					  fileno (smimeout), fileno (smimeerr), NULL,
-					  mutt_b2s (tmpfname), SIGNOPAQUE)) == -1)
+           (thepid = smime_invoke_verify (&smimein, NULL, NULL, -1,
+                                          fileno (smimeout), fileno (smimeerr), NULL,
+                                          mutt_b2s (tmpfname), SIGNOPAQUE)) == -1)
   {
     mutt_unlink (mutt_b2s (tmpfname));
     if (s->flags & MUTT_DISPLAY)

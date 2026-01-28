@@ -248,8 +248,8 @@ int mutt_bcache_exists(body_cache_t *bcache, const char *id)
 }
 
 int mutt_bcache_list(body_cache_t *bcache,
-		     int (*want_id)(const char *id, body_cache_t *bcache,
-				    void *data), void *data)
+                     int (*want_id)(const char *id, body_cache_t *bcache,
+                                    void *data), void *data)
 {
   DIR *d = NULL;
   struct dirent *de;
@@ -265,7 +265,7 @@ int mutt_bcache_list(body_cache_t *bcache,
   while ((de = readdir (d)))
   {
     if (mutt_strncmp (de->d_name, ".", 1) == 0 ||
-	mutt_strncmp (de->d_name, "..", 2) == 0)
+        mutt_strncmp (de->d_name, "..", 2) == 0)
       continue;
 
     dprint (3, (debugfile, "bcache: list: dir: '%s', id :'%s'\n", bcache->path, de->d_name));

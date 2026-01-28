@@ -36,16 +36,16 @@ char *strsep (char **stringp, const char *delim)
       char ch = delim[0];
 
       if (ch == '\0')
-	end = NULL;
+        end = NULL;
       else
-	{
-	  if (*begin == ch)
-	    end = begin;
-	  else if (*begin == '\0')
-	    end = NULL;
-	  else
-	    end = strchr (begin + 1, ch);
-	}
+        {
+          if (*begin == ch)
+            end = begin;
+          else if (*begin == '\0')
+            end = NULL;
+          else
+            end = strchr (begin + 1, ch);
+        }
     }
   else
     /* Find the end of the token.  */

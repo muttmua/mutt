@@ -640,9 +640,9 @@ enum
   OPTNEEDRESCORE,	/* (pseudo) set when the `score' command is used */
   OPTATTACHMSG,		/* (pseudo) used by attach-message */
   OPTKEEPQUIET,		/* (pseudo) shut up the message and refresh
-			 * 	    functions while we are executing an
-			 * 	    external program.
-			 */
+                         * 	    functions while we are executing an
+                         * 	    external program.
+                         */
   OPTMENUCALLER,	/* (pseudo) tell menu to give caller a take */
   OPTREDRAWTREE,	/* (pseudo) redraw the thread tree */
   OPTPGPCHECKTRUST,	/* (pseudo) used by pgp_select_key () */
@@ -798,28 +798,28 @@ typedef struct body
   char *description;            /* content-description */
   char *form_name;		/* Content-Disposition form-data name param */
   LOFF_T hdr_offset;            /* offset in stream where the headers begin.
-				 * this info is used when invoking metamail,
-				 * where we need to send the headers of the
-				 * attachment
-				 */
+                                 * this info is used when invoking metamail,
+                                 * where we need to send the headers of the
+                                 * attachment
+                                 */
   LOFF_T offset;                /* offset where the actual data begins */
   LOFF_T length;                /* length (in bytes) of attachment */
   char *filename;               /* when sending a message, this is the file
-				 * to which this structure refers
-				 */
+                                 * to which this structure refers
+                                 */
   char *d_filename;		/* filename to be used for the
-				 * content-disposition header.
-				 * If NULL, filename is used
-				 * instead.
-				 */
+                                 * content-disposition header.
+                                 * If NULL, filename is used
+                                 * instead.
+                                 */
   char *charset;                /* send mode: charset of attached file as stored
                                  * on disk.  the charset used in the generated
                                  * message is stored in parameter. */
   CONTENT *content;             /* structure used to store detailed info about
-				 * the content of the attachment.  this is used
-				 * to determine what content-transfer-encoding
-				 * is required when sending mail.
-				 */
+                                 * the content of the attachment.  this is used
+                                 * to determine what content-transfer-encoding
+                                 * is required when sending mail.
+                                 */
   struct body *next;            /* next attachment in the list */
   struct body *parts;           /* parts of a multipart or message/rfc822 */
   struct header *hdr;		/* header information for message/rfc822 */
@@ -829,8 +829,8 @@ typedef struct body
   signed short attach_count;
 
   time_t stamp;			/* time stamp of last
-				 * encoding update.
-				 */
+                                 * encoding update.
+                                 */
 
   struct envelope *mime_headers; /* memory hole protected headers */
 
@@ -839,9 +839,9 @@ typedef struct body
   unsigned int disposition : 2; /* content-disposition */
   unsigned int use_disp : 1;    /* Content-Disposition uses filename= ? */
   unsigned int unlink : 1;      /* flag to indicate the the file named by
-				 * "filename" should be unlink()ed before
-				 * free()ing this structure
-				 */
+                                 * "filename" should be unlink()ed before
+                                 * free()ing this structure
+                                 */
   unsigned int tagged : 1;
   unsigned int deleted : 1;	/* attachment marked for deletion */
 
@@ -902,9 +902,9 @@ typedef struct header
   unsigned int recip_valid : 1;  	/* is_recipient is valid */
   unsigned int active : 1;	    	/* message is not to be removed */
   unsigned int trash : 1;		/* message is marked as trashed on disk.
-					 * This flag is used by the maildir_trash
-					 * option.
-					 */
+                                         * This flag is used by the maildir_trash
+                                         * option.
+                                         */
 
   /* timezone of the sender of this message */
   unsigned int zhours : 5;

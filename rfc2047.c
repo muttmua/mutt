@@ -68,11 +68,11 @@ extern char RFC822Specials[];
 const char RFC2047Specials[] = "@.,;:<>[]\\\"()?/= \t";
 
 typedef size_t (*encoder_t) (char *, ICONV_CONST char *, size_t,
-			     const char *);
+                             const char *);
 
 static size_t convert_string (ICONV_CONST char *f, size_t flen,
-			      const char *from, const char *to,
-			      char **t, size_t *tlen)
+                              const char *from, const char *to,
+                              char **t, size_t *tlen)
 {
   iconv_t cd;
   char *buf, *ob;
@@ -185,14 +185,14 @@ char *mutt_choose_charset (const char *fromcode, const char *charsets,
       tocode = t;
       if (d)
       {
-	FREE (&e);
-	e = s;
+        FREE (&e);
+        e = s;
       }
       else
-	FREE (&s);
+        FREE (&s);
       elen = slen;
       if (!bestn)
-	break;
+        break;
     }
     else
     {
@@ -214,7 +214,7 @@ char *mutt_choose_charset (const char *fromcode, const char *charsets,
 }
 
 static size_t b_encoder (char *s, ICONV_CONST char *d, size_t dlen,
-			 const char *tocode)
+                         const char *tocode)
 {
   char *s0 = s;
 
@@ -255,7 +255,7 @@ static size_t b_encoder (char *s, ICONV_CONST char *d, size_t dlen,
 }
 
 static size_t q_encoder (char *s, ICONV_CONST char *d, size_t dlen,
-			 const char *tocode)
+                         const char *tocode)
 {
   static const char hex[] = "0123456789ABCDEF";
   char *s0 = s;
@@ -291,8 +291,8 @@ static size_t q_encoder (char *s, ICONV_CONST char *d, size_t dlen,
  * be already in tocode, which should be 8-bit and stateless.
  */
 static size_t try_block (ICONV_CONST char *d, size_t dlen,
-			 const char *fromcode, const char *tocode,
-			 encoder_t *encoder, size_t *wlen)
+                         const char *fromcode, const char *tocode,
+                         encoder_t *encoder, size_t *wlen)
 {
   char buf1[ENCWORD_LEN_MAX - ENCWORD_LEN_MIN + 1];
   iconv_t cd;
@@ -307,7 +307,7 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
     assert (cd != (iconv_t)(-1));
     ib = d, ibl = dlen, ob = buf1, obl = sizeof (buf1) - strlen (tocode);
     if (iconv (cd, &ib, &ibl, &ob, &obl) == (size_t)(-1) ||
-	iconv (cd, 0, 0, &ob, &obl) == (size_t)(-1))
+        iconv (cd, 0, 0, &ob, &obl) == (size_t)(-1))
     {
       assert (errno == E2BIG);
       iconv_close (cd);
@@ -330,7 +330,7 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
     unsigned char c = *p;
     assert (strchr (RFC2047Specials, '?'));
     if (c >= 0x7f || c < 0x20 || *p == '_' ||
-	(c != ' ' && strchr (RFC2047Specials, *p)))
+        (c != ' ' && strchr (RFC2047Specials, *p)))
       ++count;
   }
 
@@ -363,8 +363,8 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
  * Return the length of the encoded word.
  */
 static size_t encode_block (char *s, char *d, size_t dlen,
-			    const char *fromcode, const char *tocode,
-			    encoder_t encoder)
+                            const char *fromcode, const char *tocode,
+                            encoder_t encoder)
 {
   char buf1[ENCWORD_LEN_MAX - ENCWORD_LEN_MIN + 1];
   iconv_t cd;
@@ -394,8 +394,8 @@ static size_t encode_block (char *s, char *d, size_t dlen,
  * We start in column col, which limits the length of the word.
  */
 static size_t choose_block (char *d, size_t dlen, int col,
-			    const char *fromcode, const char *tocode,
-			    encoder_t *encoder, size_t *wlen)
+                            const char *fromcode, const char *tocode,
+                            encoder_t *encoder, size_t *wlen)
 {
   size_t n, nn;
   int utf8 = fromcode && !ascii_strcasecmp (fromcode, "utf-8");
@@ -411,7 +411,7 @@ static size_t choose_block (char *d, size_t dlen, int col,
     assert (n > 0);
     if (utf8)
       while (n > 1 && CONTINUATION_BYTE(d[n]))
-	--n;
+        --n;
   }
   return n;
 }
@@ -429,8 +429,8 @@ static size_t choose_block (char *d, size_t dlen, int col,
  * if col is non-zero, the preceding character was a space.
  */
 static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
-			   const char *fromcode, const char *charsets,
-			   char **e, size_t *elen, char *specials)
+                           const char *fromcode, const char *charsets,
+                           char **e, size_t *elen, char *specials)
 {
   int ret = 0;
   char *buf;
@@ -458,7 +458,7 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
   for (t = u; t < u + ulen; t++)
   {
     if ((*t & 0x80) ||
-	(*t == '=' && t[1] == '?' && (t == u || HSPACE(*(t-1)))))
+        (*t == '=' && t[1] == '?' && (t == u || HSPACE(*(t-1)))))
     {
       if (!t0) t0 = t;
       t1 = t;
@@ -512,9 +512,9 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
     t = t0 + 1;
     if (icode)
       while (t < u + ulen && CONTINUATION_BYTE(*t))
-	++t;
+        ++t;
     if (!try_block (t0, t - t0, icode, tocode, &encoder, &wlen) &&
-	col + (t0 - u) + wlen <= ENCWORD_LEN_MAX + 1)
+        col + (t0 - u) + wlen <= ENCWORD_LEN_MAX + 1)
       break;
   }
 
@@ -526,9 +526,9 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
     t = t1 - 1;
     if (icode)
       while (CONTINUATION_BYTE(*t))
-	--t;
+        --t;
     if (!try_block (t, t1 - t, icode, tocode, &encoder, &wlen) &&
-	1 + wlen + (u + ulen - t1) <= ENCWORD_LEN_MAX + 1)
+        1 + wlen + (u + ulen - t1) <= ENCWORD_LEN_MAX + 1)
       break;
   }
 
@@ -551,23 +551,23 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
     {
       /* See if we can fit the us-ascii suffix, too. */
       if (col + wlen + (u + ulen - t1) <= ENCWORD_LEN_MAX + 1)
-	break;
+        break;
       n = t1 - t - 1;
       if (icode)
-	while (CONTINUATION_BYTE(t[n]))
-	  --n;
+        while (CONTINUATION_BYTE(t[n]))
+          --n;
       assert (t + n >= t);
       if (!n)
       {
-	/* This should only happen in the really stupid case where the
-	   only word that needs encoding is one character long, but
-	   there is too much us-ascii stuff after it to use a single
-	   encoded word. We add the next word to the encoded region
-	   and try again. */
-	assert (t1 < u + ulen);
-	for (t1++; t1 < u + ulen && !HSPACE(*t1); t1++)
-	  ;
-	continue;
+        /* This should only happen in the really stupid case where the
+           only word that needs encoding is one character long, but
+           there is too much us-ascii stuff after it to use a single
+           encoded word. We add the next word to the encoded region
+           and try again. */
+        assert (t1 < u + ulen);
+        for (t1++; t1 < u + ulen && !HSPACE(*t1); t1++)
+          ;
+        continue;
       }
       n = choose_block (t, n, col, icode, tocode, &encoder, &wlen);
     }
@@ -690,7 +690,7 @@ static int rfc2047_decode_word (BUFFER *d, const char *s, char **charset)
     if (count == 4)
     {
       while (pp1 && *(pp1 + 1) != '=')
-	pp1 = strchr(pp1 + 1, '?');
+        pp1 = strchr(pp1 + 1, '?');
       if (!pp1)
         goto error_out_0;
     }
@@ -698,64 +698,64 @@ static int rfc2047_decode_word (BUFFER *d, const char *s, char **charset)
     switch (count)
     {
       case 2:
-	/* ignore language specification a la RFC 2231 */
-	t = pp1;
+        /* ignore language specification a la RFC 2231 */
+        t = pp1;
         if ((t1 = memchr (pp, '*', t - pp)))
-	  t = t1;
-	*charset = mutt_substrdup (pp, t);
-	break;
+          t = t1;
+        *charset = mutt_substrdup (pp, t);
+        break;
       case 3:
-	if (toupper ((unsigned char) *pp) == 'Q')
-	  enc = ENCQUOTEDPRINTABLE;
-	else if (toupper ((unsigned char) *pp) == 'B')
-	  enc = ENCBASE64;
-	else
-	  goto error_out_0;
-	break;
+        if (toupper ((unsigned char) *pp) == 'Q')
+          enc = ENCQUOTEDPRINTABLE;
+        else if (toupper ((unsigned char) *pp) == 'B')
+          enc = ENCBASE64;
+        else
+          goto error_out_0;
+        break;
       case 4:
-	if (enc == ENCQUOTEDPRINTABLE)
-	{
-	  for (; pp < pp1; pp++)
-	  {
-	    if (*pp == '_')
-	      *pd++ = ' ';
-	    else if (*pp == '=' &&
-		     (!(pp[1] & ~127) && hexval(pp[1]) != -1) &&
-		     (!(pp[2] & ~127) && hexval(pp[2]) != -1))
-	    {
-	      *pd++ = (hexval(pp[1]) << 4) | hexval(pp[2]);
-	      pp += 2;
-	    }
-	    else
-	      *pd++ = *pp;
-	  }
-	  *pd = 0;
-	}
-	else if (enc == ENCBASE64)
-	{
-	  int c, b = 0, k = 0;
+        if (enc == ENCQUOTEDPRINTABLE)
+        {
+          for (; pp < pp1; pp++)
+          {
+            if (*pp == '_')
+              *pd++ = ' ';
+            else if (*pp == '=' &&
+                     (!(pp[1] & ~127) && hexval(pp[1]) != -1) &&
+                     (!(pp[2] & ~127) && hexval(pp[2]) != -1))
+            {
+              *pd++ = (hexval(pp[1]) << 4) | hexval(pp[2]);
+              pp += 2;
+            }
+            else
+              *pd++ = *pp;
+          }
+          *pd = 0;
+        }
+        else if (enc == ENCBASE64)
+        {
+          int c, b = 0, k = 0;
 
-	  for (; pp < pp1; pp++)
-	  {
-	    if (*pp == '=')
-	      break;
-	    if ((*pp & ~127) || (c = base64val(*pp)) == -1)
+          for (; pp < pp1; pp++)
+          {
+            if (*pp == '=')
+              break;
+            if ((*pp & ~127) || (c = base64val(*pp)) == -1)
               goto error_out_0;
-	    if (k + 6 >= 8)
-	    {
-	      k -= 2;
-	      *pd++ = b | (c >> k);
-	      b = c << (8 - k);
-	    }
-	    else
-	    {
-	      b |= c << (k + 2);
-	      k += 6;
-	    }
-	  }
-	  *pd = 0;
-	}
-	break;
+            if (k + 6 >= 8)
+            {
+              k -= 2;
+              *pd++ = b | (c >> k);
+              b = c << (8 - k);
+            }
+            else
+            {
+              b |= c << (k + 2);
+              k += 6;
+            }
+          }
+          *pd = 0;
+        }
+        break;
     }
   }
 
@@ -780,8 +780,8 @@ static const char *find_encoded_word (const char *s, const char **x)
   while ((p = strstr (q, "=?")))
   {
     for (q = p + 2;
-	 0x20 < *q && *q < 0x7f && !strchr ("()<>@,;:\"/[]?.=", *q);
-	 q++)
+         0x20 < *q && *q < 0x7f && !strchr ("()<>@,;:\"/[]?.=", *q);
+         q++)
       ;
     if (q[0] != '?' || q[1] == '\0' || !strchr ("BbQq", q[1]) || q[2] != '?')
       continue;
@@ -986,7 +986,7 @@ void rfc2047_decode_adrlist (ADDRESS *a)
   while (a)
   {
     if (a->personal && ((strstr (a->personal, "=?") != NULL) ||
-			AssumedCharset))
+                        AssumedCharset))
       rfc2047_decode (&a->personal);
     else if (a->group && a->mailbox && (strstr (a->mailbox, "=?") != NULL))
       rfc2047_decode (&a->mailbox);

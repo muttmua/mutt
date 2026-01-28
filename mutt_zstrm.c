@@ -67,11 +67,11 @@ static int mutt_zstrm_close (CONNECTION* conn)
   int rc = zctx->next_conn.conn_close (&zctx->next_conn);
 
   dprint (4, (debugfile, "zstrm_close: read %llu->%llu (%.1fx) "
-	"wrote %llu<-%llu (%.1fx)\n",
-	zctx->read.z.total_in, zctx->read.z.total_out,
-	(float)zctx->read.z.total_out / (float)zctx->read.z.total_in,
-	zctx->write.z.total_in, zctx->write.z.total_out,
-	(float)zctx->write.z.total_in / (float)zctx->write.z.total_out));
+        "wrote %llu<-%llu (%.1fx)\n",
+        zctx->read.z.total_in, zctx->read.z.total_out,
+        (float)zctx->read.z.total_out / (float)zctx->read.z.total_in,
+        zctx->write.z.total_in, zctx->write.z.total_out,
+        (float)zctx->write.z.total_in / (float)zctx->write.z.total_out));
 
   conn->sockdata   = zctx->next_conn.sockdata;
   conn->conn_open  = zctx->next_conn.conn_open;
@@ -106,9 +106,9 @@ retry:
   if (zctx->read.pos == 0 && !zctx->read.conn_eof)
   {
     rc = zctx->next_conn.conn_read (&zctx->next_conn,
-	zctx->read.buf, zctx->read.len);
+        zctx->read.buf, zctx->read.len);
     dprint (4, (debugfile, "zstrm_read: consuming data from next "
-	"stream: %d bytes\n", rc));
+        "stream: %d bytes\n", rc));
     if (rc < 0)
       return rc;
     else if (rc == 0)
@@ -124,9 +124,9 @@ retry:
 
   zrc = inflate (&zctx->read.z, Z_SYNC_FLUSH);
   dprint (4, (debugfile, "zstrm_read: rc=%d, "
-	"consumed %u/%u bytes, produced %u/%u bytes\n", zrc,
-	zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
-	len - zctx->read.z.avail_out, len));
+        "consumed %u/%u bytes, produced %u/%u bytes\n", zrc,
+        zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
+        len - zctx->read.z.avail_out, len));
 
   /* shift any remaining input data to the front of the buffer */
   if ((Bytef*) zctx->read.buf != zctx->read.z.next_in)
@@ -141,8 +141,8 @@ retry:
       zrc = len - zctx->read.z.avail_out;  /* "returned" bytes */
       if (zrc == 0)
       {
-	/* there was progress, so must have been reading input */
-	dprint (4, (debugfile, "zstrm_read: inflate just consumed\n"));
+        /* there was progress, so must have been reading input */
+        dprint (4, (debugfile, "zstrm_read: inflate just consumed\n"));
         goto retry;
       }
       break;
@@ -154,7 +154,7 @@ retry:
     case Z_BUF_ERROR:  /* no progress was possible */
       if (!zctx->read.conn_eof)
       {
-	dprint (5, (debugfile, "zstrm_read: inflate returned Z_BUF_ERROR. retrying.\n"));
+        dprint (5, (debugfile, "zstrm_read: inflate returned Z_BUF_ERROR. retrying.\n"));
         goto retry;
       }
       zrc = 0;
@@ -174,8 +174,8 @@ static int mutt_zstrm_poll (CONNECTION* conn, time_t wait_secs)
   zstrmctx* zctx = conn->sockdata;
 
   dprint (4, (debugfile, "zstrm_poll: %s\n",
-	zctx->read.z.avail_out == 0 || zctx->read.pos > 0 ?
-	"last read wrote full buffer" : "falling back on next stream"));
+        zctx->read.z.avail_out == 0 || zctx->read.pos > 0 ?
+        "last read wrote full buffer" : "falling back on next stream"));
   if (zctx->read.z.avail_out == 0 || zctx->read.pos > 0)
     return 1;
   else
@@ -203,25 +203,25 @@ static int mutt_zstrm_write (CONNECTION* conn, const char* buf, size_t count)
       zctx->write.pos = zctx->write.len - zctx->write.z.avail_out;
       wbufp = zctx->write.buf;
       dprint (4, (debugfile, "zstrm_write: deflate consumed %d/%d bytes\n",
-	  count - zctx->write.z.avail_in, count));
+          count - zctx->write.z.avail_in, count));
       while (zctx->write.pos > 0)
       {
-	rc = zctx->next_conn.conn_write (&zctx->next_conn,
-	    wbufp, zctx->write.pos);
-	dprint (4, (debugfile, "zstrm_write: next stream wrote: %d bytes\n",
-	    rc));
-	if (rc < 0)
-	  return -1;  /* we can't recover from write failure */
+        rc = zctx->next_conn.conn_write (&zctx->next_conn,
+            wbufp, zctx->write.pos);
+        dprint (4, (debugfile, "zstrm_write: next stream wrote: %d bytes\n",
+            rc));
+        if (rc < 0)
+          return -1;  /* we can't recover from write failure */
 
-	wbufp += rc;
-	zctx->write.pos -= rc;
+        wbufp += rc;
+        zctx->write.pos -= rc;
       }
 
       /* see if there's more for us to do, retry if the output buffer
        * was full (there may be something in zlib buffers), and retry
        * when there is still available input data */
       if (zctx->write.z.avail_out != 0 && zctx->write.z.avail_in == 0)
-	break;
+        break;
 
       zctx->write.z.avail_out = (uInt) zctx->write.len;
       zctx->write.z.next_out = (Bytef*) zctx->write.buf;

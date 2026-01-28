@@ -80,28 +80,28 @@ int _mutt_system (const char *cmd, int flags)
 
       switch (fork ())
       {
-	case 0:
+        case 0:
 #if defined(OPEN_MAX)
-	  for (fd = 0; fd < OPEN_MAX; fd++)
-	    close (fd);
+          for (fd = 0; fd < OPEN_MAX; fd++)
+            close (fd);
 #elif defined(_POSIX_OPEN_MAX)
-	  for (fd = 0; fd < _POSIX_OPEN_MAX; fd++)
-	    close (fd);
+          for (fd = 0; fd < _POSIX_OPEN_MAX; fd++)
+            close (fd);
 #else
-	  close (0);
-	  close (1);
-	  close (2);
+          close (0);
+          close (1);
+          close (2);
 #endif
-	  chdir ("/");
-	  act.sa_handler = SIG_DFL;
-	  sigaction (SIGCHLD, &act, NULL);
-	  break;
+          chdir ("/");
+          act.sa_handler = SIG_DFL;
+          sigaction (SIGCHLD, &act, NULL);
+          break;
 
-	case -1:
-	  _exit (127);
+        case -1:
+          _exit (127);
 
-	default:
-	  _exit (0);
+        default:
+          _exit (0);
       }
     }
 

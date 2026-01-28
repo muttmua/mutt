@@ -154,7 +154,7 @@ static COLOR_LINE *mutt_new_color_line (void)
 }
 
 static void mutt_free_color_line(COLOR_LINE **l,
-				 int free_colors)
+                                 int free_colors)
 {
   COLOR_LINE *tmp;
 
@@ -413,7 +413,7 @@ static int _mutt_alloc_color (int fg, int bg, int type)
   }
 
   dprint (3, (debugfile,"mutt_alloc_color(): Color pairs used so far: %d\n",
-	      UserColors));
+              UserColors));
 
   return p->pair;
 }
@@ -541,7 +541,7 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
     s += 5;
     *col = strtol (s, &eptr, 10);
     if (!*s || *eptr || *col < 0 ||
-	(*col >= COLORS && !option(OPTNOCURSES) && has_colors()))
+        (*col >= COLORS && !option(OPTNOCURSES) && has_colors()))
     {
       snprintf (err->data, err->dsize, _("%s: color not supported by term"), s);
       return (-1);
@@ -607,7 +607,7 @@ _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse_uncolor);
 #ifdef HAVE_COLOR
 
 int mutt_parse_uncolor (BUFFER *buf, BUFFER *s, union pointer_long_t udata,
-			BUFFER *err)
+                        BUFFER *err)
 {
   return _mutt_parse_uncolor(buf, s, err, 1);
 }
@@ -615,7 +615,7 @@ int mutt_parse_uncolor (BUFFER *buf, BUFFER *s, union pointer_long_t udata,
 #endif
 
 int mutt_parse_unmono (BUFFER *buf, BUFFER *s, union pointer_long_t udata,
-		       BUFFER *err)
+                       BUFFER *err)
 {
   return _mutt_parse_uncolor(buf, s, err, 0);
 }
@@ -646,15 +646,15 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse
   else
   {
     snprintf (err->data, err->dsize,
-	      _("%s: command valid only for index, body, header objects"),
-	      parse_uncolor ? "uncolor" : "unmono");
+              _("%s: command valid only for index, body, header objects"),
+              parse_uncolor ? "uncolor" : "unmono");
     return (-1);
   }
 
   if (!MoreArgs (s))
   {
     snprintf (err->data, err->dsize,
-	      _("%s: too few arguments"), parse_uncolor ? "uncolor" : "unmono");
+              _("%s: too few arguments"), parse_uncolor ? "uncolor" : "unmono");
     return (-1);
   }
 
@@ -688,10 +688,10 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse
       for (tmp = *list; tmp; )
       {
         if (!do_cache)
-	  do_cache = 1;
-	last = tmp;
-	tmp = tmp->next;
-	mutt_free_color_line(&last, parse_uncolor);
+          do_cache = 1;
+        last = tmp;
+        tmp = tmp->next;
+        mutt_free_color_line(&last, parse_uncolor);
       }
       *list = NULL;
     }
@@ -699,19 +699,19 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse
     {
       for (last = NULL, tmp = *list; tmp; last = tmp, tmp = tmp->next)
       {
-	if (!mutt_strcmp (buf->data, tmp->pattern))
-	{
+        if (!mutt_strcmp (buf->data, tmp->pattern))
+        {
           if (!do_cache)
-	    do_cache = 1;
-	  dprint(1,(debugfile,"Freeing pattern \"%s\" from color list\n",
+            do_cache = 1;
+          dprint(1,(debugfile,"Freeing pattern \"%s\" from color list\n",
                     tmp->pattern));
-	  if (last)
-	    last->next = tmp->next;
-	  else
-	    *list = tmp->next;
-	  mutt_free_color_line(&tmp, parse_uncolor);
-	  break;
-	}
+          if (last)
+            last->next = tmp->next;
+          else
+            *list = tmp->next;
+          mutt_free_color_line(&tmp, parse_uncolor);
+          break;
+        }
       }
     }
   }
@@ -735,8 +735,8 @@ static int _mutt_parse_uncolor (BUFFER *buf, BUFFER *s, BUFFER *err, short parse
 
 static int
 add_pattern (COLOR_LINE **top, const char *s, int sensitive,
-	     int fg, int bg, int attr, BUFFER *err,
-	     int is_index)
+             int fg, int bg, int attr, BUFFER *err,
+             int is_index)
 {
 
   /* is_index used to store compiled pattern
@@ -750,12 +750,12 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
     if (sensitive)
     {
       if (mutt_strcmp (s, tmp->pattern) == 0)
-	break;
+        break;
     }
     else
     {
       if (mutt_strcasecmp (s, tmp->pattern) == 0)
-	break;
+        break;
     }
     tmp = tmp->next;
   }
@@ -767,13 +767,13 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
     {
       if (tmp->fg != fg || tmp->bg != bg)
       {
-	mutt_free_color (tmp->color.pair);
-	tmp->fg = fg;
-	tmp->bg = bg;
+        mutt_free_color (tmp->color.pair);
+        tmp->fg = fg;
+        tmp->bg = bg;
         tmp->color.pair = mutt_alloc_color (fg, bg);
       }
       else
-	attr |= (tmp->color.attrs & ~A_BOLD);
+        attr |= (tmp->color.attrs & ~A_BOLD);
     }
 #endif /* HAVE_COLOR */
     tmp->color.attrs = attr;
@@ -793,8 +793,8 @@ add_pattern (COLOR_LINE **top, const char *s, int sensitive,
       mutt_buffer_pool_release (&buf);
       if (tmp->color_pattern == NULL)
       {
-	mutt_free_color_line(&tmp, 1);
-	return -1;
+        mutt_free_color_line(&tmp, 1);
+        return -1;
       }
     }
     else if ((r = REGCOMP (&tmp->rx, s, (sensitive ? mutt_which_case (s) : REG_ICASE))) != 0)
@@ -852,8 +852,8 @@ parse_object(BUFFER *buf, BUFFER *s, int *o, int *ql, BUFFER *err)
       *ql = strtol(buf->data + 6, &eptr, 10);
       if (*eptr || q_level < 0)
       {
-	snprintf(err->data, err->dsize, _("%s: no such object"), buf->data);
-	return -1;
+        snprintf(err->data, err->dsize, _("%s: no such object"), buf->data);
+        return -1;
       }
     }
     else
@@ -992,7 +992,7 @@ static COLOR_ATTR fgbgattr_to_color (int fg, int bg, int attr)
 
 static int
 _mutt_parse_color (BUFFER *buf, BUFFER *s, BUFFER *err,
-		   parser_callback_t callback, short dry_run)
+                   parser_callback_t callback, short dry_run)
 {
   int object = 0, attr = 0, fg = 0, bg = 0, q_level = 0;
   int r = 0;
@@ -1069,8 +1069,8 @@ _mutt_parse_color (BUFFER *buf, BUFFER *s, BUFFER *err,
       ColorQuote[0] = ColorDefs[MT_COLOR_QUOTED];
       for (q_level = 1; q_level < ColorQuoteUsed; q_level++)
       {
-	if (ColorQuote[q_level].pair == 0 && ColorQuote[q_level].attrs == 0)
-	  ColorQuote[q_level] = ColorDefs[MT_COLOR_QUOTED];
+        if (ColorQuote[q_level].pair == 0 && ColorQuote[q_level].attrs == 0)
+          ColorQuote[q_level] = ColorDefs[MT_COLOR_QUOTED];
       }
     }
     else

@@ -69,8 +69,8 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
     }
 
     if (mutt_bit_isset (idata->capabilities, AUTH_ANON) &&
-	(!idata->conn->account.user[0] ||
-	 !ascii_strncmp (idata->conn->account.user, "anonymous", 9)))
+        (!idata->conn->account.user[0] ||
+         !ascii_strncmp (idata->conn->account.user, "anonymous", 9)))
       rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
                               &mech);
   }
@@ -88,7 +88,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       rc = sasl_client_start (saslconn, method, &interaction,
                               &pc, &olen, &mech);
       if (rc == SASL_INTERACT)
-	mutt_sasl_interact (interaction);
+        mutt_sasl_interact (interaction);
     }
     while (rc == SASL_INTERACT);
 
@@ -141,8 +141,8 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       /* Exchange incorrectly returns +\r\n instead of + \r\n */
       if (idata->buf[1] == '\0')
       {
-	buf[0] = '\0';
-	len = 0;
+        buf[0] = '\0';
+        len = 0;
       }
       else
       {
@@ -169,9 +169,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
     {
       do
       {
-	rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
-	if (rc == SASL_INTERACT)
-	  mutt_sasl_interact (interaction);
+        rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
+        if (rc == SASL_INTERACT)
+          mutt_sasl_interact (interaction);
       }
       while (rc == SASL_INTERACT);
     }
@@ -188,8 +188,8 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA* idata, const char* method)
       }
       if (sasl_encode64 (pc, olen, buf, bufsize, &olen) != SASL_OK)
       {
-	dprint (1, (debugfile, "imap_auth_sasl: error base64-encoding client response.\n"));
-	goto bail;
+        dprint (1, (debugfile, "imap_auth_sasl: error base64-encoding client response.\n"));
+        goto bail;
       }
     }
 

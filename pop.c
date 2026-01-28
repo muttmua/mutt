@@ -109,17 +109,17 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
     {
       if (ret == 0)
       {
-	pop_data->cmd_top = 1;
+        pop_data->cmd_top = 1;
 
-	dprint (1, (debugfile, "pop_read_header: set TOP capability\n"));
+        dprint (1, (debugfile, "pop_read_header: set TOP capability\n"));
       }
 
       if (ret == -2)
       {
-	pop_data->cmd_top = 0;
+        pop_data->cmd_top = 0;
 
-	dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
-	snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
+        dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
+        snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
                   _("Command TOP is not supported by server."));
       }
     }
@@ -135,8 +135,8 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
       rewind (f);
       while (!feof (f))
       {
-	h->content->length--;
-	fgets (buf, sizeof (buf), f);
+        h->content->length--;
+        fgets (buf, sizeof (buf), f);
       }
       break;
     }
@@ -316,44 +316,44 @@ static int pop_fetch_headers (CONTEXT *ctx)
     {
       if (ctx->hdrs[i]->refno == -1)
       {
-	ctx->hdrs[i]->deleted = 1;
-	deleted++;
+        ctx->hdrs[i]->deleted = 1;
+        deleted++;
       }
     }
     if (deleted > 0)
     {
       mutt_error (_("%d message(s) have been lost. Try reopening the mailbox."),
-		  deleted);
+                  deleted);
       mutt_sleep (2);
     }
 
     for (i = old_count; i < new_count; i++)
     {
       if (!ctx->quiet)
-	mutt_progress_update (&progress, i + 1 - old_count, -1);
+        mutt_progress_update (&progress, i + 1 - old_count, -1);
 #if USE_HCACHE
       if ((data = mutt_hcache_fetch (hc, ctx->hdrs[i]->data, strlen)))
       {
-	char *uidl = safe_strdup (ctx->hdrs[i]->data);
-	int refno = ctx->hdrs[i]->refno;
-	int index = ctx->hdrs[i]->index;
-	/*
-	 * - POP dynamically numbers headers and relies on h->refno
-	 *   to map messages; so restore header and overwrite restored
-	 *   refno with current refno, same for index
-	 * - h->data needs to a separate pointer as it's driver-specific
-	 *   data freed separately elsewhere
-	 *   (the old h->data should point inside a malloc'd block from
-	 *   hcache so there shouldn't be a memleak here)
-	 */
-	HEADER *h = mutt_hcache_restore ((unsigned char *) data, NULL);
-	mutt_free_header (&ctx->hdrs[i]);
-	ctx->hdrs[i] = h;
-	ctx->hdrs[i]->refno = refno;
-	ctx->hdrs[i]->index = index;
-	ctx->hdrs[i]->data = uidl;
-	ret = 0;
-	hcached = 1;
+        char *uidl = safe_strdup (ctx->hdrs[i]->data);
+        int refno = ctx->hdrs[i]->refno;
+        int index = ctx->hdrs[i]->index;
+        /*
+         * - POP dynamically numbers headers and relies on h->refno
+         *   to map messages; so restore header and overwrite restored
+         *   refno with current refno, same for index
+         * - h->data needs to a separate pointer as it's driver-specific
+         *   data freed separately elsewhere
+         *   (the old h->data should point inside a malloc'd block from
+         *   hcache so there shouldn't be a memleak here)
+         */
+        HEADER *h = mutt_hcache_restore ((unsigned char *) data, NULL);
+        mutt_free_header (&ctx->hdrs[i]);
+        ctx->hdrs[i] = h;
+        ctx->hdrs[i]->refno = refno;
+        ctx->hdrs[i]->index = index;
+        ctx->hdrs[i]->data = uidl;
+        ret = 0;
+        hcached = 1;
       }
       else
 #endif
@@ -591,7 +591,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers
       /* yes, so just return a pointer to the message */
       msg->fp = fopen (cache->path, "r");
       if (msg->fp)
-	return 0;
+        return 0;
 
       mutt_perror (cache->path);
       mutt_sleep (2);
@@ -621,7 +621,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers
     }
 
     mutt_progress_init (&progressbar, _("Fetching message..."),
-			MUTT_PROGRESS_SIZE, NetInc,
+                        MUTT_PROGRESS_SIZE, NetInc,
                         headers ?
                         h->content->offset - 1 :
                         h->content->length + h->content->offset - 1);
@@ -635,9 +635,9 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers
       mutt_buffer_mktemp (path);
       if (!(msg->fp = safe_fopen (mutt_b2s (path), "w+")))
       {
-	mutt_perror (mutt_b2s (path));
-	mutt_sleep (2);
-	goto cleanup;
+        mutt_perror (mutt_b2s (path));
+        mutt_sleep (2);
+        goto cleanup;
       }
 
       if (headers)
@@ -652,7 +652,7 @@ static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers
     if (ret == 0)
     {
       if (headers && pop_data->cmd_top == 2)
-	pop_data->cmd_top = 1;
+        pop_data->cmd_top = 1;
       break;
     }
 
@@ -761,7 +761,7 @@ static int pop_sync_mailbox (CONTEXT *ctx, int *index_hint)
       return -1;
 
     mutt_progress_init (&progress, _("Marking messages deleted..."),
-			MUTT_PROGRESS_MSG, WriteInc, ctx->deleted);
+                        MUTT_PROGRESS_MSG, WriteInc, ctx->deleted);
 
 #if USE_HCACHE
     hc = pop_hcache_open (pop_data, ctx->path);
@@ -771,23 +771,23 @@ static int pop_sync_mailbox (CONTEXT *ctx, int *index_hint)
     {
       if (ctx->hdrs[i]->deleted && ctx->hdrs[i]->refno != -1)
       {
-	j++;
-	if (!ctx->quiet)
-	  mutt_progress_update (&progress, j, -1);
-	snprintf (buf, sizeof (buf), "DELE %d\r\n", ctx->hdrs[i]->refno);
-	if ((ret = pop_query (pop_data, buf, sizeof (buf))) == 0)
-	{
-	  mutt_bcache_del (pop_data->bcache, cache_id (ctx->hdrs[i]->data));
+        j++;
+        if (!ctx->quiet)
+          mutt_progress_update (&progress, j, -1);
+        snprintf (buf, sizeof (buf), "DELE %d\r\n", ctx->hdrs[i]->refno);
+        if ((ret = pop_query (pop_data, buf, sizeof (buf))) == 0)
+        {
+          mutt_bcache_del (pop_data->bcache, cache_id (ctx->hdrs[i]->data));
 #if USE_HCACHE
-	  mutt_hcache_delete (hc, ctx->hdrs[i]->data, strlen);
+          mutt_hcache_delete (hc, ctx->hdrs[i]->data, strlen);
 #endif
-	}
+        }
       }
 
 #if USE_HCACHE
       if (ctx->hdrs[i]->changed)
       {
-	mutt_hcache_store (hc, ctx->hdrs[i]->data, ctx->hdrs[i], 0, strlen, MUTT_GENERATE_UIDVALIDITY);
+        mutt_hcache_store (hc, ctx->hdrs[i]->data, ctx->hdrs[i], 0, strlen, MUTT_GENERATE_UIDVALIDITY);
       }
 #endif
 
@@ -968,12 +968,12 @@ void pop_fetch_mail (void)
       snprintf (buffer, sizeof (buffer), "RETR %d\r\n", i);
       ret = pop_fetch_data (pop_data, buffer, NULL, fetch_message, msg->fp);
       if (ret == -3)
-	rset = 1;
+        rset = 1;
 
       if (ret == 0 && mx_commit_message (msg, &ctx) != 0)
       {
-	rset = 1;
-	ret = -3;
+        rset = 1;
+        ret = -3;
       }
 
       mx_close_message (&ctx, &msg);

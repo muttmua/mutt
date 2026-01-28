@@ -683,7 +683,7 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
  */
 static void *
 mutt_hcache_dump(header_cache_t *h, HEADER * header, int *off,
-		 unsigned int uidvalidity, mutt_hcache_store_flags_t flags)
+                 unsigned int uidvalidity, mutt_hcache_store_flags_t flags)
 {
   unsigned char *d = NULL;
   HEADER nh;
@@ -778,7 +778,7 @@ mutt_hcache_restore(const unsigned char *d, HEADER ** oh)
 
 void *
 mutt_hcache_fetch(header_cache_t *h, const char *filename,
-		  size_t(*keylen) (const char *fn))
+                  size_t(*keylen) (const char *fn))
 {
   void* data;
 
@@ -875,9 +875,9 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
  */
 int
 mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
-		  unsigned int uidvalidity,
-		  size_t(*keylen) (const char *fn),
-		  mutt_hcache_store_flags_t flags)
+                  unsigned int uidvalidity,
+                  size_t(*keylen) (const char *fn),
+                  mutt_hcache_store_flags_t flags)
 {
   char* data;
   int dlen;
@@ -1028,7 +1028,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1090,7 +1090,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1163,7 +1163,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1218,7 +1218,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   datum key;
   BUFFER *path = NULL;
@@ -1338,7 +1338,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   DBT key;
 
@@ -1431,7 +1431,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-		   size_t(*keylen) (const char *fn))
+                   size_t(*keylen) (const char *fn))
 {
   BUFFER *path = NULL;
   int ksize;

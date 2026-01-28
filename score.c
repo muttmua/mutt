@@ -49,7 +49,7 @@ void mutt_check_rescore (CONTEXT *ctx)
           (SortAux & SORT_MASK) == SORT_SCORE)
       {
         set_option (OPTNEEDRESORT);
-	set_option (OPTSORTSUBTHREADS);
+        set_option (OPTSORTSUBTHREADS);
       }
     }
     else if ((Sort & SORT_MASK) == SORT_SCORE ||
@@ -148,8 +148,8 @@ void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
     {
       if (tmp->exact || tmp->val == 9999 || tmp->val == -9999)
       {
-	hdr->score = tmp->val;
-	break;
+        hdr->score = tmp->val;
+        break;
       }
       hdr->score += tmp->val;
     }
@@ -179,10 +179,10 @@ int mutt_parse_unscore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFF
     {
       for (tmp = Score; tmp; )
       {
-	last = tmp;
-	tmp = tmp->next;
-	mutt_pattern_free (&last->pat);
-	FREE (&last);
+        last = tmp;
+        tmp = tmp->next;
+        mutt_pattern_free (&last->pat);
+        FREE (&last);
       }
       Score = NULL;
     }
@@ -190,17 +190,17 @@ int mutt_parse_unscore (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFF
     {
       for (tmp = Score; tmp; last = tmp, tmp = tmp->next)
       {
-	if (!mutt_strcmp (buf->data, tmp->str))
-	{
-	  if (last)
-	    last->next = tmp->next;
-	  else
-	    Score = tmp->next;
-	  mutt_pattern_free (&tmp->pat);
-	  FREE (&tmp);
-	  /* there should only be one score per pattern, so we can stop here */
-	  break;
-	}
+        if (!mutt_strcmp (buf->data, tmp->str))
+        {
+          if (last)
+            last->next = tmp->next;
+          else
+            Score = tmp->next;
+          mutt_pattern_free (&tmp->pat);
+          FREE (&tmp);
+          /* there should only be one score per pattern, so we can stop here */
+          break;
+        }
       }
     }
   }

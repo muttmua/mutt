@@ -124,7 +124,7 @@ static void account_entry (char *s, size_t slen, MUTTMENU *m, int num)
 
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
                      NONULL (AutocryptAcctFormat), account_format_str,
-		     entry, MUTT_FORMAT_ARROWCURSOR);
+                     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static MUTTMENU *create_menu (void)
@@ -257,7 +257,7 @@ void mutt_autocrypt_account_menu (void)
                     */
                     _("Really delete account \"%s\"?"),
                     entry->addr->mailbox);
-	  if (mutt_yesorno (msg, MUTT_NO) != MUTT_YES)
+          if (mutt_yesorno (msg, MUTT_NO) != MUTT_YES)
             break;
 
           if (!mutt_autocrypt_db_account_delete (entry->account))

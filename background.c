@@ -287,7 +287,7 @@ static int background_edit_landing_page (pid_t bg_pid)
         break;
 
       case OP_REDRAW:
-	clearok (stdscr, TRUE);
+        clearok (stdscr, TRUE);
         menu->redraw = REDRAW_FULL;
         break;
     }
@@ -454,7 +454,7 @@ static void make_bg_entry (char *s, size_t slen, MUTTMENU *m, int num)
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
                      NONULL (BackgroundFormat),
                      bg_format_str,
-		     entry, MUTT_FORMAT_ARROWCURSOR);
+                     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static void update_bg_menu (MUTTMENU *menu)

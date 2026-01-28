@@ -425,7 +425,7 @@ static int add_entropy (const char *file)
     return errno == ENOENT ? 0 : -1;
 
   mutt_message (_("Filling entropy pool: %s...\n"),
-		file);
+                file);
 
   /* check that the file permissions are secure */
   if (st.st_uid != getuid () ||
@@ -974,7 +974,7 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
   /* Try the DNS subjectAltNames. */
   match_found = 0;
   if ((subj_alt_names = X509_get_ext_d2i(x509cert, NID_subject_alt_name,
-					 NULL, NULL)))
+                                         NULL, NULL)))
   {
     subj_alt_names_count = sk_GENERAL_NAME_num(subj_alt_names);
     for (i = 0; i < subj_alt_names_count; i++)
@@ -982,13 +982,13 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
       subj_alt_name = sk_GENERAL_NAME_value(subj_alt_names, i);
       if (subj_alt_name->type == GEN_DNS)
       {
-	if (subj_alt_name->d.ia5->length >= 0 &&
-	    mutt_strlen((char *)subj_alt_name->d.ia5->data) == (size_t)subj_alt_name->d.ia5->length &&
-	    (match_found = hostname_match(hostname_ascii,
-					  (char *)(subj_alt_name->d.ia5->data))))
-	{
-	  break;
-	}
+        if (subj_alt_name->d.ia5->length >= 0 &&
+            mutt_strlen((char *)subj_alt_name->d.ia5->data) == (size_t)subj_alt_name->d.ia5->length &&
+            (match_found = hostname_match(hostname_ascii,
+                                          (char *)(subj_alt_name->d.ia5->data))))
+        {
+          break;
+        }
       }
     }
     GENERAL_NAMES_free(subj_alt_names);
@@ -1000,26 +1000,26 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
     if (!(x509_subject = X509_get_subject_name(x509cert)))
     {
       if (err && errlen)
-	strfcpy (err, _("cannot get certificate subject"), errlen);
+        strfcpy (err, _("cannot get certificate subject"), errlen);
       goto out;
     }
 
     /* first get the space requirements */
     bufsize = X509_NAME_get_text_by_NID(x509_subject, NID_commonName,
-					NULL, 0);
+                                        NULL, 0);
     if (bufsize == -1)
     {
       if (err && errlen)
-	strfcpy (err, _("cannot get certificate common name"), errlen);
+        strfcpy (err, _("cannot get certificate common name"), errlen);
       goto out;
     }
     bufsize++; /* space for the terminal nul char */
     buf = safe_malloc((size_t)bufsize);
     if (X509_NAME_get_text_by_NID(x509_subject, NID_commonName,
-				  buf, bufsize) == -1)
+                                  buf, bufsize) == -1)
     {
       if (err && errlen)
-	strfcpy (err, _("cannot get certificate common name"), errlen);
+        strfcpy (err, _("cannot get certificate common name"), errlen);
       goto out;
     }
     /* cast is safe since bufsize is incremented above, so bufsize-1 is always
@@ -1035,7 +1035,7 @@ static int check_host (X509 *x509cert, const char *hostname, char *err, size_t e
   {
     if (err && errlen)
       snprintf (err, errlen, _("certificate owner does not match hostname %s"),
-		hostname);
+                hostname);
     goto out;
   }
 
@@ -1253,8 +1253,8 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   mutt_menu_add_dialog_row (menu, mutt_b2s (drow));
 
   snprintf (title, sizeof (title),
-	    _("SSL Certificate check (certificate %d of %d in chain)"),
-	    len - idx, len);
+            _("SSL Certificate check (certificate %d of %d in chain)"),
+            len - idx, len);
   menu->title = title;
 
   /* The leaf/host certificate can't be skipped. */
@@ -1323,26 +1323,26 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
           break;
         done = 0;
         if ((fp = fopen (SslCertFile, "a")))
-	{
-	  if (PEM_write_X509 (fp, cert))
-	    done = 1;
-	  safe_fclose (&fp);
-	}
-	if (!done)
         {
-	  mutt_error (_("Warning: Couldn't save certificate"));
-	  mutt_sleep (2);
-	}
-	else
+          if (PEM_write_X509 (fp, cert))
+            done = 1;
+          safe_fclose (&fp);
+        }
+        if (!done)
         {
-	  mutt_message (_("Certificate saved"));
-	  mutt_sleep (0);
-	}
+          mutt_error (_("Warning: Couldn't save certificate"));
+          mutt_sleep (2);
+        }
+        else
+        {
+          mutt_message (_("Certificate saved"));
+          mutt_sleep (0);
+        }
         /* fall through */
       case OP_MAX + 2:		/* accept once */
         done = 2;
         SSL_set_ex_data (ssl, SkipModeExDataIndex, NULL);
-	ssl_cache_trusted_cert (cert);
+        ssl_cache_trusted_cert (cert);
         break;
       case OP_MAX + 4:          /* skip */
         if (!allow_skip)

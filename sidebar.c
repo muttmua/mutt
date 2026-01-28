@@ -667,15 +667,15 @@ static void draw_sidebar (int num_rows, int num_cols, int div_width)
     {
       if ((ColorDefs[MT_COLOR_SB_INDICATOR].pair != 0 ||
            ColorDefs[MT_COLOR_SB_INDICATOR].attrs != 0))
-	mutt_attrset_cursor (ColorDefs[entry_color],
-		ColorDefs[MT_COLOR_SB_INDICATOR]);
+        mutt_attrset_cursor (ColorDefs[entry_color],
+                ColorDefs[MT_COLOR_SB_INDICATOR]);
       else
-	mutt_attrset_cursor (ColorDefs[entry_color],
-		ColorDefs[MT_COLOR_INDICATOR]);
+        mutt_attrset_cursor (ColorDefs[entry_color],
+                ColorDefs[MT_COLOR_INDICATOR]);
     }
     else if (entryidx == HilIndex)
       mutt_attrset_cursor (ColorDefs[entry_color],
-	      ColorDefs[MT_COLOR_HIGHLIGHT]);
+              ColorDefs[MT_COLOR_HIGHLIGHT]);
     else
       SETCOLOR(entry_color);
 

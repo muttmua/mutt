@@ -225,7 +225,7 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
     dprint (2, (debugfile, "SASL failed to get remote IP address\n"));
 
   dprint (2, (debugfile, "SASL local ip: %s, remote ip:%s\n", NONULL(plp),
-	      NONULL(prp)));
+              NONULL(prp)));
 
   rc = sasl_client_new (service, conn->account.host, plp, prp,
                         mutt_sasl_get_callbacks (&conn->account), 0, saslconn);
@@ -415,8 +415,8 @@ static int mutt_sasl_cb_authname (void* context, int id, const char** result,
     return SASL_BADPARAM;
 
   dprint (2, (debugfile, "mutt_sasl_cb_authname: getting %s for %s:%u\n",
-	      id == SASL_CB_AUTHNAME ? "authname" : "user",
-	      account->host, account->port));
+              id == SASL_CB_AUTHNAME ? "authname" : "user",
+              account->host, account->port));
 
   if (id == SASL_CB_AUTHNAME)
   {
@@ -541,15 +541,15 @@ static int mutt_sasl_conn_read (CONNECTION* conn, char* buf, size_t len)
       /* call the underlying read function to fill the buffer */
       rc = (sasldata->msasl_read) (conn, buf, len);
       if (rc <= 0)
-	goto out;
+        goto out;
 
       rc = sasl_decode (sasldata->saslconn, buf, rc, &sasldata->buf,
                         &sasldata->blen);
       if (rc != SASL_OK)
       {
-	dprint (1, (debugfile, "SASL decode failed: %s\n",
+        dprint (1, (debugfile, "SASL decode failed: %s\n",
                     sasl_errstring (rc, NULL, NULL)));
-	goto out;
+        goto out;
       }
     }
     while (!sasldata->blen);
@@ -594,14 +594,14 @@ static int mutt_sasl_conn_write (CONNECTION* conn, const char* buf,
       rc = sasl_encode (sasldata->saslconn, buf, olen, &pbuf, &plen);
       if (rc != SASL_OK)
       {
-	dprint (1, (debugfile, "SASL encoding failed: %s\n",
+        dprint (1, (debugfile, "SASL encoding failed: %s\n",
                     sasl_errstring (rc, NULL, NULL)));
-	goto fail;
+        goto fail;
       }
 
       rc = (sasldata->msasl_write) (conn, pbuf, plen);
       if (rc != plen)
-	goto fail;
+        goto fail;
 
       len -= olen;
       buf += olen;

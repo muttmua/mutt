@@ -188,14 +188,14 @@ static int query_search (MUTTMENU *m, regex_t *re, int n)
   if (table[n].data->addr)
   {
     if (table[n].data->addr->personal &&
-	!regexec (re, table[n].data->addr->personal, 0, NULL, 0))
+        !regexec (re, table[n].data->addr->personal, 0, NULL, 0))
       return 0;
     if (table[n].data->addr->mailbox &&
-	!regexec (re, table[n].data->addr->mailbox, 0, NULL, 0))
+        !regexec (re, table[n].data->addr->mailbox, 0, NULL, 0))
       return 0;
 #ifdef EXACT_ADDRESS
     if (table[n].data->addr->val &&
-	!regexec (re, table[n].data->addr->val, 0, NULL, 0))
+        !regexec (re, table[n].data->addr->val, 0, NULL, 0))
       return 0;
 #endif
   }
@@ -204,10 +204,10 @@ static int query_search (MUTTMENU *m, regex_t *re, int n)
 }
 
 static const char * query_format_str (char *dest, size_t destlen, size_t col, int cols,
-				      char op, const char *src,
-				      const char *fmt, const char *ifstring,
-				      const char *elsestring,
-				      void *data, format_flag flags)
+                                      char op, const char *src,
+                                      const char *fmt, const char *ifstring,
+                                      const char *elsestring,
+                                      void *data, format_flag flags)
 {
   ENTRY *entry = (ENTRY *)data;
   QUERY *query = entry->data;
@@ -258,7 +258,7 @@ static void query_entry (char *s, size_t slen, MUTTMENU *m, int num)
 
   entry->data->num = num;
   mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, NONULL (QueryFormat), query_format_str,
-		     entry, MUTT_FORMAT_ARROWCURSOR);
+                     entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
 static int query_tag (MUTTMENU *menu, int n, int m)
@@ -367,138 +367,138 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
     {
       switch ((op = mutt_menuLoop (menu)))
       {
-	case OP_QUERY_APPEND:
-	case OP_QUERY:
-	  if (mutt_get_field (_("Query: "), buf, buflen, 0) == 0 && buf[0])
-	  {
-	    QUERY *newresults = NULL;
+        case OP_QUERY_APPEND:
+        case OP_QUERY:
+          if (mutt_get_field (_("Query: "), buf, buflen, 0) == 0 && buf[0])
+          {
+            QUERY *newresults = NULL;
 
-	    newresults = run_query (buf, 0);
+            newresults = run_query (buf, 0);
 
-	    menu->redraw = REDRAW_FULL;
-	    if (newresults)
-	    {
-	      snprintf (title, sizeof (title), _("Query '%s'"), buf);
+            menu->redraw = REDRAW_FULL;
+            if (newresults)
+            {
+              snprintf (title, sizeof (title), _("Query '%s'"), buf);
 
-	      if (op == OP_QUERY)
-	      {
+              if (op == OP_QUERY)
+              {
                 free_query (&results);
-		results = newresults;
-		FREE (&QueryTable);
-	      }
-	      else
-	      {
-		/* append */
-		for (queryp = results; queryp->next; queryp = queryp->next);
+                results = newresults;
+                FREE (&QueryTable);
+              }
+              else
+              {
+                /* append */
+                for (queryp = results; queryp->next; queryp = queryp->next);
 
-		queryp->next = newresults;
-	      }
+                queryp->next = newresults;
+              }
 
 
-	      menu->current = 0;
+              menu->current = 0;
               mutt_pop_current_menu (menu);
-	      mutt_menuDestroy (&menu);
-	      menu = mutt_new_menu (MENU_QUERY);
-	      menu->make_entry = query_entry;
-	      menu->search = query_search;
-	      menu->tag = query_tag;
-	      menu->title = title;
-	      menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_QUERY, QueryHelp);
+              mutt_menuDestroy (&menu);
+              menu = mutt_new_menu (MENU_QUERY);
+              menu->make_entry = query_entry;
+              menu->search = query_search;
+              menu->tag = query_tag;
+              menu->title = title;
+              menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_QUERY, QueryHelp);
               mutt_push_current_menu (menu);
 
-	      /* count the number of results */
-	      for (queryp = results; queryp; queryp = queryp->next)
-		menu->max++;
+              /* count the number of results */
+              for (queryp = results; queryp; queryp = queryp->next)
+                menu->max++;
 
-	      if (op == OP_QUERY)
-	      {
-		menu->data = QueryTable =
-		  (ENTRY *) safe_calloc (menu->max, sizeof (ENTRY));
+              if (op == OP_QUERY)
+              {
+                menu->data = QueryTable =
+                  (ENTRY *) safe_calloc (menu->max, sizeof (ENTRY));
 
-		for (i = 0, queryp = results; queryp;
-		     queryp = queryp->next, i++)
-		  QueryTable[i].data = queryp;
-	      }
-	      else
-	      {
-		int clear = 0;
+                for (i = 0, queryp = results; queryp;
+                     queryp = queryp->next, i++)
+                  QueryTable[i].data = queryp;
+              }
+              else
+              {
+                int clear = 0;
 
-		/* append */
-		safe_realloc (&QueryTable, menu->max * sizeof (ENTRY));
+                /* append */
+                safe_realloc (&QueryTable, menu->max * sizeof (ENTRY));
 
-		menu->data = QueryTable;
+                menu->data = QueryTable;
 
-		for (i = 0, queryp = results; queryp;
-		     queryp = queryp->next, i++)
-		{
-		  /* once we hit new entries, clear/init the tag */
-		  if (queryp == newresults)
-		    clear = 1;
+                for (i = 0, queryp = results; queryp;
+                     queryp = queryp->next, i++)
+                {
+                  /* once we hit new entries, clear/init the tag */
+                  if (queryp == newresults)
+                    clear = 1;
 
-		  QueryTable[i].data = queryp;
-		  if (clear)
-		    QueryTable[i].tagged = 0;
-		}
-	      }
-	    }
-	  }
-	  break;
+                  QueryTable[i].data = queryp;
+                  if (clear)
+                    QueryTable[i].tagged = 0;
+                }
+              }
+            }
+          }
+          break;
 
-	case OP_CREATE_ALIAS:
-	  if (menu->tagprefix)
-	  {
-	    ADDRESS *naddr = NULL;
+        case OP_CREATE_ALIAS:
+          if (menu->tagprefix)
+          {
+            ADDRESS *naddr = NULL;
 
-	    for (i = 0; i < menu->max; i++)
-	      if (QueryTable[i].tagged)
-	      {
-		ADDRESS *a = result_to_addr(QueryTable[i].data);
-		rfc822_append (&naddr, a, 0);
-		rfc822_free_address (&a);
-	      }
+            for (i = 0; i < menu->max; i++)
+              if (QueryTable[i].tagged)
+              {
+                ADDRESS *a = result_to_addr(QueryTable[i].data);
+                rfc822_append (&naddr, a, 0);
+                rfc822_free_address (&a);
+              }
 
-	    mutt_create_alias (NULL, naddr);
-	  }
-	  else
-	  {
-	    ADDRESS *a = result_to_addr(QueryTable[menu->current].data);
-	    mutt_create_alias (NULL, a);
-	    rfc822_free_address (&a);
-	  }
-	  break;
+            mutt_create_alias (NULL, naddr);
+          }
+          else
+          {
+            ADDRESS *a = result_to_addr(QueryTable[menu->current].data);
+            mutt_create_alias (NULL, a);
+            rfc822_free_address (&a);
+          }
+          break;
 
-	case OP_GENERIC_SELECT_ENTRY:
-	  if (retbuf)
-	  {
-	    done = 2;
-	    break;
-	  }
-	  /* fall through */
+        case OP_GENERIC_SELECT_ENTRY:
+          if (retbuf)
+          {
+            done = 2;
+            break;
+          }
+          /* fall through */
 
-	case OP_MAIL:
-	  msg = mutt_new_header ();
-	  msg->env = mutt_new_envelope ();
-	  if (!menu->tagprefix)
-	  {
-	    msg->env->to = result_to_addr(QueryTable[menu->current].data);
-	  }
-	  else
-	  {
-	    for (i = 0; i < menu->max; i++)
-	      if (QueryTable[i].tagged)
-	      {
-		ADDRESS *a = result_to_addr(QueryTable[i].data);
-		rfc822_append (&msg->env->to, a, 0);
-		rfc822_free_address (&a);
-	      }
-	  }
-	  mutt_send_message (SENDBACKGROUNDEDIT, msg, NULL, Context, NULL);
-	  menu->redraw = REDRAW_FULL;
-	  break;
+        case OP_MAIL:
+          msg = mutt_new_header ();
+          msg->env = mutt_new_envelope ();
+          if (!menu->tagprefix)
+          {
+            msg->env->to = result_to_addr(QueryTable[menu->current].data);
+          }
+          else
+          {
+            for (i = 0; i < menu->max; i++)
+              if (QueryTable[i].tagged)
+              {
+                ADDRESS *a = result_to_addr(QueryTable[i].data);
+                rfc822_append (&msg->env->to, a, 0);
+                rfc822_free_address (&a);
+              }
+          }
+          mutt_send_message (SENDBACKGROUNDEDIT, msg, NULL, Context, NULL);
+          menu->redraw = REDRAW_FULL;
+          break;
 
-	case OP_EXIT:
-	  done = 1;
-	  break;
+        case OP_EXIT:
+          done = 1;
+          break;
       }
     }
 
@@ -513,36 +513,36 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
       /* check for tagged entries */
       for (i = 0; i < menu->max; i++)
       {
-	if (QueryTable[i].tagged)
-	{
-	  if (curpos == 0)
-	  {
-	    ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
-	    mutt_addrlist_to_local (tmpa);
-	    tagged = 1;
-	    rfc822_write_address (buf, buflen, tmpa, 0);
-	    curpos = mutt_strlen (buf);
-	    rfc822_free_address (&tmpa);
-	  }
-	  else if (curpos + 2 < buflen)
-	  {
-	    ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
-	    mutt_addrlist_to_local (tmpa);
-	    strcat (buf, ", ");	/* __STRCAT_CHECKED__ */
-	    rfc822_write_address ((char *) buf + curpos + 2, buflen - curpos - 2,
-				  tmpa, 0);
-	    curpos = mutt_strlen (buf);
-	    rfc822_free_address (&tmpa);
-	  }
-	}
+        if (QueryTable[i].tagged)
+        {
+          if (curpos == 0)
+          {
+            ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
+            mutt_addrlist_to_local (tmpa);
+            tagged = 1;
+            rfc822_write_address (buf, buflen, tmpa, 0);
+            curpos = mutt_strlen (buf);
+            rfc822_free_address (&tmpa);
+          }
+          else if (curpos + 2 < buflen)
+          {
+            ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
+            mutt_addrlist_to_local (tmpa);
+            strcat (buf, ", ");	/* __STRCAT_CHECKED__ */
+            rfc822_write_address ((char *) buf + curpos + 2, buflen - curpos - 2,
+                                  tmpa, 0);
+            curpos = mutt_strlen (buf);
+            rfc822_free_address (&tmpa);
+          }
+        }
       }
       /* then enter current message */
       if (!tagged)
       {
-	ADDRESS *tmpa = result_to_addr (QueryTable[menu->current].data);
-	mutt_addrlist_to_local (tmpa);
-	rfc822_write_address (buf, buflen, tmpa, 0);
-	rfc822_free_address (&tmpa);
+        ADDRESS *tmpa = result_to_addr (QueryTable[menu->current].data);
+        mutt_addrlist_to_local (tmpa);
+        rfc822_write_address (buf, buflen, tmpa, 0);
+        rfc822_free_address (&tmpa);
       }
 
     }

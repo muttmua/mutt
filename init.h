@@ -116,8 +116,8 @@ const struct mapping_t SortAuxMethods[] = {  /* DT_SORT_AUX */
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
   { "threads",		SORT_DATE },	/* note: sort_aux == threads
-					 * isn't possible.
-					 */
+                                         * isn't possible.
+                                         */
   { "from",		SORT_FROM },
   { "label",		SORT_LABEL },
   { "mailbox-order",	SORT_ORDER },

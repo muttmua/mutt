@@ -91,8 +91,8 @@ static int fseek_last_message (FILE * f)
     for (i = bytes_read; --i >= 0;)
       if (!mutt_strncmp (buffer + i, "\n\nFrom ", 7))
       {				/* found it - go to the beginning of the From */
-	fseeko (f, pos + i + 2, SEEK_SET);
-	return 0;
+        fseeko (f, pos + i + 2, SEEK_SET);
+        return 0;
       }
     bytes_read = BUFSIZ;
   }
@@ -207,7 +207,7 @@ BUFFY *mutt_find_mailbox (const char *path)
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
     if (stat (mutt_b2s (tmp->pathbuf), &tmp_sb) ==0 &&
-	sb.st_dev == tmp_sb.st_dev && sb.st_ino == tmp_sb.st_ino)
+        sb.st_dev == tmp_sb.st_dev && sb.st_ino == tmp_sb.st_ino)
       break;
   }
   return tmp;
@@ -718,7 +718,7 @@ int mutt_buffy_check (int force)
       tmp->new = 0;
 #ifdef USE_POP
       if (mx_is_pop (mutt_b2s (tmp->pathbuf)))
-	tmp->magic = MUTT_POP;
+        tmp->magic = MUTT_POP;
       else
 #endif
         if (stat (mutt_b2s (tmp->pathbuf), &sb) != 0 ||
@@ -738,9 +738,9 @@ int mutt_buffy_check (int force)
     /* check to see if the folder is the currently selected folder
      * before polling */
     if (!Context || !Context->path ||
-	(( tmp->magic == MUTT_IMAP || tmp->magic == MUTT_POP )
+        (( tmp->magic == MUTT_IMAP || tmp->magic == MUTT_POP )
             ? mutt_strcmp (mutt_b2s (tmp->pathbuf), Context->path) :
-	      (sb.st_dev != contex_sb.st_dev || sb.st_ino != contex_sb.st_ino)))
+              (sb.st_dev != contex_sb.st_dev || sb.st_ino != contex_sb.st_ino)))
     {
       switch (tmp->magic)
       {
@@ -907,19 +907,19 @@ void mutt_buffer_buffy (BUFFER *s)
     for (pass = 0; pass < 2; pass++)
       for (tmp = Incoming; tmp; tmp = tmp->next)
       {
-	mutt_buffer_expand_path (tmp->pathbuf);
-	if ((found || pass) && tmp->new)
-	{
-	  mutt_buffer_strcpy (s, mutt_b2s (tmp->pathbuf));
-	  mutt_buffer_pretty_mailbox (s);
-	  return;
-	}
-	if (mutt_strcmp (mutt_b2s (s), mutt_b2s (tmp->pathbuf)) == 0)
-	  found = 1;
+        mutt_buffer_expand_path (tmp->pathbuf);
+        if ((found || pass) && tmp->new)
+        {
+          mutt_buffer_strcpy (s, mutt_b2s (tmp->pathbuf));
+          mutt_buffer_pretty_mailbox (s);
+          return;
+        }
+        if (mutt_strcmp (mutt_b2s (s), mutt_b2s (tmp->pathbuf)) == 0)
+          found = 1;
       }
 
     mutt_buffy_check (MUTT_BUFFY_CHECK_FORCE); /* buffy was wrong - resync
-						  things */
+                                                  things */
   }
 
   /* no folders with new mail */

@@ -58,51 +58,51 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
       {
         i = 0;
         for (u = *expn; u; u = u->next)
-	{
-	  if (mutt_strcmp (a->mailbox, u->data) == 0) /* alias already found */
-	  {
-	    dprint (1, (debugfile, "mutt_expand_aliases_r(): loop in alias found for '%s'\n", a->mailbox));
-	    i = 1;
-	    break;
-	  }
-	}
+        {
+          if (mutt_strcmp (a->mailbox, u->data) == 0) /* alias already found */
+          {
+            dprint (1, (debugfile, "mutt_expand_aliases_r(): loop in alias found for '%s'\n", a->mailbox));
+            i = 1;
+            break;
+          }
+        }
 
         if (!i)
-	{
+        {
           u = safe_malloc (sizeof (LIST));
           u->data = safe_strdup (a->mailbox);
           u->next = *expn;
           *expn = u;
-	  w = rfc822_cpy_adr (t, 0);
-	  w = mutt_expand_aliases_r (w, expn);
-	  if (head)
-	    last->next = w;
-	  else
-	    head = last = w;
-	  while (last && last->next)
-	    last = last->next;
+          w = rfc822_cpy_adr (t, 0);
+          w = mutt_expand_aliases_r (w, expn);
+          if (head)
+            last->next = w;
+          else
+            head = last = w;
+          while (last && last->next)
+            last = last->next;
         }
-	t = a;
-	a = a->next;
-	t->next = NULL;
-	rfc822_free_address (&t);
-	continue;
+        t = a;
+        a = a->next;
+        t->next = NULL;
+        rfc822_free_address (&t);
+        continue;
       }
       else
       {
-	struct passwd *pw = getpwnam (a->mailbox);
+        struct passwd *pw = getpwnam (a->mailbox);
 
-	if (pw)
-	{
-	  char namebuf[STRING];
+        if (pw)
+        {
+          char namebuf[STRING];
 
-	  mutt_gecos_name (namebuf, sizeof (namebuf), pw);
-	  mutt_str_replace (&a->personal, namebuf);
+          mutt_gecos_name (namebuf, sizeof (namebuf), pw);
+          mutt_str_replace (&a->personal, namebuf);
 
 #ifdef EXACT_ADDRESS
-	  FREE (&a->val);
+          FREE (&a->val);
 #endif
-	}
+        }
       }
     }
 
@@ -173,7 +173,7 @@ static void write_safe_address (FILE *fp, const char *s)
   while (*s)
   {
     if (*s == '\\' || *s == '`' || *s == '\'' || *s == '"'
-	|| *s == '$')
+        || *s == '$')
       fputc ('\\', fp);
     fputc (*s, fp);
     s++;
@@ -279,10 +279,10 @@ retry_name:
     switch (mutt_yesorno (_("Warning: This alias name may not work.  Fix it?"), MUTT_YES))
     {
       case MUTT_YES:
-      	mutt_buffer_strcpy (buf, mutt_b2s (tmp));
-	goto retry_name;
+        mutt_buffer_strcpy (buf, mutt_b2s (tmp));
+        goto retry_name;
       case -1:
-	goto cleanup;
+        goto cleanup;
     }
   }
 
@@ -373,20 +373,20 @@ retry_name:
       if (fseek (rc, -1, SEEK_CUR) < 0)
       {
         mutt_perror (_("Error seeking in alias file"));
-	goto cleanup;
+        goto cleanup;
       }
       if (fread(&line_end, 1, 1, rc) != 1)
       {
-	mutt_perror (_("Error reading alias file"));
-	goto cleanup;
+        mutt_perror (_("Error reading alias file"));
+        goto cleanup;
       }
       if (fseek (rc, 0, SEEK_END) < 0)
       {
         mutt_perror (_("Error seeking in alias file"));
-	goto cleanup;
+        goto cleanup;
       }
       if (line_end != '\n')
-	fputc ('\n', rc);
+        fputc ('\n', rc);
     }
 
     if (check_alias_name (new->name, NULL))
@@ -445,7 +445,7 @@ static int check_alias_name (const char *s, BUFFER *dest)
     if (bad)
     {
       if (dry)
-	return -1;
+        return -1;
       if (l == (size_t)(-1))
       {
         memset (&mb, 0, sizeof (mbstate_t));
@@ -534,15 +534,15 @@ int mutt_alias_complete (char *s, size_t buflen)
     {
       if (a->name && strstr (a->name, s) == a->name)
       {
-	if (!bestname[0]) /* init */
-	  strfcpy (bestname, a->name,
-		   min (mutt_strlen (a->name) + 1, sizeof (bestname)));
-	else
-	{
-	  for (i = 0 ; a->name[i] && a->name[i] == bestname[i] ; i++)
-	    ;
-	  bestname[i] = 0;
-	}
+        if (!bestname[0]) /* init */
+          strfcpy (bestname, a->name,
+                   min (mutt_strlen (a->name) + 1, sizeof (bestname)));
+        else
+        {
+          for (i = 0 ; a->name[i] && a->name[i] == bestname[i] ; i++)
+            ;
+          bestname[i] = 0;
+        }
       }
       a = a->next;
     }
@@ -551,9 +551,9 @@ int mutt_alias_complete (char *s, size_t buflen)
     {
       if (mutt_strcmp (bestname, s) != 0)
       {
-	/* we are adding something to the completion */
-	strfcpy (s, bestname, mutt_strlen (bestname) + 1);
-	return 1;
+        /* we are adding something to the completion */
+        strfcpy (s, bestname, mutt_strlen (bestname) + 1);
+        return 1;
       }
 
       /* build alias list and show it */
@@ -561,19 +561,19 @@ int mutt_alias_complete (char *s, size_t buflen)
       a = Aliases;
       while (a)
       {
-	if (a->name && (strstr (a->name, s) == a->name))
-	{
-	  if (!a_list)  /* init */
-	    a_cur = a_list = (ALIAS *) safe_malloc (sizeof (ALIAS));
-	  else
-	  {
-	    a_cur->next = (ALIAS *) safe_malloc (sizeof (ALIAS));
-	    a_cur = a_cur->next;
-	  }
-	  memcpy (a_cur, a, sizeof (ALIAS));
-	  a_cur->next = NULL;
-	}
-	a = a->next;
+        if (a->name && (strstr (a->name, s) == a->name))
+        {
+          if (!a_list)  /* init */
+            a_cur = a_list = (ALIAS *) safe_malloc (sizeof (ALIAS));
+          else
+          {
+            a_cur->next = (ALIAS *) safe_malloc (sizeof (ALIAS));
+            a_cur = a_cur->next;
+          }
+          memcpy (a_cur, a, sizeof (ALIAS));
+          a_cur->next = NULL;
+        }
+        a = a->next;
       }
     }
   }
@@ -598,17 +598,17 @@ int mutt_alias_complete (char *s, size_t buflen)
     if (a_cur->del)
     {
       if (a_list)
-	a_list->next = a_cur->next;
+        a_list->next = a_cur->next;
       else
-	Aliases = a_cur->next;
+        Aliases = a_cur->next;
 
       a_cur->next = NULL;
       mutt_free_alias (&a_cur);
 
       if (a_list)
-	a_cur = a_list;
+        a_cur = a_list;
       else
-	a_cur = Aliases;
+        a_cur = Aliases;
     }
     else
     {

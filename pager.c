@@ -175,7 +175,7 @@ static int check_sig (const char *s, struct line_t *info, int n)
     while (*s)
     {
       if (!ISSPACE (*s))
-	return 0;
+        return 0;
       s++;
     }
 
@@ -245,8 +245,8 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 
       while (class && class->length > cnt)
       {
-	def_color = class->color;
-	class = class->up;
+        def_color = class->color;
+        class = class->up;
       }
     }
   }
@@ -386,12 +386,12 @@ shift_class_colors (struct q_class_t *QuoteList, struct q_class_t *new_class,
     {
       while (!q_list->next)
       {
-	q_list = q_list->up;
-	if (q_list == NULL)
-	  break;
+        q_list = q_list->up;
+        if (q_list == NULL)
+          break;
       }
       if (q_list)
-	q_list = q_list->next;
+        q_list = q_list->next;
     }
   }
 
@@ -421,7 +421,7 @@ cleanup_quote (struct q_class_t **QuoteList)
 
 static struct q_class_t *
 classify_quote (struct q_class_t **QuoteList, const char *qptr,
-		int length, int *force_redraw, int *q_level)
+                int length, int *force_redraw, int *q_level)
 {
   struct q_class_t *q_list = *QuoteList;
   struct q_class_t *class = NULL, *tmp = NULL, *ptr, *save;
@@ -453,91 +453,91 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
 
       if (mutt_strncmp (qptr, q_list->prefix, length) == 0)
       {
-	if (length == q_list->length)
-	  return q_list;	/* same prefix: return the current class */
+        if (length == q_list->length)
+          return q_list;	/* same prefix: return the current class */
 
-	/* found shorter prefix */
-	if (tmp == NULL)
-	{
-	  /* add a node above q_list */
-	  tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-	  tmp->prefix = (char *) safe_calloc (1, length + 1);
-	  strncpy (tmp->prefix, qptr, length);
-	  tmp->length = length;
+        /* found shorter prefix */
+        if (tmp == NULL)
+        {
+          /* add a node above q_list */
+          tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
+          tmp->prefix = (char *) safe_calloc (1, length + 1);
+          strncpy (tmp->prefix, qptr, length);
+          tmp->length = length;
 
-	  /* replace q_list by tmp in the top level list */
-	  if (q_list->next)
-	  {
-	    tmp->next = q_list->next;
-	    q_list->next->prev = tmp;
-	  }
-	  if (q_list->prev)
-	  {
-	    tmp->prev = q_list->prev;
-	    q_list->prev->next = tmp;
-	  }
+          /* replace q_list by tmp in the top level list */
+          if (q_list->next)
+          {
+            tmp->next = q_list->next;
+            q_list->next->prev = tmp;
+          }
+          if (q_list->prev)
+          {
+            tmp->prev = q_list->prev;
+            q_list->prev->next = tmp;
+          }
 
-	  /* make q_list a child of tmp */
-	  tmp->down = q_list;
-	  q_list->up = tmp;
+          /* make q_list a child of tmp */
+          tmp->down = q_list;
+          q_list->up = tmp;
 
-	  /* q_list has no siblings for now */
-	  q_list->next = NULL;
-	  q_list->prev = NULL;
+          /* q_list has no siblings for now */
+          q_list->next = NULL;
+          q_list->prev = NULL;
 
-	  /* update the root if necessary */
-	  if (q_list == *QuoteList)
-	    *QuoteList = tmp;
+          /* update the root if necessary */
+          if (q_list == *QuoteList)
+            *QuoteList = tmp;
 
-	  index = q_list->index;
+          index = q_list->index;
 
-	  /* tmp should be the return class too */
-	  class = tmp;
+          /* tmp should be the return class too */
+          class = tmp;
 
-	  /* next class to test; if tmp is a shorter prefix for another
-	   * node, that node can only be in the top level list, so don't
-	   * go down after this point
-	   */
-	  q_list = tmp->next;
-	}
-	else
-	{
-	  /* found another branch for which tmp is a shorter prefix */
+          /* next class to test; if tmp is a shorter prefix for another
+           * node, that node can only be in the top level list, so don't
+           * go down after this point
+           */
+          q_list = tmp->next;
+        }
+        else
+        {
+          /* found another branch for which tmp is a shorter prefix */
 
-	  /* save the next sibling for later */
-	  save = q_list->next;
+          /* save the next sibling for later */
+          save = q_list->next;
 
-	  /* unlink q_list from the top level list */
-	  if (q_list->next)
-	    q_list->next->prev = q_list->prev;
-	  if (q_list->prev)
-	    q_list->prev->next = q_list->next;
+          /* unlink q_list from the top level list */
+          if (q_list->next)
+            q_list->next->prev = q_list->prev;
+          if (q_list->prev)
+            q_list->prev->next = q_list->next;
 
-	  /* at this point, we have a tmp->down; link q_list to it */
-	  ptr = tmp->down;
-	  /* sibling order is important here, q_list should be linked last */
-	  while (ptr->next)
-	    ptr = ptr->next;
-	  ptr->next = q_list;
-	  q_list->next = NULL;
-	  q_list->prev = ptr;
-	  q_list->up = tmp;
+          /* at this point, we have a tmp->down; link q_list to it */
+          ptr = tmp->down;
+          /* sibling order is important here, q_list should be linked last */
+          while (ptr->next)
+            ptr = ptr->next;
+          ptr->next = q_list;
+          q_list->next = NULL;
+          q_list->prev = ptr;
+          q_list->up = tmp;
 
-	  index = q_list->index;
+          index = q_list->index;
 
-	  /* next class to test; as above, we shouldn't go down */
-	  q_list = save;
-	}
+          /* next class to test; as above, we shouldn't go down */
+          q_list = save;
+        }
 
-	/* we found a shorter prefix, so certain quotes have changed classes */
-	*force_redraw = 1;
-	continue;
+        /* we found a shorter prefix, so certain quotes have changed classes */
+        *force_redraw = 1;
+        continue;
       }
       else
       {
-	/* shorter, but not a substring of the current class: try next */
-	q_list = q_list->next;
-	continue;
+        /* shorter, but not a substring of the current class: try next */
+        q_list = q_list->next;
+        continue;
       }
     }
     else
@@ -547,162 +547,162 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
       /* tmp != NULL means we already found a shorter prefix at case 1 */
       if (tmp == NULL && mutt_strncmp (qptr, q_list->prefix, q_list->length) == 0)
       {
-	/* ok, it's a subclass somewhere on this branch */
+        /* ok, it's a subclass somewhere on this branch */
 
-	ptr = q_list;
-	offset = q_list->length;
+        ptr = q_list;
+        offset = q_list->length;
 
-	q_list = q_list->down;
-	tail_lng = length - offset;
-	tail_qptr = (char *) qptr + offset;
+        q_list = q_list->down;
+        tail_lng = length - offset;
+        tail_qptr = (char *) qptr + offset;
 
-	while (q_list)
-	{
-	  if (length <= q_list->length)
-	  {
-	    if (mutt_strncmp (tail_qptr, (q_list->prefix) + offset, tail_lng) == 0)
-	    {
-	      /* same prefix: return the current class */
-	      if (length == q_list->length)
-		return q_list;
+        while (q_list)
+        {
+          if (length <= q_list->length)
+          {
+            if (mutt_strncmp (tail_qptr, (q_list->prefix) + offset, tail_lng) == 0)
+            {
+              /* same prefix: return the current class */
+              if (length == q_list->length)
+                return q_list;
 
-	      /* found shorter common prefix */
-	      if (tmp == NULL)
-	      {
-		/* add a node above q_list */
-		tmp = (struct q_class_t *)
+              /* found shorter common prefix */
+              if (tmp == NULL)
+              {
+                /* add a node above q_list */
+                tmp = (struct q_class_t *)
                   safe_calloc (1, sizeof (struct q_class_t));
-		tmp->prefix = (char *) safe_calloc (1, length + 1);
-		strncpy (tmp->prefix, qptr, length);
-		tmp->length = length;
+                tmp->prefix = (char *) safe_calloc (1, length + 1);
+                strncpy (tmp->prefix, qptr, length);
+                tmp->length = length;
 
-		/* replace q_list by tmp */
-		if (q_list->next)
-		{
-		  tmp->next = q_list->next;
-		  q_list->next->prev = tmp;
-		}
-		if (q_list->prev)
-		{
-		  tmp->prev = q_list->prev;
-		  q_list->prev->next = tmp;
-		}
+                /* replace q_list by tmp */
+                if (q_list->next)
+                {
+                  tmp->next = q_list->next;
+                  q_list->next->prev = tmp;
+                }
+                if (q_list->prev)
+                {
+                  tmp->prev = q_list->prev;
+                  q_list->prev->next = tmp;
+                }
 
-		/* make q_list a child of tmp */
-		tmp->down = q_list;
-		tmp->up = q_list->up;
-		q_list->up = tmp;
-		if (tmp->up->down == q_list)
-		  tmp->up->down = tmp;
+                /* make q_list a child of tmp */
+                tmp->down = q_list;
+                tmp->up = q_list->up;
+                q_list->up = tmp;
+                if (tmp->up->down == q_list)
+                  tmp->up->down = tmp;
 
-		/* q_list has no siblings */
-		q_list->next = NULL;
-		q_list->prev = NULL;
+                /* q_list has no siblings */
+                q_list->next = NULL;
+                q_list->prev = NULL;
 
-		index = q_list->index;
+                index = q_list->index;
 
-		/* tmp should be the return class too */
-		class = tmp;
+                /* tmp should be the return class too */
+                class = tmp;
 
-		/* next class to test */
-		q_list = tmp->next;
-	      }
-	      else
-	      {
-		/* found another branch for which tmp is a shorter prefix */
+                /* next class to test */
+                q_list = tmp->next;
+              }
+              else
+              {
+                /* found another branch for which tmp is a shorter prefix */
 
-		/* save the next sibling for later */
-		save = q_list->next;
+                /* save the next sibling for later */
+                save = q_list->next;
 
-		/* unlink q_list from the top level list */
-		if (q_list->next)
-		  q_list->next->prev = q_list->prev;
-		if (q_list->prev)
-		  q_list->prev->next = q_list->next;
+                /* unlink q_list from the top level list */
+                if (q_list->next)
+                  q_list->next->prev = q_list->prev;
+                if (q_list->prev)
+                  q_list->prev->next = q_list->next;
 
-		/* at this point, we have a tmp->down; link q_list to it */
-		ptr = tmp->down;
-		while (ptr->next)
-		  ptr = ptr->next;
-		ptr->next = q_list;
-		q_list->next = NULL;
-		q_list->prev = ptr;
-		q_list->up = tmp;
+                /* at this point, we have a tmp->down; link q_list to it */
+                ptr = tmp->down;
+                while (ptr->next)
+                  ptr = ptr->next;
+                ptr->next = q_list;
+                q_list->next = NULL;
+                q_list->prev = ptr;
+                q_list->up = tmp;
 
-		index = q_list->index;
+                index = q_list->index;
 
-		/* next class to test */
-		q_list = save;
-	      }
+                /* next class to test */
+                q_list = save;
+              }
 
-	      /* we found a shorter prefix, so we need a redraw */
-	      *force_redraw = 1;
-	      continue;
-	    }
-	    else
-	    {
-	      q_list = q_list->next;
-	      continue;
-	    }
-	  }
-	  else
-	  {
-	    /* longer than the current prefix: try subclassing it */
-	    if (tmp == NULL && mutt_strncmp (tail_qptr, (q_list->prefix) + offset,
+              /* we found a shorter prefix, so we need a redraw */
+              *force_redraw = 1;
+              continue;
+            }
+            else
+            {
+              q_list = q_list->next;
+              continue;
+            }
+          }
+          else
+          {
+            /* longer than the current prefix: try subclassing it */
+            if (tmp == NULL && mutt_strncmp (tail_qptr, (q_list->prefix) + offset,
                                              q_list->length - offset) == 0)
-	    {
-	      /* still a subclass: go down one level */
-	      ptr = q_list;
-	      offset = q_list->length;
+            {
+              /* still a subclass: go down one level */
+              ptr = q_list;
+              offset = q_list->length;
 
-	      q_list = q_list->down;
-	      tail_lng = length - offset;
-	      tail_qptr = (char *) qptr + offset;
+              q_list = q_list->down;
+              tail_lng = length - offset;
+              tail_qptr = (char *) qptr + offset;
 
-	      continue;
-	    }
-	    else
-	    {
-	      /* nope, try the next prefix */
-	      q_list = q_list->next;
-	      continue;
-	    }
-	  }
-	}
+              continue;
+            }
+            else
+            {
+              /* nope, try the next prefix */
+              q_list = q_list->next;
+              continue;
+            }
+          }
+        }
 
-	/* still not found so far: add it as a sibling to the current node */
-	if (class == NULL)
-	{
-	  tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-	  tmp->prefix = (char *) safe_calloc (1, length + 1);
-	  strncpy (tmp->prefix, qptr, length);
-	  tmp->length = length;
+        /* still not found so far: add it as a sibling to the current node */
+        if (class == NULL)
+        {
+          tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
+          tmp->prefix = (char *) safe_calloc (1, length + 1);
+          strncpy (tmp->prefix, qptr, length);
+          tmp->length = length;
 
-	  if (ptr->down)
-	  {
-	    tmp->next = ptr->down;
-	    ptr->down->prev = tmp;
-	  }
-	  ptr->down = tmp;
-	  tmp->up = ptr;
+          if (ptr->down)
+          {
+            tmp->next = ptr->down;
+            ptr->down->prev = tmp;
+          }
+          ptr->down = tmp;
+          tmp->up = ptr;
 
-	  new_class_color (tmp, q_level);
+          new_class_color (tmp, q_level);
 
-	  return tmp;
-	}
-	else
-	{
-	  if (index != -1)
-	    shift_class_colors (*QuoteList, tmp, index, q_level);
+          return tmp;
+        }
+        else
+        {
+          if (index != -1)
+            shift_class_colors (*QuoteList, tmp, index, q_level);
 
-	  return class;
-	}
+          return class;
+        }
       }
       else
       {
-	/* nope, try the next prefix */
-	q_list = q_list->next;
-	continue;
+        /* nope, try the next prefix */
+        q_list = q_list->next;
+        continue;
       }
     }
   }
@@ -758,13 +758,13 @@ mutt_is_quote_line (char *buf, regmatch_t *pmatch)
     {
       if (smatch[0].rm_so > 0)
       {
-	c = buf[smatch[0].rm_so];
-	buf[smatch[0].rm_so] = 0;
+        c = buf[smatch[0].rm_so];
+        buf[smatch[0].rm_so] = 0;
 
-	if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+        if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
           is_quote = 1;
 
-	buf[smatch[0].rm_so] = c;
+        buf[smatch[0].rm_so] = c;
       }
     }
     else
@@ -924,7 +924,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
        * line's color as default. */
       if (n > 0 && (buf[0] == ' ' || buf[0] == '\t'))
       {
-	lineInfo[n].type = lineInfo[n-1].type; /* wrapped line */
+        lineInfo[n].type = lineInfo[n-1].type; /* wrapped line */
         if (!option (OPTHEADERCOLORPARTIAL))
         {
           (lineInfo[n].syntax)[0].color = (lineInfo[n-1].syntax)[0].color;
@@ -933,7 +933,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       }
       else
       {
-	lineInfo[n].type = MT_COLOR_HDEFAULT;
+        lineInfo[n].type = MT_COLOR_HDEFAULT;
       }
 
       /* When this option is unset, we color the entire header the
@@ -981,9 +981,9 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
 
     lineInfo[n].type = MT_COLOR_SIGNATURE;
     while (i < last && check_sig (buf, lineInfo, i - 1) == 0 &&
-	   (lineInfo[i].type == MT_COLOR_NORMAL ||
-	    lineInfo[i].type == MT_COLOR_QUOTED ||
-	    lineInfo[i].type == MT_COLOR_HEADER))
+           (lineInfo[i].type == MT_COLOR_NORMAL ||
+            lineInfo[i].type == MT_COLOR_QUOTED ||
+            lineInfo[i].type == MT_COLOR_HEADER))
     {
       /* oops... */
       if (lineInfo[i].chunks)
@@ -1054,66 +1054,66 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
     {
       if (buf[pos] == '1' && (pos+1 == x || buf[pos+1] == ';'))
       {
-	a->attr |= ANSI_BOLD;
-	pos += 2;
+        a->attr |= ANSI_BOLD;
+        pos += 2;
       }
       else if (buf[pos] == '4' && (pos+1 == x || buf[pos+1] == ';'))
       {
-	a->attr |= ANSI_UNDERLINE;
-	pos += 2;
+        a->attr |= ANSI_UNDERLINE;
+        pos += 2;
       }
       else if (buf[pos] == '5' && (pos+1 == x || buf[pos+1] == ';'))
       {
-	a->attr |= ANSI_BLINK;
-	pos += 2;
+        a->attr |= ANSI_BLINK;
+        pos += 2;
       }
       else if (buf[pos] == '7' && (pos+1 == x || buf[pos+1] == ';'))
       {
-	a->attr |= ANSI_REVERSE;
-	pos += 2;
+        a->attr |= ANSI_REVERSE;
+        pos += 2;
       }
       else if (buf[pos] == '0' && (pos+1 == x || buf[pos+1] == ';'))
       {
-	a->attr = ANSI_OFF;
-	a->pair = -1;
+        a->attr = ANSI_OFF;
+        a->pair = -1;
         a->fg = -1;
         a->bg = -1;
-	pos += 2;
+        pos += 2;
       }
       else if (mutt_strncmp("38;5;", (char *)&buf[pos], 5) == 0 && isdigit(buf[pos+5]))
       {
-	char *end;
-	a->pair = -1;
-	a->attr |= ANSI_COLOR;
-	a->fg = (int)strtoul((char *)&buf[pos+5], &end, 10);
-	pos += end - (char *)&buf[pos];
+        char *end;
+        a->pair = -1;
+        a->attr |= ANSI_COLOR;
+        a->fg = (int)strtoul((char *)&buf[pos+5], &end, 10);
+        pos += end - (char *)&buf[pos];
       }
       else if (buf[pos] == '3' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
-	a->pair = -1;
-	a->attr |= ANSI_COLOR;
-	a->fg = buf[pos+1] - '0';
-	pos += 3;
+        a->pair = -1;
+        a->attr |= ANSI_COLOR;
+        a->fg = buf[pos+1] - '0';
+        pos += 3;
       }
       else if (mutt_strncmp("48;5;", (char *)&buf[pos], 5) == 0 && isdigit(buf[pos+5]))
       {
-	char *end;
-	a->pair = -1;
-	a->attr |= ANSI_COLOR;
-	a->bg = (int)strtoul((char *)&buf[pos+5], &end, 10);
-	pos += end - (char *)&buf[pos];
+        char *end;
+        a->pair = -1;
+        a->attr |= ANSI_COLOR;
+        a->bg = (int)strtoul((char *)&buf[pos+5], &end, 10);
+        pos += end - (char *)&buf[pos];
       }
       else if (buf[pos] == '4' && isdigit(buf[pos+1]) && buf[pos+1] != '8')
       {
-	a->pair = -1;
-	a->attr |= ANSI_COLOR;
-	a->bg = buf[pos+1] - '0';
-	pos += 3;
+        a->pair = -1;
+        a->attr |= ANSI_COLOR;
+        a->bg = buf[pos+1] - '0';
+        pos += 3;
       }
       else
       {
-	while (pos < x && buf[pos] != ';') pos++;
-	pos++;
+        while (pos < x && buf[pos] != ';') pos++;
+        pos++;
       }
     }
   }
@@ -1171,7 +1171,7 @@ void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_mark
 
 static int
 fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
-	     unsigned char **fmt, size_t *blen, int *buf_ready)
+             unsigned char **fmt, size_t *blen, int *buf_ready)
 {
   static int b_read;
   BUFFER stripped;
@@ -1269,8 +1269,8 @@ bail:
 }
 
 static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
-			int flags, ansi_attr *pa, int cnt,
-			int *pspace, int *pvch, int *pcol, int *pspecial,
+                        int flags, ansi_attr *pa, int cnt,
+                        int *pspace, int *pvch, int *pcol, int *pspecial,
                         mutt_window_t *pager_window)
 {
   int space = -1; /* index of the last space or TAB */
@@ -1301,16 +1301,16 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
   {
     /* Handle ANSI sequences */
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == '[' &&
-	   is_ansi ((char *) buf+ch+2))
+           is_ansi ((char *) buf+ch+2))
       ch = grok_ansi (buf, ch+2, pa) + 1;
 
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == ']' &&
-	   ((check_attachment_marker ((char *) buf+ch) == 0) ||
+           ((check_attachment_marker ((char *) buf+ch) == 0) ||
             (check_protected_header_marker ((char *) buf+ch) == 0)))
     {
       while (buf[ch++] != '\a')
-	if (ch >= cnt)
-	  break;
+        if (ch >= cnt)
+          break;
     }
 
     /* is anything left to do? */
@@ -1323,12 +1323,12 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
       if (k == (size_t)(-1))
         memset(&mbstate, 0, sizeof(mbstate));
       dprint (1, (debugfile, "%s:%d: mbrtowc returned %d; errno = %d.\n",
-		  __FILE__, __LINE__, k, errno));
+                  __FILE__, __LINE__, k, errno));
       if (col + 4 > wrap_cols)
-	break;
+        break;
       col += 4;
       if (pa)
-	printw ("\\%03o", buf[ch]);
+        printw ("\\%03o", buf[ch]);
       k = 1;
       continue;
     }
@@ -1339,13 +1339,13 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
     {
       if (wc == 0x200B || wc == 0x200C || wc == 0xFEFF)
       {
-	dprint (3, (debugfile, "skip zero-width character U+%04X\n", (unsigned short)wc));
-	continue;
+        dprint (3, (debugfile, "skip zero-width character U+%04X\n", (unsigned short)wc));
+        continue;
       }
       if (is_display_corrupting_utf8 (wc))
       {
-	dprint (3, (debugfile, "filtered U+%04X\n", (unsigned short)wc));
-	continue;
+        dprint (3, (debugfile, "filtered U+%04X\n", (unsigned short)wc));
+        continue;
       }
     }
 
@@ -1367,32 +1367,32 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
             (k2 == 0) || (!IsWPrint (wc1)))
           break;
 
-	if (wc == wc1)
-	{
-	  special |= (wc == '_' && special & A_UNDERLINE)
-	    ? A_UNDERLINE : A_BOLD;
-	}
-	else if (wc == '_' || wc1 == '_')
-	{
-	  special |= A_UNDERLINE;
-	  wc = (wc1 == '_') ? wc : wc1;
-	}
-	else
-	{
-	  /* special = 0; / * overstrike: nothing to do! */
-	  wc = wc1;
-	}
+        if (wc == wc1)
+        {
+          special |= (wc == '_' && special & A_UNDERLINE)
+            ? A_UNDERLINE : A_BOLD;
+        }
+        else if (wc == '_' || wc1 == '_')
+        {
+          special |= A_UNDERLINE;
+          wc = (wc1 == '_') ? wc : wc1;
+        }
+        else
+        {
+          /* special = 0; / * overstrike: nothing to do! */
+          wc = wc1;
+        }
 
-	ch += k + k1;
-	k = k2;
-	mbstate = mbstate1;
+        ch += k + k1;
+        k = k2;
+        mbstate = mbstate1;
         k1 = mbrtowc (&wc1, (char *)buf+ch+k, cnt-ch-k, &mbstate1);
       }
     }
 
     if (pa &&
-	((flags & (MUTT_SHOWCOLOR | MUTT_SEARCH | MUTT_PAGER_MARKER)) ||
-	 special || last_special || pa->attr))
+        ((flags & (MUTT_SHOWCOLOR | MUTT_SEARCH | MUTT_PAGER_MARKER)) ||
+         special || last_special || pa->attr))
     {
       resolve_color (*lineInfo, n, vch, flags, special, pa, wrap_cols);
       last_special = special;
@@ -1401,13 +1401,13 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
     if (IsWPrint (wc) || (Charset_is_utf8 && wc == 0x00A0))
     {
       if (wc == ' ')
-	space = ch;
+        space = ch;
       t = wcwidth (wc);
       if (col + t > wrap_cols)
-	break;
+        break;
       col += t;
       if (pa)
-	mutt_addwch (wc);
+        mutt_addwch (wc);
     }
     else if (wc == '\n')
       break;
@@ -1416,36 +1416,36 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
       space = ch;
       t = (col & ~7) + 8;
       if (t > wrap_cols)
-	break;
+        break;
       if (pa)
-	for (; col < t; col++)
-	  addch (' ');
+        for (; col < t; col++)
+          addch (' ');
       else
-	col = t;
+        col = t;
     }
     else if (wc < 0x20 || wc == 0x7f)
     {
       if (col + 2 > wrap_cols)
-	break;
+        break;
       col += 2;
       if (pa)
-	printw ("^%c", ('@' + wc) & 0x7f);
+        printw ("^%c", ('@' + wc) & 0x7f);
     }
     else if (wc < 0x100)
     {
       if (col + 4 > wrap_cols)
-	break;
+        break;
       col += 4;
       if (pa)
-	printw ("\\%03o", wc);
+        printw ("\\%03o", wc);
     }
     else
     {
       if (col + 1 > wrap_cols)
-	break;
+        break;
       ++col;
       if (pa)
-	mutt_addwch (replacement_char ());
+        mutt_addwch (replacement_char ());
     }
   }
   *pspace = space;
@@ -1474,8 +1474,8 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
 static int
 display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
-	      int *last, int *max, int flags, struct q_class_t **QuoteList,
-	      int *q_level, int *force_redraw, regex_t *SearchRE,
+              int *last, int *max, int flags, struct q_class_t **QuoteList,
+              int *q_level, int *force_redraw, regex_t *SearchRE,
               mutt_window_t *pager_window)
 {
   unsigned char *buf = NULL, *fmt = NULL;
@@ -1518,9 +1518,9 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       /* determine the line class */
       if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
       {
-	if (change_last)
-	  (*last)--;
-	goto out;
+        if (change_last)
+          (*last)--;
+        goto out;
       }
 
       resolve_types ((char *) fmt, (char *) buf, *lineInfo, n, *last,
@@ -1528,7 +1528,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
 
       /* avoid race condition for continuation lines when scrolling up */
       for (m = n + 1; m < *last && (*lineInfo)[m].offset && (*lineInfo)[m].continuation; m++)
-	(*lineInfo)[m].type = (*lineInfo)[n].type;
+        (*lineInfo)[m].type = (*lineInfo)[n].type;
     }
 
     /* this also prevents searching through the hidden lines */
@@ -1564,7 +1564,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
     {
       if (change_last)
-	(*last)--;
+        (*last)--;
       goto out;
     }
 
@@ -1573,21 +1573,21 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     while (regexec (SearchRE, (char *) fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
     {
       if (++((*lineInfo)[n].search_cnt) > 1)
-	safe_realloc (&((*lineInfo)[n].search),
-		      ((*lineInfo)[n].search_cnt) * sizeof (struct syntax_t));
+        safe_realloc (&((*lineInfo)[n].search),
+                      ((*lineInfo)[n].search_cnt) * sizeof (struct syntax_t));
       else
-	(*lineInfo)[n].search = safe_malloc (sizeof (struct syntax_t));
+        (*lineInfo)[n].search = safe_malloc (sizeof (struct syntax_t));
       pmatch[0].rm_so += offset;
       pmatch[0].rm_eo += offset;
       ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].first = pmatch[0].rm_so;
       ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].last = pmatch[0].rm_eo;
 
       if (pmatch[0].rm_eo == pmatch[0].rm_so)
-	offset++; /* avoid degenerate cases */
+        offset++; /* avoid degenerate cases */
       else
-	offset = pmatch[0].rm_eo;
+        offset = pmatch[0].rm_eo;
       if (!fmt[offset])
-	break;
+        break;
     }
   }
 
@@ -1605,7 +1605,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   }
 
   if ((b_read = fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt,
-			     &buflen, &buf_ready)) < 0)
+                             &buflen, &buf_ready)) < 0)
   {
     if (change_last)
       (*last)--;
@@ -1641,7 +1641,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     if (!(flags & MUTT_PAGER_NSKIP))
       /* skip leading blanks on the next line too */
       while (*buf_ptr == ' ' || *buf_ptr == '\t')
-	buf_ptr++;
+        buf_ptr++;
   }
 
   if (*buf_ptr == '\r')
@@ -2082,7 +2082,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 
   MUTTMENU *pager_menu = NULL;
   int old_PagerIndexLines;		/* some people want to resize it
-  					 * while inside the pager... */
+                                         * while inside the pager... */
 
   pager_redraw_data_t rd;
 
@@ -2192,8 +2192,8 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
           Resize->SearchBack = rd.SearchBack;
         }
 
-	ch = -1;
-	rc = OP_REFORMAT_WINCH;
+        ch = -1;
+        rc = OP_REFORMAT_WINCH;
         continue;
       }
     }
@@ -2242,295 +2242,295 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     switch (ch)
     {
       case OP_EXIT:
-	rc = -1;
-	ch = -1;
-	break;
+        rc = -1;
+        ch = -1;
+        break;
 
       case OP_QUIT:
-	if (query_quadoption (OPT_QUIT, _("Quit Mutt?")) == MUTT_YES)
-	{
-	  /* avoid prompting again in the index menu */
-	  set_quadoption (OPT_QUIT, MUTT_YES);
-	  ch = -1;
-	}
-	break;
+        if (query_quadoption (OPT_QUIT, _("Quit Mutt?")) == MUTT_YES)
+        {
+          /* avoid prompting again in the index menu */
+          set_quadoption (OPT_QUIT, MUTT_YES);
+          ch = -1;
+        }
+        break;
 
       case OP_NEXT_PAGE:
-	if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
-	{
-	  rd.topline = upNLines (PagerContext, rd.lineInfo, rd.curline, rd.hideQuoted);
-	}
-	else if (option (OPTPAGERSTOP))
-	{
-	  /* emulate "less -q" and don't go on to the next message. */
-	  mutt_error _("Bottom of message is shown.");
-	}
-	else
-	{
-	  /* end of the current message, so display the next message. */
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	  ch = -1;
-	}
-	break;
+        if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
+        {
+          rd.topline = upNLines (PagerContext, rd.lineInfo, rd.curline, rd.hideQuoted);
+        }
+        else if (option (OPTPAGERSTOP))
+        {
+          /* emulate "less -q" and don't go on to the next message. */
+          mutt_error _("Bottom of message is shown.");
+        }
+        else
+        {
+          /* end of the current message, so display the next message. */
+          rc = OP_MAIN_NEXT_UNDELETED;
+          ch = -1;
+        }
+        break;
 
       case OP_PREV_PAGE:
-	if (rd.topline != 0)
-	{
-	  rd.topline = upNLines (rd.pager_window->rows-PagerContext, rd.lineInfo, rd.topline, rd.hideQuoted);
-	}
-	else
-	  mutt_error _("Top of message is shown.");
-	break;
+        if (rd.topline != 0)
+        {
+          rd.topline = upNLines (rd.pager_window->rows-PagerContext, rd.lineInfo, rd.topline, rd.hideQuoted);
+        }
+        else
+          mutt_error _("Top of message is shown.");
+        break;
 
       case OP_NEXT_LINE:
-	if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
-	{
-	  rd.topline++;
-	  if (rd.hideQuoted)
-	  {
-	    while (rd.lineInfo[rd.topline].type == MT_COLOR_QUOTED &&
-		   rd.topline < rd.lastLine)
-	      rd.topline++;
-	  }
-	}
-	else
-	  mutt_error _("Bottom of message is shown.");
-	break;
+        if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
+        {
+          rd.topline++;
+          if (rd.hideQuoted)
+          {
+            while (rd.lineInfo[rd.topline].type == MT_COLOR_QUOTED &&
+                   rd.topline < rd.lastLine)
+              rd.topline++;
+          }
+        }
+        else
+          mutt_error _("Bottom of message is shown.");
+        break;
 
       case OP_PREV_LINE:
-	if (rd.topline)
-	  rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
-	else
-	  mutt_error _("Top of message is shown.");
-	break;
+        if (rd.topline)
+          rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
+        else
+          mutt_error _("Top of message is shown.");
+        break;
 
       case OP_PAGER_TOP:
         if (rd.topline)
-	  rd.topline = 0;
-      	else
-	  mutt_error _("Top of message is shown.");
-	break;
+          rd.topline = 0;
+        else
+          mutt_error _("Top of message is shown.");
+        break;
 
       case OP_HALF_UP:
-	if (rd.topline)
-	  rd.topline = upNLines (rd.pager_window->rows/2 + rd.pager_window->rows%2,
+        if (rd.topline)
+          rd.topline = upNLines (rd.pager_window->rows/2 + rd.pager_window->rows%2,
                                  rd.lineInfo, rd.topline, rd.hideQuoted);
-	else
-	  mutt_error _("Top of message is shown.");
-	break;
+        else
+          mutt_error _("Top of message is shown.");
+        break;
 
       case OP_HALF_DOWN:
-	if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
-	{
-	  rd.topline = upNLines (rd.pager_window->rows/2, rd.lineInfo, rd.curline, rd.hideQuoted);
-	}
-	else if (option (OPTPAGERSTOP))
-	{
-	  /* emulate "less -q" and don't go on to the next message. */
-	  mutt_error _("Bottom of message is shown.");
-	}
-	else
-	{
-	  /* end of the current message, so display the next message. */
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	  ch = -1;
-	}
-	break;
+        if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
+        {
+          rd.topline = upNLines (rd.pager_window->rows/2, rd.lineInfo, rd.curline, rd.hideQuoted);
+        }
+        else if (option (OPTPAGERSTOP))
+        {
+          /* emulate "less -q" and don't go on to the next message. */
+          mutt_error _("Bottom of message is shown.");
+        }
+        else
+        {
+          /* end of the current message, so display the next message. */
+          rc = OP_MAIN_NEXT_UNDELETED;
+          ch = -1;
+        }
+        break;
 
       case OP_SEARCH_NEXT:
       case OP_SEARCH_OPPOSITE:
-	if (rd.SearchCompiled)
-	{
-	  wrapped = 0;
+        if (rd.SearchCompiled)
+        {
+          wrapped = 0;
 
-	  if (SearchContext > 0 && SearchContext < rd.pager_window->rows)
-	    searchctx = SearchContext;
-	  else
-	    searchctx = 0;
+          if (SearchContext > 0 && SearchContext < rd.pager_window->rows)
+            searchctx = SearchContext;
+          else
+            searchctx = 0;
 
 search_next:
-	  if ((!rd.SearchBack && ch==OP_SEARCH_NEXT) ||
-	      (rd.SearchBack &&ch==OP_SEARCH_OPPOSITE))
-	  {
-	    /* searching forward */
-	    for (i = wrapped ? 0 : rd.topline + searchctx + 1; i < rd.lastLine; i++)
-	    {
-	      if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
+          if ((!rd.SearchBack && ch==OP_SEARCH_NEXT) ||
+              (rd.SearchBack &&ch==OP_SEARCH_OPPOSITE))
+          {
+            /* searching forward */
+            for (i = wrapped ? 0 : rd.topline + searchctx + 1; i < rd.lastLine; i++)
+            {
+              if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
                   !rd.lineInfo[i].continuation && rd.lineInfo[i].search_cnt > 0)
-		break;
-	    }
+                break;
+            }
 
-	    if (i < rd.lastLine)
-	      rd.topline = i;
-	    else if (wrapped || !option (OPTWRAPSEARCH))
-	      mutt_error _("Not found.");
-	    else
-	    {
-	      mutt_message _("Search wrapped to top.");
-	      wrapped = 1;
-	      goto search_next;
-	    }
-	  }
-	  else
-	  {
-	    /* searching backward */
-	    for (i = wrapped ? rd.lastLine : rd.topline + searchctx - 1; i >= 0; i--)
-	    {
-	      if ((!rd.hideQuoted || (rd.has_types &&
+            if (i < rd.lastLine)
+              rd.topline = i;
+            else if (wrapped || !option (OPTWRAPSEARCH))
+              mutt_error _("Not found.");
+            else
+            {
+              mutt_message _("Search wrapped to top.");
+              wrapped = 1;
+              goto search_next;
+            }
+          }
+          else
+          {
+            /* searching backward */
+            for (i = wrapped ? rd.lastLine : rd.topline + searchctx - 1; i >= 0; i--)
+            {
+              if ((!rd.hideQuoted || (rd.has_types &&
                                       rd.lineInfo[i].type != MT_COLOR_QUOTED)) &&
                   !rd.lineInfo[i].continuation && rd.lineInfo[i].search_cnt > 0)
-		break;
-	    }
+                break;
+            }
 
-	    if (i >= 0)
-	      rd.topline = i;
-	    else if (wrapped || !option (OPTWRAPSEARCH))
-	      mutt_error _("Not found.");
-	    else
-	    {
-	      mutt_message _("Search wrapped to bottom.");
-	      wrapped = 1;
-	      goto search_next;
-	    }
-	  }
+            if (i >= 0)
+              rd.topline = i;
+            else if (wrapped || !option (OPTWRAPSEARCH))
+              mutt_error _("Not found.");
+            else
+            {
+              mutt_message _("Search wrapped to bottom.");
+              wrapped = 1;
+              goto search_next;
+            }
+          }
 
-	  if (rd.lineInfo[rd.topline].search_cnt > 0)
-	  {
-	    rd.SearchFlag = MUTT_SEARCH;
-	    /* give some context for search results */
-	    if (rd.topline - searchctx > 0)
-	      rd.topline -= searchctx;
-	  }
+          if (rd.lineInfo[rd.topline].search_cnt > 0)
+          {
+            rd.SearchFlag = MUTT_SEARCH;
+            /* give some context for search results */
+            if (rd.topline - searchctx > 0)
+              rd.topline -= searchctx;
+          }
 
-	  break;
-	}
+          break;
+        }
         /* fall through */
-	/* no previous search pattern, so fall through to search */
+        /* no previous search pattern, so fall through to search */
 
       case OP_SEARCH:
       case OP_SEARCH_REVERSE:
         strfcpy (buffer, searchbuf, sizeof (buffer));
-	if (mutt_get_field ((ch == OP_SEARCH || ch == OP_SEARCH_NEXT) ?
-			    _("Search for: ") : _("Reverse search for: "),
-			    buffer, sizeof (buffer),
-			    MUTT_CLEAR) != 0)
-	  break;
+        if (mutt_get_field ((ch == OP_SEARCH || ch == OP_SEARCH_NEXT) ?
+                            _("Search for: ") : _("Reverse search for: "),
+                            buffer, sizeof (buffer),
+                            MUTT_CLEAR) != 0)
+          break;
 
-	if (!strcmp (buffer, searchbuf))
-	{
-	  if (rd.SearchCompiled)
-	  {
-	    /* do an implicit search-next */
-	    if (ch == OP_SEARCH)
-	      ch = OP_SEARCH_NEXT;
-	    else
-	      ch = OP_SEARCH_OPPOSITE;
+        if (!strcmp (buffer, searchbuf))
+        {
+          if (rd.SearchCompiled)
+          {
+            /* do an implicit search-next */
+            if (ch == OP_SEARCH)
+              ch = OP_SEARCH_NEXT;
+            else
+              ch = OP_SEARCH_OPPOSITE;
 
-	    wrapped = 0;
-	    goto search_next;
-	  }
-	}
+            wrapped = 0;
+            goto search_next;
+          }
+        }
 
         if (!buffer[0])
-	  break;
+          break;
 
-	strfcpy (searchbuf, buffer, sizeof (searchbuf));
+        strfcpy (searchbuf, buffer, sizeof (searchbuf));
 
-	/* leave SearchBack alone if ch == OP_SEARCH_NEXT */
-	if (ch == OP_SEARCH)
-	  rd.SearchBack = 0;
-	else if (ch == OP_SEARCH_REVERSE)
-	  rd.SearchBack = 1;
+        /* leave SearchBack alone if ch == OP_SEARCH_NEXT */
+        if (ch == OP_SEARCH)
+          rd.SearchBack = 0;
+        else if (ch == OP_SEARCH_REVERSE)
+          rd.SearchBack = 1;
 
-	if (rd.SearchCompiled)
-	{
-	  regfree (&rd.SearchRE);
-	  for (i = 0; i < rd.lastLine; i++)
-	  {
-	    if (rd.lineInfo[i].search)
-	      FREE (&(rd.lineInfo[i].search));
-	    rd.lineInfo[i].search_cnt = -1;
-	  }
-	}
+        if (rd.SearchCompiled)
+        {
+          regfree (&rd.SearchRE);
+          for (i = 0; i < rd.lastLine; i++)
+          {
+            if (rd.lineInfo[i].search)
+              FREE (&(rd.lineInfo[i].search));
+            rd.lineInfo[i].search_cnt = -1;
+          }
+        }
 
-	if ((err = REGCOMP (&rd.SearchRE, searchbuf, REG_NEWLINE | mutt_which_case (searchbuf))) != 0)
-	{
-	  regerror (err, &rd.SearchRE, buffer, sizeof (buffer));
-	  mutt_error ("%s", buffer);
-	  for (i = 0; i < rd.maxLine ; i++)
-	  {
-	    /* cleanup */
-	    if (rd.lineInfo[i].search)
-	      FREE (&(rd.lineInfo[i].search));
-	    rd.lineInfo[i].search_cnt = -1;
-	  }
-	  rd.SearchFlag = 0;
-	  rd.SearchCompiled = 0;
-	}
-	else
-	{
-	  rd.SearchCompiled = 1;
-	  /* update the search pointers */
-	  i = 0;
-	  while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
+        if ((err = REGCOMP (&rd.SearchRE, searchbuf, REG_NEWLINE | mutt_which_case (searchbuf))) != 0)
+        {
+          regerror (err, &rd.SearchRE, buffer, sizeof (buffer));
+          mutt_error ("%s", buffer);
+          for (i = 0; i < rd.maxLine ; i++)
+          {
+            /* cleanup */
+            if (rd.lineInfo[i].search)
+              FREE (&(rd.lineInfo[i].search));
+            rd.lineInfo[i].search_cnt = -1;
+          }
+          rd.SearchFlag = 0;
+          rd.SearchCompiled = 0;
+        }
+        else
+        {
+          rd.SearchCompiled = 1;
+          /* update the search pointers */
+          i = 0;
+          while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
                                &rd.maxLine, MUTT_SEARCH | (flags & MUTT_PAGER_NSKIP) | (flags & MUTT_PAGER_NOWRAP) | rd.has_types,
                                &rd.QuoteList, &rd.q_level,
                                &rd.force_redraw, &rd.SearchRE, rd.pager_window) == 0)
-	    i++;
+            i++;
 
-	  if (!rd.SearchBack)
-	  {
-	    /* searching forward */
-	    for (i = rd.topline; i < rd.lastLine; i++)
-	    {
-	      if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
+          if (!rd.SearchBack)
+          {
+            /* searching forward */
+            for (i = rd.topline; i < rd.lastLine; i++)
+            {
+              if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
                   !rd.lineInfo[i].continuation && rd.lineInfo[i].search_cnt > 0)
-		break;
-	    }
+                break;
+            }
 
-	    if (i < rd.lastLine) rd.topline = i;
-	  }
-	  else
-	  {
-	    /* searching backward */
-	    for (i = rd.topline; i >= 0; i--)
-	    {
-	      if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
+            if (i < rd.lastLine) rd.topline = i;
+          }
+          else
+          {
+            /* searching backward */
+            for (i = rd.topline; i >= 0; i--)
+            {
+              if ((!rd.hideQuoted || rd.lineInfo[i].type != MT_COLOR_QUOTED) &&
                   !rd.lineInfo[i].continuation && rd.lineInfo[i].search_cnt > 0)
-		break;
-	    }
+                break;
+            }
 
-	    if (i >= 0) rd.topline = i;
-	  }
+            if (i >= 0) rd.topline = i;
+          }
 
-	  if (rd.lineInfo[rd.topline].search_cnt == 0)
-	  {
-	    rd.SearchFlag = 0;
-	    mutt_error _("Not found.");
-	  }
-	  else
-	  {
-	    rd.SearchFlag = MUTT_SEARCH;
-	    /* give some context for search results */
-	    if (SearchContext > 0 && SearchContext < rd.pager_window->rows)
-	      searchctx = SearchContext;
-	    else
-	      searchctx = 0;
-	    if (rd.topline - searchctx > 0)
-	      rd.topline -= searchctx;
-	  }
+          if (rd.lineInfo[rd.topline].search_cnt == 0)
+          {
+            rd.SearchFlag = 0;
+            mutt_error _("Not found.");
+          }
+          else
+          {
+            rd.SearchFlag = MUTT_SEARCH;
+            /* give some context for search results */
+            if (SearchContext > 0 && SearchContext < rd.pager_window->rows)
+              searchctx = SearchContext;
+            else
+              searchctx = 0;
+            if (rd.topline - searchctx > 0)
+              rd.topline -= searchctx;
+          }
 
-	}
-	pager_menu->redraw = REDRAW_BODY;
-	break;
+        }
+        pager_menu->redraw = REDRAW_BODY;
+        break;
 
       case OP_SEARCH_TOGGLE:
-	if (rd.SearchCompiled)
-	{
-	  rd.SearchFlag ^= MUTT_SEARCH;
-	  pager_menu->redraw = REDRAW_BODY;
-	}
-	break;
+        if (rd.SearchCompiled)
+        {
+          rd.SearchFlag ^= MUTT_SEARCH;
+          pager_menu->redraw = REDRAW_BODY;
+        }
+        break;
 
       case OP_SORT:
       case OP_SORT_REVERSE:
@@ -2544,38 +2544,38 @@ search_next:
         break;
 
       case OP_HELP:
-	/* don't let the user enter the help-menu from the help screen! */
-	if (! InHelp)
-	{
-	  InHelp = 1;
-	  mutt_help (MENU_PAGER);
-	  InHelp = 0;
-	}
-	else
-	  mutt_error _("Help is currently being shown.");
-	break;
+        /* don't let the user enter the help-menu from the help screen! */
+        if (! InHelp)
+        {
+          InHelp = 1;
+          mutt_help (MENU_PAGER);
+          InHelp = 0;
+        }
+        else
+          mutt_error _("Help is currently being shown.");
+        break;
 
       case OP_ERROR_HISTORY:
         mutt_error_history_display ();
         break;
 
       case OP_PAGER_HIDE_QUOTED:
-	if (rd.has_types)
-	{
-	  rd.hideQuoted ^= MUTT_HIDE;
-	  if (rd.hideQuoted && rd.lineInfo[rd.topline].type == MT_COLOR_QUOTED)
-	    rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
-	  else
-	    pager_menu->redraw = REDRAW_BODY;
-	}
-	break;
+        if (rd.has_types)
+        {
+          rd.hideQuoted ^= MUTT_HIDE;
+          if (rd.hideQuoted && rd.lineInfo[rd.topline].type == MT_COLOR_QUOTED)
+            rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
+          else
+            pager_menu->redraw = REDRAW_BODY;
+        }
+        break;
 
       case OP_PAGER_SKIP_QUOTED:
-	if (rd.has_types)
-	{
-	  int dretval = 0;
-	  int new_topline = rd.topline;
-	  int num_quoted = 0;
+        if (rd.has_types)
+        {
+          int dretval = 0;
+          int new_topline = rd.topline;
+          int num_quoted = 0;
 
           if (PagerSkipQuotedContext < 0)
             PagerSkipQuotedContext = 0;
@@ -2583,65 +2583,65 @@ search_next:
           /* Skip past previous "context" quoted lines */
           if (PagerSkipQuotedContext > 0)
           {
-	    while ((new_topline < rd.lastLine ||
-		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
-			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
-	    {
-	      new_topline++;
-	      num_quoted++;
-	    }
+            while ((new_topline < rd.lastLine ||
+                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                           new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+                           &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+                   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
+            {
+              new_topline++;
+              num_quoted++;
+            }
 
-	    if (dretval < 0)
-	    {
-	      mutt_error _("No more unquoted text after quoted text.");
-	      break;
-	    }
+            if (dretval < 0)
+            {
+              mutt_error _("No more unquoted text after quoted text.");
+              break;
+            }
           }
 
           if (num_quoted <= PagerSkipQuotedContext)
           {
-	    num_quoted = 0;
-	    while ((new_topline < rd.lastLine ||
-		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
-			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		   && rd.lineInfo[new_topline].type != MT_COLOR_QUOTED)
-	      new_topline++;
+            num_quoted = 0;
+            while ((new_topline < rd.lastLine ||
+                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                           new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+                           &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+                   && rd.lineInfo[new_topline].type != MT_COLOR_QUOTED)
+              new_topline++;
 
-	    if (dretval < 0)
-	    {
-	      mutt_error _("No more quoted text.");
-	      break;
-	    }
+            if (dretval < 0)
+            {
+              mutt_error _("No more quoted text.");
+              break;
+            }
 
-	    while ((new_topline < rd.lastLine ||
-		    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			   new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
-			   &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
-	    {
-	      new_topline++;
-	      num_quoted++;
-	    }
+            while ((new_topline < rd.lastLine ||
+                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                           new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+                           &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
+                   && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
+            {
+              new_topline++;
+              num_quoted++;
+            }
 
-	    if (dretval < 0)
-	    {
-	      mutt_error _("No more unquoted text after quoted text.");
-	      break;
-	    }
-	  }
+            if (dretval < 0)
+            {
+              mutt_error _("No more unquoted text after quoted text.");
+              break;
+            }
+          }
 
-	  rd.topline = new_topline - MIN (PagerSkipQuotedContext, num_quoted);
-	}
-	break;
+          rd.topline = new_topline - MIN (PagerSkipQuotedContext, num_quoted);
+        }
+        break;
 
       case OP_PAGER_SKIP_HEADERS:
-	if (rd.has_types)
-	{
-	  int dretval = 0;
-	  int new_topline = rd.topline;
+        if (rd.has_types)
+        {
+          int dretval = 0;
+          int new_topline = rd.topline;
 
           if (!ISHEADER (rd.lineInfo[new_topline].type))
           {
@@ -2649,199 +2649,199 @@ search_next:
                Displayed if <skip-headers> is invoked in the pager, but we are
                already past the headers
             */
-	    mutt_error _("Already skipped past headers.");
-	    break;
-	  }
+            mutt_error _("Already skipped past headers.");
+            break;
+          }
 
-	  while ((new_topline < rd.lastLine ||
-		  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
-			 new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
+          while ((new_topline < rd.lastLine ||
+                  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                         new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
                          &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-		 && ISHEADER (rd.lineInfo[new_topline].type))
-	    new_topline++;
+                 && ISHEADER (rd.lineInfo[new_topline].type))
+            new_topline++;
 
-	  if (dretval < 0)
-	  {
+          if (dretval < 0)
+          {
             /* L10N:
                Displayed if <skip-headers> is invoked in the pager, but there is
                no text past the headers.
                (I don't think this is actually possible in Mutt's code, but
                display some kind of message in case it somehow occurs.)
             */
-	    mutt_error _("No text past headers.");
-	    break;
-	  }
-	  rd.topline = new_topline;
-	}
-	break;
+            mutt_error _("No text past headers.");
+            break;
+          }
+          rd.topline = new_topline;
+        }
+        break;
 
       case OP_PAGER_BOTTOM: /* move to the end of the file */
-	if (rd.lineInfo[rd.curline].offset < rd.sb.st_size - 1)
-	{
-	  i = rd.curline;
-	  /* make sure the types are defined to the end of file */
-	  while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
+        if (rd.lineInfo[rd.curline].offset < rd.sb.st_size - 1)
+        {
+          i = rd.curline;
+          /* make sure the types are defined to the end of file */
+          while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
                                &rd.maxLine, rd.has_types | (flags & MUTT_PAGER_NOWRAP),
                                &rd.QuoteList, &rd.q_level, &rd.force_redraw,
                                &rd.SearchRE, rd.pager_window) == 0)
-	    i++;
-	  rd.topline = upNLines (rd.pager_window->rows, rd.lineInfo, rd.lastLine, rd.hideQuoted);
-	}
-	else
-	  mutt_error _("Bottom of message is shown.");
-	break;
+            i++;
+          rd.topline = upNLines (rd.pager_window->rows, rd.lineInfo, rd.lastLine, rd.hideQuoted);
+        }
+        else
+          mutt_error _("Bottom of message is shown.");
+        break;
 
       case OP_REDRAW:
-	clearok (stdscr, TRUE);
-	pager_menu->redraw = REDRAW_FULL;
-	break;
+        clearok (stdscr, TRUE);
+        pager_menu->redraw = REDRAW_FULL;
+        break;
 
       case OP_NULL:
-	km_error_key (MENU_PAGER);
-	break;
+        km_error_key (MENU_PAGER);
+        break;
 
-	/* --------------------------------------------------------------------
-	 * The following are operations on the current message rather than
-	 * adjusting the view of the message.
-	 */
+        /* --------------------------------------------------------------------
+         * The following are operations on the current message rather than
+         * adjusting the view of the message.
+         */
 
       case OP_BOUNCE_MESSAGE:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
         if (IsMsgAttach (extra))
-	  mutt_attach_bounce (extra->fp, extra->hdr,
-			      extra->actx, extra->bdy);
+          mutt_attach_bounce (extra->fp, extra->hdr,
+                              extra->actx, extra->bdy);
         else
           ci_bounce_message (extra->hdr);
-	break;
+        break;
 
       case OP_RESEND:
         CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
         if (IsMsgAttach (extra))
-	  mutt_attach_resend (extra->fp, extra->hdr,
-			      extra->actx, extra->bdy);
+          mutt_attach_resend (extra->fp, extra->hdr,
+                              extra->actx, extra->bdy);
         else
-	  mutt_resend_message (NULL, extra->ctx, extra->hdr);
+          mutt_resend_message (NULL, extra->ctx, extra->hdr);
         break;
 
       case OP_CHECK_TRADITIONAL:
         CHECK_MODE (IsHeader (extra));
         if (!(WithCrypto & APPLICATION_PGP))
-	  break;
+          break;
         if (!(extra->hdr->security & PGP_TRADITIONAL_CHECKED))
         {
-	  ch = -1;
-	  rc = OP_CHECK_TRADITIONAL;
-	}
+          ch = -1;
+          rc = OP_CHECK_TRADITIONAL;
+        }
         break;
 
       case OP_COMPOSE_TO_SENDER:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
         if (IsMsgAttach (extra))
-	  mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
+          mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
                                    extra->bdy);
-	else
-	  mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
+        else
+          mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
                              NULL, NULL, extra->ctx, extra->hdr);
-	break;
+        break;
 
       case OP_CREATE_ALIAS:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         if (IsMsgAttach (extra))
-	  mutt_create_alias (extra->bdy->hdr->env, NULL);
+          mutt_create_alias (extra->bdy->hdr->env, NULL);
         else
-	  mutt_create_alias (extra->hdr->env, NULL);
-	break;
+          mutt_create_alias (extra->hdr->env, NULL);
+        break;
 
       case OP_PURGE_MESSAGE:
       case OP_DELETE:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message"));
+        CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message"));
 
-	mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 1);
-	mutt_set_flag (Context, extra->hdr, MUTT_PURGE, (ch == OP_PURGE_MESSAGE));
+        mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 1);
+        mutt_set_flag (Context, extra->hdr, MUTT_PURGE, (ch == OP_PURGE_MESSAGE));
         if (option (OPTDELETEUNTAG))
-	  mutt_set_flag (Context, extra->hdr, MUTT_TAG, 0);
-	pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	}
-	break;
+          mutt_set_flag (Context, extra->hdr, MUTT_TAG, 0);
+        pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_MAIN_NEXT_UNDELETED;
+        }
+        break;
 
       case OP_MAIN_SET_FLAG:
       case OP_MAIN_CLEAR_FLAG:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
 
-	if (mutt_change_flag (extra->hdr, (ch == OP_MAIN_SET_FLAG)) == 0)
-	  pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (extra->hdr->deleted && option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	}
-	break;
+        if (mutt_change_flag (extra->hdr, (ch == OP_MAIN_SET_FLAG)) == 0)
+          pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (extra->hdr->deleted && option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_MAIN_NEXT_UNDELETED;
+        }
+        break;
 
       case OP_DELETE_THREAD:
       case OP_DELETE_SUBTHREAD:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message(s)"));
+        CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message(s)"));
 
-	r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 1,
-				  ch == OP_DELETE_THREAD ? 0 : 1);
+        r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 1,
+                                  ch == OP_DELETE_THREAD ? 0 : 1);
 
-	if (r != -1)
-	{
-	  if (option (OPTDELETEUNTAG))
-	    mutt_thread_set_flag (extra->hdr, MUTT_TAG, 0,
-				  ch == OP_DELETE_THREAD ? 0 : 1);
-	  if (option (OPTRESOLVE))
-	  {
-	    rc = OP_MAIN_NEXT_UNDELETED;
-	    ch = -1;
-	  }
+        if (r != -1)
+        {
+          if (option (OPTDELETEUNTAG))
+            mutt_thread_set_flag (extra->hdr, MUTT_TAG, 0,
+                                  ch == OP_DELETE_THREAD ? 0 : 1);
+          if (option (OPTRESOLVE))
+          {
+            rc = OP_MAIN_NEXT_UNDELETED;
+            ch = -1;
+          }
 
-	  if (!option (OPTRESOLVE) && PagerIndexLines)
-	    pager_menu->redraw = REDRAW_FULL;
-	  else
-	    pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	}
-	break;
+          if (!option (OPTRESOLVE) && PagerIndexLines)
+            pager_menu->redraw = REDRAW_FULL;
+          else
+            pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        }
+        break;
 
       case OP_DISPLAY_ADDRESS:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         if (IsMsgAttach (extra))
-	  mutt_display_address (extra->bdy->hdr->env);
+          mutt_display_address (extra->bdy->hdr->env);
         else
-	  mutt_display_address (extra->hdr->env);
-	break;
+          mutt_display_address (extra->hdr->env);
+        break;
 
       case OP_ENTER_COMMAND:
-	old_PagerIndexLines = PagerIndexLines;
+        old_PagerIndexLines = PagerIndexLines;
 
-	mutt_enter_command ();
+        mutt_enter_command ();
 
-	if (option (OPTNEEDRESORT))
-	{
-	  unset_option (OPTNEEDRESORT);
-	  CHECK_MODE(IsHeader (extra));
-	  set_option (OPTNEEDRESORT);
-	}
+        if (option (OPTNEEDRESORT))
+        {
+          unset_option (OPTNEEDRESORT);
+          CHECK_MODE(IsHeader (extra));
+          set_option (OPTNEEDRESORT);
+        }
 
-	if (old_PagerIndexLines != PagerIndexLines)
-	{
-	  if (rd.index)
-	    mutt_menuDestroy (&rd.index);
-	  rd.index = NULL;
-	}
+        if (old_PagerIndexLines != PagerIndexLines)
+        {
+          if (rd.index)
+            mutt_menuDestroy (&rd.index);
+          rd.index = NULL;
+        }
 
         if ((pager_menu->redraw & REDRAW_FLOW) &&
             (flags & MUTT_PAGER_RETWINCH))
@@ -2852,49 +2852,49 @@ search_next:
         }
 
         ch = 0;
-	break;
+        break;
 
       case OP_FLAG_MESSAGE:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_WRITE, "Cannot flag message");
+        CHECK_ACL(MUTT_ACL_WRITE, "Cannot flag message");
 
-	mutt_set_flag (Context, extra->hdr, MUTT_FLAG, !extra->hdr->flagged);
-	pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	}
-	break;
+        mutt_set_flag (Context, extra->hdr, MUTT_FLAG, !extra->hdr->flagged);
+        pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_MAIN_NEXT_UNDELETED;
+        }
+        break;
 
       case OP_PIPE:
-	CHECK_MODE(IsHeader (extra) || IsAttach (extra));
-	if (IsAttach (extra))
-	  mutt_pipe_attachment_list (extra->actx, extra->fp, 0, extra->bdy, 0);
-	else
-	  mutt_pipe_message (extra->hdr);
-	break;
+        CHECK_MODE(IsHeader (extra) || IsAttach (extra));
+        if (IsAttach (extra))
+          mutt_pipe_attachment_list (extra->actx, extra->fp, 0, extra->bdy, 0);
+        else
+          mutt_pipe_message (extra->hdr);
+        break;
 
       case OP_PRINT:
-	CHECK_MODE(IsHeader (extra) || IsAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsAttach (extra));
         if (IsAttach (extra))
-	  mutt_print_attachment_list (extra->actx, extra->fp, 0, extra->bdy);
+          mutt_print_attachment_list (extra->actx, extra->fp, 0, extra->bdy);
         else
-	  mutt_print_message (extra->hdr);
-	break;
+          mutt_print_message (extra->hdr);
+        break;
 
       case OP_BACKGROUND_COMPOSE_MENU:
         mutt_background_compose_menu ();
         break;
 
       case OP_MAIL:
-	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
+        CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
+        mutt_send_message (SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
                            extra->ctx, NULL);
-	break;
+        break;
 
       case OP_REPLY:
       case OP_GROUP_REPLY:
@@ -2903,20 +2903,20 @@ search_next:
       {
         int replyflags;
 
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
 
         replyflags = SENDREPLY | SENDBACKGROUNDEDIT |
-	  (ch == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
-	  (ch == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
-	  (ch == OP_LIST_REPLY ? SENDLISTREPLY : 0);
+          (ch == OP_GROUP_REPLY ? SENDGROUPREPLY : 0) |
+          (ch == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
+          (ch == OP_LIST_REPLY ? SENDLISTREPLY : 0);
 
         if (IsMsgAttach (extra))
-	  mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
-			     extra->bdy, replyflags);
-	else
-	  mutt_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
-	break;
+          mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
+                             extra->bdy, replyflags);
+        else
+          mutt_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
+        break;
       }
 
       case OP_LIST_ACTION:
@@ -2925,22 +2925,22 @@ search_next:
         break;
 
       case OP_RECALL_MESSAGE:
-	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
+        CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
+        mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
                            NULL, NULL, extra->ctx, NULL);
-	break;
+        break;
 
       case OP_FORWARD_MESSAGE:
-	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
         if (IsMsgAttach (extra))
-	  mutt_attach_forward (extra->fp, extra->hdr, extra->actx,
-			       extra->bdy);
+          mutt_attach_forward (extra->fp, extra->hdr, extra->actx,
+                               extra->bdy);
         else
-	  mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
+          mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
                              NULL, NULL, extra->ctx, extra->hdr);
-	break;
+        break;
 
       case OP_DECRYPT_SAVE:
         if (!WithCrypto)
@@ -2948,14 +2948,14 @@ search_next:
           ch = -1;
           break;
         }
-	/* fall through */
+        /* fall through */
       case OP_SAVE:
-	if (IsAttach (extra))
-	{
-	  mutt_save_attachment_list (extra->actx, extra->fp, 0, extra->bdy, extra->hdr, NULL);
-	  break;
-	}
-	/* fall through */
+        if (IsAttach (extra))
+        {
+          mutt_save_attachment_list (extra->actx, extra->fp, 0, extra->bdy, extra->hdr, NULL);
+          break;
+        }
+        /* fall through */
       case OP_COPY_MESSAGE:
       case OP_DECODE_SAVE:
       case OP_DECODE_COPY:
@@ -2965,130 +2965,130 @@ search_next:
           ch = -1;
           break;
         }
-	CHECK_MODE(IsHeader (extra));
-	if (mutt_save_message (extra->hdr,
-			       (ch == OP_DECRYPT_SAVE) ||
-			       (ch == OP_SAVE) || (ch == OP_DECODE_SAVE),
-			       (ch == OP_DECODE_SAVE) || (ch == OP_DECODE_COPY),
-			       (ch == OP_DECRYPT_SAVE) || (ch == OP_DECRYPT_COPY) ||
-			       0) == 0 &&
+        CHECK_MODE(IsHeader (extra));
+        if (mutt_save_message (extra->hdr,
+                               (ch == OP_DECRYPT_SAVE) ||
+                               (ch == OP_SAVE) || (ch == OP_DECODE_SAVE),
+                               (ch == OP_DECODE_SAVE) || (ch == OP_DECODE_COPY),
+                               (ch == OP_DECRYPT_SAVE) || (ch == OP_DECRYPT_COPY) ||
+                               0) == 0 &&
             (ch == OP_SAVE || ch == OP_DECODE_SAVE || ch == OP_DECRYPT_SAVE)
           )
-	{
-	  if (option (OPTRESOLVE))
-	  {
-	    ch = -1;
-	    rc = OP_MAIN_NEXT_UNDELETED;
-	  }
-	  else
-	    pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	}
-	break;
+        {
+          if (option (OPTRESOLVE))
+          {
+            ch = -1;
+            rc = OP_MAIN_NEXT_UNDELETED;
+          }
+          else
+            pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        }
+        break;
 
       case OP_SHELL_ESCAPE:
-	mutt_shell_escape ();
-	break;
+        mutt_shell_escape ();
+        break;
 
       case OP_TAG:
-	CHECK_MODE(IsHeader (extra));
-	mutt_set_flag (Context, extra->hdr, MUTT_TAG, !extra->hdr->tagged);
+        CHECK_MODE(IsHeader (extra));
+        mutt_set_flag (Context, extra->hdr, MUTT_TAG, !extra->hdr->tagged);
 
-	Context->last_tag = extra->hdr->tagged ? extra->hdr :
-	  ((Context->last_tag == extra->hdr && !extra->hdr->tagged)
-	   ? NULL : Context->last_tag);
+        Context->last_tag = extra->hdr->tagged ? extra->hdr :
+          ((Context->last_tag == extra->hdr && !extra->hdr->tagged)
+           ? NULL : Context->last_tag);
 
-	pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_NEXT_ENTRY;
-	}
-	break;
+        pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_NEXT_ENTRY;
+        }
+        break;
 
       case OP_TOGGLE_NEW:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_SEEN, _("Cannot toggle new"));
+        CHECK_ACL(MUTT_ACL_SEEN, _("Cannot toggle new"));
 
-	if (extra->hdr->read || extra->hdr->old)
-	  mutt_set_flag (Context, extra->hdr, MUTT_NEW, 1);
-	else if (!first)
-	  mutt_set_flag (Context, extra->hdr, MUTT_READ, 1);
-	first = 0;
+        if (extra->hdr->read || extra->hdr->old)
+          mutt_set_flag (Context, extra->hdr, MUTT_NEW, 1);
+        else if (!first)
+          mutt_set_flag (Context, extra->hdr, MUTT_READ, 1);
+        first = 0;
         Context->msgnotreadyet = -1;
-	pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_MAIN_NEXT_UNDELETED;
-	}
-	break;
+        pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_MAIN_NEXT_UNDELETED;
+        }
+        break;
 
       case OP_UNDELETE:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message"));
+        CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message"));
 
-	mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 0);
-	mutt_set_flag (Context, extra->hdr, MUTT_PURGE, 0);
-	pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	if (option (OPTRESOLVE))
-	{
-	  ch = -1;
-	  rc = OP_NEXT_ENTRY;
-	}
-	break;
+        mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 0);
+        mutt_set_flag (Context, extra->hdr, MUTT_PURGE, 0);
+        pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        if (option (OPTRESOLVE))
+        {
+          ch = -1;
+          rc = OP_NEXT_ENTRY;
+        }
+        break;
 
       case OP_UNDELETE_THREAD:
       case OP_UNDELETE_SUBTHREAD:
-	CHECK_MODE(IsHeader (extra));
-	CHECK_READONLY;
+        CHECK_MODE(IsHeader (extra));
+        CHECK_READONLY;
         /* L10N: CHECK_ACL */
-	CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message(s)"));
+        CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message(s)"));
 
-	r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 0,
-				  ch == OP_UNDELETE_THREAD ? 0 : 1);
-	if (r != -1)
+        r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 0,
+                                  ch == OP_UNDELETE_THREAD ? 0 : 1);
+        if (r != -1)
           r = mutt_thread_set_flag (extra->hdr, MUTT_PURGE, 0,
                                     ch == OP_UNDELETE_THREAD ? 0 : 1);
-	if (r != -1)
-	{
-	  if (option (OPTRESOLVE))
-	  {
-	    rc = (ch == OP_DELETE_THREAD) ?
+        if (r != -1)
+        {
+          if (option (OPTRESOLVE))
+          {
+            rc = (ch == OP_DELETE_THREAD) ?
               OP_MAIN_NEXT_THREAD : OP_MAIN_NEXT_SUBTHREAD;
-	    ch = -1;
-	  }
+            ch = -1;
+          }
 
-	  if (!option (OPTRESOLVE) && PagerIndexLines)
-	    pager_menu->redraw = REDRAW_FULL;
-	  else
-	    pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-	}
-	break;
+          if (!option (OPTRESOLVE) && PagerIndexLines)
+            pager_menu->redraw = REDRAW_FULL;
+          else
+            pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
+        }
+        break;
 
       case OP_VERSION:
-	mutt_version ();
-	break;
+        mutt_version ();
+        break;
 
       case OP_BUFFY_LIST:
-	mutt_buffy_list ();
-	break;
+        mutt_buffy_list ();
+        break;
 
       case OP_VIEW_ATTACHMENTS:
         if (flags & MUTT_PAGER_ATTACHMENT)
         {
-	  ch = -1;
-	  rc = OP_ATTACH_COLLAPSE;
-	  break;
-	}
-	CHECK_MODE(IsHeader (extra));
-	mutt_view_attachments (extra->hdr);
-	if (extra->hdr->attach_del)
-	  Context->changed = 1;
-	break;
+          ch = -1;
+          rc = OP_ATTACH_COLLAPSE;
+          break;
+        }
+        CHECK_MODE(IsHeader (extra));
+        mutt_view_attachments (extra->hdr);
+        if (extra->hdr->attach_del)
+          Context->changed = 1;
+        break;
 
       case OP_EDIT_LABEL:
         CHECK_MODE(IsHeader (extra));
@@ -3111,15 +3111,15 @@ search_next:
           ch = -1;
           break;
         }
-	CHECK_MODE(IsHeader(extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_ATTACH;
-	mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, NULL);
-	break;
+        mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, NULL);
+        break;
 
 
       case OP_FORGET_PASSPHRASE:
-	crypt_forget_passphrase ();
-	break;
+        crypt_forget_passphrase ();
+        break;
 
       case OP_EXTRACT_KEYS:
         if (!WithCrypto)
@@ -3128,17 +3128,17 @@ search_next:
           break;
         }
         CHECK_MODE(IsHeader(extra));
-	crypt_extract_keys_from_messages(extra->hdr);
+        crypt_extract_keys_from_messages(extra->hdr);
         pager_menu->redraw = REDRAW_FULL;
         break;
 
       case OP_WHAT_KEY:
-	mutt_what_key ();
-	break;
+        mutt_what_key ();
+        break;
 
       case OP_CHECK_STATS:
-	mutt_check_stats ();
-	break;
+        mutt_check_stats ();
+        break;
 
 #ifdef USE_SIDEBAR
       case OP_SIDEBAR_FIRST:
@@ -3149,18 +3149,18 @@ search_next:
       case OP_SIDEBAR_PAGE_UP:
       case OP_SIDEBAR_PREV:
       case OP_SIDEBAR_PREV_NEW:
-	mutt_sb_change_mailbox (ch);
-	break;
+        mutt_sb_change_mailbox (ch);
+        break;
 
       case OP_SIDEBAR_TOGGLE_VISIBLE:
-	toggle_option (OPTSIDEBAR);
+        toggle_option (OPTSIDEBAR);
         mutt_reflow_windows();
-	break;
+        break;
 #endif
 
       default:
-	ch = -1;
-	break;
+        ch = -1;
+        break;
     }
   }
 

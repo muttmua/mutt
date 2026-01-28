@@ -147,11 +147,11 @@ static int union_hash_insert (HASH * table, union hash_key key, void *data)
       r = table->cmp_key (tmp->key, key);
       if (r == 0)
       {
-	FREE (&ptr);
-	return (-1);
+        FREE (&ptr);
+        return (-1);
       }
       if (r > 0)
-	break;
+        break;
     }
     if (last)
       last->next = ptr;
@@ -253,11 +253,11 @@ static void union_hash_delete (HASH *table, union hash_key key, const void *data
   while (ptr)
   {
     if ((data == ptr->data || !data)
-	&& table->cmp_key (ptr->key, key) == 0)
+        && table->cmp_key (ptr->key, key) == 0)
     {
       *last = ptr->next;
       if (destroy)
-	destroy (ptr->data);
+        destroy (ptr->data);
       if (table->strdup_keys)
         FREE (&ptr->key.strkey);
       FREE (&ptr);
@@ -308,7 +308,7 @@ void hash_destroy (HASH **ptr, void (*destroy) (void *))
       tmp = elem;
       elem = elem->next;
       if (destroy)
-	destroy (tmp->data);
+        destroy (tmp->data);
       if (pptr->strdup_keys)
         FREE (&tmp->key.strkey);
       FREE (&tmp);

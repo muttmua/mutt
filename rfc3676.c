@@ -171,7 +171,7 @@ static int quote_width (STATE *s, int ql)
 }
 
 static void print_flowed_line (char *line, STATE *s, int ql,
-			       flowed_state_t *fst, int term)
+                               flowed_state_t *fst, int term)
 {
   size_t width, w, words = 0;
   char *p;
@@ -190,12 +190,12 @@ static void print_flowed_line (char *line, STATE *s, int ql,
   last = line[mutt_strlen (line) - 1];
 
   dprint (4, (debugfile, "f=f: line [%s], width = %ld, spaces = %d\n",
-	      NONULL(line), (long)width, fst->spaces));
+              NONULL(line), (long)width, fst->spaces));
 
   for (p = (char *)line, words = 0; (p = strsep (&line, " ")) != NULL ; )
   {
     dprint(4,(debugfile,"f=f: word [%s], width: %d, remaining = [%s]\n",
-	      p, fst->width, line));
+              p, fst->width, line));
 
     /* remember number of spaces */
     if (!*p)
@@ -215,14 +215,14 @@ static void print_flowed_line (char *line, STATE *s, int ql,
        have a long word that we should break within (we leave that
        up to the pager or user) */
     if (!(!fst->spaces && fst->delsp && last != ' ') &&
-	w < width && w + fst->width + fst->spaces > width)
+        w < width && w + fst->width + fst->spaces > width)
     {
       dprint(4,(debugfile,"f=f: break line at %d, %d spaces left\n",
-		fst->width, fst->spaces));
+                fst->width, fst->spaces));
       /* only honor trailing spaces for format=flowed replies */
       if (option(OPTTEXTFLOWED))
-	for ( ; fst->spaces; fst->spaces--)
-	  state_putc (' ', s);
+        for ( ; fst->spaces; fst->spaces--)
+          state_putc (' ', s);
       state_putc ('\n', s);
       fst->width = 0;
       fst->spaces = 0;
@@ -243,7 +243,7 @@ static void print_flowed_line (char *line, STATE *s, int ql,
 }
 
 static void print_fixed_line (const char *line, STATE *s, int ql,
-			      flowed_state_t *fst)
+                              flowed_state_t *fst)
 {
   print_indent (ql, s, add_quote_suffix (s, ql));
   if (line && *line)

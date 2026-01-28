@@ -58,7 +58,7 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
   FOREVER
   {
     if (fgets (buf, *linelen - offset, f) == NULL ||	/* end of file or */
-	(is_email_wsp (*line) && !offset))		/* end of headers */
+        (is_email_wsp (*line) && !offset))		/* end of headers */
     {
       *line = 0;
       return (line);
@@ -73,22 +73,22 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
     {
       /* we did get a full line. remove trailing space */
       while (is_email_wsp (*buf))
-	*buf-- = 0;	/* we cannot come beyond line's beginning because
-			 * it begins with a non-space */
+        *buf-- = 0;	/* we cannot come beyond line's beginning because
+                         * it begins with a non-space */
 
       /* check to see if the next line is a continuation line */
       if ((ch = fgetc (f)) != ' ' && ch != '\t')
       {
-	ungetc (ch, f);
-	return (line); /* next line is a separate header field or EOH */
+        ungetc (ch, f);
+        return (line); /* next line is a separate header field or EOH */
       }
 
       /* eat tabs and spaces from the beginning of the continuation line */
       while ((ch = fgetc (f)) == ' ' || ch == '\t')
-	;
+        ;
       ungetc (ch, f);
       *++buf = ' '; /* string is still terminated because we removed
-		       at least one whitespace char above */
+                       at least one whitespace char above */
     }
 
     buf++;
@@ -185,20 +185,20 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
       i = p - s;
       /* remove whitespace from the end of the attribute name */
       while (i > 0 && is_email_wsp(s[i-1]))
-	--i;
+        --i;
 
       /* the check for the missing parameter token is here so that we can skip
        * over any quoted value that may be present.
        */
       if (i == 0)
       {
-	dprint(1, (debugfile, "parse_parameters: missing attribute: %s\n", s));
-	new = NULL;
+        dprint(1, (debugfile, "parse_parameters: missing attribute: %s\n", s));
+        new = NULL;
       }
       else
       {
-	new = mutt_new_parameter ();
-	new->attribute = mutt_substrdup(s, s + i);
+        new = mutt_new_parameter ();
+        new->attribute = mutt_substrdup(s, s + i);
       }
 
       do
@@ -252,20 +252,20 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
       /* if the attribute token was missing, 'new' will be NULL */
       if (new)
       {
-	new->value = safe_strdup (mutt_b2s (buffer));
+        new->value = safe_strdup (mutt_b2s (buffer));
 
-	dprint (2, (debugfile, "parse_parameter: `%s' = `%s'\n",
+        dprint (2, (debugfile, "parse_parameter: `%s' = `%s'\n",
                     new->attribute ? new->attribute : "",
                     new->value ? new->value : ""));
 
-	/* Add this parameter to the list */
-	if (head)
-	{
-	  cur->next = new;
-	  cur = cur->next;
-	}
-	else
-	  head = cur = new;
+        /* Add this parameter to the list */
+        if (head)
+        {
+          cur->next = new;
+          cur = cur->next;
+        }
+        else
+          head = cur = new;
       }
     }
     else
@@ -411,8 +411,8 @@ void mutt_parse_content_type (char *s, BODY *ct)
       /* Microsoft Outlook seems to think it is necessary to repeat
        * charset=, strip it off not to confuse ourselves */
       if (ascii_strncasecmp (pc, "charset=", sizeof ("charset=") - 1) == 0)
-	mutt_set_parameter ("charset", pc + (sizeof ("charset=") - 1),
-			    &ct->parameter);
+        mutt_set_parameter ("charset", pc + (sizeof ("charset=") - 1),
+                            &ct->parameter);
     }
   }
 
@@ -534,8 +534,8 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
       c = skip_email_wsp(c + 1);
       if (!*c)
       {
-	dprint (1, (debugfile, "mutt_read_mime_header(): skipping empty header field: %s\n", line));
-	continue;
+        dprint (1, (debugfile, "mutt_read_mime_header(): skipping empty header field: %s\n", line));
+        continue;
       }
     }
     else
@@ -547,15 +547,15 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
     if (!ascii_strncasecmp ("content-", line, 8))
     {
       if (!ascii_strcasecmp ("type", line + 8))
-	mutt_parse_content_type (c, p);
+        mutt_parse_content_type (c, p);
       else if (!ascii_strcasecmp ("transfer-encoding", line + 8))
-	p->encoding = mutt_check_encoding (c);
+        p->encoding = mutt_check_encoding (c);
       else if (!ascii_strcasecmp ("disposition", line + 8))
-	parse_content_disposition (c, p);
+        parse_content_disposition (c, p);
       else if (!ascii_strcasecmp ("description", line + 8))
       {
-	mutt_str_replace (&p->description, c);
-	rfc2047_decode (&p->description);
+        mutt_str_replace (&p->description, c);
+        rfc2047_decode (&p->description);
       }
     }
 #ifdef SUN_ATTACHMENT
@@ -569,7 +569,7 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
         mutt_set_parameter ("content-lines", c, &(p->parameter));
       else if (!ascii_strcasecmp ("data-description", line + 6))
       {
-	mutt_str_replace (&p->description, c);
+        mutt_str_replace (&p->description, c);
         rfc2047_decode (&p->description);
       }
     }
@@ -628,13 +628,13 @@ static void _parse_part (FILE *fp, BODY *b, int *counter)
     case TYPEMESSAGE:
       if (b->subtype)
       {
-	fseeko (fp, b->offset, SEEK_SET);
-	if (mutt_is_message_type(b->type, b->subtype))
-	  b->parts = _parse_messageRFC822 (fp, b, counter);
-	else if (ascii_strcasecmp (b->subtype, "external-body") == 0)
-	  b->parts = mutt_read_mime_header (fp, 0);
-	else
-	  goto bail;
+        fseeko (fp, b->offset, SEEK_SET);
+        if (mutt_is_message_type(b->type, b->subtype))
+          b->parts = _parse_messageRFC822 (fp, b, counter);
+        else if (ascii_strcasecmp (b->subtype, "external-body") == 0)
+          b->parts = mutt_read_mime_header (fp, 0);
+        else
+          goto bail;
       }
       break;
 
@@ -724,16 +724,16 @@ static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
     crlf =  (len > 1 && buffer[len - 2] == '\r') ? 1 : 0;
 
     if (buffer[0] == '-' && buffer[1] == '-' &&
-	mutt_strncmp (buffer + 2, boundary, blen) == 0)
+        mutt_strncmp (buffer + 2, boundary, blen) == 0)
     {
       if (last)
       {
-	last->length = ftello (fp) - last->offset - len - 1 - crlf;
-	if (last->parts && last->parts->length == 0)
-	  last->parts->length = ftello (fp) - last->parts->offset - len - 1 - crlf;
-	/* if the body is empty, we can end up with a -1 length */
-	if (last->length < 0)
-	  last->length = 0;
+        last->length = ftello (fp) - last->offset - len - 1 - crlf;
+        if (last->parts && last->parts->length == 0)
+          last->parts->length = ftello (fp) - last->parts->offset - len - 1 - crlf;
+        /* if the body is empty, we can end up with a -1 length */
+        if (last->length < 0)
+          last->length = 0;
       }
 
       /* Remove any trailing whitespace, up to the length of the boundary */
@@ -743,41 +743,41 @@ static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
       /* Check for the end boundary */
       if (mutt_strcmp (buffer + blen + 2, "--") == 0)
       {
-	final = 1;
-	break; /* done parsing */
+        final = 1;
+        break; /* done parsing */
       }
       else if (buffer[2 + blen] == 0)
       {
-	new = mutt_read_mime_header (fp, digest);
+        new = mutt_read_mime_header (fp, digest);
 
 #ifdef SUN_ATTACHMENT
         if (mutt_get_parameter ("content-lines", new->parameter))
         {
-	  mutt_atoi (mutt_get_parameter ("content-lines", new->parameter),
+          mutt_atoi (mutt_get_parameter ("content-lines", new->parameter),
                      &lines, 0);
-	  for ( ; lines; lines-- )
+          for ( ; lines; lines-- )
             if (ftello (fp) >= end_off || fgets (buffer, LONG_STRING, fp) == NULL)
               break;
-	}
+        }
 #endif
 
-	/*
-	 * Consistency checking - catch
-	 * bad attachment end boundaries
-	 */
+        /*
+         * Consistency checking - catch
+         * bad attachment end boundaries
+         */
 
-	if (new->offset > end_off)
-	{
-	  mutt_free_body(&new);
-	  break;
-	}
-	if (head)
-	{
-	  last->next = new;
-	  last = new;
-	}
-	else
-	  last = head = new;
+        if (new->offset > end_off)
+        {
+          mutt_free_body(&new);
+          break;
+        }
+        if (head)
+        {
+          last->next = new;
+          last = new;
+        }
+        else
+          last = head = new;
 
         /* It seems more intuitive to add the counter increment to
          * _parse_part(), but we want to stop the case where a multipart
@@ -942,92 +942,92 @@ time_t mutt_parse_date (const char *s, HEADER *h)
     switch (count)
     {
       case 0: /* day of the month */
-	if (mutt_atoi (t, &tm.tm_mday, 0) < 0 || tm.tm_mday < 0)
-	  return (-1);
-	if (tm.tm_mday > 31)
-	  return (-1);
-	break;
+        if (mutt_atoi (t, &tm.tm_mday, 0) < 0 || tm.tm_mday < 0)
+          return (-1);
+        if (tm.tm_mday > 31)
+          return (-1);
+        break;
 
       case 1: /* month of the year */
-	if ((i = mutt_check_month (t)) < 0)
-	  return (-1);
-	tm.tm_mon = i;
-	break;
+        if ((i = mutt_check_month (t)) < 0)
+          return (-1);
+        tm.tm_mon = i;
+        break;
 
       case 2: /* year */
-	if (mutt_atoi (t, &tm.tm_year, 0) < 0 || tm.tm_year < 0)
-	  return (-1);
+        if (mutt_atoi (t, &tm.tm_year, 0) < 0 || tm.tm_year < 0)
+          return (-1);
         if (tm.tm_year < 50)
-	  tm.tm_year += 100;
+          tm.tm_year += 100;
         else if (tm.tm_year >= 1900)
-	  tm.tm_year -= 1900;
-	break;
+          tm.tm_year -= 1900;
+        break;
 
       case 3: /* time of day */
-	if (sscanf (t, "%d:%d:%d", &hour, &min, &sec) == 3)
-	  ;
-	else if (sscanf (t, "%d:%d", &hour, &min) == 2)
-	  sec = 0;
-	else
-	{
-	  dprint(1, (debugfile, "parse_date: could not process time format: %s\n", t));
-	  return(-1);
-	}
-	tm.tm_hour = hour;
-	tm.tm_min = min;
-	tm.tm_sec = sec;
-	break;
+        if (sscanf (t, "%d:%d:%d", &hour, &min, &sec) == 3)
+          ;
+        else if (sscanf (t, "%d:%d", &hour, &min) == 2)
+          sec = 0;
+        else
+        {
+          dprint(1, (debugfile, "parse_date: could not process time format: %s\n", t));
+          return(-1);
+        }
+        tm.tm_hour = hour;
+        tm.tm_min = min;
+        tm.tm_sec = sec;
+        break;
 
       case 4: /* timezone */
-	/* sometimes we see things like (MST) or (-0700) so attempt to
-	 * compensate by uncommenting the string if non-RFC822 compliant
-	 */
-	ptz = uncomment_timezone (tzstr, sizeof (tzstr), t);
+        /* sometimes we see things like (MST) or (-0700) so attempt to
+         * compensate by uncommenting the string if non-RFC822 compliant
+         */
+        ptz = uncomment_timezone (tzstr, sizeof (tzstr), t);
 
-	if (*ptz == '+' || *ptz == '-')
-	{
-	  if (ptz[1] && ptz[2] && ptz[3] && ptz[4]
-	      && isdigit ((unsigned char) ptz[1]) && isdigit ((unsigned char) ptz[2])
-	      && isdigit ((unsigned char) ptz[3]) && isdigit ((unsigned char) ptz[4]))
-	  {
-	    zhours = (ptz[1] - '0') * 10 + (ptz[2] - '0');
-	    zminutes = (ptz[3] - '0') * 10 + (ptz[4] - '0');
+        if (*ptz == '+' || *ptz == '-')
+        {
+          if (ptz[1] && ptz[2] && ptz[3] && ptz[4]
+              && isdigit ((unsigned char) ptz[1]) && isdigit ((unsigned char) ptz[2])
+              && isdigit ((unsigned char) ptz[3]) && isdigit ((unsigned char) ptz[4]))
+          {
+            zhours = (ptz[1] - '0') * 10 + (ptz[2] - '0');
+            zminutes = (ptz[3] - '0') * 10 + (ptz[4] - '0');
 
-	    if (ptz[0] == '-')
-	      zoccident = 1;
-	  }
-	}
-	else
-	{
-	  struct tz_t *tz;
+            if (ptz[0] == '-')
+              zoccident = 1;
+          }
+        }
+        else
+        {
+          struct tz_t *tz;
 
-	  tz = bsearch (ptz, TimeZones, sizeof TimeZones/sizeof (struct tz_t),
-			sizeof (struct tz_t),
-			(int (*)(const void *, const void *)) ascii_strcasecmp
-			/* This is safe to do: A pointer to a struct equals
-			 * a pointer to its first element*/);
+          tz = bsearch (ptz, TimeZones, sizeof TimeZones/sizeof (struct tz_t),
+                        sizeof (struct tz_t),
+                        (int (*)(const void *, const void *)) ascii_strcasecmp
+                        /* This is safe to do: A pointer to a struct equals
+                         * a pointer to its first element*/);
 
-	  if (tz)
-	  {
-	    zhours = tz->zhours;
-	    zminutes = tz->zminutes;
-	    zoccident = tz->zoccident;
-	  }
+          if (tz)
+          {
+            zhours = tz->zhours;
+            zminutes = tz->zminutes;
+            zoccident = tz->zoccident;
+          }
 
-	  /* ad hoc support for the European MET (now officially CET) TZ */
-	  if (ascii_strcasecmp (t, "MET") == 0)
-	  {
-	    if ((t = strtok (NULL, " \t")) != NULL)
-	    {
-	      if (!ascii_strcasecmp (t, "DST"))
-		zhours++;
-	    }
-	  }
-	}
-	tz_offset = zhours * 3600 + zminutes * 60;
-	if (!zoccident)
-	  tz_offset = -tz_offset;
-	break;
+          /* ad hoc support for the European MET (now officially CET) TZ */
+          if (ascii_strcasecmp (t, "MET") == 0)
+          {
+            if ((t = strtok (NULL, " \t")) != NULL)
+            {
+              if (!ascii_strcasecmp (t, "DST"))
+                zhours++;
+            }
+          }
+        }
+        tz_offset = zhours * 3600 + zminutes * 60;
+        if (!zoccident)
+          tz_offset = -tz_offset;
+        break;
     }
     count++;
     t = 0;
@@ -1214,7 +1214,7 @@ void mutt_auto_subscribe (const char *mailto)
 }
 
 int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short user_hdrs, short weed,
-			    short do_2047, LIST **lastp)
+                            short do_2047, LIST **lastp)
 {
   int matched = 0;
 
@@ -1524,7 +1524,7 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
     line[strlen (line)] = ':';
 
     if (weed && option (OPTWEED) && mutt_matches_ignore (line, Ignore)
-	&& !mutt_matches_ignore (line, UnIgnore))
+        && !mutt_matches_ignore (line, UnIgnore))
       goto done;
 
     if (last)
@@ -1566,7 +1566,7 @@ done:
  *              mutt_free_envelope() when envelope stay unneeded.
  */
 ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
-				   short weed)
+                                   short weed)
 {
   ENVELOPE *e = mutt_new_envelope();
   LIST *last = NULL;
@@ -1602,13 +1602,13 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
 
       /* some bogus MTAs will quote the original "From " line */
       if (mutt_strncmp (">From ", line, 6) == 0)
-	continue; /* just ignore */
+        continue; /* just ignore */
       else if (is_from (line, NULL, 0, &t))
       {
-	/* MH sometimes has the From_ line in the middle of the header! */
-	if (hdr && !hdr->received)
-	  hdr->received = t - mutt_local_tz (t);
-	continue;
+        /* MH sometimes has the From_ line in the middle of the header! */
+        if (hdr && !hdr->received)
+          hdr->received = t - mutt_local_tz (t);
+        continue;
       }
 
       fseeko (f, loc, SEEK_SET);
@@ -1622,37 +1622,37 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
       if (!mutt_match_rx_list(line, NoSpamList))
       {
 
-	/* if spam tag already exists, figure out how to amend it */
-	if (e->spam && *buf)
-	{
-	  /* If SpamSep defined, append with separator */
-	  if (SpamSep)
-	  {
-	    mutt_buffer_addstr(e->spam, SpamSep);
-	    mutt_buffer_addstr(e->spam, buf);
-	  }
+        /* if spam tag already exists, figure out how to amend it */
+        if (e->spam && *buf)
+        {
+          /* If SpamSep defined, append with separator */
+          if (SpamSep)
+          {
+            mutt_buffer_addstr(e->spam, SpamSep);
+            mutt_buffer_addstr(e->spam, buf);
+          }
 
-	  /* else overwrite */
-	  else
-	  {
+          /* else overwrite */
+          else
+          {
             mutt_buffer_clear (e->spam);
-	    mutt_buffer_addstr(e->spam, buf);
-	  }
-	}
+            mutt_buffer_addstr(e->spam, buf);
+          }
+        }
 
-	/* spam tag is new, and match expr is non-empty; copy */
-	else if (!e->spam && *buf)
-	{
-	  e->spam = mutt_buffer_from (buf);
-	}
+        /* spam tag is new, and match expr is non-empty; copy */
+        else if (!e->spam && *buf)
+        {
+          e->spam = mutt_buffer_from (buf);
+        }
 
-	/* match expr is empty; plug in null string if no existing tag */
-	else if (!e->spam)
-	{
-	  e->spam = mutt_buffer_from("");
-	}
+        /* match expr is empty; plug in null string if no existing tag */
+        else if (!e->spam)
+        {
+          e->spam = mutt_buffer_from("");
+        }
 
-	if (e->spam && e->spam->data)
+        if (e->spam && e->spam->data)
           dprint(5, (debugfile, "p822: spam = %s\n", e->spam->data));
       }
     }
@@ -1679,9 +1679,9 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
       regmatch_t pmatch[1];
 
       if (regexec (ReplyRegexp.rx, e->subject, 1, pmatch, 0) == 0)
-	e->real_subj = e->subject + pmatch[0].rm_eo;
+        e->real_subj = e->subject + pmatch[0].rm_eo;
       else
-	e->real_subj = e->subject;
+        e->real_subj = e->subject;
     }
 
     if (hdr->received < 0)
@@ -1756,7 +1756,7 @@ static int count_body_parts_check(LIST **checklist, BODY *b, int dflt)
                dflt ? "[OK]   " : "[EXCL] ",
                b->type, b->subtype, a->major, a->minor, a->major_int));
     if ((a->major_int == TYPEANY || a->major_int == b->type) &&
-	!regexec(&a->minor_rx, b->subtype, 0, NULL, 0))
+        !regexec(&a->minor_rx, b->subtype, 0, NULL, 0))
     {
       dprint(5, (debugfile, "yes\n"));
       return 1;
@@ -1800,11 +1800,11 @@ static int count_body_parts (BODY *body, int flags)
 
       /* If it's an external body pointer, don't recurse it. */
       if (!ascii_strcasecmp (bp->subtype, "external-body"))
-	shallrecurse = 0;
+        shallrecurse = 0;
 
       /* Don't count containers if they're top-level. */
       if (flags & MUTT_PARTS_TOPLEVEL)
-	AT_NOCOUNT("top-level message/*");
+        AT_NOCOUNT("top-level message/*");
     }
     else if (bp->type == TYPEMULTIPART)
     {
@@ -1824,7 +1824,7 @@ static int count_body_parts (BODY *body, int flags)
 
       /* Don't count containers if they're top-level. */
       if (flags & MUTT_PARTS_TOPLEVEL)
-	AT_NOCOUNT("top-level multipart");
+        AT_NOCOUNT("top-level multipart");
     }
 
     /* If this body isn't scheduled for enumeration already, don't bother
@@ -1840,9 +1840,9 @@ static int count_body_parts (BODY *body, int flags)
       if (bp->disposition == DISPATTACH)
       {
         if (!count_body_parts_check(&AttachAllow, bp, 1))
-	  AT_NOCOUNT("attach not allowed");
+          AT_NOCOUNT("attach not allowed");
         if (count_body_parts_check(&AttachExclude, bp, 0))
-	  AT_NOCOUNT("attach excluded");
+          AT_NOCOUNT("attach excluded");
       }
       else
       {

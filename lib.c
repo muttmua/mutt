@@ -368,7 +368,7 @@ void mutt_unlink (const char *s)
       return;
 
     if ((fstat (fd, &sb2) != 0) || !S_ISREG (sb2.st_mode)
-	|| (sb.st_dev != sb2.st_dev) || (sb.st_ino != sb2.st_ino))
+        || (sb.st_dev != sb2.st_dev) || (sb.st_ino != sb2.st_ino))
     {
       close (fd);
       return;
@@ -380,8 +380,8 @@ void mutt_unlink (const char *s)
       memset (buf, 0, sizeof (buf));
       while (sb.st_size > 0)
       {
-	fwrite (buf, 1, MIN (sizeof (buf), sb.st_size), f);
-	sb.st_size -= MIN (sizeof (buf), sb.st_size);
+        fwrite (buf, 1, MIN (sizeof (buf), sb.st_size), f);
+        sb.st_size -= MIN (sizeof (buf), sb.st_size);
       }
       safe_fclose (&f);
     }
@@ -498,18 +498,18 @@ int safe_rename (const char *src, const char *target)
      */
     if (errno == EXDEV || errno == ENOSYS || errno == EPERM
 #ifdef ENOTSUP
-	|| errno == ENOTSUP
+        || errno == ENOTSUP
 #endif
 #ifdef EOPNOTSUPP
-	|| errno == EOPNOTSUPP
+        || errno == EOPNOTSUPP
 #endif
       )
     {
       dprint (1, (debugfile, "safe_rename: trying rename...\n"));
       if (rename (src, target) == -1)
       {
-	dprint (1, (debugfile, "safe_rename: rename (%s, %s) failed: %s (%d)\n", src, target, strerror (errno), errno));
-	return -1;
+        dprint (1, (debugfile, "safe_rename: rename (%s, %s) failed: %s (%d)\n", src, target, strerror (errno), errno));
+        return -1;
       }
       dprint (1, (debugfile, "safe_rename: rename succeeded.\n"));
 
@@ -533,14 +533,14 @@ int safe_rename (const char *src, const char *target)
   if (lstat (src, &ssb) == -1)
   {
     dprint (1, (debugfile, "safe_rename: can't stat %s: %s (%d)\n",
-		src, strerror (errno), errno));
+                src, strerror (errno), errno));
     return -1;
   }
 
   if (lstat (target, &tsb) == -1)
   {
     dprint (1, (debugfile, "safe_rename: can't stat %s: %s (%d)\n",
-		src, strerror (errno), errno));
+                src, strerror (errno), errno));
     return -1;
   }
 
@@ -564,7 +564,7 @@ success:
   if (unlink (src) == -1)
   {
     dprint (1, (debugfile, "safe_rename: unlink (%s) failed: %s (%d)\n",
-		src, strerror (errno), errno));
+                src, strerror (errno), errno));
   }
 
 
@@ -620,14 +620,14 @@ char *mutt_read_line (char *s, size_t *size, FILE *fp, int *line, int flags)
     if ((ch = strchr (s + offset, '\n')) != NULL)
     {
       if (line)
-	(*line)++;
+        (*line)++;
       if (flags & MUTT_EOL)
-	return s;
+        return s;
       *ch = 0;
       if (ch > s && *(ch - 1) == '\r')
-	*--ch = 0;
+        *--ch = 0;
       if (!(flags & MUTT_CONT) || ch == s || *(ch - 1) != '\\')
-	return s;
+        return s;
       offset = ch - s - 1;
     }
     else
@@ -641,8 +641,8 @@ char *mutt_read_line (char *s, size_t *size, FILE *fp, int *line, int flags)
       if (c == EOF)
       {
         /* The last line of fp isn't \n terminated */
-	if (line)
-	  (*line)++;
+        if (line)
+          (*line)++;
         return s;
       }
       else

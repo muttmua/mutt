@@ -58,15 +58,15 @@ static int url_pct_decode (char *s)
     if (*s == '%')
     {
       if (s[1] && s[2] &&
-	  isxdigit ((unsigned char) s[1]) &&
-	  isxdigit ((unsigned char) s[2]) &&
-	  hexval (s[1]) >= 0 && hexval (s[2]) >= 0)
+          isxdigit ((unsigned char) s[1]) &&
+          isxdigit ((unsigned char) s[2]) &&
+          hexval (s[1]) >= 0 && hexval (s[2]) >= 0)
       {
-	*d++ = (hexval (s[1]) << 4) | (hexval (s[2]));
-	s += 2;
+        *d++ = (hexval (s[1]) << 4) | (hexval (s[2]));
+        s += 2;
       }
       else
-	return -1;
+        return -1;
     }
     else
       *d++ = *s;
@@ -139,7 +139,7 @@ static int ciss_parse_userhost (ciss_url_t *ciss, char *src)
       *p = '\0';
       ciss->pass = p + 1;
       if (url_pct_decode (ciss->pass) < 0)
-	return -1;
+        return -1;
     }
     ciss->user = src;
     if (url_pct_decode (ciss->user) < 0)
@@ -250,12 +250,12 @@ int url_ciss_tobuffer (ciss_url_t* ciss, BUFFER* dest, int flags)
 
       if (flags & U_DECODE_PASSWD && ciss->pass)
       {
-	char p[STRING];
-	url_pct_encode (p, sizeof (p), ciss->pass);
-	mutt_buffer_add_printf (dest, "%s:%s@", u, p);
+        char p[STRING];
+        url_pct_encode (p, sizeof (p), ciss->pass);
+        mutt_buffer_add_printf (dest, "%s:%s@", u, p);
       }
       else
-	mutt_buffer_add_printf (dest, "%s@", u);
+        mutt_buffer_add_printf (dest, "%s@", u);
     }
 
     if (strchr (ciss->host, ':'))
@@ -347,8 +347,8 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
     {
       if (!ascii_strcasecmp (tag, "body"))
       {
-	if (body)
-	  mutt_str_replace (body, value);
+        if (body)
+          mutt_str_replace (body, value);
       }
       /* This is a hack to allow un-bracketed message-ids in mailto URLs
        * without doing the same for email header parsing. */
@@ -360,15 +360,15 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
       }
       else
       {
-	char *scratch;
-	size_t taglen = mutt_strlen (tag);
+        char *scratch;
+        size_t taglen = mutt_strlen (tag);
 
         mutt_filter_commandline_header_value (value);
-	safe_asprintf (&scratch, "%s: %s", tag, value);
-	scratch[taglen] = 0; /* overwrite the colon as mutt_parse_rfc822_line expects */
-	value = skip_email_wsp(&scratch[taglen + 1]);
-	mutt_parse_rfc822_line (e, NULL, scratch, value, 1, 0, 1, &last);
-	FREE (&scratch);
+        safe_asprintf (&scratch, "%s: %s", tag, value);
+        scratch[taglen] = 0; /* overwrite the colon as mutt_parse_rfc822_line expects */
+        value = skip_email_wsp(&scratch[taglen + 1]);
+        mutt_parse_rfc822_line (e, NULL, scratch, value, 1, 0, 1, &last);
+        FREE (&scratch);
       }
     }
   }

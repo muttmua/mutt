@@ -35,7 +35,7 @@
  */
 pid_t
 mutt_create_filter_fd (const char *cmd, FILE **in, FILE **out, FILE **err,
-		       int fdin, int fdout, int fderr)
+                       int fdin, int fdout, int fderr)
 {
   int pin[2], pout[2], perr[2], thepid;
   char columns[11];
@@ -54,8 +54,8 @@ mutt_create_filter_fd (const char *cmd, FILE **in, FILE **out, FILE **err,
     {
       if (in)
       {
-	close (pin[0]);
-	close (pin[1]);
+        close (pin[0]);
+        close (pin[1]);
       }
       return (-1);
     }
@@ -68,13 +68,13 @@ mutt_create_filter_fd (const char *cmd, FILE **in, FILE **out, FILE **err,
     {
       if (in)
       {
-	close (pin[0]);
-	close (pin[1]);
+        close (pin[0]);
+        close (pin[1]);
       }
       if (out)
       {
-	close (pout[0]);
-	close (pout[1]);
+        close (pout[0]);
+        close (pout[1]);
       }
       return (-1);
     }

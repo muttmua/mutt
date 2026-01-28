@@ -559,8 +559,8 @@ dotlock_dereference_symlink (char *d, size_t l, const char *path)
 
       if ((len = readlink (pathptr, linkfile, sizeof (linkfile) - 1)) == -1)
       {
-	/* perror (pathptr); */
-	return -1;
+        /* perror (pathptr); */
+        return -1;
       }
 
       linkfile[len] = '\0';
@@ -651,19 +651,19 @@ dotlock_lock (const char *realpath)
     {
       if (DotlockFlags & DL_FL_FORCE)
       {
-	BEGIN_PRIVILEGED ();
-	unlink (lockfile);
-	END_PRIVILEGED ();
+        BEGIN_PRIVILEGED ();
+        unlink (lockfile);
+        END_PRIVILEGED ();
 
-	count = 0;
-	continue;
+        count = 0;
+        continue;
       }
       else
       {
-	BEGIN_PRIVILEGED ();
-	unlink (nfslockfile);
-	END_PRIVILEGED ();
-	return DL_EX_EXIST;
+        BEGIN_PRIVILEGED ();
+        unlink (nfslockfile);
+        END_PRIVILEGED ();
+        return DL_EX_EXIST;
       }
     }
 

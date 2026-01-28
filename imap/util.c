@@ -391,17 +391,17 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
     if (n > 1)
     {
       if (sscanf (tmp, ":%hu%127s", &(mx->account.port), tmp) >= 1)
-	mx->account.flags |= MUTT_ACCT_PORT;
+        mx->account.flags |= MUTT_ACCT_PORT;
       if (sscanf (tmp, "/%s", tmp) == 1)
       {
-	if (!ascii_strncmp (tmp, "ssl", 3))
-	  mx->account.flags |= MUTT_ACCT_SSL;
-	else
-	{
-	  dprint (1, (debugfile, "imap_parse_path: Unknown connection type in %s\n", path));
-	  FREE (&mx->mbox);
-	  return -1;
-	}
+        if (!ascii_strncmp (tmp, "ssl", 3))
+          mx->account.flags |= MUTT_ACCT_SSL;
+        else
+        {
+          dprint (1, (debugfile, "imap_parse_path: Unknown connection type in %s\n", path));
+          FREE (&mx->mbox);
+          return -1;
+        }
       }
     }
   }
@@ -459,14 +459,14 @@ void imap_pretty_mailbox (char* path, size_t pathlen)
   {
     hlen = mutt_strlen (home.mbox);
     if (tlen && mutt_account_match (&home.account, &target.account) &&
-	!mutt_strncmp (home.mbox, target.mbox, hlen))
+        !mutt_strncmp (home.mbox, target.mbox, hlen))
     {
       if (! hlen)
-	home_match = 1;
+        home_match = 1;
       else if (ImapDelimChars)
-	for (delim = ImapDelimChars; *delim != '\0'; delim++)
-	  if (target.mbox[hlen] == *delim)
-	    home_match = 1;
+        for (delim = ImapDelimChars; *delim != '\0'; delim++)
+          if (target.mbox[hlen] == *delim)
+            home_match = 1;
     }
     FREE (&home.mbox);
   }
@@ -563,8 +563,8 @@ char *imap_fix_path (IMAP_DATA *idata, const char *mailbox, char *path,
         delim = *mailbox;
 
       while (*mailbox
-	     && ((ImapDelimChars && strchr(ImapDelimChars, *mailbox))
-	         || (delim && *mailbox == delim)))
+             && ((ImapDelimChars && strchr(ImapDelimChars, *mailbox))
+                 || (delim && *mailbox == delim)))
         mailbox++;
       path[i] = delim;
     }
@@ -651,7 +651,7 @@ char *imap_next_word (char *s)
     {
       s++;
       if (*s)
-	s++;
+        s++;
       continue;
     }
     if (*s == '\"')
@@ -928,26 +928,26 @@ void imap_keepalive (void)
       idata = (IMAP_DATA*) conn->data;
 
       if (idata->state >= IMAP_AUTHENTICATED
-	  && time(NULL) >= idata->lastread + ImapKeepalive)
+          && time(NULL) >= idata->lastread + ImapKeepalive)
       {
-	if (idata->ctx)
-	  ctx = idata->ctx;
-	else
-	{
-	  ctx = safe_calloc (1, sizeof (CONTEXT));
-	  ctx->data = idata;
-	  /* imap_close_mailbox will set ctx->iadata->ctx to NULL, so we can't
-	   * rely on the value of iadata->ctx to determine if this placeholder
-	   * context needs to be freed.
-	   */
-	  need_free = 1;
-	}
-	/* if the imap connection closes during this call, ctx may be invalid
-	 * after this point, and thus should not be read.
-	 */
-	imap_check_mailbox (ctx, NULL, 1);
-	if (need_free)
-	  FREE (&ctx);
+        if (idata->ctx)
+          ctx = idata->ctx;
+        else
+        {
+          ctx = safe_calloc (1, sizeof (CONTEXT));
+          ctx->data = idata;
+          /* imap_close_mailbox will set ctx->iadata->ctx to NULL, so we can't
+           * rely on the value of iadata->ctx to determine if this placeholder
+           * context needs to be freed.
+           */
+          need_free = 1;
+        }
+        /* if the imap connection closes during this call, ctx may be invalid
+         * after this point, and thus should not be read.
+         */
+        imap_check_mailbox (ctx, NULL, 1);
+        if (need_free)
+          FREE (&ctx);
       }
     }
 

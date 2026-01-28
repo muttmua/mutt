@@ -107,7 +107,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
    */
 
   mutt_to_base64 ((unsigned char*) ibuf, (unsigned char*) obuf, strlen (obuf),
-		  sizeof (ibuf) - 2);
+                  sizeof (ibuf) - 2);
   safe_strcat (ibuf, sizeof (ibuf), "\r\n");
   mutt_socket_write (idata->conn, ibuf);
 

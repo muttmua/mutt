@@ -93,8 +93,8 @@ void rfc2231_decode_parameters (PARAMETER **headp)
   int encoded;
   int index;
   short dirty = 0;	/* set to 1 when we may have created
-			 * empty parameters.
-			 */
+                         * empty parameters.
+                         */
 
   if (!headp) return;
 
@@ -118,7 +118,7 @@ void rfc2231_decode_parameters (PARAMETER **headp)
        */
 
       if (option (OPTRFC2047PARAMS) && p->value && strstr (p->value, "=?"))
-	rfc2047_decode (&p->value);
+        rfc2047_decode (&p->value);
       else if (AssumedCharset)
         convert_nonmime_string (&p->value);
 
@@ -153,7 +153,7 @@ void rfc2231_decode_parameters (PARAMETER **headp)
     {
       *s = '\0'; s++; /* let s point to the first character of index. */
       for (t = s; *t && isdigit ((unsigned char) *t); t++)
-	;
+        ;
       encoded = (*t == '*');
       *t = '\0';
 
@@ -251,7 +251,7 @@ static void rfc2231_decode_one (char *dest, char *src)
  */
 
 static void rfc2231_list_insert (struct rfc2231_parameter **list,
-				 struct rfc2231_parameter *par)
+                                 struct rfc2231_parameter *par)
 {
   struct rfc2231_parameter **last = list;
   struct rfc2231_parameter *p = *list;
@@ -274,7 +274,7 @@ static void rfc2231_list_insert (struct rfc2231_parameter **list,
 /* process continuation parameters */
 
 static void rfc2231_join_continuations (PARAMETER **head,
-					struct rfc2231_parameter *par)
+                                        struct rfc2231_parameter *par)
 {
   struct rfc2231_parameter *q;
 
@@ -300,7 +300,7 @@ static void rfc2231_join_continuations (PARAMETER **head,
     do
     {
       if (encoded && par->encoded)
-	rfc2231_decode_one (par->value, valp);
+        rfc2231_decode_one (par->value, valp);
 
       vl = strlen (par->value);
 
@@ -311,14 +311,14 @@ static void rfc2231_join_continuations (PARAMETER **head,
       q = par->next;
       rfc2231_free_parameter (&par);
       if ((par = q))
-	valp = par->value;
+        valp = par->value;
     } while (par && !strcmp (par->attribute, attribute));
 
     if (value)
     {
       if (encoded)
       {
-	mutt_convert_string (&value, charset, Charset, MUTT_ICONV_HOOK_FROM);
+        mutt_convert_string (&value, charset, Charset, MUTT_ICONV_HOOK_FROM);
         mutt_filter_unprintable (&value);
       }
       *head = mutt_new_parameter ();

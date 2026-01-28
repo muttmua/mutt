@@ -66,29 +66,29 @@ int pgp_valid_passphrase (void);
 /* The PGP invocation interface - not really beautiful. */
 
 pid_t pgp_invoke_decode (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd,
-			 const char *fname, short need_passphrase);
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *fname, short need_passphrase);
 pid_t pgp_invoke_verify (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd,
-			 const char *fname, const char *sig_fname);
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *fname, const char *sig_fname);
 pid_t pgp_invoke_decrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname);
+                          int pgpinfd, int pgpoutfd, int pgperrfd,
+                          const char *fname);
 pid_t pgp_invoke_sign (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-		       int pgpinfd, int pgpoutfd, int pgperrfd,
-		       const char *fname);
+                       int pgpinfd, int pgpoutfd, int pgperrfd,
+                       const char *fname);
 pid_t pgp_invoke_encrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname, const char *uids, int sign);
+                          int pgpinfd, int pgpoutfd, int pgperrfd,
+                          const char *fname, const char *uids, int sign);
 pid_t pgp_invoke_export (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd,
-			 const char *uids);
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *uids);
 pid_t pgp_invoke_verify_key (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			     int pgpinfd, int pgpoutfd, int pgperrfd,
-			     const char *uids);
+                             int pgpinfd, int pgpoutfd, int pgperrfd,
+                             const char *uids);
 pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			    int pgpinfd, int pgpoutfd, int pgperrfd,
-			    pgp_ring_t keyring, LIST *hints);
+                            int pgpinfd, int pgpoutfd, int pgperrfd,
+                            pgp_ring_t keyring, LIST *hints);
 pid_t pgp_invoke_traditional (FILE **pgpin, FILE **pgpout, FILE **pgperr,
                               int pgpinfd, int pgpoutfd, int pgperrfd,
                               const char *fname, const char *uids, int flags);

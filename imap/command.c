@@ -114,7 +114,7 @@ int imap_cmd_step (IMAP_DATA* idata)
       safe_realloc (&idata->buf, idata->blen + IMAP_CMD_BUFSIZE);
       idata->blen = idata->blen + IMAP_CMD_BUFSIZE;
       dprint (3, (debugfile, "imap_cmd_step: grew buffer to %u bytes\n",
-		  idata->blen));
+                  idata->blen));
     }
 
     /* back up over '\0' */
@@ -174,18 +174,18 @@ int imap_cmd_step (IMAP_DATA* idata)
     {
       if (!ascii_strncmp (idata->buf, cmd->seq, SEQLEN))
       {
-	if (!stillrunning)
-	{
-	  /* first command in queue has finished - move queue pointer up */
-	  idata->lastcmd = (idata->lastcmd + 1) % idata->cmdslots;
-	}
-	cmd->state = cmd_status (idata->buf);
-	/* bogus - we don't know which command result to return here. Caller
-	 * should provide a tag. */
-	rc = cmd->state;
+        if (!stillrunning)
+        {
+          /* first command in queue has finished - move queue pointer up */
+          idata->lastcmd = (idata->lastcmd + 1) % idata->cmdslots;
+        }
+        cmd->state = cmd_status (idata->buf);
+        /* bogus - we don't know which command result to return here. Caller
+         * should provide a tag. */
+        rc = cmd->state;
       }
       else
-	stillrunning++;
+        stillrunning++;
     }
 
     c = (c + 1) % idata->cmdslots;
@@ -224,11 +224,11 @@ const char* imap_cmd_trailer (IMAP_DATA* idata)
 
   s = imap_next_word ((char *)s);
   if (!s || (ascii_strncasecmp (s, "OK", 2) &&
-	     ascii_strncasecmp (s, "NO", 2) &&
-	     ascii_strncasecmp (s, "BAD", 3)))
+             ascii_strncasecmp (s, "NO", 2) &&
+             ascii_strncasecmp (s, "BAD", 3)))
   {
     dprint (2, (debugfile, "imap_cmd_trailer: not a command completion: %s",
-		idata->buf));
+                idata->buf));
     return notrailer;
   }
 
@@ -319,7 +319,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
       imap_expunge_mailbox (idata);
       /* Detect whether we've gotten unexpected EXPUNGE messages */
       if (!(idata->reopen & IMAP_EXPUNGE_EXPECTED))
-	idata->check_status |= IMAP_EXPUNGE_PENDING;
+        idata->check_status |= IMAP_EXPUNGE_PENDING;
       idata->reopen &= ~(IMAP_EXPUNGE_PENDING | IMAP_EXPUNGE_EXPECTED);
     }
     if (idata->reopen & IMAP_NEWMAIL_PENDING)
@@ -541,13 +541,13 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
       {
         /* Notes 6.0.3 has a tendency to report fewer messages exist than
          * it should. */
-	dprint (1, (debugfile, "Message count is out of sync"));
-	return 0;
+        dprint (1, (debugfile, "Message count is out of sync"));
+        return 0;
       }
       /* at least the InterChange server sends EXISTS messages freely,
        * even when there is no new mail */
       else if (count == idata->max_msn)
-	dprint (3, (debugfile,
+        dprint (3, (debugfile,
                     "cmd_handle_untagged: superfluous EXISTS message.\n"));
       else
       {
@@ -555,7 +555,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
                     "cmd_handle_untagged: New mail in %s - %d messages total.\n",
                     idata->mailbox, count));
         idata->reopen |= IMAP_NEWMAIL_PENDING;
-	idata->newMailCount = count;
+        idata->newMailCount = count;
       }
     }
     /* pn vs. s: need initial seqno */
@@ -636,8 +636,8 @@ static void cmd_parse_capability (IMAP_DATA* idata, char* s)
     for (x = 0; x < CAPMAX; x++)
       if (imap_wordcasecmp(Capabilities[x], s) == 0)
       {
-	mutt_bit_set (idata->capabilities, x);
-	break;
+        mutt_bit_set (idata->capabilities, x);
+        break;
       }
     s = imap_next_word (s);
   }
@@ -1060,34 +1060,34 @@ static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
     switch (*s)
     {
       case 'l':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_LOOKUP);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_LOOKUP);
+        break;
       case 'r':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_READ);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_READ);
+        break;
       case 's':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_SEEN);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_SEEN);
+        break;
       case 'w':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_WRITE);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_WRITE);
+        break;
       case 'i':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_INSERT);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_INSERT);
+        break;
       case 'p':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_POST);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_POST);
+        break;
       case 'a':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_ADMIN);
-	break;
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_ADMIN);
+        break;
       case 'k':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_CREATE);
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_CREATE);
         break;
       case 'x':
         mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELMX);
         break;
       case 't':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELETE);
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELETE);
         break;
       case 'e':
         mutt_bit_set (idata->ctx->rights, MUTT_ACL_EXPUNGE);
@@ -1095,13 +1095,13 @@ static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
 
         /* obsolete rights */
       case 'c':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_CREATE);
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_CREATE);
         mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELMX);
-	break;
+        break;
       case 'd':
-	mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELETE);
+        mutt_bit_set (idata->ctx->rights, MUTT_ACL_DELETE);
         mutt_bit_set (idata->ctx->rights, MUTT_ACL_EXPUNGE);
-	break;
+        break;
       default:
         dprint(1, (debugfile, "Unknown right: %c\n", *s));
     }
@@ -1244,32 +1244,32 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
     {
       if (mx.mbox)
       {
-	value = safe_strdup (mx.mbox);
-	imap_fix_path (idata, mx.mbox, value, mutt_strlen (value) + 1);
-	FREE (&mx.mbox);
+        value = safe_strdup (mx.mbox);
+        imap_fix_path (idata, mx.mbox, value, mutt_strlen (value) + 1);
+        FREE (&mx.mbox);
       }
       else
-	value = safe_strdup ("INBOX");
+        value = safe_strdup ("INBOX");
 
       if (value && !imap_mxcmp (mailbox, value))
       {
         dprint (3, (debugfile, "Found %s in buffy list (OV: %u ON: %u U: %d)\n",
                     mailbox, olduv, oldun, status->unseen));
 
-	if (option(OPTMAILCHECKRECENT))
-	{
-	  if (olduv && olduv == status->uidvalidity)
-	  {
-	    if (oldun < status->uidnext)
-	      new = (status->unseen > 0);
-	  }
-	  else if (!olduv && !oldun)
-	    /* first check per session, use recent. might need a flag for this. */
-	    new = (status->recent > 0);
-	  else
-	    new = (status->unseen > 0);
-	}
-	else
+        if (option(OPTMAILCHECKRECENT))
+        {
+          if (olduv && olduv == status->uidvalidity)
+          {
+            if (oldun < status->uidnext)
+              new = (status->unseen > 0);
+          }
+          else if (!olduv && !oldun)
+            /* first check per session, use recent. might need a flag for this. */
+            new = (status->recent > 0);
+          else
+            new = (status->unseen > 0);
+        }
+        else
           new = (status->unseen > 0);
 
 #ifdef USE_SIDEBAR
@@ -1283,10 +1283,10 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
           inc->msg_count = status->messages;
         inc->msg_unread = status->unseen;
 
-	if (inc->new)
-	  /* force back to keep detecting new mail until the mailbox is
-	     opened */
-	  status->uidnext = oldun;
+        if (inc->new)
+          /* force back to keep detecting new mail until the mailbox is
+             opened */
+          status->uidnext = oldun;
 
         FREE (&value);
         return;

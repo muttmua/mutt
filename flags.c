@@ -43,50 +43,50 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
     case MUTT_DELETE:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_DELETE))
-	return;
+        return;
 
       if (bf)
       {
-	if (!h->deleted && !ctx->readonly
-	    && (!h->flagged || !option(OPTFLAGSAFE)))
-	{
-	  h->deleted = 1;
+        if (!h->deleted && !ctx->readonly
+            && (!h->flagged || !option(OPTFLAGSAFE)))
+        {
+          h->deleted = 1;
           update = 1;
-	  if (upd_ctx) ctx->deleted++;
+          if (upd_ctx) ctx->deleted++;
 #ifdef USE_IMAP
           /* deleted messages aren't treated as changed elsewhere so that the
            * purge-on-sync option works correctly. This isn't applicable here */
           if (ctx && ctx->magic == MUTT_IMAP)
           {
             h->changed = 1;
-	    if (upd_ctx) ctx->changed = 1;
+            if (upd_ctx) ctx->changed = 1;
           }
 #endif
-	}
+        }
       }
       else if (h->deleted)
       {
-	h->deleted = 0;
+        h->deleted = 0;
         update = 1;
-	if (upd_ctx) ctx->deleted--;
+        if (upd_ctx) ctx->deleted--;
 #ifdef USE_IMAP
         /* see my comment above */
-	if (ctx->magic == MUTT_IMAP)
-	{
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+        if (ctx->magic == MUTT_IMAP)
+        {
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
 #endif
-	/*
-	 * If the user undeletes a message which is marked as
-	 * "trash" in the maildir folder on disk, the folder has
-	 * been changed, and is marked accordingly.  However, we do
-	 * _not_ mark the message itself changed, because trashing
-	 * is checked in specific code in the maildir folder
-	 * driver.
-	 */
-	if (ctx->magic == MUTT_MAILDIR && upd_ctx && h->trash)
-	  ctx->changed = 1;
+        /*
+         * If the user undeletes a message which is marked as
+         * "trash" in the maildir folder on disk, the folder has
+         * been changed, and is marked accordingly.  However, we do
+         * _not_ mark the message itself changed, because trashing
+         * is checked in specific code in the maildir folder
+         * driver.
+         */
+        if (ctx->magic == MUTT_MAILDIR && upd_ctx && h->trash)
+          ctx->changed = 1;
       }
       break;
 
@@ -107,166 +107,166 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
     case MUTT_NEW:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_SEEN))
-	return;
+        return;
 
       if (bf)
       {
-	if (h->read || h->old)
-	{
+        if (h->read || h->old)
+        {
           update = 1;
-	  h->old = 0;
-	  if (upd_ctx) ctx->new++;
-	  if (h->read)
-	  {
-	    h->read = 0;
-	    if (upd_ctx) ctx->unread++;
-	  }
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+          h->old = 0;
+          if (upd_ctx) ctx->new++;
+          if (h->read)
+          {
+            h->read = 0;
+            if (upd_ctx) ctx->unread++;
+          }
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
       }
       else if (!h->read)
       {
         update = 1;
-	if (!h->old)
-	  if (upd_ctx) ctx->new--;
-	h->read = 1;
-	if (upd_ctx) ctx->unread--;
-	h->changed = 1;
-	if (upd_ctx) ctx->changed = 1;
+        if (!h->old)
+          if (upd_ctx) ctx->new--;
+        h->read = 1;
+        if (upd_ctx) ctx->unread--;
+        h->changed = 1;
+        if (upd_ctx) ctx->changed = 1;
       }
       break;
 
     case MUTT_OLD:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_SEEN))
-	return;
+        return;
 
       if (bf)
       {
-	if (!h->old)
-	{
+        if (!h->old)
+        {
           update = 1;
-	  h->old = 1;
-	  if (!h->read)
-	    if (upd_ctx) ctx->new--;
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+          h->old = 1;
+          if (!h->read)
+            if (upd_ctx) ctx->new--;
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
       }
       else if (h->old)
       {
         update = 1;
-	h->old = 0;
-	if (!h->read)
-	  if (upd_ctx) ctx->new++;
-	h->changed = 1;
-	if (upd_ctx) ctx->changed = 1;
+        h->old = 0;
+        if (!h->read)
+          if (upd_ctx) ctx->new++;
+        h->changed = 1;
+        if (upd_ctx) ctx->changed = 1;
       }
       break;
 
     case MUTT_READ:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_SEEN))
-	return;
+        return;
 
       if (bf)
       {
-	if (!h->read)
-	{
+        if (!h->read)
+        {
           update = 1;
-	  h->read = 1;
-	  if (upd_ctx) ctx->unread--;
-	  if (!h->old)
-	    if (upd_ctx) ctx->new--;
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+          h->read = 1;
+          if (upd_ctx) ctx->unread--;
+          if (!h->old)
+            if (upd_ctx) ctx->new--;
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
       }
       else if (h->read)
       {
         update = 1;
-	h->read = 0;
-	if (upd_ctx) ctx->unread++;
-	if (!h->old)
-	  if (upd_ctx) ctx->new++;
-	h->changed = 1;
-	if (upd_ctx) ctx->changed = 1;
+        h->read = 0;
+        if (upd_ctx) ctx->unread++;
+        if (!h->old)
+          if (upd_ctx) ctx->new++;
+        h->changed = 1;
+        if (upd_ctx) ctx->changed = 1;
       }
       break;
 
     case MUTT_REPLIED:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_WRITE))
-	return;
+        return;
 
       if (bf)
       {
-	if (!h->replied)
-	{
+        if (!h->replied)
+        {
           update = 1;
-	  h->replied = 1;
-	  if (!h->read)
-	  {
-	    h->read = 1;
-	    if (upd_ctx) ctx->unread--;
-	    if (!h->old)
-	      if (upd_ctx) ctx->new--;
-	  }
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+          h->replied = 1;
+          if (!h->read)
+          {
+            h->read = 1;
+            if (upd_ctx) ctx->unread--;
+            if (!h->old)
+              if (upd_ctx) ctx->new--;
+          }
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
       }
       else if (h->replied)
       {
         update = 1;
-	h->replied = 0;
-	h->changed = 1;
-	if (upd_ctx) ctx->changed = 1;
+        h->replied = 0;
+        h->changed = 1;
+        if (upd_ctx) ctx->changed = 1;
       }
       break;
 
     case MUTT_FLAG:
 
       if (!mutt_bit_isset(ctx->rights,MUTT_ACL_WRITE))
-	return;
+        return;
 
       if (bf)
       {
-	if (!h->flagged)
-	{
+        if (!h->flagged)
+        {
           update = 1;
-	  h->flagged = bf;
-	  if (upd_ctx) ctx->flagged++;
-	  h->changed = 1;
-	  if (upd_ctx) ctx->changed = 1;
-	}
+          h->flagged = bf;
+          if (upd_ctx) ctx->flagged++;
+          h->changed = 1;
+          if (upd_ctx) ctx->changed = 1;
+        }
       }
       else if (h->flagged)
       {
         update = 1;
-	h->flagged = 0;
-	if (upd_ctx) ctx->flagged--;
-	h->changed = 1;
-	if (upd_ctx) ctx->changed = 1;
+        h->flagged = 0;
+        if (upd_ctx) ctx->flagged--;
+        h->changed = 1;
+        if (upd_ctx) ctx->changed = 1;
       }
       break;
 
     case MUTT_TAG:
       if (bf)
       {
-	if (!h->tagged)
-	{
+        if (!h->tagged)
+        {
           update = 1;
-	  h->tagged = 1;
-	  if (upd_ctx) ctx->tagged++;
-	}
+          h->tagged = 1;
+          if (upd_ctx) ctx->tagged++;
+        }
       }
       else if (h->tagged)
       {
         update = 1;
-	h->tagged = 0;
-	if (upd_ctx) ctx->tagged--;
+        h->tagged = 0;
+        if (upd_ctx) ctx->tagged--;
       }
       break;
   }
@@ -343,9 +343,9 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
     {
       while (!cur->next)
       {
-	cur = cur->parent;
-	if (cur == start)
-	  return (0);
+        cur = cur->parent;
+        if (cur == start)
+          return (0);
       }
       cur = cur->next;
     }
@@ -398,9 +398,9 @@ int mutt_change_flag (HEADER *h, int bf)
     case 'o':
     case 'O':
       if (h)
-	mutt_set_flag (Context, h, MUTT_READ, !bf);
+        mutt_set_flag (Context, h, MUTT_READ, !bf);
       else
-	mutt_tag_set_flag (MUTT_READ, !bf);
+        mutt_tag_set_flag (MUTT_READ, !bf);
       flag = MUTT_OLD;
       break;
 

@@ -141,7 +141,7 @@ static short pgp_mic_from_packet (unsigned char *p, size_t len)
   if ((p[0] & 0x3f) != PT_SIG)
   {
     dprint (1, (debugfile, "pgp_mic_from_packet: tag = %d, want %d.\n",
-		p[0]&0x3f, PT_SIG));
+                p[0]&0x3f, PT_SIG));
     return -1;
   }
 

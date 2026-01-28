@@ -320,7 +320,7 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
     if (option (OPTSORTSUBTHREADS))
     {
       if (ctx->tree)
-	ctx->tree = mutt_sort_subthreads (ctx->tree, 1);
+        ctx->tree = mutt_sort_subthreads (ctx->tree, 1);
       unset_option (OPTSORTSUBTHREADS);
     }
     mutt_sort_threads (ctx, init);
@@ -349,11 +349,11 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
     while ((thread = top) != NULL)
     {
       while (!thread->message)
-	thread = thread->child;
+        thread = thread->child;
       h = thread->message;
 
       if (h->collapsed)
-	mutt_collapse_thread (ctx, h);
+        mutt_collapse_thread (ctx, h);
       top = top->next;
     }
     mutt_set_virtual (ctx);

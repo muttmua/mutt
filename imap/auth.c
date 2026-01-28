@@ -72,25 +72,25 @@ int imap_authenticate (IMAP_DATA* idata)
     {
       delim = strchr (method, ':');
       if (delim)
-	*delim++ = '\0';
+        *delim++ = '\0';
       if (! method[0])
-	continue;
+        continue;
 
       dprint (2, (debugfile, "imap_authenticate: Trying method %s\n", method));
       authenticator = imap_authenticators;
 
       while (authenticator->authenticate)
       {
-	if (!authenticator->method ||
-	    !ascii_strcasecmp (authenticator->method, method))
-	  if ((r = authenticator->authenticate (idata, method)) !=
-	      IMAP_AUTH_UNAVAIL)
-	  {
-	    FREE (&methods);
-	    return r;
-	  }
+        if (!authenticator->method ||
+            !ascii_strcasecmp (authenticator->method, method))
+          if ((r = authenticator->authenticate (idata, method)) !=
+              IMAP_AUTH_UNAVAIL)
+          {
+            FREE (&methods);
+            return r;
+          }
 
-	authenticator++;
+        authenticator++;
       }
     }
 
@@ -105,7 +105,7 @@ int imap_authenticate (IMAP_DATA* idata)
     while (authenticator->authenticate)
     {
       if ((r = authenticator->authenticate (idata, NULL)) != IMAP_AUTH_UNAVAIL)
-	return r;
+        return r;
       authenticator++;
     }
   }
