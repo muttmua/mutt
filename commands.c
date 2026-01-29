@@ -277,7 +277,7 @@ int mutt_display_message (HEADER *cur)
   if (fpfilterout != NULL && mutt_wait_filter (filterpid) != 0)
     mutt_any_key_to_continue (NULL);
 
-  safe_fclose (&fpfilterout);	/* XXX - check result? */
+  safe_fclose (&fpfilterout);   /* XXX - check result? */
 
   if (WithCrypto)
   {
@@ -831,13 +831,13 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
     *chflags = CH_XMIT | CH_MIME | CH_TXTPLAIN;
     *cmflags = MUTT_CM_DECODE | MUTT_CM_CHARCONV;
 
-    if (!decrypt)	/* If decode doesn't kick in for decrypt, */
+    if (!decrypt)       /* If decode doesn't kick in for decrypt, */
     {
-      *chflags |= CH_DECODE;	/* then decode RFC 2047 headers, */
+      *chflags |= CH_DECODE;    /* then decode RFC 2047 headers, */
 
       if (option (OPTCOPYDECODEWEED))
       {
-        *chflags |= CH_WEED;	/* and respect $weed. */
+        *chflags |= CH_WEED;    /* and respect $weed. */
         *cmflags |= MUTT_CM_WEED;
       }
     }

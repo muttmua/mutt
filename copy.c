@@ -529,20 +529,20 @@ static int count_delete_lines (FILE *fp, BODY *b, LOFF_T *length, size_t datelen
 
 /* make a copy of a message
  *
- * fpout	where to write output
- * fpin		where to get input
- * hdr		header of message being copied
- * body		structure of message being copied
+ * fpout        where to write output
+ * fpin         where to get input
+ * hdr          header of message being copied
+ * body         structure of message being copied
  * flags
- * 	MUTT_CM_NOHEADER	don't copy header
- * 	MUTT_CM_PREFIX	quote header and body
- *	MUTT_CM_DECODE	decode message body to text/plain
- *	MUTT_CM_DISPLAY	displaying output to the user
+ *      MUTT_CM_NOHEADER        don't copy header
+ *      MUTT_CM_PREFIX  quote header and body
+ *      MUTT_CM_DECODE  decode message body to text/plain
+ *      MUTT_CM_DISPLAY displaying output to the user
  *      MUTT_CM_PRINTING   printing the message
- *	MUTT_CM_UPDATE	update structures in memory after syncing
- *	MUTT_CM_DECODE_PGP	used for decoding PGP messages
- *	MUTT_CM_CHARCONV	perform character set conversion
- * chflags	flags to mutt_copy_header()
+ *      MUTT_CM_UPDATE  update structures in memory after syncing
+ *      MUTT_CM_DECODE_PGP      used for decoding PGP messages
+ *      MUTT_CM_CHARCONV        perform character set conversion
+ * chflags      flags to mutt_copy_header()
  */
 
 int
@@ -782,13 +782,13 @@ mutt_copy_message (FILE *fpout, CONTEXT *src, HEADER *hdr, int flags,
 
 /* appends a copy of the given message to a mailbox
  *
- * dest		destination mailbox
- * fpin		where to get input
- * src		source mailbox
- * hdr		message being copied
- * body		structure of message being copied
- * flags	mutt_copy_message() flags
- * chflags	mutt_copy_header() flags
+ * dest         destination mailbox
+ * fpin         where to get input
+ * src          source mailbox
+ * hdr          message being copied
+ * body         structure of message being copied
+ * flags        mutt_copy_message() flags
+ * chflags      mutt_copy_header() flags
  */
 
 int
@@ -918,7 +918,7 @@ static void format_address_header (char **h, ADDRESS *a)
 
     if (count && linelen + l > 74)
     {
-      strcpy (cbuf, "\n\t");  	/* __STRCPY_CHECKED__ */
+      strcpy (cbuf, "\n\t");    /* __STRCPY_CHECKED__ */
       linelen = l + 8;
     }
     else
@@ -930,7 +930,7 @@ static void format_address_header (char **h, ADDRESS *a)
        */
       if (a->mailbox && (!count || !prev->group))
       {
-        strcpy (cbuf, " ");	/* __STRCPY_CHECKED__ */
+        strcpy (cbuf, " ");     /* __STRCPY_CHECKED__ */
         linelen++;
       }
       linelen += l;
@@ -939,7 +939,7 @@ static void format_address_header (char **h, ADDRESS *a)
     {
       linelen++;
       buflen++;
-      strcpy (c2buf, ",");	/* __STRCPY_CHECKED__ */
+      strcpy (c2buf, ",");      /* __STRCPY_CHECKED__ */
     }
 
     prev = a;
@@ -949,16 +949,16 @@ static void format_address_header (char **h, ADDRESS *a)
     buflen += l + cbuflen + c2buflen;
     safe_realloc (h, buflen);
     p = *h;
-    strcat (p + plen, cbuf);		/* __STRCAT_CHECKED__ */
+    strcat (p + plen, cbuf);            /* __STRCAT_CHECKED__ */
     plen += cbuflen;
-    strcat (p + plen, buf);		/* __STRCAT_CHECKED__ */
+    strcat (p + plen, buf);             /* __STRCAT_CHECKED__ */
     plen += l;
-    strcat (p + plen, c2buf);		/* __STRCAT_CHECKED__ */
+    strcat (p + plen, c2buf);           /* __STRCAT_CHECKED__ */
     plen += c2buflen;
   }
 
   /* Space for this was allocated in the beginning of this function. */
-  strcat (p + plen, "\n");		/* __STRCAT_CHECKED__ */
+  strcat (p + plen, "\n");              /* __STRCAT_CHECKED__ */
 }
 
 static int address_header_decode (char **h)

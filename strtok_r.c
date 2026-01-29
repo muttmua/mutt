@@ -26,9 +26,9 @@
    the next starting point.  For example:
         char s[] = "-abc-=-def";
         char *sp;
-        x = strtok_r(s, "-", &sp);	// x = "abc", sp = "=-def"
-        x = strtok_r(NULL, "-=", &sp);	// x = "def", sp = NULL
-        x = strtok_r(NULL, "=", &sp);	// x = NULL
+        x = strtok_r(s, "-", &sp);      // x = "abc", sp = "=-def"
+        x = strtok_r(NULL, "-=", &sp);  // x = "def", sp = NULL
+        x = strtok_r(NULL, "=", &sp);   // x = NULL
                 // s = "abc\0-def\0"
 */
 char *

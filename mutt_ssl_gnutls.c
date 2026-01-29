@@ -124,10 +124,10 @@ int mutt_ssl_socket_setup (CONNECTION* conn)
   if (tls_init () < 0)
     return -1;
 
-  conn->conn_open	= tls_socket_open;
-  conn->conn_read	= tls_socket_read;
-  conn->conn_write	= tls_socket_write;
-  conn->conn_close	= tls_socket_close;
+  conn->conn_open       = tls_socket_open;
+  conn->conn_read       = tls_socket_read;
+  conn->conn_write      = tls_socket_write;
+  conn->conn_close      = tls_socket_close;
   conn->conn_poll       = tls_socket_poll;
 
   return 0;
@@ -240,9 +240,9 @@ int mutt_ssl_starttls (CONNECTION* conn)
   if (tls_negotiate (conn) < 0)
     return -1;
 
-  conn->conn_read	= tls_socket_read;
-  conn->conn_write	= tls_socket_write;
-  conn->conn_close	= tls_starttls_close;
+  conn->conn_read       = tls_socket_read;
+  conn->conn_write      = tls_socket_write;
+  conn->conn_close      = tls_starttls_close;
   conn->conn_poll       = tls_socket_poll;
 
   return 0;
@@ -1082,12 +1082,12 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
   {
     switch (mutt_menuLoop (menu))
     {
-      case -1:			/* abort */
-      case OP_MAX + 1:		/* reject */
+      case -1:                  /* abort */
+      case OP_MAX + 1:          /* reject */
       case OP_EXIT:
         done = 1;
         break;
-      case OP_MAX + 3:		/* accept always */
+      case OP_MAX + 3:          /* accept always */
         done = 0;
         if ((fp = fopen (SslCertFile, "a")))
         {
@@ -1127,7 +1127,7 @@ static int tls_check_one_certificate (const gnutls_datum_t *certdata,
           mutt_sleep (0);
         }
         /* fall through */
-      case OP_MAX + 2:		/* accept once */
+      case OP_MAX + 2:          /* accept once */
         done = 2;
         break;
     }

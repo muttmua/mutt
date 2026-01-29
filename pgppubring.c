@@ -493,7 +493,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 
       switch (skt & 0x7f)
       {
-        case 2:			/* creation time */
+        case 2:                 /* creation time */
         {
           if (skl < 4)
             break;
@@ -503,7 +503,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 
           break;
         }
-        case 3:			/* expiration time */
+        case 3:                 /* expiration time */
         {
           if (skl < 4)
             break;
@@ -512,7 +512,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
             validity = (validity << 8) + buff[j++];
           break;
         }
-        case 9:			/* key expiration time */
+        case 9:                 /* key expiration time */
         {
           if (skl < 4)
             break;
@@ -521,7 +521,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
             key_validity = (key_validity << 8) + buff[j++];
           break;
         }
-        case 16:			/* issuer key ID */
+        case 16:                        /* issuer key ID */
         {
           if (skl < 8)
             break;
@@ -533,19 +533,19 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 
           break;
         }
-        case 10:			/* CMR key */
+        case 10:                        /* CMR key */
           break;
-        case 4:				/* exportable */
-        case 5:				/* trust */
-        case 6:				/* regexp */
-        case 7:				/* revocable */
-        case 11:			/* Pref. symm. alg. */
-        case 12:			/* revocation key */
-        case 20:			/* notation data */
-        case 21:			/* pref. hash */
-        case 22:			/* pref. comp.alg. */
-        case 23:			/* key server prefs. */
-        case 24:			/* pref. key server */
+        case 4:                         /* exportable */
+        case 5:                         /* trust */
+        case 6:                         /* regexp */
+        case 7:                         /* revocable */
+        case 11:                        /* Pref. symm. alg. */
+        case 12:                        /* revocation key */
+        case 20:                        /* notation data */
+        case 21:                        /* pref. hash */
+        case 22:                        /* pref. comp.alg. */
+        case 23:                        /* key server prefs. */
+        case 24:                        /* pref. key server */
         default:
         {
           if (skt & 0x80)

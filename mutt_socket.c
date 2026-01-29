@@ -453,7 +453,7 @@ static int socket_connect (int fd, struct sockaddr* sa)
   {
     save_errno = errno;
     dprint (2, (debugfile, "Connection failed. errno: %d...\n", errno));
-    SigInt = 0;	/* reset in case we caught SIGINTR while in connect() */
+    SigInt = 0; /* reset in case we caught SIGINTR while in connect() */
   }
 
   if (ConnectTimeout > 0)

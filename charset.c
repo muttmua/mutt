@@ -58,122 +58,122 @@ static const struct
 }
 PreferredMIMENames[] =
 {
-  { "ansi_x3.4-1968", 	"us-ascii"     	},
-  { "iso-ir-6",		"us-ascii" 	},
-  { "iso_646.irv:1991",	"us-ascii" 	},
-  { "ascii",		"us-ascii" 	},
-  { "iso646-us",	"us-ascii" 	},
-  { "us",		"us-ascii" 	},
-  { "ibm367",		"us-ascii" 	},
-  { "cp367",		"us-ascii" 	},
-  { "csASCII",		"us-ascii" 	},
+  { "ansi_x3.4-1968",   "us-ascii"      },
+  { "iso-ir-6",         "us-ascii"      },
+  { "iso_646.irv:1991", "us-ascii"      },
+  { "ascii",            "us-ascii"      },
+  { "iso646-us",        "us-ascii"      },
+  { "us",               "us-ascii"      },
+  { "ibm367",           "us-ascii"      },
+  { "cp367",            "us-ascii"      },
+  { "csASCII",          "us-ascii"      },
 
-  { "csISO2022KR",	"iso-2022-kr" 	},
-  { "csEUCKR",		"euc-kr"      	},
-  { "csISO2022JP",	"iso-2022-jp"	},
-  { "csISO2022JP2",	"iso-2022-jp-2" },
+  { "csISO2022KR",      "iso-2022-kr"   },
+  { "csEUCKR",          "euc-kr"        },
+  { "csISO2022JP",      "iso-2022-jp"   },
+  { "csISO2022JP2",     "iso-2022-jp-2" },
 
-  { "ISO_8859-1:1987",	"iso-8859-1"	},
-  { "iso-ir-100",	"iso-8859-1"	},
-  { "iso_8859-1",	"iso-8859-1"	},
-  { "latin1",		"iso-8859-1"	},
-  { "l1",		"iso-8859-1"	},
-  { "IBM819",		"iso-8859-1"	},
-  { "CP819",		"iso-8859-1"	},
-  { "csISOLatin1",	"iso-8859-1"	},
+  { "ISO_8859-1:1987",  "iso-8859-1"    },
+  { "iso-ir-100",       "iso-8859-1"    },
+  { "iso_8859-1",       "iso-8859-1"    },
+  { "latin1",           "iso-8859-1"    },
+  { "l1",               "iso-8859-1"    },
+  { "IBM819",           "iso-8859-1"    },
+  { "CP819",            "iso-8859-1"    },
+  { "csISOLatin1",      "iso-8859-1"    },
 
-  { "ISO_8859-2:1987",	"iso-8859-2"	},
-  { "iso-ir-101",	"iso-8859-2"	},
-  { "iso_8859-2",	"iso-8859-2"	},
-  { "latin2",		"iso-8859-2"	},
-  { "l2",		"iso-8859-2"	},
-  { "csISOLatin2",	"iso-8859-2"	},
+  { "ISO_8859-2:1987",  "iso-8859-2"    },
+  { "iso-ir-101",       "iso-8859-2"    },
+  { "iso_8859-2",       "iso-8859-2"    },
+  { "latin2",           "iso-8859-2"    },
+  { "l2",               "iso-8859-2"    },
+  { "csISOLatin2",      "iso-8859-2"    },
 
-  { "ISO_8859-3:1988",	"iso-8859-3"	},
-  { "iso-ir-109",	"iso-8859-3"	},
-  { "ISO_8859-3",	"iso-8859-3"	},
-  { "latin3",		"iso-8859-3"	},
-  { "l3",		"iso-8859-3"	},
-  { "csISOLatin3",	"iso-8859-3"	},
+  { "ISO_8859-3:1988",  "iso-8859-3"    },
+  { "iso-ir-109",       "iso-8859-3"    },
+  { "ISO_8859-3",       "iso-8859-3"    },
+  { "latin3",           "iso-8859-3"    },
+  { "l3",               "iso-8859-3"    },
+  { "csISOLatin3",      "iso-8859-3"    },
 
-  { "ISO_8859-4:1988",	"iso-8859-4"	},
-  { "iso-ir-110",	"iso-8859-4"	},
-  { "ISO_8859-4",	"iso-8859-4"	},
-  { "latin4",		"iso-8859-4"	},
-  { "l4",		"iso-8859-4"	},
-  { "csISOLatin4",	"iso-8859-4"	},
+  { "ISO_8859-4:1988",  "iso-8859-4"    },
+  { "iso-ir-110",       "iso-8859-4"    },
+  { "ISO_8859-4",       "iso-8859-4"    },
+  { "latin4",           "iso-8859-4"    },
+  { "l4",               "iso-8859-4"    },
+  { "csISOLatin4",      "iso-8859-4"    },
 
-  { "ISO_8859-6:1987",	"iso-8859-6"	},
-  { "iso-ir-127",	"iso-8859-6"	},
-  { "iso_8859-6",	"iso-8859-6"	},
-  { "ECMA-114",		"iso-8859-6"	},
-  { "ASMO-708",		"iso-8859-6"	},
-  { "arabic",		"iso-8859-6"	},
-  { "csISOLatinArabic",	"iso-8859-6"	},
+  { "ISO_8859-6:1987",  "iso-8859-6"    },
+  { "iso-ir-127",       "iso-8859-6"    },
+  { "iso_8859-6",       "iso-8859-6"    },
+  { "ECMA-114",         "iso-8859-6"    },
+  { "ASMO-708",         "iso-8859-6"    },
+  { "arabic",           "iso-8859-6"    },
+  { "csISOLatinArabic", "iso-8859-6"    },
 
-  { "ISO_8859-7:1987",	"iso-8859-7"	},
-  { "iso-ir-126",	"iso-8859-7"	},
-  { "ISO_8859-7",	"iso-8859-7"	},
-  { "ELOT_928",		"iso-8859-7"	},
-  { "ECMA-118",		"iso-8859-7"	},
-  { "greek",		"iso-8859-7"	},
-  { "greek8",		"iso-8859-7"	},
-  { "csISOLatinGreek",	"iso-8859-7"	},
+  { "ISO_8859-7:1987",  "iso-8859-7"    },
+  { "iso-ir-126",       "iso-8859-7"    },
+  { "ISO_8859-7",       "iso-8859-7"    },
+  { "ELOT_928",         "iso-8859-7"    },
+  { "ECMA-118",         "iso-8859-7"    },
+  { "greek",            "iso-8859-7"    },
+  { "greek8",           "iso-8859-7"    },
+  { "csISOLatinGreek",  "iso-8859-7"    },
 
-  { "ISO_8859-8:1988",	"iso-8859-8"	},
-  { "iso-ir-138",	"iso-8859-8"	},
-  { "ISO_8859-8",	"iso-8859-8"	},
-  { "hebrew",		"iso-8859-8"	},
-  { "csISOLatinHebrew",	"iso-8859-8"	},
+  { "ISO_8859-8:1988",  "iso-8859-8"    },
+  { "iso-ir-138",       "iso-8859-8"    },
+  { "ISO_8859-8",       "iso-8859-8"    },
+  { "hebrew",           "iso-8859-8"    },
+  { "csISOLatinHebrew", "iso-8859-8"    },
 
-  { "ISO_8859-5:1988",	"iso-8859-5"	},
-  { "iso-ir-144",	"iso-8859-5"	},
-  { "ISO_8859-5",	"iso-8859-5"	},
-  { "cyrillic",		"iso-8859-5"	},
-  { "csISOLatinCyrillic", "iso-8859-5"	},
+  { "ISO_8859-5:1988",  "iso-8859-5"    },
+  { "iso-ir-144",       "iso-8859-5"    },
+  { "ISO_8859-5",       "iso-8859-5"    },
+  { "cyrillic",         "iso-8859-5"    },
+  { "csISOLatinCyrillic", "iso-8859-5"  },
 
-  { "ISO_8859-9:1989",	"iso-8859-9"	},
-  { "iso-ir-148",	"iso-8859-9"	},
-  { "ISO_8859-9",	"iso-8859-9"	},
-  { "latin5",		"iso-8859-9"	}, /* this is not a bug */
-  { "l5",		"iso-8859-9"	},
-  { "csISOLatin5",	"iso-8859-9"	},
+  { "ISO_8859-9:1989",  "iso-8859-9"    },
+  { "iso-ir-148",       "iso-8859-9"    },
+  { "ISO_8859-9",       "iso-8859-9"    },
+  { "latin5",           "iso-8859-9"    }, /* this is not a bug */
+  { "l5",               "iso-8859-9"    },
+  { "csISOLatin5",      "iso-8859-9"    },
 
-  { "ISO_8859-10:1992",	"iso-8859-10"	},
-  { "iso-ir-157",	"iso-8859-10"	},
-  { "latin6",		"iso-8859-10"	}, /* this is not a bug */
-  { "l6",		"iso-8859-10"	},
-  { "csISOLatin6",	"iso-8859-10"	},
+  { "ISO_8859-10:1992", "iso-8859-10"   },
+  { "iso-ir-157",       "iso-8859-10"   },
+  { "latin6",           "iso-8859-10"   }, /* this is not a bug */
+  { "l6",               "iso-8859-10"   },
+  { "csISOLatin6",      "iso-8859-10"   },
 
-  { "csKOI8r",		"koi8-r"	},
+  { "csKOI8r",          "koi8-r"        },
 
-  { "MS_Kanji",		"Shift_JIS"	}, /* Note the underscore! */
-  { "csShiftJis",	"Shift_JIS"	},
+  { "MS_Kanji",         "Shift_JIS"     }, /* Note the underscore! */
+  { "csShiftJis",       "Shift_JIS"     },
 
   { "Extended_UNIX_Code_Packed_Format_for_Japanese",
-                        "euc-jp"	},
+                        "euc-jp"        },
   { "csEUCPkdFmtJapanese",
-                        "euc-jp"	},
+                        "euc-jp"        },
 
-  { "csGB2312",		"gb2312"	},
-  { "csbig5",		"big5"		},
+  { "csGB2312",         "gb2312"        },
+  { "csbig5",           "big5"          },
 
   /*
    * End of official brain damage.  What follows has been taken
    * from glibc's localedata files.
    */
 
-  { "iso_8859-13",	"iso-8859-13"	},
-  { "iso-ir-179",	"iso-8859-13"	},
-  { "latin7",		"iso-8859-13"	}, /* this is not a bug */
-  { "l7",		"iso-8859-13"	},
+  { "iso_8859-13",      "iso-8859-13"   },
+  { "iso-ir-179",       "iso-8859-13"   },
+  { "latin7",           "iso-8859-13"   }, /* this is not a bug */
+  { "l7",               "iso-8859-13"   },
 
-  { "iso_8859-14",	"iso-8859-14"	},
-  { "latin8",		"iso-8859-14"	}, /* this is not a bug */
-  { "l8",		"iso-8859-14"	},
+  { "iso_8859-14",      "iso-8859-14"   },
+  { "latin8",           "iso-8859-14"   }, /* this is not a bug */
+  { "l8",               "iso-8859-14"   },
 
-  { "iso_8859-15",	"iso-8859-15"	},
-  { "latin9",		"iso-8859-15"	}, /* this is not a bug */
+  { "iso_8859-15",      "iso-8859-15"   },
+  { "latin9",           "iso-8859-15"   }, /* this is not a bug */
 
   /* Suggested by Ionel Mugurel Ciobica <tgakic@sg10.chem.tue.nl> */
   { "latin0",           "iso-8859-15"   }, /* this is not a bug */
@@ -186,21 +186,21 @@ PreferredMIMENames[] =
    * nl_langinfo under SunOS 5.8.
    */
 
-  { "646",		"us-ascii"	},
+  { "646",              "us-ascii"      },
 
   /*
    * http://www.sun.com/software/white-papers/wp-unicode/
    */
 
-  { "eucJP",		"euc-jp"	},
-  { "PCK",		"Shift_JIS"	},
-  { "ko_KR-euc",	"euc-kr"	},
-  { "zh_TW-big5",	"big5"		},
+  { "eucJP",            "euc-jp"        },
+  { "PCK",              "Shift_JIS"     },
+  { "ko_KR-euc",        "euc-kr"        },
+  { "zh_TW-big5",       "big5"          },
 
   /* seems to be common on some systems */
 
-  { "sjis",		"Shift_JIS"	},
-  { "euc-jp-ms",	"eucJP-ms"	},
+  { "sjis",             "Shift_JIS"     },
+  { "euc-jp-ms",        "eucJP-ms"      },
 
 
   /*
@@ -211,7 +211,7 @@ PreferredMIMENames[] =
 
   /* End of aliases.  Please keep this line last. */
 
-  { NULL, 		NULL		}
+  { NULL,               NULL            }
 };
 
 #ifdef HAVE_LANGINFO_CODESET
@@ -520,7 +520,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
 
     *ob = '\0';
 
-    FREE (ps);		/* __FREE_CHECKED__ */
+    FREE (ps);          /* __FREE_CHECKED__ */
     *ps = buf;
 
     mutt_str_adjust (ps);
@@ -663,7 +663,7 @@ void fgetconv_close (FGETCONV **_fc)
 
   if (fc->cd != (iconv_t)-1)
     iconv_close (fc->cd);
-  FREE (_fc);		/* __FREE_CHECKED__ */
+  FREE (_fc);           /* __FREE_CHECKED__ */
 }
 
 int mutt_check_charset (const char *s, int strict)

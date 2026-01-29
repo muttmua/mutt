@@ -39,7 +39,7 @@ static const struct mapping_t AliasHelp[] = {
   { N_("Undel"),  OP_UNDELETE },
   { N_("Select"), OP_GENERIC_SELECT_ENTRY },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 static const char *

@@ -76,7 +76,7 @@ static const struct mapping_t HistoryHelp[] = {
   { N_("Select"), OP_GENERIC_SELECT_ENTRY },
   { N_("Search"), OP_SEARCH },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 /* global vars used for the string-history routines */
@@ -84,7 +84,7 @@ static const struct mapping_t HistoryHelp[] = {
 static struct history History[HC_LAST];
 static int OldSize = 0;
 
-#define GET_HISTORY(CLASS)	((CLASS >= HC_LAST) ? NULL : &History[CLASS])
+#define GET_HISTORY(CLASS)      ((CLASS >= HC_LAST) ? NULL : &History[CLASS])
 
 static void init_history (struct history *h)
 {

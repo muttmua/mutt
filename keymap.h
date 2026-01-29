@@ -97,8 +97,8 @@ extern const struct mapping_t Menus[];
 /* The function-op pairs available in a menu */
 struct menu_func_op_t
 {
-  char *name;	/* name of the function */
-  int op;	/* function id number */
+  char *name;   /* name of the function */
+  int op;       /* function id number */
 };
 
 /* The default bound key sequences in a menu */

@@ -52,7 +52,7 @@ static const struct mapping_t QueryHelp[] = {
   { N_("Make Alias"), OP_CREATE_ALIAS },
   { N_("Search"), OP_SEARCH },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf);
@@ -528,7 +528,7 @@ static void query_menu (char *buf, size_t buflen, QUERY *results, int retbuf)
           {
             ADDRESS *tmpa = result_to_addr (QueryTable[i].data);
             mutt_addrlist_to_local (tmpa);
-            strcat (buf, ", ");	/* __STRCAT_CHECKED__ */
+            strcat (buf, ", "); /* __STRCAT_CHECKED__ */
             rfc822_write_address ((char *) buf + curpos + 2, buflen - curpos - 2,
                                   tmpa, 0);
             curpos = mutt_strlen (buf);

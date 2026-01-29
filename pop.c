@@ -36,8 +36,8 @@
 #include <errno.h>
 
 #ifdef USE_HCACHE
-#define HC_FNAME	"mutt"		/* filename for hcache as POP lacks paths */
-#define HC_FEXT		"hcache"	/* extension for hcache as POP lacks paths */
+#define HC_FNAME        "mutt"          /* filename for hcache as POP lacks paths */
+#define HC_FEXT         "hcache"        /* extension for hcache as POP lacks paths */
 #endif
 
 /**
@@ -890,10 +890,10 @@ void pop_fetch_mail (void)
   url = p = safe_calloc (strlen (PopHost) + 7, sizeof (char));
   if (url_check_scheme (PopHost) == U_UNKNOWN)
   {
-    strcpy (url, "pop://");	/* __STRCPY_CHECKED__ */
+    strcpy (url, "pop://");     /* __STRCPY_CHECKED__ */
     p = strchr (url, '\0');
   }
-  strcpy (p, PopHost);		/* __STRCPY_CHECKED__ */
+  strcpy (p, PopHost);          /* __STRCPY_CHECKED__ */
 
   ret = pop_parse_path (url, &acct);
   FREE (&url);

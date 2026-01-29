@@ -185,9 +185,9 @@ static void qp_decode_line (char *dest, char *src, size_t *l,
   {
     switch ((kind = qp_decode_triple (s, &c)))
     {
-      case  0: *d++ = c; s += 3; break;	/* qp triple */
+      case  0: *d++ = c; s += 3; break; /* qp triple */
       case -1: *d++ = *s++;      break; /* single character */
-      case  1: soft = 1; s++;	 break; /* soft line break */
+      case  1: soft = 1; s++;    break; /* soft line break */
     }
   }
 
@@ -442,21 +442,21 @@ static const struct {
   const wchar_t *tag_name;
   int index;
 } EnrichedTags[] = {
-  { L"param",		RICH_PARAM },
-  { L"bold",		RICH_BOLD },
-  { L"italic",		RICH_ITALIC },
-  { L"underline",	RICH_UNDERLINE },
-  { L"nofill",		RICH_NOFILL },
-  { L"excerpt",		RICH_EXCERPT },
-  { L"indent",		RICH_INDENT },
-  { L"indentright",	RICH_INDENT_RIGHT },
-  { L"center",		RICH_CENTER },
-  { L"flushleft",	RICH_FLUSHLEFT },
-  { L"flushright",	RICH_FLUSHRIGHT },
-  { L"flushboth",	RICH_FLUSHLEFT },
-  { L"color",		RICH_COLOR },
-  { L"x-color",		RICH_COLOR },
-  { NULL,		-1 }
+  { L"param",           RICH_PARAM },
+  { L"bold",            RICH_BOLD },
+  { L"italic",          RICH_ITALIC },
+  { L"underline",       RICH_UNDERLINE },
+  { L"nofill",          RICH_NOFILL },
+  { L"excerpt",         RICH_EXCERPT },
+  { L"indent",          RICH_INDENT },
+  { L"indentright",     RICH_INDENT_RIGHT },
+  { L"center",          RICH_CENTER },
+  { L"flushleft",       RICH_FLUSHLEFT },
+  { L"flushright",      RICH_FLUSHRIGHT },
+  { L"flushboth",       RICH_FLUSHLEFT },
+  { L"color",           RICH_COLOR },
+  { L"x-color",         RICH_COLOR },
+  { NULL,               -1 }
 };
 
 struct enriched_state
@@ -1034,7 +1034,7 @@ static int alternative_handler (BODY *a, STATE *s)
   {
     char *c;
     size_t btlen;  /* length of basetype */
-    int wild;	/* do we have a wildcard to match all subtypes? */
+    int wild;   /* do we have a wildcard to match all subtypes? */
 
     c = strchr (t->data, '/');
     if (c)
@@ -1627,7 +1627,7 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
   /* see if we need to decode this part before processing it */
   if (b->encoding == ENCBASE64 || b->encoding == ENCQUOTEDPRINTABLE ||
       b->encoding == ENCUUENCODED || plaintext ||
-      mutt_is_text_part (b))				/* text subtypes may
+      mutt_is_text_part (b))                            /* text subtypes may
                                                          * require character
                                                          * set conversion even
                                                          * with 8bit encoding.

@@ -467,7 +467,7 @@ void menu_jump (MUTTMENU *menu)
     {
       if (mutt_atoi (buf, &n, 0) == 0 && n > 0 && n < menu->max + 1)
       {
-        n--;	/* msg numbers are 0-based */
+        n--;    /* msg numbers are 0-based */
         menu->current = n;
         menu->redraw = REDRAW_MOTION;
       }
@@ -762,7 +762,7 @@ void mutt_menuDestroy (MUTTMENU **p)
     FREE (& (*p)->dialog);
   }
 
-  FREE (p);		/* __FREE_CHECKED__ */
+  FREE (p);             /* __FREE_CHECKED__ */
 }
 
 void mutt_menu_add_dialog_row (MUTTMENU *m, const char *row)

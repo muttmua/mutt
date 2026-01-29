@@ -38,11 +38,11 @@
 
 typedef struct
 {
-  CONTEXT *ctx;	/* current mailbox */
-  HEADER *hdr;	/* current message */
-  BODY *bdy;	/* current attachment */
-  FILE *fp;	/* source stream */
-  ATTACH_CONTEXT *actx;	/* attachment information */
+  CONTEXT *ctx; /* current mailbox */
+  HEADER *hdr;  /* current message */
+  BODY *bdy;    /* current attachment */
+  FILE *fp;     /* source stream */
+  ATTACH_CONTEXT *actx; /* attachment information */
 } pager_t;
 
 int mutt_do_pager (const char *, const char *, int, pager_t *);

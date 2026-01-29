@@ -141,7 +141,7 @@ static const struct mapping_t ComposeHelp[] = {
   { N_("Attach file"),  OP_COMPOSE_ATTACH_FILE },
   { N_("Descrip"), OP_COMPOSE_EDIT_DESCRIPTION },
   { N_("Help"),    OP_HELP },
-  { NULL,	0 }
+  { NULL,       0 }
 };
 
 #ifdef USE_AUTOCRYPT
@@ -1034,9 +1034,9 @@ static void compose_menu_redraw (MUTTMENU *menu)
 
 /* return values:
  *
- * 1	message should be postponed
- * 0	normal exit
- * -1	abort message
+ * 1    message should be postponed
+ * 0    normal exit
+ * -1   abort message
  * 2    edit was backgrounded
  */
 int mutt_compose_menu (SEND_CONTEXT *sctx)
@@ -1049,10 +1049,10 @@ int mutt_compose_menu (SEND_CONTEXT *sctx)
   ATTACH_CONTEXT *actx;
   ATTACHPTR *new;
   int i, close = 0;
-  int r = -1;		/* return value */
+  int r = -1;           /* return value */
   int op = 0;
   int loop = 1;
-  int fccSet = 0;	/* has the user edited the Fcc: field ? */
+  int fccSet = 0;       /* has the user edited the Fcc: field ? */
   CONTEXT *ctx = NULL, *this = NULL;
   /* Sort, SortAux could be changed in mutt_index_menu() */
   int oldSort, oldSortAux, oldSortThreadGroups;

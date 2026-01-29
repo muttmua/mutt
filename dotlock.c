@@ -153,7 +153,7 @@ int main (int argc, char **argv)
   /* determine the system's host name */
 
   uname (&utsname);
-  if (!(Hostname = strdup (utsname.nodename)))	/* __MEM_CHECKED__ */
+  if (!(Hostname = strdup (utsname.nodename)))  /* __MEM_CHECKED__ */
     return DL_EX_ERROR;
   if ((p = strchr (Hostname, '.')))
     *p = '\0';

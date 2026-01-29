@@ -104,15 +104,15 @@ enum
   IMAP4 = 0,
   IMAP4REV1,
   STATUS,
-  ACL,				/* RFC 2086: IMAP4 ACL extension */
-  NAMESPACE,                   	/* RFC 2342: IMAP4 Namespace */
-  ACRAM_MD5,			/* RFC 2195: CRAM-MD5 authentication */
-  AGSSAPI,			/* RFC 1731: GSSAPI authentication */
-  AUTH_ANON,			/* AUTH=ANONYMOUS */
+  ACL,                          /* RFC 2086: IMAP4 ACL extension */
+  NAMESPACE,                    /* RFC 2342: IMAP4 Namespace */
+  ACRAM_MD5,                    /* RFC 2195: CRAM-MD5 authentication */
+  AGSSAPI,                      /* RFC 1731: GSSAPI authentication */
+  AUTH_ANON,                    /* AUTH=ANONYMOUS */
   AUTH_OAUTHBEARER,             /* RFC 7628: AUTH=OAUTHBEARER */
   AUTH_XOAUTH2,                 /* Deprecated precursor to OAUTHBEARER */
-  STARTTLS,			/* RFC 2595: STARTTLS */
-  LOGINDISABLED,		/*           LOGINDISABLED */
+  STARTTLS,                     /* RFC 2595: STARTTLS */
+  LOGINDISABLED,                /*           LOGINDISABLED */
   IDLE,                         /* RFC 2177: IDLE */
   SASL_IR,                      /* SASL initial response draft */
   ENABLE,                       /* RFC 5161 */

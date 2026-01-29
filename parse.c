@@ -57,8 +57,8 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
 
   FOREVER
   {
-    if (fgets (buf, *linelen - offset, f) == NULL ||	/* end of file or */
-        (is_email_wsp (*line) && !offset))		/* end of headers */
+    if (fgets (buf, *linelen - offset, f) == NULL ||    /* end of file or */
+        (is_email_wsp (*line) && !offset))              /* end of headers */
     {
       *line = 0;
       return (line);
@@ -73,7 +73,7 @@ char *mutt_read_rfc822_line (FILE *f, char *line, size_t *linelen)
     {
       /* we did get a full line. remove trailing space */
       while (is_email_wsp (*buf))
-        *buf-- = 0;	/* we cannot come beyond line's beginning because
+        *buf-- = 0;     /* we cannot come beyond line's beginning because
                          * it begins with a non-space */
 
       /* check to see if the next line is a continuation line */
@@ -505,10 +505,10 @@ cleanup:
 #endif
 
 /* args:
- *	fp	stream to read from
+ *      fp      stream to read from
  *
- *	digest	1 if reading subparts of a multipart/digest, 0
- *		otherwise
+ *      digest  1 if reading subparts of a multipart/digest, 0
+ *              otherwise
  */
 
 BODY *mutt_read_mime_header (FILE *fp, int digest)
@@ -655,10 +655,10 @@ bail:
 /* parse a MESSAGE/RFC822 body
  *
  * args:
- *	fp		stream to read from
+ *      fp              stream to read from
  *
- *	parent		structure which contains info about the message/rfc822
- *			body part
+ *      parent          structure which contains info about the message/rfc822
+ *                      body part
  *
  * NOTE: this assumes that `parent->length' has been set!
  */
@@ -688,14 +688,14 @@ static BODY *_parse_messageRFC822 (FILE *fp, BODY *parent, int *counter)
 /* parse a multipart structure
  *
  * args:
- *	fp		stream to read from
+ *      fp              stream to read from
  *
- *	boundary	body separator
+ *      boundary        body separator
  *
- *	end_off		length of the multipart body (used when the final
- *			boundary is missing to avoid reading too far)
+ *      end_off         length of the multipart body (used when the final
+ *                      boundary is missing to avoid reading too far)
  *
- *	digest		1 if reading a multipart/digest, 0 otherwise
+ *      digest          1 if reading a multipart/digest, 0 otherwise
  */
 
 static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
@@ -1551,16 +1551,16 @@ done:
  *
  * Args:
  *
- * f		stream to read from
+ * f            stream to read from
  *
- * hdr		header structure of current message (optional).
+ * hdr          header structure of current message (optional).
  *
- * user_hdrs	If set, store user headers.  Used for recall-message and
- * 		postpone modes.
+ * user_hdrs    If set, store user headers.  Used for recall-message and
+ *              postpone modes.
  *
- * weed		If this parameter is set and the user has activated the
- * 		$weed option, honor the header weed list for user headers.
- * 	        Used for recall-message.
+ * weed         If this parameter is set and the user has activated the
+ *              $weed option, honor the header weed list for user headers.
+ *              Used for recall-message.
  *
  * Returns:     newly allocated envelope structure.  You should free it by
  *              mutt_free_envelope() when envelope stay unneeded.

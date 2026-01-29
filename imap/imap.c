@@ -346,7 +346,7 @@ static int imap_check_capabilities (IMAP_DATA* idata)
         mutt_bit_isset(idata->capabilities,IMAP4REV1)))
   {
     mutt_error _("This IMAP server is ancient. Mutt does not work with it.");
-    mutt_sleep (2);	/* pause a moment to let the user see the error */
+    mutt_sleep (2);     /* pause a moment to let the user see the error */
 
     return -1;
   }
@@ -1176,9 +1176,9 @@ static int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag,
                               int changed, int invert, int* pos)
 {
   HEADER** hdrs = idata->ctx->hdrs;
-  int count = 0;	/* number of messages in message set */
-  int match = 0;	/* whether current message matches flag condition */
-  unsigned int setstart = 0;	/* start of current message range */
+  int count = 0;        /* number of messages in message set */
+  int match = 0;        /* whether current message matches flag condition */
+  unsigned int setstart = 0;    /* start of current message range */
   int n;
   int started = 0;
 
@@ -1790,10 +1790,10 @@ int imap_close_mailbox (CONTEXT* ctx)
 /* use the NOOP or IDLE command to poll for new mail
  *
  * return values:
- *	MUTT_REOPENED	mailbox has been externally modified
- *	MUTT_NEW_MAIL	new mail has arrived!
- *	0		no change
- *	-1		error
+ *      MUTT_REOPENED   mailbox has been externally modified
+ *      MUTT_NEW_MAIL   new mail has arrived!
+ *      0               no change
+ *      -1              error
  */
 int imap_check_mailbox (CONTEXT *ctx, int *index_hint, int force)
 {

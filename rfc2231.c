@@ -92,7 +92,7 @@ void rfc2231_decode_parameters (PARAMETER **headp)
 
   int encoded;
   int index;
-  short dirty = 0;	/* set to 1 when we may have created
+  short dirty = 0;      /* set to 1 when we may have created
                          * empty parameters.
                          */
 
@@ -201,7 +201,7 @@ static void rfc2231_free_parameter (struct rfc2231_parameter **p)
   {
     FREE (&(*p)->attribute);
     FREE (&(*p)->value);
-    FREE (p);		/* __FREE_CHECKED__ */
+    FREE (p);           /* __FREE_CHECKED__ */
   }
 }
 
@@ -305,7 +305,7 @@ static void rfc2231_join_continuations (PARAMETER **head,
       vl = strlen (par->value);
 
       safe_realloc (&value, l + vl + 1);
-      strcpy (value + l, par->value);	/* __STRCPY_CHECKED__ */
+      strcpy (value + l, par->value);   /* __STRCPY_CHECKED__ */
       l += vl;
 
       q = par->next;

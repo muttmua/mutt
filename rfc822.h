@@ -37,11 +37,11 @@ enum
 typedef struct address_t
 {
 #ifdef EXACT_ADDRESS
-  char *val;		/* value of address as parsed */
+  char *val;            /* value of address as parsed */
 #endif
-  char *personal;	/* real name of address */
-  char *mailbox;	/* mailbox and host address */
-  int group;		/* group mailbox? */
+  char *personal;       /* real name of address */
+  char *mailbox;        /* mailbox and host address */
+  int group;            /* group mailbox? */
   struct address_t *next;
   unsigned is_intl      : 1;
   unsigned intl_checked : 1;

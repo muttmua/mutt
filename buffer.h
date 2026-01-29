@@ -23,9 +23,9 @@
 
 typedef struct
 {
-  char *data;	/* pointer to data */
-  char *dptr;	/* current read/write position */
-  size_t dsize;	/* length of data */
+  char *data;   /* pointer to data */
+  char *dptr;   /* current read/write position */
+  size_t dsize; /* length of data */
 } BUFFER;
 
 /* Convert a buffer to a const char * "string" */

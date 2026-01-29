@@ -62,7 +62,7 @@
 #define DEVRANDOM "/dev/urandom"
 #endif
 
-#define HAVE_ENTROPY()	(RAND_status() == 1)
+#define HAVE_ENTROPY()  (RAND_status() == 1)
 
 /* index for storing hostname as application specific data in SSL structure */
 static int HostExDataIndex = -1;
@@ -462,10 +462,10 @@ int mutt_ssl_socket_setup (CONNECTION * conn)
     return -1;
   }
 
-  conn->conn_open	= ssl_socket_open;
-  conn->conn_read	= ssl_socket_read;
-  conn->conn_write	= ssl_socket_write;
-  conn->conn_close	= ssl_socket_close;
+  conn->conn_open       = ssl_socket_open;
+  conn->conn_read       = ssl_socket_read;
+  conn->conn_write      = ssl_socket_write;
+  conn->conn_close      = ssl_socket_close;
   conn->conn_poll       = ssl_socket_poll;
 
   return 0;
@@ -1313,12 +1313,12 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
   {
     switch (mutt_menuLoop (menu))
     {
-      case -1:			/* abort */
-      case OP_MAX + 1:		/* reject */
+      case -1:                  /* abort */
+      case OP_MAX + 1:          /* reject */
       case OP_EXIT:
         done = 1;
         break;
-      case OP_MAX + 3:		/* accept always */
+      case OP_MAX + 3:          /* accept always */
         if (!allow_always)
           break;
         done = 0;
@@ -1339,7 +1339,7 @@ static int interactive_check_cert (X509 *cert, int idx, int len, SSL *ssl, int a
           mutt_sleep (0);
         }
         /* fall through */
-      case OP_MAX + 2:		/* accept once */
+      case OP_MAX + 2:          /* accept once */
         done = 2;
         SSL_set_ex_data (ssl, SkipModeExDataIndex, NULL);
         ssl_cache_trusted_cert (cert);

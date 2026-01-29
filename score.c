@@ -31,7 +31,7 @@ typedef struct score_t
   char *str;
   pattern_t *pat;
   int val;
-  int exact;		/* if this rule matches, don't evaluate any more */
+  int exact;            /* if this rule matches, don't evaluate any more */
   struct score_t *next;
 } SCORE;
 

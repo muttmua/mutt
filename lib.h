@@ -66,10 +66,10 @@
  *
  * See K&R 2nd ed, p. 231 for an explanation.
  */
-# define _MUTT_FORMAT_2(a,b)	"%" a  b
-# define _MUTT_FORMAT_1(a, b)	_MUTT_FORMAT_2(#a, b)
-# define MUTT_FORMAT(a)		_MUTT_FORMAT_1(a, "s")
-# define MUTT_FORMAT2(a,b)	_MUTT_FORMAT_1(a, b)
+# define _MUTT_FORMAT_2(a,b)    "%" a  b
+# define _MUTT_FORMAT_1(a, b)   _MUTT_FORMAT_2(#a, b)
+# define MUTT_FORMAT(a)         _MUTT_FORMAT_1(a, "s")
+# define MUTT_FORMAT2(a,b)      _MUTT_FORMAT_1(a, b)
 
 
 # define FREE(x) safe_free(x)
@@ -100,9 +100,9 @@
 /* Making left 0 and center -1 is of course completely nonsensical, but
  * it retains compatibility for any patches that call mutt_format_string.
  * Once patches are updated to use FMT_*, these can be made sane. */
-#define FMT_LEFT	0
-#define FMT_RIGHT	1
-#define FMT_CENTER	-1
+#define FMT_LEFT        0
+#define FMT_RIGHT       1
+#define FMT_CENTER      -1
 
 #define FOREVER while (1)
 
@@ -177,8 +177,8 @@ void mutt_debug_f (const char *, const int, const char *, const char *, ...);
 #define S_BKG 126
 
 /* Flags for mutt_read_line() */
-#define MUTT_CONT		(1<<0)		/* \-continuation */
-#define MUTT_EOL		(1<<1)		/* don't strip \n/\r\n */
+#define MUTT_CONT               (1<<0)          /* \-continuation */
+#define MUTT_EOL                (1<<1)          /* don't strip \n/\r\n */
 
 /* Flags for mutt_sanitize_filename() and mutt_buffer_sanitize_filename() */
 #define MUTT_SANITIZE_ALLOW_SLASH   (1<<0)
@@ -204,9 +204,9 @@ char *safe_strdup (const char *);
 #define MUTT_ATOI_ALLOW_TRAILING  (1<<1)  /* allow values after the number */
 
 /* strtol() wrappers with range checking; they return
- * 	 0 success
- * 	-1 format error
- * 	-2 out of range
+ *       0 success
+ *      -1 format error
+ *      -2 out of range
  * the dst pointer may be NULL to test only without conversion
  */
 int mutt_atos (const char *, short *, int);

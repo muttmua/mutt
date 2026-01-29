@@ -32,7 +32,7 @@
 #include <idn/idn2.h>
 #endif
 
-#define MI_MAY_BE_IRREVERSIBLE		(1 << 0)
+#define MI_MAY_BE_IRREVERSIBLE          (1 << 0)
 
 /* Work around incompatibilities in the libidn API */
 

@@ -79,17 +79,17 @@
 #endif
 
 
-#define KEYFLAG_CANSIGN 		(1 <<  0)
-#define KEYFLAG_CANENCRYPT 		(1 <<  1)
+#define KEYFLAG_CANSIGN                 (1 <<  0)
+#define KEYFLAG_CANENCRYPT              (1 <<  1)
 #define KEYFLAG_ISX509                  (1 <<  2)
-#define KEYFLAG_SECRET			(1 <<  7)
-#define KEYFLAG_EXPIRED 		(1 <<  8)
-#define KEYFLAG_REVOKED 		(1 <<  9)
-#define KEYFLAG_DISABLED 		(1 << 10)
-#define KEYFLAG_SUBKEY 			(1 << 11)
-#define KEYFLAG_CRITICAL 		(1 << 12)
-#define KEYFLAG_PREFER_ENCRYPTION 	(1 << 13)
-#define KEYFLAG_PREFER_SIGNING 		(1 << 14)
+#define KEYFLAG_SECRET                  (1 <<  7)
+#define KEYFLAG_EXPIRED                 (1 <<  8)
+#define KEYFLAG_REVOKED                 (1 <<  9)
+#define KEYFLAG_DISABLED                (1 << 10)
+#define KEYFLAG_SUBKEY                  (1 << 11)
+#define KEYFLAG_CRITICAL                (1 << 12)
+#define KEYFLAG_PREFER_ENCRYPTION       (1 << 13)
+#define KEYFLAG_PREFER_SIGNING          (1 << 14)
 
 #define KEYFLAG_CANTUSE (KEYFLAG_DISABLED|KEYFLAG_REVOKED|KEYFLAG_EXPIRED)
 #define KEYFLAG_RESTRICTIONS (KEYFLAG_CANTUSE|KEYFLAG_CRITICAL)

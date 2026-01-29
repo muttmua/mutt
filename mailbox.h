@@ -47,16 +47,16 @@ enum
 
 typedef struct _message
 {
-  FILE *fp;	/* pointer to the message data */
-  char *path;	/* path to temp file */
-  short write;	/* nonzero if message is open for writing */
+  FILE *fp;     /* pointer to the message data */
+  char *path;   /* path to temp file */
+  short write;  /* nonzero if message is open for writing */
   struct {
     unsigned read : 1;
     unsigned flagged : 1;
     unsigned replied : 1;
     unsigned draft : 1;
   } flags;
-  time_t received;	/* the time at which this message was received */
+  time_t received;      /* the time at which this message was received */
 } MESSAGE;
 
 CONTEXT *mx_open_mailbox (const char *, int, CONTEXT *);

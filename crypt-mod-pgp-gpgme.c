@@ -126,15 +126,15 @@ struct crypt_module_specs crypt_mod_pgp_gpgme =
     crypt_mod_pgp_encrypt_message,
     crypt_mod_pgp_make_key_attachment,
     crypt_mod_pgp_check_traditional,
-    NULL, 			/* pgp_traditional_encryptsign  */
+    NULL,                       /* pgp_traditional_encryptsign  */
     NULL, /* pgp_invoke_getkeys  */
     crypt_mod_pgp_invoke_import,
     NULL, /* pgp_extract_keys_from_attachment_list  */
 
-    NULL,			/* smime_getkeys */
-    NULL,			/* smime_verify_sender */
-    NULL,			/* smime_build_smime_entity */
-    NULL,			/* smime_invoke_import */
+    NULL,                       /* smime_getkeys */
+    NULL,                       /* smime_verify_sender */
+    NULL,                       /* smime_build_smime_entity */
+    NULL,                       /* smime_invoke_import */
   }
 };
 

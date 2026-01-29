@@ -108,8 +108,8 @@ static int smtp_code (const char *buf, size_t len, int *n)
 
 /* Reads a command response from the SMTP server.
  * Returns:
- * 0	on success (2xx code) or continue (354 code)
- * -1	write error, or any other response code
+ * 0    on success (2xx code) or continue (354 code)
+ * -1   write error, or any other response code
  */
 static int
 smtp_get_resp (CONNECTION * conn)

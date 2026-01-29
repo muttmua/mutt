@@ -173,7 +173,7 @@ static const struct mapping_t LandingHelp[] = {
   { N_("Exit"),  OP_EXIT },
   { N_("Redraw"), OP_REDRAW },
   { N_("Help"),  OP_HELP },
-  { NULL,	 0 }
+  { NULL,        0 }
 };
 
 
@@ -365,7 +365,7 @@ static const struct mapping_t BgComposeHelp[] = {
   */
   { N_("Resume"),   OP_GENERIC_SELECT_ENTRY },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 static const char *bg_format_str (char *dest, size_t destlen, size_t col,

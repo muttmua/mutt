@@ -184,9 +184,9 @@ static int undotlock_file (const char *path, int fd)
 #endif /* USE_DOTLOCK */
 
 /* Args:
- *	excl		if excl != 0, request an exclusive lock
- *	dot		if dot != 0, try to dotlock the file
- *	timeout 	should retry locking?
+ *      excl            if excl != 0, request an exclusive lock
+ *      dot             if dot != 0, try to dotlock the file
+ *      timeout         should retry locking?
  */
 int mx_lock_file (const char *path, int fd, int excl, int dot, int timeout)
 {
@@ -345,9 +345,9 @@ static void mx_unlink_empty (const char *path)
 /* try to figure out what type of mailbox ``path'' is
  *
  * return values:
- *	M_*	mailbox type
- *	0	not a mailbox
- *	-1	error
+ *      M_*     mailbox type
+ *      0       not a mailbox
+ *      -1      error
  */
 
 #ifdef USE_IMAP
@@ -571,12 +571,12 @@ static int mx_open_mailbox_append (CONTEXT *ctx, int flags)
  * open a mailbox and parse it
  *
  * Args:
- *	flags	MUTT_NOSORT	do not sort mailbox
- *		MUTT_APPEND	open mailbox for appending
- *		MUTT_READONLY	open mailbox in read-only mode
- *		MUTT_QUIET		only print error messages
- *		MUTT_PEEK		revert atime where applicable
- *	ctx	if non-null, context struct to use
+ *      flags   MUTT_NOSORT     do not sort mailbox
+ *              MUTT_APPEND     open mailbox for appending
+ *              MUTT_READONLY   open mailbox in read-only mode
+ *              MUTT_QUIET              only print error messages
+ *              MUTT_PEEK               revert atime where applicable
+ *      ctx     if non-null, context struct to use
  */
 CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
 {
@@ -1202,8 +1202,8 @@ void mx_update_tables(CONTEXT *ctx, int committing)
 /* save changes to mailbox
  *
  * return values:
- *	0		success
- *	-1		error
+ *      0               success
+ *      -1              error
  */
 int mx_sync_mailbox (CONTEXT *ctx, int *index_hint)
 {
@@ -1330,9 +1330,9 @@ int mx_sync_mailbox (CONTEXT *ctx, int *index_hint)
 }
 
 /* args:
- *	dest	destination mailbox
- *	hdr	message being copied (required for maildir support, because
- *		the filename depends on the message flags)
+ *      dest    destination mailbox
+ *      hdr     message being copied (required for maildir support, because
+ *              the filename depends on the message flags)
  */
 MESSAGE *mx_open_new_message (CONTEXT *dest, HEADER *hdr, int flags)
 {
@@ -1456,7 +1456,7 @@ int mx_close_message (CONTEXT *ctx, MESSAGE **msg)
     FREE (&(*msg)->path);
   }
 
-  FREE (msg);		/* __FREE_CHECKED__ */
+  FREE (msg);           /* __FREE_CHECKED__ */
   return (r);
 }
 

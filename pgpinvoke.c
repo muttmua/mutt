@@ -48,11 +48,11 @@
  */
 
 struct pgp_command_context {
-  short need_passphrase;	/* %p */
-  const char *fname;		/* %f */
-  const char *sig_fname;	/* %s */
-  const char *signas;		/* %a */
-  const char *ids;		/* %r */
+  short need_passphrase;        /* %p */
+  const char *fname;            /* %f */
+  const char *sig_fname;        /* %s */
+  const char *signas;           /* %a */
+  const char *ids;              /* %r */
 };
 
 
@@ -176,13 +176,13 @@ static pid_t pgp_invoke (FILE **pgpin, FILE **pgpout, FILE **pgperr,
     return (pid_t) -1;
 
   cctx.need_passphrase = need_passphrase;
-  cctx.fname	       = fname;
+  cctx.fname           = fname;
   cctx.sig_fname       = sig_fname;
   if (PgpSignAs)
-    cctx.signas	       = PgpSignAs;
+    cctx.signas        = PgpSignAs;
   else
-    cctx.signas	       = PgpDefaultKey;
-  cctx.ids	       = ids;
+    cctx.signas        = PgpDefaultKey;
+  cctx.ids             = ids;
 
   mutt_pgp_command (cmd, sizeof (cmd), &cctx, format);
 
@@ -274,9 +274,9 @@ void pgp_invoke_import (const char *fname)
   mutt_buffer_quote_filename (fnamebuf, fname);
   cctx.fname = mutt_b2s (fnamebuf);
   if (PgpSignAs)
-    cctx.signas	       = PgpSignAs;
+    cctx.signas        = PgpSignAs;
   else
-    cctx.signas	       = PgpDefaultKey;
+    cctx.signas        = PgpDefaultKey;
 
   mutt_pgp_command (cmd, sizeof (cmd), &cctx, PgpImportCommand);
   mutt_system (cmd);

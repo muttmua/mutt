@@ -46,7 +46,7 @@
 
 #ifndef __THROW
 # if defined __cplusplus && __GNUC_PREREQ (2,8)
-#  define __THROW	throw ()
+#  define __THROW       throw ()
 # else
 #  define __THROW
 # endif

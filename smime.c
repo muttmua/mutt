@@ -53,12 +53,12 @@
 #include "mutt_crypt.h"
 
 struct smime_command_context {
-  const char *key;		    /* %k */
-  const char *cryptalg;		    /* %a */
-  const char *digestalg;	    /* %d */
-  const char *fname;		    /* %f */
-  const char *sig_fname;	    /* %s */
-  const char *certificates;	    /* %c */
+  const char *key;                  /* %k */
+  const char *cryptalg;             /* %a */
+  const char *digestalg;            /* %d */
+  const char *fname;                /* %f */
+  const char *sig_fname;            /* %s */
+  const char *certificates;         /* %c */
   const char *intermediates;        /* %i */
 };
 
@@ -351,10 +351,10 @@ static pid_t smime_invoke (FILE **smimein, FILE **smimeout, FILE **smimeerr,
   if (!format || !*format)
     return (pid_t) -1;
 
-  cctx.fname	       = fname;
+  cctx.fname           = fname;
   cctx.sig_fname       = sig_fname;
-  cctx.key	       = key;
-  cctx.cryptalg	       = cryptalg;
+  cctx.key             = key;
+  cctx.cryptalg        = cryptalg;
   cctx.digestalg       = digestalg;
   cctx.certificates    = certificates;
   cctx.intermediates   = intermediates;
@@ -459,12 +459,12 @@ static smime_key_t *smime_select_key (smime_key_t *keys, char *query)
   /* Make Helpstring */
   helpstr[0] = 0;
   mutt_make_help (buf, sizeof (buf), _("Exit  "), MENU_SMIME, OP_EXIT);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Select  "), MENU_SMIME,
                   OP_GENERIC_SELECT_ENTRY);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof(buf), _("Help"), MENU_SMIME, OP_HELP);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
 
   /* Create the menu */
   menu = mutt_new_menu(MENU_SMIME);
@@ -919,7 +919,7 @@ char *smime_findKeys (ADDRESS *adrlist, int oppenc_mode)
     keyID = key->hash;
     keylist_size += mutt_strlen (keyID) + 2;
     safe_realloc (&keylist, keylist_size);
-    sprintf (keylist + keylist_used, "%s%s", keylist_used ? " " : "", keyID);	/* __SPRINTF_CHECKED__ */
+    sprintf (keylist + keylist_used, "%s%s", keylist_used ? " " : "", keyID);   /* __SPRINTF_CHECKED__ */
     keylist_used = mutt_strlen (keylist);
 
     smime_free_key (&key);

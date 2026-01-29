@@ -247,8 +247,8 @@ static int rfc1524_mailcap_parse (BODY *a,
       ch = get_field (buf);
       if (ascii_strcasecmp (buf, type) &&
           (ascii_strncasecmp (buf, type, btlen) ||
-           (buf[btlen] != 0 &&			/* implicit wild */
-            mutt_strcmp (buf + btlen, "/*"))))	/* wildsubtype */
+           (buf[btlen] != 0 &&                  /* implicit wild */
+            mutt_strcmp (buf + btlen, "/*"))))  /* wildsubtype */
         continue;
 
       /* next field is the viewcommand */
@@ -413,7 +413,7 @@ void rfc1524_free_entry(rfc1524_entry **entry)
   FREE (&p->editcommand);
   FREE (&p->printcommand);
   FREE (&p->nametemplate);
-  FREE (entry);		/* __FREE_CHECKED__ */
+  FREE (entry);         /* __FREE_CHECKED__ */
 }
 
 /*

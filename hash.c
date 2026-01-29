@@ -288,8 +288,8 @@ void int_hash_delete (HASH *table, unsigned int intkey, const void *data,
   union_hash_delete (table, key, data, destroy);
 }
 
-/* ptr		pointer to the hash table to be freed
- * destroy()	function to call to free the ->data member (optional)
+/* ptr          pointer to the hash table to be freed
+ * destroy()    function to call to free the ->data member (optional)
  */
 void hash_destroy (HASH **ptr, void (*destroy) (void *))
 {
@@ -315,7 +315,7 @@ void hash_destroy (HASH **ptr, void (*destroy) (void *))
     }
   }
   FREE (&pptr->table);
-  FREE (ptr);		/* __FREE_CHECKED__ */
+  FREE (ptr);           /* __FREE_CHECKED__ */
 }
 
 struct hash_elem *hash_walk(const HASH *table, struct hash_walk_state *state)

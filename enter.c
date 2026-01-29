@@ -33,8 +33,8 @@
 /* redraw flags for mutt_enter_string() */
 enum
 {
-  MUTT_REDRAW_INIT = 1,	/* go to end of line and redraw */
-  MUTT_REDRAW_LINE		/* redraw entire line */
+  MUTT_REDRAW_INIT = 1, /* go to end of line and redraw */
+  MUTT_REDRAW_LINE              /* redraw entire line */
 };
 
 static int my_wcwidth (wchar_t wc)
@@ -215,8 +215,8 @@ static inline int is_shell_char(wchar_t ch)
  * listed in the comment header for _mutt_enter_string().
  *
  * Returns:
- *	0 if input was given
- * 	-1 if abort.
+ *      0 if input was given
+ *      -1 if abort.
  */
 int mutt_enter_string (char *buf, size_t buflen, int col, int flags)
 {
@@ -258,8 +258,8 @@ int mutt_enter_string (char *buf, size_t buflen, int col, int flags)
  *
  * Returns:
  *      1 need to redraw the screen and call me again
- *	0 if input was given
- * 	-1 if abort.
+ *      0 if input was given
+ *      -1 if abort.
  */
 int _mutt_enter_string (char *buf, size_t buflen, int col,
                         int flags, int multiple, char ***files, int *numfiles,
@@ -899,7 +899,7 @@ void mutt_free_enter_state (ENTER_STATE **esp)
   if (!esp) return;
 
   FREE (&(*esp)->wbuf);
-  FREE (esp);		/* __FREE_CHECKED__ */
+  FREE (esp);           /* __FREE_CHECKED__ */
 }
 
 /*

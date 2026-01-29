@@ -137,9 +137,9 @@ static int fetch_auth (char *line, void *data)
   {
     safe_realloc (&pop_data->auth_list,
                   strlen (pop_data->auth_list) + strlen (line) + 2);
-    strcat (pop_data->auth_list, " ");	/* __STRCAT_CHECKED__ */
+    strcat (pop_data->auth_list, " ");  /* __STRCAT_CHECKED__ */
   }
-  strcat (pop_data->auth_list, line);	/* __STRCAT_CHECKED__ */
+  strcat (pop_data->auth_list, line);   /* __STRCAT_CHECKED__ */
 
   return 0;
 }

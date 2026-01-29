@@ -185,7 +185,7 @@ static void _pgp_free_key (pgp_key_t *kpp)
   FREE (&kp->keyid);
   FREE (&kp->fingerprint);
   /* mutt_crypt.h: 'typedef struct pgp_keyinfo *pgp_key_t;' */
-  FREE (kpp);		/* __FREE_CHECKED__ */
+  FREE (kpp);           /* __FREE_CHECKED__ */
 }
 
 pgp_key_t pgp_remove_key (pgp_key_t *klist, pgp_key_t key)

@@ -19,7 +19,7 @@
 
 #if HAVE_CONFIG_H
 #include "config.h"
-#endif				/* HAVE_CONFIG_H */
+#endif                          /* HAVE_CONFIG_H */
 
 #include <sys/types.h>
 #include <errno.h>
@@ -100,7 +100,7 @@ void mutt_bcache_close (body_cache_t **bcache)
   if (!bcache || !*bcache)
     return;
   FREE (&(*bcache)->path);
-  FREE(bcache);			/* __FREE_CHECKED__ */
+  FREE(bcache);                 /* __FREE_CHECKED__ */
 }
 
 FILE* mutt_bcache_get(body_cache_t *bcache, const char *id)

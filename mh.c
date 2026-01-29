@@ -59,7 +59,7 @@
 #include <sys/time.h>
 #endif
 
-#define		INS_SORT_THRESHOLD		6
+#define         INS_SORT_THRESHOLD              6
 
 static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint);
 static int mh_check_mailbox (CONTEXT * ctx, int *index_hint);
@@ -194,7 +194,7 @@ static int mh_read_sequences (struct mh_sequences *mhs, const char *path)
       f = MH_SEQ_FLAGGED;
     else if (!mutt_strcmp (t, MhReplied))
       f = MH_SEQ_REPLIED;
-    else			/* unknown sequence */
+    else                        /* unknown sequence */
       continue;
 
     while ((t = strtok (NULL, " \t:")))
@@ -389,7 +389,7 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
 
   if ((*fp = fdopen (fd, "w")) == NULL)
   {
-    FREE (tgt);		/* __FREE_CHECKED__ */
+    FREE (tgt);         /* __FREE_CHECKED__ */
     close (fd);
     unlink (mutt_b2s (path));
     rc = -1;
@@ -665,7 +665,7 @@ static void maildir_free_entry (struct maildir **md)
   if ((*md)->h)
     mutt_free_header (&(*md)->h);
 
-  FREE (md);		/* __FREE_CHECKED__ */
+  FREE (md);            /* __FREE_CHECKED__ */
 }
 
 static void maildir_free_maildir (struct maildir **md)
@@ -706,17 +706,17 @@ static void maildir_parse_flags (HEADER * h, const char *path)
           h->flagged = 1;
           break;
 
-        case 'S':		/* seen */
+        case 'S':               /* seen */
 
           h->read = 1;
           break;
 
-        case 'R':		/* replied */
+        case 'R':               /* replied */
 
           h->replied = 1;
           break;
 
-        case 'T':		/* trashed */
+        case 'T':               /* trashed */
           if (!h->flagged || !option(OPTFLAGSAFE))
           {
             h->trash = 1;
@@ -1168,7 +1168,7 @@ static void maildir_delayed_parsing (CONTEXT * ctx, struct maildir **md,
     }                                                                   \
   } while (0)
 #else
-#define DO_SORT()	/* nothing */
+#define DO_SORT()       /* nothing */
 #endif
 
 #if USE_HCACHE
@@ -1259,9 +1259,9 @@ static int mh_close_mailbox (CONTEXT *ctx)
 /* Read a MH/maildir style mailbox.
  *
  * args:
- *	ctx [IN/OUT]	context for this mailbox
- *	subdir [IN]	NULL for MH mailboxes, otherwise the subdir of the
- *			maildir mailbox to read from
+ *      ctx [IN/OUT]    context for this mailbox
+ *      subdir [IN]     NULL for MH mailboxes, otherwise the subdir of the
+ *                      maildir mailbox to read from
  */
 static int mh_read_dir (CONTEXT * ctx, const char *subdir)
 {
@@ -2218,19 +2218,19 @@ static int maildir_update_flags (CONTEXT *ctx, HEADER *o, HEADER *n)
  */
 static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
 {
-  struct stat st_new;		/* status of the "new" subdirectory */
-  struct stat st_cur;		/* status of the "cur" subdirectory */
+  struct stat st_new;           /* status of the "new" subdirectory */
+  struct stat st_cur;           /* status of the "cur" subdirectory */
   BUFFER *buf = NULL;
-  int changed = 0;		/* bitmask representing which subdirectories
+  int changed = 0;              /* bitmask representing which subdirectories
                                    have changed.  0x1 = new, 0x2 = cur */
-  int occult = 0;		/* messages were removed from the mailbox */
-  int have_new = 0;		/* messages were added to the mailbox */
+  int occult = 0;               /* messages were removed from the mailbox */
+  int have_new = 0;             /* messages were added to the mailbox */
   int flags_changed = 0;        /* message flags were changed in the mailbox */
-  struct maildir *md;		/* list of messages in the mailbox */
+  struct maildir *md;           /* list of messages in the mailbox */
   struct maildir **last, *p;
   int i;
   int count = 0;
-  HASH *fnames;			/* hash table for quickly looking up the base filename
+  HASH *fnames;                 /* hash table for quickly looking up the base filename
                                    for a maildir message */
   struct mh_data *data = mh_data (ctx);
 
@@ -2264,7 +2264,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   if (!changed)
   {
     mutt_buffer_pool_release (&buf);
-    return 0;			/* nothing to do */
+    return 0;                   /* nothing to do */
   }
 
   /* Update the modification times on the mailbox.
@@ -2605,7 +2605,7 @@ static FILE *_maildir_open_find_message (const char *folder, const char *unique,
     {
       mutt_buffer_printf (fname, "%s/%s/%s", folder, subfolder,
                           de->d_name);
-      fp = fopen (mutt_b2s (fname), "r");	/* __FOPEN_CHECKED__ */
+      fp = fopen (mutt_b2s (fname), "r");       /* __FOPEN_CHECKED__ */
       oe = errno;
       break;
     }
@@ -2628,7 +2628,7 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
   BUFFER *unique = NULL;
   FILE *fp = NULL;
 
-  static unsigned int new_hits = 0, cur_hits = 0;	/* simple dynamic optimization */
+  static unsigned int new_hits = 0, cur_hits = 0;       /* simple dynamic optimization */
 
   unique = mutt_buffer_pool_get ();
   maildir_canon_filename (unique, msg);

@@ -28,20 +28,20 @@ typedef struct buffy_t
 
   off_t size;
   struct buffy_t *next;
-  short new;			/* mailbox has new mail */
+  short new;                    /* mailbox has new mail */
 
   /* These next three are only set when OPTMAILCHECKSTATS is set */
-  int msg_count;		/* total number of messages */
-  int msg_unread;		/* number of unread messages */
-  int msg_flagged;		/* number of flagged messages */
+  int msg_count;                /* total number of messages */
+  int msg_unread;               /* number of unread messages */
+  int msg_flagged;              /* number of flagged messages */
 
   short nonotify;               /* if set, don't notify for new mail */
   short nopoll;                 /* if set, don't poll for new mail */
-  short notified;		/* user has been notified */
-  short magic;			/* mailbox type */
-  short newly_created;		/* mbox or mmdf just popped into existence */
-  struct timespec last_visited;		/* time of last exit from this mailbox */
-  struct timespec stats_last_checked;	/* mtime of mailbox the last time stats where checked. */
+  short notified;               /* user has been notified */
+  short magic;                  /* mailbox type */
+  short newly_created;          /* mbox or mmdf just popped into existence */
+  struct timespec last_visited;         /* time of last exit from this mailbox */
+  struct timespec stats_last_checked;   /* mtime of mailbox the last time stats where checked. */
 }
 BUFFY;
 
@@ -49,7 +49,7 @@ WHERE BUFFY *Incoming;
 WHERE short BuffyTimeout INITVAL (3);
 WHERE short BuffyCheckStatsInterval INITVAL (60);
 
-extern time_t BuffyDoneTime;	/* last time we knew for sure how much mail there was */
+extern time_t BuffyDoneTime;    /* last time we knew for sure how much mail there was */
 
 void mutt_buffy_add (const char *path, const char *label, int nopoll, int nonotify);
 void mutt_buffy_remove (const char *path);

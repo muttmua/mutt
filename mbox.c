@@ -705,11 +705,11 @@ int mbox_strict_cmp_headers (const HEADER *h1, const HEADER *h2)
 /* check to see if the mailbox has changed on disk.
  *
  * return values:
- *	MUTT_REOPENED	mailbox has been reopened
- *	MUTT_NEW_MAIL	new mail has arrived!
- *	MUTT_LOCKED	couldn't lock the file
- *	0		no change
- *	-1		error
+ *      MUTT_REOPENED   mailbox has been reopened
+ *      MUTT_NEW_MAIL   new mail has arrived!
+ *      MUTT_LOCKED     couldn't lock the file
+ *      0               no change
+ *      -1              error
  */
 static int mbox_check_mailbox (CONTEXT *ctx, int *index_hint)
 {
@@ -859,8 +859,8 @@ void mbox_reset_atime (CONTEXT *ctx, struct stat *st)
 }
 
 /* return values:
- *	0	success
- *	-1	failure
+ *      0       success
+ *      -1      failure
  */
 static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
 {
@@ -870,8 +870,8 @@ static int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
   int unlink_tempfile = 0;
   int rc = -1;
   int need_sort = 0; /* flag to resort mailbox if new mail arrives */
-  int first = -1;	/* first message to be written */
-  LOFF_T offset;	/* location in mailbox to write changed messages */
+  int first = -1;       /* first message to be written */
+  LOFF_T offset;        /* location in mailbox to write changed messages */
   struct stat statbuf;
   struct m_update_t *newOffset = NULL;
   struct m_update_t *oldOffset = NULL;
@@ -1278,7 +1278,7 @@ int mutt_reopen_mailbox (CONTEXT *ctx, int *index_hint)
     ctx->hdrs = NULL;
   }
 
-  ctx->hdrmax = 0;	/* force allocation of new headers */
+  ctx->hdrmax = 0;      /* force allocation of new headers */
   ctx->msgcount = 0;
   ctx->vcount = 0;
   ctx->vsize = 0;

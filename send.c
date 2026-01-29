@@ -772,7 +772,7 @@ void mutt_make_misc_reply_headers (ENVELOPE *env, CONTEXT *ctx,
   {
     FREE (&env->subject);
     env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
-    sprintf (env->subject, "Re: %s", curenv->real_subj);	/* __SPRINTF_CHECKED__ */
+    sprintf (env->subject, "Re: %s", curenv->real_subj);        /* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
     env->subject = safe_strdup ("Re:");
@@ -897,11 +897,11 @@ envelope_defaults (ENVELOPE *env, CONTEXT *ctx, HEADER *cur, int flags)
 }
 
 static int
-generate_body (FILE *tempfp,	/* stream for outgoing message */
-               HEADER *msg,	/* header for outgoing message */
-               int flags,	/* compose mode */
-               CONTEXT *ctx,	/* current mailbox */
-               HEADER *cur)	/* current message */
+generate_body (FILE *tempfp,    /* stream for outgoing message */
+               HEADER *msg,     /* header for outgoing message */
+               int flags,       /* compose mode */
+               CONTEXT *ctx,    /* current mailbox */
+               HEADER *cur)     /* current message */
 {
   int i;
   HEADER *h;
@@ -1057,7 +1057,7 @@ void mutt_set_followup_to (ENVELOPE *e)
         for (t = from; t && t->next; t = t->next)
           ;
 
-        t->next = e->mail_followup_to; 	/* t cannot be NULL at this point. */
+        t->next = e->mail_followup_to;  /* t cannot be NULL at this point. */
         e->mail_followup_to = from;
       }
     }
@@ -1118,7 +1118,7 @@ ADDRESS *mutt_default_from (void)
   {
     adr = rfc822_new_address ();
     adr->mailbox = safe_malloc (mutt_strlen (Username) + mutt_strlen (fqdn) + 2);
-    sprintf (adr->mailbox, "%s@%s", NONULL(Username), NONULL(fqdn));	/* __SPRINTF_CHECKED__ */
+    sprintf (adr->mailbox, "%s@%s", NONULL(Username), NONULL(fqdn));    /* __SPRINTF_CHECKED__ */
   }
   else
   {
@@ -1676,7 +1676,7 @@ static int postpone_message (SEND_CONTEXT *sctx)
   msg->read = 0; msg->old = 0;
 
   mutt_prepare_envelope (msg->env, 0);
-  mutt_env_to_intl (msg->env, NULL, NULL);	/* Handle bad IDNAs the next time. */
+  mutt_env_to_intl (msg->env, NULL, NULL);      /* Handle bad IDNAs the next time. */
 
   if (mutt_write_fcc (NONULL (Postponed), sctx,
                       (flags & SENDREPLY) ? sctx->cur_message_id : NULL,
@@ -2579,13 +2579,13 @@ main_loop:
                 && sctx->msg->content->type == TYPEAPPLICATION))
       {
         mutt_free_body (&sctx->msg->content); /* destroy PGP data */
-        sctx->msg->content = clear_content;	/* restore clear text. */
+        sctx->msg->content = clear_content;     /* restore clear text. */
       }
       else if ((sctx->msg->security & SIGN) &&
                sctx->msg->content->type == TYPEMULTIPART &&
                !ascii_strcasecmp (sctx->msg->content->subtype, "signed"))
       {
-        mutt_free_body (&sctx->msg->content->parts->next);	     /* destroy sig */
+        mutt_free_body (&sctx->msg->content->parts->next);           /* destroy sig */
         sctx->msg->content = mutt_remove_multipart (sctx->msg->content);
       }
 

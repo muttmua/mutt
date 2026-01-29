@@ -427,10 +427,10 @@ static THREAD *find_subject (CONTEXT *ctx, THREAD *cur)
     for (ptr = hash_find_bucket (ctx->subj_hash, subjects->data); ptr; ptr = ptr->next)
     {
       tmp = ((HEADER *) ptr->data)->thread;
-      if (tmp != cur &&			   /* don't match the same message */
-          !tmp->fake_thread &&		   /* don't match pseudo threads */
+      if (tmp != cur &&                    /* don't match the same message */
+          !tmp->fake_thread &&             /* don't match pseudo threads */
           tmp->message->subject_changed && /* only match interesting replies */
-          !is_descendant (tmp, cur) &&	   /* don't match in the same thread */
+          !is_descendant (tmp, cur) &&     /* don't match in the same thread */
           (date >= (option (OPTTHREADRECEIVED) ?
                     tmp->message->received :
                     tmp->message->date_sent)) &&

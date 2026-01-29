@@ -627,7 +627,7 @@ int _rfc2047_encode_string (char **pd, int encode_specials, int col)
                        Charset, charsets, &e, &elen,
                        encode_specials ? RFC822Specials : NULL);
 
-  FREE (pd);		/* __FREE_CHECKED__ */
+  FREE (pd);            /* __FREE_CHECKED__ */
   *pd = e;
 
   return rv;

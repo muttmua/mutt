@@ -631,11 +631,11 @@ static void start_curses (void)
   mutt_reflow_windows ();
 }
 
-#define MUTT_IGNORE  (1<<0)	/* -z */
-#define MUTT_BUFFY   (1<<1)	/* -Z */
-#define MUTT_NOSYSRC (1<<2)	/* -n */
-#define MUTT_RO      (1<<3)	/* -R */
-#define MUTT_SELECT  (1<<4)	/* -y */
+#define MUTT_IGNORE  (1<<0)     /* -z */
+#define MUTT_BUFFY   (1<<1)     /* -Z */
+#define MUTT_NOSYSRC (1<<2)     /* -n */
+#define MUTT_RO      (1<<3)     /* -R */
+#define MUTT_SELECT  (1<<4)     /* -y */
 
 int main (int argc, char **argv, char **environ)
 {

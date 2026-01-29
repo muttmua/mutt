@@ -40,56 +40,56 @@
 #include "functions.h"
 
 const struct mapping_t Menus[] = {
-  { "alias",	MENU_ALIAS },
-  { "attach",	MENU_ATTACH },
-  { "browser",	MENU_FOLDER },
-  { "compose",	MENU_COMPOSE },
-  { "editor",	MENU_EDITOR },
-  { "list",	MENU_LIST },
-  { "index",	MENU_MAIN },
-  { "pager",	MENU_PAGER },
-  { "postpone",	MENU_POST },
-  { "pgp",	MENU_PGP },
-  { "smime",	MENU_SMIME },
+  { "alias",    MENU_ALIAS },
+  { "attach",   MENU_ATTACH },
+  { "browser",  MENU_FOLDER },
+  { "compose",  MENU_COMPOSE },
+  { "editor",   MENU_EDITOR },
+  { "list",     MENU_LIST },
+  { "index",    MENU_MAIN },
+  { "pager",    MENU_PAGER },
+  { "postpone", MENU_POST },
+  { "pgp",      MENU_PGP },
+  { "smime",    MENU_SMIME },
 #ifdef CRYPT_BACKEND_GPGME
-  { "key_select_pgp",	MENU_KEY_SELECT_PGP },
-  { "key_select_smime",	MENU_KEY_SELECT_SMIME },
+  { "key_select_pgp",   MENU_KEY_SELECT_PGP },
+  { "key_select_smime", MENU_KEY_SELECT_SMIME },
 #endif
 
 #ifdef MIXMASTER
-  { "mix", 	MENU_MIX },
+  { "mix",      MENU_MIX },
 #endif
 
 
-  { "query",	MENU_QUERY },
-  { "generic",	MENU_GENERIC },
-  { NULL,	0 }
+  { "query",    MENU_QUERY },
+  { "generic",  MENU_GENERIC },
+  { NULL,       0 }
 };
 
 #define mutt_check_menu(s) mutt_getvaluebyname(s, Menus)
 
 static struct mapping_t KeyNames[] = {
-  { "<PageUp>",	KEY_PPAGE },
-  { "<PageDown>",	KEY_NPAGE },
-  { "<Up>",	KEY_UP },
-  { "<Down>",	KEY_DOWN },
-  { "<Right>",	KEY_RIGHT },
-  { "<Left>",	KEY_LEFT },
-  { "<Delete>",	KEY_DC },
+  { "<PageUp>", KEY_PPAGE },
+  { "<PageDown>",       KEY_NPAGE },
+  { "<Up>",     KEY_UP },
+  { "<Down>",   KEY_DOWN },
+  { "<Right>",  KEY_RIGHT },
+  { "<Left>",   KEY_LEFT },
+  { "<Delete>", KEY_DC },
   { "<BackSpace>",KEY_BACKSPACE },
-  { "<Insert>",	KEY_IC },
-  { "<Home>",	KEY_HOME },
-  { "<End>",	KEY_END },
-  { "<Enter>",	'\n' },
-  { "<Return>",	'\r' },
+  { "<Insert>", KEY_IC },
+  { "<Home>",   KEY_HOME },
+  { "<End>",    KEY_END },
+  { "<Enter>",  '\n' },
+  { "<Return>", '\r' },
 #ifdef KEY_ENTER
-  { "<KeypadEnter>",	KEY_ENTER },
+  { "<KeypadEnter>",    KEY_ENTER },
 #else
-  { "<KeypadEnter>",	'\n' },
+  { "<KeypadEnter>",    '\n' },
 #endif
-  { "<Esc>",	'\033' },
-  { "<Tab>",	'\t' },
-  { "<Space>",	' ' },
+  { "<Esc>",    '\033' },
+  { "<Tab>",    '\t' },
+  { "<Space>",  ' ' },
 #ifdef KEY_BTAB
   { "<BackTab>", KEY_BTAB },
 #endif
@@ -100,36 +100,36 @@ static struct mapping_t KeyNames[] = {
   /* extensions supported by ncurses.  values are filled in during initialization */
 
   /* CTRL+key */
-  { "<C-Up>",	-1 },
-  { "<C-Down>",	-1 },
+  { "<C-Up>",   -1 },
+  { "<C-Down>", -1 },
   { "<C-Left>", -1 },
-  { "<C-Right>",	-1 },
-  { "<C-Home>",	-1 },
-  { "<C-End>",	-1 },
-  { "<C-Next>",	-1 },
-  { "<C-Prev>",	-1 },
+  { "<C-Right>",        -1 },
+  { "<C-Home>", -1 },
+  { "<C-End>",  -1 },
+  { "<C-Next>", -1 },
+  { "<C-Prev>", -1 },
 
   /* SHIFT+key */
-  { "<S-Up>",	-1 },
-  { "<S-Down>",	-1 },
+  { "<S-Up>",   -1 },
+  { "<S-Down>", -1 },
   { "<S-Left>", -1 },
-  { "<S-Right>",	-1 },
-  { "<S-Home>",	-1 },
-  { "<S-End>",	-1 },
-  { "<S-Next>",	-1 },
-  { "<S-Prev>",	-1 },
+  { "<S-Right>",        -1 },
+  { "<S-Home>", -1 },
+  { "<S-End>",  -1 },
+  { "<S-Next>", -1 },
+  { "<S-Prev>", -1 },
 
   /* ALT+key */
-  { "<A-Up>",	-1 },
-  { "<A-Down>",	-1 },
+  { "<A-Up>",   -1 },
+  { "<A-Down>", -1 },
   { "<A-Left>", -1 },
-  { "<A-Right>",	-1 },
-  { "<A-Home>",	-1 },
-  { "<A-End>",	-1 },
-  { "<A-Next>",	-1 },
-  { "<A-Prev>",	-1 },
+  { "<A-Right>",        -1 },
+  { "<A-Home>", -1 },
+  { "<A-End>",  -1 },
+  { "<A-Next>", -1 },
+  { "<A-Prev>", -1 },
 #endif /* NCURSES_VERSION */
-  { NULL,	0 }
+  { NULL,       0 }
 };
 
 /* contains the last key the user pressed */
@@ -395,7 +395,7 @@ static void generic_tokenize_push_string (char *s, void (*generic_push) (int, in
         }
       }
     }
-    generic_push ((unsigned char)*p--, 0);	/* independent 8 bits chars */
+    generic_push ((unsigned char)*p--, 0);      /* independent 8 bits chars */
   }
 }
 
@@ -423,10 +423,10 @@ static int retry_generic (int menu, keycode_t *keys, int keyslen, int lastkey)
 }
 
 /* return values:
- *	>0		function to execute
- *	OP_NULL		no function bound to key sequence
- *	-1		error occurred while reading input
- *	-2		a timeout or sigwinch occurred
+ *      >0              function to execute
+ *      OP_NULL         no function bound to key sequence
+ *      -1              error occurred while reading input
+ *      -2              a timeout or sigwinch occurred
  */
 int km_dokey (int menu)
 {

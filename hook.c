@@ -36,10 +36,10 @@
 
 typedef struct hook
 {
-  int type;		/* hook type */
-  REGEXP rx;		/* regular expression */
-  char *command;	/* filename, command or pattern to execute */
-  pattern_t *pattern;	/* used for fcc,save,send-hook */
+  int type;             /* hook type */
+  REGEXP rx;            /* regular expression */
+  char *command;        /* filename, command or pattern to execute */
+  pattern_t *pattern;   /* used for fcc,save,send-hook */
   struct hook *next;
 } HOOK;
 
@@ -483,7 +483,7 @@ void mutt_folder_hook (const char *path)
         if (mutt_parse_rc_line (tmp->command, &err) == -1)
         {
           mutt_error ("%s", err.data);
-          mutt_sleep (1);	/* pause a moment to let the user see the error */
+          mutt_sleep (1);       /* pause a moment to let the user see the error */
           current_hook_type = 0;
           FREE (&err.data);
 

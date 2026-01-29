@@ -26,7 +26,7 @@
 #define unix
 #endif /* unix */
 
-#include <slang.h>	/* in addition to slcurses.h, we need slang.h for the version
+#include <slang.h>      /* in addition to slcurses.h, we need slang.h for the version
                            number to test for 2.x having UTF-8 support in main.c */
 #include <slcurses.h>
 

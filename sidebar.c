@@ -87,7 +87,7 @@ static const char *cb_format_str(char *dest, size_t destlen, size_t col, int col
   if (!sbe || !dest)
     return src;
 
-  dest[0] = 0;	/* Just in case there's nothing to do */
+  dest[0] = 0;  /* Just in case there's nothing to do */
 
   BUFFY *b = sbe->buffy;
   if (!b)
@@ -243,9 +243,9 @@ static void make_sidebar_entry (char *buf, unsigned int buflen, int width, const
  * @b: Second SBENTRY to compare
  *
  * Returns:
- *	-1: a precedes b
- *	 0: a and b are identical
- *	 1: b precedes a
+ *      -1: a precedes b
+ *       0: a and b are identical
+ *       1: b precedes a
  */
 static int cb_qsort_sbe (const void *a, const void *b)
 {
@@ -288,11 +288,11 @@ static int cb_qsort_sbe (const void *a, const void *b)
  *
  * For each SBENTRY in the Entries array, check whether we should display it.
  * This is determined by several criteria.  If the BUFFY:
- *	is the currently open mailbox
- *	is the currently highlighted mailbox
- *	has unread messages
- *	has flagged messages
- *	is whitelisted
+ *      is the currently open mailbox
+ *      is the currently highlighted mailbox
+ *      has unread messages
+ *      has flagged messages
+ *      is whitelisted
  */
 static void update_entries_visibility (void)
 {
@@ -390,8 +390,8 @@ static void sort_entries (void)
  * can change outside of the sidebar that we don't hear about.
  *
  * Returns:
- *	0: No, don't draw the sidebar
- *	1: Yes, draw the sidebar
+ *      0: No, don't draw the sidebar
+ *      1: Yes, draw the sidebar
  */
 static int prepare_sidebar (int page_size)
 {
@@ -480,9 +480,9 @@ static int prepare_sidebar (int page_size)
  * option "sidebar_width".
  *
  * Returns:
- *	-1: Error: bad character, etc
- *	0:  Error: 0 width character
- *	n:  Success: character occupies n screen columns
+ *      -1: Error: bad character, etc
+ *      0:  Error: 0 width character
+ *      n:  Success: character occupies n screen columns
  */
 static int draw_divider (int num_rows, int num_cols)
 {
@@ -500,7 +500,7 @@ static int draw_divider (int num_rows, int num_cols)
   int i;
   for (i = 0; i < num_rows; i++)
   {
-    mutt_window_move (MuttSidebarWindow, i, num_cols - delim_len);	//RAR 0 for rhs
+    mutt_window_move (MuttSidebarWindow, i, num_cols - delim_len);      //RAR 0 for rhs
     addstr (NONULL(SidebarDividerChar));
   }
 
@@ -523,7 +523,7 @@ static void fill_empty_space (int first_row, int num_rows, int width)
   int r;
   for (r = 0; r < num_rows; r++)
   {
-    mutt_window_move (MuttSidebarWindow, first_row + r, 0);	//RAR rhs
+    mutt_window_move (MuttSidebarWindow, first_row + r, 0);     //RAR rhs
     int i;
     for (i = 0; i < width; i++)
       addch (' ');
@@ -917,8 +917,8 @@ static int select_next (void)
  * Search down the list of mail folders for one containing new mail.
  *
  * Returns:
- *	1: Success
- *	0: Failure
+ *      1: Success
+ *      0: Failure
  */
 static int select_next_new (void)
 {
@@ -977,8 +977,8 @@ static int select_prev (void)
  * Search up the list of mail folders for one containing new mail.
  *
  * Returns:
- *	1: Success
- *	0: Failure
+ *      1: Success
+ *      0: Failure
  */
 static int select_prev_new (void)
 {
@@ -1073,7 +1073,7 @@ void mutt_sb_change_mailbox (int op)
   if (!option (OPTSIDEBAR))
     return;
 
-  if (HilIndex < 0)	/* It'll get reset on the next draw */
+  if (HilIndex < 0)     /* It'll get reset on the next draw */
     return;
 
   switch (op)
@@ -1152,7 +1152,7 @@ void mutt_sb_set_buffystats (const CONTEXT *ctx)
  * Get the path of the mailbox that's highlighted in the sidebar.
  *
  * Returns:
- *	Mailbox path
+ *      Mailbox path
  */
 const char *mutt_sb_get_highlight (void)
 {
@@ -1195,8 +1195,8 @@ void mutt_sb_set_open_buffy (void)
  * mutt_sb_notify_mailbox - The state of a BUFFY is about to change
  *
  * We receive a notification:
- *	After a new BUFFY has been created
- *	Before a BUFFY is deleted
+ *      After a new BUFFY has been created
+ *      Before a BUFFY is deleted
  *
  * Before a deletion, check that our pointers won't be invalidated.
  */

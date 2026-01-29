@@ -40,26 +40,26 @@
  * declared "static" (sigh)
  */
 static char* EditorHelp1 = N_("\
-~~		insert a line beginning with a single ~\n\
-~b addresses	add addresses to the Bcc: field\n\
-~c addresses	add addresses to the Cc: field\n\
-~f messages	include messages\n\
-~F messages	same as ~f, except also include headers\n\
-~h		edit the message header\n\
-~m messages	include and quote messages\n\
-~M messages	same as ~m, except include headers\n\
-~p		print the message\n");
+~~              insert a line beginning with a single ~\n\
+~b addresses    add addresses to the Bcc: field\n\
+~c addresses    add addresses to the Cc: field\n\
+~f messages     include messages\n\
+~F messages     same as ~f, except also include headers\n\
+~h              edit the message header\n\
+~m messages     include and quote messages\n\
+~M messages     same as ~m, except include headers\n\
+~p              print the message\n");
 
 static char* EditorHelp2 = N_("\
-~q		write file and quit editor\n\
-~r file		read a file into the editor\n\
-~t users	add users to the To: field\n\
-~u		recall the previous line\n\
-~v		edit message with the $visual editor\n\
-~w file		write message to file\n\
-~x		abort changes and quit editor\n\
-~?		this message\n\
-.		on a line by itself ends input\n");
+~q              write file and quit editor\n\
+~r file         read a file into the editor\n\
+~t users        add users to the To: field\n\
+~u              recall the previous line\n\
+~v              edit message with the $visual editor\n\
+~w file         write message to file\n\
+~x              abort changes and quit editor\n\
+~?              this message\n\
+.               on a line by itself ends input\n");
 
 static char **
 be_snarf_data (FILE *f, char **buf, int *bufmax, int *buflen, LOFF_T offset,
@@ -126,7 +126,7 @@ static int be_barf_file (const char *path, char **buf, int buflen)
   FILE *f;
   int i;
 
-  if ((f = fopen (path, "w")) == NULL)		/* __FOPEN_CHECKED__ */
+  if ((f = fopen (path, "w")) == NULL)          /* __FOPEN_CHECKED__ */
   {
     addstr (strerror (errno));
     addch ('\n');
@@ -166,7 +166,7 @@ be_include_messages (char *msg, char **buf, int *bufmax, int *buflen,
         setlocale (LC_TIME, NONULL (AttributionLocale));
         mutt_make_string (tmp, sizeof (tmp) - 1, Attribution, Context, Context->hdrs[n]);
         setlocale (LC_TIME, "");
-        strcat (tmp, "\n");	/* __STRCAT_CHECKED__ */
+        strcat (tmp, "\n");     /* __STRCAT_CHECKED__ */
       }
 
       if (*bufmax == *buflen)
@@ -233,7 +233,7 @@ static void be_print_header (ENVELOPE *env)
 }
 
 /* args:
- *	force	override the $ask* vars (used for the ~h command)
+ *      force   override the $ask* vars (used for the ~h command)
  */
 static void be_edit_header (ENVELOPE *e, int force)
 {
@@ -252,7 +252,7 @@ static void be_edit_header (ENVELOPE *e, int force)
       rfc822_free_address (&e->to);
       e->to = mutt_parse_adrlist (e->to, tmp);
       e->to = mutt_expand_aliases (e->to);
-      mutt_addrlist_to_intl (e->to, NULL);	/* XXX - IDNA error reporting? */
+      mutt_addrlist_to_intl (e->to, NULL);      /* XXX - IDNA error reporting? */
       tmp[0] = 0;
       rfc822_write_address (tmp, sizeof (tmp), e->to, 1);
       mutt_window_mvaddstr (MuttMessageWindow, 0, 4, tmp);
@@ -260,7 +260,7 @@ static void be_edit_header (ENVELOPE *e, int force)
   }
   else
   {
-    mutt_addrlist_to_intl (e->to, NULL);	/* XXX - IDNA error reporting? */
+    mutt_addrlist_to_intl (e->to, NULL);        /* XXX - IDNA error reporting? */
     addstr (tmp);
   }
   addch ('\n');

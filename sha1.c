@@ -155,7 +155,7 @@ unsigned i;
 unsigned char finalcount[8];
 unsigned char c;
 
-#if 0	/* untested "improvement" by DHR */
+#if 0   /* untested "improvement" by DHR */
     /* Convert context->count to a sequence of bytes
      * in finalcount.  Second element first, but
      * big-endian order within element.

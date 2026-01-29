@@ -50,7 +50,7 @@
 #endif
 
 #ifdef WORDS_BIGENDIAN
-# define SWAP(n)							\
+# define SWAP(n)                                                        \
     (((n) << 24) | (((n) & 0xff00) << 8) | (((n) >> 8) & 0xff00) | ((n) >> 24))
 #else
 # define SWAP(n) (n)
@@ -331,14 +331,14 @@ md5_process_block (const void *buffer, size_t len, struct md5_ctx *ctx)
          before the computation.  To reduce the work for the next steps
          we store the swapped words in the array CORRECT_WORDS.  */
 
-#define OP(a, b, c, d, s, T)						\
-      do								\
-        {								\
-          a += FF (b, c, d) + (*cwp++ = SWAP (*words)) + T;		\
-          ++words;							\
-          CYCLIC (a, s);						\
-          a += b;							\
-        }								\
+#define OP(a, b, c, d, s, T)                                            \
+      do                                                                \
+        {                                                               \
+          a += FF (b, c, d) + (*cwp++ = SWAP (*words)) + T;             \
+          ++words;                                                      \
+          CYCLIC (a, s);                                                \
+          a += b;                                                       \
+        }                                                               \
       while (0)
 
       /* It is unfortunate that C does not provide an operator for
@@ -377,13 +377,13 @@ md5_process_block (const void *buffer, size_t len, struct md5_ctx *ctx)
          in CORRECT_WORDS.  Redefine the macro to take an additional first
          argument specifying the function to use.  */
 #undef OP
-#define OP(f, a, b, c, d, k, s, T)					\
-      do								\
-        {								\
-          a += f (b, c, d) + correct_words[k] + T;			\
-          CYCLIC (a, s);						\
-          a += b;							\
-        }								\
+#define OP(f, a, b, c, d, k, s, T)                                      \
+      do                                                                \
+        {                                                               \
+          a += f (b, c, d) + correct_words[k] + T;                      \
+          CYCLIC (a, s);                                                \
+          a += b;                                                       \
+        }                                                               \
       while (0)
 
       /* Round 2.  */

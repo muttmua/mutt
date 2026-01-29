@@ -154,7 +154,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 
     switch (field)
     {
-      case 1:			/* record type */
+      case 1:                   /* record type */
       {
         dprint (2, (debugfile, "record type: %s\n", p));
 
@@ -178,12 +178,12 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 
         break;
       }
-      case 2:			/* trust info */
+      case 2:                   /* trust info */
       {
         dprint (2, (debugfile, "trust info: %s\n", p));
 
         switch (*p)
-        {				/* look only at the first letter */
+        {                               /* look only at the first letter */
           case 'e':
             flags |= KEYFLAG_EXPIRED;
             break;
@@ -212,7 +212,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 
         break;
       }
-      case 3:			/* key length  */
+      case 3:                   /* key length  */
       {
         dprint (2, (debugfile, "key len: %s\n", p));
 
@@ -221,7 +221,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
           goto bail;
         break;
       }
-      case 4:			/* pubkey algo */
+      case 4:                   /* pubkey algo */
       {
         dprint (2, (debugfile, "pubkey algorithm: %s\n", p));
 
@@ -235,7 +235,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         }
         break;
       }
-      case 5:			/* 16 hex digits with the long keyid. */
+      case 5:                   /* 16 hex digits with the long keyid. */
       {
         dprint (2, (debugfile, "key id: %s\n", p));
 
@@ -244,7 +244,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         break;
 
       }
-      case 6:			/* timestamp (1998-02-28) */
+      case 6:                   /* timestamp (1998-02-28) */
       {
         dprint (2, (debugfile, "time stamp: %s\n", p));
 
@@ -288,13 +288,13 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         }
         break;
       }
-      case 7:			/* valid for n days */
+      case 7:                   /* valid for n days */
         break;
-      case 8:			/* Local id         */
+      case 8:                   /* Local id         */
         break;
-      case 9:			/* ownertrust       */
+      case 9:                   /* ownertrust       */
         break;
-      case 10:			/* name             */
+      case 10:                  /* name             */
       {
         /* Empty field or no trailing colon.
          * We allow an empty field for a pub record type because it is
@@ -334,9 +334,9 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 
         break;
       }
-      case 11:			/* signature class  */
+      case 11:                  /* signature class  */
         break;
-      case 12:			/* key capabilities */
+      case 12:                  /* key capabilities */
         dprint (2, (debugfile, "capabilities info: %s\n", p));
 
         while (*p)

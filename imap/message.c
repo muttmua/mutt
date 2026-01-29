@@ -874,9 +874,9 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
                    mutt_b2s (hdr_list));
   }
   else
-  {	/* Unable to fetch headers for lower versions */
+  {     /* Unable to fetch headers for lower versions */
     mutt_error _("Unable to fetch headers from this IMAP server version.");
-    mutt_sleep (2);	/* pause a moment to let the user see the error */
+    mutt_sleep (2);     /* pause a moment to let the user see the error */
     goto bail;
   }
 

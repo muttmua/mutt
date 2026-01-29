@@ -389,7 +389,7 @@ void mutt_free_header (HEADER **h)
 #if defined USE_POP || defined USE_IMAP
   FREE (&(*h)->data);
 #endif
-  FREE (h);		/* __FREE_CHECKED__ */
+  FREE (h);             /* __FREE_CHECKED__ */
 }
 
 /* returns true if the header contained in "s" is in list "t" */
@@ -902,7 +902,7 @@ void mutt_free_envelope (ENVELOPE **p)
   mutt_free_autocrypthdr (&(*p)->autocrypt_gossip);
 #endif
 
-  FREE (p);		/* __FREE_CHECKED__ */
+  FREE (p);             /* __FREE_CHECKED__ */
 }
 
 /* move all the headers from extra not present in base into base */
@@ -1301,17 +1301,17 @@ int mutt_check_overwrite (const char *attname, const char *path,
                  See the msgid "Save to file: " (alias.c, recvattach.c) */
               (_("File is a directory, save under it? [(y)es, (n)o, (a)ll]"), _("yna")))
       {
-        case 3:		/* all */
+        case 3:         /* all */
           mutt_str_replace (directory, mutt_b2s (fname));
           break;
-        case 1:		/* yes */
-          FREE (directory);		/* __FREE_CHECKED__ */
+        case 1:         /* yes */
+          FREE (directory);             /* __FREE_CHECKED__ */
           break;
-        case -1:	/* abort */
-          FREE (directory); 		/* __FREE_CHECKED__ */
+        case -1:        /* abort */
+          FREE (directory);             /* __FREE_CHECKED__ */
           return -1;
-        case  2:	/* no */
-          FREE (directory);		/* __FREE_CHECKED__ */
+        case  2:        /* no */
+          FREE (directory);             /* __FREE_CHECKED__ */
           return 1;
       }
     }
@@ -1532,14 +1532,14 @@ char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
 }
 
 
-void mutt_FormatString (char *dest,		/* output buffer */
-                        size_t destlen,		/* output buffer len */
-                        size_t col,		/* starting column (nonzero when called recursively) */
+void mutt_FormatString (char *dest,             /* output buffer */
+                        size_t destlen,         /* output buffer len */
+                        size_t col,             /* starting column (nonzero when called recursively) */
                         int cols,               /* maximum columns */
-                        const char *src,	/* template string */
-                        format_t *callback,	/* callback for processing */
-                        void *data,		/* callback data */
-                        format_flag flags)	/* callback flags */
+                        const char *src,        /* template string */
+                        format_t *callback,     /* callback for processing */
+                        void *data,             /* callback data */
+                        format_flag flags)      /* callback flags */
 {
   char prefix[SHORT_STRING], buf[LONG_STRING], *cp, *wptr = dest, ch;
   char ifstring[SHORT_STRING], elsestring[SHORT_STRING];
@@ -1622,7 +1622,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
 
       dprint(3, (debugfile, "fmtpipe > %s\n", command->data));
 
-      col -= wlen;	/* reset to passed in value */
+      col -= wlen;      /* reset to passed in value */
       wptr = dest;      /* reset write ptr */
       wlen = ((flags & MUTT_FORMAT_ARROWCURSOR) && option (OPTARROWCURSOR)) ? 3 : 0;
       if ((pid = mutt_create_filter(command->data, NULL, &filter, NULL)) != -1)
@@ -2295,7 +2295,7 @@ void mutt_free_regexp (REGEXP **pp)
   FREE (&(*pp)->pattern);
   regfree ((*pp)->rx);
   FREE (&(*pp)->rx);
-  FREE (pp);		/* __FREE_CHECKED__ */
+  FREE (pp);            /* __FREE_CHECKED__ */
 }
 
 void mutt_free_rx_list (RX_LIST **list)

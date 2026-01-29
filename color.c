@@ -73,16 +73,16 @@ static int AnsiColors = 0;
 
 static const struct mapping_t Colors[] =
 {
-  { "black",	COLOR_BLACK },
-  { "blue",	COLOR_BLUE },
-  { "cyan",	COLOR_CYAN },
-  { "green",	COLOR_GREEN },
-  { "magenta",	COLOR_MAGENTA },
-  { "red",	COLOR_RED },
-  { "white",	COLOR_WHITE },
-  { "yellow",	COLOR_YELLOW },
+  { "black",    COLOR_BLACK },
+  { "blue",     COLOR_BLUE },
+  { "cyan",     COLOR_CYAN },
+  { "green",    COLOR_GREEN },
+  { "magenta",  COLOR_MAGENTA },
+  { "red",      COLOR_RED },
+  { "white",    COLOR_WHITE },
+  { "yellow",   COLOR_YELLOW },
 #if defined (USE_SLANG_CURSES) || defined (HAVE_USE_DEFAULT_COLORS)
-  { "default",	COLOR_DEFAULT },
+  { "default",  COLOR_DEFAULT },
 #endif
   { 0, 0 }
 };
@@ -91,34 +91,34 @@ static const struct mapping_t Colors[] =
 
 static const struct mapping_t Fields[] =
 {
-  { "hdrdefault",	MT_COLOR_HDEFAULT },
-  { "quoted",		MT_COLOR_QUOTED },
-  { "signature",	MT_COLOR_SIGNATURE },
-  { "indicator",	MT_COLOR_INDICATOR },
-  { "status",		MT_COLOR_STATUS },
-  { "tree",		MT_COLOR_TREE },
-  { "error",		MT_COLOR_ERROR },
-  { "normal",		MT_COLOR_NORMAL },
-  { "tilde",		MT_COLOR_TILDE },
-  { "markers",		MT_COLOR_MARKERS },
-  { "header",		MT_COLOR_HEADER },
-  { "body",		MT_COLOR_BODY },
-  { "message",		MT_COLOR_MESSAGE },
-  { "attachment",	MT_COLOR_ATTACHMENT },
-  { "search",		MT_COLOR_SEARCH },
-  { "bold",		MT_COLOR_BOLD },
-  { "underline",	MT_COLOR_UNDERLINE },
-  { "index",		MT_COLOR_INDEX },
-  { "prompt",		MT_COLOR_PROMPT },
+  { "hdrdefault",       MT_COLOR_HDEFAULT },
+  { "quoted",           MT_COLOR_QUOTED },
+  { "signature",        MT_COLOR_SIGNATURE },
+  { "indicator",        MT_COLOR_INDICATOR },
+  { "status",           MT_COLOR_STATUS },
+  { "tree",             MT_COLOR_TREE },
+  { "error",            MT_COLOR_ERROR },
+  { "normal",           MT_COLOR_NORMAL },
+  { "tilde",            MT_COLOR_TILDE },
+  { "markers",          MT_COLOR_MARKERS },
+  { "header",           MT_COLOR_HEADER },
+  { "body",             MT_COLOR_BODY },
+  { "message",          MT_COLOR_MESSAGE },
+  { "attachment",       MT_COLOR_ATTACHMENT },
+  { "search",           MT_COLOR_SEARCH },
+  { "bold",             MT_COLOR_BOLD },
+  { "underline",        MT_COLOR_UNDERLINE },
+  { "index",            MT_COLOR_INDEX },
+  { "prompt",           MT_COLOR_PROMPT },
 #ifdef USE_SIDEBAR
-  { "sidebar_divider",	MT_COLOR_DIVIDER },
-  { "sidebar_flagged",	MT_COLOR_FLAGGED },
+  { "sidebar_divider",  MT_COLOR_DIVIDER },
+  { "sidebar_flagged",  MT_COLOR_FLAGGED },
   { "sidebar_highlight",MT_COLOR_HIGHLIGHT },
   { "sidebar_indicator",MT_COLOR_SB_INDICATOR },
-  { "sidebar_new",	MT_COLOR_NEW },
+  { "sidebar_new",      MT_COLOR_NEW },
   { "sidebar_spoolfile",MT_COLOR_SB_SPOOLFILE },
 #endif
-  { NULL,		0 }
+  { NULL,               0 }
 };
 
 static const struct mapping_t ComposeFields[] =
@@ -131,7 +131,7 @@ static const struct mapping_t ComposeFields[] =
   { NULL,                   0 }
 };
 
-#define COLOR_QUOTE_INIT	8
+#define COLOR_QUOTE_INIT        8
 
 #ifdef NCURSES_VERSION
 #define ATTR_MASK (A_ATTRIBUTES ^ A_COLOR)
@@ -175,7 +175,7 @@ static void mutt_free_color_line(COLOR_LINE **l,
   regfree(&tmp->rx);
   mutt_pattern_free(&tmp->color_pattern);
   FREE (&tmp->pattern);
-  FREE (l);		/* __FREE_CHECKED__ */
+  FREE (l);             /* __FREE_CHECKED__ */
 }
 
 #if defined(HAVE_COLOR) && defined(HAVE_USE_DEFAULT_COLORS)
@@ -597,7 +597,7 @@ parse_color_name (const char *s, int *col, int *attr, int is_fg, BUFFER *err)
 
 
 /* usage: uncolor index pattern [pattern...]
- * 	  unmono  index pattern [pattern...]
+ *        unmono  index pattern [pattern...]
  */
 
 static int
@@ -987,7 +987,7 @@ static COLOR_ATTR fgbgattr_to_color (int fg, int bg, int attr)
 }
 
 /* usage: color <object> <fg> <bg> [ <regexp> ]
- * 	  mono  <object> <attr> [ <regexp> ]
+ *        mono  <object> <attr> [ <regexp> ]
  */
 
 static int

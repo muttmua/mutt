@@ -51,11 +51,11 @@
 
 #include <stdio.h>
 
-static time_t BuffyTime = 0;	/* last time we started checking for mail */
+static time_t BuffyTime = 0;    /* last time we started checking for mail */
 static time_t BuffyStatsTime = 0; /* last time we check performed mail_check_stats */
-time_t BuffyDoneTime = 0;	/* last time we knew for sure how much mail there was. */
-static short BuffyCount = 0;	/* how many boxes with new mail */
-static short BuffyNotify = 0;	/* # of unnotified new boxes */
+time_t BuffyDoneTime = 0;       /* last time we knew for sure how much mail there was. */
+static short BuffyCount = 0;    /* how many boxes with new mail */
+static short BuffyNotify = 0;   /* # of unnotified new boxes */
 
 static BUFFY* buffy_get (const char *path);
 
@@ -65,9 +65,9 @@ static BUFFY* buffy_get (const char *path);
 static int fseek_last_message (FILE * f)
 {
   LOFF_T pos;
-  char buffer[BUFSIZ + 7];	/* 7 for "\n\nFrom " */
+  char buffer[BUFSIZ + 7];      /* 7 for "\n\nFrom " */
   int bytes_read;
-  int i;			/* Index into `buffer' for scanning.  */
+  int i;                        /* Index into `buffer' for scanning.  */
 
   memset (buffer, 0, sizeof(buffer));
   fseek (f, 0, SEEK_END);
@@ -90,7 +90,7 @@ static int fseek_last_message (FILE * f)
       return -1;
     for (i = bytes_read; --i >= 0;)
       if (!mutt_strncmp (buffer + i, "\n\nFrom ", 7))
-      {				/* found it - go to the beginning of the From */
+      {                         /* found it - go to the beginning of the From */
         fseeko (f, pos + i + 2, SEEK_SET);
         return 0;
       }
@@ -762,7 +762,7 @@ int mutt_buffy_check (int force)
       }
     }
     else if (option(OPTCHECKMBOXSIZE) && Context && Context->path)
-      tmp->size = (off_t) sb.st_size;	/* update the size of current folder */
+      tmp->size = (off_t) sb.st_size;   /* update the size of current folder */
 
 #ifdef USE_SIDEBAR
     if ((orig_new != tmp->new) ||

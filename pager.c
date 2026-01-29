@@ -202,9 +202,9 @@ static void
 resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
                ansi_attr *a, int wrap_cols)
 {
-  COLOR_ATTR def_color = {0};		/* color without syntax highlight */
-  COLOR_ATTR color = {0};		/* final color */
-  static COLOR_ATTR last_color = {0};	/* last color set */
+  COLOR_ATTR def_color = {0};           /* color without syntax highlight */
+  COLOR_ATTR color = {0};               /* final color */
+  static COLOR_ATTR last_color = {0};   /* last color set */
   int search = 0, m;
   struct syntax_t *matching_chunk;
 
@@ -412,7 +412,7 @@ cleanup_quote (struct q_class_t **QuoteList)
     ptr = (*QuoteList)->next;
     if ((*QuoteList)->prefix)
       FREE (&(*QuoteList)->prefix);
-    FREE (QuoteList);		/* __FREE_CHECKED__ */
+    FREE (QuoteList);           /* __FREE_CHECKED__ */
     *QuoteList = ptr;
   }
 
@@ -454,7 +454,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
       if (mutt_strncmp (qptr, q_list->prefix, length) == 0)
       {
         if (length == q_list->length)
-          return q_list;	/* same prefix: return the current class */
+          return q_list;        /* same prefix: return the current class */
 
         /* found shorter prefix */
         if (tmp == NULL)
@@ -971,7 +971,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       }
     }
   }
-  else if (mutt_strncmp ("\033[0m", raw, 4) == 0)	/* a little hack... */
+  else if (mutt_strncmp ("\033[0m", raw, 4) == 0)       /* a little hack... */
     lineInfo[n].type = MT_COLOR_NORMAL;
   else if (check_attachment_marker ((char *) raw) == 0)
     lineInfo[n].type = MT_COLOR_ATTACHMENT;
@@ -1139,20 +1139,20 @@ void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_mark
   {
     if (*s == '\010' && (s > src))
     {
-      if (*(s+1) == '_')	/* underline */
+      if (*(s+1) == '_')        /* underline */
         s += 2;
-      else if (*(s+1) && mutt_buffer_len (dest))	/* bold or overstrike */
+      else if (*(s+1) && mutt_buffer_len (dest))        /* bold or overstrike */
       {
         dest->dptr--;
         mutt_buffer_addch (dest, *(s+1));
         s += 2;
       }
-      else			/* ^H */
+      else                      /* ^H */
         mutt_buffer_addch (dest, *s++);
     }
     else if (*s == '\033' && *(s+1) == '[' && is_ansi (s + 2))
     {
-      while (*s++ != 'm')	/* skip ANSI sequence */
+      while (*s++ != 'm')       /* skip ANSI sequence */
         ;
     }
     else if (strip_markers &&
@@ -1161,7 +1161,7 @@ void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_mark
               (check_protected_header_marker (s) == 0)))
     {
       dprint (2, (debugfile, "mutt_buffer_strip_formatting: Seen attachment marker.\n"));
-      while (*s++ != '\a')	/* skip pseudo-ANSI sequence */
+      while (*s++ != '\a')      /* skip pseudo-ANSI sequence */
         ;
     }
     else
@@ -1457,19 +1457,19 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
 /*
  * Args:
- *	flags	MUTT_SHOWFLAT, show characters (used for displaying help)
- *		MUTT_SHOWCOLOR, show characters in color
- *			otherwise don't show characters
- *		MUTT_HIDE, don't show quoted text
- *		MUTT_SEARCH, resolve search patterns
- *		MUTT_TYPES, compute line's type
- *		MUTT_PAGER_NSKIP, keeps leading whitespace
- *		MUTT_PAGER_MARKER, eventually show markers
+ *      flags   MUTT_SHOWFLAT, show characters (used for displaying help)
+ *              MUTT_SHOWCOLOR, show characters in color
+ *                      otherwise don't show characters
+ *              MUTT_HIDE, don't show quoted text
+ *              MUTT_SEARCH, resolve search patterns
+ *              MUTT_TYPES, compute line's type
+ *              MUTT_PAGER_NSKIP, keeps leading whitespace
+ *              MUTT_PAGER_MARKER, eventually show markers
  *
  * Return values:
- *	-1	EOF was reached
- *	0	normal exit, line was not displayed
- *	>0	normal exit, line was displayed
+ *      -1      EOF was reached
+ *      0       normal exit, line was not displayed
+ *      >0      normal exit, line was displayed
  */
 
 static int
@@ -1734,17 +1734,17 @@ upNLines (int nlines, struct line_t *info, int cur, int hiding)
 }
 
 static const struct mapping_t PagerHelp[] = {
-  { N_("Exit"),	OP_EXIT },
+  { N_("Exit"), OP_EXIT },
   { N_("PrevPg"), OP_PREV_PAGE },
   { N_("NextPg"), OP_NEXT_PAGE },
-  { NULL,	0 }
+  { NULL,       0 }
 };
 static const struct mapping_t PagerHelpExtra[] = {
   { N_("View Attachm."), OP_VIEW_ATTACHMENTS },
   { N_("Del"), OP_DELETE },
   { N_("Reply"), OP_REPLY },
-  { N_("Next"),	OP_MAIN_NEXT_UNDELETED },
-  { NULL,	0 }
+  { N_("Next"), OP_MAIN_NEXT_UNDELETED },
+  { NULL,       0 }
 };
 
 void mutt_clear_pager_position (void)
@@ -1776,7 +1776,7 @@ typedef struct
   mutt_window_t *index_window;
   mutt_window_t *pager_status_window;
   mutt_window_t *pager_window;
-  MUTTMENU *index;		/* the Pager Index (PI) */
+  MUTTMENU *index;              /* the Pager Index (PI) */
   regex_t SearchRE;
   int SearchCompiled;
   int SearchFlag;
@@ -2081,7 +2081,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
   int r = -1, wrapped = 0, searchctx = 0;
 
   MUTTMENU *pager_menu = NULL;
-  int old_PagerIndexLines;		/* some people want to resize it
+  int old_PagerIndexLines;              /* some people want to resize it
                                          * while inside the pager... */
 
   pager_redraw_data_t rd;

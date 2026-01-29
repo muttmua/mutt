@@ -38,8 +38,8 @@
 /*
  * return value:
  *
- * 1	message not modified
- * 0	message edited successfully
+ * 1    message not modified
+ * 0    message edited successfully
  * -1   error
  */
 

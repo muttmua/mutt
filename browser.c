@@ -47,7 +47,7 @@ static const struct mapping_t FolderHelp[] = {
   { N_("Chdir"), OP_CHANGE_DIRECTORY },
   { N_("Mask"),  OP_ENTER_MASK },
   { N_("Help"),  OP_HELP },
-  { NULL,	 0 }
+  { NULL,        0 }
 };
 
 typedef struct folder_t

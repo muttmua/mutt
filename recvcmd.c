@@ -427,7 +427,7 @@ static BODY ** copy_problematic_attachments (BODY **last,
         (force || !mutt_can_decode (actx->idx[i]->content)))
     {
       if (mutt_copy_body (actx->idx[i]->fp, last, actx->idx[i]->content) == -1)
-        return NULL;		/* XXXXX - may lead to crashes */
+        return NULL;            /* XXXXX - may lead to crashes */
       last = &((*last)->next);
     }
   }
@@ -712,7 +712,7 @@ static void attach_forward_msgs (FILE * fp, HEADER * hdr,
     }
     safe_fclose (&tmpfp);
   }
-  else if (rc == MUTT_YES)	/* do MIME encapsulation - we don't need to do much here */
+  else if (rc == MUTT_YES)      /* do MIME encapsulation - we don't need to do much here */
   {
     last = &tmphdr->content;
     if (cur)

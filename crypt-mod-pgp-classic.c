@@ -109,7 +109,7 @@ static void crypt_mod_pgp_extract_keys_from_attachment_list (FILE *fp, int tag, 
 struct crypt_module_specs crypt_mod_pgp_classic =
 { APPLICATION_PGP,
   {
-    NULL,			/* init */
+    NULL,                       /* init */
     NULL,                       /* cleanup */
     crypt_mod_pgp_void_passphrase,
     crypt_mod_pgp_valid_passphrase,
@@ -130,9 +130,9 @@ struct crypt_module_specs crypt_mod_pgp_classic =
     crypt_mod_pgp_invoke_import,
     crypt_mod_pgp_extract_keys_from_attachment_list,
 
-    NULL,			/* smime_getkeys */
-    NULL,			/* smime_verify_sender */
-    NULL,			/* smime_build_smime_entity */
-    NULL,			/* smime_invoke_import */
+    NULL,                       /* smime_getkeys */
+    NULL,                       /* smime_verify_sender */
+    NULL,                       /* smime_build_smime_entity */
+    NULL,                       /* smime_invoke_import */
   }
 };

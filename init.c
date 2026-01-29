@@ -53,7 +53,7 @@
 #include <sys/time.h>
 
 #define CHECK_PAGER                                     \
-  if ((CurrentMenu == MENU_PAGER) && (idx >= 0) &&	\
+  if ((CurrentMenu == MENU_PAGER) && (idx >= 0) &&      \
       (MuttVars[idx].flags & R_RESORT))                 \
   {                                                     \
     snprintf (err->data, err->dsize, "%s",              \
@@ -172,9 +172,9 @@ static int mutt_option_index (char *s)
 
 int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
 {
-  char		ch;
-  char		qc = 0; /* quote char */
-  char		*pc;
+  char          ch;
+  char          qc = 0; /* quote char */
+  char          *pc;
 
   /* Some callers used to rely on the (bad) assumption that dest->data
    * would be non-NULL after calling this function.  Perhaps I've missed
@@ -273,11 +273,11 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
     }
     else if (ch == '`' && (!qc || qc == '"'))
     {
-      FILE	*fp;
-      pid_t	pid;
-      char	*cmd;
-      BUFFER	expn;
-      int	line = 0, rc;
+      FILE      *fp;
+      pid_t     pid;
+      char      *cmd;
+      BUFFER    expn;
+      int       line = 0, rc;
 
       pc = tok->dptr;
       do
@@ -416,7 +416,7 @@ static void mutt_free_opt (struct option_t* p)
     case DT_PATH:
     case DT_CMD_PATH:
     case DT_STR:
-      FREE ((char**)p->data.p);		/* __FREE_CHECKED__ */
+      FREE ((char**)p->data.p);         /* __FREE_CHECKED__ */
       break;
   }
 }
@@ -670,7 +670,7 @@ static void free_mbchar_table (mbchar_table **t)
   FREE (&(*t)->chars);
   FREE (&(*t)->segmented_str);
   FREE (&(*t)->orig_str);
-  FREE (t);		/* __FREE_CHECKED__ */
+  FREE (t);             /* __FREE_CHECKED__ */
 }
 
 static mbchar_table *parse_mbchar_table (const char *s)
@@ -1332,7 +1332,7 @@ static int parse_unattach_list (BUFFER *buf, BUFFER *s, LIST **ldata, BUFFER *er
           *ldata = lp->next;
 
         newlp = lp->next;
-        FREE(&lp->data);	/* same as a */
+        FREE(&lp->data);        /* same as a */
         FREE(&lp);
         lp = newlp;
         continue;
@@ -1879,7 +1879,7 @@ static void mutt_restore_default (struct option_t *p)
       break;
     case DT_PATH:
     case DT_CMD_PATH:
-      FREE((char **) p->data.p);		/* __FREE_CHECKED__ */
+      FREE((char **) p->data.p);                /* __FREE_CHECKED__ */
       if (p->init.p)
       {
         BUFFER *path;
@@ -2016,7 +2016,7 @@ static size_t escape_string (char *dst, size_t len, const char* src)
   if (!len)
     return 0;
   len--; /* save room for \0 */
-#define ESC_CHAR(C)	do { *p++ = '\\'; if (p - dst < len) *p++ = C; } while (0)
+#define ESC_CHAR(C)     do { *p++ = '\\'; if (p - dst < len) *p++ = C; } while (0)
   while (p - dst < len && src && *src)
   {
     switch (*src)
@@ -2057,7 +2057,7 @@ static void pretty_var (char *dst, size_t len, const char *option, const char *v
     *p++ = '=';
   if (p - dst < len)
     *p++ = '"';
-  p += escape_string (p, len - (p - dst) + 1, val);	/* \0 terminate it */
+  p += escape_string (p, len - (p - dst) + 1, val);     /* \0 terminate it */
   if (p - dst < len)
     *p++ = '"';
   *p = 0;
@@ -2395,7 +2395,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
         else
           /* MuttVars[idx].data.p is already 'char**' (or some 'void**') or...
            * so cast to 'void*' is okay */
-          FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
+          FREE (MuttVars[idx].data.p);          /* __FREE_CHECKED__ */
       }
       else if (query || *s->dptr != '=')
       {
@@ -2471,7 +2471,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
         {
           /* MuttVars[idx].data is already 'char**' (or some 'void**') or...
            * so cast to 'void*' is okay */
-          FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
+          FREE (MuttVars[idx].data.p);          /* __FREE_CHECKED__ */
 
           scratch = mutt_buffer_pool_get ();
           mutt_buffer_strcpy (scratch, tmp->data);
@@ -2498,7 +2498,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
             return (-1);
           }
 
-          FREE (MuttVars[idx].data.p);		/* __FREE_CHECKED__ */
+          FREE (MuttVars[idx].data.p);          /* __FREE_CHECKED__ */
           *((char **) MuttVars[idx].data.p) = safe_strdup (tmp->data);
           if (mutt_strcmp (MuttVars[idx].option, "charset") == 0)
             mutt_set_charset (Charset);
@@ -3051,16 +3051,16 @@ static int parse_cd (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER 
 }
 
 
-/* line		command to execute
+/* line         command to execute
 
-   token	scratch buffer to be used by parser.
+   token        scratch buffer to be used by parser.
                 the reason for this variable is
                 to avoid having to allocate and deallocate a lot of memory
                 if we are parsing many lines.  the caller can pass in the
                 memory to use, which avoids having to create new space for
                 every call to this function.
 
-   err		where to write error messages */
+   err          where to write error messages */
 int mutt_parse_rc_buffer (BUFFER *line, BUFFER *token, BUFFER *err)
 {
   int i, r = -1;
@@ -3217,7 +3217,7 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
            || !mutt_strncmp (buffer, "unset", 5)
            || !mutt_strncmp (buffer, "reset", 5)
            || !mutt_strncmp (buffer, "toggle", 6))
-  { 		/* complete variables */
+  {             /* complete variables */
     static const char * const prefixes[] = { "no", "inv", "?", "&", 0 };
 
     pt++;
@@ -4018,12 +4018,12 @@ void mutt_init (int skip_sys_rc, LIST *commands)
     {
       /* we have a compile-time domain name, use that for Fqdn */
       Fqdn = safe_malloc (mutt_strlen (domain) + mutt_strlen (Hostname) + 2);
-      sprintf (Fqdn, "%s.%s", NONULL(Hostname), domain);	/* __SPRINTF_CHECKED__ */
+      sprintf (Fqdn, "%s.%s", NONULL(Hostname), domain);        /* __SPRINTF_CHECKED__ */
     }
     else if (!(getdnsdomainname (buffer)))
     {
       Fqdn = safe_malloc (mutt_buffer_len (buffer) + mutt_strlen (Hostname) + 2);
-      sprintf (Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s (buffer));	/* __SPRINTF_CHECKED__ */
+      sprintf (Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s (buffer));     /* __SPRINTF_CHECKED__ */
     }
     else
       /*
@@ -4119,7 +4119,7 @@ static void myvar_del (const char* var)
     tmp = (*cur)->next;
     FREE (&(*cur)->name);
     FREE (&(*cur)->value);
-    FREE (cur);		/* __FREE_CHECKED__ */
+    FREE (cur);         /* __FREE_CHECKED__ */
     *cur = tmp;
   }
 }

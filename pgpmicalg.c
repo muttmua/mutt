@@ -42,17 +42,17 @@ static const struct
 }
 HashAlgorithms[] =
 {
-  { 1,		"pgp-md5"  		},
-  { 2,  	"pgp-sha1" 		},
-  { 3,  	"pgp-ripemd160" 	},
-  { 5,  	"pgp-md2"		},
-  { 6,  	"pgp-tiger192"		},
-  { 7,		"pgp-haval-5-160" 	},
-  { 8,		"pgp-sha256"		},
-  { 9,		"pgp-sha384"		},
-  { 10,		"pgp-sha512"		},
-  { 11,		"pgp-sha224"		},
-  { -1, 	NULL }
+  { 1,          "pgp-md5"               },
+  { 2,          "pgp-sha1"              },
+  { 3,          "pgp-ripemd160"         },
+  { 5,          "pgp-md2"               },
+  { 6,          "pgp-tiger192"          },
+  { 7,          "pgp-haval-5-160"       },
+  { 8,          "pgp-sha256"            },
+  { 9,          "pgp-sha384"            },
+  { 10,         "pgp-sha512"            },
+  { 11,         "pgp-sha224"            },
+  { -1,         NULL }
 };
 
 static const char *pgp_hash_to_micalg (short id)

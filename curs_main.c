@@ -573,7 +573,7 @@ static const struct mapping_t IndexHelp[] = {
   { N_("Reply"), OP_REPLY },
   { N_("Group"), OP_GROUP_REPLY },
   { N_("Help"),  OP_HELP },
-  { NULL,	 0 }
+  { NULL,        0 }
 };
 
 static void index_menu_redraw (MUTTMENU *menu)
@@ -885,7 +885,7 @@ int mutt_index_menu (void)
       else
         menu->oldcurrent = -1;
 
-      mutt_curs_set (1);	/* fallback from the pager */
+      mutt_curs_set (1);        /* fallback from the pager */
     }
 
     switch (op)

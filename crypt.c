@@ -679,8 +679,8 @@ int crypt_query (BODY *m)
     BODY *p;
     int u, v, w;
 
-    u = m->parts ? 0xffffffff : 0;	/* Bits set in all parts */
-    w = 0;				/* Bits set in any part  */
+    u = m->parts ? 0xffffffff : 0;      /* Bits set in all parts */
+    w = 0;                              /* Bits set in any part  */
 
     for (p = m->parts; p; p = p->next)
     {

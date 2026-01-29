@@ -50,14 +50,14 @@ static int eat_range (pattern_t *pat, int, BUFFER *, BUFFER *);
 static int patmatch (const pattern_t *pat, const char *buf);
 
 /* Values for pattern_flags.eat_arg */
-#define EAT_REGEXP	1
-#define EAT_DATE	2
-#define EAT_RANGE	3
+#define EAT_REGEXP      1
+#define EAT_DATE        2
+#define EAT_RANGE       3
 
 static const struct pattern_flags
 {
-  int tag;	/* character used to represent this op */
-  int op;	/* operation to perform */
+  int tag;      /* character used to represent this op */
+  int op;       /* operation to perform */
   int class;
   int eat_arg;
   char *desc;
@@ -291,21 +291,21 @@ Flags[] =
 };
 
 static pattern_t *SearchPattern = NULL; /* current search pattern */
-static char LastSearch[STRING] = { 0 };	/* last pattern searched for */
+static char LastSearch[STRING] = { 0 }; /* last pattern searched for */
 static char LastSearchExpn[LONG_STRING] = { 0 }; /* expanded version of
                                                     LastSearch */
 
 #define MUTT_MAXRANGE -1
 
 /* constants for parse_date_range() */
-#define MUTT_PDR_NONE	0x0000
-#define MUTT_PDR_MINUS	0x0001
-#define MUTT_PDR_PLUS	0x0002
-#define MUTT_PDR_WINDOW	0x0004
-#define MUTT_PDR_ABSOLUTE	0x0008
-#define MUTT_PDR_DONE	0x0010
-#define MUTT_PDR_ERROR	0x0100
-#define MUTT_PDR_ERRORDONE	(MUTT_PDR_ERROR | MUTT_PDR_DONE)
+#define MUTT_PDR_NONE   0x0000
+#define MUTT_PDR_MINUS  0x0001
+#define MUTT_PDR_PLUS   0x0002
+#define MUTT_PDR_WINDOW 0x0004
+#define MUTT_PDR_ABSOLUTE       0x0008
+#define MUTT_PDR_DONE   0x0010
+#define MUTT_PDR_ERROR  0x0100
+#define MUTT_PDR_ERRORDONE      (MUTT_PDR_ERROR | MUTT_PDR_DONE)
 
 
 /* if no uppercase letters are given, do a case-insensitive search */
@@ -737,10 +737,10 @@ static const char *getDate (const char *s, struct tm *t, BUFFER *err)
   return p;
 }
 
-/* Ny	years
-   Nm	months
-   Nw	weeks
-   Nd	days */
+/* Ny   years
+   Nm   months
+   Nw   weeks
+   Nd   days */
 static const char *get_offset (struct tm *tm, const char *s, int sign)
 {
   char *ps;
@@ -914,9 +914,9 @@ static int eval_date_minmax (pattern_t *pat, const char *s, BUFFER *err)
   if (strchr ("<>=", s[0]))
   {
     /* offset from current time
-       <3d	less than three days ago
-       >3d	more than three days ago
-       =3d	exactly three days ago */
+       <3d      less than three days ago
+       >3d      more than three days ago
+       =3d      exactly three days ago */
     time_t now = time (NULL);
     struct tm *tm = localtime (&now);
     int exact = 0;
@@ -1154,7 +1154,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
   int not = 0;
   int alladdr = 0;
   int or = 0;
-  int implicit = 1;	/* used to detect logical AND operator */
+  int implicit = 1;     /* used to detect logical AND operator */
   int isalias = 0;
   short thread_op;
   const struct pattern_flags *entry;
@@ -1697,7 +1697,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
     case MUTT_RECIPIENT:
       return (pat->not ^ match_adrlist (pat, flags & MUTT_MATCH_FULL_ADDRESS,
                                         2, h->env->to, h->env->cc));
-    case MUTT_LIST:	/* known list, subscribed or not */
+    case MUTT_LIST:     /* known list, subscribed or not */
       if (cache)
       {
         cache_entry = pat->alladdr ? &cache->list_all : &cache->list_one;
@@ -2173,7 +2173,7 @@ static const struct mapping_t PatternHelp[] = {
   { N_("Exit"),   OP_EXIT },
   { N_("Select"), OP_GENERIC_SELECT_ENTRY },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 static const char *pattern_format_str (char *dest, size_t destlen, size_t col,

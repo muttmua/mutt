@@ -49,7 +49,7 @@ static int read_material (size_t material, size_t * used, FILE * fp)
 
     nplen = *used + material + CHUNKSIZE;
 
-    if (!(p = realloc (pbuf, nplen)))	/* __MEM_CHECKED__ */
+    if (!(p = realloc (pbuf, nplen)))   /* __MEM_CHECKED__ */
     {
       perror ("realloc");
       return -1;
@@ -96,7 +96,7 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
     goto bail;
   }
 
-  if (ctb & 0x40)		/* handle PGP 5.0 packets. */
+  if (ctb & 0x40)               /* handle PGP 5.0 packets. */
   {
     int partial = 0;
     pbuf[0] = ctb;

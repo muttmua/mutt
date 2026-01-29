@@ -283,11 +283,11 @@ void mutt_account_unsetpass (ACCOUNT* account)
  */
 int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoauth2)
 {
-  FILE	*fp;
+  FILE  *fp;
   char *cmd = NULL;
   char *token = NULL;
   size_t token_size = 0;
-  pid_t	pid;
+  pid_t pid;
   BUFFER *unencoded_bearertoken = NULL;
 
   mutt_buffer_clear (authbearer);

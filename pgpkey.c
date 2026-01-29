@@ -102,14 +102,14 @@ static pgp_key_t pgp_principal_key (pgp_key_t key)
 /*
  * Format an entry on the PGP key selection menu.
  *
- * %n	number
- * %k	key id		%K 	key id of the principal key
- * %u	user id
- * %a	algorithm	%A      algorithm of the princ. key
- * %l	length		%L	length of the princ. key
- * %f	flags		%F 	flags of the princ. key
- * %c	capabilities	%C	capabilities of the princ. key
- * %t	trust/validity of the key-uid association
+ * %n   number
+ * %k   key id          %K      key id of the principal key
+ * %u   user id
+ * %a   algorithm       %A      algorithm of the princ. key
+ * %l   length          %L      length of the princ. key
+ * %f   flags           %F      flags of the princ. key
+ * %c   capabilities    %C      capabilities of the princ. key
+ * %t   trust/validity of the key-uid association
  * %[...] date of key using strftime(3)
  */
 
@@ -415,9 +415,9 @@ static int pgp_id_is_valid (pgp_uid_t *uid)
   return 1;
 }
 
-#define PGP_KV_VALID  	1
-#define PGP_KV_ADDR   	2
-#define PGP_KV_STRING 	4
+#define PGP_KV_VALID    1
+#define PGP_KV_ADDR     2
+#define PGP_KV_STRING   4
 #define PGP_KV_STRONGID 8
 
 #define PGP_KV_MATCH (PGP_KV_ADDR|PGP_KV_STRING)
@@ -517,14 +517,14 @@ static pgp_key_t pgp_select_key (pgp_key_t keys,
 
   helpstr[0] = 0;
   mutt_make_help (buf, sizeof (buf), _("Exit  "), MENU_PGP, OP_EXIT);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Select  "), MENU_PGP,
                   OP_GENERIC_SELECT_ENTRY);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Check key  "), MENU_PGP, OP_VERIFY_KEY);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Help"), MENU_PGP, OP_HELP);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
 
   menu = mutt_new_menu (MENU_PGP);
   menu->max = i;
@@ -551,7 +551,7 @@ static pgp_key_t pgp_select_key (pgp_key_t keys,
     {
 
       case OP_VERIFY_KEY:
-        if ((devnull = fopen ("/dev/null", "w")) == NULL)	/* __FOPEN_CHECKED__ */
+        if ((devnull = fopen ("/dev/null", "w")) == NULL)       /* __FOPEN_CHECKED__ */
         {
           mutt_perror _("Can't open /dev/null");
           break;
@@ -746,7 +746,7 @@ BODY *pgp_make_key_attachment (void)
     goto cleanup;
   }
 
-  if ((devnull = fopen ("/dev/null", "w")) == NULL)	/* __FOPEN_CHECKED__ */
+  if ((devnull = fopen ("/dev/null", "w")) == NULL)     /* __FOPEN_CHECKED__ */
   {
     mutt_perror _("Can't open /dev/null");
     safe_fclose (&tempfp);
@@ -867,7 +867,7 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
       continue;
     }
 
-    match                = 0;   /* any match 		  */
+    match                = 0;   /* any match              */
 
     for (q = k->address; q; q = q->next)
     {
@@ -877,7 +877,7 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
       {
         int validity = pgp_id_matches_addr (a, p, q);
 
-        if (validity & PGP_KV_MATCH)	/* something matches */
+        if (validity & PGP_KV_MATCH)    /* something matches */
           match = 1;
 
         if ((validity & PGP_KV_VALID)

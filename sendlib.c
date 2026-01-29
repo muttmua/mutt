@@ -1016,7 +1016,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
         break;
       default:
         dprint (1, (debugfile, "mutt_lookup_mime_type: Internal error, count = %d.\n", count));
-        goto bye;	/* shouldn't happen */
+        goto bye;       /* shouldn't happen */
     }
 
     if ((f = fopen (buf, "r")) != NULL)
@@ -2268,7 +2268,7 @@ out:
  *
  * privacy != 0 => will omit any headers which may identify the user.
  *               Output generated is suitable for being sent through
- * 		 anonymous remailer chains.
+ *               anonymous remailer chains.
  *
  * hide_protected_subject: replaces the Subject header with
  * $crypt_protected_headers_subject in NORMAL or POSTPONE mode.
@@ -2518,10 +2518,10 @@ static void alarm_handler (int sig)
 }
 
 /* invoke sendmail in a subshell
-   path	(in)		path to program to execute
-   args	(in)		arguments to pass to program
-   msg (in)		temp file containing message to send
-   tempfile (out)	if sendmail is put in the background, this points
+   path (in)            path to program to execute
+   args (in)            arguments to pass to program
+   msg (in)             temp file containing message to send
+   tempfile (out)       if sendmail is put in the background, this points
                         to the temporary file containing the stdout of the
                         child process. If it is NULL, stderr and stdout
                         are not redirected. */
@@ -2599,9 +2599,9 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
       }
       else if (tempfile)
       {
-        if (open ("/dev/null", O_WRONLY | O_APPEND) < 0)	/* stdout */
+        if (open ("/dev/null", O_WRONLY | O_APPEND) < 0)        /* stdout */
           _exit (S_ERR);
-        if (open ("/dev/null", O_RDWR | O_APPEND) < 0)		/* stderr */
+        if (open ("/dev/null", O_RDWR | O_APPEND) < 0)          /* stderr */
           _exit (S_ERR);
       }
 
@@ -2616,7 +2616,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     {
       unlink (msg);
       if (tempfile)
-        FREE (tempfile);		/* __FREE_CHECKED__ */
+        FREE (tempfile);                /* __FREE_CHECKED__ */
       _exit (S_ERR);
     }
 
@@ -2647,7 +2647,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
       if (SendmailWait && st == (0xff & EX_OK) && tempfile && *tempfile)
       {
         unlink (*tempfile); /* no longer needed */
-        FREE (tempfile);		/* __FREE_CHECKED__ */
+        FREE (tempfile);                /* __FREE_CHECKED__ */
       }
     }
     else
@@ -2657,7 +2657,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
       if (SendmailWait > 0 && tempfile && *tempfile)
       {
         unlink (*tempfile);
-        FREE (tempfile);		/* __FREE_CHECKED__ */
+        FREE (tempfile);                /* __FREE_CHECKED__ */
       }
     }
 
@@ -2669,7 +2669,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     {
       /* the parent is already dead */
       unlink (*tempfile);
-      FREE (tempfile);		/* __FREE_CHECKED__ */
+      FREE (tempfile);          /* __FREE_CHECKED__ */
     }
 
     _exit (st);
@@ -2680,7 +2680,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
   if (pid != -1 && waitpid (pid, &st, 0) > 0)
     st = WIFEXITED (st) ? WEXITSTATUS (st) : S_ERR; /* return child status */
   else
-    st = S_ERR;	/* error */
+    st = S_ERR; /* error */
 
   mutt_unblock_signals_system (1);
 
@@ -2713,7 +2713,7 @@ add_option (char **args, size_t *argslen, size_t *argsmax, char *s)
 }
 
 int
-mutt_invoke_sendmail (ADDRESS *from,	/* the sender */
+mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
                       ADDRESS *to, ADDRESS *cc, ADDRESS *bcc, /* recips */
                       const char *msg, /* file containing message */
                       int eightbit) /* message contains 8bit chars */
@@ -3288,7 +3288,7 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
       dprint (1, (debugfile, "mutt_write_fcc(): %s: write failed.\n", mutt_b2s (tempfile)));
       safe_fclose (&tempfp);
       unlink (mutt_b2s (tempfile));
-      mx_commit_message (msg, &f);	/* XXX - really? */
+      mx_commit_message (msg, &f);      /* XXX - really? */
       mx_close_message (&f, &msg);
       mx_close_mailbox (&f, NULL);
       goto cleanup;

@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     print_usage(argc ? argv[0] : "pgpewrap");
   }
 
-  opts = malloc((2 * argc + 1) * sizeof (* opts));	/* __MEM_CHECKED__ */
+  opts = malloc((2 * argc + 1) * sizeof (* opts));      /* __MEM_CHECKED__ */
   if (!opts)
   {
     perror(argv[0]);

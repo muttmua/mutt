@@ -1111,7 +1111,7 @@ static int _enter_fname (const char *prompt, BUFFER *fname, int flags,
   {
     char *pc = safe_malloc (mutt_strlen (prompt) + 3);
 
-    sprintf (pc, "%s: ", prompt);	/* __SPRINTF_CHECKED__ */
+    sprintf (pc, "%s: ", prompt);       /* __SPRINTF_CHECKED__ */
     mutt_unget_event (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
 
     mutt_buffer_increase_size (fname, LONG_STRING);
@@ -1237,8 +1237,8 @@ void mutt_curs_set (int cursor)
 
   if (curs_set (cursor) == ERR)
   {
-    if (cursor == 1)	/* cnorm */
-      curs_set (2);	/* cvvis */
+    if (cursor == 1)    /* cnorm */
+      curs_set (2);     /* cvvis */
   }
 }
 #endif
@@ -1401,7 +1401,7 @@ void mutt_format_string (char *dest, size_t destlen,
   w = (int)destlen < min_width ? destlen : min_width;
   if (w <= 0)
     *p = '\0';
-  else if (justify == FMT_RIGHT)	/* right justify */
+  else if (justify == FMT_RIGHT)        /* right justify */
   {
     p[w] = '\0';
     while (--p >= dest)
@@ -1409,7 +1409,7 @@ void mutt_format_string (char *dest, size_t destlen,
     while (--w >= 0)
       dest[w] = m_pad_char;
   }
-  else if (justify == FMT_CENTER)	/* center */
+  else if (justify == FMT_CENTER)       /* center */
   {
     char *savedp = p;
     int half = (w+1) / 2; /* half of cushion space */
@@ -1429,7 +1429,7 @@ void mutt_format_string (char *dest, size_t destlen,
     while (half--)
       dest[half] = m_pad_char;
   }
-  else					/* left justify */
+  else                                  /* left justify */
   {
     while (--w >= 0)
       *p++ = m_pad_char;
@@ -1557,7 +1557,7 @@ size_t mutt_wstr_trunc (const char *src, size_t maxlen, size_t maxwid, size_t *w
     if (cw < 0 && cl == 1 && src[0] && src[0] < MUTT_TREE_MAX)
       cw = 1;
     else if (cw < 0)
-      cw = 0;			/* unprintable wchar */
+      cw = 0;                   /* unprintable wchar */
     if (cl + l > maxlen || cw + w > maxwid)
       break;
     l += cl;
@@ -1572,9 +1572,9 @@ out:
 /*
  * returns the number of bytes the first (multibyte) character
  * of input consumes:
- * 	< 0 ... conversion error
- * 	= 0 ... end of input
- * 	> 0 ... length (bytes)
+ *      < 0 ... conversion error
+ *      = 0 ... end of input
+ *      > 0 ... length (bytes)
  */
 int mutt_charlen (const char *s, int *width)
 {

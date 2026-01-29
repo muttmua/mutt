@@ -222,13 +222,13 @@ static HEADER *select_msg (void)
 }
 
 /* args:
- *      ctx	Context info, used when recalling a message to which
+ *      ctx     Context info, used when recalling a message to which
  *              we reply.
  *      sctx    Send Context info.
  *
  * return vals:
- *	-1		error/no messages
- *	0		normal exit
+ *      -1              error/no messages
+ *      0               normal exit
  */
 int mutt_get_postponed (CONTEXT *ctx, SEND_CONTEXT *sctx)
 {

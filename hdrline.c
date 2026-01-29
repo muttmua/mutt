@@ -246,7 +246,7 @@ static char *apply_subject_mods (ENVELOPE *env)
  * %X = number of MIME attachments
  * %y = `x-label:' field (if present)
  * %Y = `x-label:' field (if present, tree unfolded, and != parent's x-label)
- * %Z = status flags	*/
+ * %Z = status flags    */
 
 static const char *
 hdr_format_str (char *dest,
@@ -728,7 +728,7 @@ hdr_format_str (char *dest,
     case 'Y':
       if (hdr->env->x_label)
       {
-        i = 1;	/* reduce reuse recycle */
+        i = 1;  /* reduce reuse recycle */
         htmp = NULL;
         if (flags & MUTT_FORMAT_TREE
             && (hdr->thread->prev && hdr->thread->prev->message

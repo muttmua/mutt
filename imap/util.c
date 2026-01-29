@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "mutt.h"
-#include "mx.h"	/* for MUTT_IMAP */
+#include "mx.h" /* for MUTT_IMAP */
 #include "url.h"
 #include "imap_private.h"
 #ifdef USE_HCACHE
@@ -533,7 +533,7 @@ void imap_free_idata (IMAP_DATA** idata)
   FREE (&(*idata)->buf);
   mutt_bcache_close (&(*idata)->bcache);
   FREE (&(*idata)->cmds);
-  FREE (idata);		/* __FREE_CHECKED__ */
+  FREE (idata);         /* __FREE_CHECKED__ */
 }
 
 /*
@@ -987,7 +987,7 @@ int imap_wait_keepalive (pid_t pid)
     alarm (ImapKeepalive);
   }
 
-  alarm (0);	/* cancel a possibly pending alarm */
+  alarm (0);    /* cancel a possibly pending alarm */
 
   sigaction (SIGALRM, &oldalrm, NULL);
   sigprocmask (SIG_SETMASK, &oldmask, NULL);

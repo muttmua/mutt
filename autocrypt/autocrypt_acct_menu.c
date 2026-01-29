@@ -60,7 +60,7 @@ static const struct mapping_t AutocryptAcctHelp[] = {
   */
   { N_("Prf Encr"), OP_AUTOCRYPT_TOGGLE_PREFER },
   { N_("Help"),   OP_HELP },
-  { NULL,	  0 }
+  { NULL,         0 }
 };
 
 static const char *account_format_str (char *dest, size_t destlen, size_t col,

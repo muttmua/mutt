@@ -16,25 +16,25 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#define SORT_DATE	1   /* the date the mail was sent. */
-#define SORT_SIZE	2
-#define SORT_SUBJECT	3
-#define SORT_FROM	4
-#define SORT_ORDER	5   /* the order the messages appear in the mailbox. */
-#define SORT_THREADS	6
-#define SORT_RECEIVED	7   /* when the message were delivered locally */
-#define SORT_TO		8
-#define SORT_SCORE	9
-#define SORT_ALIAS	10
-#define SORT_ADDRESS	11
-#define SORT_KEYID	12
-#define SORT_TRUST	13
-#define SORT_SPAM	14
-#define SORT_COUNT	15
-#define SORT_UNREAD	16
-#define SORT_FLAGGED	17
-#define SORT_PATH	18
-#define SORT_LABEL	19
+#define SORT_DATE       1   /* the date the mail was sent. */
+#define SORT_SIZE       2
+#define SORT_SUBJECT    3
+#define SORT_FROM       4
+#define SORT_ORDER      5   /* the order the messages appear in the mailbox. */
+#define SORT_THREADS    6
+#define SORT_RECEIVED   7   /* when the message were delivered locally */
+#define SORT_TO         8
+#define SORT_SCORE      9
+#define SORT_ALIAS      10
+#define SORT_ADDRESS    11
+#define SORT_KEYID      12
+#define SORT_TRUST      13
+#define SORT_SPAM       14
+#define SORT_COUNT      15
+#define SORT_UNREAD     16
+#define SORT_FLAGGED    17
+#define SORT_PATH       18
+#define SORT_LABEL      19
 #define SORT_AUX        20  /* $sort_thread_groups delegation to $sort_aux */
 #define SORT_UID        21  /* used internally by the IMAP code */
 
@@ -50,9 +50,9 @@
  * collide with the constants above. (Or we can just expand
  * sort and sort_aux to uint32_t.)
  */
-#define SORT_MASK	((1<<8) - 1)
-#define SORT_REVERSE	(1<<8)
-#define SORT_LAST	(1<<9)
+#define SORT_MASK       ((1<<8) - 1)
+#define SORT_REVERSE    (1<<8)
+#define SORT_LAST       (1<<9)
 
 typedef int sort_t (const void *, const void *);
 sort_t *mutt_get_sort_func (int);

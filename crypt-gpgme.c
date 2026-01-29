@@ -880,7 +880,7 @@ static void free_recipient_set (gpgme_key_t **p_rset)
     rset++;
   }
 
-  FREE (p_rset);	/* __FREE_CHECKED__ */
+  FREE (p_rset);        /* __FREE_CHECKED__ */
 }
 
 
@@ -1708,7 +1708,7 @@ static int show_one_sig_status (gpgme_ctx_t ctx, int idx, STATE *s)
            i++, sig = sig->next)
         ;
       if (! sig)
-        return -1;		/* Signature not found.  */
+        return -1;              /* Signature not found.  */
 
       if (signature_key)
         {
@@ -3249,14 +3249,14 @@ cleanup:
 /*
  * Format an entry on the CRYPT key selection menu.
  *
- * %n	number
- * %k	key id		%K 	key id of the principal key
- * %u	user id
- * %a	algorithm	%A      algorithm of the princ. key
- * %l	length		%L	length of the princ. key
- * %f	flags		%F 	flags of the princ. key
- * %c	capabilities	%C	capabilities of the princ. key
- * %t	trust/validity of the key-uid association
+ * %n   number
+ * %k   key id          %K      key id of the principal key
+ * %u   user id
+ * %a   algorithm       %A      algorithm of the princ. key
+ * %l   length          %L      length of the princ. key
+ * %f   flags           %F      flags of the princ. key
+ * %c   capabilities    %C      capabilities of the princ. key
+ * %t   trust/validity of the key-uid association
  * %p           protocol
  * %[...] date of key using strftime(3)
  */
@@ -4558,15 +4558,15 @@ static crypt_key_t *crypt_select_key (crypt_key_t *keys,
 
   helpstr[0] = 0;
   mutt_make_help (buf, sizeof (buf), _("Exit  "), menu_to_use, OP_EXIT);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Select  "), menu_to_use,
                   OP_GENERIC_SELECT_ENTRY);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Check key  "),
                   menu_to_use, OP_VERIFY_KEY);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
   mutt_make_help (buf, sizeof (buf), _("Help"), menu_to_use, OP_HELP);
-  strcat (helpstr, buf);	/* __STRCAT_CHECKED__ */
+  strcat (helpstr, buf);        /* __STRCAT_CHECKED__ */
 
   menu = mutt_new_menu (menu_to_use);
   menu->max = i;
@@ -4750,16 +4750,16 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
           continue;
         }
 
-      this_key_has_strong  = 0;	/* strong and valid match */
+      this_key_has_strong  = 0; /* strong and valid match */
       this_key_has_addr_match = 0;
-      match                = 0;   /* any match 		  */
+      match                = 0;   /* any match            */
 
       r = rfc822_parse_adrlist (NULL, k->uid);
       for (p = r; p; p = p->next)
         {
           int validity = crypt_id_matches_addr (a, p, k);
 
-          if (validity & CRYPT_KV_MATCH)	/* something matches */
+          if (validity & CRYPT_KV_MATCH)        /* something matches */
           {
             match = 1;
 
