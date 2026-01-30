@@ -629,8 +629,8 @@ sub handle_docline($$) {
     }
     elsif ($line =~ /^\.dt/) {
       if ($docstat & $D_DD) {
-	$docstat = commit_buff(\$buff, $docstat);
-	$docstat = print_docline($SP_END_DD, undef, $docstat);
+        $docstat = commit_buff(\$buff, $docstat);
+        $docstat = print_docline($SP_END_DD, undef, $docstat);
       }
       $docstat = commit_buff(\$buff, $docstat);
       $docstat = print_docline($SP_DT, undef, $docstat);
@@ -638,8 +638,8 @@ sub handle_docline($$) {
     }
     elsif ($line =~ /^\.dd/) {
       if (($docstat & $D_IL) && ($docstat & $D_DD)) {
-	$docstat = commit_buff(\$buff, $docstat);
-	$docstat = print_docline($SP_END_DD, undef, $docstat);
+        $docstat = commit_buff(\$buff, $docstat);
+        $docstat = print_docline($SP_END_DD, undef, $docstat);
       }
       $docstat = commit_buff(\$buff, $docstat);
       $docstat = print_docline($SP_DD, undef, $docstat);

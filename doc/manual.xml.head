@@ -10165,70 +10165,70 @@ please have a look at the mixmaster documentation.
     <table id="table-sidebar-variables">
       <title>Sidebar Variables</title>
       <tgroup cols="3">
-	<thead>
-	  <row>
-	    <entry>Name</entry>
-	    <entry>Type</entry>
-	    <entry>Default</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry><literal>sidebar_delim_chars</literal></entry>
-	    <entry>string</entry>
-	    <entry><literal>/.</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_divider_char</literal></entry>
-	    <entry>string</entry>
-	    <entry><literal>|</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_folder_indent</literal></entry>
-	    <entry>boolean</entry>
-	    <entry><literal>no</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_format</literal></entry>
-	    <entry>string</entry>
-	    <entry><literal>%B%*  %n</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_indent_string</literal></entry>
-	    <entry>string</entry>
-	    <entry><literal>&nbsp;&nbsp;</literal> (two spaces)</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_new_mail_only</literal></entry>
-	    <entry>boolean</entry>
-	    <entry><literal>no</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_next_new_wrap</literal></entry>
-	    <entry>boolean</entry>
-	    <entry><literal>no</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_short_path</literal></entry>
-	    <entry>boolean</entry>
-	    <entry><literal>no</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_sort_method</literal></entry>
-	    <entry>enum</entry>
-	    <entry><literal>unsorted</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_visible</literal></entry>
-	    <entry>boolean</entry>
-	    <entry><literal>no</literal></entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_width</literal></entry>
-	    <entry>number</entry>
-	    <entry><literal>20</literal></entry>
-	  </row>
-	</tbody>
+        <thead>
+          <row>
+            <entry>Name</entry>
+            <entry>Type</entry>
+            <entry>Default</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>sidebar_delim_chars</literal></entry>
+            <entry>string</entry>
+            <entry><literal>/.</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_divider_char</literal></entry>
+            <entry>string</entry>
+            <entry><literal>|</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_folder_indent</literal></entry>
+            <entry>boolean</entry>
+            <entry><literal>no</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_format</literal></entry>
+            <entry>string</entry>
+            <entry><literal>%B%*  %n</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_indent_string</literal></entry>
+            <entry>string</entry>
+            <entry><literal>&nbsp;&nbsp;</literal> (two spaces)</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_new_mail_only</literal></entry>
+            <entry>boolean</entry>
+            <entry><literal>no</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_next_new_wrap</literal></entry>
+            <entry>boolean</entry>
+            <entry><literal>no</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_short_path</literal></entry>
+            <entry>boolean</entry>
+            <entry><literal>no</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_sort_method</literal></entry>
+            <entry>enum</entry>
+            <entry><literal>unsorted</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_visible</literal></entry>
+            <entry>boolean</entry>
+            <entry><literal>no</literal></entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_width</literal></entry>
+            <entry>number</entry>
+            <entry><literal>20</literal></entry>
+          </row>
+        </tbody>
       </tgroup>
     </table>
   </sect2>
@@ -10244,55 +10244,55 @@ please have a look at the mixmaster documentation.
     <table id="table-sidebar-functions">
       <title>Sidebar Functions</title>
       <tgroup cols="3">
-	<thead>
-	  <row>
-	    <entry>Menus</entry>
-	    <entry>Function</entry>
-	    <entry>Description</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-next&gt;</literal></entry>
-	    <entry>Move the highlight to next mailbox</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-next-new&gt;</literal></entry>
-	    <entry>Move the highlight to next mailbox with new mail</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-open&gt;</literal></entry>
-	    <entry>Open highlighted mailbox</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-page-down&gt;</literal></entry>
-	    <entry>Scroll the Sidebar down 1 page</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-page-up&gt;</literal></entry>
-	    <entry>Scroll the Sidebar up 1 page</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-prev&gt;</literal></entry>
-	    <entry>Move the highlight to previous mailbox</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-prev-new&gt;</literal></entry>
-	    <entry>Move the highlight to previous mailbox with new mail</entry>
-	  </row>
-	  <row>
-	    <entry>index,pager</entry>
-	    <entry><literal>&lt;sidebar-toggle-visible&gt;</literal></entry>
-	    <entry>Make the Sidebar (in)visible</entry>
-	  </row>
-	</tbody>
+        <thead>
+          <row>
+            <entry>Menus</entry>
+            <entry>Function</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-next&gt;</literal></entry>
+            <entry>Move the highlight to next mailbox</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-next-new&gt;</literal></entry>
+            <entry>Move the highlight to next mailbox with new mail</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-open&gt;</literal></entry>
+            <entry>Open highlighted mailbox</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-page-down&gt;</literal></entry>
+            <entry>Scroll the Sidebar down 1 page</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-page-up&gt;</literal></entry>
+            <entry>Scroll the Sidebar up 1 page</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-prev&gt;</literal></entry>
+            <entry>Move the highlight to previous mailbox</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-prev-new&gt;</literal></entry>
+            <entry>Move the highlight to previous mailbox with new mail</entry>
+          </row>
+          <row>
+            <entry>index,pager</entry>
+            <entry><literal>&lt;sidebar-toggle-visible&gt;</literal></entry>
+            <entry>Make the Sidebar (in)visible</entry>
+          </row>
+        </tbody>
       </tgroup>
     </table>
   </sect2>
@@ -10302,19 +10302,19 @@ please have a look at the mixmaster documentation.
     <cmdsynopsis>
       <command>sidebar_whitelist</command>
       <arg choice="plain">
-	<replaceable class="parameter">mailbox</replaceable>
+        <replaceable class="parameter">mailbox</replaceable>
       </arg>
       <arg choice="opt" rep="repeat">
-	<replaceable class="parameter">mailbox</replaceable>
+        <replaceable class="parameter">mailbox</replaceable>
       </arg>
 
       <command>unsidebar_whitelist</command>
       <group choice="req">
       <arg choice="plain">
-	<replaceable class="parameter">*</replaceable>
+        <replaceable class="parameter">*</replaceable>
       </arg>
       <arg choice="plain" rep="repeat">
-	<replaceable class="parameter">mailbox</replaceable>
+        <replaceable class="parameter">mailbox</replaceable>
       </arg>
       </group>
     </cmdsynopsis>
@@ -10339,45 +10339,45 @@ please have a look at the mixmaster documentation.
     <table id="table-sidebar-colors">
       <title>Sidebar Colors</title>
       <tgroup cols="3">
-	<thead>
-	  <row>
-	    <entry>Name</entry>
-	    <entry>Default Color</entry>
-	    <entry>Description</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry><literal>sidebar_divider</literal></entry>
-	    <entry>default</entry>
-	    <entry>The dividing line between the Sidebar and the Index/Pager panels</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_flagged</literal></entry>
-	    <entry>default</entry>
-	    <entry>Mailboxes containing flagged mail</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_highlight</literal></entry>
-	    <entry>underline</entry>
-	    <entry>Cursor to select a mailbox</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_indicator</literal></entry>
-	    <entry>mutt <literal>indicator</literal></entry>
-	    <entry>The mailbox open in the Index panel</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_new</literal></entry>
-	    <entry>default</entry>
-	    <entry>Mailboxes containing new mail</entry>
-	  </row>
-	  <row>
-	    <entry><literal>sidebar_spoolfile</literal></entry>
-	    <entry>default</entry>
-	    <entry>Mailbox that receives incoming mail</entry>
-	  </row>
-	</tbody>
+        <thead>
+          <row>
+            <entry>Name</entry>
+            <entry>Default Color</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>sidebar_divider</literal></entry>
+            <entry>default</entry>
+            <entry>The dividing line between the Sidebar and the Index/Pager panels</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_flagged</literal></entry>
+            <entry>default</entry>
+            <entry>Mailboxes containing flagged mail</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_highlight</literal></entry>
+            <entry>underline</entry>
+            <entry>Cursor to select a mailbox</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_indicator</literal></entry>
+            <entry>mutt <literal>indicator</literal></entry>
+            <entry>The mailbox open in the Index panel</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_new</literal></entry>
+            <entry>default</entry>
+            <entry>Mailboxes containing new mail</entry>
+          </row>
+          <row>
+            <entry><literal>sidebar_spoolfile</literal></entry>
+            <entry>default</entry>
+            <entry>Mailbox that receives incoming mail</entry>
+          </row>
+        </tbody>
       </tgroup>
     </table>
 
@@ -10393,46 +10393,46 @@ please have a look at the mixmaster documentation.
     <table id="table-sidebar-sort">
       <title>Sidebar Sort</title>
       <tgroup cols="2">
-	<thead>
-	  <row>
-	    <entry>Sort</entry>
-	    <entry>Description</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry><literal>alpha</literal></entry>
-	    <entry>Alphabetically by path or label</entry>
-	  </row>
-	  <row>
-	    <entry><literal>count</literal></entry>
-	    <entry>Total number of messages</entry>
-	  </row>
-	  <row>
-	    <entry><literal>flagged</literal></entry>
-	    <entry>Number of flagged messages</entry>
-	  </row>
-	  <row>
-	    <entry><literal>name</literal></entry>
-	    <entry>Alphabetically by path or label</entry>
-	  </row>
-	  <row>
-	    <entry><literal>new</literal></entry>
-	    <entry>Number of unread messages</entry>
-	  </row>
-	  <row>
-	    <entry><literal>path</literal></entry>
-	    <entry>Alphabetically by path (ignores label)</entry>
-	  </row>
-	  <row>
-	    <entry><literal>unread</literal></entry>
-	    <entry>Number of unread messages</entry>
-	  </row>
-	  <row>
-	    <entry><literal>unsorted</literal></entry>
-	    <entry>Do not resort the paths</entry>
-	  </row>
-	</tbody>
+        <thead>
+          <row>
+            <entry>Sort</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>alpha</literal></entry>
+            <entry>Alphabetically by path or label</entry>
+          </row>
+          <row>
+            <entry><literal>count</literal></entry>
+            <entry>Total number of messages</entry>
+          </row>
+          <row>
+            <entry><literal>flagged</literal></entry>
+            <entry>Number of flagged messages</entry>
+          </row>
+          <row>
+            <entry><literal>name</literal></entry>
+            <entry>Alphabetically by path or label</entry>
+          </row>
+          <row>
+            <entry><literal>new</literal></entry>
+            <entry>Number of unread messages</entry>
+          </row>
+          <row>
+            <entry><literal>path</literal></entry>
+            <entry>Alphabetically by path (ignores label)</entry>
+          </row>
+          <row>
+            <entry><literal>unread</literal></entry>
+            <entry>Number of unread messages</entry>
+          </row>
+          <row>
+            <entry><literal>unsorted</literal></entry>
+            <entry>Do not resort the paths</entry>
+          </row>
+        </tbody>
       </tgroup>
     </table>
   </sect2>

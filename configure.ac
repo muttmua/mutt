@@ -181,8 +181,8 @@ if test x"$mutt_enable_gpgme" = xyes; then
    AC_MSG_RESULT(yes)
    AM_PATH_GPG_ERROR(1.33)
    AM_PATH_GPGME([$mutt_gpgme_version], AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
-		 [Defined, if GPGME support is enabled]),
-		 [gpgme_found=no])
+                 [Defined, if GPGME support is enabled]),
+                 [gpgme_found=no])
    if test x"$gpgme_found" = xno; then
       AC_MSG_ERROR([*** GPGME not found or version is older than $mutt_gpgme_version ***])
    else
@@ -205,21 +205,21 @@ if test x$have_pgp != xno ; then
 fi
 
 AC_ARG_ENABLE(smime, AS_HELP_STRING([--disable-smime],[Disable SMIME support]),
-[	if test x$enableval = xno ; then
-		have_smime=no
-	fi
+[       if test x$enableval = xno ; then
+                have_smime=no
+        fi
 ])
 
 if test x$have_smime != xno ; then
-	AC_DEFINE(CRYPT_BACKEND_CLASSIC_SMIME, 1, [Define if you want classic S/MIME support.])
-	MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS smime.o crypt-mod-smime-classic.o"
-	SMIMEAUX_TARGET="smime_keys"
+        AC_DEFINE(CRYPT_BACKEND_CLASSIC_SMIME, 1, [Define if you want classic S/MIME support.])
+        MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS smime.o crypt-mod-smime-classic.o"
+        SMIMEAUX_TARGET="smime_keys"
 fi
 
 AC_ARG_ENABLE(sidebar, AS_HELP_STRING([--enable-sidebar], [Enable Sidebar support]),
 [       if test x$enableval = xyes ; then
-		AC_DEFINE(USE_SIDEBAR, 1, [Define if you want support for the sidebar.])
-		OPS="$OPS \$(srcdir)/OPS.SIDEBAR"
+                AC_DEFINE(USE_SIDEBAR, 1, [Define if you want support for the sidebar.])
+                OPS="$OPS \$(srcdir)/OPS.SIDEBAR"
                 MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS sidebar.o"
         fi
 ])
@@ -228,8 +228,8 @@ AC_ARG_ENABLE(compressed, AS_HELP_STRING([--enable-compressed], [Enable compress
               enable_compressed=$enableval, enable_compressed=no
 )
 AS_IF([test x$enable_compressed = "xyes"], [
-	   AC_DEFINE(USE_COMPRESSED, 1, [Define to enable compressed folders support.])
-	   MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS compress.o"
+           AC_DEFINE(USE_COMPRESSED, 1, [Define to enable compressed folders support.])
+           MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS compress.o"
 ])
 AM_CONDITIONAL(BUILD_COMPRESS, test x$enable_compressed = xyes)
 
@@ -331,12 +331,12 @@ main ()
                         CPPFLAGS="$CPPFLAGS -I${mutt_cv_curses}/include"
                 fi])
 
-	AC_CHECK_FUNC(initscr,,[
-	cf_ncurses="ncurses"
-	for lib in ncurses ncursesw
-	do
-		AC_CHECK_LIB($lib, waddnwstr, [cf_ncurses="$lib"; break])
-	done
+        AC_CHECK_FUNC(initscr,,[
+        cf_ncurses="ncurses"
+        for lib in ncurses ncursesw
+        do
+                AC_CHECK_LIB($lib, waddnwstr, [cf_ncurses="$lib"; break])
+        done
         AC_CHECK_LIB($cf_ncurses, initscr,
                 [MUTTLIBS="$MUTTLIBS -l$cf_ncurses"
 
@@ -351,10 +351,10 @@ main ()
 
                   AC_CHECK_HEADERS(ncurses/ncurses.h,[cf_cv_ncurses_header="ncurses/ncurses.h"],
                     [AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])])
-		fi],
+                fi],
 
                 [CF_CURSES_LIBS])
-		])
+                ])
 
         AC_CHECK_HEADERS(term.h)
 
@@ -648,11 +648,11 @@ AC_ARG_ENABLE(imap, AS_HELP_STRING([--enable-imap],[Enable IMAP support]),
 AM_CONDITIONAL(BUILD_IMAP, test x$need_imap = xyes)
 
 AC_ARG_ENABLE(smtp, AS_HELP_STRING([--enable-smtp],[include internal SMTP relay support]),
-	[if test $enableval = yes; then
-		AC_DEFINE(USE_SMTP, 1, [Include internal SMTP relay support])
-            	MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS smtp.o"
-		need_socket="yes"
-	fi])
+        [if test $enableval = yes; then
+                AC_DEFINE(USE_SMTP, 1, [Include internal SMTP relay support])
+                MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS smtp.o"
+                need_socket="yes"
+        fi])
 
 if test x"$need_imap" = xyes -o x"$need_pop" = xyes ; then
   MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS bcache.o"
@@ -711,26 +711,26 @@ if test "$zlib_prefix" != "no"
 then
   if test "$need_imap" = "yes"
   then
-	have_zlib=
-	if test "$zlib_prefix" != "yes" -a "$zlib_prefix" != "auto"
-	then
-	  LDFLAGS="$LDFLAGS -L$zlib_prefix/lib"
+        have_zlib=
+        if test "$zlib_prefix" != "yes" -a "$zlib_prefix" != "auto"
+        then
+          LDFLAGS="$LDFLAGS -L$zlib_prefix/lib"
           CPPFLAGS="$CPPFLAGS -I$zlib_prefix/include"
-	fi
+        fi
         saved_LIBS="$LIBS"
-	AC_CHECK_HEADERS([zlib.h], [AC_CHECK_LIB([z], [deflate],
-					 [have_zlib=yes])])
-	if test "x$have_zlib" = "x"
-	then
-	  if test "x$zlib_prefix" != "xauto"
-	  then
-		AC_MSG_ERROR([ZLIB requested, but library or headers not found])
-	  fi
-	else
-	  MUTTLIBS="$MUTTLIBS -lz"
-	  AC_DEFINE(USE_ZLIB, 1, [Define if you have libz available])
-	  MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_zstrm.o"
-	fi
+        AC_CHECK_HEADERS([zlib.h], [AC_CHECK_LIB([z], [deflate],
+                                         [have_zlib=yes])])
+        if test "x$have_zlib" = "x"
+        then
+          if test "x$zlib_prefix" != "xauto"
+          then
+                AC_MSG_ERROR([ZLIB requested, but library or headers not found])
+          fi
+        else
+          MUTTLIBS="$MUTTLIBS -lz"
+          AC_DEFINE(USE_ZLIB, 1, [Define if you have libz available])
+          MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_zstrm.o"
+        fi
         LIBS="$saved_LIBS"
   else
     AC_MSG_WARN([ZLIB was requested but IMAP is not enabled])
@@ -744,7 +744,7 @@ AC_ARG_WITH(ssl, AS_HELP_STRING([--with-ssl@<:@=PFX@:>@],[Enable TLS support usi
         then
           if test "$need_socket" != "yes"; then
            AC_MSG_WARN([SSL support is only useful with POP, IMAP or SMTP support])
-	  else
+          else
             if test "$with_ssl" != "yes"
             then
              LDFLAGS="$LDFLAGS -L$withval/lib"
@@ -1073,7 +1073,7 @@ then
 
     dnl -- Kyoto Cabinet --
     if test x$with_kyotocabinet != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = kc
+            && test "$db_requested" = auto -o "$db_requested" = kc
     then
       if test -n "$with_kyotocabinet" && test "$with_kyotocabinet" != "yes"
       then
@@ -1096,7 +1096,7 @@ then
 
     dnl -- Tokyo Cabinet --
     if test "x$with_tokyocabinet" != "xno" && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = tc
+            && test "$db_requested" = auto -o "$db_requested" = tc
     then
       if test -n "$with_tokyocabinet" && test "$with_tokyocabinet" != "yes"
       then
@@ -1119,7 +1119,7 @@ then
 
     dnl -- LMDB --
     if test x$with_lmdb != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = lmdb
+            && test "$db_requested" = auto -o "$db_requested" = lmdb
     then
         if test -n "$with_lmdb" && test "$with_lmdb" != "yes"
         then
@@ -1147,20 +1147,20 @@ then
 
     dnl -- QDBM --
     if test "$with_qdbm" != "no" && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = qdbm
+            && test "$db_requested" = auto -o "$db_requested" = qdbm
     then
       if test -n "$with_qdbm" && test "$with_qdbm" != "yes"
       then
         if test -d $with_qdbm/include/qdbm; then
           CPPFLAGS="$CPPFLAGS -I$with_qdbm/include/qdbm"
-	else
+        else
           CPPFLAGS="$CPPFLAGS -I$with_qdbm/include"
-	fi
+        fi
         LDFLAGS="$LDFLAGS -L$with_qdbm/lib"
       else
          if test -d /usr/include/qdbm; then
            CPPFLAGS="$CPPFLAGS -I/usr/include/qdbm"
-	 fi
+         fi
       fi
 
       saved_LIBS="$LIBS"
@@ -1180,7 +1180,7 @@ then
 
     dnl -- GDBM --
     if test x$with_gdbm != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = gdbm
+            && test "$db_requested" = auto -o "$db_requested" = gdbm
     then
         if test -n "$with_gdbm" && test "$with_gdbm" != "yes"
         then
@@ -1208,7 +1208,7 @@ then
 
     dnl -- BDB --
     if test x$with_bdb != xno && test $db_found = no \
-	    && test "$db_requested" = auto -o "$db_requested" = bdb
+            && test "$db_requested" = auto -o "$db_requested" = bdb
     then
         if test -n "$with_bdb" && test "$with_bdb" != "yes"
         then
@@ -1360,15 +1360,15 @@ if test "$am_func_iconv" = yes; then
 fi
 
 AC_ARG_WITH(idn, AS_HELP_STRING([--with-idn=@<:@PFX@:>@],[Use GNU libidn for internationalized domain names]),
-		 [
-		  if test "$with_idn" != "no" ; then
-		  	if test "$with_idn" != "yes" ; then
-			   CPPFLAGS="$CPPFLAGS -I$with_idn/include"
-			   LDFLAGS="$LDFLAGS -L$with_idn/lib"
-			fi
-		  fi
-		 ],
-		 [with_idn=auto])
+                 [
+                  if test "$with_idn" != "no" ; then
+                        if test "$with_idn" != "yes" ; then
+                           CPPFLAGS="$CPPFLAGS -I$with_idn/include"
+                           LDFLAGS="$LDFLAGS -L$with_idn/lib"
+                        fi
+                  fi
+                 ],
+                 [with_idn=auto])
 
 AC_ARG_WITH(idn2, AS_HELP_STRING([--with-idn2=@<:@PFX@:>@],[Use GNU libidn2 for internationalized domain names]),
         [
@@ -1398,12 +1398,12 @@ if test "x$with_idn" != "xno"; then
     dnl Solaris 11 has /usr/include/idn
     have_stringprep_h=no
     AC_CHECK_HEADERS([stringprep.h idn/stringprep.h], [
-		      have_stringprep_h=yes
-		      break])
+                      have_stringprep_h=yes
+                      break])
     have_idna_h=no
     AC_CHECK_HEADERS([idna.h idn/idna.h], [
-		      have_idna_h=yes
-		      break])
+                      have_idna_h=yes
+                      break])
 
     mutt_save_LIBS="$LIBS"
     LIBS=
@@ -1422,7 +1422,7 @@ if test "x$with_idn" != "xno"; then
 
     if test "$with_idn" != auto; then
       if test $have_stringprep_h = no || test $have_idna_h = no || test $ac_cv_search_stringprep_check_version = no; then
-	AC_MSG_ERROR([IDN was requested, but libidn was not usable on this system])
+        AC_MSG_ERROR([IDN was requested, but libidn was not usable on this system])
       fi
     fi
   fi
@@ -1570,7 +1570,7 @@ fi
 if test $wc_funcs = yes; then
         AC_DEFINE(HAVE_WC_FUNCS,1,[ Define if you are using the system's wchar_t functions. ])
 else
-	MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS utf8.o wcwidth.o"
+        MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS utf8.o wcwidth.o"
 fi
 
 AC_CACHE_CHECK([for nl_langinfo and CODESET], mutt_cv_langinfo_codeset,
@@ -1627,7 +1627,7 @@ AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc],[Do not build the documentatio
 AM_CONDITIONAL(BUILD_DOC, test x$do_build_doc != xno)
 
 AC_ARG_ENABLE(full_doc,
-	      AS_HELP_STRING([--disable-full-doc],[Omit disabled variables]),
+              AS_HELP_STRING([--disable-full-doc],[Omit disabled variables]),
 [       if test x$enableval = xno ; then
                 full_doc=no
         fi

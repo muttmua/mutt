@@ -10,24 +10,24 @@ RV=0;
 
 do_check_files ()
 {
-	pattern="$1" ; shift
-	magic="$1" ; shift
-	msg="$1" ; shift
-	grep -En "$pattern" "$@"        	| \
-		grep -v '^[^	 ]*:[^ 	]*#' 	| \
-		grep -Fv "$magic" > $TMPFILE
+        pattern="$1" ; shift
+        magic="$1" ; shift
+        msg="$1" ; shift
+        grep -En "$pattern" "$@"        	| \
+                grep -v '^[^	 ]*:[^ 	]*#' 	| \
+                grep -Fv "$magic" > $TMPFILE
 
-	test -s $TMPFILE && {
-		echo "$msg" ;
-		cat $TMPFILE;
-		rm -f $TMPFILE;
-		RV=1;
-	}
+        test -s $TMPFILE && {
+                echo "$msg" ;
+                cat $TMPFILE;
+                rm -f $TMPFILE;
+                RV=1;
+        }
 }
 
 do_check ()
 {
-	do_check_files "$1" "$2" "$3" `find . -path ./intl -prune -o -name '*.c' -print`
+        do_check_files "$1" "$2" "$3" `find . -path ./intl -prune -o -name '*.c' -print`
 }
 
 do_check '\<fopen.*'\"'.*w' __FOPEN_CHECKED__ "Alert: Unchecked fopen calls."
@@ -41,7 +41,7 @@ do_check '\<FREE[ ]?\([^&]' __FREE_CHECKED__ "You probably meant FREE(&...) here
 
 # don't do this check on others' code.
 do_check_files '\<(malloc|realloc|free|strdup)[ 	]*\(' __MEM_CHECKED__ "Alert: Use of traditional memory management calls." \
-	./*.c imap/*.c autocrypt/*.c
+        ./*.c imap/*.c autocrypt/*.c
 
 rm -f $TMPFILE
 exit $RV

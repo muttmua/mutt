@@ -1,25 +1,25 @@
 #!/bin/sh --
 
 list_patches_PATCHES () {
-	cat -
+        cat -
 }
 
 list_patches_mq () {
-	hg qapplied | sed -e 's/^/mq-/'
+        hg qapplied | sed -e 's/^/mq-/'
 }
 
 list_patches_guilt () {
-	guilt applied | sed -e 's/^/guilt-/'
+        guilt applied | sed -e 's/^/guilt-/'
 }
 
 list_patches () {
-	if [ -d .git/patches ]; then
-		list_patches_guilt
-	elif [ -f .hg/patches/series ]; then
-		list_patches_mq
-	else
-		list_patches_PATCHES
-	fi
+        if [ -d .git/patches ]; then
+                list_patches_guilt
+        elif [ -f .hg/patches/series ]; then
+                list_patches_mq
+        else
+                list_patches_PATCHES
+        fi
 }
 
 cat <<EOF
@@ -36,7 +36,7 @@ void mutt_print_patchlist (void)
 EOF
 
 list_patches | while read patch ; do
-	echo "  puts (\"${patch}\");"
+        echo "  puts (\"${patch}\");"
 done
 
 echo "}"
