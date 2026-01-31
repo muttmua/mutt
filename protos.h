@@ -112,14 +112,20 @@ char *mutt_read_rfc822_line (FILE *, char *, size_t *);
 ENVELOPE *mutt_read_rfc822_header (FILE *, HEADER *, short, short);
 HEADER *mutt_dup_header (HEADER *);
 
+int mutt_check_month (const char *);
+const char *mutt_ctime (const time_t *t);
+
+#define MUTT_IS_FROM_PREFIX   0      /* Anything with a "From " prefix passes */
+#define MUTT_IS_FROM_LAX      1      /* Reverse scan.  Accepts any return-path */
+#define MUTT_IS_FROM_STRICT   2      /* Mutt's traditional strict-ish check */
+int mutt_is_from (const char *, char *, size_t, time_t *, int);
+
 void mutt_set_mtime (const char *from, const char *to);
 time_t mutt_decrease_mtime (const char *, struct stat *);
 time_t mutt_local_tz (time_t);
 time_t mutt_mktime (struct tm *, int);
 time_t mutt_parse_date (const char *, HEADER *);
 time_t mutt_add_timeout (time_t, long);
-int is_from (const char *, char *, size_t, time_t *);
-const char *mutt_ctime (const time_t *t);
 void mutt_touch_atime (int);
 int mutt_timespec_compare (struct timespec *a, struct timespec *b);
 void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_type type);
@@ -309,7 +315,6 @@ int mutt_check_encoding (const char *);
 int mutt_check_key (const char *);
 int mutt_check_menu (const char *);
 int mutt_check_mime_type (const char *);
-int mutt_check_month (const char *);
 int mutt_check_overwrite (const char *, const char *, BUFFER *, int *, char **);
 int mutt_check_traditional_pgp (HEADER *, int *);
 int mutt_command_complete (char *, size_t, int, int);

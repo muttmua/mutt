@@ -161,7 +161,7 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
 
       return_path[0] = 0;
 
-      if (!is_from (buf, return_path, sizeof (return_path), &t))
+      if (!mutt_is_from (buf, return_path, sizeof (return_path), &t, MUTT_IS_FROM_PREFIX))
       {
         if (fseeko (ctx->fp, loc, SEEK_SET) != 0)
         {
@@ -248,7 +248,7 @@ int mbox_parse_mailbox (CONTEXT *ctx)
   HEADER *curhdr;
   time_t t;
   int count = 0, lines = 0, has_mbox_sep = 0;
-  int expect_from_line = 1;
+  int expect_from_line = 1, is_from_mode;
   LOFF_T loc;
 #ifdef NFS_ATTRIBUTE_HACK
 #ifdef HAVE_UTIMENSAT
@@ -299,7 +299,22 @@ int mbox_parse_mailbox (CONTEXT *ctx)
   loc = ftello (ctx->fp);
   while (fgets (buf, sizeof (buf), ctx->fp) != NULL)
   {
-    if (is_from (buf, return_path, sizeof (return_path), &t))
+    /* At BOF or after a content-length separator, accept everything
+       with a "From " prefix */
+    if (expect_from_line)
+      is_from_mode = MUTT_IS_FROM_PREFIX;
+
+    /* After a blank line, use a looser parser that allows for weird
+       return paths */
+    else if (has_mbox_sep)
+      is_from_mode = MUTT_IS_FROM_LAX;
+
+    /* Otherwise use the traditional strictest parser mutt has been
+       using forever */
+    else
+      is_from_mode = MUTT_IS_FROM_STRICT;
+
+    if (mutt_is_from (buf, return_path, sizeof (return_path), &t, is_from_mode))
     {
       /* Save the Content-Length of the previous message */
       if (count > 0)

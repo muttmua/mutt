@@ -292,7 +292,7 @@ static int is_from_reverse_scan (const char * const bos,
  * From [ <return-path> ] <weekday> <month> <day> <time> [ <timezone> ] <year>
  */
 
-int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
+int mutt_is_from (const char *s, char *path, size_t pathlen, time_t *tp, int mode)
 {
   struct tm tm;
 
@@ -308,10 +308,31 @@ int is_from (const char *s, char *path, size_t pathlen, time_t *tp)
   if (!*s)
     return 0;
 
+  if ((mode == MUTT_IS_FROM_PREFIX) && !(path || tp))
+    return 1;
+
   dprint (3, (debugfile, "\nis_from(): parsing: %s", s));
 
-  if (!is_from_forward_scan (s, path, pathlen, &tm))
-    return 0;
+  switch (mode)
+  {
+    case MUTT_IS_FROM_PREFIX:
+      if (!is_from_reverse_scan (s, path, pathlen, &tm))
+        return 1;
+      break;
+
+    case MUTT_IS_FROM_LAX:
+      if (!is_from_reverse_scan (s, path, pathlen, &tm))
+        return 0;
+      break;
+
+    case MUTT_IS_FROM_STRICT:
+      if (!is_from_forward_scan (s, path, pathlen, &tm))
+        return 0;
+      break;
+
+    default:
+      return 0;
+  }
 
   dprint (3, (debugfile,
               "is_from(): month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.\n",

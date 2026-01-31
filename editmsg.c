@@ -170,7 +170,7 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
   of = 0;
   cf = ((tmpctx.magic == MUTT_MBOX || tmpctx.magic == MUTT_MMDF) ? 0 : CH_NOSTATUS);
 
-  if (fgets (buff, sizeof (buff), fp) && is_from (buff, NULL, 0, NULL))
+  if (fgets (buff, sizeof (buff), fp) && mutt_is_from (buff, NULL, 0, NULL, MUTT_IS_FROM_PREFIX))
   {
     if (tmpctx.magic == MUTT_MBOX || tmpctx.magic == MUTT_MMDF)
       cf = CH_FROM | CH_FORCE_FROM;

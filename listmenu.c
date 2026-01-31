@@ -95,7 +95,7 @@ static void parse_list_headers (CONTEXT *ctx, HEADER *hdr,
         /* some bogus MTAs will quote the original "From " line */
         if (mutt_strncmp (">From ", line, 6) == 0)
           continue; /* just ignore */
-        else if (is_from (line, NULL, 0, NULL))
+        else if (mutt_is_from (line, NULL, 0, NULL, MUTT_IS_FROM_PREFIX))
           continue; /* just ignore */
 
         break; /* end of header */

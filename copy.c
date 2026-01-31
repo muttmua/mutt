@@ -803,7 +803,8 @@ _mutt_append_message (CONTEXT *dest, FILE *fpin, CONTEXT *src, HEADER *hdr,
   if (fgets (buf, sizeof (buf), fpin) == NULL)
     return -1;
 
-  if ((msg = mx_open_new_message (dest, hdr, is_from (buf, NULL, 0, NULL) ? 0 : MUTT_ADD_FROM)) == NULL)
+  if ((msg = mx_open_new_message (dest, hdr,
+                                  mutt_is_from (buf, NULL, 0, NULL, MUTT_IS_FROM_PREFIX) ? 0 : MUTT_ADD_FROM)) == NULL)
     return -1;
   if (dest->magic == MUTT_MBOX || dest->magic == MUTT_MMDF)
     chflags |= CH_FROM | CH_FORCE_FROM;
