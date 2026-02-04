@@ -403,6 +403,8 @@ struct option_t MuttVars[] = {
   */
   /* L10N:
      $attribution default value
+     %d is the date and time of the message
+     %n is the author's real name (or address if missing)
   */
   { "attribution",      DT_STR|DT_L10N_STR, R_NONE, {.p=&Attribution}, {.p=N_("On %d, %n wrote:")} },
   /*
@@ -4518,6 +4520,8 @@ struct option_t MuttVars[] = {
   */
   /* L10N:
      $status_format default value
+     See the documentation for this option for more information about all the
+     expandos used.
   */
   { "status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&Status}, {.p=N_("-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?B? Back:%B?%?l? %l?]---(%s/%?T?%T/?%S)-%>-(%P)---")} },
   /*
@@ -4722,6 +4726,29 @@ struct option_t MuttVars[] = {
   */
   /* L10N:
      $ts_icon_format default value
+
+     When $ts_enabled is set, mutt will use escape codes to update the
+     window title and window "icon" to indicate when you have new
+     mail.
+
+     The $ts_icon_format is supposed to be a very short string indicating new mail.
+
+     The format of this string uses the expandoes listed in the
+     documentation for $status_format:
+     <http://www.mutt.org/doc/manual/#status-format>.
+
+     It also uses the very terse "if" "then" "else" syntax you can use in some
+     format strings:
+       "%?<sequence_char>?<if_string>&<else_string>?"
+
+     If the value of sequence_char is non-zero, if_string will be expanded,
+     otherwise else_string will be expanded.
+
+     So this default starts with "M".  Then %?n? says to check the %n
+     expando to see if it is non-zero.  %n is "number of new messages
+     in the mailbox".  So if there are new messages in the mail box,
+     it will follow up with "AIL", printing "MAIL".  Otherwise it will
+     follow up with "ail", printing "Mail".
   */
   {"ts_icon_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&TSIconFormat}, {.p=N_("M%?n?AIL&ail?")} },
   /*
@@ -4739,6 +4766,9 @@ struct option_t MuttVars[] = {
   */
   /* L10N:
      $ts_status_format default value
+
+     See the L10N comments about $ts_icon_format for more information about the
+     expandos and the "if" "then" "else" format used.
   */
   {"ts_status_format", DT_STR|DT_L10N_STR, R_BOTH, {.p=&TSStatusFormat}, {.p=N_("Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?")} },
   /*
