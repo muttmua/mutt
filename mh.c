@@ -2749,10 +2749,22 @@ int mx_is_maildir (const char *path)
   int rc = 0;
 
   tmp = mutt_buffer_pool_get ();
-  mutt_buffer_printf (tmp, "%s/cur", path);
-  if (stat (mutt_b2s (tmp), &st) == 0 && S_ISDIR (st.st_mode))
-    rc = 1;
 
+  mutt_buffer_printf (tmp, "%s/cur", path);
+  if (stat (mutt_b2s (tmp), &st) != 0 || !S_ISDIR (st.st_mode))
+    goto out;
+
+  mutt_buffer_printf (tmp, "%s/new", path);
+  if (stat (mutt_b2s (tmp), &st) != 0 || !S_ISDIR (st.st_mode))
+    goto out;
+
+  mutt_buffer_printf (tmp, "%s/tmp", path);
+  if (stat (mutt_b2s (tmp), &st) != 0 || !S_ISDIR (st.st_mode))
+    goto out;
+
+  rc = 1;
+
+out:
   mutt_buffer_pool_release (&tmp);
   return rc;
 }
