@@ -91,7 +91,7 @@ static int check_year (const char *s)
 }
 
 static int is_from_forward_scan (const char *s,
-                                 char *path, size_t pathlen,
+                                 char *path, size_t pathsize,
                                  struct tm *tm)
 {
   if (!is_day_name (s))
@@ -129,8 +129,8 @@ static int is_from_forward_scan (const char *s,
     if (path)
     {
       len = (size_t) (p - s);
-      if (len + 1 > pathlen)
-        len = pathlen - 1;
+      if (len >= pathsize)
+        len = pathsize - 1;
       memcpy (path, s, len);
       path[len] = 0;
       dprint (3, (debugfile, "is_from_forward_scan(): got return path: %s\n", path));
@@ -207,7 +207,7 @@ static int is_from_forward_scan (const char *s,
 }
 
 static int is_from_reverse_scan (const char * const bos,
-                                 char *path, size_t pathlen,
+                                 char *path, size_t pathsize,
                                  struct tm *tm)
 {
   const char *cur = bos + strlen (bos);
@@ -276,8 +276,8 @@ static int is_from_reverse_scan (const char * const bos,
     size_t len;
 
     len = (size_t) (cur - bos);
-    if (len + 1 > pathlen)
-      len = pathlen - 1;
+    if (len >= pathsize)
+      len = pathsize - 1;
     memcpy (path, bos, len);
     path[len] = 0;
     dprint (3, (debugfile, "is_from_reverse_scan(): got return path: %s\n", path));
@@ -292,7 +292,7 @@ static int is_from_reverse_scan (const char * const bos,
  * From [ <return-path> ] <weekday> <month> <day> <time> [ <timezone> ] <year>
  */
 
-int mutt_is_from (const char *s, char *path, size_t pathlen, time_t *tp, int mode)
+int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mode)
 {
   struct tm tm;
 
@@ -316,17 +316,17 @@ int mutt_is_from (const char *s, char *path, size_t pathlen, time_t *tp, int mod
   switch (mode)
   {
     case MUTT_IS_FROM_PREFIX:
-      if (!is_from_reverse_scan (s, path, pathlen, &tm))
+      if (!is_from_reverse_scan (s, path, pathsize, &tm))
         return 1;
       break;
 
     case MUTT_IS_FROM_LAX:
-      if (!is_from_reverse_scan (s, path, pathlen, &tm))
+      if (!is_from_reverse_scan (s, path, pathsize, &tm))
         return 0;
       break;
 
     case MUTT_IS_FROM_STRICT:
-      if (!is_from_forward_scan (s, path, pathlen, &tm))
+      if (!is_from_forward_scan (s, path, pathsize, &tm))
         return 0;
       break;
 
