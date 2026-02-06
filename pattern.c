@@ -904,7 +904,7 @@ static int eval_date_minmax (pattern_t *pat, const char *s, BUFFER *err)
   /* Arbitrary year in the future.  Don't set this too high
      or mutt_mktime() returns something larger than will
      fit in a time_t on some systems */
-  max.tm_year = 130;
+  max.tm_year = 137;
   max.tm_mon = 11;
   max.tm_mday = 31;
   max.tm_hour = 23;
