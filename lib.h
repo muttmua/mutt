@@ -165,6 +165,7 @@ void mutt_debug_f (const char *, const int, const char *, const int err, const c
 # else
 
 #  define dprintf(N, ...) do { } while (0)
+#  define deprintf(N, ...) do {  } while (0)
 
 # endif
 
