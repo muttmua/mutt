@@ -127,7 +127,7 @@ static int mdb_get_r_txn(header_cache_t *h)
     if ((rc = mdb_txn_renew (h->txn)) != MDB_SUCCESS)
     {
       h->txn = NULL;
-      dprintf(2, "mdb_txn_renew: %s", mdb_strerror (rc));
+      muttdbg(2, "mdb_txn_renew: %s", mdb_strerror (rc));
       return rc;
     }
     h->txn_mode = txn_read;
@@ -137,7 +137,7 @@ static int mdb_get_r_txn(header_cache_t *h)
   if ((rc = mdb_txn_begin (h->env, NULL, MDB_RDONLY, &h->txn)) != MDB_SUCCESS)
   {
     h->txn = NULL;
-    dprintf(2, "mdb_txn_begin: %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_txn_begin: %s", mdb_strerror (rc));
     return rc;
   }
   h->txn_mode = txn_read;
@@ -160,7 +160,7 @@ static int mdb_get_w_txn(header_cache_t *h)
   if ((rc = mdb_txn_begin (h->env, NULL, 0, &h->txn)) != MDB_SUCCESS)
   {
     h->txn = NULL;
-    dprintf(2, "mdb_txn_begin %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_txn_begin %s", mdb_strerror (rc));
     return rc;
   }
 
@@ -958,7 +958,7 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
   {
     if ((rv = mdb_put (h->txn, h->db, &key, &databuf, 0)) != MDB_SUCCESS)
     {
-      dprintf(2, "mdb_put: %s", mdb_strerror(rv));
+      muttdbg(2, "mdb_put: %s", mdb_strerror(rv));
       mdb_txn_abort (h->txn);
       h->txn_mode = txn_uninitialized;
       h->txn = NULL;
@@ -1059,7 +1059,7 @@ hcache_open_tc (struct header_cache* h, const char* path)
   {
 #ifdef DEBUG
     int ecode = tcbdbecode (h->db);
-    dprintf(2, "tcbdbopen failed for %s: %s (ecode %d)", path, tcbdberrmsg (ecode), ecode);
+    muttdbg(2, "tcbdbopen failed for %s: %s (ecode %d)", path, tcbdberrmsg (ecode), ecode);
 #endif
     tcbdbdel(h->db);
     return -1;
@@ -1076,7 +1076,7 @@ mutt_hcache_close(header_cache_t *h)
   {
 #ifdef DEBUG
     int ecode = tcbdbecode (h->db);
-    dprintf(2, "tcbdbclose failed for %s: %s (ecode %d)", h->folder, tcbdberrmsg (ecode), ecode);
+    muttdbg(2, "tcbdbclose failed for %s: %s (ecode %d)", h->folder, tcbdberrmsg (ecode), ecode);
 #endif
   }
   tcbdbdel(h->db);
@@ -1129,7 +1129,7 @@ hcache_open_kc (struct header_cache* h, const char* path)
     goto cleanup;
   if (!kcdbopen(h->db, mutt_b2s (fullpath), KCOWRITER | KCOCREATE))
   {
-    dprintf(2, "kcdbopen failed for %s: %s (ecode %d)",
+    muttdbg(2, "kcdbopen failed for %s: %s (ecode %d)",
                 mutt_b2s (fullpath),
                 kcdbemsg (h->db), kcdbecode (h->db));
     kcdbdel(h->db);
@@ -1150,7 +1150,7 @@ mutt_hcache_close(header_cache_t *h)
     return;
 
   if (!kcdbclose(h->db))
-    dprintf(2, "kcdbclose failed for %s: %s (ecode %d)", h->folder,
+    muttdbg(2, "kcdbclose failed for %s: %s (ecode %d)", h->folder,
                 kcdbemsg (h->db), kcdbecode (h->db));
   kcdbdel(h->db);
   FREE(&h->folder);
@@ -1358,7 +1358,7 @@ hcache_open_lmdb (struct header_cache* h, const char* path)
 
   if ((rc = mdb_env_create(&h->env)) != MDB_SUCCESS)
   {
-    dprintf(2, "mdb_env_create: %s",
+    muttdbg(2, "mdb_env_create: %s",
                 mdb_strerror(rc));
     return -1;
   }
@@ -1367,7 +1367,7 @@ hcache_open_lmdb (struct header_cache* h, const char* path)
 
   if ((rc = mdb_env_open(h->env, path, MDB_NOSUBDIR, 0644)) != MDB_SUCCESS)
   {
-    dprintf(2, "mdb_env_open: %s",
+    muttdbg(2, "mdb_env_open: %s",
                 mdb_strerror(rc));
     goto fail_env;
   }
@@ -1377,7 +1377,7 @@ hcache_open_lmdb (struct header_cache* h, const char* path)
 
   if ((rc = mdb_dbi_open(h->txn, NULL, MDB_CREATE, &h->db)) != MDB_SUCCESS)
   {
-    dprintf(2, "mdb_dbi_open: %s",
+    muttdbg(2, "mdb_dbi_open: %s",
                 mdb_strerror(rc));
     goto fail_dbi;
   }
@@ -1410,7 +1410,7 @@ mutt_hcache_close(header_cache_t *h)
     {
       if ((rc = mdb_txn_commit (h->txn)) != MDB_SUCCESS)
       {
-        dprintf(2, "mdb_txn_commit: %s",
+        muttdbg(2, "mdb_txn_commit: %s",
                     mdb_strerror (rc));
       }
     }
@@ -1449,7 +1449,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   rc = mdb_del(h->txn, h->db, &key, NULL);
   if (rc != MDB_SUCCESS && rc != MDB_NOTFOUND)
   {
-    dprintf(2, "mdb_del: %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_del: %s", mdb_strerror (rc));
     mdb_txn_abort(h->txn);
     h->txn_mode = txn_uninitialized;
     h->txn = NULL;

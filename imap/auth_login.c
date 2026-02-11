@@ -56,7 +56,7 @@ imap_auth_res_t imap_auth_login (IMAP_DATA* idata, const char* method)
    * additional protection */
 
   if (debuglevel < IMAP_LOG_PASS)
-    dprintf (2, "Sending LOGIN command for %s...", idata->conn->account.user);
+    muttdbg (2, "Sending LOGIN command for %s...", idata->conn->account.user);
 #endif
 
   snprintf (buf, sizeof (buf), "LOGIN %s %s", q_user, q_pass);

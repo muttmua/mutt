@@ -627,7 +627,7 @@ static int have_gpg_version (const char *version)
         engineinfo = engineinfo->next;
       if (!engineinfo)
         {
-          dprintf(1, "Error finding GPGME PGP engine");
+          muttdbg(1, "Error finding GPGME PGP engine");
           engine_version = safe_strdup ("0.0.0");
         }
       else
@@ -1927,7 +1927,7 @@ static int verify_one (BODY *sigbdy, STATE *s,
   gpgme_release (ctx);
 
   state_attach_puts (_("[-- End signature information --]\n\n"), s);
-  dprintf(1, "returning %d.", badsig);
+  muttdbg(1, "returning %d.", badsig);
 
   return badsig? 1: anywarn? 2 : 0;
 }
@@ -2366,7 +2366,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
     mutt_buffer_printf (tmpdir, "%s/mutt-gpgme-XXXXXX", NONULL (Tempdir));
     if (!mkdtemp (tmpdir->data))
     {
-      dprintf(1, "Error creating temporary GPGME home");
+      muttdbg(1, "Error creating temporary GPGME home");
       goto err_ctx;
     }
 
@@ -2375,7 +2375,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
       engineinfo = engineinfo->next;
     if (!engineinfo)
     {
-      dprintf(1, "Error finding GPGME PGP engine");
+      muttdbg(1, "Error finding GPGME PGP engine");
       goto err_tmpdir;
     }
 
@@ -2383,13 +2383,13 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
                                      engineinfo->file_name, mutt_b2s (tmpdir));
     if (err != GPG_ERR_NO_ERROR)
     {
-      dprintf(1, "Error setting GPGME context home");
+      muttdbg(1, "Error setting GPGME context home");
       goto err_tmpdir;
     }
 
     if ((err = gpgme_op_import (tmpctx, keydata)) != GPG_ERR_NO_ERROR)
     {
-      dprintf(1, "Error importing key");
+      muttdbg(1, "Error importing key");
       goto err_tmpdir;
     }
   }
@@ -2447,7 +2447,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
   }
   if (gpg_err_code (err) != GPG_ERR_EOF)
   {
-    dprintf(1, "Error listing keys");
+    muttdbg(1, "Error listing keys");
     goto err_fp;
   }
 
@@ -2769,7 +2769,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
   char body_charset[STRING];  /* Only used for clearsigned messages. */
   char *gpgcharset = NULL;
 
-  dprintf(2, "Entering pgp_application_pgp handler");
+  muttdbg(2, "Entering pgp_application_pgp handler");
 
   /* For clearsigned messages we won't be able to get a character set
      but we know that this may only be text thus we assume Latin-1
@@ -3022,7 +3022,7 @@ int pgp_gpgme_application_handler (BODY *m, STATE *s)
                            " of PGP message! --]\n\n"), s);
       return 1;
     }
-  dprintf(2, "Leaving pgp_application_pgp handler");
+  muttdbg(2, "Leaving pgp_application_pgp handler");
 
   return err;
 }
@@ -3043,7 +3043,7 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
   int is_signed;
   int rc = 0;
 
-  dprintf(2, "Entering pgp_encrypted handler");
+  muttdbg(2, "Entering pgp_encrypted handler");
 
   /* Note: the handler calls mutt_body_handler()
    * so we don't use the pool for this operation. */
@@ -3127,7 +3127,7 @@ int pgp_gpgme_encrypted_handler (BODY *a, STATE *s)
 
   safe_fclose (&fpout);
   mutt_unlink(mutt_b2s (tempfile));
-  dprintf(2, "Leaving pgp_encrypted handler");
+  muttdbg(2, "Leaving pgp_encrypted handler");
 
 cleanup:
   mutt_buffer_free (&tempfile);
@@ -3143,7 +3143,7 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
   int is_signed;
   int rc = 0;
 
-  dprintf(2, "Entering smime_encrypted handler");
+  muttdbg(2, "Entering smime_encrypted handler");
 
   /* clear out any mime headers before the handler, so they can't be
    * spoofed. */
@@ -3238,7 +3238,7 @@ int smime_gpgme_application_handler (BODY *a, STATE *s)
 
   safe_fclose (&fpout);
   mutt_unlink(mutt_b2s (tempfile));
-  dprintf(2, "Leaving smime_encrypted handler");
+  muttdbg(2, "Leaving smime_encrypted handler");
 
 cleanup:
   mutt_buffer_free (&tempfile);
@@ -4735,16 +4735,16 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
   if (!keys)
     return NULL;
 
-  dprintf(5, "looking for %s <%s>.",
+  muttdbg(5, "looking for %s <%s>.",
               NONULL (a->personal), NONULL (a->mailbox));
 
   for (k = keys; k; k = k->next)
     {
-      dprintf(5, "  looking at key: %s `%.15s'", crypt_keyid (k), k->uid);
+      muttdbg(5, "  looking at key: %s `%.15s'", crypt_keyid (k), k->uid);
 
       if (abilities && !(k->flags & abilities))
         {
-          dprintf(5, "  insufficient abilities: Has %x, want %x",
+          muttdbg(5, "  insufficient abilities: Has %x, want %x",
                       k->flags, abilities);
           continue;
         }
@@ -4872,7 +4872,7 @@ static crypt_key_t *crypt_getkeybystr (char *p, short abilities,
         {
           crypt_key_t *tmp;
 
-          dprintf(5, "matching \"%s\" against "
+          muttdbg(5, "matching \"%s\" against "
                      "key %s, \"%s\": match",
                       p, crypt_long_keyid (k), k->uid);
 
@@ -4881,7 +4881,7 @@ static crypt_key_t *crypt_getkeybystr (char *p, short abilities,
         }
         else
         {
-          dprintf(5, "matching \"%s\" against "
+          muttdbg(5, "matching \"%s\" against "
                      "key %s, \"%s\": no match",
                       p, crypt_long_keyid (k), k->uid);
         }
@@ -5560,7 +5560,7 @@ int smime_gpgme_verify_sender (HEADER *h)
 
 void mutt_gpgme_set_sender (const char *sender)
 {
-  dprintf(2, "setting to: %s", sender);
+  muttdbg(2, "setting to: %s", sender);
   FREE (&current_sender);
   current_sender = safe_strdup (sender);
 }

@@ -185,7 +185,7 @@ void mutt_free_body (BODY **p)
     {
       if (b->unlink)
         unlink (b->filename);
-      dprintf(1, "%sunlinking %s.",
+      muttdbg(1, "%sunlinking %s.",
                   b->unlink ? "" : "not ", b->filename);
     }
 
@@ -968,9 +968,9 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
                       NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
                       (int) getuid (), (int) getpid (), random64.int_64,
                       suffix ? "." : "", NONULL (suffix));
-  dprintf(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
+  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
   if (unlink (mutt_b2s (buf)) && errno != ENOENT)
-    deprintf(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
+    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
 }
 
 void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
@@ -984,12 +984,12 @@ void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
                        (int) getuid (), (int) getpid (), random64.int_64,
                        suffix ? "." : "", NONULL (suffix));
   if (n >= slen)
-    dprintf(1, "%s:%d: ERROR: insufficient buffer space "
+    muttdbg(1, "%s:%d: ERROR: insufficient buffer space "
                "to hold temporary filename! slen=%zu but need %zu",
                src, line, slen, n);
-  dprintf(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, s);
+  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, s);
   if (unlink (s) && errno != ENOENT)
-    deprintf(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, s);
+    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, s);
 }
 
 /* these characters must be escaped in regular expressions */
@@ -1480,7 +1480,7 @@ char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
 
     if (regexec (l->rx->rx, mutt_b2s (srcbuf), l->nmatch, pmatch, 0) == 0)
     {
-      dprintf(5, "%s matches %s",
+      muttdbg(5, "%s matches %s",
                   mutt_b2s (srcbuf), l->rx->pattern);
 
       mutt_buffer_clear (destbuf);
@@ -1516,7 +1516,7 @@ char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
       }
 
       mutt_buffer_strcpy (srcbuf, mutt_b2s (destbuf));
-      dprintf(5, "subst %s", mutt_b2s (destbuf));
+      muttdbg(5, "subst %s", mutt_b2s (destbuf));
     }
   }
 
@@ -1578,7 +1578,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
       int     i = 0;
 #endif
 
-      dprintf(3, "fmtpipe = %s", src);
+      muttdbg(3, "fmtpipe = %s", src);
 
       strncpy(srccopy, src, n);
       srccopy[n-1] = '\0';
@@ -1597,11 +1597,11 @@ void mutt_FormatString (char *dest,             /* output buffer */
         char *p;
 
         /* Extract the command name and copy to command line */
-        dprintf(3, "fmtpipe +++: %s", srcbuf->dptr);
+        muttdbg(3, "fmtpipe +++: %s", srcbuf->dptr);
         if (word->data)
           *word->data = '\0';
         mutt_extract_token(word, srcbuf, MUTT_TOKEN_NOLISP);
-        dprintf(3, "fmtpipe %2d: %s", i++, word->data);
+        muttdbg(3, "fmtpipe %2d: %s", i++, word->data);
         mutt_buffer_addch(command, '\'');
         mutt_FormatString(buf, sizeof(buf), 0, cols, word->data, callback, data,
                           flags | MUTT_FORMAT_NOFILTER);
@@ -1620,7 +1620,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
         mutt_buffer_addch(command, ' ');
       } while (MoreArgs(srcbuf));
 
-      dprintf(3, "fmtpipe > %s", command->data);
+      muttdbg(3, "fmtpipe > %s", command->data);
 
       col -= wlen;      /* reset to passed in value */
       wptr = dest;      /* reset write ptr */
@@ -1633,13 +1633,13 @@ void mutt_FormatString (char *dest,             /* output buffer */
         safe_fclose (&filter);
         rc = mutt_wait_filter(pid);
         if (rc != 0)
-          dprintf(1, "format pipe command exited code %d", rc);
+          muttdbg(1, "format pipe command exited code %d", rc);
         if (n > 0)
         {
           dest[n] = 0;
           while ((n > 0) && (dest[n-1] == '\n' || dest[n-1] == '\r'))
             dest[--n] = '\0';
-          dprintf(3, "fmtpipe < %s", dest);
+          muttdbg(3, "fmtpipe < %s", dest);
 
           /* If the result ends with '%', this indicates that the filter
            * generated %-tokens that mutt can expand.  Eliminate the '%'
@@ -1668,7 +1668,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
         else
         {
           /* read error */
-          deprintf(1, "error reading from fmtpipe");
+          mutt_errno_dbg(1, "error reading from fmtpipe");
           *wptr = 0;
         }
       }
@@ -2335,7 +2335,7 @@ int mutt_match_rx_list (const char *s, RX_LIST *l)
   {
     if (regexec (l->rx->rx, s, (size_t) 0, (regmatch_t *) 0, (int) 0) == 0)
     {
-      dprintf(5, "%s matches %s", s, l->rx->pattern);
+      muttdbg(5, "%s matches %s", s, l->rx->pattern);
       return 1;
     }
   }
@@ -2371,8 +2371,8 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
     /* Does this pattern match? */
     if (regexec (l->rx->rx, s, (size_t) l->nmatch, (regmatch_t *) pmatch, (int) 0) == 0)
     {
-      dprintf(5, "%s matches %s", s, l->rx->pattern);
-      dprintf(5, "%d subs", (int)l->rx->rx->re_nsub);
+      muttdbg(5, "%s matches %s", s, l->rx->pattern);
+      muttdbg(5, "%d subs", (int)l->rx->rx->re_nsub);
 
       /* Copy template into text, with substitutions. */
       for (p = l->template; *p && tlen < textsize - 1;)
@@ -2411,7 +2411,7 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
       if (tlen < textsize)
       {
         text[tlen] = '\0';
-        dprintf(5, "\"%s\"", text);
+        muttdbg(5, "\"%s\"", text);
       }
       return 1;
     }
@@ -2471,7 +2471,7 @@ int mutt_rmtree (const char* path)
 
   if (!(dirp = opendir (path)))
   {
-    dprintf(1, "error opening directory %s", path);
+    muttdbg(1, "error opening directory %s", path);
     return -1;
   }
 
@@ -2533,7 +2533,7 @@ static int mutt_mkwrapdir (const char *path, BUFFER *newfile, BUFFER *newdir)
   mutt_buffer_printf (newdir, "%s/%s", mutt_b2s (parent), ".muttXXXXXX");
   if (mkdtemp(newdir->data) == NULL)
   {
-    dprintf(1, "mkdtemp() failed");
+    muttdbg(1, "mkdtemp() failed");
     rc = -1;
     goto cleanup;
   }
@@ -2595,7 +2595,7 @@ int safe_open (const char *path, int flags)
   if (lstat (path, &osb) < 0 || fstat (fd, &nsb) < 0 ||
       compare_stat(&osb, &nsb) == -1)
   {
-/*    dprintf(1, "%s is a symlink!", path); */
+/*    muttdbg(1, "%s is a symlink!", path); */
     close (fd);
     fd = -1;
     goto cleanup;

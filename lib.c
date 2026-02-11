@@ -400,7 +400,7 @@ int mutt_copy_bytes (FILE *in, FILE *out, size_t size)
       break;
     if (fwrite (buf, 1, chunk, out) != chunk)
     {
-      /* dprintf(1, "fwrite() returned short byte count"); */
+      /* muttdbg(1, "fwrite() returned short byte count"); */
       return (-1);
     }
     size -= chunk;
@@ -470,7 +470,7 @@ int safe_rename (const char *src, const char *target)
         (lstat (target, &tsb) == 0) &&
         (compare_stat (&ssb, &tsb) == 0))
     {
-      dprintf(1, "link (%s, %s) reported failure: "
+      muttdbg(1, "link (%s, %s) reported failure: "
                  "%s (%d) but actually succeeded",
                  src, target, strerror (errno), errno);
       goto success;
@@ -490,7 +490,7 @@ int safe_rename (const char *src, const char *target)
      *
      */
 
-    dprintf(1, "link (%s, %s) failed: %s (%d)",
+    muttdbg(1, "link (%s, %s) failed: %s (%d)",
                src, target, strerror (errno), errno);
 
     /*
@@ -506,13 +506,13 @@ int safe_rename (const char *src, const char *target)
 #endif
       )
     {
-      dprintf(1, "trying rename...");
+      muttdbg(1, "trying rename...");
       if (rename (src, target) == -1)
       {
-        deprintf(1, "rename (%s, %s) failed", src, target);
+        mutt_errno_dbg(1, "rename (%s, %s) failed", src, target);
         return -1;
       }
-      dprintf(1, "rename succeeded.");
+      muttdbg(1, "rename succeeded.");
 
       return 0;
     }
@@ -533,14 +533,14 @@ int safe_rename (const char *src, const char *target)
    */
   if (lstat (src, &ssb) == -1)
   {
-    dprintf(1, "can't stat %s: %s (%d)",
+    muttdbg(1, "can't stat %s: %s (%d)",
                 src, strerror (errno), errno);
     return -1;
   }
 
   if (lstat (target, &tsb) == -1)
   {
-    dprintf(1, "can't stat %s: %s (%d)",
+    muttdbg(1, "can't stat %s: %s (%d)",
                 src, strerror (errno), errno);
     return -1;
   }
@@ -551,7 +551,7 @@ int safe_rename (const char *src, const char *target)
    */
   if (compare_stat (&ssb, &tsb) == -1)
   {
-    dprintf(1, "stat blocks for %s and %s diverge; pretending EEXIST.", src, target);
+    muttdbg(1, "stat blocks for %s and %s diverge; pretending EEXIST.", src, target);
     errno = EEXIST;
     return -1;
   }
@@ -564,7 +564,7 @@ success:
    */
   if (unlink (src) == -1)
   {
-    dprintf(1, "unlink (%s) failed: %s (%d)",
+    muttdbg(1, "unlink (%s) failed: %s (%d)",
                 src, strerror (errno), errno);
   }
 
@@ -818,7 +818,7 @@ void mutt_debug_f (const char *file, const int line, const char *function, const
   if (err)
     fprintf (debugfile, " [errno %d %s]", err, strerror(err));
 
-  /* because we always print a line header, in dprintf() we auto-newline */
+  /* because we always print a line header, in muttdbg() we auto-newline */
   if (strchr(fmt, '\n') == NULL)
     fputc('\n', debugfile);
 }

@@ -849,7 +849,7 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
   if (!keys)
     return NULL;
 
-  dprintf(5, "looking for %s <%s>.",
+  muttdbg(5, "looking for %s <%s>.",
               NONULL (a->personal), NONULL (a->mailbox));
 
 
@@ -857,11 +857,11 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring,
   {
     kn = k->next;
 
-    dprintf(5, "  looking at key: %s", pgp_keyid (k));
+    muttdbg(5, "  looking at key: %s", pgp_keyid (k));
 
     if (abilities && !(k->flags & abilities))
     {
-      dprintf(5, "  insufficient abilities: Has %x, want %x",
+      muttdbg(5, "  insufficient abilities: Has %x, want %x",
                   k->flags, abilities);
       continue;
     }
@@ -992,7 +992,7 @@ pgp_key_t pgp_getkeybystr (char *p, short abilities, pgp_ring_t keyring)
 
     match = 0;
 
-    dprintf(5, "matching \"%s\" against key %s:",
+    muttdbg(5, "matching \"%s\" against key %s:",
                 p, pgp_long_keyid (k));
 
     if (!*p ||
@@ -1000,18 +1000,18 @@ pgp_key_t pgp_getkeybystr (char *p, short abilities, pgp_ring_t keyring)
         (pl && mutt_strcasecmp (pl, pgp_long_keyid (k)) == 0) ||
         (ps && mutt_strcasecmp (ps, pgp_short_keyid (k)) == 0))
     {
-      dprintf(5, "\t\tmatch.");
+      muttdbg(5, "\t\tmatch.");
       match = 1;
     }
     else
     {
       for (a = k->address; a; a = a->next)
       {
-        dprintf(5, "matching \"%s\" against key %s, \"%s\":",
+        muttdbg(5, "matching \"%s\" against key %s, \"%s\":",
                     p, pgp_long_keyid (k), NONULL (a->addr));
         if (mutt_stristr (a->addr, p))
         {
-          dprintf(5, "\t\tmatch.");
+          muttdbg(5, "\t\tmatch.");
           match = 1;
           break;
         }

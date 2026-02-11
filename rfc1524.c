@@ -241,7 +241,7 @@ static int rfc1524_mailcap_parse (BODY *a,
       /* ignore comments */
       if (*buf == '#')
         continue;
-      dprintf(2, "mailcap entry: %s", buf);
+      muttdbg(2, "mailcap entry: %s", buf);
 
       /* check type */
       ch = get_field (buf);
@@ -268,7 +268,7 @@ static int rfc1524_mailcap_parse (BODY *a,
       {
         field = ch;
         ch = get_field (ch);
-        dprintf(2, "field: %s", field);
+        muttdbg(2, "field: %s", field);
 
         if (!ascii_strcasecmp (field, "needsterminal"))
         {
@@ -474,7 +474,7 @@ int rfc1524_mailcap_lookup (BODY *a, char *type, size_t typelen, rfc1524_entry *
 
     mutt_buffer_expand_path (path);
 
-    dprintf(2, "Checking mailcap file: %s", mutt_b2s (path));
+    muttdbg(2, "Checking mailcap file: %s", mutt_b2s (path));
     found = rfc1524_mailcap_parse (a, mutt_b2s (path), type, entry, opt);
   }
 

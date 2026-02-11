@@ -114,7 +114,7 @@ static QUERY *run_query (char *s, int quiet)
 
   if ((thepid = mutt_create_filter (mutt_b2s (cmd), NULL, &fp, NULL)) < 0)
   {
-    dprintf(1, "unable to fork command: %s", mutt_b2s (cmd));
+    muttdbg(1, "unable to fork command: %s", mutt_b2s (cmd));
     mutt_buffer_pool_release (&cmd);
     return 0;
   }
@@ -164,7 +164,7 @@ static QUERY *run_query (char *s, int quiet)
   safe_fclose (&fp);
   if (mutt_wait_filter (thepid))
   {
-    dprintf(1, "Error: %s", msg);
+    muttdbg(1, "Error: %s", msg);
     if (!quiet)  mutt_error ("%s", msg);
   }
   else

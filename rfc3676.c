@@ -189,18 +189,18 @@ static void print_flowed_line (char *line, STATE *s, int ql,
   width = quote_width (s, ql);
   last = line[mutt_strlen (line) - 1];
 
-  dprintf(4, "f=f: line [%s], width = %ld, spaces = %d",
+  muttdbg(4, "f=f: line [%s], width = %ld, spaces = %d",
               NONULL(line), (long)width, fst->spaces);
 
   for (p = (char *)line, words = 0; (p = strsep (&line, " ")) != NULL ; )
   {
-    dprintf(4, "f=f: word [%s], width: %d, remaining = [%s]",
+    muttdbg(4, "f=f: word [%s], width: %d, remaining = [%s]",
               p, fst->width, line);
 
     /* remember number of spaces */
     if (!*p)
     {
-      dprintf(4, "f=f: additional space");
+      muttdbg(4, "f=f: additional space");
       fst->spaces++;
       continue;
     }
@@ -217,7 +217,7 @@ static void print_flowed_line (char *line, STATE *s, int ql,
     if (!(!fst->spaces && fst->delsp && last != ' ') &&
         w < width && w + fst->width + fst->spaces > width)
     {
-      dprintf(4, "f=f: break line at %d, %d spaces left",
+      muttdbg(4, "f=f: break line at %d, %d spaces left",
                 fst->width, fst->spaces);
       /* only honor trailing spaces for format=flowed replies */
       if (option(OPTTEXTFLOWED))
@@ -272,7 +272,7 @@ int rfc3676_handler (BODY * a, STATE * s)
     fst.delsp = 1;
   }
 
-  dprintf(4, "f=f: DelSp: %s", delsp ? "yes" : "no");
+  muttdbg(4, "f=f: DelSp: %s", delsp ? "yes" : "no");
 
   while ((buf = mutt_read_line (buf, &sz, s->fpin, NULL, 0)))
   {

@@ -111,14 +111,14 @@ static int pop_read_header (POP_DATA *pop_data, HEADER *h)
       {
         pop_data->cmd_top = 1;
 
-        dprintf(1, "set TOP capability");
+        muttdbg(1, "set TOP capability");
       }
 
       if (ret == -2)
       {
         pop_data->cmd_top = 0;
 
-        dprintf(1, "unset TOP capability");
+        muttdbg(1, "unset TOP capability");
         snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
                   _("Command TOP is not supported by server."));
       }
@@ -186,7 +186,7 @@ static int fetch_uidl (char *line, void *data)
 
   if (i == ctx->msgcount)
   {
-    dprintf(1, "pop_fetch_headers: new header %d %s", index, line);
+    muttdbg(1, "pop_fetch_headers: new header %d %s", index, line);
 
     if (i >= ctx->hdrmax)
       mx_alloc_memory(ctx);
@@ -293,14 +293,14 @@ static int pop_fetch_headers (CONTEXT *ctx)
     {
       pop_data->cmd_uidl = 1;
 
-      dprintf(1, "set UIDL capability");
+      muttdbg(1, "set UIDL capability");
     }
 
     if (ret == -2 && pop_data->cmd_uidl == 2)
     {
       pop_data->cmd_uidl = 0;
 
-      dprintf(1, "unset UIDL capability");
+      muttdbg(1, "unset UIDL capability");
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
                 _("Command UIDL is not supported by server."));
     }
@@ -504,7 +504,7 @@ static void pop_clear_cache (POP_DATA *pop_data)
   if (!pop_data->clear_cache)
     return;
 
-  dprintf(1, "delete cached messages");
+  muttdbg(1, "delete cached messages");
 
   for (i = 0; i < POP_CACHE_LEN; i++)
   {

@@ -828,7 +828,7 @@ int mutt_index_menu (void)
 
       op = km_dokey (MENU_MAIN);
 
-      dprintf(4, "Got op %d", op);
+      muttdbg(4, "Got op %d", op);
 
       /* either user abort or timeout */
       if (op < 0)
@@ -2475,7 +2475,7 @@ int mutt_index_menu (void)
                by whatever they typed at the prompt.) */
             snprintf(buf, sizeof(buf), _("Message bound to %s."), str);
             mutt_message(buf);
-            dprintf(1, "Mark: %s => %s", str, macro);
+            muttdbg(1, "Mark: %s => %s", str, macro);
           }
         }
         else

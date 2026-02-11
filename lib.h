@@ -159,13 +159,13 @@ MUTT_LIB_WHERE int debuglevel;
 void mutt_debug_f (const char *, const int, const char *, const int err, const char *, ...);
 
 /* __func__ is a C99 provision, but we now require C99 so it's safe */
-#  define dprintf(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, 0, __VA_ARGS__); } while (0)
-#  define deprintf(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, errno, __VA_ARGS__); } while (0)
+#  define muttdbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, 0, __VA_ARGS__); } while (0)
+#  define mutt_errno_dbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, errno, __VA_ARGS__); } while (0)
 
 # else
 
-#  define dprintf(N, ...) do { } while (0)
-#  define deprintf(N, ...) do {  } while (0)
+#  define muttdbg(N, ...) do { } while (0)
+#  define mutt_errno_dbg(N, ...) do {  } while (0)
 
 # endif
 

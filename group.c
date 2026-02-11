@@ -45,7 +45,7 @@ group_t *mutt_pattern_group (const char *k)
 
   if (!(p = hash_find (Groups, k)))
   {
-    dprintf(2, "Creating group %s.", k);
+    muttdbg(2, "Creating group %s.", k);
     p = safe_calloc (1, sizeof (group_t));
     p->name = safe_strdup (k);
     hash_insert (Groups, p->name, p);

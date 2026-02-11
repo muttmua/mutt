@@ -39,15 +39,15 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA* idata, const char* method)
   chosen_mech = mutt_gsasl_get_mech (method, idata->capstr);
   if (!chosen_mech)
   {
-    dprintf(2, "mutt_gsasl_get_mech() returned no usable mech");
+    muttdbg(2, "mutt_gsasl_get_mech() returned no usable mech");
     return IMAP_AUTH_UNAVAIL;
   }
 
-  dprintf(2, "imap_auth_gsasl: using mech %s", chosen_mech);
+  muttdbg(2, "imap_auth_gsasl: using mech %s", chosen_mech);
 
   if (mutt_gsasl_client_new (idata->conn, chosen_mech, &gsasl_session) < 0)
   {
-    dprintf (1, "imap_auth_gsasl: Error allocating GSASL connection.");
+    muttdbg (1, "imap_auth_gsasl: Error allocating GSASL connection.");
     return IMAP_AUTH_UNAVAIL;
   }
 
@@ -60,7 +60,7 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA* idata, const char* method)
     gsasl_rc = gsasl_step64 (gsasl_session, "", &gsasl_step_output);
     if (gsasl_rc != GSASL_NEEDS_MORE && gsasl_rc != GSASL_OK)
     {
-      dprintf (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+      muttdbg (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
                   gsasl_strerror (gsasl_rc));
       rc = IMAP_AUTH_UNAVAIL;
       goto bail;
@@ -95,7 +95,7 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA* idata, const char* method)
     /* if a sasl error occured, send an abort string */
     else
     {
-      dprintf (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+      muttdbg (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
                   gsasl_strerror (gsasl_rc));
       mutt_buffer_strcpy(output_buf, "*");
     }
@@ -130,7 +130,7 @@ bail:
 
   if (rc == IMAP_AUTH_FAILURE)
   {
-    dprintf(2, "imap_auth_gsasl: %s failed", chosen_mech);
+    muttdbg(2, "imap_auth_gsasl: %s failed", chosen_mech);
     mutt_error _("SASL authentication failed.");
     mutt_sleep (2);
   }

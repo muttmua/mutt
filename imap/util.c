@@ -228,7 +228,7 @@ HEADER* imap_hcache_get (IMAP_DATA* idata, unsigned int uid)
     if (uv == idata->uid_validity)
       h = mutt_hcache_restore ((unsigned char *)data, NULL);
     else
-      dprintf(3, "hcache uidvalidity mismatch: %u", uv);
+      muttdbg(3, "hcache uidvalidity mismatch: %u", uv);
     mutt_hcache_free ((void **)&data);
   }
 
@@ -274,7 +274,7 @@ int imap_hcache_store_uid_seqset (IMAP_DATA *idata)
   rc = mutt_hcache_store_raw (idata->hcache, "/UIDSEQSET",
                               b->data, mutt_buffer_len (b) + 1,
                               imap_hcache_keylen);
-  dprintf(5, "Stored /UIDSEQSET %s", b->data);
+  muttdbg(5, "Stored /UIDSEQSET %s", b->data);
   mutt_buffer_free (&b);
   return rc;
 }
@@ -298,7 +298,7 @@ char *imap_hcache_get_uid_seqset (IMAP_DATA *idata)
                                      imap_hcache_keylen);
   seqset = safe_strdup (hc_seqset);
   mutt_hcache_free ((void **)&hc_seqset);
-  dprintf(5, "Retrieved /UIDSEQSET %s", NONULL (seqset));
+  muttdbg(5, "Retrieved /UIDSEQSET %s", NONULL (seqset));
 
   return seqset;
 }
@@ -324,7 +324,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
       ImapPort = ntohs (service->s_port);
     else
       ImapPort = IMAP_PORT;
-    dprintf(3, "Using default IMAP port %d", ImapPort);
+    muttdbg(3, "Using default IMAP port %d", ImapPort);
   }
   if (!ImapsPort)
   {
@@ -333,7 +333,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
       ImapsPort = ntohs (service->s_port);
     else
       ImapsPort = IMAP_SSL_PORT;
-    dprintf(3, "Using default IMAPS port %d", ImapsPort);
+    muttdbg(3, "Using default IMAPS port %d", ImapsPort);
   }
 
   /* Defaults */
@@ -383,7 +383,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
 
     if ((n = sscanf (tmp, "%127[^:/]%127s", mx->account.host, tmp)) < 1)
     {
-      dprintf(1, "imap_parse_path: NULL host in %s", path);
+      muttdbg(1, "imap_parse_path: NULL host in %s", path);
       FREE (&mx->mbox);
       return -1;
     }
@@ -398,7 +398,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
           mx->account.flags |= MUTT_ACCT_SSL;
         else
         {
-          dprintf(1, "imap_parse_path: Unknown connection type in %s", path);
+          muttdbg(1, "imap_parse_path: Unknown connection type in %s", path);
           FREE (&mx->mbox);
           return -1;
         }

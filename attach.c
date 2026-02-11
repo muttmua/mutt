@@ -115,7 +115,7 @@ int mutt_compose_attachment (BODY *a)
 
       mutt_rfc1524_expand_filename (entry->nametemplate,
                                     a->filename, newfile);
-      dprintf(1, "oldfile: %s\t newfile: %s", a->filename, mutt_b2s (newfile));
+      muttdbg(1, "oldfile: %s\t newfile: %s", a->filename, mutt_b2s (newfile));
 
       if (safe_symlink (a->filename, mutt_b2s (newfile)) == -1)
       {
@@ -247,7 +247,7 @@ int mutt_edit_attachment (BODY *a)
       mutt_buffer_strcpy (command, entry->editcommand);
       mutt_rfc1524_expand_filename (entry->nametemplate,
                                     a->filename, newfile);
-      dprintf(1, "oldfile: %s\t newfile: %s", a->filename, mutt_b2s (newfile));
+      muttdbg(1, "oldfile: %s\t newfile: %s", a->filename, mutt_b2s (newfile));
 
       if (safe_symlink (a->filename, mutt_b2s (newfile)) == -1)
       {
@@ -328,7 +328,7 @@ void mutt_check_lookup_list (BODY *b, char *type, size_t len)
                   n == TYPETEXT ? "text" :
                   n == TYPEVIDEO ? "video" : "other",
                   tmp.subtype);
-        dprintf(1, "\"%s\" -> %s", b->filename, type);
+        muttdbg(1, "\"%s\" -> %s", b->filename, type);
       }
       if (tmp.subtype)
         FREE (&tmp.subtype);
@@ -521,7 +521,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
         decode_state.fpout = safe_fopen(mutt_b2s (pagerfile), "w");
         if (!decode_state.fpout)
         {
-          deprintf(1, "safe_fopen(%s)", mutt_b2s (pagerfile));
+          mutt_errno_dbg(1, "safe_fopen(%s)", mutt_b2s (pagerfile));
           mutt_perror(mutt_b2s (pagerfile));
           mutt_sleep(1);
           goto return_error;
@@ -532,7 +532,7 @@ int mutt_view_attachment (FILE *fp, BODY *a, int flag, HEADER *hdr,
         decode_state.flags = MUTT_CHARCONV;
         mutt_decode_attachment(a, &decode_state);
         if (fclose(decode_state.fpout) == EOF)
-          deprintf(1, "fclose", mutt_b2s (pagerfile));
+          mutt_errno_dbg(1, "fclose", mutt_b2s (pagerfile));
       }
       else
       {
@@ -968,7 +968,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     int piped = 0;
     char *sanitized_fname = NULL;
 
-    dprintf(2, "Using mailcap...");
+    muttdbg(2, "Using mailcap...");
 
     entry = rfc1524_new_entry ();
     rfc1524_mailcap_lookup (a, type, sizeof(type), entry, MUTT_PRINT);
@@ -1048,7 +1048,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
     if (mutt_decode_save_attachment (fp, a, mutt_b2s (newfile), MUTT_PRINTING, 0) == 0)
     {
       unlink_newfile = 1;
-      dprintf(2, "successfully decoded %s type attachment to %s",
+      muttdbg(2, "successfully decoded %s type attachment to %s",
                   type, mutt_b2s (newfile));
 
       if ((ifp = fopen (mutt_b2s (newfile), "r")) == NULL)
@@ -1057,7 +1057,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
         goto decode_cleanup;
       }
 
-      dprintf(2, "successfully opened %s read-only", mutt_b2s (newfile));
+      muttdbg(2, "successfully opened %s read-only", mutt_b2s (newfile));
 
       mutt_endwin (NULL);
       if ((thepid = mutt_create_filter (NONULL(PrintCmd), &fpout, NULL, NULL)) < 0)
@@ -1066,7 +1066,7 @@ int mutt_print_attachment (FILE *fp, BODY *a)
         goto decode_cleanup;
       }
 
-      dprintf(2, "Filter created.");
+      muttdbg(2, "Filter created.");
 
       mutt_copy_stream (ifp, fpout);
 

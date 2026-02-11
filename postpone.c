@@ -93,10 +93,10 @@ int mutt_num_postponed (int force)
       if (newpc >= 0)
       {
         PostCount = newpc;
-        dprintf(3, "%d postponed IMAP messages found.", PostCount);
+        muttdbg(3, "%d postponed IMAP messages found.", PostCount);
       }
       else
-        dprintf(3, "using old IMAP postponed count.");
+        muttdbg(3, "using old IMAP postponed count.");
     }
     return PostCount;
   }

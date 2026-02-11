@@ -125,14 +125,14 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
 
     if (mutt_convert_string (&reversed_user, Charset, "utf-8", 0) == -1)
     {
-      dprintf(1, "Not reversible. Charset conv to utf-8 failed for user = '%s'.",
+      muttdbg(1, "Not reversible. Charset conv to utf-8 failed for user = '%s'.",
                   reversed_user);
       goto cleanup;
     }
 
     if (ascii_strcasecmp (orig_user, reversed_user))
     {
-      dprintf(1, "Not reversible. orig = '%s', reversed = '%s'.",
+      muttdbg(1, "Not reversible. orig = '%s', reversed = '%s'.",
                   orig_user, reversed_user);
       goto cleanup;
     }
@@ -141,7 +141,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
 
     if (mutt_convert_string (&reversed_domain, Charset, "utf-8", 0) == -1)
     {
-      dprintf(1, "Not reversible. Charset conv to utf-8 failed for domain = '%s'.",
+      muttdbg(1, "Not reversible. Charset conv to utf-8 failed for domain = '%s'.",
                   reversed_domain);
       goto cleanup;
     }
@@ -155,7 +155,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
     {
       if (idna_to_ascii_8z (reversed_domain, &tmp, IDNA_ALLOW_UNASSIGNED) != IDNA_SUCCESS)
       {
-        dprintf(1, "Not reversible. idna_to_ascii_8z failed for domain = '%s'.",
+        muttdbg(1, "Not reversible. idna_to_ascii_8z failed for domain = '%s'.",
                     reversed_domain);
         goto cleanup;
       }
@@ -165,7 +165,7 @@ static char *intl_to_local (char *orig_user, char *orig_domain, int flags)
 
     if (ascii_strcasecmp (orig_domain, reversed_domain))
     {
-      dprintf(1, "Not reversible. orig = '%s', reversed = '%s'.",
+      muttdbg(1, "Not reversible. orig = '%s', reversed = '%s'.",
                   orig_domain, reversed_domain);
       goto cleanup;
     }

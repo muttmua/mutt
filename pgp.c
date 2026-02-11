@@ -200,11 +200,11 @@ static int pgp_copy_checksig (FILE *fpin, FILE *fpout)
     {
       if (regexec (PgpGoodSign.rx, line, 0, NULL, 0) == 0)
       {
-        dprintf(2, "\"%s\" matches regexp.", line);
+        muttdbg(2, "\"%s\" matches regexp.", line);
         rv = 0;
       }
       else
-        dprintf(2, "\"%s\" doesn't match regexp.", line);
+        muttdbg(2, "\"%s\" doesn't match regexp.", line);
 
       if (strncmp (line, "[GNUPG:] ", 9) == 0)
         continue;
@@ -215,7 +215,7 @@ static int pgp_copy_checksig (FILE *fpin, FILE *fpout)
   }
   else
   {
-    dprintf(2, "No pattern.");
+    muttdbg(2, "No pattern.");
     mutt_copy_stream (fpin, fpout);
     rv = 1;
   }
@@ -241,18 +241,18 @@ static int pgp_check_pgp_decryption_okay_regexp (FILE *fpin)
     {
       if (regexec (PgpDecryptionOkay.rx, line, 0, NULL, 0) == 0)
       {
-        dprintf(2, "\"%s\" matches regexp.", line);
+        muttdbg(2, "\"%s\" matches regexp.", line);
         rv = 0;
         break;
       }
       else
-        dprintf(2, "\"%s\" doesn't match regexp.", line);
+        muttdbg(2, "\"%s\" doesn't match regexp.", line);
     }
     FREE (&line);
   }
   else
   {
-    dprintf(2, "No pattern.");
+    muttdbg(2, "No pattern.");
     rv = 1;
   }
 
@@ -293,7 +293,7 @@ static int pgp_check_decryption_okay (FILE *fpin)
     if (strncmp (line, "[GNUPG:] ", 9) != 0)
       continue;
     s = line + 9;
-    dprintf(2, "checking \"%s\".", line);
+    muttdbg(2, "checking \"%s\".", line);
     if (mutt_strncmp (s, "BEGIN_DECRYPTION", 16) == 0)
       inside_decrypt = 1;
     else if (mutt_strncmp (s, "END_DECRYPTION", 14) == 0)
@@ -302,14 +302,14 @@ static int pgp_check_decryption_okay (FILE *fpin)
     {
       if (!inside_decrypt)
       {
-        dprintf(2, "\tPLAINTEXT encountered outside of DECRYPTION.");
+        muttdbg(2, "\tPLAINTEXT encountered outside of DECRYPTION.");
         if (rv > -2)
           rv = -2;
       }
     }
     else if (mutt_strncmp (s, "DECRYPTION_FAILED", 17) == 0)
     {
-      dprintf(2, "\tDECRYPTION_FAILED encountered.  Failure.");
+      muttdbg(2, "\tDECRYPTION_FAILED encountered.  Failure.");
       rv = -3;
       break;
     }
@@ -317,7 +317,7 @@ static int pgp_check_decryption_okay (FILE *fpin)
     {
       /* Don't break out because we still have to check for
        * PLAINTEXT outside of the decryption boundaries. */
-      dprintf(2, "\tDECRYPTION_OKAY encountered.");
+      muttdbg(2, "\tDECRYPTION_OKAY encountered.");
       if (rv > -2)
         rv = 0;
     }
@@ -627,7 +627,7 @@ int pgp_application_pgp_handler (BODY *m, STATE *s)
         int c;
         char *expected_charset = gpgcharset && *gpgcharset ? gpgcharset : "utf-8";
 
-        dprintf(4, "pgp: recoding inline from [%s] to [%s]",
+        muttdbg(4, "pgp: recoding inline from [%s] to [%s]",
                   expected_charset, Charset);
 
         rewind (pgpout);
@@ -849,7 +849,7 @@ int pgp_verify_one (BODY *sigbdy, STATE *s, const char *tempfile)
     if ((rv = mutt_wait_filter (thepid)))
       badsig = -1;
 
-    dprintf(1, "mutt_wait_filter returned %d.", rv);
+    muttdbg(1, "mutt_wait_filter returned %d.", rv);
   }
 
   safe_fclose (&pgperr);
@@ -863,7 +863,7 @@ cleanup:
   mutt_buffer_pool_release (&sigfile);
   mutt_buffer_pool_release (&pgperrfile);
 
-  dprintf(1, "returning %d.", badsig);
+  muttdbg(1, "returning %d.", badsig);
   return badsig;
 }
 

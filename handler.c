@@ -309,7 +309,7 @@ void mutt_decode_base64 (STATE *s, LOFF_T len, int istext, iconv_t cd)
     {
       /* "i" may be zero if there is trailing whitespace, which is not an error */
       if (i != 0)
-        dprintf(2, "didn't get a multiple of 4 chars.");
+        muttdbg(2, "didn't get a multiple of 4 chars.");
       break;
     }
 
@@ -1286,7 +1286,7 @@ static int multipart_handler (BODY *a, STATE *s)
     if (rc)
     {
       mutt_error (_("One or more parts of this message could not be displayed"));
-      dprintf(1, "Failed on attachment #%d, type %s/%s.", count, TYPE(p), NONULL (p->subtype));
+      muttdbg(1, "Failed on attachment #%d, type %s/%s.", count, TYPE(p), NONULL (p->subtype));
     }
 
     if ((s->flags & MUTT_REPLYING)
@@ -1643,7 +1643,7 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
       if ((s->fpout = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
       {
         mutt_error _("Unable to open temporary file!");
-        dprintf(1, "Can't open %s.", mutt_b2s (tempfile));
+        muttdbg(1, "Can't open %s.", mutt_b2s (tempfile));
         mutt_buffer_pool_release (&tempfile);
         return -1;
       }
@@ -1693,7 +1693,7 @@ static int run_decode_and_handler (BODY *b, STATE *s, handler_t handler, int pla
 
     if (rc)
     {
-      dprintf(1, "Failed on attachment of type %s/%s.", TYPE(b), NONULL (b->subtype));
+      muttdbg(1, "Failed on attachment of type %s/%s.", TYPE(b), NONULL (b->subtype));
     }
 
     if (decode)
@@ -1783,7 +1783,7 @@ int mutt_body_handler (BODY *b, STATE *s)
 
   if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
-    dprintf(1, "recurse level too deep. giving up!");
+    muttdbg(1, "recurse level too deep. giving up!");
     return 1;
   }
   recurse_level++;
@@ -1849,7 +1849,7 @@ int mutt_body_handler (BODY *b, STATE *s)
     if (b->encoding != ENC7BIT && b->encoding != ENC8BIT
         && b->encoding != ENCBINARY)
     {
-      dprintf(1, "Bad encoding type %d for multipart entity, "
+      muttdbg(1, "Bad encoding type %d for multipart entity, "
                   "assuming 7 bit", b->encoding);
       b->encoding = ENC7BIT;
     }
@@ -1911,7 +1911,7 @@ cleanup:
   s->flags = oflags | (s->flags & MUTT_FIRSTDONE);
   if (rc)
   {
-    dprintf(1, "Bailing on attachment of type %s/%s.", TYPE(b), NONULL (b->subtype));
+    muttdbg(1, "Bailing on attachment of type %s/%s.", TYPE(b), NONULL (b->subtype));
   }
 
   return rc;

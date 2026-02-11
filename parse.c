@@ -167,7 +167,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
   if (allow_value_spaces)
     mutt_buffer_increase_size (buffer, mutt_strlen (s));
 
-  dprintf(2, "`%s'", s);
+  muttdbg(2, "`%s'", s);
 
   while (*s)
   {
@@ -175,7 +175,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
 
     if ((p = strpbrk (s, "=;")) == NULL)
     {
-      dprintf(1, "malformed parameter: %s", s);
+      muttdbg(1, "malformed parameter: %s", s);
       goto bail;
     }
 
@@ -192,7 +192,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
        */
       if (i == 0)
       {
-        dprintf(1, "missing attribute: %s", s);
+        muttdbg(1, "missing attribute: %s", s);
         new = NULL;
       }
       else
@@ -254,7 +254,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
       {
         new->value = safe_strdup (mutt_b2s (buffer));
 
-        dprintf(2, "parse_parameter: `%s' = `%s'",
+        muttdbg(2, "parse_parameter: `%s' = `%s'",
                     new->attribute ? new->attribute : "",
                     new->value ? new->value : "");
 
@@ -270,7 +270,7 @@ static PARAMETER *parse_parameters (const char *s, int allow_value_spaces)
     }
     else
     {
-      dprintf(1, "parameter with no value: %s", s);
+      muttdbg(1, "parameter with no value: %s", s);
       s = p;
     }
 
@@ -534,13 +534,13 @@ BODY *mutt_read_mime_header (FILE *fp, int digest)
       c = skip_email_wsp(c + 1);
       if (!*c)
       {
-        dprintf(1, "skipping empty header field: %s", line);
+        muttdbg(1, "skipping empty header field: %s", line);
         continue;
       }
     }
     else
     {
-      dprintf(1, "read_mime_header: bogus MIME header: %s", line);
+      muttdbg(1, "read_mime_header: bogus MIME header: %s", line);
       break;
     }
 
@@ -603,7 +603,7 @@ static void _parse_part (FILE *fp, BODY *b, int *counter)
 
   if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
-    dprintf(1, "recurse level too deep. giving up!");
+    muttdbg(1, "recurse level too deep. giving up!");
     return;
   }
   recurse_level++;
@@ -970,7 +970,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
           sec = 0;
         else
         {
-          dprintf(1, "parse_date: could not process time format: %s", t);
+          muttdbg(1, "parse_date: could not process time format: %s", t);
           return(-1);
         }
         tm.tm_hour = hour;
@@ -1035,7 +1035,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
 
   if (count < 4) /* don't check for missing timezone */
   {
-    dprintf(1, "error parsing date format, using received time");
+    muttdbg(1, "error parsing date format, using received time");
     return (-1);
   }
 
@@ -1653,7 +1653,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
         }
 
         if (e->spam && e->spam->data)
-          dprintf(5, "p822: spam = %s", e->spam->data);
+          muttdbg(5, "p822: spam = %s", e->spam->data);
       }
     }
 
@@ -1686,14 +1686,14 @@ ENVELOPE *mutt_read_rfc822_header (FILE *f, HEADER *hdr, short user_hdrs,
 
     if (hdr->received < 0)
     {
-      dprintf(1, "read_rfc822_header(): resetting invalid received time to 0");
+      muttdbg(1, "read_rfc822_header(): resetting invalid received time to 0");
       hdr->received = 0;
     }
 
     /* check for missing or invalid date */
     if (hdr->date_sent <= 0)
     {
-      dprintf(1, "read_rfc822_header(): no date found, using received time from msg separator");
+      muttdbg(1, "read_rfc822_header(): no date found, using received time from msg separator");
       hdr->date_sent = hdr->received;
     }
 
@@ -1755,14 +1755,14 @@ static int count_body_parts_check(LIST **checklist, BODY *b, int dflt)
     if ((a->major_int == TYPEANY || a->major_int == b->type) &&
         !regexec(&a->minor_rx, b->subtype, 0, NULL, 0))
     {
-      dprintf(5, "cbpc: %s %d/%s ?? %s/%s [%d]... yes",
+      muttdbg(5, "cbpc: %s %d/%s ?? %s/%s [%d]... yes",
                  dflt ? "[OK]   " : "[EXCL] ",
                  b->type, b->subtype, a->major, a->minor, a->major_int);
       return 1;
     }
     else
     {
-      dprintf(5, "cbpc: %s %d/%s ?? %s/%s [%d]... no",
+      muttdbg(5, "cbpc: %s %d/%s ?? %s/%s [%d]... no",
                  dflt ? "[OK]   " : "[EXCL] ",
                  b->type, b->subtype, a->major, a->minor, a->major_int);
     }
@@ -1789,7 +1789,7 @@ static int count_body_parts (BODY *body, int flags)
     AT_COUNT("default");
     shallrecurse = 0;
 
-    dprintf(5, "bp: desc=\"%s\"; fn=\"%s\", type=\"%d/%s\"",
+    muttdbg(5, "bp: desc=\"%s\"; fn=\"%s\", type=\"%d/%s\"",
                bp->description ? bp->description : ("none"),
                bp->filename ? bp->filename :
                bp->d_filename ? bp->d_filename : "(none)",
@@ -1875,18 +1875,18 @@ static int count_body_parts (BODY *body, int flags)
       count++;
     bp->attach_qualifies = shallcount ? 1 : 0;
 
-    dprintf(5, "cbp: %p shallcount = %d", (void *)bp, shallcount);
+    muttdbg(5, "cbp: %p shallcount = %d", (void *)bp, shallcount);
 
     if (shallrecurse)
     {
-      dprintf(5, "cbp: %p pre count = %d", (void *)bp, count);
+      muttdbg(5, "cbp: %p pre count = %d", (void *)bp, count);
       bp->attach_count = count_body_parts(bp->parts, recurse_flags);
       count += bp->attach_count;
-      dprintf(5, "cbp: %p post count = %d", (void *)bp, count);
+      muttdbg(5, "cbp: %p post count = %d", (void *)bp, count);
     }
   }
 
-  dprintf(5, "bp: return %d", count < 0 ? 0 : count);
+  muttdbg(5, "bp: return %d", count < 0 ? 0 : count);
   return count < 0 ? 0 : count;
 }
 

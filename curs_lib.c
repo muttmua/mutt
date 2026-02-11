@@ -639,7 +639,7 @@ static void curses_message (int error, const char *fmt, va_list ap)
   vsnprintf (scratch, sizeof (scratch), fmt, ap);
   error_history_add (scratch);
 
-  deprintf(1, "%s", scratch);
+  mutt_errno_dbg(1, "%s", scratch);
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
                       0, MuttMessageWindow->cols, FMT_LEFT, 0, scratch, sizeof (scratch), 0);
 
@@ -712,7 +712,7 @@ void mutt_progress_init (progress_t* progress, const char *msg,
     return;
   }
   if (gettimeofday (&tv, NULL) < 0)
-    deprintf(1, "gettimeofday failed");
+    mutt_errno_dbg(1, "gettimeofday failed");
   /* if timestamp is 0 no time-based suppression is done */
   if (TimeInc)
     progress->timestamp_millis = ((unsigned long long) tv.tv_sec * 1000ULL)
@@ -764,7 +764,7 @@ void mutt_progress_update (progress_t* progress, long pos, int percent)
     else
       snprintf (posstr, sizeof (posstr), "%ld", pos);
 
-    dprintf(5, "updating progress: %s", posstr);
+    muttdbg(5, "updating progress: %s", posstr);
 
     progress->pos = pos;
     if (now_millis)
@@ -817,7 +817,7 @@ void mutt_reflow_windows (void)
   if (option (OPTNOCURSES))
     return;
 
-  dprintf(2, "In mutt_reflow_windows");
+  muttdbg(2, "In mutt_reflow_windows");
 
   MuttStatusWindow->rows = 1;
   MuttStatusWindow->cols = COLS;
@@ -1005,7 +1005,7 @@ void mutt_perror (const char *s)
 {
   const char *p = strerror (errno);
 
-  deprintf(1, s);
+  mutt_errno_dbg(1, s);
   mutt_error ("%s: %s (errno = %d)", s, p ? p : _("unknown error"), errno);
 }
 

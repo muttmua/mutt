@@ -113,14 +113,14 @@ static int monitor_init (void)
     INotifyFd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
     if (INotifyFd == -1)
     {
-      deprintf(2, "monitor: inotify_init1 failed");
+      mutt_errno_dbg(2, "monitor: inotify_init1 failed");
       return -1;
     }
 #else
     INotifyFd = inotify_init();
     if (INotifyFd == -1)
     {
-      deprintf(2, "monitor: inotify_init failed");
+      mutt_errno_dbg(2, "monitor: inotify_init failed");
       return -1;
     }
     fcntl(INotifyFd, F_SETFL, O_NONBLOCK);
@@ -205,10 +205,10 @@ static int monitor_handle_ignore (int descr)
     if (iter->magic == MUTT_MH && stat (iter->mh_backup_path, &sb) == 0)
     {
       if ((new_descr = inotify_add_watch (INotifyFd, iter->mh_backup_path, INOTIFY_MASK_FILE)) == -1)
-        deprintf(2, "monitor: inotify_add_watch failed for '%s'", iter->mh_backup_path);
+        mutt_errno_dbg(2, "monitor: inotify_add_watch failed for '%s'", iter->mh_backup_path);
       else
       {
-        dprintf(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, iter->mh_backup_path);
+        muttdbg(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, iter->mh_backup_path);
         iter->st_dev = sb.st_dev;
         iter->st_ino = sb.st_ino;
         iter->descr = new_descr;
@@ -216,7 +216,7 @@ static int monitor_handle_ignore (int descr)
     }
     else
     {
-      dprintf(3, "monitor: cleanup watch (implicitly removed) - descriptor=%d", descr);
+      muttdbg(3, "monitor: cleanup watch (implicitly removed) - descriptor=%d", descr);
     }
 
     if (MonitorContextDescriptor == descr)
@@ -263,7 +263,7 @@ int mutt_monitor_poll (void)
       rc = -1;
       if (errno != EINTR)
       {
-        deprintf(2, "monitor: poll() failed");
+        mutt_errno_dbg(2, "monitor: poll() failed");
       }
     }
     else
@@ -281,7 +281,7 @@ int mutt_monitor_poll (void)
           else if (PollFds[i].fd == INotifyFd)
           {
             MonitorFilesChanged = 1;
-            dprintf(3, "monitor: file change(s) detected");
+            muttdbg(3, "monitor: file change(s) detected");
             int len;
             char *ptr = buf;
             const struct inotify_event *event;
@@ -292,14 +292,14 @@ int mutt_monitor_poll (void)
               if (len == -1)
               {
                 if (errno != EAGAIN)
-                  deprintf(2, "monitor: read inotify events failed");
+                  mutt_errno_dbg(2, "monitor: read inotify events failed");
                 break;
               }
 
               while (ptr < buf + len)
               {
                 event = (const struct inotify_event *) ptr;
-                dprintf(5, "monitor:  + detail: descriptor=%d mask=0x%x",
+                muttdbg(5, "monitor:  + detail: descriptor=%d mask=0x%x",
                             event->wd, event->mask);
                 if (event->mask & IN_IGNORED)
                   monitor_handle_ignore (event->wd);
@@ -419,12 +419,12 @@ int mutt_monitor_add (BUFFY *buffy)
   if ((INotifyFd == -1 && monitor_init () == -1)
       || (descr = inotify_add_watch (INotifyFd, info.path, mask)) == -1)
   {
-    deprintf(2, "monitor: inotify_add_watch failed for '%s'", info.path);
+    mutt_errno_dbg(2, "monitor: inotify_add_watch failed for '%s'", info.path);
     rc = -1;
     goto cleanup;
   }
 
-  dprintf(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, info.path);
+  muttdbg(3, "monitor: inotify_add_watch descriptor=%d for '%s'", descr, info.path);
   if (!buffy)
     MonitorContextDescriptor = descr;
 
@@ -484,7 +484,7 @@ int mutt_monitor_remove (BUFFY *buffy)
   }
 
   inotify_rm_watch(info.monitor->descr, INotifyFd);
-  dprintf(3, "monitor: inotify_rm_watch for '%s' descriptor=%d", info.path, info.monitor->descr);
+  muttdbg(3, "monitor: inotify_rm_watch for '%s' descriptor=%d", info.path, info.monitor->descr);
 
   monitor_delete (info.monitor);
   monitor_check_free ();

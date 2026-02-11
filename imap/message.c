@@ -383,7 +383,7 @@ retry:
                          sizeof (idata->uid_validity), imap_hcache_keylen);
   if (maxuid && idata->uidnext < maxuid + 1)
   {
-    dprintf(2, "Overriding UIDNEXT: %u -> %u", idata->uidnext, maxuid + 1);
+    muttdbg(2, "Overriding UIDNEXT: %u -> %u", idata->uidnext, maxuid + 1);
     idata->uidnext = maxuid + 1;
   }
   if (idata->uidnext > 1)
@@ -493,21 +493,21 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
 
       if (!h.data->uid)
       {
-        dprintf (2, "skipping hcache FETCH response "
+        muttdbg (2, "skipping hcache FETCH response "
                     "for message number %d missing a UID", h.data->msn);
         continue;
       }
 
       if (h.data->msn < 1 || h.data->msn > msn_end)
       {
-        dprintf (1, "skipping hcache FETCH response "
+        muttdbg (1, "skipping hcache FETCH response "
                     "for unknown message number %d", h.data->msn);
         continue;
       }
 
       if (idata->msn_index[h.data->msn - 1])
       {
-        dprintf (2, "skipping hcache FETCH "
+        muttdbg (2, "skipping hcache FETCH "
                     "for duplicate message %d", h.data->msn);
         continue;
       }
@@ -585,7 +585,7 @@ static int read_headers_qresync_eval_cache (IMAP_DATA *idata, char *uid_seqset)
   HEADER *h;
   IMAP_HEADER_DATA *ihd;
 
-  dprintf(2, "Reading uid seqset from header cache");
+  muttdbg(2, "Reading uid seqset from header cache");
   ctx = idata->ctx;
   msn = 1;
 
@@ -711,7 +711,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
     if (header_msn < 1 || header_msn > msn_end ||
         !idata->msn_index[header_msn - 1])
     {
-      dprintf (1, "skipping CONDSTORE flag "
+      muttdbg (1, "skipping CONDSTORE flag "
                   "update for unknown message number %u", header_msn);
       continue;
     }
@@ -949,7 +949,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
 
         if (!ftello (fp))
         {
-          dprintf(2, "ignoring fetch response with no body");
+          muttdbg(2, "ignoring fetch response with no body");
           continue;
         }
 
@@ -958,7 +958,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
 
         if (h.data->msn < 1 || h.data->msn > fetch_msn_end)
         {
-          dprintf (1, "skipping FETCH response for "
+          muttdbg (1, "skipping FETCH response for "
                       "unknown message number %d", h.data->msn);
           continue;
         }
@@ -966,7 +966,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
         /* May receive FLAGS updates in a separate untagged response (#2935) */
         if (idata->msn_index[h.data->msn - 1])
         {
-          dprintf (2, "skipping FETCH response for "
+          muttdbg (2, "skipping FETCH response for "
                       "duplicate message %d", h.data->msn);
           continue;
         }
@@ -1429,7 +1429,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   return 0;
 
 cmd_step_fail:
-  dprintf (1, "command failed: %s", idata->buf);
+  muttdbg (1, "command failed: %s", idata->buf);
   if (rc != IMAP_CMD_BAD)
   {
     char *pc;
@@ -1472,21 +1472,21 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
 
   if (imap_parse_path (dest, &mx))
   {
-    dprintf(1, "bad destination %s", dest);
+    muttdbg(1, "bad destination %s", dest);
     return -1;
   }
 
   /* check that the save-to folder is in the same account */
   if (!mutt_account_match (&(CTX_DATA->conn->account), &(mx.account)))
   {
-    dprintf (3, "%s not same server as %s", dest, ctx->path);
+    muttdbg (3, "%s not same server as %s", dest, ctx->path);
     rc = 1;
     goto out;
   }
 
   if (h && h->attach_del)
   {
-    dprintf(3, "Message contains attachments to be deleted");
+    muttdbg(3, "Message contains attachments to be deleted");
     rc = 1;
     goto out;
   }
@@ -1515,7 +1515,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
       {
         if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->attach_del)
         {
-          dprintf(3, "Message contains attachments to be deleted");
+          muttdbg(3, "Message contains attachments to be deleted");
           rc = 1;
           goto out;
         }
@@ -1526,7 +1526,7 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
           rc = imap_sync_message_for_copy (idata, ctx->hdrs[n], sync_cmd, &err_continue);
           if (rc < 0)
           {
-            dprintf(1, "could not sync");
+            muttdbg(1, "could not sync");
             goto out;
           }
         }
@@ -1535,13 +1535,13 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
       rc = imap_exec_msgset (idata, "UID COPY", mmbox, MUTT_TAG, 0, 0);
       if (!rc)
       {
-        dprintf(1, "No messages tagged");
+        muttdbg(1, "No messages tagged");
         rc = -1;
         goto out;
       }
       else if (rc < 0)
       {
-        dprintf(1, "could not queue copy");
+        muttdbg(1, "could not queue copy");
         goto out;
       }
       else
@@ -1557,13 +1557,13 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
         rc = imap_sync_message_for_copy (idata, h, sync_cmd, &err_continue);
         if (rc < 0)
         {
-          dprintf(1, "could not sync");
+          muttdbg(1, "could not sync");
           goto out;
         }
       }
       if ((rc = imap_exec (idata, mutt_b2s (cmd), IMAP_CMD_QUEUE)) < 0)
       {
-        dprintf(1, "could not queue copy");
+        muttdbg(1, "could not queue copy");
         goto out;
       }
     }
@@ -1574,13 +1574,13 @@ int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
     {
       if (triedcreate)
       {
-        dprintf(1, "Already tried to create mailbox %s", mbox);
+        muttdbg(1, "Already tried to create mailbox %s", mbox);
         break;
       }
       /* bail out if command failed for reasons other than nonexistent target */
       if (ascii_strncasecmp (imap_get_qualifier (idata->buf), "[TRYCREATE]", 11))
         break;
-      dprintf(3, "server suggests TRYCREATE");
+      muttdbg(3, "server suggests TRYCREATE");
       snprintf (prompt, sizeof (prompt), _("Create %s?"), mbox);
       if (option (OPTCONFIRMCREATE) &&
           mutt_query_boolean (OPTCONFIRMCREATE, prompt, 1) < 1)
@@ -1805,7 +1805,7 @@ char* imap_set_flags (IMAP_DATA* idata, HEADER* h, char* s, int *server_changes)
 
   memcpy (&old_hd, hd, sizeof(old_hd));
 
-  dprintf(2, "parsing FLAGS");
+  muttdbg(2, "parsing FLAGS");
   if ((s = msg_parse_flags (&newh, s)) == NULL)
     return NULL;
 
@@ -1946,7 +1946,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
       SKIPWS (s);
       if (*s != '\"')
       {
-        dprintf(1, "bogus INTERNALDATE entry: %s", s);
+        muttdbg(1, "bogus INTERNALDATE entry: %s", s);
         return -1;
       }
       s++;
@@ -1990,7 +1990,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
       SKIPWS(s);
       if (*s != '(')
       {
-        dprintf (1, "bogus MODSEQ response: %s", s);
+        muttdbg (1, "bogus MODSEQ response: %s", s);
         return -1;
       }
       s++;
@@ -2000,7 +2000,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
         s++;
       else
       {
-        dprintf (1, "Unterminated MODSEQ response: %s", s);
+        muttdbg (1, "Unterminated MODSEQ response: %s", s);
         return -1;
       }
     }
@@ -2025,14 +2025,14 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
   /* sanity-check string */
   if (ascii_strncasecmp ("FLAGS", s, 5) != 0)
   {
-    dprintf (1, "not a FLAGS response: %s", s);
+    muttdbg (1, "not a FLAGS response: %s", s);
     return NULL;
   }
   s += 5;
   SKIPWS(s);
   if (*s != '(')
   {
-    dprintf (1, "bogus FLAGS response: %s", s);
+    muttdbg (1, "bogus FLAGS response: %s", s);
     return NULL;
   }
   s++;
@@ -2094,7 +2094,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
     s++;
   else
   {
-    dprintf (1, "Unterminated FLAGS response: %s", s);
+    muttdbg (1, "Unterminated FLAGS response: %s", s);
     return NULL;
   }
 
