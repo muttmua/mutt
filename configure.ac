@@ -955,7 +955,7 @@ AC_ARG_ENABLE(warnings, AS_HELP_STRING([--disable-warnings],[Turn off compiler w
         mutt_cv_warnings=no
 fi])
 
-if test x$GCC = xyes && test $mutt_cv_warnings = yes; then
+if test $mutt_cv_warnings = yes; then
   CFLAGS="-Wall -pedantic $CFLAGS"
 fi
 
