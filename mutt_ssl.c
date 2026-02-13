@@ -708,6 +708,7 @@ static void ssl_err (sslsockdata *data, int err)
       errmsg = "unknown error";
   }
 
+  (void)errmsg;  /* Silence warning when configured with --disable-debug */
   muttdbg(1, "SSL error: %s", errmsg);
 }
 
