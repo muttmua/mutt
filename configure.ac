@@ -956,7 +956,7 @@ AC_ARG_ENABLE(warnings, AS_HELP_STRING([--disable-warnings],[Turn off compiler w
 fi])
 
 if test $mutt_cv_warnings = yes; then
-  CFLAGS="-Wall -pedantic $CFLAGS"
+  CFLAGS="-Wall $CFLAGS"
 fi
 
 AC_ARG_ENABLE(nfs-fix, AS_HELP_STRING([--enable-nfs-fix],[Work around an NFS with broken attributes caching]),
