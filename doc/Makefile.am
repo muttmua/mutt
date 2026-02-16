@@ -149,7 +149,6 @@ uninstall-local:
 	  rm -f $(DESTDIR)$(infodir)/mutt.info ; \
 	fi
 
-check:
 manual.txt: manual.html
 	-LC_ALL=C lynx -localhost -dump -nolist -nonumbers -with_backspaces -display_charset=us-ascii manual.html > $@ || \
 	LC_ALL=C w3m -T text/html -I utf-8 -O utf-8 -dump < manual.html > $@ || \
@@ -204,6 +203,8 @@ mutt.texi: stamp-doc-xml
 
 mutt.info: mutt.texi
 	-$(MAKEINFO) --no-split -o mutt.info mutt.texi
+
+check-local: validate
 
 validate: stamp-doc-xml
 	xmllint --noout --noblanks --postvalid manual.xml

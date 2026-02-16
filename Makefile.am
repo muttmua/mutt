@@ -204,6 +204,8 @@ uninstall-local:
 pclean:
 	cat /dev/null > $(top_srcdir)/PATCHES
 
+check-local: check-security tabcheck
+
 check-security:
 	(cd $(top_srcdir) && ./check_sec.sh)
 
@@ -221,4 +223,8 @@ update-doc:
 shellcheck:
 	(find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
 
-.PHONY: commit pclean check-security shellcheck
+tabcheck:
+	find . -name '*.[ch]' ! -name keymap_defs.h ! -name conststrings.c -print0 | \
+		xargs -0 perl -n -e '/\t/ && die "tab found in $$ARGV"'
+
+.PHONY: commit pclean check-security shellcheck tabcheck
