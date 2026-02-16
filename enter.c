@@ -175,7 +175,7 @@ static void replace_part(ENTER_STATE *state, size_t from, char *buf)
   if (savelen)
   {
     savebuf = safe_calloc(savelen, sizeof(wchar_t));
-    memcpy(savebuf, state->wbuf + state->curpos, savelen * sizeof(wchar_t));
+    wmemcpy(savebuf, state->wbuf + state->curpos, savelen);
   }
 
   /* Convert to wide characters */
@@ -191,7 +191,7 @@ static void replace_part(ENTER_STATE *state, size_t from, char *buf)
     }
 
     /* Restore suffix */
-    memcpy(state->wbuf + state->curpos, savebuf, savelen * sizeof(wchar_t));
+    wmemcpy(state->wbuf + state->curpos, savebuf, savelen);
     FREE(&savebuf);
   }
 
@@ -392,7 +392,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               --i;
             if (i)
               --i;
-            memmove(state->wbuf + i, state->wbuf + state->curpos, (state->lastchar - state->curpos) * sizeof(wchar_t));
+            wmemmove(state->wbuf + i, state->wbuf + state->curpos, state->lastchar - state->curpos);
             state->lastchar -= state->curpos - i;
             state->curpos = i;
           }
@@ -499,7 +499,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               ++i;
             while (i < state->lastchar && COMB_CHAR(state->wbuf[i]))
               ++i;
-            memmove(state->wbuf + state->curpos, state->wbuf + i, (state->lastchar - i) * sizeof(wchar_t));
+            wmemmove(state->wbuf + state->curpos, state->wbuf + i, state->lastchar - i);
             state->lastchar -= i - state->curpos;
           }
           break;
@@ -521,8 +521,8 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               else
                 --i;
             }
-            memmove(state->wbuf + i, state->wbuf + state->curpos,
-                    (state->lastchar - state->curpos) * sizeof(wchar_t));
+            wmemmove(state->wbuf + i, state->wbuf + state->curpos,
+                     state->lastchar - state->curpos);
             state->lastchar += i - state->curpos;
             state->curpos = i;
           }
@@ -553,8 +553,8 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
             }
           }
 
-          memmove(state->wbuf + state->curpos, state->wbuf + i,
-                  (state->lastchar - i) * sizeof(wchar_t));
+          wmemmove(state->wbuf + state->curpos, state->wbuf + i,
+                   state->lastchar - i);
           state->lastchar += state->curpos - i;
           break;
 
@@ -580,7 +580,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               ;
             my_wcstombs(buf, buflen, state->wbuf + i, state->curpos - i);
             if (tempbuf && templen == state->lastchar - i &&
-                !memcmp(tempbuf, state->wbuf + i, (state->lastchar - i) * sizeof(wchar_t)))
+                !wmemcmp(tempbuf, state->wbuf + i, state->lastchar - i))
             {
               mutt_select_file(buf, buflen, 0);
               if (*buf)
@@ -593,7 +593,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               templen = state->lastchar - i;
               safe_realloc(&tempbuf, templen * sizeof(wchar_t));
               if (tempbuf)
-                memcpy(tempbuf, state->wbuf + i, templen * sizeof(wchar_t));
+                wmemcpy(tempbuf, state->wbuf + i, templen);
             }
             else
               BEEP();
@@ -722,7 +722,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
             /* see if the path has changed from the last time */
             if ((!tempbuf && !state->lastchar) ||
                 (tempbuf && templen == state->lastchar &&
-                 !memcmp(tempbuf, state->wbuf, state->lastchar * sizeof(wchar_t))))
+                 !wmemcmp(tempbuf, state->wbuf, state->lastchar)))
             {
               _mutt_select_file(buf, buflen,
                                 ((flags & MUTT_MAILBOX) ? MUTT_SEL_MAILBOX : 0) | (multiple ? MUTT_SEL_MULTI : 0),
@@ -751,7 +751,7 @@ int _mutt_enter_string(char *buf, size_t buflen, int col,
               templen = state->lastchar;
               safe_realloc(&tempbuf, templen * sizeof(wchar_t));
               if (tempbuf)
-                memcpy(tempbuf, state->wbuf, templen * sizeof(wchar_t));
+                wmemcpy(tempbuf, state->wbuf, templen);
             }
             else
               BEEP(); /* let the user know that nothing matched */
@@ -875,7 +875,7 @@ self_insert:
           state->wbuflen = state->lastchar + 20;
           safe_realloc(&state->wbuf, state->wbuflen * sizeof(wchar_t));
         }
-        memmove(state->wbuf + state->curpos + 1, state->wbuf + state->curpos, (state->lastchar - state->curpos) * sizeof(wchar_t));
+        wmemmove(state->wbuf + state->curpos + 1, state->wbuf + state->curpos, state->lastchar - state->curpos);
         state->wbuf[state->curpos++] = wc;
         state->lastchar++;
       }
