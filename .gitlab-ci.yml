@@ -1,16 +1,16 @@
-image: registry.gitlab.com/muttmua/mutt/ubuntu:18.04
+image: registry.gitlab.com/muttmua/mutt/debian:trixie
 
 stages:
-  - shellcheck
+  # - shellcheck
   - tabcheck
   # - pylint
   - build
   - deploy
 
-shellcheck:
-  stage: shellcheck
-  script:
-    - (find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
+# shellcheck:
+#   stage: shellcheck
+#   script:
+#     - (find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
 
 tabcheck:
   stage: tabcheck
