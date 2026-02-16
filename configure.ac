@@ -1550,6 +1550,10 @@ wc_funcs=maybe
 AC_ARG_WITH(wc-funcs, AS_HELP_STRING([--without-wc-funcs],[Do not use the system's wchar_t functions]),
         wc_funcs=$withval)
 
+if test "$wc_funcs" = no; then
+        AC_MSG_WARN([--without-wc-funcs is deprecated and will be removed in mutt 2.5.0])
+fi
+
 if test "$wc_funcs" != yes && test "$wc_funcs" != no; then
         AC_CACHE_CHECK([for wchar_t functions], mutt_cv_wc_funcs,
                 mutt_cv_wc_funcs=no
@@ -1565,6 +1569,9 @@ if test "$wc_funcs" != yes && test "$wc_funcs" != no; then
 #endif]], [[mbrtowc(0, 0, 0, 0); wctomb(0, 0); wcwidth(0); iswblank(0);
         iswprint(0); iswspace(0); towlower(0); towupper(0); iswalnum(0)]])],[mutt_cv_wc_funcs=yes],[]))
         wc_funcs=$mutt_cv_wc_funcs
+        if test "$wc_funcs" = no; then
+           AC_MSG_WARN([This system is missing needed wchar_t functions. Starting with mutt 2.5.0 this system may no longer be able to compile mutt.])
+        fi
 fi
 
 if test $wc_funcs = yes; then
