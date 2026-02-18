@@ -1028,13 +1028,13 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
 
         /* remove any leading space. */
         ct = buf;
-        SKIPWS (ct);
+        SKIP_ASCII_WS (ct);
 
         /* position on the next field in this line */
         if ((p = strpbrk (ct, " \t")) == NULL)
           continue;
         *p++ = 0;
-        SKIPWS (p);
+        SKIP_ASCII_WS (p);
 
         /* cycle through the file extensions */
         while ((p = strtok (p, " \t\n")))
@@ -1053,7 +1053,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
             }
             *p++ = 0;
 
-            for (q = p; *q && !ISSPACE (*q); q++)
+            for (q = p; *q && !IS_ASCII_WS (*q); q++)
               ;
 
             mutt_substrcpy (subtype, p, q, sizeof (subtype));

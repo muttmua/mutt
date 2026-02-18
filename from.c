@@ -28,9 +28,9 @@
 
 static const char *next_word (const char *s)
 {
-  while (*s && !ISSPACE (*s))
+  while (*s && !IS_ASCII_WS (*s))
     s++;
-  SKIPWS (s);
+  SKIP_ASCII_WS (s);
   return s;
 }
 
@@ -38,9 +38,9 @@ static const char *prev_word (const char * const bos, const char *cur)
 {
   if (cur <= bos)
     return bos;
-  while (cur > bos && ISSPACE (*(cur-1)))
+  while (cur > bos && IS_ASCII_WS (*(cur-1)))
     cur--;
-  while (cur > bos && !ISSPACE (*(cur-1)))
+  while (cur > bos && !IS_ASCII_WS (*(cur-1)))
     cur--;
   return cur;
 }
@@ -59,7 +59,7 @@ static int is_day_name (const char *s)
 {
   int i;
 
-  if ((strlen (s) < 3) || !*(s + 3) || !ISSPACE (*(s+3)))
+  if ((strlen (s) < 3) || !*(s + 3) || !IS_ASCII_WS (*(s+3)))
     return 0;
   for (i=0; i<7; i++)
     if (mutt_strncasecmp (s, Weekdays[i], 3) == 0)
@@ -100,7 +100,7 @@ static int is_from_forward_scan (const char *s,
     size_t len;
     short q = 0;
 
-    for (p = s; *p && (q || !ISSPACE (*p)); p++)
+    for (p = s; *p && (q || !IS_ASCII_WS (*p)); p++)
     {
       if (*p == '\\')
       {
@@ -137,7 +137,7 @@ static int is_from_forward_scan (const char *s,
     }
 
     s = p + 1;
-    SKIPWS (s);
+    SKIP_ASCII_WS (s);
     if (!*s)
       return 0;
 
@@ -268,7 +268,7 @@ static int is_from_reverse_scan (const char * const bos,
   }
 
   /* return path? */
-  while (cur > bos && ISSPACE (*(cur-1)))
+  while (cur > bos && IS_ASCII_WS (*(cur-1)))
     cur--;
   if (cur != bos && path)
   {

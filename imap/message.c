@@ -1924,7 +1924,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
 
   while (*s)
   {
-    SKIPWS (s);
+    SKIP_ASCII_WS (s);
 
     if (ascii_strncasecmp ("FLAGS", s, 5) == 0)
     {
@@ -1934,7 +1934,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     else if (ascii_strncasecmp ("UID", s, 3) == 0)
     {
       s += 3;
-      SKIPWS (s);
+      SKIP_ASCII_WS (s);
       if (mutt_atoui (s, &h->data->uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
         return -1;
 
@@ -1943,7 +1943,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     else if (ascii_strncasecmp ("INTERNALDATE", s, 12) == 0)
     {
       s += 12;
-      SKIPWS (s);
+      SKIP_ASCII_WS (s);
       if (*s != '\"')
       {
         muttdbg(1, "bogus INTERNALDATE entry: %s", s);
@@ -1966,7 +1966,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     else if (ascii_strncasecmp ("RFC822.SIZE", s, 11) == 0)
     {
       s += 11;
-      SKIPWS (s);
+      SKIP_ASCII_WS (s);
       ptmp = tmp;
       dlen = sizeof(tmp) - 1;
       while (isdigit ((unsigned char) *s) && dlen)
@@ -1987,7 +1987,7 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
     else if (ascii_strncasecmp ("MODSEQ", s, 6) == 0)
     {
       s += 6;
-      SKIPWS(s);
+      SKIP_ASCII_WS(s);
       if (*s != '(')
       {
         muttdbg (1, "bogus MODSEQ response: %s", s);
@@ -2029,7 +2029,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
     return NULL;
   }
   s += 5;
-  SKIPWS(s);
+  SKIP_ASCII_WS(s);
   if (*s != '(')
   {
     muttdbg (1, "bogus FLAGS response: %s", s);
@@ -2079,14 +2079,14 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
       if (!hd->keywords)
         hd->keywords = mutt_new_list ();
 
-      while (*s && !ISSPACE (*s) && *s != ')')
+      while (*s && !IS_ASCII_WS (*s) && *s != ')')
         s++;
       ctmp = *s;
       *s = '\0';
       mutt_add_list (hd->keywords, flag_word);
       *s = ctmp;
     }
-    SKIPWS(s);
+    SKIP_ASCII_WS(s);
   }
 
   /* wrap up, or note bad flags response */

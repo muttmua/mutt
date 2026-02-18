@@ -325,7 +325,7 @@ int mutt_label_message(HEADER *hdr)
     return 0;
 
   new = buf;
-  SKIPWS(new);
+  SKIP_ASCII_WS(new);
   if (*new == '\0')
     new = NULL;
 

@@ -265,9 +265,9 @@ int iswprint (wint_t wc)
 int iswspace (wint_t wc)
 {
   if (Charset_is_utf8 || charset_is_ja)
-    return (9 <= wc && wc <= 13) || wc == 32;
+    return IS_ASCII_WS (wc);
   else
-    return (0 <= wc && wc < 256) ? isspace (wc) : 0;
+    return (0 <= wc && wc < 256) ? isspace (wc) : 0;  /* __SAFE_ISSPACE_CHECKED__ */
 }
 
 int iswblank (wint_t wc)

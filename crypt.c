@@ -1221,7 +1221,7 @@ const char* crypt_get_fingerprint_or_id (char *p, const char **pphint,
    * if an ID was found and to simplify logic in the key loop's inner
    * condition of the caller. */
 
-  pf = mutt_skip_whitespace (p);
+  pf = mutt_skip_ascii_ws (p);
   if (!mutt_strncasecmp (pf, "0x", 2))
     pf += 2;
 
@@ -1258,7 +1258,7 @@ const char* crypt_get_fingerprint_or_id (char *p, const char **pphint,
     s1 = s2 = pfcopy;
     do
     {
-      *(s1++) = *(s2 = mutt_skip_whitespace (s2));
+      *(s1++) = *(s2 = mutt_skip_ascii_ws (s2));
     } while (*(s2++));
 
     phint = pfcopy;

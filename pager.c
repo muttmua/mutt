@@ -174,7 +174,7 @@ static int check_sig (const char *s, struct line_t *info, int n)
     /* check for a blank line */
     while (*s)
     {
-      if (!ISSPACE (*s))
+      if (!IS_ASCII_WS (*s))
         return 0;
       s++;
     }

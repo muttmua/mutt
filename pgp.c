@@ -371,7 +371,7 @@ static void pgp_copy_clearsigned (FILE *fpin, STATE *s, char *charset)
 
     if (armor_header)
     {
-      char *p = mutt_skip_whitespace (buf);
+      char *p = mutt_skip_ascii_ws (buf);
       if (*p == '\0')
         armor_header = 0;
       continue;

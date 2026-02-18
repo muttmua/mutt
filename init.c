@@ -184,13 +184,13 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
     mutt_buffer_increase_size (dest, STRING);
   mutt_buffer_clear (dest);
 
-  SKIPWS (tok->dptr);
+  SKIP_ASCII_WS (tok->dptr);
 
   if ((*tok->dptr == '(') && !(flags & MUTT_TOKEN_NOLISP) &&
       ((flags & MUTT_TOKEN_LISP) || option (OPTMUTTLISPINLINEEVAL)))
   {
     int rc = mutt_lisp_eval_list (dest, tok);
-    SKIPWS (tok->dptr);
+    SKIP_ASCII_WS (tok->dptr);
     return rc;
   }
 
@@ -198,7 +198,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
   {
     if (!qc)
     {
-      if ((ISSPACE (ch) && !(flags & MUTT_TOKEN_SPACE)) ||
+      if ((IS_ASCII_WS (ch) && !(flags & MUTT_TOKEN_SPACE)) ||
           (ch == '#' && !(flags & MUTT_TOKEN_COMMENT)) ||
           (ch == '=' && (flags & MUTT_TOKEN_EQUAL)) ||
           (ch == ';' && !(flags & MUTT_TOKEN_SEMICOLON)) ||
@@ -391,7 +391,7 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
     else
       mutt_buffer_addch (dest, ch);
   }
-  SKIPWS (tok->dptr);
+  SKIP_ASCII_WS (tok->dptr);
   return 0;
 }
 
@@ -2226,7 +2226,7 @@ static int parse_setenv(BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFF
   if (*s->dptr == '=')
   {
     s->dptr++;
-    SKIPWS (s->dptr);
+    SKIP_ASCII_WS (s->dptr);
   }
 
   if (!MoreArgs (s))
@@ -2293,7 +2293,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
       snprintf (err->data, err->dsize, _("%s: unknown variable"), tmp->data);
       return (-1);
     }
-    SKIPWS (s->dptr);
+    SKIP_ASCII_WS (s->dptr);
 
     if (reset)
     {
@@ -3067,7 +3067,7 @@ int mutt_parse_rc_buffer (BUFFER *line, BUFFER *token, BUFFER *err)
   /* Read from the beginning of line->data */
   mutt_buffer_rewind (line);
 
-  SKIPWS (line->dptr);
+  SKIP_ASCII_WS (line->dptr);
   while (*line->dptr)
   {
     if (*line->dptr == '#')
@@ -3165,11 +3165,11 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
   int spaces; /* keep track of the number of leading spaces on the line */
   myvar_t *myv;
 
-  SKIPWS (buffer);
+  SKIP_ASCII_WS (buffer);
   spaces = buffer - pt;
 
   pt = buffer + pos - spaces;
-  while ((pt > buffer) && !isspace ((unsigned char) *pt))
+  while ((pt > buffer) && !IS_ASCII_WS ((unsigned char) *pt))
     pt--;
 
   if (pt == buffer) /* complete cmd */
@@ -3312,7 +3312,7 @@ int mutt_command_complete (char *buffer, size_t len, int pos, int numtabs)
   else if (!mutt_strncmp (buffer, "cd", 2))
   {
     pt = buffer + 2;
-    SKIPWS (pt);
+    SKIP_ASCII_WS (pt);
     if (numtabs == 1)
     {
       if (mutt_complete (pt, buffer + len - pt - spaces))
@@ -3364,11 +3364,11 @@ int mutt_var_value_complete (char *buffer, size_t len, int pos)
   if (buffer[0] == 0)
     return 0;
 
-  SKIPWS (buffer);
+  SKIP_ASCII_WS (buffer);
   spaces = buffer - pt;
 
   pt = buffer + pos - spaces;
-  while ((pt > buffer) && !isspace ((unsigned char) *pt))
+  while ((pt > buffer) && !IS_ASCII_WS ((unsigned char) *pt))
     pt--;
   pt++; /* move past the space */
   if (*pt == '=') /* abort if no var before the '=' */
@@ -4137,7 +4137,7 @@ int mutt_label_complete (char *buffer, size_t len, int numtabs)
   if (!Context || !Context->label_hash)
     return 0;
 
-  SKIPWS (buffer);
+  SKIP_ASCII_WS (buffer);
   spaces = buffer - pt;
 
   /* first TAB. Collect all the matches */

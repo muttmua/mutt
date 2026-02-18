@@ -74,7 +74,7 @@ static int read_list (BUFFER *list, BUFFER *line)
   if (!line->dptr || !*line->dptr)
     return 0;
 
-  SKIPWS (line->dptr);
+  SKIP_ASCII_WS (line->dptr);
 
   if (*line->dptr != '(')
     return -1;
@@ -135,7 +135,7 @@ static int read_atom (BUFFER *atom, BUFFER *line)
   if (!line->dptr || !*line->dptr)
     return 0;
 
-  SKIPWS (line->dptr);
+  SKIP_ASCII_WS (line->dptr);
 
   while (*line->dptr)
   {
@@ -156,7 +156,7 @@ static int read_atom (BUFFER *atom, BUFFER *line)
     }
     else if (!quotechar)
     {
-      if (ISSPACE (ch) || ch == '(' || ch == ')')
+      if (IS_ASCII_WS (ch) || ch == '(' || ch == ')')
         break;
       if (ch == '"' || ch == '\'')
         quotechar = ch;
@@ -180,7 +180,7 @@ static int read_sexp (BUFFER *sexp, BUFFER *line)
   if (!line->dptr || !*line->dptr)
     return 0;
 
-  SKIPWS (line->dptr);
+  SKIP_ASCII_WS (line->dptr);
 
   if (*line->dptr == '(')
     rc = read_list (sexp, line);
@@ -472,7 +472,7 @@ int mutt_lisp_eval_list (BUFFER *result, BUFFER *line)
   function = mutt_buffer_new ();
   if (read_sexp (function, list) <= 0)
     goto cleanup;
-  SKIPWS (list->dptr);
+  SKIP_ASCII_WS (list->dptr);
 
   if (eval_function (result, mutt_b2s (function), list) < 0)
     goto cleanup;

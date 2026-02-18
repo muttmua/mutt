@@ -591,7 +591,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
 
     /* server shut down our connection */
     s += 3;
-    SKIPWS (s);
+    SKIP_ASCII_WS (s);
     mutt_error ("%s", s);
     mutt_sleep (2);
     cmd_handle_fatal (idata);
@@ -812,7 +812,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 
   while (*s)
   {
-    SKIPWS (s);
+    SKIP_ASCII_WS (s);
 
     if (ascii_strncasecmp ("FLAGS", s, 5) == 0)
     {
@@ -821,7 +821,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
         break;
 
       s += 5;
-      SKIPWS(s);
+      SKIP_ASCII_WS(s);
       if (*s != '(')
       {
         muttdbg(1, "bogus FLAGS response: %s", s);
@@ -841,7 +841,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
     else if (ascii_strncasecmp ("UID", s, 3) == 0)
     {
       s += 3;
-      SKIPWS (s);
+      SKIP_ASCII_WS (s);
       if (mutt_atoui (s, &uid, MUTT_ATOI_ALLOW_TRAILING) < 0)
       {
         muttdbg(1, "cmd_parse_fetch: Illegal UID.  Skipping update.");
@@ -860,7 +860,7 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
     else if (ascii_strncasecmp ("MODSEQ", s, 6) == 0)
     {
       s += 6;
-      SKIPWS(s);
+      SKIP_ASCII_WS(s);
       if (*s != '(')
       {
         muttdbg (1, "bogus MODSEQ response: %s", s);
@@ -970,7 +970,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
     {
       *s = '\0';
       s++;
-      SKIPWS(s);
+      SKIP_ASCII_WS(s);
     }
   }
   else
@@ -1041,7 +1041,7 @@ static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
   /* zero out current rights set */
   memset (idata->ctx->rights, 0, sizeof (idata->ctx->rights));
 
-  while (*s && !isspace((unsigned char) *s))
+  while (*s && !IS_ASCII_WS((unsigned char) *s))
   {
     switch (*s)
     {
@@ -1150,7 +1150,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
     s = mailbox + litlen;
     *s = '\0';
     s++;
-    SKIPWS(s);
+    SKIP_ASCII_WS(s);
   }
   else
   {

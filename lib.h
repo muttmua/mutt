@@ -74,7 +74,6 @@
 
 # define FREE(x) safe_free(x)
 # define NONULL(x) x?x:""
-# define ISSPACE(c) isspace((unsigned char)c)
 
 #ifdef HAVE_MEMCCPY
 # define strfcpy(A,B,C) memccpy(A,B,0,(C)-1), *((A)+(C)-1)=0
@@ -106,27 +105,43 @@
 
 #define FOREVER while (1)
 
-/* this macro must check for *c == 0 since isspace(0) has unreliable behavior
-   on some systems */
-# define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
+/*
+ * ASCII Whitespace
+ * 0x09-0x0d (\t \n \v \f \r)
+ * 0x20      (space)
+ */
+#define IS_ASCII_WS(c) ((9 <= (c) && (c) <= 13) || (c) == 32)
 
+#define SKIP_ASCII_WS(c) while (IS_ASCII_WS (*(c))) c++;
+
+/*
+ * WSP as defined by RFC5322.
+ * This is used primarily for parsing header fields.
+ */
 #define EMAIL_WSP " \t\r\n"
 
-/* skip over WSP as defined by RFC5322.  This is used primarily for parsing
- * header fields. */
+static inline int is_email_wsp (char c)
+{
+  return c && (strchr(EMAIL_WSP, c) != NULL);
+}
 
-static inline char *skip_email_wsp(const char *s)
+static inline char *skip_email_wsp (const char *s)
 {
   if (s)
     return (char *)(s + strspn(s, EMAIL_WSP));
   return (char *)s;
 }
 
-static inline int is_email_wsp(char c)
-{
-  return c && (strchr(EMAIL_WSP, c) != NULL);
-}
+/*
+ * Locale-defined whitespace.  This shouldn't be used much, if all
+ * inside Mutt, because on some platforms it can return true for
+ * unexpected values, such as 0xa0 or 0x85.
+ */
+#define IS_LOCALE_WS(c) isspace((unsigned char)c)
 
+/* this macro must check for *c == 0 since isspace(0) has unreliable behavior
+   on some systems */
+#define SKIP_LOCALE_WS(c) while (*(c) && IS_LOCALE_WS (*(c))) c++;
 
 /*
  * These functions aren't defined in lib.c, but
@@ -186,7 +201,7 @@ void mutt_debug_f (const char *, const int, const char *, const int err, const c
 
 char *mutt_concat_path (char *, const char *, const char *, size_t);
 char *mutt_read_line (char *, size_t *, FILE *, int *, int);
-char *mutt_skip_whitespace (char *);
+char *mutt_skip_ascii_ws (char *);
 char *mutt_strlower (char *);
 char *mutt_substrcpy (char *, const char *, const char *, size_t);
 char *mutt_substrdup (const char *, const char *);
@@ -236,7 +251,7 @@ size_t mutt_strlen (const char *);
 void *safe_calloc (size_t, size_t);
 void *safe_malloc (size_t);
 void mutt_nocurses_error (const char *, ...);
-void mutt_remove_trailing_ws (char *);
+void mutt_remove_trailing_ascii_ws (char *);
 void mutt_sanitize_filename (char *, int flags);
 void mutt_str_replace (char **p, const char *s);
 int mutt_mkdir (char *path, mode_t mode);

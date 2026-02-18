@@ -749,7 +749,7 @@ static char* imap_get_flags (LIST** hflags, char* s)
     return NULL;
   }
   s += 5;
-  SKIPWS(s);
+  SKIP_ASCII_WS(s);
   if (*s != '(')
   {
     muttdbg (1, "bogus FLAGS response: %s", s);
@@ -763,9 +763,9 @@ static char* imap_get_flags (LIST** hflags, char* s)
   while (*s && *s != ')')
   {
     s++;
-    SKIPWS(s);
+    SKIP_ASCII_WS(s);
     flag_word = s;
-    while (*s && (*s != ')') && !ISSPACE (*s))
+    while (*s && (*s != ')') && !IS_ASCII_WS (*s))
       s++;
     ctmp = *s;
     *s = '\0';
@@ -1398,7 +1398,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   if (mutt_bit_isset (idata->ctx->rights, MUTT_ACL_WRITE))
     imap_add_keywords (flags, hdr, idata->flags, sizeof (flags));
 
-  mutt_remove_trailing_ws (flags);
+  mutt_remove_trailing_ascii_ws (flags);
 
   /* UW-IMAP is OK with null flags, Cyrus isn't. The only solution is to
    * explicitly revoke all system flags (if we have permission) */
@@ -1411,7 +1411,7 @@ int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     imap_set_flag (idata, MUTT_ACL_DELETE, !HEADER_DATA(hdr)->deleted,
                    "\\Deleted ", flags, sizeof (flags));
 
-    mutt_remove_trailing_ws (flags);
+    mutt_remove_trailing_ascii_ws (flags);
 
     mutt_buffer_addstr (cmd, " -FLAGS.SILENT (");
   }
@@ -2247,7 +2247,7 @@ static int imap_compile_search (const pattern_t* pat, BUFFER* buf)
         /* and field */
         *delim = ':';
         delim++;
-        SKIPWS(delim);
+        SKIP_ASCII_WS(delim);
         imap_quote_string (term, sizeof (term), delim);
         mutt_buffer_addstr (buf, term);
         break;

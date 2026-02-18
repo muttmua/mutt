@@ -360,11 +360,11 @@ int mutt_builtin_editor (SEND_CONTEXT *sctx)
     {
       /* remove trailing whitespace from the line */
       p = tmp + mutt_strlen (tmp) - 1;
-      while (p >= tmp && ISSPACE (*p))
+      while (p >= tmp && IS_ASCII_WS (*p))
         *p-- = 0;
 
       p = tmp + 2;
-      SKIPWS (p);
+      SKIP_ASCII_WS (p);
 
       switch (tmp[1])
       {

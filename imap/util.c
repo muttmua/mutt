@@ -656,12 +656,12 @@ char *imap_next_word (char *s)
     }
     if (*s == '\"')
       quoted = quoted ? 0 : 1;
-    if (!quoted && ISSPACE (*s))
+    if (!quoted && IS_ASCII_WS (*s))
       break;
     s++;
   }
 
-  SKIPWS (s);
+  SKIP_ASCII_WS (s);
   return s;
 }
 
@@ -889,7 +889,7 @@ int imap_wordcasecmp(const char *a, const char *b)
   tmp[SHORT_STRING-1] = 0;
   for (i=0;i < SHORT_STRING-2;i++,s++)
   {
-    if (!*s || ISSPACE(*s))
+    if (!*s || IS_ASCII_WS(*s))
     {
       tmp[i] = 0;
       break;

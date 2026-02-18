@@ -92,7 +92,7 @@ void pop_error (POP_DATA *pop_data, char *msg)
   }
 
   strfcpy (t, c, sizeof (pop_data->err_msg) - strlen (pop_data->err_msg));
-  mutt_remove_trailing_ws (pop_data->err_msg);
+  mutt_remove_trailing_ascii_ws (pop_data->err_msg);
 }
 
 /* Parse CAPA output */

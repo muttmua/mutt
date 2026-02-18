@@ -653,7 +653,7 @@ static int eat_range (pattern_t *pat, int flags, BUFFER *s, BUFFER *err)
   if (skip_quote && *tmp == '"')
     tmp++;
 
-  SKIPWS (tmp);
+  SKIP_ASCII_WS (tmp);
   s->dptr = tmp;
   return 0;
 }
@@ -814,7 +814,7 @@ static const char * parse_date_range (const char* pc, struct tm *min,
   {
     const char *pt;
     char ch = *pc++;
-    SKIPWS (pc);
+    SKIP_ASCII_WS (pc);
     switch (ch)
     {
       case '-':
@@ -878,7 +878,7 @@ static const char * parse_date_range (const char* pc, struct tm *min,
       default:
         flag |= MUTT_PDR_ERRORDONE;
     }
-    SKIPWS (pc);
+    SKIP_ASCII_WS (pc);
   }
   if ((flag & MUTT_PDR_ERROR) && !(flag & MUTT_PDR_ABSOLUTE))
   { /* getDate has its own error message, don't overwrite it here */
@@ -968,11 +968,11 @@ static int eval_date_minmax (pattern_t *pat, const char *s, BUFFER *err)
         return (-1);
       }
       haveMin = TRUE;
-      SKIPWS (pc);
+      SKIP_ASCII_WS (pc);
       if (*pc == '-')
       {
         const char *pt = pc + 1;
-        SKIPWS (pt);
+        SKIP_ASCII_WS (pt);
         untilNow = (*pt == '\0');
       }
     }
@@ -1172,7 +1172,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
   ps.dptr = s;
   ps.dsize = mutt_strlen (s);
 
-  SKIPWS (ps.dptr);
+  SKIP_ASCII_WS (ps.dptr);
   while (*ps.dptr)
   {
     switch (*ps.dptr)
@@ -1316,7 +1316,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
         tmp->op = entry->op;
 
         ps.dptr++; /* eat the operator and any optional whitespace */
-        SKIPWS (ps.dptr);
+        SKIP_ASCII_WS (ps.dptr);
 
         if (entry->eat_arg)
         {
@@ -1382,7 +1382,7 @@ pattern_t *mutt_pattern_comp (/* const */ char *s, int flags, BUFFER *err)
         mutt_pattern_free (&curlist);
         return NULL;
     }
-    SKIPWS (ps.dptr);
+    SKIP_ASCII_WS (ps.dptr);
   }
   if (!curlist)
   {

@@ -742,17 +742,17 @@ const char *mutt_stristr (const char *haystack, const char *needle)
   return NULL;
 }
 
-char *mutt_skip_whitespace (char *p)
+char *mutt_skip_ascii_ws (char *p)
 {
-  SKIPWS (p);
+  SKIP_ASCII_WS (p);
   return p;
 }
 
-void mutt_remove_trailing_ws (char *s)
+void mutt_remove_trailing_ascii_ws (char *s)
 {
   char *p;
 
-  for (p = s + mutt_strlen (s) - 1 ; p >= s && ISSPACE (*p) ; p--)
+  for (p = s + mutt_strlen (s) - 1 ; p >= s && IS_ASCII_WS (*p) ; p--)
     *p = 0;
 }
 

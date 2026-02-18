@@ -256,7 +256,7 @@ static void format_line (FILE *f, int ismacro,
 
       if (ismacro >= 0)
       {
-        SKIPWS(t3);
+        SKIP_ASCII_WS(t3);
         n = get_wrapped_width (t3, n);
       }
 

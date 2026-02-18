@@ -38,6 +38,7 @@ do_check '\<sprintf.*%s' __SPRINTF_CHECKED__ "Alert: Unchecked sprintf calls."
 do_check '\<strncat' __STRNCAT_CHECKED__ "You probably meant safe_strcat here."
 do_check '\<safe_free' __SAFE_FREE_CHECKED__ "You probably meant FREE here."
 do_check '\<FREE[ ]?\([^&]' __FREE_CHECKED__ "You probably meant FREE(&...) here."
+do_check '\<isspace' __SAFE_ISSPACE_CHECKED__ "You probably meant IS_ASCII_WS here."
 
 # don't do this check on others' code.
 do_check_files '\<(malloc|realloc|free|strdup)[ 	]*\(' __MEM_CHECKED__ "Alert: Use of traditional memory management calls." \

@@ -63,7 +63,7 @@ int mutt_parse_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER 
   if (*s->dptr == '!')
   {
     s->dptr++;
-    SKIPWS (s->dptr);
+    SKIP_ASCII_WS (s->dptr);
     not = 1;
   }
 
@@ -346,7 +346,7 @@ int mutt_parse_idxfmt_hook (BUFFER *buf, BUFFER *s, union pointer_long_t udata, 
   if (*s->dptr == '!')
   {
     s->dptr++;
-    SKIPWS (s->dptr);
+    SKIP_ASCII_WS (s->dptr);
     not = 1;
   }
   mutt_extract_token (pattern, s, 0);

@@ -269,7 +269,7 @@ static void mutt_decode_quoted (STATE *s, LOFF_T len, int istext, iconv_t cd)
     /* chop trailing whitespace if we got the full line */
     if (last == '\n')
     {
-      while (linelen > 0 && ISSPACE (line[linelen-1]))
+      while (linelen > 0 && IS_ASCII_WS (line[linelen-1]))
         linelen--;
       line[linelen]=0;
     }
@@ -390,7 +390,7 @@ static void mutt_decode_uuencoded (STATE *s, LOFF_T len, int istext, iconv_t cd)
     if ((fgets(tmps, sizeof(tmps), s->fpin)) == NULL)
       goto cleanup;
     len -= mutt_strlen(tmps);
-    if ((!mutt_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
+    if ((!mutt_strncmp (tmps, "begin", 5)) && IS_ASCII_WS (tmps[5]))
       break;
   }
   while (len > 0)

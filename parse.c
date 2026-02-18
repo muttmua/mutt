@@ -335,7 +335,7 @@ void mutt_parse_content_type (char *s, BODY *ct)
   if ((pc = strchr(s, ';')) != NULL)
   {
     *pc++ = 0;
-    while (*pc && ISSPACE (*pc))
+    while (*pc && IS_ASCII_WS (*pc))
       pc++;
     ct->parameter = parse_parameters(pc, 0);
 
@@ -357,7 +357,7 @@ void mutt_parse_content_type (char *s, BODY *ct)
   if ((subtype = strchr(s, '/')))
   {
     *subtype++ = '\0';
-    for (pc = subtype; *pc && !ISSPACE(*pc) && *pc != ';'; pc++)
+    for (pc = subtype; *pc && !IS_ASCII_WS(*pc) && *pc != ';'; pc++)
       ;
     *pc = '\0';
     ct->subtype = safe_strdup (subtype);
@@ -737,7 +737,7 @@ static BODY *_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off,
       }
 
       /* Remove any trailing whitespace, up to the length of the boundary */
-      for (i = len - 1; ISSPACE (buffer[i]) && i >= blen + 2; i--)
+      for (i = len - 1; IS_ASCII_WS (buffer[i]) && i >= blen + 2; i--)
         buffer[i] = 0;
 
       /* Check for the end boundary */
