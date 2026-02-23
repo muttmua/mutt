@@ -1,23 +1,36 @@
 image: freebsd/latest
 packages:
-- automake
 - autoconf
-- mime-support
-- urlview
-- indexinfo
-- gpgme
-- libgpg-error
-- libassuan
-- libidn2
-- libunistring
-- kyotocabinet
-- libiconv
+- automake
 - gettext-runtime
 - gettext-tools
+- gpgme
+- indexinfo
+- kyotocabinet
+- libassuan
+- libgpg-error
+- libiconv
+- libidn2
+- libunistring
+- mime-support
+- urlview
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
-- configure: |
+- default: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make -j4 CFLAGS='-Wall -Werror'
+
+- without-wc-funcs: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --without-wc-funcs
+    make -j4 CFLAGS='-Wall -Werror'
+
+- original: |
     cd mutt
     autoreconf -if
     ./configure \
@@ -34,6 +47,4 @@ tasks:
         --without-sasl \
         --with-libiconv-prefix=/usr/local \
         --with-libintl-prefix=/usr/local
-- build: |
-    cd mutt
-    make
+      make -j4 CFLAGS='-Wall -Werror'
