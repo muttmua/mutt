@@ -9,6 +9,7 @@ packages:
 - libncurses-dev
 - libsasl2-dev
 - libssl-dev
+- tcc
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
@@ -40,4 +41,10 @@ tasks:
         --with-curses \
         --with-ssl \
         --with-sasl
+    make -j4 CFLAGS='-Wall -Werror'
+
+- tcc: |
+    cd mutt
+    autoreconf -if
+    CC=tcc ./configure
     make -j4 CFLAGS='-Wall -Werror'
