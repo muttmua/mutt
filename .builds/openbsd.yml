@@ -1,0 +1,74 @@
+image: openbsd/latest
+packages:
+- autoconf-2.72p0
+- automake-1.18
+- gettext-runtime
+- gettext-tools
+- gpgme
+- indexinfo
+- kyotocabinet
+- libassuan
+- libgpg-error
+- libiconv
+- libidn2
+- libunistring
+- qdbm
+sources:
+- https://git.sr.ht/~mutt/mutt
+environment:
+  AUTOCONF_VERSION: 2.72
+  AUTOMAKE_VERSION: 1.18
+  LDFLAGS: -L/usr/local/lib
+tasks:
+- default: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make -j4 CFLAGS='-Wall -Werror'
+
+- without-wc-funcs: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --without-wc-funcs
+    make -j4 CFLAGS='-Wall -Werror'
+
+- original: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --enable-gpgme \
+        --enable-pop \
+        --enable-imap \
+        --enable-smtp \
+        --enable-hcache \
+        --enable-sidebar \
+        --with-kyotocabinet=/usr/local \
+        --with-mailpath=/var/spool/mail \
+        --with-curses \
+        --with-ssl \
+        --without-sasl \
+        --with-libiconv-prefix=/usr/local \
+        --with-libintl-prefix=/usr/local
+      make -j4 CFLAGS='-Wall -Werror'
+
+- openbsd: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+      --enable-compressed \
+      --enable-debug \
+      --enable-external_dotlock \
+      --disable-fcntl \
+      --enable-flock \
+      --with-idn2 \
+      --enable-imap \
+      --enable-pop \
+      --enable-sidebar \
+      --enable-smtp \
+      --mandir=${PREFIX}/man \
+      --with-docdir="${PREFIX}/share/doc/mutt" \
+      --with-ssl \
+      --enable-hcache \
+      --with-qdbm
+      make -j4 CFLAGS='-Wall -Werror'
