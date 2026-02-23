@@ -12,7 +12,20 @@ packages:
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
-- configure: |
+- default: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make -j4 CFLAGS='-Wall -Werror'
+
+- without-wc-funcs: |
+    cd mutt
+    autoreconf -if
+    ./configure \
+        --without-wc-funcs
+    make -j4 CFLAGS='-Wall -Werror'
+
+- original: |
     cd mutt
     autoreconf -if
     ./configure \
@@ -27,6 +40,4 @@ tasks:
         --with-curses \
         --with-ssl \
         --with-sasl
-- build: |
-    cd mutt
-    make
+    make -j4 CFLAGS='-Wall -Werror'
