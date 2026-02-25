@@ -221,7 +221,7 @@ update-doc:
 	(cd doc && $(MAKE) update-doc)
 
 shellcheck:
-	(find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck --exclude=SC2003,SC2006,SC2086,SC2162,SC2046
+	(find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck
 
 tabcheck:
 	find . -name '*.[ch]' ! -name keymap_defs.h ! -name conststrings.c -print0 | \
