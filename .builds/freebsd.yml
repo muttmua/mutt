@@ -5,6 +5,7 @@ packages:
 - gettext-runtime
 - gettext-tools
 - gpgme
+- hs-ShellCheck
 - indexinfo
 - kyotocabinet
 - libassuan
@@ -17,6 +18,12 @@ packages:
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
+- check: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make check-local
+
 - default: |
     cd mutt
     autoreconf -if

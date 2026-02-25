@@ -13,6 +13,7 @@ packages:
 - libidn2
 - libunistring
 - qdbm
+- shellcheck
 sources:
 - https://git.sr.ht/~mutt/mutt
 environment:
@@ -20,6 +21,12 @@ environment:
   AUTOMAKE_VERSION: 1.18
   LDFLAGS: -L/usr/local/lib
 tasks:
+- check: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make check-local
+
 - default: |
     cd mutt
     autoreconf -if

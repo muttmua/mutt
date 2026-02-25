@@ -10,11 +10,18 @@ packages:
 - ncurses-dev
 - openssl-dev
 - perl
+- shellcheck
 - tcc
 - tcc-libs-static
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
+- check: |
+    cd mutt
+    autoreconf -if
+    ./configure
+    make check-local
+
 - default: |
     cd mutt
     autoreconf -if
