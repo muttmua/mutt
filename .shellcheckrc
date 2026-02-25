@@ -1,0 +1,2 @@
+# SC2268 (style): Avoid x-prefix in comparisons as it no longer serves a purpose.
+disable=SC2268
