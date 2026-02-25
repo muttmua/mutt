@@ -928,6 +928,7 @@ void imap_keepalive (void)
       idata = (IMAP_DATA*) conn->data;
 
       if (idata->state >= IMAP_AUTHENTICATED
+          && (idata->status != IMAP_FATAL)
           && time(NULL) >= idata->lastread + ImapKeepalive)
       {
         if (idata->ctx)
