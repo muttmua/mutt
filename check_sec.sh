@@ -4,7 +4,7 @@
 # grep for some things which may look like security problems.
 #
 
-TMPFILE=`mktemp check_sec.tmp.XXXXXX` || exit 1
+TMPFILE=$(mktemp check_sec.tmp.XXXXXX) || exit 1
 
 RV=0;
 
@@ -27,7 +27,7 @@ do_check_files ()
 
 do_check ()
 {
-        do_check_files "$1" "$2" "$3" `find . -name '*.c' -print`
+        do_check_files "$1" "$2" "$3" $(find . -name '*.c' -print)
 }
 
 do_check '\<fopen.*'\"'.*w' __FOPEN_CHECKED__ "Alert: Unchecked fopen calls."

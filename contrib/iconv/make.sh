@@ -21,6 +21,6 @@ for f in $LIBICONV/libcharset/tools/* ; do
 		sed '1,/^$/d' $f | awk '($4 != $3) { printf ("iconv-hook %s %s\n", $4, $3); }' | \
 			sed -e 's/^iconv-hook SJIS /iconv-hook Shift_JIS /gi' |
 			sort -u > tmp.rc )
-	test -s tmp.rc && mv tmp.rc iconv.`basename $f`.rc
+	test -s tmp.rc && mv tmp.rc iconv.$(basename $f).rc
 	rm -f tmp.rc
 done
