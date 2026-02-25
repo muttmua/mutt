@@ -15,18 +15,20 @@ do_check_files ()
         msg="$1" ; shift
         grep -En "$pattern" "$@"        	| \
                 grep -v '^[^	 ]*:[^ 	]*#' 	| \
-                grep -Fv "$magic" > $TMPFILE
+                grep -Fv "$magic" > "$TMPFILE"
 
-        test -s $TMPFILE && {
+        test -s "$TMPFILE" && {
                 echo "$msg" ;
-                cat $TMPFILE;
-                rm -f $TMPFILE;
+                cat "$TMPFILE"
+                rm -f "$TMPFILE"
                 RV=1;
         }
 }
 
 do_check ()
 {
+        # We rely on .c files having sane filenames, ignore warning.
+        # shellcheck disable=SC2046
         do_check_files "$1" "$2" "$3" $(find . -name '*.c' -print)
 }
 
@@ -44,5 +46,5 @@ do_check '\<isspace' __SAFE_ISSPACE_CHECKED__ "You probably meant IS_ASCII_WS he
 do_check_files '\<(malloc|realloc|free|strdup)[ 	]*\(' __MEM_CHECKED__ "Alert: Use of traditional memory management calls." \
         ./*.c imap/*.c autocrypt/*.c
 
-rm -f $TMPFILE
+rm -f "$TMPFILE"
 exit $RV

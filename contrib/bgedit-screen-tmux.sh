@@ -52,9 +52,9 @@ $editor "\$@"
 exitval=\$?
 END_SCRIPT
 
-if test x$STY != x; then
+if test x"$STY" != x; then
   screen -X screen /bin/sh "$tmpdir/run" "$@"
-elif test x$TMUX != x; then
+elif test x"$TMUX" != x; then
   tmux neww /bin/sh "$tmpdir/run" "$@"
 else
   echo "Not running inside a terminal emulator" >&2

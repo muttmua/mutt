@@ -14,4 +14,4 @@ lrev=$(git describe --tags --match 'mutt-*-rel' --abbrev=0)
 # anymore to make it worth the effort.
 git log --name-status \
     --pretty=format:"%ai  %an  <%ae> (%h)%n%n%w(,8,8)* %s%n%+b" \
-    ${lrev}^..
+    "$lrev"^..

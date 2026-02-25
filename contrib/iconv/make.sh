@@ -9,18 +9,17 @@
 #
 
 LIBICONV=$1
-test -d $LIBICONV/libcharset/tools || {
+test -d "$LIBICONV"/libcharset/tools || {
 	echo "Sorry, I can't find libiconv's source!" >&2 ; 
 	exit 1 ;
 }
 
-# shellcheck disable=SC2231
-for f in $LIBICONV/libcharset/tools/* ; do
+for f in "$LIBICONV"/libcharset/tools/* ; do
 	rm -f tmp.rc.
-	( head -3 $f | grep -q 'locale name.*locale charmap.*locale_charset' ) && (
-		sed '1,/^$/d' $f | awk '($4 != $3) { printf ("iconv-hook %s %s\n", $4, $3); }' | \
+	( head -3 "$f" | grep -q 'locale name.*locale charmap.*locale_charset' ) && (
+		sed '1,/^$/d' "$f" | awk '($4 != $3) { printf ("iconv-hook %s %s\n", $4, $3); }' | \
 			sed -e 's/^iconv-hook SJIS /iconv-hook Shift_JIS /gi' |
 			sort -u > tmp.rc )
-	test -s tmp.rc && mv tmp.rc iconv.$(basename $f).rc
+	test -s tmp.rc && mv tmp.rc iconv."$(basename "$f")".rc
 	rm -f tmp.rc
 done

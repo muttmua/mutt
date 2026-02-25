@@ -21,6 +21,6 @@ rm -f "$TARGET"
 
 sed -e "s;/usr/local/bin/;$bindir/;g" 	 	\
     -e "s;/usr/local/doc/mutt/;$docdir/;g" 	\
-    "$SOURCE" > $TARGET
+    "$SOURCE" > "$TARGET"
 
 chmod 644 "$TARGET"
