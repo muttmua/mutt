@@ -328,7 +328,6 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
   for (p = buf1; p < ob; p++)
   {
     unsigned char c = *p;
-    assert (strchr (RFC2047Specials, '?'));
     if (c >= 0x7f || c < 0x20 || *p == '_' ||
         (c != ' ' && strchr (RFC2047Specials, *p)))
       ++count;
