@@ -35,7 +35,7 @@ void mutt_print_patchlist (void)
 {
 EOF
 
-list_patches | while read patch ; do
+list_patches | while read -r patch ; do
         echo "  puts (\"${patch}\");"
 done
 

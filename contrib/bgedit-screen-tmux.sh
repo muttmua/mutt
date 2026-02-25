@@ -61,6 +61,5 @@ else
   exit 1
 fi
 
-read exitval <"$tmpdir/status"
+read -r exitval <"$tmpdir/status"
 exit "$exitval"
-
