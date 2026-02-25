@@ -204,7 +204,7 @@ uninstall-local:
 pclean:
 	cat /dev/null > $(top_srcdir)/PATCHES
 
-check-local: check-security tabcheck
+check-local: check-security shellcheck tabcheck
 
 check-security:
 	(cd $(top_srcdir) && ./check_sec.sh)
