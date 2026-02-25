@@ -532,24 +532,27 @@ static void init_state (struct browser_state *state, MUTTMENU *menu)
 }
 
 static int examine_directory (MUTTMENU *menu, struct browser_state *state,
-                              const char *d, const char *prefix)
+                              BUFFER *dbuf, const char *prefix)
 {
   struct stat s;
   DIR *dp;
   struct dirent *de;
+  const char *d;
   BUFFER *full_path = NULL;
   BUFFY *tmp;
 
+  d = mutt_b2s (dbuf);
   while (stat (d, &s) == -1)
   {
-    if (errno == ENOENT)
+    if (errno == ENOENT && dbuf->data)
     {
       /* The last used directory is deleted, try to use the parent dir. */
-      char *c = strrchr (d, '/');
+      char *c = strrchr (dbuf->data, '/');
 
       if (c && (c > d))
       {
         *c = 0;
+        mutt_buffer_fix_dptr (dbuf);
         continue;
       }
     }
@@ -944,7 +947,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
 #ifdef USE_IMAP
     if (!state.imap_browse)
 #endif
-      if (examine_directory (NULL, &state, mutt_b2s (working_dir), mutt_b2s (prefix)) == -1)
+      if (examine_directory (NULL, &state, working_dir, mutt_b2s (prefix)) == -1)
         goto bail;
 
   menu = mutt_new_menu (MENU_FOLDER);
@@ -1081,11 +1084,11 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
             }
             else
 #endif
-              if (examine_directory (menu, &state, mutt_b2s (working_dir), mutt_b2s (prefix)) == -1)
+              if (examine_directory (menu, &state, working_dir, mutt_b2s (prefix)) == -1)
               {
                 /* try to restore the old values */
                 mutt_buffer_strcpy (working_dir, mutt_b2s (old_working_dir));
-                if (examine_directory (menu, &state, mutt_b2s (working_dir), mutt_b2s (prefix)) == -1)
+                if (examine_directory (menu, &state, working_dir, mutt_b2s (prefix)) == -1)
                 {
                   mutt_buffer_strcpy (working_dir, NONULL(Homedir));
                   goto bail;
@@ -1310,12 +1313,12 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
               if (S_ISDIR (st.st_mode))
               {
                 destroy_state (&state);
-                if (examine_directory (menu, &state, mutt_b2s (buf), mutt_b2s (prefix)) == 0)
+                if (examine_directory (menu, &state, buf, mutt_b2s (prefix)) == 0)
                   mutt_buffer_strcpy (working_dir, mutt_b2s (buf));
                 else
                 {
                   mutt_error _("Error scanning directory.");
-                  if (examine_directory (menu, &state, mutt_b2s (working_dir), mutt_b2s (prefix)) == -1)
+                  if (examine_directory (menu, &state, working_dir, mutt_b2s (prefix)) == -1)
                   {
                     goto bail;
                   }
@@ -1385,7 +1388,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
             }
             else
 #endif
-              if (examine_directory (menu, &state, mutt_b2s (working_dir), NULL) == 0)
+              if (examine_directory (menu, &state, working_dir, NULL) == 0)
                 init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel),
                            mutt_b2s (working_dir));
               else
@@ -1441,7 +1444,7 @@ void _mutt_buffer_select_file (BUFFER *f, int flags, char ***files, int *numfile
           menu->data = state.entry;
         }
 #endif
-        else if (examine_directory (menu, &state, mutt_b2s (working_dir), mutt_b2s (prefix)) == -1)
+        else if (examine_directory (menu, &state, working_dir, mutt_b2s (prefix)) == -1)
           goto bail;
         init_menu (&state, menu, title, sizeof (title), mutt_b2s (defaultsel),
                    mutt_b2s (working_dir));
