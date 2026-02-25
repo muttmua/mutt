@@ -78,7 +78,8 @@ static int url_pct_decode (char *s)
 url_scheme_t url_check_scheme (const char *s)
 {
   char sbuf[STRING];
-  char *t;
+  const char *t;
+  char *sbufp;
   int i;
 
   if (!s || !(t = strchr (s, ':')))
@@ -87,8 +88,8 @@ url_scheme_t url_check_scheme (const char *s)
     return U_UNKNOWN;
 
   strfcpy (sbuf, s, t - s + 1);
-  for (t = sbuf; *t; t++)
-    *t = ascii_tolower (*t);
+  for (sbufp = sbuf; *sbufp; sbufp++)
+    *sbufp = ascii_tolower (*sbufp);
 
   if ((i = mutt_getvaluebyname (sbuf, UrlMap)) == -1)
     return U_UNKNOWN;
@@ -292,7 +293,8 @@ static int url_mailto_header_allowed (const char *header)
 
 int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
 {
-  char *t, *p;
+  const char *t;
+  char *p;
   char *tmp;
   char *headers;
   char *tag, *value;

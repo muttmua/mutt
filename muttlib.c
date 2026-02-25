@@ -510,7 +510,8 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
         else
         {
           struct passwd *pw;
-          if ((t = strchr (s + 1, '/')))
+          /* NB: this is temporarily modifying src but is restoring it below */
+          if ((t = strchr (src->data + 1, '/')))
             *t = 0;
 
           if ((pw = getpwnam (s + 1)))

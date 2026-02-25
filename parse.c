@@ -825,7 +825,7 @@ BODY *mutt_parse_multipart (FILE *fp, const char *boundary, LOFF_T end_off, int 
 
 static const char *uncomment_timezone (char *buf, size_t buflen, const char *tz)
 {
-  char *p;
+  const char *p;
   size_t len;
 
   if (*tz != '(')
@@ -999,7 +999,7 @@ time_t mutt_parse_date (const char *s, HEADER *h)
         }
         else
         {
-          struct tz_t *tz;
+          const struct tz_t *tz;
 
           tz = bsearch (ptz, TimeZones, sizeof TimeZones/sizeof (struct tz_t),
                         sizeof (struct tz_t),

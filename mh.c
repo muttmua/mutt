@@ -684,7 +684,8 @@ static void maildir_free_maildir (struct maildir **md)
 
 static void maildir_parse_flags (HEADER * h, const char *path)
 {
-  char *p, *q = NULL;
+  const char *p;
+  char *q = NULL;
 
   h->flagged = 0;
   h->read = 0;
@@ -2117,7 +2118,8 @@ err:
 
 static void maildir_canon_filename (BUFFER *dest, const char *src)
 {
-  char *t, *u;
+  const char *t;
+  char *u;
 
   if ((t = strrchr (src, '/')))
     src = t + 1;

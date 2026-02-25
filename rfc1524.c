@@ -208,6 +208,7 @@ static int rfc1524_mailcap_parse (BODY *a,
   FILE *fp;
   char *buf = NULL;
   size_t buflen;
+  const char *typeslash;
   char *ch;
   char *field;
   int found = FALSE;
@@ -230,9 +231,9 @@ static int rfc1524_mailcap_parse (BODY *a,
    */
 
   /* find length of basetype */
-  if ((ch = strchr (type, '/')) == NULL)
+  if ((typeslash = strchr (type, '/')) == NULL)
     return FALSE;
-  btlen = ch - type;
+  btlen = typeslash - type;
 
   if ((fp = fopen (filename, "r")) != NULL)
   {
@@ -499,7 +500,7 @@ void mutt_rfc1524_expand_filename (const char *nametemplate,
                                    BUFFER *newfile)
 {
   int i, j, k, ps;
-  char *s;
+  const char *s;
   short lmatch = 0, rmatch = 0;
   BUFFER *left = NULL;
   BUFFER *right = NULL;

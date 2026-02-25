@@ -2100,7 +2100,8 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
                              const char *pfx, const char *start, const char *end,
                              int flags)
 {
-  char *tagbuf, *valbuf, *t;
+  char *tagbuf, *valbuf;
+  const char *t;
   int is_from = ((end - start) > 5 &&
                  ascii_strncasecmp (start, "from ", 5) == 0);
 
