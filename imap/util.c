@@ -315,6 +315,7 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
   char tmp[128];
   ciss_url_t url;
   char *c;
+  const char *constc;
   int n;
 
   if (!ImapPort)
@@ -365,12 +366,12 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
     if (sscanf (path, "{%127[^}]}", tmp) != 1)
       return -1;
 
-    c = strchr (path, '}');
-    if (!c)
+    constc = strchr (path, '}');
+    if (!constc)
       return -1;
     else
       /* walk past closing '}' */
-      mx->mbox = safe_strdup (c+1);
+      mx->mbox = safe_strdup (constc+1);
 
     if ((c = strrchr (tmp, '@')))
     {
@@ -607,7 +608,7 @@ void imap_cachepath (IMAP_DATA *idata, const char *mailbox, BUFFER *dest)
 
 /* imap_get_literal_count: write number of bytes in an IMAP literal into
  *   bytes, return 0 on success, -1 on failure. */
-int imap_get_literal_count(const char *buf, unsigned int *bytes)
+int imap_get_literal_count(char *buf, unsigned int *bytes)
 {
   char *pc;
   char *pn;

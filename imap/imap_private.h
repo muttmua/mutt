@@ -315,7 +315,7 @@ void imap_free_idata (IMAP_DATA** idata);
 char* imap_fix_path (IMAP_DATA* idata, const char* mailbox, char* path,
                      size_t plen);
 void imap_cachepath(IMAP_DATA *idata, const char *mailbox, BUFFER *dest);
-int imap_get_literal_count (const char* buf, unsigned int* bytes);
+int imap_get_literal_count (char* buf, unsigned int* bytes);
 char* imap_get_qualifier (char* buf);
 int imap_mxcmp (const char* mx1, const char* mx2);
 char* imap_next_word (char* s);
