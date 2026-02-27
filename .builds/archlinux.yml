@@ -1,19 +1,18 @@
-image: debian/stable
-submitter:
-  git.sr.ht:
-    enabled: false
+image: archlinux
 packages:
 - autoconf
 - automake
+- cyrus-sasl
+- gdbm
 - gettext
-- libgdbm-dev
-- libgpgme-dev
-- libidn2-dev
-- libncurses-dev
-- libsasl2-dev
-- libssl-dev
+- gpgme
+- libidn2
+- ncurses
+- openssl
+- perl
 - shellcheck
 - tcc
+- tcc-libs-static
 sources:
 - https://git.sr.ht/~mutt/mutt
 tasks:
@@ -50,7 +49,8 @@ tasks:
         --with-mailpath=/var/spool/mail \
         --with-curses \
         --with-ssl \
-        --with-sasl
+        --with-sasl \
+        --with-idn2
     make -j4 CFLAGS='-Wall -Werror'
 
 - tcc: |
