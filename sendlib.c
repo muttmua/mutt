@@ -2067,7 +2067,7 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
   return 0;
 }
 
-static char *unfold_header (char *s)
+static void unfold_header (char *s)
 {
   char *p = s, *q = s;
 
@@ -2092,8 +2092,6 @@ static char *unfold_header (char *s)
   }
   if (q)
     *q = 0;
-
-  return s;
 }
 
 static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
@@ -2184,7 +2182,7 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
   char *v = safe_strdup (value);
 
   if (!(flags & CH_DISPLAY) || option (OPTWEED))
-    v = unfold_header (v);
+    unfold_header (v);
 
   /* when not displaying, use sane wrap value */
   if (!(flags & CH_DISPLAY))
