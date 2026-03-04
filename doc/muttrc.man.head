@@ -325,7 +325,8 @@ attributes to objects.
 [\fBun\fP]\fBignore\fP \fIpattern\fP [ \fIpattern\fP ... ]
 The \fBignore\fP command permits you to specify header fields which
 you usually don't wish to see.  Any header field whose tag
-\fIbegins\fP with an \(lqignored\(rq pattern will be ignored.
+\fIbegins\fP with an \(lqignored\(rq pattern will be ignored,
+when $weed is set.
 .IP
 The \fBunignore\fP command permits you to define exceptions from
 the above mentioned list of ignored headers.
@@ -387,7 +388,8 @@ user-defined headers.
 .TP
 \fBhdr_order\fP \fIheader1\fP \fIheader2\fP [ ... ]
 With this command, you can specify an order in which mutt will
-attempt to present headers to you when viewing messages.
+attempt to present headers to you when viewing messages with
+$weed set.
 .
 .TP
 \fBsave-hook\fP [\fB!\fP]\fIpattern\fP \fIfilename\fP

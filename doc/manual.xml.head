@@ -3485,6 +3485,22 @@ line can be manipulated with <command>ignore/unignore</command> and
 <command>hdr_order/unhdr_order</command> commands.
 </para>
 
+<para>
+Mutt has two modes for displaying the headers.  When <link
+linkend="weed">$weed</link> is set (the default), or toggled on via
+<literal>&lt;display-toggle-weed&gt;</literal>, mutt unfolds and then
+refolds header lines using <link linkend="wrap">$wrap</link> as
+described above.  Furthermore, the following sections will be applied,
+allowing the selection and ordering of headers.
+</para>
+
+<para>
+When <link linkend="weed">$weed</link> is unset, or toggled off via
+<literal>&lt;display-toggle-weed&gt;</literal>, mutt will display all
+headers as they appear in the original email (but still subject to
+being folded at the width of your terminal).  None of the following
+sections are applied.
+</para>
 </sect2>
 
 <sect2 id="ignore">
