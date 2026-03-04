@@ -2242,8 +2242,13 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
   }
 
   if (last && *last)
+  {
+    /* This means the header was not \n terminated. */
+    if (!p)
+      goto out;
     if (write_one_header (fp, pfxw, max, wraplen, pfx, last, p, flags) < 0)
       goto out;
+  }
 
   rc = 0;
 
