@@ -2060,6 +2060,8 @@ int mutt_index_menu (void)
         break;
 
       case OP_MAIN_COLLAPSE_THREAD:
+      case OP_MAIN_CLOSE_THREAD:
+      case OP_MAIN_OPEN_THREAD:
         CHECK_MSGCOUNT;
         CHECK_VISIBLE;
 
@@ -2069,7 +2071,8 @@ int mutt_index_menu (void)
           break;
         }
 
-        if (CURHDR->collapsed)
+        if ((op == OP_MAIN_COLLAPSE_THREAD || op == OP_MAIN_OPEN_THREAD) &&
+            CURHDR->collapsed)
         {
           /* Note this returns the *old* virtual index of the root message.
            *
@@ -2081,29 +2084,32 @@ int mutt_index_menu (void)
           if (option (OPTUNCOLLAPSEJUMP))
             menu->current = mutt_thread_next_unread (Context, CURHDR);
         }
-        else if (option (OPTCOLLAPSEUNREAD) || !UNREAD (CURHDR))
+        else if (op == OP_MAIN_COLLAPSE_THREAD || op == OP_MAIN_CLOSE_THREAD)
         {
-          HEADER *base;
-          int final;
-          /* This also returns the *old* virtual index of the root, but now
-           * we have to find the new position of the root, which isn't
-           * the same for sort=reverse-threads. */
-          final = mutt_collapse_thread (Context, CURHDR);
-          base = Context->hdrs[Context->v2r[final]];
-          mutt_set_virtual (Context);
-          for (j = 0; j < Context->vcount; j++)
+          if (option (OPTCOLLAPSEUNREAD) || !UNREAD (CURHDR))
           {
-            if (Context->hdrs[Context->v2r[j]]->index == base->index)
+            HEADER *base;
+            int final;
+            /* This also returns the *old* virtual index of the root, but now
+             * we have to find the new position of the root, which isn't
+             * the same for sort=reverse-threads. */
+            final = mutt_collapse_thread (Context, CURHDR);
+            base = Context->hdrs[Context->v2r[final]];
+            mutt_set_virtual (Context);
+            for (j = 0; j < Context->vcount; j++)
             {
-              menu->current = j;
-              break;
+              if (Context->hdrs[Context->v2r[j]]->index == base->index)
+              {
+                menu->current = j;
+                break;
+              }
             }
           }
-        }
-        else
-        {
-          mutt_error _("Thread contains unread messages.");
-          break;
+          else
+          {
+            mutt_error _("Thread contains unread messages.");
+            break;
+          }
         }
 
         menu->redraw = REDRAW_INDEX | REDRAW_STATUS;
@@ -2111,6 +2117,8 @@ int mutt_index_menu (void)
         break;
 
       case OP_MAIN_COLLAPSE_ALL:
+      case OP_MAIN_OPEN_ALL_THREADS:
+      case OP_MAIN_CLOSE_ALL_THREADS:
         CHECK_MSGCOUNT;
         CHECK_VISIBLE;
 
@@ -2125,17 +2133,25 @@ int mutt_index_menu (void)
           THREAD *thread, *top;
           int final;
 
-          if (CURHDR->collapsed)
-            final = mutt_uncollapse_thread (Context, CURHDR);
-          else if (option (OPTCOLLAPSEUNREAD) || !UNREAD (CURHDR))
-            final = mutt_collapse_thread (Context, CURHDR);
+          if (op == OP_MAIN_COLLAPSE_ALL)
+            Context->collapsed = !Context->collapsed;
+          else if (op == OP_MAIN_OPEN_ALL_THREADS)
+            Context->collapsed = 0;
           else
-            final = CURHDR->virtual;
+            Context->collapsed = 1;
+
+          final = CURHDR->virtual;
+          if (CURHDR->collapsed != Context->collapsed)
+          {
+            if (CURHDR->collapsed)
+              final = mutt_uncollapse_thread (Context, CURHDR);
+            else if (option (OPTCOLLAPSEUNREAD) || !UNREAD (CURHDR))
+              final = mutt_collapse_thread (Context, CURHDR);
+          }
 
           base = Context->hdrs[Context->v2r[final]];
 
           top = Context->tree;
-          Context->collapsed = !Context->collapsed;
           while ((thread = top) != NULL)
           {
             while (!thread->message)

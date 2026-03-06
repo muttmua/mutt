@@ -1194,6 +1194,26 @@ OP_MAIN_COLLAPSE_THREAD N_("collapse/uncollapse current thread")
  */
 OP_MAIN_COLLAPSE_ALL N_("collapse/uncollapse all threads")
 
+/* L10N: Help screen description for OP_MAIN_OPEN_THREAD
+   index menu: <open-thread>
+ */
+OP_MAIN_OPEN_THREAD N_("uncollapse current thread")
+
+/* L10N: Help screen description for OP_MAIN_OPEN_ALL_THREADS
+   index menu: <open-all-threads>
+ */
+OP_MAIN_OPEN_ALL_THREADS N_("uncollapse all threads")
+
+/* L10N: Help screen description for OP_MAIN_CLOSE_THREAD
+   index menu: <close-thread>
+ */
+OP_MAIN_CLOSE_THREAD N_("collapse current thread")
+
+/* L10N: Help screen description for OP_MAIN_CLOSE_ALL_THREADS
+   index menu: <close-all-threads>
+ */
+OP_MAIN_CLOSE_ALL_THREADS N_("collapse all threads")
+
 /* L10N: Help screen description for OP_DESCEND_DIRECTORY
    browser menu: <descend-directory>
  */
