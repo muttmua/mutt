@@ -88,11 +88,26 @@ void mutt_adv_mktemp (BUFFER *buf)
       *suffix = 0;
       ++suffix;
     }
-    mutt_buffer_mktemp_pfx_sfx (buf, mutt_b2s (prefix), suffix);
+    _mutt_buffer_mktemp_pfx_sfx (buf, mutt_b2s (prefix), suffix);
 
   out:
     mutt_buffer_pool_release (&prefix);
   }
+}
+
+void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
+                          const char *src, int line)
+{
+  RANDOM64 random64;
+  mutt_random_bytes(random64.char_array, sizeof(random64));
+
+  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
+                      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
+                      (int) getuid (), (int) getpid (), random64.int_64,
+                      suffix ? "." : "", NONULL (suffix));
+  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
+  if (unlink (mutt_b2s (buf)) && errno != ENOENT)
+    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
 }
 
 /* create a send-mode duplicate from a receive-mode body */
@@ -957,21 +972,6 @@ void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
 #undef MOVE_ELEM
 
   mutt_free_envelope(extra);
-}
-
-void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
-                          const char *src, int line)
-{
-  RANDOM64 random64;
-  mutt_random_bytes(random64.char_array, sizeof(random64));
-
-  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
-                      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-                      (int) getuid (), (int) getpid (), random64.int_64,
-                      suffix ? "." : "", NONULL (suffix));
-  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
-  if (unlink (mutt_b2s (buf)) && errno != ENOENT)
-    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
 }
 
 /* these characters must be escaped in regular expressions */
