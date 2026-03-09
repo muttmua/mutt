@@ -1931,7 +1931,7 @@ static int send_message_setup (SEND_CONTEXT *sctx, const char *tempfile,
       if (!tempfile)
       {
         tmpbuffer = mutt_buffer_pool_get ();
-        mutt_buffer_mktemp (tmpbuffer);
+        mutt_buffer_mktemp_draft (tmpbuffer);
         tempfp = safe_fopen (mutt_b2s (tmpbuffer), "w+");
         sctx->msg->content->filename = safe_strdup (mutt_b2s (tmpbuffer));
         mutt_buffer_pool_release (&tmpbuffer);

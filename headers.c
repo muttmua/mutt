@@ -47,7 +47,7 @@ int mutt_edit_headers (const char *editor,
   if (flags != MUTT_EDIT_HEADERS_RESUME)
   {
     sctx->tempfile = mutt_buffer_new ();
-    mutt_buffer_mktemp (sctx->tempfile);
+    mutt_buffer_mktemp_draft (sctx->tempfile);
     if ((ofp = safe_fopen (mutt_b2s (sctx->tempfile), "w")) == NULL)
     {
       mutt_perror (mutt_b2s (sctx->tempfile));

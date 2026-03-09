@@ -172,10 +172,14 @@ group_t *mutt_pattern_group (const char *);
 
 REGEXP *mutt_compile_regexp (const char *, int);
 
-void mutt_adv_mktemp (BUFFER *);
-#define mutt_buffer_mktemp(a) _mutt_buffer_mktemp_pfx_sfx (a, "mutt", NULL)
-#define _mutt_buffer_mktemp_pfx_sfx(a,b,c)  _mutt_buffer_mktemp (a, b, c, __FILE__, __LINE__)
-void _mutt_buffer_mktemp (BUFFER *, const char *, const char *, const char *, int);
+#define mutt_adv_mktemp(a) _mutt_adv_mktemp (a, Tempdir)
+#define mutt_adv_mktemp_draft(a) _mutt_adv_mktemp (a, TempDraftDir)
+void _mutt_adv_mktemp (BUFFER *, const char *);
+
+#define mutt_buffer_mktemp(a) _mutt_buffer_mktemp_pfx_sfx (a, Tempdir, "mutt", NULL)
+#define mutt_buffer_mktemp_draft(a) _mutt_buffer_mktemp_pfx_sfx (a, TempDraftDir, "mutt", NULL)
+#define _mutt_buffer_mktemp_pfx_sfx(a,b,c,d) _mutt_buffer_mktemp (a, b, c, d, __FILE__, __LINE__)
+void _mutt_buffer_mktemp (BUFFER *, const char *, const char *, const char *, const char *, int);
 
 void mutt_account_hook (const char* url);
 void mutt_alias_menu (char *, size_t, ALIAS *);

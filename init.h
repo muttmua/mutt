@@ -4696,9 +4696,21 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** This variable allows you to specify where Mutt will place its
-  ** temporary files needed for displaying and composing messages.  If
+  ** temporary files needed for displaying messages.  If
   ** this variable is not set, the environment variable \fC$$$TMPDIR\fP is
   ** used.  If \fC$$$TMPDIR\fP is not set then ``\fC/tmp\fP'' is used.
+  */
+  { "tmpdraftdir",           DT_PATH, R_NONE, {.p=&TempDraftDir}, {.p=0} },
+  /*
+  ** .pp
+  ** This variable allows you to specify where Mutt will place its
+  ** temporary files when composing messages.  If this variable is not set,
+  ** the environment variable \fC$$$TMPDIR\fP is used.  If \fC$$$TMPDIR\fP
+  ** is not set then ``\fC/var/tmp\fP'' is used.
+  ** .pp
+  ** It's suggested that this be set to a directory whose contents
+  ** won't be removed during an unanticipated reboot, so that the files
+  ** will survive a crash or other unplanned computer shutdown.
   */
   { "to_chars",         DT_MBCHARTBL, R_BOTH, {.p=&Tochars}, {.p=" +TCFL"} },
   /*

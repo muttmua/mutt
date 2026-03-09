@@ -64,7 +64,7 @@ BODY *mutt_new_body (void)
  * Renamed to mutt_adv_mktemp so I only have to change where it's
  * called, and not all possible cases.
  */
-void mutt_adv_mktemp (BUFFER *buf)
+void _mutt_adv_mktemp (BUFFER *buf, const char *tempdir)
 {
   BUFFER *prefix = NULL;
   char *suffix;
@@ -72,14 +72,14 @@ void mutt_adv_mktemp (BUFFER *buf)
 
   if (!(buf->data && buf->data[0]))
   {
-    mutt_buffer_mktemp (buf);
+    _mutt_buffer_mktemp_pfx_sfx (buf, tempdir, "mutt", NULL);
   }
   else
   {
     prefix = mutt_buffer_pool_get ();
     mutt_buffer_strcpy (prefix, buf->data);
     mutt_sanitize_filename (prefix->data, MUTT_SANITIZE_ALLOW_8BIT);
-    mutt_buffer_printf (buf, "%s/%s", NONULL (Tempdir), mutt_b2s (prefix));
+    mutt_buffer_printf (buf, "%s/%s", NONULL (tempdir), mutt_b2s (prefix));
     if (lstat (mutt_b2s (buf), &sb) == -1 && errno == ENOENT)
       goto out;
 
@@ -88,21 +88,22 @@ void mutt_adv_mktemp (BUFFER *buf)
       *suffix = 0;
       ++suffix;
     }
-    _mutt_buffer_mktemp_pfx_sfx (buf, mutt_b2s (prefix), suffix);
+    _mutt_buffer_mktemp_pfx_sfx (buf, tempdir, mutt_b2s (prefix), suffix);
 
   out:
     mutt_buffer_pool_release (&prefix);
   }
 }
 
-void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
+void _mutt_buffer_mktemp (BUFFER *buf, const char *tempdir,
+                          const char *prefix, const char *suffix,
                           const char *src, int line)
 {
   RANDOM64 random64;
   mutt_random_bytes(random64.char_array, sizeof(random64));
 
   mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
-                      NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
+                      NONULL (tempdir), NONULL (prefix), NONULL (Hostname),
                       (int) getuid (), (int) getpid (), random64.int_64,
                       suffix ? "." : "", NONULL (suffix));
   muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));

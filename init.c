@@ -3852,6 +3852,7 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   }
 
   Tempdir = safe_strdup ((p = getenv ("TMPDIR")) ? p : "/tmp");
+  TempDraftDir = safe_strdup ((p = getenv ("TMPDIR")) ? p : "/var/tmp");
 
   p = getenv ("VISUAL");
   if (!p)

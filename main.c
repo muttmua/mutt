@@ -1093,7 +1093,7 @@ int main (int argc, char **argv, char **environ)
       if (!edit_infile)
       {
         tempfile = mutt_buffer_new ();
-        mutt_buffer_mktemp (tempfile);
+        mutt_buffer_mktemp_draft (tempfile);
 
         if ((fout = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
         {

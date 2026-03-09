@@ -241,9 +241,9 @@ rely on this being set.
 .IP "REPLYTO"
 Default Reply-To address.
 .IP "TMPDIR"
-Directory in which temporary files are created.
-If unset, \fI/tmp\fP is used.
-See also $tmpdir configuration variable.
+Directory in which temporary files are created.  If unset, \fI/tmp\fP
+is used for $tmpdir, and \fI/var/tmp\fP is used for $tmpdraftdir.  See
+also the $tmpdir and $tmpdraftdir configuration variables.
 .IP "LC_ALL, LC_CTYPE, LANG"
 Used to determine charset and locale to use.
 .IP TEXTDOMAINDIR
