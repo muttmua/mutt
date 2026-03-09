@@ -249,9 +249,6 @@ void mutt_message_to_7bit (BODY *, FILE *);
 #define mutt_buffer_mktemp(a) mutt_buffer_mktemp_pfx_sfx (a, "mutt", NULL)
 #define mutt_buffer_mktemp_pfx_sfx(a,b,c)  _mutt_buffer_mktemp (a, b, c, __FILE__, __LINE__)
 void _mutt_buffer_mktemp (BUFFER *, const char *, const char *, const char *, int);
-#define mutt_mktemp(a,b) mutt_mktemp_pfx_sfx (a, b, "mutt", NULL)
-#define mutt_mktemp_pfx_sfx(a,b,c,d)  _mutt_mktemp (a, b, c, d, __FILE__, __LINE__)
-void _mutt_mktemp (char *, size_t, const char *, const char *, const char *, int);
 void mutt_normalize_time (struct tm *);
 void mutt_paddstr (int, const char *);
 void mutt_parse_mime_message (CONTEXT *ctx, HEADER *);

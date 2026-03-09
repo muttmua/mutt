@@ -974,25 +974,6 @@ void _mutt_buffer_mktemp (BUFFER *buf, const char *prefix, const char *suffix,
     mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
 }
 
-void _mutt_mktemp (char *s, size_t slen, const char *prefix, const char *suffix,
-                   const char *src, int line)
-{
-  RANDOM64 random64;
-  mutt_random_bytes(random64.char_array, sizeof(random64));
-
-  size_t n = snprintf (s, slen, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
-                       NONULL (Tempdir), NONULL (prefix), NONULL (Hostname),
-                       (int) getuid (), (int) getpid (), random64.int_64,
-                       suffix ? "." : "", NONULL (suffix));
-  if (n >= slen)
-    muttdbg(1, "%s:%d: ERROR: insufficient buffer space "
-               "to hold temporary filename! slen=%zu but need %zu",
-               src, line, slen, n);
-  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, s);
-  if (unlink (s) && errno != ENOENT)
-    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, s);
-}
-
 /* these characters must be escaped in regular expressions */
 
 static const char rx_special_chars[] = "^.[$()|*+?{\\";
