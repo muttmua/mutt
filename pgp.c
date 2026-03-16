@@ -1238,13 +1238,14 @@ BODY *pgp_sign_message (BODY *a)
 {
   BODY *t, *rv = NULL;
   char buffer[LONG_STRING];
-  BUFFER *sigfile, *signedfile;
+  BUFFER *sigfile, *lf_file, *signedfile;
   FILE *pgpin, *pgpout, *pgperr, *fp, *sfp;
   int err = 0;
   int empty = 1;
   pid_t thepid;
 
   sigfile = mutt_buffer_pool_get ();
+  lf_file = mutt_buffer_pool_get ();
   signedfile = mutt_buffer_pool_get ();
 
   convert_to_7bit (a); /* Signed data _must_ be in 7-bit format. */
@@ -1255,10 +1256,10 @@ BODY *pgp_sign_message (BODY *a)
     goto cleanup;
   }
 
-  mutt_buffer_mktemp (signedfile);
-  if ((sfp = safe_fopen (mutt_b2s (signedfile), "w")) == NULL)
+  mutt_buffer_mktemp (lf_file);
+  if ((sfp = safe_fopen (mutt_b2s (lf_file), "w")) == NULL)
   {
-    mutt_perror (mutt_b2s (signedfile));
+    mutt_perror (mutt_b2s (lf_file));
     safe_fclose (&fp);
     unlink (mutt_b2s (sigfile));
     goto cleanup;
@@ -1268,6 +1269,16 @@ BODY *pgp_sign_message (BODY *a)
   fputc ('\n', sfp);
   mutt_write_mime_body (a, sfp);
   safe_fclose (&sfp);
+
+  mutt_buffer_mktemp (signedfile);
+  if (mutt_convert_to_crlf (mutt_b2s (lf_file), NULL, mutt_b2s (signedfile), NULL) < 0)
+  {
+    safe_fclose (&fp);
+    unlink (mutt_b2s (sigfile));
+    unlink (mutt_b2s (lf_file));
+    goto cleanup;
+  }
+  unlink (mutt_b2s (lf_file));
 
   if ((thepid = pgp_invoke_sign (&pgpin, &pgpout, &pgperr,
                                  -1, -1, -1, mutt_b2s (signedfile))) == -1)
@@ -1357,6 +1368,7 @@ BODY *pgp_sign_message (BODY *a)
 
 cleanup:
   mutt_buffer_pool_release (&sigfile);
+  mutt_buffer_pool_release (&lf_file);
   mutt_buffer_pool_release (&signedfile);
   return (rv);
 }
