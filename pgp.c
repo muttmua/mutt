@@ -1500,88 +1500,103 @@ char *pgp_findKeys (ADDRESS *adrlist, int oppenc_mode)
 BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
 {
   char buf[LONG_STRING];
-  BUFFER *tempfile, *pgperrfile, *pgpinfile;
-  FILE *pgpin, *pgperr, *fpout, *fptmp;
+  BUFFER *pgpstdoutfile, *pgpstderrfile, *pgpinfile_lf, *pgpinfile_crlf;
+  FILE *pgpstdin, *pgpstderr, *pgpstdout, *fp_infile_lf;
   BODY *t = NULL;
   int err = 0;
   int empty = 0;
   pid_t thepid;
 
-  tempfile = mutt_buffer_pool_get ();
-  pgperrfile = mutt_buffer_pool_get ();
-  pgpinfile = mutt_buffer_pool_get ();
+  pgpstdoutfile = mutt_buffer_pool_get ();
+  pgpstderrfile = mutt_buffer_pool_get ();
+  pgpinfile_lf = mutt_buffer_pool_get ();
+  pgpinfile_crlf = mutt_buffer_pool_get ();
 
-  mutt_buffer_mktemp (tempfile);
-  if ((fpout = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
+  mutt_buffer_mktemp (pgpstdoutfile);
+  if ((pgpstdout = safe_fopen (mutt_b2s (pgpstdoutfile), "w+")) == NULL)
   {
-    mutt_perror (mutt_b2s (tempfile));
+    mutt_perror (mutt_b2s (pgpstdoutfile));
     goto cleanup;
   }
 
-  mutt_buffer_mktemp (pgperrfile);
-  if ((pgperr = safe_fopen (mutt_b2s (pgperrfile), "w+")) == NULL)
+  mutt_buffer_mktemp (pgpstderrfile);
+  if ((pgpstderr = safe_fopen (mutt_b2s (pgpstderrfile), "w+")) == NULL)
   {
-    mutt_perror (mutt_b2s (pgperrfile));
-    unlink (mutt_b2s (tempfile));
-    safe_fclose (&fpout);
+    mutt_perror (mutt_b2s (pgpstderrfile));
+    unlink (mutt_b2s (pgpstdoutfile));
+    safe_fclose (&pgpstdout);
     goto cleanup;
   }
-  unlink (mutt_b2s (pgperrfile));
+  unlink (mutt_b2s (pgpstderrfile));
 
-  mutt_buffer_mktemp (pgpinfile);
-  if ((fptmp = safe_fopen (mutt_b2s (pgpinfile), "w")) == NULL)
+  mutt_buffer_mktemp (pgpinfile_lf);
+  if ((fp_infile_lf = safe_fopen (mutt_b2s (pgpinfile_lf), "w")) == NULL)
   {
-    mutt_perror (mutt_b2s (pgpinfile));
-    unlink (mutt_b2s (tempfile));
-    safe_fclose (&fpout);
-    safe_fclose (&pgperr);
+    mutt_perror (mutt_b2s (pgpinfile_lf));
+    unlink (mutt_b2s (pgpstdoutfile));
+    safe_fclose (&pgpstdout);
+    safe_fclose (&pgpstderr);
     goto cleanup;
   }
 
   if (sign)
     convert_to_7bit (a);
 
-  mutt_write_mime_header (a, fptmp);
-  fputc ('\n', fptmp);
-  mutt_write_mime_body (a, fptmp);
-  safe_fclose (&fptmp);
+  mutt_write_mime_header (a, fp_infile_lf);
+  fputc ('\n', fp_infile_lf);
+  mutt_write_mime_body (a, fp_infile_lf);
+  safe_fclose (&fp_infile_lf);
 
-  if ((thepid = pgp_invoke_encrypt (&pgpin, NULL, NULL, -1,
-                                    fileno (fpout), fileno (pgperr),
-                                    mutt_b2s (pgpinfile), keylist, sign)) == -1)
+  mutt_buffer_mktemp (pgpinfile_crlf);
+  if (mutt_convert_to_crlf (mutt_b2s (pgpinfile_lf), NULL,
+                            mutt_b2s (pgpinfile_crlf), NULL) < 0)
   {
-    safe_fclose (&pgperr);
-    unlink (mutt_b2s (pgpinfile));
+    safe_fclose (&pgpstdout);
+    safe_fclose (&pgpstderr);
+    unlink (mutt_b2s (pgpstdoutfile));
+    unlink (mutt_b2s (pgpinfile_lf));
+    goto cleanup;
+  }
+  unlink (mutt_b2s (pgpinfile_lf));
+
+  if ((thepid = pgp_invoke_encrypt (&pgpstdin, NULL, NULL, -1,
+                                    fileno (pgpstdout), fileno (pgpstderr),
+                                    mutt_b2s (pgpinfile_crlf), keylist, sign)) == -1)
+  {
+    safe_fclose (&pgpstdout);
+    safe_fclose (&pgpstderr);
+    unlink (mutt_b2s (pgpstdoutfile));
+    unlink (mutt_b2s (pgpinfile_crlf));
     goto cleanup;
   }
 
   if (sign)
   {
     if (!pgp_use_gpg_agent())
-      fputs (PgpPass, pgpin);
-    fputc ('\n', pgpin);
+      fputs (PgpPass, pgpstdin);
+    fputc ('\n', pgpstdin);
   }
-  safe_fclose (&pgpin);
+  safe_fclose (&pgpstdin);
 
   if (mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
     empty=1;
 
-  unlink (mutt_b2s (pgpinfile));
+  unlink (mutt_b2s (pgpinfile_crlf));
 
-  fflush (fpout);
-  rewind (fpout);
+  fflush (pgpstdout);
+  rewind (pgpstdout);
   if (!empty)
-    empty = (fgetc (fpout) == EOF);
-  safe_fclose (&fpout);
+    empty = (fgetc (pgpstdout) == EOF);
+  safe_fclose (&pgpstdout);
 
-  fflush (pgperr);
-  rewind (pgperr);
-  while (fgets (buf, sizeof (buf) - 1, pgperr) != NULL)
+  fflush (pgpstderr);
+  rewind (pgpstderr);
+  while (fgets (buf, sizeof (buf) - 1, pgpstderr) != NULL)
   {
     err = 1;
     fputs (buf, stdout);
   }
-  safe_fclose (&pgperr);
+  safe_fclose (&pgpstderr);
 
   /* pause if there is any error output from PGP */
   if (err)
@@ -1592,7 +1607,7 @@ BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
     /* fatal error while trying to encrypt message */
     if (sign)
       pgp_void_passphrase (); /* just in case */
-    unlink (mutt_b2s (tempfile));
+    unlink (mutt_b2s (pgpstdoutfile));
     goto cleanup;
   }
 
@@ -1615,16 +1630,17 @@ BODY *pgp_encrypt_message (BODY *a, char *keylist, int sign)
   t->parts->next->type = TYPEAPPLICATION;
   t->parts->next->subtype = safe_strdup ("octet-stream");
   t->parts->next->encoding = ENC7BIT;
-  t->parts->next->filename = safe_strdup (mutt_b2s (tempfile));
+  t->parts->next->filename = safe_strdup (mutt_b2s (pgpstdoutfile));
   t->parts->next->use_disp = 1;
   t->parts->next->disposition = DISPATTACH;
   t->parts->next->unlink = 1; /* delete after sending the message */
   t->parts->next->d_filename = safe_strdup ("msg.asc"); /* non pgp/mime can save */
 
 cleanup:
-  mutt_buffer_pool_release (&tempfile);
-  mutt_buffer_pool_release (&pgperrfile);
-  mutt_buffer_pool_release (&pgpinfile);
+  mutt_buffer_pool_release (&pgpstdoutfile);
+  mutt_buffer_pool_release (&pgpstderrfile);
+  mutt_buffer_pool_release (&pgpinfile_lf);
+  mutt_buffer_pool_release (&pgpinfile_crlf);
   return (t);
 }
 
