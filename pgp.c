@@ -927,11 +927,9 @@ void pgp_extract_keys_from_attachment_list (FILE *fp, int tag, BODY *top)
 
 BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
 {
-  char buf[LONG_STRING];
   FILE *pgpin, *pgpout, *pgperr, *pgptmp;
   struct stat info;
   BODY *tattach = NULL;
-  size_t len;
   BUFFER *pgperrfile = NULL, *pgptmpfile = NULL;
   pid_t thepid;
   int rv;
@@ -984,12 +982,12 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   /* Read the output from PGP, and make sure to change CRLF to LF, otherwise
    * read_mime_header has a hard time parsing the message.
    */
-  while (fgets (buf, sizeof (buf) - 1, pgpout) != NULL)
+  if (mutt_convert_to_lf (NULL, pgpout, NULL, fpout) < 0)
   {
-    len = mutt_strlen (buf);
-    if (len > 1 && buf[len - 2] == '\r')
-      strcpy (buf + len - 2, "\n");     /* __STRCPY_CHECKED__ */
-    fputs (buf, fpout);
+    safe_fclose (&pgperr);
+    safe_fclose (&pgpout);
+    mutt_unlink (mutt_b2s (pgptmpfile));
+    goto cleanup;
   }
 
   safe_fclose (&pgpout);
@@ -1006,6 +1004,7 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   {
     mutt_error _("Decryption failed");
     pgp_void_passphrase ();
+    safe_fclose (&pgperr);
     goto cleanup;
   }
 
