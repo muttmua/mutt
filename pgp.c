@@ -1647,7 +1647,7 @@ cleanup:
 BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
 {
   BODY *b = NULL;
-  BUFFER *pgpinfile, *pgpoutfile, *pgperrfile;
+  BUFFER *pgpinfile_lf, *pgpoutfile, *pgperrfile, *pgpinfile_crlf;
   char body_charset[STRING];
   char *from_charset;
   const char *send_charset;
@@ -1669,14 +1669,15 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
     return NULL;
   }
 
-  pgpinfile = mutt_buffer_pool_get ();
+  pgpinfile_lf = mutt_buffer_pool_get ();
+  pgpinfile_crlf = mutt_buffer_pool_get ();
   pgpoutfile = mutt_buffer_pool_get ();
   pgperrfile = mutt_buffer_pool_get ();
 
-  mutt_buffer_mktemp (pgpinfile);
-  if ((pgpin = safe_fopen (mutt_b2s (pgpinfile), "w")) == NULL)
+  mutt_buffer_mktemp (pgpinfile_lf);
+  if ((pgpin = safe_fopen (mutt_b2s (pgpinfile_lf), "w")) == NULL)
   {
-    mutt_perror (mutt_b2s (pgpinfile));
+    mutt_perror (mutt_b2s (pgpinfile_lf));
     safe_fclose (&fp);
     goto cleanup;
   }
@@ -1718,13 +1719,22 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
   safe_fclose (&fp);
   safe_fclose (&pgpin);
 
+  mutt_buffer_mktemp (pgpinfile_crlf);
+  if (mutt_convert_to_crlf (mutt_b2s (pgpinfile_lf), NULL,
+                            mutt_b2s (pgpinfile_crlf), NULL) < 0)
+  {
+    unlink (mutt_b2s (pgpinfile_lf));
+    goto cleanup;
+  }
+  unlink (mutt_b2s (pgpinfile_lf));
+
   mutt_buffer_mktemp (pgpoutfile);
   mutt_buffer_mktemp (pgperrfile);
   if ((pgpout = safe_fopen (mutt_b2s (pgpoutfile), "w+")) == NULL ||
       (pgperr = safe_fopen (mutt_b2s (pgperrfile), "w+")) == NULL)
   {
     mutt_perror (pgpout ? mutt_b2s (pgperrfile) : mutt_b2s (pgpoutfile));
-    unlink (mutt_b2s (pgpinfile));
+    unlink (mutt_b2s (pgpinfile_crlf));
     if (pgpout)
     {
       safe_fclose (&pgpout);
@@ -1737,12 +1747,12 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
 
   if ((thepid = pgp_invoke_traditional (&pgpin, NULL, NULL,
                                         -1, fileno (pgpout), fileno (pgperr),
-                                        mutt_b2s (pgpinfile), keylist, flags)) == -1)
+                                        mutt_b2s (pgpinfile_crlf), keylist, flags)) == -1)
   {
     mutt_perror _("Can't invoke PGP");
     safe_fclose (&pgpout);
     safe_fclose (&pgperr);
-    mutt_unlink (mutt_b2s (pgpinfile));
+    mutt_unlink (mutt_b2s (pgpinfile_crlf));
     unlink (mutt_b2s (pgpoutfile));
     goto cleanup;
   }
@@ -1756,7 +1766,7 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
   if (mutt_wait_filter (thepid) && option(OPTPGPCHECKEXIT))
     empty=1;
 
-  mutt_unlink (mutt_b2s (pgpinfile));
+  mutt_unlink (mutt_b2s (pgpinfile_crlf));
 
   fflush (pgpout);
   fflush (pgperr);
@@ -1812,7 +1822,8 @@ BODY *pgp_traditional_encryptsign (BODY *a, int flags, char *keylist)
     b->encoding = a->encoding;
 
 cleanup:
-  mutt_buffer_pool_release (&pgpinfile);
+  mutt_buffer_pool_release (&pgpinfile_lf);
+  mutt_buffer_pool_release (&pgpinfile_crlf);
   mutt_buffer_pool_release (&pgpoutfile);
   mutt_buffer_pool_release (&pgperrfile);
   return b;
