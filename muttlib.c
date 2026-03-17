@@ -2437,6 +2437,69 @@ int mutt_atolofft (const char *str, LOFF_T *dst, int flags)
   return rc;
 }
 
+static int normalize_line_endings (const char *infile, FILE *ifp, const char *outfile,
+                                   FILE *ofp, int tocrlf)
+{
+  char *buf = NULL;
+  size_t blen = 0, olen;
+  int has_nl;
+
+  if (infile)
+    if (!(ifp = safe_fopen (infile, "r")))
+      mutt_perror (infile);
+  if (!ifp)
+    return -1;
+
+  if (outfile)
+    if (!(ofp = safe_fopen (outfile, "w")))
+      mutt_perror (outfile);
+  if (!ofp)
+  {
+    if (infile)
+      safe_fclose (&ifp);
+    return -1;
+  }
+
+  while ((buf = mutt_read_line (buf, &blen, ifp, NULL, MUTT_EOL)) != NULL)
+  {
+    has_nl = 0;
+    olen = mutt_strlen (buf);
+    if ((olen > 0) && buf[olen - 1] == '\n')
+    {
+      has_nl = 1;
+      buf[olen - 1] = '\0';
+      if ((olen > 1) && buf[olen - 2] == '\r')
+        buf[olen - 2] = '\0';
+    }
+    fputs (buf, ofp);
+    if (has_nl)
+    {
+      if (tocrlf)
+        fputc ('\r', ofp);
+      fputc ('\n', ofp);
+    }
+  }
+
+  if (infile)
+    safe_fclose (&ifp);
+  if (outfile)
+    safe_fclose (&ofp);
+  FREE (&buf);
+
+  return 0;
+}
+
+int mutt_convert_to_crlf (const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
+{
+  return normalize_line_endings (infile, ifp, outfile, ofp, 1);
+}
+
+int mutt_convert_to_lf (const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
+{
+  return normalize_line_endings (infile, ifp, outfile, ofp, 0);
+}
+
+
 
 /************************************************************************
  * These functions are transplanted from lib.c, in order to modify them *

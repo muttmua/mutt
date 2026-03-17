@@ -323,6 +323,8 @@ int mutt_command_complete (char *, size_t, int, int);
 int mutt_var_value_complete (char *, size_t, int);
 int mutt_complete (char *, size_t);
 int mutt_compose_attachment (BODY *a);
+int mutt_convert_to_crlf (const char *, FILE *, const char *, FILE *);
+int mutt_convert_to_lf (const char *, FILE *, const char *, FILE *);
 int mutt_copy_body (FILE *, BODY **, BODY *);
 int mutt_decode_save_attachment (FILE *, BODY *, const char *, int, int);
 int mutt_display_message (HEADER *h);
