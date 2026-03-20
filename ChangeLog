@@ -1,3 +1,121 @@
+2026-03-20 13:18:13 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0f1f138c)
+
+        * Update UPDATING file for 2.3.1 release.
+
+M	UPDATING
+
+2026-02-25 11:15:20 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3a8dfafc)
+
+        * Fix browser examine_directory() writable buffer parameter bug.
+        
+        Despite being "const char *", the directory "d" parameter was being
+        modified inside examine_directory() if the directory no longer
+        existed.  The code climbed the directory path until it found where it
+        still existed, using the strchr() return value as "char *" to modify
+        the "const char *" parameter.
+        
+        Unfortunately, it modified the buffer data directly without updating
+        the dptr.  This could lead to buggy behavior, because subsequent
+        buffer operations would append to the dptr, unaware that the string
+        was nul terminated earlier.
+        
+        Thanks to Rene Kita for finding this issue and to Alejandro Colomar
+        for his research into the problem.
+
+M	browser.c
+
+2026-02-22 12:34:22 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a0083dc9)
+
+        * Fix IMAP reconnect crash at password prompt.
+        
+        When waiting at a password prompt, eventually it will time out and
+        call imap_keepalive().  This will end up recursively calling
+        imap_check_mailbox(), because the idata has IMAP_REOPEN_ALLOW set
+        during a reconnect operation.
+        
+        To prevent this problem, don't send keepalives on connections with a
+        FATAL status.  In any case, we shouldn't be sending keepalives since
+        the connection is in an unknown state.
+        
+        As an aside, a reconnect should be using the cached credentials in the
+        Connections list when imap_conn_find() iterates through the connection
+        list.  However, ticket 517 clearly shows there is a path where this is
+        not happening.  I haven't figured out how yet, but this fix should be
+        applied regardless.
+
+M	imap/util.c
+
+2026-02-14 12:20:34 +0800  Kevin J. McCarthy  <kevin@8t8.us> (025a33ad)
+
+        * Fix another compilation error --without-wc-funcs.
+        
+        This was generating an error on FreeBSD:
+          mbyte.c:417:5: error: redefinition of '__wcwidth'
+        
+        Thanks to Daniel Tameling for suggesting the undef and testing it
+        fixes the build error.
+
+M	mbyte.h
+
+2026-01-26 12:57:05 +0800  Kevin J. McCarthy  <kevin@8t8.us> (8b10799c)
+
+        * Fix iswblank() compilation error when configured --without-wc-funcs.
+        
+        The iswblank() call was added to mutt_format_string() in commit
+        7074b571, more recently than all the mbyte.[ch] substitution code
+        added about 25 years ago.
+        
+        Unfortunately, when added, it wasn't included in the HAVE_WC_FUNCS
+        tests, and a replacement was not created in mbyte.c for when mutt is
+        configured with --without-wc-funcs.  This led to a compilation error
+        in that (apparently rarely used) configuration, because wctype.h is
+        not included in that case.
+        
+        Honestly the code is a little bit confusing, but I've preserved the
+        existing conventions for this stable branch fix.
+
+M	configure.ac
+M	curs_lib.c
+M	mbyte.c
+M	mbyte.h
+
+2026-01-25 11:01:42 +0800  Kevin J. McCarthy  <kevin@8t8.us> (50e3b1f3)
+
+        * automatic post-release commit for mutt-2.3.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2026-01-25 10:55:27 +0800  Kevin J. McCarthy  <kevin@8t8.us> (6d9cf2fb)
 
         * Update UPDATING file for 2.3.0 release.
