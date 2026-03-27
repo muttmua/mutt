@@ -81,7 +81,7 @@ int query_quadoption (int, const char *);
 int quadoption (int);
 int mutt_query_boolean (int opt, const char *prompt, int def);
 
-char* mutt_extract_message_id (const char *, const char **, int);
+char *mutt_extract_message_id (const char *, const char **, int);
 
 ADDRESS *mutt_get_address (ENVELOPE *, char **);
 ADDRESS *mutt_lookup_alias (const char *s);
@@ -181,7 +181,7 @@ void _mutt_adv_mktemp (BUFFER *, const char *);
 #define _mutt_buffer_mktemp_pfx_sfx(a,b,c,d) _mutt_buffer_mktemp (a, b, c, d, __FILE__, __LINE__)
 void _mutt_buffer_mktemp (BUFFER *, const char *, const char *, const char *, const char *, int);
 
-void mutt_account_hook (const char* url);
+void mutt_account_hook (const char *url);
 void mutt_alias_menu (char *, size_t, ALIAS *);
 void mutt_allow_interrupt (int);
 void mutt_auto_subscribe (const char *);
@@ -252,7 +252,7 @@ void mutt_draw_tree (CONTEXT *);
 void mutt_check_lookup_list (BODY *, char *, size_t);
 void mutt_list_menu (CONTEXT *ctx, HEADER *cur);
 void mutt_make_help (char *, size_t, const char *, int, int);
-void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra);
+void mutt_merge_envelopes(ENVELOPE *base, ENVELOPE **extra);
 void mutt_message_to_7bit (BODY *, FILE *);
 void mutt_normalize_time (struct tm *);
 void mutt_paddstr (int, const char *);

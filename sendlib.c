@@ -1677,9 +1677,9 @@ static int get_toplevel_encoding (BODY *a)
 }
 
 /* check for duplicate boundary. return 1 if duplicate */
-static int mutt_check_boundary (const char* boundary, BODY *b)
+static int mutt_check_boundary (const char *boundary, BODY *b)
 {
-  char* p;
+  char *p;
 
   if (b->parts && mutt_check_boundary (boundary, b->parts))
     return 1;
@@ -2941,7 +2941,7 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
   if ((f = safe_fopen (mutt_b2s (tempfile), "w")) != NULL)
   {
     int ch_flags = CH_XMIT | CH_NONEWLINE | CH_NOQFROM;
-    char* msgid_str;
+    char *msgid_str;
     BUFFER *date;
 
     if (!option (OPTBOUNCEDELIVERED))

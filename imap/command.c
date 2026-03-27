@@ -38,23 +38,23 @@
 #define IMAP_CMD_BUFSIZE 512
 
 /* forward declarations */
-static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags);
-static int cmd_queue_full (IMAP_DATA* idata);
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags);
-static IMAP_COMMAND* cmd_new (IMAP_DATA* idata);
+static int cmd_start (IMAP_DATA *idata, const char *cmdstr, int flags);
+static int cmd_queue_full (IMAP_DATA *idata);
+static int cmd_queue (IMAP_DATA *idata, const char *cmdstr, int flags);
+static IMAP_COMMAND *cmd_new (IMAP_DATA *idata);
 static int cmd_status (const char *s);
-static void cmd_handle_fatal (IMAP_DATA* idata);
-static int cmd_handle_untagged (IMAP_DATA* idata);
-static void cmd_parse_capability (IMAP_DATA* idata, char* s);
-static void cmd_parse_vanished (IMAP_DATA* idata, char* s);
-static void cmd_parse_expunge (IMAP_DATA* idata, const char* s);
-static void cmd_parse_list (IMAP_DATA* idata, char* s);
-static void cmd_parse_lsub (IMAP_DATA* idata, char* s);
-static void cmd_parse_fetch (IMAP_DATA* idata, char* s);
-static void cmd_parse_myrights (IMAP_DATA* idata, const char* s);
-static void cmd_parse_search (IMAP_DATA* idata, const char* s);
-static void cmd_parse_status (IMAP_DATA* idata, char* s);
-static void cmd_parse_enabled (IMAP_DATA* idata, const char* s);
+static void cmd_handle_fatal (IMAP_DATA *idata);
+static int cmd_handle_untagged (IMAP_DATA *idata);
+static void cmd_parse_capability (IMAP_DATA *idata, char *s);
+static void cmd_parse_vanished (IMAP_DATA *idata, char *s);
+static void cmd_parse_expunge (IMAP_DATA *idata, const char *s);
+static void cmd_parse_list (IMAP_DATA *idata, char *s);
+static void cmd_parse_lsub (IMAP_DATA *idata, char *s);
+static void cmd_parse_fetch (IMAP_DATA *idata, char *s);
+static void cmd_parse_myrights (IMAP_DATA *idata, const char *s);
+static void cmd_parse_search (IMAP_DATA *idata, const char *s);
+static void cmd_parse_status (IMAP_DATA *idata, char *s);
+static void cmd_parse_enabled (IMAP_DATA *idata, const char *s);
 
 static const char * const Capabilities[] = {
   "IMAP4",
@@ -82,7 +82,7 @@ static const char * const Capabilities[] = {
 
 /* imap_cmd_start: Given an IMAP command, send it to the server.
  *   If cmdstr is NULL, sends queued commands. */
-int imap_cmd_start (IMAP_DATA* idata, const char* cmdstr)
+int imap_cmd_start (IMAP_DATA *idata, const char *cmdstr)
 {
   return cmd_start (idata, cmdstr, 0);
 }
@@ -91,13 +91,13 @@ int imap_cmd_start (IMAP_DATA* idata, const char* cmdstr)
  *   tagged completion response, handles untagged messages, can read
  *   arbitrarily large strings (using malloc, so don't make it _too_
  *   large!). */
-int imap_cmd_step (IMAP_DATA* idata)
+int imap_cmd_step (IMAP_DATA *idata)
 {
   size_t len = 0;
   int c;
   int rc;
   int stillrunning = 0;
-  IMAP_COMMAND* cmd;
+  IMAP_COMMAND *cmd;
 
   if (idata->status == IMAP_FATAL)
   {
@@ -210,10 +210,10 @@ int imap_code (const char *s)
 }
 
 /* imap_cmd_trailer: extra information after tagged command response if any */
-const char* imap_cmd_trailer (IMAP_DATA* idata)
+const char *imap_cmd_trailer (IMAP_DATA *idata)
 {
-  static const char* notrailer = "";
-  const char* s = idata->buf;
+  static const char *notrailer = "";
+  const char *s = idata->buf;
 
   if (!s)
   {
@@ -247,7 +247,7 @@ const char* imap_cmd_trailer (IMAP_DATA* idata)
  *   IMAP_CMD_POLL: poll the socket for a response before running imap_cmd_step.
  * Return 0 on success, -1 on Failure, -2 on OK Failure
  */
-int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
+int imap_exec (IMAP_DATA *idata, const char *cmdstr, int flags)
 {
   int rc;
 
@@ -298,7 +298,7 @@ int imap_exec (IMAP_DATA* idata, const char* cmdstr, int flags)
  * idata->check_status is set and will be used later by
  * imap_check_mailbox().
  */
-void imap_cmd_finish (IMAP_DATA* idata)
+void imap_cmd_finish (IMAP_DATA *idata)
 {
   if (idata->status == IMAP_FATAL)
   {
@@ -332,7 +332,7 @@ void imap_cmd_finish (IMAP_DATA* idata)
 }
 
 /* imap_cmd_idle: Enter the IDLE state. */
-int imap_cmd_idle (IMAP_DATA* idata)
+int imap_cmd_idle (IMAP_DATA *idata)
 {
   int rc;
 
@@ -372,7 +372,7 @@ int imap_cmd_idle (IMAP_DATA* idata)
   return 0;
 }
 
-static int cmd_queue_full (IMAP_DATA* idata)
+static int cmd_queue_full (IMAP_DATA *idata)
 {
   if ((idata->nextcmd + 1) % idata->cmdslots == idata->lastcmd)
     return 1;
@@ -382,9 +382,9 @@ static int cmd_queue_full (IMAP_DATA* idata)
 
 /* sets up a new command control block and adds it to the queue.
  * Returns NULL if the pipeline is full. */
-static IMAP_COMMAND* cmd_new (IMAP_DATA* idata)
+static IMAP_COMMAND *cmd_new (IMAP_DATA *idata)
 {
-  IMAP_COMMAND* cmd;
+  IMAP_COMMAND *cmd;
 
   if (cmd_queue_full (idata))
   {
@@ -405,9 +405,9 @@ static IMAP_COMMAND* cmd_new (IMAP_DATA* idata)
 }
 
 /* queues command. If the queue is full, attempts to drain it. */
-static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags)
+static int cmd_queue (IMAP_DATA *idata, const char *cmdstr, int flags)
 {
-  IMAP_COMMAND* cmd;
+  IMAP_COMMAND *cmd;
   int rc;
 
   if (cmd_queue_full (idata))
@@ -429,7 +429,7 @@ static int cmd_queue (IMAP_DATA* idata, const char* cmdstr, int flags)
   return 0;
 }
 
-static int cmd_start (IMAP_DATA* idata, const char* cmdstr, int flags)
+static int cmd_start (IMAP_DATA *idata, const char *cmdstr, int flags)
 {
   int rc;
 
@@ -473,7 +473,7 @@ static int cmd_status (const char *s)
 }
 
 /* cmd_handle_fatal: when IMAP_DATA is in fatal state, do what we can */
-static void cmd_handle_fatal (IMAP_DATA* idata)
+static void cmd_handle_fatal (IMAP_DATA *idata)
 {
   /* Attempt to reconnect later during mx_check_mailbox() */
   if (Context && idata->ctx == Context)
@@ -510,10 +510,10 @@ static void cmd_handle_fatal (IMAP_DATA* idata)
 }
 
 /* cmd_handle_untagged: fallback parser for otherwise unhandled messages. */
-static int cmd_handle_untagged (IMAP_DATA* idata)
+static int cmd_handle_untagged (IMAP_DATA *idata)
 {
-  char* s;
-  char* pn;
+  char *s;
+  char *pn;
   unsigned int count;
 
   s = imap_next_word (idata->buf);
@@ -612,10 +612,10 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
 
 /* cmd_parse_capabilities: set capability bits according to CAPABILITY
  *   response */
-static void cmd_parse_capability (IMAP_DATA* idata, char* s)
+static void cmd_parse_capability (IMAP_DATA *idata, char *s)
 {
   int x;
-  char* bracket;
+  char *bracket;
 
   muttdbg(3, "Handling CAPABILITY");
 
@@ -641,10 +641,10 @@ static void cmd_parse_capability (IMAP_DATA* idata, char* s)
 
 /* cmd_parse_expunge: mark headers with new sequence ID and mark idata to
  *   be reopened at our earliest convenience */
-static void cmd_parse_expunge (IMAP_DATA* idata, const char* s)
+static void cmd_parse_expunge (IMAP_DATA *idata, const char *s)
 {
   unsigned int exp_msn, cur;
-  HEADER* h;
+  HEADER *h;
 
   muttdbg(2, "Handling EXPUNGE");
 
@@ -680,13 +680,13 @@ static void cmd_parse_expunge (IMAP_DATA* idata, const char* s)
 /* cmd_parse_vanished: handles VANISHED (RFC 7162), which is like
  *   expunge, but passes a seqset of UIDs.  An optional (EARLIER) argument
  *   specifies not to decrement subsequent MSNs. */
-static void cmd_parse_vanished (IMAP_DATA* idata, char* s)
+static void cmd_parse_vanished (IMAP_DATA *idata, char *s)
 {
   int earlier = 0, rc;
   char *end_of_seqset;
   SEQSET_ITERATOR *iter;
   unsigned int uid, exp_msn, cur;
-  HEADER* h;
+  HEADER *h;
 
   muttdbg(2, "Handling VANISHED");
 
@@ -769,7 +769,7 @@ static void cmd_parse_vanished (IMAP_DATA* idata, char* s)
  *   handles unanticipated FETCH responses, and only FLAGS data. We get
  *   these if another client has changed flags for a mailbox we've selected.
  *   Of course, a lot of code here duplicates code in message.c. */
-static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
+static void cmd_parse_fetch (IMAP_DATA *idata, char *s)
 {
   unsigned int msn, uid;
   HEADER *h;
@@ -900,9 +900,9 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
   }
 }
 
-static void cmd_parse_list (IMAP_DATA* idata, char* s)
+static void cmd_parse_list (IMAP_DATA *idata, char *s)
 {
-  IMAP_LIST* list;
+  IMAP_LIST *list;
   IMAP_LIST lb;
   char delimbuf[5]; /* worst case: "\\"\0 */
   unsigned int litlen;
@@ -990,7 +990,7 @@ static void cmd_parse_list (IMAP_DATA* idata, char* s)
   }
 }
 
-static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
+static void cmd_parse_lsub (IMAP_DATA *idata, char *s)
 {
   BUFFER *mailbox = NULL;
   ciss_url_t url;
@@ -1031,7 +1031,7 @@ static void cmd_parse_lsub (IMAP_DATA* idata, char* s)
 }
 
 /* cmd_parse_myrights: set rights bits according to MYRIGHTS response */
-static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
+static void cmd_parse_myrights (IMAP_DATA *idata, const char *s)
 {
   muttdbg(2, "Handling MYRIGHTS");
 
@@ -1096,7 +1096,7 @@ static void cmd_parse_myrights (IMAP_DATA* idata, const char* s)
 }
 
 /* cmd_parse_search: store SEARCH response for later use */
-static void cmd_parse_search (IMAP_DATA* idata, const char* s)
+static void cmd_parse_search (IMAP_DATA *idata, const char *s)
 {
   unsigned int uid;
   HEADER *h;
@@ -1115,11 +1115,11 @@ static void cmd_parse_search (IMAP_DATA* idata, const char* s)
 
 /* first cut: just do buffy update. Later we may wish to cache all
  * mailbox information, even that not desired by buffy */
-static void cmd_parse_status (IMAP_DATA* idata, char* s)
+static void cmd_parse_status (IMAP_DATA *idata, char *s)
 {
-  char* mailbox;
-  char* value;
-  BUFFY* inc;
+  char *mailbox;
+  char *value;
+  BUFFY *inc;
   IMAP_MBOX mx;
   unsigned long ulcount;
   unsigned int count;
@@ -1286,7 +1286,7 @@ static void cmd_parse_status (IMAP_DATA* idata, char* s)
 }
 
 /* cmd_parse_enabled: record what the server has enabled */
-static void cmd_parse_enabled (IMAP_DATA* idata, const char* s)
+static void cmd_parse_enabled (IMAP_DATA *idata, const char *s)
 {
   muttdbg(2, "Handling ENABLED");
 

@@ -72,7 +72,7 @@ void mx_update_tables (CONTEXT *, int);
 int mx_lock_file (const char *, int, int, int, int);
 int mx_unlock_file (const char *path, int fd, int dot);
 
-struct mx_ops* mx_get_ops (int magic);
+struct mx_ops *mx_get_ops (int magic);
 extern struct mx_ops mx_maildir_ops;
 extern struct mx_ops mx_mbox_ops;
 extern struct mx_ops mx_mh_ops;

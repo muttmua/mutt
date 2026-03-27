@@ -103,10 +103,10 @@ void mutt_bcache_close (body_cache_t **bcache)
   FREE(bcache);                 /* __FREE_CHECKED__ */
 }
 
-FILE* mutt_bcache_get(body_cache_t *bcache, const char *id)
+FILE *mutt_bcache_get(body_cache_t *bcache, const char *id)
 {
   BUFFER *path;
-  FILE* fp = NULL;
+  FILE *fp = NULL;
 
   if (!id || !*id || !bcache)
     return NULL;
@@ -124,11 +124,11 @@ FILE* mutt_bcache_get(body_cache_t *bcache, const char *id)
   return fp;
 }
 
-FILE* mutt_bcache_put(body_cache_t *bcache, const char *id, int tmp)
+FILE *mutt_bcache_put(body_cache_t *bcache, const char *id, int tmp)
 {
   BUFFER *path = NULL;
-  FILE* fp = NULL;
-  char* s = NULL;
+  FILE *fp = NULL;
+  char *s = NULL;
   struct stat sb;
 
   if (!id || !*id || !bcache)
@@ -164,7 +164,7 @@ out:
   return fp;
 }
 
-int mutt_bcache_commit(body_cache_t* bcache, const char* id)
+int mutt_bcache_commit(body_cache_t *bcache, const char *id)
 {
   BUFFER *tmpid;
   int rv;
@@ -178,7 +178,7 @@ int mutt_bcache_commit(body_cache_t* bcache, const char* id)
   return rv;
 }
 
-int mutt_bcache_move(body_cache_t* bcache, const char* id, const char* newid)
+int mutt_bcache_move(body_cache_t *bcache, const char *id, const char *newid)
 {
   BUFFER *path, *newpath;
   int rv;

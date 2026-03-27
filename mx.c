@@ -64,7 +64,7 @@
 #include <ctype.h>
 #include <utime.h>
 
-struct mx_ops* mx_get_ops (int magic)
+struct mx_ops *mx_get_ops (int magic)
 {
   switch (magic)
   {
@@ -513,7 +513,7 @@ int mx_set_magic (const char *s)
 /* mx_access: Wrapper for access, checks permissions on a given mailbox.
  *   We may be interested in using ACL-style flags at some point, currently
  *   we use the normal access() flags. */
-int mx_access (const char* path, int flags)
+int mx_access (const char *path, int flags)
 {
 #ifdef USE_IMAP
   if (mx_is_imap (path))

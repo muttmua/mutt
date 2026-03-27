@@ -46,9 +46,9 @@ int   smime_decrypt_mime (FILE *, FILE **, BODY *, BODY **);
 int  smime_application_smime_handler (BODY *, STATE *);
 
 
-BODY* smime_sign_message (BODY *);
+BODY *smime_sign_message (BODY *);
 
-BODY* smime_build_smime_entity (BODY *, char *);
+BODY *smime_build_smime_entity (BODY *, char *);
 
 int   smime_verify_one(BODY *, STATE *, const char *);
 
@@ -56,7 +56,7 @@ int   smime_verify_one(BODY *, STATE *, const char *);
 int   smime_verify_sender(HEADER *);
 
 
-char* smime_get_field_from_db (char *, char *, short, short);
+char *smime_get_field_from_db (char *, char *, short, short);
 
 void  smime_getkeys (ENVELOPE *);
 

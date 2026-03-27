@@ -1618,7 +1618,7 @@ static void show_one_sig_validity (gpgme_ctx_t ctx, int idx, STATE *s)
     state_puts (txt, s);
 }
 
-static void print_smime_keyinfo (const char* msg, gpgme_signature_t sig,
+static void print_smime_keyinfo (const char *msg, gpgme_signature_t sig,
                                  gpgme_key_t key, STATE *s)
 {
   int msgwid;
@@ -2331,7 +2331,7 @@ bail:
   return -1;
 }
 
-static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
+static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE **fp)
 {
   /* Before gpgme 1.9.0 and gpg 2.1.14 there was no side-effect free
    * way to view key data in GPGME, so we import the key into a
@@ -2345,7 +2345,7 @@ static int pgp_gpgme_extract_keys (gpgme_data_t keydata, FILE** fp)
   gpgme_key_t key;
   gpgme_user_id_t uid;
   gpgme_subkey_t subkey;
-  const char* shortid;
+  const char *shortid;
   size_t len;
   char date[STRING];
   int more;
@@ -5506,7 +5506,7 @@ static int verify_sender (HEADER *h, gpgme_protocol_t protocol)
             && (uid->email[uid_length - 1] == '>')
             && (uid_length == sender_length + 2))
         {
-          const char* at_sign = strchr(uid->email + 1, '@');
+          const char *at_sign = strchr(uid->email + 1, '@');
           if (at_sign == NULL)
           {
             if (! strncmp (uid->email + 1, sender->mailbox, sender_length))
@@ -5519,8 +5519,8 @@ static int verify_sender (HEADER *h, gpgme_protocol_t protocol)
              * The mailbox part is case-sensitive,
              * the domainname is not. (RFC 2821)
              */
-            const char* tmp_email = uid->email + 1;
-            const char* tmp_sender = sender->mailbox;
+            const char *tmp_email = uid->email + 1;
+            const char *tmp_sender = sender->mailbox;
             /* length of mailbox part including '@' */
             int mailbox_length = at_sign - tmp_email + 1;
             int domainname_length = sender_length - mailbox_length;

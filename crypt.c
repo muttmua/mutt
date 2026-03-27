@@ -1205,7 +1205,7 @@ int mutt_signed_handler (BODY *a, STATE *s)
 /* Obtain pointers to fingerprint or short or long key ID, if any.
  * See mutt_crypt.h for details.
  */
-const char* crypt_get_fingerprint_or_id (char *p, const char **pphint,
+const char *crypt_get_fingerprint_or_id (char *p, const char **pphint,
                                          const char **ppl, const char **pps)
 {
   const char *ps, *pl, *phint;

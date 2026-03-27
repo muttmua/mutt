@@ -36,7 +36,7 @@
 #include <netinet/in.h>
 
 /* given an POP mailbox name, return host, port, username and password */
-int pop_parse_path (const char* path, ACCOUNT* acct)
+int pop_parse_path (const char *path, ACCOUNT *acct)
 {
   ciss_url_t url;
   char *c;

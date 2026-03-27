@@ -65,17 +65,17 @@ typedef struct myvar
 {
   char *name;
   char *value;
-  struct myvar* next;
+  struct myvar *next;
 } myvar_t;
 
-static myvar_t* MyVars;
+static myvar_t *MyVars;
 
 static int var_to_string (int idx, BUFFER *val);
 static void escape_string_to_buffer (BUFFER *dst, const char *src);
 
-static void myvar_set (const char* var, const char* val);
-static const char* myvar_get (const char* var);
-static void myvar_del (const char* var);
+static void myvar_set (const char *var, const char *val);
+static const char *myvar_get (const char *var);
+static void myvar_del (const char *var);
 
 extern char **envlist;
 
@@ -395,9 +395,9 @@ int mutt_extract_token (BUFFER *dest, BUFFER *tok, int flags)
   return 0;
 }
 
-static void mutt_free_opt (struct option_t* p)
+static void mutt_free_opt (struct option_t *p)
 {
-  REGEXP* pp;
+  REGEXP *pp;
 
   switch (p->type & DT_MASK)
   {
@@ -2004,9 +2004,9 @@ static void escape_string_to_buffer (BUFFER *dst, const char *src)
   }
 }
 
-static size_t escape_string (char *dst, size_t len, const char* src)
+static size_t escape_string (char *dst, size_t len, const char *src)
 {
-  char* p = dst;
+  char *p = dst;
 
   if (!len)
     return 0;
@@ -2249,7 +2249,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, union pointer_long_t udata, BUFFER
   int idx = -1;
   const char *p;
   BUFFER *scratch = NULL;
-  char* myvar;
+  char *myvar;
   long data = udata.l;
 
   while (MoreArgs (s))
@@ -3682,16 +3682,16 @@ static int mutt_execute_commands (LIST *p)
   return 0;
 }
 
-static char* mutt_find_cfg (const char *home, const char *xdg_cfg_home)
+static char *mutt_find_cfg (const char *home, const char *xdg_cfg_home)
 {
-  const char* names[] =
+  const char *names[] =
     {
       "muttrc-" MUTT_VERSION,
       "muttrc",
       NULL,
     };
 
-  const char* locations[][2] =
+  const char *locations[][2] =
     {
       { home, ".", },
       { home, ".mutt/" },
@@ -4082,9 +4082,9 @@ bail:
   return -1;
 }
 
-static void myvar_set (const char* var, const char* val)
+static void myvar_set (const char *var, const char *val)
 {
-  myvar_t** cur;
+  myvar_t **cur;
 
   for (cur = &MyVars; *cur; cur = &((*cur)->next))
     if (!mutt_strcmp ((*cur)->name, var))
@@ -4099,7 +4099,7 @@ static void myvar_set (const char* var, const char* val)
   mutt_str_replace (&(*cur)->value, val);
 }
 
-static void myvar_del (const char* var)
+static void myvar_del (const char *var)
 {
   myvar_t **cur;
   myvar_t *tmp;
@@ -4119,9 +4119,9 @@ static void myvar_del (const char* var)
   }
 }
 
-static const char* myvar_get (const char* var)
+static const char *myvar_get (const char *var)
 {
-  myvar_t* cur;
+  myvar_t *cur;
 
   for (cur = MyVars; cur; cur = cur->next)
     if (!mutt_strcmp (cur->name, var))

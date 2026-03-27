@@ -330,7 +330,7 @@ int mutt_which_case (const char *s)
 }
 
 static int
-msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
+msg_search (CONTEXT *ctx, pattern_t *pat, int msgno)
 {
   BUFFER *tempfile = NULL;
   MESSAGE *msg = NULL;
@@ -805,7 +805,7 @@ static void adjust_date_range (struct tm *min, struct tm *max)
   }
 }
 
-static const char * parse_date_range (const char* pc, struct tm *min,
+static const char * parse_date_range (const char *pc, struct tm *min,
                                       struct tm *max, int haveMin,
                                       struct tm *baseMin, BUFFER *err)
 {
@@ -1047,7 +1047,7 @@ out:
   return rc;
 }
 
-static int patmatch (const pattern_t* pat, const char* buf)
+static int patmatch (const pattern_t *pat, const char *buf)
 {
   if (pat->stringmatch)
     return pat->ign_case ? !strcasestr (buf, pat->p.str) :
@@ -1533,7 +1533,7 @@ static int match_threadchildren(struct pattern_t *pat, pattern_exec_flag flags, 
   return 0;
 }
 
-static int match_content_type(const pattern_t* pat, BODY *b)
+static int match_content_type(const pattern_t *pat, BODY *b)
 {
   char buffer[STRING];
   if (!b)
@@ -2024,7 +2024,7 @@ int mutt_search_command (int cur, int op)
   int incr;
   HEADER *h;
   progress_t progress;
-  const char* msg = NULL;
+  const char *msg = NULL;
 
   if (!*LastSearch || (op != OP_SEARCH_NEXT && op != OP_SEARCH_OPPOSITE))
   {

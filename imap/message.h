@@ -42,7 +42,7 @@ typedef struct imap_header_data
 
 typedef struct
 {
-  IMAP_HEADER_DATA* data;
+  IMAP_HEADER_DATA *data;
 
   time_t received;
   long content_length;

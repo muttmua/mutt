@@ -45,23 +45,23 @@ zstrmctx;
 
 /* simple wrapper functions to match zlib interface for calling
  * malloc/free */
-static void *mutt_zstrm_malloc (void* op, unsigned int sze, unsigned int v)
+static void *mutt_zstrm_malloc (void *op, unsigned int sze, unsigned int v)
 {
   return safe_calloc (sze, v);
 }
 
-static void mutt_zstrm_free (void* op, void* ptr)
+static void mutt_zstrm_free (void *op, void *ptr)
 {
   FREE (&ptr);
 }
 
-static int mutt_zstrm_open (CONNECTION* conn)
+static int mutt_zstrm_open (CONNECTION *conn)
 {
   /* cannot open a zlib connection, must wrap an existing one */
   return -1;
 }
 
-static int mutt_zstrm_close (CONNECTION* conn)
+static int mutt_zstrm_close (CONNECTION *conn)
 {
   zstrmctx* zctx = conn->sockdata;
   int rc = zctx->next_conn.conn_close (&zctx->next_conn);
@@ -89,7 +89,7 @@ static int mutt_zstrm_close (CONNECTION* conn)
   return rc;
 }
 
-static int mutt_zstrm_read (CONNECTION* conn, char* buf, size_t len)
+static int mutt_zstrm_read (CONNECTION *conn, char *buf, size_t len)
 {
   zstrmctx* zctx = conn->sockdata;
   int rc = 0;
@@ -167,7 +167,7 @@ retry:
   return zrc;
 }
 
-static int mutt_zstrm_poll (CONNECTION* conn, time_t wait_secs)
+static int mutt_zstrm_poll (CONNECTION *conn, time_t wait_secs)
 {
   zstrmctx* zctx = conn->sockdata;
 
@@ -180,7 +180,7 @@ static int mutt_zstrm_poll (CONNECTION* conn, time_t wait_secs)
     return zctx->next_conn.conn_poll (&zctx->next_conn, wait_secs);
 }
 
-static int mutt_zstrm_write (CONNECTION* conn, const char* buf, size_t count)
+static int mutt_zstrm_write (CONNECTION *conn, const char *buf, size_t count)
 {
   zstrmctx* zctx = conn->sockdata;
   int rc;
@@ -235,7 +235,7 @@ static int mutt_zstrm_write (CONNECTION* conn, const char* buf, size_t count)
   return rc <= 0 ? 1 : rc;  /* avoid wrong behaviour due to overflow */
 }
 
-void mutt_zstrm_wrap_conn (CONNECTION* conn)
+void mutt_zstrm_wrap_conn (CONNECTION *conn)
 {
   zstrmctx* zctx;
 

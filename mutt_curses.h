@@ -166,20 +166,20 @@ typedef struct
 {
   unsigned short inc;
   unsigned short flags;
-  const char* msg;
+  const char *msg;
   long pos;
   long size;
   unsigned long long timestamp_millis;
   char sizestr[SHORT_STRING];
 } progress_t;
 
-void mutt_progress_init (progress_t* progress, const char *msg,
+void mutt_progress_init (progress_t *progress, const char *msg,
                          unsigned short flags, unsigned short inc,
                          long size);
 /* If percent is positive, it is displayed as percentage, otherwise
  * percentage is calculated from progress->size and pos if progress
  * was initialized with positive size, otherwise no percentage is shown */
-void mutt_progress_update (progress_t* progress, long pos, int percent);
+void mutt_progress_update (progress_t *progress, long pos, int percent);
 
 /* Windows for different parts of the screen */
 typedef struct

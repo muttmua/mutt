@@ -28,9 +28,9 @@
 #include "mutt_curses.h"
 
 /* mutt_account_match: compare account info (host/port/user) */
-int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
+int mutt_account_match (const ACCOUNT *a1, const ACCOUNT *a2)
 {
-  const char* user = NONULL (Username);
+  const char *user = NONULL (Username);
 
   if (a1->type != a2->type)
     return 0;
@@ -63,7 +63,7 @@ int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
 }
 
 /* mutt_account_fromurl: fill account with information from url. */
-int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
+int mutt_account_fromurl (ACCOUNT *account, ciss_url_t *url)
 {
   /* must be present */
   if (url->host)
@@ -105,7 +105,7 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
  * to prevent cross-muttrc name collisions.  For that case, pass 1 to
  * force_users
  */
-void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url, int force_user)
+void mutt_account_tourl (ACCOUNT *account, ciss_url_t *url, int force_user)
 {
   url->scheme = U_UNKNOWN;
   url->user = NULL;
@@ -158,7 +158,7 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url, int force_user)
 }
 
 /* mutt_account_getuser: retrieve username into ACCOUNT, if necessary */
-int mutt_account_getuser (ACCOUNT* account)
+int mutt_account_getuser (ACCOUNT *account)
 {
   char prompt[SHORT_STRING];
 
@@ -189,7 +189,7 @@ int mutt_account_getuser (ACCOUNT* account)
   return 0;
 }
 
-int mutt_account_getlogin (ACCOUNT* account)
+int mutt_account_getlogin (ACCOUNT *account)
 {
   /* already set */
   if (account->flags & MUTT_ACCT_LOGIN)
@@ -227,7 +227,7 @@ static void getpass_prompt (char *prompt, size_t prompt_size, ACCOUNT *account)
             account->host);
 }
 
-int _mutt_account_getpass (ACCOUNT* account,
+int _mutt_account_getpass (ACCOUNT *account,
                            void (*prompt_func) (char *, size_t, ACCOUNT *))
 {
   char prompt[SHORT_STRING];
@@ -267,7 +267,7 @@ int mutt_account_getpass (ACCOUNT *account)
   return _mutt_account_getpass (account, getpass_prompt);
 }
 
-void mutt_account_unsetpass (ACCOUNT* account)
+void mutt_account_unsetpass (ACCOUNT *account)
 {
   account->flags &= ~MUTT_ACCT_PASS;
   account->flags &= ~MUTT_ACCT_PASS_FROM_URL;
@@ -281,7 +281,7 @@ void mutt_account_unsetpass (ACCOUNT* account)
  *
  * If xoauth2 is set, a deprecated XOAUTH2 token will be generated instead.
  */
-int mutt_account_getoauthbearer (ACCOUNT* account, BUFFER *authbearer, int xoauth2)
+int mutt_account_getoauthbearer (ACCOUNT *account, BUFFER *authbearer, int xoauth2)
 {
   FILE  *fp;
   char *cmd = NULL;

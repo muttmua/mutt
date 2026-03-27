@@ -28,21 +28,21 @@
 typedef struct
 {
   ACCOUNT account;
-  char* mbox;
+  char *mbox;
 } IMAP_MBOX;
 
 /* imap.c */
 int imap_access (const char *path);
 int imap_check_mailbox (CONTEXT *ctx, int *index_hint, int force);
-int imap_delete_mailbox (CONTEXT* idata, IMAP_MBOX mx);
+int imap_delete_mailbox (CONTEXT *idata, IMAP_MBOX mx);
 int imap_sync_mailbox (CONTEXT *ctx, int expunge, int *index_hint);
 int imap_close_mailbox (CONTEXT *ctx);
 int imap_buffy_check (int force, int check_stats);
 int imap_status (const char *path, int queue);
-int imap_search (CONTEXT* ctx, const pattern_t* pat);
+int imap_search (CONTEXT *ctx, const pattern_t *pat);
 int imap_subscribe (char *path, int subscribe);
-int imap_complete (char* dest, size_t dlen, const char* path);
-int imap_fast_trash (CONTEXT* ctx, char* dest);
+int imap_complete (char *dest, size_t dlen, const char *path);
+int imap_fast_trash (CONTEXT *ctx, char *dest);
 
 void imap_allow_reopen (CONTEXT *ctx);
 void imap_disallow_reopen (CONTEXT *ctx);
@@ -50,26 +50,26 @@ void imap_disallow_reopen (CONTEXT *ctx);
 extern struct mx_ops mx_imap_ops;
 
 /* browse.c */
-int imap_browse (const char* path, struct browser_state* state);
-int imap_mailbox_create (const char* folder, BUFFER *result);
-int imap_mailbox_rename (const char* mailbox, BUFFER *result);
+int imap_browse (const char *path, struct browser_state *state);
+int imap_mailbox_create (const char *folder, BUFFER *result);
+int imap_mailbox_rename (const char *mailbox, BUFFER *result);
 
 /* message.c */
-int imap_append_message (CONTEXT* ctx, MESSAGE* msg);
-int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete);
+int imap_append_message (CONTEXT *ctx, MESSAGE *msg);
+int imap_copy_messages (CONTEXT *ctx, HEADER *h, const char *dest, int delete);
 
 /* socket.c */
 void imap_logout_all (void);
 
 /* util.c */
-int imap_expand_path (BUFFER* path);
+int imap_expand_path (BUFFER *path);
 int imap_buffer_remove_path_password (BUFFER *dest, const char *src);
-int imap_parse_path (const char* path, IMAP_MBOX* mx);
-void imap_pretty_mailbox (char* path, size_t pathlen);
+int imap_parse_path (const char *path, IMAP_MBOX *mx);
+void imap_pretty_mailbox (char *path, size_t pathlen);
 
 int imap_wait_keepalive (pid_t pid);
 void imap_keepalive (void);
 
-int imap_account_match (const ACCOUNT* a1, const ACCOUNT* a2);
+int imap_account_match (const ACCOUNT *a1, const ACCOUNT *a2);
 
 #endif

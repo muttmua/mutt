@@ -601,7 +601,7 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
   BUFFER *hcfile = NULL;
   struct stat sb;
   unsigned char md5sum[16];
-  char* s;
+  char *s;
   int ret;
   size_t plen;
 #ifndef HAVE_ICONV
@@ -777,7 +777,7 @@ void *
 mutt_hcache_fetch(header_cache_t *h, const char *filename,
                   size_t(*keylen) (const char *fn))
 {
-  void* data;
+  void *data;
 
   data = mutt_hcache_fetch_raw (h, filename, keylen);
 
@@ -876,7 +876,7 @@ mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
                   size_t(*keylen) (const char *fn),
                   mutt_hcache_store_flags_t flags)
 {
-  char* data;
+  char *data;
   int dlen;
   int ret;
 
@@ -892,8 +892,8 @@ mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
 }
 
 int
-mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
-                       size_t dlen, size_t(*keylen) (const char* fn))
+mutt_hcache_store_raw (header_cache_t *h, const char *filename, void *data,
+                       size_t dlen, size_t(*keylen) (const char *fn))
 {
 #ifndef HAVE_DB4
   BUFFER *path = NULL;
@@ -971,7 +971,7 @@ mutt_hcache_store_raw (header_cache_t* h, const char* filename, void* data,
 #endif
 }
 
-static char* get_foldername (const char *folder)
+static char *get_foldername (const char *folder)
 {
   char *p = NULL;
   BUFFER *path;
@@ -997,7 +997,7 @@ static char* get_foldername (const char *folder)
 
 #if HAVE_QDBM
 static int
-hcache_open_qdbm (struct header_cache* h, const char* path)
+hcache_open_qdbm (struct header_cache *h, const char *path)
 {
   int    flags = VL_OWRITER | VL_OCREAT;
 
@@ -1046,7 +1046,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 
 #elif HAVE_TC
 static int
-hcache_open_tc (struct header_cache* h, const char* path)
+hcache_open_tc (struct header_cache *h, const char *path)
 {
   h->db = tcbdbnew();
   if (!h->db)
@@ -1108,7 +1108,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 
 #elif HAVE_KC
 static int
-hcache_open_kc (struct header_cache* h, const char* path)
+hcache_open_kc (struct header_cache *h, const char *path)
 {
   BUFFER *fullpath = NULL;
   int rc = -1;
@@ -1181,7 +1181,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 
 #elif HAVE_GDBM
 static int
-hcache_open_gdbm (struct header_cache* h, const char* path)
+hcache_open_gdbm (struct header_cache *h, const char *path)
 {
   int pagesize;
 
@@ -1255,7 +1255,7 @@ mutt_hcache_dbt_empty_init(DBT * dbt)
 }
 
 static int
-hcache_open_db4 (struct header_cache* h, const char* path)
+hcache_open_db4 (struct header_cache *h, const char *path)
 {
   struct stat sb;
   int ret;
@@ -1350,7 +1350,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 #elif HAVE_LMDB
 
 static int
-hcache_open_lmdb (struct header_cache* h, const char* path)
+hcache_open_lmdb (struct header_cache *h, const char *path)
 {
   int rc;
 
@@ -1468,7 +1468,7 @@ header_cache_t *
 mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
 {
   struct header_cache *h = safe_calloc(1, sizeof (struct header_cache));
-  int (*hcache_open) (struct header_cache* h, const char* path);
+  int (*hcache_open) (struct header_cache *h, const char *path);
   struct stat sb;
   BUFFER *hcpath = NULL;
 

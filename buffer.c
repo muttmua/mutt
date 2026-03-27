@@ -124,7 +124,7 @@ void mutt_buffer_fix_dptr (BUFFER *buf)
   }
 }
 
-static int _mutt_buffer_add_printf (BUFFER* buf, const char* fmt, va_list ap)
+static int _mutt_buffer_add_printf (BUFFER *buf, const char *fmt, va_list ap)
 {
   va_list ap_retry;
   int len, blen, doff;
@@ -158,7 +158,7 @@ static int _mutt_buffer_add_printf (BUFFER* buf, const char* fmt, va_list ap)
   return len;
 }
 
-int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
+int mutt_buffer_printf (BUFFER *buf, const char *fmt, ...)
 {
   va_list ap;
   int rv;
@@ -171,7 +171,7 @@ int mutt_buffer_printf (BUFFER* buf, const char* fmt, ...)
   return rv;
 }
 
-int mutt_buffer_add_printf (BUFFER* buf, const char* fmt, ...)
+int mutt_buffer_add_printf (BUFFER *buf, const char *fmt, ...)
 {
   va_list ap;
   int rv;
@@ -186,7 +186,7 @@ int mutt_buffer_add_printf (BUFFER* buf, const char* fmt, ...)
 /* Dynamically grows a BUFFER to accommodate s, in increments of 128 bytes.
  * Always one byte bigger than necessary for the null terminator, and
  * the buffer is always null-terminated */
-void mutt_buffer_addstr_n (BUFFER* buf, const char* s, size_t len)
+void mutt_buffer_addstr_n (BUFFER *buf, const char *s, size_t len)
 {
   if (!buf->data ||
       (buf->dptr + len + 1 > buf->data + buf->dsize))
@@ -196,12 +196,12 @@ void mutt_buffer_addstr_n (BUFFER* buf, const char* s, size_t len)
   *(buf->dptr) = '\0';
 }
 
-void mutt_buffer_addstr (BUFFER* buf, const char* s)
+void mutt_buffer_addstr (BUFFER *buf, const char *s)
 {
   mutt_buffer_addstr_n (buf, s, mutt_strlen (s));
 }
 
-void mutt_buffer_addch (BUFFER* buf, char c)
+void mutt_buffer_addch (BUFFER *buf, char c)
 {
   mutt_buffer_addstr_n (buf, &c, 1);
 }

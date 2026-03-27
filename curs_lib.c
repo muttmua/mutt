@@ -678,7 +678,7 @@ void mutt_curses_message (const char *fmt, ...)
   va_end (ap);
 }
 
-void mutt_progress_init (progress_t* progress, const char *msg,
+void mutt_progress_init (progress_t *progress, const char *msg,
                          unsigned short flags, unsigned short inc,
                          long size)
 {
@@ -720,7 +720,7 @@ void mutt_progress_init (progress_t* progress, const char *msg,
   mutt_progress_update (progress, 0, 0);
 }
 
-void mutt_progress_update (progress_t* progress, long pos, int percent)
+void mutt_progress_update (progress_t *progress, long pos, int percent)
 {
   char posstr[SHORT_STRING];
   short update = 0;

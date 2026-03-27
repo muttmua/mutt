@@ -399,7 +399,7 @@ static void smime_entry (char *s, size_t l, MUTTMENU * menu, int num)
 {
   smime_key_t **Table = (smime_key_t **) menu->data;
   smime_key_t *this = Table[num];
-  char* truststate;
+  char *truststate;
   switch (this->trust)
   {
     case 't':
@@ -438,7 +438,7 @@ static smime_key_t *smime_select_key (smime_key_t *keys, char *query)
   char helpstr[LONG_STRING];
   char buf[LONG_STRING];
   char title[256];
-  MUTTMENU* menu;
+  MUTTMENU *menu;
   char *s = "";
   int done = 0;
 

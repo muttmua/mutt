@@ -676,14 +676,14 @@ LIST *mutt_crypt_hook (ADDRESS *adr)
 }
 
 #ifdef USE_SOCKET
-void mutt_account_hook (const char* url)
+void mutt_account_hook (const char *url)
 {
   /* parsing commands with URLs in an account hook can cause a recursive
    * call. We just skip processing if this occurs. Typically such commands
    * belong in a folder-hook -- perhaps we should warn the user. */
   static int inhook = 0;
 
-  HOOK* hook;
+  HOOK *hook;
   BUFFER err;
 
   if (inhook)

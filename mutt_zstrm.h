@@ -22,7 +22,7 @@
 #include "mutt_socket.h"
 
 #if defined(USE_ZLIB)
-void mutt_zstrm_wrap_conn (CONNECTION* conn);
+void mutt_zstrm_wrap_conn (CONNECTION *conn);
 #endif
 
 #endif /* _MUTT_ZSTRM_H_ */

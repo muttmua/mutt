@@ -39,7 +39,7 @@
  * SLcurses_waddnstr() can't take a "const char *", so this is only
  * declared "static" (sigh)
  */
-static char* EditorHelp1 = N_("\
+static char *EditorHelp1 = N_("\
 ~~              insert a line beginning with a single ~\n\
 ~b addresses    add addresses to the Bcc: field\n\
 ~c addresses    add addresses to the Cc: field\n\
@@ -50,7 +50,7 @@ static char* EditorHelp1 = N_("\
 ~M messages     same as ~m, except include headers\n\
 ~p              print the message\n");
 
-static char* EditorHelp2 = N_("\
+static char *EditorHelp2 = N_("\
 ~q              write file and quit editor\n\
 ~r file         read a file into the editor\n\
 ~t users        add users to the To: field\n\

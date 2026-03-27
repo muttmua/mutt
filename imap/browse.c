@@ -31,17 +31,17 @@
 #include "imap_private.h"
 
 /* -- forward declarations -- */
-static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
-                                   struct browser_state* state, short isparent);
+static int browse_add_list_result (IMAP_DATA *idata, const char *cmd,
+                                   struct browser_state *state, short isparent);
 static void imap_add_folder (char delim, char *folder, int noselect,
                              int noinferiors, struct browser_state *state, short isparent);
 static int compare_names(struct folder_file *a, struct folder_file *b);
 
 /* imap_browse: IMAP hook into the folder browser, fills out browser_state,
  *   given a current folder to browse */
-int imap_browse (const char* path, struct browser_state* state)
+int imap_browse (const char *path, struct browser_state *state)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   IMAP_LIST list;
   char buf[LONG_STRING*2];
   char mbox[LONG_STRING];
@@ -229,9 +229,9 @@ fail:
 }
 
 /* imap_mailbox_create: Prompt for a new mailbox name, and try to create it */
-int imap_mailbox_create (const char* folder, BUFFER *result)
+int imap_mailbox_create (const char *folder, BUFFER *result)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   IMAP_MBOX mx;
   char buf[LONG_STRING];
   short n;
@@ -284,9 +284,9 @@ fail:
   return -1;
 }
 
-int imap_mailbox_rename(const char* mailbox, BUFFER *result)
+int imap_mailbox_rename(const char *mailbox, BUFFER *result)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   IMAP_MBOX mx;
   char buf[LONG_STRING];
   char newname[SHORT_STRING];
@@ -344,8 +344,8 @@ fail:
   return -1;
 }
 
-static int browse_add_list_result (IMAP_DATA* idata, const char* cmd,
-                                   struct browser_state* state, short isparent)
+static int browse_add_list_result (IMAP_DATA *idata, const char *cmd,
+                                   struct browser_state *state, short isparent)
 {
   IMAP_LIST list;
   IMAP_MBOX mx;

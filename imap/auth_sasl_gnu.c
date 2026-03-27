@@ -27,7 +27,7 @@
 
 #include <gsasl.h>
 
-imap_auth_res_t imap_auth_gsasl (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_gsasl (IMAP_DATA *idata, const char *method)
 {
   Gsasl_session *gsasl_session = NULL;
   const char *chosen_mech;

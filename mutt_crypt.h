@@ -182,7 +182,7 @@ int crypt_write_signed(BODY *a, STATE *s, const char *tempf);
             crypt_add_string_to_hints().
    *ppl     Start of long key ID if detected, else NULL.
    *pps     Start of short key ID if detected, else NULL. */
-const char* crypt_get_fingerprint_or_id (char *p, const char **pphint,
+const char *crypt_get_fingerprint_or_id (char *p, const char **pphint,
                                          const char **ppl, const char **pps);
 
 /* Check if a string contains a numerical key */

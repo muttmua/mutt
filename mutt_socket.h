@@ -54,18 +54,18 @@ typedef struct _connection
   struct _connection *next;
 
   void *sockdata;
-  int (*conn_read) (struct _connection* conn, char* buf, size_t len);
+  int (*conn_read) (struct _connection *conn, char *buf, size_t len);
   int (*conn_write) (struct _connection *conn, const char *buf, size_t count);
   int (*conn_open) (struct _connection *conn);
   int (*conn_close) (struct _connection *conn);
   int (*conn_poll) (struct _connection *conn, time_t wait_secs);
 } CONNECTION;
 
-int mutt_socket_open (CONNECTION* conn);
-int mutt_socket_close (CONNECTION* conn);
+int mutt_socket_open (CONNECTION *conn);
+int mutt_socket_close (CONNECTION *conn);
 int mutt_socket_has_buffered_input (CONNECTION *conn);
 void mutt_socket_clear_buffered_input (CONNECTION *conn);
-int mutt_socket_poll (CONNECTION* conn, time_t wait_secs);
+int mutt_socket_poll (CONNECTION *conn, time_t wait_secs);
 int mutt_socket_readchar (CONNECTION *conn, char *c);
 #define mutt_socket_buffer_readln(A,B) mutt_socket_buffer_readln_d(A,B,MUTT_SOCK_LOG_CMD)
 int mutt_socket_buffer_readln_d (BUFFER *buf, CONNECTION *conn, int dbg);
@@ -76,14 +76,14 @@ int mutt_socket_readln_d (char *buf, size_t buflen, CONNECTION *conn, int dbg);
 int mutt_socket_write_d (CONNECTION *conn, const char *buf, int len, int dbg);
 
 /* stupid hack for imap_logout_all */
-CONNECTION* mutt_socket_head (void);
-void mutt_socket_free (CONNECTION* conn);
-CONNECTION* mutt_conn_find (const CONNECTION* start, const ACCOUNT* account);
+CONNECTION *mutt_socket_head (void);
+void mutt_socket_free (CONNECTION *conn);
+CONNECTION *mutt_conn_find (const CONNECTION *start, const ACCOUNT *account);
 
-int raw_socket_read (CONNECTION* conn, char* buf, size_t len);
-int raw_socket_write (CONNECTION* conn, const char* buf, size_t count);
+int raw_socket_read (CONNECTION *conn, char *buf, size_t len);
+int raw_socket_write (CONNECTION *conn, const char *buf, size_t count);
 int raw_socket_open (CONNECTION *conn);
 int raw_socket_close (CONNECTION *conn);
-int raw_socket_poll (CONNECTION* conn, time_t wait_secs);
+int raw_socket_poll (CONNECTION *conn, time_t wait_secs);
 
 #endif /* _MUTT_SOCKET_H_ */

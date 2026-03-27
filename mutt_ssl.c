@@ -87,12 +87,12 @@ sslsockdata;
 /* local prototypes */
 static int ssl_init (void);
 static int add_entropy (const char *file);
-static int ssl_socket_read (CONNECTION* conn, char* buf, size_t len);
-static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len);
-static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs);
+static int ssl_socket_read (CONNECTION *conn, char *buf, size_t len);
+static int ssl_socket_write (CONNECTION *conn, const char *buf, size_t len);
+static int ssl_socket_poll (CONNECTION *conn, time_t wait_secs);
 static int ssl_socket_open (CONNECTION * conn);
 static int ssl_socket_close (CONNECTION * conn);
-static int starttls_close (CONNECTION* conn);
+static int starttls_close (CONNECTION *conn);
 static void ssl_err (sslsockdata *data, int err);
 static void ssl_dprint_err_stack (void);
 static int ssl_cache_trusted_cert (X509 *cert);
@@ -319,7 +319,7 @@ bail:
 }
 
 /* mutt_ssl_starttls: Negotiate TLS over an already opened connection. */
-int mutt_ssl_starttls (CONNECTION* conn)
+int mutt_ssl_starttls (CONNECTION *conn)
 {
   long ssl_options = 0;
 
@@ -471,7 +471,7 @@ int mutt_ssl_socket_setup (CONNECTION * conn)
   return 0;
 }
 
-static int ssl_socket_read (CONNECTION* conn, char* buf, size_t len)
+static int ssl_socket_read (CONNECTION *conn, char *buf, size_t len)
 {
   sslsockdata *data = conn->sockdata;
   int rc;
@@ -486,7 +486,7 @@ static int ssl_socket_read (CONNECTION* conn, char* buf, size_t len)
   return rc;
 }
 
-static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len)
+static int ssl_socket_write (CONNECTION *conn, const char *buf, size_t len)
 {
   sslsockdata *data = conn->sockdata;
   int rc;
@@ -498,7 +498,7 @@ static int ssl_socket_write (CONNECTION* conn, const char* buf, size_t len)
   return rc;
 }
 
-static int ssl_socket_poll (CONNECTION* conn, time_t wait_secs)
+static int ssl_socket_poll (CONNECTION *conn, time_t wait_secs)
 {
   sslsockdata *data = conn->sockdata;
 
@@ -641,7 +641,7 @@ static int ssl_socket_close (CONNECTION * conn)
   return raw_socket_close (conn);
 }
 
-static int starttls_close (CONNECTION* conn)
+static int starttls_close (CONNECTION *conn)
 {
   int rc;
 
@@ -656,7 +656,7 @@ static int starttls_close (CONNECTION* conn)
 
 static void ssl_err (sslsockdata *data, int err)
 {
-  const char* errmsg;
+  const char *errmsg;
   unsigned long sslerr;
 
   switch (SSL_get_error (data->ssl, err))

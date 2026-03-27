@@ -219,10 +219,10 @@ out:
   return rc;
 }
 
-static inline mode_t mh_umask (CONTEXT* ctx)
+static inline mode_t mh_umask (CONTEXT *ctx)
 {
   struct stat st;
-  struct mh_data* data = mh_data (ctx);
+  struct mh_data *data = mh_data (ctx);
 
   if (data && data->mh_umask)
     return data->mh_umask;
@@ -970,13 +970,13 @@ static int md_cmp_path (struct maildir *a, struct maildir *b)
 /*
  * Merge two maildir lists according to the inode numbers.
  */
-static struct maildir*  maildir_merge_lists (struct maildir *left,
+static struct maildir *maildir_merge_lists (struct maildir *left,
                                              struct maildir *right,
                                              int (*cmp) (struct maildir *,
                                                          struct maildir *))
 {
-  struct maildir* head;
-  struct maildir* tail;
+  struct maildir *head;
+  struct maildir *tail;
 
   if (left && right)
   {
@@ -1028,7 +1028,7 @@ static struct maildir*  maildir_merge_lists (struct maildir *left,
   return head;
 }
 
-static struct maildir* maildir_ins_sort (struct maildir* list,
+static struct maildir *maildir_ins_sort (struct maildir *list,
                                          int (*cmp) (struct maildir *,
                                                      struct maildir *))
 {
@@ -1060,12 +1060,12 @@ static struct maildir* maildir_ins_sort (struct maildir* list,
 /*
  * Sort maildir list according to inode.
  */
-static struct maildir* maildir_sort (struct maildir* list, size_t len,
+static struct maildir *maildir_sort (struct maildir *list, size_t len,
                                      int (*cmp) (struct maildir *,
                                                  struct maildir *))
 {
-  struct maildir* left = list;
-  struct maildir* right = list;
+  struct maildir *left = list;
+  struct maildir *right = list;
   size_t c = 0;
 
   if (!list || !list->next)

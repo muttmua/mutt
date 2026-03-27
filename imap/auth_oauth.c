@@ -28,7 +28,7 @@
 #include "auth.h"
 
 /* imap_auth_oauth: AUTH=OAUTHBEARER support. See RFC 7628 */
-static imap_auth_res_t imap_auth_oauth (IMAP_DATA* idata, int xoauth2)
+static imap_auth_res_t imap_auth_oauth (IMAP_DATA *idata, int xoauth2)
 {
   int rc = IMAP_AUTH_FAILURE, steprc;
   BUFFER *bearertoken = NULL, *authline = NULL;
@@ -80,7 +80,7 @@ cleanup:
 }
 
 /* AUTH=OAUTHBEARER support. See RFC 7628 */
-imap_auth_res_t imap_auth_oauthbearer (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_oauthbearer (IMAP_DATA *idata, const char *method)
 {
   /* For now, we only support SASL_IR also and over TLS */
   if (!mutt_bit_isset (idata->capabilities, SASL_IR) ||
@@ -97,7 +97,7 @@ imap_auth_res_t imap_auth_oauthbearer (IMAP_DATA* idata, const char* method)
 }
 
 /* AUTH=XOAUTH2 support. */
-imap_auth_res_t imap_auth_xoauth2 (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_xoauth2 (IMAP_DATA *idata, const char *method)
 {
   /* For now, we only support SASL_IR also and over TLS */
   if (!mutt_bit_isset (idata->capabilities, SASL_IR) ||

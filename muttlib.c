@@ -923,7 +923,7 @@ void mutt_free_envelope (ENVELOPE **p)
 }
 
 /* move all the headers from extra not present in base into base */
-void mutt_merge_envelopes(ENVELOPE* base, ENVELOPE** extra)
+void mutt_merge_envelopes(ENVELOPE *base, ENVELOPE **extra)
 {
   /* copies each existing element if necessary, and sets the element
    * to NULL in the source so that mutt_free_envelope doesn't leave us
@@ -2171,7 +2171,7 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
 }
 
 /* sets mtime of 'to' to mtime of 'from' */
-void mutt_set_mtime (const char* from, const char* to)
+void mutt_set_mtime (const char *from, const char *to)
 {
   struct utimbuf utim;
   struct stat st;
@@ -2507,10 +2507,10 @@ int mutt_convert_to_lf (const char *infile, FILE *ifp, const char *outfile, FILE
  ************************************************************************/
 
 /* remove a directory and everything under it */
-int mutt_rmtree (const char* path)
+int mutt_rmtree (const char *path)
 {
-  DIR* dirp;
-  struct dirent* de;
+  DIR *dirp;
+  struct dirent *de;
   BUFFER *cur = NULL;
   struct stat statbuf;
   int rc = 0;

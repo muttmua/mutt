@@ -43,9 +43,9 @@ typedef struct
 /* forward declarations */
 static int tunnel_socket_open (CONNECTION*);
 static int tunnel_socket_close (CONNECTION*);
-static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len);
-static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len);
-static int tunnel_socket_poll (CONNECTION* conn, time_t wait_secs);
+static int tunnel_socket_read (CONNECTION *conn, char *buf, size_t len);
+static int tunnel_socket_write (CONNECTION *conn, const char *buf, size_t len);
+static int tunnel_socket_poll (CONNECTION *conn, time_t wait_secs);
 
 /* -- public functions -- */
 int mutt_tunnel_socket_setup (CONNECTION *conn)
@@ -66,7 +66,7 @@ int mutt_tunnel_socket_setup (CONNECTION *conn)
 
 static int tunnel_socket_open (CONNECTION *conn)
 {
-  TUNNEL_DATA* tunnel;
+  TUNNEL_DATA *tunnel;
   int pid;
   int rc;
   int pin[2], pout[2];
@@ -142,9 +142,9 @@ static int tunnel_socket_open (CONNECTION *conn)
   return 0;
 }
 
-static int tunnel_socket_close (CONNECTION* conn)
+static int tunnel_socket_close (CONNECTION *conn)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA*) conn->sockdata;
   int status;
 
   close (tunnel->readfd);
@@ -162,9 +162,9 @@ static int tunnel_socket_close (CONNECTION* conn)
   return 0;
 }
 
-static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len)
+static int tunnel_socket_read (CONNECTION *conn, char *buf, size_t len)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA*) conn->sockdata;
   int rc;
 
   do
@@ -183,9 +183,9 @@ static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len)
   return rc;
 }
 
-static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len)
+static int tunnel_socket_write (CONNECTION *conn, const char *buf, size_t len)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA*) conn->sockdata;
   int rc;
   size_t sent = 0;
 
@@ -210,9 +210,9 @@ static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len)
   return sent;
 }
 
-static int tunnel_socket_poll (CONNECTION* conn, time_t wait_secs)
+static int tunnel_socket_poll (CONNECTION *conn, time_t wait_secs)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA*) conn->sockdata;
   int ofd;
   int rc;
 

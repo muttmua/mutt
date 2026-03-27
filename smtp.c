@@ -70,20 +70,20 @@ enum {
   CAPMAX
 };
 
-static int smtp_auth (CONNECTION* conn);
-static int smtp_auth_oauth (CONNECTION* conn, int xoauth2);
+static int smtp_auth (CONNECTION *conn);
+static int smtp_auth_oauth (CONNECTION *conn, int xoauth2);
 #ifdef USE_SASL_CYRUS
-static int smtp_auth_sasl (CONNECTION* conn, const char* mechanisms);
+static int smtp_auth_sasl (CONNECTION *conn, const char *mechanisms);
 #endif
 #ifdef USE_SASL_GNU
-static int smtp_auth_gsasl (CONNECTION* conn, const char* method);
+static int smtp_auth_gsasl (CONNECTION *conn, const char *method);
 #endif
 
-static int smtp_fill_account (ACCOUNT* account);
-static int smtp_open (CONNECTION* conn);
+static int smtp_fill_account (ACCOUNT *account);
+static int smtp_open (CONNECTION *conn);
 
 static int Esmtp = 0;
-static char* AuthMechs = NULL;
+static char *AuthMechs = NULL;
 static unsigned char Capabilities[(CAPMAX + 7)/ 8];
 
 /* Note: the 'len' parameter is actually the number of bytes, as
@@ -318,7 +318,7 @@ static int address_uses_unicode(const char *a)
 /* Returns 1 if any address in a contains at least one 8-bit
  * character, 0 if none do.
  */
-static int addresses_use_unicode(const ADDRESS* a)
+static int addresses_use_unicode(const ADDRESS *a)
 {
   while (a)
   {
@@ -331,12 +331,12 @@ static int addresses_use_unicode(const ADDRESS* a)
 
 
 int
-mutt_smtp_send (const ADDRESS* from, const ADDRESS* to, const ADDRESS* cc,
-                const ADDRESS* bcc, const char *msgfile, int eightbit)
+mutt_smtp_send (const ADDRESS *from, const ADDRESS *to, const ADDRESS *cc,
+                const ADDRESS *bcc, const char *msgfile, int eightbit)
 {
   CONNECTION *conn;
   ACCOUNT account;
-  const char* envfrom;
+  const char *envfrom;
   char buf[1024];
   int ret = -1;
 
@@ -420,13 +420,13 @@ mutt_smtp_send (const ADDRESS* from, const ADDRESS* to, const ADDRESS* cc,
   return ret;
 }
 
-static int smtp_fill_account (ACCOUNT* account)
+static int smtp_fill_account (ACCOUNT *account)
 {
   static unsigned short SmtpPort = 0;
 
-  struct servent* service;
+  struct servent *service;
   ciss_url_t url;
-  char* urlstr;
+  char *urlstr;
 
   account->flags = 0;
   account->port = 0;
@@ -469,10 +469,10 @@ static int smtp_fill_account (ACCOUNT* account)
   return 0;
 }
 
-static int smtp_helo (CONNECTION* conn)
+static int smtp_helo (CONNECTION *conn)
 {
   char buf[LONG_STRING];
-  const char* fqdn;
+  const char *fqdn;
 
   memset (Capabilities, 0, sizeof (Capabilities));
 
@@ -500,7 +500,7 @@ static int smtp_helo (CONNECTION* conn)
   return smtp_get_resp (conn);
 }
 
-static int smtp_open (CONNECTION* conn)
+static int smtp_open (CONNECTION *conn)
 {
   int rc;
 
@@ -565,15 +565,15 @@ static int smtp_open (CONNECTION* conn)
   return 0;
 }
 
-static int smtp_auth (CONNECTION* conn)
+static int smtp_auth (CONNECTION *conn)
 {
   int r = SMTP_AUTH_UNAVAIL;
 
   if (SmtpAuthenticators)
   {
-    char* methods = safe_strdup (SmtpAuthenticators);
-    char* method;
-    char* delim;
+    char *methods = safe_strdup (SmtpAuthenticators);
+    char *method;
+    char *delim;
 
     for (method = methods; method; method = delim)
     {
@@ -647,12 +647,12 @@ static int smtp_auth (CONNECTION* conn)
 }
 
 #ifdef USE_SASL_CYRUS
-static int smtp_auth_sasl (CONNECTION* conn, const char* mechlist)
+static int smtp_auth_sasl (CONNECTION *conn, const char *mechlist)
 {
-  sasl_conn_t* saslconn;
-  sasl_interact_t* interaction = NULL;
-  const char* mech;
-  const char* data = NULL;
+  sasl_conn_t *saslconn;
+  sasl_interact_t *interaction = NULL;
+  const char *mech;
+  const char *data = NULL;
   unsigned int data_len;
   BUFFER *temp_buf = NULL, *output_buf = NULL, *smtp_response_buf = NULL;
   int rc = SMTP_AUTH_FAIL, sasl_rc, smtp_rc;
@@ -866,7 +866,7 @@ fail:
 
 
 /* smtp_auth_oauth: AUTH=OAUTHBEARER support. See RFC 7628 */
-static int smtp_auth_oauth (CONNECTION* conn, int xoauth2)
+static int smtp_auth_oauth (CONNECTION *conn, int xoauth2)
 {
   int rc = SMTP_AUTH_FAIL, smtp_rc;
   BUFFER *bearertoken = NULL, *authline = NULL;

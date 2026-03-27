@@ -52,7 +52,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static const char* There_are_no_attachments = N_("There are no attachments.");
+static const char *There_are_no_attachments = N_("There are no attachments.");
 
 #define CHECK_COUNT if (actx->idxlen == 0) { mutt_error _(There_are_no_attachments); break; }
 

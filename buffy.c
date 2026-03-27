@@ -57,7 +57,7 @@ time_t BuffyDoneTime = 0;       /* last time we knew for sure how much mail ther
 static short BuffyCount = 0;    /* how many boxes with new mail */
 static short BuffyNotify = 0;   /* # of unnotified new boxes */
 
-static BUFFY* buffy_get (const char *path);
+static BUFFY *buffy_get (const char *path);
 
 /* Find the last message in the file.
  * upon success return 0. If no message found - return -1 */
@@ -111,7 +111,7 @@ static int fseek_last_message (FILE * f)
 static int test_last_status_new (FILE * f)
 {
   HEADER *hdr;
-  ENVELOPE* tmp_envelope;
+  ENVELOPE *tmp_envelope;
   int result = 0;
 
   if (fseek_last_message (f) == -1)
@@ -229,7 +229,7 @@ void mutt_update_mailbox (BUFFY * b)
 
 static BUFFY *buffy_new (const char *path)
 {
-  BUFFY* buffy;
+  BUFFY *buffy;
   char rp[PATH_MAX] = "";
   char *r = NULL;
 
@@ -478,7 +478,7 @@ int mutt_parse_unmailboxes (BUFFER *path, BUFFER *s, union pointer_long_t udata,
  * check_stats: if true, count total, new, and flagged messages.
  * Returns 1 if the dir has new mail.
  */
-static int buffy_maildir_check_dir (BUFFY* mailbox, const char *dir_name, int check_new,
+static int buffy_maildir_check_dir (BUFFY *mailbox, const char *dir_name, int check_new,
                                     int check_stats)
 {
   BUFFER *path = NULL;
@@ -567,7 +567,7 @@ cleanup:
  * check_stats: if true, also count total, new, and flagged messages.
  * Returns 1 if the mailbox has new mail.
  */
-static int buffy_maildir_check (BUFFY* mailbox, int check_stats)
+static int buffy_maildir_check (BUFFY *mailbox, int check_stats)
 {
   int rc, check_new = 1;
 
@@ -592,7 +592,7 @@ static int buffy_maildir_check (BUFFY* mailbox, int check_stats)
  * check_stats: if true, also count total, new, and flagged messages.
  * Returns 1 if the mailbox has new mail.
  */
-static int buffy_mbox_check (BUFFY* mailbox, struct stat *sb, int check_stats)
+static int buffy_mbox_check (BUFFY *mailbox, struct stat *sb, int check_stats)
 {
   int rc = 0;
   int new_or_changed;
@@ -927,7 +927,7 @@ void mutt_buffer_buffy (BUFFER *s)
 }
 
 /* fetch buffy object for given path, if present */
-static BUFFY* buffy_get (const char *path)
+static BUFFY *buffy_get (const char *path)
 {
   BUFFY *cur;
   BUFFER *epath;

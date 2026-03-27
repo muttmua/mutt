@@ -65,7 +65,7 @@ CHAR64LONG16 block[1];  /* use array to appear as a pointer */
      * And the result is written through.  I threw a "const" in, hoping
      * this will cause a diagnostic.
      */
-CHAR64LONG16* block = (const CHAR64LONG16*)buffer;
+CHAR64LONG16 *block = (const CHAR64LONG16*)buffer;
 #endif
     /* Copy context->state[] to working vars */
     a = state[0];
@@ -110,7 +110,7 @@ CHAR64LONG16* block = (const CHAR64LONG16*)buffer;
 
 /* SHA1Init - Initialize new context */
 
-void SHA1Init(SHA1_CTX* context)
+void SHA1Init(SHA1_CTX *context)
 {
     /* SHA1 initialization constants */
     context->state[0] = 0x67452301;
@@ -124,7 +124,7 @@ void SHA1Init(SHA1_CTX* context)
 
 /* Run your data through this. */
 
-void SHA1Update(SHA1_CTX* context, const unsigned char* data, uint32_t len)
+void SHA1Update(SHA1_CTX *context, const unsigned char *data, uint32_t len)
 {
 uint32_t i;
 uint32_t j;
@@ -149,7 +149,7 @@ uint32_t j;
 
 /* Add padding and return the message digest. */
 
-void SHA1Final(unsigned char digest[20], SHA1_CTX* context)
+void SHA1Final(unsigned char digest[20], SHA1_CTX *context)
 {
 unsigned i;
 unsigned char finalcount[8];

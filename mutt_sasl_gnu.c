@@ -159,7 +159,7 @@ static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
 {
   int rc = GSASL_NO_CALLBACK;
   CONNECTION *conn;
-  const char* service;
+  const char *service;
 
   conn = gsasl_session_hook_get (sctx);
   if (!conn)

@@ -54,11 +54,11 @@ static CONNECTION *Connections = NULL;
 
 /* forward declarations */
 static int socket_preconnect (void);
-static int socket_connect (int fd, struct sockaddr* sa);
-static CONNECTION* socket_new_conn (void);
+static int socket_connect (int fd, struct sockaddr *sa);
+static CONNECTION *socket_new_conn (void);
 
 /* Wrappers */
-int mutt_socket_open (CONNECTION* conn)
+int mutt_socket_open (CONNECTION *conn)
 {
   int rc;
 
@@ -73,7 +73,7 @@ int mutt_socket_open (CONNECTION* conn)
   return rc;
 }
 
-int mutt_socket_close (CONNECTION* conn)
+int mutt_socket_close (CONNECTION *conn)
 {
   int rc = -1;
 
@@ -161,7 +161,7 @@ void mutt_socket_clear_buffered_input (CONNECTION *conn)
  *   Returns: >0 if there is data to read,
  *            0 if a read would block,
  *            -1 if this connection doesn't support polling */
-int mutt_socket_poll (CONNECTION* conn, time_t wait_secs)
+int mutt_socket_poll (CONNECTION *conn, time_t wait_secs)
 {
   if (conn->bufpos < conn->available)
     return conn->available - conn->bufpos;
@@ -201,7 +201,7 @@ int mutt_socket_readchar (CONNECTION *conn, char *c)
   return 1;
 }
 
-int mutt_socket_readln_d (char* buf, size_t buflen, CONNECTION* conn, int dbg)
+int mutt_socket_readln_d (char *buf, size_t buflen, CONNECTION *conn, int dbg)
 {
   char ch;
   int i;
@@ -262,16 +262,16 @@ int mutt_socket_buffer_readln_d (BUFFER *buf, CONNECTION *conn, int dbg)
   return 0;
 }
 
-CONNECTION* mutt_socket_head (void)
+CONNECTION *mutt_socket_head (void)
 {
   return Connections;
 }
 
 /* mutt_socket_free: remove connection from connection list and free it */
-void mutt_socket_free (CONNECTION* conn)
+void mutt_socket_free (CONNECTION *conn)
 {
-  CONNECTION* iter;
-  CONNECTION* tmp;
+  CONNECTION *iter;
+  CONNECTION *tmp;
 
   iter = Connections;
 
@@ -301,9 +301,9 @@ void mutt_socket_free (CONNECTION* conn)
  *   connections after the given connection (allows higher level socket code
  *   to make more fine-grained searches than account info - eg in IMAP we may
  *   wish to find a connection which is not in IMAP_SELECTED state) */
-CONNECTION* mutt_conn_find (const CONNECTION* start, const ACCOUNT* account)
+CONNECTION *mutt_conn_find (const CONNECTION *start, const ACCOUNT *account)
 {
-  CONNECTION* conn;
+  CONNECTION *conn;
   ciss_url_t url;
   char hook[LONG_STRING];
 
@@ -386,7 +386,7 @@ static void alarm_handler (int sig)
 }
 
 /* socket_connect: set up to connect to a socket fd. */
-static int socket_connect (int fd, struct sockaddr* sa)
+static int socket_connect (int fd, struct sockaddr *sa)
 {
   int sa_size;
   int save_errno;
@@ -466,9 +466,9 @@ static int socket_connect (int fd, struct sockaddr* sa)
 }
 
 /* socket_new_conn: allocate and initialise a new connection. */
-static CONNECTION* socket_new_conn (void)
+static CONNECTION *socket_new_conn (void)
 {
-  CONNECTION* conn;
+  CONNECTION *conn;
 
   conn = (CONNECTION *) safe_calloc (1, sizeof (CONNECTION));
   conn->fd = -1;
@@ -481,7 +481,7 @@ int raw_socket_close (CONNECTION *conn)
   return close (conn->fd);
 }
 
-int raw_socket_read (CONNECTION* conn, char* buf, size_t len)
+int raw_socket_read (CONNECTION *conn, char *buf, size_t len)
 {
   int rc;
 
@@ -501,7 +501,7 @@ int raw_socket_read (CONNECTION* conn, char* buf, size_t len)
   return rc;
 }
 
-int raw_socket_write (CONNECTION* conn, const char* buf, size_t count)
+int raw_socket_write (CONNECTION *conn, const char *buf, size_t count)
 {
   int rc;
   size_t sent = 0;
@@ -527,7 +527,7 @@ int raw_socket_write (CONNECTION* conn, const char* buf, size_t count)
   return sent;
 }
 
-int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
+int raw_socket_poll (CONNECTION *conn, time_t wait_secs)
 {
   fd_set rfds;
   unsigned long long wait_millis, post_t_millis;
@@ -568,7 +568,7 @@ int raw_socket_poll (CONNECTION* conn, time_t wait_secs)
   }
 }
 
-int raw_socket_open (CONNECTION* conn)
+int raw_socket_open (CONNECTION *conn)
 {
   int rc;
   int fd;
@@ -581,8 +581,8 @@ int raw_socket_open (CONNECTION* conn)
   /* "65536\0" */
   char port[6];
   struct addrinfo hints;
-  struct addrinfo* res;
-  struct addrinfo* cur;
+  struct addrinfo *res;
+  struct addrinfo *cur;
 
   /* we accept v4 or v6 STREAM sockets */
   memset (&hints, 0, sizeof (hints));
@@ -648,7 +648,7 @@ int raw_socket_open (CONNECTION* conn)
   /* --- IPv4 only --- */
 
   struct sockaddr_in sin;
-  struct hostent* he;
+  struct hostent *he;
   int i;
 
   memset (&sin, 0, sizeof (sin));

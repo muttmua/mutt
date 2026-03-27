@@ -31,11 +31,11 @@
 #define MD5_DIGEST_LEN 16
 
 /* forward declarations */
-static void hmac_md5 (const char* password, char* challenge,
-                      unsigned char* response);
+static void hmac_md5 (const char *password, char *challenge,
+                      unsigned char *response);
 
 /* imap_auth_cram_md5: AUTH=CRAM-MD5 support. */
-imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA *idata, const char *method)
 {
   char ibuf[LONG_STRING*2], obuf[LONG_STRING];
   unsigned char hmac_response[MD5_DIGEST_LEN];
@@ -131,8 +131,8 @@ bail:
 }
 
 /* hmac_md5: produce CRAM-MD5 challenge response. */
-static void hmac_md5 (const char* password, char* challenge,
-                      unsigned char* response)
+static void hmac_md5 (const char *password, char *challenge,
+                      unsigned char *response)
 {
   struct md5_ctx ctx;
   unsigned char ipad[MD5_BLOCK_LEN], opad[MD5_BLOCK_LEN];

@@ -66,15 +66,15 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
                                    unsigned int *maxuid, int initial_download);
 
 
-static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h);
-static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h);
-static int msg_cache_commit (IMAP_DATA* idata, HEADER* h);
+static FILE *msg_cache_get (IMAP_DATA *idata, HEADER *h);
+static FILE *msg_cache_put (IMAP_DATA *idata, HEADER *h);
+static int msg_cache_commit (IMAP_DATA *idata, HEADER *h);
 
-static int flush_buffer (char* buf, size_t* len, CONNECTION* conn);
-static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf,
-                             FILE* fp);
-static int msg_parse_fetch (IMAP_HEADER* h, char* s);
-static char* msg_parse_flags (IMAP_HEADER* h, char* s);
+static int flush_buffer (char *buf, size_t *len, CONNECTION *conn);
+static int msg_fetch_header (CONTEXT *ctx, IMAP_HEADER *h, char *buf,
+                             FILE *fp);
+static int msg_parse_fetch (IMAP_HEADER *h, char *s);
+static char *msg_parse_flags (IMAP_HEADER *h, char *s);
 
 
 /* If the user hits ctrl-c during an initial header download for a mailbox,
@@ -226,11 +226,11 @@ static unsigned int imap_fetch_msn_seqset (BUFFER *b, IMAP_DATA *idata, int eval
  * msn of the last message read. It will return a value other than
  * msn_end if mail comes in while downloading headers (in theory).
  */
-int imap_read_headers (IMAP_DATA* idata, unsigned int msn_begin, unsigned int msn_end,
+int imap_read_headers (IMAP_DATA *idata, unsigned int msn_begin, unsigned int msn_end,
                        int initial_download)
 {
-  CONTEXT* ctx;
-  IMAP_STATUS* status;
+  CONTEXT *ctx;
+  IMAP_STATUS *status;
   int oldmsgcount;
   unsigned int maxuid = 0;
   int retval = -1;
@@ -447,7 +447,7 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
                                            int store_flag_updates,
                                            int eval_condstore)
 {
-  CONTEXT* ctx;
+  CONTEXT *ctx;
   int idx, msgno, rc, mfhrc = 0;
   progress_t progress;
   IMAP_HEADER h;
@@ -578,7 +578,7 @@ static int read_headers_normal_eval_cache (IMAP_DATA *idata,
  */
 static int read_headers_qresync_eval_cache (IMAP_DATA *idata, char *uid_seqset)
 {
-  CONTEXT* ctx;
+  CONTEXT *ctx;
   int rc;
   unsigned int uid, msn;
   SEQSET_ITERATOR *iter;
@@ -661,7 +661,7 @@ static int read_headers_condstore_qresync_updates (IMAP_DATA *idata,
                                                    unsigned long long hc_modseq,
                                                    int eval_qresync)
 {
-  CONTEXT* ctx;
+  CONTEXT *ctx;
   progress_t progress;
   int msgno, rc;
   char buf[LONG_STRING];
@@ -834,7 +834,7 @@ static int read_headers_fetch_new (IMAP_DATA *idata, unsigned int msn_begin,
                                    unsigned int msn_end, int evalhc,
                                    unsigned int *maxuid, int initial_download)
 {
-  CONTEXT* ctx;
+  CONTEXT *ctx;
   int idx, msgno, rc, mfhrc = 0, retval = -1;
   unsigned int fetch_msn_end = 0;
   progress_t progress;
@@ -1057,9 +1057,9 @@ bail:
 
 int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 {
-  IMAP_DATA* idata;
-  HEADER* h;
-  ENVELOPE* newenv;
+  IMAP_DATA *idata;
+  HEADER *h;
+  ENVELOPE *newenv;
   BUFFER *path;
   char buf[LONG_STRING];
   char *pc;
@@ -1315,7 +1315,7 @@ int imap_commit_message (CONTEXT *ctx, MESSAGE *msg)
 
 int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   FILE *fp = NULL;
   BUFFER *internaldate;
   char buf[LONG_STRING*2];
@@ -1455,9 +1455,9 @@ fail:
  *      -1: error
  *       0: success
  *       1: non-fatal error - try fetch/append */
-int imap_copy_messages (CONTEXT* ctx, HEADER* h, const char* dest, int delete)
+int imap_copy_messages (CONTEXT *ctx, HEADER *h, const char *dest, int delete)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   BUFFER *sync_cmd = NULL, *cmd = NULL;
   char mbox[LONG_STRING];
   char mmbox[LONG_STRING];
@@ -1650,7 +1650,7 @@ static body_cache_t *msg_cache_open (IMAP_DATA *idata)
   return rv;
 }
 
-static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h)
+static FILE *msg_cache_get (IMAP_DATA *idata, HEADER *h)
 {
   char id[SHORT_STRING];
 
@@ -1662,7 +1662,7 @@ static FILE* msg_cache_get (IMAP_DATA* idata, HEADER* h)
   return mutt_bcache_get (idata->bcache, id);
 }
 
-static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h)
+static FILE *msg_cache_put (IMAP_DATA *idata, HEADER *h)
 {
   char id[SHORT_STRING];
 
@@ -1674,7 +1674,7 @@ static FILE* msg_cache_put (IMAP_DATA* idata, HEADER* h)
   return mutt_bcache_put (idata->bcache, id, 1);
 }
 
-static int msg_cache_commit (IMAP_DATA* idata, HEADER* h)
+static int msg_cache_commit (IMAP_DATA *idata, HEADER *h)
 {
   char id[SHORT_STRING];
 
@@ -1687,7 +1687,7 @@ static int msg_cache_commit (IMAP_DATA* idata, HEADER* h)
   return mutt_bcache_commit (idata->bcache, id);
 }
 
-int imap_cache_del (IMAP_DATA* idata, HEADER* h)
+int imap_cache_del (IMAP_DATA *idata, HEADER *h)
 {
   char id[SHORT_STRING];
 
@@ -1699,10 +1699,10 @@ int imap_cache_del (IMAP_DATA* idata, HEADER* h)
   return mutt_bcache_del (idata->bcache, id);
 }
 
-static int msg_cache_clean_cb (const char* id, body_cache_t* bcache, void* data)
+static int msg_cache_clean_cb (const char *id, body_cache_t *bcache, void *data)
 {
   unsigned int uv, uid;
-  IMAP_DATA* idata = (IMAP_DATA*)data;
+  IMAP_DATA *idata = (IMAP_DATA*)data;
 
   if (sscanf (id, "%u-%u", &uv, &uid) != 2)
     return 0;
@@ -1715,7 +1715,7 @@ static int msg_cache_clean_cb (const char* id, body_cache_t* bcache, void* data)
   return 0;
 }
 
-int imap_cache_clean (IMAP_DATA* idata)
+int imap_cache_clean (IMAP_DATA *idata)
 {
   idata->bcache = msg_cache_open (idata);
   mutt_bcache_list (idata->bcache, msg_cache_clean_cb, idata);
@@ -1725,7 +1725,7 @@ int imap_cache_clean (IMAP_DATA* idata)
 
 /* imap_add_keywords: concatenate custom IMAP tags to list, if they
  *   appear in the folder flags list. Why wouldn't they? */
-void imap_add_keywords (char* s, HEADER* h, LIST* mailbox_flags, size_t slen)
+void imap_add_keywords (char *s, HEADER *h, LIST *mailbox_flags, size_t slen)
 {
   LIST *keywords;
 
@@ -1746,7 +1746,7 @@ void imap_add_keywords (char* s, HEADER* h, LIST* mailbox_flags, size_t slen)
 }
 
 /* imap_free_header_data: free IMAP_HEADER structure */
-void imap_free_header_data (IMAP_HEADER_DATA** data)
+void imap_free_header_data (IMAP_HEADER_DATA **data)
 {
   if (*data)
   {
@@ -1788,12 +1788,12 @@ static void imap_set_changed_flag (CONTEXT *ctx, HEADER *h, int local_changes,
  * Sets server_changes to 1 if a change to a flag is made, or in the
  * case of h->changed, if a change to a flag _would_ have been
  * made. */
-char* imap_set_flags (IMAP_DATA* idata, HEADER* h, char* s, int *server_changes)
+char *imap_set_flags (IMAP_DATA *idata, HEADER *h, char *s, int *server_changes)
 {
-  CONTEXT* ctx = idata->ctx;
+  CONTEXT *ctx = idata->ctx;
   IMAP_HEADER newh;
   IMAP_HEADER_DATA old_hd;
-  IMAP_HEADER_DATA* hd;
+  IMAP_HEADER_DATA *hd;
   unsigned char readonly;
   int local_changes;
 
@@ -1847,9 +1847,9 @@ char* imap_set_flags (IMAP_DATA* idata, HEADER* h, char* s, int *server_changes)
  *      0 on success
  *     -1 if the string is not a fetch response
  *     -2 if the string is a corrupt fetch response */
-static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
+static int msg_fetch_header (CONTEXT *ctx, IMAP_HEADER *h, char *buf, FILE *fp)
 {
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   unsigned int bytes;
   int rc = -1; /* default now is that string isn't FETCH response*/
   int parse_rc;
@@ -2018,9 +2018,9 @@ static int msg_parse_fetch (IMAP_HEADER *h, char *s)
 }
 
 /* msg_parse_flags: read a FLAGS token into an IMAP_HEADER */
-static char* msg_parse_flags (IMAP_HEADER* h, char* s)
+static char *msg_parse_flags (IMAP_HEADER *h, char *s)
 {
-  IMAP_HEADER_DATA* hd = h->data;
+  IMAP_HEADER_DATA *hd = h->data;
 
   /* sanity-check string */
   if (ascii_strncasecmp ("FLAGS", s, 5) != 0)
@@ -2074,7 +2074,7 @@ static char* msg_parse_flags (IMAP_HEADER* h, char* s)
     {
       /* store custom flags as well */
       char ctmp;
-      char* flag_word = s;
+      char *flag_word = s;
 
       if (!hd->keywords)
         hd->keywords = mutt_new_list ();

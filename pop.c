@@ -562,7 +562,7 @@ int pop_close_mailbox (CONTEXT *ctx)
 }
 
 /* fetch message from POP server */
-static int pop_fetch_message (CONTEXT* ctx, MESSAGE* msg, int msgno, int headers)
+static int pop_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers)
 {
   int ret, rc = -1;
   void *uidl;

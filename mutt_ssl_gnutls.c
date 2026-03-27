@@ -83,20 +83,20 @@ typedef struct _tlssockdata
 tlssockdata;
 
 /* local prototypes */
-static int tls_socket_read (CONNECTION* conn, char* buf, size_t len);
-static int tls_socket_write (CONNECTION* conn, const char* buf, size_t len);
-static int tls_socket_poll (CONNECTION* conn, time_t wait_secs);
-static int tls_socket_open (CONNECTION* conn);
-static int tls_socket_close (CONNECTION* conn);
-static int tls_starttls_close (CONNECTION* conn);
+static int tls_socket_read (CONNECTION *conn, char *buf, size_t len);
+static int tls_socket_write (CONNECTION *conn, const char *buf, size_t len);
+static int tls_socket_poll (CONNECTION *conn, time_t wait_secs);
+static int tls_socket_open (CONNECTION *conn);
+static int tls_socket_close (CONNECTION *conn);
+static int tls_starttls_close (CONNECTION *conn);
 
 static int tls_init (void);
-static int tls_negotiate (CONNECTION* conn);
-static int tls_check_certificate (CONNECTION* conn);
-static int tls_passwd_cb (void* userdata, int attempt, const char* token_url,
-                          const char* token_label,
+static int tls_negotiate (CONNECTION *conn);
+static int tls_check_certificate (CONNECTION *conn);
+static int tls_passwd_cb (void *userdata, int attempt, const char *token_url,
+                          const char *token_label,
                           unsigned int flags,
-                          char* pin, size_t pin_max);
+                          char *pin, size_t pin_max);
 
 
 static int tls_init (void)
@@ -119,7 +119,7 @@ static int tls_init (void)
   return 0;
 }
 
-int mutt_ssl_socket_setup (CONNECTION* conn)
+int mutt_ssl_socket_setup (CONNECTION *conn)
 {
   if (tls_init () < 0)
     return -1;
@@ -133,7 +133,7 @@ int mutt_ssl_socket_setup (CONNECTION* conn)
   return 0;
 }
 
-static int tls_socket_read (CONNECTION* conn, char* buf, size_t len)
+static int tls_socket_read (CONNECTION *conn, char *buf, size_t len)
 {
   tlssockdata *data = conn->sockdata;
   int ret;
@@ -160,7 +160,7 @@ static int tls_socket_read (CONNECTION* conn, char* buf, size_t len)
   return ret;
 }
 
-static int tls_socket_write (CONNECTION* conn, const char* buf, size_t len)
+static int tls_socket_write (CONNECTION *conn, const char *buf, size_t len)
 {
   tlssockdata *data = conn->sockdata;
   int ret;
@@ -193,7 +193,7 @@ static int tls_socket_write (CONNECTION* conn, const char* buf, size_t len)
   return sent;
 }
 
-static int tls_socket_poll (CONNECTION* conn, time_t wait_secs)
+static int tls_socket_poll (CONNECTION *conn, time_t wait_secs)
 {
   tlssockdata *data = conn->sockdata;
 
@@ -206,7 +206,7 @@ static int tls_socket_poll (CONNECTION* conn, time_t wait_secs)
     return raw_socket_poll (conn, wait_secs);
 }
 
-static int tls_socket_open (CONNECTION* conn)
+static int tls_socket_open (CONNECTION *conn)
 {
   if (raw_socket_open (conn) < 0)
     return -1;
@@ -220,7 +220,7 @@ static int tls_socket_open (CONNECTION* conn)
   return 0;
 }
 
-int mutt_ssl_starttls (CONNECTION* conn)
+int mutt_ssl_starttls (CONNECTION *conn)
 {
   if (mutt_socket_has_buffered_input (conn))
   {
@@ -262,12 +262,12 @@ int mutt_ssl_starttls (CONNECTION* conn)
  * I'm disabling it.
  */
 #if 0
-static void tls_get_client_cert (CONNECTION* conn)
+static void tls_get_client_cert (CONNECTION *conn)
 {
   tlssockdata *data = conn->sockdata;
-  const gnutls_datum_t* crtdata;
+  const gnutls_datum_t *crtdata;
   gnutls_x509_crt_t clientcrt;
-  char* cn = NULL;
+  char *cn = NULL;
   size_t cnlen = 0;
   int rc;
 
@@ -539,7 +539,7 @@ fail:
   return -1;
 }
 
-static int tls_socket_close (CONNECTION* conn)
+static int tls_socket_close (CONNECTION *conn)
 {
   tlssockdata *data = conn->sockdata;
   if (data)
@@ -562,7 +562,7 @@ static int tls_socket_close (CONNECTION* conn)
   return raw_socket_close (conn);
 }
 
-static int tls_starttls_close (CONNECTION* conn)
+static int tls_starttls_close (CONNECTION *conn)
 {
   int rc;
 
@@ -648,7 +648,7 @@ static int tls_compare_certificates (const gnutls_datum_t *peercert)
 }
 
 static void tls_fingerprint (gnutls_digest_algorithm_t algo,
-                             char* s, int l, const gnutls_datum_t* data)
+                             char *s, int l, const gnutls_datum_t *data)
 {
   unsigned char md[64];
   size_t n;
@@ -742,8 +742,8 @@ static int tls_check_stored_hostname (const gnutls_datum_t *cert,
  */
 static int tls_check_preauth (const gnutls_datum_t *certdata,
                               gnutls_certificate_status_t certstat,
-                              const char *hostname, int chainidx, int* certerr,
-                              int* savedcert)
+                              const char *hostname, int chainidx, int *certerr,
+                              int *savedcert)
 {
   gnutls_x509_crt_t cert;
 
@@ -849,7 +849,7 @@ static int tls_check_preauth (const gnutls_datum_t *certdata,
  */
 static int tls_check_one_certificate (const gnutls_datum_t *certdata,
                                       gnutls_certificate_status_t certstat,
-                                      const char* hostname, int idx, int len)
+                                      const char *hostname, int idx, int len)
 {
   int certerr, savedcert;
   gnutls_x509_crt_t cert;
@@ -1191,7 +1191,7 @@ static int tls_verify_peers (gnutls_session_t tlsstate,
 /* Returns 1 on success.
  *         0 on failure.
  */
-static int tls_check_certificate (CONNECTION* conn)
+static int tls_check_certificate (CONNECTION *conn)
 {
   tlssockdata *data = conn->sockdata;
   gnutls_session_t state = data->state;
@@ -1286,10 +1286,10 @@ static void client_cert_prompt (char *prompt, size_t prompt_size, ACCOUNT *accou
             account->host);
 }
 
-static int tls_passwd_cb (void* userdata, int attempt, const char* token_url,
-                          const char* token_label,
+static int tls_passwd_cb (void *userdata, int attempt, const char *token_url,
+                          const char *token_label,
                           unsigned int flags,
-                          char* buf, size_t size)
+                          char *buf, size_t size)
 {
   ACCOUNT *account;
 

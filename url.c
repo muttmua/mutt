@@ -215,7 +215,7 @@ static void url_pct_encode (char *dst, size_t l, const char *src)
   *dst = 0;
 }
 
-int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
+int url_ciss_tostring (ciss_url_t *ciss, char *dest, size_t len, int flags)
 {
   BUFFER *dest_buf;
   int retval;
@@ -232,7 +232,7 @@ int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
 }
 
 /* url_ciss_tobuffer: output the URL string for a given CISS object. */
-int url_ciss_tobuffer (ciss_url_t* ciss, BUFFER* dest, int flags)
+int url_ciss_tobuffer (ciss_url_t *ciss, BUFFER *dest, int flags)
 {
   if (ciss->scheme == U_UNKNOWN)
     return -1;

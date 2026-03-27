@@ -28,7 +28,7 @@
 #include "sidebar.h"
 #endif
 
-char* SearchBuffers[MENU_MAX];
+char *SearchBuffers[MENU_MAX];
 
 /* These are used to track the active menus, for redraw operations. */
 static size_t MenuStackCount = 0;
@@ -885,7 +885,7 @@ static int menu_search (MUTTMENU *menu, int op)
   int searchDir;
   regex_t re;
   char buf[SHORT_STRING];
-  char* searchBuf = menu->menu >= 0 && menu->menu < MENU_MAX ?
+  char *searchBuf = menu->menu >= 0 && menu->menu < MENU_MAX ?
     SearchBuffers[menu->menu] : NULL;
 
   if (!(searchBuf && *searchBuf) ||

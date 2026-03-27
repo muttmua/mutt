@@ -55,12 +55,12 @@ static const imap_auth_t imap_authenticators[] = {
 
 /* imap_authenticate: Attempt to authenticate using either user-specified
  *   authentication method if specified, or any. */
-int imap_authenticate (IMAP_DATA* idata)
+int imap_authenticate (IMAP_DATA *idata)
 {
-  const imap_auth_t* authenticator;
-  char* methods;
-  char* method;
-  char* delim;
+  const imap_auth_t *authenticator;
+  char *methods;
+  char *method;
+  char *delim;
   int r = IMAP_AUTH_UNAVAIL;
 
   if (ImapAuthenticators)

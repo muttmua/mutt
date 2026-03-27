@@ -49,10 +49,10 @@
  * Outputs: The buffer is rewritten in place with the canonical IMAP path.
  * Returns 0 on success, or -1 if imap_parse_path chokes or url_ciss_tobuffer
  *   fails, which it might if there isn't enough room in the buffer. */
-int imap_expand_path (BUFFER* path)
+int imap_expand_path (BUFFER *path)
 {
   IMAP_MBOX mx;
-  IMAP_DATA* idata;
+  IMAP_DATA *idata;
   ciss_url_t url;
   char fixedpath[LONG_STRING];
   int rc;
@@ -156,7 +156,7 @@ static void imap_hcache_namer (const char *path, BUFFER *dest)
   mutt_buffer_printf (dest, "%s.hcache", path);
 }
 
-header_cache_t* imap_hcache_open (IMAP_DATA* idata, const char* path)
+header_cache_t *imap_hcache_open (IMAP_DATA *idata, const char *path)
 {
   IMAP_MBOX mx;
   ciss_url_t url;
@@ -200,7 +200,7 @@ cleanup:
   return rv;
 }
 
-void imap_hcache_close (IMAP_DATA* idata)
+void imap_hcache_close (IMAP_DATA *idata)
 {
   if (!idata->hcache)
     return;
@@ -209,12 +209,12 @@ void imap_hcache_close (IMAP_DATA* idata)
   idata->hcache = NULL;
 }
 
-HEADER* imap_hcache_get (IMAP_DATA* idata, unsigned int uid)
+HEADER *imap_hcache_get (IMAP_DATA *idata, unsigned int uid)
 {
   char key[16];
   void *data;
   unsigned int uv;
-  HEADER* h = NULL;
+  HEADER *h = NULL;
 
   if (!idata->hcache)
     return NULL;
@@ -235,7 +235,7 @@ HEADER* imap_hcache_get (IMAP_DATA* idata, unsigned int uid)
   return h;
 }
 
-int imap_hcache_put (IMAP_DATA* idata, HEADER* h)
+int imap_hcache_put (IMAP_DATA *idata, HEADER *h)
 {
   char key[16];
 
@@ -247,7 +247,7 @@ int imap_hcache_put (IMAP_DATA* idata, HEADER* h)
                             imap_hcache_keylen, 0);
 }
 
-int imap_hcache_del (IMAP_DATA* idata, unsigned int uid)
+int imap_hcache_del (IMAP_DATA *idata, unsigned int uid)
 {
   char key[16];
 
@@ -307,11 +307,11 @@ char *imap_hcache_get_uid_seqset (IMAP_DATA *idata)
 /* imap_parse_path: given an IMAP mailbox name, return host, port
  *   and a path IMAP servers will recognize.
  * mx.mbox is malloc'd, caller must free it */
-int imap_parse_path (const char* path, IMAP_MBOX* mx)
+int imap_parse_path (const char *path, IMAP_MBOX *mx)
 {
   static unsigned short ImapPort = 0;
   static unsigned short ImapsPort = 0;
-  struct servent* service;
+  struct servent *service;
   char tmp[128];
   ciss_url_t url;
   char *c;
@@ -414,10 +414,10 @@ int imap_parse_path (const char* path, IMAP_MBOX* mx)
 }
 
 /* silly helper for mailbox name string comparisons, because of INBOX */
-int imap_mxcmp (const char* mx1, const char* mx2)
+int imap_mxcmp (const char *mx1, const char *mx2)
 {
-  char* b1;
-  char* b2;
+  char *b1;
+  char *b2;
   int rc;
 
   if (!mx1 || !*mx1)
@@ -442,11 +442,11 @@ int imap_mxcmp (const char* mx1, const char* mx2)
 
 /* imap_pretty_mailbox: called by mutt_pretty_mailbox to make IMAP paths
  *   look nice. */
-void imap_pretty_mailbox (char* path, size_t pathlen)
+void imap_pretty_mailbox (char *path, size_t pathlen)
 {
   IMAP_MBOX home, target;
   ciss_url_t url;
-  char* delim;
+  char *delim;
   int tlen;
   int hlen = 0;
   char home_match = 0;
@@ -496,7 +496,7 @@ void imap_pretty_mailbox (char* path, size_t pathlen)
 
 /* imap_continue: display a message and ask the user if she wants to
  *   go on. */
-int imap_continue (const char* msg, const char* resp)
+int imap_continue (const char *msg, const char *resp)
 {
   imap_error (msg, resp);
   return mutt_yesorno (_("Continue?"), 0);
@@ -510,9 +510,9 @@ void imap_error (const char *where, const char *msg)
 }
 
 /* imap_new_idata: Allocate and initialise a new IMAP_DATA structure. */
-IMAP_DATA* imap_new_idata (void)
+IMAP_DATA *imap_new_idata (void)
 {
-  IMAP_DATA* idata = safe_calloc (1, sizeof (IMAP_DATA));
+  IMAP_DATA *idata = safe_calloc (1, sizeof (IMAP_DATA));
 
   idata->cmdbuf = mutt_buffer_new ();
   idata->cmdslots = ImapPipelineDepth + 2;
@@ -522,7 +522,7 @@ IMAP_DATA* imap_new_idata (void)
 }
 
 /* imap_free_idata: Release and clear storage in an IMAP_DATA structure. */
-void imap_free_idata (IMAP_DATA** idata)
+void imap_free_idata (IMAP_DATA **idata)
 {
   if (!idata)
     return;
@@ -629,7 +629,7 @@ int imap_get_literal_count(char *buf, unsigned int *bytes)
 
 /* imap_get_qualifier: in a tagged response, skip tag and status for
  *   the qualifier message. Used by imap_copy_message for TRYCREATE */
-char* imap_get_qualifier (char* buf)
+char *imap_get_qualifier (char *buf)
 {
   char *s = buf;
 
@@ -717,7 +717,7 @@ time_t imap_parse_date (char *s)
 /* format date in IMAP style: DD-MMM-YYYY HH:MM:SS +ZZzz. */
 void imap_make_date (BUFFER *buf, time_t timestamp)
 {
-  struct tm* tm = localtime (&timestamp);
+  struct tm *tm = localtime (&timestamp);
   time_t tz = mutt_local_tz (timestamp);
 
   tz /= 60;
@@ -736,7 +736,7 @@ void imap_make_date (BUFFER *buf, time_t timestamp)
  * Note this will include the password in the URL, if it was present in the
  * account connection URL.
  */
-void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
+void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char *path)
 {
   ciss_url_t url;
 
@@ -746,7 +746,7 @@ void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char* path)
   url_ciss_tostring (&url, dest, len, U_DECODE_PASSWD);
 }
 
-void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char* path)
+void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char *path)
 {
   ciss_url_t url;
 
@@ -1015,12 +1015,12 @@ void imap_disallow_reopen (CONTEXT *ctx)
     CTX_DATA->reopen &= ~IMAP_REOPEN_ALLOW;
 }
 
-int imap_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
+int imap_account_match (const ACCOUNT *a1, const ACCOUNT *a2)
 {
-  IMAP_DATA* a1_idata = imap_conn_find (a1, MUTT_IMAP_CONN_NONEW);
-  IMAP_DATA* a2_idata = imap_conn_find (a2, MUTT_IMAP_CONN_NONEW);
-  const ACCOUNT* a1_canon = a1_idata == NULL ? a1 : &a1_idata->conn->account;
-  const ACCOUNT* a2_canon = a2_idata == NULL ? a2 : &a2_idata->conn->account;
+  IMAP_DATA *a1_idata = imap_conn_find (a1, MUTT_IMAP_CONN_NONEW);
+  IMAP_DATA *a2_idata = imap_conn_find (a2, MUTT_IMAP_CONN_NONEW);
+  const ACCOUNT *a1_canon = a1_idata == NULL ? a1 : &a1_idata->conn->account;
+  const ACCOUNT *a2_canon = a2_idata == NULL ? a2 : &a2_idata->conn->account;
 
   return mutt_account_match (a1_canon, a2_canon);
 }

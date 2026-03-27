@@ -50,7 +50,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
   char *buf = NULL;
   size_t bufsize = 0;
   char inbuf[LONG_STRING];
-  const char* mech;
+  const char *mech;
   const char *pc = NULL;
   unsigned int len, olen, client_start;
 
@@ -548,13 +548,13 @@ static const pop_auth_t pop_authenticators[] = {
  * -2 - login failed,
  * -3 - authentication canceled.
  */
-int pop_authenticate (POP_DATA* pop_data)
+int pop_authenticate (POP_DATA *pop_data)
 {
   ACCOUNT *acct = &pop_data->conn->account;
-  const pop_auth_t* authenticator;
-  char* methods;
-  char* comma;
-  char* method;
+  const pop_auth_t *authenticator;
+  char *methods;
+  char *comma;
+  char *method;
   int attempts = 0;
   int ret = POP_A_UNAVAIL;
 
