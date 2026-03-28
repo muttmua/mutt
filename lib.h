@@ -41,9 +41,9 @@
 
 # ifdef ENABLE_NLS
 #  include "gettext.h"
-# define _(a) (gettext (a))
+# define _(a) (gettext(a))
 #  ifdef gettext_noop
-#   define N_(a) gettext_noop (a)
+#   define N_(a) gettext_noop(a)
 #  else
 #   define N_(a) (a)
 #  endif
@@ -93,7 +93,7 @@
 
 /* Use this with care.  If the compiler can't see the array
  * definition, it obviously won't produce a correct result. */
-#define mutt_array_size(x)  (sizeof (x) / sizeof ((x)[0]))
+#define mutt_array_size(x)  (sizeof(x) / sizeof((x)[0]))
 
 /* For mutt_format_string() justifications */
 /* Making left 0 and center -1 is of course completely nonsensical, but
@@ -112,7 +112,7 @@
  */
 #define IS_ASCII_WS(c) ((9 <= (c) && (c) <= 13) || (c) == 32)
 
-#define SKIP_ASCII_WS(c) while (IS_ASCII_WS (*(c))) c++;
+#define SKIP_ASCII_WS(c) while (IS_ASCII_WS(*(c))) c++;
 
 /*
  * WSP as defined by RFC5322.
@@ -120,12 +120,12 @@
  */
 #define EMAIL_WSP " \t\r\n"
 
-static inline int is_email_wsp (char c)
+static inline int is_email_wsp(char c)
 {
   return c && (strchr(EMAIL_WSP, c) != NULL);
 }
 
-static inline char *skip_email_wsp (const char *s)
+static inline char *skip_email_wsp(const char *s)
 {
   if (s)
     return (char *)(s + strspn(s, EMAIL_WSP));
@@ -141,7 +141,7 @@ static inline char *skip_email_wsp (const char *s)
 
 /* this macro must check for *c == 0 since isspace(0) has unreliable behavior
    on some systems */
-#define SKIP_LOCALE_WS(c) while (*(c) && IS_LOCALE_WS (*(c))) c++;
+#define SKIP_LOCALE_WS(c) while (*(c) && IS_LOCALE_WS(*(c))) c++;
 
 /*
  * These functions aren't defined in lib.c, but
@@ -152,7 +152,7 @@ static inline char *skip_email_wsp (const char *s)
 
 
 # ifndef _EXTLIB_C
-extern void (*mutt_error) (const char *, ...);
+extern void (*mutt_error)(const char *, ...);
 # endif
 
 # ifdef _LIB_C
@@ -163,7 +163,7 @@ extern void (*mutt_error) (const char *, ...);
 #  define MUTT_LIB_INITVAL(x)
 # endif
 
-void mutt_exit (int);
+void mutt_exit(int);
 
 
 # ifdef DEBUG
@@ -171,11 +171,11 @@ void mutt_exit (int);
 MUTT_LIB_WHERE FILE *debugfile;
 MUTT_LIB_WHERE int debuglevel;
 
-void mutt_debug_f (const char *, const int, const char *, const int err, const char *, ...);
+void mutt_debug_f(const char *, const int, const char *, const int err, const char *, ...);
 
 /* __func__ is a C99 provision, but we now require C99 so it's safe */
-#  define muttdbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, 0, __VA_ARGS__); } while (0)
-#  define mutt_errno_dbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f (__FILE__, __LINE__, __func__, errno, __VA_ARGS__); } while (0)
+#  define muttdbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f(__FILE__, __LINE__, __func__, 0, __VA_ARGS__); } while (0)
+#  define mutt_errno_dbg(N, ...) do { if (debuglevel >= (N) && debugfile) mutt_debug_f(__FILE__, __LINE__, __func__, errno, __VA_ARGS__); } while (0)
 
 # else
 
@@ -199,15 +199,15 @@ void mutt_debug_f (const char *, const int, const char *, const int err, const c
 
 /* The actual library functions. */
 
-char *mutt_concat_path (char *, const char *, const char *, size_t);
-char *mutt_read_line (char *, size_t *, FILE *, int *, int);
-char *mutt_skip_ascii_ws (char *);
-char *mutt_strlower (char *);
-char *mutt_substrcpy (char *, const char *, const char *, size_t);
-char *mutt_substrdup (const char *, const char *);
-char *safe_strcat (char *, size_t, const char *);
-char *safe_strncat (char *, size_t, const char *, size_t);
-char *safe_strdup (const char *);
+char *mutt_concat_path(char *, const char *, const char *, size_t);
+char *mutt_read_line(char *, size_t *, FILE *, int *, int);
+char *mutt_skip_ascii_ws(char *);
+char *mutt_strlower(char *);
+char *mutt_substrcpy(char *, const char *, const char *, size_t);
+char *mutt_substrdup(const char *, const char *);
+char *safe_strcat(char *, size_t, const char *);
+char *safe_strncat(char *, size_t, const char *, size_t);
+char *safe_strdup(const char *);
 
 /* mutt_atoX() flags:
  *
@@ -222,43 +222,43 @@ char *safe_strdup (const char *);
  *      -2 out of range
  * the dst pointer may be NULL to test only without conversion
  */
-int mutt_atos (const char *, short *, int);
-int mutt_atoi (const char *, int *, int);
-int mutt_atol (const char *, long *, int);
-int mutt_atoll (const char *, long long *, int);
-int mutt_atoui (const char *, unsigned int *, int);
-int mutt_atoul (const char *, unsigned long *, int);
-int mutt_atoull (const char *, unsigned long long *, int);
+int mutt_atos(const char *, short *, int);
+int mutt_atoi(const char *, int *, int);
+int mutt_atol(const char *, long *, int);
+int mutt_atoll(const char *, long long *, int);
+int mutt_atoui(const char *, unsigned int *, int);
+int mutt_atoul(const char *, unsigned long *, int);
+int mutt_atoull(const char *, unsigned long long *, int);
 
-const char *mutt_stristr (const char *, const char *);
-const char *mutt_basename (const char *);
+const char *mutt_stristr(const char *, const char *);
+const char *mutt_basename(const char *);
 
-int compare_stat (struct stat *, struct stat *);
-int mutt_copy_stream (FILE *, FILE *);
-int mutt_copy_bytes (FILE *, FILE *, size_t);
-int mutt_strcasecmp (const char *, const char *);
-int mutt_strcmp (const char *, const char *);
-int mutt_strncasecmp (const char *, const char *, size_t);
-int mutt_strncmp (const char *, const char *, size_t);
-int mutt_strcoll (const char *, const char *);
-int safe_asprintf (char **, const char *, ...);
-int safe_rename (const char *, const char *);
-int safe_fclose (FILE **);
-int safe_fsync_close (FILE **);
+int compare_stat(struct stat *, struct stat *);
+int mutt_copy_stream(FILE *, FILE *);
+int mutt_copy_bytes(FILE *, FILE *, size_t);
+int mutt_strcasecmp(const char *, const char *);
+int mutt_strcmp(const char *, const char *);
+int mutt_strncasecmp(const char *, const char *, size_t);
+int mutt_strncmp(const char *, const char *, size_t);
+int mutt_strcoll(const char *, const char *);
+int safe_asprintf(char **, const char *, ...);
+int safe_rename(const char *, const char *);
+int safe_fclose(FILE **);
+int safe_fsync_close(FILE **);
 
-size_t mutt_strlen (const char *);
+size_t mutt_strlen(const char *);
 
-void *safe_calloc (size_t, size_t);
-void *safe_malloc (size_t);
-void mutt_nocurses_error (const char *, ...);
-void mutt_remove_trailing_ascii_ws (char *);
-void mutt_sanitize_filename (char *, int flags);
-void mutt_str_replace (char **p, const char *s);
-int mutt_mkdir (char *path, mode_t mode);
-void mutt_str_adjust (char **p);
-void mutt_unlink (const char *);
-void safe_free (void *);
-void safe_realloc (void *, size_t);
+void *safe_calloc(size_t, size_t);
+void *safe_malloc(size_t);
+void mutt_nocurses_error(const char *, ...);
+void mutt_remove_trailing_ascii_ws(char *);
+void mutt_sanitize_filename(char *, int flags);
+void mutt_str_replace(char **p, const char *s);
+int mutt_mkdir(char *path, mode_t mode);
+void mutt_str_adjust(char **p);
+void mutt_unlink(const char *);
+void safe_free(void *);
+void safe_realloc(void *, size_t);
 
 const char *mutt_strsysexit(int e);
 #endif

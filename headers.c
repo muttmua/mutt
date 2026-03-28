@@ -34,8 +34,8 @@
  *        -1 on error
  *         2 if edit headers is backgrounded.
  */
-int mutt_edit_headers (const char *editor,
-                       SEND_CONTEXT *sctx, int flags)
+int mutt_edit_headers(const char *editor,
+                      SEND_CONTEXT *sctx, int flags)
 {
   const char *filename;
   FILE *ifp, *ofp;
@@ -46,46 +46,46 @@ int mutt_edit_headers (const char *editor,
 
   if (flags != MUTT_EDIT_HEADERS_RESUME)
   {
-    sctx->tempfile = mutt_buffer_new ();
-    mutt_buffer_mktemp_draft (sctx->tempfile);
-    if ((ofp = safe_fopen (mutt_b2s (sctx->tempfile), "w")) == NULL)
+    sctx->tempfile = mutt_buffer_new();
+    mutt_buffer_mktemp_draft(sctx->tempfile);
+    if ((ofp = safe_fopen(mutt_b2s(sctx->tempfile), "w")) == NULL)
     {
-      mutt_perror (mutt_b2s (sctx->tempfile));
+      mutt_perror(mutt_b2s(sctx->tempfile));
       goto cleanup;
     }
 
-    mutt_env_to_local (sctx->msg->env);
-    mutt_write_rfc822_header (ofp, sctx->msg->env, NULL, NULL, MUTT_WRITE_HEADER_EDITHDRS, 0, 0);
-    fputc ('\n', ofp);  /* tie off the header. */
+    mutt_env_to_local(sctx->msg->env);
+    mutt_write_rfc822_header(ofp, sctx->msg->env, NULL, NULL, MUTT_WRITE_HEADER_EDITHDRS, 0, 0);
+    fputc('\n', ofp);  /* tie off the header. */
 
     /* now copy the body of the message. */
-    if ((ifp = fopen (filename, "r")) == NULL)
+    if ((ifp = fopen(filename, "r")) == NULL)
     {
-      mutt_perror (filename);
+      mutt_perror(filename);
       goto cleanup;
     }
 
-    mutt_copy_stream (ifp, ofp);
+    mutt_copy_stream(ifp, ofp);
 
-    safe_fclose (&ifp);
-    safe_fclose (&ofp);
+    safe_fclose(&ifp);
+    safe_fclose(&ofp);
 
-    if (stat (mutt_b2s (sctx->tempfile), &st) == -1)
+    if (stat(mutt_b2s(sctx->tempfile), &st) == -1)
     {
-      mutt_perror (mutt_b2s (sctx->tempfile));
+      mutt_perror(mutt_b2s(sctx->tempfile));
       goto cleanup;
     }
 
-    sctx->tempfile_mtime = mutt_decrease_mtime (mutt_b2s (sctx->tempfile), &st);
+    sctx->tempfile_mtime = mutt_decrease_mtime(mutt_b2s(sctx->tempfile), &st);
     if (sctx->tempfile_mtime == (time_t) -1)
     {
-      mutt_perror (mutt_b2s (sctx->tempfile));
+      mutt_perror(mutt_b2s(sctx->tempfile));
       goto cleanup;
     }
 
     if (flags == MUTT_EDIT_HEADERS_BACKGROUND)
     {
-      if (mutt_background_edit_file (sctx, editor, mutt_b2s (sctx->tempfile)) == 2)
+      if (mutt_background_edit_file(sctx, editor, mutt_b2s(sctx->tempfile)) == 2)
       {
         sctx->state = SEND_STATE_FIRST_EDIT_HEADERS;
         return 2;
@@ -93,7 +93,7 @@ int mutt_edit_headers (const char *editor,
       flags = 0; /* fall through on error */
     }
     else
-      mutt_edit_file (editor, mutt_b2s (sctx->tempfile));
+      mutt_edit_file(editor, mutt_b2s(sctx->tempfile));
   }
 
   if (flags != MUTT_EDIT_HEADERS_BACKGROUND)
@@ -104,58 +104,58 @@ int mutt_edit_headers (const char *editor,
     ENVELOPE *n;
     LIST *cur, **last = NULL, *tmp;
 
-    stat (mutt_b2s (sctx->tempfile), &st);
+    stat(mutt_b2s(sctx->tempfile), &st);
     if (sctx->tempfile_mtime == st.st_mtime)
     {
       muttdbg(1, "temp file was not modified.");
       /* the file has not changed! */
-      mutt_unlink (mutt_b2s (sctx->tempfile));
+      mutt_unlink(mutt_b2s(sctx->tempfile));
       goto cleanup;
     }
 
-    mutt_unlink (filename);
-    mutt_free_list (&sctx->msg->env->userhdrs);
+    mutt_unlink(filename);
+    mutt_free_list(&sctx->msg->env->userhdrs);
 
     /* Read the temp file back in */
-    if ((ifp = fopen (mutt_b2s (sctx->tempfile), "r")) == NULL)
+    if ((ifp = fopen(mutt_b2s(sctx->tempfile), "r")) == NULL)
     {
-      mutt_perror (mutt_b2s (sctx->tempfile));
+      mutt_perror(mutt_b2s(sctx->tempfile));
       goto cleanup;
     }
 
-    if ((ofp = safe_fopen (filename, "w")) == NULL)
+    if ((ofp = safe_fopen(filename, "w")) == NULL)
     {
       /* intentionally leak a possible temporary file here */
-      safe_fclose (&ifp);
-      mutt_perror (filename);
+      safe_fclose(&ifp);
+      mutt_perror(filename);
       goto cleanup;
     }
 
-    n = mutt_read_rfc822_header (ifp, NULL, 1, 0);
-    while ((i = fread (buffer, 1, sizeof (buffer), ifp)) > 0)
-      fwrite (buffer, 1, i, ofp);
-    safe_fclose (&ofp);
-    safe_fclose (&ifp);
-    mutt_unlink (mutt_b2s (sctx->tempfile));
+    n = mutt_read_rfc822_header(ifp, NULL, 1, 0);
+    while ((i = fread(buffer, 1, sizeof(buffer), ifp)) > 0)
+      fwrite(buffer, 1, i, ofp);
+    safe_fclose(&ofp);
+    safe_fclose(&ifp);
+    mutt_unlink(mutt_b2s(sctx->tempfile));
 
     /* in case the user modifies/removes the In-Reply-To header with
        $edit_headers set, we remove References: as they're likely invalid;
        we can simply compare strings as we don't generate References for
        multiple Message-Ids in IRT anyways */
     if (sctx->msg->env->in_reply_to &&
-        (!n->in_reply_to || mutt_strcmp (n->in_reply_to->data,
-                                         sctx->msg->env->in_reply_to->data) != 0))
-      mutt_free_list (&sctx->msg->env->references);
+        (!n->in_reply_to || mutt_strcmp(n->in_reply_to->data,
+                                        sctx->msg->env->in_reply_to->data) != 0))
+      mutt_free_list(&sctx->msg->env->references);
 
     /* restore old info. */
-    mutt_free_list (&n->references);
+    mutt_free_list(&n->references);
     n->references = sctx->msg->env->references;
     sctx->msg->env->references = NULL;
 
-    mutt_free_envelope (&sctx->msg->env);
+    mutt_free_envelope(&sctx->msg->env);
     sctx->msg->env = n; n = NULL;
 
-    mutt_expand_aliases_env (sctx->msg->env);
+    mutt_expand_aliases_env(sctx->msg->env);
 
     /* search through the user defined headers added to see if
      * fcc: or attach: or pgp: was specified
@@ -167,17 +167,17 @@ int mutt_edit_headers (const char *editor,
     {
       keep = 1;
 
-      if (ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
+      if (ascii_strncasecmp("fcc:", cur->data, 4) == 0)
       {
         p = skip_email_wsp(cur->data + 4);
         if (*p)
         {
-          mutt_buffer_strcpy (sctx->fcc, p);
-          mutt_buffer_pretty_multi_mailbox (sctx->fcc, FccDelimiter);
+          mutt_buffer_strcpy(sctx->fcc, p);
+          mutt_buffer_pretty_multi_mailbox(sctx->fcc, FccDelimiter);
         }
         keep = 0;
       }
-      else if (ascii_strncasecmp ("attach:", cur->data, 7) == 0)
+      else if (ascii_strncasecmp("attach:", cur->data, 7) == 0)
       {
         BODY *body;
         BODY *parts;
@@ -185,7 +185,7 @@ int mutt_edit_headers (const char *editor,
         p = skip_email_wsp(cur->data + 7);
         if (*p)
         {
-          BUFFER *path = mutt_buffer_pool_get ();
+          BUFFER *path = mutt_buffer_pool_get();
           for ( ; *p && *p != ' ' && *p != '\t'; p++)
           {
             if (*p == '\\')
@@ -194,31 +194,31 @@ int mutt_edit_headers (const char *editor,
                 break;
               p++;
             }
-            mutt_buffer_addch (path, *p);
+            mutt_buffer_addch(path, *p);
           }
           p = skip_email_wsp(p);
 
-          mutt_buffer_expand_path (path);
-          if ((body = mutt_make_file_attach (mutt_b2s (path))))
+          mutt_buffer_expand_path(path);
+          if ((body = mutt_make_file_attach(mutt_b2s(path))))
           {
-            body->description = safe_strdup (p);
+            body->description = safe_strdup(p);
             for (parts = sctx->msg->content; parts->next; parts = parts->next) ;
             parts->next = body;
           }
           else
           {
-            mutt_buffer_pretty_mailbox (path);
-            mutt_error (_("%s: unable to attach file"), mutt_b2s (path));
+            mutt_buffer_pretty_mailbox(path);
+            mutt_error(_("%s: unable to attach file"), mutt_b2s(path));
           }
-          mutt_buffer_pool_release (&path);
+          mutt_buffer_pool_release(&path);
         }
         keep = 0;
       }
       else if ((WithCrypto & APPLICATION_PGP)
-               && ascii_strncasecmp ("pgp:", cur->data, 4) == 0)
+               && ascii_strncasecmp("pgp:", cur->data, 4) == 0)
       {
-        sctx->msg->security = mutt_parse_crypt_hdr (cur->data + 4, 0, APPLICATION_PGP,
-                                                    sctx);
+        sctx->msg->security = mutt_parse_crypt_hdr(cur->data + 4, 0, APPLICATION_PGP,
+                                                   sctx);
         if (sctx->msg->security)
           sctx->msg->security |= APPLICATION_PGP;
         keep = 0;
@@ -235,7 +235,7 @@ int mutt_edit_headers (const char *editor,
         *last     = cur->next;
         cur       = cur->next;
         tmp->next = NULL;
-        mutt_free_list (&tmp);
+        mutt_free_list(&tmp);
       }
     }
   }
@@ -243,7 +243,7 @@ int mutt_edit_headers (const char *editor,
   rc = 0;
 
 cleanup:
-  mutt_buffer_free (&sctx->tempfile);
+  mutt_buffer_free(&sctx->tempfile);
   return rc;
 }
 
@@ -252,7 +252,7 @@ static void label_ref_dec(CONTEXT *ctx, char *label)
   struct hash_elem *elem;
   uintptr_t count;
 
-  elem = hash_find_elem (ctx->label_hash, label);
+  elem = hash_find_elem(ctx->label_hash, label);
   if (!elem)
     return;
 
@@ -272,7 +272,7 @@ static void label_ref_inc(CONTEXT *ctx, char *label)
   struct hash_elem *elem;
   uintptr_t count;
 
-  elem = hash_find_elem (ctx->label_hash, label);
+  elem = hash_find_elem(ctx->label_hash, label);
   if (!elem)
   {
     count = 1;
@@ -292,12 +292,12 @@ static int label_message(CONTEXT *ctx, HEADER *hdr, char *new)
 {
   if (hdr == NULL)
     return 0;
-  if (mutt_strcmp (hdr->env->x_label, new) == 0)
+  if (mutt_strcmp(hdr->env->x_label, new) == 0)
     return 0;
 
   if (hdr->env->x_label != NULL)
     label_ref_dec(ctx, hdr->env->x_label);
-  mutt_str_replace (&hdr->env->x_label, new);
+  mutt_str_replace(&hdr->env->x_label, new);
   if (hdr->env->x_label != NULL)
     label_ref_inc(ctx, hdr->env->x_label);
 
@@ -335,7 +335,7 @@ int mutt_label_message(HEADER *hdr)
     if (label_message(Context, hdr, new))
     {
       ++changed;
-      mutt_set_header_color (Context, hdr);
+      mutt_set_header_color(Context, hdr);
     }
   }
   else
@@ -347,7 +347,7 @@ int mutt_label_message(HEADER *hdr)
         if (label_message(Context, HDR_OF(i), new))
         {
           ++changed;
-          mutt_set_header_color (Context, HDR_OF(i));
+          mutt_set_header_color(Context, HDR_OF(i));
         }
     }
   }
@@ -355,7 +355,7 @@ int mutt_label_message(HEADER *hdr)
   return changed;
 }
 
-void mutt_make_label_hash (CONTEXT *ctx)
+void mutt_make_label_hash(CONTEXT *ctx)
 {
   /* 131 is just a rough prime estimate of how many distinct
    * labels someone might have in a mailbox.
@@ -363,18 +363,18 @@ void mutt_make_label_hash (CONTEXT *ctx)
   ctx->label_hash = hash_create(131, MUTT_HASH_STRDUP_KEYS);
 }
 
-void mutt_label_hash_add (CONTEXT *ctx, HEADER *hdr)
+void mutt_label_hash_add(CONTEXT *ctx, HEADER *hdr)
 {
   if (!ctx || !ctx->label_hash)
     return;
   if (hdr->env->x_label)
-    label_ref_inc (ctx, hdr->env->x_label);
+    label_ref_inc(ctx, hdr->env->x_label);
 }
 
-void mutt_label_hash_remove (CONTEXT *ctx, HEADER *hdr)
+void mutt_label_hash_remove(CONTEXT *ctx, HEADER *hdr)
 {
   if (!ctx || !ctx->label_hash)
     return;
   if (hdr->env->x_label)
-    label_ref_dec (ctx, hdr->env->x_label);
+    label_ref_dec(ctx, hdr->env->x_label);
 }

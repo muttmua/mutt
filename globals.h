@@ -16,8 +16,8 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-WHERE void (*mutt_error) (const char *, ...);
-WHERE void (*mutt_message) (const char *, ...);
+WHERE void (*mutt_error)(const char *, ...);
+WHERE void (*mutt_message)(const char *, ...);
 
 WHERE CONTEXT *Context;
 
@@ -242,7 +242,7 @@ WHERE short ReadInc;
 WHERE short ReflowWrap;
 WHERE short SaveHist;
 WHERE short SendmailWait;
-WHERE short SleepTime INITVAL (1);
+WHERE short SleepTime INITVAL(1);
 WHERE short TimeInc;
 WHERE short Timeout;
 WHERE short Wrap;

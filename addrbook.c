@@ -43,9 +43,9 @@ static const struct mapping_t AliasHelp[] = {
 };
 
 static const char *
-alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
-                  const char *fmt, const char *ifstring, const char *elsestring,
-                  void *data, format_flag flags)
+alias_format_str(char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
+                 const char *fmt, const char *ifstring, const char *elsestring,
+                 void *data, format_flag flags)
 {
   char tmp[SHORT_STRING], adr[SHORT_STRING];
   ALIAS *alias = (ALIAS *) data;
@@ -53,21 +53,21 @@ alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, con
   switch (op)
   {
     case 'f':
-      snprintf (tmp, sizeof (tmp), "%%%ss", fmt);
-      snprintf (dest, destlen, tmp, alias->del ? "D" : " ");
+      snprintf(tmp, sizeof(tmp), "%%%ss", fmt);
+      snprintf(dest, destlen, tmp, alias->del ? "D" : " ");
       break;
     case 'a':
-      mutt_format_s (dest, destlen, fmt, alias->name);
+      mutt_format_s(dest, destlen, fmt, alias->name);
       break;
     case 'r':
       adr[0] = 0;
-      rfc822_write_address (adr, sizeof (adr), alias->addr, 1);
-      snprintf (tmp, sizeof (tmp), "%%%ss", fmt);
-      snprintf (dest, destlen, tmp, adr);
+      rfc822_write_address(adr, sizeof(adr), alias->addr, 1);
+      snprintf(tmp, sizeof(tmp), "%%%ss", fmt);
+      snprintf(dest, destlen, tmp, adr);
       break;
     case 'n':
-      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-      snprintf (dest, destlen, tmp, alias->num + 1);
+      snprintf(tmp, sizeof(tmp), "%%%sd", fmt);
+      snprintf(dest, destlen, tmp, alias->num + 1);
       break;
     case 't':
       dest[0] = alias->tagged ? '*' : ' ';
@@ -78,12 +78,12 @@ alias_format_str (char *dest, size_t destlen, size_t col, int cols, char op, con
   return (src);
 }
 
-static void alias_entry (char *s, size_t slen, MUTTMENU *m, int num)
+static void alias_entry(char *s, size_t slen, MUTTMENU *m, int num)
 {
-  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, NONULL (AliasFmt), alias_format_str, ((ALIAS **) m->data)[num], MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString(s, slen, 0, MuttIndexWindow->cols, NONULL(AliasFmt), alias_format_str, ((ALIAS **) m->data)[num], MUTT_FORMAT_ARROWCURSOR);
 }
 
-static int alias_tag (MUTTMENU *menu, int n, int m)
+static int alias_tag(MUTTMENU *menu, int n, int m)
 {
   ALIAS *cur = ((ALIAS **) menu->data)[n];
   int ot = cur->tagged;
@@ -93,16 +93,16 @@ static int alias_tag (MUTTMENU *menu, int n, int m)
   return cur->tagged - ot;
 }
 
-static int alias_SortAlias (const void *a, const void *b)
+static int alias_SortAlias(const void *a, const void *b)
 {
   ALIAS *pa = *(ALIAS **) a;
   ALIAS *pb = *(ALIAS **) b;
-  int r = mutt_strcasecmp (pa->name, pb->name);
+  int r = mutt_strcasecmp(pa->name, pb->name);
 
-  return (RSORT (r));
+  return (RSORT(r));
 }
 
-static int alias_SortAddress (const void *a, const void *b)
+static int alias_SortAddress(const void *a, const void *b)
 {
   ADDRESS *pa = (*(ALIAS **) a)->addr;
   ADDRESS *pb = (*(ALIAS **) b)->addr;
@@ -117,18 +117,18 @@ static int alias_SortAddress (const void *a, const void *b)
   else if (pa->personal)
   {
     if (pb->personal)
-      r = mutt_strcasecmp (pa->personal, pb->personal);
+      r = mutt_strcasecmp(pa->personal, pb->personal);
     else
       r = 1;
   }
   else if (pb->personal)
     r = -1;
   else
-    r = ascii_strcasecmp (pa->mailbox, pb->mailbox);
-  return (RSORT (r));
+    r = ascii_strcasecmp(pa->mailbox, pb->mailbox);
+  return (RSORT(r));
 }
 
-void mutt_alias_menu (char *buf, size_t buflen, ALIAS *aliases)
+void mutt_alias_menu(char *buf, size_t buflen, ALIAS *aliases)
 {
   ALIAS *aliasp;
   MUTTMENU *menu;
@@ -146,12 +146,12 @@ void mutt_alias_menu (char *buf, size_t buflen, ALIAS *aliases)
     return;
   }
 
-  menu = mutt_new_menu (MENU_ALIAS);
+  menu = mutt_new_menu(MENU_ALIAS);
   menu->make_entry = alias_entry;
   menu->tag = alias_tag;
   menu->title = _("Aliases");
-  menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_ALIAS, AliasHelp);
-  mutt_push_current_menu (menu);
+  menu->help = mutt_compile_help(helpstr, sizeof(helpstr), MENU_ALIAS, AliasHelp);
+  mutt_push_current_menu(menu);
 
 new_aliases:
 
@@ -165,7 +165,7 @@ new_aliases:
     menu->max++;
   }
 
-  safe_realloc (&AliasTable, menu->max * sizeof (ALIAS *));
+  safe_realloc(&AliasTable, menu->max * sizeof(ALIAS *));
   menu->data = AliasTable;
 
   for (i = omax, aliasp = aliases; aliasp; aliasp = aliasp->next, i++)
@@ -176,8 +176,8 @@ new_aliases:
 
   if ((SortAlias & SORT_MASK) != SORT_ORDER)
   {
-    qsort (AliasTable, i, sizeof (ALIAS *),
-           (SortAlias & SORT_MASK) == SORT_ADDRESS ? alias_SortAddress : alias_SortAlias);
+    qsort(AliasTable, i, sizeof(ALIAS *),
+          (SortAlias & SORT_MASK) == SORT_ADDRESS ? alias_SortAddress : alias_SortAlias);
   }
 
   for (i=0; i<menu->max; i++) AliasTable[i]->num = i;
@@ -191,7 +191,7 @@ new_aliases:
       goto new_aliases;
     }
 
-    switch ((op = mutt_menuLoop (menu)))
+    switch ((op = mutt_menuLoop(menu)))
     {
       case OP_DELETE:
       case OP_UNDELETE:
@@ -206,7 +206,7 @@ new_aliases:
         {
           AliasTable[menu->current]->self->del = (op == OP_DELETE) ? 1 : 0;
           menu->redraw |= REDRAW_CURRENT;
-          if (option (OPTRESOLVE) && menu->current < menu->max - 1)
+          if (option(OPTRESOLVE) && menu->current < menu->max - 1)
           {
             menu->current++;
             menu->redraw |= REDRAW_INDEX;
@@ -226,18 +226,18 @@ new_aliases:
   {
     if (AliasTable[i]->tagged)
     {
-      rfc822_write_address (buf, buflen, AliasTable[i]->addr, 1);
+      rfc822_write_address(buf, buflen, AliasTable[i]->addr, 1);
       t = -1;
     }
   }
 
   if (t != -1)
   {
-    rfc822_write_address (buf, buflen, AliasTable[t]->addr, 1);
+    rfc822_write_address(buf, buflen, AliasTable[t]->addr, 1);
   }
 
-  mutt_pop_current_menu (menu);
-  mutt_menuDestroy (&menu);
-  FREE (&AliasTable);
+  mutt_pop_current_menu(menu);
+  mutt_menuDestroy(&menu);
+  FREE(&AliasTable);
 
 }

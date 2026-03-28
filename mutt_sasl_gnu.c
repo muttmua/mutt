@@ -30,38 +30,38 @@
 
 static Gsasl *mutt_gsasl_ctx = NULL;
 
-static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
-                                Gsasl_property prop);
+static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
+                               Gsasl_property prop);
 
 
 /* mutt_gsasl_start: called before doing a SASL exchange - initialises library
  *   (if necessary). */
-static int mutt_gsasl_init (void)
+static int mutt_gsasl_init(void)
 {
   int rc;
 
   if (mutt_gsasl_ctx)
     return 0;
 
-  rc = gsasl_init (&mutt_gsasl_ctx);
+  rc = gsasl_init(&mutt_gsasl_ctx);
   if (rc != GSASL_OK)
   {
     mutt_gsasl_ctx = NULL;
     muttdbg(1, "mutt_gsasl_start: libgsasl initialisation failed (%d): %s.",
-                rc, gsasl_strerror (rc));
+            rc, gsasl_strerror(rc));
     return -1;
   }
 
-  gsasl_callback_set (mutt_gsasl_ctx, mutt_gsasl_callback);
+  gsasl_callback_set(mutt_gsasl_ctx, mutt_gsasl_callback);
 
   return 0;
 }
 
-void mutt_gsasl_done (void)
+void mutt_gsasl_done(void)
 {
   if (mutt_gsasl_ctx)
   {
-    gsasl_done (mutt_gsasl_ctx);
+    gsasl_done(mutt_gsasl_ctx);
     mutt_gsasl_ctx = NULL;
   }
 }
@@ -70,98 +70,98 @@ static const char *VALID_MECHANISM_CHARACTERS =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
 /* This logic is derived from the libgsasl suggest code */
-static int mechlist_contains (const char *uc_mech, const char *uc_mechlist)
+static int mechlist_contains(const char *uc_mech, const char *uc_mechlist)
 {
   size_t mech_len, mechlist_len, fragment_len, i;
 
-  mech_len = mutt_strlen (uc_mech);
-  mechlist_len = mutt_strlen (uc_mechlist);
+  mech_len = mutt_strlen(uc_mech);
+  mechlist_len = mutt_strlen(uc_mechlist);
 
   if (!mech_len || !mechlist_len)
     return 0;
 
   for (i = 0; i < mechlist_len;)
   {
-    fragment_len = strspn (uc_mechlist + i, VALID_MECHANISM_CHARACTERS);
+    fragment_len = strspn(uc_mechlist + i, VALID_MECHANISM_CHARACTERS);
     if ((mech_len == fragment_len) &&
-        !ascii_strncmp (uc_mech, uc_mechlist + i, mech_len))
+        !ascii_strncmp(uc_mech, uc_mechlist + i, mech_len))
       return 1;
     i += fragment_len + 1;
   }
   return 0;
 }
 
-const char *mutt_gsasl_get_mech (const char *requested_mech,
-                                 const char *server_mechlist)
+const char *mutt_gsasl_get_mech(const char *requested_mech,
+                                const char *server_mechlist)
 {
   char *uc_requested_mech, *uc_server_mechlist;
   const char *rv = NULL;
 
-  if (mutt_gsasl_init ())
+  if (mutt_gsasl_init())
     return NULL;
 
   /* libgsasl does not do case-independent string comparisons, and stores
    * its methods internally in uppercase.
    */
-  uc_server_mechlist = safe_strdup (server_mechlist);
+  uc_server_mechlist = safe_strdup(server_mechlist);
   if (uc_server_mechlist)
-    ascii_strupper (uc_server_mechlist);
+    ascii_strupper(uc_server_mechlist);
 
-  uc_requested_mech = safe_strdup (requested_mech);
+  uc_requested_mech = safe_strdup(requested_mech);
   if (uc_requested_mech)
-    ascii_strupper (uc_requested_mech);
+    ascii_strupper(uc_requested_mech);
 
   if (uc_requested_mech)
   {
-    if (mechlist_contains (uc_requested_mech, uc_server_mechlist))
-      rv = gsasl_client_suggest_mechanism (mutt_gsasl_ctx, uc_requested_mech);
+    if (mechlist_contains(uc_requested_mech, uc_server_mechlist))
+      rv = gsasl_client_suggest_mechanism(mutt_gsasl_ctx, uc_requested_mech);
   }
   else
-    rv = gsasl_client_suggest_mechanism (mutt_gsasl_ctx, uc_server_mechlist);
+    rv = gsasl_client_suggest_mechanism(mutt_gsasl_ctx, uc_server_mechlist);
 
-  FREE (&uc_requested_mech);
-  FREE (&uc_server_mechlist);
+  FREE(&uc_requested_mech);
+  FREE(&uc_server_mechlist);
 
   return rv;
 }
 
-int mutt_gsasl_client_new (CONNECTION *conn, const char *mech,
-                           Gsasl_session **sctx)
+int mutt_gsasl_client_new(CONNECTION *conn, const char *mech,
+                          Gsasl_session **sctx)
 {
   int rc;
 
-  if (mutt_gsasl_init ())
+  if (mutt_gsasl_init())
     return -1;
 
-  rc = gsasl_client_start (mutt_gsasl_ctx, mech, sctx);
+  rc = gsasl_client_start(mutt_gsasl_ctx, mech, sctx);
   if (rc != GSASL_OK)
   {
     *sctx = NULL;
     muttdbg(1, "gsasl_client_start failed (%d): %s.",
-                rc, gsasl_strerror (rc));
+            rc, gsasl_strerror(rc));
     return -1;
   }
 
-  gsasl_session_hook_set (*sctx, conn);
+  gsasl_session_hook_set(*sctx, conn);
 
   return 0;
 }
 
-void mutt_gsasl_client_finish (Gsasl_session **sctx)
+void mutt_gsasl_client_finish(Gsasl_session **sctx)
 {
-  gsasl_finish (*sctx);
+  gsasl_finish(*sctx);
   *sctx = NULL;
 }
 
 
-static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
-                                Gsasl_property prop)
+static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
+                               Gsasl_property prop)
 {
   int rc = GSASL_NO_CALLBACK;
   CONNECTION *conn;
   const char *service;
 
-  conn = gsasl_session_hook_get (sctx);
+  conn = gsasl_session_hook_get(sctx);
   if (!conn)
   {
     muttdbg(1, "missing session hook data!");
@@ -171,30 +171,30 @@ static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
   switch (prop)
   {
     case GSASL_PASSWORD:
-      if (mutt_account_getpass (&conn->account))
+      if (mutt_account_getpass(&conn->account))
         return rc;
-      gsasl_property_set (sctx, GSASL_PASSWORD, conn->account.pass);
+      gsasl_property_set(sctx, GSASL_PASSWORD, conn->account.pass);
       rc = GSASL_OK;
       break;
 
     case GSASL_AUTHID:
       /* whom the provided password belongs to: login */
-      if (mutt_account_getlogin (&conn->account))
+      if (mutt_account_getlogin(&conn->account))
         return rc;
-      gsasl_property_set (sctx, GSASL_AUTHID, conn->account.login);
+      gsasl_property_set(sctx, GSASL_AUTHID, conn->account.login);
       rc = GSASL_OK;
       break;
 
     case GSASL_AUTHZID:
       /* name of the user whose mail/resources you intend to access: user */
-      if (mutt_account_getuser (&conn->account))
+      if (mutt_account_getuser(&conn->account))
         return rc;
-      gsasl_property_set (sctx, GSASL_AUTHZID, conn->account.user);
+      gsasl_property_set(sctx, GSASL_AUTHZID, conn->account.user);
       rc = GSASL_OK;
       break;
 
     case GSASL_ANONYMOUS_TOKEN:
-      gsasl_property_set (sctx, GSASL_ANONYMOUS_TOKEN, "dummy");
+      gsasl_property_set(sctx, GSASL_ANONYMOUS_TOKEN, "dummy");
       rc = GSASL_OK;
       break;
 
@@ -213,12 +213,12 @@ static int mutt_gsasl_callback (Gsasl *ctx, Gsasl_session *sctx,
         default:
           return rc;
       }
-      gsasl_property_set (sctx, GSASL_SERVICE, service);
+      gsasl_property_set(sctx, GSASL_SERVICE, service);
       rc = GSASL_OK;
       break;
 
     case GSASL_HOSTNAME:
-      gsasl_property_set (sctx, GSASL_HOSTNAME, conn->account.host);
+      gsasl_property_set(sctx, GSASL_HOSTNAME, conn->account.host);
       rc = GSASL_OK;
       break;
 

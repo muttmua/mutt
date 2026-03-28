@@ -28,47 +28,48 @@
 /*
     Type definitions for crypto module functions.
  */
-typedef void (*crypt_func_void_passphrase_t) (void);
-typedef int (*crypt_func_valid_passphrase_t)  (void);
+typedef void (*crypt_func_void_passphrase_t)(void);
+typedef int (*crypt_func_valid_passphrase_t)(void);
 
-typedef int (*crypt_func_decrypt_mime_t) (FILE *a, FILE **b,
-                                          BODY *c, BODY **d);
+typedef int (*crypt_func_decrypt_mime_t)(FILE *a, FILE **b,
+                                         BODY *c, BODY **d);
 
-typedef int (*crypt_func_application_handler_t) (BODY *m, STATE *s);
-typedef int (*crypt_func_encrypted_handler_t) (BODY *m, STATE *s);
+typedef int (*crypt_func_application_handler_t)(BODY *m, STATE *s);
+typedef int (*crypt_func_encrypted_handler_t)(BODY *m, STATE *s);
 
-typedef void (*crypt_func_pgp_invoke_getkeys_t) (ADDRESS *addr);
-typedef int (*crypt_func_pgp_check_traditional_t) (FILE *fp, BODY *b,
-                                                   int just_one);
-typedef BODY *(*crypt_func_pgp_traditional_encryptsign_t) (BODY *a, int flags,
-                                                           char *keylist);
-typedef BODY *(*crypt_func_pgp_make_key_attachment_t) (void);
-typedef char *(*crypt_func_findkeys_t) (ADDRESS *adrlist, int oppenc_mode);
-typedef BODY *(*crypt_func_sign_message_t) (BODY *a);
-typedef BODY *(*crypt_func_pgp_encrypt_message_t) (BODY *a, char *keylist,
-                                                   int sign);
-typedef void (*crypt_func_pgp_invoke_import_t) (const char *fname);
-typedef int (*crypt_func_verify_one_t) (BODY *sigbdy, STATE *s,
-                                        const char *tempf);
-typedef void (*crypt_func_pgp_extract_keys_from_attachment_list_t)
-                                           (FILE *fp, int tag, BODY *top);
+typedef void (*crypt_func_pgp_invoke_getkeys_t)(ADDRESS *addr);
+typedef int (*crypt_func_pgp_check_traditional_t)(FILE *fp, BODY *b,
+                                                  int just_one);
+typedef BODY *(*crypt_func_pgp_traditional_encryptsign_t)(BODY *a, int flags,
+                                                          char *keylist);
+typedef BODY *(*crypt_func_pgp_make_key_attachment_t)(void);
+typedef char *(*crypt_func_findkeys_t)(ADDRESS *adrlist, int oppenc_mode);
+typedef BODY *(*crypt_func_sign_message_t)(BODY *a);
+typedef BODY *(*crypt_func_pgp_encrypt_message_t)(BODY *a, char *keylist,
+                                                  int sign);
+typedef void (*crypt_func_pgp_invoke_import_t)(const char *fname);
+typedef int (*crypt_func_verify_one_t)(BODY *sigbdy, STATE *s,
+                                       const char *tempf);
+typedef void (*crypt_func_pgp_extract_keys_from_attachment_list_t)(FILE *fp,
+                                                                   int tag,
+                                                                   BODY *top);
 
-typedef void (*crypt_func_send_menu_t) (SEND_CONTEXT *sctx);
+typedef void (*crypt_func_send_menu_t)(SEND_CONTEXT *sctx);
 
- /* (SMIME) */
-typedef void (*crypt_func_smime_getkeys_t) (ENVELOPE *env);
-typedef int (*crypt_func_smime_verify_sender_t) (HEADER *h);
+/* (SMIME) */
+typedef void (*crypt_func_smime_getkeys_t)(ENVELOPE *env);
+typedef int (*crypt_func_smime_verify_sender_t)(HEADER *h);
 
-typedef BODY *(*crypt_func_smime_build_smime_entity_t) (BODY *a,
-                                                        char *certlist);
+typedef BODY *(*crypt_func_smime_build_smime_entity_t)(BODY *a,
+                                                       char *certlist);
 
-typedef void (*crypt_func_smime_invoke_import_t) (const char *infile, const char *mailbox);
+typedef void (*crypt_func_smime_invoke_import_t)(const char *infile, const char *mailbox);
 
-typedef void (*crypt_func_init_t) (void);
+typedef void (*crypt_func_init_t)(void);
 
-typedef void (*crypt_func_cleanup_t) (void);
+typedef void (*crypt_func_cleanup_t)(void);
 
-typedef void (*crypt_func_set_sender_t) (const char *sender);
+typedef void (*crypt_func_set_sender_t)(const char *sender);
 
 /*
    A structure to keep all crypto module functions together.
@@ -123,19 +124,19 @@ typedef struct crypt_module_specs
    High Level crypto module interface.
  */
 
-void crypto_module_register (crypt_module_specs_t specs);
-crypt_module_specs_t crypto_module_lookup (int identifier);
+void crypto_module_register(crypt_module_specs_t specs);
+crypt_module_specs_t crypto_module_lookup(int identifier);
 
 /* If the crypto module identifier by IDENTIFIER has been registered,
    call its function FUNC.  Do nothing else.  This may be used as an
    expression. */
 #define CRYPT_MOD_CALL_CHECK(identifier, func) \
-  (crypto_module_lookup (APPLICATION_ ## identifier) \
-   && (crypto_module_lookup (APPLICATION_ ## identifier))->functions.func)
+  (crypto_module_lookup(APPLICATION_ ## identifier) \
+   && (crypto_module_lookup(APPLICATION_ ## identifier))->functions.func)
 
 /* Call the function FUNC in the crypto module identified by
    IDENTIFIER. This may be used as an expression. */
 #define CRYPT_MOD_CALL(identifier, func) \
-  *(crypto_module_lookup (APPLICATION_ ## identifier))->functions.func
+  *(crypto_module_lookup(APPLICATION_ ## identifier))->functions.func
 
 #endif

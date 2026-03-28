@@ -11,7 +11,7 @@
 #define EILSEQ EINVAL
 #endif
 
-int mutt_wctoutf8 (char *s, unsigned int c, size_t buflen)
+int mutt_wctoutf8(char *s, unsigned int c, size_t buflen)
 {
   if (c < (1 << 7))
   {

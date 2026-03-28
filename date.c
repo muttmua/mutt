@@ -25,9 +25,9 @@
 
 /* returns the seconds east of UTC given `g' and its corresponding gmtime()
    representation */
-static time_t compute_tz (time_t g, struct tm *utc)
+static time_t compute_tz(time_t g, struct tm *utc)
 {
-  struct tm *lt = localtime (&g);
+  struct tm *lt = localtime(&g);
   time_t t;
   int yday;
 
@@ -49,18 +49,18 @@ static time_t compute_tz (time_t g, struct tm *utc)
 /* Returns the local timezone in seconds east of UTC for the time t,
  * or for the current time if t is zero.
  */
-time_t mutt_local_tz (time_t t)
+time_t mutt_local_tz(time_t t)
 {
   struct tm *ptm;
   struct tm utc;
 
   if (!t)
-    t = time (NULL);
-  ptm = gmtime (&t);
+    t = time(NULL);
+  ptm = gmtime(&t);
   /* need to make a copy because gmtime/localtime return a pointer to
      static memory (grr!) */
-  memcpy (&utc, ptm, sizeof (utc));
-  return (compute_tz (t, &utc));
+  memcpy(&utc, ptm, sizeof(utc));
+  return (compute_tz(t, &utc));
 }
 
 /* theoretically time_t can be float but it is integer on most (if not all) systems */
@@ -69,7 +69,7 @@ time_t mutt_local_tz (time_t t)
 
 /* converts struct tm to time_t, but does not take the local timezone into
    account unless ``local'' is nonzero */
-time_t mutt_mktime (struct tm *t, int local)
+time_t mutt_mktime(struct tm *t, int local)
 {
   time_t g;
   int year;
@@ -115,14 +115,14 @@ time_t mutt_mktime (struct tm *t, int local)
   g += t->tm_sec;
 
   if (local)
-    g -= compute_tz (g, t);
+    g -= compute_tz(g, t);
 
   return (g);
 }
 
 /* Safely add a timeout to a given time_t value, truncating instead of
  * overflowing. */
-time_t mutt_add_timeout (time_t now, long timeout)
+time_t mutt_add_timeout(time_t now, long timeout)
 {
   if (timeout < 0)
     return now;
@@ -134,7 +134,7 @@ time_t mutt_add_timeout (time_t now, long timeout)
 }
 
 /* Return 1 if month is February of leap year, else 0 */
-static int isLeapYearFeb (struct tm *tm)
+static int isLeapYearFeb(struct tm *tm)
 {
   if (tm->tm_mon == 1)
   {
@@ -144,7 +144,7 @@ static int isLeapYearFeb (struct tm *tm)
   return (0);
 }
 
-void mutt_normalize_time (struct tm *tm)
+void mutt_normalize_time(struct tm *tm)
 {
   static const char DaysPerMonth[12] = {
     31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
@@ -201,10 +201,10 @@ void mutt_normalize_time (struct tm *tm)
       tm->tm_mon = 11;
       tm->tm_year--;
     }
-    tm->tm_mday += DaysPerMonth[tm->tm_mon] + isLeapYearFeb (tm);
+    tm->tm_mday += DaysPerMonth[tm->tm_mon] + isLeapYearFeb(tm);
   }
   while (tm->tm_mday > (DaysPerMonth[tm->tm_mon] +
-                        (nLeap = isLeapYearFeb (tm))))
+                        (nLeap = isLeapYearFeb(tm))))
   {
     tm->tm_mday -= DaysPerMonth[tm->tm_mon] + nLeap;
     if (tm->tm_mon < 11)

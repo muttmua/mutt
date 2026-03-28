@@ -61,19 +61,19 @@ static const char *ExtPagerProgress = "all";
 /* The folder the user last saved to.  Used by ci_save_message() */
 static BUFFER *LastSaveFolder = NULL;
 
-void mutt_commands_cleanup (void)
+void mutt_commands_cleanup(void)
 {
-  mutt_buffer_free (&LastSaveFolder);
+  mutt_buffer_free(&LastSaveFolder);
 }
 
-static void process_protected_headers (HEADER *cur)
+static void process_protected_headers(HEADER *cur)
 {
   ENVELOPE *prot_headers = NULL;
   regmatch_t pmatch[1];
 
-  if (!option (OPTCRYPTPROTHDRSREAD)
+  if (!option(OPTCRYPTPROTHDRSREAD)
 #ifdef USE_AUTOCRYPT
-      && !option (OPTAUTOCRYPT)
+      && !option(OPTAUTOCRYPT)
 #endif
     )
     return;
@@ -90,13 +90,13 @@ static void process_protected_headers (HEADER *cur)
     if (!(cur->security & GOODSIGN))
       return;
 
-    if (mutt_is_multipart_signed (cur->content) &&
+    if (mutt_is_multipart_signed(cur->content) &&
         cur->content->parts)
     {
       prot_headers = cur->content->parts->mime_headers;
     }
     else if ((WithCrypto & APPLICATION_SMIME) &&
-             mutt_is_application_smime (cur->content))
+             mutt_is_application_smime(cur->content))
     {
       prot_headers = cur->content->mime_headers;
     }
@@ -104,41 +104,41 @@ static void process_protected_headers (HEADER *cur)
   if (!prot_headers && (cur->security & ENCRYPT))
   {
     if ((WithCrypto & APPLICATION_PGP) &&
-        (mutt_is_valid_multipart_pgp_encrypted (cur->content) ||
-         mutt_is_malformed_multipart_pgp_encrypted (cur->content)))
+        (mutt_is_valid_multipart_pgp_encrypted(cur->content) ||
+         mutt_is_malformed_multipart_pgp_encrypted(cur->content)))
     {
       prot_headers = cur->content->mime_headers;
     }
     else if ((WithCrypto & APPLICATION_SMIME) &&
-             mutt_is_application_smime (cur->content))
+             mutt_is_application_smime(cur->content))
     {
       prot_headers = cur->content->mime_headers;
     }
   }
 
   /* Update protected headers in the index and header cache. */
-  if (option (OPTCRYPTPROTHDRSREAD) &&
+  if (option(OPTCRYPTPROTHDRSREAD) &&
       prot_headers &&
       prot_headers->subject &&
-      mutt_strcmp (cur->env->subject, prot_headers->subject))
+      mutt_strcmp(cur->env->subject, prot_headers->subject))
   {
     if (Context->subj_hash && cur->env->real_subj)
-      hash_delete (Context->subj_hash, cur->env->real_subj, cur, NULL);
+      hash_delete(Context->subj_hash, cur->env->real_subj, cur, NULL);
 
-    mutt_str_replace (&cur->env->subject, prot_headers->subject);
-    FREE (&cur->env->disp_subj);
-    if (regexec (ReplyRegexp.rx, cur->env->subject, 1, pmatch, 0) == 0)
+    mutt_str_replace(&cur->env->subject, prot_headers->subject);
+    FREE(&cur->env->disp_subj);
+    if (regexec(ReplyRegexp.rx, cur->env->subject, 1, pmatch, 0) == 0)
       cur->env->real_subj = cur->env->subject + pmatch[0].rm_eo;
     else
       cur->env->real_subj = cur->env->subject;
 
     if (Context->subj_hash)
-      hash_insert (Context->subj_hash, cur->env->real_subj, cur);
+      hash_insert(Context->subj_hash, cur->env->real_subj, cur);
 
-    mx_save_to_header_cache (Context, cur);
+    mx_save_to_header_cache(Context, cur);
 
     /* Also persist back to the message headers if this is set */
-    if (option (OPTCRYPTPROTHDRSSAVE))
+    if (option(OPTCRYPTPROTHDRSSAVE))
     {
       cur->env->changed |= MUTT_ENV_CHANGED_SUBJECT;
       cur->changed = 1;
@@ -147,17 +147,17 @@ static void process_protected_headers (HEADER *cur)
   }
 
 #ifdef USE_AUTOCRYPT
-  if (option (OPTAUTOCRYPT) &&
+  if (option(OPTAUTOCRYPT) &&
       (cur->security & ENCRYPT) &&
       prot_headers &&
       prot_headers->autocrypt_gossip)
   {
-    mutt_autocrypt_process_gossip_header (cur, prot_headers);
+    mutt_autocrypt_process_gossip_header(cur, prot_headers);
   }
 #endif
 }
 
-int mutt_display_message (HEADER *cur)
+int mutt_display_message(HEADER *cur)
 {
   BUFFER *tempfile = NULL;
   int rc = 0, builtin = 0;
@@ -167,8 +167,8 @@ int mutt_display_message (HEADER *cur)
   pid_t filterpid = -1;
   int res;
 
-  mutt_parse_mime_message (Context, cur);
-  mutt_message_hook (Context, cur, MUTT_MESSAGEHOOK);
+  mutt_parse_mime_message(Context, cur);
+  mutt_message_hook(Context, cur, MUTT_MESSAGEHOOK);
 
   /* see if crypto is needed for this message.  if so, we should exit curses */
   if (WithCrypto && cur->security)
@@ -176,7 +176,7 @@ int mutt_display_message (HEADER *cur)
     if (cur->security & ENCRYPT)
     {
       if (cur->security & APPLICATION_SMIME)
-        crypt_smime_getkeys (cur->env);
+        crypt_smime_getkeys(cur->env);
       if (!crypt_valid_passphrase(cur->security))
         goto cleanup;
 
@@ -186,7 +186,7 @@ int mutt_display_message (HEADER *cur)
     {
       /* find out whether or not the verify signature */
       /* L10N: Used for the $crypt_verify_sig prompt */
-      if (query_quadoption (OPT_VERIFYSIG, _("Verify signature?")) == MUTT_YES)
+      if (query_quadoption(OPT_VERIFYSIG, _("Verify signature?")) == MUTT_YES)
       {
         cmflags |= MUTT_CM_VERIFY;
       }
@@ -198,19 +198,19 @@ int mutt_display_message (HEADER *cur)
     if (cur->security & APPLICATION_PGP)
     {
       if (cur->env->from)
-        crypt_pgp_invoke_getkeys (cur->env->from);
+        crypt_pgp_invoke_getkeys(cur->env->from);
 
-      crypt_invoke_message (APPLICATION_PGP);
+      crypt_invoke_message(APPLICATION_PGP);
     }
 
     if (cur->security & APPLICATION_SMIME)
-      crypt_invoke_message (APPLICATION_SMIME);
+      crypt_invoke_message(APPLICATION_SMIME);
   }
 
 
-  tempfile = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (tempfile);
-  if ((fpout = safe_fopen (mutt_b2s (tempfile), "w")) == NULL)
+  tempfile = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(tempfile);
+  if ((fpout = safe_fopen(mutt_b2s(tempfile), "w")) == NULL)
   {
     mutt_error _("Could not create temporary file!");
     goto cleanup;
@@ -221,18 +221,18 @@ int mutt_display_message (HEADER *cur)
     fpfilterout = fpout;
     fpout = NULL;
     /* mutt_endwin (NULL); */
-    filterpid = mutt_create_filter_fd (DisplayFilter, &fpout, NULL, NULL,
-                                       -1, fileno(fpfilterout), -1);
+    filterpid = mutt_create_filter_fd(DisplayFilter, &fpout, NULL, NULL,
+                                      -1, fileno(fpfilterout), -1);
     if (filterpid < 0)
     {
-      mutt_error (_("Cannot create display filter"));
-      safe_fclose (&fpfilterout);
-      unlink (mutt_b2s (tempfile));
+      mutt_error(_("Cannot create display filter"));
+      safe_fclose(&fpfilterout);
+      unlink(mutt_b2s(tempfile));
       goto cleanup;
     }
   }
 
-  if (!Pager || mutt_strcmp (Pager, "builtin") == 0)
+  if (!Pager || mutt_strcmp(Pager, "builtin") == 0)
     builtin = 1;
   else
   {
@@ -242,23 +242,23 @@ int mutt_display_message (HEADER *cur)
     hfi.ctx = Context;
     hfi.pager_progress = ExtPagerProgress;
     hfi.hdr = cur;
-    mutt_make_string_info (buf, sizeof (buf), MuttIndexWindow->cols, NONULL(PagerFmt), &hfi, 0);
-    fputs (buf, fpout);
-    fputs ("\n\n", fpout);
+    mutt_make_string_info(buf, sizeof(buf), MuttIndexWindow->cols, NONULL(PagerFmt), &hfi, 0);
+    fputs(buf, fpout);
+    fputs("\n\n", fpout);
   }
 
-  res = mutt_copy_message (fpout, Context, cur, cmflags,
-                           (option (OPTWEED) ? (CH_WEED | CH_REORDER) : 0) |
-                           CH_DECODE | CH_FROM | CH_DISPLAY);
-  if ((safe_fclose (&fpout) != 0 && errno != EPIPE) || res < 0)
+  res = mutt_copy_message(fpout, Context, cur, cmflags,
+                          (option(OPTWEED) ? (CH_WEED | CH_REORDER) : 0) |
+                          CH_DECODE | CH_FROM | CH_DISPLAY);
+  if ((safe_fclose(&fpout) != 0 && errno != EPIPE) || res < 0)
   {
-    mutt_error (_("Could not copy message"));
+    mutt_error(_("Could not copy message"));
     if (fpfilterout != NULL)
     {
-      mutt_wait_filter (filterpid);
-      safe_fclose (&fpfilterout);
+      mutt_wait_filter(filterpid);
+      safe_fclose(&fpfilterout);
     }
-    mutt_unlink (mutt_b2s (tempfile));
+    mutt_unlink(mutt_b2s(tempfile));
     goto cleanup;
   }
 
@@ -271,26 +271,26 @@ int mutt_display_message (HEADER *cur)
        will still display what it was able to generate, but will also
        display this message in the message line.
     */
-    mutt_error (_("There was an error displaying all or part of the message"));
+    mutt_error(_("There was an error displaying all or part of the message"));
   }
 
-  if (fpfilterout != NULL && mutt_wait_filter (filterpid) != 0)
-    mutt_any_key_to_continue (NULL);
+  if (fpfilterout != NULL && mutt_wait_filter(filterpid) != 0)
+    mutt_any_key_to_continue(NULL);
 
-  safe_fclose (&fpfilterout);   /* XXX - check result? */
+  safe_fclose(&fpfilterout);   /* XXX - check result? */
 
   if (WithCrypto)
   {
     /* update crypto information for this message */
     cur->security &= ~(GOODSIGN|BADSIGN);
-    cur->security |= crypt_query (cur->content);
+    cur->security |= crypt_query(cur->content);
 
     /* Remove color cache for this message, in case there
        are color patterns for both ~g and ~V */
     cur->color.pair = cur->color.attrs = 0;
 
     /* Process protected headers and autocrypt gossip headers */
-    process_protected_headers (cur);
+    process_protected_headers(cur);
   }
 
   if (builtin)
@@ -303,66 +303,66 @@ int mutt_display_message (HEADER *cur)
       if (cur->security & GOODSIGN)
       {
         if (!crypt_smime_verify_sender(cur))
-          mutt_message ( _("S/MIME signature successfully verified."));
+          mutt_message( _("S/MIME signature successfully verified."));
         else
-          mutt_error ( _("S/MIME certificate owner does not match sender."));
+          mutt_error( _("S/MIME certificate owner does not match sender."));
       }
       else if (cur->security & PARTSIGN)
-        mutt_message (_("Warning: Part of this message has not been signed."));
+        mutt_message(_("Warning: Part of this message has not been signed."));
       else if (cur->security & SIGN || cur->security & BADSIGN)
-        mutt_error ( _("S/MIME signature could NOT be verified."));
+        mutt_error( _("S/MIME signature could NOT be verified."));
     }
 
     if (WithCrypto
         && (cur->security & APPLICATION_PGP) && (cmflags & MUTT_CM_VERIFY))
     {
       if (cur->security & GOODSIGN)
-        mutt_message (_("PGP signature successfully verified."));
+        mutt_message(_("PGP signature successfully verified."));
       else if (cur->security & PARTSIGN)
-        mutt_message (_("Warning: Part of this message has not been signed."));
+        mutt_message(_("Warning: Part of this message has not been signed."));
       else if (cur->security & SIGN)
-        mutt_message (_("PGP signature could NOT be verified."));
+        mutt_message(_("PGP signature could NOT be verified."));
     }
 
     /* Invoke the builtin pager */
-    memset (&info, 0, sizeof (pager_t));
+    memset(&info, 0, sizeof(pager_t));
     info.hdr = cur;
     info.ctx = Context;
-    rc = mutt_pager (NULL, mutt_b2s (tempfile), MUTT_PAGER_MESSAGE, &info);
+    rc = mutt_pager(NULL, mutt_b2s(tempfile), MUTT_PAGER_MESSAGE, &info);
   }
   else
   {
     int r;
     BUFFER *cmd = NULL;
 
-    mutt_endwin (NULL);
+    mutt_endwin(NULL);
 
-    cmd = mutt_buffer_pool_get ();
-    mutt_expand_file_fmt (cmd, NONULL (Pager), mutt_b2s (tempfile));
-    if ((r = mutt_system (mutt_b2s (cmd))) == -1)
-      mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
-    unlink (mutt_b2s (tempfile));
-    mutt_buffer_pool_release (&cmd);
+    cmd = mutt_buffer_pool_get();
+    mutt_expand_file_fmt(cmd, NONULL(Pager), mutt_b2s(tempfile));
+    if ((r = mutt_system(mutt_b2s(cmd))) == -1)
+      mutt_error(_("Error running \"%s\"!"), mutt_b2s(cmd));
+    unlink(mutt_b2s(tempfile));
+    mutt_buffer_pool_release(&cmd);
 
-    if (!option (OPTNOCURSES))
-      keypad (stdscr, TRUE);
+    if (!option(OPTNOCURSES))
+      keypad(stdscr, TRUE);
     if (r != -1)
-      mutt_set_flag (Context, cur, MUTT_READ, 1);
-    if (r != -1 && option (OPTPROMPTAFTER))
+      mutt_set_flag(Context, cur, MUTT_READ, 1);
+    if (r != -1 && option(OPTPROMPTAFTER))
     {
-      mutt_unget_event (mutt_any_key_to_continue _("Command: "), 0);
-      rc = km_dokey (MENU_PAGER);
+      mutt_unget_event(mutt_any_key_to_continue _("Command: "), 0);
+      rc = km_dokey(MENU_PAGER);
     }
     else
       rc = 0;
   }
 
 cleanup:
-  mutt_buffer_pool_release (&tempfile);
+  mutt_buffer_pool_release(&tempfile);
   return rc;
 }
 
-void ci_bounce_message (HEADER *h)
+void ci_bounce_message(HEADER *h)
 {
   char prompt[SHORT_STRING+1];
   char scratch[SHORT_STRING];
@@ -378,7 +378,7 @@ void ci_bounce_message (HEADER *h)
     if (!h->env->from)
     {
       mutt_error _("Warning: message contains no From: header");
-      mutt_sleep (2);
+      mutt_sleep(2);
     }
   }
   else if (Context)
@@ -388,7 +388,7 @@ void ci_bounce_message (HEADER *h)
       if (Context->hdrs[rc]->tagged && !Context->hdrs[rc]->env->from)
       {
         mutt_error _("Warning: message contains no From: header");
-        mutt_sleep (2);
+        mutt_sleep(2);
         break;
       }
     }
@@ -399,68 +399,68 @@ void ci_bounce_message (HEADER *h)
   else
     strfcpy(prompt, _("Bounce tagged messages to: "), sizeof(prompt));
 
-  rc = mutt_get_field (prompt, buf, sizeof (buf), MUTT_ALIAS);
+  rc = mutt_get_field(prompt, buf, sizeof(buf), MUTT_ALIAS);
   if (rc || !buf[0])
     return;
 
-  if (!(adr = mutt_parse_adrlist (adr, buf)))
+  if (!(adr = mutt_parse_adrlist(adr, buf)))
   {
     mutt_error _("Error parsing address!");
     return;
   }
 
-  adr = mutt_expand_aliases (adr);
+  adr = mutt_expand_aliases(adr);
 
-  if (mutt_addrlist_to_intl (adr, &err) < 0)
+  if (mutt_addrlist_to_intl(adr, &err) < 0)
   {
-    mutt_error (_("Bad IDN: '%s'"), err);
-    FREE (&err);
-    rfc822_free_address (&adr);
+    mutt_error(_("Bad IDN: '%s'"), err);
+    FREE(&err);
+    rfc822_free_address(&adr);
     return;
   }
 
   buf[0] = 0;
-  rfc822_write_address (buf, sizeof (buf), adr, 1);
+  rfc822_write_address(buf, sizeof(buf), adr, 1);
 
 #define extra_space (15 + 7 + 2)
-  snprintf (scratch, sizeof (scratch),
-            (h ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
+  snprintf(scratch, sizeof(scratch),
+           (h ? _("Bounce message to %s") : _("Bounce messages to %s")), buf);
 
-  if (mutt_strwidth (prompt) > MuttMessageWindow->cols - extra_space)
+  if (mutt_strwidth(prompt) > MuttMessageWindow->cols - extra_space)
   {
-    mutt_format_string (prompt, sizeof (prompt),
-                        0, MuttMessageWindow->cols-extra_space, FMT_LEFT, 0,
-                        scratch, sizeof (scratch), 0);
-    safe_strcat (prompt, sizeof (prompt), "...?");
+    mutt_format_string(prompt, sizeof(prompt),
+                       0, MuttMessageWindow->cols-extra_space, FMT_LEFT, 0,
+                       scratch, sizeof(scratch), 0);
+    safe_strcat(prompt, sizeof(prompt), "...?");
   }
   else
-    snprintf (prompt, sizeof (prompt), "%s?", scratch);
+    snprintf(prompt, sizeof(prompt), "%s?", scratch);
 
-  if (query_quadoption (OPT_BOUNCE, prompt) != MUTT_YES)
+  if (query_quadoption(OPT_BOUNCE, prompt) != MUTT_YES)
   {
-    rfc822_free_address (&adr);
-    mutt_window_clearline (MuttMessageWindow, 0);
-    mutt_message (h ? _("Message not bounced.") : _("Messages not bounced."));
+    rfc822_free_address(&adr);
+    mutt_window_clearline(MuttMessageWindow, 0);
+    mutt_message(h ? _("Message not bounced.") : _("Messages not bounced."));
     return;
   }
 
-  mutt_window_clearline (MuttMessageWindow, 0);
+  mutt_window_clearline(MuttMessageWindow, 0);
 
-  rc = mutt_bounce_message (NULL, h, adr);
-  rfc822_free_address (&adr);
+  rc = mutt_bounce_message(NULL, h, adr);
+  rfc822_free_address(&adr);
   /* If no error, or background, display message. */
   if ((rc == 0) || (rc == S_BKG))
-    mutt_message (h ? _("Message bounced.") : _("Messages bounced."));
+    mutt_message(h ? _("Message bounced.") : _("Messages bounced."));
 }
 
-static void pipe_set_flags (int decode, int print, int *cmflags, int *chflags)
+static void pipe_set_flags(int decode, int print, int *cmflags, int *chflags)
 {
   if (decode)
   {
     *chflags |= CH_DECODE | CH_REORDER;
     *cmflags |= MUTT_CM_DECODE | MUTT_CM_CHARCONV;
 
-    if (print ? option (OPTPRINTDECODEWEED) : option (OPTPIPEDECODEWEED))
+    if (print ? option(OPTPRINTDECODEWEED) : option(OPTPIPEDECODEWEED))
     {
       *chflags |= CH_WEED;
       *cmflags |= MUTT_CM_WEED;
@@ -479,34 +479,34 @@ static void pipe_set_flags (int decode, int print, int *cmflags, int *chflags)
 
 }
 
-static void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
+static void pipe_msg(HEADER *h, FILE *fp, int decode, int print)
 {
   int cmflags = 0;
   int chflags = CH_FROM;
 
-  pipe_set_flags (decode, print, &cmflags, &chflags);
+  pipe_set_flags(decode, print, &cmflags, &chflags);
 
   if (WithCrypto && decode && h->security & ENCRYPT)
   {
     if (!crypt_valid_passphrase(h->security))
       return;
-    mutt_endwin (NULL);
+    mutt_endwin(NULL);
   }
 
   if (decode)
-    mutt_parse_mime_message (Context, h);
+    mutt_parse_mime_message(Context, h);
 
-  mutt_copy_message (fp, Context, h, cmflags, chflags);
+  mutt_copy_message(fp, Context, h, cmflags, chflags);
 }
 
 
 /* the following code is shared between printing and piping */
 
-static int _mutt_pipe_message (HEADER *h, const char *cmd,
-                               int decode,
-                               int print,
-                               int split,
-                               char *sep)
+static int _mutt_pipe_message(HEADER *h, const char *cmd,
+                              int decode,
+                              int print,
+                              int split,
+                              char *sep)
 {
 
   int i, rc = 0;
@@ -522,27 +522,27 @@ static int _mutt_pipe_message (HEADER *h, const char *cmd,
   if (h)
   {
 
-    mutt_message_hook (Context, h, MUTT_MESSAGEHOOK);
+    mutt_message_hook(Context, h, MUTT_MESSAGEHOOK);
 
     if (WithCrypto && decode)
     {
-      mutt_parse_mime_message (Context, h);
+      mutt_parse_mime_message(Context, h);
       if (h->security & ENCRYPT && !crypt_valid_passphrase(h->security))
         return 1;
     }
-    mutt_endwin (NULL);
+    mutt_endwin(NULL);
 
-    if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0)
+    if ((thepid = mutt_create_filter(cmd, &fpout, NULL, NULL)) < 0)
     {
       mutt_perror _("Can't create filter process");
       return 1;
     }
 
-    set_option (OPTKEEPQUIET);
-    pipe_msg (h, fpout, decode, print);
-    safe_fclose (&fpout);
-    rc = mutt_wait_filter (thepid);
-    unset_option (OPTKEEPQUIET);
+    set_option(OPTKEEPQUIET);
+    pipe_msg(h, fpout, decode, print);
+    safe_fclose(&fpout);
+    rc = mutt_wait_filter(thepid);
+    unset_option(OPTKEEPQUIET);
   }
   else
   { /* handle tagged messages */
@@ -552,7 +552,7 @@ static int _mutt_pipe_message (HEADER *h, const char *cmd,
       for (i = 0; i < Context->vcount; i++)
         if (Context->hdrs[Context->v2r[i]]->tagged)
         {
-          mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
+          mutt_message_hook(Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
           mutt_parse_mime_message(Context, Context->hdrs[Context->v2r[i]]);
           if (Context->hdrs[Context->v2r[i]]->security & ENCRYPT &&
               !crypt_valid_passphrase(Context->hdrs[Context->v2r[i]]->security))
@@ -566,109 +566,109 @@ static int _mutt_pipe_message (HEADER *h, const char *cmd,
       {
         if (Context->hdrs[Context->v2r[i]]->tagged)
         {
-          mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
-          mutt_endwin (NULL);
-          if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0)
+          mutt_message_hook(Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
+          mutt_endwin(NULL);
+          if ((thepid = mutt_create_filter(cmd, &fpout, NULL, NULL)) < 0)
           {
             mutt_perror _("Can't create filter process");
             return 1;
           }
-          set_option (OPTKEEPQUIET);
-          pipe_msg (Context->hdrs[Context->v2r[i]], fpout, decode, print);
+          set_option(OPTKEEPQUIET);
+          pipe_msg(Context->hdrs[Context->v2r[i]], fpout, decode, print);
           /* add the message separator */
-          if (sep)  fputs (sep, fpout);
-          safe_fclose (&fpout);
-          if (mutt_wait_filter (thepid) != 0)
+          if (sep)  fputs(sep, fpout);
+          safe_fclose(&fpout);
+          if (mutt_wait_filter(thepid) != 0)
             rc = 1;
-          unset_option (OPTKEEPQUIET);
+          unset_option(OPTKEEPQUIET);
         }
       }
     }
     else
     {
-      mutt_endwin (NULL);
-      if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0)
+      mutt_endwin(NULL);
+      if ((thepid = mutt_create_filter(cmd, &fpout, NULL, NULL)) < 0)
       {
         mutt_perror _("Can't create filter process");
         return 1;
       }
-      set_option (OPTKEEPQUIET);
+      set_option(OPTKEEPQUIET);
       for (i = 0; i < Context->vcount; i++)
       {
         if (Context->hdrs[Context->v2r[i]]->tagged)
         {
-          mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
-          pipe_msg (Context->hdrs[Context->v2r[i]], fpout, decode, print);
+          mutt_message_hook(Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
+          pipe_msg(Context->hdrs[Context->v2r[i]], fpout, decode, print);
           /* add the message separator */
-          if (sep) fputs (sep, fpout);
+          if (sep) fputs(sep, fpout);
         }
       }
-      safe_fclose (&fpout);
-      if (mutt_wait_filter (thepid) != 0)
+      safe_fclose(&fpout);
+      if (mutt_wait_filter(thepid) != 0)
         rc = 1;
-      unset_option (OPTKEEPQUIET);
+      unset_option(OPTKEEPQUIET);
     }
   }
 
-  if (rc || option (OPTWAITKEY))
-    mutt_any_key_to_continue (NULL);
+  if (rc || option(OPTWAITKEY))
+    mutt_any_key_to_continue(NULL);
   return rc;
 }
 
-void mutt_pipe_message (HEADER *h)
+void mutt_pipe_message(HEADER *h)
 {
   BUFFER *buffer;
 
-  buffer = mutt_buffer_pool_get ();
-  if (mutt_buffer_get_field (_("Pipe to command: "), buffer, MUTT_CMD) != 0)
+  buffer = mutt_buffer_pool_get();
+  if (mutt_buffer_get_field(_("Pipe to command: "), buffer, MUTT_CMD) != 0)
     goto cleanup;
 
-  if (!mutt_buffer_len (buffer))
+  if (!mutt_buffer_len(buffer))
     goto cleanup;
 
   /* norel because it's a command which searches path */
-  mutt_buffer_expand_path_norel (buffer);
-  _mutt_pipe_message (h, mutt_b2s (buffer),
-                      option (OPTPIPEDECODE),
-                      0,
-                      option (OPTPIPESPLIT),
-                      PipeSep);
+  mutt_buffer_expand_path_norel(buffer);
+  _mutt_pipe_message(h, mutt_b2s(buffer),
+                     option(OPTPIPEDECODE),
+                     0,
+                     option(OPTPIPESPLIT),
+                     PipeSep);
 
 cleanup:
-  mutt_buffer_pool_release (&buffer);
+  mutt_buffer_pool_release(&buffer);
 }
 
-void mutt_print_message (HEADER *h)
+void mutt_print_message(HEADER *h)
 {
 
-  if (quadoption (OPT_PRINT) && !PrintCmd)
+  if (quadoption(OPT_PRINT) && !PrintCmd)
   {
-    mutt_message (_("No printing command has been defined."));
+    mutt_message(_("No printing command has been defined."));
     return;
   }
 
-  if (query_quadoption (OPT_PRINT,
-                        h ? _("Print message?") : _("Print tagged messages?"))
+  if (query_quadoption(OPT_PRINT,
+                       h ? _("Print message?") : _("Print tagged messages?"))
       != MUTT_YES)
     return;
 
-  if (_mutt_pipe_message (h, PrintCmd,
-                          option (OPTPRINTDECODE),
-                          1,
-                          option (OPTPRINTSPLIT),
-                          "\f") == 0)
-    mutt_message (h ? _("Message printed") : _("Messages printed"));
+  if (_mutt_pipe_message(h, PrintCmd,
+                         option(OPTPRINTDECODE),
+                         1,
+                         option(OPTPRINTSPLIT),
+                         "\f") == 0)
+    mutt_message(h ? _("Message printed") : _("Messages printed"));
   else
-    mutt_message (h ? _("Message could not be printed") :
-                  _("Messages could not be printed"));
+    mutt_message(h ? _("Message could not be printed") :
+                 _("Messages could not be printed"));
 }
 
 
-int mutt_select_sort (int reverse)
+int mutt_select_sort(int reverse)
 {
   int method = Sort; /* save the current method in case of abort */
 
-  switch (mutt_multi_choice (reverse ?
+  switch (mutt_multi_choice(reverse ?
        /* L10N: The following three are the sort/reverse sort prompts.
         * Letters must match the order of the characters in the third
         * string.  Note that mutt now supports multiline prompts, so
@@ -732,61 +732,61 @@ int mutt_select_sort (int reverse)
 }
 
 /* invoke a command in a subshell */
-void mutt_shell_escape (void)
+void mutt_shell_escape(void)
 {
   char buf[LONG_STRING];
 
   buf[0] = 0;
-  if (mutt_get_field (_("Shell command: "), buf, sizeof (buf), MUTT_CMD) == 0)
+  if (mutt_get_field(_("Shell command: "), buf, sizeof(buf), MUTT_CMD) == 0)
   {
     if (!buf[0] && Shell)
-      strfcpy (buf, Shell, sizeof (buf));
+      strfcpy(buf, Shell, sizeof(buf));
     if (buf[0])
     {
-      mutt_window_clearline (MuttMessageWindow, 0);
-      mutt_endwin (NULL);
-      fflush (stdout);
-      if (mutt_system (buf) != 0 || option (OPTWAITKEY))
-        mutt_any_key_to_continue (NULL);
+      mutt_window_clearline(MuttMessageWindow, 0);
+      mutt_endwin(NULL);
+      fflush(stdout);
+      if (mutt_system(buf) != 0 || option(OPTWAITKEY))
+        mutt_any_key_to_continue(NULL);
     }
   }
 }
 
 /* enter a mutt command */
-void mutt_enter_command (void)
+void mutt_enter_command(void)
 {
   BUFFER err;
   char buffer[LONG_STRING];
   int r;
 
   buffer[0] = 0;
-  if (mutt_get_field (":", buffer, sizeof (buffer), MUTT_COMMAND) != 0 || !buffer[0])
+  if (mutt_get_field(":", buffer, sizeof(buffer), MUTT_COMMAND) != 0 || !buffer[0])
     return;
-  mutt_buffer_init (&err);
+  mutt_buffer_init(&err);
   err.dsize = STRING;
   err.data = safe_malloc(err.dsize);
-  r = mutt_parse_rc_line (buffer, &err);
+  r = mutt_parse_rc_line(buffer, &err);
   if (err.data[0])
   {
     /* since errbuf could potentially contain printf() sequences in it,
        we must call mutt_error() in this fashion so that vsprintf()
        doesn't expect more arguments that we passed */
     if (r == 0)
-      mutt_message ("%s", err.data);
+      mutt_message("%s", err.data);
     else
-      mutt_error ("%s", err.data);
+      mutt_error("%s", err.data);
   }
 
-  FREE (&err.data);
+  FREE(&err.data);
 }
 
-void mutt_display_address (ENVELOPE *env)
+void mutt_display_address(ENVELOPE *env)
 {
   char *pfx = NULL;
   char buf[SHORT_STRING];
   ADDRESS *adr = NULL;
 
-  adr = mutt_get_address (env, &pfx);
+  adr = mutt_get_address(env, &pfx);
 
   if (!adr) return;
 
@@ -798,11 +798,11 @@ void mutt_display_address (ENVELOPE *env)
    */
 
   buf[0] = 0;
-  rfc822_write_address (buf, sizeof (buf), adr, 0);
-  mutt_message ("%s: %s", pfx, buf);
+  rfc822_write_address(buf, sizeof(buf), adr, 0);
+  mutt_message("%s: %s", pfx, buf);
 }
 
-static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, int *chflags)
+static void set_copy_flags(HEADER *hdr, int decode, int decrypt, int *cmflags, int *chflags)
 {
   *cmflags = 0;
   *chflags = CH_UPDATE_LEN;
@@ -816,7 +816,7 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
       *cmflags = MUTT_CM_DECODE_PGP;
     }
     else if ((WithCrypto & APPLICATION_PGP)
-             && mutt_is_application_pgp (hdr->content) & ENCRYPT)
+             && mutt_is_application_pgp(hdr->content) & ENCRYPT)
       decode = 1;
     else if ((WithCrypto & APPLICATION_SMIME)
              && mutt_is_application_smime(hdr->content) & ENCRYPT)
@@ -835,7 +835,7 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
     {
       *chflags |= CH_DECODE;    /* then decode RFC 2047 headers, */
 
-      if (option (OPTCOPYDECODEWEED))
+      if (option(OPTCOPYDECODEWEED))
       {
         *chflags |= CH_WEED;    /* and respect $weed. */
         *cmflags |= MUTT_CM_WEED;
@@ -844,32 +844,32 @@ static void set_copy_flags (HEADER *hdr, int decode, int decrypt, int *cmflags, 
   }
 }
 
-int _mutt_save_message (HEADER *h, CONTEXT *ctx, int delete, int decode, int decrypt)
+int _mutt_save_message(HEADER *h, CONTEXT *ctx, int delete, int decode, int decrypt)
 {
   int cmflags, chflags;
   int rc;
 
-  set_copy_flags (h, decode, decrypt, &cmflags, &chflags);
+  set_copy_flags(h, decode, decrypt, &cmflags, &chflags);
 
   if (decode || decrypt)
-    mutt_parse_mime_message (Context, h);
+    mutt_parse_mime_message(Context, h);
 
-  if ((rc = mutt_append_message (ctx, Context, h, cmflags, chflags)) != 0)
+  if ((rc = mutt_append_message(ctx, Context, h, cmflags, chflags)) != 0)
     return rc;
 
   if (delete)
   {
-    mutt_set_flag (Context, h, MUTT_DELETE, 1);
-    mutt_set_flag (Context, h, MUTT_PURGE, 1);
-    if (option (OPTDELETEUNTAG))
-      mutt_set_flag (Context, h, MUTT_TAG, 0);
+    mutt_set_flag(Context, h, MUTT_DELETE, 1);
+    mutt_set_flag(Context, h, MUTT_PURGE, 1);
+    if (option(OPTDELETEUNTAG))
+      mutt_set_flag(Context, h, MUTT_TAG, 0);
   }
 
   return 0;
 }
 
 /* returns 0 if the copy/save was successful, or -1 on error/abort */
-int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
+int mutt_save_message(HEADER *h, int delete, int decode, int decrypt)
 {
   int i, need_buffy_cleanup;
   int need_passphrase = 0, app=0;
@@ -882,15 +882,15 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
   CONTEXT ctx;
   struct stat st;
 
-  buf = mutt_buffer_pool_get ();
+  buf = mutt_buffer_pool_get();
 
-  snprintf (prompt, sizeof (prompt),
-            decode  ? (delete ? _("Decode-save%s to mailbox") :
-                       _("Decode-copy%s to mailbox")) :
-            (decrypt ? (delete ? _("Decrypt-save%s to mailbox") :
-                        _("Decrypt-copy%s to mailbox")) :
-             (delete ? _("Save%s to mailbox") : _("Copy%s to mailbox"))),
-            h ? "" : _(" tagged"));
+  snprintf(prompt, sizeof(prompt),
+           decode  ? (delete ? _("Decode-save%s to mailbox") :
+                      _("Decode-copy%s to mailbox")) :
+           (decrypt ? (delete ? _("Decrypt-save%s to mailbox") :
+                       _("Decrypt-copy%s to mailbox")) :
+            (delete ? _("Save%s to mailbox") : _("Copy%s to mailbox"))),
+           h ? "" : _(" tagged"));
 
 
   if (h)
@@ -900,9 +900,9 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
       need_passphrase = h->security & ENCRYPT;
       app = h->security;
     }
-    mutt_message_hook (Context, h, MUTT_MESSAGEHOOK);
-    mutt_default_save (buf->data, buf->dsize, h);
-    mutt_buffer_fix_dptr (buf);
+    mutt_message_hook(Context, h, MUTT_MESSAGEHOOK);
+    mutt_default_save(buf->data, buf->dsize, h);
+    mutt_buffer_fix_dptr(buf);
   }
   else
   {
@@ -920,9 +920,9 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 
     if (h)
     {
-      mutt_message_hook (Context, h, MUTT_MESSAGEHOOK);
-      mutt_default_save (buf->data, buf->dsize, h);
-      mutt_buffer_fix_dptr (buf);
+      mutt_message_hook(Context, h, MUTT_MESSAGEHOOK);
+      mutt_default_save(buf->data, buf->dsize, h);
+      mutt_buffer_fix_dptr(buf);
       if (WithCrypto)
       {
         need_passphrase = h->security & ENCRYPT;
@@ -932,43 +932,43 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
     }
   }
 
-  mutt_buffer_pretty_mailbox (buf);
-  if (mutt_enter_mailbox (prompt, buf, 0) == -1)
+  mutt_buffer_pretty_mailbox(buf);
+  if (mutt_enter_mailbox(prompt, buf, 0) == -1)
     goto cleanup;
-  if (!mutt_buffer_len (buf))
+  if (!mutt_buffer_len(buf))
     goto cleanup;
 
   /* This is an undocumented feature of ELM pointed out to me by Felix von
    * Leitner <leitner@prz.fu-berlin.de>
    */
   if (!LastSaveFolder)
-    LastSaveFolder = mutt_buffer_new ();
-  if (mutt_strcmp (mutt_b2s (buf), ".") == 0)
-    mutt_buffer_strcpy (buf, mutt_b2s (LastSaveFolder));
+    LastSaveFolder = mutt_buffer_new();
+  if (mutt_strcmp(mutt_b2s(buf), ".") == 0)
+    mutt_buffer_strcpy(buf, mutt_b2s(LastSaveFolder));
   else
-    mutt_buffer_strcpy (LastSaveFolder, mutt_b2s (buf));
+    mutt_buffer_strcpy(LastSaveFolder, mutt_b2s(buf));
 
-  mutt_buffer_expand_path (buf);
+  mutt_buffer_expand_path(buf);
 
   /* check to make sure that this file is really the one the user wants */
-  if (mutt_save_confirm (mutt_b2s (buf), &st) != 0)
+  if (mutt_save_confirm(mutt_b2s(buf), &st) != 0)
     goto cleanup;
 
   if (WithCrypto && need_passphrase && (decode || decrypt)
       && !crypt_valid_passphrase(app))
     goto cleanup;
 
-  mutt_message (_("Copying to %s..."), mutt_b2s (buf));
+  mutt_message(_("Copying to %s..."), mutt_b2s(buf));
 
 #ifdef USE_IMAP
   if (Context->magic == MUTT_IMAP &&
-      !(decode || decrypt) && mx_is_imap (mutt_b2s (buf)))
+      !(decode || decrypt) && mx_is_imap(mutt_b2s(buf)))
   {
-    switch (imap_copy_messages (Context, h, mutt_b2s (buf), delete))
+    switch (imap_copy_messages(Context, h, mutt_b2s(buf), delete))
     {
       /* success */
       case 0:
-        mutt_clear_error ();
+        mutt_clear_error();
         rc = 0;
         goto cleanup;
       /* non-fatal error: fall through to fetch/append */
@@ -987,13 +987,13 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
   if (!h)
     context_flags |= MUTT_QUIET;
 
-  if (mx_open_mailbox (mutt_b2s (buf), context_flags, &ctx) != NULL)
+  if (mx_open_mailbox(mutt_b2s(buf), context_flags, &ctx) != NULL)
   {
     if (h)
     {
       if (_mutt_save_message(h, &ctx, delete, decode, decrypt) != 0)
       {
-        mx_close_mailbox (&ctx, NULL);
+        mx_close_mailbox(&ctx, NULL);
         goto errcleanup;
       }
     }
@@ -1003,23 +1003,23 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
          Progress meter message when saving tagged messages
       */
       progress_msg = delete ? _("Saving tagged messages...") :
-      /* L10N:
-         Progress meter message when copying tagged messages
-      */
+        /* L10N:
+           Progress meter message when copying tagged messages
+        */
         _("Copying tagged messages...");
-      mutt_progress_init (&progress, progress_msg, MUTT_PROGRESS_MSG,
-                          WriteInc, Context->tagged);
+      mutt_progress_init(&progress, progress_msg, MUTT_PROGRESS_MSG,
+                         WriteInc, Context->tagged);
 
       for (i = 0; i < Context->vcount; i++)
       {
         if (Context->hdrs[Context->v2r[i]]->tagged)
         {
-          mutt_progress_update (&progress, ++tagged_progress_count, -1);
-          mutt_message_hook (Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
+          mutt_progress_update(&progress, ++tagged_progress_count, -1);
+          mutt_message_hook(Context, Context->hdrs[Context->v2r[i]], MUTT_MESSAGEHOOK);
           if (_mutt_save_message(Context->hdrs[Context->v2r[i]],
                                  &ctx, delete, decode, decrypt) != 0)
           {
-            mx_close_mailbox (&ctx, NULL);
+            mx_close_mailbox(&ctx, NULL);
             goto errcleanup;
           }
         }
@@ -1028,12 +1028,12 @@ int mutt_save_message (HEADER *h, int delete, int decode, int decrypt)
 
     need_buffy_cleanup = (ctx.magic == MUTT_MBOX || ctx.magic == MUTT_MMDF);
 
-    mx_close_mailbox (&ctx, NULL);
+    mx_close_mailbox(&ctx, NULL);
 
     if (need_buffy_cleanup)
-      mutt_buffy_cleanup (mutt_b2s (buf), &st);
+      mutt_buffy_cleanup(mutt_b2s(buf), &st);
 
-    mutt_clear_error ();
+    mutt_clear_error();
     rc = 0;
   }
 
@@ -1069,14 +1069,14 @@ errcleanup:
   }
 
 cleanup:
-  mutt_buffer_pool_release (&buf);
+  mutt_buffer_pool_release(&buf);
   return rc;
 }
 
 
-void mutt_version (void)
+void mutt_version(void)
 {
-  mutt_message ("Mutt %s (%s)", MUTT_VERSION, ReleaseDate);
+  mutt_message("Mutt %s (%s)", MUTT_VERSION, ReleaseDate);
 }
 
 /*
@@ -1085,7 +1085,7 @@ void mutt_version (void)
  *     recvattach requires this to know when to regenerate the actx.
  *   0 otherwise.
  */
-int mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
+int mutt_edit_content_type(HEADER *h, BODY *b, FILE *fp)
 {
   char buf[LONG_STRING];
   char obuf[LONG_STRING];
@@ -1099,82 +1099,82 @@ int mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
   short type_changed = 0;
   short structure_changed = 0;
 
-  cp = mutt_get_parameter ("charset", b->parameter);
-  strfcpy (charset, NONULL (cp), sizeof (charset));
+  cp = mutt_get_parameter("charset", b->parameter);
+  strfcpy(charset, NONULL(cp), sizeof(charset));
 
-  snprintf (buf, sizeof (buf), "%s/%s", TYPE (b), b->subtype);
-  strfcpy (obuf, buf, sizeof (obuf));
+  snprintf(buf, sizeof(buf), "%s/%s", TYPE(b), b->subtype);
+  strfcpy(obuf, buf, sizeof(obuf));
   if (b->parameter)
   {
     size_t l;
 
     for (p = b->parameter; p; p = p->next)
     {
-      l = strlen (buf);
+      l = strlen(buf);
 
-      rfc822_cat (tmp, sizeof (tmp), p->value, MimeSpecials);
-      snprintf (buf + l, sizeof (buf) - l, "; %s=%s", p->attribute, tmp);
+      rfc822_cat(tmp, sizeof(tmp), p->value, MimeSpecials);
+      snprintf(buf + l, sizeof(buf) - l, "; %s=%s", p->attribute, tmp);
     }
   }
 
-  if (mutt_get_field ("Content-Type: ", buf, sizeof (buf), 0) != 0 ||
+  if (mutt_get_field("Content-Type: ", buf, sizeof(buf), 0) != 0 ||
       buf[0] == 0)
     return 0;
 
   /* clean up previous junk */
-  mutt_free_parameter (&b->parameter);
-  FREE (&b->subtype);
+  mutt_free_parameter(&b->parameter);
+  FREE(&b->subtype);
 
-  mutt_parse_content_type (buf, b);
+  mutt_parse_content_type(buf, b);
 
 
-  snprintf (tmp, sizeof (tmp), "%s/%s", TYPE (b), NONULL (b->subtype));
-  type_changed = ascii_strcasecmp (tmp, obuf);
-  charset_changed = ascii_strcasecmp (charset, mutt_get_parameter ("charset", b->parameter));
+  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), NONULL(b->subtype));
+  type_changed = ascii_strcasecmp(tmp, obuf);
+  charset_changed = ascii_strcasecmp(charset, mutt_get_parameter("charset", b->parameter));
 
   /* if in send mode, check for conversion - current setting is default. */
 
   if (!h && b->type == TYPETEXT && charset_changed)
   {
     int r;
-    snprintf (tmp, sizeof (tmp), _("Convert to %s upon sending?"),
-              mutt_get_parameter ("charset", b->parameter));
-    if ((r = mutt_yesorno (tmp, !b->noconv)) != -1)
+    snprintf(tmp, sizeof(tmp), _("Convert to %s upon sending?"),
+             mutt_get_parameter("charset", b->parameter));
+    if ((r = mutt_yesorno(tmp, !b->noconv)) != -1)
       b->noconv = (r == MUTT_NO);
   }
 
   /* inform the user */
 
-  snprintf (tmp, sizeof (tmp), "%s/%s", TYPE (b), NONULL (b->subtype));
+  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), NONULL(b->subtype));
   if (type_changed)
-    mutt_message (_("Content-Type changed to %s."), tmp);
+    mutt_message(_("Content-Type changed to %s."), tmp);
   if (b->type == TYPETEXT && charset_changed)
   {
     if (type_changed)
-      mutt_sleep (1);
-    mutt_message (_("Character set changed to %s; %s."),
-                  mutt_get_parameter ("charset", b->parameter),
-                  b->noconv ? _("not converting") : _("converting"));
+      mutt_sleep(1);
+    mutt_message(_("Character set changed to %s; %s."),
+                 mutt_get_parameter("charset", b->parameter),
+                 b->noconv ? _("not converting") : _("converting"));
   }
 
   b->force_charset |= charset_changed ? 1 : 0;
 
-  if (!is_multipart (b) && b->parts)
+  if (!is_multipart(b) && b->parts)
   {
     structure_changed = 1;
-    mutt_free_body (&b->parts);
+    mutt_free_body(&b->parts);
   }
-  if (!mutt_is_message_type (b->type, b->subtype) && b->hdr)
+  if (!mutt_is_message_type(b->type, b->subtype) && b->hdr)
   {
     structure_changed = 1;
     b->hdr->content = NULL;
-    mutt_free_header (&b->hdr);
+    mutt_free_header(&b->hdr);
   }
 
-  if (fp && !b->parts && (is_multipart (b) || mutt_is_message_type (b->type, b->subtype)))
+  if (fp && !b->parts && (is_multipart(b) || mutt_is_message_type(b->type, b->subtype)))
   {
     structure_changed = 1;
-    mutt_parse_part (fp, b);
+    mutt_parse_part(fp, b);
   }
 
   if (WithCrypto && h)
@@ -1182,53 +1182,53 @@ int mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
     if (h->content == b)
       h->security  = 0;
 
-    h->security |= crypt_query (b);
+    h->security |= crypt_query(b);
   }
 
   return structure_changed;
 }
 
 
-static int _mutt_check_traditional_pgp (HEADER *h, int *redraw)
+static int _mutt_check_traditional_pgp(HEADER *h, int *redraw)
 {
   MESSAGE *msg;
   int rv = 0;
 
   h->security |= PGP_TRADITIONAL_CHECKED;
 
-  mutt_parse_mime_message (Context, h);
-  if ((msg = mx_open_message (Context, h->msgno, 0)) == NULL)
+  mutt_parse_mime_message(Context, h);
+  if ((msg = mx_open_message(Context, h->msgno, 0)) == NULL)
     return 0;
-  if (crypt_pgp_check_traditional (msg->fp, h->content, 0))
+  if (crypt_pgp_check_traditional(msg->fp, h->content, 0))
   {
-    h->security = crypt_query (h->content);
+    h->security = crypt_query(h->content);
     *redraw |= REDRAW_FULL;
     rv = 1;
   }
 
   h->security |= PGP_TRADITIONAL_CHECKED;
-  mx_close_message (Context, &msg);
+  mx_close_message(Context, &msg);
   return rv;
 }
 
-int mutt_check_traditional_pgp (HEADER *h, int *redraw)
+int mutt_check_traditional_pgp(HEADER *h, int *redraw)
 {
   int i;
   int rv = 0;
   if (h && !(h->security & PGP_TRADITIONAL_CHECKED))
-    rv = _mutt_check_traditional_pgp (h, redraw);
+    rv = _mutt_check_traditional_pgp(h, redraw);
   else
   {
     for (i = 0; i < Context->vcount; i++)
       if (Context->hdrs[Context->v2r[i]]->tagged &&
           !(Context->hdrs[Context->v2r[i]]->security & PGP_TRADITIONAL_CHECKED))
-        rv = _mutt_check_traditional_pgp (Context->hdrs[Context->v2r[i]], redraw)
+        rv = _mutt_check_traditional_pgp(Context->hdrs[Context->v2r[i]], redraw)
           || rv;
   }
   return rv;
 }
 
-void mutt_check_stats (void)
+void mutt_check_stats(void)
 {
-  mutt_buffy_check (MUTT_BUFFY_CHECK_FORCE | MUTT_BUFFY_CHECK_FORCE_STATS);
+  mutt_buffy_check(MUTT_BUFFY_CHECK_FORCE | MUTT_BUFFY_CHECK_FORCE_STATS);
 }

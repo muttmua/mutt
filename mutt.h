@@ -655,7 +655,7 @@ enum
   OPTMAX
 };
 
-#define mutt_bit_alloc(n) calloc ((n + 7) / 8, sizeof (char))
+#define mutt_bit_alloc(n) calloc((n + 7) / 8, sizeof(char))
 #define mutt_bit_set(v,n) v[n/8] |= (1 << (n % 8))
 #define mutt_bit_unset(v,n) v[n/8] &= ~(1 << (n % 8))
 #define mutt_bit_toggle(v,n) v[n/8] ^= (1 << (n % 8))
@@ -686,23 +686,23 @@ typedef struct replace_list_t
   struct replace_list_t *next;
 } REPLACE_LIST;
 
-#define mutt_new_list() safe_calloc (1, sizeof (LIST))
-#define mutt_new_rx_list() safe_calloc (1, sizeof (RX_LIST))
-#define mutt_new_replace_list() safe_calloc (1, sizeof (REPLACE_LIST))
-void mutt_free_list (LIST **);
-void mutt_free_list_generic (LIST **list, void (*data_free)(char **));
-void mutt_free_rx_list (RX_LIST **);
-void mutt_free_replace_list (REPLACE_LIST **);
-LIST *mutt_copy_list (LIST *);
-int mutt_matches_ignore (const char *, LIST *);
+#define mutt_new_list() safe_calloc(1, sizeof(LIST))
+#define mutt_new_rx_list() safe_calloc(1, sizeof(RX_LIST))
+#define mutt_new_replace_list() safe_calloc(1, sizeof(REPLACE_LIST))
+void mutt_free_list(LIST **);
+void mutt_free_list_generic(LIST **list, void(*data_free)(char **));
+void mutt_free_rx_list(RX_LIST **);
+void mutt_free_replace_list(REPLACE_LIST **);
+LIST *mutt_copy_list(LIST *);
+int mutt_matches_ignore(const char *, LIST *);
 
 /* add an element to a list */
-LIST *mutt_add_list (LIST *, const char *);
-LIST *mutt_add_list_n (LIST*, const void *, size_t);
-LIST *mutt_find_list (LIST *, const char *);
-int mutt_remove_from_rx_list (RX_LIST **l, const char *str);
+LIST *mutt_add_list(LIST *, const char *);
+LIST *mutt_add_list_n(LIST*, const void *, size_t);
+LIST *mutt_find_list(LIST *, const char *);
+int mutt_remove_from_rx_list(RX_LIST **l, const char *str);
 
-void mutt_init (int, LIST *);
+void mutt_init(int, LIST *);
 
 typedef struct alias
 {
@@ -1078,17 +1078,17 @@ struct _message;
  */
 struct mx_ops
 {
-  int (*open) (struct _context *);
-  int (*open_append) (struct _context *, int flags);
-  int (*close) (struct _context *);
-  int (*check) (struct _context *ctx, int *index_hint);
-  int (*sync) (struct _context *ctx, int *index_hint);
-  int (*open_msg) (struct _context *, struct _message *, int msgno, int headers);
-  int (*close_msg) (struct _context *, struct _message *);
-  int (*commit_msg) (struct _context *, struct _message *);
-  int (*open_new_msg) (struct _message *, struct _context *, HEADER *);
-  int (*msg_padding_size) (struct _context *);
-  int (*save_to_header_cache) (struct _context *, struct header *);
+  int (*open)(struct _context *);
+  int (*open_append)(struct _context *, int flags);
+  int (*close)(struct _context *);
+  int (*check)(struct _context *ctx, int *index_hint);
+  int (*sync)(struct _context *ctx, int *index_hint);
+  int (*open_msg)(struct _context *, struct _message *, int msgno, int headers);
+  int (*close_msg)(struct _context *, struct _message *);
+  int (*commit_msg)(struct _context *, struct _message *);
+  int (*open_new_msg)(struct _message *, struct _context *, HEADER *);
+  int (*msg_padding_size)(struct _context *);
+  int (*save_to_header_cache)(struct _context *, struct header *);
 };
 
 typedef struct _context
@@ -1183,13 +1183,13 @@ typedef struct
 #define state_puts(x,y) fputs(x,(y)->fpout)
 #define state_putc(x,y) fputc(x,(y)->fpout)
 
-void state_mark_attach (STATE *);
-void state_mark_protected_header (STATE *);
-void state_attach_puts (const char *, STATE *);
-void state_prefix_putc (char, STATE *);
+void state_mark_attach(STATE *);
+void state_mark_protected_header(STATE *);
+void state_attach_puts(const char *, STATE *);
+void state_prefix_putc(char, STATE *);
 int  state_printf(STATE *, const char *, ...);
-int state_putwc (wchar_t, STATE *);
-int state_putws (const wchar_t *, STATE *);
+int state_putwc(wchar_t, STATE *);
+int state_putws(const wchar_t *, STATE *);
 
 /* for attachment counter */
 typedef struct

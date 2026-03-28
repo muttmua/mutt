@@ -40,38 +40,37 @@ typedef struct
 
   /* underlying stream */
   CONNECTION next_conn;
-}
-zstrmctx;
+} zstrmctx;
 
 /* simple wrapper functions to match zlib interface for calling
  * malloc/free */
-static void *mutt_zstrm_malloc (void *op, unsigned int sze, unsigned int v)
+static void *mutt_zstrm_malloc(void *op, unsigned int sze, unsigned int v)
 {
-  return safe_calloc (sze, v);
+  return safe_calloc(sze, v);
 }
 
-static void mutt_zstrm_free (void *op, void *ptr)
+static void mutt_zstrm_free(void *op, void *ptr)
 {
-  FREE (&ptr);
+  FREE(&ptr);
 }
 
-static int mutt_zstrm_open (CONNECTION *conn)
+static int mutt_zstrm_open(CONNECTION *conn)
 {
   /* cannot open a zlib connection, must wrap an existing one */
   return -1;
 }
 
-static int mutt_zstrm_close (CONNECTION *conn)
+static int mutt_zstrm_close(CONNECTION *conn)
 {
   zstrmctx* zctx = conn->sockdata;
-  int rc = zctx->next_conn.conn_close (&zctx->next_conn);
+  int rc = zctx->next_conn.conn_close(&zctx->next_conn);
 
   muttdbg(4, "zstrm_close: read %llu->%llu (%.1fx) "
-        "wrote %llu<-%llu (%.1fx)",
-        zctx->read.z.total_in, zctx->read.z.total_out,
-        (float)zctx->read.z.total_out / (float)zctx->read.z.total_in,
-        zctx->write.z.total_in, zctx->write.z.total_out,
-        (float)zctx->write.z.total_in / (float)zctx->write.z.total_out);
+          "wrote %llu<-%llu (%.1fx)",
+          zctx->read.z.total_in, zctx->read.z.total_out,
+          (float)zctx->read.z.total_out / (float)zctx->read.z.total_in,
+          zctx->write.z.total_in, zctx->write.z.total_out,
+          (float)zctx->write.z.total_in / (float)zctx->write.z.total_out);
 
   conn->sockdata   = zctx->next_conn.sockdata;
   conn->conn_open  = zctx->next_conn.conn_open;
@@ -80,16 +79,16 @@ static int mutt_zstrm_close (CONNECTION *conn)
   conn->conn_write = zctx->next_conn.conn_write;
   conn->conn_poll  = zctx->next_conn.conn_poll;
 
-  inflateEnd (&zctx->read.z);
-  deflateEnd (&zctx->write.z);
-  FREE (&zctx->read.buf);
-  FREE (&zctx->write.buf);
-  FREE (&zctx);
+  inflateEnd(&zctx->read.z);
+  deflateEnd(&zctx->write.z);
+  FREE(&zctx->read.buf);
+  FREE(&zctx->write.buf);
+  FREE(&zctx);
 
   return rc;
 }
 
-static int mutt_zstrm_read (CONNECTION *conn, char *buf, size_t len)
+static int mutt_zstrm_read(CONNECTION *conn, char *buf, size_t len)
 {
   zstrmctx* zctx = conn->sockdata;
   int rc = 0;
@@ -105,8 +104,8 @@ retry:
    * might block) */
   if (zctx->read.pos == 0 && !zctx->read.conn_eof)
   {
-    rc = zctx->next_conn.conn_read (&zctx->next_conn,
-        zctx->read.buf, zctx->read.len);
+    rc = zctx->next_conn.conn_read(&zctx->next_conn,
+                                   zctx->read.buf, zctx->read.len);
     muttdbg(4, "zstrm_read: consuming data from next stream: %d bytes", rc);
     if (rc < 0)
       return rc;
@@ -121,7 +120,7 @@ retry:
   zctx->read.z.avail_out = (uInt) len;
   zctx->read.z.next_out = (Bytef*) buf;
 
-  zrc = inflate (&zctx->read.z, Z_SYNC_FLUSH);
+  zrc = inflate(&zctx->read.z, Z_SYNC_FLUSH);
   muttdbg(4, "zstrm_read: rc=%d, consumed %u/%u bytes, produced %u/%u bytes",
           zrc, zctx->read.pos - zctx->read.z.avail_in, zctx->read.pos,
           len - zctx->read.z.avail_out, len);
@@ -167,7 +166,7 @@ retry:
   return zrc;
 }
 
-static int mutt_zstrm_poll (CONNECTION *conn, time_t wait_secs)
+static int mutt_zstrm_poll(CONNECTION *conn, time_t wait_secs)
 {
   zstrmctx* zctx = conn->sockdata;
 
@@ -177,10 +176,10 @@ static int mutt_zstrm_poll (CONNECTION *conn, time_t wait_secs)
   if (zctx->read.z.avail_out == 0 || zctx->read.pos > 0)
     return 1;
   else
-    return zctx->next_conn.conn_poll (&zctx->next_conn, wait_secs);
+    return zctx->next_conn.conn_poll(&zctx->next_conn, wait_secs);
 }
 
-static int mutt_zstrm_write (CONNECTION *conn, const char *buf, size_t count)
+static int mutt_zstrm_write(CONNECTION *conn, const char *buf, size_t count)
 {
   zstrmctx* zctx = conn->sockdata;
   int rc;
@@ -194,18 +193,18 @@ static int mutt_zstrm_write (CONNECTION *conn, const char *buf, size_t count)
 
   do
   {
-    zrc = deflate (&zctx->write.z, Z_PARTIAL_FLUSH);
+    zrc = deflate(&zctx->write.z, Z_PARTIAL_FLUSH);
     if (zrc == Z_OK)
     {
       /* push out produced data to the underlying stream */
       zctx->write.pos = zctx->write.len - zctx->write.z.avail_out;
       wbufp = zctx->write.buf;
       muttdbg(4, "zstrm_write: deflate consumed %d/%d bytes",
-          count - zctx->write.z.avail_in, count);
+              count - zctx->write.z.avail_in, count);
       while (zctx->write.pos > 0)
       {
-        rc = zctx->next_conn.conn_write (&zctx->next_conn,
-            wbufp, zctx->write.pos);
+        rc = zctx->next_conn.conn_write(&zctx->next_conn,
+                                        wbufp, zctx->write.pos);
         muttdbg(4, "zstrm_write: next stream wrote: %d bytes", rc);
         if (rc < 0)
           return -1;  /* we can't recover from write failure */
@@ -235,11 +234,11 @@ static int mutt_zstrm_write (CONNECTION *conn, const char *buf, size_t count)
   return rc <= 0 ? 1 : rc;  /* avoid wrong behaviour due to overflow */
 }
 
-void mutt_zstrm_wrap_conn (CONNECTION *conn)
+void mutt_zstrm_wrap_conn(CONNECTION *conn)
 {
   zstrmctx* zctx;
 
-  zctx = (zstrmctx*) safe_calloc (1, sizeof (zstrmctx));
+  zctx = (zstrmctx*) safe_calloc(1, sizeof(zstrmctx));
   /* store wrapped stream as next stream */
   zctx->next_conn.fd         = conn->fd;
   zctx->next_conn.sockdata   = conn->sockdata;
@@ -259,10 +258,10 @@ void mutt_zstrm_wrap_conn (CONNECTION *conn)
 
   /* allocate/setup (de)compression buffers */
   zctx->read.len  = HUGE_STRING;
-  zctx->read.buf  = safe_malloc (zctx->read.len);
+  zctx->read.buf  = safe_malloc(zctx->read.len);
   zctx->read.pos  = 0;
   zctx->write.len = HUGE_STRING;
-  zctx->write.buf = safe_malloc (zctx->write.len);
+  zctx->write.buf = safe_malloc(zctx->write.len);
   zctx->write.pos = 0;
 
   /* initialise zlib for inflate and deflate for RFC-4978 */
@@ -270,11 +269,11 @@ void mutt_zstrm_wrap_conn (CONNECTION *conn)
   zctx->read.z.zfree  = mutt_zstrm_free;
   zctx->read.z.opaque = NULL;
   zctx->read.z.avail_out = zctx->read.len;
-  inflateInit2 (&zctx->read.z, -15);
+  inflateInit2(&zctx->read.z, -15);
   zctx->write.z.zalloc = mutt_zstrm_malloc;
   zctx->write.z.zfree  = mutt_zstrm_free;
   zctx->write.z.opaque = NULL;
   zctx->write.z.avail_out = zctx->write.len;
-  deflateInit2 (&zctx->write.z, Z_DEFAULT_COMPRESSION,
-      Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY);
+  deflateInit2(&zctx->write.z, Z_DEFAULT_COMPRESSION,
+               Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY);
 }

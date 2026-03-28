@@ -22,8 +22,8 @@
 #include "mutt_socket.h"
 
 #if defined(USE_SSL)
-int mutt_ssl_starttls (CONNECTION *conn);
-int mutt_ssl_socket_setup (CONNECTION *conn);
+int mutt_ssl_starttls(CONNECTION *conn);
+int mutt_ssl_socket_setup(CONNECTION *conn);
 #endif
 
 #endif /* _MUTT_SSL_H_ */

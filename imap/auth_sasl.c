@@ -31,7 +31,7 @@
 #include <sasl/saslutil.h>
 
 /* imap_auth_sasl: Default authenticator if available. */
-imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
+imap_auth_res_t imap_auth_sasl(IMAP_DATA *idata, const char *method)
 {
   sasl_conn_t *saslconn;
   sasl_interact_t *interaction = NULL;
@@ -43,9 +43,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
   unsigned int len, olen;
   unsigned char client_start;
 
-  if (mutt_sasl_client_new (idata->conn, &saslconn) < 0)
+  if (mutt_sasl_client_new(idata->conn, &saslconn) < 0)
   {
-    muttdbg (1, "imap_auth_sasl: Error allocating SASL connection.");
+    muttdbg(1, "imap_auth_sasl: Error allocating SASL connection.");
     return IMAP_AUTH_FAILURE;
   }
 
@@ -61,33 +61,33 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
      * 2. attempt sasl_client_start with only "AUTH=ANONYMOUS" capability
      * 3. if sasl_client_start fails, fall through... */
 
-    if (mutt_account_getuser (&idata->conn->account))
+    if (mutt_account_getuser(&idata->conn->account))
     {
-      sasl_dispose (&saslconn);
+      sasl_dispose(&saslconn);
       return IMAP_AUTH_FAILURE;
     }
 
-    if (mutt_bit_isset (idata->capabilities, AUTH_ANON) &&
+    if (mutt_bit_isset(idata->capabilities, AUTH_ANON) &&
         (!idata->conn->account.user[0] ||
-         !ascii_strncmp (idata->conn->account.user, "anonymous", 9)))
-      rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
-                              &mech);
+         !ascii_strncmp(idata->conn->account.user, "anonymous", 9)))
+      rc = sasl_client_start(saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
+                             &mech);
   }
-  else if (!ascii_strcasecmp ("login", method) &&
-           !strstr (NONULL (idata->capstr), "AUTH=LOGIN"))
+  else if (!ascii_strcasecmp("login", method) &&
+           !strstr(NONULL(idata->capstr), "AUTH=LOGIN"))
   {
     /* do not use SASL login for regular IMAP login (#3556) */
-    sasl_dispose (&saslconn);
+    sasl_dispose(&saslconn);
     return IMAP_AUTH_UNAVAIL;
   }
 
   if (rc != SASL_OK && rc != SASL_CONTINUE)
     do
     {
-      rc = sasl_client_start (saslconn, method, &interaction,
-                              &pc, &olen, &mech);
+      rc = sasl_client_start(saslconn, method, &interaction,
+                             &pc, &olen, &mech);
       if (rc == SASL_INTERACT)
-        mutt_sasl_interact (interaction);
+        mutt_sasl_interact(interaction);
     }
     while (rc == SASL_INTERACT);
 
@@ -101,35 +101,35 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
       muttdbg(1, "imap_auth_sasl: Failure starting authentication exchange. No shared mechanisms?");
     /* SASL doesn't support LOGIN, so fall back */
 
-    sasl_dispose (&saslconn);
+    sasl_dispose(&saslconn);
     return IMAP_AUTH_UNAVAIL;
   }
 
-  mutt_message (_("Authenticating (%s)..."), mech);
+  mutt_message(_("Authenticating (%s)..."), mech);
 
   bufsize = ((olen * 2) > LONG_STRING) ? (olen * 2) : LONG_STRING;
-  buf = safe_malloc (bufsize);
+  buf = safe_malloc(bufsize);
 
-  snprintf (buf, bufsize, "AUTHENTICATE %s", mech);
-  if (mutt_bit_isset (idata->capabilities, SASL_IR) && client_start)
+  snprintf(buf, bufsize, "AUTHENTICATE %s", mech);
+  if (mutt_bit_isset(idata->capabilities, SASL_IR) && client_start)
   {
-    len = mutt_strlen (buf);
+    len = mutt_strlen(buf);
     buf[len++] = ' ';
-    if (sasl_encode64 (pc, olen, buf + len, bufsize - len, &olen) != SASL_OK)
+    if (sasl_encode64(pc, olen, buf + len, bufsize - len, &olen) != SASL_OK)
     {
       muttdbg(1, "imap_auth_sasl: error base64-encoding client response.");
       goto bail;
     }
     client_start = olen = 0;
   }
-  imap_cmd_start (idata, buf);
+  imap_cmd_start(idata, buf);
   irc = IMAP_CMD_CONTINUE;
 
   /* looping protocol */
   while (rc == SASL_CONTINUE || olen > 0)
   {
     do
-      irc = imap_cmd_step (idata);
+      irc = imap_cmd_step(idata);
     while (irc == IMAP_CMD_CONTINUE);
 
     if (irc == IMAP_CMD_BAD || irc == IMAP_CMD_NO)
@@ -145,15 +145,15 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
       }
       else
       {
-        len = strlen (idata->buf + 2);
+        len = strlen(idata->buf + 2);
         if (len > bufsize)
         {
           bufsize = len;
-          safe_realloc (&buf, bufsize);
+          safe_realloc(&buf, bufsize);
         }
         /* For sasl_decode64, the fourth parameter, outmax, doesn't
          * include space for the trailing null */
-        if (sasl_decode64 (idata->buf+2, len, buf, bufsize - 1, &len) != SASL_OK)
+        if (sasl_decode64(idata->buf+2, len, buf, bufsize - 1, &len) != SASL_OK)
         {
           muttdbg(1, "imap_auth_sasl: error base64-decoding server response.");
           goto bail;
@@ -168,9 +168,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
     {
       do
       {
-        rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
+        rc = sasl_client_step(saslconn, buf, len, &interaction, &pc, &olen);
         if (rc == SASL_INTERACT)
-          mutt_sasl_interact (interaction);
+          mutt_sasl_interact(interaction);
       }
       while (rc == SASL_INTERACT);
     }
@@ -183,9 +183,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
       if ((olen * 2) > bufsize)
       {
         bufsize = olen * 2;
-        safe_realloc (&buf, bufsize);
+        safe_realloc(&buf, bufsize);
       }
-      if (sasl_encode64 (pc, olen, buf, bufsize, &olen) != SASL_OK)
+      if (sasl_encode64(pc, olen, buf, bufsize, &olen) != SASL_OK)
       {
         muttdbg(1, "error base64-encoding client response.");
         goto bail;
@@ -194,14 +194,14 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
 
     if (irc == IMAP_CMD_RESPOND)
     {
-      strfcpy (buf + olen, "\r\n", bufsize - olen);
-      mutt_socket_write (idata->conn, buf);
+      strfcpy(buf + olen, "\r\n", bufsize - olen);
+      mutt_socket_write(idata->conn, buf);
     }
 
     /* If SASL has errored out, send an abort string to the server */
     if (rc < 0)
     {
-      mutt_socket_write (idata->conn, "*\r\n");
+      mutt_socket_write(idata->conn, "*\r\n");
       muttdbg(1, "imap_auth_sasl: sasl_client_step error %d",rc);
     }
 
@@ -209,22 +209,22 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA *idata, const char *method)
   }
 
   while (irc != IMAP_CMD_OK)
-    if ((irc = imap_cmd_step (idata)) != IMAP_CMD_CONTINUE)
+    if ((irc = imap_cmd_step(idata)) != IMAP_CMD_CONTINUE)
       break;
 
   if (rc != SASL_OK)
     goto bail;
 
-  if (imap_code (idata->buf))
+  if (imap_code(idata->buf))
   {
-    mutt_sasl_setup_conn (idata->conn, saslconn);
-    FREE (&buf);
+    mutt_sasl_setup_conn(idata->conn, saslconn);
+    FREE(&buf);
     return IMAP_AUTH_SUCCESS;
   }
 
 bail:
-  sasl_dispose (&saslconn);
-  FREE (&buf);
+  sasl_dispose(&saslconn);
+  FREE(&buf);
 
   if (method)
   {

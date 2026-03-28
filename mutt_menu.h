@@ -69,25 +69,25 @@ typedef struct menu_t
   char *keys;           /* keys used in the prompt */
 
   /* callback to generate an index line for the requested element */
-  void (*make_entry) (char *, size_t, struct menu_t *, int);
+  void (*make_entry)(char *, size_t, struct menu_t *, int);
 
   /* how to search the menu */
-  int (*search) (struct menu_t *, regex_t *re, int n);
+  int (*search)(struct menu_t *, regex_t *re, int n);
 
-  int (*tag) (struct menu_t *, int i, int m);
+  int (*tag)(struct menu_t *, int i, int m);
 
   /* these are used for custom redrawing callbacks */
-  void (*custom_menu_redraw) (struct menu_t *);
+  void (*custom_menu_redraw)(struct menu_t *);
   void *redraw_data;
 
   /* these are used for out-of-band menu data updates,
    * such as background process list updates */
-  void (*custom_menu_update) (struct menu_t *);
+  void (*custom_menu_update)(struct menu_t *);
 
   /* color pair to be used for the requested element
    * (default function returns ColorDefs[MT_COLOR_NORMAL])
    */
-  COLOR_ATTR (*color) (int i);
+  COLOR_ATTR (*color)(int i);
 
   /* the following are used only by mutt_menuLoop() */
   int top;              /* entry that is the top of the current page */
@@ -96,51 +96,51 @@ typedef struct menu_t
   int tagged;           /* number of tagged entries */
 } MUTTMENU;
 
-void mutt_menu_init (void);
-void menu_jump (MUTTMENU *);
-void menu_redraw_full (MUTTMENU *);
+void mutt_menu_init(void);
+void menu_jump(MUTTMENU *);
+void menu_redraw_full(MUTTMENU *);
 #ifdef USE_SIDEBAR
-void menu_redraw_sidebar (MUTTMENU *);
+void menu_redraw_sidebar(MUTTMENU *);
 #endif
-void menu_redraw_index (MUTTMENU *);
-void menu_redraw_status (MUTTMENU *);
-void menu_redraw_motion (MUTTMENU *);
-void menu_redraw_current (MUTTMENU *);
-int  menu_redraw (MUTTMENU *);
-void menu_first_entry (MUTTMENU *);
-void menu_last_entry (MUTTMENU *);
-void menu_top_page (MUTTMENU *);
-void menu_bottom_page (MUTTMENU *);
-void menu_middle_page (MUTTMENU *);
-void menu_next_page (MUTTMENU *);
-void menu_prev_page (MUTTMENU *);
-void menu_next_line (MUTTMENU *);
-void menu_prev_line (MUTTMENU *);
-void menu_half_up (MUTTMENU *);
-void menu_half_down (MUTTMENU *);
-void menu_current_top (MUTTMENU *);
-void menu_current_middle (MUTTMENU *);
-void menu_current_bottom (MUTTMENU *);
-void menu_check_recenter (MUTTMENU *);
-void menu_status_line (char *, size_t, MUTTMENU *, const char *);
-short mutt_ts_capability (void);
-void mutt_ts_status (char *);
-void mutt_ts_icon (char *);
+void menu_redraw_index(MUTTMENU *);
+void menu_redraw_status(MUTTMENU *);
+void menu_redraw_motion(MUTTMENU *);
+void menu_redraw_current(MUTTMENU *);
+int  menu_redraw(MUTTMENU *);
+void menu_first_entry(MUTTMENU *);
+void menu_last_entry(MUTTMENU *);
+void menu_top_page(MUTTMENU *);
+void menu_bottom_page(MUTTMENU *);
+void menu_middle_page(MUTTMENU *);
+void menu_next_page(MUTTMENU *);
+void menu_prev_page(MUTTMENU *);
+void menu_next_line(MUTTMENU *);
+void menu_prev_line(MUTTMENU *);
+void menu_half_up(MUTTMENU *);
+void menu_half_down(MUTTMENU *);
+void menu_current_top(MUTTMENU *);
+void menu_current_middle(MUTTMENU *);
+void menu_current_bottom(MUTTMENU *);
+void menu_check_recenter(MUTTMENU *);
+void menu_status_line(char *, size_t, MUTTMENU *, const char *);
+short mutt_ts_capability(void);
+void mutt_ts_status(char *);
+void mutt_ts_icon(char *);
 
-MUTTMENU *mutt_new_menu (int);
-void mutt_menuDestroy (MUTTMENU **);
-void mutt_menu_add_dialog_row (MUTTMENU *, const char *);
-void mutt_push_current_menu (MUTTMENU *);
-void mutt_pop_current_menu (MUTTMENU *);
-void mutt_set_current_menu_redraw (int);
-void mutt_set_current_menu_redraw_full (void);
-void mutt_set_menu_redraw (int, int);
-void mutt_set_menu_redraw_full (int);
-void mutt_current_menu_redraw (void);
-int mutt_menuLoop (MUTTMENU *);
+MUTTMENU *mutt_new_menu(int);
+void mutt_menuDestroy(MUTTMENU **);
+void mutt_menu_add_dialog_row(MUTTMENU *, const char *);
+void mutt_push_current_menu(MUTTMENU *);
+void mutt_pop_current_menu(MUTTMENU *);
+void mutt_set_current_menu_redraw(int);
+void mutt_set_current_menu_redraw_full(void);
+void mutt_set_menu_redraw(int, int);
+void mutt_set_menu_redraw_full(int);
+void mutt_current_menu_redraw(void);
+int mutt_menuLoop(MUTTMENU *);
 
 /* used in both the index and pager index to make an entry. */
-void index_make_entry (char *, size_t, struct menu_t *, int);
-COLOR_ATTR index_color (int);
+void index_make_entry(char *, size_t, struct menu_t *, int);
+COLOR_ATTR index_color(int);
 
 #endif /* _MUTT_MENU_H_ */

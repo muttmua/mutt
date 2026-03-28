@@ -49,9 +49,9 @@
 #include <utime.h>
 #include <dirent.h>
 
-BODY *mutt_new_body (void)
+BODY *mutt_new_body(void)
 {
-  BODY *p = (BODY *) safe_calloc (1, sizeof (BODY));
+  BODY *p = (BODY *) safe_calloc(1, sizeof(BODY));
 
   p->disposition = DISPATTACH;
   p->use_disp = 1;
@@ -64,7 +64,7 @@ BODY *mutt_new_body (void)
  * Renamed to mutt_adv_mktemp so I only have to change where it's
  * called, and not all possible cases.
  */
-void _mutt_adv_mktemp (BUFFER *buf, const char *tempdir)
+void _mutt_adv_mktemp(BUFFER *buf, const char *tempdir)
 {
   BUFFER *prefix = NULL;
   char *suffix;
@@ -72,96 +72,96 @@ void _mutt_adv_mktemp (BUFFER *buf, const char *tempdir)
 
   if (!(buf->data && buf->data[0]))
   {
-    _mutt_buffer_mktemp_pfx_sfx (buf, tempdir, "mutt", NULL);
+    _mutt_buffer_mktemp_pfx_sfx(buf, tempdir, "mutt", NULL);
   }
   else
   {
-    prefix = mutt_buffer_pool_get ();
-    mutt_buffer_strcpy (prefix, buf->data);
-    mutt_sanitize_filename (prefix->data, MUTT_SANITIZE_ALLOW_8BIT);
-    mutt_buffer_printf (buf, "%s/%s", NONULL (tempdir), mutt_b2s (prefix));
-    if (lstat (mutt_b2s (buf), &sb) == -1 && errno == ENOENT)
+    prefix = mutt_buffer_pool_get();
+    mutt_buffer_strcpy(prefix, buf->data);
+    mutt_sanitize_filename(prefix->data, MUTT_SANITIZE_ALLOW_8BIT);
+    mutt_buffer_printf(buf, "%s/%s", NONULL(tempdir), mutt_b2s(prefix));
+    if (lstat(mutt_b2s(buf), &sb) == -1 && errno == ENOENT)
       goto out;
 
-    if ((suffix = strrchr (prefix->data, '.')) != NULL)
+    if ((suffix = strrchr(prefix->data, '.')) != NULL)
     {
       *suffix = 0;
       ++suffix;
     }
-    _mutt_buffer_mktemp_pfx_sfx (buf, tempdir, mutt_b2s (prefix), suffix);
+    _mutt_buffer_mktemp_pfx_sfx(buf, tempdir, mutt_b2s(prefix), suffix);
 
   out:
-    mutt_buffer_pool_release (&prefix);
+    mutt_buffer_pool_release(&prefix);
   }
 }
 
-void _mutt_buffer_mktemp (BUFFER *buf, const char *tempdir,
-                          const char *prefix, const char *suffix,
-                          const char *src, int line)
+void _mutt_buffer_mktemp(BUFFER *buf, const char *tempdir,
+                         const char *prefix, const char *suffix,
+                         const char *src, int line)
 {
   RANDOM64 random64;
   mutt_random_bytes(random64.char_array, sizeof(random64));
 
-  mutt_buffer_printf (buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
-                      NONULL (tempdir), NONULL (prefix), NONULL (Hostname),
-                      (int) getuid (), (int) getpid (), random64.int_64,
-                      suffix ? "." : "", NONULL (suffix));
-  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s (buf));
-  if (unlink (mutt_b2s (buf)) && errno != ENOENT)
-    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s (buf));
+  mutt_buffer_printf(buf, "%s/%s-%s-%d-%d-%"PRIu64"%s%s",
+                     NONULL(tempdir), NONULL(prefix), NONULL(Hostname),
+                     (int) getuid(), (int) getpid(), random64.int_64,
+                     suffix ? "." : "", NONULL(suffix));
+  muttdbg(3, "%s:%d: mutt_mktemp returns \"%s\".", src, line, mutt_b2s(buf));
+  if (unlink(mutt_b2s(buf)) && errno != ENOENT)
+    mutt_errno_dbg(1, "%s:%d: ERROR: unlink(\"%s\")", src, line, mutt_b2s(buf));
 }
 
 /* create a send-mode duplicate from a receive-mode body */
 
-int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
+int mutt_copy_body(FILE *fp, BODY **tgt, BODY *src)
 {
   BUFFER *tmp = NULL;
   BODY *b;
   PARAMETER *par, **ppar;
   short use_disp;
 
-  tmp = mutt_buffer_pool_get ();
+  tmp = mutt_buffer_pool_get();
 
   if (src->filename)
   {
     use_disp = 1;
-    mutt_buffer_strcpy (tmp, src->filename);
+    mutt_buffer_strcpy(tmp, src->filename);
   }
   else
   {
     use_disp = 0;
   }
 
-  mutt_adv_mktemp (tmp);
-  if (mutt_save_attachment (fp, src, mutt_b2s (tmp), 0, NULL, 0) == -1)
+  mutt_adv_mktemp(tmp);
+  if (mutt_save_attachment(fp, src, mutt_b2s(tmp), 0, NULL, 0) == -1)
   {
-    mutt_buffer_pool_release (&tmp);
+    mutt_buffer_pool_release(&tmp);
     return -1;
   }
 
-  *tgt = mutt_new_body ();
+  *tgt = mutt_new_body();
   b = *tgt;
 
-  memcpy (b, src, sizeof (BODY));
+  memcpy(b, src, sizeof(BODY));
   b->parts = NULL;
   b->next  = NULL;
 
-  b->filename = safe_strdup (mutt_b2s (tmp));
+  b->filename = safe_strdup(mutt_b2s(tmp));
   b->use_disp = use_disp;
   b->unlink = 1;
 
-  if (mutt_is_text_part (b))
+  if (mutt_is_text_part(b))
     b->noconv = 1;
 
-  b->xtype = safe_strdup (b->xtype);
-  b->subtype = safe_strdup (b->subtype);
-  b->form_name = safe_strdup (b->form_name);
-  b->d_filename = safe_strdup (b->d_filename);
+  b->xtype = safe_strdup(b->xtype);
+  b->subtype = safe_strdup(b->subtype);
+  b->form_name = safe_strdup(b->form_name);
+  b->d_filename = safe_strdup(b->d_filename);
   /* mutt_adv_mktemp() will mangle the filename in tmp,
    * so preserve it in d_filename */
   if (!b->d_filename && use_disp)
-    b->d_filename = safe_strdup (src->filename);
-  b->description = safe_strdup (b->description);
+    b->d_filename = safe_strdup(src->filename);
+  b->description = safe_strdup(b->description);
 
   /*
    * we don't seem to need the HEADER structure currently.
@@ -173,20 +173,20 @@ int mutt_copy_body (FILE *fp, BODY **tgt, BODY *src)
   /* copy parameters */
   for (par = b->parameter, ppar = &b->parameter; par; ppar = &(*ppar)->next, par = par->next)
   {
-    *ppar = mutt_new_parameter ();
-    (*ppar)->attribute = safe_strdup (par->attribute);
-    (*ppar)->value = safe_strdup (par->value);
+    *ppar = mutt_new_parameter();
+    (*ppar)->attribute = safe_strdup(par->attribute);
+    (*ppar)->value = safe_strdup(par->value);
   }
 
-  mutt_stamp_attachment (b);
+  mutt_stamp_attachment(b);
 
-  mutt_buffer_pool_release (&tmp);
+  mutt_buffer_pool_release(&tmp);
   return 0;
 }
 
 
 
-void mutt_free_body (BODY **p)
+void mutt_free_body(BODY **p)
 {
   BODY *a = *p, *b;
 
@@ -196,23 +196,23 @@ void mutt_free_body (BODY **p)
     a = a->next;
 
     if (b->parameter)
-      mutt_free_parameter (&b->parameter);
+      mutt_free_parameter(&b->parameter);
     if (b->filename)
     {
       if (b->unlink)
-        unlink (b->filename);
+        unlink(b->filename);
       muttdbg(1, "%sunlinking %s.",
-                  b->unlink ? "" : "not ", b->filename);
+              b->unlink ? "" : "not ", b->filename);
     }
 
-    FREE (&b->filename);
-    FREE (&b->d_filename);
-    FREE (&b->charset);
-    FREE (&b->content);
-    FREE (&b->xtype);
-    FREE (&b->subtype);
-    FREE (&b->description);
-    FREE (&b->form_name);
+    FREE(&b->filename);
+    FREE(&b->d_filename);
+    FREE(&b->charset);
+    FREE(&b->content);
+    FREE(&b->xtype);
+    FREE(&b->subtype);
+    FREE(&b->description);
+    FREE(&b->form_name);
 
     if (b->hdr)
     {
@@ -221,41 +221,41 @@ void mutt_free_body (BODY **p)
       mutt_free_header(&b->hdr);
     }
 
-    mutt_free_envelope (&b->mime_headers);
+    mutt_free_envelope(&b->mime_headers);
 
     if (b->parts)
-      mutt_free_body (&b->parts);
+      mutt_free_body(&b->parts);
 
-    FREE (&b);
+    FREE(&b);
   }
 
   *p = 0;
 }
 
-void mutt_free_parameter (PARAMETER **p)
+void mutt_free_parameter(PARAMETER **p)
 {
   PARAMETER *t = *p;
   PARAMETER *o;
 
   while (t)
   {
-    FREE (&t->attribute);
-    FREE (&t->value);
+    FREE(&t->attribute);
+    FREE(&t->value);
     o = t;
     t = t->next;
-    FREE (&o);
+    FREE(&o);
   }
   *p = 0;
 }
 
-LIST *mutt_add_list (LIST *head, const char *data)
+LIST *mutt_add_list(LIST *head, const char *data)
 {
-  size_t len = mutt_strlen (data);
+  size_t len = mutt_strlen(data);
 
-  return mutt_add_list_n (head, data, len ? len + 1 : 0);
+  return mutt_add_list_n(head, data, len ? len + 1 : 0);
 }
 
-LIST *mutt_add_list_n (LIST *head, const void *data, size_t len)
+LIST *mutt_add_list_n(LIST *head, const void *data, size_t len)
 {
   LIST *tmp;
 
@@ -263,20 +263,20 @@ LIST *mutt_add_list_n (LIST *head, const void *data, size_t len)
     ;
   if (tmp)
   {
-    tmp->next = safe_malloc (sizeof (LIST));
+    tmp->next = safe_malloc(sizeof(LIST));
     tmp = tmp->next;
   }
   else
-    head = tmp = safe_malloc (sizeof (LIST));
+    head = tmp = safe_malloc(sizeof(LIST));
 
-  tmp->data = safe_malloc (len);
+  tmp->data = safe_malloc(len);
   if (len)
-    memcpy (tmp->data, data, len);
+    memcpy(tmp->data, data, len);
   tmp->next = NULL;
   return head;
 }
 
-LIST *mutt_find_list (LIST *l, const char *data)
+LIST *mutt_find_list(LIST *l, const char *data)
 {
   LIST *p = l;
 
@@ -284,21 +284,21 @@ LIST *mutt_find_list (LIST *l, const char *data)
   {
     if (data == p->data)
       return p;
-    if (data && p->data && mutt_strcmp (p->data, data) == 0)
+    if (data && p->data && mutt_strcmp(p->data, data) == 0)
       return p;
     p = p->next;
   }
   return NULL;
 }
 
-int mutt_remove_from_rx_list (RX_LIST **l, const char *str)
+int mutt_remove_from_rx_list(RX_LIST **l, const char *str)
 {
   RX_LIST *p, *last = NULL;
   int rv = -1;
 
-  if (mutt_strcmp ("*", str) == 0)
+  if (mutt_strcmp("*", str) == 0)
   {
-    mutt_free_rx_list (l);    /* ``unCMD *'' means delete all current entries */
+    mutt_free_rx_list(l);    /* ``unCMD *'' means delete all current entries */
     rv = 0;
   }
   else
@@ -307,14 +307,14 @@ int mutt_remove_from_rx_list (RX_LIST **l, const char *str)
     last = NULL;
     while (p)
     {
-      if (ascii_strcasecmp (str, p->rx->pattern) == 0)
+      if (ascii_strcasecmp(str, p->rx->pattern) == 0)
       {
-        mutt_free_regexp (&p->rx);
+        mutt_free_regexp(&p->rx);
         if (last)
           last->next = p->next;
         else
           (*l) = p->next;
-        FREE (&p);
+        FREE(&p);
         rv = 0;
       }
       else
@@ -327,7 +327,7 @@ int mutt_remove_from_rx_list (RX_LIST **l, const char *str)
   return (rv);
 }
 
-void mutt_free_list (LIST **list)
+void mutt_free_list(LIST **list)
 {
   LIST *p;
 
@@ -336,12 +336,12 @@ void mutt_free_list (LIST **list)
   {
     p = *list;
     *list = (*list)->next;
-    FREE (&p->data);
-    FREE (&p);
+    FREE(&p->data);
+    FREE(&p);
   }
 }
 
-void mutt_free_list_generic(LIST **list, void (*data_free)(char **))
+void mutt_free_list_generic(LIST **list, void(*data_free)(char **))
 {
   LIST *p;
 
@@ -358,18 +358,18 @@ void mutt_free_list_generic(LIST **list, void (*data_free)(char **))
     p = *list;
     *list = (*list)->next;
     data_free(&p->data);
-    FREE (&p);
+    FREE(&p);
   }
 }
 
-LIST *mutt_copy_list (LIST *p)
+LIST *mutt_copy_list(LIST *p)
 {
   LIST *t, *r=NULL, *l=NULL;
 
   for (; p; p = p->next)
   {
-    t = (LIST *) safe_malloc (sizeof (LIST));
-    t->data = safe_strdup (p->data);
+    t = (LIST *) safe_malloc(sizeof(LIST));
+    t->data = safe_strdup(p->data);
     t->next = NULL;
     if (l)
     {
@@ -387,33 +387,33 @@ HEADER *mutt_dup_header(HEADER *h)
   HEADER *hnew;
 
   hnew = mutt_new_header();
-  memcpy(hnew, h, sizeof (HEADER));
+  memcpy(hnew, h, sizeof(HEADER));
   return hnew;
 }
 
-void mutt_free_header (HEADER **h)
+void mutt_free_header(HEADER **h)
 {
   if (!h || !*h) return;
-  mutt_free_envelope (&(*h)->env);
-  mutt_free_body (&(*h)->content);
-  FREE (&(*h)->maildir_flags);
-  FREE (&(*h)->tree);
-  FREE (&(*h)->path);
+  mutt_free_envelope(&(*h)->env);
+  mutt_free_body(&(*h)->content);
+  FREE(&(*h)->maildir_flags);
+  FREE(&(*h)->tree);
+  FREE(&(*h)->path);
 #ifdef MIXMASTER
-  mutt_free_list (&(*h)->chain);
+  mutt_free_list(&(*h)->chain);
 #endif
 #if defined USE_POP || defined USE_IMAP
-  FREE (&(*h)->data);
+  FREE(&(*h)->data);
 #endif
-  FREE (h);             /* __FREE_CHECKED__ */
+  FREE(h);             /* __FREE_CHECKED__ */
 }
 
 /* returns true if the header contained in "s" is in list "t" */
-int mutt_matches_ignore (const char *s, LIST *t)
+int mutt_matches_ignore(const char *s, LIST *t)
 {
   for (; t; t = t->next)
   {
-    if (!ascii_strncasecmp (s, t->data, mutt_strlen (t->data)) || *t->data == '*')
+    if (!ascii_strncasecmp(s, t->data, mutt_strlen(t->data)) || *t->data == '*')
       return 1;
   }
   return 0;
@@ -424,78 +424,78 @@ int mutt_matches_ignore (const char *s, LIST *t)
  * Invokes mapfunc on each part and joins the result back into src.
  * Note this function currently does not preserve trailing delimiters.
  */
-static void delimited_buffer_map_join (BUFFER *src, const char *delimiter,
-                                       void (*mapfunc)(BUFFER *))
+static void delimited_buffer_map_join(BUFFER *src, const char *delimiter,
+                                      void(*mapfunc)(BUFFER *))
 {
   BUFFER *dest, *part;
   const char *part_begin, *part_end;
   size_t delim_size;
 
-  delim_size = mutt_strlen (delimiter);
+  delim_size = mutt_strlen(delimiter);
   if (!delim_size)
   {
-    mapfunc (src);
+    mapfunc(src);
     return;
   }
 
-  dest = mutt_buffer_pool_get ();
-  part = mutt_buffer_pool_get ();
+  dest = mutt_buffer_pool_get();
+  part = mutt_buffer_pool_get();
 
-  part_begin = mutt_b2s (src);
+  part_begin = mutt_b2s(src);
   while (part_begin && *part_begin)
   {
-    part_end = strstr (part_begin, delimiter);
+    part_end = strstr(part_begin, delimiter);
     if (part_end)
     {
-      mutt_buffer_substrcpy (part, part_begin, part_end);
+      mutt_buffer_substrcpy(part, part_begin, part_end);
       part_end += delim_size;
     }
     else
-      mutt_buffer_strcpy (part, part_begin);
+      mutt_buffer_strcpy(part, part_begin);
 
-    mapfunc (part);
+    mapfunc(part);
 
-    if (part_begin != mutt_b2s (src))
-      mutt_buffer_addstr (dest, delimiter);
-    mutt_buffer_addstr (dest, mutt_b2s (part));
+    if (part_begin != mutt_b2s(src))
+      mutt_buffer_addstr(dest, delimiter);
+    mutt_buffer_addstr(dest, mutt_b2s(part));
 
     part_begin = part_end;
   }
 
-  mutt_buffer_strcpy (src, mutt_b2s (dest));
+  mutt_buffer_strcpy(src, mutt_b2s(dest));
 
-  mutt_buffer_pool_release (&dest);
-  mutt_buffer_pool_release (&part);
+  mutt_buffer_pool_release(&dest);
+  mutt_buffer_pool_release(&part);
 }
 
-void mutt_buffer_expand_multi_path (BUFFER *src, const char *delimiter)
+void mutt_buffer_expand_multi_path(BUFFER *src, const char *delimiter)
 {
-  delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path);
+  delimited_buffer_map_join(src, delimiter, mutt_buffer_expand_path);
 }
 
-void mutt_buffer_expand_multi_path_norel (BUFFER *src, const char *delimiter)
+void mutt_buffer_expand_multi_path_norel(BUFFER *src, const char *delimiter)
 {
-  delimited_buffer_map_join (src, delimiter, mutt_buffer_expand_path_norel);
+  delimited_buffer_map_join(src, delimiter, mutt_buffer_expand_path_norel);
 }
 
 /* By default this will expand relative paths and remove trailing slashes */
-void mutt_buffer_expand_path (BUFFER *src)
+void mutt_buffer_expand_path(BUFFER *src)
 {
-  _mutt_buffer_expand_path (src,
-                            MUTT_EXPAND_PATH_EXPAND_RELATIVE |
-                            MUTT_EXPAND_PATH_REMOVE_TRAILING_SLASH);
+  _mutt_buffer_expand_path(src,
+                           MUTT_EXPAND_PATH_EXPAND_RELATIVE |
+                           MUTT_EXPAND_PATH_REMOVE_TRAILING_SLASH);
 }
 
 /* Does expansion without relative path expansion or trailing slashes
  * removal.  This is because this is used for DT_CMD_PATH types which
  * can have arguments and non-path stuff after an initial command.
  */
-void mutt_buffer_expand_path_norel (BUFFER *src)
+void mutt_buffer_expand_path_norel(BUFFER *src)
 {
-  _mutt_buffer_expand_path (src, 0);
+  _mutt_buffer_expand_path(src, 0);
 }
 
-void _mutt_buffer_expand_path (BUFFER *src, int flags)
+void _mutt_buffer_expand_path(BUFFER *src, int flags)
 {
   BUFFER *p, *q, *tmp;
   const char *s, *tail = "";
@@ -505,14 +505,14 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
   int expand_relative = flags & MUTT_EXPAND_PATH_EXPAND_RELATIVE;
   int remove_trailing_slash = flags & MUTT_EXPAND_PATH_REMOVE_TRAILING_SLASH;
 
-  p = mutt_buffer_pool_get ();
-  q = mutt_buffer_pool_get ();
-  tmp = mutt_buffer_pool_get ();
+  p = mutt_buffer_pool_get();
+  q = mutt_buffer_pool_get();
+  tmp = mutt_buffer_pool_get();
 
   do
   {
     recurse = 0;
-    s = mutt_b2s (src);
+    s = mutt_b2s(src);
 
     switch (*s)
     {
@@ -520,19 +520,19 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
       {
         if (*(s + 1) == '/' || *(s + 1) == 0)
         {
-          mutt_buffer_strcpy (p, NONULL(Homedir));
+          mutt_buffer_strcpy(p, NONULL(Homedir));
           tail = s + 1;
         }
         else
         {
           struct passwd *pw;
           /* NB: this is temporarily modifying src but is restoring it below */
-          if ((t = strchr (src->data + 1, '/')))
+          if ((t = strchr(src->data + 1, '/')))
             *t = 0;
 
-          if ((pw = getpwnam (s + 1)))
+          if ((pw = getpwnam(s + 1)))
           {
-            mutt_buffer_strcpy (p, pw->pw_dir);
+            mutt_buffer_strcpy(p, pw->pw_dir);
             if (t)
             {
               *t = '/';
@@ -546,7 +546,7 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
             /* user not found! */
             if (t)
               *t = '/';
-            mutt_buffer_clear (p);
+            mutt_buffer_clear(p);
             tail = s;
           }
         }
@@ -558,16 +558,16 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
       {
 #ifdef USE_IMAP
         /* if folder = {host} or imap[s]://host/: don't append slash */
-        if (mx_is_imap (NONULL (Maildir)) &&
-            (Maildir[strlen (Maildir) - 1] == '}' ||
-             Maildir[strlen (Maildir) - 1] == '/'))
-          mutt_buffer_strcpy (p, NONULL (Maildir));
+        if (mx_is_imap(NONULL(Maildir)) &&
+            (Maildir[strlen(Maildir) - 1] == '}' ||
+             Maildir[strlen(Maildir) - 1] == '/'))
+          mutt_buffer_strcpy(p, NONULL(Maildir));
         else
 #endif
-          if (Maildir && Maildir[strlen (Maildir) - 1] == '/')
-            mutt_buffer_strcpy (p, NONULL (Maildir));
+          if (Maildir && Maildir[strlen(Maildir) - 1] == '/')
+            mutt_buffer_strcpy(p, NONULL(Maildir));
           else
-            mutt_buffer_printf (p, "%s/", NONULL (Maildir));
+            mutt_buffer_printf(p, "%s/", NONULL(Maildir));
 
         tail = s + 1;
       }
@@ -580,21 +580,21 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
         HEADER *h;
         ADDRESS *alias;
 
-        if ((alias = mutt_lookup_alias (s + 1)))
+        if ((alias = mutt_lookup_alias(s + 1)))
         {
           h = mutt_new_header();
           h->env = mutt_new_envelope();
           h->env->from = h->env->to = alias;
 
           /* TODO: fix mutt_default_save() to use BUFFER */
-          mutt_buffer_increase_size (p, _POSIX_PATH_MAX);
-          mutt_default_save (p->data, p->dsize, h);
-          mutt_buffer_fix_dptr (p);
+          mutt_buffer_increase_size(p, _POSIX_PATH_MAX);
+          mutt_default_save(p->data, p->dsize, h);
+          mutt_buffer_fix_dptr(p);
 
           h->env->from = h->env->to = NULL;
-          mutt_free_header (&h);
+          mutt_free_header(&h);
           /* Avoid infinite recursion if the resulting folder starts with '@' */
-          if (*(mutt_b2s (p)) != '@')
+          if (*(mutt_b2s(p)) != '@')
             recurse = 1;
 
           tail = "";
@@ -604,14 +604,14 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
 
       case '>':
       {
-        mutt_buffer_strcpy (p, NONULL(Inbox));
+        mutt_buffer_strcpy(p, NONULL(Inbox));
         tail = s + 1;
       }
       break;
 
       case '<':
       {
-        mutt_buffer_strcpy (p, NONULL(Outbox));
+        mutt_buffer_strcpy(p, NONULL(Outbox));
         tail = s + 1;
       }
       break;
@@ -620,12 +620,12 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
       {
         if (*(s+1) == '!')
         {
-          mutt_buffer_strcpy (p, NONULL(LastFolder));
+          mutt_buffer_strcpy(p, NONULL(LastFolder));
           tail = s + 2;
         }
         else
         {
-          mutt_buffer_strcpy (p, NONULL(Spoolfile));
+          mutt_buffer_strcpy(p, NONULL(Spoolfile));
           tail = s + 1;
         }
       }
@@ -633,66 +633,66 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
 
       case '-':
       {
-        mutt_buffer_strcpy (p, NONULL(LastFolder));
+        mutt_buffer_strcpy(p, NONULL(LastFolder));
         tail = s + 1;
       }
       break;
 
       case '^':
       {
-        mutt_buffer_strcpy (p, NONULL(CurrentFolder));
+        mutt_buffer_strcpy(p, NONULL(CurrentFolder));
         tail = s + 1;
       }
       break;
 
       default:
       {
-        mutt_buffer_clear (p);
+        mutt_buffer_clear(p);
         tail = s;
       }
     }
 
-    if (rx && *(mutt_b2s (p)) && !recurse)
+    if (rx && *(mutt_b2s(p)) && !recurse)
     {
-      mutt_rx_sanitize_string (q, mutt_b2s (p));
-      mutt_buffer_printf (tmp, "%s%s", mutt_b2s (q), tail);
+      mutt_rx_sanitize_string(q, mutt_b2s(p));
+      mutt_buffer_printf(tmp, "%s%s", mutt_b2s(q), tail);
     }
     else
-      mutt_buffer_printf (tmp, "%s%s", mutt_b2s (p), tail);
+      mutt_buffer_printf(tmp, "%s%s", mutt_b2s(p), tail);
 
-    mutt_buffer_strcpy (src, mutt_b2s (tmp));
+    mutt_buffer_strcpy(src, mutt_b2s(tmp));
   }
   while (recurse);
 
-  mutt_buffer_pool_release (&p);
-  mutt_buffer_pool_release (&q);
+  mutt_buffer_pool_release(&p);
+  mutt_buffer_pool_release(&q);
 
 #ifdef USE_IMAP
   /* Rewrite IMAP path in canonical form - aids in string comparisons of
    * folders. May possibly fail, in which case s should be the same. */
-  if (mx_is_imap (mutt_b2s (src)))
-    imap_expand_path (src);
+  if (mx_is_imap(mutt_b2s(src)))
+    imap_expand_path(src);
   else
 #endif
-    if (url_check_scheme (mutt_b2s (src)) == U_UNKNOWN)
+    if (url_check_scheme(mutt_b2s(src)) == U_UNKNOWN)
     {
       if (expand_relative &&
-          mutt_buffer_len (src) &&
-          *mutt_b2s (src) != '/')
+          mutt_buffer_len(src) &&
+          *mutt_b2s(src) != '/')
       {
-        if (mutt_getcwd (tmp))
+        if (mutt_getcwd(tmp))
         {
           /* Note, mutt_pretty_mailbox() does '..' and '.' handling. */
-          if (mutt_buffer_len (tmp) > 1)
-            mutt_buffer_addch (tmp, '/');
-          mutt_buffer_addstr (tmp, mutt_b2s (src));
-          mutt_buffer_strcpy (src, mutt_b2s (tmp));
+          if (mutt_buffer_len(tmp) > 1)
+            mutt_buffer_addch(tmp, '/');
+          mutt_buffer_addstr(tmp, mutt_b2s(src));
+          mutt_buffer_strcpy(src, mutt_b2s(tmp));
         }
       }
 
       if (remove_trailing_slash)
       {
-        while ((mutt_buffer_len (src) > 1) &&
+        while ((mutt_buffer_len(src) > 1) &&
                *(src->dptr - 1) == '/')
         {
           *(--src->dptr) = '\0';
@@ -700,21 +700,21 @@ void _mutt_buffer_expand_path (BUFFER *src, int flags)
       }
     }
 
-  mutt_buffer_pool_release (&tmp);
+  mutt_buffer_pool_release(&tmp);
 }
 
-void mutt_buffer_remove_path_password (BUFFER *dest, const char *src)
+void mutt_buffer_remove_path_password(BUFFER *dest, const char *src)
 {
-  mutt_buffer_clear (dest);
+  mutt_buffer_clear(dest);
   if (!(src && *src))
     return;
 
 #ifdef USE_IMAP
-  if (mx_is_imap (src))
-    imap_buffer_remove_path_password (dest, src);
+  if (mx_is_imap(src))
+    imap_buffer_remove_path_password(dest, src);
   else
 #endif
-    mutt_buffer_strcpy (dest, src);
+    mutt_buffer_strcpy(dest, src);
 }
 
 /* Extract the real name from /etc/passwd's GECOS field.
@@ -725,7 +725,7 @@ void mutt_buffer_remove_path_password (BUFFER *dest, const char *src)
  * name.
  */
 
-char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
+char *mutt_gecos_name(char *dest, size_t destlen, struct passwd *pw)
 {
   regmatch_t pat_match[1];
   size_t pwnl;
@@ -735,29 +735,29 @@ char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
   if (!pw || !pw->pw_gecos)
     return NULL;
 
-  memset (dest, 0, destlen);
+  memset(dest, 0, destlen);
 
   if (GecosMask.rx)
   {
-    if (regexec (GecosMask.rx, pw->pw_gecos, 1, pat_match, 0) == 0)
-      strfcpy (dest, pw->pw_gecos + pat_match[0].rm_so,
-               MIN (pat_match[0].rm_eo - pat_match[0].rm_so + 1, destlen));
+    if (regexec(GecosMask.rx, pw->pw_gecos, 1, pat_match, 0) == 0)
+      strfcpy(dest, pw->pw_gecos + pat_match[0].rm_so,
+              MIN(pat_match[0].rm_eo - pat_match[0].rm_so + 1, destlen));
   }
-  else if ((p = strchr (pw->pw_gecos, ',')))
-    strfcpy (dest, pw->pw_gecos, MIN (destlen, p - pw->pw_gecos + 1));
+  else if ((p = strchr(pw->pw_gecos, ',')))
+    strfcpy(dest, pw->pw_gecos, MIN(destlen, p - pw->pw_gecos + 1));
   else
-    strfcpy (dest, pw->pw_gecos, destlen);
+    strfcpy(dest, pw->pw_gecos, destlen);
 
-  pwnl = strlen (pw->pw_name);
+  pwnl = strlen(pw->pw_name);
 
   for (idx = 0; dest[idx]; idx++)
   {
     if (dest[idx] == '&')
     {
-      memmove (&dest[idx + pwnl], &dest[idx + 1],
-               MAX((ssize_t)(destlen - idx - pwnl - 1), 0));
-      memcpy (&dest[idx], pw->pw_name, MIN(destlen - idx - 1, pwnl));
-      dest[idx] = toupper ((unsigned char) dest[idx]);
+      memmove(&dest[idx + pwnl], &dest[idx + 1],
+              MAX((ssize_t)(destlen - idx - pwnl - 1), 0));
+      memcpy(&dest[idx], pw->pw_name, MIN(destlen - idx - 1, pwnl));
+      dest[idx] = toupper((unsigned char) dest[idx]);
     }
   }
 
@@ -765,30 +765,30 @@ char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
 }
 
 
-char *mutt_get_parameter (const char *s, PARAMETER *p)
+char *mutt_get_parameter(const char *s, PARAMETER *p)
 {
   for (; p; p = p->next)
-    if (ascii_strcasecmp (s, p->attribute) == 0)
+    if (ascii_strcasecmp(s, p->attribute) == 0)
       return (p->value);
 
   return NULL;
 }
 
-void mutt_set_parameter (const char *attribute, const char *value, PARAMETER **p)
+void mutt_set_parameter(const char *attribute, const char *value, PARAMETER **p)
 {
   PARAMETER *q;
 
   if (!value)
   {
-    mutt_delete_parameter (attribute, p);
+    mutt_delete_parameter(attribute, p);
     return;
   }
 
   for (q = *p; q; q = q->next)
   {
-    if (ascii_strcasecmp (attribute, q->attribute) == 0)
+    if (ascii_strcasecmp(attribute, q->attribute) == 0)
     {
-      mutt_str_replace (&q->value, value);
+      mutt_str_replace(&q->value, value);
       return;
     }
   }
@@ -800,24 +800,24 @@ void mutt_set_parameter (const char *attribute, const char *value, PARAMETER **p
   *p = q;
 }
 
-void mutt_delete_parameter (const char *attribute, PARAMETER **p)
+void mutt_delete_parameter(const char *attribute, PARAMETER **p)
 {
   PARAMETER *q;
 
   for (q = *p; q; p = &q->next, q = q->next)
   {
-    if (ascii_strcasecmp (attribute, q->attribute) == 0)
+    if (ascii_strcasecmp(attribute, q->attribute) == 0)
     {
       *p = q->next;
       q->next = NULL;
-      mutt_free_parameter (&q);
+      mutt_free_parameter(&q);
       return;
     }
   }
 }
 
 /* returns 1 if Mutt can't display this type of data, 0 otherwise */
-int mutt_needs_mailcap (BODY *m)
+int mutt_needs_mailcap(BODY *m)
 {
   switch (m->type)
   {
@@ -841,12 +841,12 @@ int mutt_needs_mailcap (BODY *m)
   return 1;
 }
 
-int mutt_is_text_part (const BODY *b)
+int mutt_is_text_part(const BODY *b)
 {
   int t = b->type;
   char *s = b->subtype;
 
-  if ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp (b))
+  if ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp(b))
     return 0;
 
   if (t == TYPETEXT)
@@ -854,13 +854,13 @@ int mutt_is_text_part (const BODY *b)
 
   if (t == TYPEMESSAGE)
   {
-    if (!ascii_strcasecmp ("delivery-status", s))
+    if (!ascii_strcasecmp("delivery-status", s))
       return 1;
   }
 
   if ((WithCrypto & APPLICATION_PGP) && t == TYPEAPPLICATION)
   {
-    if (!ascii_strcasecmp ("pgp-keys", s))
+    if (!ascii_strcasecmp("pgp-keys", s))
       return 1;
   }
 
@@ -868,7 +868,7 @@ int mutt_is_text_part (const BODY *b)
 }
 
 #ifdef USE_AUTOCRYPT
-void mutt_free_autocrypthdr (AUTOCRYPTHDR **p)
+void mutt_free_autocrypthdr(AUTOCRYPTHDR **p)
 {
   AUTOCRYPTHDR *cur;
 
@@ -879,47 +879,47 @@ void mutt_free_autocrypthdr (AUTOCRYPTHDR **p)
   {
     cur = *p;
     *p = (*p)->next;
-    FREE (&cur->addr);
-    FREE (&cur->keydata);
-    FREE (&cur);
+    FREE(&cur->addr);
+    FREE(&cur->keydata);
+    FREE(&cur);
   }
 }
 #endif
 
-void mutt_free_envelope (ENVELOPE **p)
+void mutt_free_envelope(ENVELOPE **p)
 {
   if (!*p) return;
-  rfc822_free_address (&(*p)->return_path);
-  rfc822_free_address (&(*p)->from);
-  rfc822_free_address (&(*p)->to);
-  rfc822_free_address (&(*p)->cc);
-  rfc822_free_address (&(*p)->bcc);
-  rfc822_free_address (&(*p)->sender);
-  rfc822_free_address (&(*p)->reply_to);
-  rfc822_free_address (&(*p)->mail_followup_to);
+  rfc822_free_address(&(*p)->return_path);
+  rfc822_free_address(&(*p)->from);
+  rfc822_free_address(&(*p)->to);
+  rfc822_free_address(&(*p)->cc);
+  rfc822_free_address(&(*p)->bcc);
+  rfc822_free_address(&(*p)->sender);
+  rfc822_free_address(&(*p)->reply_to);
+  rfc822_free_address(&(*p)->mail_followup_to);
 
-  FREE (&(*p)->list_post);
+  FREE(&(*p)->list_post);
 
-  FREE (&(*p)->subject);
+  FREE(&(*p)->subject);
   /* real_subj is just an offset to subject and shouldn't be freed */
-  FREE (&(*p)->disp_subj);
-  FREE (&(*p)->message_id);
-  FREE (&(*p)->supersedes);
-  FREE (&(*p)->date);
-  FREE (&(*p)->x_label);
+  FREE(&(*p)->disp_subj);
+  FREE(&(*p)->message_id);
+  FREE(&(*p)->supersedes);
+  FREE(&(*p)->date);
+  FREE(&(*p)->x_label);
 
-  mutt_buffer_free (&(*p)->spam);
+  mutt_buffer_free(&(*p)->spam);
 
-  mutt_free_list (&(*p)->references);
-  mutt_free_list (&(*p)->in_reply_to);
-  mutt_free_list (&(*p)->userhdrs);
+  mutt_free_list(&(*p)->references);
+  mutt_free_list(&(*p)->in_reply_to);
+  mutt_free_list(&(*p)->userhdrs);
 
 #ifdef USE_AUTOCRYPT
-  mutt_free_autocrypthdr (&(*p)->autocrypt);
-  mutt_free_autocrypthdr (&(*p)->autocrypt_gossip);
+  mutt_free_autocrypthdr(&(*p)->autocrypt);
+  mutt_free_autocrypthdr(&(*p)->autocrypt_gossip);
 #endif
 
-  FREE (p);             /* __FREE_CHECKED__ */
+  FREE(p);             /* __FREE_CHECKED__ */
 }
 
 /* move all the headers from extra not present in base into base */
@@ -966,8 +966,8 @@ void mutt_merge_envelopes(ENVELOPE *base, ENVELOPE **extra)
   }
   /* spam and user headers should never be hashed, and the new envelope may
    * have better values. Use new versions regardless. */
-  mutt_buffer_free (&base->spam);
-  mutt_free_list (&base->userhdrs);
+  mutt_buffer_free(&base->spam);
+  mutt_free_list(&base->userhdrs);
   MOVE_ELEM(spam);
   MOVE_ELEM(userhdrs);
 #undef MOVE_ELEM
@@ -1043,14 +1043,14 @@ void mutt_pretty_mailbox (char *s, size_t buflen)
   {
     p = strchr(s, ':')+1;
     if (!strncmp (p, "//", 2))
-      q = strchr (p+2, '/');
+      q = strchr(p+2, '/');
     if (!q)
-      q = strchr (p, '\0');
+      q = strchr(p, '\0');
     p = q;
   }
 
   /* cleanup path */
-  if (strstr (p, "//") || strstr (p, "/./"))
+  if (strstr(p, "//") || strstr(p, "/./"))
   {
     /* first attempt to collapse the pathname, this is more
      * lightweight than realpath() and doesn't resolve links
@@ -1072,128 +1072,128 @@ void mutt_pretty_mailbox (char *s, size_t buflen)
     }
     *q = 0;
   }
-  else if (strstr (p, "..") &&
+  else if (strstr(p, "..") &&
            (scheme == U_UNKNOWN || scheme == U_FILE) &&
-           realpath (p, tmp))
-    strfcpy (p, tmp, buflen - (p - s));
+           realpath(p, tmp))
+    strfcpy(p, tmp, buflen - (p - s));
 
-  if (mutt_strncmp (s, Maildir, (len = mutt_strlen (Maildir))) == 0 &&
+  if (mutt_strncmp(s, Maildir, (len = mutt_strlen(Maildir))) == 0 &&
       s[len] == '/')
   {
     *s++ = '=';
-    memmove (s, s + len, mutt_strlen (s + len) + 1);
+    memmove(s, s + len, mutt_strlen(s + len) + 1);
   }
   else
   {
-    BUFFER *cwd = mutt_buffer_pool_get ();
-    BUFFER *home = mutt_buffer_pool_get ();
+    BUFFER *cwd = mutt_buffer_pool_get();
+    BUFFER *home = mutt_buffer_pool_get();
     int under_cwd = 0, under_home = 0, cwd_under_home = 0;
     size_t cwd_len, home_len;
 
-    mutt_getcwd (cwd);
-    if (mutt_buffer_len (cwd) > 1)
-      mutt_buffer_addch (cwd, '/');
-    cwd_len = mutt_buffer_len (cwd);
+    mutt_getcwd(cwd);
+    if (mutt_buffer_len(cwd) > 1)
+      mutt_buffer_addch(cwd, '/');
+    cwd_len = mutt_buffer_len(cwd);
 
-    mutt_buffer_strcpy (home, NONULL (Homedir));
-    if (mutt_buffer_len (home) > 1)
-      mutt_buffer_addch (home, '/');
-    home_len = mutt_buffer_len (home);
+    mutt_buffer_strcpy(home, NONULL(Homedir));
+    if (mutt_buffer_len(home) > 1)
+      mutt_buffer_addch(home, '/');
+    home_len = mutt_buffer_len(home);
 
     if (cwd_len &&
-        mutt_strncmp (s, mutt_b2s (cwd), cwd_len) == 0)
+        mutt_strncmp(s, mutt_b2s(cwd), cwd_len) == 0)
       under_cwd = 1;
 
     if (home_len &&
-        mutt_strncmp (s, mutt_b2s (home), home_len) == 0)
+        mutt_strncmp(s, mutt_b2s(home), home_len) == 0)
       under_home = 1;
 
     if (under_cwd && under_home && (home_len < cwd_len))
       cwd_under_home = 1;
 
     if (under_cwd && (!under_home || cwd_under_home))
-      memmove (s, s + cwd_len, mutt_strlen (s + cwd_len) + 1);
+      memmove(s, s + cwd_len, mutt_strlen(s + cwd_len) + 1);
     else if (under_home && (home_len > 1))
     {
       *s++ = '~';
-      memmove (s, s + home_len - 2, mutt_strlen (s + home_len - 2) + 1);
+      memmove(s, s + home_len - 2, mutt_strlen(s + home_len - 2) + 1);
     }
 
-    mutt_buffer_pool_release (&cwd);
-    mutt_buffer_pool_release (&home);
+    mutt_buffer_pool_release(&cwd);
+    mutt_buffer_pool_release(&home);
   }
 }
 
-void mutt_pretty_size (char *s, size_t len, LOFF_T n)
+void mutt_pretty_size(char *s, size_t len, LOFF_T n)
 {
-  if (option (OPTSIZESHOWBYTES) && (n < 1024))
-    snprintf (s, len, "%d", (int)n);
+  if (option(OPTSIZESHOWBYTES) && (n < 1024))
+    snprintf(s, len, "%d", (int)n);
   else if (n == 0)
-    strfcpy (s,
-             option (OPTSIZEUNITSONLEFT) ? "K0" : "0K",
-             len);
-  else if (option (OPTSIZESHOWFRACTIONS) && (n < 10189)) /* 0.1K - 9.9K */
+    strfcpy(s,
+            option(OPTSIZEUNITSONLEFT) ? "K0" : "0K",
+            len);
+  else if (option(OPTSIZESHOWFRACTIONS) && (n < 10189)) /* 0.1K - 9.9K */
   {
-    snprintf (s, len,
-              option (OPTSIZEUNITSONLEFT) ? "K%3.1f" : "%3.1fK",
-              (n < 103) ? 0.1 : n / 1024.0);
+    snprintf(s, len,
+             option(OPTSIZEUNITSONLEFT) ? "K%3.1f" : "%3.1fK",
+             (n < 103) ? 0.1 : n / 1024.0);
   }
-  else if (!option (OPTSIZESHOWMB) || (n < 1023949)) /* 10K - 999K */
+  else if (!option(OPTSIZESHOWMB) || (n < 1023949)) /* 10K - 999K */
   {
     /* 51 is magic which causes 10189/10240 to be rounded up to 10 */
-    snprintf (s, len,
-              option (OPTSIZEUNITSONLEFT) ? ("K" OFF_T_FMT) : (OFF_T_FMT "K"),
-              (n + 51) / 1024);
+    snprintf(s, len,
+             option(OPTSIZEUNITSONLEFT) ? ("K" OFF_T_FMT) : (OFF_T_FMT "K"),
+             (n + 51) / 1024);
   }
-  else if (option (OPTSIZESHOWFRACTIONS) && (n < 10433332)) /* 1.0M - 9.9M */
+  else if (option(OPTSIZESHOWFRACTIONS) && (n < 10433332)) /* 1.0M - 9.9M */
   {
-    snprintf (s, len,
-              option (OPTSIZEUNITSONLEFT) ? "M%3.1f" : "%3.1fM",
-              n / 1048576.0);
+    snprintf(s, len,
+             option(OPTSIZEUNITSONLEFT) ? "M%3.1f" : "%3.1fM",
+             n / 1048576.0);
   }
   else /* 10M+ */
   {
     /* (10433332 + 52428) / 1048576 = 10 */
-    snprintf (s, len,
-              option (OPTSIZEUNITSONLEFT) ?  ("M" OFF_T_FMT) : (OFF_T_FMT "M"),
-              (n + 52428) / 1048576);
+    snprintf(s, len,
+             option(OPTSIZEUNITSONLEFT) ?  ("M" OFF_T_FMT) : (OFF_T_FMT "M"),
+             (n + 52428) / 1048576);
   }
 }
 
-void _mutt_buffer_quote_filename (BUFFER *d, const char *f, int add_outer)
+void _mutt_buffer_quote_filename(BUFFER *d, const char *f, int add_outer)
 {
-  mutt_buffer_clear (d);
+  mutt_buffer_clear(d);
 
   if (!f)
     return;
 
   if (add_outer)
-    mutt_buffer_addch (d, '\'');
+    mutt_buffer_addch(d, '\'');
 
   for (; *f; f++)
   {
     if (*f == '\'' || *f == '`')
     {
-      mutt_buffer_addch (d, '\'');
-      mutt_buffer_addch (d, '\\');
-      mutt_buffer_addch (d, *f);
-      mutt_buffer_addch (d, '\'');
+      mutt_buffer_addch(d, '\'');
+      mutt_buffer_addch(d, '\\');
+      mutt_buffer_addch(d, *f);
+      mutt_buffer_addch(d, '\'');
     }
     else
-      mutt_buffer_addch (d, *f);
+      mutt_buffer_addch(d, *f);
   }
 
   if (add_outer)
-    mutt_buffer_addch (d, '\'');
+    mutt_buffer_addch(d, '\'');
 }
 
 static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%";
 
-void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, int flags)
+void mutt_buffer_sanitize_filename(BUFFER *d, const char *f, int flags)
 {
   int allow_slash, allow_8bit;
 
-  mutt_buffer_clear (d);
+  mutt_buffer_clear(d);
 
   if (!f)
     return;
@@ -1205,29 +1205,29 @@ void mutt_buffer_sanitize_filename (BUFFER *d, const char *f, int flags)
   {
     if ((allow_slash && *f == '/')  ||
         (allow_8bit && (*f & 0x80)) ||
-        strchr (safe_chars, *f))
-      mutt_buffer_addch (d, *f);
+        strchr(safe_chars, *f))
+      mutt_buffer_addch(d, *f);
     else
-      mutt_buffer_addch (d, '_');
+      mutt_buffer_addch(d, '_');
   }
 }
 
-void mutt_expand_file_fmt (BUFFER *dest, const char *fmt, const char *src)
+void mutt_expand_file_fmt(BUFFER *dest, const char *fmt, const char *src)
 {
   BUFFER *tmp;
 
-  tmp = mutt_buffer_pool_get ();
-  mutt_buffer_quote_filename (tmp, src);
-  mutt_expand_fmt (dest, fmt, mutt_b2s (tmp));
-  mutt_buffer_pool_release (&tmp);
+  tmp = mutt_buffer_pool_get();
+  mutt_buffer_quote_filename(tmp, src);
+  mutt_expand_fmt(dest, fmt, mutt_b2s(tmp));
+  mutt_buffer_pool_release(&tmp);
 }
 
-void mutt_expand_fmt (BUFFER *dest, const char *fmt, const char *src)
+void mutt_expand_fmt(BUFFER *dest, const char *fmt, const char *src)
 {
   const char *p;
   int found = 0;
 
-  mutt_buffer_clear (dest);
+  mutt_buffer_clear(dest);
 
   for (p = fmt; *p; p++)
   {
@@ -1236,45 +1236,45 @@ void mutt_expand_fmt (BUFFER *dest, const char *fmt, const char *src)
       switch (p[1])
       {
         case '%':
-          mutt_buffer_addch (dest, *p++);
+          mutt_buffer_addch(dest, *p++);
           break;
         case 's':
           found = 1;
-          mutt_buffer_addstr (dest, src);
+          mutt_buffer_addstr(dest, src);
           p++;
           break;
         default:
-          mutt_buffer_addch (dest, *p);
+          mutt_buffer_addch(dest, *p);
           break;
       }
     }
     else
     {
-      mutt_buffer_addch (dest, *p);
+      mutt_buffer_addch(dest, *p);
     }
   }
 
   if (!found)
   {
-    mutt_buffer_addch (dest, ' ');
-    mutt_buffer_addstr (dest, src);
+    mutt_buffer_addch(dest, ' ');
+    mutt_buffer_addstr(dest, src);
   }
 }
 
 /* return 0 on success, -1 on abort, 1 on error */
-int mutt_check_overwrite (const char *attname, const char *path,
-                          BUFFER *fname, int *append, char **directory)
+int mutt_check_overwrite(const char *attname, const char *path,
+                         BUFFER *fname, int *append, char **directory)
 {
   int rc = 0;
   BUFFER *tmp = NULL;
   struct stat st;
 
-  mutt_buffer_strcpy (fname, path);
-  if (access (mutt_b2s (fname), F_OK) != 0)
+  mutt_buffer_strcpy(fname, path);
+  if (access(mutt_b2s(fname), F_OK) != 0)
     return 0;
-  if (stat (mutt_b2s (fname), &st) != 0)
+  if (stat(mutt_b2s(fname), &st) != 0)
     return -1;
-  if (S_ISDIR (st.st_mode))
+  if (S_ISDIR(st.st_mode))
   {
     if (directory)
     {
@@ -1285,39 +1285,39 @@ int mutt_check_overwrite (const char *attname, const char *path,
               (_("File is a directory, save under it? [(y)es, (n)o, (a)ll]"), _("yna")))
       {
         case 3:         /* all */
-          mutt_str_replace (directory, mutt_b2s (fname));
+          mutt_str_replace(directory, mutt_b2s(fname));
           break;
         case 1:         /* yes */
-          FREE (directory);             /* __FREE_CHECKED__ */
+          FREE(directory);             /* __FREE_CHECKED__ */
           break;
         case -1:        /* abort */
-          FREE (directory);             /* __FREE_CHECKED__ */
+          FREE(directory);             /* __FREE_CHECKED__ */
           return -1;
         case  2:        /* no */
-          FREE (directory);             /* __FREE_CHECKED__ */
+          FREE(directory);             /* __FREE_CHECKED__ */
           return 1;
       }
     }
     /* L10N:
        Means "The path you specified as the destination file is a directory."
        See the msgid "Save to file: " (alias.c, recvattach.c) */
-    else if ((rc = mutt_yesorno (_("File is a directory, save under it?"), MUTT_YES)) != MUTT_YES)
+    else if ((rc = mutt_yesorno(_("File is a directory, save under it?"), MUTT_YES)) != MUTT_YES)
       return (rc == MUTT_NO) ? 1 : -1;
 
-    tmp = mutt_buffer_pool_get ();
-    mutt_buffer_strcpy (tmp, mutt_basename (NONULL (attname)));
-    if ((mutt_buffer_get_field (_("File under directory: "), tmp,
-                                MUTT_FILE | MUTT_CLEAR) != 0) ||
-        !mutt_buffer_len (tmp))
+    tmp = mutt_buffer_pool_get();
+    mutt_buffer_strcpy(tmp, mutt_basename(NONULL(attname)));
+    if ((mutt_buffer_get_field(_("File under directory: "), tmp,
+                               MUTT_FILE | MUTT_CLEAR) != 0) ||
+        !mutt_buffer_len(tmp))
     {
-      mutt_buffer_pool_release (&tmp);
+      mutt_buffer_pool_release(&tmp);
       return (-1);
     }
-    mutt_buffer_concat_path (fname, path, mutt_b2s (tmp));
-    mutt_buffer_pool_release (&tmp);
+    mutt_buffer_concat_path(fname, path, mutt_b2s(tmp));
+    mutt_buffer_pool_release(&tmp);
   }
 
-  if (*append == 0 && access (mutt_b2s (fname), F_OK) == 0)
+  if (*append == 0 && access(mutt_b2s(fname), F_OK) == 0)
   {
     switch (mutt_multi_choice
             (_("File exists, (o)verwrite, (a)ppend, or (c)ancel?"), _("oac")))
@@ -1338,101 +1338,101 @@ int mutt_check_overwrite (const char *attname, const char *path,
   return 0;
 }
 
-void mutt_save_path (char *d, size_t dsize, ADDRESS *a)
+void mutt_save_path(char *d, size_t dsize, ADDRESS *a)
 {
   if (a && a->mailbox)
   {
-    strfcpy (d, a->mailbox, dsize);
-    if (!option (OPTSAVEADDRESS))
+    strfcpy(d, a->mailbox, dsize);
+    if (!option(OPTSAVEADDRESS))
     {
       char *p;
 
-      if ((p = strpbrk (d, "%@")))
+      if ((p = strpbrk(d, "%@")))
         *p = 0;
     }
-    mutt_strlower (d);
+    mutt_strlower(d);
   }
   else
     *d = 0;
 }
 
-void mutt_buffer_save_path (BUFFER *dest, ADDRESS *a)
+void mutt_buffer_save_path(BUFFER *dest, ADDRESS *a)
 {
   if (a && a->mailbox)
   {
-    mutt_buffer_strcpy (dest, a->mailbox);
-    if (!option (OPTSAVEADDRESS))
+    mutt_buffer_strcpy(dest, a->mailbox);
+    if (!option(OPTSAVEADDRESS))
     {
       char *p;
 
-      if ((p = strpbrk (dest->data, "%@")))
+      if ((p = strpbrk(dest->data, "%@")))
       {
         *p = 0;
-        mutt_buffer_fix_dptr (dest);
+        mutt_buffer_fix_dptr(dest);
       }
     }
-    mutt_strlower (dest->data);
+    mutt_strlower(dest->data);
   }
   else
-    mutt_buffer_clear (dest);
+    mutt_buffer_clear(dest);
 }
 
-void mutt_safe_path (BUFFER *dest, ADDRESS *a)
+void mutt_safe_path(BUFFER *dest, ADDRESS *a)
 {
   char *p;
 
-  mutt_buffer_save_path (dest, a);
+  mutt_buffer_save_path(dest, a);
   for (p = dest->data; *p; p++)
-    if (*p == '/' || IS_ASCII_WS (*p) || !IsPrint ((unsigned char) *p))
+    if (*p == '/' || IS_ASCII_WS(*p) || !IsPrint((unsigned char) *p))
       *p = '_';
 }
 
-void mutt_buffer_concat_path (BUFFER *d, const char *dir, const char *fname)
+void mutt_buffer_concat_path(BUFFER *d, const char *dir, const char *fname)
 {
   const char *fmt = "%s/%s";
 
   if (!*fname || (*dir && dir[strlen(dir)-1] == '/'))
     fmt = "%s%s";
 
-  mutt_buffer_printf (d, fmt, dir, fname);
+  mutt_buffer_printf(d, fmt, dir, fname);
 }
 
 /*
  * Write the concatened pathname (dir + "/" + fname) into dst.
  * The slash is omitted when dir or fname is of 0 length.
  */
-void mutt_buffer_concatn_path (BUFFER *dst, const char *dir, size_t dirlen,
-                               const char *fname, size_t fnamelen)
+void mutt_buffer_concatn_path(BUFFER *dst, const char *dir, size_t dirlen,
+                              const char *fname, size_t fnamelen)
 {
-  mutt_buffer_clear (dst);
+  mutt_buffer_clear(dst);
   if (dirlen)
-    mutt_buffer_addstr_n (dst, dir, dirlen);
+    mutt_buffer_addstr_n(dst, dir, dirlen);
   if (dirlen && fnamelen)
-    mutt_buffer_addch (dst, '/');
+    mutt_buffer_addch(dst, '/');
   if (fnamelen)
-    mutt_buffer_addstr_n (dst, fname, fnamelen);
+    mutt_buffer_addstr_n(dst, fname, fnamelen);
 }
 
-const char *mutt_getcwd (BUFFER *cwd)
+const char *mutt_getcwd(BUFFER *cwd)
 {
   char *retval;
 
-  mutt_buffer_increase_size (cwd, _POSIX_PATH_MAX);
-  retval = getcwd (cwd->data, cwd->dsize);
+  mutt_buffer_increase_size(cwd, _POSIX_PATH_MAX);
+  retval = getcwd(cwd->data, cwd->dsize);
   while (!retval && errno == ERANGE)
   {
-    mutt_buffer_increase_size (cwd, cwd->dsize + STRING);
-    retval = getcwd (cwd->data, cwd->dsize);
+    mutt_buffer_increase_size(cwd, cwd->dsize + STRING);
+    retval = getcwd(cwd->data, cwd->dsize);
   }
   if (retval)
-    mutt_buffer_fix_dptr (cwd);
+    mutt_buffer_fix_dptr(cwd);
   else
-    mutt_buffer_clear (cwd);
+    mutt_buffer_clear(cwd);
 
   return retval;
 }
 
-char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
+char *mutt_apply_replace(char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
 {
   REPLACE_LIST *l;
   static regmatch_t *pmatch = NULL;
@@ -1447,26 +1447,26 @@ char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
   if (s == NULL || *s == '\0' || (d && !dlen))
     return d;
 
-  srcbuf = mutt_buffer_pool_get ();
-  destbuf = mutt_buffer_pool_get ();
+  srcbuf = mutt_buffer_pool_get();
+  destbuf = mutt_buffer_pool_get();
 
-  mutt_buffer_strcpy (srcbuf, s);
+  mutt_buffer_strcpy(srcbuf, s);
 
   for (l = rlist; l; l = l->next)
   {
     /* If this pattern needs more matches, expand pmatch. */
     if (l->nmatch > nmatch)
     {
-      safe_realloc (&pmatch, l->nmatch * sizeof(regmatch_t));
+      safe_realloc(&pmatch, l->nmatch * sizeof(regmatch_t));
       nmatch = l->nmatch;
     }
 
-    if (regexec (l->rx->rx, mutt_b2s (srcbuf), l->nmatch, pmatch, 0) == 0)
+    if (regexec(l->rx->rx, mutt_b2s(srcbuf), l->nmatch, pmatch, 0) == 0)
     {
       muttdbg(5, "%s matches %s",
-                  mutt_b2s (srcbuf), l->rx->pattern);
+              mutt_b2s(srcbuf), l->rx->pattern);
 
-      mutt_buffer_clear (destbuf);
+      mutt_buffer_clear(destbuf);
       if (l->template)
       {
         for (p = l->template; *p; )
@@ -1477,52 +1477,52 @@ char *mutt_apply_replace (char *d, size_t dlen, char *s, REPLACE_LIST *rlist)
             if (*p == 'L')
             {
               p++;
-              mutt_buffer_addstr_n (destbuf, mutt_b2s (srcbuf), pmatch[0].rm_so);
+              mutt_buffer_addstr_n(destbuf, mutt_b2s(srcbuf), pmatch[0].rm_so);
             }
             else if (*p == 'R')
             {
               p++;
-              mutt_buffer_addstr (destbuf, srcbuf->data + pmatch[0].rm_eo);
+              mutt_buffer_addstr(destbuf, srcbuf->data + pmatch[0].rm_eo);
             }
             else
             {
-              if (!mutt_atoui (p, &n, MUTT_ATOI_ALLOW_TRAILING) && (n < l->nmatch))
-                mutt_buffer_addstr_n (destbuf, srcbuf->data + pmatch[n].rm_so,
-                                      pmatch[n].rm_eo - pmatch[n].rm_so);
+              if (!mutt_atoui(p, &n, MUTT_ATOI_ALLOW_TRAILING) && (n < l->nmatch))
+                mutt_buffer_addstr_n(destbuf, srcbuf->data + pmatch[n].rm_so,
+                                     pmatch[n].rm_eo - pmatch[n].rm_so);
               while (isdigit((unsigned char)*p))    /* skip subst token */
                 ++p;
             }
           }
           else
-            mutt_buffer_addch (destbuf, *p++);
+            mutt_buffer_addch(destbuf, *p++);
         }
       }
 
-      mutt_buffer_strcpy (srcbuf, mutt_b2s (destbuf));
-      muttdbg(5, "subst %s", mutt_b2s (destbuf));
+      mutt_buffer_strcpy(srcbuf, mutt_b2s(destbuf));
+      muttdbg(5, "subst %s", mutt_b2s(destbuf));
     }
   }
 
   if (d)
-    strfcpy (d, mutt_b2s (srcbuf), dlen);
+    strfcpy(d, mutt_b2s(srcbuf), dlen);
   else
-    d = safe_strdup (mutt_b2s (srcbuf));
+    d = safe_strdup(mutt_b2s(srcbuf));
 
-  mutt_buffer_pool_release (&srcbuf);
-  mutt_buffer_pool_release (&destbuf);
+  mutt_buffer_pool_release(&srcbuf);
+  mutt_buffer_pool_release(&destbuf);
 
   return d;
 }
 
 
-void mutt_FormatString (char *dest,             /* output buffer */
-                        size_t destlen,         /* output buffer len */
-                        size_t col,             /* starting column (nonzero when called recursively) */
-                        int cols,               /* maximum columns */
-                        const char *src,        /* template string */
-                        format_t *callback,     /* callback for processing */
-                        void *data,             /* callback data */
-                        format_flag flags)      /* callback flags */
+void mutt_FormatString(char *dest,             /* output buffer */
+                       size_t destlen,         /* output buffer len */
+                       size_t col,             /* starting column (nonzero when called recursively) */
+                       int cols,               /* maximum columns */
+                       const char *src,        /* template string */
+                       format_t *callback,     /* callback for processing */
+                       void *data,             /* callback data */
+                       format_flag flags)      /* callback flags */
 {
   char prefix[SHORT_STRING], buf[LONG_STRING], *cp, *wptr = dest, ch;
   char ifstring[SHORT_STRING], elsestring[SHORT_STRING];
@@ -1534,7 +1534,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
 
   prefix[0] = '\0';
   destlen--; /* save room for the terminal \0 */
-  wlen = ((flags & MUTT_FORMAT_ARROWCURSOR) && option (OPTARROWCURSOR)) ? 3 : 0;
+  wlen = ((flags & MUTT_FORMAT_ARROWCURSOR) && option(OPTARROWCURSOR)) ? 3 : 0;
   col += wlen;
 
   if ((flags & MUTT_FORMAT_NOFILTER) == 0)
@@ -1567,12 +1567,12 @@ void mutt_FormatString (char *dest,             /* output buffer */
       srccopy[n-1] = '\0';
 
       /* prepare BUFFERs */
-      srcbuf = mutt_buffer_from (srccopy);
+      srcbuf = mutt_buffer_from(srccopy);
       /* note: we are resetting dptr and *reading* from the buffer, so we don't
        * want to use mutt_buffer_clear(). */
-      mutt_buffer_rewind (srcbuf);
-      word = mutt_buffer_new ();
-      command = mutt_buffer_new ();
+      mutt_buffer_rewind(srcbuf);
+      word = mutt_buffer_new();
+      command = mutt_buffer_new();
 
       /* Iterate expansions across successive arguments */
       do
@@ -1607,13 +1607,13 @@ void mutt_FormatString (char *dest,             /* output buffer */
 
       col -= wlen;      /* reset to passed in value */
       wptr = dest;      /* reset write ptr */
-      wlen = ((flags & MUTT_FORMAT_ARROWCURSOR) && option (OPTARROWCURSOR)) ? 3 : 0;
+      wlen = ((flags & MUTT_FORMAT_ARROWCURSOR) && option(OPTARROWCURSOR)) ? 3 : 0;
       if ((pid = mutt_create_filter(command->data, NULL, &filter, NULL)) != -1)
       {
         int rc;
 
         n = fread(dest, 1, destlen /* already decremented */, filter);
-        safe_fclose (&filter);
+        safe_fclose(&filter);
         rc = mutt_wait_filter(pid);
         if (rc != 0)
           muttdbg(1, "format pipe command exited code %d", rc);
@@ -1693,8 +1693,8 @@ void mutt_FormatString (char *dest,             /* output buffer */
         /* eat the format string */
         cp = prefix;
         count = 0;
-        while (count < sizeof (prefix) &&
-               (isdigit ((unsigned char) *src) || *src == '.' || *src == '-' || *src == '='))
+        while (count < sizeof(prefix) &&
+               (isdigit((unsigned char) *src) || *src == '.' || *src == '-' || *src == '='))
         {
           *cp++ = *src++;
           count++;
@@ -1716,7 +1716,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
         /* eat the `if' part of the string */
         cp = ifstring;
         count = 0;
-        while (count < sizeof (ifstring) && *src && *src != '?' && *src != '&')
+        while (count < sizeof(ifstring) && *src && *src != '?' && *src != '&')
         {
           *cp++ = *src++;
           count++;
@@ -1728,7 +1728,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
           src++; /* skip the & */
         cp = elsestring;
         count = 0;
-        while (count < sizeof (elsestring) && *src && *src != '?')
+        while (count < sizeof(elsestring) && *src && *src != '?')
         {
           *cp++ = *src++;
           count++;
@@ -1748,7 +1748,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
          * %*X: right justify to EOL, right takes precedence */
         int soft = ch == '*';
         int pl, pw;
-        if ((pl = mutt_charlen (src, &pw)) <= 0)
+        if ((pl = mutt_charlen(src, &pw)) <= 0)
           pl = pw = 1;
 
         /* see if there's room to add content, else ignore */
@@ -1757,9 +1757,9 @@ void mutt_FormatString (char *dest,             /* output buffer */
           int pad;
 
           /* get contents after padding */
-          mutt_FormatString (buf, sizeof (buf), 0, cols, src + pl, callback, data, flags);
-          len = mutt_strlen (buf);
-          wid = mutt_strwidth (buf);
+          mutt_FormatString(buf, sizeof(buf), 0, cols, src + pl, callback, data, flags);
+          len = mutt_strlen(buf);
+          wid = mutt_strwidth(buf);
 
           pad = (cols - col - wid) / pw;
           if (pad >= 0)
@@ -1782,7 +1782,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
             }
             while (pad-- > 0)
             {
-              memcpy (wptr, src, pl);
+              memcpy(wptr, src, pl);
               wptr += pl;
               wlen += pl;
               col += pw;
@@ -1790,14 +1790,14 @@ void mutt_FormatString (char *dest,             /* output buffer */
           }
           else if (soft && pad < 0)
           {
-            int offset = ((flags & MUTT_FORMAT_ARROWCURSOR) && option (OPTARROWCURSOR)) ? 3 : 0;
+            int offset = ((flags & MUTT_FORMAT_ARROWCURSOR) && option(OPTARROWCURSOR)) ? 3 : 0;
             int avail_cols = (cols > offset) ? (cols - offset) : 0;
             /* \0-terminate dest for length computation in mutt_wstr_trunc() */
             *wptr = 0;
             /* make sure right part is at most as wide as display */
-            len = mutt_wstr_trunc (buf, destlen, avail_cols, &wid);
+            len = mutt_wstr_trunc(buf, destlen, avail_cols, &wid);
             /* truncate left so that right part fits completely in */
-            wlen = mutt_wstr_trunc (dest, destlen - len, avail_cols - wid, &col);
+            wlen = mutt_wstr_trunc(dest, destlen - len, avail_cols - wid, &col);
             wptr = dest + wlen;
             /* Multi-column characters may be truncated in the middle.
              * Add spacing so the right hand side lines up. */
@@ -1809,8 +1809,8 @@ void mutt_FormatString (char *dest,             /* output buffer */
             }
           }
           if (len + wlen > destlen)
-            len = mutt_wstr_trunc (buf, destlen - wlen, cols - col, NULL);
-          memcpy (wptr, buf, len);
+            len = mutt_wstr_trunc(buf, destlen - wlen, cols - col, NULL);
+          memcpy(wptr, buf, len);
           wptr += len;
           wlen += len;
           col += wid;
@@ -1822,7 +1822,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
       {
         /* pad to EOL */
         int pl, pw, c;
-        if ((pl = mutt_charlen (src, &pw)) <= 0)
+        if ((pl = mutt_charlen(src, &pw)) <= 0)
           pl = pw = 1;
 
         /* see if there's room to add content, else ignore */
@@ -1833,7 +1833,7 @@ void mutt_FormatString (char *dest,             /* output buffer */
             c = ((signed)(destlen - wlen)) / pl;
           while (c > 0)
           {
-            memcpy (wptr, src, pl);
+            memcpy(wptr, src, pl);
             wptr += pl;
             wlen += pl;
             col += pw;
@@ -1860,10 +1860,10 @@ void mutt_FormatString (char *dest,             /* output buffer */
 
         /* use callback function to handle this case */
         *buf = '\0';
-        src = callback (buf, sizeof (buf), col, cols, ch, src, prefix, ifstring, elsestring, data, flags);
+        src = callback(buf, sizeof(buf), col, cols, ch, src, prefix, ifstring, elsestring, data, flags);
 
         if (tolower)
-          mutt_strlower (buf);
+          mutt_strlower(buf);
         if (nodots)
         {
           char *p = buf;
@@ -1872,13 +1872,13 @@ void mutt_FormatString (char *dest,             /* output buffer */
               *p = '_';
         }
 
-        if ((len = mutt_strlen (buf)) + wlen > destlen)
-          len = mutt_wstr_trunc (buf, destlen - wlen, cols - col, NULL);
+        if ((len = mutt_strlen(buf)) + wlen > destlen)
+          len = mutt_wstr_trunc(buf, destlen - wlen, cols - col, NULL);
 
-        memcpy (wptr, buf, len);
+        memcpy(wptr, buf, len);
         wptr += len;
         wlen += len;
-        col += mutt_strwidth (buf);
+        col += mutt_strwidth(buf);
       }
     }
     else if (*src == '\\')
@@ -1915,11 +1915,11 @@ void mutt_FormatString (char *dest,             /* output buffer */
     {
       int tmp, w;
       /* in case of error, simply copy byte */
-      if ((tmp = mutt_charlen (src, &w)) < 0)
+      if ((tmp = mutt_charlen(src, &w)) < 0)
         tmp = w = 1;
       if (tmp > 0 && wlen + tmp < destlen)
       {
-        memcpy (wptr, src, tmp);
+        memcpy(wptr, src, tmp);
         wptr += tmp;
         src += tmp;
         wlen += tmp;
@@ -1938,12 +1938,12 @@ void mutt_FormatString (char *dest,             /* output buffer */
 /* This function allows the user to specify a command to read stdout from in
    place of a normal file.  If the last character in the string is a pipe (|),
    then we assume it is a command to run instead of a normal file. */
-FILE *mutt_open_read (const char *path, pid_t *thepid)
+FILE *mutt_open_read(const char *path, pid_t *thepid)
 {
   FILE *f;
   struct stat s;
 
-  size_t len = mutt_strlen (path);
+  size_t len = mutt_strlen(path);
   if (!len)
     return NULL;
 
@@ -1951,37 +1951,37 @@ FILE *mutt_open_read (const char *path, pid_t *thepid)
   {
     /* read from a pipe */
 
-    char *s = safe_strdup (path);
+    char *s = safe_strdup(path);
 
     s[len - 1] = 0;
-    mutt_endwin (NULL);
-    *thepid = mutt_create_filter (s, NULL, &f, NULL);
-    FREE (&s);
+    mutt_endwin(NULL);
+    *thepid = mutt_create_filter(s, NULL, &f, NULL);
+    FREE(&s);
   }
   else
   {
-    if (stat (path, &s) < 0)
+    if (stat(path, &s) < 0)
       return (NULL);
-    if (S_ISDIR (s.st_mode))
+    if (S_ISDIR(s.st_mode))
     {
       errno = EINVAL;
       return (NULL);
     }
-    f = fopen (path, "r");
+    f = fopen(path, "r");
     *thepid = -1;
   }
   return (f);
 }
 
 /* returns 0 if OK to proceed, -1 to abort, 1 to retry */
-int mutt_save_confirm (const char *s, struct stat *st)
+int mutt_save_confirm(const char *s, struct stat *st)
 {
   BUFFER *tmp = NULL;
   int ret = 0;
   int rc;
   int magic = 0;
 
-  magic = mx_get_magic (s);
+  magic = mx_get_magic(s);
 
 #ifdef USE_POP
   if (magic == MUTT_POP)
@@ -1991,26 +1991,26 @@ int mutt_save_confirm (const char *s, struct stat *st)
   }
 #endif
 
-  if (magic > 0 && !mx_access (s, W_OK))
+  if (magic > 0 && !mx_access(s, W_OK))
   {
-    if (option (OPTCONFIRMAPPEND))
+    if (option(OPTCONFIRMAPPEND))
     {
-      tmp = mutt_buffer_pool_get ();
-      mutt_buffer_printf (tmp, _("Append message(s) to %s?"), s);
-      if ((rc = mutt_query_boolean (OPTCONFIRMAPPEND,
-                                    mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
+      tmp = mutt_buffer_pool_get();
+      mutt_buffer_printf(tmp, _("Append message(s) to %s?"), s);
+      if ((rc = mutt_query_boolean(OPTCONFIRMAPPEND,
+                                   mutt_b2s(tmp), MUTT_YES)) == MUTT_NO)
         ret = 1;
       else if (rc == -1)
         ret = -1;
-      mutt_buffer_pool_release (&tmp);
+      mutt_buffer_pool_release(&tmp);
     }
   }
 
-  if (stat (s, st) != -1)
+  if (stat(s, st) != -1)
   {
     if (magic == -1)
     {
-      mutt_error (_("%s is not a mailbox!"), s);
+      mutt_error(_("%s is not a mailbox!"), s);
       return 1;
     }
   }
@@ -2021,126 +2021,126 @@ int mutt_save_confirm (const char *s, struct stat *st)
 
     if (errno == ENOENT)
     {
-      if (option (OPTCONFIRMCREATE))
+      if (option(OPTCONFIRMCREATE))
       {
-        tmp = mutt_buffer_pool_get ();
-        mutt_buffer_printf (tmp, _("Create %s?"), s);
-        if ((rc = mutt_query_boolean (OPTCONFIRMCREATE,
-                                      mutt_b2s (tmp), MUTT_YES)) == MUTT_NO)
+        tmp = mutt_buffer_pool_get();
+        mutt_buffer_printf(tmp, _("Create %s?"), s);
+        if ((rc = mutt_query_boolean(OPTCONFIRMCREATE,
+                                     mutt_b2s(tmp), MUTT_YES)) == MUTT_NO)
           ret = 1;
         else if (rc == -1)
           ret = -1;
-        mutt_buffer_pool_release (&tmp);
+        mutt_buffer_pool_release(&tmp);
       }
     }
     else
     {
-      mutt_perror (s);
+      mutt_perror(s);
       return 1;
     }
   }
 
-  mutt_window_clearline (MuttMessageWindow, 0);
+  mutt_window_clearline(MuttMessageWindow, 0);
   return (ret);
 }
 
-void state_prefix_putc (char c, STATE *s)
+void state_prefix_putc(char c, STATE *s)
 {
   if (s->flags & MUTT_PENDINGPREFIX)
   {
-    state_reset_prefix (s);
+    state_reset_prefix(s);
     if (s->prefix)
-      state_puts (s->prefix, s);
+      state_puts(s->prefix, s);
   }
 
-  state_putc (c, s);
+  state_putc(c, s);
 
   if (c == '\n')
-    state_set_prefix (s);
+    state_set_prefix(s);
 }
 
-int state_printf (STATE *s, const char *fmt, ...)
+int state_printf(STATE *s, const char *fmt, ...)
 {
   int rv;
   va_list ap;
 
-  va_start (ap, fmt);
-  rv = vfprintf (s->fpout, fmt, ap);
-  va_end (ap);
+  va_start(ap, fmt);
+  rv = vfprintf(s->fpout, fmt, ap);
+  va_end(ap);
 
   return rv;
 }
 
-void state_mark_attach (STATE *s)
+void state_mark_attach(STATE *s)
 {
   if ((s->flags & MUTT_DISPLAY) &&
-      (!Pager || !mutt_strcmp (Pager, "builtin")))
-    state_puts (AttachmentMarker, s);
+      (!Pager || !mutt_strcmp(Pager, "builtin")))
+    state_puts(AttachmentMarker, s);
 }
 
-void state_mark_protected_header (STATE *s)
+void state_mark_protected_header(STATE *s)
 {
   if ((s->flags & MUTT_DISPLAY) &&
-      (!Pager || !mutt_strcmp (Pager, "builtin")))
-    state_puts (ProtectedHeaderMarker, s);
+      (!Pager || !mutt_strcmp(Pager, "builtin")))
+    state_puts(ProtectedHeaderMarker, s);
 }
 
-void state_attach_puts (const char *t, STATE *s)
+void state_attach_puts(const char *t, STATE *s)
 {
-  if (*t != '\n') state_mark_attach (s);
+  if (*t != '\n') state_mark_attach(s);
   while (*t)
   {
-    state_putc (*t, s);
+    state_putc(*t, s);
     if (*t++ == '\n' && *t)
-      if (*t != '\n') state_mark_attach (s);
+      if (*t != '\n') state_mark_attach(s);
   }
 }
 
-int state_putwc (wchar_t wc, STATE *s)
+int state_putwc(wchar_t wc, STATE *s)
 {
   char mb[MB_LEN_MAX] = "";
   int rc;
 
-  if ((rc = wcrtomb (mb, wc, NULL)) < 0)
+  if ((rc = wcrtomb(mb, wc, NULL)) < 0)
     return rc;
-  if (fputs (mb, s->fpout) == EOF)
+  if (fputs(mb, s->fpout) == EOF)
     return -1;
   return 0;
 }
 
-int state_putws (const wchar_t *ws, STATE *s)
+int state_putws(const wchar_t *ws, STATE *s)
 {
   const wchar_t *p = ws;
 
   while (p && *p != L'\0')
   {
-    if (state_putwc (*p, s) < 0)
+    if (state_putwc(*p, s) < 0)
       return -1;
     p++;
   }
   return 0;
 }
 
-void mutt_display_sanitize (char *s)
+void mutt_display_sanitize(char *s)
 {
   for (; *s; s++)
   {
-    if (!IsPrint (*s))
+    if (!IsPrint(*s))
       *s = '?';
   }
 }
 
-void mutt_sleep (short s)
+void mutt_sleep(short s)
 {
   if (SleepTime > s)
-    sleep (SleepTime);
+    sleep(SleepTime);
   else if (s)
     sleep(s);
 }
 
 /* Decrease a file's modification time by 1 second */
 
-time_t mutt_decrease_mtime (const char *f, struct stat *st)
+time_t mutt_decrease_mtime(const char *f, struct stat *st)
 {
   struct utimbuf utim;
   struct stat _st;
@@ -2149,18 +2149,18 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
 
   if (!st)
   {
-    if (stat (f, &_st) == -1)
+    if (stat(f, &_st) == -1)
       return -1;
     st = &_st;
   }
 
-  if ((mtime = st->st_mtime) == time (NULL))
+  if ((mtime = st->st_mtime) == time(NULL))
   {
     mtime -= 1;
     utim.actime = mtime;
     utim.modtime = mtime;
     do
-      rc = utime (f, &utim);
+      rc = utime(f, &utim);
     while (rc == -1 && errno == EINTR);
 
     if (rc == -1)
@@ -2171,22 +2171,22 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
 }
 
 /* sets mtime of 'to' to mtime of 'from' */
-void mutt_set_mtime (const char *from, const char *to)
+void mutt_set_mtime(const char *from, const char *to)
 {
   struct utimbuf utim;
   struct stat st;
 
-  if (stat (from, &st) != -1)
+  if (stat(from, &st) != -1)
   {
     utim.actime = st.st_mtime;
     utim.modtime = st.st_mtime;
-    utime (to, &utim);
+    utime(to, &utim);
   }
 }
 
 /* set atime to current time, just as read() would do on !noatime.
  * Silently ignored if unsupported. */
-void mutt_touch_atime (int f)
+void mutt_touch_atime(int f)
 {
 #ifdef HAVE_FUTIMENS
   struct timespec times[2]={{0,UTIME_NOW},{0,UTIME_OMIT}};
@@ -2194,7 +2194,7 @@ void mutt_touch_atime (int f)
 #endif
 }
 
-int mutt_timespec_compare (struct timespec *a, struct timespec *b)
+int mutt_timespec_compare(struct timespec *a, struct timespec *b)
 {
   if (a->tv_sec < b->tv_sec)
     return -1;
@@ -2208,7 +2208,7 @@ int mutt_timespec_compare (struct timespec *a, struct timespec *b)
   return 0;
 }
 
-void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_type type)
+void mutt_get_stat_timespec(struct timespec *dest, struct stat *sb, mutt_stat_type type)
 {
   dest->tv_sec = 0;
   dest->tv_nsec = 0;
@@ -2236,52 +2236,52 @@ void mutt_get_stat_timespec (struct timespec *dest, struct stat *sb, mutt_stat_t
   }
 }
 
-int mutt_stat_timespec_compare (struct stat *sba, mutt_stat_type type, struct timespec *b)
+int mutt_stat_timespec_compare(struct stat *sba, mutt_stat_type type, struct timespec *b)
 {
   struct timespec a;
 
-  mutt_get_stat_timespec (&a, sba, type);
-  return mutt_timespec_compare (&a, b);
+  mutt_get_stat_timespec(&a, sba, type);
+  return mutt_timespec_compare(&a, b);
 }
 
-int mutt_stat_compare (struct stat *sba, mutt_stat_type sba_type,
-                       struct stat *sbb, mutt_stat_type sbb_type)
+int mutt_stat_compare(struct stat *sba, mutt_stat_type sba_type,
+                      struct stat *sbb, mutt_stat_type sbb_type)
 {
   struct timespec a, b;
 
-  mutt_get_stat_timespec (&a, sba, sba_type);
-  mutt_get_stat_timespec (&b, sbb, sbb_type);
-  return mutt_timespec_compare (&a, &b);
+  mutt_get_stat_timespec(&a, sba, sba_type);
+  mutt_get_stat_timespec(&b, sbb, sbb_type);
+  return mutt_timespec_compare(&a, &b);
 }
 
-const char *mutt_make_version (void)
+const char *mutt_make_version(void)
 {
   static char vstring[STRING];
-  snprintf (vstring, sizeof (vstring), "Mutt %s (%s)",
-            MUTT_VERSION, ReleaseDate);
+  snprintf(vstring, sizeof(vstring), "Mutt %s (%s)",
+           MUTT_VERSION, ReleaseDate);
   return vstring;
 }
 
-REGEXP *mutt_compile_regexp (const char *s, int flags)
+REGEXP *mutt_compile_regexp(const char *s, int flags)
 {
-  REGEXP *pp = safe_calloc (sizeof (REGEXP), 1);
-  pp->pattern = safe_strdup (s);
-  pp->rx = safe_calloc (sizeof (regex_t), 1);
-  if (REGCOMP (pp->rx, NONULL(s), flags) != 0)
-    mutt_free_regexp (&pp);
+  REGEXP *pp = safe_calloc(sizeof(REGEXP), 1);
+  pp->pattern = safe_strdup(s);
+  pp->rx = safe_calloc(sizeof(regex_t), 1);
+  if (REGCOMP(pp->rx, NONULL(s), flags) != 0)
+    mutt_free_regexp(&pp);
 
   return pp;
 }
 
-void mutt_free_regexp (REGEXP **pp)
+void mutt_free_regexp(REGEXP **pp)
 {
-  FREE (&(*pp)->pattern);
-  regfree ((*pp)->rx);
-  FREE (&(*pp)->rx);
-  FREE (pp);            /* __FREE_CHECKED__ */
+  FREE(&(*pp)->pattern);
+  regfree((*pp)->rx);
+  FREE(&(*pp)->rx);
+  FREE(pp);            /* __FREE_CHECKED__ */
 }
 
-void mutt_free_rx_list (RX_LIST **list)
+void mutt_free_rx_list(RX_LIST **list)
 {
   RX_LIST *p;
 
@@ -2290,12 +2290,12 @@ void mutt_free_rx_list (RX_LIST **list)
   {
     p = *list;
     *list = (*list)->next;
-    mutt_free_regexp (&p->rx);
-    FREE (&p);
+    mutt_free_regexp(&p->rx);
+    FREE(&p);
   }
 }
 
-void mutt_free_replace_list (REPLACE_LIST **list)
+void mutt_free_replace_list(REPLACE_LIST **list)
 {
   REPLACE_LIST *p;
 
@@ -2304,19 +2304,19 @@ void mutt_free_replace_list (REPLACE_LIST **list)
   {
     p = *list;
     *list = (*list)->next;
-    mutt_free_regexp (&p->rx);
-    FREE (&p->template);
-    FREE (&p);
+    mutt_free_regexp(&p->rx);
+    FREE(&p->template);
+    FREE(&p);
   }
 }
 
-int mutt_match_rx_list (const char *s, RX_LIST *l)
+int mutt_match_rx_list(const char *s, RX_LIST *l)
 {
   if (!s)  return 0;
 
   for (; l; l = l->next)
   {
-    if (regexec (l->rx->rx, s, (size_t) 0, (regmatch_t *) 0, (int) 0) == 0)
+    if (regexec(l->rx->rx, s, (size_t) 0, (regmatch_t *) 0, (int) 0) == 0)
     {
       muttdbg(5, "%s matches %s", s, l->rx->pattern);
       return 1;
@@ -2333,7 +2333,7 @@ int mutt_match_rx_list (const char *s, RX_LIST *l)
  *
  * Returns 1 if the argument `s` matches a pattern in the spam list, otherwise
  * 0. */
-int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsize)
+int mutt_match_spam_list(const char *s, REPLACE_LIST *l, char *text, int textsize)
 {
   static regmatch_t *pmatch = NULL;
   static int nmatch = 0;
@@ -2347,12 +2347,12 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
     /* If this pattern needs more matches, expand pmatch. */
     if (l->nmatch > nmatch)
     {
-      safe_realloc (&pmatch, l->nmatch * sizeof(regmatch_t));
+      safe_realloc(&pmatch, l->nmatch * sizeof(regmatch_t));
       nmatch = l->nmatch;
     }
 
     /* Does this pattern match? */
-    if (regexec (l->rx->rx, s, (size_t) l->nmatch, (regmatch_t *) pmatch, (int) 0) == 0)
+    if (regexec(l->rx->rx, s, (size_t) l->nmatch, (regmatch_t *) pmatch, (int) 0) == 0)
     {
       muttdbg(5, "%s matches %s", s, l->rx->pattern);
       muttdbg(5, "%d subs", (int)l->rx->rx->re_nsub);
@@ -2403,23 +2403,23 @@ int mutt_match_spam_list (const char *s, REPLACE_LIST *l, char *text, int textsi
   return 0;
 }
 
-void mutt_encode_path (BUFFER *dest, const char *src)
+void mutt_encode_path(BUFFER *dest, const char *src)
 {
   char *p;
   int rc;
 
-  p = safe_strdup (src);
-  rc = mutt_convert_string (&p, Charset, "utf-8", 0);
+  p = safe_strdup(src);
+  rc = mutt_convert_string(&p, Charset, "utf-8", 0);
   /* `src' may be NULL, such as when called from the pop3 driver. */
-  mutt_buffer_strcpy (dest, (rc == 0) ? NONULL(p) : NONULL(src));
-  FREE (&p);
+  mutt_buffer_strcpy(dest, (rc == 0) ? NONULL(p) : NONULL(src));
+  FREE(&p);
 }
 
 /* returns: 0 - successful conversion
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atolofft (const char *str, LOFF_T *dst, int flags)
+int mutt_atolofft(const char *str, LOFF_T *dst, int flags)
 {
   int rc;
   long long res;
@@ -2428,7 +2428,7 @@ int mutt_atolofft (const char *str, LOFF_T *dst, int flags)
 
   *t = 0;
 
-  if ((rc = mutt_atoll (str, &res, flags)) < 0)
+  if ((rc = mutt_atoll(str, &res, flags)) < 0)
     return rc;
   if ((LOFF_T) res != res)
     return -2;
@@ -2437,33 +2437,33 @@ int mutt_atolofft (const char *str, LOFF_T *dst, int flags)
   return rc;
 }
 
-static int normalize_line_endings (const char *infile, FILE *ifp, const char *outfile,
-                                   FILE *ofp, int tocrlf)
+static int normalize_line_endings(const char *infile, FILE *ifp, const char *outfile,
+                                  FILE *ofp, int tocrlf)
 {
   char *buf = NULL;
   size_t blen = 0, olen;
   int has_nl;
 
   if (infile)
-    if (!(ifp = safe_fopen (infile, "r")))
-      mutt_perror (infile);
+    if (!(ifp = safe_fopen(infile, "r")))
+      mutt_perror(infile);
   if (!ifp)
     return -1;
 
   if (outfile)
-    if (!(ofp = safe_fopen (outfile, "w")))
-      mutt_perror (outfile);
+    if (!(ofp = safe_fopen(outfile, "w")))
+      mutt_perror(outfile);
   if (!ofp)
   {
     if (infile)
-      safe_fclose (&ifp);
+      safe_fclose(&ifp);
     return -1;
   }
 
-  while ((buf = mutt_read_line (buf, &blen, ifp, NULL, MUTT_EOL)) != NULL)
+  while ((buf = mutt_read_line(buf, &blen, ifp, NULL, MUTT_EOL)) != NULL)
   {
     has_nl = 0;
-    olen = mutt_strlen (buf);
+    olen = mutt_strlen(buf);
     if ((olen > 0) && buf[olen - 1] == '\n')
     {
       has_nl = 1;
@@ -2471,32 +2471,32 @@ static int normalize_line_endings (const char *infile, FILE *ifp, const char *ou
       if ((olen > 1) && buf[olen - 2] == '\r')
         buf[olen - 2] = '\0';
     }
-    fputs (buf, ofp);
+    fputs(buf, ofp);
     if (has_nl)
     {
       if (tocrlf)
-        fputc ('\r', ofp);
-      fputc ('\n', ofp);
+        fputc('\r', ofp);
+      fputc('\n', ofp);
     }
   }
 
   if (infile)
-    safe_fclose (&ifp);
+    safe_fclose(&ifp);
   if (outfile)
-    safe_fclose (&ofp);
-  FREE (&buf);
+    safe_fclose(&ofp);
+  FREE(&buf);
 
   return 0;
 }
 
-int mutt_convert_to_crlf (const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
+int mutt_convert_to_crlf(const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
 {
-  return normalize_line_endings (infile, ifp, outfile, ofp, 1);
+  return normalize_line_endings(infile, ifp, outfile, ofp, 1);
 }
 
-int mutt_convert_to_lf (const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
+int mutt_convert_to_lf(const char *infile, FILE *ifp, const char *outfile, FILE *ofp)
 {
-  return normalize_line_endings (infile, ifp, outfile, ofp, 0);
+  return normalize_line_endings(infile, ifp, outfile, ofp, 0);
 }
 
 
@@ -2507,7 +2507,7 @@ int mutt_convert_to_lf (const char *infile, FILE *ifp, const char *outfile, FILE
  ************************************************************************/
 
 /* remove a directory and everything under it */
-int mutt_rmtree (const char *path)
+int mutt_rmtree(const char *path)
 {
   DIR *dirp;
   struct dirent *de;
@@ -2515,7 +2515,7 @@ int mutt_rmtree (const char *path)
   struct stat statbuf;
   int rc = 0;
 
-  if (!(dirp = opendir (path)))
+  if (!(dirp = opendir(path)))
   {
     muttdbg(1, "error opening directory %s", path);
     return -1;
@@ -2523,60 +2523,60 @@ int mutt_rmtree (const char *path)
 
   /* We avoid using the buffer pool for this function, because it
    * invokes recursively to an unknown depth. */
-  cur = mutt_buffer_new ();
-  mutt_buffer_increase_size (cur, _POSIX_PATH_MAX);
+  cur = mutt_buffer_new();
+  mutt_buffer_increase_size(cur, _POSIX_PATH_MAX);
 
-  while ((de = readdir (dirp)))
+  while ((de = readdir(dirp)))
   {
-    if (!strcmp (".", de->d_name) || !strcmp ("..", de->d_name))
+    if (!strcmp(".", de->d_name) || !strcmp("..", de->d_name))
       continue;
 
-    mutt_buffer_printf (cur, "%s/%s", path, de->d_name);
+    mutt_buffer_printf(cur, "%s/%s", path, de->d_name);
     /* XXX make nonrecursive version */
 
-    if (stat(mutt_b2s (cur), &statbuf) == -1)
+    if (stat(mutt_b2s(cur), &statbuf) == -1)
     {
       rc = 1;
       continue;
     }
 
-    if (S_ISDIR (statbuf.st_mode))
-      rc |= mutt_rmtree (mutt_b2s (cur));
+    if (S_ISDIR(statbuf.st_mode))
+      rc |= mutt_rmtree(mutt_b2s(cur));
     else
-      rc |= unlink (mutt_b2s (cur));
+      rc |= unlink(mutt_b2s(cur));
   }
-  closedir (dirp);
+  closedir(dirp);
 
-  rc |= rmdir (path);
+  rc |= rmdir(path);
 
-  mutt_buffer_free (&cur);
+  mutt_buffer_free(&cur);
   return rc;
 }
 
 /* Create a temporary directory next to a file name */
 
-static int mutt_mkwrapdir (const char *path, BUFFER *newfile, BUFFER *newdir)
+static int mutt_mkwrapdir(const char *path, BUFFER *newfile, BUFFER *newdir)
 {
   const char *basename;
   BUFFER *parent = NULL;
   char *p;
   int rc = 0;
 
-  parent = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (parent, NONULL (path));
+  parent = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(parent, NONULL(path));
 
-  if ((p = strrchr (parent->data, '/')))
+  if ((p = strrchr(parent->data, '/')))
   {
     *p = '\0';
     basename = p + 1;
   }
   else
   {
-    mutt_buffer_strcpy (parent, ".");
+    mutt_buffer_strcpy(parent, ".");
     basename = path;
   }
 
-  mutt_buffer_printf (newdir, "%s/%s", mutt_b2s (parent), ".muttXXXXXX");
+  mutt_buffer_printf(newdir, "%s/%s", mutt_b2s(parent), ".muttXXXXXX");
   if (mkdtemp(newdir->data) == NULL)
   {
     muttdbg(1, "mkdtemp() failed");
@@ -2584,24 +2584,24 @@ static int mutt_mkwrapdir (const char *path, BUFFER *newfile, BUFFER *newdir)
     goto cleanup;
   }
 
-  mutt_buffer_printf (newfile, "%s/%s", mutt_b2s (newdir), NONULL(basename));
+  mutt_buffer_printf(newfile, "%s/%s", mutt_b2s(newdir), NONULL(basename));
 
 cleanup:
-  mutt_buffer_pool_release (&parent);
+  mutt_buffer_pool_release(&parent);
   return rc;
 }
 
-static int mutt_put_file_in_place (const char *path, const char *safe_file, const char *safe_dir)
+static int mutt_put_file_in_place(const char *path, const char *safe_file, const char *safe_dir)
 {
   int rv;
 
-  rv = safe_rename (safe_file, path);
-  unlink (safe_file);
-  rmdir (safe_dir);
+  rv = safe_rename(safe_file, path);
+  unlink(safe_file);
+  rmdir(safe_dir);
   return rv;
 }
 
-int safe_open (const char *path, int flags)
+int safe_open(const char *path, int flags)
 {
   struct stat osb, nsb;
   int fd;
@@ -2610,46 +2610,46 @@ int safe_open (const char *path, int flags)
 
   if (flags & O_EXCL)
   {
-    safe_file = mutt_buffer_pool_get ();
-    safe_dir = mutt_buffer_pool_get ();
+    safe_file = mutt_buffer_pool_get();
+    safe_dir = mutt_buffer_pool_get();
 
-    if (mutt_mkwrapdir (path, safe_file, safe_dir) == -1)
+    if (mutt_mkwrapdir(path, safe_file, safe_dir) == -1)
     {
       fd = -1;
       goto cleanup;
     }
 
-    if ((fd = open (mutt_b2s (safe_file), flags, 0600)) < 0)
+    if ((fd = open(mutt_b2s(safe_file), flags, 0600)) < 0)
     {
-      rmdir (mutt_b2s (safe_dir));
+      rmdir(mutt_b2s(safe_dir));
       goto cleanup;
     }
 
     /* NFS and I believe cygwin do not handle movement of open files well */
-    close (fd);
-    if (mutt_put_file_in_place (path, mutt_b2s (safe_file), mutt_b2s (safe_dir)) == -1)
+    close(fd);
+    if (mutt_put_file_in_place(path, mutt_b2s(safe_file), mutt_b2s(safe_dir)) == -1)
     {
       fd = -1;
       goto cleanup;
     }
   }
 
-  if ((fd = open (path, flags & ~O_EXCL, 0600)) < 0)
+  if ((fd = open(path, flags & ~O_EXCL, 0600)) < 0)
     goto cleanup;
 
   /* make sure the file is not symlink */
-  if (lstat (path, &osb) < 0 || fstat (fd, &nsb) < 0 ||
+  if (lstat(path, &osb) < 0 || fstat(fd, &nsb) < 0 ||
       compare_stat(&osb, &nsb) == -1)
   {
 /*    muttdbg(1, "%s is a symlink!", path); */
-    close (fd);
+    close(fd);
     fd = -1;
     goto cleanup;
   }
 
 cleanup:
-  mutt_buffer_pool_release (&safe_file);
-  mutt_buffer_pool_release (&safe_dir);
+  mutt_buffer_pool_release(&safe_file);
+  mutt_buffer_pool_release(&safe_dir);
 
   return (fd);
 }
@@ -2657,7 +2657,7 @@ cleanup:
 /* when opening files for writing, make sure the file doesn't already exist
  * to avoid race conditions.
  */
-FILE *safe_fopen (const char *path, const char *mode)
+FILE *safe_fopen(const char *path, const char *mode)
 {
   if (mode[0] == 'w')
   {
@@ -2673,13 +2673,13 @@ FILE *safe_fopen (const char *path, const char *mode)
     else
       flags |= O_WRONLY;
 
-    if ((fd = safe_open (path, flags)) < 0)
+    if ((fd = safe_open(path, flags)) < 0)
       return (NULL);
 
-    return (fdopen (fd, mode));
+    return (fdopen(fd, mode));
   }
   else
-    return (fopen (path, mode));
+    return (fopen(path, mode));
 }
 
 int safe_symlink(const char *oldpath, const char *newpath)
@@ -2694,30 +2694,30 @@ int safe_symlink(const char *oldpath, const char *newpath)
 
   if (oldpath[0] == '/')
   {
-    if (symlink (oldpath, newpath) == -1)
+    if (symlink(oldpath, newpath) == -1)
       return -1;
   }
   else
   {
     BUFFER *abs_oldpath = NULL;
 
-    abs_oldpath = mutt_buffer_pool_get ();
+    abs_oldpath = mutt_buffer_pool_get();
 
-    if (mutt_getcwd (abs_oldpath) == NULL)
+    if (mutt_getcwd(abs_oldpath) == NULL)
     {
-      mutt_buffer_pool_release (&abs_oldpath);
+      mutt_buffer_pool_release(&abs_oldpath);
       return -1;
     }
 
-    mutt_buffer_addch (abs_oldpath, '/');
-    mutt_buffer_addstr (abs_oldpath, oldpath);
-    if (symlink (mutt_b2s (abs_oldpath), newpath) == -1)
+    mutt_buffer_addch(abs_oldpath, '/');
+    mutt_buffer_addstr(abs_oldpath, oldpath);
+    if (symlink(mutt_b2s(abs_oldpath), newpath) == -1)
     {
-      mutt_buffer_pool_release (&abs_oldpath);
+      mutt_buffer_pool_release(&abs_oldpath);
       return -1;
     }
 
-    mutt_buffer_pool_release (&abs_oldpath);
+    mutt_buffer_pool_release(&abs_oldpath);
   }
 
   if (stat(oldpath, &osb) == -1 || stat(newpath, &nsb) == -1

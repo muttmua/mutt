@@ -89,22 +89,22 @@ static sasl_callback_t mutt_sasl_callbacks[5];
 
 static sasl_secret_t *secret_ptr = NULL;
 
-static int mutt_sasl_start (void);
+static int mutt_sasl_start(void);
 
 /* callbacks */
-static int mutt_sasl_cb_log (void *context, int priority, const char *message);
-static int mutt_sasl_cb_authname (void *context, int id, const char **result,
-                                  unsigned int *len);
-static int mutt_sasl_cb_pass (sasl_conn_t *conn, void *context, int id,
-                              sasl_secret_t **psecret);
+static int mutt_sasl_cb_log(void *context, int priority, const char *message);
+static int mutt_sasl_cb_authname(void *context, int id, const char **result,
+                                 unsigned int *len);
+static int mutt_sasl_cb_pass(sasl_conn_t *conn, void *context, int id,
+                             sasl_secret_t **psecret);
 
 /* socket wrappers for a SASL security layer */
-static int mutt_sasl_conn_open (CONNECTION *conn);
-static int mutt_sasl_conn_close (CONNECTION *conn);
-static int mutt_sasl_conn_read (CONNECTION *conn, char *buf, size_t len);
-static int mutt_sasl_conn_write (CONNECTION *conn, const char *buf,
-                                 size_t count);
-static int mutt_sasl_conn_poll (CONNECTION *conn, time_t wait_secs);
+static int mutt_sasl_conn_open(CONNECTION *conn);
+static int mutt_sasl_conn_close(CONNECTION *conn);
+static int mutt_sasl_conn_read(CONNECTION *conn, char *buf, size_t len);
+static int mutt_sasl_conn_write(CONNECTION *conn, const char *buf,
+                                size_t count);
+static int mutt_sasl_conn_poll(CONNECTION *conn, time_t wait_secs);
 
 /* utility function, stolen from sasl2 sample code */
 static int iptostring(const struct sockaddr *addr, socklen_t addrlen,
@@ -135,7 +135,7 @@ static int iptostring(const struct sockaddr *addr, socklen_t addrlen,
 
 /* mutt_sasl_start: called before doing a SASL exchange - initialises library
  *   (if necessary). */
-int mutt_sasl_start (void)
+int mutt_sasl_start(void)
 {
   static unsigned char sasl_init = 0;
 
@@ -154,7 +154,7 @@ int mutt_sasl_start (void)
   callbacks[1].proc = NULL;
   callbacks[1].context = NULL;
 
-  rc = sasl_client_init (callbacks);
+  rc = sasl_client_init(callbacks);
 
   if (rc != SASL_OK)
   {
@@ -170,7 +170,7 @@ int mutt_sasl_start (void)
 /* mutt_sasl_client_new: wrapper for sasl_client_new which also sets various
  * security properties. If this turns out to be fine for POP too we can
  * probably stop exporting mutt_sasl_get_callbacks(). */
-int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
+int mutt_sasl_client_new(CONNECTION *conn, sasl_conn_t **saslconn)
 {
   sasl_security_properties_t secprops;
   struct sockaddr_storage local, remote;
@@ -181,7 +181,7 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
   const char *service;
   int rc;
 
-  if (mutt_sasl_start () != SASL_OK)
+  if (mutt_sasl_start() != SASL_OK)
     return -1;
 
   switch (conn->account.type)
@@ -196,12 +196,12 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
       service = "smtp";
       break;
     default:
-      mutt_error (_("Unknown SASL profile"));
+      mutt_error(_("Unknown SASL profile"));
       return -1;
   }
 
-  size = sizeof (local);
-  if (!getsockname (conn->fd, (struct sockaddr *)&local, &size))
+  size = sizeof(local);
+  if (!getsockname(conn->fd, (struct sockaddr *)&local, &size))
   {
     if (iptostring((struct sockaddr *)&local, size, iplocalport,
                    IP_PORT_BUFLEN) == SASL_OK)
@@ -212,8 +212,8 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
   else
     muttdbg(2, "SASL failed to get local IP address");
 
-  size = sizeof (remote);
-  if (!getpeername (conn->fd, (struct sockaddr *)&remote, &size))
+  size = sizeof(remote);
+  if (!getpeername(conn->fd, (struct sockaddr *)&remote, &size))
   {
     if (iptostring((struct sockaddr *)&remote, size, ipremoteport,
                    IP_PORT_BUFLEN) == SASL_OK)
@@ -225,26 +225,26 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
     muttdbg(2, "SASL failed to get remote IP address");
 
   muttdbg(2, "SASL local ip: %s, remote ip:%s", NONULL(plp),
-              NONULL(prp));
+          NONULL(prp));
 
-  rc = sasl_client_new (service, conn->account.host, plp, prp,
-                        mutt_sasl_get_callbacks (&conn->account), 0, saslconn);
+  rc = sasl_client_new(service, conn->account.host, plp, prp,
+                       mutt_sasl_get_callbacks(&conn->account), 0, saslconn);
 
   if (rc != SASL_OK)
   {
-    mutt_error (_("Error allocating SASL connection"));
-    mutt_sleep (2);
+    mutt_error(_("Error allocating SASL connection"));
+    mutt_sleep(2);
     return -1;
   }
 
-  memset (&secprops, 0, sizeof (secprops));
+  memset(&secprops, 0, sizeof(secprops));
   /* Work around a casting bug in the SASL krb4 module */
   secprops.max_ssf = 0x7fff;
   secprops.maxbufsize = MUTT_SASL_MAXBUF;
-  if (sasl_setprop (*saslconn, SASL_SEC_PROPS, &secprops) != SASL_OK)
+  if (sasl_setprop(*saslconn, SASL_SEC_PROPS, &secprops) != SASL_OK)
   {
-    mutt_error (_("Error setting SASL security properties"));
-    sasl_dispose (saslconn);
+    mutt_error(_("Error setting SASL security properties"));
+    sasl_dispose(saslconn);
     return -1;
   }
 
@@ -252,20 +252,20 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
   {
     /* I'm not sure this actually has an effect, at least with SASLv2 */
     muttdbg(2, "External SSF: %d", conn->ssf);
-    if (sasl_setprop (*saslconn, SASL_SSF_EXTERNAL, &(conn->ssf)) != SASL_OK)
+    if (sasl_setprop(*saslconn, SASL_SSF_EXTERNAL, &(conn->ssf)) != SASL_OK)
     {
-      mutt_error (_("Error setting SASL external security strength"));
-      sasl_dispose (saslconn);
+      mutt_error(_("Error setting SASL external security strength"));
+      sasl_dispose(saslconn);
       return -1;
     }
   }
   if (conn->account.user[0])
   {
     muttdbg(2, "External authentication name: %s", conn->account.user);
-    if (sasl_setprop (*saslconn, SASL_AUTH_EXTERNAL, conn->account.user) != SASL_OK)
+    if (sasl_setprop(*saslconn, SASL_AUTH_EXTERNAL, conn->account.user) != SASL_OK)
     {
-      mutt_error (_("Error setting SASL external user name"));
-      sasl_dispose (saslconn);
+      mutt_error(_("Error setting SASL external user name"));
+      sasl_dispose(saslconn);
       return -1;
     }
   }
@@ -273,7 +273,7 @@ int mutt_sasl_client_new (CONNECTION *conn, sasl_conn_t **saslconn)
   return 0;
 }
 
-sasl_callback_t *mutt_sasl_get_callbacks (ACCOUNT *account)
+sasl_callback_t *mutt_sasl_get_callbacks(ACCOUNT *account)
 {
   sasl_callback_t *callback;
 
@@ -306,7 +306,7 @@ sasl_callback_t *mutt_sasl_get_callbacks (ACCOUNT *account)
   return mutt_sasl_callbacks;
 }
 
-int mutt_sasl_interact (sasl_interact_t *interaction)
+int mutt_sasl_interact(sasl_interact_t *interaction)
 {
   char prompt[SHORT_STRING];
   char resp[SHORT_STRING];
@@ -315,14 +315,14 @@ int mutt_sasl_interact (sasl_interact_t *interaction)
   {
     muttdbg(2, "filling in SASL interaction %ld.", interaction->id);
 
-    snprintf (prompt, sizeof (prompt), "%s: ", interaction->prompt);
+    snprintf(prompt, sizeof(prompt), "%s: ", interaction->prompt);
     resp[0] = '\0';
-    if (option (OPTNOCURSES) || mutt_get_field (prompt, resp, sizeof (resp), 0))
+    if (option(OPTNOCURSES) || mutt_get_field(prompt, resp, sizeof(resp), 0))
       return SASL_FAIL;
 
-    interaction->len = mutt_strlen (resp)+1;
-    interaction->result = safe_malloc (interaction->len);
-    memcpy ((char *)interaction->result, resp, interaction->len);
+    interaction->len = mutt_strlen(resp)+1;
+    interaction->result = safe_malloc(interaction->len);
+    memcpy((char *)interaction->result, resp, interaction->len);
 
     interaction++;
   }
@@ -346,20 +346,20 @@ int mutt_sasl_interact (sasl_interact_t *interaction)
 /* mutt_sasl_setup_conn: replace connection methods, sockdata with
  *   SASL wrappers, for protection layers. Also get ssf, as a fastpath
  *   for the read/write methods. */
-void mutt_sasl_setup_conn (CONNECTION *conn, sasl_conn_t *saslconn)
+void mutt_sasl_setup_conn(CONNECTION *conn, sasl_conn_t *saslconn)
 {
-  SASL_DATA *sasldata = (SASL_DATA*) safe_malloc (sizeof (SASL_DATA));
+  SASL_DATA *sasldata = (SASL_DATA*) safe_malloc(sizeof(SASL_DATA));
   /* work around sasl_getprop aliasing issues */
   const void *tmp;
 
   sasldata->saslconn = saslconn;
   /* get ssf so we know whether we have to (en|de)code read/write */
-  sasl_getprop (saslconn, SASL_SSF, &tmp);
+  sasl_getprop(saslconn, SASL_SSF, &tmp);
   sasldata->ssf = tmp;
   muttdbg(3, "SASL protection strength: %u", *sasldata->ssf);
   /* Add SASL SSF to transport SSF */
   conn->ssf += *sasldata->ssf;
-  sasl_getprop (saslconn, SASL_MAXOUTBUF, &tmp);
+  sasl_getprop(saslconn, SASL_MAXOUTBUF, &tmp);
   sasldata->pbufsize = tmp;
   muttdbg(3, "SASL protection buffer size: %u", *sasldata->pbufsize);
 
@@ -386,21 +386,21 @@ void mutt_sasl_setup_conn (CONNECTION *conn, sasl_conn_t *saslconn)
 }
 
 /* mutt_sasl_cb_log: callback to log SASL messages */
-static int mutt_sasl_cb_log (void *context, int priority, const char *message)
+static int mutt_sasl_cb_log(void *context, int priority, const char *message)
 {
   muttdbg(priority, "SASL: %s", message);
 
   return SASL_OK;
 }
 
-void mutt_sasl_done (void)
+void mutt_sasl_done(void)
 {
-  sasl_done ();
+  sasl_done();
 }
 
 /* mutt_sasl_cb_authname: callback to retrieve authname or user from ACCOUNT */
-static int mutt_sasl_cb_authname (void *context, int id, const char **result,
-                                  unsigned *len)
+static int mutt_sasl_cb_authname(void *context, int id, const char **result,
+                                 unsigned *len)
 {
   ACCOUNT *account = (ACCOUNT*) context;
 
@@ -415,30 +415,30 @@ static int mutt_sasl_cb_authname (void *context, int id, const char **result,
     return SASL_BADPARAM;
 
   muttdbg(2, "getting %s for %s:%u",
-              id == SASL_CB_AUTHNAME ? "authname" : "user",
-              account->host, account->port);
+          id == SASL_CB_AUTHNAME ? "authname" : "user",
+          account->host, account->port);
 
   if (id == SASL_CB_AUTHNAME)
   {
-    if (mutt_account_getlogin (account))
+    if (mutt_account_getlogin(account))
       return SASL_FAIL;
     *result = account->login;
   }
   else
   {
-    if (mutt_account_getuser (account))
+    if (mutt_account_getuser(account))
       return SASL_FAIL;
     *result = account->user;
   }
 
   if (len)
-    *len = strlen (*result);
+    *len = strlen(*result);
 
   return SASL_OK;
 }
 
-static int mutt_sasl_cb_pass (sasl_conn_t *conn, void *context, int id,
-                              sasl_secret_t **psecret)
+static int mutt_sasl_cb_pass(sasl_conn_t *conn, void *context, int id,
+                             sasl_secret_t **psecret)
 {
   ACCOUNT *account = (ACCOUNT*) context;
   int len;
@@ -447,15 +447,15 @@ static int mutt_sasl_cb_pass (sasl_conn_t *conn, void *context, int id,
     return SASL_BADPARAM;
 
   muttdbg(2, "getting password for %s@%s:%u", account->login,
-              account->host, account->port);
+          account->host, account->port);
 
-  if (mutt_account_getpass (account))
+  if (mutt_account_getpass(account))
     return SASL_FAIL;
 
-  len = strlen (account->pass);
+  len = strlen(account->pass);
 
-  safe_realloc (&secret_ptr, sizeof (sasl_secret_t) + len);
-  memcpy ((char *) secret_ptr->data, account->pass, (size_t) len);
+  safe_realloc(&secret_ptr, sizeof(sasl_secret_t) + len);
+  memcpy((char *) secret_ptr->data, account->pass, (size_t) len);
   secret_ptr->len = len;
   *psecret = secret_ptr;
 
@@ -466,14 +466,14 @@ static int mutt_sasl_cb_pass (sasl_conn_t *conn, void *context, int id,
  *   don't know in advance that a connection will use SASL, so we
  *   replace conn's methods with sasl methods when authentication
  *   is successful, using mutt_sasl_setup_conn */
-static int mutt_sasl_conn_open (CONNECTION *conn)
+static int mutt_sasl_conn_open(CONNECTION *conn)
 {
   SASL_DATA *sasldata;
   int rc;
 
   sasldata = (SASL_DATA*) conn->sockdata;
   conn->sockdata = sasldata->sockdata;
-  rc = (sasldata->msasl_open) (conn);
+  rc = (sasldata->msasl_open)(conn);
   conn->sockdata = sasldata;
 
   return rc;
@@ -481,7 +481,7 @@ static int mutt_sasl_conn_open (CONNECTION *conn)
 
 /* mutt_sasl_conn_close: calls underlying close function and disposes of
  *   the sasl_conn_t object, then restores connection to pre-sasl state */
-static int mutt_sasl_conn_close (CONNECTION *conn)
+static int mutt_sasl_conn_close(CONNECTION *conn)
 {
   SASL_DATA *sasldata;
   int rc;
@@ -497,16 +497,16 @@ static int mutt_sasl_conn_close (CONNECTION *conn)
   conn->conn_poll = sasldata->msasl_poll;
 
   /* release sasl resources */
-  sasl_dispose (&sasldata->saslconn);
-  FREE (&sasldata);
+  sasl_dispose(&sasldata->saslconn);
+  FREE(&sasldata);
 
   /* call underlying close */
-  rc = (conn->conn_close) (conn);
+  rc = (conn->conn_close)(conn);
 
   return rc;
 }
 
-static int mutt_sasl_conn_read (CONNECTION *conn, char *buf, size_t len)
+static int mutt_sasl_conn_read(CONNECTION *conn, char *buf, size_t len)
 {
   SASL_DATA *sasldata;
   int rc;
@@ -521,7 +521,7 @@ static int mutt_sasl_conn_read (CONNECTION *conn, char *buf, size_t len)
     olen = (sasldata->blen - sasldata->bpos > len) ? len :
       sasldata->blen - sasldata->bpos;
 
-    memcpy (buf, sasldata->buf+sasldata->bpos, olen);
+    memcpy(buf, sasldata->buf+sasldata->bpos, olen);
     sasldata->bpos += olen;
 
     return olen;
@@ -538,16 +538,16 @@ static int mutt_sasl_conn_read (CONNECTION *conn, char *buf, size_t len)
     do
     {
       /* call the underlying read function to fill the buffer */
-      rc = (sasldata->msasl_read) (conn, buf, len);
+      rc = (sasldata->msasl_read)(conn, buf, len);
       if (rc <= 0)
         goto out;
 
-      rc = sasl_decode (sasldata->saslconn, buf, rc, &sasldata->buf,
-                        &sasldata->blen);
+      rc = sasl_decode(sasldata->saslconn, buf, rc, &sasldata->buf,
+                       &sasldata->blen);
       if (rc != SASL_OK)
       {
         muttdbg(1, "SASL decode failed: %s",
-                    sasl_errstring (rc, NULL, NULL));
+                sasl_errstring(rc, NULL, NULL));
         goto out;
       }
     }
@@ -556,13 +556,13 @@ static int mutt_sasl_conn_read (CONNECTION *conn, char *buf, size_t len)
     olen = (sasldata->blen - sasldata->bpos > len) ? len :
       sasldata->blen - sasldata->bpos;
 
-    memcpy (buf, sasldata->buf, olen);
+    memcpy(buf, sasldata->buf, olen);
     sasldata->bpos += olen;
 
     rc = olen;
   }
   else
-    rc = (sasldata->msasl_read) (conn, buf, len);
+    rc = (sasldata->msasl_read)(conn, buf, len);
 
 out:
   conn->sockdata = sasldata;
@@ -570,8 +570,8 @@ out:
   return rc;
 }
 
-static int mutt_sasl_conn_write (CONNECTION *conn, const char *buf,
-                                 size_t len)
+static int mutt_sasl_conn_write(CONNECTION *conn, const char *buf,
+                                size_t len)
 {
   SASL_DATA *sasldata;
   int rc;
@@ -590,14 +590,14 @@ static int mutt_sasl_conn_write (CONNECTION *conn, const char *buf,
     {
       olen = (len > *sasldata->pbufsize) ? *sasldata->pbufsize : len;
 
-      rc = sasl_encode (sasldata->saslconn, buf, olen, &pbuf, &plen);
+      rc = sasl_encode(sasldata->saslconn, buf, olen, &pbuf, &plen);
       if (rc != SASL_OK)
       {
-        muttdbg(1, "SASL encoding failed: %s", sasl_errstring (rc, NULL, NULL));
+        muttdbg(1, "SASL encoding failed: %s", sasl_errstring(rc, NULL, NULL));
         goto fail;
       }
 
-      rc = (sasldata->msasl_write) (conn, pbuf, plen);
+      rc = (sasldata->msasl_write)(conn, pbuf, plen);
       if (rc != plen)
         goto fail;
 
@@ -608,7 +608,7 @@ static int mutt_sasl_conn_write (CONNECTION *conn, const char *buf,
   }
   else
     /* just write using the underlying socket function */
-    rc = (sasldata->msasl_write) (conn, buf, len);
+    rc = (sasldata->msasl_write)(conn, buf, len);
 
   conn->sockdata = sasldata;
 
@@ -619,13 +619,13 @@ fail:
   return -1;
 }
 
-static int mutt_sasl_conn_poll (CONNECTION *conn, time_t wait_secs)
+static int mutt_sasl_conn_poll(CONNECTION *conn, time_t wait_secs)
 {
   SASL_DATA *sasldata = conn->sockdata;
   int rc;
 
   conn->sockdata = sasldata->sockdata;
-  rc = sasldata->msasl_poll (conn, wait_secs);
+  rc = sasldata->msasl_poll(conn, wait_secs);
   conn->sockdata = sasldata;
 
   return rc;

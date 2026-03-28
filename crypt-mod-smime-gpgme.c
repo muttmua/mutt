@@ -29,60 +29,60 @@
 #include "crypt-mod.h"
 #include "crypt-gpgme.h"
 
-static void crypt_mod_smime_init (void)
+static void crypt_mod_smime_init(void)
 {
-  smime_gpgme_init ();
+  smime_gpgme_init();
 }
 
-static void crypt_mod_smime_void_passphrase (void)
+static void crypt_mod_smime_void_passphrase(void)
 {
   /* Handled by gpg-agent.  */
 }
 
-static int crypt_mod_smime_valid_passphrase (void)
+static int crypt_mod_smime_valid_passphrase(void)
 {
   /* Handled by gpg-agent.  */
   return 1;
 }
 
-static int crypt_mod_smime_decrypt_mime (FILE *a, FILE **b, BODY *c, BODY **d)
+static int crypt_mod_smime_decrypt_mime(FILE *a, FILE **b, BODY *c, BODY **d)
 {
-  return smime_gpgme_decrypt_mime (a, b, c, d);
+  return smime_gpgme_decrypt_mime(a, b, c, d);
 }
 
-static int crypt_mod_smime_application_handler (BODY *m, STATE *s)
+static int crypt_mod_smime_application_handler(BODY *m, STATE *s)
 {
-  return smime_gpgme_application_handler (m, s);
+  return smime_gpgme_application_handler(m, s);
 }
 
-static char *crypt_mod_smime_findkeys (ADDRESS *adrlist, int oppenc_mode)
+static char *crypt_mod_smime_findkeys(ADDRESS *adrlist, int oppenc_mode)
 {
-  return smime_gpgme_findkeys (adrlist, oppenc_mode);
+  return smime_gpgme_findkeys(adrlist, oppenc_mode);
 }
 
-static BODY *crypt_mod_smime_sign_message (BODY *a)
+static BODY *crypt_mod_smime_sign_message(BODY *a)
 {
-  return smime_gpgme_sign_message (a);
+  return smime_gpgme_sign_message(a);
 }
 
-static int crypt_mod_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
+static int crypt_mod_smime_verify_one(BODY *sigbdy, STATE *s, const char *tempf)
 {
-  return smime_gpgme_verify_one (sigbdy, s, tempf);
+  return smime_gpgme_verify_one(sigbdy, s, tempf);
 }
 
-static void crypt_mod_smime_send_menu (SEND_CONTEXT *sctx)
+static void crypt_mod_smime_send_menu(SEND_CONTEXT *sctx)
 {
-  smime_gpgme_send_menu (sctx);
+  smime_gpgme_send_menu(sctx);
 }
 
-static BODY *crypt_mod_smime_build_smime_entity (BODY *a, char *certlist)
+static BODY *crypt_mod_smime_build_smime_entity(BODY *a, char *certlist)
 {
-  return smime_gpgme_build_smime_entity (a, certlist);
+  return smime_gpgme_build_smime_entity(a, certlist);
 }
 
-static int crypt_mod_smime_verify_sender (HEADER *h)
+static int crypt_mod_smime_verify_sender(HEADER *h)
 {
-  return smime_gpgme_verify_sender (h);
+  return smime_gpgme_verify_sender(h);
 }
 
 struct crypt_module_specs crypt_mod_smime_gpgme =

@@ -55,7 +55,7 @@ static const imap_auth_t imap_authenticators[] = {
 
 /* imap_authenticate: Attempt to authenticate using either user-specified
  *   authentication method if specified, or any. */
-int imap_authenticate (IMAP_DATA *idata)
+int imap_authenticate(IMAP_DATA *idata)
 {
   const imap_auth_t *authenticator;
   char *methods;
@@ -66,11 +66,11 @@ int imap_authenticate (IMAP_DATA *idata)
   if (ImapAuthenticators)
   {
     /* Try user-specified list of authentication methods */
-    methods = safe_strdup (ImapAuthenticators);
+    methods = safe_strdup(ImapAuthenticators);
 
     for (method = methods; method; method = delim)
     {
-      delim = strchr (method, ':');
+      delim = strchr(method, ':');
       if (delim)
         *delim++ = '\0';
       if (! method[0])
@@ -82,11 +82,11 @@ int imap_authenticate (IMAP_DATA *idata)
       while (authenticator->authenticate)
       {
         if (!authenticator->method ||
-            !ascii_strcasecmp (authenticator->method, method))
-          if ((r = authenticator->authenticate (idata, method)) !=
+            !ascii_strcasecmp(authenticator->method, method))
+          if ((r = authenticator->authenticate(idata, method)) !=
               IMAP_AUTH_UNAVAIL)
           {
-            FREE (&methods);
+            FREE(&methods);
             return r;
           }
 
@@ -94,7 +94,7 @@ int imap_authenticate (IMAP_DATA *idata)
       }
     }
 
-    FREE (&methods);
+    FREE(&methods);
   }
   else
   {
@@ -104,7 +104,7 @@ int imap_authenticate (IMAP_DATA *idata)
 
     while (authenticator->authenticate)
     {
-      if ((r = authenticator->authenticate (idata, NULL)) != IMAP_AUTH_UNAVAIL)
+      if ((r = authenticator->authenticate(idata, NULL)) != IMAP_AUTH_UNAVAIL)
         return r;
       authenticator++;
     }
@@ -112,8 +112,8 @@ int imap_authenticate (IMAP_DATA *idata)
 
   if (r == IMAP_AUTH_UNAVAIL)
   {
-    mutt_error (_("No authenticators available"));
-    mutt_sleep (1);
+    mutt_error(_("No authenticators available"));
+    mutt_sleep(1);
   }
 
   return r;

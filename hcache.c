@@ -124,20 +124,20 @@ static int mdb_get_r_txn(header_cache_t *h)
     if (h->txn_mode == txn_read || h->txn_mode == txn_write)
       return MDB_SUCCESS;
 
-    if ((rc = mdb_txn_renew (h->txn)) != MDB_SUCCESS)
+    if ((rc = mdb_txn_renew(h->txn)) != MDB_SUCCESS)
     {
       h->txn = NULL;
-      muttdbg(2, "mdb_txn_renew: %s", mdb_strerror (rc));
+      muttdbg(2, "mdb_txn_renew: %s", mdb_strerror(rc));
       return rc;
     }
     h->txn_mode = txn_read;
     return rc;
   }
 
-  if ((rc = mdb_txn_begin (h->env, NULL, MDB_RDONLY, &h->txn)) != MDB_SUCCESS)
+  if ((rc = mdb_txn_begin(h->env, NULL, MDB_RDONLY, &h->txn)) != MDB_SUCCESS)
   {
     h->txn = NULL;
-    muttdbg(2, "mdb_txn_begin: %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_txn_begin: %s", mdb_strerror(rc));
     return rc;
   }
   h->txn_mode = txn_read;
@@ -154,13 +154,13 @@ static int mdb_get_w_txn(header_cache_t *h)
       return MDB_SUCCESS;
 
     /* Free up the memory for readonly or reset transactions */
-    mdb_txn_abort (h->txn);
+    mdb_txn_abort(h->txn);
   }
 
-  if ((rc = mdb_txn_begin (h->env, NULL, 0, &h->txn)) != MDB_SUCCESS)
+  if ((rc = mdb_txn_begin(h->env, NULL, 0, &h->txn)) != MDB_SUCCESS)
   {
     h->txn = NULL;
-    muttdbg(2, "mdb_txn_begin %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_txn_begin %s", mdb_strerror(rc));
     return rc;
   }
 
@@ -198,9 +198,9 @@ lazy_realloc(void *ptr, size_t siz)
 static unsigned char *
 dump_int(unsigned int i, unsigned char *d, int *off)
 {
-  lazy_realloc(&d, *off + sizeof (int));
-  memcpy(d + *off, &i, sizeof (int));
-  (*off) += sizeof (int);
+  lazy_realloc(&d, *off + sizeof(int));
+  memcpy(d + *off, &i, sizeof(int));
+  (*off) += sizeof(int);
 
   return d;
 }
@@ -208,11 +208,11 @@ dump_int(unsigned int i, unsigned char *d, int *off)
 static void
 restore_int(unsigned int *i, const unsigned char *d, int *off)
 {
-  memcpy(i, d + *off, sizeof (int));
-  (*off) += sizeof (int);
+  memcpy(i, d + *off, sizeof(int));
+  (*off) += sizeof(int);
 }
 
-static inline int is_ascii (const char *p, size_t len)
+static inline int is_ascii(const char *p, size_t len)
 {
   register const char *s = p;
   while (s && (unsigned) (s - p) < len)
@@ -236,13 +236,13 @@ dump_char_size(char *c, unsigned char *d, int *off, ssize_t size, int convert)
     return d;
   }
 
-  if (convert && !is_ascii (c, size))
+  if (convert && !is_ascii(c, size))
   {
-    p = mutt_substrdup (c, c + size);
-    if (mutt_convert_string (&p, Charset, "utf-8", 0) == 0)
+    p = mutt_substrdup(c, c + size);
+    if (mutt_convert_string(&p, Charset, "utf-8", 0) == 0)
     {
       c = p;
-      size = mutt_strlen (c) + 1;
+      size = mutt_strlen(c) + 1;
     }
   }
 
@@ -260,7 +260,7 @@ dump_char_size(char *c, unsigned char *d, int *off, ssize_t size, int convert)
 static unsigned char *
 dump_char(char *c, unsigned char *d, int *off, int convert)
 {
-  return dump_char_size (c, d, off, mutt_strlen (c) + 1, convert);
+  return dump_char_size(c, d, off, mutt_strlen(c) + 1, convert);
 }
 
 static void
@@ -277,12 +277,12 @@ restore_char(char **c, const unsigned char *d, int *off, int convert)
 
   *c = safe_malloc(size);
   memcpy(*c, d + *off, size);
-  if (convert && !is_ascii (*c, size))
+  if (convert && !is_ascii(*c, size))
   {
-    char *tmp = safe_strdup (*c);
-    if (mutt_convert_string (&tmp, "utf-8", Charset, 0) == 0)
+    char *tmp = safe_strdup(*c);
+    if (mutt_convert_string(&tmp, "utf-8", Charset, 0) == 0)
     {
-      mutt_str_replace (c, tmp);
+      mutt_str_replace(c, tmp);
     }
     else
     {
@@ -312,7 +312,7 @@ dump_address(ADDRESS * a, unsigned char *d, int *off, int convert)
     counter++;
   }
 
-  memcpy(d + start_off, &counter, sizeof (int));
+  memcpy(d + start_off, &counter, sizeof(int));
 
   return d;
 }
@@ -355,7 +355,7 @@ dump_list(LIST * l, unsigned char *d, int *off, int convert)
     counter++;
   }
 
-  memcpy(d + start_off, &counter, sizeof (int));
+  memcpy(d + start_off, &counter, sizeof(int));
 
   return d;
 }
@@ -369,7 +369,7 @@ restore_list(LIST ** l, const unsigned char *d, int *off, int convert)
 
   while (counter)
   {
-    *l = safe_malloc(sizeof (LIST));
+    *l = safe_malloc(sizeof(LIST));
     restore_char(&(*l)->data, d, off, convert);
     l = &(*l)->next;
     counter--;
@@ -407,12 +407,12 @@ restore_buffer(BUFFER ** b, const unsigned char *d, int *off, int convert)
     return;
   }
 
-  *b = safe_malloc(sizeof (BUFFER));
+  *b = safe_malloc(sizeof(BUFFER));
 
   restore_char(&(*b)->data, d, off, convert);
   restore_int(&offset, d, off);
   (*b)->dptr = (*b)->data + offset;
-  restore_int (&used, d, off);
+  restore_int(&used, d, off);
   (*b)->dsize = used;
 }
 
@@ -432,7 +432,7 @@ dump_parameter(PARAMETER * p, unsigned char *d, int *off, int convert)
     counter++;
   }
 
-  memcpy(d + start_off, &counter, sizeof (int));
+  memcpy(d + start_off, &counter, sizeof(int));
 
   return d;
 }
@@ -446,7 +446,7 @@ restore_parameter(PARAMETER ** p, const unsigned char *d, int *off, int convert)
 
   while (counter)
   {
-    *p = safe_malloc(sizeof (PARAMETER));
+    *p = safe_malloc(sizeof(PARAMETER));
     restore_char(&(*p)->attribute, d, off, 0);
     restore_char(&(*p)->value, d, off, convert);
     p = &(*p)->next;
@@ -461,7 +461,7 @@ dump_body(BODY * c, unsigned char *d, int *off, int convert)
 {
   BODY nb;
 
-  memcpy (&nb, c, sizeof (BODY));
+  memcpy(&nb, c, sizeof(BODY));
 
   /* some fields are not safe to cache */
   nb.content = NULL;
@@ -472,9 +472,9 @@ dump_body(BODY * c, unsigned char *d, int *off, int convert)
   nb.aptr = NULL;
   nb.mime_headers = NULL;
 
-  lazy_realloc(&d, *off + sizeof (BODY));
-  memcpy(d + *off, &nb, sizeof (BODY));
-  *off += sizeof (BODY);
+  lazy_realloc(&d, *off + sizeof(BODY));
+  memcpy(d + *off, &nb, sizeof(BODY));
+  *off += sizeof(BODY);
 
   d = dump_char(nb.xtype, d, off, 0);
   d = dump_char(nb.subtype, d, off, 0);
@@ -492,8 +492,8 @@ dump_body(BODY * c, unsigned char *d, int *off, int convert)
 static void
 restore_body(BODY * c, const unsigned char *d, int *off, int convert)
 {
-  memcpy(c, d + *off, sizeof (BODY));
-  *off += sizeof (BODY);
+  memcpy(c, d + *off, sizeof(BODY));
+  *off += sizeof(BODY);
 
   restore_char(&c->xtype, d, off, 0);
   restore_char(&c->subtype, d, off, 0);
@@ -556,8 +556,8 @@ restore_envelope(ENVELOPE * e, const unsigned char *d, int *off, int convert)
 
   restore_char(&e->list_post, d, off, convert);
 
-  if (option (OPTAUTOSUBSCRIBE))
-    mutt_auto_subscribe (e->list_post);
+  if (option(OPTAUTOSUBSCRIBE))
+    mutt_auto_subscribe(e->list_post);
 
   restore_char(&e->subject, d, off, convert);
   restore_int((unsigned int *) (&real_subj_off), d, off);
@@ -582,7 +582,7 @@ restore_envelope(ENVELOPE * e, const unsigned char *d, int *off, int convert)
 static int
 crc_matches(const char *d, unsigned int crc)
 {
-  int off = sizeof (validate);
+  int off = sizeof(validate);
   unsigned int mycrc = 0;
 
   if (!d)
@@ -605,18 +605,18 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
   int ret;
   size_t plen;
 #ifndef HAVE_ICONV
-  const char *chs = Charset ? Charset : mutt_get_default_charset ();
+  const char *chs = Charset ? Charset : mutt_get_default_charset();
 #endif
 
-  plen = mutt_strlen (path);
+  plen = mutt_strlen(path);
 
   ret = stat(path, &sb);
   if (ret < 0 && path[plen-1] != '/')
   {
 #ifdef HAVE_ICONV
-    mutt_buffer_strcpy (hcpath, path);
+    mutt_buffer_strcpy(hcpath, path);
 #else
-    mutt_buffer_printf (hcpath, "%s-%s", path, chs);
+    mutt_buffer_printf(hcpath, "%s-%s", path, chs);
 #endif
     return;
   }
@@ -624,22 +624,22 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
   if (ret >= 0 && !S_ISDIR(sb.st_mode))
   {
 #ifdef HAVE_ICONV
-    mutt_buffer_strcpy (hcpath, path);
+    mutt_buffer_strcpy(hcpath, path);
 #else
-    mutt_buffer_printf (hcpath, "%s-%s", path, chs);
+    mutt_buffer_printf(hcpath, "%s-%s", path, chs);
 #endif
     return;
   }
 
-  hcfile = mutt_buffer_pool_get ();
+  hcfile = mutt_buffer_pool_get();
 
   if (namer)
   {
-    namer (folder, hcfile);
+    namer(folder, hcfile);
   }
   else
   {
-    md5_buffer (folder, strlen (folder), &md5sum);
+    md5_buffer(folder, strlen(folder), &md5sum);
     mutt_buffer_printf(hcfile,
                        "%02x%02x%02x%02x%02x%02x%02x%02x"
                        "%02x%02x%02x%02x%02x%02x%02x%02x",
@@ -648,30 +648,30 @@ mutt_hcache_per_folder(BUFFER *hcpath, const char *path, const char *folder,
                        md5sum[8], md5sum[9], md5sum[10], md5sum[11],
                        md5sum[12], md5sum[13], md5sum[14], md5sum[15]);
 #ifndef HAVE_ICONV
-    mutt_buffer_addch (hcfile, '-');
-    mutt_buffer_addstr (hcfile, chs);
+    mutt_buffer_addch(hcfile, '-');
+    mutt_buffer_addstr(hcfile, chs);
 #endif
   }
 
-  mutt_buffer_concat_path (hcpath, path, mutt_b2s (hcfile));
-  mutt_buffer_pool_release (&hcfile);
+  mutt_buffer_concat_path(hcpath, path, mutt_b2s(hcfile));
+  mutt_buffer_pool_release(&hcfile);
 
-  if (stat (mutt_b2s (hcpath), &sb) >= 0)
+  if (stat(mutt_b2s(hcpath), &sb) >= 0)
     return;
 
-  s = strchr (hcpath->data + 1, '/');
+  s = strchr(hcpath->data + 1, '/');
   while (s)
   {
     /* create missing path components */
     *s = '\0';
-    if (stat (mutt_b2s (hcpath), &sb) < 0 &&
-        (errno != ENOENT || mkdir (mutt_b2s (hcpath), 0777) < 0))
+    if (stat(mutt_b2s(hcpath), &sb) < 0 &&
+        (errno != ENOENT || mkdir(mutt_b2s(hcpath), 0777) < 0))
     {
-      mutt_buffer_strcpy (hcpath, path);
+      mutt_buffer_strcpy(hcpath, path);
       break;
     }
     *s = '/';
-    s = strchr (s + 1, '/');
+    s = strchr(s + 1, '/');
   }
 }
 
@@ -687,22 +687,22 @@ mutt_hcache_dump(header_cache_t *h, HEADER * header, int *off,
   int convert = !Charset_is_utf8;
 
   *off = 0;
-  d = lazy_malloc(sizeof (validate));
+  d = lazy_malloc(sizeof(validate));
 
   if (flags & MUTT_GENERATE_UIDVALIDITY)
   {
     struct timeval now;
     gettimeofday(&now, NULL);
-    memcpy(d, &now, sizeof (struct timeval));
+    memcpy(d, &now, sizeof(struct timeval));
   }
   else
-    memcpy(d, &uidvalidity, sizeof (uidvalidity));
-  *off += sizeof (validate);
+    memcpy(d, &uidvalidity, sizeof(uidvalidity));
+  *off += sizeof(validate);
 
   d = dump_int(h->crc, d, off);
 
-  lazy_realloc(&d, *off + sizeof (HEADER));
-  memcpy(&nh, header, sizeof (HEADER));
+  lazy_realloc(&d, *off + sizeof(HEADER));
+  memcpy(&nh, header, sizeof(HEADER));
 
   /* some fields are not safe to cache */
   nh.tagged = 0;
@@ -728,8 +728,8 @@ mutt_hcache_dump(header_cache_t *h, HEADER * header, int *off,
   nh.data = NULL;
 #endif
 
-  memcpy(d + *off, &nh, sizeof (HEADER));
-  *off += sizeof (HEADER);
+  memcpy(d + *off, &nh, sizeof(HEADER));
+  *off += sizeof(HEADER);
 
   d = dump_envelope(nh.env, d, off, convert);
   d = dump_body(nh.content, d, off, convert);
@@ -746,13 +746,13 @@ mutt_hcache_restore(const unsigned char *d, HEADER ** oh)
   int convert = !Charset_is_utf8;
 
   /* skip validate */
-  off += sizeof (validate);
+  off += sizeof(validate);
 
   /* skip crc */
-  off += sizeof (unsigned int);
+  off += sizeof(unsigned int);
 
-  memcpy(h, d + off, sizeof (HEADER));
-  off += sizeof (HEADER);
+  memcpy(h, d + off, sizeof(HEADER));
+  off += sizeof(HEADER);
 
   h->env = mutt_new_envelope();
   restore_envelope(h->env, d, &off, convert);
@@ -775,15 +775,15 @@ mutt_hcache_restore(const unsigned char *d, HEADER ** oh)
 
 void *
 mutt_hcache_fetch(header_cache_t *h, const char *filename,
-                  size_t(*keylen) (const char *fn))
+                  size_t (*keylen)(const char *fn))
 {
   void *data;
 
-  data = mutt_hcache_fetch_raw (h, filename, keylen);
+  data = mutt_hcache_fetch_raw(h, filename, keylen);
 
   if (!data || !crc_matches(data, h->crc))
   {
-    mutt_hcache_free (&data);
+    mutt_hcache_free(&data);
     return NULL;
   }
 
@@ -791,8 +791,8 @@ mutt_hcache_fetch(header_cache_t *h, const char *filename,
 }
 
 void *
-mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
-                       size_t(*keylen) (const char *fn))
+mutt_hcache_fetch_raw(header_cache_t *h, const char *filename,
+                      size_t (*keylen)(const char *fn))
 {
 #ifndef HAVE_DB4
   BUFFER *path = NULL;
@@ -830,18 +830,18 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
   return data.data;
 
 #else
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
-  ksize = strlen (h->folder) + keylen (filename);
+  ksize = strlen(h->folder) + keylen(filename);
 
 #ifdef HAVE_QDBM
-  rv = vlget(h->db, mutt_b2s (path), ksize, NULL);
+  rv = vlget(h->db, mutt_b2s(path), ksize, NULL);
 #elif HAVE_TC
-  rv = tcbdbget(h->db, mutt_b2s (path), ksize, &sp);
+  rv = tcbdbget(h->db, mutt_b2s(path), ksize, &sp);
 #elif HAVE_KC
-  rv = kcdbget(h->db, mutt_b2s (path), ksize, &sp);
+  rv = kcdbget(h->db, mutt_b2s(path), ksize, &sp);
 #elif HAVE_GDBM
   key.dptr = path->data;
   key.dsize = ksize;
@@ -854,12 +854,12 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
   key.mv_size = ksize;
   /* LMDB claims ownership of the returned data, so this will not be
    * freed in mutt_hcache_free(). */
-  if ((mdb_get_r_txn (h) == MDB_SUCCESS) &&
-      (mdb_get (h->txn, h->db, &key, &data) == MDB_SUCCESS))
+  if ((mdb_get_r_txn(h) == MDB_SUCCESS) &&
+      (mdb_get(h->txn, h->db, &key, &data) == MDB_SUCCESS))
     rv = data.mv_data;
 #endif
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rv;
 #endif
 }
@@ -873,7 +873,7 @@ mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
 int
 mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
                   unsigned int uidvalidity,
-                  size_t(*keylen) (const char *fn),
+                  size_t (*keylen)(const char *fn),
                   mutt_hcache_store_flags_t flags)
 {
   char *data;
@@ -884,7 +884,7 @@ mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
     return -1;
 
   data = mutt_hcache_dump(h, header, &dlen, uidvalidity, flags);
-  ret = mutt_hcache_store_raw (h, filename, data, dlen, keylen);
+  ret = mutt_hcache_store_raw(h, filename, data, dlen, keylen);
 
   FREE(&data);
 
@@ -892,8 +892,8 @@ mutt_hcache_store(header_cache_t *h, const char *filename, HEADER * header,
 }
 
 int
-mutt_hcache_store_raw (header_cache_t *h, const char *filename, void *data,
-                       size_t dlen, size_t(*keylen) (const char *fn))
+mutt_hcache_store_raw(header_cache_t *h, const char *filename, void *data,
+                      size_t dlen, size_t (*keylen)(const char *fn))
 {
 #ifndef HAVE_DB4
   BUFFER *path = NULL;
@@ -929,18 +929,18 @@ mutt_hcache_store_raw (header_cache_t *h, const char *filename, void *data,
   return h->db->put(h->db, NULL, &key, &databuf, 0);
 
 #else
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
   ksize = strlen(h->folder) + keylen(filename);
 
 #if HAVE_QDBM
-  rv = vlput(h->db, mutt_b2s (path), ksize, data, dlen, VL_DOVER);
+  rv = vlput(h->db, mutt_b2s(path), ksize, data, dlen, VL_DOVER);
 #elif HAVE_TC
-  rv = tcbdbput(h->db, mutt_b2s (path), ksize, data, dlen);
+  rv = tcbdbput(h->db, mutt_b2s(path), ksize, data, dlen);
 #elif HAVE_KC
-  rv = kcdbset(h->db, mutt_b2s (path), ksize, data, dlen);
+  rv = kcdbset(h->db, mutt_b2s(path), ksize, data, dlen);
 #elif HAVE_GDBM
   key.dptr = path->data;
   key.dsize = ksize;
@@ -954,57 +954,57 @@ mutt_hcache_store_raw (header_cache_t *h, const char *filename, void *data,
   key.mv_size = ksize;
   databuf.mv_data = data;
   databuf.mv_size = dlen;
-  if ((rv = mdb_get_w_txn (h)) == MDB_SUCCESS)
+  if ((rv = mdb_get_w_txn(h)) == MDB_SUCCESS)
   {
-    if ((rv = mdb_put (h->txn, h->db, &key, &databuf, 0)) != MDB_SUCCESS)
+    if ((rv = mdb_put(h->txn, h->db, &key, &databuf, 0)) != MDB_SUCCESS)
     {
       muttdbg(2, "mdb_put: %s", mdb_strerror(rv));
-      mdb_txn_abort (h->txn);
+      mdb_txn_abort(h->txn);
       h->txn_mode = txn_uninitialized;
       h->txn = NULL;
     }
   }
 #endif
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rv;
 #endif
 }
 
-static char *get_foldername (const char *folder)
+static char *get_foldername(const char *folder)
 {
   char *p = NULL;
   BUFFER *path;
   struct stat st;
 
-  path = mutt_buffer_pool_get ();
-  mutt_encode_path (path, folder);
+  path = mutt_buffer_pool_get();
+  mutt_encode_path(path, folder);
 
   /* if the folder is local, canonify the path to avoid
    * to ensure equivalent paths share the hcache */
-  if (stat (mutt_b2s (path), &st) == 0)
+  if (stat(mutt_b2s(path), &st) == 0)
   {
-    p = safe_malloc (PATH_MAX+1);
-    if (!realpath (mutt_b2s (path), p))
-      mutt_str_replace (&p, mutt_b2s (path));
+    p = safe_malloc(PATH_MAX+1);
+    if (!realpath(mutt_b2s(path), p))
+      mutt_str_replace(&p, mutt_b2s(path));
   }
   else
-    p = safe_strdup (mutt_b2s (path));
+    p = safe_strdup(mutt_b2s(path));
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return p;
 }
 
 #if HAVE_QDBM
 static int
-hcache_open_qdbm (struct header_cache *h, const char *path)
+hcache_open_qdbm(struct header_cache *h, const char *path)
 {
   int    flags = VL_OWRITER | VL_OCREAT;
 
   if (option(OPTHCACHECOMPRESS))
     flags |= VL_OZCOMP;
 
-  h->db = vlopen (path, flags, VL_CMPLEX);
+  h->db = vlopen(path, flags, VL_CMPLEX);
   if (h->db)
     return 0;
   else
@@ -1024,7 +1024,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1032,21 +1032,21 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   if (!h)
     return -1;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
   ksize = strlen(h->folder) + keylen(filename);
 
-  rc = vlout(h->db, mutt_b2s (path), ksize);
+  rc = vlout(h->db, mutt_b2s(path), ksize);
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rc;
 }
 
 #elif HAVE_TC
 static int
-hcache_open_tc (struct header_cache *h, const char *path)
+hcache_open_tc(struct header_cache *h, const char *path)
 {
   h->db = tcbdbnew();
   if (!h->db)
@@ -1058,8 +1058,8 @@ hcache_open_tc (struct header_cache *h, const char *path)
   else
   {
 #ifdef DEBUG
-    int ecode = tcbdbecode (h->db);
-    muttdbg(2, "tcbdbopen failed for %s: %s (ecode %d)", path, tcbdberrmsg (ecode), ecode);
+    int ecode = tcbdbecode(h->db);
+    muttdbg(2, "tcbdbopen failed for %s: %s (ecode %d)", path, tcbdberrmsg(ecode), ecode);
 #endif
     tcbdbdel(h->db);
     return -1;
@@ -1075,8 +1075,8 @@ mutt_hcache_close(header_cache_t *h)
   if (!tcbdbclose(h->db))
   {
 #ifdef DEBUG
-    int ecode = tcbdbecode (h->db);
-    muttdbg(2, "tcbdbclose failed for %s: %s (ecode %d)", h->folder, tcbdberrmsg (ecode), ecode);
+    int ecode = tcbdbecode(h->db);
+    muttdbg(2, "tcbdbclose failed for %s: %s (ecode %d)", h->folder, tcbdberrmsg(ecode), ecode);
 #endif
   }
   tcbdbdel(h->db);
@@ -1086,7 +1086,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1094,26 +1094,26 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   if (!h)
     return -1;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
   ksize = strlen(h->folder) + keylen(filename);
 
-  rc = tcbdbout(h->db, mutt_b2s (path), ksize);
+  rc = tcbdbout(h->db, mutt_b2s(path), ksize);
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rc;
 }
 
 #elif HAVE_KC
 static int
-hcache_open_kc (struct header_cache *h, const char *path)
+hcache_open_kc(struct header_cache *h, const char *path)
 {
   BUFFER *fullpath = NULL;
   int rc = -1;
 
-  fullpath = mutt_buffer_pool_get ();
+  fullpath = mutt_buffer_pool_get();
 
   /* Kyoto cabinet options are discussed at
    * http://fallabs.com/kyotocabinet/spex.html
@@ -1122,16 +1122,16 @@ hcache_open_kc (struct header_cache *h, const char *path)
    *   this isn't suggested unless you are tuning the number of buckets.
    * - opts=c enables compression
    */
-  mutt_buffer_printf (fullpath, "%s#type=kct%s", path,
-                      option(OPTHCACHECOMPRESS) ? "#opts=c" : "");
+  mutt_buffer_printf(fullpath, "%s#type=kct%s", path,
+                     option(OPTHCACHECOMPRESS) ? "#opts=c" : "");
   h->db = kcdbnew();
   if (!h->db)
     goto cleanup;
-  if (!kcdbopen(h->db, mutt_b2s (fullpath), KCOWRITER | KCOCREATE))
+  if (!kcdbopen(h->db, mutt_b2s(fullpath), KCOWRITER | KCOCREATE))
   {
     muttdbg(2, "kcdbopen failed for %s: %s (ecode %d)",
-                mutt_b2s (fullpath),
-                kcdbemsg (h->db), kcdbecode (h->db));
+            mutt_b2s(fullpath),
+            kcdbemsg(h->db), kcdbecode(h->db));
     kcdbdel(h->db);
     goto cleanup;
   }
@@ -1139,7 +1139,7 @@ hcache_open_kc (struct header_cache *h, const char *path)
   rc = 0;
 
 cleanup:
-  mutt_buffer_pool_release (&fullpath);
+  mutt_buffer_pool_release(&fullpath);
   return rc;
 }
 
@@ -1151,7 +1151,7 @@ mutt_hcache_close(header_cache_t *h)
 
   if (!kcdbclose(h->db))
     muttdbg(2, "kcdbclose failed for %s: %s (ecode %d)", h->folder,
-                kcdbemsg (h->db), kcdbecode (h->db));
+            kcdbemsg(h->db), kcdbecode(h->db));
   kcdbdel(h->db);
   FREE(&h->folder);
   FREE(&h);
@@ -1159,7 +1159,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   BUFFER *path = NULL;
   int ksize, rc;
@@ -1167,21 +1167,21 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   if (!h)
     return -1;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
   ksize = strlen(h->folder) + keylen(filename);
 
-  rc = kcdbremove(h->db, mutt_b2s (path), ksize);
+  rc = kcdbremove(h->db, mutt_b2s(path), ksize);
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rc;
 }
 
 #elif HAVE_GDBM
 static int
-hcache_open_gdbm (struct header_cache *h, const char *path)
+hcache_open_gdbm(struct header_cache *h, const char *path)
 {
   int pagesize;
 
@@ -1214,7 +1214,7 @@ mutt_hcache_close(header_cache_t *h)
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   datum key;
   BUFFER *path = NULL;
@@ -1223,16 +1223,16 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   if (!h)
     return -1;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
 
   key.dptr = path->data;
   key.dsize = strlen(h->folder) + keylen(filename);
 
   rc = gdbm_delete(h->db, key);
 
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rc;
 }
 #elif HAVE_DB4
@@ -1255,7 +1255,7 @@ mutt_hcache_dbt_empty_init(DBT * dbt)
 }
 
 static int
-hcache_open_db4 (struct header_cache *h, const char *path)
+hcache_open_db4(struct header_cache *h, const char *path)
 {
   struct stat sb;
   int ret;
@@ -1266,17 +1266,17 @@ hcache_open_db4 (struct header_cache *h, const char *path)
   if (pagesize <= 0)
     pagesize = 16384;
 
-  h->lockfile = mutt_buffer_new ();
-  mutt_buffer_printf (h->lockfile, "%s-lock-hack", path);
+  h->lockfile = mutt_buffer_new();
+  mutt_buffer_printf(h->lockfile, "%s-lock-hack", path);
 
-  h->fd = open (mutt_b2s (h->lockfile), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+  h->fd = open(mutt_b2s(h->lockfile), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
   if (h->fd < 0)
     return -1;
 
-  if (mx_lock_file (mutt_b2s (h->lockfile), h->fd, 1, 0, 5))
+  if (mx_lock_file(mutt_b2s(h->lockfile), h->fd, 1, 0, 5))
     goto fail_close;
 
-  ret = db_env_create (&h->env, 0);
+  ret = db_env_create(&h->env, 0);
   if (ret)
     goto fail_unlock;
 
@@ -1285,7 +1285,7 @@ hcache_open_db4 (struct header_cache *h, const char *path)
   if (ret)
     goto fail_env;
 
-  ret = db_create (&h->db, h->env, 0);
+  ret = db_create(&h->db, h->env, 0);
   if (ret)
     goto fail_env;
 
@@ -1303,15 +1303,15 @@ hcache_open_db4 (struct header_cache *h, const char *path)
   return 0;
 
 fail_db:
-  h->db->close (h->db, 0);
+  h->db->close(h->db, 0);
 fail_env:
-  h->env->close (h->env, 0);
+  h->env->close(h->env, 0);
 fail_unlock:
-  mx_unlock_file (mutt_b2s (h->lockfile), h->fd, 0);
+  mx_unlock_file(mutt_b2s(h->lockfile), h->fd, 0);
 fail_close:
-  close (h->fd);
-  unlink (mutt_b2s (h->lockfile));
-  mutt_buffer_free (&h->lockfile);
+  close(h->fd);
+  unlink(mutt_b2s(h->lockfile));
+  mutt_buffer_free(&h->lockfile);
 
   return -1;
 }
@@ -1322,19 +1322,19 @@ mutt_hcache_close(header_cache_t *h)
   if (!h)
     return;
 
-  h->db->close (h->db, 0);
-  h->env->close (h->env, 0);
-  mx_unlock_file (mutt_b2s (h->lockfile), h->fd, 0);
-  close (h->fd);
-  unlink (mutt_b2s (h->lockfile));
-  mutt_buffer_free (&h->lockfile);
-  FREE (&h->folder);
-  FREE (&h);
+  h->db->close(h->db, 0);
+  h->env->close(h->env, 0);
+  mx_unlock_file(mutt_b2s(h->lockfile), h->fd, 0);
+  close(h->fd);
+  unlink(mutt_b2s(h->lockfile));
+  mutt_buffer_free(&h->lockfile);
+  FREE(&h->folder);
+  FREE(&h);
 }
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   DBT key;
 
@@ -1350,7 +1350,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
 #elif HAVE_LMDB
 
 static int
-hcache_open_lmdb (struct header_cache *h, const char *path)
+hcache_open_lmdb(struct header_cache *h, const char *path)
 {
   int rc;
 
@@ -1359,7 +1359,7 @@ hcache_open_lmdb (struct header_cache *h, const char *path)
   if ((rc = mdb_env_create(&h->env)) != MDB_SUCCESS)
   {
     muttdbg(2, "mdb_env_create: %s",
-                mdb_strerror(rc));
+            mdb_strerror(rc));
     return -1;
   }
 
@@ -1368,7 +1368,7 @@ hcache_open_lmdb (struct header_cache *h, const char *path)
   if ((rc = mdb_env_open(h->env, path, MDB_NOSUBDIR, 0644)) != MDB_SUCCESS)
   {
     muttdbg(2, "mdb_env_open: %s",
-                mdb_strerror(rc));
+            mdb_strerror(rc));
     goto fail_env;
   }
 
@@ -1378,7 +1378,7 @@ hcache_open_lmdb (struct header_cache *h, const char *path)
   if ((rc = mdb_dbi_open(h->txn, NULL, MDB_CREATE, &h->db)) != MDB_SUCCESS)
   {
     muttdbg(2, "mdb_dbi_open: %s",
-                mdb_strerror(rc));
+            mdb_strerror(rc));
     goto fail_dbi;
   }
 
@@ -1408,26 +1408,26 @@ mutt_hcache_close(header_cache_t *h)
   {
     if (h->txn_mode == txn_write)
     {
-      if ((rc = mdb_txn_commit (h->txn)) != MDB_SUCCESS)
+      if ((rc = mdb_txn_commit(h->txn)) != MDB_SUCCESS)
       {
         muttdbg(2, "mdb_txn_commit: %s",
-                    mdb_strerror (rc));
+                mdb_strerror(rc));
       }
     }
     else
-      mdb_txn_abort (h->txn);
+      mdb_txn_abort(h->txn);
     h->txn_mode = txn_uninitialized;
     h->txn = NULL;
   }
 
   mdb_env_close(h->env);
-  FREE (&h->folder);
-  FREE (&h);
+  FREE(&h->folder);
+  FREE(&h);
 }
 
 int
 mutt_hcache_delete(header_cache_t *h, const char *filename,
-                   size_t(*keylen) (const char *fn))
+                   size_t (*keylen)(const char *fn))
 {
   BUFFER *path = NULL;
   int ksize;
@@ -1437,10 +1437,10 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   if (!h)
     return -1;
 
-  path = mutt_buffer_pool_get ();
-  mutt_buffer_strcpy (path, h->folder);
-  mutt_buffer_addstr (path, filename);
-  ksize = strlen (h->folder) + keylen (filename);
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
+  ksize = strlen(h->folder) + keylen(filename);
 
   key.mv_data = path->data;
   key.mv_size = ksize;
@@ -1449,7 +1449,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   rc = mdb_del(h->txn, h->db, &key, NULL);
   if (rc != MDB_SUCCESS && rc != MDB_NOTFOUND)
   {
-    muttdbg(2, "mdb_del: %s", mdb_strerror (rc));
+    muttdbg(2, "mdb_del: %s", mdb_strerror(rc));
     mdb_txn_abort(h->txn);
     h->txn_mode = txn_uninitialized;
     h->txn = NULL;
@@ -1459,7 +1459,7 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   rc = 0;
 
 cleanup:
-  mutt_buffer_pool_release (&path);
+  mutt_buffer_pool_release(&path);
   return rc;
 }
 #endif
@@ -1467,8 +1467,8 @@ cleanup:
 header_cache_t *
 mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
 {
-  struct header_cache *h = safe_calloc(1, sizeof (struct header_cache));
-  int (*hcache_open) (struct header_cache *h, const char *path);
+  struct header_cache *h = safe_calloc(1, sizeof(struct header_cache));
+  int (*hcache_open)(struct header_cache *h, const char *path);
   struct stat sb;
   BUFFER *hcpath = NULL;
 
@@ -1537,67 +1537,67 @@ mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
     return NULL;
   }
 
-  hcpath = mutt_buffer_pool_get ();
+  hcpath = mutt_buffer_pool_get();
   mutt_hcache_per_folder(hcpath, path, h->folder, namer);
 
-  if (hcache_open (h, mutt_b2s (hcpath)))
+  if (hcache_open(h, mutt_b2s(hcpath)))
   {
     /* remove a possibly incompatible version */
-    if (stat (mutt_b2s (hcpath), &sb) ||
-        unlink (mutt_b2s (hcpath)) ||
-        hcache_open (h, mutt_b2s (hcpath)))
+    if (stat(mutt_b2s(hcpath), &sb) ||
+        unlink(mutt_b2s(hcpath)) ||
+        hcache_open(h, mutt_b2s(hcpath)))
     {
       FREE(&h->folder);
       FREE(&h);
     }
   }
 
-  mutt_buffer_pool_release (&hcpath);
+  mutt_buffer_pool_release(&hcpath);
   return h;
 }
 
-void mutt_hcache_free (void **data)
+void mutt_hcache_free(void **data)
 {
   if (!data || !*data)
     return;
 
 #if HAVE_KC
-  kcfree (*data);
+  kcfree(*data);
   *data = NULL;
 #elif HAVE_LMDB
   /* LMDB owns the data returned.  It should not be freed */
 #else
-  FREE (data);  /* __FREE_CHECKED__ */
+  FREE(data);  /* __FREE_CHECKED__ */
 #endif
 }
 
 #if HAVE_DB4
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   return DB_VERSION_STRING;
 }
 #elif HAVE_LMDB
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   return "lmdb " MDB_VERSION_STRING;
 }
 #elif HAVE_GDBM
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   return gdbm_version;
 }
 #elif HAVE_QDBM
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   return "qdbm " _QDBM_VERSION;
 }
 #elif HAVE_TC
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   return "tokyocabinet " _TC_VERSION;
 }
 #elif HAVE_KC
-const char *mutt_hcache_backend (void)
+const char *mutt_hcache_backend(void)
 {
   static char backend[SHORT_STRING];
   snprintf(backend, sizeof(backend), "kyotocabinet %s", KCVERSION);

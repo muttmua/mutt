@@ -55,8 +55,7 @@ static const struct
 {
   const char *key;
   const char *pref;
-}
-PreferredMIMENames[] =
+} PreferredMIMENames[] =
 {
   { "ansi_x3.4-1968",   "us-ascii"      },
   { "iso-ir-6",         "us-ascii"      },
@@ -150,10 +149,8 @@ PreferredMIMENames[] =
   { "MS_Kanji",         "Shift_JIS"     }, /* Note the underscore! */
   { "csShiftJis",       "Shift_JIS"     },
 
-  { "Extended_UNIX_Code_Packed_Format_for_Japanese",
-                        "euc-jp"        },
-  { "csEUCPkdFmtJapanese",
-                        "euc-jp"        },
+  { "Extended_UNIX_Code_Packed_Format_for_Japanese", "euc-jp" },
+  { "csEUCPkdFmtJapanese",    "euc-jp"  },
 
   { "csGB2312",         "gb2312"        },
   { "csbig5",           "big5"          },
@@ -218,81 +215,81 @@ PreferredMIMENames[] =
 # include <langinfo.h>
 
 
-void mutt_set_langinfo_charset (void)
+void mutt_set_langinfo_charset(void)
 {
   char buff[LONG_STRING];
   char buff2[LONG_STRING];
 
-  strfcpy (buff, nl_langinfo (CODESET), sizeof (buff));
-  mutt_canonical_charset (buff2, sizeof (buff2), buff);
+  strfcpy(buff, nl_langinfo(CODESET), sizeof(buff));
+  mutt_canonical_charset(buff2, sizeof(buff2), buff);
 
   /* finally, set $charset */
-  if (!(Charset = safe_strdup (buff2)))
-    Charset = safe_strdup ("iso-8859-1");
+  if (!(Charset = safe_strdup(buff2)))
+    Charset = safe_strdup("iso-8859-1");
 }
 
 #else
 
-void mutt_set_langinfo_charset (void)
+void mutt_set_langinfo_charset(void)
 {
-  Charset = safe_strdup ("iso-8859-1");
+  Charset = safe_strdup("iso-8859-1");
 }
 
 #endif
 
 /* this first ties off any charset extension such as //TRANSLIT,
    canonicalizes the charset and re-adds the extension */
-void mutt_canonical_charset (char *dest, size_t dlen, const char *name)
+void mutt_canonical_charset(char *dest, size_t dlen, const char *name)
 {
   size_t i;
   char *p, *ext;
   char in[LONG_STRING], scratch[LONG_STRING+10];
 
-  strfcpy (in, name, sizeof (in));
-  if ((ext = strchr (in, '/')))
+  strfcpy(in, name, sizeof(in));
+  if ((ext = strchr(in, '/')))
     *ext++ = 0;
 
-  if (!ascii_strcasecmp (in, "utf-8") || !ascii_strcasecmp (in, "utf8"))
+  if (!ascii_strcasecmp(in, "utf-8") || !ascii_strcasecmp(in, "utf8"))
   {
-    strfcpy (dest, "utf-8", dlen);
+    strfcpy(dest, "utf-8", dlen);
     goto out;
   }
 
   /* catch some common iso-8859-something misspellings */
-  if (!ascii_strncasecmp (in, "8859", 4) && in[4] != '-')
-    snprintf (scratch, sizeof (scratch), "iso-8859-%s", in +4);
-  else if (!ascii_strncasecmp (in, "8859-", 5))
-    snprintf (scratch, sizeof (scratch), "iso-8859-%s", in + 5);
-  else if (!ascii_strncasecmp (in, "iso8859", 7) && in[7] != '-')
-    snprintf (scratch, sizeof (scratch), "iso_8859-%s", in + 7);
-  else if (!ascii_strncasecmp (in, "iso8859-", 8))
-    snprintf (scratch, sizeof (scratch), "iso_8859-%s", in + 8);
+  if (!ascii_strncasecmp(in, "8859", 4) && in[4] != '-')
+    snprintf(scratch, sizeof(scratch), "iso-8859-%s", in +4);
+  else if (!ascii_strncasecmp(in, "8859-", 5))
+    snprintf(scratch, sizeof(scratch), "iso-8859-%s", in + 5);
+  else if (!ascii_strncasecmp(in, "iso8859", 7) && in[7] != '-')
+    snprintf(scratch, sizeof(scratch), "iso_8859-%s", in + 7);
+  else if (!ascii_strncasecmp(in, "iso8859-", 8))
+    snprintf(scratch, sizeof(scratch), "iso_8859-%s", in + 8);
   else
-    strfcpy (scratch, in, sizeof (scratch));
+    strfcpy(scratch, in, sizeof(scratch));
 
   for (i = 0; PreferredMIMENames[i].key; i++)
-    if (!ascii_strcasecmp (scratch, PreferredMIMENames[i].key) ||
-        !mutt_strcasecmp (scratch, PreferredMIMENames[i].key))
+    if (!ascii_strcasecmp(scratch, PreferredMIMENames[i].key) ||
+        !mutt_strcasecmp(scratch, PreferredMIMENames[i].key))
     {
-      strfcpy (dest, PreferredMIMENames[i].pref, dlen);
+      strfcpy(dest, PreferredMIMENames[i].pref, dlen);
       goto out;
     }
 
-  strfcpy (dest, scratch, dlen);
+  strfcpy(dest, scratch, dlen);
 
   /* for cosmetics' sake, transform to lowercase. */
   for (p = dest; *p; p++)
-    *p = ascii_tolower (*p);
+    *p = ascii_tolower(*p);
 
 out:
   if (ext && *ext)
   {
-    safe_strcat (dest, dlen, "/");
-    safe_strcat (dest, dlen, ext);
+    safe_strcat(dest, dlen, "/");
+    safe_strcat(dest, dlen, ext);
   }
 }
 
-int mutt_chscmp (const char *s, const char *chs)
+int mutt_chscmp(const char *s, const char *chs)
 {
   char buffer[STRING];
   size_t a, b;
@@ -305,14 +302,14 @@ int mutt_chscmp (const char *s, const char *chs)
      extension)
      we simply check if the shorter string is a prefix for
      the longer */
-  mutt_canonical_charset (buffer, sizeof (buffer), s);
-  a = mutt_strlen (buffer);
-  b = mutt_strlen (chs);
-  return !ascii_strncasecmp (a > b ? buffer : chs,
-                             a > b ? chs : buffer, MIN(a,b));
+  mutt_canonical_charset(buffer, sizeof(buffer), s);
+  a = mutt_strlen(buffer);
+  b = mutt_strlen(chs);
+  return !ascii_strncasecmp(a > b ? buffer : chs,
+                            a > b ? chs : buffer, MIN(a,b));
 }
 
-char *mutt_get_default_charset (void)
+char *mutt_get_default_charset(void)
 {
   static char fcharset[SHORT_STRING];
   const char *c = AssumedCharset;
@@ -321,31 +318,31 @@ char *mutt_get_default_charset (void)
 
   if (c)
   {
-    c1 = strchr (c, ':');
+    c1 = strchr(c, ':');
     if (c1)
-      copysize = MIN ((c1 - c + 1), sizeof (fcharset));
+      copysize = MIN((c1 - c + 1), sizeof(fcharset));
     else
-      copysize = sizeof (fcharset);
-    strfcpy (fcharset, c, copysize);
+      copysize = sizeof(fcharset);
+    strfcpy(fcharset, c, copysize);
     return fcharset;
   }
-  return strcpy (fcharset, "us-ascii"); /* __STRCPY_CHECKED__ */
+  return strcpy(fcharset, "us-ascii"); /* __STRCPY_CHECKED__ */
 }
 
 #ifndef HAVE_ICONV
 
-iconv_t iconv_open (const char *tocode, const char *fromcode)
+iconv_t iconv_open(const char *tocode, const char *fromcode)
 {
   return (iconv_t)(-1);
 }
 
-size_t iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
-              char **outbuf, size_t *outbytesleft)
+size_t iconv(iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
+             char **outbuf, size_t *outbytesleft)
 {
   return 0;
 }
 
-int iconv_close (iconv_t cd)
+int iconv_close(iconv_t cd)
 {
   return 0;
 }
@@ -367,7 +364,7 @@ int iconv_close (iconv_t cd)
  * MUTT_ICONV_HOOK_FROM acts on charset-hooks, not at all on iconv-hooks.
  */
 
-iconv_t mutt_iconv_open (const char *tocode, const char *fromcode, int flags)
+iconv_t mutt_iconv_open(const char *tocode, const char *fromcode, int flags)
 {
   char tocode1[SHORT_STRING];
   char fromcode1[SHORT_STRING];
@@ -377,23 +374,23 @@ iconv_t mutt_iconv_open (const char *tocode, const char *fromcode, int flags)
   iconv_t cd;
 
   /* transform to MIME preferred charset names */
-  mutt_canonical_charset (tocode1, sizeof (tocode1), tocode);
-  mutt_canonical_charset (fromcode1, sizeof (fromcode1), fromcode);
+  mutt_canonical_charset(tocode1, sizeof(tocode1), tocode);
+  mutt_canonical_charset(fromcode1, sizeof(fromcode1), fromcode);
 
   /* maybe apply charset-hooks and recanonicalise fromcode,
    * but only when caller asked us to sanitize a potentialy wrong
    * charset name incoming from the wild exterior. */
-  if ((flags & MUTT_ICONV_HOOK_FROM) && (tmp = mutt_charset_hook (fromcode1)))
-    mutt_canonical_charset (fromcode1, sizeof (fromcode1), tmp);
+  if ((flags & MUTT_ICONV_HOOK_FROM) && (tmp = mutt_charset_hook(fromcode1)))
+    mutt_canonical_charset(fromcode1, sizeof(fromcode1), tmp);
 
   /* always apply iconv-hooks to suit system's iconv tastes */
-  tocode2 = mutt_iconv_hook (tocode1);
+  tocode2 = mutt_iconv_hook(tocode1);
   tocode2 = (tocode2) ? tocode2 : tocode1;
-  fromcode2 = mutt_iconv_hook (fromcode1);
+  fromcode2 = mutt_iconv_hook(fromcode1);
   fromcode2 = (fromcode2) ? fromcode2 : fromcode1;
 
   /* call system iconv with names it appreciates */
-  if ((cd = iconv_open (tocode2, fromcode2)) != (iconv_t) -1)
+  if ((cd = iconv_open(tocode2, fromcode2)) != (iconv_t) -1)
     return cd;
 
   return (iconv_t) -1;
@@ -406,9 +403,9 @@ iconv_t mutt_iconv_open (const char *tocode, const char *fromcode, int flags)
  * if you're supplying an outrepl, the target charset should be.
  */
 
-size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
-                   char **outbuf, size_t *outbytesleft,
-                   ICONV_CONST char **inrepls, const char *outrepl)
+size_t mutt_iconv(iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
+                  char **outbuf, size_t *outbytesleft,
+                  ICONV_CONST char **inrepls, const char *outrepl)
 {
   size_t ret = 0, ret1;
   ICONV_CONST char *ib = *inbuf;
@@ -418,7 +415,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
 
   for (;;)
   {
-    ret1 = iconv (cd, &ib, &ibl, &ob, &obl);
+    ret1 = iconv(cd, &ib, &ibl, &ob, &obl);
     if (ret1 != (size_t)-1)
       ret += ret1;
     if (ibl && obl && errno == EILSEQ)
@@ -430,10 +427,10 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
         for (t = inrepls; *t; t++)
         {
           ICONV_CONST char *ib1 = *t;
-          size_t ibl1 = strlen (*t);
+          size_t ibl1 = strlen(*t);
           char *ob1 = ob;
           size_t obl1 = obl;
-          iconv (cd, &ib1, &ibl1, &ob1, &obl1);
+          iconv(cd, &ib1, &ibl1, &ob1, &obl1);
           if (!ibl1)
           {
             ++ib, --ibl;
@@ -448,20 +445,20 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
       /* Replace the output */
       if (!outrepl)
         outrepl = "?";
-      iconv (cd, 0, 0, &ob, &obl);
+      iconv(cd, 0, 0, &ob, &obl);
       if (obl)
       {
-        size_t n = strlen (outrepl);
+        size_t n = strlen(outrepl);
         if (n > obl)
         {
           outrepl = "?";
           n = 1;
         }
-        memcpy (ob, outrepl, n);
+        memcpy(ob, outrepl, n);
         ++ib, --ibl;
         ob += n, obl -= n;
         ++ret;
-        iconv (cd, 0, 0, 0, 0); /* for good measure */
+        iconv(cd, 0, 0, 0, 0); /* for good measure */
         continue;
       }
     }
@@ -479,7 +476,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t *inbytesleft,
  * for its meaning and usage policy.
  */
 
-int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
+int mutt_convert_string(char **ps, const char *from, const char *to, int flags)
 {
   iconv_t cd;
   ICONV_CONST char *repls[] = { "\357\277\275", "?", 0 };
@@ -488,7 +485,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
   if (!s || !*s)
     return 0;
 
-  if (to && from && (cd = mutt_iconv_open (to, from, flags)) != (iconv_t)-1)
+  if (to && from && (cd = mutt_iconv_open(to, from, flags)) != (iconv_t)-1)
   {
     ICONV_CONST char *ib;
     char *buf, *ob;
@@ -496,34 +493,34 @@ int mutt_convert_string (char **ps, const char *from, const char *to, int flags)
     ICONV_CONST char **inrepls = 0;
     char *outrepl = 0;
 
-    if (mutt_is_utf8 (to))
+    if (mutt_is_utf8(to))
       outrepl = "\357\277\275";
-    else if (mutt_is_utf8 (from))
+    else if (mutt_is_utf8(from))
       inrepls = repls;
     else
       outrepl = "?";
 
     ib = s;
-    ibl = strlen (s);
+    ibl = strlen(s);
     if (ibl >= SIZE_MAX / MB_LEN_MAX)
     {
-      iconv_close (cd);
+      iconv_close(cd);
       return -1;
     }
 
     obl = MB_LEN_MAX * ibl;
-    ob = buf = safe_malloc (obl + 1);
+    ob = buf = safe_malloc(obl + 1);
 
-    mutt_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
-    iconv (cd, 0, 0, &ob, &obl);
-    iconv_close (cd);
+    mutt_iconv(cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
+    iconv(cd, 0, 0, &ob, &obl);
+    iconv_close(cd);
 
     *ob = '\0';
 
-    FREE (ps);          /* __FREE_CHECKED__ */
+    FREE(ps);          /* __FREE_CHECKED__ */
     *ps = buf;
 
-    mutt_str_adjust (ps);
+    mutt_str_adjust(ps);
     return 0;
   }
   else
@@ -559,38 +556,38 @@ struct fgetconv_not
  * Parameter flags is given as-is to mutt_iconv_open(). See there
  * for its meaning and usage policy.
  */
-FGETCONV *fgetconv_open (FILE *file, const char *from, const char *to, int flags)
+FGETCONV *fgetconv_open(FILE *file, const char *from, const char *to, int flags)
 {
   struct fgetconv_s *fc;
   iconv_t cd = (iconv_t)-1;
   static ICONV_CONST char *repls[] = { "\357\277\275", "?", 0 };
 
   if (from && to)
-    cd = mutt_iconv_open (to, from, flags);
+    cd = mutt_iconv_open(to, from, flags);
 
   if (cd != (iconv_t)-1)
   {
-    fc = safe_malloc (sizeof (struct fgetconv_s));
+    fc = safe_malloc(sizeof(struct fgetconv_s));
     fc->p = fc->ob = fc->bufo;
     fc->ib = fc->bufi;
     fc->ibl = 0;
-    fc->inrepls = mutt_is_utf8 (to) ? repls : repls + 1;
+    fc->inrepls = mutt_is_utf8(to) ? repls : repls + 1;
   }
   else
-    fc = safe_malloc (sizeof (struct fgetconv_not));
+    fc = safe_malloc(sizeof(struct fgetconv_not));
   fc->file = file;
   fc->cd = cd;
   return (FGETCONV *)fc;
 }
 
-char *fgetconvs (char *buf, size_t l, FGETCONV *_fc)
+char *fgetconvs(char *buf, size_t l, FGETCONV *_fc)
 {
   int c;
   size_t r;
 
   for (r = 0; r + 1 < l;)
   {
-    if ((c = fgetconv (_fc)) == EOF)
+    if ((c = fgetconv(_fc)) == EOF)
       break;
     buf[r++] = (char) c;
     if (c == '\n')
@@ -604,14 +601,14 @@ char *fgetconvs (char *buf, size_t l, FGETCONV *_fc)
     return NULL;
 }
 
-int fgetconv (FGETCONV *_fc)
+int fgetconv(FGETCONV *_fc)
 {
   struct fgetconv_s *fc = (struct fgetconv_s *)_fc;
 
   if (!fc)
     return EOF;
   if (fc->cd == (iconv_t)-1)
-    return fgetc (fc->file);
+    return fgetc(fc->file);
   if (!fc->p)
     return EOF;
   if (fc->p < fc->ob)
@@ -621,8 +618,8 @@ int fgetconv (FGETCONV *_fc)
   fc->p = fc->ob = fc->bufo;
   if (fc->ibl)
   {
-    size_t obl = sizeof (fc->bufo);
-    iconv (fc->cd, (ICONV_CONST char **)&fc->ib, &fc->ibl, &fc->ob, &obl);
+    size_t obl = sizeof(fc->bufo);
+    iconv(fc->cd, (ICONV_CONST char **)&fc->ib, &fc->ibl, &fc->ob, &obl);
     if (fc->p < fc->ob)
       return (unsigned char)*(fc->p)++;
   }
@@ -631,23 +628,23 @@ int fgetconv (FGETCONV *_fc)
    * ask why it had stopped converting ... */
 
   /* Try to read some more */
-  if (fc->ibl == sizeof (fc->bufi) ||
-      (fc->ibl && fc->ib + fc->ibl < fc->bufi + sizeof (fc->bufi)))
+  if (fc->ibl == sizeof(fc->bufi) ||
+      (fc->ibl && fc->ib + fc->ibl < fc->bufi + sizeof(fc->bufi)))
   {
     fc->p = 0;
     return EOF;
   }
   if (fc->ibl)
-    memcpy (fc->bufi, fc->ib, fc->ibl);
+    memcpy(fc->bufi, fc->ib, fc->ibl);
   fc->ib = fc->bufi;
-  fc->ibl += fread (fc->ib + fc->ibl, 1, sizeof (fc->bufi) - fc->ibl, fc->file);
+  fc->ibl += fread(fc->ib + fc->ibl, 1, sizeof(fc->bufi) - fc->ibl, fc->file);
 
   /* Try harder this time to convert some */
   if (fc->ibl)
   {
-    size_t obl = sizeof (fc->bufo);
-    mutt_iconv (fc->cd, (ICONV_CONST char **)&fc->ib, &fc->ibl, &fc->ob, &obl,
-                fc->inrepls, 0);
+    size_t obl = sizeof(fc->bufo);
+    mutt_iconv(fc->cd, (ICONV_CONST char **)&fc->ib, &fc->ibl, &fc->ob, &obl,
+               fc->inrepls, 0);
     if (fc->p < fc->ob)
       return (unsigned char)*(fc->p)++;
   }
@@ -657,34 +654,34 @@ int fgetconv (FGETCONV *_fc)
   return EOF;
 }
 
-void fgetconv_close (FGETCONV **_fc)
+void fgetconv_close(FGETCONV **_fc)
 {
   struct fgetconv_s *fc = (struct fgetconv_s *) *_fc;
 
   if (fc->cd != (iconv_t)-1)
-    iconv_close (fc->cd);
-  FREE (_fc);           /* __FREE_CHECKED__ */
+    iconv_close(fc->cd);
+  FREE(_fc);           /* __FREE_CHECKED__ */
 }
 
-int mutt_check_charset (const char *s, int strict)
+int mutt_check_charset(const char *s, int strict)
 {
   int i;
   iconv_t cd;
 
-  if (mutt_is_utf8 (s))
+  if (mutt_is_utf8(s))
     return 0;
 
   if (!strict)
     for (i = 0; PreferredMIMENames[i].key; i++)
     {
-      if (ascii_strcasecmp (PreferredMIMENames[i].key, s) == 0 ||
-          ascii_strcasecmp (PreferredMIMENames[i].pref, s) == 0)
+      if (ascii_strcasecmp(PreferredMIMENames[i].key, s) == 0 ||
+          ascii_strcasecmp(PreferredMIMENames[i].pref, s) == 0)
         return 0;
     }
 
-  if ((cd = mutt_iconv_open (s, s, 0)) != (iconv_t)(-1))
+  if ((cd = mutt_iconv_open(s, s, 0)) != (iconv_t)(-1))
   {
-    iconv_close (cd);
+    iconv_close(cd);
     return 0;
   }
 

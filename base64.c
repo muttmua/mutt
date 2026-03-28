@@ -48,16 +48,16 @@
 
 #define BAD     -1
 
-void mutt_buffer_to_base64 (BUFFER *out, const unsigned char *in, size_t len)
+void mutt_buffer_to_base64(BUFFER *out, const unsigned char *in, size_t len)
 {
-  mutt_buffer_increase_size (out,
-                             ((len * 2) > LONG_STRING) ? (len * 2) : LONG_STRING);
-  mutt_to_base64 ((unsigned char *)out->data, in, len, out->dsize);
-  mutt_buffer_fix_dptr (out);
+  mutt_buffer_increase_size(out,
+                            ((len * 2) > LONG_STRING) ? (len * 2) : LONG_STRING);
+  mutt_to_base64((unsigned char *)out->data, in, len, out->dsize);
+  mutt_buffer_fix_dptr(out);
 }
 
-static void to_base64 (unsigned char *out, const unsigned char *in, size_t len,
-                     size_t olen, const char *dict)
+static void to_base64(unsigned char *out, const unsigned char *in, size_t len,
+                      size_t olen, const char *dict)
 {
   while (len >= 3 && olen > 4)
   {
@@ -88,24 +88,24 @@ static void to_base64 (unsigned char *out, const unsigned char *in, size_t len,
 }
 
 /* raw bytes to null-terminated base 64 string */
-void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
-                     size_t olen)
+void mutt_to_base64(unsigned char *out, const unsigned char *in, size_t len,
+                    size_t olen)
 {
-  to_base64 (out, in, len, olen, B64Chars);
+  to_base64(out, in, len, olen, B64Chars);
 }
 
-void mutt_to_base64_safeurl (unsigned char *out, const unsigned char *in,
-                             size_t len, size_t olen)
+void mutt_to_base64_safeurl(unsigned char *out, const unsigned char *in,
+                            size_t len, size_t olen)
 {
-  to_base64 (out, in, len, olen, B64Chars_urlsafe);
+  to_base64(out, in, len, olen, B64Chars_urlsafe);
 }
 
-int mutt_buffer_from_base64 (BUFFER *out, const char *in)
+int mutt_buffer_from_base64(BUFFER *out, const char *in)
 {
   int olen;
 
-  mutt_buffer_increase_size (out, mutt_strlen (in));
-  olen = mutt_from_base64 (out->data, in, out->dsize);
+  mutt_buffer_increase_size(out, mutt_strlen(in));
+  olen = mutt_from_base64(out->data, in, out->dsize);
   /* mutt_from_base64 returns raw bytes, so don't terminate the buffer either */
   if (olen > 0)
     out->dptr = out->data + olen;
@@ -117,7 +117,7 @@ int mutt_buffer_from_base64 (BUFFER *out, const char *in)
 
 /* Convert '\0'-terminated base 64 string to raw bytes.
  * Returns length of returned buffer, or -1 on error */
-int mutt_from_base64 (char *out, const char *in, size_t olen)
+int mutt_from_base64(char *out, const char *in, size_t olen)
 {
   int len = 0;
   register unsigned char digit1, digit2, digit3, digit4;
@@ -125,16 +125,16 @@ int mutt_from_base64 (char *out, const char *in, size_t olen)
   do
   {
     digit1 = in[0];
-    if (digit1 > 127 || base64val (digit1) == BAD)
+    if (digit1 > 127 || base64val(digit1) == BAD)
       return -1;
     digit2 = in[1];
-    if (digit2 > 127 || base64val (digit2) == BAD)
+    if (digit2 > 127 || base64val(digit2) == BAD)
       return -1;
     digit3 = in[2];
-    if (digit3 > 127 || ((digit3 != '=') && (base64val (digit3) == BAD)))
+    if (digit3 > 127 || ((digit3 != '=') && (base64val(digit3) == BAD)))
       return -1;
     digit4 = in[3];
-    if (digit4 > 127 || ((digit4 != '=') && (base64val (digit4) == BAD)))
+    if (digit4 > 127 || ((digit4 != '=') && (base64val(digit4) == BAD)))
       return -1;
     in += 4;
 

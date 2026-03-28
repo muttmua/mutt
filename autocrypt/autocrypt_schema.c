@@ -24,7 +24,7 @@
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
-int mutt_autocrypt_schema_init (void)
+int mutt_autocrypt_schema_init(void)
 {
   const char *schema;
   char *errmsg = NULL;
@@ -78,21 +78,21 @@ int mutt_autocrypt_schema_init (void)
 
     "COMMIT TRANSACTION";
 
-  if (sqlite3_exec (AutocryptDB, schema, NULL, NULL, &errmsg) != SQLITE_OK)
+  if (sqlite3_exec(AutocryptDB, schema, NULL, NULL, &errmsg) != SQLITE_OK)
   {
-    muttdbg (1, "mutt_autocrypt_schema_init() returned %s", errmsg);
-    sqlite3_free (errmsg);
+    muttdbg(1, "mutt_autocrypt_schema_init() returned %s", errmsg);
+    sqlite3_free(errmsg);
     return -1;
   }
   return 0;
 }
 
-int mutt_autocrypt_schema_update (void)
+int mutt_autocrypt_schema_update(void)
 {
   sqlite3_stmt *stmt = NULL;
   int rv = -1, version;
 
-  if (sqlite3_prepare_v2 (
+  if (sqlite3_prepare_v2(
         AutocryptDB,
         "SELECT version FROM schema;",
         -1,
@@ -100,10 +100,10 @@ int mutt_autocrypt_schema_update (void)
         NULL) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (stmt) != SQLITE_ROW)
+  if (sqlite3_step(stmt) != SQLITE_ROW)
     goto cleanup;
 
-  version = sqlite3_column_int (stmt, 0);
+  version = sqlite3_column_int(stmt, 0);
 
   if (version > 1)
   {
@@ -114,7 +114,7 @@ int mutt_autocrypt_schema_update (void)
        database was upgraded by a future version.
     */
     mutt_error _("Autocrypt database version is too new");
-    mutt_sleep (0);
+    mutt_sleep(0);
     goto cleanup;
   }
 
@@ -124,6 +124,6 @@ int mutt_autocrypt_schema_update (void)
   rv = 0;
 
 cleanup:
-  sqlite3_finalize (stmt);
+  sqlite3_finalize(stmt);
   return rv;
 }

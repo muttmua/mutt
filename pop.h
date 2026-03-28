@@ -83,30 +83,30 @@ typedef struct
 typedef struct
 {
   /* do authentication, using named method or any available if method is NULL */
-  pop_auth_res_t (*authenticate) (POP_DATA *, const char *);
+  pop_auth_res_t (*authenticate)(POP_DATA *, const char *);
   /* name of authentication method supported, NULL means variable. If this
    * is not null, authenticate may ignore the second parameter. */
   const char *method;
 } pop_auth_t;
 
 /* pop_auth.c */
-int pop_authenticate (POP_DATA *);
-void pop_apop_timestamp (POP_DATA *, char *);
+int pop_authenticate(POP_DATA *);
+void pop_apop_timestamp(POP_DATA *, char *);
 
 /* pop_lib.c */
 #define pop_query(A,B,C) pop_query_d(A,B,C,NULL)
-int pop_parse_path (const char *, ACCOUNT *);
-int pop_connect (POP_DATA *);
-int pop_open_connection (POP_DATA *);
-int pop_query_d (POP_DATA *, char *, size_t, char *);
-int pop_fetch_data (POP_DATA *, char *, progress_t *, int (*funct) (char *, void *), void *);
-int pop_reconnect (CONTEXT *);
-void pop_logout (CONTEXT *);
-void pop_error (POP_DATA *, char *);
+int pop_parse_path(const char *, ACCOUNT *);
+int pop_connect(POP_DATA *);
+int pop_open_connection(POP_DATA *);
+int pop_query_d(POP_DATA *, char *, size_t, char *);
+int pop_fetch_data(POP_DATA *, char *, progress_t *, int (*funct)(char *, void *), void *);
+int pop_reconnect(CONTEXT *);
+void pop_logout(CONTEXT *);
+void pop_error(POP_DATA *, char *);
 
 /* pop.c */
-int pop_close_mailbox (CONTEXT *);
-void pop_fetch_mail (void);
+int pop_close_mailbox(CONTEXT *);
+void pop_fetch_mail(void);
 
 extern struct mx_ops mx_pop_ops;
 

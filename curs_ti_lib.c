@@ -31,23 +31,23 @@
 #if !defined(USE_SLANG_CURSES) && defined(HAVE_TERM_H)
 #include <term.h>
 
-const char *mutt_tigetstr (const char *capname)
+const char *mutt_tigetstr(const char *capname)
 {
-  return tigetstr (capname);
+  return tigetstr(capname);
 }
 
-int mutt_tigetflag (const char *capname)
+int mutt_tigetflag(const char *capname)
 {
-  return tigetflag (capname);
+  return tigetflag(capname);
 }
 
 #else
-const char *mutt_tigetstr (const char *capname)
+const char *mutt_tigetstr(const char *capname)
 {
   return NULL;
 }
 
-int mutt_tigetflag (const char *capname)
+int mutt_tigetflag(const char *capname)
 {
   return 0;
 }

@@ -23,9 +23,9 @@ WHERE int MonitorFilesChanged;
 WHERE int MonitorContextChanged;
 
 #ifdef _BUFFY_H
-int mutt_monitor_add (BUFFY *b);
-int mutt_monitor_remove (BUFFY *b);
+int mutt_monitor_add(BUFFY *b);
+int mutt_monitor_remove(BUFFY *b);
 #endif
-int mutt_monitor_poll (void);
+int mutt_monitor_poll(void);
 
 #endif /* MONITOR_H */

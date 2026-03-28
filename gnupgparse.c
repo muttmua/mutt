@@ -73,16 +73,16 @@
 
 static char *_chs = 0;
 
-static void fix_uid (char *uid)
+static void fix_uid(char *uid)
 {
   char *s, *d;
   iconv_t cd;
 
   for (s = d = uid; *s;)
   {
-    if (*s == '\\' && *(s+1) == 'x' && isxdigit ((unsigned char) *(s+2)) && isxdigit ((unsigned char) *(s+3)))
+    if (*s == '\\' && *(s+1) == 'x' && isxdigit((unsigned char) *(s+2)) && isxdigit((unsigned char) *(s+3)))
     {
-      *d++ = hexval (*(s+2)) << 4 | hexval (*(s+3));
+      *d++ = hexval(*(s+2)) << 4 | hexval(*(s+3));
       s += 4;
     }
     else
@@ -90,7 +90,7 @@ static void fix_uid (char *uid)
   }
   *d = '\0';
 
-  if (_chs && (cd = mutt_iconv_open (_chs, "utf-8", 0)) != (iconv_t)-1)
+  if (_chs && (cd = mutt_iconv_open(_chs, "utf-8", 0)) != (iconv_t)-1)
   {
     int n = s - uid + 1; /* chars available in original buffer */
     char *buf;
@@ -98,25 +98,25 @@ static void fix_uid (char *uid)
     char *ob;
     size_t ibl, obl;
 
-    buf = safe_malloc (n+1);
+    buf = safe_malloc(n+1);
     ib = uid, ibl = d - uid + 1, ob = buf, obl = n;
-    iconv (cd, &ib, &ibl, &ob, &obl);
+    iconv(cd, &ib, &ibl, &ob, &obl);
     if (!ibl)
     {
       if (ob-buf < n)
       {
-        memcpy (uid, buf, ob-buf);
+        memcpy(uid, buf, ob-buf);
         uid[ob-buf] = '\0';
       }
-      else if (n >= 0 && ob-buf == n && (buf[n] = 0, strlen (buf) < (size_t)n))
-        memcpy (uid, buf, n);
+      else if (n >= 0 && ob-buf == n && (buf[n] = 0, strlen(buf) < (size_t)n))
+        memcpy(uid, buf, n);
     }
-    FREE (&buf);
-    iconv_close (cd);
+    FREE(&buf);
+    iconv_close(cd);
   }
 }
 
-static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
+static pgp_key_t parse_pub_line(char *buf, int *is_subkey, pgp_key_t k)
 {
   pgp_uid_t *uid = NULL;
   int field = 0, is_uid = 0;
@@ -135,15 +135,15 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
    * start with a fresh one to work with so that we don't
    * mess up the real key in case we find parsing errors. */
   if (k)
-    memcpy (&tmp, k, sizeof (tmp));
+    memcpy(&tmp, k, sizeof(tmp));
   else
-    memset (&tmp, 0, sizeof (tmp));
+    memset(&tmp, 0, sizeof(tmp));
 
   muttdbg(2, "buf = `%s'", buf);
 
   for (p = buf; p; p = pend)
   {
-    if ((pend = strchr (p, ':')))
+    if ((pend = strchr(p, ':')))
       *pend++ = 0;
     field++;
     if (!*p && (field != 1) && (field != 10))
@@ -158,23 +158,23 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         muttdbg(2, "record type: %s", p);
 
-        if (!mutt_strcmp (p, "pub"))
+        if (!mutt_strcmp(p, "pub"))
           is_pub = 1;
-        else if (!mutt_strcmp (p, "sub"))
+        else if (!mutt_strcmp(p, "sub"))
           *is_subkey = 1;
-        else if (!mutt_strcmp (p, "sec"))
+        else if (!mutt_strcmp(p, "sec"))
           ;
-        else if (!mutt_strcmp (p, "ssb"))
+        else if (!mutt_strcmp(p, "ssb"))
           *is_subkey = 1;
-        else if (!mutt_strcmp (p, "uid"))
+        else if (!mutt_strcmp(p, "uid"))
           is_uid = 1;
-        else if (!mutt_strcmp (p, "fpr"))
+        else if (!mutt_strcmp(p, "fpr"))
           is_fpr = 1;
         else
           return NULL;
 
-        if (!(is_uid || is_fpr || (*is_subkey && option (OPTPGPIGNORESUB))))
-          memset (&tmp, 0, sizeof (tmp));
+        if (!(is_uid || is_fpr || (*is_subkey && option(OPTPGPIGNORESUB))))
+          memset(&tmp, 0, sizeof(tmp));
 
         break;
       }
@@ -207,7 +207,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
             break;
         }
 
-        if (!is_uid && !(*is_subkey && option (OPTPGPIGNORESUB)))
+        if (!is_uid && !(*is_subkey && option(OPTPGPIGNORESUB)))
           tmp.flags |= flags;
 
         break;
@@ -216,8 +216,8 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         muttdbg(2, "key len: %s", p);
 
-        if (!(*is_subkey && option (OPTPGPIGNORESUB)) &&
-            mutt_atos (p, &tmp.keylen, MUTT_ATOI_ALLOW_EMPTY) < 0)
+        if (!(*is_subkey && option(OPTPGPIGNORESUB)) &&
+            mutt_atos(p, &tmp.keylen, MUTT_ATOI_ALLOW_EMPTY) < 0)
           goto bail;
         break;
       }
@@ -225,13 +225,13 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         muttdbg(2, "pubkey algorithm: %s", p);
 
-        if (!(*is_subkey && option (OPTPGPIGNORESUB)))
+        if (!(*is_subkey && option(OPTPGPIGNORESUB)))
         {
           int x = 0;
-          if (mutt_atoi (p, &x, MUTT_ATOI_ALLOW_EMPTY) < 0)
+          if (mutt_atoi(p, &x, MUTT_ATOI_ALLOW_EMPTY) < 0)
             goto bail;
           tmp.numalg = x;
-          tmp.algorithm = pgp_pkalgbytype (x);
+          tmp.algorithm = pgp_pkalgbytype(x);
         }
         break;
       }
@@ -239,8 +239,8 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         muttdbg(2, "key id: %s", p);
 
-        if (!(*is_subkey && option (OPTPGPIGNORESUB)))
-          mutt_str_replace (&tmp.keyid, p);
+        if (!(*is_subkey && option(OPTPGPIGNORESUB)))
+          mutt_str_replace(&tmp.keyid, p);
         break;
 
       }
@@ -248,7 +248,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         muttdbg(2, "time stamp: %s", p);
 
-        if (strchr (p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
+        if (strchr(p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
         {
           char tstr[11];
           struct tm time;
@@ -256,33 +256,33 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
           time.tm_sec = 0;
           time.tm_min = 0;
           time.tm_hour = 12;
-          strncpy (tstr, p, 11);
+          strncpy(tstr, p, 11);
           tstr[4] = '\0';
           tstr[7] = '\0';
-          if (mutt_atoi (tstr, &time.tm_year, 0) < 0)
+          if (mutt_atoi(tstr, &time.tm_year, 0) < 0)
           {
             p = tstr;
             goto bail;
           }
           time.tm_year -= 1900;
-          if (mutt_atoi (tstr+5, &time.tm_mon, 0) < 0)
+          if (mutt_atoi(tstr+5, &time.tm_mon, 0) < 0)
           {
             p = tstr+5;
             goto bail;
           }
           time.tm_mon -= 1;
-          if (mutt_atoi (tstr+8, &time.tm_mday, 0) < 0)
+          if (mutt_atoi(tstr+8, &time.tm_mday, 0) < 0)
           {
             p = tstr+8;
             goto bail;
           }
-          tmp.gen_time = mutt_mktime (&time, 0);
+          tmp.gen_time = mutt_mktime(&time, 0);
         }
         else                  /* gpg 2.0.10+ uses seconds since 1970-01-01 */
         {
           unsigned long long secs;
 
-          if (mutt_atoull (p, &secs, MUTT_ATOI_ALLOW_EMPTY) < 0)
+          if (mutt_atoull(p, &secs, MUTT_ATOI_ALLOW_EMPTY) < 0)
             goto bail;
           tmp.gen_time = (time_t)secs;
         }
@@ -309,27 +309,27 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         {
           /* don't let a subkey fpr overwrite an existing primary key fpr */
           if (!tmp.fingerprint)
-            tmp.fingerprint = safe_strdup (p);
+            tmp.fingerprint = safe_strdup(p);
           break;
         }
 
         /* ignore user IDs on subkeys */
-        if (!is_uid && (*is_subkey && option (OPTPGPIGNORESUB)))
+        if (!is_uid && (*is_subkey && option(OPTPGPIGNORESUB)))
           break;
 
-        muttdbg(2, "user ID: %s", NONULL (p));
+        muttdbg(2, "user ID: %s", NONULL(p));
 
-        uid = safe_calloc (sizeof (pgp_uid_t), 1);
-        fix_uid (p);
-        uid->addr = safe_strdup (p);
+        uid = safe_calloc(sizeof(pgp_uid_t), 1);
+        fix_uid(p);
+        uid->addr = safe_strdup(p);
         uid->trust = trust;
         uid->flags |= flags;
         uid->next = tmp.address;
         tmp.address = uid;
 
-        if (strstr (p, "ENCR"))
+        if (strstr(p, "ENCR"))
           tmp.flags |= KEYFLAG_PREFER_ENCRYPTION;
-        if (strstr (p, "SIGN"))
+        if (strstr(p, "SIGN"))
           tmp.flags |= KEYFLAG_PREFER_SIGNING;
 
         break;
@@ -358,7 +358,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         }
 
         if (!is_uid &&
-            (!*is_subkey || !option (OPTPGPIGNORESUB)
+            (!*is_subkey || !option(OPTPGPIGNORESUB)
              || !((flags & KEYFLAG_DISABLED)
                   || (flags & KEYFLAG_REVOKED)
                   || (flags & KEYFLAG_EXPIRED))))
@@ -372,9 +372,9 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
   }
 
   /* merge temp key back into real key */
-  if (!(is_uid || is_fpr || (*is_subkey && option (OPTPGPIGNORESUB))))
-    k = safe_malloc (sizeof (*k));
-  memcpy (k, &tmp, sizeof (*k));
+  if (!(is_uid || is_fpr || (*is_subkey && option(OPTPGPIGNORESUB))))
+    k = safe_malloc(sizeof(*k));
+  memcpy(k, &tmp, sizeof(*k));
   /* fixup parentship of uids after mering the temp key into
    * the real key */
   if (tmp.address)
@@ -390,7 +390,7 @@ bail:
   return NULL;
 }
 
-pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
+pgp_key_t pgp_get_candidates(pgp_ring_t keyring, LIST * hints)
 {
   FILE *fp;
   pid_t thepid;
@@ -399,24 +399,24 @@ pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
   int is_sub;
   int devnull;
 
-  if ((devnull = open ("/dev/null", O_RDWR)) == -1)
+  if ((devnull = open("/dev/null", O_RDWR)) == -1)
     return NULL;
 
-  mutt_str_replace (&_chs, Charset);
+  mutt_str_replace(&_chs, Charset);
 
-  thepid = pgp_invoke_list_keys (NULL, &fp, NULL, -1, -1, devnull,
-                                 keyring, hints);
+  thepid = pgp_invoke_list_keys(NULL, &fp, NULL, -1, -1, devnull,
+                                keyring, hints);
   if (thepid == -1)
   {
-    close (devnull);
+    close(devnull);
     return NULL;
   }
 
   kend = &db;
   k = NULL;
-  while (fgets (buf, sizeof (buf) - 1, fp))
+  while (fgets(buf, sizeof(buf) - 1, fp))
   {
-    if (!(kk = parse_pub_line (buf, &is_sub, k)))
+    if (!(kk = parse_pub_line(buf, &is_sub, k)))
       continue;
 
     /* Only append kk to the list if it's new. */
@@ -434,20 +434,20 @@ pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
         k->parent  = mainkey;
         for (l = &k->address; *l; l = &(*l)->next)
           ;
-        *l = pgp_copy_uids (mainkey->address, k);
+        *l = pgp_copy_uids(mainkey->address, k);
       }
       else
         mainkey = k;
     }
   }
 
-  if (ferror (fp))
-    mutt_perror ("fgets");
+  if (ferror(fp))
+    mutt_perror("fgets");
 
-  safe_fclose (&fp);
-  mutt_wait_filter (thepid);
+  safe_fclose(&fp);
+  mutt_wait_filter(thepid);
 
-  close (devnull);
+  close(devnull);
 
   return db;
 }

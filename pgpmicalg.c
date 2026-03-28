@@ -39,8 +39,7 @@ static const struct
 {
   short id;
   const char *name;
-}
-HashAlgorithms[] =
+} HashAlgorithms[] =
 {
   { 1,          "pgp-md5"               },
   { 2,          "pgp-sha1"              },
@@ -55,7 +54,7 @@ HashAlgorithms[] =
   { -1,         NULL }
 };
 
-static const char *pgp_hash_to_micalg (short id)
+static const char *pgp_hash_to_micalg(short id)
 {
   int i;
 
@@ -65,7 +64,7 @@ static const char *pgp_hash_to_micalg (short id)
   return "x-unknown";
 }
 
-static void pgp_dearmor (FILE *in, FILE *out)
+static void pgp_dearmor(FILE *in, FILE *out)
 {
   char line[HUGE_STRING];
   LOFF_T start;
@@ -74,15 +73,15 @@ static void pgp_dearmor (FILE *in, FILE *out)
 
   STATE state;
 
-  memset (&state, 0, sizeof (STATE));
+  memset(&state, 0, sizeof(STATE));
   state.fpin = in;
   state.fpout = out;
 
   /* find the beginning of ASCII armor */
 
-  while ((r = fgets (line, sizeof (line), in)) != NULL)
+  while ((r = fgets(line, sizeof(line), in)) != NULL)
   {
-    if (!strncmp (line, "-----BEGIN", 10))
+    if (!strncmp(line, "-----BEGIN", 10))
       break;
   }
   if (r == NULL)
@@ -93,9 +92,9 @@ static void pgp_dearmor (FILE *in, FILE *out)
 
   /* skip the armor header */
 
-  while ((r = fgets (line, sizeof (line), in)) != NULL)
+  while ((r = fgets(line, sizeof(line), in)) != NULL)
   {
-    SKIP_ASCII_WS (r);
+    SKIP_ASCII_WS(r);
     if (!*r) break;
   }
   if (r == NULL)
@@ -105,13 +104,13 @@ static void pgp_dearmor (FILE *in, FILE *out)
   }
 
   /* actual data starts here */
-  start = ftello (in);
+  start = ftello(in);
 
   /* find the checksum */
 
-  while ((r = fgets (line, sizeof (line), in)) != NULL)
+  while ((r = fgets(line, sizeof(line), in)) != NULL)
   {
-    if (*line == '=' || !strncmp (line, "-----END", 8))
+    if (*line == '=' || !strncmp(line, "-----END", 8))
       break;
   }
   if (r == NULL)
@@ -120,22 +119,22 @@ static void pgp_dearmor (FILE *in, FILE *out)
     return;
   }
 
-  if ((end = ftello (in) - strlen (line)) < start)
+  if ((end = ftello(in) - strlen(line)) < start)
   {
     muttdbg(1, "end < start???");
     return;
   }
 
-  if (fseeko (in, start, SEEK_SET) == -1)
+  if (fseeko(in, start, SEEK_SET) == -1)
   {
     muttdbg(1, "Can't seekto start.");
     return;
   }
 
-  mutt_decode_base64 (&state, end - start, 0, (iconv_t) -1);
+  mutt_decode_base64(&state, end - start, 0, (iconv_t) -1);
 }
 
-static short pgp_mic_from_packet (unsigned char *p, size_t len)
+static short pgp_mic_from_packet(unsigned char *p, size_t len)
 {
   /* is signature? */
   if ((p[0] & 0x3f) != PT_SIG)
@@ -157,7 +156,7 @@ static short pgp_mic_from_packet (unsigned char *p, size_t len)
   }
 }
 
-static short pgp_find_hash (const char *fname)
+static short pgp_find_hash(const char *fname)
 {
   FILE *in = NULL;
   FILE *out = NULL;
@@ -166,27 +165,27 @@ static short pgp_find_hash (const char *fname)
   size_t l;
   short rv = -1;
 
-  tempfile = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (tempfile);
-  if ((out = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
+  tempfile = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(tempfile);
+  if ((out = safe_fopen(mutt_b2s(tempfile), "w+")) == NULL)
   {
-    mutt_perror (mutt_b2s (tempfile));
+    mutt_perror(mutt_b2s(tempfile));
     goto bye;
   }
-  unlink (mutt_b2s (tempfile));
+  unlink(mutt_b2s(tempfile));
 
-  if ((in = fopen (fname, "r")) == NULL)
+  if ((in = fopen(fname, "r")) == NULL)
   {
-    mutt_perror (fname);
+    mutt_perror(fname);
     goto bye;
   }
 
-  pgp_dearmor (in, out);
-  rewind (out);
+  pgp_dearmor(in, out);
+  rewind(out);
 
-  if ((p = pgp_read_packet (out, &l)) != NULL)
+  if ((p = pgp_read_packet(out, &l)) != NULL)
   {
-    rv = pgp_mic_from_packet (p, l);
+    rv = pgp_mic_from_packet(p, l);
   }
   else
   {
@@ -194,14 +193,14 @@ static short pgp_find_hash (const char *fname)
   }
 
 bye:
-  mutt_buffer_pool_release (&tempfile);
-  safe_fclose (&in);
-  safe_fclose (&out);
-  pgp_release_packet ();
+  mutt_buffer_pool_release(&tempfile);
+  safe_fclose(&in);
+  safe_fclose(&out);
+  pgp_release_packet();
   return rv;
 }
 
-const char *pgp_micalg (const char *fname)
+const char *pgp_micalg(const char *fname)
 {
-  return pgp_hash_to_micalg (pgp_find_hash (fname));
+  return pgp_hash_to_micalg(pgp_find_hash(fname));
 }

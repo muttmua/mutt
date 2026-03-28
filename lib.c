@@ -109,17 +109,17 @@ sysexits_h[] =
   { -1, NULL}
 };
 
-void mutt_nocurses_error (const char *fmt, ...)
+void mutt_nocurses_error(const char *fmt, ...)
 {
   va_list ap;
 
-  va_start (ap, fmt);
-  vfprintf (stderr, fmt, ap);
-  va_end (ap);
-  fputc ('\n', stderr);
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  fputc('\n', stderr);
 }
 
-void *safe_calloc (size_t nmemb, size_t size)
+void *safe_calloc(size_t nmemb, size_t size)
 {
   void *p;
 
@@ -129,35 +129,35 @@ void *safe_calloc (size_t nmemb, size_t size)
   if (((size_t) -1) / nmemb <= size)
   {
     mutt_error _("Integer overflow -- can't allocate memory!");
-    sleep (1);
-    mutt_exit (1);
+    sleep(1);
+    mutt_exit(1);
   }
 
-  if (!(p = calloc (nmemb, size)))
+  if (!(p = calloc(nmemb, size)))
   {
     mutt_error _("Out of memory!");
-    sleep (1);
-    mutt_exit (1);
+    sleep(1);
+    mutt_exit(1);
   }
   return p;
 }
 
-void *safe_malloc (size_t siz)
+void *safe_malloc(size_t siz)
 {
   void *p;
 
   if (siz == 0)
     return 0;
-  if ((p = (void *) malloc (siz)) == 0) /* __MEM_CHECKED__ */
+  if ((p = (void *) malloc(siz)) == 0) /* __MEM_CHECKED__ */
   {
     mutt_error _("Out of memory!");
-    sleep (1);
-    mutt_exit (1);
+    sleep(1);
+    mutt_exit(1);
   }
   return (p);
 }
 
-void safe_realloc (void *ptr, size_t siz)
+void safe_realloc(void *ptr, size_t siz)
 {
   void *r;
   void **p = (void **)ptr;
@@ -166,83 +166,83 @@ void safe_realloc (void *ptr, size_t siz)
   {
     if (*p)
     {
-      free (*p);                        /* __MEM_CHECKED__ */
+      free(*p);                        /* __MEM_CHECKED__ */
       *p = NULL;
     }
     return;
   }
 
   if (*p)
-    r = (void *) realloc (*p, siz);     /* __MEM_CHECKED__ */
+    r = (void *) realloc(*p, siz);     /* __MEM_CHECKED__ */
   else
   {
     /* realloc(NULL, nbytes) doesn't seem to work under SunOS 4.1.x  --- __MEM_CHECKED__ */
-    r = (void *) malloc (siz);          /* __MEM_CHECKED__ */
+    r = (void *) malloc(siz);          /* __MEM_CHECKED__ */
   }
 
   if (!r)
   {
     mutt_error _("Out of memory!");
-    sleep (1);
-    mutt_exit (1);
+    sleep(1);
+    mutt_exit(1);
   }
 
   *p = r;
 }
 
-void safe_free (void *ptr)      /* __SAFE_FREE_CHECKED__ */
+void safe_free(void *ptr)      /* __SAFE_FREE_CHECKED__ */
 {
   void **p = (void **)ptr;
   if (*p)
   {
-    free (*p);                          /* __MEM_CHECKED__ */
+    free(*p);                          /* __MEM_CHECKED__ */
     *p = 0;
   }
 }
 
-int safe_fclose (FILE **f)
+int safe_fclose(FILE **f)
 {
   int r = 0;
 
   if (*f)
-    r = fclose (*f);
+    r = fclose(*f);
 
   *f = NULL;
   return r;
 }
 
-int safe_fsync_close (FILE **f)
+int safe_fsync_close(FILE **f)
 {
   int r = 0;
 
   if (*f)
   {
-    if (fflush (*f) || fsync (fileno (*f)))
+    if (fflush(*f) || fsync(fileno(*f)))
     {
       r = -1;
-      safe_fclose (f);
+      safe_fclose(f);
     }
     else
-      r = safe_fclose (f);
+      r = safe_fclose(f);
   }
 
   return r;
 }
 
-char *safe_strdup (const char *s)
+char *safe_strdup(const char *s)
 {
   char *p;
   size_t l;
 
   if (!s || !*s)
     return 0;
-  l = strlen (s) + 1;
-  p = (char *)safe_malloc (l);
-  memcpy (p, s, l);
+  l = strlen(s) + 1;
+  p = (char *)safe_malloc(l);
+  memcpy(p, s, l);
   return (p);
 }
 
-char *safe_strcat (char *d, size_t l, const char *s)
+char *safe_strcat(char *d, size_t l, const char *s)
 {
   char *p = d;
 
@@ -261,7 +261,7 @@ char *safe_strcat (char *d, size_t l, const char *s)
   return p;
 }
 
-char *safe_strncat (char *d, size_t l, const char *s, size_t sl)
+char *safe_strncat(char *d, size_t l, const char *s, size_t sl)
 {
   char *p = d;
 
@@ -284,53 +284,53 @@ char *safe_strncat (char *d, size_t l, const char *s, size_t sl)
 /* Free *p afterwards to handle the case that *p and s reference the
  * same memory
  */
-void mutt_str_replace (char **p, const char *s)
+void mutt_str_replace(char **p, const char *s)
 {
   char *tmp = *p;
-  *p = safe_strdup (s);
-  FREE (&tmp);
+  *p = safe_strdup(s);
+  FREE(&tmp);
 }
 
-void mutt_str_adjust (char **p)
+void mutt_str_adjust(char **p)
 {
   if (!p || !*p) return;
-  safe_realloc (p, strlen (*p) + 1);
+  safe_realloc(p, strlen(*p) + 1);
 }
 
 /* convert all characters in the string to lowercase */
-char *mutt_strlower (char *s)
+char *mutt_strlower(char *s)
 {
   char *p = s;
 
   while (*p)
   {
-    *p = tolower ((unsigned char) *p);
+    *p = tolower((unsigned char) *p);
     p++;
   }
 
   return (s);
 }
 
-int mutt_mkdir (char *path, mode_t mode)
+int mutt_mkdir(char *path, mode_t mode)
 {
   struct stat sb;
   char *s;
   int rv = -1;
 
-  if (stat (path, &sb) >= 0)
+  if (stat(path, &sb) >= 0)
     return 0;
 
   s = path;
   do
   {
-    s = strchr (s + 1, '/');
+    s = strchr(s + 1, '/');
     if (s)
       *s = '\0';
-    if (stat (path, &sb) < 0)
+    if (stat(path, &sb) < 0)
     {
       if (errno != ENOENT)
         goto cleanup;
-      if (mkdir (path, mode) < 0)
+      if (mkdir(path, mode) < 0)
         goto cleanup;
     }
     if (s)
@@ -346,7 +346,7 @@ cleanup:
   return rv;
 }
 
-void mutt_unlink (const char *s)
+void mutt_unlink(const char *s)
 {
   int fd;
   int flags;
@@ -362,43 +362,43 @@ void mutt_unlink (const char *s)
   flags = O_RDWR;
 #endif
 
-  if (lstat (s, &sb) == 0 && S_ISREG(sb.st_mode))
+  if (lstat(s, &sb) == 0 && S_ISREG(sb.st_mode))
   {
-    if ((fd = open (s, flags)) < 0)
+    if ((fd = open(s, flags)) < 0)
       return;
 
-    if ((fstat (fd, &sb2) != 0) || !S_ISREG (sb2.st_mode)
+    if ((fstat(fd, &sb2) != 0) || !S_ISREG(sb2.st_mode)
         || (sb.st_dev != sb2.st_dev) || (sb.st_ino != sb2.st_ino))
     {
-      close (fd);
+      close(fd);
       return;
     }
 
-    if ((f = fdopen (fd, "r+")))
+    if ((f = fdopen(fd, "r+")))
     {
-      unlink (s);
-      memset (buf, 0, sizeof (buf));
+      unlink(s);
+      memset(buf, 0, sizeof(buf));
       while (sb.st_size > 0)
       {
-        fwrite (buf, 1, MIN (sizeof (buf), sb.st_size), f);
-        sb.st_size -= MIN (sizeof (buf), sb.st_size);
+        fwrite(buf, 1, MIN(sizeof(buf), sb.st_size), f);
+        sb.st_size -= MIN(sizeof(buf), sb.st_size);
       }
-      safe_fclose (&f);
+      safe_fclose(&f);
     }
   }
 }
 
-int mutt_copy_bytes (FILE *in, FILE *out, size_t size)
+int mutt_copy_bytes(FILE *in, FILE *out, size_t size)
 {
   char buf[2048];
   size_t chunk;
 
   while (size > 0)
   {
-    chunk = (size > sizeof (buf)) ? sizeof (buf) : size;
-    if ((chunk = fread (buf, 1, chunk, in)) < 1)
+    chunk = (size > sizeof(buf)) ? sizeof(buf) : size;
+    if ((chunk = fread(buf, 1, chunk, in)) < 1)
       break;
-    if (fwrite (buf, 1, chunk, out) != chunk)
+    if (fwrite(buf, 1, chunk, out) != chunk)
     {
       /* muttdbg(1, "fwrite() returned short byte count"); */
       return (-1);
@@ -409,14 +409,14 @@ int mutt_copy_bytes (FILE *in, FILE *out, size_t size)
   return 0;
 }
 
-int mutt_copy_stream (FILE *fin, FILE *fout)
+int mutt_copy_stream(FILE *fin, FILE *fout)
 {
   size_t l;
   char buf[LONG_STRING];
 
-  while ((l = fread (buf, 1, sizeof (buf), fin)) > 0)
+  while ((l = fread(buf, 1, sizeof(buf), fin)) > 0)
   {
-    if (fwrite (buf, 1, l, fout) != l)
+    if (fwrite(buf, 1, l, fout) != l)
       return (-1);
   }
 
@@ -424,7 +424,7 @@ int mutt_copy_stream (FILE *fin, FILE *fout)
 }
 
 int
-compare_stat (struct stat *osb, struct stat *nsb)
+compare_stat(struct stat *osb, struct stat *nsb)
 {
   if (osb->st_dev != nsb->st_dev || osb->st_ino != nsb->st_ino ||
       osb->st_rdev != nsb->st_rdev)
@@ -443,7 +443,7 @@ compare_stat (struct stat *osb, struct stat *nsb)
  * Warning: We don't check whether src and target are equal.
  */
 
-int safe_rename (const char *src, const char *target)
+int safe_rename(const char *src, const char *target)
 {
   struct stat ssb, tsb;
   int link_errno;
@@ -451,7 +451,7 @@ int safe_rename (const char *src, const char *target)
   if (!src || !target)
     return -1;
 
-  if (link (src, target) != 0)
+  if (link(src, target) != 0)
   {
     link_errno = errno;
 
@@ -466,13 +466,13 @@ int safe_rename (const char *src, const char *target)
      * used lstat() further below for 20 years without issue, and I
      * believe was never intended to be used on a src symlink.
      */
-    if ((lstat (src, &ssb) == 0) &&
-        (lstat (target, &tsb) == 0) &&
-        (compare_stat (&ssb, &tsb) == 0))
+    if ((lstat(src, &ssb) == 0) &&
+        (lstat(target, &tsb) == 0) &&
+        (compare_stat(&ssb, &tsb) == 0))
     {
       muttdbg(1, "link (%s, %s) reported failure: "
-                 "%s (%d) but actually succeeded",
-                 src, target, strerror (errno), errno);
+              "%s (%d) but actually succeeded",
+              src, target, strerror(errno), errno);
       goto success;
     }
 
@@ -491,7 +491,7 @@ int safe_rename (const char *src, const char *target)
      */
 
     muttdbg(1, "link (%s, %s) failed: %s (%d)",
-               src, target, strerror (errno), errno);
+            src, target, strerror(errno), errno);
 
     /*
      * FUSE may return ENOSYS. VFAT may return EPERM. FreeBSD's
@@ -507,7 +507,7 @@ int safe_rename (const char *src, const char *target)
       )
     {
       muttdbg(1, "trying rename...");
-      if (rename (src, target) == -1)
+      if (rename(src, target) == -1)
       {
         mutt_errno_dbg(1, "rename (%s, %s) failed", src, target);
         return -1;
@@ -531,17 +531,17 @@ int safe_rename (const char *src, const char *target)
   /*
    * Stat both links and check if they are equal.
    */
-  if (lstat (src, &ssb) == -1)
+  if (lstat(src, &ssb) == -1)
   {
     muttdbg(1, "can't stat %s: %s (%d)",
-                src, strerror (errno), errno);
+            src, strerror(errno), errno);
     return -1;
   }
 
-  if (lstat (target, &tsb) == -1)
+  if (lstat(target, &tsb) == -1)
   {
     muttdbg(1, "can't stat %s: %s (%d)",
-                src, strerror (errno), errno);
+            src, strerror(errno), errno);
     return -1;
   }
 
@@ -549,7 +549,7 @@ int safe_rename (const char *src, const char *target)
    * pretend that the link failed because the target file
    * did already exist.
    */
-  if (compare_stat (&ssb, &tsb) == -1)
+  if (compare_stat(&ssb, &tsb) == -1)
   {
     muttdbg(1, "stat blocks for %s and %s diverge; pretending EEXIST.", src, target);
     errno = EEXIST;
@@ -562,10 +562,10 @@ success:
    * Unlink the original link.  Should we really ignore the return
    * value here? XXX
    */
-  if (unlink (src) == -1)
+  if (unlink(src) == -1)
   {
     muttdbg(1, "unlink (%s) failed: %s (%d)",
-                src, strerror (errno), errno);
+            src, strerror(errno), errno);
   }
 
 
@@ -575,7 +575,7 @@ success:
 
 static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%";
 
-void mutt_sanitize_filename (char *f, int flags)
+void mutt_sanitize_filename(char *f, int flags)
 {
   int allow_slash, allow_8bit;
 
@@ -588,7 +588,7 @@ void mutt_sanitize_filename (char *f, int flags)
   {
     if ((allow_slash && *f == '/')  ||
         (allow_8bit && (*f & 0x80)) ||
-        strchr (safe_chars, *f))
+        strchr(safe_chars, *f))
       continue;
     else
       *f = '_';
@@ -600,25 +600,25 @@ void mutt_sanitize_filename (char *f, int flags)
  * If a line ends with "\", this char and the linefeed is removed,
  * and the next line is read too.
  */
-char *mutt_read_line (char *s, size_t *size, FILE *fp, int *line, int flags)
+char *mutt_read_line(char *s, size_t *size, FILE *fp, int *line, int flags)
 {
   size_t offset = 0;
   char *ch;
 
   if (!s)
   {
-    s = safe_malloc (STRING);
+    s = safe_malloc(STRING);
     *size = STRING;
   }
 
   FOREVER
   {
-    if (fgets (s + offset, *size - offset, fp) == NULL)
+    if (fgets(s + offset, *size - offset, fp) == NULL)
     {
-      FREE (&s);
+      FREE(&s);
       return NULL;
     }
-    if ((ch = strchr (s + offset, '\n')) != NULL)
+    if ((ch = strchr(s + offset, '\n')) != NULL)
     {
       if (line)
         (*line)++;
@@ -634,11 +634,11 @@ char *mutt_read_line (char *s, size_t *size, FILE *fp, int *line, int flags)
     else
     {
       int c;
-      c = getc (fp); /* This is kind of a hack. We want to know if the
-                        char at the current point in the input stream is EOF.
-                        feof() will only tell us if we've already hit EOF, not
-                        if the next character is EOF. So, we need to read in
-                        the next character and manually check if it is EOF. */
+      c = getc(fp); /* This is kind of a hack. We want to know if the
+                       char at the current point in the input stream is EOF.
+                       feof() will only tell us if we've already hit EOF, not
+                       if the next character is EOF. So, we need to read in
+                       the next character and manually check if it is EOF. */
       if (c == EOF)
       {
         /* The last line of fp isn't \n terminated */
@@ -648,30 +648,30 @@ char *mutt_read_line (char *s, size_t *size, FILE *fp, int *line, int flags)
       }
       else
       {
-        ungetc (c, fp); /* undo our damage */
+        ungetc(c, fp); /* undo our damage */
         /* There wasn't room for the line -- increase ``s'' */
         offset = *size - 1; /* overwrite the terminating 0 */
         *size += STRING;
-        safe_realloc (&s, *size);
+        safe_realloc(&s, *size);
       }
     }
   }
 }
 
 char *
-mutt_substrcpy (char *dest, const char *beg, const char *end, size_t destlen)
+mutt_substrcpy(char *dest, const char *beg, const char *end, size_t destlen)
 {
   size_t len;
 
   len = end - beg;
   if (len > destlen - 1)
     len = destlen - 1;
-  memcpy (dest, beg, len);
+  memcpy(dest, beg, len);
   dest[len] = 0;
   return dest;
 }
 
-char *mutt_substrdup (const char *begin, const char *end)
+char *mutt_substrdup(const char *begin, const char *end)
 {
   size_t len;
   char *p;
@@ -679,10 +679,10 @@ char *mutt_substrdup (const char *begin, const char *end)
   if (end)
     len = end - begin;
   else
-    len = strlen (begin);
+    len = strlen(begin);
 
-  p = safe_malloc (len + 1);
-  memcpy (p, begin, len);
+  p = safe_malloc(len + 1);
+  memcpy(p, begin, len);
   p[len] = 0;
   return p;
 }
@@ -711,7 +711,7 @@ int mutt_strncasecmp(const char *a, const char *b, size_t l)
 
 size_t mutt_strlen(const char *a)
 {
-  return a ? strlen (a) : 0;
+  return a ? strlen(a) : 0;
 }
 
 int mutt_strcoll(const char *a, const char *b)
@@ -719,7 +719,7 @@ int mutt_strcoll(const char *a, const char *b)
   return strcoll(NONULL(a), NONULL(b));
 }
 
-const char *mutt_stristr (const char *haystack, const char *needle)
+const char *mutt_stristr(const char *haystack, const char *needle)
 {
   const char *p, *q;
 
@@ -732,7 +732,7 @@ const char *mutt_stristr (const char *haystack, const char *needle)
   {
     for (q = needle;
          *p && *q &&
-           tolower ((unsigned char) *p) == tolower ((unsigned char) *q);
+           tolower((unsigned char) *p) == tolower((unsigned char) *q);
          p++, q++)
       ;
     if (!*q)
@@ -742,34 +742,34 @@ const char *mutt_stristr (const char *haystack, const char *needle)
   return NULL;
 }
 
-char *mutt_skip_ascii_ws (char *p)
+char *mutt_skip_ascii_ws(char *p)
 {
-  SKIP_ASCII_WS (p);
+  SKIP_ASCII_WS(p);
   return p;
 }
 
-void mutt_remove_trailing_ascii_ws (char *s)
+void mutt_remove_trailing_ascii_ws(char *s)
 {
   char *p;
 
-  for (p = s + mutt_strlen (s) - 1 ; p >= s && IS_ASCII_WS (*p) ; p--)
+  for (p = s + mutt_strlen(s) - 1 ; p >= s && IS_ASCII_WS(*p) ; p--)
     *p = 0;
 }
 
-char *mutt_concat_path (char *d, const char *dir, const char *fname, size_t l)
+char *mutt_concat_path(char *d, const char *dir, const char *fname, size_t l)
 {
   const char *fmt = "%s/%s";
 
   if (!*fname || (*dir && dir[strlen(dir)-1] == '/'))
     fmt = "%s%s";
 
-  snprintf (d, l, fmt, dir, fname);
+  snprintf(d, l, fmt, dir, fname);
   return d;
 }
 
-const char *mutt_basename (const char *f)
+const char *mutt_basename(const char *f)
 {
-  const char *p = strrchr (f, '/');
+  const char *p = strrchr(f, '/');
   if (p)
     return p + 1;
   else
@@ -792,31 +792,31 @@ mutt_strsysexit(int e)
 
 #ifdef DEBUG
 
-void mutt_debug_f (const char *file, const int line, const char *function, const int err, const char *fmt, ...)
+void mutt_debug_f(const char *file, const int line, const char *function, const int err, const char *fmt, ...)
 {
   va_list ap;
-  time_t now = time (NULL);
+  time_t now = time(NULL);
   static char buf[23] = "";
   static time_t last = 0;
 
   if (now > last)
   {
-    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", localtime (&now));
+    strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
     last = now;
   }
 
   if (function)
-    fprintf (debugfile, "[%s %s@%s:%d] ", buf, function, file, line);
+    fprintf(debugfile, "[%s %s@%s:%d] ", buf, function, file, line);
   else
-    fprintf (debugfile, "[%s %s:%d] ", buf, file, line);
+    fprintf(debugfile, "[%s %s:%d] ", buf, file, line);
 
-  va_start (ap, fmt);
-  vfprintf (debugfile, fmt, ap);
-  va_end (ap);
+  va_start(ap, fmt);
+  vfprintf(debugfile, fmt, ap);
+  va_end(ap);
 
   /* include passed errno? */
   if (err)
-    fprintf (debugfile, " [errno %d %s]", err, strerror(err));
+    fprintf(debugfile, " [errno %d %s]", err, strerror(err));
 
   /* because we always print a line header, in muttdbg() we auto-newline */
   if (strchr(fmt, '\n') == NULL)
@@ -846,7 +846,7 @@ void mutt_debug_f (const char *file, const int line, const char *function, const
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atos (const char *str, short *dst, int flags)
+int mutt_atos(const char *str, short *dst, int flags)
 {
   int rc;
   long res;
@@ -855,7 +855,7 @@ int mutt_atos (const char *str, short *dst, int flags)
 
   *t = 0;
 
-  if ((rc = mutt_atol (str, &res, flags)) < 0)
+  if ((rc = mutt_atol(str, &res, flags)) < 0)
     return rc;
   if ((short) res != res)
     return -2;
@@ -868,7 +868,7 @@ int mutt_atos (const char *str, short *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atoi (const char *str, int *dst, int flags)
+int mutt_atoi(const char *str, int *dst, int flags)
 {
   int rc;
   long res;
@@ -877,7 +877,7 @@ int mutt_atoi (const char *str, int *dst, int flags)
 
   *t = 0;
 
-  if ((rc = mutt_atol (str, &res, flags)) < 0)
+  if ((rc = mutt_atol(str, &res, flags)) < 0)
     return rc;
   if ((int) res != res)
     return -2;
@@ -890,7 +890,7 @@ int mutt_atoi (const char *str, int *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atol (const char *str, long *dst, int flags)
+int mutt_atol(const char *str, long *dst, int flags)
 {
   long tmp, res;
   long *t = dst ? dst : &tmp;
@@ -902,7 +902,7 @@ int mutt_atol (const char *str, long *dst, int flags)
     return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  res = strtol (str, &e, 10);
+  res = strtol(str, &e, 10);
 
   if (errno == ERANGE)
     return -2;
@@ -919,7 +919,7 @@ int mutt_atol (const char *str, long *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atoll (const char *str, long long *dst, int flags)
+int mutt_atoll(const char *str, long long *dst, int flags)
 {
   long long tmp, res;
   long long *t = dst ? dst : &tmp;
@@ -931,7 +931,7 @@ int mutt_atoll (const char *str, long long *dst, int flags)
     return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  res = strtoll (str, &e, 10);
+  res = strtoll(str, &e, 10);
 
   if (errno == ERANGE)
     return -2;
@@ -948,7 +948,7 @@ int mutt_atoll (const char *str, long long *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atoui (const char *str, unsigned int *dst, int flags)
+int mutt_atoui(const char *str, unsigned int *dst, int flags)
 {
   int rc;
   unsigned long res;
@@ -957,7 +957,7 @@ int mutt_atoui (const char *str, unsigned int *dst, int flags)
 
   *t = 0;
 
-  if ((rc = mutt_atoul (str, &res, flags)) < 0)
+  if ((rc = mutt_atoul(str, &res, flags)) < 0)
     return rc;
   if ((unsigned int) res != res)
     return -2;
@@ -970,7 +970,7 @@ int mutt_atoui (const char *str, unsigned int *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atoul (const char *str, unsigned long *dst, int flags)
+int mutt_atoul(const char *str, unsigned long *dst, int flags)
 {
   unsigned long tmp, res;
   unsigned long *t = dst ? dst : &tmp;
@@ -982,7 +982,7 @@ int mutt_atoul (const char *str, unsigned long *dst, int flags)
     return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  res = strtoul (str, &e, 10);
+  res = strtoul(str, &e, 10);
 
   if (errno == ERANGE)
     return -2;
@@ -999,7 +999,7 @@ int mutt_atoul (const char *str, unsigned long *dst, int flags)
  *         -1 - error: invalid input
  *         -2 - error: out of range
  */
-int mutt_atoull (const char *str, unsigned long long *dst, int flags)
+int mutt_atoull(const char *str, unsigned long long *dst, int flags)
 {
   unsigned long long tmp, res;
   unsigned long long *t = dst ? dst : &tmp;
@@ -1011,7 +1011,7 @@ int mutt_atoull (const char *str, unsigned long long *dst, int flags)
     return (flags & MUTT_ATOI_ALLOW_EMPTY) ? 0 : -1;
 
   errno = 0;
-  res = strtoull (str, &e, 10);
+  res = strtoull(str, &e, 10);
 
   if (errno == ERANGE)
     return -2;

@@ -253,89 +253,89 @@ typedef struct
 
 /* -- private IMAP functions -- */
 /* imap.c */
-int imap_create_mailbox (IMAP_DATA *idata, char *mailbox);
-int imap_rename_mailbox (IMAP_DATA *idata, IMAP_MBOX *mx, const char *newname);
-IMAP_STATUS *imap_mboxcache_get (IMAP_DATA *idata, const char *mbox,
-                                 int create);
-void imap_mboxcache_free (IMAP_DATA *idata);
-int imap_exec_msgset (IMAP_DATA *idata, const char *pre, const char *post,
-                      int flag, int changed, int invert);
-int imap_open_connection (IMAP_DATA *idata);
-void imap_close_connection (IMAP_DATA *idata);
-IMAP_DATA *imap_conn_find (const ACCOUNT *account, int flags);
-int imap_read_literal (FILE *fp, IMAP_DATA *idata, unsigned int bytes, progress_t*);
-void imap_expunge_mailbox (IMAP_DATA *idata);
-void imap_logout (IMAP_DATA **idata);
-int imap_sync_message_for_copy (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
-                                int *err_continue);
-int imap_has_flag (LIST *flag_list, const char *flag);
-int imap_reconnect (IMAP_DATA **p_idata);
+int imap_create_mailbox(IMAP_DATA *idata, char *mailbox);
+int imap_rename_mailbox(IMAP_DATA *idata, IMAP_MBOX *mx, const char *newname);
+IMAP_STATUS *imap_mboxcache_get(IMAP_DATA *idata, const char *mbox,
+                                int create);
+void imap_mboxcache_free(IMAP_DATA *idata);
+int imap_exec_msgset(IMAP_DATA *idata, const char *pre, const char *post,
+                     int flag, int changed, int invert);
+int imap_open_connection(IMAP_DATA *idata);
+void imap_close_connection(IMAP_DATA *idata);
+IMAP_DATA *imap_conn_find(const ACCOUNT *account, int flags);
+int imap_read_literal(FILE *fp, IMAP_DATA *idata, unsigned int bytes, progress_t*);
+void imap_expunge_mailbox(IMAP_DATA *idata);
+void imap_logout(IMAP_DATA **idata);
+int imap_sync_message_for_copy(IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
+                               int *err_continue);
+int imap_has_flag(LIST *flag_list, const char *flag);
+int imap_reconnect(IMAP_DATA **p_idata);
 
 /* auth.c */
-int imap_authenticate (IMAP_DATA *idata);
+int imap_authenticate(IMAP_DATA *idata);
 
 /* command.c */
-int imap_cmd_start (IMAP_DATA *idata, const char *cmd);
-int imap_cmd_step (IMAP_DATA *idata);
-void imap_cmd_finish (IMAP_DATA *idata);
-int imap_code (const char *s);
-const char *imap_cmd_trailer (IMAP_DATA *idata);
-int imap_exec (IMAP_DATA *idata, const char *cmd, int flags);
-int imap_cmd_idle (IMAP_DATA *idata);
+int imap_cmd_start(IMAP_DATA *idata, const char *cmd);
+int imap_cmd_step(IMAP_DATA *idata);
+void imap_cmd_finish(IMAP_DATA *idata);
+int imap_code(const char *s);
+const char *imap_cmd_trailer(IMAP_DATA *idata);
+int imap_exec(IMAP_DATA *idata, const char *cmd, int flags);
+int imap_cmd_idle(IMAP_DATA *idata);
 
 /* message.c */
-void imap_add_keywords (char *s, HEADER *keywords, LIST *mailbox_flags, size_t slen);
-void imap_free_header_data (IMAP_HEADER_DATA **data);
-int imap_read_headers (IMAP_DATA *idata, unsigned int msn_begin, unsigned int msn_end,
-                       int initial_download);
-char *imap_set_flags (IMAP_DATA *idata, HEADER *h, char *s, int *server_changes);
-int imap_cache_del (IMAP_DATA *idata, HEADER *h);
-int imap_cache_clean (IMAP_DATA *idata);
+void imap_add_keywords(char *s, HEADER *keywords, LIST *mailbox_flags, size_t slen);
+void imap_free_header_data(IMAP_HEADER_DATA **data);
+int imap_read_headers(IMAP_DATA *idata, unsigned int msn_begin, unsigned int msn_end,
+                      int initial_download);
+char *imap_set_flags(IMAP_DATA *idata, HEADER *h, char *s, int *server_changes);
+int imap_cache_del(IMAP_DATA *idata, HEADER *h);
+int imap_cache_clean(IMAP_DATA *idata);
 
-int imap_fetch_message (CONTEXT *ctx, MESSAGE *msg, int msgno, int headers);
-int imap_close_message (CONTEXT *ctx, MESSAGE *msg);
-int imap_commit_message (CONTEXT *ctx, MESSAGE *msg);
+int imap_fetch_message(CONTEXT *ctx, MESSAGE *msg, int msgno, int headers);
+int imap_close_message(CONTEXT *ctx, MESSAGE *msg);
+int imap_commit_message(CONTEXT *ctx, MESSAGE *msg);
 
 /* util.c */
 #ifdef USE_HCACHE
-header_cache_t *imap_hcache_open (IMAP_DATA *idata, const char *path);
-void imap_hcache_close (IMAP_DATA *idata);
-HEADER *imap_hcache_get (IMAP_DATA *idata, unsigned int uid);
-int imap_hcache_put (IMAP_DATA *idata, HEADER *h);
-int imap_hcache_del (IMAP_DATA *idata, unsigned int uid);
-int imap_hcache_store_uid_seqset (IMAP_DATA *idata);
-int imap_hcache_clear_uid_seqset (IMAP_DATA *idata);
-char *imap_hcache_get_uid_seqset (IMAP_DATA *idata);
+header_cache_t *imap_hcache_open(IMAP_DATA *idata, const char *path);
+void imap_hcache_close(IMAP_DATA *idata);
+HEADER *imap_hcache_get(IMAP_DATA *idata, unsigned int uid);
+int imap_hcache_put(IMAP_DATA *idata, HEADER *h);
+int imap_hcache_del(IMAP_DATA *idata, unsigned int uid);
+int imap_hcache_store_uid_seqset(IMAP_DATA *idata);
+int imap_hcache_clear_uid_seqset(IMAP_DATA *idata);
+char *imap_hcache_get_uid_seqset(IMAP_DATA *idata);
 #endif
 
-int imap_continue (const char *msg, const char *resp);
-void imap_error (const char *where, const char *msg);
-IMAP_DATA *imap_new_idata (void);
-void imap_free_idata (IMAP_DATA **idata);
-char *imap_fix_path (IMAP_DATA *idata, const char *mailbox, char *path,
-                     size_t plen);
+int imap_continue(const char *msg, const char *resp);
+void imap_error(const char *where, const char *msg);
+IMAP_DATA *imap_new_idata(void);
+void imap_free_idata(IMAP_DATA **idata);
+char *imap_fix_path(IMAP_DATA *idata, const char *mailbox, char *path,
+                    size_t plen);
 void imap_cachepath(IMAP_DATA *idata, const char *mailbox, BUFFER *dest);
-int imap_get_literal_count (char *buf, unsigned int *bytes);
-char *imap_get_qualifier (char *buf);
-int imap_mxcmp (const char *mx1, const char *mx2);
-char *imap_next_word (char *s);
-time_t imap_parse_date (char *s);
-void imap_make_date (BUFFER *buf, time_t timestamp);
-void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char *path);
-void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char *path);
-void imap_quote_string (char *dest, size_t dlen, const char *src);
-void imap_quote_string_and_backquotes (char *dest, size_t dlen, const char *src);
-void imap_unquote_string (char *s);
-void imap_munge_mbox_name (IMAP_DATA *idata, char *dest, size_t dlen, const char *src);
-void imap_unmunge_mbox_name (IMAP_DATA *idata, char *s);
+int imap_get_literal_count(char *buf, unsigned int *bytes);
+char *imap_get_qualifier(char *buf);
+int imap_mxcmp(const char *mx1, const char *mx2);
+char *imap_next_word(char *s);
+time_t imap_parse_date(char *s);
+void imap_make_date(BUFFER *buf, time_t timestamp);
+void imap_qualify_path(char *dest, size_t len, IMAP_MBOX *mx, char *path);
+void imap_buffer_qualify_path(BUFFER *dest, IMAP_MBOX *mx, char *path);
+void imap_quote_string(char *dest, size_t dlen, const char *src);
+void imap_quote_string_and_backquotes(char *dest, size_t dlen, const char *src);
+void imap_unquote_string(char *s);
+void imap_munge_mbox_name(IMAP_DATA *idata, char *dest, size_t dlen, const char *src);
+void imap_unmunge_mbox_name(IMAP_DATA *idata, char *s);
 int imap_wordcasecmp(const char *a, const char *b);
-SEQSET_ITERATOR *mutt_seqset_iterator_new (const char *seqset);
-int mutt_seqset_iterator_next (SEQSET_ITERATOR *iter, unsigned int *next);
-void mutt_seqset_iterator_free (SEQSET_ITERATOR **p_iter);
+SEQSET_ITERATOR *mutt_seqset_iterator_new(const char *seqset);
+int mutt_seqset_iterator_next(SEQSET_ITERATOR *iter, unsigned int *next);
+void mutt_seqset_iterator_free(SEQSET_ITERATOR **p_iter);
 
 /* utf7.c */
-void imap_utf_encode (IMAP_DATA *idata, char **s);
-void imap_utf_decode (IMAP_DATA *idata, char **s);
+void imap_utf_encode(IMAP_DATA *idata, char **s);
+void imap_utf_decode(IMAP_DATA *idata, char **s);
 
 #if USE_HCACHE
 /* typedef size_t (*hcache_keylen_t)(const char *fn); */

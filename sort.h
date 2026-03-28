@@ -54,25 +54,25 @@
 #define SORT_REVERSE    (1<<8)
 #define SORT_LAST       (1<<9)
 
-typedef int sort_t (const void *, const void *);
-sort_t *mutt_get_sort_func (int);
+typedef int sort_t(const void *, const void *);
+sort_t *mutt_get_sort_func(int);
 
-void mutt_clear_threads (CONTEXT *);
-void mutt_sort_headers (CONTEXT *, int);
-void mutt_sort_threads (CONTEXT *, int);
-int mutt_select_sort (int);
-THREAD *mutt_sort_subthreads (THREAD *, int);
+void mutt_clear_threads(CONTEXT *);
+void mutt_sort_headers(CONTEXT *, int);
+void mutt_sort_threads(CONTEXT *, int);
+int mutt_select_sort(int);
+THREAD *mutt_sort_subthreads(THREAD *, int);
 
-WHERE short BrowserSort INITVAL (SORT_SUBJECT);
-WHERE short BrowserSortMailboxes INITVAL (SORT_ORDER);
-WHERE short Sort INITVAL (SORT_DATE);
-WHERE short SortAux INITVAL (SORT_DATE); /* auxiliary sorting method */
-WHERE short SortThreadGroups INITVAL (SORT_AUX); /* thread roots sorting method */
-WHERE short SortAlias INITVAL (SORT_ALIAS);
-WHERE short SidebarSortMethod INITVAL (SORT_ORDER);
+WHERE short BrowserSort INITVAL(SORT_SUBJECT);
+WHERE short BrowserSortMailboxes INITVAL(SORT_ORDER);
+WHERE short Sort INITVAL(SORT_DATE);
+WHERE short SortAux INITVAL(SORT_DATE); /* auxiliary sorting method */
+WHERE short SortThreadGroups INITVAL(SORT_AUX); /* thread roots sorting method */
+WHERE short SortAlias INITVAL(SORT_ALIAS);
+WHERE short SidebarSortMethod INITVAL(SORT_ORDER);
 
 /* FIXME: This one does not belong to here */
-WHERE short PgpSortKeys INITVAL (SORT_ADDRESS);
+WHERE short PgpSortKeys INITVAL(SORT_ADDRESS);
 
 #include "mapping.h"
 extern const struct mapping_t SortMethods[];

@@ -34,33 +34,33 @@
 #include <stdlib.h>
 #include "ascii.h"
 
-inline int ascii_isupper (int c)
+inline int ascii_isupper(int c)
 {
   return (c >= 'A') && (c <= 'Z');
 }
 
-inline int ascii_islower (int c)
+inline int ascii_islower(int c)
 {
   return (c >= 'a') && (c <= 'z');
 }
 
-inline int ascii_toupper (int c)
+inline int ascii_toupper(int c)
 {
-  if (ascii_islower (c))
+  if (ascii_islower(c))
     return c & ~32;
 
   return c;
 }
 
-inline int ascii_tolower (int c)
+inline int ascii_tolower(int c)
 {
-  if (ascii_isupper (c))
+  if (ascii_isupper(c))
     return c | 32;
 
   return c;
 }
 
-int ascii_strcasecmp (const char *a, const char *b)
+int ascii_strcasecmp(const char *a, const char *b)
 {
   int i;
 
@@ -73,7 +73,7 @@ int ascii_strcasecmp (const char *a, const char *b)
 
   for (;; a++, b++)
   {
-    if ((i = ascii_tolower (*a) - ascii_tolower (*b)))
+    if ((i = ascii_tolower(*a) - ascii_tolower(*b)))
       return i;
     /* test for NUL here rather that in the for loop in order to detect unqual
      * length strings (see http://dev.mutt.org/trac/ticket/3601)
@@ -85,7 +85,7 @@ int ascii_strcasecmp (const char *a, const char *b)
   return 0;
 }
 
-int ascii_strncasecmp (const char *a, const char *b, int n)
+int ascii_strncasecmp(const char *a, const char *b, int n)
 {
   int i, j;
 
@@ -98,7 +98,7 @@ int ascii_strncasecmp (const char *a, const char *b, int n)
 
   for (j = 0; (*a || *b) && j < n; a++, b++, j++)
   {
-    if ((i = ascii_tolower (*a) - ascii_tolower (*b)))
+    if ((i = ascii_tolower(*a) - ascii_tolower(*b)))
       return i;
   }
 

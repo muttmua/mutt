@@ -63,11 +63,11 @@ static const struct mapping_t AutocryptAcctHelp[] = {
   { NULL,         0 }
 };
 
-static const char *account_format_str (char *dest, size_t destlen, size_t col,
-                                       int cols, char op, const char *src,
-                                       const char *fmt, const char *ifstring,
-                                       const char *elsestring,
-                                       void *data, format_flag flags)
+static const char *account_format_str(char *dest, size_t destlen, size_t col,
+                                      int cols, char op, const char *src,
+                                      const char *fmt, const char *ifstring,
+                                      const char *elsestring,
+                                      void *data, format_flag flags)
 {
   ENTRY *entry = (ENTRY *)data;
   char tmp[SHORT_STRING];
@@ -75,14 +75,14 @@ static const char *account_format_str (char *dest, size_t destlen, size_t col,
   switch (op)
   {
     case 'a':
-      mutt_format_s (dest, destlen, fmt, entry->addr->mailbox);
+      mutt_format_s(dest, destlen, fmt, entry->addr->mailbox);
       break;
     case 'k':
-      mutt_format_s (dest, destlen, fmt, entry->account->keyid);
+      mutt_format_s(dest, destlen, fmt, entry->account->keyid);
       break;
     case 'n':
-      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-      snprintf (dest, destlen, tmp, entry->num);
+      snprintf(tmp, sizeof(tmp), "%%%sd", fmt);
+      snprintf(dest, destlen, tmp, entry->num);
       break;
     case 'p':
       if (entry->account->prefer_encrypt)
@@ -90,14 +90,14 @@ static const char *account_format_str (char *dest, size_t destlen, size_t col,
            Autocrypt Account menu.
            flag that an account has prefer-encrypt set
         */
-        mutt_format_s (dest, destlen, fmt, _("prefer encrypt"));
+        mutt_format_s(dest, destlen, fmt, _("prefer encrypt"));
       else
         /* L10N:
            Autocrypt Account menu.
            flag that an account has prefer-encrypt unset;
            thus encryption will need to be manually enabled.
         */
-        mutt_format_s (dest, destlen, fmt, _("manual encrypt"));
+        mutt_format_s(dest, destlen, fmt, _("manual encrypt"));
       break;
     case 's':
       if (entry->account->enabled)
@@ -105,29 +105,29 @@ static const char *account_format_str (char *dest, size_t destlen, size_t col,
            Autocrypt Account menu.
            flag that an account is enabled/active
         */
-        mutt_format_s (dest, destlen, fmt, _("active"));
+        mutt_format_s(dest, destlen, fmt, _("active"));
       else
         /* L10N:
            Autocrypt Account menu.
            flag that an account is disabled/inactive
         */
-        mutt_format_s (dest, destlen, fmt, _("inactive"));
+        mutt_format_s(dest, destlen, fmt, _("inactive"));
       break;
   }
 
   return (src);
 }
 
-static void account_entry (char *s, size_t slen, MUTTMENU *m, int num)
+static void account_entry(char *s, size_t slen, MUTTMENU *m, int num)
 {
   ENTRY *entry = &((ENTRY *) m->data)[num];
 
-  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
-                     NONULL (AutocryptAcctFormat), account_format_str,
-                     entry, MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString(s, slen, 0, MuttIndexWindow->cols,
+                    NONULL(AutocryptAcctFormat), account_format_str,
+                    entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
-static MUTTMENU *create_menu (void)
+static MUTTMENU *create_menu(void)
 {
   MUTTMENU *menu = NULL;
   AUTOCRYPT_ACCOUNT **accounts = NULL;
@@ -135,21 +135,21 @@ static MUTTMENU *create_menu (void)
   int num_accounts = 0, i;
   char *helpstr;
 
-  if (mutt_autocrypt_db_account_get_all (&accounts, &num_accounts) < 0)
+  if (mutt_autocrypt_db_account_get_all(&accounts, &num_accounts) < 0)
     return NULL;
 
-  menu = mutt_new_menu (MENU_AUTOCRYPT_ACCT);
+  menu = mutt_new_menu(MENU_AUTOCRYPT_ACCT);
   menu->make_entry = account_entry;
   /* menu->tag = account_tag; */
   /* L10N:
      Autocrypt Account Management Menu title
   */
   menu->title = _("Autocrypt Accounts");
-  helpstr = safe_malloc (STRING);
-  menu->help = mutt_compile_help (helpstr, STRING, MENU_AUTOCRYPT_ACCT,
-                                  AutocryptAcctHelp);
+  helpstr = safe_malloc(STRING);
+  menu->help = mutt_compile_help(helpstr, STRING, MENU_AUTOCRYPT_ACCT,
+                                 AutocryptAcctHelp);
 
-  menu->data = entries = safe_calloc (num_accounts, sizeof(ENTRY));
+  menu->data = entries = safe_calloc(num_accounts, sizeof(ENTRY));
   menu->max = num_accounts;
 
   for (i = 0; i < num_accounts; i++)
@@ -161,18 +161,18 @@ static MUTTMENU *create_menu (void)
      */
     entries[i].account = accounts[i];
 
-    entries[i].addr = rfc822_new_address ();
-    entries[i].addr->mailbox = safe_strdup (accounts[i]->email_addr);
-    mutt_addrlist_to_local (entries[i].addr);
+    entries[i].addr = rfc822_new_address();
+    entries[i].addr->mailbox = safe_strdup(accounts[i]->email_addr);
+    mutt_addrlist_to_local(entries[i].addr);
   }
-  FREE (&accounts);
+  FREE(&accounts);
 
-  mutt_push_current_menu (menu);
+  mutt_push_current_menu(menu);
 
   return menu;
 }
 
-static void free_menu (MUTTMENU **menu)
+static void free_menu(MUTTMENU **menu)
 {
   int i;
   ENTRY *entries;
@@ -180,20 +180,20 @@ static void free_menu (MUTTMENU **menu)
   entries = (ENTRY *)(*menu)->data;
   for (i = 0; i < (*menu)->max; i++)
   {
-    mutt_autocrypt_db_account_free (&entries[i].account);
-    rfc822_free_address (&entries[i].addr);
+    mutt_autocrypt_db_account_free(&entries[i].account);
+    rfc822_free_address(&entries[i].addr);
   }
-  FREE (&(*menu)->data);
+  FREE(&(*menu)->data);
 
-  mutt_pop_current_menu (*menu);
-  FREE (&(*menu)->help);
-  mutt_menuDestroy (menu);
+  mutt_pop_current_menu(*menu);
+  FREE(&(*menu)->help);
+  mutt_menuDestroy(menu);
 }
 
-static void toggle_active (ENTRY *entry)
+static void toggle_active(ENTRY *entry)
 {
   entry->account->enabled = !entry->account->enabled;
-  if (mutt_autocrypt_db_account_update (entry->account) != 0)
+  if (mutt_autocrypt_db_account_update(entry->account) != 0)
   {
     entry->account->enabled = !entry->account->enabled;
     /* L10N:
@@ -204,46 +204,46 @@ static void toggle_active (ENTRY *entry)
   }
 }
 
-static void toggle_prefer_encrypt (ENTRY *entry)
+static void toggle_prefer_encrypt(ENTRY *entry)
 {
   entry->account->prefer_encrypt = !entry->account->prefer_encrypt;
-  if (mutt_autocrypt_db_account_update (entry->account))
+  if (mutt_autocrypt_db_account_update(entry->account))
   {
     entry->account->prefer_encrypt = !entry->account->prefer_encrypt;
     mutt_error _("Error updating account record");
   }
 }
 
-void mutt_autocrypt_account_menu (void)
+void mutt_autocrypt_account_menu(void)
 {
   MUTTMENU *menu;
   int done = 0, op;
   ENTRY *entry;
   char msg[SHORT_STRING];
 
-  if (!option (OPTAUTOCRYPT))
+  if (!option(OPTAUTOCRYPT))
     return;
 
-  if (mutt_autocrypt_init (0))
+  if (mutt_autocrypt_init(0))
     return;
 
-  menu = create_menu ();
+  menu = create_menu();
   if (!menu)
     return;
 
   while (!done)
   {
-    switch ((op = mutt_menuLoop (menu)))
+    switch ((op = mutt_menuLoop(menu)))
     {
       case OP_EXIT:
         done = 1;
         break;
 
       case OP_AUTOCRYPT_CREATE_ACCT:
-        if (!mutt_autocrypt_account_init (0))
+        if (!mutt_autocrypt_account_init(0))
         {
-          free_menu (&menu);
-          menu = create_menu ();
+          free_menu(&menu);
+          menu = create_menu();
         }
         break;
 
@@ -251,19 +251,19 @@ void mutt_autocrypt_account_menu (void)
         if (menu->data)
         {
           entry = (ENTRY *)(menu->data) + menu->current;
-          snprintf (msg, sizeof(msg),
-                    /* L10N:
-                       Confirmation message when deleting an autocrypt account
-                    */
-                    _("Really delete account \"%s\"?"),
-                    entry->addr->mailbox);
-          if (mutt_yesorno (msg, MUTT_NO) != MUTT_YES)
+          snprintf(msg, sizeof(msg),
+                   /* L10N:
+                      Confirmation message when deleting an autocrypt account
+                   */
+                   _("Really delete account \"%s\"?"),
+                   entry->addr->mailbox);
+          if (mutt_yesorno(msg, MUTT_NO) != MUTT_YES)
             break;
 
-          if (!mutt_autocrypt_db_account_delete (entry->account))
+          if (!mutt_autocrypt_db_account_delete(entry->account))
           {
-            free_menu (&menu);
-            menu = create_menu ();
+            free_menu(&menu);
+            menu = create_menu();
           }
         }
         break;
@@ -272,7 +272,7 @@ void mutt_autocrypt_account_menu (void)
         if (menu->data)
         {
           entry = (ENTRY *)(menu->data) + menu->current;
-          toggle_active (entry);
+          toggle_active(entry);
           menu->redraw |= REDRAW_FULL;
         }
         break;
@@ -281,12 +281,12 @@ void mutt_autocrypt_account_menu (void)
         if (menu->data)
         {
           entry = (ENTRY *)(menu->data) + menu->current;
-          toggle_prefer_encrypt (entry);
+          toggle_prefer_encrypt(entry);
           menu->redraw |= REDRAW_FULL;
         }
         break;
     }
   }
 
-  free_menu (&menu);
+  free_menu(&menu);
 }

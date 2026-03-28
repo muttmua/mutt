@@ -7,7 +7,7 @@
 #include <string.h>
 
 /* mkdtemp function for systems which don't have one */
-char *mkdtemp (char *tmpl)
+char *mkdtemp(char *tmpl)
 {
   static const char LETTERS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   static unsigned long value = 0;
@@ -15,14 +15,14 @@ char *mkdtemp (char *tmpl)
   int               len;
   int               i, j;
 
-  len = strlen (tmpl);
-  if (len < 6 || strcmp (&tmpl[len - 6], "XXXXXX") != 0)
+  len = strlen(tmpl);
+  if (len < 6 || strcmp(&tmpl[len - 6], "XXXXXX") != 0)
   {
     errno = EINVAL;
     return NULL;
   }
 
-  value += ((unsigned long) time (NULL)) ^ getpid ();
+  value += ((unsigned long) time(NULL)) ^ getpid();
 
   for (i = 0; i < 7 ; ++i, value += 7777)
   {
@@ -34,7 +34,7 @@ char *mkdtemp (char *tmpl)
     }
 
     /* try to create the directory */
-    if (mkdir (tmpl, 0700) == 0)
+    if (mkdir(tmpl, 0700) == 0)
       return tmpl;
     else if (errno != EEXIST)
       return NULL;

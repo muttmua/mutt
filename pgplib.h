@@ -28,8 +28,7 @@ typedef struct pgp_signature
   unsigned char sigtype;
   unsigned long sid1;
   unsigned long sid2;
-}
-pgp_sig_t;
+} pgp_sig_t;
 
 struct pgp_keyinfo
 {
@@ -55,8 +54,7 @@ typedef struct pgp_uid
   struct pgp_keyinfo *parent;
   struct pgp_uid *next;
   struct pgp_signature *sigs;
-}
-pgp_uid_t;
+} pgp_uid_t;
 
 enum pgp_version
 {
@@ -68,17 +66,17 @@ enum pgp_version
 
 /* prototypes */
 
-const char *pgp_pkalgbytype (unsigned char);
+const char *pgp_pkalgbytype(unsigned char);
 
-pgp_key_t pgp_remove_key (pgp_key_t *, pgp_key_t );
-pgp_uid_t *pgp_copy_uids (pgp_uid_t *, pgp_key_t );
+pgp_key_t pgp_remove_key(pgp_key_t *, pgp_key_t );
+pgp_uid_t *pgp_copy_uids(pgp_uid_t *, pgp_key_t );
 
-short pgp_canencrypt (unsigned char);
-short pgp_cansign (unsigned char);
-short pgp_get_abilities (unsigned char);
+short pgp_canencrypt(unsigned char);
+short pgp_cansign(unsigned char);
+short pgp_get_abilities(unsigned char);
 
-void pgp_free_key (pgp_key_t *kpp);
+void pgp_free_key(pgp_key_t *kpp);
 
-#define pgp_new_keyinfo() safe_calloc (sizeof *((pgp_key_t)0), 1)
+#define pgp_new_keyinfo() safe_calloc(sizeof *((pgp_key_t)0), 1)
 
 #endif /* CRYPT_BACKEND_CLASSIC_PGP */

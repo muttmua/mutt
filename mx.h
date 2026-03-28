@@ -42,37 +42,37 @@ enum
 #endif
 };
 
-WHERE short DefaultMagic INITVAL (MUTT_MBOX);
+WHERE short DefaultMagic INITVAL(MUTT_MBOX);
 
 #define MMDF_SEP "\001\001\001\001\n"
 #define MBOX_SEP "\n"
 #define MAXLOCKATTEMPT 5
 
-int mbox_lock_mailbox (CONTEXT *, int, int);
-int mbox_parse_mailbox (CONTEXT *);
-int mmdf_parse_mailbox (CONTEXT *);
-void mbox_unlock_mailbox (CONTEXT *);
-int mbox_check_empty (const char *);
-void mbox_reset_atime (CONTEXT *, struct stat *);
+int mbox_lock_mailbox(CONTEXT *, int, int);
+int mbox_parse_mailbox(CONTEXT *);
+int mmdf_parse_mailbox(CONTEXT *);
+void mbox_unlock_mailbox(CONTEXT *);
+int mbox_check_empty(const char *);
+void mbox_reset_atime(CONTEXT *, struct stat *);
 
-int mh_check_empty (const char *);
+int mh_check_empty(const char *);
 
-int maildir_check_empty (const char *);
+int maildir_check_empty(const char *);
 
-FILE *maildir_open_find_message (const char *, const char *);
+FILE *maildir_open_find_message(const char *, const char *);
 
-int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
-int mutt_reopen_mailbox (CONTEXT *, int *);
+int mbox_strict_cmp_headers(const HEADER *, const HEADER *);
+int mutt_reopen_mailbox(CONTEXT *, int *);
 
-void mx_alloc_memory (CONTEXT *);
-void mx_update_context (CONTEXT *, int);
-void mx_update_tables (CONTEXT *, int);
+void mx_alloc_memory(CONTEXT *);
+void mx_update_context(CONTEXT *, int);
+void mx_update_tables(CONTEXT *, int);
 
 
-int mx_lock_file (const char *, int, int, int, int);
-int mx_unlock_file (const char *path, int fd, int dot);
+int mx_lock_file(const char *, int, int, int, int);
+int mx_unlock_file(const char *path, int fd, int dot);
 
-struct mx_ops *mx_get_ops (int magic);
+struct mx_ops *mx_get_ops(int magic);
 extern struct mx_ops mx_maildir_ops;
 extern struct mx_ops mx_mbox_ops;
 extern struct mx_ops mx_mh_ops;

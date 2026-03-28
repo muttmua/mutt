@@ -35,7 +35,7 @@
 #include "lib.h"
 #include "pgplib.h"
 
-const char *pgp_pkalgbytype (unsigned char type)
+const char *pgp_pkalgbytype(unsigned char type)
 {
   switch (type)
   {
@@ -62,7 +62,7 @@ const char *pgp_pkalgbytype (unsigned char type)
 
 #if 0
 
-static const char *hashalgbytype (unsigned char type)
+static const char *hashalgbytype(unsigned char type)
 {
   switch (type)
   {
@@ -81,7 +81,7 @@ static const char *hashalgbytype (unsigned char type)
 
 #endif
 
-short pgp_canencrypt (unsigned char type)
+short pgp_canencrypt(unsigned char type)
 {
   switch (type)
   {
@@ -95,7 +95,7 @@ short pgp_canencrypt (unsigned char type)
   }
 }
 
-short pgp_cansign (unsigned char type)
+short pgp_cansign(unsigned char type)
 {
   switch (type)
   {
@@ -116,12 +116,12 @@ short pgp_cansign (unsigned char type)
  * 3 = both
  */
 
-short pgp_get_abilities (unsigned char type)
+short pgp_get_abilities(unsigned char type)
 {
-  return (pgp_canencrypt (type) << 1) | pgp_cansign (type);
+  return (pgp_canencrypt(type) << 1) | pgp_cansign(type);
 }
 
-void pgp_free_sig (pgp_sig_t **sigp)
+void pgp_free_sig(pgp_sig_t **sigp)
 {
   pgp_sig_t *sp, *q;
 
@@ -131,13 +131,13 @@ void pgp_free_sig (pgp_sig_t **sigp)
   for (sp = *sigp; sp; sp = q)
   {
     q = sp->next;
-    FREE (&sp);
+    FREE(&sp);
   }
 
   *sigp = NULL;
 }
 
-void pgp_free_uid (pgp_uid_t ** upp)
+void pgp_free_uid(pgp_uid_t ** upp)
 {
   pgp_uid_t *up, *q;
 
@@ -146,25 +146,25 @@ void pgp_free_uid (pgp_uid_t ** upp)
   for (up = *upp; up; up = q)
   {
     q = up->next;
-    pgp_free_sig (&up->sigs);
-    FREE (&up->addr);
-    FREE (&up);
+    pgp_free_sig(&up->sigs);
+    FREE(&up->addr);
+    FREE(&up);
   }
 
   *upp = NULL;
 }
 
-pgp_uid_t *pgp_copy_uids (pgp_uid_t *up, pgp_key_t parent)
+pgp_uid_t *pgp_copy_uids(pgp_uid_t *up, pgp_key_t parent)
 {
   pgp_uid_t *l = NULL;
   pgp_uid_t **lp = &l;
 
   for (; up; up = up->next)
   {
-    *lp = safe_calloc (1, sizeof (pgp_uid_t));
+    *lp = safe_calloc(1, sizeof(pgp_uid_t));
     (*lp)->trust  = up->trust;
     (*lp)->flags  = up->flags;
-    (*lp)->addr   = safe_strdup (up->addr);
+    (*lp)->addr   = safe_strdup(up->addr);
     (*lp)->parent = parent;
     lp = &(*lp)->next;
   }
@@ -172,7 +172,7 @@ pgp_uid_t *pgp_copy_uids (pgp_uid_t *up, pgp_key_t parent)
   return l;
 }
 
-static void _pgp_free_key (pgp_key_t *kpp)
+static void _pgp_free_key(pgp_key_t *kpp)
 {
   pgp_key_t kp;
 
@@ -181,14 +181,14 @@ static void _pgp_free_key (pgp_key_t *kpp)
 
   kp = *kpp;
 
-  pgp_free_uid (&kp->address);
-  FREE (&kp->keyid);
-  FREE (&kp->fingerprint);
+  pgp_free_uid(&kp->address);
+  FREE(&kp->keyid);
+  FREE(&kp->fingerprint);
   /* mutt_crypt.h: 'typedef struct pgp_keyinfo *pgp_key_t;' */
-  FREE (kpp);           /* __FREE_CHECKED__ */
+  FREE(kpp);           /* __FREE_CHECKED__ */
 }
 
-pgp_key_t pgp_remove_key (pgp_key_t *klist, pgp_key_t key)
+pgp_key_t pgp_remove_key(pgp_key_t *klist, pgp_key_t key)
 {
   pgp_key_t *last;
   pgp_key_t p, q, r;
@@ -216,7 +216,7 @@ pgp_key_t pgp_remove_key (pgp_key_t *klist, pgp_key_t key)
   return q;
 }
 
-void pgp_free_key (pgp_key_t *kpp)
+void pgp_free_key(pgp_key_t *kpp)
 {
   pgp_key_t p, q, r;
 
@@ -239,12 +239,12 @@ void pgp_free_key (pgp_key_t *kpp)
     for (q = p->next; q && q->parent == p; q = r)
     {
       r = q->next;
-      _pgp_free_key (&q);
+      _pgp_free_key(&q);
     }
     if (p->parent)
-      _pgp_free_key (&p->parent);
+      _pgp_free_key(&p->parent);
 
-    _pgp_free_key (&p);
+    _pgp_free_key(&p);
   }
 
   *kpp = NULL;

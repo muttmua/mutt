@@ -36,25 +36,25 @@ static sqlite3_stmt *PeerUpdateStmt;
 static sqlite3_stmt *PeerHistoryInsertStmt;
 static sqlite3_stmt *GossipHistoryInsertStmt;
 
-static int autocrypt_db_create (const char *db_path)
+static int autocrypt_db_create(const char *db_path)
 {
-  if (sqlite3_open_v2 (db_path,
-                       &AutocryptDB,
-                       SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE,
-                       NULL) != SQLITE_OK)
+  if (sqlite3_open_v2(db_path,
+                      &AutocryptDB,
+                      SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE,
+                      NULL) != SQLITE_OK)
   {
     /* L10N:
        %s is the path to the database.  For some reason sqlite3 failed
        to open that database file.
     */
-    mutt_error (_("Unable to open autocrypt database %s"), db_path);
-    mutt_sleep (0);
+    mutt_error(_("Unable to open autocrypt database %s"), db_path);
+    mutt_sleep(0);
     return -1;
   }
-  return mutt_autocrypt_schema_init ();
+  return mutt_autocrypt_schema_init();
 }
 
-int mutt_autocrypt_db_init (int can_create)
+int mutt_autocrypt_db_init(int can_create)
 {
   int rv = -1;
   BUFFER *db_path = NULL;
@@ -63,88 +63,88 @@ int mutt_autocrypt_db_init (int can_create)
   if (AutocryptDB)
     return 0;
 
-  if (!option (OPTAUTOCRYPT) || !AutocryptDir)
+  if (!option(OPTAUTOCRYPT) || !AutocryptDir)
     return -1;
 
-  db_path = mutt_buffer_pool_get ();
-  mutt_buffer_concat_path (db_path, AutocryptDir, "autocrypt.db");
+  db_path = mutt_buffer_pool_get();
+  mutt_buffer_concat_path(db_path, AutocryptDir, "autocrypt.db");
 
-  if (stat (mutt_b2s (db_path), &sb))
+  if (stat(mutt_b2s(db_path), &sb))
   {
     if (!can_create)
       goto cleanup;
-    if (autocrypt_db_create (mutt_b2s (db_path)))
+    if (autocrypt_db_create(mutt_b2s(db_path)))
       goto cleanup;
     /* Don't abort the whole init process because account creation failed */
-    mutt_autocrypt_account_init (1);
-    mutt_autocrypt_scan_mailboxes ();
+    mutt_autocrypt_account_init(1);
+    mutt_autocrypt_scan_mailboxes();
   }
   else
   {
-    if (sqlite3_open_v2 (mutt_b2s (db_path),
-                         &AutocryptDB,
-                         SQLITE_OPEN_READWRITE,
-                         NULL) != SQLITE_OK)
+    if (sqlite3_open_v2(mutt_b2s(db_path),
+                        &AutocryptDB,
+                        SQLITE_OPEN_READWRITE,
+                        NULL) != SQLITE_OK)
     {
       /* L10N:
          Error message if autocrypt couldn't open the sqlite database
          for some reason.  The %s is the full path of the database file.
       */
-      mutt_error (_("Unable to open autocrypt database %s"), mutt_b2s (db_path));
-      mutt_sleep (0);
+      mutt_error(_("Unable to open autocrypt database %s"), mutt_b2s(db_path));
+      mutt_sleep(0);
       goto cleanup;
     }
 
-    if (mutt_autocrypt_schema_update ())
+    if (mutt_autocrypt_schema_update())
       goto cleanup;
   }
 
   rv = 0;
 
 cleanup:
-  mutt_buffer_pool_release (&db_path);
+  mutt_buffer_pool_release(&db_path);
   return rv;
 }
 
-void mutt_autocrypt_db_close (void)
+void mutt_autocrypt_db_close(void)
 {
   if (!AutocryptDB)
     return;
 
-  sqlite3_finalize (AccountGetStmt);
+  sqlite3_finalize(AccountGetStmt);
   AccountGetStmt = NULL;
-  sqlite3_finalize (AccountInsertStmt);
+  sqlite3_finalize(AccountInsertStmt);
   AccountInsertStmt = NULL;
-  sqlite3_finalize (AccountUpdateStmt);
+  sqlite3_finalize(AccountUpdateStmt);
   AccountUpdateStmt = NULL;
-  sqlite3_finalize (AccountDeleteStmt);
+  sqlite3_finalize(AccountDeleteStmt);
   AccountDeleteStmt = NULL;
 
-  sqlite3_finalize (PeerGetStmt);
+  sqlite3_finalize(PeerGetStmt);
   PeerGetStmt = NULL;
-  sqlite3_finalize (PeerInsertStmt);
+  sqlite3_finalize(PeerInsertStmt);
   PeerInsertStmt = NULL;
-  sqlite3_finalize (PeerUpdateStmt);
+  sqlite3_finalize(PeerUpdateStmt);
   PeerUpdateStmt = NULL;
 
-  sqlite3_finalize (PeerHistoryInsertStmt);
+  sqlite3_finalize(PeerHistoryInsertStmt);
   PeerHistoryInsertStmt = NULL;
 
-  sqlite3_finalize (GossipHistoryInsertStmt);
+  sqlite3_finalize(GossipHistoryInsertStmt);
   GossipHistoryInsertStmt = NULL;
 
-  sqlite3_close_v2 (AutocryptDB);
+  sqlite3_close_v2(AutocryptDB);
   AutocryptDB = NULL;
 }
 
-void mutt_autocrypt_db_normalize_addrlist (ADDRESS *addrlist)
+void mutt_autocrypt_db_normalize_addrlist(ADDRESS *addrlist)
 {
   ADDRESS *addr;
 
-  mutt_addrlist_to_local (addrlist);
+  mutt_addrlist_to_local(addrlist);
   for (addr = addrlist; addr; addr = addr->next)
-    ascii_strlower (addr->mailbox);
-  mutt_addrlist_to_intl (addrlist, NULL);
+    ascii_strlower(addr->mailbox);
+  mutt_addrlist_to_intl(addrlist, NULL);
 }
 
 /* The autocrypt spec says email addresses should be
@@ -155,7 +155,7 @@ void mutt_autocrypt_db_normalize_addrlist (ADDRESS *addrlist)
  *
  * The return value must be freed.
  */
-static ADDRESS *copy_normalize_addr (ADDRESS *addr)
+static ADDRESS *copy_normalize_addr(ADDRESS *addr)
 {
   ADDRESS *norm_addr;
 
@@ -166,48 +166,48 @@ static ADDRESS *copy_normalize_addr (ADDRESS *addr)
    * because of requirements in autocrypt.c
    */
 
-  norm_addr = rfc822_new_address ();
-  norm_addr->mailbox = safe_strdup (addr->mailbox);
+  norm_addr = rfc822_new_address();
+  norm_addr->mailbox = safe_strdup(addr->mailbox);
   norm_addr->is_intl = addr->is_intl;
   norm_addr->intl_checked = addr->intl_checked;
 
-  mutt_autocrypt_db_normalize_addrlist (norm_addr);
+  mutt_autocrypt_db_normalize_addrlist(norm_addr);
   return norm_addr;
 }
 
 /* Helper that converts to char * and safe_strdups the result */
-static char *strdup_column_text (sqlite3_stmt *stmt, int index)
+static char *strdup_column_text(sqlite3_stmt *stmt, int index)
 {
-  const char *val = (const char *)sqlite3_column_text (stmt, index);
-  return safe_strdup (val);
+  const char *val = (const char *)sqlite3_column_text(stmt, index);
+  return safe_strdup(val);
 }
 
-AUTOCRYPT_ACCOUNT *mutt_autocrypt_db_account_new (void)
+AUTOCRYPT_ACCOUNT *mutt_autocrypt_db_account_new(void)
 {
-  return safe_calloc (1, sizeof(AUTOCRYPT_ACCOUNT));
+  return safe_calloc(1, sizeof(AUTOCRYPT_ACCOUNT));
 }
 
-void mutt_autocrypt_db_account_free (AUTOCRYPT_ACCOUNT **account)
+void mutt_autocrypt_db_account_free(AUTOCRYPT_ACCOUNT **account)
 {
   if (!account || !*account)
     return;
-  FREE (&(*account)->email_addr);
-  FREE (&(*account)->keyid);
-  FREE (&(*account)->keydata);
-  FREE (account);      /* __FREE_CHECKED__ */
+  FREE(&(*account)->email_addr);
+  FREE(&(*account)->keyid);
+  FREE(&(*account)->keydata);
+  FREE(account);      /* __FREE_CHECKED__ */
 }
 
-int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
+int mutt_autocrypt_db_account_get(ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
 {
   int rv = -1, result;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
   *account = NULL;
 
   if (!AccountGetStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "SELECT "
           "email_addr, "
@@ -224,14 +224,14 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (AccountGetStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountGetStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  result = sqlite3_step (AccountGetStmt);
+  result = sqlite3_step(AccountGetStmt);
   if (result != SQLITE_ROW)
   {
     if (result == SQLITE_DONE)
@@ -239,32 +239,32 @@ int mutt_autocrypt_db_account_get (ADDRESS *addr, AUTOCRYPT_ACCOUNT **account)
     goto cleanup;
   }
 
-  *account = mutt_autocrypt_db_account_new ();
-  (*account)->email_addr = strdup_column_text (AccountGetStmt, 0);
-  (*account)->keyid = strdup_column_text (AccountGetStmt, 1);
-  (*account)->keydata = strdup_column_text (AccountGetStmt, 2);
-  (*account)->prefer_encrypt = sqlite3_column_int (AccountGetStmt, 3);
-  (*account)->enabled = sqlite3_column_int (AccountGetStmt, 4);
+  *account = mutt_autocrypt_db_account_new();
+  (*account)->email_addr = strdup_column_text(AccountGetStmt, 0);
+  (*account)->keyid = strdup_column_text(AccountGetStmt, 1);
+  (*account)->keydata = strdup_column_text(AccountGetStmt, 2);
+  (*account)->prefer_encrypt = sqlite3_column_int(AccountGetStmt, 3);
+  (*account)->enabled = sqlite3_column_int(AccountGetStmt, 4);
 
   rv = 1;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (AccountGetStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(AccountGetStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
-                                      const char *keydata, int prefer_encrypt)
+int mutt_autocrypt_db_account_insert(ADDRESS *addr, const char *keyid,
+                                     const char *keydata, int prefer_encrypt)
 {
   int rv = -1;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
 
   if (!AccountInsertStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "INSERT INTO account "
           "(email_addr, "
@@ -280,51 +280,51 @@ int mutt_autocrypt_db_account_insert (ADDRESS *addr, const char *keyid,
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (AccountInsertStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountInsertStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (AccountInsertStmt,
-                         2,
-                         keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountInsertStmt,
+                        2,
+                        keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (AccountInsertStmt,
-                         3,
-                         keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountInsertStmt,
+                        3,
+                        keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (AccountInsertStmt,
-                        4,
-                        prefer_encrypt) != SQLITE_OK)
+  if (sqlite3_bind_int(AccountInsertStmt,
+                       4,
+                       prefer_encrypt) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (AccountInsertStmt,
-                        5,
-                        1) != SQLITE_OK)
+  if (sqlite3_bind_int(AccountInsertStmt,
+                       5,
+                       1) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (AccountInsertStmt) != SQLITE_DONE)
+  if (sqlite3_step(AccountInsertStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (AccountInsertStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(AccountInsertStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_account_update (AUTOCRYPT_ACCOUNT *acct)
+int mutt_autocrypt_db_account_update(AUTOCRYPT_ACCOUNT *acct)
 {
   int rv = -1;
 
   if (!AccountUpdateStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "UPDATE account SET "
           "keyid = ?, "
@@ -339,50 +339,50 @@ int mutt_autocrypt_db_account_update (AUTOCRYPT_ACCOUNT *acct)
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (AccountUpdateStmt,
-                         1,
-                         acct->keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountUpdateStmt,
+                        1,
+                        acct->keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (AccountUpdateStmt,
-                         2,
-                         acct->keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountUpdateStmt,
+                        2,
+                        acct->keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (AccountUpdateStmt,
-                        3,
-                        acct->prefer_encrypt) != SQLITE_OK)
+  if (sqlite3_bind_int(AccountUpdateStmt,
+                       3,
+                       acct->prefer_encrypt) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (AccountUpdateStmt,
-                        4,
-                        acct->enabled) != SQLITE_OK)
+  if (sqlite3_bind_int(AccountUpdateStmt,
+                       4,
+                       acct->enabled) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (AccountUpdateStmt,
-                         5,
-                         acct->email_addr,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountUpdateStmt,
+                        5,
+                        acct->email_addr,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (AccountUpdateStmt) != SQLITE_DONE)
+  if (sqlite3_step(AccountUpdateStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  sqlite3_reset (AccountUpdateStmt);
+  sqlite3_reset(AccountUpdateStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_account_delete (AUTOCRYPT_ACCOUNT *acct)
+int mutt_autocrypt_db_account_delete(AUTOCRYPT_ACCOUNT *acct)
 {
   int rv = -1;
 
   if (!AccountDeleteStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "DELETE from account "
           "WHERE email_addr = ?;",
@@ -393,24 +393,24 @@ int mutt_autocrypt_db_account_delete (AUTOCRYPT_ACCOUNT *acct)
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (AccountDeleteStmt,
-                         1,
-                         acct->email_addr,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(AccountDeleteStmt,
+                        1,
+                        acct->email_addr,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (AccountDeleteStmt) != SQLITE_DONE)
+  if (sqlite3_step(AccountDeleteStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  sqlite3_reset (AccountDeleteStmt);
+  sqlite3_reset(AccountDeleteStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_account_get_all (AUTOCRYPT_ACCOUNT ***accounts, int *num_accounts)
+int mutt_autocrypt_db_account_get_all(AUTOCRYPT_ACCOUNT ***accounts, int *num_accounts)
 {
   int rv = -1, result;
   sqlite3_stmt *stmt = NULL;
@@ -422,7 +422,7 @@ int mutt_autocrypt_db_account_get_all (AUTOCRYPT_ACCOUNT ***accounts, int *num_a
 
   /* Note, speed is not of the essence for the account management screen,
    * so we don't bother with a persistent prepared statement */
-  if (sqlite3_prepare_v2 (
+  if (sqlite3_prepare_v2(
         AutocryptDB,
         "SELECT "
         "email_addr, "
@@ -437,21 +437,21 @@ int mutt_autocrypt_db_account_get_all (AUTOCRYPT_ACCOUNT ***accounts, int *num_a
         NULL) != SQLITE_OK)
     goto cleanup;
 
-  while ((result = sqlite3_step (stmt)) == SQLITE_ROW)
+  while ((result = sqlite3_step(stmt)) == SQLITE_ROW)
   {
     if (results_count == results_len)
     {
       results_len += 5;
-      safe_realloc (&results, results_len * sizeof(AUTOCRYPT_ACCOUNT *));
+      safe_realloc(&results, results_len * sizeof(AUTOCRYPT_ACCOUNT *));
     }
 
-    results[results_count++] = account = mutt_autocrypt_db_account_new ();
+    results[results_count++] = account = mutt_autocrypt_db_account_new();
 
-    account->email_addr = strdup_column_text (stmt, 0);
-    account->keyid = strdup_column_text (stmt, 1);
-    account->keydata = strdup_column_text (stmt, 2);
-    account->prefer_encrypt = sqlite3_column_int (stmt, 3);
-    account->enabled = sqlite3_column_int (stmt, 4);
+    account->email_addr = strdup_column_text(stmt, 0);
+    account->keyid = strdup_column_text(stmt, 1);
+    account->keydata = strdup_column_text(stmt, 2);
+    account->prefer_encrypt = sqlite3_column_int(stmt, 3);
+    account->enabled = sqlite3_column_int(stmt, 4);
   }
 
   if (result == SQLITE_DONE)
@@ -462,43 +462,43 @@ int mutt_autocrypt_db_account_get_all (AUTOCRYPT_ACCOUNT ***accounts, int *num_a
   else
   {
     while (results_count > 0)
-      mutt_autocrypt_db_account_free (&results[--results_count]);
-    FREE (&results);
+      mutt_autocrypt_db_account_free(&results[--results_count]);
+    FREE(&results);
   }
 
 cleanup:
-  sqlite3_finalize (stmt);
+  sqlite3_finalize(stmt);
   return rv;
 }
 
-AUTOCRYPT_PEER *mutt_autocrypt_db_peer_new (void)
+AUTOCRYPT_PEER *mutt_autocrypt_db_peer_new(void)
 {
-  return safe_calloc (1, sizeof(AUTOCRYPT_PEER));
+  return safe_calloc(1, sizeof(AUTOCRYPT_PEER));
 }
 
-void mutt_autocrypt_db_peer_free (AUTOCRYPT_PEER **peer)
+void mutt_autocrypt_db_peer_free(AUTOCRYPT_PEER **peer)
 {
   if (!peer || !*peer)
     return;
-  FREE (&(*peer)->email_addr);
-  FREE (&(*peer)->keyid);
-  FREE (&(*peer)->keydata);
-  FREE (&(*peer)->gossip_keyid);
-  FREE (&(*peer)->gossip_keydata);
-  FREE (peer);      /* __FREE_CHECKED__ */
+  FREE(&(*peer)->email_addr);
+  FREE(&(*peer)->keyid);
+  FREE(&(*peer)->keydata);
+  FREE(&(*peer)->gossip_keyid);
+  FREE(&(*peer)->gossip_keydata);
+  FREE(peer);      /* __FREE_CHECKED__ */
 }
 
-int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
+int mutt_autocrypt_db_peer_get(ADDRESS *addr, AUTOCRYPT_PEER **peer)
 {
   int rv = -1, result;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
   *peer = NULL;
 
   if (!PeerGetStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "SELECT "
           "email_addr, "
@@ -519,14 +519,14 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (PeerGetStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerGetStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  result = sqlite3_step (PeerGetStmt);
+  result = sqlite3_step(PeerGetStmt);
   if (result != SQLITE_ROW)
   {
     if (result == SQLITE_DONE)
@@ -534,35 +534,35 @@ int mutt_autocrypt_db_peer_get (ADDRESS *addr, AUTOCRYPT_PEER **peer)
     goto cleanup;
   }
 
-  *peer = mutt_autocrypt_db_peer_new ();
-  (*peer)->email_addr = strdup_column_text (PeerGetStmt, 0);
-  (*peer)->last_seen = sqlite3_column_int64 (PeerGetStmt, 1);
-  (*peer)->autocrypt_timestamp = sqlite3_column_int64 (PeerGetStmt, 2);
-  (*peer)->keyid = strdup_column_text (PeerGetStmt, 3);
-  (*peer)->keydata = strdup_column_text (PeerGetStmt, 4);
-  (*peer)->prefer_encrypt = sqlite3_column_int (PeerGetStmt, 5);
-  (*peer)->gossip_timestamp = sqlite3_column_int64 (PeerGetStmt, 6);
-  (*peer)->gossip_keyid = strdup_column_text (PeerGetStmt, 7);
-  (*peer)->gossip_keydata = strdup_column_text (PeerGetStmt, 8);
+  *peer = mutt_autocrypt_db_peer_new();
+  (*peer)->email_addr = strdup_column_text(PeerGetStmt, 0);
+  (*peer)->last_seen = sqlite3_column_int64(PeerGetStmt, 1);
+  (*peer)->autocrypt_timestamp = sqlite3_column_int64(PeerGetStmt, 2);
+  (*peer)->keyid = strdup_column_text(PeerGetStmt, 3);
+  (*peer)->keydata = strdup_column_text(PeerGetStmt, 4);
+  (*peer)->prefer_encrypt = sqlite3_column_int(PeerGetStmt, 5);
+  (*peer)->gossip_timestamp = sqlite3_column_int64(PeerGetStmt, 6);
+  (*peer)->gossip_keyid = strdup_column_text(PeerGetStmt, 7);
+  (*peer)->gossip_keydata = strdup_column_text(PeerGetStmt, 8);
 
   rv = 1;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (PeerGetStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(PeerGetStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
+int mutt_autocrypt_db_peer_insert(ADDRESS *addr, AUTOCRYPT_PEER *peer)
 {
   int rv = -1;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
 
   if (!PeerInsertStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "INSERT INTO peer "
           "(email_addr, "
@@ -582,71 +582,71 @@ int mutt_autocrypt_db_peer_insert (ADDRESS *addr, AUTOCRYPT_PEER *peer)
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (PeerInsertStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerInsertStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerInsertStmt,
-                          2,
-                          peer->last_seen) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerInsertStmt,
+                         2,
+                         peer->last_seen) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerInsertStmt,
-                          3,
-                          peer->autocrypt_timestamp) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerInsertStmt,
+                         3,
+                         peer->autocrypt_timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerInsertStmt,
-                         4,
-                         peer->keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerInsertStmt,
+                        4,
+                        peer->keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerInsertStmt,
-                         5,
-                         peer->keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerInsertStmt,
+                        5,
+                        peer->keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (PeerInsertStmt,
-                        6,
-                        peer->prefer_encrypt) != SQLITE_OK)
+  if (sqlite3_bind_int(PeerInsertStmt,
+                       6,
+                       peer->prefer_encrypt) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerInsertStmt,
-                          7,
-                          peer->gossip_timestamp) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerInsertStmt,
+                         7,
+                         peer->gossip_timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerInsertStmt,
-                         8,
-                         peer->gossip_keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerInsertStmt,
+                        8,
+                        peer->gossip_keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerInsertStmt,
-                         9,
-                         peer->gossip_keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerInsertStmt,
+                        9,
+                        peer->gossip_keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (PeerInsertStmt) != SQLITE_DONE)
+  if (sqlite3_step(PeerInsertStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (PeerInsertStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(PeerInsertStmt);
   return rv;
 }
 
-int mutt_autocrypt_db_peer_update (AUTOCRYPT_PEER *peer)
+int mutt_autocrypt_db_peer_update(AUTOCRYPT_PEER *peer)
 {
   int rv = -1;
 
   if (!PeerUpdateStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "UPDATE peer SET "
           "last_seen = ?, "
@@ -665,88 +665,88 @@ int mutt_autocrypt_db_peer_update (AUTOCRYPT_PEER *peer)
       goto cleanup;
   }
 
-  if (sqlite3_bind_int64 (PeerUpdateStmt,
-                          1,
-                          peer->last_seen) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerUpdateStmt,
+                         1,
+                         peer->last_seen) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerUpdateStmt,
-                          2,
-                          peer->autocrypt_timestamp) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerUpdateStmt,
+                         2,
+                         peer->autocrypt_timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerUpdateStmt,
-                         3,
-                         peer->keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerUpdateStmt,
+                        3,
+                        peer->keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerUpdateStmt,
-                         4,
-                         peer->keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerUpdateStmt,
+                        4,
+                        peer->keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int (PeerUpdateStmt,
-                        5,
-                        peer->prefer_encrypt) != SQLITE_OK)
+  if (sqlite3_bind_int(PeerUpdateStmt,
+                       5,
+                       peer->prefer_encrypt) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerUpdateStmt,
-                          6,
-                          peer->gossip_timestamp) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerUpdateStmt,
+                         6,
+                         peer->gossip_timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerUpdateStmt,
-                         7,
-                         peer->gossip_keyid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerUpdateStmt,
+                        7,
+                        peer->gossip_keyid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerUpdateStmt,
-                         8,
-                         peer->gossip_keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerUpdateStmt,
+                        8,
+                        peer->gossip_keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerUpdateStmt,
-                         9,
-                         peer->email_addr,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerUpdateStmt,
+                        9,
+                        peer->email_addr,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (PeerUpdateStmt) != SQLITE_DONE)
+  if (sqlite3_step(PeerUpdateStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  sqlite3_reset (PeerUpdateStmt);
+  sqlite3_reset(PeerUpdateStmt);
   return rv;
 }
 
-AUTOCRYPT_PEER_HISTORY *mutt_autocrypt_db_peer_history_new (void)
+AUTOCRYPT_PEER_HISTORY *mutt_autocrypt_db_peer_history_new(void)
 {
-  return safe_calloc (1, sizeof(AUTOCRYPT_PEER_HISTORY));
+  return safe_calloc(1, sizeof(AUTOCRYPT_PEER_HISTORY));
 }
 
-void mutt_autocrypt_db_peer_history_free (AUTOCRYPT_PEER_HISTORY **peerhist)
+void mutt_autocrypt_db_peer_history_free(AUTOCRYPT_PEER_HISTORY **peerhist)
 {
   if (!peerhist || !*peerhist)
     return;
-  FREE (&(*peerhist)->peer_email_addr);
-  FREE (&(*peerhist)->email_msgid);
-  FREE (&(*peerhist)->keydata);
-  FREE (peerhist);      /* __FREE_CHECKED__ */
+  FREE(&(*peerhist)->peer_email_addr);
+  FREE(&(*peerhist)->email_msgid);
+  FREE(&(*peerhist)->keydata);
+  FREE(peerhist);      /* __FREE_CHECKED__ */
 }
 
-int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY *peerhist)
+int mutt_autocrypt_db_peer_history_insert(ADDRESS *addr, AUTOCRYPT_PEER_HISTORY *peerhist)
 {
   int rv = -1;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
 
   if (!PeerHistoryInsertStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "INSERT INTO peer_history "
           "(peer_email_addr, "
@@ -761,66 +761,66 @@ int mutt_autocrypt_db_peer_history_insert (ADDRESS *addr, AUTOCRYPT_PEER_HISTORY
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (PeerHistoryInsertStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerHistoryInsertStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerHistoryInsertStmt,
-                         2,
-                         peerhist->email_msgid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerHistoryInsertStmt,
+                        2,
+                        peerhist->email_msgid,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (PeerHistoryInsertStmt,
-                          3,
-                          peerhist->timestamp) != SQLITE_OK)
+  if (sqlite3_bind_int64(PeerHistoryInsertStmt,
+                         3,
+                         peerhist->timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (PeerHistoryInsertStmt,
-                         4,
-                         peerhist->keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(PeerHistoryInsertStmt,
+                        4,
+                        peerhist->keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (PeerHistoryInsertStmt) != SQLITE_DONE)
+  if (sqlite3_step(PeerHistoryInsertStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (PeerHistoryInsertStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(PeerHistoryInsertStmt);
   return rv;
 }
 
-AUTOCRYPT_GOSSIP_HISTORY *mutt_autocrypt_db_gossip_history_new (void)
+AUTOCRYPT_GOSSIP_HISTORY *mutt_autocrypt_db_gossip_history_new(void)
 {
-  return safe_calloc (1, sizeof(AUTOCRYPT_GOSSIP_HISTORY));
+  return safe_calloc(1, sizeof(AUTOCRYPT_GOSSIP_HISTORY));
 }
 
-void mutt_autocrypt_db_gossip_history_free (AUTOCRYPT_GOSSIP_HISTORY **gossip_hist)
+void mutt_autocrypt_db_gossip_history_free(AUTOCRYPT_GOSSIP_HISTORY **gossip_hist)
 {
   if (!gossip_hist || !*gossip_hist)
     return;
-  FREE (&(*gossip_hist)->peer_email_addr);
-  FREE (&(*gossip_hist)->sender_email_addr);
-  FREE (&(*gossip_hist)->email_msgid);
-  FREE (&(*gossip_hist)->gossip_keydata);
-  FREE (gossip_hist);      /* __FREE_CHECKED__ */
+  FREE(&(*gossip_hist)->peer_email_addr);
+  FREE(&(*gossip_hist)->sender_email_addr);
+  FREE(&(*gossip_hist)->email_msgid);
+  FREE(&(*gossip_hist)->gossip_keydata);
+  FREE(gossip_hist);      /* __FREE_CHECKED__ */
 }
 
-int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HISTORY *gossip_hist)
+int mutt_autocrypt_db_gossip_history_insert(ADDRESS *addr, AUTOCRYPT_GOSSIP_HISTORY *gossip_hist)
 {
   int rv = -1;
   ADDRESS *norm_addr = NULL;
 
-  norm_addr = copy_normalize_addr (addr);
+  norm_addr = copy_normalize_addr(addr);
 
   if (!GossipHistoryInsertStmt)
   {
-    if (sqlite3_prepare_v3 (
+    if (sqlite3_prepare_v3(
           AutocryptDB,
           "INSERT INTO gossip_history "
           "(peer_email_addr, "
@@ -836,41 +836,41 @@ int mutt_autocrypt_db_gossip_history_insert (ADDRESS *addr, AUTOCRYPT_GOSSIP_HIS
       goto cleanup;
   }
 
-  if (sqlite3_bind_text (GossipHistoryInsertStmt,
-                         1,
-                         norm_addr->mailbox,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(GossipHistoryInsertStmt,
+                        1,
+                        norm_addr->mailbox,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_text (GossipHistoryInsertStmt,
-                         2,
-                         gossip_hist->sender_email_addr,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
-  if (sqlite3_bind_text (GossipHistoryInsertStmt,
-                         3,
-                         gossip_hist->email_msgid,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(GossipHistoryInsertStmt,
+                        2,
+                        gossip_hist->sender_email_addr,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
+    if (sqlite3_bind_text(GossipHistoryInsertStmt,
+                          3,
+                          gossip_hist->email_msgid,
+                          -1,
+                          SQLITE_STATIC) != SQLITE_OK)
+      goto cleanup;
+  if (sqlite3_bind_int64(GossipHistoryInsertStmt,
+                         4,
+                         gossip_hist->timestamp) != SQLITE_OK)
     goto cleanup;
-  if (sqlite3_bind_int64 (GossipHistoryInsertStmt,
-                          4,
-                          gossip_hist->timestamp) != SQLITE_OK)
-    goto cleanup;
-  if (sqlite3_bind_text (GossipHistoryInsertStmt,
-                         5,
-                         gossip_hist->gossip_keydata,
-                         -1,
-                         SQLITE_STATIC) != SQLITE_OK)
+  if (sqlite3_bind_text(GossipHistoryInsertStmt,
+                        5,
+                        gossip_hist->gossip_keydata,
+                        -1,
+                        SQLITE_STATIC) != SQLITE_OK)
     goto cleanup;
 
-  if (sqlite3_step (GossipHistoryInsertStmt) != SQLITE_DONE)
+  if (sqlite3_step(GossipHistoryInsertStmt) != SQLITE_DONE)
     goto cleanup;
 
   rv = 0;
 
 cleanup:
-  rfc822_free_address (&norm_addr);
-  sqlite3_reset (GossipHistoryInsertStmt);
+  rfc822_free_address(&norm_addr);
+  sqlite3_reset(GossipHistoryInsertStmt);
   return rv;
 }

@@ -29,28 +29,28 @@
 #include <ctype.h>
 #include <unistd.h>
 
-static int compare_score (const void *a, const void *b)
+static int compare_score(const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return mutt_numeric_cmp ((*pb)->score, (*pa)->score); /* note that this is reverse */
+  return mutt_numeric_cmp((*pb)->score, (*pa)->score); /* note that this is reverse */
 }
 
-static int compare_size (const void *a, const void *b)
+static int compare_size(const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return mutt_numeric_cmp ((*pa)->content->length, (*pb)->content->length);
+  return mutt_numeric_cmp((*pa)->content->length, (*pb)->content->length);
 }
 
-static int compare_date_sent (const void *a, const void *b)
+static int compare_date_sent(const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return mutt_numeric_cmp ((*pa)->date_sent, (*pb)->date_sent);
+  return mutt_numeric_cmp((*pa)->date_sent, (*pb)->date_sent);
 }
 
-static int compare_subject (const void *a, const void *b)
+static int compare_subject(const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
@@ -59,74 +59,74 @@ static int compare_subject (const void *a, const void *b)
   if (!(*pa)->env->real_subj)
   {
     if (!(*pb)->env->real_subj)
-      rc = compare_date_sent (pa, pb);
+      rc = compare_date_sent(pa, pb);
     else
       rc = -1;
   }
   else if (!(*pb)->env->real_subj)
     rc = 1;
   else
-    rc = mutt_strcasecmp ((*pa)->env->real_subj, (*pb)->env->real_subj);
+    rc = mutt_strcasecmp((*pa)->env->real_subj, (*pb)->env->real_subj);
   return rc;
 }
 
-const char *mutt_get_name (ADDRESS *a)
+const char *mutt_get_name(ADDRESS *a)
 {
   ADDRESS *ali;
 
   if (a)
   {
-    if (option (OPTREVALIAS) && (ali = alias_reverse_lookup (a)) && ali->personal)
+    if (option(OPTREVALIAS) && (ali = alias_reverse_lookup(a)) && ali->personal)
       return ali->personal;
     else if (a->personal)
       return a->personal;
     else if (a->mailbox)
-      return (mutt_addr_for_display (a));
+      return (mutt_addr_for_display(a));
   }
   /* don't return NULL to avoid segfault when printing/comparing */
   return ("");
 }
 
-static int compare_to (const void *a, const void *b)
+static int compare_to(const void *a, const void *b)
 {
   HEADER **ppa = (HEADER **) a;
   HEADER **ppb = (HEADER **) b;
   char fa[SHORT_STRING];
   const char *fb;
 
-  strfcpy (fa, mutt_get_name ((*ppa)->env->to), SHORT_STRING);
-  fb = mutt_get_name ((*ppb)->env->to);
-  return mutt_strncasecmp (fa, fb, SHORT_STRING);
+  strfcpy(fa, mutt_get_name((*ppa)->env->to), SHORT_STRING);
+  fb = mutt_get_name((*ppb)->env->to);
+  return mutt_strncasecmp(fa, fb, SHORT_STRING);
 }
 
-static int compare_from (const void *a, const void *b)
+static int compare_from(const void *a, const void *b)
 {
   HEADER **ppa = (HEADER **) a;
   HEADER **ppb = (HEADER **) b;
   char fa[SHORT_STRING];
   const char *fb;
 
-  strfcpy (fa, mutt_get_name ((*ppa)->env->from), SHORT_STRING);
-  fb = mutt_get_name ((*ppb)->env->from);
-  return mutt_strncasecmp (fa, fb, SHORT_STRING);
+  strfcpy(fa, mutt_get_name((*ppa)->env->from), SHORT_STRING);
+  fb = mutt_get_name((*ppb)->env->from);
+  return mutt_strncasecmp(fa, fb, SHORT_STRING);
 }
 
-static int compare_date_received (const void *a, const void *b)
+static int compare_date_received(const void *a, const void *b)
 {
   HEADER **pa = (HEADER **) a;
   HEADER **pb = (HEADER **) b;
-  return mutt_numeric_cmp ((*pa)->received, (*pb)->received);
+  return mutt_numeric_cmp((*pa)->received, (*pb)->received);
 }
 
-static int compare_order (const void *a, const void *b)
+static int compare_order(const void *a, const void *b)
 {
   HEADER **ha = (HEADER **) a;
   HEADER **hb = (HEADER **) b;
 
-  return mutt_numeric_cmp ((*ha)->index, (*hb)->index);
+  return mutt_numeric_cmp((*ha)->index, (*hb)->index);
 }
 
-static int compare_spam (const void *a, const void *b)
+static int compare_spam(const void *a, const void *b)
 {
   HEADER **ppa = (HEADER **) a;
   HEADER **ppb = (HEADER **) b;
@@ -174,7 +174,7 @@ static int compare_spam (const void *a, const void *b)
   return result;
 }
 
-static int compare_label (const void *a, const void *b)
+static int compare_label(const void *a, const void *b)
 {
   HEADER **ppa = (HEADER **) a;
   HEADER **ppb = (HEADER **) b;
@@ -200,7 +200,7 @@ static int compare_label (const void *a, const void *b)
   return mutt_strcasecmp((*ppa)->env->x_label, (*ppb)->env->x_label);
 }
 
-sort_t *mutt_get_sort_func (int method)
+sort_t *mutt_get_sort_func(int method)
 {
   switch (method & SORT_MASK)
   {
@@ -230,7 +230,7 @@ sort_t *mutt_get_sort_func (int method)
   /* not reached */
 }
 
-static int compare_unthreaded (const void *a, const void *b)
+static int compare_unthreaded(const void *a, const void *b)
 {
   static sort_t *sort_func = NULL;
   static sort_t *aux_func = NULL;
@@ -238,46 +238,46 @@ static int compare_unthreaded (const void *a, const void *b)
 
   if (!(a && b))
   {
-    sort_func = mutt_get_sort_func (Sort);
-    aux_func = mutt_get_sort_func (SortAux);
+    sort_func = mutt_get_sort_func(Sort);
+    aux_func = mutt_get_sort_func(SortAux);
     return (sort_func && aux_func ? 1 : 0);
   }
 
-  rc = (*sort_func) (a, b);
+  rc = (*sort_func)(a, b);
   if (rc)
     return (Sort & SORT_REVERSE) ? -rc : rc;
 
-  rc = (*aux_func) (a, b);
+  rc = (*aux_func)(a, b);
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = mutt_numeric_cmp ((*((HEADER **)a))->index, (*((HEADER **)b))->index);
+  rc = mutt_numeric_cmp((*((HEADER **)a))->index, (*((HEADER **)b))->index);
   if (rc)
     return (Sort & SORT_REVERSE) ? -rc : rc;
 
   return rc;
 }
 
-static int sort_unthreaded (CONTEXT *ctx)
+static int sort_unthreaded(CONTEXT *ctx)
 {
-  if (!compare_unthreaded (NULL, NULL))
+  if (!compare_unthreaded(NULL, NULL))
   {
     mutt_error _("Could not find sorting function! [report this bug]");
-    mutt_sleep (1);
+    mutt_sleep(1);
     return -1;
   }
 
-  qsort ((void *) ctx->hdrs, ctx->msgcount, sizeof (HEADER *), compare_unthreaded);
+  qsort((void *) ctx->hdrs, ctx->msgcount, sizeof(HEADER *), compare_unthreaded);
   return 0;
 }
 
-void mutt_sort_headers (CONTEXT *ctx, int init)
+void mutt_sort_headers(CONTEXT *ctx, int init)
 {
   int i;
   HEADER *h;
   THREAD *thread, *top;
 
-  unset_option (OPTNEEDRESORT);
+  unset_option(OPTNEEDRESORT);
 
   if (!ctx)
     return;
@@ -290,42 +290,42 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
      */
     ctx->vcount = 0;
     ctx->vsize = 0;
-    mutt_clear_threads (ctx);
+    mutt_clear_threads(ctx);
     return; /* nothing to do! */
   }
 
   if (!ctx->quiet)
     mutt_message _("Sorting mailbox...");
 
-  if (option (OPTNEEDRESCORE) && option (OPTSCORE))
+  if (option(OPTNEEDRESCORE) && option(OPTSCORE))
   {
     for (i = 0; i < ctx->msgcount; i++)
-      mutt_score_message (ctx, ctx->hdrs[i], 1);
+      mutt_score_message(ctx, ctx->hdrs[i], 1);
   }
-  unset_option (OPTNEEDRESCORE);
+  unset_option(OPTNEEDRESCORE);
 
-  if (option (OPTRESORTINIT))
+  if (option(OPTRESORTINIT))
   {
-    unset_option (OPTRESORTINIT);
+    unset_option(OPTRESORTINIT);
     init = 1;
   }
 
   if (init && ctx->tree)
-    mutt_clear_threads (ctx);
+    mutt_clear_threads(ctx);
 
   if ((Sort & SORT_MASK) == SORT_THREADS)
   {
     /* if $sort_aux changed after the mailbox is sorted, then all the
        subthreads need to be resorted */
-    if (option (OPTSORTSUBTHREADS))
+    if (option(OPTSORTSUBTHREADS))
     {
       if (ctx->tree)
-        ctx->tree = mutt_sort_subthreads (ctx->tree, 1);
-      unset_option (OPTSORTSUBTHREADS);
+        ctx->tree = mutt_sort_subthreads(ctx->tree, 1);
+      unset_option(OPTSORTSUBTHREADS);
     }
-    mutt_sort_threads (ctx, init);
+    mutt_sort_threads(ctx, init);
   }
-  else if (sort_unthreaded (ctx))
+  else if (sort_unthreaded(ctx))
     return;
 
   /* adjust the virtual message numbers */
@@ -353,12 +353,12 @@ void mutt_sort_headers (CONTEXT *ctx, int init)
       h = thread->message;
 
       if (h->collapsed)
-        mutt_collapse_thread (ctx, h);
+        mutt_collapse_thread(ctx, h);
       top = top->next;
     }
-    mutt_set_virtual (ctx);
+    mutt_set_virtual(ctx);
   }
 
   if (!ctx->quiet)
-    mutt_clear_error ();
+    mutt_clear_error();
 }

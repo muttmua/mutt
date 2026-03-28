@@ -76,14 +76,14 @@ static const char B64Chars[64] = {
  * form, such as &ACY- (instead of &-) or &AMA-&AMA- (instead
  * of &AMAAwA-).
  */
-static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
-                           size_t *u8len)
+static char *utf7_to_utf8(const char *u7, size_t u7len, char **u8,
+                          size_t *u8len)
 {
   char *buf, *p;
   int b, ch, k;
   int pair1 = 0;
 
-  p = buf = safe_malloc (u7len + u7len / 8 + 1);
+  p = buf = safe_malloc(u7len + u7len / 8 + 1);
 
   for (; u7len; u7++, u7len--)
   {
@@ -186,13 +186,13 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
   if (u8len)
     *u8len = p - buf;
 
-  safe_realloc (&buf, p - buf);
+  safe_realloc(&buf, p - buf);
   if (u8)
     *u8 = buf;
   return buf;
 
 bail:
-  FREE (&buf);
+  FREE(&buf);
   return 0;
 }
 
@@ -203,8 +203,8 @@ bail:
  * Unicode characters above U+FFFF converted to a UTF-16 surrogate pair.
  * If input data is invalid, return 0 and don't store anything.
  */
-static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
-                           size_t *u7len)
+static char *utf8_to_utf7(const char *u8, size_t u8len, char **u7,
+                          size_t *u7len)
 {
   char *buf, *p;
   int ch;
@@ -215,7 +215,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
    * In the worst case we convert 2 chars to 7 chars. For example:
    * "\x10&\x10&..." -> "&ABA-&-&ABA-&-...".
    */
-  p = buf = safe_malloc ((u8len / 2) * 7 + 6);
+  p = buf = safe_malloc((u8len / 2) * 7 + 6);
 
   while (u8len)
   {
@@ -307,7 +307,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
 
   if (u8len)
   {
-    FREE (&buf);
+    FREE(&buf);
     return 0;
   }
 
@@ -321,49 +321,49 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
   *p++ = '\0';
   if (u7len)
     *u7len = p - buf;
-  safe_realloc (&buf, p - buf);
+  safe_realloc(&buf, p - buf);
   if (u7)  *u7 = buf;
   return buf;
 
 bail:
-  FREE (&buf);
+  FREE(&buf);
   return 0;
 }
 
-void imap_utf_encode (IMAP_DATA *idata, char **s)
+void imap_utf_encode(IMAP_DATA *idata, char **s)
 {
   if (Charset)
   {
-    char *t = safe_strdup (*s);
-    if (t && !mutt_convert_string (&t, Charset, "utf-8", 0))
+    char *t = safe_strdup(*s);
+    if (t && !mutt_convert_string(&t, Charset, "utf-8", 0))
     {
-      FREE (s);         /* __FREE_CHECKED__ */
+      FREE(s);         /* __FREE_CHECKED__ */
       if (idata->unicode)
-        *s = safe_strdup (t);
+        *s = safe_strdup(t);
       else
-        *s = utf8_to_utf7 (t, strlen (t), NULL, 0);
+        *s = utf8_to_utf7(t, strlen(t), NULL, 0);
     }
-    FREE (&t);
+    FREE(&t);
   }
 }
 
-void imap_utf_decode (IMAP_DATA *idata, char **s)
+void imap_utf_decode(IMAP_DATA *idata, char **s)
 {
   char *t;
 
   if (Charset)
   {
     if (idata->unicode)
-      t = safe_strdup (*s);
+      t = safe_strdup(*s);
     else
-      t = utf7_to_utf8 (*s, strlen (*s), 0, 0);
+      t = utf7_to_utf8(*s, strlen(*s), 0, 0);
 
-    if (t && !mutt_convert_string (&t, "utf-8", Charset, 0))
+    if (t && !mutt_convert_string(&t, "utf-8", Charset, 0))
     {
-      FREE (s);         /* __FREE_CHECKED__ */
+      FREE(s);         /* __FREE_CHECKED__ */
       *s = t;
     }
     else
-      FREE (&t);
+      FREE(&t);
   }
 }

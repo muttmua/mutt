@@ -71,15 +71,15 @@ typedef enum
   AUTOCRYPT_REC_YES
 } autocrypt_rec_t;
 
-int mutt_autocrypt_init (int);
-void mutt_autocrypt_cleanup (void);
-int mutt_autocrypt_process_autocrypt_header (HEADER *hdr, ENVELOPE *env);
-int mutt_autocrypt_process_gossip_header (HEADER *hdr, ENVELOPE *prot_headers);
-autocrypt_rec_t mutt_autocrypt_ui_recommendation (HEADER *hdr, char **keylist);
-int mutt_autocrypt_set_sign_as_default_key (HEADER *hdr);
-int mutt_autocrypt_write_autocrypt_header (ENVELOPE *env, FILE *fp);
-int mutt_autocrypt_write_gossip_headers (ENVELOPE *env, FILE *fp);
-int mutt_autocrypt_generate_gossip_list (HEADER *hdr);
-void mutt_autocrypt_account_menu (void);
+int mutt_autocrypt_init(int);
+void mutt_autocrypt_cleanup(void);
+int mutt_autocrypt_process_autocrypt_header(HEADER *hdr, ENVELOPE *env);
+int mutt_autocrypt_process_gossip_header(HEADER *hdr, ENVELOPE *prot_headers);
+autocrypt_rec_t mutt_autocrypt_ui_recommendation(HEADER *hdr, char **keylist);
+int mutt_autocrypt_set_sign_as_default_key(HEADER *hdr);
+int mutt_autocrypt_write_autocrypt_header(ENVELOPE *env, FILE *fp);
+int mutt_autocrypt_write_gossip_headers(ENVELOPE *env, FILE *fp);
+int mutt_autocrypt_generate_gossip_list(HEADER *hdr);
+void mutt_autocrypt_account_menu(void);
 
 #endif

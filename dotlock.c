@@ -109,36 +109,36 @@ static gid_t UserGid;
 static gid_t MailGid;
 #endif
 
-static int dotlock_dereference_symlink (char *, size_t, const char *);
-static int dotlock_prepare (char *, size_t, const char *, int fd);
-static int dotlock_check_stats (struct stat *, struct stat *);
-static int dotlock_dispatch (const char *, int fd);
+static int dotlock_dereference_symlink(char *, size_t, const char *);
+static int dotlock_prepare(char *, size_t, const char *, int fd);
+static int dotlock_check_stats(struct stat *, struct stat *);
+static int dotlock_dispatch(const char *, int fd);
 
 #ifdef DL_STANDALONE
-static int dotlock_init_privs (void);
-static void usage (const char *);
+static int dotlock_init_privs(void);
+static void usage(const char *);
 #endif
 
-static void dotlock_expand_link (char *, const char *, const char *);
-static void BEGIN_PRIVILEGED (void);
-static void END_PRIVILEGED (void);
+static void dotlock_expand_link(char *, const char *, const char *);
+static void BEGIN_PRIVILEGED(void);
+static void END_PRIVILEGED(void);
 
 /* These functions work on the current directory.
  * Invoke dotlock_prepare () before and check their
  * return value.
  */
 
-static int dotlock_try (void);
-static int dotlock_unlock (const char *);
-static int dotlock_unlink (const char *);
-static int dotlock_lock (const char *);
+static int dotlock_try(void);
+static int dotlock_unlock(const char *);
+static int dotlock_unlink(const char *);
+static int dotlock_lock(const char *);
 
 
 #ifdef DL_STANDALONE
 
-#define check_flags(a) if (a & DL_FL_ACTIONS) usage (argv[0])
+#define check_flags(a) if (a & DL_FL_ACTIONS) usage(argv[0])
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
   int i;
   char *p;
@@ -146,44 +146,44 @@ int main (int argc, char **argv)
 
   /* first, drop privileges */
 
-  if (dotlock_init_privs () == -1)
+  if (dotlock_init_privs() == -1)
     return DL_EX_ERROR;
 
 
   /* determine the system's host name */
 
-  uname (&utsname);
-  if (!(Hostname = strdup (utsname.nodename)))  /* __MEM_CHECKED__ */
+  uname(&utsname);
+  if (!(Hostname = strdup(utsname.nodename)))  /* __MEM_CHECKED__ */
     return DL_EX_ERROR;
-  if ((p = strchr (Hostname, '.')))
+  if ((p = strchr(Hostname, '.')))
     *p = '\0';
 
 
   /* parse the command line options. */
   DotlockFlags = 0;
 
-  while ((i = getopt (argc, argv, "dtfupr:")) != EOF)
+  while ((i = getopt(argc, argv, "dtfupr:")) != EOF)
   {
     switch (i)
     {
       /* actions, mutually exclusive */
-      case 't': check_flags (DotlockFlags); DotlockFlags |= DL_FL_TRY; break;
-      case 'd': check_flags (DotlockFlags); DotlockFlags |= DL_FL_UNLINK; break;
-      case 'u': check_flags (DotlockFlags); DotlockFlags |= DL_FL_UNLOCK; break;
+      case 't': check_flags(DotlockFlags); DotlockFlags |= DL_FL_TRY; break;
+      case 'd': check_flags(DotlockFlags); DotlockFlags |= DL_FL_UNLINK; break;
+      case 'u': check_flags(DotlockFlags); DotlockFlags |= DL_FL_UNLOCK; break;
 
       /* other flags */
       case 'f': DotlockFlags |= DL_FL_FORCE; break;
       case 'p': DotlockFlags |= DL_FL_USEPRIV; break;
-      case 'r': DotlockFlags |= DL_FL_RETRY; Retry = atoi (optarg); break;
+      case 'r': DotlockFlags |= DL_FL_RETRY; Retry = atoi(optarg); break;
 
-      default: usage (argv[0]);
+      default: usage(argv[0]);
     }
   }
 
   if (optind >= argc || Retry < 0)
-    usage (argc ? argv[0] : "mutt_dotlock");
+    usage(argc ? argv[0] : "mutt_dotlock");
 
-  return dotlock_dispatch (argv[optind], -1);
+  return dotlock_dispatch(argv[optind], -1);
 }
 
 
@@ -200,15 +200,15 @@ int main (int argc, char **argv)
 
 
 static int
-dotlock_init_privs (void)
+dotlock_init_privs(void)
 {
 
 # ifdef USE_SETGID
 
-  UserGid = getgid ();
-  MailGid = getegid ();
+  UserGid = getgid();
+  MailGid = getegid();
 
-  if (SETEGID (UserGid) != 0)
+  if (SETEGID(UserGid) != 0)
     return -1;
 
 # endif
@@ -224,14 +224,14 @@ dotlock_init_privs (void)
  * mutt instead of mx.c's invoke_dotlock ().
  */
 
-int dotlock_invoke (const char *path, int fd, int flags, int retry)
+int dotlock_invoke(const char *path, int fd, int flags, int retry)
 {
   int currdir;
   int r;
 
   DotlockFlags = flags;
 
-  if ((currdir = open (".", O_RDONLY)) == -1)
+  if ((currdir = open(".", O_RDONLY)) == -1)
     return DL_EX_ERROR;
 
   if (!(DotlockFlags & DL_FL_RETRY) || retry)
@@ -239,10 +239,10 @@ int dotlock_invoke (const char *path, int fd, int flags, int retry)
   else
     Retry = 0;
 
-  r = dotlock_dispatch (path, fd);
+  r = dotlock_dispatch(path, fd);
 
-  fchdir (currdir);
-  close (currdir);
+  fchdir(currdir);
+  close(currdir);
 
   return r;
 }
@@ -250,7 +250,7 @@ int dotlock_invoke (const char *path, int fd, int flags, int retry)
 #endif  /* DL_STANDALONE */
 
 
-static int dotlock_dispatch (const char *f, int fd)
+static int dotlock_dispatch(const char *f, int fd)
 {
   char realpath[_POSIX_PATH_MAX];
 
@@ -265,19 +265,19 @@ static int dotlock_dispatch (const char *f, int fd)
    * lengthy comment below.
    */
 
-  if (dotlock_prepare (realpath, sizeof (realpath), f, fd) != 0)
+  if (dotlock_prepare(realpath, sizeof(realpath), f, fd) != 0)
     return DL_EX_ERROR;
 
   /* Actually perform the locking operation. */
 
   if (DotlockFlags & DL_FL_TRY)
-    return dotlock_try ();
+    return dotlock_try();
   else if (DotlockFlags & DL_FL_UNLOCK)
-    return dotlock_unlock (realpath);
+    return dotlock_unlock(realpath);
   else if (DotlockFlags & DL_FL_UNLINK)
-    return dotlock_unlink (realpath);
+    return dotlock_unlink(realpath);
   else /* lock */
-    return dotlock_lock (realpath);
+    return dotlock_lock(realpath);
 }
 
 
@@ -293,15 +293,15 @@ static int dotlock_dispatch (const char *f, int fd)
  */
 
 static void
-BEGIN_PRIVILEGED (void)
+BEGIN_PRIVILEGED(void)
 {
 #ifdef USE_SETGID
   if (DotlockFlags & DL_FL_USEPRIV)
   {
-    if (SETEGID (MailGid) != 0)
+    if (SETEGID(MailGid) != 0)
     {
       /* perror ("setegid"); */
-      exit (DL_EX_ERROR);
+      exit(DL_EX_ERROR);
     }
   }
 #endif
@@ -317,15 +317,15 @@ BEGIN_PRIVILEGED (void)
  */
 
 static void
-END_PRIVILEGED (void)
+END_PRIVILEGED(void)
 {
 #ifdef USE_SETGID
   if (DotlockFlags & DL_FL_USEPRIV)
   {
-    if (SETEGID (UserGid) != 0)
+    if (SETEGID(UserGid) != 0)
     {
       /* perror ("setegid"); */
-      exit (DL_EX_ERROR);
+      exit(DL_EX_ERROR);
     }
   }
 #endif
@@ -341,25 +341,25 @@ END_PRIVILEGED (void)
  */
 
 static void
-usage (const char *av0)
+usage(const char *av0)
 {
-  fprintf (stderr, "dotlock [Mutt %s (%s)]\n", MUTT_VERSION, ReleaseDate);
-  fprintf (stderr, "usage: %s [-t|-f|-u|-d] [-p] [-r <retries>] file\n",
-           av0);
+  fprintf(stderr, "dotlock [Mutt %s (%s)]\n", MUTT_VERSION, ReleaseDate);
+  fprintf(stderr, "usage: %s [-t|-f|-u|-d] [-p] [-r <retries>] file\n",
+          av0);
 
-  fputs ("\noptions:"
-         "\n  -t\t\ttry"
-         "\n  -f\t\tforce"
-         "\n  -u\t\tunlock"
-         "\n  -d\t\tunlink"
-         "\n  -p\t\tprivileged"
+  fputs("\noptions:"
+        "\n  -t\t\ttry"
+        "\n  -f\t\tforce"
+        "\n  -u\t\tunlock"
+        "\n  -d\t\tunlink"
+        "\n  -p\t\tprivileged"
 #ifndef USE_SETGID
-         " (ignored)"
+        " (ignored)"
 #endif
-         "\n  -r <retries>\tRetry locking"
-         "\n", stderr);
+        "\n  -r <retries>\tRetry locking"
+        "\n", stderr);
 
-  exit (DL_EX_ERROR);
+  exit(DL_EX_ERROR);
 }
 
 #endif
@@ -413,14 +413,14 @@ usage (const char *av0)
  */
 
 static int
-dotlock_check_stats (struct stat *fsb, struct stat *lsb)
+dotlock_check_stats(struct stat *fsb, struct stat *lsb)
 {
   /* S_ISLNK (fsb->st_mode) should actually be impossible,
    * but we may have mixed up the parameters somewhere.
    * play safe.
    */
 
-  if (S_ISLNK (lsb->st_mode) || S_ISLNK (fsb->st_mode))
+  if (S_ISLNK(lsb->st_mode) || S_ISLNK(fsb->st_mode))
     return -1;
 
   if ((lsb->st_dev != fsb->st_dev) ||
@@ -440,7 +440,7 @@ dotlock_check_stats (struct stat *fsb, struct stat *lsb)
 }
 
 static int
-dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
+dotlock_prepare(char *bn, size_t l, const char *f, int _fd)
 {
   struct stat fsb, lsb;
   char realpath[_POSIX_PATH_MAX];
@@ -449,10 +449,10 @@ dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
   int fd;
   int r;
 
-  if (dotlock_dereference_symlink (realpath, sizeof (realpath), f) == -1)
+  if (dotlock_dereference_symlink(realpath, sizeof(realpath), f) == -1)
     return -1;
 
-  if ((p = strrchr (realpath, '/')))
+  if ((p = strrchr(realpath, '/')))
   {
     *p = '\0';
     basename = p + 1;
@@ -464,31 +464,31 @@ dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
     dirname = ".";
   }
 
-  if (strlen (basename) + 1 > l)
+  if (strlen(basename) + 1 > l)
     return -1;
 
-  strfcpy (bn, basename, l);
+  strfcpy(bn, basename, l);
 
-  if (chdir (dirname) == -1)
+  if (chdir(dirname) == -1)
     return -1;
 
   if (_fd != -1)
     fd = _fd;
-  else if ((fd = open (basename, O_RDONLY)) == -1)
+  else if ((fd = open(basename, O_RDONLY)) == -1)
     return -1;
 
-  r = fstat (fd, &fsb);
+  r = fstat(fd, &fsb);
 
   if (_fd == -1)
-    close (fd);
+    close(fd);
 
   if (r == -1)
     return -1;
 
-  if (lstat (basename, &lsb) == -1)
+  if (lstat(basename, &lsb) == -1)
     return -1;
 
-  if (dotlock_check_stats (&fsb, &lsb) == -1)
+  if (dotlock_check_stats(&fsb, &lsb) == -1)
     return -1;
 
   return 0;
@@ -503,7 +503,7 @@ dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
  */
 
 static void
-dotlock_expand_link (char *newpath, const char *path, const char *link)
+dotlock_expand_link(char *newpath, const char *path, const char *link)
 {
   const char *lb = NULL;
   size_t len;
@@ -511,20 +511,20 @@ dotlock_expand_link (char *newpath, const char *path, const char *link)
   /* link is full path */
   if (*link == '/')
   {
-    strfcpy (newpath, link, _POSIX_PATH_MAX);
+    strfcpy(newpath, link, _POSIX_PATH_MAX);
     return;
   }
 
-  if ((lb = strrchr (path, '/')) == NULL)
+  if ((lb = strrchr(path, '/')) == NULL)
   {
     /* no path in link */
-    strfcpy (newpath, link, _POSIX_PATH_MAX);
+    strfcpy(newpath, link, _POSIX_PATH_MAX);
     return;
   }
 
   len = lb - path + 1;
-  memcpy (newpath, path, len);
-  strfcpy (newpath + len, link, _POSIX_PATH_MAX - len);
+  memcpy(newpath, path, len);
+  strfcpy(newpath + len, link, _POSIX_PATH_MAX - len);
 }
 
 
@@ -536,7 +536,7 @@ dotlock_expand_link (char *newpath, const char *path, const char *link)
  */
 
 static int
-dotlock_dereference_symlink (char *d, size_t l, const char *path)
+dotlock_dereference_symlink(char *d, size_t l, const char *path)
 {
   struct stat sb;
   char realpath[_POSIX_PATH_MAX];
@@ -545,34 +545,34 @@ dotlock_dereference_symlink (char *d, size_t l, const char *path)
 
   while (count++ < MAXLINKS)
   {
-    if (lstat (pathptr, &sb) == -1)
+    if (lstat(pathptr, &sb) == -1)
     {
       /* perror (pathptr); */
       return -1;
     }
 
-    if (S_ISLNK (sb.st_mode))
+    if (S_ISLNK(sb.st_mode))
     {
       char linkfile[_POSIX_PATH_MAX];
       char linkpath[_POSIX_PATH_MAX];
       int len;
 
-      if ((len = readlink (pathptr, linkfile, sizeof (linkfile) - 1)) == -1)
+      if ((len = readlink(pathptr, linkfile, sizeof(linkfile) - 1)) == -1)
       {
         /* perror (pathptr); */
         return -1;
       }
 
       linkfile[len] = '\0';
-      dotlock_expand_link (linkpath, pathptr, linkfile);
-      strfcpy (realpath, linkpath, sizeof (realpath));
+      dotlock_expand_link(linkpath, pathptr, linkfile);
+      strfcpy(realpath, linkpath, sizeof(realpath));
       pathptr = realpath;
     }
     else
       break;
   }
 
-  strfcpy (d, pathptr, l);
+  strfcpy(d, pathptr, l);
   return 0;
 }
 
@@ -588,7 +588,7 @@ dotlock_dereference_symlink (char *d, size_t l, const char *path)
 #define HARDMAXATTEMPTS 10
 
 static int
-dotlock_lock (const char *realpath)
+dotlock_lock(const char *realpath)
 {
   char lockfile[_POSIX_PATH_MAX + LONG_STRING];
   char nfslockfile[_POSIX_PATH_MAX + LONG_STRING];
@@ -599,18 +599,18 @@ dotlock_lock (const char *realpath)
   struct stat sb;
   time_t t;
 
-  snprintf (nfslockfile, sizeof (nfslockfile), "%s.%s.%d",
-            realpath, Hostname, (int) getpid ());
-  snprintf (lockfile, sizeof (lockfile), "%s.lock", realpath);
+  snprintf(nfslockfile, sizeof(nfslockfile), "%s.%s.%d",
+           realpath, Hostname, (int) getpid());
+  snprintf(lockfile, sizeof(lockfile), "%s.lock", realpath);
 
 
-  BEGIN_PRIVILEGED ();
+  BEGIN_PRIVILEGED();
 
-  unlink (nfslockfile);
+  unlink(nfslockfile);
 
-  while ((fd = open (nfslockfile, O_WRONLY | O_EXCL | O_CREAT, 0)) < 0)
+  while ((fd = open(nfslockfile, O_WRONLY | O_EXCL | O_CREAT, 0)) < 0)
   {
-    END_PRIVILEGED ();
+    END_PRIVILEGED();
 
 
     if (errno != EAGAIN)
@@ -620,22 +620,22 @@ dotlock_lock (const char *realpath)
     }
 
 
-    BEGIN_PRIVILEGED ();
+    BEGIN_PRIVILEGED();
   }
 
-  END_PRIVILEGED ();
+  END_PRIVILEGED();
 
 
-  close (fd);
+  close(fd);
 
   while (hard_count++ < HARDMAXATTEMPTS)
   {
 
-    BEGIN_PRIVILEGED ();
-    link (nfslockfile, lockfile);
-    END_PRIVILEGED ();
+    BEGIN_PRIVILEGED();
+    link(nfslockfile, lockfile);
+    END_PRIVILEGED();
 
-    if (stat (nfslockfile, &sb) != 0)
+    if (stat(nfslockfile, &sb) != 0)
     {
       /* perror ("stat"); */
       return DL_EX_ERROR;
@@ -651,18 +651,18 @@ dotlock_lock (const char *realpath)
     {
       if (DotlockFlags & DL_FL_FORCE)
       {
-        BEGIN_PRIVILEGED ();
-        unlink (lockfile);
-        END_PRIVILEGED ();
+        BEGIN_PRIVILEGED();
+        unlink(lockfile);
+        END_PRIVILEGED();
 
         count = 0;
         continue;
       }
       else
       {
-        BEGIN_PRIVILEGED ();
-        unlink (nfslockfile);
-        END_PRIVILEGED ();
+        BEGIN_PRIVILEGED();
+        unlink(nfslockfile);
+        END_PRIVILEGED();
         return DL_EX_EXIST;
       }
     }
@@ -673,16 +673,16 @@ dotlock_lock (const char *realpath)
      * by users sending signals.
      */
 
-    t = time (NULL);
+    t = time(NULL);
     do
     {
-      sleep (1);
-    } while (time (NULL) == t);
+      sleep(1);
+    } while (time(NULL) == t);
   }
 
-  BEGIN_PRIVILEGED ();
-  unlink (nfslockfile);
-  END_PRIVILEGED ();
+  BEGIN_PRIVILEGED();
+  unlink(nfslockfile);
+  END_PRIVILEGED();
 
   return DL_EX_OK;
 }
@@ -696,17 +696,17 @@ dotlock_lock (const char *realpath)
  */
 
 static int
-dotlock_unlock (const char *realpath)
+dotlock_unlock(const char *realpath)
 {
   char lockfile[_POSIX_PATH_MAX + LONG_STRING];
   int i;
 
-  snprintf (lockfile, sizeof (lockfile), "%s.lock",
-            realpath);
+  snprintf(lockfile, sizeof(lockfile), "%s.lock",
+           realpath);
 
-  BEGIN_PRIVILEGED ();
-  i = unlink (lockfile);
-  END_PRIVILEGED ();
+  BEGIN_PRIVILEGED();
+  i = unlink(lockfile);
+  END_PRIVILEGED();
 
   if (i == -1)
     return DL_EX_ERROR;
@@ -717,18 +717,18 @@ dotlock_unlock (const char *realpath)
 /* remove an empty file */
 
 static int
-dotlock_unlink (const char *realpath)
+dotlock_unlink(const char *realpath)
 {
   struct stat lsb;
   int i = -1;
 
-  if (dotlock_lock (realpath) != DL_EX_OK)
+  if (dotlock_lock(realpath) != DL_EX_OK)
     return DL_EX_ERROR;
 
-  if ((i = lstat (realpath, &lsb)) == 0 && lsb.st_size == 0)
-    unlink (realpath);
+  if ((i = lstat(realpath, &lsb)) == 0 && lsb.st_size == 0)
+    unlink(realpath);
 
-  dotlock_unlock (realpath);
+  dotlock_unlock(realpath);
 
   return (i == 0) ?  DL_EX_OK : DL_EX_ERROR;
 }
@@ -742,17 +742,17 @@ dotlock_unlink (const char *realpath)
  */
 
 static int
-dotlock_try (void)
+dotlock_try(void)
 {
 #ifdef USE_SETGID
   struct stat sb;
 #endif
 
-  if (access (".", W_OK) == 0)
+  if (access(".", W_OK) == 0)
     return DL_EX_OK;
 
 #ifdef USE_SETGID
-  if (stat (".", &sb) == 0)
+  if (stat(".", &sb) == 0)
   {
     if ((sb.st_mode & S_IWGRP) == S_IWGRP && sb.st_gid == MailGid)
       return DL_EX_NEED_PRIVS;

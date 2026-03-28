@@ -95,14 +95,14 @@ const char B64Chars_urlsafe[64] = {
   '8', '9', '-', '_'
 };
 
-static void transform_to_7bit (BODY *a, FILE *fpin);
+static void transform_to_7bit(BODY *a, FILE *fpin);
 
-static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
+static void encode_quoted(FGETCONV * fc, FILE *fout, int istext)
 {
   int c, linelen = 0;
   char line[77], savechar;
 
-  while ((c = fgetconv (fc)) != EOF)
+  while ((c = fgetconv(fc)) != EOF)
   {
     /* Wrap the line if needed. */
     if (linelen == 76 && ((istext && c != '\n') || !istext))
@@ -114,8 +114,8 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
       if (line[linelen-3] == '=')
       {
         line[linelen-3] = 0;
-        fputs (line, fout);
-        fputs ("=\n", fout);
+        fputs(line, fout);
+        fputs("=\n", fout);
         line[linelen] = 0;
         line[0] = '=';
         line[1] = line[linelen-2];
@@ -127,27 +127,27 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
         savechar = line[linelen-1];
         line[linelen-1] = '=';
         line[linelen] = 0;
-        fputs (line, fout);
-        fputc ('\n', fout);
+        fputs(line, fout);
+        fputc('\n', fout);
         line[0] = savechar;
         linelen = 1;
       }
     }
 
     /* Escape lines that begin with/only contain "the message separator". */
-    if (linelen == 4 && !mutt_strncmp ("From", line, 4))
+    if (linelen == 4 && !mutt_strncmp("From", line, 4))
     {
-      strfcpy (line, "=46rom", sizeof (line));
+      strfcpy(line, "=46rom", sizeof(line));
       linelen = 6;
     }
-    else if (linelen == 4 && !mutt_strncmp ("from", line, 4))
+    else if (linelen == 4 && !mutt_strncmp("from", line, 4))
     {
-      strfcpy (line, "=66rom", sizeof (line));
+      strfcpy(line, "=66rom", sizeof(line));
       linelen = 6;
     }
     else if (linelen == 1 && line[0] == '.')
     {
-      strfcpy (line, "=2E", sizeof (line));
+      strfcpy(line, "=2E", sizeof(line));
       linelen = 3;
     }
 
@@ -159,8 +159,8 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
       {
         if (linelen < 74)
         {
-          sprintf (line+linelen-1, "=%2.2X", (unsigned char) line[linelen-1]);
-          fputs (line, fout);
+          sprintf(line+linelen-1, "=%2.2X", (unsigned char) line[linelen-1]);
+          fputs(line, fout);
         }
         else
         {
@@ -168,16 +168,16 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
 
           line[linelen-1] = '=';
           line[linelen] = 0;
-          fputs (line, fout);
-          fprintf (fout, "\n=%2.2X", (unsigned char) savechar);
+          fputs(line, fout);
+          fprintf(fout, "\n=%2.2X", (unsigned char) savechar);
         }
       }
       else
       {
         line[linelen] = 0;
-        fputs (line, fout);
+        fputs(line, fout);
       }
-      fputc ('\n', fout);
+      fputc('\n', fout);
       linelen = 0;
     }
     else if (c != 9 && (c < 32 || c > 126 || c == '='))
@@ -189,11 +189,11 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
       {
         line[linelen++] = '=';
         line[linelen] = 0;
-        fputs (line, fout);
-        fputc ('\n', fout);
+        fputs(line, fout);
+        fputc('\n', fout);
         linelen = 0;
       }
-      sprintf (line+linelen,"=%2.2X", (unsigned char) c);
+      sprintf(line+linelen,"=%2.2X", (unsigned char) c);
       linelen += 3;
     }
     else
@@ -212,20 +212,20 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
     {
       /* take care of trailing whitespace */
       if (linelen < 74)
-        sprintf (line+linelen-1, "=%2.2X", (unsigned char) line[linelen-1]);
+        sprintf(line+linelen-1, "=%2.2X", (unsigned char) line[linelen-1]);
       else
       {
         savechar = line[linelen-1];
         line[linelen-1] = '=';
         line[linelen] = 0;
-        fputs (line, fout);
-        fputc ('\n', fout);
-        sprintf (line, "=%2.2X", (unsigned char) savechar);
+        fputs(line, fout);
+        fputc('\n', fout);
+        sprintf(line, "=%2.2X", (unsigned char) savechar);
       }
     }
     else
       line[linelen] = 0;
-    fputs (line, fout);
+    fputs(line, fout);
   }
 }
 
@@ -284,13 +284,13 @@ static void b64_putc(char c, FILE *fout)
 }
 
 
-static void encode_base64 (FGETCONV * fc, FILE *fout, int istext)
+static void encode_base64(FGETCONV * fc, FILE *fout, int istext)
 {
   int ch, ch1 = EOF;
 
   b64_num = b64_linelen = 0;
 
-  while ((ch = fgetconv (fc)) != EOF)
+  while ((ch = fgetconv(fc)) != EOF)
   {
     if (istext && ch == '\n' && ch1 != '\r')
       b64_putc('\r', fout);
@@ -301,16 +301,16 @@ static void encode_base64 (FGETCONV * fc, FILE *fout, int istext)
   fputc('\n', fout);
 }
 
-static void encode_8bit (FGETCONV *fc, FILE *fout, int istext)
+static void encode_8bit(FGETCONV *fc, FILE *fout, int istext)
 {
   int ch;
 
-  while ((ch = fgetconv (fc)) != EOF)
-    fputc (ch, fout);
+  while ((ch = fgetconv(fc)) != EOF)
+    fputc(ch, fout);
 }
 
 
-int mutt_write_mime_header (BODY *a, FILE *f)
+int mutt_write_mime_header(BODY *a, FILE *f)
 {
   PARAMETER *p;
   PARAMETER *param_conts, *cont;
@@ -320,53 +320,53 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   size_t len;
   size_t tmplen;
 
-  fprintf (f, "Content-Type: %s/%s", TYPE (a), a->subtype);
+  fprintf(f, "Content-Type: %s/%s", TYPE(a), a->subtype);
 
   if (a->parameter)
   {
-    len = 25 + mutt_strlen (a->subtype); /* approximate len. of content-type */
+    len = 25 + mutt_strlen(a->subtype); /* approximate len. of content-type */
 
     for (p = a->parameter; p; p = p->next)
     {
       if (!(p->attribute && p->value))
         continue;
 
-      param_conts = rfc2231_encode_string (p->attribute, p->value);
+      param_conts = rfc2231_encode_string(p->attribute, p->value);
       for (cont = param_conts; cont; cont = cont->next)
       {
-        fputc (';', f);
+        fputc(';', f);
 
         buffer[0] = 0;
-        rfc822_cat (buffer, sizeof (buffer), cont->value, MimeSpecials);
+        rfc822_cat(buffer, sizeof(buffer), cont->value, MimeSpecials);
 
         /* Dirty hack to make messages readable by Outlook Express
          * for the Mac: force quotes around the boundary parameter
          * even when they aren't needed.
          */
-        if (!ascii_strcasecmp (cont->attribute, "boundary") &&
-            !mutt_strcmp (buffer, cont->value))
-          snprintf (buffer, sizeof (buffer), "\"%s\"", cont->value);
+        if (!ascii_strcasecmp(cont->attribute, "boundary") &&
+            !mutt_strcmp(buffer, cont->value))
+          snprintf(buffer, sizeof(buffer), "\"%s\"", cont->value);
 
-        tmplen = mutt_strlen (buffer) + mutt_strlen (cont->attribute) + 1;
+        tmplen = mutt_strlen(buffer) + mutt_strlen(cont->attribute) + 1;
         if (len + tmplen + 2 > 76)
         {
-          fputs ("\n\t", f);
+          fputs("\n\t", f);
           len = tmplen + 1;
         }
         else
         {
-          fputc (' ', f);
+          fputc(' ', f);
           len += tmplen + 1;
         }
 
-        fprintf (f, "%s=%s", cont->attribute, buffer);
+        fprintf(f, "%s=%s", cont->attribute, buffer);
       }
 
-      mutt_free_parameter (&param_conts);
+      mutt_free_parameter(&param_conts);
     }
   }
 
-  fputc ('\n', f);
+  fputc('\n', f);
 
   if (a->description)
     fprintf(f, "Content-Description: %s\n", a->description);
@@ -381,8 +381,8 @@ int mutt_write_mime_header (BODY *a, FILE *f)
 
     if (a->disposition < sizeof(dispstr)/sizeof(char*))
     {
-      fprintf (f, "Content-Disposition: %s", dispstr[a->disposition]);
-      len = 21 + mutt_strlen (dispstr[a->disposition]);
+      fprintf(f, "Content-Disposition: %s", dispstr[a->disposition]);
+      len = 21 + mutt_strlen(dispstr[a->disposition]);
 
       if (a->use_disp)
       {
@@ -392,38 +392,38 @@ int mutt_write_mime_header (BODY *a, FILE *f)
         if (fn)
         {
           /* Strip off the leading path... */
-          if ((t = strrchr (fn, '/')))
+          if ((t = strrchr(fn, '/')))
             t++;
           else
             t = fn;
 
-          param_conts = rfc2231_encode_string ("filename", t);
+          param_conts = rfc2231_encode_string("filename", t);
           for (cont = param_conts; cont; cont = cont->next)
           {
-            fputc (';', f);
+            fputc(';', f);
             buffer[0] = 0;
-            rfc822_cat (buffer, sizeof (buffer), cont->value, MimeSpecials);
+            rfc822_cat(buffer, sizeof(buffer), cont->value, MimeSpecials);
 
-            tmplen = mutt_strlen (buffer) + mutt_strlen (cont->attribute) + 1;
+            tmplen = mutt_strlen(buffer) + mutt_strlen(cont->attribute) + 1;
             if (len + tmplen + 2 > 76)
             {
-              fputs ("\n\t", f);
+              fputs("\n\t", f);
               len = tmplen + 1;
             }
             else
             {
-              fputc (' ', f);
+              fputc(' ', f);
               len += tmplen + 1;
             }
 
-            fprintf (f, "%s=%s", cont->attribute, buffer);
+            fprintf(f, "%s=%s", cont->attribute, buffer);
           }
 
-          mutt_free_parameter (&param_conts);
+          mutt_free_parameter(&param_conts);
         }
       }
 
-      fputc ('\n', f);
+      fputc('\n', f);
     }
     else
     {
@@ -432,28 +432,28 @@ int mutt_write_mime_header (BODY *a, FILE *f)
   }
 
   if (a->encoding != ENC7BIT)
-    fprintf(f, "Content-Transfer-Encoding: %s\n", ENCODING (a->encoding));
+    fprintf(f, "Content-Transfer-Encoding: %s\n", ENCODING(a->encoding));
 
-  if ((option (OPTCRYPTPROTHDRSWRITE)
+  if ((option(OPTCRYPTPROTHDRSWRITE)
 #ifdef USE_AUTOCRYPT
-       || option (OPTAUTOCRYPT)
+       || option(OPTAUTOCRYPT)
 #endif
         ) &&
       a->mime_headers)
   {
-    mutt_write_rfc822_header (f, a->mime_headers, NULL, a->mime_headers->date,
-                              MUTT_WRITE_HEADER_MIME, 0, 0);
+    mutt_write_rfc822_header(f, a->mime_headers, NULL, a->mime_headers->date,
+                             MUTT_WRITE_HEADER_MIME, 0, 0);
   }
 
   /* Do NOT add the terminator here!!! */
-  return (ferror (f) ? -1 : 0);
+  return (ferror(f) ? -1 : 0);
 }
 
 #define write_as_text_part(a)                                           \
   (mutt_is_text_part(a) ||                                              \
    ((WithCrypto & APPLICATION_PGP) && mutt_is_application_pgp(a)))
 
-int mutt_write_mime_body (BODY *a, FILE *f)
+int mutt_write_mime_body(BODY *a, FILE *f)
 {
   char *p, boundary[SHORT_STRING];
   char send_charset[SHORT_STRING];
@@ -464,76 +464,76 @@ int mutt_write_mime_body (BODY *a, FILE *f)
   if (a->type == TYPEMULTIPART)
   {
     /* First, find the boundary to use */
-    if (!(p = mutt_get_parameter ("boundary", a->parameter)))
+    if (!(p = mutt_get_parameter("boundary", a->parameter)))
     {
       muttdbg(1, "no boundary parameter found!");
       mutt_error _("No boundary parameter found! [report this error]");
       return (-1);
     }
-    strfcpy (boundary, p, sizeof (boundary));
+    strfcpy(boundary, p, sizeof(boundary));
 
     for (t = a->parts; t ; t = t->next)
     {
-      fprintf (f, "\n--%s\n", boundary);
-      if (mutt_write_mime_header (t, f) == -1)
+      fprintf(f, "\n--%s\n", boundary);
+      if (mutt_write_mime_header(t, f) == -1)
         return -1;
-      fputc ('\n', f);
-      if (mutt_write_mime_body (t, f) == -1)
+      fputc('\n', f);
+      if (mutt_write_mime_body(t, f) == -1)
         return -1;
     }
-    fprintf (f, "\n--%s--\n", boundary);
-    return (ferror (f) ? -1 : 0);
+    fprintf(f, "\n--%s--\n", boundary);
+    return (ferror(f) ? -1 : 0);
   }
 
   /* This is pretty gross, but it's the best solution for now... */
   if ((WithCrypto & APPLICATION_PGP)
       && a->type == TYPEAPPLICATION
-      && mutt_strcmp (a->subtype, "pgp-encrypted") == 0
+      && mutt_strcmp(a->subtype, "pgp-encrypted") == 0
       && !a->filename)
   {
-    fputs ("Version: 1\n", f);
+    fputs("Version: 1\n", f);
     return 0;
   }
 
-  if ((fpin = fopen (a->filename, "r")) == NULL)
+  if ((fpin = fopen(a->filename, "r")) == NULL)
   {
     muttdbg(1, "write_mime_body: %s no longer exists!", a->filename);
-    mutt_error (_("%s no longer exists!"), a->filename);
+    mutt_error(_("%s no longer exists!"), a->filename);
     return -1;
   }
 
   if (a->type == TYPETEXT && (!a->noconv))
-    fc = fgetconv_open (fpin, a->charset,
-                        mutt_get_body_charset (send_charset, sizeof (send_charset), a),
-                        0);
+    fc = fgetconv_open(fpin, a->charset,
+                       mutt_get_body_charset(send_charset, sizeof(send_charset), a),
+                       0);
   else
-    fc = fgetconv_open (fpin, 0, 0, 0);
+    fc = fgetconv_open(fpin, 0, 0, 0);
 
   if (a->encoding == ENCQUOTEDPRINTABLE)
-    encode_quoted (fc, f, write_as_text_part (a));
+    encode_quoted(fc, f, write_as_text_part(a));
   else if (a->encoding == ENCBASE64)
-    encode_base64 (fc, f, write_as_text_part (a));
+    encode_base64(fc, f, write_as_text_part(a));
   else if (a->type == TYPETEXT && (!a->noconv))
-    encode_8bit (fc, f, write_as_text_part (a));
+    encode_8bit(fc, f, write_as_text_part(a));
   else
-    mutt_copy_stream (fpin, f);
+    mutt_copy_stream(fpin, f);
 
-  fgetconv_close (&fc);
-  safe_fclose (&fpin);
+  fgetconv_close(&fc);
+  safe_fclose(&fpin);
 
-  return (ferror (f) ? -1 : 0);
+  return (ferror(f) ? -1 : 0);
 }
 
 #undef write_as_text_part
 
 #define BOUNDARYLEN 16
-void mutt_generate_boundary (PARAMETER **parm)
+void mutt_generate_boundary(PARAMETER **parm)
 {
   char rs[BOUNDARYLEN + 1];
 
   mutt_base64_random96(rs);
 
-  mutt_set_parameter ("boundary", rs, parm);
+  mutt_set_parameter("boundary", rs, parm);
 }
 
 typedef struct
@@ -547,7 +547,7 @@ typedef struct
 CONTENT_STATE;
 
 
-static void update_content_info (CONTENT *info, CONTENT_STATE *s, char *d, size_t dlen)
+static void update_content_info(CONTENT *info, CONTENT_STATE *s, char *d, size_t dlen)
 {
   int from = s->from;
   int whitespace = s->whitespace;
@@ -678,13 +678,13 @@ static void update_content_info (CONTENT *info, CONTENT_STATE *s, char *d, size_
  * long as the input for any pair of charsets we might be interested
  * in.
  */
-static size_t convert_file_to (FILE *file, const char *fromcode,
-                               int ncodes, const char **tocodes,
-                               int *tocode, CONTENT *info)
+static size_t convert_file_to(FILE *file, const char *fromcode,
+                              int ncodes, const char **tocodes,
+                              int *tocode, CONTENT *info)
 {
 #ifdef HAVE_ICONV
   iconv_t cd1, *cd;
-  char bufi[256], bufu[512], bufo[4 * sizeof (bufi)];
+  char bufi[256], bufu[512], bufo[4 * sizeof(bufi)];
   ICONV_CONST char *ib, *ub;
   char *ob;
   size_t ibl, obl, ubl, ubl1, n, ret;
@@ -693,41 +693,41 @@ static size_t convert_file_to (FILE *file, const char *fromcode,
   CONTENT_STATE *states;
   size_t *score;
 
-  cd1 = mutt_iconv_open ("utf-8", fromcode, 0);
+  cd1 = mutt_iconv_open("utf-8", fromcode, 0);
   if (cd1 == (iconv_t)(-1))
     return -1;
 
-  cd     = safe_calloc (ncodes, sizeof (iconv_t));
-  score  = safe_calloc (ncodes, sizeof (size_t));
-  states = safe_calloc (ncodes, sizeof (CONTENT_STATE));
-  infos  = safe_calloc (ncodes, sizeof (CONTENT));
+  cd     = safe_calloc(ncodes, sizeof(iconv_t));
+  score  = safe_calloc(ncodes, sizeof(size_t));
+  states = safe_calloc(ncodes, sizeof(CONTENT_STATE));
+  infos  = safe_calloc(ncodes, sizeof(CONTENT));
 
   for (i = 0; i < ncodes; i++)
-    if (ascii_strcasecmp (tocodes[i], "utf-8"))
-      cd[i] = mutt_iconv_open (tocodes[i], "utf-8", 0);
+    if (ascii_strcasecmp(tocodes[i], "utf-8"))
+      cd[i] = mutt_iconv_open(tocodes[i], "utf-8", 0);
     else
       /* Special case for conversion to UTF-8 */
       cd[i] = (iconv_t)(-1), score[i] = (size_t)(-1);
 
-  rewind (file);
+  rewind(file);
   ibl = 0;
   for (;;)
   {
 
     /* Try to fill input buffer */
-    n = fread (bufi + ibl, 1, sizeof (bufi) - ibl, file);
+    n = fread(bufi + ibl, 1, sizeof(bufi) - ibl, file);
     ibl += n;
 
     /* Convert to UTF-8 */
     ib = bufi;
-    ob = bufu, obl = sizeof (bufu);
-    n = iconv (cd1, ibl ? &ib : 0, &ibl, &ob, &obl);
-    assert (n == (size_t)(-1) || !n || ICONV_NONTRANS);
+    ob = bufu, obl = sizeof(bufu);
+    n = iconv(cd1, ibl ? &ib : 0, &ibl, &ob, &obl);
+    assert(n == (size_t)(-1) || !n || ICONV_NONTRANS);
     if (n == (size_t)(-1) &&
         ((errno != EINVAL && errno != E2BIG) || ib == bufi))
     {
-      assert (errno == EILSEQ ||
-              (errno == EINVAL && ib == bufi && ibl < sizeof (bufi)));
+      assert(errno == EILSEQ ||
+             (errno == EINVAL && ib == bufi && ibl < sizeof(bufi)));
       ret = (size_t)(-1);
       break;
     }
@@ -738,28 +738,28 @@ static size_t convert_file_to (FILE *file, const char *fromcode,
       if (cd[i] != (iconv_t)(-1) && score[i] != (size_t)(-1))
       {
         ub = bufu, ubl = ubl1;
-        ob = bufo, obl = sizeof (bufo);
-        n = iconv (cd[i], (ibl || ubl) ? &ub : 0, &ubl, &ob, &obl);
+        ob = bufo, obl = sizeof(bufo);
+        n = iconv(cd[i], (ibl || ubl) ? &ub : 0, &ubl, &ob, &obl);
         if (n == (size_t)(-1))
         {
-          assert (errno == E2BIG ||
-                  (BUGGY_ICONV && (errno == EILSEQ || errno == ENOENT)));
+          assert(errno == E2BIG ||
+                 (BUGGY_ICONV && (errno == EILSEQ || errno == ENOENT)));
           score[i] = (size_t)(-1);
         }
         else
         {
           score[i] += n;
-          update_content_info (&infos[i], &states[i], bufo, ob - bufo);
+          update_content_info(&infos[i], &states[i], bufo, ob - bufo);
         }
       }
       else if (cd[i] == (iconv_t)(-1) && score[i] == (size_t)(-1))
         /* Special case for conversion to UTF-8 */
-        update_content_info (&infos[i], &states[i], bufu, ubl1);
+        update_content_info(&infos[i], &states[i], bufu, ubl1);
 
     if (ibl)
       /* Save unused input */
-      memmove (bufi, ib, ibl);
-    else if (!ubl1 && ib < bufi + sizeof (bufi))
+      memmove(bufi, ib, ibl);
+    else if (!ubl1 && ib < bufi + sizeof(bufi))
     {
       ret = 0;
       break;
@@ -791,20 +791,20 @@ static size_t convert_file_to (FILE *file, const char *fromcode,
     }
     if (ret != (size_t)(-1))
     {
-      memcpy (info, &infos[*tocode], sizeof(CONTENT));
-      update_content_info (info, &states[*tocode], 0, 0); /* EOF */
+      memcpy(info, &infos[*tocode], sizeof(CONTENT));
+      update_content_info(info, &states[*tocode], 0, 0); /* EOF */
     }
   }
 
   for (i = 0; i < ncodes; i++)
     if (cd[i] != (iconv_t)(-1))
-      iconv_close (cd[i]);
+      iconv_close(cd[i]);
 
-  iconv_close (cd1);
-  FREE (&cd);
-  FREE (&infos);
-  FREE (&score);
-  FREE (&states);
+  iconv_close(cd1);
+  FREE(&cd);
+  FREE(&infos);
+  FREE(&score);
+  FREE(&states);
 
   return ret;
 #else
@@ -823,9 +823,9 @@ static size_t convert_file_to (FILE *file, const char *fromcode,
  * However, if fromcode is zero then fromcodes is assumed to be the
  * name of a single charset even if it contains a colon.
  */
-static size_t convert_file_from_to (FILE *file,
-                                    const char *fromcodes, const char *tocodes,
-                                    char **fromcode, char **tocode, CONTENT *info)
+static size_t convert_file_from_to(FILE *file,
+                                   const char *fromcodes, const char *tocodes,
+                                   char **fromcode, char **tocode, CONTENT *info)
 {
   char *fcode = NULL;
   char **tcode;
@@ -837,18 +837,18 @@ static size_t convert_file_from_to (FILE *file,
   ncodes = 0;
   for (c = tocodes; c; c = c1 ? c1 + 1 : 0)
   {
-    if ((c1 = strchr (c, ':')) == c)
+    if ((c1 = strchr(c, ':')) == c)
       continue;
     ++ncodes;
   }
 
   /* Copy them */
-  tcode = safe_malloc (ncodes * sizeof (char *));
+  tcode = safe_malloc(ncodes * sizeof(char *));
   for (c = tocodes, i = 0; c; c = c1 ? c1 + 1 : 0, i++)
   {
-    if ((c1 = strchr (c, ':')) == c)
+    if ((c1 = strchr(c, ':')) == c)
       continue;
-    tcode[i] = mutt_substrdup (c, c1);
+    tcode[i] = mutt_substrdup(c, c1);
   }
 
   ret = (size_t)(-1);
@@ -857,12 +857,12 @@ static size_t convert_file_from_to (FILE *file,
     /* Try each fromcode in turn */
     for (c = fromcodes; c; c = c1 ? c1 + 1 : 0)
     {
-      if ((c1 = strchr (c, ':')) == c)
+      if ((c1 = strchr(c, ':')) == c)
         continue;
-      fcode = mutt_substrdup (c, c1);
+      fcode = mutt_substrdup(c, c1);
 
-      ret = convert_file_to (file, fcode, ncodes, (const char **)tcode,
-                             &cn, info);
+      ret = convert_file_to(file, fcode, ncodes, (const char **)tcode,
+                            &cn, info);
       if (ret != (size_t)(-1))
       {
         *fromcode = fcode;
@@ -870,14 +870,14 @@ static size_t convert_file_from_to (FILE *file,
         tcode[cn] = 0;
         break;
       }
-      FREE (&fcode);
+      FREE(&fcode);
     }
   }
   else
   {
     /* There is only one fromcode */
-    ret = convert_file_to (file, fromcodes, ncodes, (const char **)tcode,
-                           &cn, info);
+    ret = convert_file_to(file, fromcodes, ncodes, (const char **)tcode,
+                          &cn, info);
     if (ret != (size_t)(-1))
     {
       *tocode = tcode[cn];
@@ -887,9 +887,9 @@ static size_t convert_file_from_to (FILE *file,
 
   /* Free memory */
   for (i = 0; i < ncodes; i++)
-    FREE (&tcode[i]);
+    FREE(&tcode[i]);
 
-  FREE (&tcode);
+  FREE(&tcode);
 
   return ret;
 }
@@ -898,7 +898,7 @@ static size_t convert_file_from_to (FILE *file,
  * Analyze the contents of a file to determine which MIME encoding to use.
  * Also set the body charset, sometimes, or not.
  */
-CONTENT *mutt_get_content_info (const char *fname, BODY *b)
+CONTENT *mutt_get_content_info(const char *fname, BODY *b)
 {
   CONTENT *info;
   CONTENT_STATE state;
@@ -915,59 +915,59 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
   if (!fname)
     return NULL;
 
-  if (stat (fname, &sb) == -1)
+  if (stat(fname, &sb) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), fname, strerror (errno));
+    mutt_error(_("Can't stat %s: %s"), fname, strerror(errno));
     return NULL;
   }
 
   if (!S_ISREG(sb.st_mode))
   {
-    mutt_error (_("%s isn't a regular file."), fname);
+    mutt_error(_("%s isn't a regular file."), fname);
     return NULL;
   }
 
-  if ((fp = fopen (fname, "r")) == NULL)
+  if ((fp = fopen(fname, "r")) == NULL)
   {
     mutt_errno_dbg(1, "%s", fname);
     return (NULL);
   }
 
-  info = safe_calloc (1, sizeof (CONTENT));
-  memset (&state, 0, sizeof (state));
+  info = safe_calloc(1, sizeof(CONTENT));
+  memset(&state, 0, sizeof(state));
 
   if (b != NULL && b->type == TYPETEXT && (!b->noconv && !b->force_charset))
   {
-    char *chs = mutt_get_parameter ("charset", b->parameter);
+    char *chs = mutt_get_parameter("charset", b->parameter);
     char *fchs = b->use_disp ? (AttachCharset ? AttachCharset : Charset) : Charset;
     if (Charset && (chs || SendCharset) &&
-        convert_file_from_to (fp, fchs, chs ? chs : SendCharset,
-                              &fromcode, &tocode, info) != (size_t)(-1))
+        convert_file_from_to(fp, fchs, chs ? chs : SendCharset,
+                             &fromcode, &tocode, info) != (size_t)(-1))
     {
       if (!chs)
       {
-        mutt_canonical_charset (chsbuf, sizeof (chsbuf), tocode);
-        mutt_set_parameter ("charset", chsbuf, &b->parameter);
+        mutt_canonical_charset(chsbuf, sizeof(chsbuf), tocode);
+        mutt_set_parameter("charset", chsbuf, &b->parameter);
       }
-      FREE (&b->charset);
+      FREE(&b->charset);
       b->charset = fromcode;
-      FREE (&tocode);
-      safe_fclose (&fp);
+      FREE(&tocode);
+      safe_fclose(&fp);
       return info;
     }
   }
 
-  rewind (fp);
-  while ((r = fread (buffer, 1, sizeof(buffer), fp)))
-    update_content_info (info, &state, buffer, r);
-  update_content_info (info, &state, 0, 0);
+  rewind(fp);
+  while ((r = fread(buffer, 1, sizeof(buffer), fp)))
+    update_content_info(info, &state, buffer, r);
+  update_content_info(info, &state, 0, 0);
 
-  safe_fclose (&fp);
+  safe_fclose(&fp);
 
   if (b != NULL && b->type == TYPETEXT && (!b->noconv && !b->force_charset))
-    mutt_set_parameter ("charset", (!info->hibin ? "us-ascii" :
-                                    Charset  && !mutt_is_us_ascii (Charset) ? Charset : "unknown-8bit"),
-                        &b->parameter);
+    mutt_set_parameter("charset", (!info->hibin ? "us-ascii" :
+                                   Charset  && !mutt_is_us_ascii(Charset) ? Charset : "unknown-8bit"),
+                       &b->parameter);
 
   return info;
 }
@@ -979,7 +979,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY *b)
  * exists.
  */
 
-int mutt_lookup_mime_type (BODY *att, const char *path)
+int mutt_lookup_mime_type(BODY *att, const char *path)
 {
   FILE *f;
   char *p, *q, *ct;
@@ -994,7 +994,7 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
   type     = TYPEOTHER;
   cur_sze  = 0;
 
-  szf      = mutt_strlen (path);
+  szf      = mutt_strlen(path);
 
   for (count = 0 ; count < 3 ; count++)
   {
@@ -1005,68 +1005,68 @@ int mutt_lookup_mime_type (BODY *att, const char *path)
     switch (count)
     {
       case 0:
-        snprintf (buf, sizeof (buf), "%s/.mime.types", NONULL(Homedir));
+        snprintf(buf, sizeof(buf), "%s/.mime.types", NONULL(Homedir));
         break;
       case 1:
-        strfcpy (buf, SYSCONFDIR"/mime.types", sizeof(buf));
+        strfcpy(buf, SYSCONFDIR"/mime.types", sizeof(buf));
         break;
       case 2:
-        strfcpy (buf, PKGDATADIR"/mime.types", sizeof (buf));
+        strfcpy(buf, PKGDATADIR"/mime.types", sizeof(buf));
         break;
       default:
         muttdbg(1, "Internal error, count = %d.", count);
         goto bye;       /* shouldn't happen */
     }
 
-    if ((f = fopen (buf, "r")) != NULL)
+    if ((f = fopen(buf, "r")) != NULL)
     {
-      while (fgets (buf, sizeof (buf) - 1, f) != NULL)
+      while (fgets(buf, sizeof(buf) - 1, f) != NULL)
       {
         /* weed out any comments */
-        if ((p = strchr (buf, '#')))
+        if ((p = strchr(buf, '#')))
           *p = 0;
 
         /* remove any leading space. */
         ct = buf;
-        SKIP_ASCII_WS (ct);
+        SKIP_ASCII_WS(ct);
 
         /* position on the next field in this line */
-        if ((p = strpbrk (ct, " \t")) == NULL)
+        if ((p = strpbrk(ct, " \t")) == NULL)
           continue;
         *p++ = 0;
-        SKIP_ASCII_WS (p);
+        SKIP_ASCII_WS(p);
 
         /* cycle through the file extensions */
-        while ((p = strtok (p, " \t\n")))
+        while ((p = strtok(p, " \t\n")))
         {
-          sze = mutt_strlen (p);
+          sze = mutt_strlen(p);
           if ((sze > cur_sze) && (szf >= sze) &&
-              (mutt_strcasecmp (path + szf - sze, p) == 0 || ascii_strcasecmp (path + szf - sze, p) == 0) &&
+              (mutt_strcasecmp(path + szf - sze, p) == 0 || ascii_strcasecmp(path + szf - sze, p) == 0) &&
               (szf == sze || path[szf - sze - 1] == '.'))
           {
             /* get the content-type */
 
-            if ((p = strchr (ct, '/')) == NULL)
+            if ((p = strchr(ct, '/')) == NULL)
             {
               /* malformed line, just skip it. */
               break;
             }
             *p++ = 0;
 
-            for (q = p; *q && !IS_ASCII_WS (*q); q++)
+            for (q = p; *q && !IS_ASCII_WS(*q); q++)
               ;
 
-            mutt_substrcpy (subtype, p, q, sizeof (subtype));
+            mutt_substrcpy(subtype, p, q, sizeof(subtype));
 
-            if ((type = mutt_check_mime_type (ct)) == TYPEOTHER)
-              strfcpy (xtype, ct, sizeof (xtype));
+            if ((type = mutt_check_mime_type(ct)) == TYPEOTHER)
+              strfcpy(xtype, ct, sizeof(xtype));
 
             cur_sze = sze;
           }
           p = NULL;
         }
       }
-      safe_fclose (&f);
+      safe_fclose(&f);
     }
   }
 
@@ -1075,14 +1075,14 @@ bye:
   if (type != TYPEOTHER || *xtype != '\0')
   {
     att->type = type;
-    mutt_str_replace (&att->subtype, subtype);
-    mutt_str_replace (&att->xtype, xtype);
+    mutt_str_replace(&att->subtype, subtype);
+    mutt_str_replace(&att->xtype, xtype);
   }
 
   return (type);
 }
 
-void mutt_message_to_7bit (BODY *a, FILE *fp)
+void mutt_message_to_7bit(BODY *a, FILE *fp)
 {
   BUFFER *temp = NULL;
   FILE *fpin = NULL;
@@ -1091,85 +1091,85 @@ void mutt_message_to_7bit (BODY *a, FILE *fp)
 
   if (!a->filename && fp)
     fpin = fp;
-  else if (!a->filename || !(fpin = fopen (a->filename, "r")))
+  else if (!a->filename || !(fpin = fopen(a->filename, "r")))
   {
-    mutt_error (_("Could not open %s"), a->filename ? a->filename : "(null)");
+    mutt_error(_("Could not open %s"), a->filename ? a->filename : "(null)");
     return;
   }
   else
   {
     a->offset = 0;
-    if (stat (a->filename, &sb) == -1)
+    if (stat(a->filename, &sb) == -1)
     {
-      mutt_perror ("stat");
-      safe_fclose (&fpin);
+      mutt_perror("stat");
+      safe_fclose(&fpin);
       goto cleanup;
     }
     a->length = sb.st_size;
   }
 
   /* Avoid buffer pool due to recursion */
-  temp = mutt_buffer_new ();
-  mutt_buffer_mktemp (temp);
-  if (!(fpout = safe_fopen (mutt_b2s (temp), "w+")))
+  temp = mutt_buffer_new();
+  mutt_buffer_mktemp(temp);
+  if (!(fpout = safe_fopen(mutt_b2s(temp), "w+")))
   {
-    mutt_perror ("fopen");
+    mutt_perror("fopen");
     goto cleanup;
   }
 
-  fseeko (fpin, a->offset, SEEK_SET);
-  a->parts = mutt_parse_messageRFC822 (fpin, a);
+  fseeko(fpin, a->offset, SEEK_SET);
+  a->parts = mutt_parse_messageRFC822(fpin, a);
 
-  transform_to_7bit (a->parts, fpin);
+  transform_to_7bit(a->parts, fpin);
 
-  mutt_copy_hdr (fpin, fpout, a->offset, a->offset + a->length,
-                 CH_MIME | CH_NONEWLINE | CH_XMIT, NULL);
+  mutt_copy_hdr(fpin, fpout, a->offset, a->offset + a->length,
+                CH_MIME | CH_NONEWLINE | CH_XMIT, NULL);
 
-  fputs ("MIME-Version: 1.0\n", fpout);
-  mutt_write_mime_header (a->parts, fpout);
-  fputc ('\n', fpout);
-  mutt_write_mime_body (a->parts, fpout);
+  fputs("MIME-Version: 1.0\n", fpout);
+  mutt_write_mime_header(a->parts, fpout);
+  fputc('\n', fpout);
+  mutt_write_mime_body(a->parts, fpout);
 
   if (fpin != fp)
-    safe_fclose (&fpin);
-  safe_fclose (&fpout);
+    safe_fclose(&fpin);
+  safe_fclose(&fpout);
 
   a->encoding = ENC7BIT;
-  FREE (&a->d_filename);
+  FREE(&a->d_filename);
   a->d_filename = a->filename;
   if (a->filename && a->unlink)
-    unlink (a->filename);
-  a->filename = safe_strdup (mutt_b2s (temp));
+    unlink(a->filename);
+  a->filename = safe_strdup(mutt_b2s(temp));
   a->unlink = 1;
-  if (stat (a->filename, &sb) == -1)
+  if (stat(a->filename, &sb) == -1)
   {
-    mutt_perror ("stat");
+    mutt_perror("stat");
     goto cleanup;
   }
   a->length = sb.st_size;
-  mutt_free_body (&a->parts);
+  mutt_free_body(&a->parts);
   a->hdr->content = NULL;
 
 cleanup:
   if (fpin && fpin != fp)
-    safe_fclose (&fpin);
+    safe_fclose(&fpin);
 
   if (fpout)
   {
-    safe_fclose (&fpout);
-    mutt_unlink (mutt_b2s (temp));
+    safe_fclose(&fpout);
+    mutt_unlink(mutt_b2s(temp));
   }
 
-  mutt_buffer_free (&temp);
+  mutt_buffer_free(&temp);
 }
 
-static void transform_to_7bit (BODY *a, FILE *fpin)
+static void transform_to_7bit(BODY *a, FILE *fpin)
 {
   BUFFER *buff;
   STATE s;
   struct stat sb;
 
-  memset (&s, 0, sizeof (s));
+  memset(&s, 0, sizeof(s));
   for (; a; a = a->next)
   {
     if (a->type == TYPEMULTIPART)
@@ -1177,11 +1177,11 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
       if (a->encoding != ENC7BIT)
         a->encoding = ENC7BIT;
 
-      transform_to_7bit (a->parts, fpin);
+      transform_to_7bit(a->parts, fpin);
     }
     else if (mutt_is_message_type(a->type, a->subtype))
     {
-      mutt_message_to_7bit (a, fpin);
+      mutt_message_to_7bit(a, fpin);
     }
     else
     {
@@ -1190,30 +1190,30 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
 
       /* Because of the potential recursion in message types, we
        * restrict the lifetime of the buffer tightly */
-      buff = mutt_buffer_pool_get ();
-      mutt_buffer_mktemp (buff);
-      if ((s.fpout = safe_fopen (mutt_b2s (buff), "w")) == NULL)
+      buff = mutt_buffer_pool_get();
+      mutt_buffer_mktemp(buff);
+      if ((s.fpout = safe_fopen(mutt_b2s(buff), "w")) == NULL)
       {
-        mutt_perror ("fopen");
-        mutt_buffer_pool_release (&buff);
+        mutt_perror("fopen");
+        mutt_buffer_pool_release(&buff);
         return;
       }
       s.fpin = fpin;
-      mutt_decode_attachment (a, &s);
-      safe_fclose (&s.fpout);
-      FREE (&a->d_filename);
+      mutt_decode_attachment(a, &s);
+      safe_fclose(&s.fpout);
+      FREE(&a->d_filename);
       a->d_filename = a->filename;
-      a->filename = safe_strdup (mutt_b2s (buff));
-      mutt_buffer_pool_release (&buff);
+      a->filename = safe_strdup(mutt_b2s(buff));
+      mutt_buffer_pool_release(&buff);
       a->unlink = 1;
-      if (stat (a->filename, &sb) == -1)
+      if (stat(a->filename, &sb) == -1)
       {
-        mutt_perror ("stat");
+        mutt_perror("stat");
         return;
       }
       a->length = sb.st_size;
 
-      mutt_update_encoding (a);
+      mutt_update_encoding(a);
       if (a->encoding == ENC8BIT)
         a->encoding = ENCQUOTEDPRINTABLE;
       else if (a->encoding == ENCBINARY)
@@ -1223,17 +1223,17 @@ static void transform_to_7bit (BODY *a, FILE *fpin)
 }
 
 /* determine which Content-Transfer-Encoding to use */
-static void mutt_set_encoding (BODY *b, CONTENT *info)
+static void mutt_set_encoding(BODY *b, CONTENT *info)
 {
   char send_charset[SHORT_STRING];
 
   if (b->type == TYPETEXT)
   {
-    char *chsname = mutt_get_body_charset (send_charset, sizeof (send_charset), b);
-    if ((info->lobin && ascii_strncasecmp (chsname, "iso-2022", 8)) || info->linemax > 990 || (info->from && option (OPTENCODEFROM)))
+    char *chsname = mutt_get_body_charset(send_charset, sizeof(send_charset), b);
+    if ((info->lobin && ascii_strncasecmp(chsname, "iso-2022", 8)) || info->linemax > 990 || (info->from && option(OPTENCODEFROM)))
       b->encoding = ENCQUOTEDPRINTABLE;
     else if (info->hibin)
-      b->encoding = option (OPTALLOW8BIT) ? ENC8BIT : ENCQUOTEDPRINTABLE;
+      b->encoding = option(OPTALLOW8BIT) ? ENC8BIT : ENCQUOTEDPRINTABLE;
     else
       b->encoding = ENC7BIT;
   }
@@ -1241,15 +1241,15 @@ static void mutt_set_encoding (BODY *b, CONTENT *info)
   {
     if (info->lobin || info->hibin)
     {
-      if (option (OPTALLOW8BIT) && !info->lobin)
+      if (option(OPTALLOW8BIT) && !info->lobin)
         b->encoding = ENC8BIT;
       else
-        mutt_message_to_7bit (b, NULL);
+        mutt_message_to_7bit(b, NULL);
     }
     else
       b->encoding = ENC7BIT;
   }
-  else if (b->type == TYPEAPPLICATION && ascii_strcasecmp (b->subtype, "pgp-keys") == 0)
+  else if (b->type == TYPEAPPLICATION && ascii_strcasecmp(b->subtype, "pgp-keys") == 0)
     b->encoding = ENC7BIT;
   else
   {
@@ -1269,7 +1269,7 @@ void mutt_stamp_attachment(BODY *a)
 
 /* Get a body's character set */
 
-char *mutt_get_body_charset (char *d, size_t dlen, BODY *b)
+char *mutt_get_body_charset(char *d, size_t dlen, BODY *b)
 {
   char *p = NULL;
 
@@ -1277,42 +1277,42 @@ char *mutt_get_body_charset (char *d, size_t dlen, BODY *b)
     return NULL;
 
   if (b)
-    p = mutt_get_parameter ("charset", b->parameter);
+    p = mutt_get_parameter("charset", b->parameter);
 
   if (p)
-    mutt_canonical_charset (d, dlen, NONULL(p));
+    mutt_canonical_charset(d, dlen, NONULL(p));
   else
-    strfcpy (d, "us-ascii", dlen);
+    strfcpy(d, "us-ascii", dlen);
 
   return d;
 }
 
 
 /* Assumes called from send mode where BODY->filename points to actual file */
-void mutt_update_encoding (BODY *a)
+void mutt_update_encoding(BODY *a)
 {
   CONTENT *info;
   char chsbuff[STRING];
 
   /* override noconv when it's us-ascii */
-  if (mutt_is_us_ascii (mutt_get_body_charset (chsbuff, sizeof (chsbuff), a)))
+  if (mutt_is_us_ascii(mutt_get_body_charset(chsbuff, sizeof(chsbuff), a)))
     a->noconv = 0;
 
   if (!a->force_charset && !a->noconv)
-    mutt_delete_parameter ("charset", &a->parameter);
+    mutt_delete_parameter("charset", &a->parameter);
 
-  if ((info = mutt_get_content_info (a->filename, a)) == NULL)
+  if ((info = mutt_get_content_info(a->filename, a)) == NULL)
     return;
 
-  mutt_set_encoding (a, info);
+  mutt_set_encoding(a, info);
   mutt_stamp_attachment(a);
 
-  FREE (&a->content);
+  FREE(&a->content);
   a->content = info;
 
 }
 
-BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
+BODY *mutt_make_message_attach(CONTEXT *ctx, HEADER *hdr, int attach_msg)
 {
   BUFFER *buffer = NULL;
   BODY *body;
@@ -1322,13 +1322,13 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
   int copy_rc, try_decode = 0, try_decrypt = 0;
 
   /* If we are attaching a message, ignore OPTMIMEFORWDECODE */
-  if (!attach_msg && option (OPTMIMEFORWDECODE))
+  if (!attach_msg && option(OPTMIMEFORWDECODE))
     try_decode = 1;
   else if (WithCrypto &&
            (hdr->security & ENCRYPT) &&
            /* L10N: Prompt for $forward_decrypt when attaching or forwarding
               a message */
-           (query_quadoption (OPT_FORWDECRYPT, _("Decrypt message attachment?")) == MUTT_YES))
+           (query_quadoption(OPT_FORWDECRYPT, _("Decrypt message attachment?")) == MUTT_YES))
     try_decrypt = 1;
 
   if (WithCrypto)
@@ -1341,26 +1341,26 @@ BODY *mutt_make_message_attach (CONTEXT *ctx, HEADER *hdr, int attach_msg)
   }
 
 retry:
-  buffer = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (buffer);
-  if ((fp = safe_fopen (mutt_b2s (buffer), "w+")) == NULL)
+  buffer = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(buffer);
+  if ((fp = safe_fopen(mutt_b2s(buffer), "w+")) == NULL)
   {
-    mutt_buffer_pool_release (&buffer);
+    mutt_buffer_pool_release(&buffer);
     return NULL;
   }
 
-  body = mutt_new_body ();
+  body = mutt_new_body();
   body->type = TYPEMESSAGE;
-  body->subtype = safe_strdup ("rfc822");
-  body->filename = safe_strdup (mutt_b2s (buffer));
+  body->subtype = safe_strdup("rfc822");
+  body->filename = safe_strdup(mutt_b2s(buffer));
   body->unlink = 1;
   body->use_disp = 0;
   body->disposition = DISPINLINE;
   body->noconv = 1;
 
-  mutt_buffer_pool_release (&buffer);
+  mutt_buffer_pool_release(&buffer);
 
-  mutt_parse_mime_message (ctx, hdr);
+  mutt_parse_mime_message(ctx, hdr);
 
   chflags = CH_XMIT;
   cmflags = 0;
@@ -1377,21 +1377,21 @@ retry:
   else if (try_decrypt)
   {
     if ((WithCrypto & APPLICATION_PGP)
-        && mutt_is_multipart_encrypted (hdr->content))
+        && mutt_is_multipart_encrypted(hdr->content))
     {
       chflags |= CH_MIME | CH_NONEWLINE;
       cmflags = MUTT_CM_DECODE_PGP;
       pgp &= ~PGPENCRYPT;
     }
     else if ((WithCrypto & APPLICATION_PGP) &&
-             ((mutt_is_application_pgp (hdr->content) & PGPENCRYPT) == PGPENCRYPT))
+             ((mutt_is_application_pgp(hdr->content) & PGPENCRYPT) == PGPENCRYPT))
     {
       chflags |= CH_MIME | CH_TXTPLAIN;
       cmflags = MUTT_CM_DECODE | MUTT_CM_CHARCONV;
       pgp &= ~PGPENCRYPT;
     }
     else if ((WithCrypto & APPLICATION_SMIME) &&
-             ((mutt_is_application_smime (hdr->content) & SMIMEENCRYPT) == SMIMEENCRYPT))
+             ((mutt_is_application_smime(hdr->content) & SMIMEENCRYPT) == SMIMEENCRYPT))
     {
       chflags |= CH_MIME | CH_NONEWLINE;
       cmflags = MUTT_CM_DECODE_SMIME;
@@ -1399,17 +1399,17 @@ retry:
     }
   }
 
-  copy_rc = mutt_copy_message (fp, ctx, hdr, cmflags, chflags);
+  copy_rc = mutt_copy_message(fp, ctx, hdr, cmflags, chflags);
   if ((copy_rc != 0) && (try_decode || try_decrypt))
   {
-    mutt_clear_error ();
+    mutt_clear_error();
     if ((try_decode &&
          /* L10N: Prompt when forwarding a message with
             $mime_forward_decode set, and there was a problem decoding
             the message.  If they answer yes the message will be
             forwarded without decoding.
          */
-         (mutt_yesorno (_("There was a problem decoding the message for attachment.  Try again with decoding turned off?"), MUTT_YES) == MUTT_YES))
+         (mutt_yesorno(_("There was a problem decoding the message for attachment.  Try again with decoding turned off?"), MUTT_YES) == MUTT_YES))
         ||
         (try_decrypt &&
          /* L10N: Prompt when attaching or forwarding a message with
@@ -1417,10 +1417,10 @@ retry:
             the message.  If they answer yes the message will be attached
             without decrypting it.
          */
-         (mutt_yesorno (_("There was a problem decrypting the message for attachment.  Try again with decryption turned off?"), MUTT_YES) == MUTT_YES)))
+         (mutt_yesorno(_("There was a problem decrypting the message for attachment.  Try again with decryption turned off?"), MUTT_YES) == MUTT_YES)))
     {
-      safe_fclose (&fp);
-      mutt_free_body (&body);
+      safe_fclose(&fp);
+      mutt_free_body(&body);
       try_decode = 0;
       try_decrypt = 0;
       goto retry;
@@ -1428,8 +1428,8 @@ retry:
   }
   if (copy_rc < 0)
   {
-    safe_fclose (&fp);
-    mutt_free_body (&body);
+    safe_fclose(&fp);
+    mutt_free_body(&body);
     return NULL;
   }
 
@@ -1442,15 +1442,15 @@ retry:
   body->hdr->env = mutt_read_rfc822_header(fp, body->hdr, 0, 0);
   if (WithCrypto)
     body->hdr->security = pgp;
-  mutt_update_encoding (body);
+  mutt_update_encoding(body);
   body->parts = body->hdr->content;
 
-  safe_fclose (&fp);
+  safe_fclose(&fp);
 
   return (body);
 }
 
-BODY *mutt_run_send_alternative_filter (HEADER *h)
+BODY *mutt_run_send_alternative_filter(HEADER *h)
 {
   BUFFER *alt_file = NULL;
   FILE *b_fp = NULL, *alt_fp = NULL;
@@ -1468,76 +1468,76 @@ BODY *mutt_run_send_alternative_filter (HEADER *h)
   if (!SendMultipartAltFilter)
     return NULL;
 
-  mutt_rfc3676_space_unstuff (h);
+  mutt_rfc3676_space_unstuff(h);
 
-  if ((b_fp = safe_fopen (b->filename, "r")) == NULL)
+  if ((b_fp = safe_fopen(b->filename, "r")) == NULL)
   {
-    mutt_perror (b->filename);
+    mutt_perror(b->filename);
     goto cleanup;
   }
 
-  alt_file = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (alt_file);
-  if ((alt_fp = safe_fopen (mutt_b2s (alt_file), "w")) == NULL)
+  alt_file = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(alt_file);
+  if ((alt_fp = safe_fopen(mutt_b2s(alt_file), "w")) == NULL)
   {
-    mutt_perror (mutt_b2s (alt_file));
+    mutt_perror(mutt_b2s(alt_file));
     goto cleanup;
   }
 
-  if ((thepid = mutt_create_filter (SendMultipartAltFilter, &filter_in, &filter_out, &filter_err)) < 0)
+  if ((thepid = mutt_create_filter(SendMultipartAltFilter, &filter_in, &filter_out, &filter_err)) < 0)
   {
-    mutt_error (_("Error running \"%s\"!"), SendMultipartAltFilter);
+    mutt_error(_("Error running \"%s\"!"), SendMultipartAltFilter);
     goto cleanup;
   }
 
-  mutt_copy_stream (b_fp, filter_in);
-  safe_fclose (&b_fp);
-  safe_fclose (&filter_in);
+  mutt_copy_stream(b_fp, filter_in);
+  safe_fclose(&b_fp);
+  safe_fclose(&filter_in);
 
-  mime = mutt_read_line (NULL, &buflen, filter_out, NULL, 0);
-  if (!mime || !strchr (mime, '/'))
+  mime = mutt_read_line(NULL, &buflen, filter_out, NULL, 0);
+  if (!mime || !strchr(mime, '/'))
   {
     /* L10N:
        The first line of output from $send_multipart_alternative_filter
        should be a mime type, e.g. text/html.  This error is generated
        if that is missing.
     */
-    mutt_error (_("Missing mime type from output of \"%s\"!"), SendMultipartAltFilter);
+    mutt_error(_("Missing mime type from output of \"%s\"!"), SendMultipartAltFilter);
     goto cleanup;
   }
 
-  buf = mutt_read_line (NULL, &buflen, filter_out, NULL, 0);
-  if (!buf || mutt_strlen (buf))
+  buf = mutt_read_line(NULL, &buflen, filter_out, NULL, 0);
+  if (!buf || mutt_strlen(buf))
   {
     /* L10N:
        The second line of output from $send_multipart_alternative_filter
        should be a blank line.  This error is generated if the blank line
        is missing.
     */
-    mutt_error (_("Missing blank line separator from output of \"%s\"!"), SendMultipartAltFilter);
+    mutt_error(_("Missing blank line separator from output of \"%s\"!"), SendMultipartAltFilter);
     goto cleanup;
   }
 
-  mutt_copy_stream (filter_out, alt_fp);
-  safe_fclose (&filter_out);
-  safe_fclose (&filter_err);
+  mutt_copy_stream(filter_out, alt_fp);
+  safe_fclose(&filter_out);
+  safe_fclose(&filter_err);
 
-  if (mutt_wait_filter (thepid) != 0)
+  if (mutt_wait_filter(thepid) != 0)
   {
-    mutt_error (_("Error running \"%s\"!"), SendMultipartAltFilter);
+    mutt_error(_("Error running \"%s\"!"), SendMultipartAltFilter);
     thepid = 0;
     goto cleanup;
   }
   thepid = 0;
-  safe_fclose (&alt_fp);
+  safe_fclose(&alt_fp);
 
-  alternative = mutt_new_body ();
-  alternative->filename = safe_strdup (mutt_b2s (alt_file));
+  alternative = mutt_new_body();
+  alternative->filename = safe_strdup(mutt_b2s(alt_file));
   alternative->unlink = 1;
   alternative->use_disp = 0;
   alternative->disposition = DISPINLINE;
 
-  mutt_parse_content_type (mime, alternative);
+  mutt_parse_content_type(mime, alternative);
   if (alternative->type == TYPEMULTIPART)
   {
     /* L10N:
@@ -1547,34 +1547,34 @@ BODY *mutt_run_send_alternative_filter (HEADER *h)
        structures will not be properly generated.  To preempt bug
        reports, this error is displayed, and the generation is blocked
        at the filter level.
-     */
+    */
     mutt_error _("$send_multipart_alternative_filter does not support multipart type generation.");
-    mutt_free_body (&alternative);
+    mutt_free_body(&alternative);
     goto cleanup;
   }
-  mutt_update_encoding (alternative);
+  mutt_update_encoding(alternative);
 
 cleanup:
-  safe_fclose (&b_fp);
-  mutt_rfc3676_space_stuff (h);
+  safe_fclose(&b_fp);
+  mutt_rfc3676_space_stuff(h);
   if (alt_fp)
   {
-    safe_fclose (&alt_fp);
-    mutt_unlink (mutt_b2s (alt_file));
+    safe_fclose(&alt_fp);
+    mutt_unlink(mutt_b2s(alt_file));
   }
-  mutt_buffer_pool_release (&alt_file);
-  safe_fclose (&filter_in);
-  safe_fclose (&filter_out);
-  safe_fclose (&filter_err);
+  mutt_buffer_pool_release(&alt_file);
+  safe_fclose(&filter_in);
+  safe_fclose(&filter_out);
+  safe_fclose(&filter_err);
   if (thepid > 0)
-    mutt_wait_filter (thepid);
-  FREE (&buf);
-  FREE (&mime);
+    mutt_wait_filter(thepid);
+  FREE(&buf);
+  FREE(&mime);
 
   return alternative;
 }
 
-static void run_mime_type_query (BODY *att)
+static void run_mime_type_query(BODY *att)
 {
   FILE *fp, *fperr;
   BUFFER *cmd = NULL;
@@ -1583,30 +1583,30 @@ static void run_mime_type_query (BODY *att)
   int dummy = 0;
   pid_t thepid;
 
-  cmd = mutt_buffer_pool_get ();
-  mutt_expand_file_fmt (cmd, MimeTypeQueryCmd, att->filename);
+  cmd = mutt_buffer_pool_get();
+  mutt_expand_file_fmt(cmd, MimeTypeQueryCmd, att->filename);
 
-  if ((thepid = mutt_create_filter (mutt_b2s (cmd), NULL, &fp, &fperr)) < 0)
+  if ((thepid = mutt_create_filter(mutt_b2s(cmd), NULL, &fp, &fperr)) < 0)
   {
-    mutt_error (_("Error running \"%s\"!"), mutt_b2s (cmd));
-    mutt_buffer_pool_release (&cmd);
+    mutt_error(_("Error running \"%s\"!"), mutt_b2s(cmd));
+    mutt_buffer_pool_release(&cmd);
     return;
   }
-  mutt_buffer_pool_release (&cmd);
+  mutt_buffer_pool_release(&cmd);
 
-  if ((buf = mutt_read_line (buf, &buflen, fp, &dummy, 0)) != NULL)
+  if ((buf = mutt_read_line(buf, &buflen, fp, &dummy, 0)) != NULL)
   {
     if (strchr(buf, '/'))
-      mutt_parse_content_type (buf, att);
-    FREE (&buf);
+      mutt_parse_content_type(buf, att);
+    FREE(&buf);
   }
 
-  safe_fclose (&fp);
-  safe_fclose (&fperr);
-  mutt_wait_filter (thepid);
+  safe_fclose(&fp);
+  safe_fclose(&fperr);
+  mutt_wait_filter(thepid);
 }
 
-BODY *mutt_make_file_attach (const char *path)
+BODY *mutt_make_file_attach(const char *path)
 {
   BODY *att;
   CONTENT *info;
@@ -1614,26 +1614,26 @@ BODY *mutt_make_file_attach (const char *path)
   if (!(path && *path))
     return NULL;
 
-  att = mutt_new_body ();
-  att->filename = safe_strdup (path);
+  att = mutt_new_body();
+  att->filename = safe_strdup(path);
 
-  if (MimeTypeQueryCmd && option (OPTMIMETYPEQUERYFIRST))
-    run_mime_type_query (att);
+  if (MimeTypeQueryCmd && option(OPTMIMETYPEQUERYFIRST))
+    run_mime_type_query(att);
 
   /* Attempt to determine the appropriate content-type based on the filename
    * suffix.
    */
   if (!att->subtype)
-    mutt_lookup_mime_type (att, path);
+    mutt_lookup_mime_type(att, path);
 
   if (!att->subtype &&
       MimeTypeQueryCmd &&
-      !option (OPTMIMETYPEQUERYFIRST))
-    run_mime_type_query (att);
+      !option(OPTMIMETYPEQUERYFIRST))
+    run_mime_type_query(att);
 
-  if ((info = mutt_get_content_info (path, att)) == NULL)
+  if ((info = mutt_get_content_info(path, att)) == NULL)
   {
-    mutt_free_body (&att);
+    mutt_free_body(&att);
     return NULL;
   }
 
@@ -1647,21 +1647,21 @@ BODY *mutt_make_file_attach (const char *path)
        * chars if this is really a binary file...
        */
       att->type = TYPETEXT;
-      att->subtype = safe_strdup ("plain");
+      att->subtype = safe_strdup("plain");
     }
     else
     {
       att->type = TYPEAPPLICATION;
-      att->subtype = safe_strdup ("octet-stream");
+      att->subtype = safe_strdup("octet-stream");
     }
   }
 
   FREE(&info);
-  mutt_update_encoding (att);
+  mutt_update_encoding(att);
   return (att);
 }
 
-static int get_toplevel_encoding (BODY *a)
+static int get_toplevel_encoding(BODY *a)
 {
   int e = ENC7BIT;
 
@@ -1677,38 +1677,38 @@ static int get_toplevel_encoding (BODY *a)
 }
 
 /* check for duplicate boundary. return 1 if duplicate */
-static int mutt_check_boundary (const char *boundary, BODY *b)
+static int mutt_check_boundary(const char *boundary, BODY *b)
 {
   char *p;
 
-  if (b->parts && mutt_check_boundary (boundary, b->parts))
+  if (b->parts && mutt_check_boundary(boundary, b->parts))
     return 1;
 
-  if (b->next && mutt_check_boundary (boundary, b->next))
+  if (b->next && mutt_check_boundary(boundary, b->next))
     return 1;
 
-  if ((p = mutt_get_parameter ("boundary", b->parameter))
-      && !ascii_strcmp (p, boundary))
+  if ((p = mutt_get_parameter("boundary", b->parameter))
+      && !ascii_strcmp(p, boundary))
     return 1;
   return 0;
 }
 
-static BODY *mutt_make_multipart (BODY *b, const char *subtype)
+static BODY *mutt_make_multipart(BODY *b, const char *subtype)
 {
   BODY *new;
 
-  new = mutt_new_body ();
+  new = mutt_new_body();
   new->type = TYPEMULTIPART;
-  new->subtype = safe_strdup (subtype);
-  new->encoding = get_toplevel_encoding (b);
+  new->subtype = safe_strdup(subtype);
+  new->encoding = get_toplevel_encoding(b);
   do
   {
-    mutt_generate_boundary (&new->parameter);
-    if (mutt_check_boundary (mutt_get_parameter ("boundary", new->parameter),
-                             b))
-      mutt_delete_parameter ("boundary", &new->parameter);
+    mutt_generate_boundary(&new->parameter);
+    if (mutt_check_boundary(mutt_get_parameter("boundary", new->parameter),
+                            b))
+      mutt_delete_parameter("boundary", &new->parameter);
   }
-  while (!mutt_get_parameter ("boundary", new->parameter));
+  while (!mutt_get_parameter("boundary", new->parameter));
   new->use_disp = 0;
   new->disposition = DISPINLINE;
   new->parts = b;
@@ -1717,7 +1717,7 @@ static BODY *mutt_make_multipart (BODY *b, const char *subtype)
 }
 
 /* remove the multipart body if it exists */
-BODY *mutt_remove_multipart (BODY *b)
+BODY *mutt_remove_multipart(BODY *b)
 {
   BODY *t;
 
@@ -1726,54 +1726,54 @@ BODY *mutt_remove_multipart (BODY *b)
     t = b;
     b = b->parts;
     t->parts = NULL;
-    mutt_free_body (&t);
+    mutt_free_body(&t);
   }
   return b;
 }
 
-BODY *mutt_make_multipart_mixed (BODY *b)
+BODY *mutt_make_multipart_mixed(BODY *b)
 {
-  return mutt_make_multipart (b, "mixed");
+  return mutt_make_multipart(b, "mixed");
 }
 
 /* remove the multipart/mixed body if it exists */
-BODY *mutt_remove_multipart_mixed (BODY *b)
+BODY *mutt_remove_multipart_mixed(BODY *b)
 {
   if ((b->type == TYPEMULTIPART) &&
-      !ascii_strcasecmp (b->subtype, "mixed"))
-    return mutt_remove_multipart (b);
+      !ascii_strcasecmp(b->subtype, "mixed"))
+    return mutt_remove_multipart(b);
 
   return b;
 }
 
-BODY *mutt_make_multipart_alternative (BODY *b, BODY *alternative)
+BODY *mutt_make_multipart_alternative(BODY *b, BODY *alternative)
 {
   BODY *attachments, *mp;
 
   attachments = b->next;
 
   b->next = alternative;
-  mp = mutt_make_multipart (b, "alternative");
+  mp = mutt_make_multipart(b, "alternative");
 
   mp->next = attachments;
 
   return mp;
 }
 
-BODY *mutt_remove_multipart_alternative (BODY *b)
+BODY *mutt_remove_multipart_alternative(BODY *b)
 {
   BODY *attachments;
 
   if ((b->type != TYPEMULTIPART) ||
-      ascii_strcasecmp (b->subtype, "alternative"))
+      ascii_strcasecmp(b->subtype, "alternative"))
     return b;
 
   attachments = b->next;
   b->next = NULL;
 
-  b = mutt_remove_multipart (b);
+  b = mutt_remove_multipart(b);
 
-  mutt_free_body (&b->next);
+  mutt_free_body(&b->next);
   b->next = attachments;
 
   return b;
@@ -1782,33 +1782,33 @@ BODY *mutt_remove_multipart_alternative (BODY *b)
 /* Appends the date to the passed in buffer.
  * The buffer is not cleared because some callers prepend quotes.
  */
-void mutt_make_date (BUFFER *s)
+void mutt_make_date(BUFFER *s)
 {
-  time_t t = time (NULL);
+  time_t t = time(NULL);
   struct tm *l;
   time_t tz = 0;
 
-  if (option (OPTLOCALDATEHEADER))
+  if (option(OPTLOCALDATEHEADER))
   {
-    l = localtime (&t);
-    tz = mutt_local_tz (t);
+    l = localtime(&t);
+    tz = mutt_local_tz(t);
   }
   else
   {
-    l = gmtime (&t);
+    l = gmtime(&t);
   }
 
   tz /= 60;
 
-  mutt_buffer_add_printf (s,  "%s, %d %s %d %02d:%02d:%02d %+03d%02d",
-            Weekdays[l->tm_wday], l->tm_mday, Months[l->tm_mon],
-            l->tm_year + 1900, l->tm_hour, l->tm_min, l->tm_sec,
-            (int) tz / 60, (int) abs ((int) tz) % 60);
+  mutt_buffer_add_printf(s,  "%s, %d %s %d %02d:%02d:%02d %+03d%02d",
+                         Weekdays[l->tm_wday], l->tm_mday, Months[l->tm_mon],
+                         l->tm_year + 1900, l->tm_hour, l->tm_min, l->tm_sec,
+                         (int) tz / 60, (int) abs((int) tz) % 60);
 }
 
 /* wrapper around mutt_write_address() so we can handle very large
    recipient lists without needing a huge temporary buffer in memory */
-void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
+void mutt_write_address_list(ADDRESS *adr, FILE *fp, int linelen, int display)
 {
   ADDRESS *tmp, *prev;
   char buf[LONG_STRING];
@@ -1820,34 +1820,34 @@ void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
     tmp = adr->next;
     adr->next = NULL;
     buf[0] = 0;
-    rfc822_write_address (buf, sizeof (buf), adr, display);
-    len = mutt_strlen (buf);
+    rfc822_write_address(buf, sizeof(buf), adr, display);
+    len = mutt_strlen(buf);
     if (count && linelen + len > 74)
     {
-      fputs ("\n\t", fp);
+      fputs("\n\t", fp);
       linelen = len + 8; /* tab is usually about 8 spaces... */
     }
     else
     {
       if (count && !prev->group && adr->mailbox)
       {
-        fputc (' ', fp);
+        fputc(' ', fp);
         linelen++;
       }
       linelen += len;
     }
-    fputs (buf, fp);
+    fputs(buf, fp);
     adr->next = tmp;
     if (!adr->group && adr->next && adr->next->mailbox)
     {
       linelen++;
-      fputc (',', fp);
+      fputc(',', fp);
     }
     prev = adr;
     adr = adr->next;
     count++;
   }
-  fputc ('\n', fp);
+  fputc('\n', fp);
 }
 
 /* arbitrary number of elements to grow the array by */
@@ -1856,7 +1856,7 @@ void mutt_write_address_list (ADDRESS *adr, FILE *fp, int linelen, int display)
 /* need to write the list in reverse because they are stored in reverse order
  * when parsed to speed up threading
  */
-void mutt_write_references (LIST *r, FILE *f, int trim)
+void mutt_write_references(LIST *r, FILE *f, int trim)
 {
   LIST **ref = NULL;
   int refcnt = 0, refmax = 0;
@@ -1864,34 +1864,34 @@ void mutt_write_references (LIST *r, FILE *f, int trim)
   for ( ; (trim == 0 || refcnt < trim) && r ; r = r->next)
   {
     if (refcnt == refmax)
-      safe_realloc (&ref, (refmax += REF_INC) * sizeof (LIST *));
+      safe_realloc(&ref, (refmax += REF_INC) * sizeof(LIST *));
     ref[refcnt++] = r;
   }
 
   while (refcnt-- > 0)
   {
-    fputc (' ', f);
-    fputs (ref[refcnt]->data, f);
+    fputc(' ', f);
+    fputs(ref[refcnt]->data, f);
     if (refcnt >= 1)
-      fputc ('\n', f);
+      fputc('\n', f);
   }
 
-  FREE (&ref);
+  FREE(&ref);
 }
 
-static const char *find_word (const char *src)
+static const char *find_word(const char *src)
 {
   const char *p = src;
 
-  while (p && *p && strchr (" \t\n", *p))
+  while (p && *p && strchr(" \t\n", *p))
     p++;
-  while (p && *p && !strchr (" \t\n", *p))
+  while (p && *p && !strchr(" \t\n", *p))
     p++;
   return p;
 }
 
 /* like wcwidth(), but gets const char* not wchar_t* */
-static int my_width (const char *p, int col, int flags)
+static int my_width(const char *p, int col, int flags)
 {
   wchar_t wc;
   int l, w = 0, nl = 0;
@@ -1901,23 +1901,23 @@ static int my_width (const char *p, int col, int flags)
   if (!p)
     return 0;
 
-  memset (&mbstate, 0, sizeof (mbstate));
-  n = mutt_strlen (p);
+  memset(&mbstate, 0, sizeof(mbstate));
+  n = mutt_strlen(p);
 
   while (*p && n)
   {
-    consumed = mbrtowc (&wc, p, n, &mbstate);
+    consumed = mbrtowc(&wc, p, n, &mbstate);
     if (!consumed)
       break;
     if (consumed == (size_t)(-1) || consumed == (size_t)(-2))
     {
       if (consumed == (size_t)(-1))
-        memset (&mbstate, 0, sizeof (mbstate));
-      wc = replacement_char ();
+        memset(&mbstate, 0, sizeof(mbstate));
+      wc = replacement_char();
       consumed = (consumed == (size_t)(-1)) ? 1 : n;
     }
 
-    l = wcwidth (wc);
+    l = wcwidth(wc);
     if (l < 0)
       l = 1;
     /* correctly calc tab stop, even for sending as the
@@ -1940,24 +1940,24 @@ static int my_width (const char *p, int col, int flags)
   return w;
 }
 
-static int print_val (FILE *fp, const char *pfx, const char *value,
-                      int flags, size_t col)
+static int print_val(FILE *fp, const char *pfx, const char *value,
+                     int flags, size_t col)
 {
   while (value && *value)
   {
-    if (fputc (*value, fp) == EOF)
+    if (fputc(*value, fp) == EOF)
       return -1;
     /* corner-case: break words longer than 998 chars by force,
      * mandated by RfC5322 */
     if (!(flags & CH_DISPLAY) && ++col >= 998)
     {
-      if (fputs ("\n ", fp) < 0)
+      if (fputs("\n ", fp) < 0)
         return -1;
       col = 1;
     }
     if (*value == '\n')
     {
-      if (*(value + 1) && pfx && *pfx && fputs (pfx, fp) == EOF)
+      if (*(value + 1) && pfx && *pfx && fputs(pfx, fp) == EOF)
         return -1;
       /* for display, turn folding spaces into folding tabs */
       if ((flags & CH_DISPLAY) && (*(value + 1) == ' ' || *(value + 1) == '\t'))
@@ -1965,7 +1965,7 @@ static int print_val (FILE *fp, const char *pfx, const char *value,
         value++;
         while (*value && (*value == ' ' || *value == '\t'))
           value++;
-        if (fputc ('\t', fp) == EOF)
+        if (fputc('\t', fp) == EOF)
           return -1;
         continue;
       }
@@ -1975,19 +1975,19 @@ static int print_val (FILE *fp, const char *pfx, const char *value,
   return 0;
 }
 
-static int fold_one_header (FILE *fp, const char *tag, const char *value,
-                            const char *pfx, int wraplen, int flags)
+static int fold_one_header(FILE *fp, const char *tag, const char *value,
+                           const char *pfx, int wraplen, int flags)
 {
   const char *p = value, *next, *sp;
   char buf[HUGE_STRING] = "";
   int first = 1, enc, col = 0, w, l = 0, fold;
 
   muttdbg(4, "mwoh: pfx=[%s], tag=[%s], flags=%d value=[%s]",
-            NONULL (pfx), tag, flags, value);
+          NONULL(pfx), tag, flags, value);
 
-  if (tag && *tag && fprintf (fp, "%s%s: ", NONULL (pfx), tag) < 0)
+  if (tag && *tag && fprintf(fp, "%s%s: ", NONULL(pfx), tag) < 0)
     return -1;
-  col = mutt_strlen (tag) + (tag && *tag ? 2 : 0) + mutt_strlen (pfx);
+  col = mutt_strlen(tag) + (tag && *tag ? 2 : 0) + mutt_strlen(pfx);
 
   while (p && *p)
   {
@@ -1995,27 +1995,27 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
 
     /* find the next word and place it in `buf'. it may start with
      * whitespace we can fold before */
-    next = find_word (p);
-    l = MIN(sizeof (buf) - 1, next - p);
-    memcpy (buf, p, l);
+    next = find_word(p);
+    l = MIN(sizeof(buf) - 1, next - p);
+    memcpy(buf, p, l);
     buf[l] = 0;
 
     /* determine width: character cells for display, bytes for sending
      * (we get pure ascii only) */
-    w = my_width (buf, col, flags);
-    enc = mutt_strncmp (buf, "=?", 2) == 0;
+    w = my_width(buf, col, flags);
+    enc = mutt_strncmp(buf, "=?", 2) == 0;
 
     muttdbg(5, "mwoh: word=[%s], col=%d, w=%d, next=[0x0%x]",
-              buf, col, w, *next);
+            buf, col, w, *next);
 
     /* insert a folding \n before the current word's lwsp except for
      * header name, first word on a line (word longer than wrap width)
      * and encoded words */
     if (!first && !enc && col && col + w >= wraplen)
     {
-      col = mutt_strlen (pfx);
+      col = mutt_strlen(pfx);
       fold = 1;
-      if (fprintf (fp, "\n%s", NONULL(pfx)) <= 0)
+      if (fprintf(fp, "\n%s", NONULL(pfx)) <= 0)
         return -1;
     }
 
@@ -2029,13 +2029,13 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
         p++;
         col--;
       }
-      if (fputc ('\t', fp) == EOF)
+      if (fputc('\t', fp) == EOF)
         return -1;
-      if (print_val (fp, pfx, p, flags, col) < 0)
+      if (print_val(fp, pfx, p, flags, col) < 0)
         return -1;
       col += 8;
     }
-    else if (print_val (fp, pfx, buf, flags, col) < 0)
+    else if (print_val(fp, pfx, buf, flags, col) < 0)
       return -1;
     col += w;
 
@@ -2061,13 +2061,13 @@ static int fold_one_header (FILE *fp, const char *tag, const char *value,
   /* if we have printed something but didn't \n-terminate it, do it
    * except the last word we printed ended in \n already */
   if (col && (l == 0 || buf[l - 1] != '\n'))
-    if (putc ('\n', fp) == EOF)
+    if (putc('\n', fp) == EOF)
       return -1;
 
   return 0;
 }
 
-static void unfold_header (char *s)
+static void unfold_header(char *s)
 {
   char *p = s, *q = s;
 
@@ -2094,32 +2094,32 @@ static void unfold_header (char *s)
     *q = 0;
 }
 
-static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
-                             const char *pfx, const char *start, const char *end,
-                             int flags)
+static int write_one_header(FILE *fp, int pfxw, int max, int wraplen,
+                            const char *pfx, const char *start, const char *end,
+                            int flags)
 {
   char *tagbuf, *valbuf;
   const char *t;
   int is_from = ((end - start) > 5 &&
-                 ascii_strncasecmp (start, "from ", 5) == 0);
+                 ascii_strncasecmp(start, "from ", 5) == 0);
 
   /* only pass through folding machinery if necessary for sending,
      never wrap From_ headers on sending */
   if (!(flags & CH_DISPLAY) && (pfxw + max <= wraplen || is_from))
   {
-    valbuf = mutt_substrdup (start, end);
+    valbuf = mutt_substrdup(start, end);
     muttdbg(4, "mwoh: buf[%s%s] short enough, "
-              "max width = %d <= %d",
-              NONULL(pfx), valbuf, max, wraplen);
+            "max width = %d <= %d",
+            NONULL(pfx), valbuf, max, wraplen);
     if (pfx && *pfx)
-      if (fputs (pfx, fp) == EOF)
+      if (fputs(pfx, fp) == EOF)
         return -1;
-    if (!(t = strchr (valbuf, ':')))
+    if (!(t = strchr(valbuf, ':')))
     {
       muttdbg(1, "mwoh: warning: header not in 'key: value' format!");
       return 0;
     }
-    if (print_val (fp, pfx, valbuf, flags, mutt_strlen (pfx)) < 0)
+    if (print_val(fp, pfx, valbuf, flags, mutt_strlen(pfx)) < 0)
     {
       FREE(&valbuf);
       return -1;
@@ -2128,7 +2128,7 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
   }
   else
   {
-    t = strchr (start, ':');
+    t = strchr(start, ':');
     if (!t || t >= end)
     {
       muttdbg(1, "mwoh: warning: header not in 'key: value' format!");
@@ -2137,11 +2137,11 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
     if (is_from)
     {
       tagbuf = NULL;
-      valbuf = mutt_substrdup (start, end);
+      valbuf = mutt_substrdup(start, end);
     }
     else
     {
-      tagbuf = mutt_substrdup (start, t);
+      tagbuf = mutt_substrdup(start, t);
       /* skip over the colon separating the header field name and value */
       ++t;
 
@@ -2151,7 +2151,7 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
       while (*t == ' ' || *t == '\t')
         t++;
 
-      valbuf = mutt_substrdup (t, end);
+      valbuf = mutt_substrdup(t, end);
     }
     if (flags & CH_DISPLAY)
     {
@@ -2163,26 +2163,26 @@ static int write_one_header (FILE *fp, int pfxw, int max, int wraplen,
       muttdbg(4, "mwoh: buf[%s%s] too long, max width = %d > %d",
               NONULL(pfx), valbuf, max, wraplen);
     }
-    if (fold_one_header (fp, tagbuf, valbuf, pfx, wraplen, flags) < 0)
+    if (fold_one_header(fp, tagbuf, valbuf, pfx, wraplen, flags) < 0)
       return -1;
-    FREE (&tagbuf);
-    FREE (&valbuf);
+    FREE(&tagbuf);
+    FREE(&valbuf);
   }
   return 0;
 }
 
 /* split several headers into individual ones and call write_one_header
  * for each one */
-int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
-                           const char *pfx, int wraplen, int flags)
+int mutt_write_one_header(FILE *fp, const char *tag, const char *value,
+                          const char *pfx, int wraplen, int flags)
 {
   char *p = (char *)value, *last, *line;
   int max = 0, w, rc = -1;
-  int pfxw = mutt_strwidth (pfx);
-  char *v = safe_strdup (value);
+  int pfxw = mutt_strwidth(pfx);
+  char *v = safe_strdup(value);
 
-  if (!(flags & CH_DISPLAY) || option (OPTWEED))
-    unfold_header (v);
+  if (!(flags & CH_DISPLAY) || option(OPTWEED))
+    unfold_header(v);
 
   /* when not displaying, use sane wrap value */
   if (!(flags & CH_DISPLAY))
@@ -2198,19 +2198,19 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
   if (tag)
   {
     /* if header is short enough, simply print it */
-    if (!(flags & CH_DISPLAY) && mutt_strwidth (tag) + 2 + pfxw +
-        mutt_strwidth (v) <= wraplen)
+    if (!(flags & CH_DISPLAY) && mutt_strwidth(tag) + 2 + pfxw +
+        mutt_strwidth(v) <= wraplen)
     {
       muttdbg(4, "mwoh: buf[%s%s: %s] is short enough",
-                NONULL(pfx), tag, v);
-      if (fprintf (fp, "%s%s: %s\n", NONULL(pfx), tag, v) <= 0)
+              NONULL(pfx), tag, v);
+      if (fprintf(fp, "%s%s: %s\n", NONULL(pfx), tag, v) <= 0)
         goto out;
       rc = 0;
       goto out;
     }
     else
     {
-      rc = fold_one_header (fp, tag, v, pfx, wraplen, flags);
+      rc = fold_one_header(fp, tag, v, pfx, wraplen, flags);
       goto out;
     }
   }
@@ -2218,12 +2218,12 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
   p = last = line = (char *)v;
   while (p && *p)
   {
-    p = strchr (p, '\n');
+    p = strchr(p, '\n');
 
     /* find maximum line width in current header */
     if (p)
       *p = 0;
-    if ((w = my_width (line, 0, flags)) > max)
+    if ((w = my_width(line, 0, flags)) > max)
       max = w;
     if (p)
       *p = '\n';
@@ -2234,7 +2234,7 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
     line = ++p;
     if (*p != ' ' && *p != '\t')
     {
-      if (write_one_header (fp, pfxw, max, wraplen, pfx, last, p, flags) < 0)
+      if (write_one_header(fp, pfxw, max, wraplen, pfx, last, p, flags) < 0)
         goto out;
       last = p;
       max = 0;
@@ -2246,14 +2246,14 @@ int mutt_write_one_header (FILE *fp, const char *tag, const char *value,
     /* This means the header was not \n terminated. */
     if (!p)
       goto out;
-    if (write_one_header (fp, pfxw, max, wraplen, pfx, last, p, flags) < 0)
+    if (write_one_header(fp, pfxw, max, wraplen, pfx, last, p, flags) < 0)
       goto out;
   }
 
   rc = 0;
 
 out:
-  FREE (&v);
+  FREE(&v);
   return rc;
 }
 
@@ -2282,9 +2282,9 @@ out:
  * $crypt_protected_headers_subject in NORMAL or POSTPONE mode.
  *
  */
-int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
-                              mutt_write_header_mode mode, int privacy,
-                              int hide_protected_subject)
+int mutt_write_rfc822_header(FILE *fp, ENVELOPE *env, BODY *attach, char *date,
+                             mutt_write_header_mode mode, int privacy,
+                             int hide_protected_subject)
 {
   char buffer[LONG_STRING];
   char *p, *q;
@@ -2296,13 +2296,13 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
       !privacy)
   {
     if (date)
-      fprintf (fp, "Date: %s\n", date);
+      fprintf(fp, "Date: %s\n", date);
     else
     {
-      BUFFER *datebuf = mutt_buffer_pool_get ();
-      mutt_make_date (datebuf);
-      fprintf (fp, "Date: %s\n", mutt_b2s (datebuf));
-      mutt_buffer_pool_release (&datebuf);
+      BUFFER *datebuf = mutt_buffer_pool_get();
+      mutt_make_date(datebuf);
+      fprintf(fp, "Date: %s\n", mutt_b2s(datebuf));
+      mutt_buffer_pool_release(&datebuf);
     }
   }
 
@@ -2312,7 +2312,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
    * is turned off.
    */
   if ((mode == MUTT_WRITE_HEADER_MIME) && !privacy && date)
-    fprintf (fp, "Date: %s\n", date);
+    fprintf(fp, "Date: %s\n", date);
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
    * field if the user sets it with the `my_hdr' command
@@ -2320,32 +2320,32 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
   if (env->from && !privacy)
   {
     buffer[0] = 0;
-    rfc822_write_address (buffer, sizeof (buffer), env->from, 0);
-    fprintf (fp, "From: %s\n", buffer);
+    rfc822_write_address(buffer, sizeof(buffer), env->from, 0);
+    fprintf(fp, "From: %s\n", buffer);
   }
 
   if (env->sender && !privacy)
   {
     buffer[0] = 0;
-    rfc822_write_address (buffer, sizeof (buffer), env->sender, 0);
-    fprintf (fp, "Sender: %s\n", buffer);
+    rfc822_write_address(buffer, sizeof(buffer), env->sender, 0);
+    fprintf(fp, "Sender: %s\n", buffer);
   }
 
   if (env->to)
   {
-    fputs ("To: ", fp);
-    mutt_write_address_list (env->to, fp, 4, 0);
+    fputs("To: ", fp);
+    mutt_write_address_list(env->to, fp, 4, 0);
   }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
-    fputs ("To: \n", fp);
+    fputs("To: \n", fp);
 
   if (env->cc)
   {
-    fputs ("Cc: ", fp);
-    mutt_write_address_list (env->cc, fp, 4, 0);
+    fputs("Cc: ", fp);
+    mutt_write_address_list(env->cc, fp, 4, 0);
   }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
-    fputs ("Cc: \n", fp);
+    fputs("Cc: \n", fp);
 
   if (env->bcc)
   {
@@ -2354,12 +2354,12 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
         mode == MUTT_WRITE_HEADER_FCC ||
         (mode == MUTT_WRITE_HEADER_NORMAL && option(OPTWRITEBCC)))
     {
-      fputs ("Bcc: ", fp);
-      mutt_write_address_list (env->bcc, fp, 5, 0);
+      fputs("Bcc: ", fp);
+      mutt_write_address_list(env->bcc, fp, 5, 0);
     }
   }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
-    fputs ("Bcc: \n", fp);
+    fputs("Bcc: \n", fp);
 
   if (env->subject)
   {
@@ -2367,29 +2367,29 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
         (mode == MUTT_WRITE_HEADER_NORMAL ||
          mode == MUTT_WRITE_HEADER_FCC ||
          mode == MUTT_WRITE_HEADER_POSTPONE))
-      mutt_write_one_header (fp, "Subject", ProtHdrSubject, NULL, 0, 0);
+      mutt_write_one_header(fp, "Subject", ProtHdrSubject, NULL, 0, 0);
     else
-      mutt_write_one_header (fp, "Subject", env->subject, NULL, 0, 0);
+      mutt_write_one_header(fp, "Subject", env->subject, NULL, 0, 0);
   }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
-    fputs ("Subject: \n", fp);
+    fputs("Subject: \n", fp);
 
   /* save message id if the user has set it */
   if (env->message_id && !privacy)
-    fprintf (fp, "Message-ID: %s\n", env->message_id);
+    fprintf(fp, "Message-ID: %s\n", env->message_id);
 
   if (env->reply_to)
   {
-    fputs ("Reply-To: ", fp);
-    mutt_write_address_list (env->reply_to, fp, 10, 0);
+    fputs("Reply-To: ", fp);
+    mutt_write_address_list(env->reply_to, fp, 10, 0);
   }
   else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
-    fputs ("Reply-To: \n", fp);
+    fputs("Reply-To: \n", fp);
 
   if (env->mail_followup_to)
   {
-    fputs ("Mail-Followup-To: ", fp);
-    mutt_write_address_list (env->mail_followup_to, fp, 18, 0);
+    fputs("Mail-Followup-To: ", fp);
+    mutt_write_address_list(env->mail_followup_to, fp, 18, 0);
   }
 
   if (mode == MUTT_WRITE_HEADER_NORMAL ||
@@ -2398,37 +2398,37 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
   {
     if (env->references)
     {
-      fputs ("References:", fp);
-      mutt_write_references (env->references, fp, 10);
+      fputs("References:", fp);
+      mutt_write_references(env->references, fp, 10);
       fputc('\n', fp);
     }
 
     /* Add the MIME headers */
-    fputs ("MIME-Version: 1.0\n", fp);
-    mutt_write_mime_header (attach, fp);
+    fputs("MIME-Version: 1.0\n", fp);
+    mutt_write_mime_header(attach, fp);
   }
 
   if (env->in_reply_to)
   {
-    fputs ("In-Reply-To:", fp);
-    mutt_write_references (env->in_reply_to, fp, 0);
-    fputc ('\n', fp);
+    fputs("In-Reply-To:", fp);
+    mutt_write_references(env->in_reply_to, fp, 0);
+    fputc('\n', fp);
   }
 
 #ifdef USE_AUTOCRYPT
-  if (option (OPTAUTOCRYPT))
+  if (option(OPTAUTOCRYPT))
   {
     if (mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC)
-      mutt_autocrypt_write_autocrypt_header (env, fp);
+      mutt_autocrypt_write_autocrypt_header(env, fp);
     if (mode == MUTT_WRITE_HEADER_MIME)
-      mutt_autocrypt_write_gossip_headers (env, fp);
+      mutt_autocrypt_write_gossip_headers(env, fp);
   }
 #endif
 
   /* Add any user defined headers */
   for (; tmp; tmp = tmp->next)
   {
-    if ((p = strchr (NONULL (tmp->data), ':')))
+    if ((p = strchr(NONULL(tmp->data), ':')))
     {
       q = p;
 
@@ -2442,7 +2442,7 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
       }
 
       /* check to see if the user has overridden the user-agent field */
-      if (!ascii_strncasecmp ("user-agent", tmp->data, 10))
+      if (!ascii_strncasecmp("user-agent", tmp->data, 10))
       {
         has_agent = 1;
         if (privacy)
@@ -2452,23 +2452,23 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach, char *date,
         }
       }
 
-      mutt_write_one_header (fp, tmp->data, p, NULL, 0, 0);
+      mutt_write_one_header(fp, tmp->data, p, NULL, 0, 0);
       *q = ':';
     }
   }
 
   if ((mode == MUTT_WRITE_HEADER_NORMAL || mode == MUTT_WRITE_HEADER_FCC) &&
       !privacy &&
-      option (OPTXMAILER) && !has_agent)
+      option(OPTXMAILER) && !has_agent)
   {
     /* Add a vanity header */
-    fprintf (fp, "User-Agent: Mutt/%s (%s)\n", MUTT_VERSION, ReleaseDate);
+    fprintf(fp, "User-Agent: Mutt/%s (%s)\n", MUTT_VERSION, ReleaseDate);
   }
 
-  return (ferror (fp) == 0 ? 0 : -1);
+  return (ferror(fp) == 0 ? 0 : -1);
 }
 
-static void encode_headers (LIST *h)
+static void encode_headers(LIST *h)
 {
   char *tmp;
   char *p;
@@ -2476,22 +2476,22 @@ static void encode_headers (LIST *h)
 
   for (; h; h = h->next)
   {
-    if (!(p = strchr (NONULL (h->data), ':')))
+    if (!(p = strchr(NONULL(h->data), ':')))
       continue;
 
     i = p - h->data;
     p = skip_email_wsp(p + 1);
-    tmp = safe_strdup (p);
+    tmp = safe_strdup(p);
 
     if (!tmp)
       continue;
 
-    rfc2047_encode_string (&tmp);
-    safe_realloc (&h->data, mutt_strlen (h->data) + 2 + mutt_strlen (tmp) + 1);
+    rfc2047_encode_string(&tmp);
+    safe_realloc(&h->data, mutt_strlen(h->data) + 2 + mutt_strlen(tmp) + 1);
 
-    sprintf (h->data + i, ": %s", NONULL (tmp));  /* __SPRINTF_CHECKED__ */
+    sprintf(h->data + i, ": %s", NONULL(tmp));  /* __SPRINTF_CHECKED__ */
 
-    FREE (&tmp);
+    FREE(&tmp);
   }
 }
 
@@ -2520,7 +2520,7 @@ const char *mutt_fqdn(short may_hide_host)
   return p;
 }
 
-static void alarm_handler (int sig)
+static void alarm_handler(int sig)
 {
   SigAlrm = 1;
 }
@@ -2534,98 +2534,98 @@ static void alarm_handler (int sig)
                         child process. If it is NULL, stderr and stdout
                         are not redirected. */
 static int
-send_msg (const char *path, char **args, const char *msg, char **tempfile)
+send_msg(const char *path, char **args, const char *msg, char **tempfile)
 {
   sigset_t set;
   int fd, st;
   pid_t pid, ppid;
 
-  mutt_block_signals_system ();
+  mutt_block_signals_system();
 
-  sigemptyset (&set);
+  sigemptyset(&set);
   /* we also don't want to be stopped right now */
-  sigaddset (&set, SIGTSTP);
-  sigprocmask (SIG_BLOCK, &set, NULL);
+  sigaddset(&set, SIGTSTP);
+  sigprocmask(SIG_BLOCK, &set, NULL);
 
   if (SendmailWait >= 0 && tempfile)
   {
     BUFFER *tmp;
 
-    tmp = mutt_buffer_pool_get ();
-    mutt_buffer_mktemp (tmp);
-    *tempfile = safe_strdup (mutt_b2s (tmp));
-    mutt_buffer_pool_release (&tmp);
+    tmp = mutt_buffer_pool_get();
+    mutt_buffer_mktemp(tmp);
+    *tempfile = safe_strdup(mutt_b2s(tmp));
+    mutt_buffer_pool_release(&tmp);
   }
 
-  if ((pid = fork ()) == 0)
+  if ((pid = fork()) == 0)
   {
     struct sigaction act, oldalrm;
 
     /* save parent's ID before setsid() */
-    ppid = getppid ();
+    ppid = getppid();
 
     /* we want the delivery to continue even after the main process dies,
      * so we put ourselves into another session right away
      */
-    setsid ();
+    setsid();
 
     /* next we close all open files */
-    close (0);
+    close(0);
 #if defined(OPEN_MAX)
     for (fd = tempfile ? 1 : 3; fd < OPEN_MAX; fd++)
-      close (fd);
+      close(fd);
 #elif defined(_POSIX_OPEN_MAX)
     for (fd = tempfile ? 1 : 3; fd < _POSIX_OPEN_MAX; fd++)
-      close (fd);
+      close(fd);
 #else
     if (tempfile)
     {
-      close (1);
-      close (2);
+      close(1);
+      close(2);
     }
 #endif
 
     /* now the second fork() */
-    if ((pid = fork ()) == 0)
+    if ((pid = fork()) == 0)
     {
       /* "msg" will be opened as stdin */
-      if (open (msg, O_RDONLY, 0) < 0)
+      if (open(msg, O_RDONLY, 0) < 0)
       {
-        unlink (msg);
-        _exit (S_ERR);
+        unlink(msg);
+        _exit(S_ERR);
       }
-      unlink (msg);
+      unlink(msg);
 
       if (SendmailWait >= 0 && tempfile && *tempfile)
       {
         /* *tempfile will be opened as stdout */
-        if (open (*tempfile, O_WRONLY | O_APPEND | O_CREAT | O_EXCL, 0600) < 0)
-          _exit (S_ERR);
+        if (open(*tempfile, O_WRONLY | O_APPEND | O_CREAT | O_EXCL, 0600) < 0)
+          _exit(S_ERR);
         /* redirect stderr to *tempfile too */
-        if (dup (1) < 0)
-          _exit (S_ERR);
+        if (dup(1) < 0)
+          _exit(S_ERR);
       }
       else if (tempfile)
       {
-        if (open ("/dev/null", O_WRONLY | O_APPEND) < 0)        /* stdout */
-          _exit (S_ERR);
-        if (open ("/dev/null", O_RDWR | O_APPEND) < 0)          /* stderr */
-          _exit (S_ERR);
+        if (open("/dev/null", O_WRONLY | O_APPEND) < 0)        /* stdout */
+          _exit(S_ERR);
+        if (open("/dev/null", O_RDWR | O_APPEND) < 0)          /* stderr */
+          _exit(S_ERR);
       }
 
-      mutt_reset_child_signals ();
+      mutt_reset_child_signals();
 
       /* execvpe is a glibc extension, so just manually set environ */
-      environ = mutt_envlist ();
-      execvp (path, args);
-      _exit (S_ERR);
+      environ = mutt_envlist();
+      execvp(path, args);
+      _exit(S_ERR);
     }
     else if (pid == -1)
     {
-      unlink (msg);
+      unlink(msg);
       if (tempfile)
-        FREE (tempfile);                /* __FREE_CHECKED__ */
-      _exit (S_ERR);
+        FREE(tempfile);                /* __FREE_CHECKED__ */
+      _exit(S_ERR);
     }
 
     /* SendmailWait > 0: interrupt waitpid() after SendmailWait seconds
@@ -2642,20 +2642,20 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
 #else
       act.sa_flags = 0;
 #endif
-      sigemptyset (&act.sa_mask);
-      sigaction (SIGALRM, &act, &oldalrm);
-      alarm (SendmailWait);
+      sigemptyset(&act.sa_mask);
+      sigaction(SIGALRM, &act, &oldalrm);
+      alarm(SendmailWait);
     }
     else if (SendmailWait < 0)
-      _exit (0xff & EX_OK);
+      _exit(0xff & EX_OK);
 
-    if (waitpid (pid, &st, 0) > 0)
+    if (waitpid(pid, &st, 0) > 0)
     {
-      st = WIFEXITED (st) ? WEXITSTATUS (st) : S_ERR;
+      st = WIFEXITED(st) ? WEXITSTATUS(st) : S_ERR;
       if (SendmailWait && st == (0xff & EX_OK) && tempfile && *tempfile)
       {
-        unlink (*tempfile); /* no longer needed */
-        FREE (tempfile);                /* __FREE_CHECKED__ */
+        unlink(*tempfile); /* no longer needed */
+        FREE(tempfile);                /* __FREE_CHECKED__ */
       }
     }
     else
@@ -2664,39 +2664,39 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
         S_BKG : S_ERR;
       if (SendmailWait > 0 && tempfile && *tempfile)
       {
-        unlink (*tempfile);
-        FREE (tempfile);                /* __FREE_CHECKED__ */
+        unlink(*tempfile);
+        FREE(tempfile);                /* __FREE_CHECKED__ */
       }
     }
 
     /* reset alarm; not really needed, but... */
-    alarm (0);
-    sigaction (SIGALRM, &oldalrm, NULL);
+    alarm(0);
+    sigaction(SIGALRM, &oldalrm, NULL);
 
-    if (kill (ppid, 0) == -1 && errno == ESRCH && tempfile && *tempfile)
+    if (kill(ppid, 0) == -1 && errno == ESRCH && tempfile && *tempfile)
     {
       /* the parent is already dead */
-      unlink (*tempfile);
-      FREE (tempfile);          /* __FREE_CHECKED__ */
+      unlink(*tempfile);
+      FREE(tempfile);          /* __FREE_CHECKED__ */
     }
 
-    _exit (st);
+    _exit(st);
   }
 
-  sigprocmask (SIG_UNBLOCK, &set, NULL);
+  sigprocmask(SIG_UNBLOCK, &set, NULL);
 
-  if (pid != -1 && waitpid (pid, &st, 0) > 0)
-    st = WIFEXITED (st) ? WEXITSTATUS (st) : S_ERR; /* return child status */
+  if (pid != -1 && waitpid(pid, &st, 0) > 0)
+    st = WIFEXITED(st) ? WEXITSTATUS(st) : S_ERR; /* return child status */
   else
     st = S_ERR; /* error */
 
-  mutt_unblock_signals_system (1);
+  mutt_unblock_signals_system(1);
 
   return (st);
 }
 
 static char **
-add_args (char **args, size_t *argslen, size_t *argsmax, ADDRESS *addr)
+add_args(char **args, size_t *argslen, size_t *argsmax, ADDRESS *addr)
 {
   for (; addr; addr = addr->next)
   {
@@ -2704,7 +2704,7 @@ add_args (char **args, size_t *argslen, size_t *argsmax, ADDRESS *addr)
     if (addr->mailbox && !addr->group)
     {
       if (*argslen == *argsmax)
-        safe_realloc (&args, (*argsmax += 5) * sizeof (char *));
+        safe_realloc(&args, (*argsmax += 5) * sizeof(char *));
       args[(*argslen)++] = addr->mailbox;
     }
   }
@@ -2712,21 +2712,21 @@ add_args (char **args, size_t *argslen, size_t *argsmax, ADDRESS *addr)
 }
 
 static char **
-add_option (char **args, size_t *argslen, size_t *argsmax, char *s)
+add_option(char **args, size_t *argslen, size_t *argsmax, char *s)
 {
   if (*argslen == *argsmax)
-    safe_realloc (&args, (*argsmax += 5) * sizeof (char *));
+    safe_realloc(&args, (*argsmax += 5) * sizeof(char *));
   args[(*argslen)++] = s;
   return (args);
 }
 
 int
-mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
-                      ADDRESS *to, ADDRESS *cc, ADDRESS *bcc, /* recips */
-                      const char *msg, /* file containing message */
-                      int eightbit) /* message contains 8bit chars */
+mutt_invoke_sendmail(ADDRESS *from,    /* the sender */
+                     ADDRESS *to, ADDRESS *cc, ADDRESS *bcc, /* recips */
+                     const char *msg, /* file containing message */
+                     int eightbit) /* message contains 8bit chars */
 {
-  char *ps = NULL, *path = NULL, *s = safe_strdup (Sendmail), *childout = NULL;
+  char *ps = NULL, *path = NULL, *s = safe_strdup(Sendmail), *childout = NULL;
   char **args = NULL;
   size_t argslen = 0, argsmax = 0;
   char **extra_args = NULL;
@@ -2742,21 +2742,21 @@ mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
 
   ps = s;
   i = 0;
-  while ((ps = strtok (ps, " ")))
+  while ((ps = strtok(ps, " ")))
   {
     if (argslen == argsmax)
-      safe_realloc (&args, sizeof (char *) * (argsmax += 5));
+      safe_realloc(&args, sizeof(char *) * (argsmax += 5));
 
     if (i)
     {
-      if (!mutt_strcmp (ps, "--"))
+      if (!mutt_strcmp(ps, "--"))
         break;
       args[argslen++] = ps;
     }
     else
     {
-      path = safe_strdup (ps);
-      ps = strrchr (ps, '/');
+      path = safe_strdup(ps);
+      ps = strrchr(ps, '/');
       if (ps)
         ps++;
       else
@@ -2772,63 +2772,63 @@ mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
   if (ps)
   {
     ps = NULL;
-    while ((ps = strtok (ps, " ")))
+    while ((ps = strtok(ps, " ")))
     {
       if (extra_argslen == extra_argsmax)
-        safe_realloc (&extra_args, sizeof (char *) * (extra_argsmax += 5));
+        safe_realloc(&extra_args, sizeof(char *) * (extra_argsmax += 5));
 
       extra_args[extra_argslen++] = ps;
       ps = NULL;
     }
   }
 
-  if (eightbit && option (OPTUSE8BITMIME))
-    args = add_option (args, &argslen, &argsmax, "-B8BITMIME");
+  if (eightbit && option(OPTUSE8BITMIME))
+    args = add_option(args, &argslen, &argsmax, "-B8BITMIME");
 
-  if (option (OPTENVFROM))
+  if (option(OPTENVFROM))
   {
     if (EnvFrom)
     {
-      args = add_option (args, &argslen, &argsmax, "-f");
+      args = add_option(args, &argslen, &argsmax, "-f");
       args = add_args   (args, &argslen, &argsmax, EnvFrom);
     }
     else if (from && !from->next)
     {
-      args = add_option (args, &argslen, &argsmax, "-f");
+      args = add_option(args, &argslen, &argsmax, "-f");
       args = add_args   (args, &argslen, &argsmax, from);
     }
   }
 
   if (DsnNotify)
   {
-    args = add_option (args, &argslen, &argsmax, "-N");
-    args = add_option (args, &argslen, &argsmax, DsnNotify);
+    args = add_option(args, &argslen, &argsmax, "-N");
+    args = add_option(args, &argslen, &argsmax, DsnNotify);
   }
   if (DsnReturn)
   {
-    args = add_option (args, &argslen, &argsmax, "-R");
-    args = add_option (args, &argslen, &argsmax, DsnReturn);
+    args = add_option(args, &argslen, &argsmax, "-R");
+    args = add_option(args, &argslen, &argsmax, DsnReturn);
   }
-  args = add_option (args, &argslen, &argsmax, "--");
+  args = add_option(args, &argslen, &argsmax, "--");
   for (i = 0; i < extra_argslen; i++)
-    args = add_option (args, &argslen, &argsmax, extra_args[i]);
-  args = add_args (args, &argslen, &argsmax, to);
-  args = add_args (args, &argslen, &argsmax, cc);
-  args = add_args (args, &argslen, &argsmax, bcc);
+    args = add_option(args, &argslen, &argsmax, extra_args[i]);
+  args = add_args(args, &argslen, &argsmax, to);
+  args = add_args(args, &argslen, &argsmax, cc);
+  args = add_args(args, &argslen, &argsmax, bcc);
 
   if (argslen == argsmax)
-    safe_realloc (&args, sizeof (char *) * (++argsmax));
+    safe_realloc(&args, sizeof(char *) * (++argsmax));
 
   args[argslen++] = NULL;
 
-  i = send_msg (path, args, msg, option(OPTNOCURSES) ? NULL : &childout);
+  i = send_msg(path, args, msg, option(OPTNOCURSES) ? NULL : &childout);
 
   /* Some user's $sendmail command uses gpg for password decryption,
    * and is set up to prompt using ncurses pinentry.  If we
    * mutt_endwin() it leaves other users staring at a blank screen.
    * So instead, just force a hard redraw on the next refresh. */
-  if (!option (OPTNOCURSES))
-    mutt_need_hard_redraw ();
+  if (!option(OPTNOCURSES))
+    mutt_need_hard_redraw();
 
   if (i != (EX_OK & 0xff))
   {
@@ -2836,25 +2836,25 @@ mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
     {
       const char *e;
 
-      e = mutt_strsysexit (i);
-      mutt_error (_("Error sending message, child exited %d (%s)."), i, NONULL (e));
+      e = mutt_strsysexit(i);
+      mutt_error(_("Error sending message, child exited %d (%s)."), i, NONULL(e));
       if (childout)
       {
         struct stat st;
 
-        if (stat (childout, &st) == 0 && st.st_size > 0)
-          mutt_do_pager (_("Output of the delivery process"), childout, 0, NULL);
+        if (stat(childout, &st) == 0 && st.st_size > 0)
+          mutt_do_pager(_("Output of the delivery process"), childout, 0, NULL);
       }
     }
   }
   else if (childout)
-    unlink (childout);
+    unlink(childout);
 
-  FREE (&childout);
-  FREE (&path);
-  FREE (&s);
-  FREE (&args);
-  FREE (&extra_args);
+  FREE(&childout);
+  FREE(&path);
+  FREE(&s);
+  FREE(&args);
+  FREE(&extra_args);
 
   if (i == (EX_OK & 0xff))
     i = 0;
@@ -2866,7 +2866,7 @@ mutt_invoke_sendmail (ADDRESS *from,    /* the sender */
 }
 
 /* For postponing (!final) do the necessary encodings only */
-void mutt_prepare_envelope (ENVELOPE *env, int final)
+void mutt_prepare_envelope(ENVELOPE *env, int final)
 {
   char buffer[LONG_STRING];
 
@@ -2878,43 +2878,43 @@ void mutt_prepare_envelope (ENVELOPE *env, int final)
        * recipients if there is no To: or Cc: field, so attempt to suppress
        * it by using an empty To: field.
        */
-      env->to = rfc822_new_address ();
+      env->to = rfc822_new_address();
       env->to->group = 1;
-      env->to->next = rfc822_new_address ();
+      env->to->next = rfc822_new_address();
 
       buffer[0] = 0;
-      rfc822_cat (buffer, sizeof (buffer), "undisclosed-recipients",
-                  RFC822Specials);
+      rfc822_cat(buffer, sizeof(buffer), "undisclosed-recipients",
+                 RFC822Specials);
 
-      env->to->mailbox = safe_strdup (buffer);
+      env->to->mailbox = safe_strdup(buffer);
     }
 
-    mutt_set_followup_to (env);
+    mutt_set_followup_to(env);
 
     if (!env->message_id)
-      env->message_id = mutt_gen_msgid ();
+      env->message_id = mutt_gen_msgid();
   }
 
   /* Take care of 8-bit => 7-bit conversion. */
-  rfc2047_encode_envelope (env);
-  encode_headers (env->userhdrs);
+  rfc2047_encode_envelope(env);
+  encode_headers(env->userhdrs);
 }
 
-void mutt_unprepare_envelope (ENVELOPE *env)
+void mutt_unprepare_envelope(ENVELOPE *env)
 {
   LIST *item;
 
   for (item = env->userhdrs; item; item = item->next)
-    rfc2047_decode (&item->data);
+    rfc2047_decode(&item->data);
 
-  rfc822_free_address (&env->mail_followup_to);
+  rfc822_free_address(&env->mail_followup_to);
 
   /* back conversions */
-  rfc2047_decode_envelope (env);
+  rfc2047_decode_envelope(env);
 }
 
-static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *resent_from,
-                                 ADDRESS *env_from)
+static int _mutt_bounce_message(FILE *fp, HEADER *h, ADDRESS *to, const char *resent_from,
+                                ADDRESS *env_from)
 {
   int i, ret = 0;
   FILE *f;
@@ -2926,73 +2926,73 @@ static int _mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to, const char *r
     /* Try to bounce each message out, aborting if we get any failures. */
     for (i=0; i<Context->msgcount; i++)
       if (Context->hdrs[i]->tagged)
-        ret |= _mutt_bounce_message (fp, Context->hdrs[i], to, resent_from, env_from);
+        ret |= _mutt_bounce_message(fp, Context->hdrs[i], to, resent_from, env_from);
     return ret;
   }
 
   /* If we failed to open a message, return with error */
-  if (!fp && (msg = mx_open_message (Context, h->msgno, 0)) == NULL)
+  if (!fp && (msg = mx_open_message(Context, h->msgno, 0)) == NULL)
     return -1;
 
   if (!fp) fp = msg->fp;
 
-  tempfile = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (tempfile);
-  if ((f = safe_fopen (mutt_b2s (tempfile), "w")) != NULL)
+  tempfile = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(tempfile);
+  if ((f = safe_fopen(mutt_b2s(tempfile), "w")) != NULL)
   {
     int ch_flags = CH_XMIT | CH_NONEWLINE | CH_NOQFROM;
     char *msgid_str;
     BUFFER *date;
 
-    if (!option (OPTBOUNCEDELIVERED))
+    if (!option(OPTBOUNCEDELIVERED))
       ch_flags |= CH_WEED_DELIVERED;
 
-    fseeko (fp, h->offset, SEEK_SET);
-    fprintf (f, "Resent-From: %s\n", resent_from);
+    fseeko(fp, h->offset, SEEK_SET);
+    fprintf(f, "Resent-From: %s\n", resent_from);
 
-    date = mutt_buffer_pool_get ();
-    mutt_make_date (date);
-    fprintf (f, "Resent-Date: %s\n", mutt_b2s (date));
-    mutt_buffer_pool_release (&date);
+    date = mutt_buffer_pool_get();
+    mutt_make_date(date);
+    fprintf(f, "Resent-Date: %s\n", mutt_b2s(date));
+    mutt_buffer_pool_release(&date);
 
     msgid_str = mutt_gen_msgid();
-    fprintf (f, "Resent-Message-ID: %s\n", msgid_str);
-    fputs ("Resent-To: ", f);
-    mutt_write_address_list (to, f, 11, 0);
-    mutt_copy_header (fp, h, f, ch_flags, NULL);
-    fputc ('\n', f);
-    mutt_copy_bytes (fp, f, h->content->length);
-    safe_fclose (&f);
-    FREE (&msgid_str);
+    fprintf(f, "Resent-Message-ID: %s\n", msgid_str);
+    fputs("Resent-To: ", f);
+    mutt_write_address_list(to, f, 11, 0);
+    mutt_copy_header(fp, h, f, ch_flags, NULL);
+    fputc('\n', f);
+    mutt_copy_bytes(fp, f, h->content->length);
+    safe_fclose(&f);
+    FREE(&msgid_str);
 
 #if USE_SMTP
     if (SmtpUrl)
-      ret = mutt_smtp_send (env_from, to, NULL, NULL, mutt_b2s (tempfile),
-                            h->content->encoding == ENC8BIT);
+      ret = mutt_smtp_send(env_from, to, NULL, NULL, mutt_b2s(tempfile),
+                           h->content->encoding == ENC8BIT);
     else
 #endif /* USE_SMTP */
-      ret = mutt_invoke_sendmail (env_from, to, NULL, NULL, mutt_b2s (tempfile),
-                                  h->content->encoding == ENC8BIT);
+      ret = mutt_invoke_sendmail(env_from, to, NULL, NULL, mutt_b2s(tempfile),
+                                 h->content->encoding == ENC8BIT);
   }
 
-  mutt_buffer_pool_release (&tempfile);
+  mutt_buffer_pool_release(&tempfile);
 
   if (msg)
-    mx_close_message (Context, &msg);
+    mx_close_message(Context, &msg);
 
   return ret;
 }
 
-int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
+int mutt_bounce_message(FILE *fp, HEADER *h, ADDRESS *to)
 {
   ADDRESS *from, *resent_to;
-  const char *fqdn = mutt_fqdn (1);
+  const char *fqdn = mutt_fqdn(1);
   char resent_from[STRING];
   int ret;
   char *err = NULL;
 
   resent_from[0] = '\0';
-  from = mutt_default_from ();
+  from = mutt_default_from();
 
   /*
    * mutt_default_from() does not use $realname if the real name is not set
@@ -3005,23 +3005,23 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
   {
     from->personal = safe_strdup(Realname);
 #ifdef EXACT_ADDRESS
-    FREE (&from->val);
+    FREE(&from->val);
 #endif
   }
 
   if (fqdn)
-    rfc822_qualify (from, fqdn);
+    rfc822_qualify(from, fqdn);
 
-  rfc2047_encode_adrlist (from, "Resent-From");
-  if (mutt_addrlist_to_intl (from, &err))
+  rfc2047_encode_adrlist(from, "Resent-From");
+  if (mutt_addrlist_to_intl(from, &err))
   {
-    mutt_error (_("Bad IDN %s while preparing resent-from."),
-                err);
-    FREE (&err);
-    rfc822_free_address (&from);
+    mutt_error(_("Bad IDN %s while preparing resent-from."),
+               err);
+    FREE(&err);
+    rfc822_free_address(&from);
     return -1;
   }
-  rfc822_write_address (resent_from, sizeof (resent_from), from, 0);
+  rfc822_write_address(resent_from, sizeof(resent_from), from, 0);
 
   /*
    * prepare recipient list. idna conversion appears to happen before this
@@ -3031,17 +3031,17 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
   resent_to = rfc822_cpy_adr(to, 0);
   rfc2047_encode_adrlist(resent_to, "Resent-To");
 
-  ret = _mutt_bounce_message (fp, h, resent_to, resent_from, from);
+  ret = _mutt_bounce_message(fp, h, resent_to, resent_from, from);
 
-  rfc822_free_address (&resent_to);
-  rfc822_free_address (&from);
+  rfc822_free_address(&resent_to);
+  rfc822_free_address(&from);
 
   return ret;
 }
 
 
 /* given a list of addresses, return a list of unique addresses */
-ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
+ADDRESS *mutt_remove_duplicates(ADDRESS *addr)
 {
   ADDRESS *top = addr;
   ADDRESS **last = &top;
@@ -3053,7 +3053,7 @@ ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
     for (tmp = top, dup = 0; tmp && tmp != addr; tmp = tmp->next)
     {
       if (tmp->mailbox && addr->mailbox &&
-          !ascii_strcasecmp (addr->mailbox, tmp->mailbox))
+          !ascii_strcasecmp(addr->mailbox, tmp->mailbox))
       {
         dup = 1;
         break;
@@ -3084,7 +3084,7 @@ ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
 /* Given a list of addresses, remove group label and end delimiter
  * entries.  This is useful when generating an encryption key list,
  * as we don't want to scan the label and empty delimiter entries. */
-ADDRESS *mutt_remove_adrlist_group_delimiters (ADDRESS *addr)
+ADDRESS *mutt_remove_adrlist_group_delimiters(ADDRESS *addr)
 {
   ADDRESS *top = addr;
   ADDRESS **last = &top;
@@ -3110,23 +3110,23 @@ ADDRESS *mutt_remove_adrlist_group_delimiters (ADDRESS *addr)
   return (top);
 }
 
-static void set_noconv_flags (BODY *b, short flag)
+static void set_noconv_flags(BODY *b, short flag)
 {
   for (; b; b = b->next)
   {
     if (b->type == TYPEMESSAGE || b->type == TYPEMULTIPART)
-      set_noconv_flags (b->parts, flag);
+      set_noconv_flags(b->parts, flag);
     else if (b->type == TYPETEXT && b->noconv)
     {
       if (flag)
-        mutt_set_parameter ("x-mutt-noconv", "yes", &b->parameter);
+        mutt_set_parameter("x-mutt-noconv", "yes", &b->parameter);
       else
-        mutt_delete_parameter ("x-mutt-noconv", &b->parameter);
+        mutt_delete_parameter("x-mutt-noconv", &b->parameter);
     }
   }
 }
 
-int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int post, const char *fcc)
+int mutt_write_fcc(const char *path, SEND_CONTEXT *sctx, const char *msgid, int post, const char *fcc)
 {
   HEADER *hdr;
   CONTEXT f;
@@ -3140,9 +3140,9 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
   hdr = sctx->msg;
 
   if (post)
-    set_noconv_flags (hdr->content, 1);
+    set_noconv_flags(hdr->content, 1);
 
-  if (mx_open_mailbox (path, MUTT_APPEND | MUTT_QUIET, &f) == NULL)
+  if (mx_open_mailbox(path, MUTT_APPEND | MUTT_QUIET, &f) == NULL)
   {
     muttdbg(1, "unable to open mailbox %s in append-mode, aborting.", path);
     goto cleanup;
@@ -3153,37 +3153,37 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
    */
   if (f.magic == MUTT_MMDF || f.magic == MUTT_MBOX)
   {
-    tempfile = mutt_buffer_pool_get ();
-    mutt_buffer_mktemp (tempfile);
-    if ((tempfp = safe_fopen (mutt_b2s (tempfile), "w+")) == NULL)
+    tempfile = mutt_buffer_pool_get();
+    mutt_buffer_mktemp(tempfile);
+    if ((tempfp = safe_fopen(mutt_b2s(tempfile), "w+")) == NULL)
     {
-      mutt_perror (mutt_b2s (tempfile));
-      mx_close_mailbox (&f, NULL);
+      mutt_perror(mutt_b2s(tempfile));
+      mx_close_mailbox(&f, NULL);
       goto cleanup;
     }
     /* remember new mail status before appending message */
     need_buffy_cleanup = 1;
-    stat (path, &st);
+    stat(path, &st);
   }
 
   hdr->read = !post; /* make sure to put it in the `cur' directory (maildir) */
   onm_flags = MUTT_ADD_FROM;
   if (post)
     onm_flags |= MUTT_SET_DRAFT;
-  if ((msg = mx_open_new_message (&f, hdr, onm_flags)) == NULL)
+  if ((msg = mx_open_new_message(&f, hdr, onm_flags)) == NULL)
   {
-    mx_close_mailbox (&f, NULL);
+    mx_close_mailbox(&f, NULL);
     goto cleanup;
   }
 
   /* post == 1 => postpone message.
    * post == 0 => fcc mode.
    * */
-  mutt_write_rfc822_header (msg->fp, hdr->env, hdr->content, sctx->date_header,
-                            post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_FCC,
-                            0,
-                            option (OPTCRYPTPROTHDRSREAD) &&
-                            mutt_should_hide_protected_subject (hdr));
+  mutt_write_rfc822_header(msg->fp, hdr->env, hdr->content, sctx->date_header,
+                           post ? MUTT_WRITE_HEADER_POSTPONE : MUTT_WRITE_HEADER_FCC,
+                           0,
+                           option(OPTCRYPTPROTHDRSREAD) &&
+                           mutt_should_hide_protected_subject(hdr));
 
   /* (postponment) if this was a reply of some sort, <msgid> contains the
    * Message-ID: of message replied to.  Save it using a special X-Mutt-
@@ -3192,65 +3192,65 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
    * the same mailbox is still open.
    */
   if (post && msgid)
-    fprintf (msg->fp, "X-Mutt-References: %s\n", msgid);
+    fprintf(msg->fp, "X-Mutt-References: %s\n", msgid);
 
   /* (postponment) save the Fcc: using a special X-Mutt- header so that
    * it can be picked up when the message is recalled
    */
   if (post && fcc)
-    fprintf (msg->fp, "X-Mutt-Fcc: %s\n", fcc);
+    fprintf(msg->fp, "X-Mutt-Fcc: %s\n", fcc);
 
   if (f.magic == MUTT_MMDF || f.magic == MUTT_MBOX)
-    fprintf (msg->fp, "Status: RO\n");
+    fprintf(msg->fp, "Status: RO\n");
 
   /* (postponment) if the mail is to be signed or encrypted, save this info */
   if ((WithCrypto & APPLICATION_PGP)
       && post && (hdr->security & APPLICATION_PGP))
   {
-    fputs ("X-Mutt-PGP: ", msg->fp);
+    fputs("X-Mutt-PGP: ", msg->fp);
     if (hdr->security & ENCRYPT)
-      fputc ('E', msg->fp);
+      fputc('E', msg->fp);
     if (hdr->security & OPPENCRYPT)
-      fputc ('O', msg->fp);
+      fputc('O', msg->fp);
     if (hdr->security & SIGN)
     {
-      fputc ('S', msg->fp);
+      fputc('S', msg->fp);
       if (sctx->pgp_sign_as)
-        fprintf (msg->fp, "<%s>", sctx->pgp_sign_as);
+        fprintf(msg->fp, "<%s>", sctx->pgp_sign_as);
     }
     if (hdr->security & INLINE)
-      fputc ('I', msg->fp);
+      fputc('I', msg->fp);
 #ifdef USE_AUTOCRYPT
     if (hdr->security & AUTOCRYPT)
-      fputc ('A', msg->fp);
+      fputc('A', msg->fp);
     if (hdr->security & AUTOCRYPT_OVERRIDE)
-      fputc ('Z', msg->fp);
+      fputc('Z', msg->fp);
 #endif
-    fputc ('\n', msg->fp);
+    fputc('\n', msg->fp);
   }
 
   /* (postponment) if the mail is to be signed or encrypted, save this info */
   if ((WithCrypto & APPLICATION_SMIME)
       && post && (hdr->security & APPLICATION_SMIME))
   {
-    fputs ("X-Mutt-SMIME: ", msg->fp);
+    fputs("X-Mutt-SMIME: ", msg->fp);
     if (hdr->security & ENCRYPT)
     {
-      fputc ('E', msg->fp);
+      fputc('E', msg->fp);
       if (sctx->smime_crypt_alg)
-        fprintf (msg->fp, "C<%s>", sctx->smime_crypt_alg);
+        fprintf(msg->fp, "C<%s>", sctx->smime_crypt_alg);
     }
     if (hdr->security & OPPENCRYPT)
-      fputc ('O', msg->fp);
+      fputc('O', msg->fp);
     if (hdr->security & SIGN)
     {
-      fputc ('S', msg->fp);
+      fputc('S', msg->fp);
       if (sctx->smime_sign_as)
-        fprintf (msg->fp, "<%s>", sctx->smime_sign_as);
+        fprintf(msg->fp, "<%s>", sctx->smime_sign_as);
     }
     if (hdr->security & INLINE)
-      fputc ('I', msg->fp);
-    fputc ('\n', msg->fp);
+      fputc('I', msg->fp);
+    fputc('\n', msg->fp);
   }
 
 #ifdef MIXMASTER
@@ -3262,11 +3262,11 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
   {
     LIST *p;
 
-    fputs ("X-Mutt-Mix:", msg->fp);
+    fputs("X-Mutt-Mix:", msg->fp);
     for (p = hdr->chain; p; p = p->next)
-      fprintf (msg->fp, " %s", (char *) p->data);
+      fprintf(msg->fp, " %s", (char *) p->data);
 
-    fputc ('\n', msg->fp);
+    fputc('\n', msg->fp);
   }
 #endif
 
@@ -3275,71 +3275,71 @@ int mutt_write_fcc (const char *path, SEND_CONTEXT *sctx, const char *msgid, int
     char sasha[LONG_STRING];
     int lines = 0;
 
-    mutt_write_mime_body (hdr->content, tempfp);
+    mutt_write_mime_body(hdr->content, tempfp);
 
     /* make sure the last line ends with a newline.  Emacs doesn't ensure
      * this will happen, and it can cause problems parsing the mailbox
      * later.
      */
-    fseek (tempfp, -1, SEEK_END);
-    if (fgetc (tempfp) != '\n')
+    fseek(tempfp, -1, SEEK_END);
+    if (fgetc(tempfp) != '\n')
     {
-      fseek (tempfp, 0, SEEK_END);
-      fputc ('\n', tempfp);
+      fseek(tempfp, 0, SEEK_END);
+      fputc('\n', tempfp);
     }
 
-    fflush (tempfp);
-    if (ferror (tempfp))
+    fflush(tempfp);
+    if (ferror(tempfp))
     {
-      muttdbg(1, "%s: write failed.", mutt_b2s (tempfile));
-      safe_fclose (&tempfp);
-      unlink (mutt_b2s (tempfile));
-      mx_commit_message (msg, &f);      /* XXX - really? */
-      mx_close_message (&f, &msg);
-      mx_close_mailbox (&f, NULL);
+      muttdbg(1, "%s: write failed.", mutt_b2s(tempfile));
+      safe_fclose(&tempfp);
+      unlink(mutt_b2s(tempfile));
+      mx_commit_message(msg, &f);      /* XXX - really? */
+      mx_close_message(&f, &msg);
+      mx_close_mailbox(&f, NULL);
       goto cleanup;
     }
 
     /* count the number of lines */
-    rewind (tempfp);
-    while (fgets (sasha, sizeof (sasha), tempfp) != NULL)
+    rewind(tempfp);
+    while (fgets(sasha, sizeof(sasha), tempfp) != NULL)
       lines++;
-    fprintf (msg->fp, "Content-Length: " OFF_T_FMT "\n", (LOFF_T) ftello (tempfp));
-    fprintf (msg->fp, "Lines: %d\n\n", lines);
+    fprintf(msg->fp, "Content-Length: " OFF_T_FMT "\n", (LOFF_T) ftello(tempfp));
+    fprintf(msg->fp, "Lines: %d\n\n", lines);
 
     /* copy the body and clean up */
-    rewind (tempfp);
-    r = mutt_copy_stream (tempfp, msg->fp);
-    if (safe_fclose (&tempfp) != 0)
+    rewind(tempfp);
+    r = mutt_copy_stream(tempfp, msg->fp);
+    if (safe_fclose(&tempfp) != 0)
       r = -1;
     /* if there was an error, leave the temp version */
     if (!r)
-      unlink (mutt_b2s (tempfile));
+      unlink(mutt_b2s(tempfile));
   }
   else
   {
-    fputc ('\n', msg->fp); /* finish off the header */
-    r = mutt_write_mime_body (hdr->content, msg->fp);
+    fputc('\n', msg->fp); /* finish off the header */
+    r = mutt_write_mime_body(hdr->content, msg->fp);
   }
 
-  if (mx_commit_message (msg, &f) != 0)
+  if (mx_commit_message(msg, &f) != 0)
     r = -1;
-  mx_close_message (&f, &msg);
-  mx_close_mailbox (&f, NULL);
+  mx_close_message(&f, &msg);
+  mx_close_mailbox(&f, NULL);
 
   if (!post && need_buffy_cleanup)
-    mutt_buffy_cleanup (path, &st);
+    mutt_buffy_cleanup(path, &st);
 
   if (post)
-    set_noconv_flags (hdr->content, 0);
+    set_noconv_flags(hdr->content, 0);
 
 cleanup:
   if (tempfp)
   {
-    safe_fclose (&tempfp);
-    unlink (mutt_b2s (tempfile));
+    safe_fclose(&tempfp);
+    unlink(mutt_b2s(tempfile));
   }
-  mutt_buffer_pool_release (&tempfile);
+  mutt_buffer_pool_release(&tempfile);
 
   return r;
 }

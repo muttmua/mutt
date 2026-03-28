@@ -21,10 +21,10 @@
 
 WHERE int BackgroundProcessCount;
 
-int mutt_background_has_backgrounded (void);
-int mutt_background_process_waitpid (void);
-int mutt_background_edit_file (SEND_CONTEXT *sctx, const char *editor,
-                               const char *filename);
-void mutt_background_compose_menu (void);
+int mutt_background_has_backgrounded(void);
+int mutt_background_process_waitpid(void);
+int mutt_background_edit_file(SEND_CONTEXT *sctx, const char *editor,
+                              const char *filename);
+void mutt_background_compose_menu(void);
 
 #endif

@@ -23,10 +23,10 @@
 
 #include "mutt_socket.h"
 
-void mutt_gsasl_done (void);
-const char *mutt_gsasl_get_mech (const char *requested_mech,
-                                 const char *server_mechlist);
-int mutt_gsasl_client_new (CONNECTION *, const char *, Gsasl_session **);
-void mutt_gsasl_client_finish (Gsasl_session **sctx);
+void mutt_gsasl_done(void);
+const char *mutt_gsasl_get_mech(const char *requested_mech,
+                                const char *server_mechlist);
+int mutt_gsasl_client_new(CONNECTION *, const char *, Gsasl_session **);
+void mutt_gsasl_client_finish(Gsasl_session **sctx);
 
 #endif /* _MUTT_SASL_GNU_H_ */

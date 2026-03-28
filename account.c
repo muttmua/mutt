@@ -28,13 +28,13 @@
 #include "mutt_curses.h"
 
 /* mutt_account_match: compare account info (host/port/user) */
-int mutt_account_match (const ACCOUNT *a1, const ACCOUNT *a2)
+int mutt_account_match(const ACCOUNT *a1, const ACCOUNT *a2)
 {
-  const char *user = NONULL (Username);
+  const char *user = NONULL(Username);
 
   if (a1->type != a2->type)
     return 0;
-  if (ascii_strcasecmp (a1->host, a2->host))
+  if (ascii_strcasecmp(a1->host, a2->host))
     return 0;
   if (a1->port != a2->port)
     return 0;
@@ -53,33 +53,33 @@ int mutt_account_match (const ACCOUNT *a1, const ACCOUNT *a2)
 #endif
 
   if (a1->flags & a2->flags & MUTT_ACCT_USER)
-    return (!strcmp (a1->user, a2->user));
+    return (!strcmp(a1->user, a2->user));
   if (a1->flags & MUTT_ACCT_USER)
-    return (!strcmp (a1->user, user));
+    return (!strcmp(a1->user, user));
   if (a2->flags & MUTT_ACCT_USER)
-    return (!strcmp (a2->user, user));
+    return (!strcmp(a2->user, user));
 
   return 1;
 }
 
 /* mutt_account_fromurl: fill account with information from url. */
-int mutt_account_fromurl (ACCOUNT *account, ciss_url_t *url)
+int mutt_account_fromurl(ACCOUNT *account, ciss_url_t *url)
 {
   /* must be present */
   if (url->host)
-    strfcpy (account->host, url->host, sizeof (account->host));
+    strfcpy(account->host, url->host, sizeof(account->host));
   else
     return -1;
 
   if (url->user)
   {
-    strfcpy (account->user, url->user, sizeof (account->user));
+    strfcpy(account->user, url->user, sizeof(account->user));
     account->flags |= MUTT_ACCT_USER;
     account->flags |= MUTT_ACCT_USER_FROM_URL;
   }
   if (url->pass)
   {
-    strfcpy (account->pass, url->pass, sizeof (account->pass));
+    strfcpy(account->pass, url->pass, sizeof(account->pass));
     account->flags |= MUTT_ACCT_PASS;
     account->flags |= MUTT_ACCT_PASS_FROM_URL;
   }
@@ -105,7 +105,7 @@ int mutt_account_fromurl (ACCOUNT *account, ciss_url_t *url)
  * to prevent cross-muttrc name collisions.  For that case, pass 1 to
  * force_users
  */
-void mutt_account_tourl (ACCOUNT *account, ciss_url_t *url, int force_user)
+void mutt_account_tourl(ACCOUNT *account, ciss_url_t *url, int force_user)
 {
   url->scheme = U_UNKNOWN;
   url->user = NULL;
@@ -158,7 +158,7 @@ void mutt_account_tourl (ACCOUNT *account, ciss_url_t *url, int force_user)
 }
 
 /* mutt_account_getuser: retrieve username into ACCOUNT, if necessary */
-int mutt_account_getuser (ACCOUNT *account)
+int mutt_account_getuser(ACCOUNT *account)
 {
   char prompt[SHORT_STRING];
 
@@ -167,20 +167,20 @@ int mutt_account_getuser (ACCOUNT *account)
     return 0;
 #ifdef USE_IMAP
   else if ((account->type == MUTT_ACCT_TYPE_IMAP) && ImapUser)
-    strfcpy (account->user, ImapUser, sizeof (account->user));
+    strfcpy(account->user, ImapUser, sizeof(account->user));
 #endif
 #ifdef USE_POP
   else if ((account->type == MUTT_ACCT_TYPE_POP) && PopUser)
-    strfcpy (account->user, PopUser, sizeof (account->user));
+    strfcpy(account->user, PopUser, sizeof(account->user));
 #endif
-  else if (option (OPTNOCURSES))
+  else if (option(OPTNOCURSES))
     return -1;
   /* prompt (defaults to unix username), copy into account->user */
   else
   {
-    snprintf (prompt, sizeof (prompt), _("Username at %s: "), account->host);
-    strfcpy (account->user, NONULL (Username), sizeof (account->user));
-    if (mutt_get_field_unbuffered (prompt, account->user, sizeof (account->user), 0))
+    snprintf(prompt, sizeof(prompt), _("Username at %s: "), account->host);
+    strfcpy(account->user, NONULL(Username), sizeof(account->user));
+    if (mutt_get_field_unbuffered(prompt, account->user, sizeof(account->user), 0))
       return -1;
   }
 
@@ -189,7 +189,7 @@ int mutt_account_getuser (ACCOUNT *account)
   return 0;
 }
 
-int mutt_account_getlogin (ACCOUNT *account)
+int mutt_account_getlogin(ACCOUNT *account)
 {
   /* already set */
   if (account->flags & MUTT_ACCT_LOGIN)
@@ -199,7 +199,7 @@ int mutt_account_getlogin (ACCOUNT *account)
   {
     if (ImapLogin)
     {
-      strfcpy (account->login, ImapLogin, sizeof (account->login));
+      strfcpy(account->login, ImapLogin, sizeof(account->login));
       account->flags |= MUTT_ACCT_LOGIN;
     }
   }
@@ -207,8 +207,8 @@ int mutt_account_getlogin (ACCOUNT *account)
 
   if (!(account->flags & MUTT_ACCT_LOGIN))
   {
-    mutt_account_getuser (account);
-    strfcpy (account->login, account->user, sizeof (account->login));
+    mutt_account_getuser(account);
+    strfcpy(account->login, account->user, sizeof(account->login));
   }
 
   account->flags |= MUTT_ACCT_LOGIN;
@@ -216,19 +216,19 @@ int mutt_account_getlogin (ACCOUNT *account)
   return 0;
 }
 
-static void getpass_prompt (char *prompt, size_t prompt_size, ACCOUNT *account)
+static void getpass_prompt(char *prompt, size_t prompt_size, ACCOUNT *account)
 {
   /* L10N:
      Prompt for an account password when connecting.
      %s@%s is user@host
   */
-  snprintf (prompt, prompt_size, _("Password for %s@%s: "),
-            account->flags & MUTT_ACCT_LOGIN ? account->login : account->user,
-            account->host);
+  snprintf(prompt, prompt_size, _("Password for %s@%s: "),
+           account->flags & MUTT_ACCT_LOGIN ? account->login : account->user,
+           account->host);
 }
 
-int _mutt_account_getpass (ACCOUNT *account,
-                           void (*prompt_func) (char *, size_t, ACCOUNT *))
+int _mutt_account_getpass(ACCOUNT *account,
+                          void (*prompt_func)(char *, size_t, ACCOUNT *))
 {
   char prompt[SHORT_STRING];
 
@@ -236,23 +236,23 @@ int _mutt_account_getpass (ACCOUNT *account,
     return 0;
 #ifdef USE_IMAP
   else if ((account->type == MUTT_ACCT_TYPE_IMAP) && ImapPass)
-    strfcpy (account->pass, ImapPass, sizeof (account->pass));
+    strfcpy(account->pass, ImapPass, sizeof(account->pass));
 #endif
 #ifdef USE_POP
   else if ((account->type == MUTT_ACCT_TYPE_POP) && PopPass)
-    strfcpy (account->pass, PopPass, sizeof (account->pass));
+    strfcpy(account->pass, PopPass, sizeof(account->pass));
 #endif
 #ifdef USE_SMTP
   else if ((account->type == MUTT_ACCT_TYPE_SMTP) && SmtpPass)
-    strfcpy (account->pass, SmtpPass, sizeof (account->pass));
+    strfcpy(account->pass, SmtpPass, sizeof(account->pass));
 #endif
-  else if (option (OPTNOCURSES))
+  else if (option(OPTNOCURSES))
     return -1;
   else
   {
-    prompt_func (prompt, sizeof(prompt), account);
+    prompt_func(prompt, sizeof(prompt), account);
     account->pass[0] = '\0';
-    if (mutt_get_password (prompt, account->pass, sizeof (account->pass)))
+    if (mutt_get_password(prompt, account->pass, sizeof(account->pass)))
       return -1;
   }
 
@@ -262,12 +262,12 @@ int _mutt_account_getpass (ACCOUNT *account,
 }
 
 /* mutt_account_getpass: fetch password into ACCOUNT, if necessary */
-int mutt_account_getpass (ACCOUNT *account)
+int mutt_account_getpass(ACCOUNT *account)
 {
-  return _mutt_account_getpass (account, getpass_prompt);
+  return _mutt_account_getpass(account, getpass_prompt);
 }
 
-void mutt_account_unsetpass (ACCOUNT *account)
+void mutt_account_unsetpass(ACCOUNT *account)
 {
   account->flags &= ~MUTT_ACCT_PASS;
   account->flags &= ~MUTT_ACCT_PASS_FROM_URL;
@@ -281,7 +281,7 @@ void mutt_account_unsetpass (ACCOUNT *account)
  *
  * If xoauth2 is set, a deprecated XOAUTH2 token will be generated instead.
  */
-int mutt_account_getoauthbearer (ACCOUNT *account, BUFFER *authbearer, int xoauth2)
+int mutt_account_getoauthbearer(ACCOUNT *account, BUFFER *authbearer, int xoauth2)
 {
   FILE  *fp;
   char *cmd = NULL;
@@ -290,10 +290,10 @@ int mutt_account_getoauthbearer (ACCOUNT *account, BUFFER *authbearer, int xoaut
   pid_t pid;
   BUFFER *unencoded_bearertoken = NULL;
 
-  mutt_buffer_clear (authbearer);
+  mutt_buffer_clear(authbearer);
 
   /* The oauthbearer token includes the login */
-  if (mutt_account_getlogin (account))
+  if (mutt_account_getlogin(account))
     return -1;
 
 #ifdef USE_IMAP
@@ -316,50 +316,50 @@ int mutt_account_getoauthbearer (ACCOUNT *account, BUFFER *authbearer, int xoaut
        $*_oauth_refresh_command defined. So the message does not mean "None of
        your $*_oauth_refresh_command's are defined."
     */
-    mutt_error (_("mutt_account_getoauthbearer: No OAUTH refresh command defined"));
+    mutt_error(_("mutt_account_getoauthbearer: No OAUTH refresh command defined"));
     return -1;
   }
 
-  if ((pid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0)
+  if ((pid = mutt_create_filter(cmd, NULL, &fp, NULL)) < 0)
   {
     mutt_perror _("mutt_account_getoauthbearer: Unable to run refresh command");
     return -1;
   }
 
   /* read line */
-  token = mutt_read_line (NULL, &token_size, fp, NULL, 0);
-  safe_fclose (&fp);
-  mutt_wait_filter (pid);
+  token = mutt_read_line(NULL, &token_size, fp, NULL, 0);
+  safe_fclose(&fp);
+  mutt_wait_filter(pid);
 
   /* The refresh cmd in some cases will invoke gpg to decrypt a token */
-  if (!option (OPTNOCURSES))
-    mutt_need_hard_redraw ();
+  if (!option(OPTNOCURSES))
+    mutt_need_hard_redraw();
 
   if (token == NULL || *token == '\0')
   {
-    mutt_error (_("mutt_account_getoauthbearer: Command returned empty string"));
-    FREE (&token);
+    mutt_error(_("mutt_account_getoauthbearer: Command returned empty string"));
+    FREE(&token);
     return -1;
   }
 
-  unencoded_bearertoken = mutt_buffer_pool_get ();
+  unencoded_bearertoken = mutt_buffer_pool_get();
 
   if (xoauth2)
-    mutt_buffer_printf (unencoded_bearertoken,
-                        "user=%s\001auth=Bearer %s\001\001",
-                        account->login, token);
+    mutt_buffer_printf(unencoded_bearertoken,
+                       "user=%s\001auth=Bearer %s\001\001",
+                       account->login, token);
   else
-    mutt_buffer_printf (unencoded_bearertoken,
-                        "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
-                        account->login, account->host, account->port, token);
+    mutt_buffer_printf(unencoded_bearertoken,
+                       "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
+                       account->login, account->host, account->port, token);
 
-  FREE (&token);
+  FREE(&token);
 
-  mutt_buffer_to_base64 (authbearer,
-                         (const unsigned char *) mutt_b2s (unencoded_bearertoken),
-                         mutt_buffer_len (unencoded_bearertoken));
+  mutt_buffer_to_base64(authbearer,
+                        (const unsigned char *) mutt_b2s(unencoded_bearertoken),
+                        mutt_buffer_len(unencoded_bearertoken));
 
-  mutt_buffer_pool_release (&unencoded_bearertoken);
+  mutt_buffer_pool_release(&unencoded_bearertoken);
 
   return 0;
 }

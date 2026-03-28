@@ -50,21 +50,21 @@ struct coord
   short r, c;
 };
 
-static REMAILER **mix_type2_list (size_t *l);
-static REMAILER *mix_new_remailer (void);
-static const char *mix_format_caps (REMAILER *r);
-static int mix_chain_add (MIXCHAIN *chain, const char *s, REMAILER **type2_list);
-static int mix_get_caps (const char *capstr);
-static void mix_add_entry (REMAILER ***, REMAILER *, size_t *, size_t *);
-static void mix_entry (char *b, size_t blen, MUTTMENU *menu, int num);
-static void mix_free_remailer (REMAILER **r);
-static void mix_free_type2_list (REMAILER ***ttlp);
-static void mix_redraw_ce (REMAILER **type2_list, struct coord *coords, MIXCHAIN *chain, int i, short selected);
-static void mix_redraw_chain (REMAILER **type2_list, struct coord *coords, MIXCHAIN *chain, int cur);
-static void mix_redraw_head (MIXCHAIN *);
-static void mix_screen_coordinates (REMAILER **type2_list, struct coord **, MIXCHAIN *, int);
+static REMAILER **mix_type2_list(size_t *l);
+static REMAILER *mix_new_remailer(void);
+static const char *mix_format_caps(REMAILER *r);
+static int mix_chain_add(MIXCHAIN *chain, const char *s, REMAILER **type2_list);
+static int mix_get_caps(const char *capstr);
+static void mix_add_entry(REMAILER ***, REMAILER *, size_t *, size_t *);
+static void mix_entry(char *b, size_t blen, MUTTMENU *menu, int num);
+static void mix_free_remailer(REMAILER **r);
+static void mix_free_type2_list(REMAILER ***ttlp);
+static void mix_redraw_ce(REMAILER **type2_list, struct coord *coords, MIXCHAIN *chain, int i, short selected);
+static void mix_redraw_chain(REMAILER **type2_list, struct coord *coords, MIXCHAIN *chain, int cur);
+static void mix_redraw_head(MIXCHAIN *);
+static void mix_screen_coordinates(REMAILER **type2_list, struct coord **, MIXCHAIN *, int);
 
-static int mix_get_caps (const char *capstr)
+static int mix_get_caps(const char *capstr)
 {
   int caps = 0;
 
@@ -102,36 +102,36 @@ static int mix_get_caps (const char *capstr)
   return caps;
 }
 
-static void mix_add_entry (REMAILER ***type2_list, REMAILER *entry,
-                           size_t *slots, size_t *used)
+static void mix_add_entry(REMAILER ***type2_list, REMAILER *entry,
+                          size_t *slots, size_t *used)
 {
   if (*used == *slots)
   {
     *slots += 5;
-    safe_realloc (type2_list, sizeof (REMAILER *) * (*slots));
+    safe_realloc(type2_list, sizeof(REMAILER *) * (*slots));
   }
 
   (*type2_list)[(*used)++] = entry;
   if (entry) entry->num = *used;
 }
 
-static REMAILER *mix_new_remailer (void)
+static REMAILER *mix_new_remailer(void)
 {
-  return safe_calloc (1, sizeof (REMAILER));
+  return safe_calloc(1, sizeof(REMAILER));
 }
 
-static void mix_free_remailer (REMAILER **r)
+static void mix_free_remailer(REMAILER **r)
 {
-  FREE (&(*r)->shortname);
-  FREE (&(*r)->addr);
-  FREE (&(*r)->ver);
+  FREE(&(*r)->shortname);
+  FREE(&(*r)->addr);
+  FREE(&(*r)->ver);
 
-  FREE (r);             /* __FREE_CHECKED__ */
+  FREE(r);             /* __FREE_CHECKED__ */
 }
 
 /* parse the type2.list as given by mixmaster -T */
 
-static REMAILER **mix_type2_list (size_t *l)
+static REMAILER **mix_type2_list(size_t *l)
 {
   FILE *fp;
   pid_t mm_pid;
@@ -147,81 +147,81 @@ static REMAILER **mix_type2_list (size_t *l)
   if (!l)
     return NULL;
 
-  if ((devnull = open ("/dev/null", O_RDWR)) == -1)
+  if ((devnull = open("/dev/null", O_RDWR)) == -1)
     return NULL;
 
-  cmd = mutt_buffer_pool_get ();
-  mutt_buffer_printf (cmd, "%s -T", Mixmaster);
+  cmd = mutt_buffer_pool_get();
+  mutt_buffer_printf(cmd, "%s -T", Mixmaster);
 
-  if ((mm_pid = mutt_create_filter_fd (mutt_b2s (cmd), NULL, &fp, NULL, devnull,
-                                       -1, devnull)) == -1)
+  if ((mm_pid = mutt_create_filter_fd(mutt_b2s(cmd), NULL, &fp, NULL, devnull,
+                                      -1, devnull)) == -1)
   {
-    mutt_buffer_pool_release (&cmd);
-    close (devnull);
+    mutt_buffer_pool_release(&cmd);
+    close(devnull);
     return NULL;
   }
 
-  mutt_buffer_pool_release (&cmd);
+  mutt_buffer_pool_release(&cmd);
 
   /* first, generate the "random" remailer */
 
-  p = mix_new_remailer ();
-  p->shortname = safe_strdup ("<random>");
-  mix_add_entry (&type2_list, p, &slots, &used);
+  p = mix_new_remailer();
+  p->shortname = safe_strdup("<random>");
+  mix_add_entry(&type2_list, p, &slots, &used);
 
-  while (fgets (line, sizeof (line), fp))
+  while (fgets(line, sizeof(line), fp))
   {
-    p = mix_new_remailer ();
+    p = mix_new_remailer();
 
-    if (!(t = strtok (line, " \t\n")))
+    if (!(t = strtok(line, " \t\n")))
       goto problem;
 
-    p->shortname = safe_strdup (t);
+    p->shortname = safe_strdup(t);
 
-    if (!(t = strtok (NULL, " \t\n")))
+    if (!(t = strtok(NULL, " \t\n")))
       goto problem;
 
-    p->addr = safe_strdup (t);
+    p->addr = safe_strdup(t);
 
-    if (!(t = strtok (NULL, " \t\n")))
+    if (!(t = strtok(NULL, " \t\n")))
       goto problem;
 
-    if (!(t = strtok (NULL, " \t\n")))
+    if (!(t = strtok(NULL, " \t\n")))
       goto problem;
 
-    p->ver = safe_strdup (t);
+    p->ver = safe_strdup(t);
 
-    if (!(t = strtok (NULL, " \t\n")))
+    if (!(t = strtok(NULL, " \t\n")))
       goto problem;
 
-    p->caps = mix_get_caps (t);
+    p->caps = mix_get_caps(t);
 
-    mix_add_entry (&type2_list, p, &slots, &used);
+    mix_add_entry(&type2_list, p, &slots, &used);
     continue;
 
   problem:
-    mix_free_remailer (&p);
+    mix_free_remailer(&p);
   }
 
   *l = used;
 
-  mix_add_entry (&type2_list, NULL, &slots, &used);
-  mutt_wait_filter (mm_pid);
+  mix_add_entry(&type2_list, NULL, &slots, &used);
+  mutt_wait_filter(mm_pid);
 
-  close (devnull);
+  close(devnull);
 
   return type2_list;
 }
 
-static void mix_free_type2_list (REMAILER ***ttlp)
+static void mix_free_type2_list(REMAILER ***ttlp)
 {
   int i;
   REMAILER **type2_list = *ttlp;
 
   for (i = 0; type2_list[i]; i++)
-    mix_free_remailer (&type2_list[i]);
+    mix_free_remailer(&type2_list[i]);
 
-  FREE (type2_list);            /* __FREE_CHECKED__ */
+  FREE(type2_list);            /* __FREE_CHECKED__ */
 }
 
 
@@ -230,10 +230,10 @@ static void mix_free_type2_list (REMAILER ***ttlp)
 #define MIX_MAXROW  (MuttIndexWindow->rows - 1)
 
 
-static void mix_screen_coordinates (REMAILER **type2_list,
-                                    struct coord **coordsp,
-                                    MIXCHAIN *chain,
-                                    int i)
+static void mix_screen_coordinates(REMAILER **type2_list,
+                                   struct coord **coordsp,
+                                   MIXCHAIN *chain,
+                                   int i)
 {
   short c, r, oc;
   struct coord *coords;
@@ -241,13 +241,13 @@ static void mix_screen_coordinates (REMAILER **type2_list,
   if (!chain->cl)
     return;
 
-  safe_realloc (coordsp, sizeof (struct coord) * chain->cl);
+  safe_realloc(coordsp, sizeof(struct coord) * chain->cl);
 
   coords = *coordsp;
 
   if (i)
   {
-    c = coords[i-1].c + strlen (type2_list[chain->ch[i-1]]->shortname) + 2;
+    c = coords[i-1].c + strlen(type2_list[chain->ch[i-1]]->shortname) + 2;
     r = coords[i-1].r;
   }
   else
@@ -260,7 +260,7 @@ static void mix_screen_coordinates (REMAILER **type2_list,
   for (; i < chain->cl; i++)
   {
     oc = c;
-    c += strlen (type2_list[chain->ch[i]]->shortname) + 2;
+    c += strlen(type2_list[chain->ch[i]]->shortname) + 2;
 
     if (c  >= MuttIndexWindow->cols)
     {
@@ -275,11 +275,11 @@ static void mix_screen_coordinates (REMAILER **type2_list,
 
 }
 
-static void mix_redraw_ce (REMAILER **type2_list,
-                           struct coord *coords,
-                           MIXCHAIN *chain,
-                           int i,
-                           short selected)
+static void mix_redraw_ce(REMAILER **type2_list,
+                          struct coord *coords,
+                          MIXCHAIN *chain,
+                          int i,
+                          short selected)
 {
   if (!coords || !chain)
     return;
@@ -288,46 +288,46 @@ static void mix_redraw_ce (REMAILER **type2_list,
   {
 
     if (selected)
-      SETCOLOR (MT_COLOR_INDICATOR);
+      SETCOLOR(MT_COLOR_INDICATOR);
     else
       NORMAL_COLOR;
 
-    mutt_window_mvaddstr (MuttIndexWindow, coords[i].r, coords[i].c,
-                          type2_list[chain->ch[i]]->shortname);
+    mutt_window_mvaddstr(MuttIndexWindow, coords[i].r, coords[i].c,
+                         type2_list[chain->ch[i]]->shortname);
     NORMAL_COLOR;
 
     if (i + 1 < chain->cl)
-      addstr (", ");
+      addstr(", ");
   }
 }
 
-static void mix_redraw_chain (REMAILER **type2_list,
-                              struct coord *coords,
-                              MIXCHAIN *chain,
-                              int cur)
+static void mix_redraw_chain(REMAILER **type2_list,
+                             struct coord *coords,
+                             MIXCHAIN *chain,
+                             int cur)
 {
   int i;
 
   for (i = MIX_VOFFSET; i < MIX_MAXROW; i++)
   {
-    mutt_window_move (MuttIndexWindow, i, 0);
-    mutt_window_clrtoeol (MuttIndexWindow);
+    mutt_window_move(MuttIndexWindow, i, 0);
+    mutt_window_clrtoeol(MuttIndexWindow);
   }
 
   for (i = 0; i < chain->cl; i++)
-    mix_redraw_ce (type2_list, coords, chain, i, i == cur);
+    mix_redraw_ce(type2_list, coords, chain, i, i == cur);
 }
 
-static void mix_redraw_head (MIXCHAIN *chain)
+static void mix_redraw_head(MIXCHAIN *chain)
 {
-  SETCOLOR (MT_COLOR_STATUS);
-  mutt_window_mvprintw (MuttIndexWindow, MIX_VOFFSET - 1, 0,
-                        "-- Remailer chain [Length: %d]", chain ? chain->cl : 0);
-  mutt_window_clrtoeol (MuttIndexWindow);
+  SETCOLOR(MT_COLOR_STATUS);
+  mutt_window_mvprintw(MuttIndexWindow, MIX_VOFFSET - 1, 0,
+                       "-- Remailer chain [Length: %d]", chain ? chain->cl : 0);
+  mutt_window_clrtoeol(MuttIndexWindow);
   NORMAL_COLOR;
 }
 
-static const char *mix_format_caps (REMAILER *r)
+static const char *mix_format_caps(REMAILER *r)
 {
   static char capbuff[10];
   char *t = capbuff;
@@ -379,17 +379,17 @@ static const char *mix_format_caps (REMAILER *r)
  *
  */
 
-static const char *mix_entry_fmt (char *dest,
-                                  size_t destlen,
-                                  size_t col,
-                                  int cols,
-                                  char op,
-                                  const char *src,
-                                  const char *prefix,
-                                  const char *ifstring,
-                                  const char *elsestring,
-                                  void *data,
-                                  format_flag flags)
+static const char *mix_entry_fmt(char *dest,
+                                 size_t destlen,
+                                 size_t col,
+                                 int cols,
+                                 char op,
+                                 const char *src,
+                                 const char *prefix,
+                                 const char *ifstring,
+                                 const char *elsestring,
+                                 void *data,
+                                 format_flag flags)
 {
   char fmt[16];
   REMAILER *remailer = (REMAILER *) data;
@@ -400,22 +400,22 @@ static const char *mix_entry_fmt (char *dest,
     case 'n':
       if (!optional)
       {
-        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-        snprintf (dest, destlen, fmt, remailer->num);
+        snprintf(fmt, sizeof(fmt), "%%%sd", prefix);
+        snprintf(dest, destlen, fmt, remailer->num);
       }
       break;
     case 'c':
       if (!optional)
       {
-        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-        snprintf (dest, destlen, fmt, mix_format_caps(remailer));
+        snprintf(fmt, sizeof(fmt), "%%%ss", prefix);
+        snprintf(dest, destlen, fmt, mix_format_caps(remailer));
       }
       break;
     case 's':
       if (!optional)
       {
-        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-        snprintf (dest, destlen, fmt, NONULL(remailer->shortname));
+        snprintf(fmt, sizeof(fmt), "%%%ss", prefix);
+        snprintf(dest, destlen, fmt, NONULL(remailer->shortname));
       }
       else if (!remailer->shortname)
         optional = 0;
@@ -423,8 +423,8 @@ static const char *mix_entry_fmt (char *dest,
     case 'a':
       if (!optional)
       {
-        snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
-        snprintf (dest, destlen, fmt, NONULL(remailer->addr));
+        snprintf(fmt, sizeof(fmt), "%%%ss", prefix);
+        snprintf(dest, destlen, fmt, NONULL(remailer->addr));
       }
       else if (!remailer->addr)
         optional = 0;
@@ -435,30 +435,30 @@ static const char *mix_entry_fmt (char *dest,
   }
 
   if (optional)
-    mutt_FormatString (dest, destlen, col, cols, ifstring, mix_entry_fmt, data, 0);
+    mutt_FormatString(dest, destlen, col, cols, ifstring, mix_entry_fmt, data, 0);
   else if (flags & MUTT_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, cols, elsestring, mix_entry_fmt, data, 0);
+    mutt_FormatString(dest, destlen, col, cols, elsestring, mix_entry_fmt, data, 0);
   return (src);
 }
 
 
 
-static void mix_entry (char *b, size_t blen, MUTTMENU *menu, int num)
+static void mix_entry(char *b, size_t blen, MUTTMENU *menu, int num)
 {
   REMAILER **type2_list = (REMAILER **) menu->data;
-  mutt_FormatString (b, blen, 0, MuttIndexWindow->cols, NONULL (MixEntryFormat), mix_entry_fmt,
-                     type2_list[num], MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString(b, blen, 0, MuttIndexWindow->cols, NONULL(MixEntryFormat), mix_entry_fmt,
+                    type2_list[num], MUTT_FORMAT_ARROWCURSOR);
 }
 
-static int mix_chain_add (MIXCHAIN *chain, const char *s,
-                          REMAILER **type2_list)
+static int mix_chain_add(MIXCHAIN *chain, const char *s,
+                         REMAILER **type2_list)
 {
   int i;
 
   if (chain->cl >= MAXMIXES)
     return -1;
 
-  if (!mutt_strcmp (s, "0") || !ascii_strcasecmp (s, "<random>"))
+  if (!mutt_strcmp(s, "0") || !ascii_strcasecmp(s, "<random>"))
   {
     chain->ch[chain->cl++] = 0;
     return 0;
@@ -466,7 +466,7 @@ static int mix_chain_add (MIXCHAIN *chain, const char *s,
 
   for (i = 0; type2_list[i]; i++)
   {
-    if (!ascii_strcasecmp (s, type2_list[i]->shortname))
+    if (!ascii_strcasecmp(s, type2_list[i]->shortname))
     {
       chain->ch[chain->cl++] = i;
       return 0;
@@ -492,7 +492,7 @@ static const struct mapping_t RemailerHelp[] =
 };
 
 
-void mix_make_chain (LIST **chainp)
+void mix_make_chain(LIST **chainp)
 {
   LIST *p;
   MIXCHAIN *chain;
@@ -512,17 +512,17 @@ void mix_make_chain (LIST **chainp)
   int i, j;
   char *t;
 
-  if (!(type2_list = mix_type2_list (&ttll)))
+  if (!(type2_list = mix_type2_list(&ttll)))
   {
     mutt_error _("Can't get mixmaster's type2.list!");
     return;
   }
 
-  chain = safe_calloc (sizeof (MIXCHAIN), 1);
+  chain = safe_calloc(sizeof(MIXCHAIN), 1);
   for (p = *chainp; p; p = p->next)
-    mix_chain_add (chain, (char *) p->data, type2_list);
+    mix_chain_add(chain, (char *) p->data, type2_list);
 
-  mutt_free_list (chainp);
+  mutt_free_list(chainp);
 
   /* safety check */
   for (i = 0; i < chain->cl; i++)
@@ -531,17 +531,17 @@ void mix_make_chain (LIST **chainp)
       chain->ch[i] = 0;
   }
 
-  mix_screen_coordinates (type2_list, &coords, chain, 0);
+  mix_screen_coordinates(type2_list, &coords, chain, 0);
 
-  menu = mutt_new_menu (MENU_MIX);
+  menu = mutt_new_menu(MENU_MIX);
   menu->max = ttll;
   menu->make_entry = mix_entry;
   menu->tag = NULL;
   menu->title = _("Select a remailer chain.");
   menu->data = type2_list;
-  menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_MIX, RemailerHelp);
+  menu->help = mutt_compile_help(helpstr, sizeof(helpstr), MENU_MIX, RemailerHelp);
   menu->pagelen = MIX_VOFFSET - 1;
-  mutt_push_current_menu (menu);
+  mutt_push_current_menu(menu);
 
   while (loop)
   {
@@ -553,26 +553,26 @@ void mix_make_chain (LIST **chainp)
 
     if (c_redraw)
     {
-      mix_redraw_head (chain);
-      mix_redraw_chain (type2_list, coords, chain, c_cur);
+      mix_redraw_head(chain);
+      mix_redraw_chain(type2_list, coords, chain, c_cur);
       c_redraw = 0;
     }
     else if (c_cur != c_old)
     {
-      mix_redraw_ce (type2_list, coords, chain, c_old, 0);
-      mix_redraw_ce (type2_list, coords, chain, c_cur, 1);
+      mix_redraw_ce(type2_list, coords, chain, c_old, 0);
+      mix_redraw_ce(type2_list, coords, chain, c_cur, 1);
     }
 
     c_old = c_cur;
 
-    switch ((op = mutt_menuLoop (menu)))
+    switch ((op = mutt_menuLoop(menu)))
     {
       case OP_REDRAW:
       {
-        menu_redraw_status (menu);
-        mix_redraw_head (chain);
-        mix_screen_coordinates (type2_list, &coords, chain, 0);
-        mix_redraw_chain (type2_list, coords, chain, c_cur);
+        menu_redraw_status(menu);
+        mix_redraw_head(chain);
+        mix_screen_coordinates(type2_list, &coords, chain, 0);
+        mix_redraw_chain(type2_list, coords, chain, c_cur);
         menu->pagelen = MIX_VOFFSET - 1;
         break;
       }
@@ -590,15 +590,15 @@ void mix_make_chain (LIST **chainp)
         {
           chain->cl++;
           chain->ch[0] = menu->current;
-          mix_screen_coordinates (type2_list, &coords, chain, c_cur);
+          mix_screen_coordinates(type2_list, &coords, chain, c_cur);
           c_redraw = 1;
         }
 
         if (chain->cl && chain->ch[chain->cl - 1] &&
             (type2_list[chain->ch[chain->cl-1]]->caps & MIX_CAP_MIDDLEMAN))
         {
-          mutt_error ( _("Error: %s can't be used as the final remailer of a chain."),
-                       type2_list[chain->ch[chain->cl - 1]]->shortname);
+          mutt_error( _("Error: %s can't be used as the final remailer of a chain."),
+                      type2_list[chain->ch[chain->cl - 1]]->shortname);
         }
         else
         {
@@ -623,12 +623,12 @@ void mix_make_chain (LIST **chainp)
             chain->ch[i] = chain->ch[i-1];
 
           chain->ch[c_cur] = menu->current;
-          mix_screen_coordinates (type2_list, &coords, chain, c_cur);
+          mix_screen_coordinates(type2_list, &coords, chain, c_cur);
           c_redraw = 1;
         }
         else
-          mutt_error ( _("Mixmaster chains are limited to %d elements."),
-                       MAXMIXES);
+          mutt_error( _("Mixmaster chains are limited to %d elements."),
+                      MAXMIXES);
 
         break;
       }
@@ -645,7 +645,7 @@ void mix_make_chain (LIST **chainp)
           if (c_cur == chain->cl && c_cur)
             c_cur--;
 
-          mix_screen_coordinates (type2_list, &coords, chain, c_cur);
+          mix_screen_coordinates(type2_list, &coords, chain, c_cur);
           c_redraw = 1;
         }
         else
@@ -677,8 +677,8 @@ void mix_make_chain (LIST **chainp)
     }
   }
 
-  mutt_pop_current_menu (menu);
-  mutt_menuDestroy (&menu);
+  mutt_pop_current_menu(menu);
+  mutt_menuDestroy(&menu);
 
   /* construct the remailer list */
 
@@ -691,18 +691,18 @@ void mix_make_chain (LIST **chainp)
       else
         t = "*";
 
-      *chainp = mutt_add_list (*chainp, t);
+      *chainp = mutt_add_list(*chainp, t);
     }
   }
 
-  mix_free_type2_list (&type2_list);
-  FREE (&coords);
-  FREE (&chain);
+  mix_free_type2_list(&type2_list);
+  FREE(&coords);
+  FREE(&chain);
 }
 
 /* some safety checks before piping the message to mixmaster */
 
-int mix_check_message (HEADER *msg)
+int mix_check_message(HEADER *msg)
 {
   const char *fqdn;
   short need_hostname = 0;
@@ -722,7 +722,7 @@ int mix_check_message (HEADER *msg)
 
   for (p = msg->env->to; p; p = p->next)
   {
-    if (!p->group && strchr (p->mailbox, '@') == NULL)
+    if (!p->group && strchr(p->mailbox, '@') == NULL)
     {
       need_hostname = 1;
       break;
@@ -732,55 +732,55 @@ int mix_check_message (HEADER *msg)
   if (need_hostname)
   {
 
-    if (!(fqdn = mutt_fqdn (1)))
+    if (!(fqdn = mutt_fqdn(1)))
     {
       mutt_error _("Please set the hostname variable to a proper value when using mixmaster!");
       return (-1);
     }
 
     /* Cc and Bcc are empty at this point. */
-    rfc822_qualify (msg->env->to, fqdn);
-    rfc822_qualify (msg->env->reply_to, fqdn);
-    rfc822_qualify (msg->env->mail_followup_to, fqdn);
+    rfc822_qualify(msg->env->to, fqdn);
+    rfc822_qualify(msg->env->reply_to, fqdn);
+    rfc822_qualify(msg->env->mail_followup_to, fqdn);
   }
 
   return 0;
 }
 
-int mix_send_message (LIST *chain, const char *tempfile)
+int mix_send_message(LIST *chain, const char *tempfile)
 {
   BUFFER *cmd;
   BUFFER *cd_quoted;
   int i;
 
-  cmd = mutt_buffer_pool_get ();
-  cd_quoted = mutt_buffer_pool_get ();
+  cmd = mutt_buffer_pool_get();
+  cd_quoted = mutt_buffer_pool_get();
 
-  mutt_buffer_printf (cmd, "cat %s | %s -m ", tempfile, Mixmaster);
+  mutt_buffer_printf(cmd, "cat %s | %s -m ", tempfile, Mixmaster);
 
   for (i = 0; chain; chain = chain->next, i = 1)
   {
-    mutt_buffer_addstr (cmd, i ? "," : " -l ");
-    mutt_buffer_quote_filename (cd_quoted, (char *) chain->data);
-    mutt_buffer_addstr (cmd, mutt_b2s (cd_quoted));
+    mutt_buffer_addstr(cmd, i ? "," : " -l ");
+    mutt_buffer_quote_filename(cd_quoted, (char *) chain->data);
+    mutt_buffer_addstr(cmd, mutt_b2s(cd_quoted));
   }
 
-  if (!option (OPTNOCURSES))
-    mutt_endwin (NULL);
+  if (!option(OPTNOCURSES))
+    mutt_endwin(NULL);
 
-  if ((i = mutt_system (cmd->data)))
+  if ((i = mutt_system(cmd->data)))
   {
-    fprintf (stderr, _("Error sending message, child exited %d.\n"), i);
-    if (!option (OPTNOCURSES))
+    fprintf(stderr, _("Error sending message, child exited %d.\n"), i);
+    if (!option(OPTNOCURSES))
     {
-      mutt_any_key_to_continue (NULL);
+      mutt_any_key_to_continue(NULL);
       mutt_error _("Error sending message.");
     }
   }
 
-  mutt_buffer_pool_release (&cmd);
-  mutt_buffer_pool_release (&cd_quoted);
-  unlink (tempfile);
+  mutt_buffer_pool_release(&cmd);
+  mutt_buffer_pool_release(&cd_quoted);
+  unlink(tempfile);
   return i;
 }
 

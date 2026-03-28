@@ -42,7 +42,7 @@
 
 #ifdef USE_SASL_CYRUS
 /* SASL authenticator */
-static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_sasl(POP_DATA *pop_data, const char *method)
 {
   sasl_conn_t *saslconn;
   sasl_interact_t *interaction = NULL;
@@ -54,11 +54,11 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
   const char *pc = NULL;
   unsigned int len, olen, client_start;
 
-  if (mutt_account_getpass (&pop_data->conn->account) ||
+  if (mutt_account_getpass(&pop_data->conn->account) ||
       !pop_data->conn->account.pass[0])
     return POP_A_FAILURE;
 
-  if (mutt_sasl_client_new (pop_data->conn, &saslconn) < 0)
+  if (mutt_sasl_client_new(pop_data->conn, &saslconn) < 0)
   {
     muttdbg(1, "Error allocating SASL connection.");
     return POP_A_FAILURE;
@@ -72,7 +72,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     rc = sasl_client_start(saslconn, method, &interaction, &pc, &olen, &mech);
     if (rc != SASL_INTERACT)
       break;
-    mutt_sasl_interact (interaction);
+    mutt_sasl_interact(interaction);
   }
 
   if (rc != SASL_OK && rc != SASL_CONTINUE)
@@ -80,7 +80,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     muttdbg(1, "Failure starting authentication exchange. No shared mechanisms?");
 
     /* SASL doesn't support suggested mechanisms, so fall back */
-    sasl_dispose (&saslconn);
+    sasl_dispose(&saslconn);
     return POP_A_UNAVAIL;
   }
 
@@ -93,21 +93,21 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
   mutt_message _("Authenticating (SASL)...");
 
   bufsize = ((olen * 2) > LONG_STRING) ? (olen * 2) : LONG_STRING;
-  buf = safe_malloc (bufsize);
+  buf = safe_malloc(bufsize);
 
-  snprintf (buf, bufsize, "AUTH %s", mech);
-  olen = strlen (buf);
+  snprintf(buf, bufsize, "AUTH %s", mech);
+  olen = strlen(buf);
 
   /* looping protocol */
   FOREVER
   {
-    strfcpy (buf + olen, "\r\n", bufsize - olen);
-    mutt_socket_write (pop_data->conn, buf);
-    if (mutt_socket_readln (inbuf, sizeof (inbuf), pop_data->conn) < 0)
+    strfcpy(buf + olen, "\r\n", bufsize - olen);
+    mutt_socket_write(pop_data->conn, buf);
+    if (mutt_socket_readln(inbuf, sizeof(inbuf), pop_data->conn) < 0)
     {
-      sasl_dispose (&saslconn);
+      sasl_dispose(&saslconn);
       pop_data->status = POP_DISCONNECTED;
-      FREE (&buf);
+      FREE(&buf);
       return POP_A_SOCKET;
     }
 
@@ -119,8 +119,8 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     if (!client_start && rc != SASL_CONTINUE)
       break;
 
-    if (!mutt_strncmp (inbuf, "+ ", 2)
-        && sasl_decode64 (inbuf+2, strlen (inbuf+2), buf, bufsize - 1, &len) != SASL_OK)
+    if (!mutt_strncmp(inbuf, "+ ", 2)
+        && sasl_decode64(inbuf+2, strlen(inbuf+2), buf, bufsize - 1, &len) != SASL_OK)
     {
       muttdbg(1, "error base64-decoding server response.");
 
@@ -141,10 +141,10 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
     if (!client_start)
       FOREVER
       {
-        rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
+        rc = sasl_client_step(saslconn, buf, len, &interaction, &pc, &olen);
         if (rc != SASL_INTERACT)
           break;
-        mutt_sasl_interact (interaction);
+        mutt_sasl_interact(interaction);
       }
     else
     {
@@ -164,9 +164,9 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
       if ((olen * 2) > bufsize)
       {
         bufsize = olen * 2;
-        safe_realloc (&buf, bufsize);
+        safe_realloc(&buf, bufsize);
       }
-      if (sasl_encode64 (pc, olen, buf, bufsize, &olen) != SASL_OK)
+      if (sasl_encode64(pc, olen, buf, bufsize, &olen) != SASL_OK)
       {
         muttdbg(1, "error base64-encoding client response.");
         goto bail;
@@ -177,30 +177,30 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA *pop_data, const char *method)
   if (rc != SASL_OK)
     goto bail;
 
-  if (!mutt_strncmp (inbuf, "+OK", 3))
+  if (!mutt_strncmp(inbuf, "+OK", 3))
   {
-    mutt_sasl_setup_conn (pop_data->conn, saslconn);
-    FREE (&buf);
+    mutt_sasl_setup_conn(pop_data->conn, saslconn);
+    FREE(&buf);
     return POP_A_SUCCESS;
   }
 
 bail:
-  sasl_dispose (&saslconn);
+  sasl_dispose(&saslconn);
 
   /* terminate SASL session if the last response is not +OK nor -ERR */
-  if (!mutt_strncmp (inbuf, "+ ", 2))
+  if (!mutt_strncmp(inbuf, "+ ", 2))
   {
-    snprintf (buf, bufsize, "*\r\n");
-    if (pop_query (pop_data, buf, sizeof (buf)) == -1)
+    snprintf(buf, bufsize, "*\r\n");
+    if (pop_query(pop_data, buf, sizeof(buf)) == -1)
     {
-      FREE (&buf);
+      FREE(&buf);
       return POP_A_SOCKET;
     }
   }
 
-  FREE (&buf);
+  FREE(&buf);
   mutt_error _("SASL authentication failed.");
-  mutt_sleep (2);
+  mutt_sleep(2);
 
   return POP_A_FAILURE;
 }
@@ -208,7 +208,7 @@ bail:
 
 
 #ifdef USE_SASL_GNU
-static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_gsasl(POP_DATA *pop_data, const char *method)
 {
   Gsasl_session *gsasl_session = NULL;
   const char *chosen_mech, *pop_auth_data;
@@ -216,7 +216,7 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
   char *gsasl_step_output = NULL;
   int rc = POP_A_FAILURE, gsasl_rc = GSASL_OK, first_challenge = 1;
 
-  chosen_mech = mutt_gsasl_get_mech (method, pop_data->auth_list);
+  chosen_mech = mutt_gsasl_get_mech(method, pop_data->auth_list);
   if (!chosen_mech)
   {
     muttdbg(2, "mutt_gsasl_get_mech() returned no usable mech");
@@ -225,38 +225,38 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
 
   muttdbg(2, "using mech %s", chosen_mech);
 
-  if (mutt_gsasl_client_new (pop_data->conn, chosen_mech, &gsasl_session) < 0)
+  if (mutt_gsasl_client_new(pop_data->conn, chosen_mech, &gsasl_session) < 0)
   {
     muttdbg(1, "Error allocating GSASL connection.");
     return POP_A_UNAVAIL;
   }
 
-  mutt_message (_("Authenticating (%s)..."), chosen_mech);
+  mutt_message(_("Authenticating (%s)..."), chosen_mech);
 
-  output_buf = mutt_buffer_pool_get ();
-  input_buf = mutt_buffer_pool_get ();
-  mutt_buffer_printf (output_buf, "AUTH %s\r\n", chosen_mech);
+  output_buf = mutt_buffer_pool_get();
+  input_buf = mutt_buffer_pool_get();
+  mutt_buffer_printf(output_buf, "AUTH %s\r\n", chosen_mech);
 
   do
   {
-    if (mutt_socket_write (pop_data->conn, mutt_b2s (output_buf)) < 0)
+    if (mutt_socket_write(pop_data->conn, mutt_b2s(output_buf)) < 0)
     {
       pop_data->status = POP_DISCONNECTED;
       rc = POP_A_SOCKET;
       goto fail;
     }
 
-    if (mutt_socket_buffer_readln (input_buf, pop_data->conn) < 0)
+    if (mutt_socket_buffer_readln(input_buf, pop_data->conn) < 0)
     {
       pop_data->status = POP_DISCONNECTED;
       rc = POP_A_SOCKET;
       goto fail;
     }
 
-    if (mutt_strncmp (mutt_b2s (input_buf), "+ ", 2))
+    if (mutt_strncmp(mutt_b2s(input_buf), "+ ", 2))
       break;
 
-    pop_auth_data = mutt_b2s (input_buf) + 2;
+    pop_auth_data = mutt_b2s(input_buf) + 2;
 
     /* Workaround for broken POP3 servers. See pop_auth_sasl() above.
      * Ignore the first challenge if it's not BASE64. */
@@ -264,44 +264,44 @@ static pop_auth_res_t pop_auth_gsasl (POP_DATA *pop_data, const char *method)
     {
       first_challenge = 0;
       /* Use output_buf as a temp buffer. */
-      if (mutt_buffer_from_base64 (output_buf, pop_auth_data) < 0)
+      if (mutt_buffer_from_base64(output_buf, pop_auth_data) < 0)
         pop_auth_data = "";
     }
 
-    gsasl_rc = gsasl_step64 (gsasl_session, pop_auth_data, &gsasl_step_output);
+    gsasl_rc = gsasl_step64(gsasl_session, pop_auth_data, &gsasl_step_output);
     if (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK)
     {
-      mutt_buffer_strcpy (output_buf, gsasl_step_output);
-      mutt_buffer_addstr (output_buf, "\r\n");
-      gsasl_free (gsasl_step_output);
+      mutt_buffer_strcpy(output_buf, gsasl_step_output);
+      mutt_buffer_addstr(output_buf, "\r\n");
+      gsasl_free(gsasl_step_output);
     }
     else
     {
       muttdbg(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
-                  gsasl_strerror (gsasl_rc));
+              gsasl_strerror(gsasl_rc));
     }
   }
   while (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK);
 
-  if (!mutt_strncmp (mutt_b2s (input_buf), "+ ", 2))
+  if (!mutt_strncmp(mutt_b2s(input_buf), "+ ", 2))
   {
-    mutt_socket_write (pop_data->conn, "*\r\n");
+    mutt_socket_write(pop_data->conn, "*\r\n");
     goto fail;
   }
 
-  if (!mutt_strncmp (mutt_b2s (input_buf), "+OK", 3) && (gsasl_rc == GSASL_OK))
+  if (!mutt_strncmp(mutt_b2s(input_buf), "+OK", 3) && (gsasl_rc == GSASL_OK))
     rc = POP_A_SUCCESS;
 
 fail:
-  mutt_buffer_pool_release (&input_buf);
-  mutt_buffer_pool_release (&output_buf);
-  mutt_gsasl_client_finish (&gsasl_session);
+  mutt_buffer_pool_release(&input_buf);
+  mutt_buffer_pool_release(&output_buf);
+  mutt_gsasl_client_finish(&gsasl_session);
 
   if (rc == POP_A_FAILURE)
   {
     muttdbg(2, "%s failed", chosen_mech);
     mutt_error _("SASL authentication failed.");
-    mutt_sleep (2);
+    mutt_sleep(2);
   }
 
   return rc;
@@ -310,21 +310,21 @@ fail:
 
 
 /* Get the server timestamp for APOP authentication */
-void pop_apop_timestamp (POP_DATA *pop_data, char *buf)
+void pop_apop_timestamp(POP_DATA *pop_data, char *buf)
 {
   char *p1, *p2;
 
-  FREE (&pop_data->timestamp);
+  FREE(&pop_data->timestamp);
 
-  if ((p1 = strchr (buf, '<')) && (p2 = strchr (p1, '>')))
+  if ((p1 = strchr(buf, '<')) && (p2 = strchr(p1, '>')))
   {
     p2[1] = '\0';
-    pop_data->timestamp = safe_strdup (p1);
+    pop_data->timestamp = safe_strdup(p1);
   }
 }
 
 /* APOP authenticator */
-static pop_auth_res_t pop_auth_apop (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_apop(POP_DATA *pop_data, const char *method)
 {
   struct md5_ctx ctx;
   unsigned char digest[16];
@@ -332,36 +332,36 @@ static pop_auth_res_t pop_auth_apop (POP_DATA *pop_data, const char *method)
   char buf[LONG_STRING];
   size_t i;
 
-  if (mutt_account_getpass (&pop_data->conn->account) ||
+  if (mutt_account_getpass(&pop_data->conn->account) ||
       !pop_data->conn->account.pass[0])
     return POP_A_FAILURE;
 
   if (!pop_data->timestamp)
     return POP_A_UNAVAIL;
 
-  if (rfc822_valid_msgid (pop_data->timestamp) < 0)
+  if (rfc822_valid_msgid(pop_data->timestamp) < 0)
   {
     mutt_error _("POP timestamp is invalid!");
-    mutt_sleep (2);
+    mutt_sleep(2);
     return POP_A_UNAVAIL;
   }
 
   mutt_message _("Authenticating (APOP)...");
 
   /* Compute the authentication hash to send to the server */
-  md5_init_ctx (&ctx);
-  md5_process_bytes (pop_data->timestamp, strlen (pop_data->timestamp), &ctx);
-  md5_process_bytes (pop_data->conn->account.pass,
-                     strlen (pop_data->conn->account.pass), &ctx);
-  md5_finish_ctx (&ctx, digest);
+  md5_init_ctx(&ctx);
+  md5_process_bytes(pop_data->timestamp, strlen(pop_data->timestamp), &ctx);
+  md5_process_bytes(pop_data->conn->account.pass,
+                    strlen(pop_data->conn->account.pass), &ctx);
+  md5_finish_ctx(&ctx, digest);
 
-  for (i = 0; i < sizeof (digest); i++)
-    sprintf (hash + 2 * i, "%02x", digest[i]);
+  for (i = 0; i < sizeof(digest); i++)
+    sprintf(hash + 2 * i, "%02x", digest[i]);
 
   /* Send APOP command to server */
-  snprintf (buf, sizeof (buf), "APOP %s %s\r\n", pop_data->conn->account.user, hash);
+  snprintf(buf, sizeof(buf), "APOP %s %s\r\n", pop_data->conn->account.user, hash);
 
-  switch (pop_query (pop_data, buf, sizeof (buf)))
+  switch (pop_query(pop_data, buf, sizeof(buf)))
   {
     case 0:
       return POP_A_SUCCESS;
@@ -370,13 +370,13 @@ static pop_auth_res_t pop_auth_apop (POP_DATA *pop_data, const char *method)
   }
 
   mutt_error _("APOP authentication failed.");
-  mutt_sleep (2);
+  mutt_sleep(2);
 
   return POP_A_FAILURE;
 }
 
 /* USER authenticator */
-static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_user(POP_DATA *pop_data, const char *method)
 {
   char buf[LONG_STRING];
   int ret;
@@ -384,14 +384,14 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
   if (!pop_data->cmd_user)
     return POP_A_UNAVAIL;
 
-  if (mutt_account_getpass (&pop_data->conn->account) ||
+  if (mutt_account_getpass(&pop_data->conn->account) ||
       !pop_data->conn->account.pass[0])
     return POP_A_FAILURE;
 
   mutt_message _("Logging in...");
 
-  snprintf (buf, sizeof (buf), "USER %s\r\n", pop_data->conn->account.user);
-  ret = pop_query (pop_data, buf, sizeof (buf));
+  snprintf(buf, sizeof(buf), "USER %s\r\n", pop_data->conn->account.user);
+  ret = pop_query(pop_data, buf, sizeof(buf));
 
   if (pop_data->cmd_user == 2)
   {
@@ -407,20 +407,20 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
       pop_data->cmd_user = 0;
 
       muttdbg(1, "unset USER capability");
-      snprintf (pop_data->err_msg, sizeof (pop_data->err_msg), "%s",
-                _("Command USER is not supported by server."));
+      snprintf(pop_data->err_msg, sizeof(pop_data->err_msg), "%s",
+               _("Command USER is not supported by server."));
     }
   }
 
   if (ret == 0)
   {
-    snprintf (buf, sizeof (buf), "PASS %s\r\n", pop_data->conn->account.pass);
-    ret = pop_query_d (pop_data, buf, sizeof (buf),
+    snprintf(buf, sizeof(buf), "PASS %s\r\n", pop_data->conn->account.pass);
+    ret = pop_query_d(pop_data, buf, sizeof(buf),
 #ifdef DEBUG
-                       /* don't print the password unless we're at the ungodly debugging level */
-                       debuglevel < MUTT_SOCK_LOG_FULL ? "PASS *\r\n" :
+                      /* don't print the password unless we're at the ungodly debugging level */
+                      debuglevel < MUTT_SOCK_LOG_FULL ? "PASS *\r\n" :
 #endif
-                       NULL);
+                      NULL);
   }
 
   switch (ret)
@@ -431,14 +431,14 @@ static pop_auth_res_t pop_auth_user (POP_DATA *pop_data, const char *method)
       return POP_A_SOCKET;
   }
 
-  mutt_error ("%s %s", _("Login failed."), pop_data->err_msg);
-  mutt_sleep (2);
+  mutt_error("%s %s", _("Login failed."), pop_data->err_msg);
+  mutt_sleep(2);
 
   return POP_A_FAILURE;
 }
 
 /* OAUTHBEARER/XOAUTH2 authenticator */
-static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, int xoauth2)
+static pop_auth_res_t pop_auth_oauth(POP_DATA *pop_data, int xoauth2)
 {
   int rc = POP_A_FAILURE;
   BUFFER *bearertoken = NULL, *authline = NULL;
@@ -449,30 +449,30 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, int xoauth2)
 
   authtype = xoauth2 ? "XOAUTH2" : "OAUTHBEARER";
 
-  mutt_message (_("Authenticating (%s)..."), authtype);
+  mutt_message(_("Authenticating (%s)..."), authtype);
 
-  bearertoken = mutt_buffer_pool_get ();
-  authline = mutt_buffer_pool_get ();
+  bearertoken = mutt_buffer_pool_get();
+  authline = mutt_buffer_pool_get();
 
-  if (mutt_account_getoauthbearer (&pop_data->conn->account, bearertoken, xoauth2))
+  if (mutt_account_getoauthbearer(&pop_data->conn->account, bearertoken, xoauth2))
     goto cleanup;
 
-  mutt_buffer_printf (authline, "AUTH %s\r\n", authtype);
-  ret = pop_query (pop_data, authline->data, authline->dsize);
+  mutt_buffer_printf(authline, "AUTH %s\r\n", authtype);
+  ret = pop_query(pop_data, authline->data, authline->dsize);
 
   if (ret == 0 ||
-      (ret == -2 && !mutt_strncmp (authline->data, "+", 1)))
+      (ret == -2 && !mutt_strncmp(authline->data, "+", 1)))
   {
-    mutt_buffer_printf (authline, "%s\r\n", mutt_b2s (bearertoken));
+    mutt_buffer_printf(authline, "%s\r\n", mutt_b2s(bearertoken));
 
-    ret = pop_query_d (pop_data, authline->data, authline->dsize,
+    ret = pop_query_d(pop_data, authline->data, authline->dsize,
 #ifdef DEBUG
-                       /* don't print the bearer token unless we're at the ungodly debugging level */
-                       debuglevel < MUTT_SOCK_LOG_FULL ?
-                       (xoauth2 ? "*\r\n" : "*\r\n")
-                       :
+                      /* don't print the bearer token unless we're at the ungodly debugging level */
+                      debuglevel < MUTT_SOCK_LOG_FULL ?
+                      (xoauth2 ? "*\r\n" : "*\r\n")
+                      :
 #endif
-                       NULL);
+                      NULL);
   }
 
   switch (ret)
@@ -489,41 +489,41 @@ static pop_auth_res_t pop_auth_oauth (POP_DATA *pop_data, int xoauth2)
    * See RFC 7628 3.2.3.  "AQ==" is Base64 encoded ^A (0x01) .
    */
   err = pop_data->err_msg;
-  len = mutt_from_base64 (decoded_err, pop_data->err_msg, sizeof(decoded_err) - 1);
+  len = mutt_from_base64(decoded_err, pop_data->err_msg, sizeof(decoded_err) - 1);
   if (len >= 0)
   {
     decoded_err[len] = '\0';
     err = decoded_err;
   }
-  mutt_buffer_strcpy (authline, "AQ==\r\n");
-  pop_query_d (pop_data, authline->data, authline->dsize, NULL);
-  mutt_error ("%s %s", _("Authentication failed."), err);
-  mutt_sleep (2);
+  mutt_buffer_strcpy(authline, "AQ==\r\n");
+  pop_query_d(pop_data, authline->data, authline->dsize, NULL);
+  mutt_error("%s %s", _("Authentication failed."), err);
+  mutt_sleep(2);
 
 cleanup:
-  mutt_buffer_pool_release (&bearertoken);
-  mutt_buffer_pool_release (&authline);
+  mutt_buffer_pool_release(&bearertoken);
+  mutt_buffer_pool_release(&authline);
   return rc;
 }
 
 
 /* OAUTHBEARER/XOAUTH2 authenticator */
-static pop_auth_res_t pop_auth_oauthbearer (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_oauthbearer(POP_DATA *pop_data, const char *method)
 {
   if (!PopOauthRefreshCmd)
     return POP_A_UNAVAIL;
 
-  return pop_auth_oauth (pop_data, 0);
+  return pop_auth_oauth(pop_data, 0);
 }
 
 /* OAUTHBEARER/XOAUTH2 authenticator */
-static pop_auth_res_t pop_auth_xoauth2 (POP_DATA *pop_data, const char *method)
+static pop_auth_res_t pop_auth_xoauth2(POP_DATA *pop_data, const char *method)
 {
   /* If they did not explicitly request XOAUTH2 then fail quietly */
   if (!(method && PopOauthRefreshCmd))
     return POP_A_UNAVAIL;
 
-  return pop_auth_oauth (pop_data, 1);
+  return pop_auth_oauth(pop_data, 1);
 }
 
 
@@ -548,7 +548,7 @@ static const pop_auth_t pop_authenticators[] = {
  * -2 - login failed,
  * -3 - authentication canceled.
  */
-int pop_authenticate (POP_DATA *pop_data)
+int pop_authenticate(POP_DATA *pop_data)
 {
   ACCOUNT *acct = &pop_data->conn->account;
   const pop_auth_t *authenticator;
@@ -558,18 +558,18 @@ int pop_authenticate (POP_DATA *pop_data)
   int attempts = 0;
   int ret = POP_A_UNAVAIL;
 
-  if (mutt_account_getuser (acct) || !acct->user[0])
+  if (mutt_account_getuser(acct) || !acct->user[0])
     return -3;
 
   if (PopAuthenticators)
   {
     /* Try user-specified list of authentication methods */
-    methods = safe_strdup (PopAuthenticators);
+    methods = safe_strdup(PopAuthenticators);
     method = methods;
 
     while (method)
     {
-      comma = strchr (method, ':');
+      comma = strchr(method, ':');
       if (comma)
         *comma++ = '\0';
       muttdbg(2, "Trying method %s", method);
@@ -578,15 +578,15 @@ int pop_authenticate (POP_DATA *pop_data)
       while (authenticator->authenticate)
       {
         if (!authenticator->method ||
-            !ascii_strcasecmp (authenticator->method, method))
+            !ascii_strcasecmp(authenticator->method, method))
         {
-          ret = authenticator->authenticate (pop_data, method);
+          ret = authenticator->authenticate(pop_data, method);
           if (ret == POP_A_SOCKET)
-            switch (pop_connect (pop_data))
+            switch (pop_connect(pop_data))
             {
               case 0:
               {
-                ret = authenticator->authenticate (pop_data, method);
+                ret = authenticator->authenticate(pop_data, method);
                 break;
               }
               case -2:
@@ -596,7 +596,7 @@ int pop_authenticate (POP_DATA *pop_data)
           if (ret != POP_A_UNAVAIL)
             attempts++;
           if (ret == POP_A_SUCCESS || ret == POP_A_SOCKET ||
-              (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
+              (ret == POP_A_FAILURE && !option(OPTPOPAUTHTRYALL)))
           {
             comma = NULL;
             break;
@@ -608,7 +608,7 @@ int pop_authenticate (POP_DATA *pop_data)
       method = comma;
     }
 
-    FREE (&methods);
+    FREE(&methods);
   }
   else
   {
@@ -618,13 +618,13 @@ int pop_authenticate (POP_DATA *pop_data)
 
     while (authenticator->authenticate)
     {
-      ret = authenticator->authenticate (pop_data, NULL);
+      ret = authenticator->authenticate(pop_data, NULL);
       if (ret == POP_A_SOCKET)
-        switch (pop_connect (pop_data))
+        switch (pop_connect(pop_data))
         {
           case 0:
           {
-            ret = authenticator->authenticate (pop_data, NULL);
+            ret = authenticator->authenticate(pop_data, NULL);
             break;
           }
           case -2:
@@ -634,7 +634,7 @@ int pop_authenticate (POP_DATA *pop_data)
       if (ret != POP_A_UNAVAIL)
         attempts++;
       if (ret == POP_A_SUCCESS || ret == POP_A_SOCKET ||
-          (ret == POP_A_FAILURE && !option (OPTPOPAUTHTRYALL)))
+          (ret == POP_A_FAILURE && !option(OPTPOPAUTHTRYALL)))
         break;
 
       authenticator++;
@@ -649,7 +649,7 @@ int pop_authenticate (POP_DATA *pop_data)
       return -1;
     case POP_A_UNAVAIL:
       if (!attempts)
-        mutt_error (_("No authenticators available"));
+        mutt_error(_("No authenticators available"));
   }
 
   return -2;

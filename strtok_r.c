@@ -32,7 +32,7 @@
                 // s = "abc\0-def\0"
 */
 char *
-strtok_r (char *s, const char *delim, char **save_ptr)
+strtok_r(char *s, const char *delim, char **save_ptr)
 {
   char *token;
 
@@ -40,7 +40,7 @@ strtok_r (char *s, const char *delim, char **save_ptr)
     s = *save_ptr;
 
   /* Scan leading delimiters.  */
-  s += strspn (s, delim);
+  s += strspn(s, delim);
   if (*s == '\0')
     {
       *save_ptr = s;
@@ -49,10 +49,10 @@ strtok_r (char *s, const char *delim, char **save_ptr)
 
   /* Find the end of the token.  */
   token = s;
-  s = strpbrk (token, delim);
+  s = strpbrk(token, delim);
   if (s == NULL)
     /* This token finishes the string.  */
-    *save_ptr = strchr (token, '\0');
+    *save_ptr = strchr(token, '\0');
   else
     {
       /* Terminate the token and make *SAVE_PTR point past it.  */

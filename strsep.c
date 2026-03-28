@@ -20,7 +20,7 @@
 
 /* Taken from glibc 2.6.1 */
 
-char *strsep (char **stringp, const char *delim)
+char *strsep(char **stringp, const char *delim)
 {
   char *begin, *end;
 
@@ -44,12 +44,12 @@ char *strsep (char **stringp, const char *delim)
           else if (*begin == '\0')
             end = NULL;
           else
-            end = strchr (begin + 1, ch);
+            end = strchr(begin + 1, ch);
         }
     }
   else
     /* Find the end of the token.  */
-    end = strpbrk (begin, delim);
+    end = strpbrk(begin, delim);
 
   if (end)
     {

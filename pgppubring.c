@@ -72,10 +72,10 @@ static short dump_signatures = 0;
 static short dump_fingerprints = 0;
 
 
-static void pgpring_find_candidates (char *ringfile, const char *hints[], int nhints);
-static void pgpring_dump_keyblock (pgp_key_t p);
+static void pgpring_find_candidates(char *ringfile, const char *hints[], int nhints);
+static void pgpring_dump_keyblock(pgp_key_t p);
 
-int main (int argc, char * const argv[])
+int main(int argc, char * const argv[])
 {
   int c;
 
@@ -88,7 +88,7 @@ int main (int argc, char * const argv[])
   char pgppath[_POSIX_PATH_MAX];
   char kring[_POSIX_PATH_MAX+12];
 
-  while ((c = getopt (argc, argv, "f25sk:S")) != EOF)
+  while ((c = getopt(argc, argv, "f25sk:S")) != EOF)
   {
     switch (c)
     {
@@ -124,53 +124,53 @@ int main (int argc, char * const argv[])
 
       default:
       {
-        fprintf (stderr, "usage: %s [-k <key ring> | [-2 | -5] [ -s] [-S] [-f]] [hints]\n",
-                 argv[0]);
-        exit (1);
+        fprintf(stderr, "usage: %s [-k <key ring> | [-2 | -5] [ -s] [-S] [-f]] [hints]\n",
+                argv[0]);
+        exit(1);
       }
     }
   }
 
   if (_kring)
-    strfcpy (kring, _kring, sizeof (kring));
+    strfcpy(kring, _kring, sizeof(kring));
   else
   {
-    if ((env_pgppath = getenv ("PGPPATH")))
-      strfcpy (pgppath, env_pgppath, sizeof (pgppath));
-    else if ((env_home = getenv ("HOME")))
-      snprintf (pgppath, sizeof (pgppath), "%s/.pgp", env_home);
+    if ((env_pgppath = getenv("PGPPATH")))
+      strfcpy(pgppath, env_pgppath, sizeof(pgppath));
+    else if ((env_home = getenv("HOME")))
+      snprintf(pgppath, sizeof(pgppath), "%s/.pgp", env_home);
     else
     {
-      fprintf (stderr, "%s: Can't determine your PGPPATH.\n",
-               argc ? argv[0] : "mutt_pgpring");
-      exit (1);
+      fprintf(stderr, "%s: Can't determine your PGPPATH.\n",
+              argc ? argv[0] : "mutt_pgpring");
+      exit(1);
     }
 
     if (secring)
-      snprintf (kring, sizeof (kring), "%s/secring.%s", pgppath, version == 2 ? "pgp" : "skr");
+      snprintf(kring, sizeof(kring), "%s/secring.%s", pgppath, version == 2 ? "pgp" : "skr");
     else
-      snprintf (kring, sizeof (kring), "%s/pubring.%s", pgppath, version == 2 ? "pgp" : "pkr");
+      snprintf(kring, sizeof(kring), "%s/pubring.%s", pgppath, version == 2 ? "pgp" : "pkr");
   }
 
 
   if (optind > argc)
     optind = argc;
 
-  pgpring_find_candidates (kring, (const char**) argv + optind, argc - optind);
+  pgpring_find_candidates(kring, (const char**) argv + optind, argc - optind);
 
   return 0;
 }
 
-static char *binary_fingerprint_to_string (unsigned char *buff, size_t length)
+static char *binary_fingerprint_to_string(unsigned char *buff, size_t length)
 {
   int i;
   char *fingerprint, *pf;
 
-  pf = fingerprint = (char *)safe_malloc ((length * 2) + 1);
+  pf = fingerprint = (char *)safe_malloc((length * 2) + 1);
 
   for (i = 0; i < length; i++)
   {
-    sprintf (pf, "%02X", buff[i]);
+    sprintf(pf, "%02X", buff[i]);
     pf += 2;
   }
   *pf = 0;
@@ -180,19 +180,19 @@ static char *binary_fingerprint_to_string (unsigned char *buff, size_t length)
 
 
 /* The actual key ring parser */
-static void pgp_make_pgp2_fingerprint (unsigned char *buff,
-                                       unsigned char *digest)
+static void pgp_make_pgp2_fingerprint(unsigned char *buff,
+                                      unsigned char *digest)
 {
   struct md5_ctx ctx;
   unsigned int size = 0;
 
-  md5_init_ctx (&ctx);
+  md5_init_ctx(&ctx);
 
   size = (buff[0] << 8) + buff[1];
   size = ((size + 7) / 8);
   buff = &buff[2];
 
-  md5_process_bytes (buff, size, &ctx);
+  md5_process_bytes(buff, size, &ctx);
 
   buff = &buff[size];
 
@@ -200,12 +200,12 @@ static void pgp_make_pgp2_fingerprint (unsigned char *buff,
   size = ((size + 7) / 8);
   buff = &buff[2];
 
-  md5_process_bytes (buff, size, &ctx);
+  md5_process_bytes(buff, size, &ctx);
 
-  md5_finish_ctx (&ctx, digest);
+  md5_finish_ctx(&ctx, digest);
 } /* pgp_make_pgp2_fingerprint() */
 
-static pgp_key_t pgp_parse_pgp2_key (unsigned char *buff, size_t l)
+static pgp_key_t pgp_parse_pgp2_key(unsigned char *buff, size_t l)
 {
   pgp_key_t p;
   unsigned char alg;
@@ -231,20 +231,20 @@ static pgp_key_t pgp_parse_pgp2_key (unsigned char *buff, size_t l)
   for (i = 0; i < 2; i++)
     exp_days = (exp_days << 8) + buff[j++];
 
-  if (exp_days && time (NULL) > gen_time + exp_days * 24 * 3600)
+  if (exp_days && time(NULL) > gen_time + exp_days * 24 * 3600)
     p->flags |= KEYFLAG_EXPIRED;
 
   alg = buff[j++];
 
   p->numalg = alg;
-  p->algorithm = pgp_pkalgbytype (alg);
-  p->flags |= pgp_get_abilities (alg);
+  p->algorithm = pgp_pkalgbytype(alg);
+  p->flags |= pgp_get_abilities(alg);
 
   if (dump_fingerprints)
   {
     /* j now points to the key material, which we need for the fingerprint */
-    pgp_make_pgp2_fingerprint (&buff[j], digest);
-    p->fingerprint = binary_fingerprint_to_string (digest, MD5_DIGEST_LENGTH);
+    pgp_make_pgp2_fingerprint(&buff[j], digest);
+    p->fingerprint = binary_fingerprint_to_string(digest, MD5_DIGEST_LENGTH);
   }
 
   expl = 0;
@@ -265,27 +265,27 @@ static pgp_key_t pgp_parse_pgp2_key (unsigned char *buff, size_t l)
     for (id = 0, i = 0; i < 4; i++)
       id = (id << 8) + buff[j++];
 
-    snprintf ((char *) scratch + k * 8, sizeof (scratch) - k * 8,
-              "%08lX", id);
+    snprintf((char *) scratch + k * 8, sizeof(scratch) - k * 8,
+             "%08lX", id);
   }
 
-  p->keyid = safe_strdup ((char *) scratch);
+  p->keyid = safe_strdup((char *) scratch);
 
   return p;
 
 bailout:
 
-  FREE (&p);
+  FREE(&p);
   return NULL;
 }
 
-static void pgp_make_pgp3_fingerprint (unsigned char *buff, size_t l,
-                                       unsigned char *digest)
+static void pgp_make_pgp3_fingerprint(unsigned char *buff, size_t l,
+                                      unsigned char *digest)
 {
   unsigned char dummy;
   SHA1_CTX context;
 
-  SHA1_Init (&context);
+  SHA1_Init(&context);
 
   dummy = buff[0] & 0x3f;
 
@@ -293,18 +293,18 @@ static void pgp_make_pgp3_fingerprint (unsigned char *buff, size_t l,
     dummy = PT_PUBKEY;
 
   dummy = (dummy << 2) | 0x81;
-  SHA1_Update (&context, &dummy, 1);
+  SHA1_Update(&context, &dummy, 1);
   dummy = ((l - 1) >> 8) & 0xff;
-  SHA1_Update (&context, &dummy, 1);
+  SHA1_Update(&context, &dummy, 1);
   dummy = (l - 1) & 0xff;
-  SHA1_Update (&context, &dummy, 1);
-  SHA1_Update (&context, buff + 1, l - 1);
-  SHA1_Final (digest, &context);
+  SHA1_Update(&context, &dummy, 1);
+  SHA1_Update(&context, buff + 1, l - 1);
+  SHA1_Final(digest, &context);
 
 }
 
-static void skip_bignum (unsigned char *buff, size_t l, size_t j,
-                         size_t * toff, size_t n)
+static void skip_bignum(unsigned char *buff, size_t l, size_t j,
+                        size_t * toff, size_t n)
 {
   size_t len;
 
@@ -320,7 +320,7 @@ static void skip_bignum (unsigned char *buff, size_t l, size_t j,
 }
 
 
-static pgp_key_t pgp_parse_pgp3_key (unsigned char *buff, size_t l)
+static pgp_key_t pgp_parse_pgp3_key(unsigned char *buff, size_t l)
 {
   pgp_key_t p;
   unsigned char alg;
@@ -332,7 +332,7 @@ static pgp_key_t pgp_parse_pgp3_key (unsigned char *buff, size_t l)
   short len;
   size_t j;
 
-  p = pgp_new_keyinfo ();
+  p = pgp_new_keyinfo();
   j = 2;
 
   for (i = 0; i < 4; i++)
@@ -343,23 +343,23 @@ static pgp_key_t pgp_parse_pgp3_key (unsigned char *buff, size_t l)
   alg = buff[j++];
 
   p->numalg = alg;
-  p->algorithm = pgp_pkalgbytype (alg);
-  p->flags |= pgp_get_abilities (alg);
+  p->algorithm = pgp_pkalgbytype(alg);
+  p->flags |= pgp_get_abilities(alg);
 
   len = (buff[j] << 8) + buff[j + 1];
   p->keylen = len;
 
   if (alg >= 1 && alg <= 3)
-    skip_bignum (buff, l, j, &j, 2);
+    skip_bignum(buff, l, j, &j, 2);
   else if (alg == 16 || alg == 20)
-    skip_bignum (buff, l, j, &j, 3);
+    skip_bignum(buff, l, j, &j, 3);
   else if (alg == 17)
-    skip_bignum (buff, l, j, &j, 4);
+    skip_bignum(buff, l, j, &j, 4);
 
-  pgp_make_pgp3_fingerprint (buff, j, digest);
+  pgp_make_pgp3_fingerprint(buff, j, digest);
   if (dump_fingerprints)
   {
-    p->fingerprint = binary_fingerprint_to_string (digest, SHA_DIGEST_LENGTH);
+    p->fingerprint = binary_fingerprint_to_string(digest, SHA_DIGEST_LENGTH);
   }
 
   for (k = 0; k < 2; k++)
@@ -368,15 +368,15 @@ static pgp_key_t pgp_parse_pgp3_key (unsigned char *buff, size_t l)
          i < SHA_DIGEST_LENGTH + (k - 1) * 4; i++)
       id = (id << 8) + digest[i];
 
-    snprintf ((char *) scratch + k * 8, sizeof (scratch) - k * 8, "%08lX", id);
+    snprintf((char *) scratch + k * 8, sizeof(scratch) - k * 8, "%08lX", id);
   }
 
-  p->keyid = safe_strdup ((char *) scratch);
+  p->keyid = safe_strdup((char *) scratch);
 
   return p;
 }
 
-static pgp_key_t pgp_parse_keyinfo (unsigned char *buff, size_t l)
+static pgp_key_t pgp_parse_keyinfo(unsigned char *buff, size_t l)
 {
   if (!buff || l < 2)
     return NULL;
@@ -385,16 +385,16 @@ static pgp_key_t pgp_parse_keyinfo (unsigned char *buff, size_t l)
   {
     case 2:
     case 3:
-      return pgp_parse_pgp2_key (buff, l);
+      return pgp_parse_pgp2_key(buff, l);
     case 4:
-      return pgp_parse_pgp3_key (buff, l);
+      return pgp_parse_pgp3_key(buff, l);
     default:
       return NULL;
   }
 }
 
-static int pgp_parse_pgp2_sig (unsigned char *buff, size_t l,
-                               pgp_key_t p, pgp_sig_t *s)
+static int pgp_parse_pgp2_sig(unsigned char *buff, size_t l,
+                              pgp_key_t p, pgp_sig_t *s)
 {
   unsigned char sigtype;
   time_t sig_gen_time;
@@ -434,8 +434,8 @@ static int pgp_parse_pgp2_sig (unsigned char *buff, size_t l,
   return 0;
 }
 
-static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
-                               pgp_key_t p, pgp_sig_t *s)
+static int pgp_parse_pgp3_sig(unsigned char *buff, size_t l,
+                              pgp_key_t p, pgp_sig_t *s)
 {
   unsigned char sigtype;
   unsigned char skt;
@@ -558,7 +558,7 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 
   if (sigtype == 0x20 || sigtype == 0x28)
     p->flags |= KEYFLAG_REVOKED;
-  if (key_validity != -1 && time (NULL) > p->gen_time + key_validity)
+  if (key_validity != -1 && time(NULL) > p->gen_time + key_validity)
     p->flags |= KEYFLAG_EXPIRED;
   if (have_critical_spks)
     p->flags |= KEYFLAG_CRITICAL;
@@ -576,8 +576,8 @@ static int pgp_parse_pgp3_sig (unsigned char *buff, size_t l,
 }
 
 
-static int pgp_parse_sig (unsigned char *buff, size_t l,
-                          pgp_key_t p, pgp_sig_t *sig)
+static int pgp_parse_sig(unsigned char *buff, size_t l,
+                         pgp_key_t p, pgp_sig_t *sig)
 {
   if (!buff || l < 2 || !p)
     return -1;
@@ -586,9 +586,9 @@ static int pgp_parse_sig (unsigned char *buff, size_t l,
   {
     case 2:
     case 3:
-      return pgp_parse_pgp2_sig (buff, l, p, sig);
+      return pgp_parse_pgp2_sig(buff, l, p, sig);
     case 4:
-      return pgp_parse_pgp3_sig (buff, l, p, sig);
+      return pgp_parse_pgp3_sig(buff, l, p, sig);
     default:
       return -1;
   }
@@ -596,7 +596,7 @@ static int pgp_parse_sig (unsigned char *buff, size_t l,
 
 /* parse one key block, including all subkeys. */
 
-static pgp_key_t pgp_parse_keyblock (FILE * fp)
+static pgp_key_t pgp_parse_keyblock(FILE * fp)
 {
   unsigned char *buff;
   unsigned char pt = 0;
@@ -619,7 +619,7 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
 
   FGETPOS(fp,pos);
 
-  while (!err && (buff = pgp_read_packet (fp, &l)) != NULL)
+  while (!err && (buff = pgp_read_packet(fp, &l)) != NULL)
   {
     last_pt = pt;
     pt = buff[0] & 0x3f;
@@ -639,7 +639,7 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
       case PT_SUBKEY:
       case PT_SUBSECKEY:
       {
-        if (!(*last = p = pgp_parse_keyinfo (buff, l)))
+        if (!(*last = p = pgp_parse_keyinfo(buff, l)))
         {
           err = 1;
           break;
@@ -655,7 +655,7 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
           if (p != root)
           {
             p->parent  = root;
-            p->address = pgp_copy_uids (root->address, p);
+            p->address = pgp_copy_uids(root->address, p);
             while (*addr) addr = &(*addr)->next;
           }
         }
@@ -670,11 +670,11 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
       {
         if (lsig)
         {
-          pgp_sig_t *signature = safe_calloc (sizeof (pgp_sig_t), 1);
+          pgp_sig_t *signature = safe_calloc(sizeof(pgp_sig_t), 1);
           *lsig = signature;
           lsig = &signature->next;
 
-          pgp_parse_sig (buff, l, p, signature);
+          pgp_parse_sig(buff, l, p, signature);
         }
         break;
       }
@@ -703,12 +703,12 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
         if (!addr)
           break;
 
-        chr = safe_malloc (l);
-        memcpy (chr, buff + 1, l - 1);
+        chr = safe_malloc(l);
+        memcpy(chr, buff + 1, l - 1);
         chr[l - 1] = '\0';
 
 
-        *addr = uid = safe_calloc (1, sizeof (pgp_uid_t)); /* XXX */
+        *addr = uid = safe_calloc(1, sizeof(pgp_uid_t)); /* XXX */
         uid->addr = chr;
         uid->parent = p;
         uid->trust = 0;
@@ -719,9 +719,9 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
          * pgp 2.6.3in.
          */
 
-        if (strstr (chr, "ENCR"))
+        if (strstr(chr, "ENCR"))
           p->flags |= KEYFLAG_PREFER_ENCRYPTION;
-        if (strstr (chr, "SIGN"))
+        if (strstr(chr, "SIGN"))
           p->flags |= KEYFLAG_PREFER_SIGNING;
 
         break;
@@ -732,12 +732,12 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
   }
 
   if (err)
-    pgp_free_key (&root);
+    pgp_free_key(&root);
 
   return root;
 }
 
-static int pgpring_string_matches_hint (const char *s, const char *hints[], int nhints)
+static int pgpring_string_matches_hint(const char *s, const char *hints[], int nhints)
 {
   int i;
 
@@ -746,7 +746,7 @@ static int pgpring_string_matches_hint (const char *s, const char *hints[], int 
 
   for (i = 0; i < nhints; i++)
   {
-    if (mutt_stristr (s, hints[i]) != NULL)
+    if (mutt_stristr(s, hints[i]) != NULL)
       return 1;
   }
 
@@ -758,7 +758,7 @@ static int pgpring_string_matches_hint (const char *s, const char *hints[], int 
  * matching IDs.
  */
 
-static void pgpring_find_candidates (char *ringfile, const char *hints[], int nhints)
+static void pgpring_find_candidates(char *ringfile, const char *hints[], int nhints)
 {
   FILE *rfp;
 #ifdef HAVE_FGETPOS
@@ -773,23 +773,23 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[], int nh
 
   short err = 0;
 
-  if ((rfp = fopen (ringfile, "r")) == NULL)
+  if ((rfp = fopen(ringfile, "r")) == NULL)
   {
     char *error_buf;
     size_t error_buf_len;
 
-    error_buf_len = sizeof ("fopen: ") - 1 + strlen (ringfile) + 1;
-    error_buf = safe_malloc (error_buf_len);
-    snprintf (error_buf, error_buf_len, "fopen: %s", ringfile);
-    perror (error_buf);
-    FREE (&error_buf);
+    error_buf_len = sizeof("fopen: ") - 1 + strlen(ringfile) + 1;
+    error_buf = safe_malloc(error_buf_len);
+    snprintf(error_buf, error_buf_len, "fopen: %s", ringfile);
+    perror(error_buf);
+    FREE(&error_buf);
     return;
   }
 
   FGETPOS(rfp,pos);
   FGETPOS(rfp,keypos);
 
-  while (!err && (buff = pgp_read_packet (rfp, &l)) != NULL)
+  while (!err && (buff = pgp_read_packet(rfp, &l)) != NULL)
   {
     pt = buff[0] & 0x3f;
 
@@ -802,14 +802,14 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[], int nh
     }
     else if (pt == PT_NAME)
     {
-      char *tmp = safe_malloc (l);
+      char *tmp = safe_malloc(l);
 
-      memcpy (tmp, buff + 1, l - 1);
+      memcpy(tmp, buff + 1, l - 1);
       tmp[l - 1] = '\0';
 
       /* mutt_decode_utf8_string (tmp, chs); */
 
-      if (pgpring_string_matches_hint (tmp, hints, nhints))
+      if (pgpring_string_matches_hint(tmp, hints, nhints))
       {
         pgp_key_t p;
 
@@ -817,59 +817,59 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[], int nh
 
         /* Not bailing out here would lead us into an endless loop. */
 
-        if ((p = pgp_parse_keyblock (rfp)) == NULL)
+        if ((p = pgp_parse_keyblock(rfp)) == NULL)
           err = 1;
 
-        pgpring_dump_keyblock (p);
-        pgp_free_key (&p);
+        pgpring_dump_keyblock(p);
+        pgp_free_key(&p);
       }
 
-      FREE (&tmp);
+      FREE(&tmp);
     }
 
     FGETPOS(rfp,pos);
   }
 
-  safe_fclose (&rfp);
+  safe_fclose(&rfp);
 
 }
 
-static void print_userid (const char *id)
+static void print_userid(const char *id)
 {
   for (; id && *id; id++)
   {
     if (*id >= ' ' && *id <= 'z' && *id != ':')
-      putchar (*id);
+      putchar(*id);
     else
-      printf ("\\x%02x", (*id) & 0xff);
+      printf("\\x%02x", (*id) & 0xff);
   }
 }
 
-static void print_fingerprint (pgp_key_t p)
+static void print_fingerprint(pgp_key_t p)
 {
   if (!p->fingerprint)
     return;
 
-  printf ("fpr:::::::::%s:\n", p->fingerprint);
+  printf("fpr:::::::::%s:\n", p->fingerprint);
 } /* print_fingerprint() */
 
 
-static void pgpring_dump_signatures (pgp_sig_t *sig)
+static void pgpring_dump_signatures(pgp_sig_t *sig)
 {
   for (; sig; sig = sig->next)
   {
     if (sig->sigtype == 0x10 || sig->sigtype == 0x11 ||
         sig->sigtype == 0x12 || sig->sigtype == 0x13)
-      printf ("sig::::%08lX%08lX::::::%X:\n",
-              sig->sid1, sig->sid2, sig->sigtype);
+      printf("sig::::%08lX%08lX::::::%X:\n",
+             sig->sid1, sig->sid2, sig->sigtype);
     else if (sig->sigtype == 0x20)
-      printf ("rev::::%08lX%08lX::::::%X:\n",
-              sig->sid1, sig->sid2, sig->sigtype);
+      printf("rev::::%08lX%08lX::::::%X:\n",
+             sig->sid1, sig->sid2, sig->sigtype);
   }
 }
 
 
-static char gnupg_trustletter (int t)
+static char gnupg_trustletter(int t)
 {
   switch (t)
   {
@@ -880,7 +880,7 @@ static char gnupg_trustletter (int t)
   return 'q';
 }
 
-static void pgpring_dump_keyblock (pgp_key_t p)
+static void pgpring_dump_keyblock(pgp_key_t p)
 {
   pgp_uid_t *uid;
   short first;
@@ -894,65 +894,65 @@ static void pgpring_dump_keyblock (pgp_key_t p)
     if (p->flags & KEYFLAG_SECRET)
     {
       if (p->flags & KEYFLAG_SUBKEY)
-        printf ("ssb:");
+        printf("ssb:");
       else
-        printf ("sec:");
+        printf("sec:");
     }
     else
     {
       if (p->flags & KEYFLAG_SUBKEY)
-        printf ("sub:");
+        printf("sub:");
       else
-        printf ("pub:");
+        printf("pub:");
     }
 
     if (p->flags & KEYFLAG_REVOKED)
-      putchar ('r');
+      putchar('r');
     if (p->flags & KEYFLAG_EXPIRED)
-      putchar ('e');
+      putchar('e');
     if (p->flags & KEYFLAG_DISABLED)
-      putchar ('d');
+      putchar('d');
 
     for (uid = p->address; uid; uid = uid->next, first = 0)
     {
       if (!first)
       {
-        printf ("uid:%c::::::::", gnupg_trustletter (uid->trust));
-        print_userid (uid->addr);
-        printf (":\n");
+        printf("uid:%c::::::::", gnupg_trustletter(uid->trust));
+        print_userid(uid->addr);
+        printf(":\n");
       }
       else
       {
         if (p->flags & KEYFLAG_SECRET)
-          putchar ('u');
+          putchar('u');
         else
-          putchar (gnupg_trustletter (uid->trust));
+          putchar(gnupg_trustletter(uid->trust));
 
         t = p->gen_time;
-        tp = gmtime (&t);
+        tp = gmtime(&t);
 
-        printf (":%d:%d:%s:%04d-%02d-%02d::::", p->keylen, p->numalg, p->keyid,
-                1900 + tp->tm_year, tp->tm_mon + 1, tp->tm_mday);
+        printf(":%d:%d:%s:%04d-%02d-%02d::::", p->keylen, p->numalg, p->keyid,
+               1900 + tp->tm_year, tp->tm_mon + 1, tp->tm_mday);
 
-        print_userid (uid->addr);
-        printf ("::");
+        print_userid(uid->addr);
+        printf("::");
 
         if (pgp_canencrypt(p->numalg))
-          putchar ('e');
+          putchar('e');
         if (pgp_cansign(p->numalg))
-          putchar ('s');
+          putchar('s');
         if (p->flags & KEYFLAG_DISABLED)
-          putchar ('D');
-        printf (":\n");
+          putchar('D');
+        printf(":\n");
 
         if (dump_fingerprints)
-          print_fingerprint (p);
+          print_fingerprint(p);
       }
 
       if (dump_signatures)
       {
-        if (first) pgpring_dump_signatures (p->sigs);
-        pgpring_dump_signatures (uid->sigs);
+        if (first) pgpring_dump_signatures(p->sigs);
+        pgpring_dump_signatures(uid->sigs);
       }
     }
   }
@@ -963,7 +963,7 @@ static void pgpring_dump_keyblock (pgp_key_t p)
  * so we do without charset conversion here.
  */
 
-char *mutt_gettext (const char *message)
+char *mutt_gettext(const char *message)
 {
   return (char *)message;
 }

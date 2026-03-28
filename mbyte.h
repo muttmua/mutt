@@ -30,24 +30,24 @@
 # undef wcwidth
 #endif
 
-size_t wcrtomb (char *s, wchar_t wc, mbstate_t *ps);
-size_t mbrtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *ps);
-int iswprint (wint_t wc);
-int iswspace (wint_t wc);
-int iswblank (wint_t wc);
-int iswalnum (wint_t wc);
-int iswalpha (wint_t wc);
-int iswupper (wint_t wc);
-wint_t towupper (wint_t wc);
-wint_t towlower (wint_t wc);
-int wcwidth (wchar_t wc);
+size_t wcrtomb(char *s, wchar_t wc, mbstate_t *ps);
+size_t mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps);
+int iswprint(wint_t wc);
+int iswspace(wint_t wc);
+int iswblank(wint_t wc);
+int iswalnum(wint_t wc);
+int iswalpha(wint_t wc);
+int iswupper(wint_t wc);
+wint_t towupper(wint_t wc);
+wint_t towlower(wint_t wc);
+int wcwidth(wchar_t wc);
 # endif /* !HAVE_WC_FUNCS */
 
 
-void mutt_set_charset (char *charset);
+void mutt_set_charset(char *charset);
 extern int Charset_is_utf8;
-size_t utf8rtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps);
-wchar_t replacement_char (void);
-int is_display_corrupting_utf8 (wchar_t wc);
+size_t utf8rtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps);
+wchar_t replacement_char(void);
+int is_display_corrupting_utf8(wchar_t wc);
 
 #endif /* _MBYTE_H */

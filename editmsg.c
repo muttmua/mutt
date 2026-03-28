@@ -43,7 +43,7 @@
  * -1   error
  */
 
-static int edit_one_message (CONTEXT *ctx, HEADER *cur)
+static int edit_one_message(CONTEXT *ctx, HEADER *cur)
 {
   BUFFER *tmp = NULL;
   char buff[STRING];
@@ -64,38 +64,38 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
   struct stat sb;
   time_t mtime = 0;
 
-  tmp = mutt_buffer_pool_get ();
-  mutt_buffer_mktemp (tmp);
+  tmp = mutt_buffer_pool_get();
+  mutt_buffer_mktemp(tmp);
 
   omagic = DefaultMagic;
   DefaultMagic = MUTT_MBOX;
 
-  rc = (mx_open_mailbox (mutt_b2s (tmp), MUTT_NEWFOLDER, &tmpctx) == NULL) ? -1 : 0;
+  rc = (mx_open_mailbox(mutt_b2s(tmp), MUTT_NEWFOLDER, &tmpctx) == NULL) ? -1 : 0;
 
   DefaultMagic = omagic;
 
   if (rc == -1)
   {
-    mutt_error (_("could not create temporary folder: %s"), strerror (errno));
-    mutt_buffer_pool_release (&tmp);
+    mutt_error(_("could not create temporary folder: %s"), strerror(errno));
+    mutt_buffer_pool_release(&tmp);
     return -1;
   }
 
-  rc = mutt_append_message (&tmpctx, ctx, cur, 0, CH_NOLEN |
-                            ((ctx->magic == MUTT_MBOX || ctx->magic == MUTT_MMDF) ? 0 : CH_NOSTATUS));
+  rc = mutt_append_message(&tmpctx, ctx, cur, 0, CH_NOLEN |
+                           ((ctx->magic == MUTT_MBOX || ctx->magic == MUTT_MMDF) ? 0 : CH_NOSTATUS));
   oerrno = errno;
 
-  mx_close_mailbox (&tmpctx, NULL);
+  mx_close_mailbox(&tmpctx, NULL);
 
   if (rc == -1)
   {
-    mutt_error (_("could not write temporary mail folder: %s"), strerror (oerrno));
+    mutt_error(_("could not write temporary mail folder: %s"), strerror(oerrno));
     goto bail;
   }
 
-  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
+  if ((rc = stat(mutt_b2s(tmp), &sb)) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
+    mutt_error(_("Can't stat %s: %s"), mutt_b2s(tmp), strerror(errno));
     goto bail;
   }
 
@@ -108,69 +108,69 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
    * the message.
    */
   if (sb.st_size != 0 &&
-      truncate (mutt_b2s (tmp), sb.st_size - 1) == -1)
+      truncate(mutt_b2s(tmp), sb.st_size - 1) == -1)
   {
     rc = -1;
-    mutt_error (_("could not truncate temporary mail folder: %s"),
-                strerror (errno));
+    mutt_error(_("could not truncate temporary mail folder: %s"),
+               strerror(errno));
     goto bail;
   }
 
   /* re-stat after the truncate, to avoid false "modified" bugs */
-  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
+  if ((rc = stat(mutt_b2s(tmp), &sb)) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
+    mutt_error(_("Can't stat %s: %s"), mutt_b2s(tmp), strerror(errno));
     goto bail;
   }
 
-  if ((mtime = mutt_decrease_mtime (mutt_b2s (tmp), &sb)) == (time_t) -1)
+  if ((mtime = mutt_decrease_mtime(mutt_b2s(tmp), &sb)) == (time_t) -1)
   {
     rc = -1;
-    mutt_perror (mutt_b2s (tmp));
+    mutt_perror(mutt_b2s(tmp));
     goto bail;
   }
 
-  mutt_edit_file (NONULL(Editor), mutt_b2s (tmp));
+  mutt_edit_file(NONULL(Editor), mutt_b2s(tmp));
 
-  if ((rc = stat (mutt_b2s (tmp), &sb)) == -1)
+  if ((rc = stat(mutt_b2s(tmp), &sb)) == -1)
   {
-    mutt_error (_("Can't stat %s: %s"), mutt_b2s (tmp), strerror (errno));
+    mutt_error(_("Can't stat %s: %s"), mutt_b2s(tmp), strerror(errno));
     goto bail;
   }
 
   if (sb.st_size == 0)
   {
-    mutt_message (_("Message file is empty!"));
+    mutt_message(_("Message file is empty!"));
     rc = 1;
     goto bail;
   }
 
   if (sb.st_mtime == mtime)
   {
-    mutt_message (_("Message not modified!"));
+    mutt_message(_("Message not modified!"));
     rc = 1;
     goto bail;
   }
 
-  if ((fp = fopen (mutt_b2s (tmp), "r")) == NULL)
+  if ((fp = fopen(mutt_b2s(tmp), "r")) == NULL)
   {
     rc = -1;
-    mutt_error (_("Can't open message file: %s"), strerror (errno));
+    mutt_error(_("Can't open message file: %s"), strerror(errno));
     goto bail;
   }
 
-  if (mx_open_mailbox (ctx->path, MUTT_APPEND, &tmpctx) == NULL)
+  if (mx_open_mailbox(ctx->path, MUTT_APPEND, &tmpctx) == NULL)
   {
     rc = -1;
     /* L10N: %s is from strerror(errno) */
-    mutt_error (_("Can't append to folder: %s"), strerror (errno));
+    mutt_error(_("Can't append to folder: %s"), strerror(errno));
     goto bail;
   }
 
   of = 0;
   cf = ((tmpctx.magic == MUTT_MBOX || tmpctx.magic == MUTT_MMDF) ? 0 : CH_NOSTATUS);
 
-  if (fgets (buff, sizeof (buff), fp) && mutt_is_from (buff, NULL, 0, NULL, MUTT_IS_FROM_PREFIX))
+  if (fgets(buff, sizeof(buff), fp) && mutt_is_from(buff, NULL, 0, NULL, MUTT_IS_FROM_PREFIX))
   {
     if (tmpctx.magic == MUTT_MBOX || tmpctx.magic == MUTT_MMDF)
       cf = CH_FROM | CH_FORCE_FROM;
@@ -186,57 +186,57 @@ static int edit_one_message (CONTEXT *ctx, HEADER *cur)
 
   o_read = cur->read; o_old = cur->old;
   cur->read = cur->old = 0;
-  msg = mx_open_new_message (&tmpctx, cur, of);
+  msg = mx_open_new_message(&tmpctx, cur, of);
   cur->read = o_read; cur->old = o_old;
 
   if (msg == NULL)
   {
     rc = -1;
-    mutt_error (_("Can't append to folder: %s"), strerror (errno));
-    mx_close_mailbox (&tmpctx, NULL);
+    mutt_error(_("Can't append to folder: %s"), strerror(errno));
+    mx_close_mailbox(&tmpctx, NULL);
     goto bail;
   }
 
-  if ((rc = mutt_copy_hdr (fp, msg->fp, 0, sb.st_size, CH_NOLEN | cf, NULL)) == 0)
+  if ((rc = mutt_copy_hdr(fp, msg->fp, 0, sb.st_size, CH_NOLEN | cf, NULL)) == 0)
   {
-    fputc ('\n', msg->fp);
-    rc = mutt_copy_stream (fp, msg->fp);
+    fputc('\n', msg->fp);
+    rc = mutt_copy_stream(fp, msg->fp);
   }
 
-  rc = mx_commit_message (msg, &tmpctx);
-  mx_close_message (&tmpctx, &msg);
+  rc = mx_commit_message(msg, &tmpctx);
+  mx_close_message(&tmpctx, &msg);
 
-  mx_close_mailbox (&tmpctx, NULL);
+  mx_close_mailbox(&tmpctx, NULL);
 
 bail:
-  if (fp) safe_fclose (&fp);
+  if (fp) safe_fclose(&fp);
 
   if (rc >= 0)
-    unlink (mutt_b2s (tmp));
+    unlink(mutt_b2s(tmp));
 
   if (rc == 0)
   {
-    mutt_set_flag (Context, cur, MUTT_DELETE, 1);
-    mutt_set_flag (Context, cur, MUTT_PURGE, 1);
-    mutt_set_flag (Context, cur, MUTT_READ, 1);
+    mutt_set_flag(Context, cur, MUTT_DELETE, 1);
+    mutt_set_flag(Context, cur, MUTT_PURGE, 1);
+    mutt_set_flag(Context, cur, MUTT_READ, 1);
 
-    if (option (OPTDELETEUNTAG))
-      mutt_set_flag (Context, cur, MUTT_TAG, 0);
+    if (option(OPTDELETEUNTAG))
+      mutt_set_flag(Context, cur, MUTT_TAG, 0);
   }
   else if (rc == -1)
-    mutt_message (_("Error. Preserving temporary file: %s"), mutt_b2s (tmp));
+    mutt_message(_("Error. Preserving temporary file: %s"), mutt_b2s(tmp));
 
-  mutt_buffer_pool_release (&tmp);
+  mutt_buffer_pool_release(&tmp);
 
   return rc;
 }
 
-int mutt_edit_message (CONTEXT *ctx, HEADER *hdr)
+int mutt_edit_message(CONTEXT *ctx, HEADER *hdr)
 {
   int i, j;
 
   if (hdr)
-    return edit_one_message (ctx, hdr);
+    return edit_one_message(ctx, hdr);
 
 
   for (i = 0; i < ctx->vcount; i++)
@@ -244,7 +244,7 @@ int mutt_edit_message (CONTEXT *ctx, HEADER *hdr)
     j = ctx->v2r[i];
     if (ctx->hdrs[j]->tagged)
     {
-      if (edit_one_message (ctx, ctx->hdrs[j]) == -1)
+      if (edit_one_message(ctx, ctx->hdrs[j]) == -1)
         return -1;
     }
   }

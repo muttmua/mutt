@@ -5000,51 +5000,51 @@ struct option_t MuttVars[] = {
 
 /* functions used to parse commands in a rc file */
 
-static int parse_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_spam_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unlist (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_spam_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unlist(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 #ifdef USE_SIDEBAR
-static int parse_path_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_path_unlist (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_path_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_path_unlist(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 #endif /* USE_SIDEBAR */
 
-static int parse_group (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_group(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
-static int parse_lists (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unlists (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_alias (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unalias (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_echo (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_ignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unignore (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_run (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_source (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_cd (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_set (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_setenv (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_my_hdr (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unmy_hdr (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_subscribe (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unsubscribe (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_attachments (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unattachments (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_lists(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unlists(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_alias(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unalias(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_echo(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_ignore(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unignore(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_run(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_source(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_cd(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_set(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_setenv(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_my_hdr(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unmy_hdr(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_subscribe(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unsubscribe(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_attachments(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unattachments(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
 
-static int parse_replace_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unreplace_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_subjectrx_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unsubjectrx_list (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_alternates (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
-static int parse_unalternates (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_replace_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unreplace_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_subjectrx_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unsubjectrx_list(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_alternates(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+static int parse_unalternates(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
 
 /* Parse -group arguments */
-static int parse_group_context (group_context_t **ctx, BUFFER *buf, BUFFER *s, BUFFER *err);
+static int parse_group_context(group_context_t **ctx, BUFFER *buf, BUFFER *s, BUFFER *err);
 
 
 struct command_t
 {
   char *name;
-  int (*func) (BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
+  int (*func)(BUFFER *, BUFFER *, union pointer_long_t, BUFFER *);
   union pointer_long_t data;
 };
 

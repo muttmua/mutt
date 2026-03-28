@@ -29,25 +29,25 @@ typedef void *iconv_t;
 
 #ifndef HAVE_ICONV
 #define ICONV_CONST /**/
-iconv_t iconv_open (const char *, const char *);
-size_t iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *);
-int iconv_close (iconv_t);
+iconv_t iconv_open(const char *, const char *);
+size_t iconv(iconv_t, ICONV_CONST char **, size_t *, char **, size_t *);
+int iconv_close(iconv_t);
 #endif
 
-int mutt_convert_string (char **, const char *, const char *, int);
+int mutt_convert_string(char **, const char *, const char *, int);
 
-iconv_t mutt_iconv_open (const char *, const char *, int);
-size_t mutt_iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *, ICONV_CONST char **, const char *);
+iconv_t mutt_iconv_open(const char *, const char *, int);
+size_t mutt_iconv(iconv_t, ICONV_CONST char **, size_t *, char **, size_t *, ICONV_CONST char **, const char *);
 
 typedef void * FGETCONV;
 
-FGETCONV *fgetconv_open (FILE *, const char *, const char *, int);
-int fgetconv (FGETCONV *);
-char * fgetconvs (char *, size_t, FGETCONV *);
-void fgetconv_close (FGETCONV **);
+FGETCONV *fgetconv_open(FILE *, const char *, const char *, int);
+int fgetconv(FGETCONV *);
+char * fgetconvs(char *, size_t, FGETCONV *);
+void fgetconv_close(FGETCONV **);
 
-void mutt_set_langinfo_charset (void);
-char *mutt_get_default_charset (void);
+void mutt_set_langinfo_charset(void);
+char *mutt_get_default_charset(void);
 
 /* flags for charset.c:mutt_convert_string(), fgetconv_open(), and
  * mutt_iconv_open(). Note that applying charset-hooks to tocode is
@@ -60,6 +60,6 @@ char *mutt_get_default_charset (void);
  * known to local iconv implementation). If strict is non-zero, check
  * against iconv only. Returns 0 if known and negative otherwise.
  */
-int mutt_check_charset (const char *s, int strict);
+int mutt_check_charset(const char *s, int strict);
 
 #endif /* _CHARSET_H */

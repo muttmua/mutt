@@ -34,9 +34,9 @@
 #include <stdlib.h>
 #include "lib.h"
 
-void (*mutt_error) (const char *, ...) = mutt_nocurses_error;
+void (*mutt_error)(const char *, ...) = mutt_nocurses_error;
 
-void mutt_exit (int code)
+void mutt_exit(int code)
 {
-  exit (code);
+  exit(code);
 }

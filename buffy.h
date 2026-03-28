@@ -42,36 +42,35 @@ typedef struct buffy_t
   short newly_created;          /* mbox or mmdf just popped into existence */
   struct timespec last_visited;         /* time of last exit from this mailbox */
   struct timespec stats_last_checked;   /* mtime of mailbox the last time stats where checked. */
-}
-BUFFY;
+} BUFFY;
 
 WHERE BUFFY *Incoming;
-WHERE short BuffyTimeout INITVAL (3);
-WHERE short BuffyCheckStatsInterval INITVAL (60);
+WHERE short BuffyTimeout INITVAL(3);
+WHERE short BuffyCheckStatsInterval INITVAL(60);
 
 extern time_t BuffyDoneTime;    /* last time we knew for sure how much mail there was */
 
-void mutt_buffy_add (const char *path, const char *label, int nopoll, int nonotify);
-void mutt_buffy_remove (const char *path);
+void mutt_buffy_add(const char *path, const char *label, int nopoll, int nonotify);
+void mutt_buffy_remove(const char *path);
 
-void mutt_buffer_buffy (BUFFER *);
-void mutt_buffy (char *, size_t);
+void mutt_buffer_buffy(BUFFER *);
+void mutt_buffy(char *, size_t);
 
-int  mutt_buffy_list (void);
-int mutt_buffy_check (int);
-int mutt_buffy_notify (void);
+int  mutt_buffy_list(void);
+int mutt_buffy_check(int);
+int mutt_buffy_notify(void);
 
-BUFFY *mutt_find_mailbox (const char *path);
-void mutt_update_mailbox (BUFFY * b);
+BUFFY *mutt_find_mailbox(const char *path);
+void mutt_update_mailbox(BUFFY * b);
 
 /* fixes up atime + mtime after mbox/mmdf mailbox was modified
    according to stat() info taken before a modification */
-void mutt_buffy_cleanup (const char *buf, struct stat *st);
+void mutt_buffy_cleanup(const char *buf, struct stat *st);
 
 /* mark mailbox just left as already notified */
-void mutt_buffy_setnotified (const char *path);
+void mutt_buffy_setnotified(const char *path);
 
-int mh_buffy (BUFFY *, int);
+int mh_buffy(BUFFY *, int);
 
 /* force flags passed to mutt_buffy_check() */
 #define MUTT_BUFFY_CHECK_FORCE       1

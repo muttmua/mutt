@@ -27,12 +27,12 @@
 #include "mutt.h"
 
 /* body handler implementing RfC 3676 for format=flowed */
-int rfc3676_handler (BODY *a, STATE *s);
+int rfc3676_handler(BODY *a, STATE *s);
 
-int mutt_rfc3676_is_format_flowed (BODY *b);
-void mutt_rfc3676_space_stuff (HEADER *hdr);
-void mutt_rfc3676_space_unstuff (HEADER *hdr);
-void mutt_rfc3676_space_unstuff_attachment (BODY *b, const char *filename);
-void mutt_rfc3676_space_stuff_attachment (BODY *b, const char *filename);
+int mutt_rfc3676_is_format_flowed(BODY *b);
+void mutt_rfc3676_space_stuff(HEADER *hdr);
+void mutt_rfc3676_space_unstuff(HEADER *hdr);
+void mutt_rfc3676_space_unstuff_attachment(BODY *b, const char *filename);
+void mutt_rfc3676_space_stuff_attachment(BODY *b, const char *filename);
 
 #endif /* !_MUTT_RFC3676_H */

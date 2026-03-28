@@ -86,7 +86,7 @@ static int OldSize = 0;
 
 #define GET_HISTORY(CLASS)      ((CLASS >= HC_LAST) ? NULL : &History[CLASS])
 
-static void init_history (struct history *h)
+static void init_history(struct history *h)
 {
   int i;
 
@@ -95,19 +95,19 @@ static void init_history (struct history *h)
     if (h->hist)
     {
       for (i = 0 ; i <= OldSize ; i ++)
-        FREE (&h->hist[i]);
-      FREE (&h->hist);
+        FREE(&h->hist[i]);
+      FREE(&h->hist);
     }
   }
 
   if (HistSize)
-    h->hist = safe_calloc (HistSize + 1, sizeof (char *));
+    h->hist = safe_calloc(HistSize + 1, sizeof(char *));
 
   h->cur = 0;
   h->last = 0;
 }
 
-void mutt_read_histfile (void)
+void mutt_read_histfile(void)
 {
   FILE *f;
   int line = 0, hclass, read;
@@ -117,48 +117,48 @@ void mutt_read_histfile (void)
   if (!HistFile)
     return;
 
-  if ((f = fopen (HistFile, "r")) == NULL)
+  if ((f = fopen(HistFile, "r")) == NULL)
     return;
 
-  while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line, 0)) != NULL)
+  while ((linebuf = mutt_read_line(linebuf, &buflen, f, &line, 0)) != NULL)
   {
     read = 0;
-    if (sscanf (linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
-        *(p = linebuf + strlen (linebuf) - 1) != '|' || hclass < 0)
+    if (sscanf(linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
+        *(p = linebuf + strlen(linebuf) - 1) != '|' || hclass < 0)
     {
-      mutt_error (_("Bad history file format (line %d)"), line);
+      mutt_error(_("Bad history file format (line %d)"), line);
       break;
     }
     /* silently ignore too high class (probably newer mutt) */
     if (hclass >= HC_LAST)
       continue;
     *p = '\0';
-    p = safe_strdup (linebuf + read);
+    p = safe_strdup(linebuf + read);
     if (p)
     {
-      mutt_convert_string (&p, "utf-8", Charset, 0);
-      mutt_history_add (hclass, p, 0);
-      FREE (&p);
+      mutt_convert_string(&p, "utf-8", Charset, 0);
+      mutt_history_add(hclass, p, 0);
+      FREE(&p);
     }
   }
 
-  safe_fclose (&f);
-  FREE (&linebuf);
+  safe_fclose(&f);
+  FREE(&linebuf);
 }
 
-static int dup_hash_dec (HASH *dup_hash, char *s)
+static int dup_hash_dec(HASH *dup_hash, char *s)
 {
   struct hash_elem *elem;
   uintptr_t count;
 
-  elem = hash_find_elem (dup_hash, s);
+  elem = hash_find_elem(dup_hash, s);
   if (!elem)
     return -1;
 
   count = (uintptr_t)elem->data;
   if (count <= 1)
   {
-    hash_delete (dup_hash, s, NULL, NULL);
+    hash_delete(dup_hash, s, NULL, NULL);
     return 0;
   }
 
@@ -167,16 +167,16 @@ static int dup_hash_dec (HASH *dup_hash, char *s)
   return count;
 }
 
-static int dup_hash_inc (HASH *dup_hash, char *s)
+static int dup_hash_inc(HASH *dup_hash, char *s)
 {
   struct hash_elem *elem;
   uintptr_t count;
 
-  elem = hash_find_elem (dup_hash, s);
+  elem = hash_find_elem(dup_hash, s);
   if (!elem)
   {
     count = 1;
-    hash_insert (dup_hash, s, (void *)count);
+    hash_insert(dup_hash, s, (void *)count);
     return count;
   }
 
@@ -186,7 +186,7 @@ static int dup_hash_inc (HASH *dup_hash, char *s)
   return count;
 }
 
-static void shrink_histfile (void)
+static void shrink_histfile(void)
 {
   BUFFER *tmpfname = NULL;
   FILE *f, *tmp = NULL;
@@ -197,28 +197,28 @@ static void shrink_histfile (void)
   int regen_file = 0;
   HASH *dup_hashes[HC_LAST] = { 0 };
 
-  if ((f = fopen (HistFile, "r")) == NULL)
+  if ((f = fopen(HistFile, "r")) == NULL)
     return;
 
-  if (option (OPTHISTREMOVEDUPS))
+  if (option(OPTHISTREMOVEDUPS))
     for (hclass = 0; hclass < HC_LAST; hclass++)
-      dup_hashes[hclass] = hash_create (MAX (10, SaveHist * 2), MUTT_HASH_STRDUP_KEYS);
+      dup_hashes[hclass] = hash_create(MAX(10, SaveHist * 2), MUTT_HASH_STRDUP_KEYS);
 
   line = 0;
-  while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line, 0)) != NULL)
+  while ((linebuf = mutt_read_line(linebuf, &buflen, f, &line, 0)) != NULL)
   {
-    if (sscanf (linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
-        *(p = linebuf + strlen (linebuf) - 1) != '|' || hclass < 0)
+    if (sscanf(linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
+        *(p = linebuf + strlen(linebuf) - 1) != '|' || hclass < 0)
     {
-      mutt_error (_("Bad history file format (line %d)"), line);
+      mutt_error(_("Bad history file format (line %d)"), line);
       goto cleanup;
     }
     /* silently ignore too high class (probably newer mutt) */
     if (hclass >= HC_LAST)
       continue;
     *p = '\0';
-    if (option (OPTHISTREMOVEDUPS) &&
-        (dup_hash_inc (dup_hashes[hclass], linebuf + read) > 1))
+    if (option(OPTHISTREMOVEDUPS) &&
+        (dup_hash_inc(dup_hashes[hclass], linebuf + read) > 1))
     {
       regen_file = 1;
       continue;
@@ -236,57 +236,57 @@ static void shrink_histfile (void)
 
   if (regen_file)
   {
-    tmpfname = mutt_buffer_pool_get ();
-    mutt_buffer_mktemp (tmpfname);
-    if ((tmp = safe_fopen (mutt_b2s (tmpfname), "w+")) == NULL)
+    tmpfname = mutt_buffer_pool_get();
+    mutt_buffer_mktemp(tmpfname);
+    if ((tmp = safe_fopen(mutt_b2s(tmpfname), "w+")) == NULL)
     {
-      mutt_perror (mutt_b2s (tmpfname));
+      mutt_perror(mutt_b2s(tmpfname));
       goto cleanup;
     }
-    rewind (f);
+    rewind(f);
     line = 0;
-    while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line, 0)) != NULL)
+    while ((linebuf = mutt_read_line(linebuf, &buflen, f, &line, 0)) != NULL)
     {
-      if (sscanf (linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
-          *(p = linebuf + strlen (linebuf) - 1) != '|' || hclass < 0)
+      if (sscanf(linebuf, "%d:%n", &hclass, &read) < 1 || read == 0 ||
+          *(p = linebuf + strlen(linebuf) - 1) != '|' || hclass < 0)
       {
-        mutt_error (_("Bad history file format (line %d)"), line);
+        mutt_error(_("Bad history file format (line %d)"), line);
         goto cleanup;
       }
       if (hclass >= HC_LAST)
         continue;
       *p = '\0';
-      if (option (OPTHISTREMOVEDUPS) &&
-          (dup_hash_dec (dup_hashes[hclass], linebuf + read) > 0))
+      if (option(OPTHISTREMOVEDUPS) &&
+          (dup_hash_dec(dup_hashes[hclass], linebuf + read) > 0))
         continue;
       *p = '|';
       if (n[hclass]-- <= SaveHist)
-        fprintf (tmp, "%s\n", linebuf);
+        fprintf(tmp, "%s\n", linebuf);
     }
   }
 
 cleanup:
-  safe_fclose (&f);
-  FREE (&linebuf);
+  safe_fclose(&f);
+  FREE(&linebuf);
   if (tmp != NULL)
   {
-    if (fflush (tmp) == 0 &&
-        (f = fopen (HistFile, "w")) != NULL) /* __FOPEN_CHECKED__ */
+    if (fflush(tmp) == 0 &&
+        (f = fopen(HistFile, "w")) != NULL) /* __FOPEN_CHECKED__ */
     {
-      rewind (tmp);
-      mutt_copy_stream (tmp, f);
-      safe_fclose (&f);
+      rewind(tmp);
+      mutt_copy_stream(tmp, f);
+      safe_fclose(&f);
     }
-    safe_fclose (&tmp);
-    unlink (mutt_b2s (tmpfname));
+    safe_fclose(&tmp);
+    unlink(mutt_b2s(tmpfname));
   }
-  mutt_buffer_pool_release (&tmpfname);
-  if (option (OPTHISTREMOVEDUPS))
+  mutt_buffer_pool_release(&tmpfname);
+  if (option(OPTHISTREMOVEDUPS))
     for (hclass = 0; hclass < HC_LAST; hclass++)
-      hash_destroy (&dup_hashes[hclass], NULL);
+      hash_destroy(&dup_hashes[hclass], NULL);
 }
 
-static void save_history (history_class_t hclass, const char *s)
+static void save_history(history_class_t hclass, const char *s)
 {
   static int n = 0;
   FILE *f;
@@ -295,30 +295,30 @@ static void save_history (history_class_t hclass, const char *s)
   if (!s || !*s)  /* This shouldn't happen, but it's safer. */
     return;
 
-  if ((f = fopen (HistFile, "a")) == NULL)
+  if ((f = fopen(HistFile, "a")) == NULL)
   {
-    mutt_perror ("fopen");
+    mutt_perror("fopen");
     return;
   }
 
-  tmp = safe_strdup (s);
-  mutt_convert_string (&tmp, Charset, "utf-8", 0);
+  tmp = safe_strdup(s);
+  mutt_convert_string(&tmp, Charset, "utf-8", 0);
 
   /* Format of a history item (1 line): "<histclass>:<string>|".
      We add a '|' in order to avoid lines ending with '\'. */
-  fprintf (f, "%d:", (int) hclass);
+  fprintf(f, "%d:", (int) hclass);
   for (p = tmp; *p; p++)
   {
     /* Don't copy \n as a history item must fit on one line. The string
        shouldn't contain such a character anyway, but as this can happen
        in practice, we must deal with that. */
     if (*p != '\n')
-      putc ((unsigned char) *p, f);
+      putc((unsigned char) *p, f);
   }
-  fputs ("|\n", f);
+  fputs("|\n", f);
 
-  safe_fclose (&f);
-  FREE (&tmp);
+  safe_fclose(&f);
+  FREE(&tmp);
 
   if (--n < 0)
   {
@@ -330,7 +330,7 @@ static void save_history (history_class_t hclass, const char *s)
 /* When removing dups, we want the created "blanks" to be right below the
  * resulting h->last position.  See the comment section above 'struct history'.
  */
-static void remove_history_dups (history_class_t hclass, const char *s)
+static void remove_history_dups(history_class_t hclass, const char *s)
 {
   int source, dest, old_last;
   struct history *h = GET_HISTORY(hclass);
@@ -342,8 +342,8 @@ static void remove_history_dups (history_class_t hclass, const char *s)
   source = dest = 0;
   while (source < h->last)
   {
-    if (!mutt_strcmp (h->hist[source], s))
-      FREE (&h->hist[source++]);
+    if (!mutt_strcmp(h->hist[source], s))
+      FREE(&h->hist[source++]);
     else
       h->hist[dest++] = h->hist[source++];
   }
@@ -361,8 +361,8 @@ static void remove_history_dups (history_class_t hclass, const char *s)
   source = dest = HistSize;
   while (source > old_last)
   {
-    if (!mutt_strcmp (h->hist[source], s))
-      FREE (&h->hist[source--]);
+    if (!mutt_strcmp(h->hist[source], s))
+      FREE(&h->hist[source--]);
     else
       h->hist[dest--] = h->hist[source--];
   }
@@ -385,7 +385,7 @@ void mutt_init_history(void)
   OldSize = HistSize;
 }
 
-void mutt_history_add (history_class_t hclass, const char *s, int save)
+void mutt_history_add(history_class_t hclass, const char *s, int save)
 {
   int prev;
   struct history *h = GET_HISTORY(hclass);
@@ -402,13 +402,13 @@ void mutt_history_add (history_class_t hclass, const char *s, int save)
      *  - lines beginning by a space
      *  - repeated lines
      */
-    if (*s != ' ' && (!h->hist[prev] || mutt_strcmp (h->hist[prev], s) != 0))
+    if (*s != ' ' && (!h->hist[prev] || mutt_strcmp(h->hist[prev], s) != 0))
     {
-      if (option (OPTHISTREMOVEDUPS))
-        remove_history_dups (hclass, s);
+      if (option(OPTHISTREMOVEDUPS))
+        remove_history_dups(hclass, s);
       if (save && SaveHist && HistFile)
-        save_history (hclass, s);
-      mutt_str_replace (&h->hist[h->last++], s);
+        save_history(hclass, s);
+      mutt_str_replace(&h->hist[h->last++], s);
       if (h->last > HistSize)
         h->last = 0;
     }
@@ -416,7 +416,7 @@ void mutt_history_add (history_class_t hclass, const char *s, int save)
   h->cur = h->last; /* reset to the last entry */
 }
 
-char *mutt_history_next (history_class_t hclass)
+char *mutt_history_next(history_class_t hclass)
 {
   int next;
   struct history *h = GET_HISTORY(hclass);
@@ -438,7 +438,7 @@ char *mutt_history_next (history_class_t hclass)
   return (h->hist[h->cur] ? h->hist[h->cur] : "");
 }
 
-char *mutt_history_prev (history_class_t hclass)
+char *mutt_history_prev(history_class_t hclass)
 {
   int prev;
   struct history *h = GET_HISTORY(hclass);
@@ -460,7 +460,7 @@ char *mutt_history_prev (history_class_t hclass)
   return (h->hist[h->cur] ? h->hist[h->cur] : "");
 }
 
-void mutt_reset_history_state (history_class_t hclass)
+void mutt_reset_history_state(history_class_t hclass)
 {
   struct history *h = GET_HISTORY(hclass);
 
@@ -470,7 +470,7 @@ void mutt_reset_history_state (history_class_t hclass)
   h->cur = h->last;
 }
 
-int mutt_history_at_scratch (history_class_t hclass)
+int mutt_history_at_scratch(history_class_t hclass)
 {
   struct history *h = GET_HISTORY(hclass);
 
@@ -480,7 +480,7 @@ int mutt_history_at_scratch (history_class_t hclass)
   return h->cur == h->last;
 }
 
-void mutt_history_save_scratch (history_class_t hclass, const char *s)
+void mutt_history_save_scratch(history_class_t hclass, const char *s)
 {
   struct history *h = GET_HISTORY(hclass);
 
@@ -489,58 +489,58 @@ void mutt_history_save_scratch (history_class_t hclass, const char *s)
 
   /* Don't check if s has a value because the scratch buffer may contain
    * an old garbage value that should be overwritten */
-  mutt_str_replace (&h->hist[h->last], s);
+  mutt_str_replace(&h->hist[h->last], s);
 }
 
 static const char *
-history_format_str (char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
-                    const char *fmt, const char *ifstring, const char *elsestring,
-                    void *data, format_flag flags)
+history_format_str(char *dest, size_t destlen, size_t col, int cols, char op, const char *src,
+                   const char *fmt, const char *ifstring, const char *elsestring,
+                   void *data, format_flag flags)
 {
   char *match = (char *)data;
 
   switch (op)
   {
     case 's':
-      mutt_format_s (dest, destlen, fmt, match);
+      mutt_format_s(dest, destlen, fmt, match);
       break;
   }
 
   return (src);
 }
 
-static void history_entry (char *s, size_t slen, MUTTMENU *m, int num)
+static void history_entry(char *s, size_t slen, MUTTMENU *m, int num)
 {
   char *entry = ((char **)m->data)[num];
 
-  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols, "%s", history_format_str,
-                     entry, MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString(s, slen, 0, MuttIndexWindow->cols, "%s", history_format_str,
+                    entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
-static void history_menu (char *buf, size_t buflen, char **matches, int match_count)
+static void history_menu(char *buf, size_t buflen, char **matches, int match_count)
 {
   MUTTMENU *menu;
   int done = 0;
   char helpstr[LONG_STRING];
   char title[STRING];
 
-  snprintf (title, sizeof (title), _("History '%s'"), buf);
+  snprintf(title, sizeof(title), _("History '%s'"), buf);
 
-  menu = mutt_new_menu (MENU_GENERIC);
+  menu = mutt_new_menu(MENU_GENERIC);
   menu->make_entry = history_entry;
   menu->title = title;
-  menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_GENERIC, HistoryHelp);
-  mutt_push_current_menu (menu);
+  menu->help = mutt_compile_help(helpstr, sizeof(helpstr), MENU_GENERIC, HistoryHelp);
+  mutt_push_current_menu(menu);
 
   menu->max = match_count;
   menu->data = matches;
 
   while (!done)
   {
-    switch (mutt_menuLoop (menu))
+    switch (mutt_menuLoop(menu))
     {
       case OP_GENERIC_SELECT_ENTRY:
-        strfcpy (buf, matches[menu->current], buflen);
+        strfcpy(buf, matches[menu->current], buflen);
         /* fall through */
 
       case OP_EXIT:
@@ -549,11 +549,11 @@ static void history_menu (char *buf, size_t buflen, char **matches, int match_co
     }
   }
 
-  mutt_pop_current_menu (menu);
-  mutt_menuDestroy (&menu);
+  mutt_pop_current_menu(menu);
+  mutt_menuDestroy(&menu);
 }
 
-static int search_history (char *search_buf, history_class_t hclass, char **matches)
+static int search_history(char *search_buf, history_class_t hclass, char **matches)
 {
   struct history *h = GET_HISTORY(hclass);
   int match_count = 0, cur;
@@ -569,26 +569,26 @@ static int search_history (char *search_buf, history_class_t hclass, char **matc
       cur = HistSize;
     if (cur == h->last)
       break;
-    if (mutt_stristr (h->hist[cur], search_buf))
+    if (mutt_stristr(h->hist[cur], search_buf))
       matches[match_count++] = h->hist[cur];
   } while (match_count < HistSize);
 
   return match_count;
 }
 
-void mutt_history_complete (char *buf, size_t buflen, history_class_t hclass)
+void mutt_history_complete(char *buf, size_t buflen, history_class_t hclass)
 {
   char **matches;
   int match_count;
 
-  matches = safe_calloc (HistSize, sizeof (char *));
-  match_count = search_history (buf, hclass, matches);
+  matches = safe_calloc(HistSize, sizeof(char *));
+  match_count = search_history(buf, hclass, matches);
   if (match_count)
   {
     if (match_count == 1)
-      strfcpy (buf, matches[0], buflen);
+      strfcpy(buf, matches[0], buflen);
     else
-      history_menu (buf, buflen, matches, match_count);
+      history_menu(buf, buflen, matches, match_count);
   }
   FREE(&matches);
 }

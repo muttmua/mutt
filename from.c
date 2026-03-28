@@ -26,54 +26,54 @@
 #include <string.h>
 #include <time.h>
 
-static const char *next_word (const char *s)
+static const char *next_word(const char *s)
 {
-  while (*s && !IS_ASCII_WS (*s))
+  while (*s && !IS_ASCII_WS(*s))
     s++;
-  SKIP_ASCII_WS (s);
+  SKIP_ASCII_WS(s);
   return s;
 }
 
-static const char *prev_word (const char * const bos, const char *cur)
+static const char *prev_word(const char * const bos, const char *cur)
 {
   if (cur <= bos)
     return bos;
-  while (cur > bos && IS_ASCII_WS (*(cur-1)))
+  while (cur > bos && IS_ASCII_WS(*(cur-1)))
     cur--;
-  while (cur > bos && !IS_ASCII_WS (*(cur-1)))
+  while (cur > bos && !IS_ASCII_WS(*(cur-1)))
     cur--;
   return cur;
 }
 
-int mutt_check_month (const char *s)
+int mutt_check_month(const char *s)
 {
   int i;
 
   for (i = 0; i < 12; i++)
-    if (mutt_strncasecmp (s, Months[i], 3) == 0)
+    if (mutt_strncasecmp(s, Months[i], 3) == 0)
       return (i);
   return (-1); /* error */
 }
 
-static int is_day_name (const char *s)
+static int is_day_name(const char *s)
 {
   int i;
 
-  if ((strlen (s) < 3) || !*(s + 3) || !IS_ASCII_WS (*(s+3)))
+  if ((strlen(s) < 3) || !*(s + 3) || !IS_ASCII_WS(*(s+3)))
     return 0;
   for (i=0; i<7; i++)
-    if (mutt_strncasecmp (s, Weekdays[i], 3) == 0)
+    if (mutt_strncasecmp(s, Weekdays[i], 3) == 0)
       return 1;
   return 0;
 }
 
-static int check_time (const char *s, struct tm *tm)
+static int check_time(const char *s, struct tm *tm)
 {
   int rv = 0;
   /* Accept either HH:MM or HH:MM:SS */
-  if (sscanf (s, "%d:%d:%d", &tm->tm_hour, &tm->tm_min, &tm->tm_sec) == 3)
+  if (sscanf(s, "%d:%d:%d", &tm->tm_hour, &tm->tm_min, &tm->tm_sec) == 3)
     ;
-  else if (sscanf (s, "%d:%d", &tm->tm_hour, &tm->tm_min) == 2)
+  else if (sscanf(s, "%d:%d", &tm->tm_hour, &tm->tm_min) == 2)
     tm->tm_sec = 0;
   else
     rv = -1;
@@ -81,26 +81,26 @@ static int check_time (const char *s, struct tm *tm)
   return rv;
 }
 
-static int check_year (const char *s)
+static int check_year(const char *s)
 {
   int yr;
 
-  if (sscanf (s, "%d", &yr) != 1 || yr < 0)
+  if (sscanf(s, "%d", &yr) != 1 || yr < 0)
     return -1;
   return yr > 1900 ? yr - 1900 : (yr < 70 ? yr + 100 : yr);
 }
 
-static int is_from_forward_scan (const char *s,
-                                 char *path, size_t pathsize,
-                                 struct tm *tm)
+static int is_from_forward_scan(const char *s,
+                                char *path, size_t pathsize,
+                                struct tm *tm)
 {
-  if (!is_day_name (s))
+  if (!is_day_name(s))
   {
     const char *p;
     size_t len;
     short q = 0;
 
-    for (p = s; *p && (q || !IS_ASCII_WS (*p)); p++)
+    for (p = s; *p && (q || !IS_ASCII_WS(*p)); p++)
     {
       if (*p == '\\')
       {

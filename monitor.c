@@ -46,8 +46,7 @@ typedef struct monitor_t
   ino_t st_ino;
   short magic;
   int descr;
-}
-MONITOR;
+} MONITOR;
 
 static int INotifyFd = -1;
 static MONITOR *Monitor = NULL;
@@ -66,8 +65,7 @@ typedef struct monitorinfo_t
   ino_t st_ino;
   MONITOR *monitor;
   BUFFER *_pathbuf; /* access via path only (maybe not initialized) */
-}
-MONITORINFO;
+} MONITORINFO;
 
 #define INOTIFY_MASK_DIR  (IN_MOVED_TO | IN_ATTRIB | IN_CLOSE_WRITE | IN_ISDIR)
 #define INOTIFY_MASK_FILE IN_CLOSE_WRITE
@@ -82,7 +80,7 @@ static void mutt_poll_fd_add(int fd, short events)
     if (PollFdsCount == PollFdsLen)
     {
       PollFdsLen += 2;
-      safe_realloc (&PollFds, PollFdsLen * sizeof(struct pollfd));
+      safe_realloc(&PollFds, PollFdsLen * sizeof(struct pollfd));
     }
     ++PollFdsCount;
     PollFds[i].fd = fd;
@@ -100,12 +98,12 @@ static int mutt_poll_fd_remove(int fd)
     return -1;
   d = PollFdsCount - i - 1;
   if (d)
-    memmove (&PollFds[i], &PollFds[i + 1], d * sizeof(struct pollfd));
+    memmove(&PollFds[i], &PollFds[i + 1], d * sizeof(struct pollfd));
   --PollFdsCount;
   return 0;
 }
 
-static int monitor_init (void)
+static int monitor_init(void)
 {
   if (INotifyFd == -1)
   {
@@ -132,20 +130,20 @@ static int monitor_init (void)
   return 0;
 }
 
-static void monitor_check_free (void)
+static void monitor_check_free(void)
 {
   if (!Monitor && INotifyFd != -1)
   {
     mutt_poll_fd_remove(INotifyFd);
-    close (INotifyFd);
+    close(INotifyFd);
     INotifyFd = -1;
     MonitorFilesChanged = 0;
   }
 }
 
-static MONITOR *monitor_create (MONITORINFO *info, int descriptor)
+static MONITOR *monitor_create(MONITORINFO *info, int descriptor)
 {
-  MONITOR *monitor = (MONITOR *) safe_calloc (1, sizeof (MONITOR));
+  MONITOR *monitor = (MONITOR *) safe_calloc(1, sizeof(MONITOR));
   monitor->magic  = info->magic;
   monitor->st_dev = info->st_dev;
   monitor->st_ino = info->st_ino;
@@ -159,17 +157,17 @@ static MONITOR *monitor_create (MONITORINFO *info, int descriptor)
   return monitor;
 }
 
-static void monitor_info_init (MONITORINFO *info)
+static void monitor_info_init(MONITORINFO *info)
 {
-  memset (info, 0, sizeof (MONITORINFO));
+  memset(info, 0, sizeof(MONITORINFO));
 }
 
-static void monitor_info_free (MONITORINFO *info)
+static void monitor_info_free(MONITORINFO *info)
 {
-  mutt_buffer_free (&info->_pathbuf);
+  mutt_buffer_free(&info->_pathbuf);
 }
 
-static void monitor_delete (MONITOR *monitor)
+static void monitor_delete(MONITOR *monitor)
 {
   MONITOR **ptr = &Monitor;
 
@@ -185,13 +183,13 @@ static void monitor_delete (MONITOR *monitor)
     ptr = &(*ptr)->next;
   }
 
-  FREE (&monitor->mh_backup_path); /* __FREE_CHECKED__ */
+  FREE(&monitor->mh_backup_path); /* __FREE_CHECKED__ */
   monitor = monitor->next;
-  FREE (ptr); /* __FREE_CHECKED__ */
+  FREE(ptr); /* __FREE_CHECKED__ */
   *ptr = monitor;
 }
 
-static int monitor_handle_ignore (int descr)
+static int monitor_handle_ignore(int descr)
 {
   int new_descr = -1;
   MONITOR *iter = Monitor;
@@ -202,9 +200,9 @@ static int monitor_handle_ignore (int descr)
 
   if (iter)
   {
-    if (iter->magic == MUTT_MH && stat (iter->mh_backup_path, &sb) == 0)
+    if (iter->magic == MUTT_MH && stat(iter->mh_backup_path, &sb) == 0)
     {
-      if ((new_descr = inotify_add_watch (INotifyFd, iter->mh_backup_path, INOTIFY_MASK_FILE)) == -1)
+      if ((new_descr = inotify_add_watch(INotifyFd, iter->mh_backup_path, INOTIFY_MASK_FILE)) == -1)
         mutt_errno_dbg(2, "monitor: inotify_add_watch failed for '%s'", iter->mh_backup_path);
       else
       {
@@ -224,8 +222,8 @@ static int monitor_handle_ignore (int descr)
 
     if (new_descr == -1)
     {
-      monitor_delete (iter);
-      monitor_check_free ();
+      monitor_delete(iter);
+      monitor_check_free();
     }
   }
 
@@ -246,7 +244,7 @@ static int monitor_handle_ignore (int descr)
  * Only STDIN and INotify file handles currently expected/supported.
  * More would ask for common infrastructur (sockets?).
  */
-int mutt_monitor_poll (void)
+int mutt_monitor_poll(void)
 {
   int rc = 0, fds, i, inputReady;
   char buf[EVENT_BUFLEN]
@@ -256,7 +254,7 @@ int mutt_monitor_poll (void)
 
   if (INotifyFd != -1)
   {
-    fds = poll (PollFds, PollFdsCount, MuttGetchTimeout);
+    fds = poll(PollFds, PollFdsCount, MuttGetchTimeout);
 
     if (fds == -1)
     {
@@ -288,7 +286,7 @@ int mutt_monitor_poll (void)
 
             FOREVER
             {
-              len = read (INotifyFd, buf, sizeof(buf));
+              len = read(INotifyFd, buf, sizeof(buf));
               if (len == -1)
               {
                 if (errno != EAGAIN)
@@ -300,9 +298,9 @@ int mutt_monitor_poll (void)
               {
                 event = (const struct inotify_event *) ptr;
                 muttdbg(5, "monitor:  + detail: descriptor=%d mask=0x%x",
-                            event->wd, event->mask);
+                        event->wd, event->mask);
                 if (event->mask & IN_IGNORED)
-                  monitor_handle_ignore (event->wd);
+                  monitor_handle_ignore(event->wd);
                 else if (event->wd == MonitorContextDescriptor)
                   MonitorContextChanged = 1;
                 ptr += sizeof(struct inotify_event) + event->len;
@@ -334,7 +332,7 @@ int mutt_monitor_poll (void)
  *       -2   magic not set
  *       -1   stat() failed (see errno; MONITORINFO fields: magic, isdir, path)
  */
-static int monitor_resolve (MONITORINFO *info, BUFFY *buffy)
+static int monitor_resolve(MONITORINFO *info, BUFFY *buffy)
 {
   MONITOR *iter;
   char *fmt = NULL;
@@ -374,11 +372,11 @@ static int monitor_resolve (MONITORINFO *info, BUFFY *buffy)
   if (fmt)
   {
     if (!info->_pathbuf)
-      info->_pathbuf = mutt_buffer_new ();
-    mutt_buffer_printf (info->_pathbuf, fmt, info->path);
-    info->path = mutt_b2s (info->_pathbuf);
+      info->_pathbuf = mutt_buffer_new();
+    mutt_buffer_printf(info->_pathbuf, fmt, info->path);
+    info->path = mutt_b2s(info->_pathbuf);
   }
-  if (stat (info->path, &sb) != 0)
+  if (stat(info->path, &sb) != 0)
     return RESOLVERES_FAIL_STAT;
 
   iter = Monitor;
@@ -398,15 +396,15 @@ static int monitor_resolve (MONITORINFO *info, BUFFY *buffy)
  *       0   success: new or already existing monitor
  *      -1   failed:  no mailbox, inaccessible file, create monitor/watcher failed
  */
-int mutt_monitor_add (BUFFY *buffy)
+int mutt_monitor_add(BUFFY *buffy)
 {
   MONITORINFO info;
   uint32_t mask;
   int descr, rc = 0;
 
-  monitor_info_init (&info);
+  monitor_info_init(&info);
 
-  descr = monitor_resolve (&info, buffy);
+  descr = monitor_resolve(&info, buffy);
   if (descr != RESOLVERES_OK_NOTEXISTING)
   {
     if (!buffy && (descr == RESOLVERES_OK_EXISTING))
@@ -416,8 +414,8 @@ int mutt_monitor_add (BUFFY *buffy)
   }
 
   mask = info.isdir ? INOTIFY_MASK_DIR : INOTIFY_MASK_FILE;
-  if ((INotifyFd == -1 && monitor_init () == -1)
-      || (descr = inotify_add_watch (INotifyFd, info.path, mask)) == -1)
+  if ((INotifyFd == -1 && monitor_init() == -1)
+      || (descr = inotify_add_watch(INotifyFd, info.path, mask)) == -1)
   {
     mutt_errno_dbg(2, "monitor: inotify_add_watch failed for '%s'", info.path);
     rc = -1;
@@ -428,10 +426,10 @@ int mutt_monitor_add (BUFFY *buffy)
   if (!buffy)
     MonitorContextDescriptor = descr;
 
-  monitor_create (&info, descr);
+  monitor_create(&info, descr);
 
 cleanup:
-  monitor_info_free (&info);
+  monitor_info_free(&info);
   return rc;
 }
 
@@ -442,13 +440,13 @@ cleanup:
  *       1   monitor not removed (shared)
  *       2   no monitor
  */
-int mutt_monitor_remove (BUFFY *buffy)
+int mutt_monitor_remove(BUFFY *buffy)
 {
   MONITORINFO info, info2;
   int rc = 0;
 
-  monitor_info_init (&info);
-  monitor_info_init (&info2);
+  monitor_info_init(&info);
+  monitor_info_init(&info2);
 
   if (!buffy)
   {
@@ -456,7 +454,7 @@ int mutt_monitor_remove (BUFFY *buffy)
     MonitorContextChanged = 0;
   }
 
-  if (monitor_resolve (&info, buffy) != RESOLVERES_OK_EXISTING)
+  if (monitor_resolve(&info, buffy) != RESOLVERES_OK_EXISTING)
   {
     rc = 2;
     goto cleanup;
@@ -466,7 +464,7 @@ int mutt_monitor_remove (BUFFY *buffy)
   {
     if (buffy)
     {
-      if (monitor_resolve (&info2, NULL) == RESOLVERES_OK_EXISTING
+      if (monitor_resolve(&info2, NULL) == RESOLVERES_OK_EXISTING
           && info.st_ino == info2.st_ino && info.st_dev == info2.st_dev)
       {
         rc = 1;
@@ -475,7 +473,7 @@ int mutt_monitor_remove (BUFFY *buffy)
     }
     else
     {
-      if (mutt_find_mailbox (Context->realpath))
+      if (mutt_find_mailbox(Context->realpath))
       {
         rc = 1;
         goto cleanup;
@@ -486,11 +484,11 @@ int mutt_monitor_remove (BUFFY *buffy)
   inotify_rm_watch(info.monitor->descr, INotifyFd);
   muttdbg(3, "monitor: inotify_rm_watch for '%s' descriptor=%d", info.path, info.monitor->descr);
 
-  monitor_delete (info.monitor);
-  monitor_check_free ();
+  monitor_delete(info.monitor);
+  monitor_check_free();
 
 cleanup:
-  monitor_info_free (&info);
-  monitor_info_free (&info2);
+  monitor_info_free(&info);
+  monitor_info_free(&info2);
   return rc;
 }

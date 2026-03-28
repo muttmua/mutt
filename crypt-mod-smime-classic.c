@@ -27,73 +27,73 @@
 #include "crypt-mod.h"
 #include "smime.h"
 
-static void crypt_mod_smime_init (void)
+static void crypt_mod_smime_init(void)
 {
-  smime_init ();
+  smime_init();
 }
 
-static void crypt_mod_smime_cleanup (void)
+static void crypt_mod_smime_cleanup(void)
 {
-  smime_cleanup ();
+  smime_cleanup();
 }
 
-static void crypt_mod_smime_void_passphrase (void)
+static void crypt_mod_smime_void_passphrase(void)
 {
-  smime_void_passphrase ();
+  smime_void_passphrase();
 }
 
-static int crypt_mod_smime_valid_passphrase (void)
+static int crypt_mod_smime_valid_passphrase(void)
 {
-  return smime_valid_passphrase ();
+  return smime_valid_passphrase();
 }
 
-static int crypt_mod_smime_decrypt_mime (FILE *a, FILE **b, BODY *c, BODY **d)
+static int crypt_mod_smime_decrypt_mime(FILE *a, FILE **b, BODY *c, BODY **d)
 {
-  return smime_decrypt_mime (a, b, c, d);
+  return smime_decrypt_mime(a, b, c, d);
 }
-static int crypt_mod_smime_application_handler (BODY *m, STATE *s)
+static int crypt_mod_smime_application_handler(BODY *m, STATE *s)
 {
-  return smime_application_smime_handler (m, s);
-}
-
-static char *crypt_mod_smime_findkeys (ADDRESS *adrlist, int oppenc_mode)
-{
-  return smime_findKeys (adrlist, oppenc_mode);
+  return smime_application_smime_handler(m, s);
 }
 
-static BODY *crypt_mod_smime_sign_message (BODY *a)
+static char *crypt_mod_smime_findkeys(ADDRESS *adrlist, int oppenc_mode)
 {
-  return smime_sign_message (a);
+  return smime_findKeys(adrlist, oppenc_mode);
 }
 
-static int crypt_mod_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
+static BODY *crypt_mod_smime_sign_message(BODY *a)
 {
-  return smime_verify_one (sigbdy, s, tempf);
+  return smime_sign_message(a);
 }
 
-static void crypt_mod_smime_send_menu (SEND_CONTEXT *sctx)
+static int crypt_mod_smime_verify_one(BODY *sigbdy, STATE *s, const char *tempf)
 {
-  smime_send_menu (sctx);
+  return smime_verify_one(sigbdy, s, tempf);
 }
 
-static void crypt_mod_smime_getkeys (ENVELOPE *env)
+static void crypt_mod_smime_send_menu(SEND_CONTEXT *sctx)
 {
-  smime_getkeys (env);
+  smime_send_menu(sctx);
 }
 
-static int crypt_mod_smime_verify_sender (HEADER *h)
+static void crypt_mod_smime_getkeys(ENVELOPE *env)
 {
-  return smime_verify_sender (h);
+  smime_getkeys(env);
 }
 
-static BODY *crypt_mod_smime_build_smime_entity (BODY *a, char *certlist)
+static int crypt_mod_smime_verify_sender(HEADER *h)
 {
-  return smime_build_smime_entity (a, certlist);
+  return smime_verify_sender(h);
 }
 
-static void crypt_mod_smime_invoke_import (const char *infile, const char *mailbox)
+static BODY *crypt_mod_smime_build_smime_entity(BODY *a, char *certlist)
 {
-  smime_invoke_import (infile, mailbox);
+  return smime_build_smime_entity(a, certlist);
+}
+
+static void crypt_mod_smime_invoke_import(const char *infile, const char *mailbox)
+{
+  smime_invoke_import(infile, mailbox);
 }
 
 

@@ -81,22 +81,22 @@ typedef struct send_ctx
   unsigned int smime_crypt_alg_cleared : 1;
 } SEND_CONTEXT;
 
-ADDRESS *mutt_remove_xrefs (ADDRESS *, ADDRESS *);
-int mutt_edit_address (ADDRESS **, const char *, int);
-void mutt_forward_intro (CONTEXT *ctx, HEADER *cur, FILE *fp);
-void mutt_forward_trailer (CONTEXT *ctx, HEADER *cur, FILE *fp);
-void mutt_make_attribution (CONTEXT *ctx, HEADER *cur, FILE *out);
-void mutt_make_post_indent (CONTEXT *ctx, HEADER *cur, FILE *out);
-int mutt_fetch_recips (ENVELOPE *out, ENVELOPE *in, int flags);
-void mutt_fix_reply_recipients (ENVELOPE *env);
-void mutt_make_forward_subject (ENVELOPE *env, CONTEXT *ctx, HEADER *cur);
-void mutt_make_misc_reply_headers (ENVELOPE *env, CONTEXT *ctx, HEADER *cur, ENVELOPE *curenv);
-void mutt_add_to_reference_headers (ENVELOPE *env, ENVELOPE *curenv, LIST ***pp, LIST ***qq);
-void mutt_set_followup_to (ENVELOPE *);
-ADDRESS *mutt_default_from (void);
-void mutt_encode_descriptions (BODY *, short);
-int mutt_resend_message (FILE *, CONTEXT *, HEADER *);
-int mutt_send_message (int, HEADER *, const char *, CONTEXT *, HEADER *);
-int mutt_send_message_resume (SEND_CONTEXT **psctx);
+ADDRESS *mutt_remove_xrefs(ADDRESS *, ADDRESS *);
+int mutt_edit_address(ADDRESS **, const char *, int);
+void mutt_forward_intro(CONTEXT *ctx, HEADER *cur, FILE *fp);
+void mutt_forward_trailer(CONTEXT *ctx, HEADER *cur, FILE *fp);
+void mutt_make_attribution(CONTEXT *ctx, HEADER *cur, FILE *out);
+void mutt_make_post_indent(CONTEXT *ctx, HEADER *cur, FILE *out);
+int mutt_fetch_recips(ENVELOPE *out, ENVELOPE *in, int flags);
+void mutt_fix_reply_recipients(ENVELOPE *env);
+void mutt_make_forward_subject(ENVELOPE *env, CONTEXT *ctx, HEADER *cur);
+void mutt_make_misc_reply_headers(ENVELOPE *env, CONTEXT *ctx, HEADER *cur, ENVELOPE *curenv);
+void mutt_add_to_reference_headers(ENVELOPE *env, ENVELOPE *curenv, LIST ***pp, LIST ***qq);
+void mutt_set_followup_to(ENVELOPE *);
+ADDRESS *mutt_default_from(void);
+void mutt_encode_descriptions(BODY *, short);
+int mutt_resend_message(FILE *, CONTEXT *, HEADER *);
+int mutt_send_message(int, HEADER *, const char *, CONTEXT *, HEADER *);
+int mutt_send_message_resume(SEND_CONTEXT **psctx);
 
 #endif

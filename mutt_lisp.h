@@ -19,6 +19,6 @@
 #ifndef _MUTT_LISP_H
 #define _MUTT_LISP_H 1
 
-int mutt_lisp_eval_list (BUFFER *result, BUFFER *line);
+int mutt_lisp_eval_list(BUFFER *result, BUFFER *line);
 
 #endif

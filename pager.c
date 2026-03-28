@@ -66,7 +66,7 @@ static HEADER *OldHdr = NULL;
 #define CHECK_MODE(x)                           \
   if (!(x))                                     \
   {                                             \
-    mutt_flushinp ();                           \
+    mutt_flushinp();                            \
     mutt_error _(Not_available_in_this_menu);   \
     break;                                      \
   }
@@ -74,7 +74,7 @@ static HEADER *OldHdr = NULL;
 #define CHECK_READONLY                          \
   if (Context->readonly)                        \
   {                                             \
-    mutt_flushinp ();                           \
+    mutt_flushinp();                            \
     mutt_error _(Mailbox_is_read_only);         \
     break;                                      \
   }
@@ -82,7 +82,7 @@ static HEADER *OldHdr = NULL;
 #define CHECK_ATTACH                                                    \
   if (option(OPTATTACHMSG))                                             \
   {                                                                     \
-    mutt_flushinp ();                                                   \
+    mutt_flushinp();                                                    \
     mutt_error _(Function_not_permitted_in_attach_message_mode);        \
     break;                                                              \
   }
@@ -92,7 +92,7 @@ static HEADER *OldHdr = NULL;
   {                                                                     \
     mutt_flushinp();                                                    \
     /* L10N: %s is one of the CHECK_ACL entries below. */               \
-    mutt_error (_("%s: Operation not permitted by ACL"), action);       \
+    mutt_error(_("%s: Operation not permitted by ACL"), action);        \
     break;                                                              \
   }
 
@@ -144,7 +144,7 @@ typedef struct _ansi_attr {
 
 static short InHelp = 0;
 
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+#if defined(USE_SLANG_CURSES) || defined(HAVE_RESIZETERM)
 static struct resize {
   int line;
   int SearchCompiled;
@@ -154,7 +154,7 @@ static struct resize {
 
 #define NumSigLines 4
 
-static int check_sig (const char *s, struct line_t *info, int n)
+static int check_sig(const char *s, struct line_t *info, int n)
 {
   int count = 0;
 
@@ -174,7 +174,7 @@ static int check_sig (const char *s, struct line_t *info, int n)
     /* check for a blank line */
     while (*s)
     {
-      if (!IS_ASCII_WS (*s))
+      if (!IS_ASCII_WS(*s))
         return 0;
       s++;
     }
@@ -186,7 +186,7 @@ static int check_sig (const char *s, struct line_t *info, int n)
 }
 
 static int
-comp_syntax_t (const void *m1, const void *m2)
+comp_syntax_t(const void *m1, const void *m2)
 {
   const int *cnt = (const int *)m1;
   const struct syntax_t *stx = (const struct syntax_t *)m2;
@@ -199,8 +199,8 @@ comp_syntax_t (const void *m1, const void *m2)
 }
 
 static void
-resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
-               ansi_attr *a, int wrap_cols)
+resolve_color(struct line_t *lineInfo, int n, int cnt, int flags, int special,
+              ansi_attr *a, int wrap_cols)
 {
   COLOR_ATTR def_color = {0};           /* color without syntax highlight */
   COLOR_ATTR color = {0};               /* final color */
@@ -217,10 +217,10 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 
   if (lineInfo[n].continuation)
   {
-    if (!cnt && option (OPTMARKERS) && (wrap_cols > 1))
+    if (!cnt && option(OPTMARKERS) && (wrap_cols > 1))
     {
-      SETCOLOR (MT_COLOR_MARKERS);
-      addch ('+');
+      SETCOLOR(MT_COLOR_MARKERS);
+      addch('+');
       last_color = ColorDefs[MT_COLOR_MARKERS];
     }
     m = (lineInfo[n].syntax)[0].first;
@@ -254,8 +254,8 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   color = def_color;
   if ((flags & MUTT_SHOWCOLOR) && lineInfo[m].chunks)
   {
-    matching_chunk = bsearch (&cnt, lineInfo[m].syntax, lineInfo[m].chunks,
-                              sizeof(struct syntax_t), comp_syntax_t);
+    matching_chunk = bsearch(&cnt, lineInfo[m].syntax, lineInfo[m].chunks,
+                             sizeof(struct syntax_t), comp_syntax_t);
     if (matching_chunk &&
         (cnt >= matching_chunk->first) &&
         (cnt < matching_chunk->last))
@@ -264,8 +264,8 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
 
   if ((flags & MUTT_SEARCH) && lineInfo[m].search_cnt)
   {
-    matching_chunk = bsearch (&cnt, lineInfo[m].search, lineInfo[m].search_cnt,
-                              sizeof(struct syntax_t), comp_syntax_t);
+    matching_chunk = bsearch(&cnt, lineInfo[m].search, lineInfo[m].search_cnt,
+                             sizeof(struct syntax_t), comp_syntax_t);
     if (matching_chunk &&
         (cnt >= matching_chunk->first) &&
         (cnt < matching_chunk->last))
@@ -280,7 +280,7 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   if ((a->attr & ANSI_COLOR) && !search)
   {
     if (a->pair == -1)
-      a->pair = mutt_alloc_ansi_color (a->fg, a->bg);
+      a->pair = mutt_alloc_ansi_color(a->fg, a->bg);
     color.pair = a->pair;
   }
   else
@@ -331,13 +331,13 @@ resolve_color (struct line_t *lineInfo, int n, int cnt, int flags, int special,
   if (color.pair != last_color.pair ||
       color.attrs != last_color.attrs)
   {
-    ATTRSET (color);
+    ATTRSET(color);
     last_color = color;
   }
 }
 
 static void
-append_line (struct line_t *lineInfo, int n, int cnt)
+append_line(struct line_t *lineInfo, int n, int cnt)
 {
   int m;
 
@@ -356,15 +356,15 @@ append_line (struct line_t *lineInfo, int n, int cnt)
 }
 
 static void
-new_class_color (struct q_class_t *class, int *q_level)
+new_class_color(struct q_class_t *class, int *q_level)
 {
   class->index = (*q_level)++;
   class->color = ColorQuote[class->index % ColorQuoteUsed];
 }
 
 static void
-shift_class_colors (struct q_class_t *QuoteList, struct q_class_t *new_class,
-                    int index, int *q_level)
+shift_class_colors(struct q_class_t *QuoteList, struct q_class_t *new_class,
+                   int index, int *q_level)
 {
   struct q_class_t * q_list;
 
@@ -401,18 +401,18 @@ shift_class_colors (struct q_class_t *QuoteList, struct q_class_t *new_class,
 }
 
 static void
-cleanup_quote (struct q_class_t **QuoteList)
+cleanup_quote(struct q_class_t **QuoteList)
 {
   struct q_class_t *ptr;
 
   while (*QuoteList)
   {
     if ((*QuoteList)->down)
-      cleanup_quote (&((*QuoteList)->down));
+      cleanup_quote(&((*QuoteList)->down));
     ptr = (*QuoteList)->next;
     if ((*QuoteList)->prefix)
-      FREE (&(*QuoteList)->prefix);
-    FREE (QuoteList);           /* __FREE_CHECKED__ */
+      FREE(&(*QuoteList)->prefix);
+    FREE(QuoteList);           /* __FREE_CHECKED__ */
     *QuoteList = ptr;
   }
 
@@ -420,8 +420,8 @@ cleanup_quote (struct q_class_t **QuoteList)
 }
 
 static struct q_class_t *
-classify_quote (struct q_class_t **QuoteList, const char *qptr,
-                int length, int *force_redraw, int *q_level)
+classify_quote(struct q_class_t **QuoteList, const char *qptr,
+               int length, int *force_redraw, int *q_level)
 {
   struct q_class_t *q_list = *QuoteList;
   struct q_class_t *class = NULL, *tmp = NULL, *ptr, *save;
@@ -435,7 +435,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
 
     if (*QuoteList == NULL)
     {
-      class = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
+      class = (struct q_class_t *) safe_calloc(1, sizeof(struct q_class_t));
       class->color = ColorQuote[0];
       *QuoteList = class;
     }
@@ -451,7 +451,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
     {
       /* case 1: check the top level nodes */
 
-      if (mutt_strncmp (qptr, q_list->prefix, length) == 0)
+      if (mutt_strncmp(qptr, q_list->prefix, length) == 0)
       {
         if (length == q_list->length)
           return q_list;        /* same prefix: return the current class */
@@ -460,9 +460,9 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
         if (tmp == NULL)
         {
           /* add a node above q_list */
-          tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-          tmp->prefix = (char *) safe_calloc (1, length + 1);
-          strncpy (tmp->prefix, qptr, length);
+          tmp = (struct q_class_t *) safe_calloc(1, sizeof(struct q_class_t));
+          tmp->prefix = (char *) safe_calloc(1, length + 1);
+          strncpy(tmp->prefix, qptr, length);
           tmp->length = length;
 
           /* replace q_list by tmp in the top level list */
@@ -545,7 +545,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
       /* case 2: try subclassing the current top level node */
 
       /* tmp != NULL means we already found a shorter prefix at case 1 */
-      if (tmp == NULL && mutt_strncmp (qptr, q_list->prefix, q_list->length) == 0)
+      if (tmp == NULL && mutt_strncmp(qptr, q_list->prefix, q_list->length) == 0)
       {
         /* ok, it's a subclass somewhere on this branch */
 
@@ -560,7 +560,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
         {
           if (length <= q_list->length)
           {
-            if (mutt_strncmp (tail_qptr, (q_list->prefix) + offset, tail_lng) == 0)
+            if (mutt_strncmp(tail_qptr, (q_list->prefix) + offset, tail_lng) == 0)
             {
               /* same prefix: return the current class */
               if (length == q_list->length)
@@ -571,9 +571,9 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
               {
                 /* add a node above q_list */
                 tmp = (struct q_class_t *)
-                  safe_calloc (1, sizeof (struct q_class_t));
-                tmp->prefix = (char *) safe_calloc (1, length + 1);
-                strncpy (tmp->prefix, qptr, length);
+                  safe_calloc(1, sizeof(struct q_class_t));
+                tmp->prefix = (char *) safe_calloc(1, length + 1);
+                strncpy(tmp->prefix, qptr, length);
                 tmp->length = length;
 
                 /* replace q_list by tmp */
@@ -648,8 +648,8 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
           else
           {
             /* longer than the current prefix: try subclassing it */
-            if (tmp == NULL && mutt_strncmp (tail_qptr, (q_list->prefix) + offset,
-                                             q_list->length - offset) == 0)
+            if (tmp == NULL && mutt_strncmp(tail_qptr, (q_list->prefix) + offset,
+                                            q_list->length - offset) == 0)
             {
               /* still a subclass: go down one level */
               ptr = q_list;
@@ -673,9 +673,9 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
         /* still not found so far: add it as a sibling to the current node */
         if (class == NULL)
         {
-          tmp = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-          tmp->prefix = (char *) safe_calloc (1, length + 1);
-          strncpy (tmp->prefix, qptr, length);
+          tmp = (struct q_class_t *) safe_calloc(1, sizeof(struct q_class_t));
+          tmp->prefix = (char *) safe_calloc(1, length + 1);
+          strncpy(tmp->prefix, qptr, length);
           tmp->length = length;
 
           if (ptr->down)
@@ -686,14 +686,14 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
           ptr->down = tmp;
           tmp->up = ptr;
 
-          new_class_color (tmp, q_level);
+          new_class_color(tmp, q_level);
 
           return tmp;
         }
         else
         {
           if (index != -1)
-            shift_class_colors (*QuoteList, tmp, index, q_level);
+            shift_class_colors(*QuoteList, tmp, index, q_level);
 
           return class;
         }
@@ -710,11 +710,11 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
   if (class == NULL)
   {
     /* not found so far: add it as a top level class */
-    class = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-    class->prefix = (char *) safe_calloc (1, length + 1);
-    strncpy (class->prefix, qptr, length);
+    class = (struct q_class_t *) safe_calloc(1, sizeof(struct q_class_t));
+    class->prefix = (char *) safe_calloc(1, length + 1);
+    strncpy(class->prefix, qptr, length);
     class->length = length;
-    new_class_color (class, q_level);
+    new_class_color(class, q_level);
 
     if (*QuoteList)
     {
@@ -725,7 +725,7 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
   }
 
   if (index != -1)
-    shift_class_colors (*QuoteList, tmp, index, q_level);
+    shift_class_colors(*QuoteList, tmp, index, q_level);
 
   return class;
 }
@@ -733,15 +733,15 @@ classify_quote (struct q_class_t **QuoteList, const char *qptr,
 static int brailleLine = -1;
 static int brailleCol = -1;
 
-static int check_attachment_marker (const char *);
-static int check_protected_header_marker (const char *);
+static int check_attachment_marker(const char *);
+static int check_protected_header_marker(const char *);
 
 /* Checks if buf matches the QuoteRegexp and doesn't match Smileys.
  * pmatch, if non-null, is populated with the regexec match against
  * QuoteRegexp.  This is used by the pager for calling classify_quote.
  */
 int
-mutt_is_quote_line (char *buf, regmatch_t *pmatch)
+mutt_is_quote_line(char *buf, regmatch_t *pmatch)
 {
   int is_quote = 0;
   regmatch_t pmatch_internal[1], smatch[1];
@@ -751,17 +751,17 @@ mutt_is_quote_line (char *buf, regmatch_t *pmatch)
     pmatch = pmatch_internal;
 
   if (QuoteRegexp.rx &&
-      regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+      regexec((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
   {
     if (Smileys.rx &&
-        regexec ((regex_t *) Smileys.rx, buf, 1, smatch, 0) == 0)
+        regexec((regex_t *) Smileys.rx, buf, 1, smatch, 0) == 0)
     {
       if (smatch[0].rm_so > 0)
       {
         c = buf[smatch[0].rm_so];
         buf[smatch[0].rm_so] = 0;
 
-        if (regexec ((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
+        if (regexec((regex_t *) QuoteRegexp.rx, buf, 1, pmatch, 0) == 0)
           is_quote = 1;
 
         buf[smatch[0].rm_so] = c;
@@ -775,7 +775,7 @@ mutt_is_quote_line (char *buf, regmatch_t *pmatch)
 }
 
 static void
-match_body_patterns (char *buf, struct line_t *lineInfo, int n)
+match_body_patterns(char *buf, struct line_t *lineInfo, int n)
 {
   COLOR_LINE *color_line, *color_list;
   size_t buflen;
@@ -786,7 +786,7 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
 
   /* don't consider line endings part of the buffer
    * for regex matching */
-  if ((buflen = mutt_strlen (buf)) > 0 && buf[buflen - 1] == '\n')
+  if ((buflen = mutt_strlen(buf)) > 0 && buf[buflen - 1] == '\n')
   {
     has_nl = 1;
     buf[buflen - 1] = 0;
@@ -829,8 +829,8 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
         }
         else
         {
-          if (regexec (&color_line->rx, buf + offset, 1, pmatch,
-                       (offset ? REG_NOTBOL : 0)) == 0)
+          if (regexec(&color_line->rx, buf + offset, 1, pmatch,
+                      (offset ? REG_NOTBOL : 0)) == 0)
           {
             has_reg_match = 1;
             color_line->cached = 1;
@@ -852,8 +852,8 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
           if (lineInfo[n].chunks > line_allocated_chunks)
           {
             line_allocated_chunks = lineInfo[n].chunks;
-            safe_realloc (&(lineInfo[n].syntax),
-                          line_allocated_chunks * sizeof (struct syntax_t));
+            safe_realloc(&(lineInfo[n].syntax),
+                         line_allocated_chunks * sizeof(struct syntax_t));
           }
         }
         i = lineInfo[n].chunks - 1;
@@ -902,16 +902,16 @@ match_body_patterns (char *buf, struct line_t *lineInfo, int n)
 }
 
 static void
-resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
-               struct q_class_t **QuoteList, int *q_level, int *force_redraw,
-               int q_classify)
+resolve_types(char *buf, char *raw, struct line_t *lineInfo, int n, int last,
+              struct q_class_t **QuoteList, int *q_level, int *force_redraw,
+              int q_classify)
 {
   COLOR_LINE *color_line;
   regmatch_t pmatch[1];
   int i;
 
-  if (n == 0 || ISHEADER (lineInfo[n-1].type) ||
-      (check_protected_header_marker (raw) == 0))
+  if (n == 0 || ISHEADER(lineInfo[n-1].type) ||
+      (check_protected_header_marker(raw) == 0))
   {
     if (buf[0] == '\n') /* end of header */
     {
@@ -925,7 +925,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       if (n > 0 && (buf[0] == ' ' || buf[0] == '\t'))
       {
         lineInfo[n].type = lineInfo[n-1].type; /* wrapped line */
-        if (!option (OPTHEADERCOLORPARTIAL))
+        if (!option(OPTHEADERCOLORPARTIAL))
         {
           (lineInfo[n].syntax)[0].color = (lineInfo[n-1].syntax)[0].color;
           lineInfo[n].is_cont_hdr = 1;
@@ -940,11 +940,11 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
        * same color.  Otherwise, we handle the header patterns just
        * like body patterns (further below).
        */
-      if (!option (OPTHEADERCOLORPARTIAL))
+      if (!option(OPTHEADERCOLORPARTIAL))
       {
         for (color_line = ColorHdrList; color_line; color_line = color_line->next)
         {
-          if (REGEXEC (color_line->rx, buf) == 0)
+          if (REGEXEC(color_line->rx, buf) == 0)
           {
             lineInfo[n].type = MT_COLOR_HEADER;
             lineInfo[n].syntax[0].color = color_line->color;
@@ -971,16 +971,16 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       }
     }
   }
-  else if (mutt_strncmp ("\033[0m", raw, 4) == 0)       /* a little hack... */
+  else if (mutt_strncmp("\033[0m", raw, 4) == 0)       /* a little hack... */
     lineInfo[n].type = MT_COLOR_NORMAL;
-  else if (check_attachment_marker ((char *) raw) == 0)
+  else if (check_attachment_marker((char *) raw) == 0)
     lineInfo[n].type = MT_COLOR_ATTACHMENT;
-  else if (mutt_strcmp ("-- \n", buf) == 0 || mutt_strcmp ("-- \r\n", buf) == 0)
+  else if (mutt_strcmp("-- \n", buf) == 0 || mutt_strcmp("-- \r\n", buf) == 0)
   {
     i = n + 1;
 
     lineInfo[n].type = MT_COLOR_SIGNATURE;
-    while (i < last && check_sig (buf, lineInfo, i - 1) == 0 &&
+    while (i < last && check_sig(buf, lineInfo, i - 1) == 0 &&
            (lineInfo[i].type == MT_COLOR_NORMAL ||
             lineInfo[i].type == MT_COLOR_QUOTED ||
             lineInfo[i].type == MT_COLOR_HEADER))
@@ -989,48 +989,48 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       if (lineInfo[i].chunks)
       {
         lineInfo[i].chunks = 0;
-        safe_realloc (&(lineInfo[n].syntax),
-                      sizeof (struct syntax_t));
+        safe_realloc(&(lineInfo[n].syntax),
+                     sizeof(struct syntax_t));
       }
       lineInfo[i++].type = MT_COLOR_SIGNATURE;
     }
   }
-  else if (check_sig (buf, lineInfo, n - 1) == 0)
+  else if (check_sig(buf, lineInfo, n - 1) == 0)
     lineInfo[n].type = MT_COLOR_SIGNATURE;
-  else if (mutt_is_quote_line (buf, pmatch))
+  else if (mutt_is_quote_line(buf, pmatch))
   {
     if (q_classify && lineInfo[n].quote == NULL)
-      lineInfo[n].quote = classify_quote (QuoteList, buf + pmatch[0].rm_so,
-                                          pmatch[0].rm_eo - pmatch[0].rm_so,
-                                          force_redraw, q_level);
+      lineInfo[n].quote = classify_quote(QuoteList, buf + pmatch[0].rm_so,
+                                         pmatch[0].rm_eo - pmatch[0].rm_so,
+                                         force_redraw, q_level);
     lineInfo[n].type = MT_COLOR_QUOTED;
   }
   else
     lineInfo[n].type = MT_COLOR_NORMAL;
 }
 
-static int is_ansi (const char *buf)
+static int is_ansi(const char *buf)
 {
   while (*buf && (isdigit((unsigned char) *buf) || *buf == ';'))
     buf++;
   return (*buf == 'm');
 }
 
-static int check_marker (const char *q, const char *p)
+static int check_marker(const char *q, const char *p)
 {
   for (;*p == *q && *q && *p && *q != '\a' && *p != '\a'; p++, q++)
     ;
   return (int) (*p - *q);
 }
 
-static int check_attachment_marker (const char *p)
+static int check_attachment_marker(const char *p)
 {
-  return check_marker (AttachmentMarker, p);
+  return check_marker(AttachmentMarker, p);
 }
 
-static int check_protected_header_marker (const char *p)
+static int check_protected_header_marker(const char *p)
 {
-  return check_marker (ProtectedHeaderMarker, p);
+  return check_marker(ProtectedHeaderMarker, p);
 }
 
 static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
@@ -1041,7 +1041,7 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
     x++;
 
   /* Character Attributes */
-  if (option (OPTALLOWANSI) && a != NULL && buf[x] == 'm')
+  if (option(OPTALLOWANSI) && a != NULL && buf[x] == 'm')
   {
     if (pos == x)
     {
@@ -1126,11 +1126,11 @@ static int grok_ansi(unsigned char *buf, int pos, ansi_attr *a)
  * This is separated out so that it can be used both by the pager
  * and the autoview handler.
  */
-void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_markers)
+void mutt_buffer_strip_formatting(BUFFER *dest, const char *src, int strip_markers)
 {
   const char *s = src;
 
-  mutt_buffer_clear (dest);
+  mutt_buffer_clear(dest);
 
   if (!s)
     return;
@@ -1141,37 +1141,37 @@ void mutt_buffer_strip_formatting (BUFFER *dest, const char *src, int strip_mark
     {
       if (*(s+1) == '_')        /* underline */
         s += 2;
-      else if (*(s+1) && mutt_buffer_len (dest))        /* bold or overstrike */
+      else if (*(s+1) && mutt_buffer_len(dest))        /* bold or overstrike */
       {
         dest->dptr--;
-        mutt_buffer_addch (dest, *(s+1));
+        mutt_buffer_addch(dest, *(s+1));
         s += 2;
       }
       else                      /* ^H */
-        mutt_buffer_addch (dest, *s++);
+        mutt_buffer_addch(dest, *s++);
     }
-    else if (*s == '\033' && *(s+1) == '[' && is_ansi (s + 2))
+    else if (*s == '\033' && *(s+1) == '[' && is_ansi(s + 2))
     {
       while (*s++ != 'm')       /* skip ANSI sequence */
         ;
     }
     else if (strip_markers &&
              *s == '\033' && *(s+1) == ']' &&
-             ((check_attachment_marker (s) == 0) ||
-              (check_protected_header_marker (s) == 0)))
+             ((check_attachment_marker(s) == 0) ||
+              (check_protected_header_marker(s) == 0)))
     {
       muttdbg(2, "Seen attachment marker.");
       while (*s++ != '\a')      /* skip pseudo-ANSI sequence */
         ;
     }
     else
-      mutt_buffer_addch (dest, *s++);
+      mutt_buffer_addch(dest, *s++);
   }
 }
 
 static int
-fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
-             unsigned char **fmt, size_t *blen, int *buf_ready)
+fill_buffer(FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
+            unsigned char **fmt, size_t *blen, int *buf_ready)
 {
   static int b_read;
   BUFFER stripped;
@@ -1179,24 +1179,24 @@ fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
   if (*buf_ready == 0)
   {
     if (offset != *last_pos)
-      fseeko (f, offset, SEEK_SET);
+      fseeko(f, offset, SEEK_SET);
 
-    if ((*buf = (unsigned char *) mutt_read_line ((char *) *buf, blen, f,
-                                                  NULL, MUTT_EOL)) == NULL)
+    if ((*buf = (unsigned char *) mutt_read_line((char *) *buf, blen, f,
+                                                 NULL, MUTT_EOL)) == NULL)
     {
       *fmt = NULL;
       return (-1);
     }
 
-    *last_pos = ftello (f);
+    *last_pos = ftello(f);
     b_read = (int) (*last_pos - offset);
     *buf_ready = 1;
 
-    mutt_buffer_init (&stripped);
-    mutt_buffer_increase_size (&stripped, *blen);
-    mutt_buffer_strip_formatting (&stripped, (const char *) *buf, 1);
+    mutt_buffer_init(&stripped);
+    mutt_buffer_increase_size(&stripped, *blen);
+    mutt_buffer_strip_formatting(&stripped, (const char *) *buf, 1);
     /* This should be a noop, because *fmt should be NULL */
-    FREE (fmt);   /* __FREE_CHECKED__ */
+    FREE(fmt);   /* __FREE_CHECKED__ */
     *fmt = (unsigned char *) stripped.data;
   }
 
@@ -1207,9 +1207,9 @@ fill_buffer (FILE *f, LOFF_T *last_pos, LOFF_T offset, unsigned char **buf,
  * They are separated from resolve_types() to make operations that jump
  * further down (e.g. <bottom> and <search>)) faster.
  */
-static int resolve_show_patterns (FILE *f, LOFF_T *last_pos, struct line_t *lineInfo,
-                                  int n, char *fmt, struct q_class_t **QuoteList,
-                                  int *q_level, int *force_redraw)
+static int resolve_show_patterns(FILE *f, LOFF_T *last_pos, struct line_t *lineInfo,
+                                 int n, char *fmt, struct q_class_t **QuoteList,
+                                 int *q_level, int *force_redraw)
 {
   char *tmp_buf = NULL, *tmp_fmt = NULL;
   size_t tmp_buflen = 0;
@@ -1225,8 +1225,8 @@ static int resolve_show_patterns (FILE *f, LOFF_T *last_pos, struct line_t *line
     m = (lineInfo[n].syntax)[0].first;
     if (lineInfo[m].show_patterns_done == 1)
       goto done;
-    if (fill_buffer (f, last_pos, lineInfo[m].offset, (unsigned char **) &tmp_buf,
-                     (unsigned char **) &tmp_fmt, &tmp_buflen, &tmp_buf_ready) < 0)
+    if (fill_buffer(f, last_pos, lineInfo[m].offset, (unsigned char **) &tmp_buf,
+                    (unsigned char **) &tmp_fmt, &tmp_buflen, &tmp_buf_ready) < 0)
     {
       goto bail;
     }
@@ -1239,19 +1239,19 @@ static int resolve_show_patterns (FILE *f, LOFF_T *last_pos, struct line_t *line
 
   if (lineInfo[m].type == MT_COLOR_NORMAL ||
       lineInfo[m].type == MT_COLOR_QUOTED ||
-      (lineInfo[m].type == MT_COLOR_HDEFAULT && option (OPTHEADERCOLORPARTIAL)))
+      (lineInfo[m].type == MT_COLOR_HDEFAULT && option(OPTHEADERCOLORPARTIAL)))
   {
-    match_body_patterns (tmp_fmt, lineInfo, m);
+    match_body_patterns(tmp_fmt, lineInfo, m);
   }
 
   if ((lineInfo[m].type == MT_COLOR_QUOTED) &&
       (lineInfo[m].quote == NULL))
   {
-    regexec ((regex_t *) QuoteRegexp.rx, tmp_fmt, 1, pmatch, 0);
-    lineInfo[m].quote = classify_quote (QuoteList,
-                                        tmp_fmt + pmatch[0].rm_so,
-                                        pmatch[0].rm_eo - pmatch[0].rm_so,
-                                        force_redraw, q_level);
+    regexec((regex_t *) QuoteRegexp.rx, tmp_fmt, 1, pmatch, 0);
+    lineInfo[m].quote = classify_quote(QuoteList,
+                                       tmp_fmt + pmatch[0].rm_so,
+                                       pmatch[0].rm_eo - pmatch[0].rm_so,
+                                       force_redraw, q_level);
   }
 
 done:
@@ -1261,17 +1261,17 @@ done:
 bail:
   if (lineInfo[n].continuation)
   {
-    FREE (&tmp_buf);
-    FREE (&tmp_fmt);
+    FREE(&tmp_buf);
+    FREE(&tmp_fmt);
   }
 
   return rc;
 }
 
-static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
-                        int flags, ansi_attr *pa, int cnt,
-                        int *pspace, int *pvch, int *pcol, int *pspecial,
-                        mutt_window_t *pager_window)
+static int format_line(struct line_t **lineInfo, int n, unsigned char *buf,
+                       int flags, ansi_attr *pa, int cnt,
+                       int *pspace, int *pvch, int *pcol, int *pspecial,
+                       mutt_window_t *pager_window)
 {
   int space = -1; /* index of the last space or TAB */
   int col;
@@ -1282,12 +1282,12 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
   int wrap_cols;
 
   if ((flags & MUTT_PAGER_NOWRAP) ||
-      (check_attachment_marker ((char *)buf) == 0))
+      (check_attachment_marker((char *)buf) == 0))
     wrap_cols = pager_window->cols;
   else
-    wrap_cols = mutt_window_wrap_cols (pager_window, Wrap);
+    wrap_cols = mutt_window_wrap_cols(pager_window, Wrap);
 
-  if (option (OPTMARKERS) &&
+  if (option(OPTMARKERS) &&
       (*lineInfo)[n].continuation &&
       (wrap_cols > 1))
     col = 1;
@@ -1301,12 +1301,12 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
   {
     /* Handle ANSI sequences */
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == '[' &&
-           is_ansi ((char *) buf+ch+2))
-      ch = grok_ansi (buf, ch+2, pa) + 1;
+           is_ansi((char *) buf+ch+2))
+      ch = grok_ansi(buf, ch+2, pa) + 1;
 
     while (cnt-ch >= 2 && buf[ch] == '\033' && buf[ch+1] == ']' &&
-           ((check_attachment_marker ((char *) buf+ch) == 0) ||
-            (check_protected_header_marker ((char *) buf+ch) == 0)))
+           ((check_attachment_marker((char *) buf+ch) == 0) ||
+            (check_protected_header_marker((char *) buf+ch) == 0)))
     {
       while (buf[ch++] != '\a')
         if (ch >= cnt)
@@ -1317,7 +1317,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
     if (ch >= cnt)
       break;
 
-    k = mbrtowc (&wc, (char *)buf+ch, cnt-ch, &mbstate);
+    k = mbrtowc(&wc, (char *)buf+ch, cnt-ch, &mbstate);
     if (k == (size_t)(-2) || k == (size_t)(-1))
     {
       if (k == (size_t)(-1))
@@ -1327,7 +1327,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         break;
       col += 4;
       if (pa)
-        printw ("\\%03o", buf[ch]);
+        printw("\\%03o", buf[ch]);
       k = 1;
       continue;
     }
@@ -1341,7 +1341,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         muttdbg(3, "skip zero-width character U+%04X", (unsigned short)wc);
         continue;
       }
-      if (is_display_corrupting_utf8 (wc))
+      if (is_display_corrupting_utf8(wc))
       {
         muttdbg(3, "filtered U+%04X", (unsigned short)wc);
         continue;
@@ -1350,20 +1350,20 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
     /* Handle backspace */
     special = 0;
-    if (IsWPrint (wc))
+    if (IsWPrint(wc))
     {
       wchar_t wc1;
       mbstate_t mbstate1;
       size_t k1, k2;
 
       mbstate1 = mbstate;
-      k1 = mbrtowc (&wc1, (char *)buf+ch+k, cnt-ch-k, &mbstate1);
+      k1 = mbrtowc(&wc1, (char *)buf+ch+k, cnt-ch-k, &mbstate1);
       while ((k1 != (size_t)(-2)) && (k1 != (size_t)(-1)) &&
              (k1 > 0) && (wc1 == '\b'))
       {
-        k2 = mbrtowc (&wc1, (char *)buf+ch+k+k1, cnt-ch-k-k1, &mbstate1);
+        k2 = mbrtowc(&wc1, (char *)buf+ch+k+k1, cnt-ch-k-k1, &mbstate1);
         if ((k2 == (size_t)(-2)) || (k2 == (size_t)(-1)) ||
-            (k2 == 0) || (!IsWPrint (wc1)))
+            (k2 == 0) || (!IsWPrint(wc1)))
           break;
 
         if (wc == wc1)
@@ -1385,7 +1385,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         ch += k + k1;
         k = k2;
         mbstate = mbstate1;
-        k1 = mbrtowc (&wc1, (char *)buf+ch+k, cnt-ch-k, &mbstate1);
+        k1 = mbrtowc(&wc1, (char *)buf+ch+k, cnt-ch-k, &mbstate1);
       }
     }
 
@@ -1393,20 +1393,20 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         ((flags & (MUTT_SHOWCOLOR | MUTT_SEARCH | MUTT_PAGER_MARKER)) ||
          special || last_special || pa->attr))
     {
-      resolve_color (*lineInfo, n, vch, flags, special, pa, wrap_cols);
+      resolve_color(*lineInfo, n, vch, flags, special, pa, wrap_cols);
       last_special = special;
     }
 
-    if (IsWPrint (wc) || (Charset_is_utf8 && wc == 0x00A0))
+    if (IsWPrint(wc) || (Charset_is_utf8 && wc == 0x00A0))
     {
       if (wc == ' ')
         space = ch;
-      t = wcwidth (wc);
+      t = wcwidth(wc);
       if (col + t > wrap_cols)
         break;
       col += t;
       if (pa)
-        mutt_addwch (wc);
+        mutt_addwch(wc);
     }
     else if (wc == '\n')
       break;
@@ -1418,7 +1418,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         break;
       if (pa)
         for (; col < t; col++)
-          addch (' ');
+          addch(' ');
       else
         col = t;
     }
@@ -1428,7 +1428,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         break;
       col += 2;
       if (pa)
-        printw ("^%c", ('@' + wc) & 0x7f);
+        printw("^%c", ('@' + wc) & 0x7f);
     }
     else if (wc < 0x100)
     {
@@ -1436,7 +1436,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         break;
       col += 4;
       if (pa)
-        printw ("\\%03o", wc);
+        printw("\\%03o", wc);
     }
     else
     {
@@ -1444,7 +1444,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
         break;
       ++col;
       if (pa)
-        mutt_addwch (replacement_char ());
+        mutt_addwch(replacement_char());
     }
   }
   *pspace = space;
@@ -1472,10 +1472,10 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
  */
 
 static int
-display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
-              int *last, int *max, int flags, struct q_class_t **QuoteList,
-              int *q_level, int *force_redraw, regex_t *SearchRE,
-              mutt_window_t *pager_window)
+display_line(FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
+             int *last, int *max, int flags, struct q_class_t **QuoteList,
+             int *q_level, int *force_redraw, regex_t *SearchRE,
+             mutt_window_t *pager_window)
 {
   unsigned char *buf = NULL, *fmt = NULL;
   size_t buflen = 0;
@@ -1498,13 +1498,13 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
 
   if (*last == *max)
   {
-    safe_realloc (lineInfo, sizeof (struct line_t) * (*max += LINES));
+    safe_realloc(lineInfo, sizeof(struct line_t) * (*max += LINES));
     for (ch = *last; ch < *max ; ch++)
     {
-      memset (&((*lineInfo)[ch]), 0, sizeof (struct line_t));
+      memset(&((*lineInfo)[ch]), 0, sizeof(struct line_t));
       (*lineInfo)[ch].type = -1;
       (*lineInfo)[ch].search_cnt = -1;
-      (*lineInfo)[ch].syntax = safe_malloc (sizeof (struct syntax_t));
+      (*lineInfo)[ch].syntax = safe_malloc(sizeof(struct syntax_t));
       ((*lineInfo)[ch].syntax)[0].first = ((*lineInfo)[ch].syntax)[0].last = -1;
     }
   }
@@ -1515,15 +1515,15 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     if ((*lineInfo)[n].type == -1)
     {
       /* determine the line class */
-      if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
+      if (fill_buffer(f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
       {
         if (change_last)
           (*last)--;
         goto out;
       }
 
-      resolve_types ((char *) fmt, (char *) buf, *lineInfo, n, *last,
-                     QuoteList, q_level, force_redraw, flags & MUTT_SHOWCOLOR);
+      resolve_types((char *) fmt, (char *) buf, *lineInfo, n, *last,
+                    QuoteList, q_level, force_redraw, flags & MUTT_SHOWCOLOR);
 
       /* avoid race condition for continuation lines when scrolling up */
       for (m = n + 1; m < *last && (*lineInfo)[m].offset && (*lineInfo)[m].continuation; m++)
@@ -1540,8 +1540,8 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   {
     if (!(*lineInfo)[n].continuation)
     {
-      if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen,
-                       &buf_ready) < 0)
+      if (fill_buffer(f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen,
+                      &buf_ready) < 0)
       {
         if (change_last)
           (*last)--;
@@ -1549,8 +1549,8 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       }
     }
 
-    if (resolve_show_patterns (f, last_pos, *lineInfo, n, (char *)fmt,
-                               QuoteList, q_level, force_redraw) < 0)
+    if (resolve_show_patterns(f, last_pos, *lineInfo, n, (char *)fmt,
+                              QuoteList, q_level, force_redraw) < 0)
     {
       if (change_last)
         (*last)--;
@@ -1560,7 +1560,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
 
   if ((flags & MUTT_SEARCH) && !(*lineInfo)[n].continuation && (*lineInfo)[n].search_cnt == -1)
   {
-    if (fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
+    if (fill_buffer(f, last_pos, (*lineInfo)[n].offset, &buf, &fmt, &buflen, &buf_ready) < 0)
     {
       if (change_last)
         (*last)--;
@@ -1569,13 +1569,13 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
 
     offset = 0;
     (*lineInfo)[n].search_cnt = 0;
-    while (regexec (SearchRE, (char *) fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
+    while (regexec(SearchRE, (char *) fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
     {
       if (++((*lineInfo)[n].search_cnt) > 1)
-        safe_realloc (&((*lineInfo)[n].search),
-                      ((*lineInfo)[n].search_cnt) * sizeof (struct syntax_t));
+        safe_realloc(&((*lineInfo)[n].search),
+                     ((*lineInfo)[n].search_cnt) * sizeof(struct syntax_t));
       else
-        (*lineInfo)[n].search = safe_malloc (sizeof (struct syntax_t));
+        (*lineInfo)[n].search = safe_malloc(sizeof(struct syntax_t));
       pmatch[0].rm_so += offset;
       pmatch[0].rm_eo += offset;
       ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].first = pmatch[0].rm_so;
@@ -1603,8 +1603,8 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     goto out; /* fake display */
   }
 
-  if ((b_read = fill_buffer (f, last_pos, (*lineInfo)[n].offset, &buf, &fmt,
-                             &buflen, &buf_ready)) < 0)
+  if ((b_read = fill_buffer(f, last_pos, (*lineInfo)[n].offset, &buf, &fmt,
+                            &buflen, &buf_ready)) < 0)
   {
     if (change_last)
       (*last)--;
@@ -1612,12 +1612,12 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   }
 
   /* now chose a good place to break the line */
-  cnt = format_line (lineInfo, n, buf, flags, 0, b_read, &ch, &vch, &col, &special,
-                     pager_window);
+  cnt = format_line(lineInfo, n, buf, flags, 0, b_read, &ch, &vch, &col, &special,
+                    pager_window);
   buf_ptr = buf + cnt;
 
   /* move the break point only if smart_wrap is set */
-  if (option (OPTWRAP))
+  if (option(OPTWRAP))
   {
     if (cnt < b_read &&
         ch != -1 &&
@@ -1649,7 +1649,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
     buf_ptr++;
 
   if ((int) (buf_ptr - buf) < b_read && !(*lineInfo)[n+1].continuation)
-    append_line (*lineInfo, n, (int) (buf_ptr - buf));
+    append_line(*lineInfo, n, (int) (buf_ptr - buf));
   (*lineInfo)[n+1].offset = (*lineInfo)[n].offset + (long) (buf_ptr - buf);
 
   /* if we don't need to display the line we are done */
@@ -1660,15 +1660,15 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   }
 
   /* display the line */
-  format_line (lineInfo, n, buf, flags, &a, cnt, &ch, &vch, &col, &special,
-               pager_window);
+  format_line(lineInfo, n, buf, flags, &a, cnt, &ch, &vch, &col, &special,
+              pager_window);
 
   /* avoid a bug in ncurses... */
 #ifndef USE_SLANG_CURSES
   if (col == 0)
   {
     NORMAL_COLOR;
-    addch (' ');
+    addch(' ');
   }
 #endif
 
@@ -1677,7 +1677,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       a.attr ||
       (col != pager_window->cols && (flags & (MUTT_SHOWCOLOR | MUTT_SEARCH))))
   {
-    resolve_color (*lineInfo, n, vch, flags, 0, &a, 0);
+    resolve_color(*lineInfo, n, vch, flags, 0, &a, 0);
   }
 
   /*
@@ -1697,7 +1697,7 @@ display_line (FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   }
 
   if (col < pager_window->cols)
-    mutt_window_clrtoeol (pager_window);
+    mutt_window_clrtoeol(pager_window);
 
   /*
    * reset the color back to normal.  This *must* come after the
@@ -1720,7 +1720,7 @@ out:
 }
 
 static int
-upNLines (int nlines, struct line_t *info, int cur, int hiding)
+upNLines(int nlines, struct line_t *info, int cur, int hiding)
 {
   while (cur > 0 && nlines > 0)
   {
@@ -1746,7 +1746,7 @@ static const struct mapping_t PagerHelpExtra[] = {
   { NULL,       0 }
 };
 
-void mutt_clear_pager_position (void)
+void mutt_clear_pager_position(void)
 {
   TopLine = 0;
   OldHdr = NULL;
@@ -1788,7 +1788,7 @@ typedef struct
   struct stat sb;
 } pager_redraw_data_t;
 
-static void pager_menu_redraw (MUTTMENU *pager_menu)
+static void pager_menu_redraw(MUTTMENU *pager_menu)
 {
   pager_redraw_data_t *rd = pager_menu->redraw_data;
   int i, j, err;
@@ -1799,35 +1799,35 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
 
   if (pager_menu->redraw & REDRAW_FULL)
   {
-#if ! (defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM))
-    mutt_reflow_windows ();
+#if ! (defined(USE_SLANG_CURSES) || defined(HAVE_RESIZETERM))
+    mutt_reflow_windows();
 #endif
     NORMAL_COLOR;
     /* clear() doesn't optimize screen redraws */
-    move (0, 0);
-    clrtobot ();
+    move(0, 0);
+    clrtobot();
 
-    if (IsHeader (rd->extra) && Context->vcount + 1 < PagerIndexLines)
+    if (IsHeader(rd->extra) && Context->vcount + 1 < PagerIndexLines)
       rd->indexlen = Context->vcount + 1;
     else
       rd->indexlen = PagerIndexLines;
 
     rd->indicator = rd->indexlen / 3;
 
-    memcpy (rd->pager_window, MuttIndexWindow, sizeof(mutt_window_t));
-    memcpy (rd->pager_status_window, MuttStatusWindow, sizeof(mutt_window_t));
+    memcpy(rd->pager_window, MuttIndexWindow, sizeof(mutt_window_t));
+    memcpy(rd->pager_status_window, MuttStatusWindow, sizeof(mutt_window_t));
     rd->index_status_window->rows = rd->index_window->rows = 0;
 
-    if (IsHeader (rd->extra) && PagerIndexLines)
+    if (IsHeader(rd->extra) && PagerIndexLines)
     {
-      memcpy (rd->index_window, MuttIndexWindow, sizeof(mutt_window_t));
+      memcpy(rd->index_window, MuttIndexWindow, sizeof(mutt_window_t));
       rd->index_window->rows = rd->indexlen > 0 ? rd->indexlen - 1 : 0;
 
-      if (option (OPTSTATUSONTOP))
+      if (option(OPTSTATUSONTOP))
       {
-        memcpy (rd->index_status_window, MuttStatusWindow, sizeof(mutt_window_t));
+        memcpy(rd->index_status_window, MuttStatusWindow, sizeof(mutt_window_t));
 
-        memcpy (rd->pager_status_window, MuttIndexWindow, sizeof(mutt_window_t));
+        memcpy(rd->pager_status_window, MuttIndexWindow, sizeof(mutt_window_t));
         rd->pager_status_window->rows = 1;
         rd->pager_status_window->row_offset += rd->index_window->rows;
 
@@ -1836,7 +1836,7 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       }
       else
       {
-        memcpy (rd->index_status_window, MuttIndexWindow, sizeof(mutt_window_t));
+        memcpy(rd->index_status_window, MuttIndexWindow, sizeof(mutt_window_t));
         rd->index_status_window->rows = 1;
         rd->index_status_window->row_offset += rd->index_window->rows;
 
@@ -1845,24 +1845,24 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       }
     }
 
-    if (option (OPTHELP))
+    if (option(OPTHELP))
     {
-      SETCOLOR (MT_COLOR_STATUS);
-      mutt_window_move (MuttHelpWindow, 0, 0);
-      mutt_paddstr (MuttHelpWindow->cols, rd->helpstr);
+      SETCOLOR(MT_COLOR_STATUS);
+      mutt_window_move(MuttHelpWindow, 0, 0);
+      mutt_paddstr(MuttHelpWindow->cols, rd->helpstr);
       NORMAL_COLOR;
     }
 
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+#if defined(USE_SLANG_CURSES) || defined(HAVE_RESIZETERM)
     if (Resize != NULL)
     {
       if ((rd->SearchCompiled = Resize->SearchCompiled))
       {
-        if ((err = REGCOMP (&rd->SearchRE, rd->searchbuf,
-                            REG_NEWLINE | mutt_which_case (rd->searchbuf))) != 0)
+        if ((err = REGCOMP(&rd->SearchRE, rd->searchbuf,
+                           REG_NEWLINE | mutt_which_case(rd->searchbuf))) != 0)
         {
-          regerror (err, &rd->SearchRE, buffer, sizeof (buffer));
-          mutt_error ("%s", buffer);
+          regerror(err, &rd->SearchRE, buffer, sizeof(buffer));
+          mutt_error("%s", buffer);
           rd->SearchCompiled = 0;
         }
         else
@@ -1874,11 +1874,11 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       rd->lines = Resize->line;
       pager_menu->redraw |= REDRAW_FLOW;
 
-      FREE (&Resize);
+      FREE(&Resize);
     }
 #endif
 
-    if (IsHeader (rd->extra) && PagerIndexLines)
+    if (IsHeader(rd->extra) && PagerIndexLines)
     {
       if (rd->index == NULL)
       {
@@ -1911,7 +1911,7 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
 #ifdef USE_SIDEBAR
     pager_menu->redraw |= REDRAW_SIDEBAR;
 #endif
-    mutt_show_error ();
+    mutt_show_error();
   }
 
   if (pager_menu->redraw & REDRAW_FLOW)
@@ -1933,10 +1933,10 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
         rd->lineInfo[i].show_patterns_done = 0;
         rd->lineInfo[i].quote = NULL;
 
-        safe_realloc (&(rd->lineInfo[i].syntax),
-                      sizeof (struct syntax_t));
+        safe_realloc(&(rd->lineInfo[i].syntax),
+                     sizeof(struct syntax_t));
         if (rd->SearchCompiled && rd->lineInfo[i].search)
-          FREE (&(rd->lineInfo[i].search));
+          FREE(&(rd->lineInfo[i].search));
       }
 
       rd->lastLine = 0;
@@ -1944,10 +1944,10 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
     }
     i = -1;
     j = -1;
-    while (display_line (rd->fp, &rd->last_pos, &rd->lineInfo, ++i, &rd->lastLine, &rd->maxLine,
-                         rd->has_types | rd->SearchFlag | (rd->flags & MUTT_PAGER_NOWRAP),
-                         &rd->QuoteList, &rd->q_level, &rd->force_redraw,
-                         &rd->SearchRE, rd->pager_window) == 0)
+    while (display_line(rd->fp, &rd->last_pos, &rd->lineInfo, ++i, &rd->lastLine, &rd->maxLine,
+                        rd->has_types | rd->SearchFlag | (rd->flags & MUTT_PAGER_NOWRAP),
+                        &rd->QuoteList, &rd->q_level, &rd->force_redraw,
+                        &rd->SearchRE, rd->pager_window) == 0)
       if (!rd->lineInfo[i].continuation && ++j == rd->lines)
       {
         rd->topline = i;
@@ -1959,7 +1959,7 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
 #ifdef USE_SIDEBAR
   if (pager_menu->redraw & REDRAW_SIDEBAR)
   {
-    menu_redraw_sidebar (pager_menu);
+    menu_redraw_sidebar(pager_menu);
   }
 #endif
 
@@ -1967,7 +1967,7 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
   {
     do
     {
-      mutt_window_move (rd->pager_window, 0, 0);
+      mutt_window_move(rd->pager_window, 0, 0);
       rd->curline = rd->oldtopline = rd->topline;
       rd->lines = 0;
       rd->force_redraw = 0;
@@ -1975,26 +1975,26 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       while (rd->lines < rd->pager_window->rows &&
              rd->lineInfo[rd->curline].offset <= rd->sb.st_size - 1)
       {
-        if (display_line (rd->fp, &rd->last_pos, &rd->lineInfo, rd->curline, &rd->lastLine,
-                          &rd->maxLine,
-                          (rd->flags & MUTT_DISPLAYFLAGS) | rd->hideQuoted | rd->SearchFlag | (rd->flags & MUTT_PAGER_NOWRAP),
-                          &rd->QuoteList, &rd->q_level, &rd->force_redraw, &rd->SearchRE,
-                          rd->pager_window) > 0)
+        if (display_line(rd->fp, &rd->last_pos, &rd->lineInfo, rd->curline, &rd->lastLine,
+                         &rd->maxLine,
+                         (rd->flags & MUTT_DISPLAYFLAGS) | rd->hideQuoted | rd->SearchFlag | (rd->flags & MUTT_PAGER_NOWRAP),
+                         &rd->QuoteList, &rd->q_level, &rd->force_redraw, &rd->SearchRE,
+                         rd->pager_window) > 0)
           rd->lines++;
         rd->curline++;
-        mutt_window_move (rd->pager_window, rd->lines, 0);
+        mutt_window_move(rd->pager_window, rd->lines, 0);
       }
       rd->last_offset = rd->lineInfo[rd->curline].offset;
     } while (rd->force_redraw);
 
-    SETCOLOR (MT_COLOR_TILDE);
+    SETCOLOR(MT_COLOR_TILDE);
     while (rd->lines < rd->pager_window->rows)
     {
-      mutt_window_clrtoeol (rd->pager_window);
-      if (option (OPTTILDE))
-        addch ('~');
+      mutt_window_clrtoeol(rd->pager_window);
+      if (option(OPTTILDE))
+        addch('~');
       rd->lines++;
-      mutt_window_move (rd->pager_window, rd->lines, 0);
+      mutt_window_move(rd->pager_window, rd->lines, 0);
     }
     NORMAL_COLOR;
 
@@ -2018,29 +2018,29 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
       strfcpy(pager_progress_str, (rd->topline == 0) ? "all" : "end", sizeof(pager_progress_str));
 
     /* print out the pager status bar */
-    mutt_window_move (rd->pager_status_window, 0, 0);
-    SETCOLOR (MT_COLOR_STATUS);
+    mutt_window_move(rd->pager_status_window, 0, 0);
+    SETCOLOR(MT_COLOR_STATUS);
 
-    if (IsHeader (rd->extra) || IsMsgAttach (rd->extra))
+    if (IsHeader(rd->extra) || IsMsgAttach(rd->extra))
     {
       size_t l1 = rd->pager_status_window->cols * MB_LEN_MAX;
-      size_t l2 = sizeof (buffer);
-      hfi.hdr = (IsHeader (rd->extra)) ? rd->extra->hdr : rd->extra->bdy->hdr;
-      mutt_make_string_info (buffer, l1 < l2 ? l1 : l2, rd->pager_status_window->cols, NONULL (PagerFmt), &hfi, 0);
-      mutt_paddstr (rd->pager_status_window->cols, buffer);
+      size_t l2 = sizeof(buffer);
+      hfi.hdr = (IsHeader(rd->extra)) ? rd->extra->hdr : rd->extra->bdy->hdr;
+      mutt_make_string_info(buffer, l1 < l2 ? l1 : l2, rd->pager_status_window->cols, NONULL(PagerFmt), &hfi, 0);
+      mutt_paddstr(rd->pager_status_window->cols, buffer);
     }
     else
     {
       char bn[STRING];
-      snprintf (bn, sizeof (bn), "%s (%s)", rd->banner, pager_progress_str);
-      mutt_paddstr (rd->pager_status_window->cols, bn);
+      snprintf(bn, sizeof(bn), "%s (%s)", rd->banner, pager_progress_str);
+      mutt_paddstr(rd->pager_status_window->cols, bn);
     }
     NORMAL_COLOR;
     if (option(OPTTSENABLED) && TSSupported)
     {
-      menu_status_line (buffer, sizeof (buffer), rd->index, NONULL (TSStatusFormat));
+      menu_status_line(buffer, sizeof(buffer), rd->index, NONULL(TSStatusFormat));
       mutt_ts_status(buffer);
-      menu_status_line (buffer, sizeof (buffer), rd->index, NONULL (TSIconFormat));
+      menu_status_line(buffer, sizeof(buffer), rd->index, NONULL(TSIconFormat));
       mutt_ts_icon(buffer);
     }
   }
@@ -2050,14 +2050,14 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
     /* redraw the pager_index indicator, because the
      * flags for this message might have changed. */
     if (rd->index_window->rows > 0)
-      menu_redraw_current (rd->index);
+      menu_redraw_current(rd->index);
 
     /* print out the index status bar */
-    menu_status_line (buffer, sizeof (buffer), rd->index, NONULL(Status));
+    menu_status_line(buffer, sizeof(buffer), rd->index, NONULL(Status));
 
-    mutt_window_move (rd->index_status_window, 0, 0);
-    SETCOLOR (MT_COLOR_STATUS);
-    mutt_paddstr (rd->index_status_window->cols, buffer);
+    mutt_window_move(rd->index_status_window, 0, 0);
+    SETCOLOR(MT_COLOR_STATUS);
+    mutt_paddstr(rd->index_status_window->cols, buffer);
     NORMAL_COLOR;
   }
 
@@ -2070,7 +2070,7 @@ static void pager_menu_redraw (MUTTMENU *pager_menu)
    is there so that we can do operations on the current message without the
    need to pop back out to the main-menu.  */
 int
-mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
+mutt_pager(const char *banner, const char *fname, int flags, pager_t *extra)
 {
   static char searchbuf[STRING] = "";
   char buffer[LONG_STRING];
@@ -2088,7 +2088,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
   if (!(flags & MUTT_SHOWCOLOR))
     flags |= MUTT_SHOWFLAT;
 
-  memset (&rd, 0, sizeof (rd));
+  memset(&rd, 0, sizeof(rd));
   rd.banner = banner;
   rd.flags = flags;
   rd.extra = extra;
@@ -2097,76 +2097,76 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
   rd.searchbuf = searchbuf;
   rd.has_types = (IsHeader(extra) || (flags & MUTT_SHOWCOLOR)) ? MUTT_TYPES : 0; /* main message or rfc822 attachment */
 
-  if ((rd.fp = fopen (fname, "r")) == NULL)
+  if ((rd.fp = fopen(fname, "r")) == NULL)
   {
-    mutt_perror (fname);
+    mutt_perror(fname);
     return (-1);
   }
 
-  if (stat (fname, &rd.sb) != 0)
+  if (stat(fname, &rd.sb) != 0)
   {
-    mutt_perror (fname);
-    safe_fclose (&rd.fp);
+    mutt_perror(fname);
+    safe_fclose(&rd.fp);
     return (-1);
   }
-  unlink (fname);
+  unlink(fname);
 
   /* Initialize variables */
 
-  if (IsHeader (extra) && !extra->hdr->read)
+  if (IsHeader(extra) && !extra->hdr->read)
   {
     Context->msgnotreadyet = extra->hdr->msgno;
-    mutt_set_flag (Context, extra->hdr, MUTT_READ, 1);
+    mutt_set_flag(Context, extra->hdr, MUTT_READ, 1);
   }
 
-  rd.lineInfo = safe_malloc (sizeof (struct line_t) * (rd.maxLine = LINES));
+  rd.lineInfo = safe_malloc(sizeof(struct line_t) * (rd.maxLine = LINES));
   for (i = 0 ; i < rd.maxLine ; i++)
   {
-    memset (&rd.lineInfo[i], 0, sizeof (struct line_t));
+    memset(&rd.lineInfo[i], 0, sizeof(struct line_t));
     rd.lineInfo[i].type = -1;
     rd.lineInfo[i].search_cnt = -1;
-    rd.lineInfo[i].syntax = safe_malloc (sizeof (struct syntax_t));
+    rd.lineInfo[i].syntax = safe_malloc(sizeof(struct syntax_t));
     (rd.lineInfo[i].syntax)[0].first = (rd.lineInfo[i].syntax)[0].last = -1;
   }
 
-  helpstr = mutt_buffer_new ();
-  mutt_compile_help (buffer, sizeof (buffer), MENU_PAGER, PagerHelp);
-  mutt_buffer_strcpy (helpstr, buffer);
-  if (IsHeader (extra))
+  helpstr = mutt_buffer_new();
+  mutt_compile_help(buffer, sizeof(buffer), MENU_PAGER, PagerHelp);
+  mutt_buffer_strcpy(helpstr, buffer);
+  if (IsHeader(extra))
   {
-    mutt_compile_help (buffer, sizeof (buffer), MENU_PAGER, PagerHelpExtra);
-    mutt_buffer_addch (helpstr, ' ');
-    mutt_buffer_addstr (helpstr, buffer);
+    mutt_compile_help(buffer, sizeof(buffer), MENU_PAGER, PagerHelpExtra);
+    mutt_buffer_addch(helpstr, ' ');
+    mutt_buffer_addstr(helpstr, buffer);
   }
   if (!InHelp)
   {
-    mutt_make_help (buffer, sizeof (buffer), _("Help"), MENU_PAGER, OP_HELP);
-    mutt_buffer_addch (helpstr, ' ');
-    mutt_buffer_addstr (helpstr, buffer);
+    mutt_make_help(buffer, sizeof(buffer), _("Help"), MENU_PAGER, OP_HELP);
+    mutt_buffer_addch(helpstr, ' ');
+    mutt_buffer_addstr(helpstr, buffer);
   }
-  rd.helpstr = mutt_b2s (helpstr);
+  rd.helpstr = mutt_b2s(helpstr);
 
-  rd.index_status_window = safe_calloc (sizeof (mutt_window_t), 1);
-  rd.index_window        = safe_calloc (sizeof (mutt_window_t), 1);
-  rd.pager_status_window = safe_calloc (sizeof (mutt_window_t), 1);
-  rd.pager_window        = safe_calloc (sizeof (mutt_window_t), 1);
+  rd.index_status_window = safe_calloc(sizeof(mutt_window_t), 1);
+  rd.index_window        = safe_calloc(sizeof(mutt_window_t), 1);
+  rd.pager_status_window = safe_calloc(sizeof(mutt_window_t), 1);
+  rd.pager_window        = safe_calloc(sizeof(mutt_window_t), 1);
 
-  pager_menu = mutt_new_menu (MENU_PAGER);
+  pager_menu = mutt_new_menu(MENU_PAGER);
   pager_menu->custom_menu_redraw = pager_menu_redraw;
   pager_menu->redraw_data = &rd;
-  mutt_push_current_menu (pager_menu);
+  mutt_push_current_menu(pager_menu);
 
   while (ch != -1)
   {
-    mutt_curs_set (0);
+    mutt_curs_set(0);
 
-#if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
+#if defined(USE_SLANG_CURSES) || defined(HAVE_RESIZETERM)
     if (SigWinch)
     {
       do
       {
         SigWinch = 0;
-        mutt_resize_screen ();
+        mutt_resize_screen();
       }
       while (SigWinch);
 
@@ -2184,7 +2184,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
             if (!rd.lineInfo[i].continuation)
               rd.lines++;
 
-          Resize = safe_malloc (sizeof (struct resize));
+          Resize = safe_malloc(sizeof(struct resize));
 
           Resize->line = rd.lines;
           Resize->SearchCompiled = rd.SearchCompiled;
@@ -2198,7 +2198,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     }
 #endif
 
-    pager_menu_redraw (pager_menu);
+    pager_menu_redraw(pager_menu);
 
     if (option(OPTBRAILLEFRIENDLY))
     {
@@ -2209,11 +2209,11 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       }
     }
     else
-      mutt_window_move (rd.pager_status_window, 0, rd.pager_status_window->cols-1);
+      mutt_window_move(rd.pager_status_window, 0, rd.pager_status_window->cols-1);
 
-    mutt_refresh ();
+    mutt_refresh();
 
-    if (IsHeader (extra) && OldHdr == extra->hdr && TopLine != rd.topline
+    if (IsHeader(extra) && OldHdr == extra->hdr && TopLine != rd.topline
         && rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
     {
       if (TopLine - rd.topline > rd.lines)
@@ -2225,10 +2225,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     else
       OldHdr = NULL;
 
-    ch = km_dokey (MENU_PAGER);
+    ch = km_dokey(MENU_PAGER);
     if (ch >= 0)
-      mutt_clear_error ();
-    mutt_curs_set (1);
+      mutt_clear_error();
+    mutt_curs_set(1);
 
     if (ch < 0)
     {
@@ -2246,10 +2246,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
         break;
 
       case OP_QUIT:
-        if (query_quadoption (OPT_QUIT, _("Quit Mutt?")) == MUTT_YES)
+        if (query_quadoption(OPT_QUIT, _("Quit Mutt?")) == MUTT_YES)
         {
           /* avoid prompting again in the index menu */
-          set_quadoption (OPT_QUIT, MUTT_YES);
+          set_quadoption(OPT_QUIT, MUTT_YES);
           ch = -1;
         }
         break;
@@ -2257,9 +2257,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       case OP_NEXT_PAGE:
         if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
         {
-          rd.topline = upNLines (PagerContext, rd.lineInfo, rd.curline, rd.hideQuoted);
+          rd.topline = upNLines(PagerContext, rd.lineInfo, rd.curline, rd.hideQuoted);
         }
-        else if (option (OPTPAGERSTOP))
+        else if (option(OPTPAGERSTOP))
         {
           /* emulate "less -q" and don't go on to the next message. */
           mutt_error _("Bottom of message is shown.");
@@ -2275,7 +2275,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       case OP_PREV_PAGE:
         if (rd.topline != 0)
         {
-          rd.topline = upNLines (rd.pager_window->rows-PagerContext, rd.lineInfo, rd.topline, rd.hideQuoted);
+          rd.topline = upNLines(rd.pager_window->rows-PagerContext, rd.lineInfo, rd.topline, rd.hideQuoted);
         }
         else
           mutt_error _("Top of message is shown.");
@@ -2298,7 +2298,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 
       case OP_PREV_LINE:
         if (rd.topline)
-          rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
+          rd.topline = upNLines(1, rd.lineInfo, rd.topline, rd.hideQuoted);
         else
           mutt_error _("Top of message is shown.");
         break;
@@ -2312,8 +2312,8 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 
       case OP_HALF_UP:
         if (rd.topline)
-          rd.topline = upNLines (rd.pager_window->rows/2 + rd.pager_window->rows%2,
-                                 rd.lineInfo, rd.topline, rd.hideQuoted);
+          rd.topline = upNLines(rd.pager_window->rows/2 + rd.pager_window->rows%2,
+                                rd.lineInfo, rd.topline, rd.hideQuoted);
         else
           mutt_error _("Top of message is shown.");
         break;
@@ -2321,9 +2321,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       case OP_HALF_DOWN:
         if (rd.lineInfo[rd.curline].offset < rd.sb.st_size-1)
         {
-          rd.topline = upNLines (rd.pager_window->rows/2, rd.lineInfo, rd.curline, rd.hideQuoted);
+          rd.topline = upNLines(rd.pager_window->rows/2, rd.lineInfo, rd.curline, rd.hideQuoted);
         }
-        else if (option (OPTPAGERSTOP))
+        else if (option(OPTPAGERSTOP))
         {
           /* emulate "less -q" and don't go on to the next message. */
           mutt_error _("Bottom of message is shown.");
@@ -2361,7 +2361,7 @@ search_next:
 
             if (i < rd.lastLine)
               rd.topline = i;
-            else if (wrapped || !option (OPTWRAPSEARCH))
+            else if (wrapped || !option(OPTWRAPSEARCH))
               mutt_error _("Not found.");
             else
             {
@@ -2383,7 +2383,7 @@ search_next:
 
             if (i >= 0)
               rd.topline = i;
-            else if (wrapped || !option (OPTWRAPSEARCH))
+            else if (wrapped || !option(OPTWRAPSEARCH))
               mutt_error _("Not found.");
             else
             {
@@ -2408,14 +2408,14 @@ search_next:
 
       case OP_SEARCH:
       case OP_SEARCH_REVERSE:
-        strfcpy (buffer, searchbuf, sizeof (buffer));
-        if (mutt_get_field ((ch == OP_SEARCH || ch == OP_SEARCH_NEXT) ?
-                            _("Search for: ") : _("Reverse search for: "),
-                            buffer, sizeof (buffer),
-                            MUTT_CLEAR) != 0)
+        strfcpy(buffer, searchbuf, sizeof(buffer));
+        if (mutt_get_field((ch == OP_SEARCH || ch == OP_SEARCH_NEXT) ?
+                           _("Search for: ") : _("Reverse search for: "),
+                           buffer, sizeof(buffer),
+                           MUTT_CLEAR) != 0)
           break;
 
-        if (!strcmp (buffer, searchbuf))
+        if (!strcmp(buffer, searchbuf))
         {
           if (rd.SearchCompiled)
           {
@@ -2433,7 +2433,7 @@ search_next:
         if (!buffer[0])
           break;
 
-        strfcpy (searchbuf, buffer, sizeof (searchbuf));
+        strfcpy(searchbuf, buffer, sizeof(searchbuf));
 
         /* leave SearchBack alone if ch == OP_SEARCH_NEXT */
         if (ch == OP_SEARCH)
@@ -2443,24 +2443,24 @@ search_next:
 
         if (rd.SearchCompiled)
         {
-          regfree (&rd.SearchRE);
+          regfree(&rd.SearchRE);
           for (i = 0; i < rd.lastLine; i++)
           {
             if (rd.lineInfo[i].search)
-              FREE (&(rd.lineInfo[i].search));
+              FREE(&(rd.lineInfo[i].search));
             rd.lineInfo[i].search_cnt = -1;
           }
         }
 
-        if ((err = REGCOMP (&rd.SearchRE, searchbuf, REG_NEWLINE | mutt_which_case (searchbuf))) != 0)
+        if ((err = REGCOMP(&rd.SearchRE, searchbuf, REG_NEWLINE | mutt_which_case(searchbuf))) != 0)
         {
-          regerror (err, &rd.SearchRE, buffer, sizeof (buffer));
-          mutt_error ("%s", buffer);
+          regerror(err, &rd.SearchRE, buffer, sizeof(buffer));
+          mutt_error("%s", buffer);
           for (i = 0; i < rd.maxLine ; i++)
           {
             /* cleanup */
             if (rd.lineInfo[i].search)
-              FREE (&(rd.lineInfo[i].search));
+              FREE(&(rd.lineInfo[i].search));
             rd.lineInfo[i].search_cnt = -1;
           }
           rd.SearchFlag = 0;
@@ -2471,10 +2471,10 @@ search_next:
           rd.SearchCompiled = 1;
           /* update the search pointers */
           i = 0;
-          while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
-                               &rd.maxLine, MUTT_SEARCH | (flags & MUTT_PAGER_NSKIP) | (flags & MUTT_PAGER_NOWRAP) | rd.has_types,
-                               &rd.QuoteList, &rd.q_level,
-                               &rd.force_redraw, &rd.SearchRE, rd.pager_window) == 0)
+          while (display_line(rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
+                              &rd.maxLine, MUTT_SEARCH | (flags & MUTT_PAGER_NSKIP) | (flags & MUTT_PAGER_NOWRAP) | rd.has_types,
+                              &rd.QuoteList, &rd.q_level,
+                              &rd.force_redraw, &rd.SearchRE, rd.pager_window) == 0)
             i++;
 
           if (!rd.SearchBack)
@@ -2533,10 +2533,10 @@ search_next:
 
       case OP_SORT:
       case OP_SORT_REVERSE:
-        CHECK_MODE(IsHeader (extra));
-        if (mutt_select_sort ((ch == OP_SORT_REVERSE)) == 0)
+        CHECK_MODE(IsHeader(extra));
+        if (mutt_select_sort((ch == OP_SORT_REVERSE)) == 0)
         {
-          set_option (OPTNEEDRESORT);
+          set_option(OPTNEEDRESORT);
           ch = -1;
           rc = OP_DISPLAY_MESSAGE;
         }
@@ -2547,7 +2547,7 @@ search_next:
         if (! InHelp)
         {
           InHelp = 1;
-          mutt_help (MENU_PAGER);
+          mutt_help(MENU_PAGER);
           InHelp = 0;
         }
         else
@@ -2555,7 +2555,7 @@ search_next:
         break;
 
       case OP_ERROR_HISTORY:
-        mutt_error_history_display ();
+        mutt_error_history_display();
         break;
 
       case OP_PAGER_HIDE_QUOTED:
@@ -2563,7 +2563,7 @@ search_next:
         {
           rd.hideQuoted ^= MUTT_HIDE;
           if (rd.hideQuoted && rd.lineInfo[rd.topline].type == MT_COLOR_QUOTED)
-            rd.topline = upNLines (1, rd.lineInfo, rd.topline, rd.hideQuoted);
+            rd.topline = upNLines(1, rd.lineInfo, rd.topline, rd.hideQuoted);
           else
             pager_menu->redraw = REDRAW_BODY;
         }
@@ -2583,7 +2583,7 @@ search_next:
           if (PagerSkipQuotedContext > 0)
           {
             while ((new_topline < rd.lastLine ||
-                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                    (0 == (dretval = display_line(rd.fp, &rd.last_pos, &rd.lineInfo,
                            new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
                            &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
                    && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
@@ -2603,7 +2603,7 @@ search_next:
           {
             num_quoted = 0;
             while ((new_topline < rd.lastLine ||
-                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                    (0 == (dretval = display_line(rd.fp, &rd.last_pos, &rd.lineInfo,
                            new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
                            &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
                    && rd.lineInfo[new_topline].type != MT_COLOR_QUOTED)
@@ -2616,7 +2616,7 @@ search_next:
             }
 
             while ((new_topline < rd.lastLine ||
-                    (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                    (0 == (dretval = display_line(rd.fp, &rd.last_pos, &rd.lineInfo,
                            new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
                            &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
                    && rd.lineInfo[new_topline].type == MT_COLOR_QUOTED)
@@ -2632,7 +2632,7 @@ search_next:
             }
           }
 
-          rd.topline = new_topline - MIN (PagerSkipQuotedContext, num_quoted);
+          rd.topline = new_topline - MIN(PagerSkipQuotedContext, num_quoted);
         }
         break;
 
@@ -2642,7 +2642,7 @@ search_next:
           int dretval = 0;
           int new_topline = rd.topline;
 
-          if (!ISHEADER (rd.lineInfo[new_topline].type))
+          if (!ISHEADER(rd.lineInfo[new_topline].type))
           {
             /* L10N:
                Displayed if <skip-headers> is invoked in the pager, but we are
@@ -2653,10 +2653,10 @@ search_next:
           }
 
           while ((new_topline < rd.lastLine ||
-                  (0 == (dretval = display_line (rd.fp, &rd.last_pos, &rd.lineInfo,
+                  (0 == (dretval = display_line(rd.fp, &rd.last_pos, &rd.lineInfo,
                          new_topline, &rd.lastLine, &rd.maxLine, MUTT_TYPES | (flags & MUTT_PAGER_NOWRAP),
                          &rd.QuoteList, &rd.q_level, &rd.force_redraw, &rd.SearchRE, rd.pager_window))))
-                 && ISHEADER (rd.lineInfo[new_topline].type))
+                 && ISHEADER(rd.lineInfo[new_topline].type))
             new_topline++;
 
           if (dretval < 0)
@@ -2679,24 +2679,24 @@ search_next:
         {
           i = rd.curline;
           /* make sure the types are defined to the end of file */
-          while (display_line (rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
-                               &rd.maxLine, rd.has_types | (flags & MUTT_PAGER_NOWRAP),
-                               &rd.QuoteList, &rd.q_level, &rd.force_redraw,
-                               &rd.SearchRE, rd.pager_window) == 0)
+          while (display_line(rd.fp, &rd.last_pos, &rd.lineInfo, i, &rd.lastLine,
+                              &rd.maxLine, rd.has_types | (flags & MUTT_PAGER_NOWRAP),
+                              &rd.QuoteList, &rd.q_level, &rd.force_redraw,
+                              &rd.SearchRE, rd.pager_window) == 0)
             i++;
-          rd.topline = upNLines (rd.pager_window->rows, rd.lineInfo, rd.lastLine, rd.hideQuoted);
+          rd.topline = upNLines(rd.pager_window->rows, rd.lineInfo, rd.lastLine, rd.hideQuoted);
         }
         else
           mutt_error _("Bottom of message is shown.");
         break;
 
       case OP_REDRAW:
-        clearok (stdscr, TRUE);
+        clearok(stdscr, TRUE);
         pager_menu->redraw = REDRAW_FULL;
         break;
 
       case OP_NULL:
-        km_error_key (MENU_PAGER);
+        km_error_key(MENU_PAGER);
         break;
 
         /* --------------------------------------------------------------------
@@ -2705,27 +2705,27 @@ search_next:
          */
 
       case OP_BOUNCE_MESSAGE:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
         CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-          mutt_attach_bounce (extra->fp, extra->hdr,
-                              extra->actx, extra->bdy);
+        if (IsMsgAttach(extra))
+          mutt_attach_bounce(extra->fp, extra->hdr,
+                             extra->actx, extra->bdy);
         else
-          ci_bounce_message (extra->hdr);
+          ci_bounce_message(extra->hdr);
         break;
 
       case OP_RESEND:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
         CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-          mutt_attach_resend (extra->fp, extra->hdr,
-                              extra->actx, extra->bdy);
+        if (IsMsgAttach(extra))
+          mutt_attach_resend(extra->fp, extra->hdr,
+                             extra->actx, extra->bdy);
         else
-          mutt_resend_message (NULL, extra->ctx, extra->hdr);
+          mutt_resend_message(NULL, extra->ctx, extra->hdr);
         break;
 
       case OP_CHECK_TRADITIONAL:
-        CHECK_MODE (IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         if (!(WithCrypto & APPLICATION_PGP))
           break;
         if (!(extra->hdr->security & PGP_TRADITIONAL_CHECKED))
@@ -2736,37 +2736,37 @@ search_next:
         break;
 
       case OP_COMPOSE_TO_SENDER:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
         CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-          mutt_attach_mail_sender (extra->fp, extra->hdr, extra->actx,
-                                   extra->bdy);
+        if (IsMsgAttach(extra))
+          mutt_attach_mail_sender(extra->fp, extra->hdr, extra->actx,
+                                  extra->bdy);
         else
-          mutt_send_message (SENDTOSENDER | SENDBACKGROUNDEDIT,
-                             NULL, NULL, extra->ctx, extra->hdr);
+          mutt_send_message(SENDTOSENDER | SENDBACKGROUNDEDIT,
+                            NULL, NULL, extra->ctx, extra->hdr);
         break;
 
       case OP_CREATE_ALIAS:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
-        if (IsMsgAttach (extra))
-          mutt_create_alias (extra->bdy->hdr->env, NULL);
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
+        if (IsMsgAttach(extra))
+          mutt_create_alias(extra->bdy->hdr->env, NULL);
         else
-          mutt_create_alias (extra->hdr->env, NULL);
+          mutt_create_alias(extra->hdr->env, NULL);
         break;
 
       case OP_PURGE_MESSAGE:
       case OP_DELETE:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message"));
 
-        mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 1);
-        mutt_set_flag (Context, extra->hdr, MUTT_PURGE, (ch == OP_PURGE_MESSAGE));
-        if (option (OPTDELETEUNTAG))
-          mutt_set_flag (Context, extra->hdr, MUTT_TAG, 0);
+        mutt_set_flag(Context, extra->hdr, MUTT_DELETE, 1);
+        mutt_set_flag(Context, extra->hdr, MUTT_PURGE, (ch == OP_PURGE_MESSAGE));
+        if (option(OPTDELETEUNTAG))
+          mutt_set_flag(Context, extra->hdr, MUTT_TAG, 0);
         pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (option (OPTRESOLVE))
+        if (option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_MAIN_NEXT_UNDELETED;
@@ -2775,12 +2775,12 @@ search_next:
 
       case OP_MAIN_SET_FLAG:
       case OP_MAIN_CLEAR_FLAG:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
 
-        if (mutt_change_flag (extra->hdr, (ch == OP_MAIN_SET_FLAG)) == 0)
+        if (mutt_change_flag(extra->hdr, (ch == OP_MAIN_SET_FLAG)) == 0)
           pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (extra->hdr->deleted && option (OPTRESOLVE))
+        if (extra->hdr->deleted && option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_MAIN_NEXT_UNDELETED;
@@ -2789,26 +2789,26 @@ search_next:
 
       case OP_DELETE_THREAD:
       case OP_DELETE_SUBTHREAD:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_DELETE, _("Cannot delete message(s)"));
 
-        r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 1,
-                                  ch == OP_DELETE_THREAD ? 0 : 1);
+        r = mutt_thread_set_flag(extra->hdr, MUTT_DELETE, 1,
+                                 ch == OP_DELETE_THREAD ? 0 : 1);
 
         if (r != -1)
         {
-          if (option (OPTDELETEUNTAG))
-            mutt_thread_set_flag (extra->hdr, MUTT_TAG, 0,
-                                  ch == OP_DELETE_THREAD ? 0 : 1);
-          if (option (OPTRESOLVE))
+          if (option(OPTDELETEUNTAG))
+            mutt_thread_set_flag(extra->hdr, MUTT_TAG, 0,
+                                 ch == OP_DELETE_THREAD ? 0 : 1);
+          if (option(OPTRESOLVE))
           {
             rc = OP_MAIN_NEXT_UNDELETED;
             ch = -1;
           }
 
-          if (!option (OPTRESOLVE) && PagerIndexLines)
+          if (!option(OPTRESOLVE) && PagerIndexLines)
             pager_menu->redraw = REDRAW_FULL;
           else
             pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
@@ -2816,29 +2816,29 @@ search_next:
         break;
 
       case OP_DISPLAY_ADDRESS:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
-        if (IsMsgAttach (extra))
-          mutt_display_address (extra->bdy->hdr->env);
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
+        if (IsMsgAttach(extra))
+          mutt_display_address(extra->bdy->hdr->env);
         else
-          mutt_display_address (extra->hdr->env);
+          mutt_display_address(extra->hdr->env);
         break;
 
       case OP_ENTER_COMMAND:
         old_PagerIndexLines = PagerIndexLines;
 
-        mutt_enter_command ();
+        mutt_enter_command();
 
-        if (option (OPTNEEDRESORT))
+        if (option(OPTNEEDRESORT))
         {
-          unset_option (OPTNEEDRESORT);
-          CHECK_MODE(IsHeader (extra));
-          set_option (OPTNEEDRESORT);
+          unset_option(OPTNEEDRESORT);
+          CHECK_MODE(IsHeader(extra));
+          set_option(OPTNEEDRESORT);
         }
 
         if (old_PagerIndexLines != PagerIndexLines)
         {
           if (rd.index)
-            mutt_menuDestroy (&rd.index);
+            mutt_menuDestroy(&rd.index);
           rd.index = NULL;
         }
 
@@ -2854,14 +2854,14 @@ search_next:
         break;
 
       case OP_FLAG_MESSAGE:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_WRITE, "Cannot flag message");
 
-        mutt_set_flag (Context, extra->hdr, MUTT_FLAG, !extra->hdr->flagged);
+        mutt_set_flag(Context, extra->hdr, MUTT_FLAG, !extra->hdr->flagged);
         pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (option (OPTRESOLVE))
+        if (option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_MAIN_NEXT_UNDELETED;
@@ -2869,30 +2869,30 @@ search_next:
         break;
 
       case OP_PIPE:
-        CHECK_MODE(IsHeader (extra) || IsAttach (extra));
-        if (IsAttach (extra))
-          mutt_pipe_attachment_list (extra->actx, extra->fp, 0, extra->bdy, 0);
+        CHECK_MODE(IsHeader(extra) || IsAttach(extra));
+        if (IsAttach(extra))
+          mutt_pipe_attachment_list(extra->actx, extra->fp, 0, extra->bdy, 0);
         else
-          mutt_pipe_message (extra->hdr);
+          mutt_pipe_message(extra->hdr);
         break;
 
       case OP_PRINT:
-        CHECK_MODE(IsHeader (extra) || IsAttach (extra));
-        if (IsAttach (extra))
-          mutt_print_attachment_list (extra->actx, extra->fp, 0, extra->bdy);
+        CHECK_MODE(IsHeader(extra) || IsAttach(extra));
+        if (IsAttach(extra))
+          mutt_print_attachment_list(extra->actx, extra->fp, 0, extra->bdy);
         else
-          mutt_print_message (extra->hdr);
+          mutt_print_message(extra->hdr);
         break;
 
       case OP_BACKGROUND_COMPOSE_MENU:
-        mutt_background_compose_menu ();
+        mutt_background_compose_menu();
         break;
 
       case OP_MAIL:
-        CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
+        CHECK_MODE(IsHeader(extra) && !IsAttach(extra));
         CHECK_ATTACH;
-        mutt_send_message (SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
-                           extra->ctx, NULL);
+        mutt_send_message(SENDBACKGROUNDEDIT | SENDCHECKPOSTPONED, NULL, NULL,
+                          extra->ctx, NULL);
         break;
 
       case OP_REPLY:
@@ -2902,7 +2902,7 @@ search_next:
       {
         int replyflags;
 
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
         CHECK_ATTACH;
 
         replyflags = SENDREPLY | SENDBACKGROUNDEDIT |
@@ -2910,35 +2910,35 @@ search_next:
           (ch == OP_GROUP_CHAT_REPLY ? SENDGROUPCHATREPLY : 0) |
           (ch == OP_LIST_REPLY ? SENDLISTREPLY : 0);
 
-        if (IsMsgAttach (extra))
-          mutt_attach_reply (extra->fp, extra->hdr, extra->actx,
-                             extra->bdy, replyflags);
+        if (IsMsgAttach(extra))
+          mutt_attach_reply(extra->fp, extra->hdr, extra->actx,
+                            extra->bdy, replyflags);
         else
-          mutt_send_message (replyflags, NULL, NULL, extra->ctx, extra->hdr);
+          mutt_send_message(replyflags, NULL, NULL, extra->ctx, extra->hdr);
         break;
       }
 
       case OP_LIST_ACTION:
         if (IsHeader(extra))
-          mutt_list_menu (Context, extra->hdr);
+          mutt_list_menu(Context, extra->hdr);
         break;
 
       case OP_RECALL_MESSAGE:
-        CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
+        CHECK_MODE(IsHeader(extra) && !IsAttach(extra));
         CHECK_ATTACH;
-        mutt_send_message (SENDPOSTPONED | SENDBACKGROUNDEDIT,
-                           NULL, NULL, extra->ctx, NULL);
+        mutt_send_message(SENDPOSTPONED | SENDBACKGROUNDEDIT,
+                          NULL, NULL, extra->ctx, NULL);
         break;
 
       case OP_FORWARD_MESSAGE:
-        CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
+        CHECK_MODE(IsHeader(extra) || IsMsgAttach(extra));
         CHECK_ATTACH;
-        if (IsMsgAttach (extra))
-          mutt_attach_forward (extra->fp, extra->hdr, extra->actx,
-                               extra->bdy);
+        if (IsMsgAttach(extra))
+          mutt_attach_forward(extra->fp, extra->hdr, extra->actx,
+                              extra->bdy);
         else
-          mutt_send_message (SENDFORWARD | SENDBACKGROUNDEDIT,
-                             NULL, NULL, extra->ctx, extra->hdr);
+          mutt_send_message(SENDFORWARD | SENDBACKGROUNDEDIT,
+                            NULL, NULL, extra->ctx, extra->hdr);
         break;
 
       case OP_DECRYPT_SAVE:
@@ -2949,9 +2949,9 @@ search_next:
         }
         /* fall through */
       case OP_SAVE:
-        if (IsAttach (extra))
+        if (IsAttach(extra))
         {
-          mutt_save_attachment_list (extra->actx, extra->fp, 0, extra->bdy, extra->hdr, NULL);
+          mutt_save_attachment_list(extra->actx, extra->fp, 0, extra->bdy, extra->hdr, NULL);
           break;
         }
         /* fall through */
@@ -2964,17 +2964,17 @@ search_next:
           ch = -1;
           break;
         }
-        CHECK_MODE(IsHeader (extra));
-        if (mutt_save_message (extra->hdr,
-                               (ch == OP_DECRYPT_SAVE) ||
-                               (ch == OP_SAVE) || (ch == OP_DECODE_SAVE),
-                               (ch == OP_DECODE_SAVE) || (ch == OP_DECODE_COPY),
-                               (ch == OP_DECRYPT_SAVE) || (ch == OP_DECRYPT_COPY) ||
-                               0) == 0 &&
+        CHECK_MODE(IsHeader(extra));
+        if (mutt_save_message(extra->hdr,
+                              (ch == OP_DECRYPT_SAVE) ||
+                              (ch == OP_SAVE) || (ch == OP_DECODE_SAVE),
+                              (ch == OP_DECODE_SAVE) || (ch == OP_DECODE_COPY),
+                              (ch == OP_DECRYPT_SAVE) || (ch == OP_DECRYPT_COPY) ||
+                              0) == 0 &&
             (ch == OP_SAVE || ch == OP_DECODE_SAVE || ch == OP_DECRYPT_SAVE)
           )
         {
-          if (option (OPTRESOLVE))
+          if (option(OPTRESOLVE))
           {
             ch = -1;
             rc = OP_MAIN_NEXT_UNDELETED;
@@ -2985,19 +2985,19 @@ search_next:
         break;
 
       case OP_SHELL_ESCAPE:
-        mutt_shell_escape ();
+        mutt_shell_escape();
         break;
 
       case OP_TAG:
-        CHECK_MODE(IsHeader (extra));
-        mutt_set_flag (Context, extra->hdr, MUTT_TAG, !extra->hdr->tagged);
+        CHECK_MODE(IsHeader(extra));
+        mutt_set_flag(Context, extra->hdr, MUTT_TAG, !extra->hdr->tagged);
 
         Context->last_tag = extra->hdr->tagged ? extra->hdr :
           ((Context->last_tag == extra->hdr && !extra->hdr->tagged)
            ? NULL : Context->last_tag);
 
         pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (option (OPTRESOLVE))
+        if (option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_NEXT_ENTRY;
@@ -3005,19 +3005,19 @@ search_next:
         break;
 
       case OP_TOGGLE_NEW:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_SEEN, _("Cannot toggle new"));
 
         if (extra->hdr->read || extra->hdr->old)
-          mutt_set_flag (Context, extra->hdr, MUTT_NEW, 1);
+          mutt_set_flag(Context, extra->hdr, MUTT_NEW, 1);
         else if (!first)
-          mutt_set_flag (Context, extra->hdr, MUTT_READ, 1);
+          mutt_set_flag(Context, extra->hdr, MUTT_READ, 1);
         first = 0;
         Context->msgnotreadyet = -1;
         pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (option (OPTRESOLVE))
+        if (option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_MAIN_NEXT_UNDELETED;
@@ -3025,15 +3025,15 @@ search_next:
         break;
 
       case OP_UNDELETE:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message"));
 
-        mutt_set_flag (Context, extra->hdr, MUTT_DELETE, 0);
-        mutt_set_flag (Context, extra->hdr, MUTT_PURGE, 0);
+        mutt_set_flag(Context, extra->hdr, MUTT_DELETE, 0);
+        mutt_set_flag(Context, extra->hdr, MUTT_PURGE, 0);
         pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
-        if (option (OPTRESOLVE))
+        if (option(OPTRESOLVE))
         {
           ch = -1;
           rc = OP_NEXT_ENTRY;
@@ -3042,26 +3042,26 @@ search_next:
 
       case OP_UNDELETE_THREAD:
       case OP_UNDELETE_SUBTHREAD:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         CHECK_READONLY;
         /* L10N: CHECK_ACL */
         CHECK_ACL(MUTT_ACL_DELETE, _("Cannot undelete message(s)"));
 
-        r = mutt_thread_set_flag (extra->hdr, MUTT_DELETE, 0,
-                                  ch == OP_UNDELETE_THREAD ? 0 : 1);
+        r = mutt_thread_set_flag(extra->hdr, MUTT_DELETE, 0,
+                                 ch == OP_UNDELETE_THREAD ? 0 : 1);
         if (r != -1)
-          r = mutt_thread_set_flag (extra->hdr, MUTT_PURGE, 0,
-                                    ch == OP_UNDELETE_THREAD ? 0 : 1);
+          r = mutt_thread_set_flag(extra->hdr, MUTT_PURGE, 0,
+                                   ch == OP_UNDELETE_THREAD ? 0 : 1);
         if (r != -1)
         {
-          if (option (OPTRESOLVE))
+          if (option(OPTRESOLVE))
           {
             rc = (ch == OP_DELETE_THREAD) ?
               OP_MAIN_NEXT_THREAD : OP_MAIN_NEXT_SUBTHREAD;
             ch = -1;
           }
 
-          if (!option (OPTRESOLVE) && PagerIndexLines)
+          if (!option(OPTRESOLVE) && PagerIndexLines)
             pager_menu->redraw = REDRAW_FULL;
           else
             pager_menu->redraw |= REDRAW_STATUS | REDRAW_INDEX;
@@ -3069,11 +3069,11 @@ search_next:
         break;
 
       case OP_VERSION:
-        mutt_version ();
+        mutt_version();
         break;
 
       case OP_BUFFY_LIST:
-        mutt_buffy_list ();
+        mutt_buffy_list();
         break;
 
       case OP_VIEW_ATTACHMENTS:
@@ -3083,20 +3083,20 @@ search_next:
           rc = OP_ATTACH_COLLAPSE;
           break;
         }
-        CHECK_MODE(IsHeader (extra));
-        mutt_view_attachments (extra->hdr);
+        CHECK_MODE(IsHeader(extra));
+        mutt_view_attachments(extra->hdr);
         if (extra->hdr->attach_del)
           Context->changed = 1;
         break;
 
       case OP_EDIT_LABEL:
-        CHECK_MODE(IsHeader (extra));
+        CHECK_MODE(IsHeader(extra));
         rc = mutt_label_message(extra->hdr);
         if (rc > 0)
         {
           Context->changed = 1;
           pager_menu->redraw = REDRAW_FULL;
-          mutt_message (_("%d labels changed."), rc);
+          mutt_message(_("%d labels changed."), rc);
         }
         else
         {
@@ -3112,12 +3112,12 @@ search_next:
         }
         CHECK_MODE(IsHeader(extra));
         CHECK_ATTACH;
-        mutt_send_message (SENDKEY, NULL, NULL, extra->ctx, NULL);
+        mutt_send_message(SENDKEY, NULL, NULL, extra->ctx, NULL);
         break;
 
 
       case OP_FORGET_PASSPHRASE:
-        crypt_forget_passphrase ();
+        crypt_forget_passphrase();
         break;
 
       case OP_EXTRACT_KEYS:
@@ -3132,11 +3132,11 @@ search_next:
         break;
 
       case OP_WHAT_KEY:
-        mutt_what_key ();
+        mutt_what_key();
         break;
 
       case OP_CHECK_STATS:
-        mutt_check_stats ();
+        mutt_check_stats();
         break;
 
 #ifdef USE_SIDEBAR
@@ -3148,11 +3148,11 @@ search_next:
       case OP_SIDEBAR_PAGE_UP:
       case OP_SIDEBAR_PREV:
       case OP_SIDEBAR_PREV_NEW:
-        mutt_sb_change_mailbox (ch);
+        mutt_sb_change_mailbox(ch);
         break;
 
       case OP_SIDEBAR_TOGGLE_VISIBLE:
-        toggle_option (OPTSIDEBAR);
+        toggle_option(OPTSIDEBAR);
         mutt_reflow_windows();
         break;
 #endif
@@ -3163,15 +3163,15 @@ search_next:
     }
   }
 
-  safe_fclose (&rd.fp);
-  if (IsHeader (extra))
+  safe_fclose(&rd.fp);
+  if (IsHeader(extra))
   {
     Context->msgnotreadyet = -1;
     switch (rc)
     {
       case -1:
       case OP_DISPLAY_HEADERS:
-        mutt_clear_pager_position ();
+        mutt_clear_pager_position();
         break;
       default:
         TopLine = rd.topline;
@@ -3180,33 +3180,33 @@ search_next:
     }
   }
 
-  cleanup_quote (&rd.QuoteList);
+  cleanup_quote(&rd.QuoteList);
 
   for (i = 0; i < rd.maxLine ; i++)
   {
-    FREE (&(rd.lineInfo[i].syntax));
+    FREE(&(rd.lineInfo[i].syntax));
     if (rd.SearchCompiled && rd.lineInfo[i].search)
-      FREE (&(rd.lineInfo[i].search));
+      FREE(&(rd.lineInfo[i].search));
   }
   if (rd.SearchCompiled)
   {
-    regfree (&rd.SearchRE);
+    regfree(&rd.SearchRE);
     rd.SearchCompiled = 0;
   }
-  FREE (&rd.lineInfo);
-  mutt_pop_current_menu (pager_menu);
-  mutt_menuDestroy (&pager_menu);
+  FREE(&rd.lineInfo);
+  mutt_pop_current_menu(pager_menu);
+  mutt_menuDestroy(&pager_menu);
   if (rd.index)
     mutt_menuDestroy(&rd.index);
 
-  mutt_buffer_free (&helpstr);
-  FREE (&rd.index_status_window);
-  FREE (&rd.index_window);
-  FREE (&rd.pager_status_window);
-  FREE (&rd.pager_window);
+  mutt_buffer_free(&helpstr);
+  FREE(&rd.index_status_window);
+  FREE(&rd.index_window);
+  FREE(&rd.pager_status_window);
+  FREE(&rd.pager_window);
 
 #ifdef HAVE_COLOR
-  mutt_free_all_ansi_colors ();
+  mutt_free_all_ansi_colors();
 #endif
 
   return (rc != -1 ? rc : 0);

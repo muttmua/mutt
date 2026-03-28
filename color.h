@@ -26,14 +26,14 @@ typedef struct color_attr
 } COLOR_ATTR;
 
 
-COLOR_ATTR mutt_merge_colors (COLOR_ATTR source, COLOR_ATTR overlay);
-void mutt_attrset_cursor (COLOR_ATTR source, COLOR_ATTR cursor);
+COLOR_ATTR mutt_merge_colors(COLOR_ATTR source, COLOR_ATTR overlay);
+void mutt_attrset_cursor(COLOR_ATTR source, COLOR_ATTR cursor);
 
 #ifdef HAVE_COLOR
-int mutt_alloc_color (int fg, int bg);
-int mutt_alloc_ansi_color (int fg, int bg);
-int mutt_alloc_overlay_color (int fg, int bg);
-void mutt_free_all_ansi_colors (void);
+int mutt_alloc_color(int fg, int bg);
+int mutt_alloc_ansi_color(int fg, int bg);
+int mutt_alloc_overlay_color(int fg, int bg);
+void mutt_free_all_ansi_colors(void);
 #endif
 
 

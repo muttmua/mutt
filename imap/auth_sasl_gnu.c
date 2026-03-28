@@ -27,7 +27,7 @@
 
 #include <gsasl.h>
 
-imap_auth_res_t imap_auth_gsasl (IMAP_DATA *idata, const char *method)
+imap_auth_res_t imap_auth_gsasl(IMAP_DATA *idata, const char *method)
 {
   Gsasl_session *gsasl_session = NULL;
   const char *chosen_mech;
@@ -36,7 +36,7 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA *idata, const char *method)
   int rc = IMAP_AUTH_FAILURE;
   int gsasl_rc = GSASL_OK, imap_step_rc = IMAP_CMD_CONTINUE;
 
-  chosen_mech = mutt_gsasl_get_mech (method, idata->capstr);
+  chosen_mech = mutt_gsasl_get_mech(method, idata->capstr);
   if (!chosen_mech)
   {
     muttdbg(2, "mutt_gsasl_get_mech() returned no usable mech");
@@ -45,37 +45,37 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA *idata, const char *method)
 
   muttdbg(2, "imap_auth_gsasl: using mech %s", chosen_mech);
 
-  if (mutt_gsasl_client_new (idata->conn, chosen_mech, &gsasl_session) < 0)
+  if (mutt_gsasl_client_new(idata->conn, chosen_mech, &gsasl_session) < 0)
   {
-    muttdbg (1, "imap_auth_gsasl: Error allocating GSASL connection.");
+    muttdbg(1, "imap_auth_gsasl: Error allocating GSASL connection.");
     return IMAP_AUTH_UNAVAIL;
   }
 
-  mutt_message (_("Authenticating (%s)..."), chosen_mech);
+  mutt_message(_("Authenticating (%s)..."), chosen_mech);
 
-  output_buf = mutt_buffer_pool_get ();
-  mutt_buffer_printf (output_buf, "AUTHENTICATE %s", chosen_mech);
-  if (mutt_bit_isset (idata->capabilities, SASL_IR))
+  output_buf = mutt_buffer_pool_get();
+  mutt_buffer_printf(output_buf, "AUTHENTICATE %s", chosen_mech);
+  if (mutt_bit_isset(idata->capabilities, SASL_IR))
   {
-    gsasl_rc = gsasl_step64 (gsasl_session, "", &gsasl_step_output);
+    gsasl_rc = gsasl_step64(gsasl_session, "", &gsasl_step_output);
     if (gsasl_rc != GSASL_NEEDS_MORE && gsasl_rc != GSASL_OK)
     {
-      muttdbg (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
-                  gsasl_strerror (gsasl_rc));
+      muttdbg(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+              gsasl_strerror(gsasl_rc));
       rc = IMAP_AUTH_UNAVAIL;
       goto bail;
     }
 
-    mutt_buffer_addch (output_buf, ' ');
-    mutt_buffer_addstr (output_buf, gsasl_step_output);
-    gsasl_free (gsasl_step_output);
+    mutt_buffer_addch(output_buf, ' ');
+    mutt_buffer_addstr(output_buf, gsasl_step_output);
+    gsasl_free(gsasl_step_output);
   }
-  imap_cmd_start (idata, mutt_b2s (output_buf));
+  imap_cmd_start(idata, mutt_b2s(output_buf));
 
   do
   {
     do
-      imap_step_rc = imap_cmd_step (idata);
+      imap_step_rc = imap_cmd_step(idata);
     while (imap_step_rc == IMAP_CMD_CONTINUE);
     if (imap_step_rc == IMAP_CMD_BAD || imap_step_rc == IMAP_CMD_NO)
       goto bail;
@@ -83,56 +83,56 @@ imap_auth_res_t imap_auth_gsasl (IMAP_DATA *idata, const char *method)
     if (imap_step_rc != IMAP_CMD_RESPOND)
       break;
 
-    imap_step_output = imap_next_word (idata->buf);
+    imap_step_output = imap_next_word(idata->buf);
 
-    gsasl_rc = gsasl_step64 (gsasl_session, imap_step_output,
-                             &gsasl_step_output);
+    gsasl_rc = gsasl_step64(gsasl_session, imap_step_output,
+                            &gsasl_step_output);
     if (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK)
     {
-      mutt_buffer_strcpy (output_buf, gsasl_step_output);
-      gsasl_free (gsasl_step_output);
+      mutt_buffer_strcpy(output_buf, gsasl_step_output);
+      gsasl_free(gsasl_step_output);
     }
     /* if a sasl error occured, send an abort string */
     else
     {
-      muttdbg (1, "gsasl_step64() failed (%d): %s", gsasl_rc,
-                  gsasl_strerror (gsasl_rc));
+      muttdbg(1, "gsasl_step64() failed (%d): %s", gsasl_rc,
+              gsasl_strerror(gsasl_rc));
       mutt_buffer_strcpy(output_buf, "*");
     }
 
-    mutt_buffer_addstr (output_buf, "\r\n");
-    mutt_socket_write (idata->conn, mutt_b2s (output_buf));
+    mutt_buffer_addstr(output_buf, "\r\n");
+    mutt_socket_write(idata->conn, mutt_b2s(output_buf));
   }
   while (gsasl_rc == GSASL_NEEDS_MORE || gsasl_rc == GSASL_OK);
 
   if (imap_step_rc != IMAP_CMD_OK)
   {
     do
-      imap_step_rc = imap_cmd_step (idata);
+      imap_step_rc = imap_cmd_step(idata);
     while (imap_step_rc == IMAP_CMD_CONTINUE);
   }
 
   if (imap_step_rc == IMAP_CMD_RESPOND)
   {
-    mutt_socket_write (idata->conn, "*\r\n");
+    mutt_socket_write(idata->conn, "*\r\n");
     goto bail;
   }
 
   if ((gsasl_rc != GSASL_OK) || (imap_step_rc != IMAP_CMD_OK))
     goto bail;
 
-  if (imap_code (idata->buf))
+  if (imap_code(idata->buf))
     rc = IMAP_AUTH_SUCCESS;
 
 bail:
-  mutt_buffer_pool_release (&output_buf);
-  mutt_gsasl_client_finish (&gsasl_session);
+  mutt_buffer_pool_release(&output_buf);
+  mutt_gsasl_client_finish(&gsasl_session);
 
   if (rc == IMAP_AUTH_FAILURE)
   {
     muttdbg(2, "imap_auth_gsasl: %s failed", chosen_mech);
     mutt_error _("SASL authentication failed.");
-    mutt_sleep (2);
+    mutt_sleep(2);
   }
 
   return rc;

@@ -23,11 +23,11 @@
 #include "mutt.h"
 #include "buffy.h"
 
-void         mutt_sb_change_mailbox (int op);
-void         mutt_sb_draw (void);
-const char * mutt_sb_get_highlight (void);
-void         mutt_sb_notify_mailbox (BUFFY *b, int created);
-void         mutt_sb_set_buffystats (const CONTEXT *ctx);
-BUFFY *      mutt_sb_set_open_buffy (void);
+void         mutt_sb_change_mailbox(int op);
+void         mutt_sb_draw(void);
+const char * mutt_sb_get_highlight(void);
+void         mutt_sb_notify_mailbox(BUFFY *b, int created);
+void         mutt_sb_set_buffystats(const CONTEXT *ctx);
+BUFFY *      mutt_sb_set_open_buffy(void);
 
 #endif /* SIDEBAR_H */

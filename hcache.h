@@ -24,16 +24,16 @@
 struct header_cache;
 typedef struct header_cache header_cache_t;
 
-typedef void (*hcache_namer_t)(const char *path, BUFFER *dest);
+typedef void(*hcache_namer_t)(const char *path, BUFFER *dest);
 
 header_cache_t *mutt_hcache_open(const char *path, const char *folder,
                                  hcache_namer_t namer);
 void mutt_hcache_close(header_cache_t *h);
 HEADER *mutt_hcache_restore(const unsigned char *d, HEADER **oh);
 void *mutt_hcache_fetch(header_cache_t *h, const char *filename, size_t (*keylen)(const char *fn));
-void *mutt_hcache_fetch_raw (header_cache_t *h, const char *filename,
-                             size_t (*keylen)(const char *fn));
-void mutt_hcache_free (void **data);
+void *mutt_hcache_fetch_raw(header_cache_t *h, const char *filename,
+                            size_t (*keylen)(const char *fn));
+void mutt_hcache_free(void **data);
 
 typedef enum {
   MUTT_GENERATE_UIDVALIDITY = 1 /* use gettimeofday() as value */
@@ -42,10 +42,10 @@ typedef enum {
 /* uidvalidity is an IMAP-specific unsigned 32 bit number */
 int mutt_hcache_store(header_cache_t *h, const char *filename, HEADER *header,
                       unsigned int uidvalidity, size_t (*keylen)(const char *fn), mutt_hcache_store_flags_t flags_t);
-int mutt_hcache_store_raw (header_cache_t *h, const char *filename, void *data,
-                           size_t dlen, size_t(*keylen) (const char *fn));
+int mutt_hcache_store_raw(header_cache_t *h, const char *filename, void *data,
+                          size_t dlen, size_t (*keylen) (const char *fn));
 int mutt_hcache_delete(header_cache_t *h, const char *filename, size_t (*keylen)(const char *fn));
 
-const char *mutt_hcache_backend (void);
+const char *mutt_hcache_backend(void);
 
 #endif /* _HCACHE_H_ */

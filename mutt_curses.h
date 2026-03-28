@@ -61,14 +61,14 @@
 
 #define CLEARLINE(win,x) mutt_window_clearline(win, x)
 #define CENTERLINE(win,x,y) mutt_window_move(win, y, (win->cols-strlen(x))/2), addstr(x)
-#define BEEP() do { if (option (OPTBEEP)) beep(); } while (0)
+#define BEEP() do { if (option(OPTBEEP)) beep(); } while (0)
 
 #if ! (defined(USE_SLANG_CURSES) || defined(HAVE_CURS_SET))
 #define curs_set(x)
 #endif
 
 #if (defined(USE_SLANG_CURSES) || defined(HAVE_CURS_SET))
-void mutt_curs_set (int);
+void mutt_curs_set(int);
 #else
 #define mutt_curs_set(x)
 #endif
@@ -83,19 +83,19 @@ void mutt_curs_set (int);
 
 extern int MuttGetchTimeout;
 
-event_t mutt_getch (void);
+event_t mutt_getch(void);
 
-void mutt_getch_timeout (int);
-void mutt_endwin (const char *);
-void mutt_flushinp (void);
-void mutt_refresh (void);
-void mutt_resize_screen (void);
-void mutt_unget_event (int, int);
-void mutt_unget_string (char *);
-void mutt_push_macro_event (int, int);
-void mutt_flush_macro_to_endcond (void);
-void mutt_flush_unget_to_endcond (void);
-void mutt_need_hard_redraw (void);
+void mutt_getch_timeout(int);
+void mutt_endwin(const char *);
+void mutt_flushinp(void);
+void mutt_refresh(void);
+void mutt_resize_screen(void);
+void mutt_unget_event(int, int);
+void mutt_unget_string(char *);
+void mutt_push_macro_event(int, int);
+void mutt_flush_macro_to_endcond(void);
+void mutt_flush_unget_to_endcond(void);
+void mutt_need_hard_redraw(void);
 
 /* ----------------------------------------------------------------------------
  * Support for color
@@ -173,13 +173,13 @@ typedef struct
   char sizestr[SHORT_STRING];
 } progress_t;
 
-void mutt_progress_init (progress_t *progress, const char *msg,
-                         unsigned short flags, unsigned short inc,
-                         long size);
+void mutt_progress_init(progress_t *progress, const char *msg,
+                        unsigned short flags, unsigned short inc,
+                        long size);
 /* If percent is positive, it is displayed as percentage, otherwise
  * percentage is calculated from progress->size and pos if progress
  * was initialized with positive size, otherwise no percentage is shown */
-void mutt_progress_update (progress_t *progress, long pos, int percent);
+void mutt_progress_update(progress_t *progress, long pos, int percent);
 
 /* Windows for different parts of the screen */
 typedef struct
@@ -198,16 +198,16 @@ extern mutt_window_t *MuttMessageWindow;
 extern mutt_window_t *MuttSidebarWindow;
 #endif
 
-void mutt_init_windows (void);
-void mutt_free_windows (void);
-void mutt_reflow_windows (void);
-int mutt_window_move (mutt_window_t *, int row, int col);
-int mutt_window_mvaddch (mutt_window_t *, int row, int col, const chtype ch);
-int mutt_window_mvaddstr (mutt_window_t *, int row, int col, const char *str);
-int mutt_window_mvprintw (mutt_window_t *, int row, int col, const char *fmt, ...);
-void mutt_window_clrtoeol (mutt_window_t *);
-void mutt_window_clearline (mutt_window_t *, int row);
-void mutt_window_getyx (mutt_window_t *, int *y, int *x);
+void mutt_init_windows(void);
+void mutt_free_windows(void);
+void mutt_reflow_windows(void);
+int mutt_window_move(mutt_window_t *, int row, int col);
+int mutt_window_mvaddch(mutt_window_t *, int row, int col, const chtype ch);
+int mutt_window_mvaddstr(mutt_window_t *, int row, int col, const char *str);
+int mutt_window_mvprintw(mutt_window_t *, int row, int col, const char *fmt, ...);
+void mutt_window_clrtoeol(mutt_window_t *);
+void mutt_window_clearline(mutt_window_t *, int row);
+void mutt_window_getyx(mutt_window_t *, int *y, int *x);
 
 
 static inline int mutt_window_wrap_cols(mutt_window_t *win, short wrap)
@@ -227,13 +227,13 @@ extern COLOR_LINE *ColorHdrList;
 extern COLOR_LINE *ColorBodyList;
 extern COLOR_LINE *ColorIndexList;
 
-void ci_start_color (void);
+void ci_start_color(void);
 
 /* Prefer bkgrndset because it allows more color pairs to be used.
  * COLOR_PAIR() returns at most 8-bits.
  */
 #if defined(HAVE_COLOR) && defined(HAVE_SETCCHAR) && defined(HAVE_BKGRNDSET)
-static inline void ATTRSET (const COLOR_ATTR X)
+static inline void ATTRSET(const COLOR_ATTR X)
 {
   cchar_t cch;
   setcchar(&cch, L" ", X.attrs, X.pair, NULL);
@@ -250,7 +250,7 @@ static inline void ATTRSET (const COLOR_ATTR X)
 #elif defined(HAVE_BKGDSET)
 #define ATTRSET(X) bkgdset(X.attrs | ' ')
 
-#elif defined (HAVE_COLOR)
+#elif defined(HAVE_COLOR)
 #define ATTRSET(X) attrset(COLOR_PAIR(X.pair) | X.attrs)
 
 #else
@@ -263,7 +263,7 @@ static inline void ATTRSET (const COLOR_ATTR X)
 #define NORMAL_COLOR SETCOLOR(MT_COLOR_NORMAL)
 
 /* curs_ti_lib.c routines: */
-const char *mutt_tigetstr (const char *capname);
-int mutt_tigetflag (const char *capname);
+const char *mutt_tigetstr(const char *capname);
+int mutt_tigetflag(const char *capname);
 
 #endif /* _MUTT_CURSES_H_ */

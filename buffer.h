@@ -31,34 +31,34 @@ typedef struct
 /* Convert a buffer to a const char * "string" */
 #define mutt_b2s(b) (b->data ? (const char *)b->data : "")
 
-BUFFER *mutt_buffer_new (void);
-BUFFER *mutt_buffer_init (BUFFER *);
-void mutt_buffer_free (BUFFER **);
-BUFFER *mutt_buffer_from (char *);
-void mutt_buffer_clear (BUFFER *);
-void mutt_buffer_rewind (BUFFER *);
+BUFFER *mutt_buffer_new(void);
+BUFFER *mutt_buffer_init(BUFFER *);
+void mutt_buffer_free(BUFFER **);
+BUFFER *mutt_buffer_from(char *);
+void mutt_buffer_clear(BUFFER *);
+void mutt_buffer_rewind(BUFFER *);
 
-size_t mutt_buffer_len (BUFFER *);
-void mutt_buffer_increase_size (BUFFER *, size_t);
-void mutt_buffer_fix_dptr (BUFFER *);
+size_t mutt_buffer_len(BUFFER *);
+void mutt_buffer_increase_size(BUFFER *, size_t);
+void mutt_buffer_fix_dptr(BUFFER *);
 
 /* These two replace the buffer contents. */
-int mutt_buffer_printf (BUFFER*, const char*, ...);
-void mutt_buffer_strcpy (BUFFER *, const char *);
-void mutt_buffer_strcpy_n (BUFFER *, const char *, size_t);
-void mutt_buffer_substrcpy (BUFFER *buf, const char *beg, const char *end);
+int mutt_buffer_printf(BUFFER*, const char*, ...);
+void mutt_buffer_strcpy(BUFFER *, const char *);
+void mutt_buffer_strcpy_n(BUFFER *, const char *, size_t);
+void mutt_buffer_substrcpy(BUFFER *buf, const char *beg, const char *end);
 
 /* These append to the buffer. */
-int mutt_buffer_add_printf (BUFFER*, const char*, ...);
-void mutt_buffer_addstr_n (BUFFER*, const char*, size_t);
-void mutt_buffer_addstr (BUFFER*, const char*);
-void mutt_buffer_addch (BUFFER*, char);
+int mutt_buffer_add_printf(BUFFER*, const char*, ...);
+void mutt_buffer_addstr_n(BUFFER*, const char*, size_t);
+void mutt_buffer_addstr(BUFFER*, const char*);
+void mutt_buffer_addch(BUFFER*, char);
 
 
-void mutt_buffer_pool_init (void);
-void mutt_buffer_pool_free (void);
+void mutt_buffer_pool_init(void);
+void mutt_buffer_pool_free(void);
 
-BUFFER *mutt_buffer_pool_get (void);
-void mutt_buffer_pool_release (BUFFER **);
+BUFFER *mutt_buffer_pool_get(void);
+void mutt_buffer_pool_release(BUFFER **);
 
 #endif

@@ -26,7 +26,7 @@
 #include "sort.h"
 #include "mx.h"
 
-void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
+void _mutt_set_flag(CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
 {
   int changed = h->changed;
   int deleted = ctx->deleted;
@@ -276,7 +276,7 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
     h->color.pair = 0;
     h->color.attrs = 0;
 #ifdef USE_SIDEBAR
-    mutt_set_current_menu_redraw (REDRAW_SIDEBAR);
+    mutt_set_current_menu_redraw(REDRAW_SIDEBAR);
 #endif
   }
 
@@ -288,16 +288,16 @@ void _mutt_set_flag (CONTEXT *ctx, HEADER *h, int flag, int bf, int upd_flags)
     h->searched = 0;
 }
 
-void mutt_tag_set_flag (int flag, int bf)
+void mutt_tag_set_flag(int flag, int bf)
 {
   int j;
 
   for (j = 0; j < Context->vcount; j++)
     if (Context->hdrs[Context->v2r[j]]->tagged)
-      mutt_set_flag (Context, Context->hdrs[Context->v2r[j]], flag, bf);
+      mutt_set_flag(Context, Context->hdrs[Context->v2r[j]], flag, bf);
 }
 
-int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
+int mutt_thread_set_flag(HEADER *hdr, int flag, int bf, int subthread)
 {
   THREAD *start, *cur = hdr->thread;
 
@@ -320,7 +320,7 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
    */
   if (cur->message)
   {
-    mutt_set_flag (Context, cur->message, flag, bf);
+    mutt_set_flag(Context, cur->message, flag, bf);
     cur->message->color.pair = cur->message->color.attrs = 0;
   }
 
@@ -331,7 +331,7 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
   {
     if (cur->message)
     {
-      mutt_set_flag (Context, cur->message, flag, bf);
+      mutt_set_flag(Context, cur->message, flag, bf);
       cur->message->color.pair = cur->message->color.attrs = 0;
     }
 
@@ -353,15 +353,15 @@ int mutt_thread_set_flag (HEADER *hdr, int flag, int bf, int subthread)
   /* not reached */
 }
 
-int mutt_change_flag (HEADER *h, int bf)
+int mutt_change_flag(HEADER *h, int bf)
 {
   int i, flag;
   event_t event;
 
-  mutt_window_mvprintw (MuttMessageWindow, 0, 0,
-                        "%s? (D/N/O/r/*/!): ", bf ? _("Set flag") : _("Clear flag"));
-  mutt_window_clrtoeol (MuttMessageWindow);
-  mutt_refresh ();
+  mutt_window_mvprintw(MuttMessageWindow, 0, 0,
+                       "%s? (D/N/O/r/*/!): ", bf ? _("Set flag") : _("Clear flag"));
+  mutt_window_clrtoeol(MuttMessageWindow);
+  mutt_refresh();
 
   do
   {
@@ -370,11 +370,11 @@ int mutt_change_flag (HEADER *h, int bf)
   i = event.ch;
   if (i < 0)
   {
-    mutt_window_clearline (MuttMessageWindow, 0);
+    mutt_window_clearline(MuttMessageWindow, 0);
     return (-1);
   }
 
-  mutt_window_clearline (MuttMessageWindow, 0);
+  mutt_window_clearline(MuttMessageWindow, 0);
 
   switch (i)
   {
@@ -383,9 +383,9 @@ int mutt_change_flag (HEADER *h, int bf)
       if (!bf)
       {
         if (h)
-          mutt_set_flag (Context, h, MUTT_PURGE, bf);
+          mutt_set_flag(Context, h, MUTT_PURGE, bf);
         else
-          mutt_tag_set_flag (MUTT_PURGE, bf);
+          mutt_tag_set_flag(MUTT_PURGE, bf);
       }
       flag = MUTT_DELETE;
       break;
@@ -398,9 +398,9 @@ int mutt_change_flag (HEADER *h, int bf)
     case 'o':
     case 'O':
       if (h)
-        mutt_set_flag (Context, h, MUTT_READ, !bf);
+        mutt_set_flag(Context, h, MUTT_READ, !bf);
       else
-        mutt_tag_set_flag (MUTT_READ, !bf);
+        mutt_tag_set_flag(MUTT_READ, !bf);
       flag = MUTT_OLD;
       break;
 
@@ -418,14 +418,14 @@ int mutt_change_flag (HEADER *h, int bf)
       break;
 
     default:
-      BEEP ();
+      BEEP();
       return (-1);
   }
 
   if (h)
-    mutt_set_flag (Context, h, flag, bf);
+    mutt_set_flag(Context, h, flag, bf);
   else
-    mutt_tag_set_flag (flag, bf);
+    mutt_tag_set_flag(flag, bf);
 
   return 0;
 }

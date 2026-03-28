@@ -36,55 +36,55 @@
 #include <errno.h>
 #include <sys/wait.h>
 
-group_t *mutt_pattern_group (const char *k)
+group_t *mutt_pattern_group(const char *k)
 {
   group_t *p;
 
   if (!k)
     return 0;
 
-  if (!(p = hash_find (Groups, k)))
+  if (!(p = hash_find(Groups, k)))
   {
     muttdbg(2, "Creating group %s.", k);
-    p = safe_calloc (1, sizeof (group_t));
-    p->name = safe_strdup (k);
-    hash_insert (Groups, p->name, p);
+    p = safe_calloc(1, sizeof(group_t));
+    p->name = safe_strdup(k);
+    hash_insert(Groups, p->name, p);
   }
 
   return p;
 }
 
-static void mutt_group_remove (group_t *g)
+static void mutt_group_remove(group_t *g)
 {
   if (!g)
     return;
-  hash_delete (Groups, g->name, g, NULL);
-  rfc822_free_address (&g->as);
-  mutt_free_rx_list (&g->rs);
+  hash_delete(Groups, g->name, g, NULL);
+  rfc822_free_address(&g->as);
+  mutt_free_rx_list(&g->rs);
   FREE(&g->name);
   FREE(&g);
 }
 
-int mutt_group_context_clear (group_context_t **ctx)
+int mutt_group_context_clear(group_context_t **ctx)
 {
   group_context_t *t;
   for ( ; ctx && *ctx; (*ctx) = t)
   {
-    mutt_group_remove ((*ctx)->g);
+    mutt_group_remove((*ctx)->g);
     t = (*ctx)->next;
     FREE(ctx);                          /* __FREE_CHECKED__ */
   }
   return 0;
 }
 
-static int empty_group (group_t *g)
+static int empty_group(group_t *g)
 {
   if (!g)
     return -1;
   return !g->as && !g->rs;
 }
 
-void mutt_group_context_add (group_context_t **ctx, group_t *group)
+void mutt_group_context_add(group_context_t **ctx, group_t *group)
 {
   for (; *ctx; ctx = &((*ctx)->next))
   {
@@ -92,21 +92,21 @@ void mutt_group_context_add (group_context_t **ctx, group_t *group)
       return;
   }
 
-  *ctx = safe_calloc (1, sizeof (group_context_t));
+  *ctx = safe_calloc(1, sizeof(group_context_t));
   (*ctx)->g = group;
 }
 
-void mutt_group_context_destroy (group_context_t **ctx)
+void mutt_group_context_destroy(group_context_t **ctx)
 {
   group_context_t *p;
   for (; *ctx; *ctx = p)
   {
     p = (*ctx)->next;
-    FREE (ctx);         /* __FREE_CHECKED__ */
+    FREE(ctx);         /* __FREE_CHECKED__ */
   }
 }
 
-void mutt_group_add_adrlist (group_t *g, ADDRESS *a)
+void mutt_group_add_adrlist(group_t *g, ADDRESS *a)
 {
   ADDRESS **p, *q;
 
@@ -118,12 +118,12 @@ void mutt_group_add_adrlist (group_t *g, ADDRESS *a)
   for (p = &g->as; *p; p = &((*p)->next))
     ;
 
-  q = rfc822_cpy_adr (a, 0);
-  q = mutt_remove_xrefs (g->as, q);
+  q = rfc822_cpy_adr(a, 0);
+  q = mutt_remove_xrefs(g->as, q);
   *p = q;
 }
 
-static int mutt_group_remove_adrlist (group_t *g, ADDRESS *a)
+static int mutt_group_remove_adrlist(group_t *g, ADDRESS *a)
 {
   ADDRESS *p;
 
@@ -133,75 +133,75 @@ static int mutt_group_remove_adrlist (group_t *g, ADDRESS *a)
     return -1;
 
   for (p = a; p; p = p->next)
-    rfc822_remove_from_adrlist (&g->as, p->mailbox);
+    rfc822_remove_from_adrlist(&g->as, p->mailbox);
 
   return 0;
 }
 
-static int mutt_group_add_rx (group_t *g, const char *s, int flags, BUFFER *err)
+static int mutt_group_add_rx(group_t *g, const char *s, int flags, BUFFER *err)
 {
-  return mutt_add_to_rx_list (&g->rs, s, flags, err);
+  return mutt_add_to_rx_list(&g->rs, s, flags, err);
 }
 
-static int mutt_group_remove_rx (group_t *g, const char *s)
+static int mutt_group_remove_rx(group_t *g, const char *s)
 {
-  return mutt_remove_from_rx_list (&g->rs, s);
+  return mutt_remove_from_rx_list(&g->rs, s);
 }
 
-void mutt_group_context_add_adrlist (group_context_t *ctx, ADDRESS *a)
+void mutt_group_context_add_adrlist(group_context_t *ctx, ADDRESS *a)
 {
   for (; ctx; ctx = ctx->next)
-    mutt_group_add_adrlist (ctx->g, a);
+    mutt_group_add_adrlist(ctx->g, a);
 }
 
-int mutt_group_context_remove_adrlist (group_context_t *ctx, ADDRESS * a)
+int mutt_group_context_remove_adrlist(group_context_t *ctx, ADDRESS * a)
 {
   int rv = 0;
 
   for (; (!rv) && ctx; ctx = ctx->next)
   {
-    rv = mutt_group_remove_adrlist (ctx->g, a);
-    if (empty_group (ctx->g))
-      mutt_group_remove (ctx->g);
+    rv = mutt_group_remove_adrlist(ctx->g, a);
+    if (empty_group(ctx->g))
+      mutt_group_remove(ctx->g);
   }
 
   return rv;
 }
 
-int mutt_group_context_add_rx (group_context_t *ctx, const char *s, int flags, BUFFER *err)
+int mutt_group_context_add_rx(group_context_t *ctx, const char *s, int flags, BUFFER *err)
 {
   int rv = 0;
 
   for (; (!rv) && ctx; ctx = ctx->next)
-    rv = mutt_group_add_rx (ctx->g, s, flags, err);
+    rv = mutt_group_add_rx(ctx->g, s, flags, err);
 
   return rv;
 }
 
-int mutt_group_context_remove_rx (group_context_t *ctx, const char *s)
+int mutt_group_context_remove_rx(group_context_t *ctx, const char *s)
 {
   int rv = 0;
 
   for (; (!rv) && ctx; ctx = ctx->next)
   {
-    rv = mutt_group_remove_rx (ctx->g, s);
-    if (empty_group (ctx->g))
-      mutt_group_remove (ctx->g);
+    rv = mutt_group_remove_rx(ctx->g, s);
+    if (empty_group(ctx->g))
+      mutt_group_remove(ctx->g);
   }
 
   return rv;
 }
 
-int mutt_group_match (group_t *g, const char *s)
+int mutt_group_match(group_t *g, const char *s)
 {
   ADDRESS *ap;
 
   if (s && g)
   {
-    if (mutt_match_rx_list (s, g->rs))
+    if (mutt_match_rx_list(s, g->rs))
       return 1;
     for (ap = g->as; ap; ap = ap->next)
-      if (ap->mailbox && !mutt_strcasecmp (s, ap->mailbox))
+      if (ap->mailbox && !mutt_strcasecmp(s, ap->mailbox))
         return 1;
   }
   return 0;

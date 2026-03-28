@@ -28,20 +28,20 @@
 #include <string.h>
 #include <ctype.h>
 
-static int check_alias_name (const char *s, BUFFER *dest);
+static int check_alias_name(const char *s, BUFFER *dest);
 
 
-ADDRESS *mutt_lookup_alias (const char *s)
+ADDRESS *mutt_lookup_alias(const char *s)
 {
   ALIAS *t = Aliases;
 
   for (; t; t = t->next)
-    if (!mutt_strcasecmp (s, t->name))
+    if (!mutt_strcasecmp(s, t->name))
       return (t->addr);
   return (NULL);   /* no such alias */
 }
 
-static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
+static ADDRESS *mutt_expand_aliases_r(ADDRESS *a, LIST **expn)
 {
   ADDRESS *head = NULL, *last = NULL, *t, *w;
   LIST *u;
@@ -50,16 +50,16 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
 
   while (a)
   {
-    if (!a->group && !a->personal && a->mailbox && strchr (a->mailbox, '@') == NULL)
+    if (!a->group && !a->personal && a->mailbox && strchr(a->mailbox, '@') == NULL)
     {
-      t = mutt_lookup_alias (a->mailbox);
+      t = mutt_lookup_alias(a->mailbox);
 
       if (t)
       {
         i = 0;
         for (u = *expn; u; u = u->next)
         {
-          if (mutt_strcmp (a->mailbox, u->data) == 0) /* alias already found */
+          if (mutt_strcmp(a->mailbox, u->data) == 0) /* alias already found */
           {
             muttdbg(1, "loop in alias found for '%s'", a->mailbox);
             i = 1;
@@ -69,12 +69,12 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
 
         if (!i)
         {
-          u = safe_malloc (sizeof (LIST));
-          u->data = safe_strdup (a->mailbox);
+          u = safe_malloc(sizeof(LIST));
+          u->data = safe_strdup(a->mailbox);
           u->next = *expn;
           *expn = u;
-          w = rfc822_cpy_adr (t, 0);
-          w = mutt_expand_aliases_r (w, expn);
+          w = rfc822_cpy_adr(t, 0);
+          w = mutt_expand_aliases_r(w, expn);
           if (head)
             last->next = w;
           else
@@ -85,22 +85,22 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
         t = a;
         a = a->next;
         t->next = NULL;
-        rfc822_free_address (&t);
+        rfc822_free_address(&t);
         continue;
       }
       else
       {
-        struct passwd *pw = getpwnam (a->mailbox);
+        struct passwd *pw = getpwnam(a->mailbox);
 
         if (pw)
         {
           char namebuf[STRING];
 
-          mutt_gecos_name (namebuf, sizeof (namebuf), pw);
-          mutt_str_replace (&a->personal, namebuf);
+          mutt_gecos_name(namebuf, sizeof(namebuf), pw);
+          mutt_str_replace(&a->personal, namebuf);
 
 #ifdef EXACT_ADDRESS
-          FREE (&a->val);
+          FREE(&a->val);
 #endif
         }
       }
@@ -117,33 +117,33 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS *a, LIST **expn)
     last->next = NULL;
   }
 
-  if (option (OPTUSEDOMAIN) && (fqdn = mutt_fqdn(1)))
+  if (option(OPTUSEDOMAIN) && (fqdn = mutt_fqdn(1)))
   {
     /* now qualify all local addresses */
-    rfc822_qualify (head, fqdn);
+    rfc822_qualify(head, fqdn);
   }
 
   return (head);
 }
 
-ADDRESS *mutt_expand_aliases (ADDRESS *a)
+ADDRESS *mutt_expand_aliases(ADDRESS *a)
 {
   ADDRESS *t;
   LIST *expn = NULL; /* previously expanded aliases to avoid loops */
 
-  t = mutt_expand_aliases_r (a, &expn);
-  mutt_free_list (&expn);
-  return (mutt_remove_duplicates (t));
+  t = mutt_expand_aliases_r(a, &expn);
+  mutt_free_list(&expn);
+  return (mutt_remove_duplicates(t));
 }
 
-void mutt_expand_aliases_env (ENVELOPE *env)
+void mutt_expand_aliases_env(ENVELOPE *env)
 {
-  env->from = mutt_expand_aliases (env->from);
-  env->to = mutt_expand_aliases (env->to);
-  env->cc = mutt_expand_aliases (env->cc);
-  env->bcc = mutt_expand_aliases (env->bcc);
-  env->reply_to = mutt_expand_aliases (env->reply_to);
-  env->mail_followup_to = mutt_expand_aliases (env->mail_followup_to);
+  env->from = mutt_expand_aliases(env->from);
+  env->to = mutt_expand_aliases(env->to);
+  env->cc = mutt_expand_aliases(env->cc);
+  env->bcc = mutt_expand_aliases(env->bcc);
+  env->reply_to = mutt_expand_aliases(env->reply_to);
+  env->mail_followup_to = mutt_expand_aliases(env->mail_followup_to);
 }
 
 
@@ -168,7 +168,7 @@ void mutt_expand_aliases_env (ENVELOPE *env)
  * variable.
  */
 
-static void write_safe_address (FILE *fp, const char *s)
+static void write_safe_address(FILE *fp, const char *s)
 {
   while (*s)
   {
@@ -689,7 +689,7 @@ int mutt_addr_is_user (ADDRESS *addr)
   return 0;
 }
 
-ADDRESS *mutt_find_user_in_envelope (ENVELOPE *env)
+ADDRESS *mutt_find_user_in_envelope(ENVELOPE *env)
 {
   ADDRESS *tmp;
 
@@ -697,14 +697,14 @@ ADDRESS *mutt_find_user_in_envelope (ENVELOPE *env)
     return NULL;
 
   for (tmp = env->to; tmp; tmp = tmp->next)
-    if (mutt_addr_is_user (tmp))
+    if (mutt_addr_is_user(tmp))
       return tmp;
 
   for (tmp = env->cc; tmp; tmp = tmp->next)
-    if (mutt_addr_is_user (tmp))
+    if (mutt_addr_is_user(tmp))
       return tmp;
 
-  if (mutt_addr_is_user (env->from))
+  if (mutt_addr_is_user(env->from))
     return env->from;
 
   return NULL;
