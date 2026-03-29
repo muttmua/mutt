@@ -658,8 +658,10 @@ int main(int argc, char **argv, char **environ)
   int explicit_folder = 0;
   int dump_variables = 0;
   int edit_infile = 0;
+#ifndef HAVE_GETOPT_H
   extern char *optarg;
   extern int optind;
+#endif
   int double_dash = argc, nargc = 1;
   int exit_code = 1;
   const char *exit_endwin_msg = NULL;

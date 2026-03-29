@@ -45,11 +45,11 @@
 #include <time.h>
 #ifdef HAVE_GETOPT_H
 # include <getopt.h>
-#endif
-#include <errno.h>
-
+#else
 extern char *optarg;
 extern int optind;
+#endif
+#include <errno.h>
 
 #include "sha1.h"
 #include "md5.h"
