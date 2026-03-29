@@ -300,8 +300,8 @@ static int _pgp_compare_address(const void *a, const void *b)
 {
   int r;
 
-  pgp_uid_t **s = (pgp_uid_t **) a;
-  pgp_uid_t **t = (pgp_uid_t **) b;
+  const pgp_uid_t * const *s = (const pgp_uid_t * const *) a;
+  const pgp_uid_t * const *t = (const pgp_uid_t * const *) b;
 
   if ((r = mutt_strcasecmp((*s)->addr, (*t)->addr)))
     return r;
@@ -322,8 +322,8 @@ static int _pgp_compare_keyid(const void *a, const void *b)
 {
   int r;
 
-  pgp_uid_t **s = (pgp_uid_t **) a;
-  pgp_uid_t **t = (pgp_uid_t **) b;
+  const pgp_uid_t * const *s = (const pgp_uid_t * const *) a;
+  const pgp_uid_t * const *t = (const pgp_uid_t * const *) b;
 
   if ((r = mutt_strcasecmp(pgp_fpr_or_lkeyid((*s)->parent),
                            pgp_fpr_or_lkeyid((*t)->parent))))
@@ -341,8 +341,8 @@ static int pgp_compare_keyid(const void *a, const void *b)
 static int _pgp_compare_date(const void *a, const void *b)
 {
   int r;
-  pgp_uid_t **s = (pgp_uid_t **) a;
-  pgp_uid_t **t = (pgp_uid_t **) b;
+  const pgp_uid_t * const *s = (const pgp_uid_t * const *) a;
+  const pgp_uid_t * const *t = (const pgp_uid_t * const *) b;
 
   if ((r = mutt_numeric_cmp((*s)->parent->gen_time, (*t)->parent->gen_time)))
     return r;
@@ -359,8 +359,8 @@ static int _pgp_compare_trust(const void *a, const void *b)
 {
   int r;
 
-  pgp_uid_t **s = (pgp_uid_t **) a;
-  pgp_uid_t **t = (pgp_uid_t **) b;
+  const pgp_uid_t * const *s = (const pgp_uid_t * const *) a;
+  const pgp_uid_t * const *t = (const pgp_uid_t * const *) b;
 
   if ((r = mutt_numeric_cmp(((*s)->parent->flags & (KEYFLAG_RESTRICTIONS)),
                             ((*t)->parent->flags & (KEYFLAG_RESTRICTIONS)))))

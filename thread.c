@@ -589,13 +589,13 @@ static int compare_aux_threads(const void *a, const void *b)
     return aux_func ? 1 : 0;
   }
 
-  rc = (*aux_func)(&(*((THREAD **) a))->sort_aux_key,
-                   &(*((THREAD **) b))->sort_aux_key);
+  rc = (*aux_func)(&(*((const THREAD * const *) a))->sort_aux_key,
+                   &(*((const THREAD * const *) b))->sort_aux_key);
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = mutt_numeric_cmp((*((THREAD **)a))->sort_aux_key->index,
-                        (*((THREAD **)b))->sort_aux_key->index);
+  rc = mutt_numeric_cmp((*((const THREAD * const *) a))->sort_aux_key->index,
+                        (*((const THREAD * const *) b))->sort_aux_key->index);
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
@@ -623,7 +623,8 @@ static int compare_aux_sortkeys(const void *a, const void *b)
   if (rc)
     return rc;
 
-  return mutt_numeric_cmp((*((HEADER **)a))->index, (*((HEADER **)b))->index);
+  return mutt_numeric_cmp((*((const HEADER * const *) a))->index,
+                          (*((const HEADER * const *) b))->index);
 }
 
 static int compare_root_threads(const void *a, const void *b)
@@ -648,13 +649,13 @@ static int compare_root_threads(const void *a, const void *b)
     return sort_func ? 1 : 0;
   }
 
-  rc = (*sort_func)(&(*((THREAD **) a))->sort_group_key,
-                    &(*((THREAD **) b))->sort_group_key);
+  rc = (*sort_func)(&(*((const THREAD * const *) a))->sort_group_key,
+                    &(*((const THREAD * const *) b))->sort_group_key);
   if (rc)
     return reverse ? -rc : rc;
 
-  rc = mutt_numeric_cmp((*((THREAD **)a))->sort_group_key->index,
-                        (*((THREAD **)b))->sort_group_key->index);
+  rc = mutt_numeric_cmp((*((const THREAD * const *) a))->sort_group_key->index,
+                        (*((const THREAD * const *) b))->sort_group_key->index);
   if (rc)
     return reverse ? -rc : rc;
 
@@ -687,7 +688,8 @@ static int compare_group_sortkeys(const void *a, const void *b)
   if (rc)
     return rc;
 
-  return mutt_numeric_cmp((*((HEADER **)a))->index, (*((HEADER **)b))->index);
+  return mutt_numeric_cmp((*((const HEADER * const *) a))->index,
+                          (*((const HEADER * const *) b))->index);
 }
 
 THREAD *mutt_sort_subthreads(THREAD *thread, int init)

@@ -86,8 +86,8 @@ static int sort_reverse_flag = 0;
 
 static int browser_compare_order(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_numeric_cmp(pa->number, pb->number);
 
@@ -96,8 +96,8 @@ static int browser_compare_order(const void *a, const void *b)
 
 static int browser_compare_subject(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_strcoll(pa->display_name, pb->display_name);
 
@@ -106,8 +106,8 @@ static int browser_compare_subject(const void *a, const void *b)
 
 static int browser_compare_date(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_numeric_cmp(pa->mtime, pb->mtime);
 
@@ -116,8 +116,8 @@ static int browser_compare_date(const void *a, const void *b)
 
 static int browser_compare_size(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_numeric_cmp(pa->size, pb->size);
 
@@ -126,8 +126,8 @@ static int browser_compare_size(const void *a, const void *b)
 
 static int browser_compare_count(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_numeric_cmp(pa->msg_count, pb->msg_count);
 
@@ -136,8 +136,8 @@ static int browser_compare_count(const void *a, const void *b)
 
 static int browser_compare_unread(const void *a, const void *b)
 {
-  struct folder_file *pa = (struct folder_file *) a;
-  struct folder_file *pb = (struct folder_file *) b;
+  const struct folder_file *pa = (const struct folder_file *) a;
+  const struct folder_file *pb = (const struct folder_file *) b;
 
   int r = mutt_numeric_cmp(pa->msg_unread, pb->msg_unread);
 

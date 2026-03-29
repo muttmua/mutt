@@ -51,7 +51,7 @@ typedef struct flowed_state
 static int get_quote_level(const char *line)
 {
   int quoted = 0;
-  char *p = (char *) line;
+  const char *p = line;
 
   while (p && *p == '>')
   {

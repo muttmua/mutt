@@ -95,8 +95,8 @@ static int alias_tag(MUTTMENU *menu, int n, int m)
 
 static int alias_SortAlias(const void *a, const void *b)
 {
-  ALIAS *pa = *(ALIAS **) a;
-  ALIAS *pb = *(ALIAS **) b;
+  const ALIAS *pa = *(const ALIAS * const *) a;
+  const ALIAS *pb = *(const ALIAS * const *) b;
   int r = mutt_strcasecmp(pa->name, pb->name);
 
   return (RSORT(r));
@@ -104,8 +104,8 @@ static int alias_SortAlias(const void *a, const void *b)
 
 static int alias_SortAddress(const void *a, const void *b)
 {
-  ADDRESS *pa = (*(ALIAS **) a)->addr;
-  ADDRESS *pb = (*(ALIAS **) b)->addr;
+  const ADDRESS *pa = (*(ALIAS * const *) a)->addr;
+  const ADDRESS *pb = (*(ALIAS * const *) b)->addr;
   int r;
 
   if (pa == pb)

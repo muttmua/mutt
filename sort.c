@@ -31,29 +31,29 @@
 
 static int compare_score(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
   return mutt_numeric_cmp((*pb)->score, (*pa)->score); /* note that this is reverse */
 }
 
 static int compare_size(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
   return mutt_numeric_cmp((*pa)->content->length, (*pb)->content->length);
 }
 
 static int compare_date_sent(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
   return mutt_numeric_cmp((*pa)->date_sent, (*pb)->date_sent);
 }
 
 static int compare_subject(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
   int rc;
 
   if (!(*pa)->env->real_subj)
@@ -89,8 +89,8 @@ const char *mutt_get_name(ADDRESS *a)
 
 static int compare_to(const void *a, const void *b)
 {
-  HEADER **ppa = (HEADER **) a;
-  HEADER **ppb = (HEADER **) b;
+  const HEADER * const *ppa = (const HEADER * const *) a;
+  const HEADER * const *ppb = (const HEADER * const *) b;
   char fa[SHORT_STRING];
   const char *fb;
 
@@ -101,8 +101,8 @@ static int compare_to(const void *a, const void *b)
 
 static int compare_from(const void *a, const void *b)
 {
-  HEADER **ppa = (HEADER **) a;
-  HEADER **ppb = (HEADER **) b;
+  const HEADER * const *ppa = (const HEADER * const *) a;
+  const HEADER * const *ppb = (const HEADER * const *) b;
   char fa[SHORT_STRING];
   const char *fb;
 
@@ -113,23 +113,23 @@ static int compare_from(const void *a, const void *b)
 
 static int compare_date_received(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
   return mutt_numeric_cmp((*pa)->received, (*pb)->received);
 }
 
 static int compare_order(const void *a, const void *b)
 {
-  HEADER **ha = (HEADER **) a;
-  HEADER **hb = (HEADER **) b;
+  const HEADER * const *ha = (const HEADER * const *) a;
+  const HEADER * const *hb = (const HEADER * const *) b;
 
   return mutt_numeric_cmp((*ha)->index, (*hb)->index);
 }
 
 static int compare_spam(const void *a, const void *b)
 {
-  HEADER **ppa = (HEADER **) a;
-  HEADER **ppb = (HEADER **) b;
+  const HEADER * const *ppa = (const HEADER * const *) a;
+  const HEADER * const *ppb = (const HEADER * const *) b;
   char   *aptr, *bptr;
   int     ahas, bhas;
   int     result = 0;
@@ -176,8 +176,8 @@ static int compare_spam(const void *a, const void *b)
 
 static int compare_label(const void *a, const void *b)
 {
-  HEADER **ppa = (HEADER **) a;
-  HEADER **ppb = (HEADER **) b;
+  const HEADER * const *ppa = (const HEADER * const *) a;
+  const HEADER * const *ppb = (const HEADER * const *) b;
   int     ahas, bhas;
 
   /* As with compare_spam, not all messages will have the x-label
@@ -251,7 +251,8 @@ static int compare_unthreaded(const void *a, const void *b)
   if (rc)
     return (SortAux & SORT_REVERSE) ? -rc : rc;
 
-  rc = mutt_numeric_cmp((*((HEADER **)a))->index, (*((HEADER **)b))->index);
+  rc = mutt_numeric_cmp((*((const HEADER * const *) a))->index,
+                        (*((const HEADER * const *) b))->index);
   if (rc)
     return (Sort & SORT_REVERSE) ? -rc : rc;
 

@@ -32,7 +32,7 @@
 static unsigned int gen_string_hash(union hash_key key, unsigned int n)
 {
   unsigned int h = 0;
-  unsigned char *s = (unsigned char *)key.strkey;
+  const unsigned char *s = (const unsigned char *)key.strkey;
 
   while (*s)
     h += (h << 7) + *s++;
@@ -49,7 +49,7 @@ static int cmp_string_key(union hash_key a, union hash_key b)
 static unsigned int gen_case_string_hash(union hash_key key, unsigned int n)
 {
   unsigned int h = 0;
-  unsigned char *s = (unsigned char *)key.strkey;
+  const unsigned char *s = (const unsigned char *)key.strkey;
 
   while (*s)
     h += (h << 7) + tolower(*s++);

@@ -158,10 +158,10 @@ static void list_headers_free(struct list_headers **p_lhdrs)
 static void make_field_format(int max, char *dst)
 {
   int len = 0;
-  struct mapping_t *action;
+  const struct mapping_t *action;
 
   dst[--max] = '\0';
-  for (action = (struct mapping_t *)ListActions; action->name; action++)
+  for (action = (const struct mapping_t *)ListActions; action->name; action++)
     len = MAX(len, mutt_strwidth(_(action->name)));
 
   /* n.b. not localized - is a metaformat */
