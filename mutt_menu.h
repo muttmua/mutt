@@ -123,7 +123,6 @@ void menu_current_middle(MUTTMENU *);
 void menu_current_bottom(MUTTMENU *);
 void menu_check_recenter(MUTTMENU *);
 void menu_status_line(char *, size_t, MUTTMENU *, const char *);
-short mutt_ts_capability(void);
 void mutt_ts_status(char *);
 void mutt_ts_icon(char *);
 
