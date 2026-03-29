@@ -229,7 +229,7 @@ static int _get_field(const char *field, BUFFER *buffer, int complete,
 #endif
     mutt_window_clearline(MuttMessageWindow, 0);
     SETCOLOR(MT_COLOR_PROMPT);
-    addstr((char *)field); /* cast to get around bad prototypes */
+    addstr(field);
     NORMAL_COLOR;
     mutt_refresh();
     mutt_window_getyx(MuttMessageWindow, NULL, &x);
@@ -1073,7 +1073,7 @@ static int _enter_fname(const char *prompt, BUFFER *fname, int flags,
   event_t ch;
 
   SETCOLOR(MT_COLOR_PROMPT);
-  mutt_window_mvaddstr(MuttMessageWindow, 0, 0, (char *) prompt);
+  mutt_window_mvaddstr(MuttMessageWindow, 0, 0, prompt);
   addstr(_(" ('?' for list): "));
   NORMAL_COLOR;
   if (mutt_buffer_len(fname))
