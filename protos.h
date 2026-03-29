@@ -516,11 +516,11 @@ int getdnsdomainname(BUFFER *);
 #define memmove(d,s,n) bcopy((s),(d),(n))
 #endif
 
+#ifdef _AIX
 /* AIX doesn't define these in any headers (sigh) */
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
 
-#ifdef _AIX
 int setegid(gid_t);
 #endif /* _AIX */
 
