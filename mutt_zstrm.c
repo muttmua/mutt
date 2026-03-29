@@ -62,7 +62,7 @@ static int mutt_zstrm_open(CONNECTION *conn)
 
 static int mutt_zstrm_close(CONNECTION *conn)
 {
-  zstrmctx* zctx = conn->sockdata;
+  zstrmctx *zctx = conn->sockdata;
   int rc = zctx->next_conn.conn_close(&zctx->next_conn);
 
   muttdbg(4, "zstrm_close: read %llu->%llu (%.1fx) "
@@ -90,7 +90,7 @@ static int mutt_zstrm_close(CONNECTION *conn)
 
 static int mutt_zstrm_read(CONNECTION *conn, char *buf, size_t len)
 {
-  zstrmctx* zctx = conn->sockdata;
+  zstrmctx *zctx = conn->sockdata;
   int rc = 0;
   int zrc;
 
@@ -168,7 +168,7 @@ retry:
 
 static int mutt_zstrm_poll(CONNECTION *conn, time_t wait_secs)
 {
-  zstrmctx* zctx = conn->sockdata;
+  zstrmctx *zctx = conn->sockdata;
 
   muttdbg(4, "zstrm_poll: %s",
           zctx->read.z.avail_out == 0 || zctx->read.pos > 0 ?
@@ -181,7 +181,7 @@ static int mutt_zstrm_poll(CONNECTION *conn, time_t wait_secs)
 
 static int mutt_zstrm_write(CONNECTION *conn, const char *buf, size_t count)
 {
-  zstrmctx* zctx = conn->sockdata;
+  zstrmctx *zctx = conn->sockdata;
   int rc;
   int zrc;
   char *wbufp;
@@ -236,7 +236,7 @@ static int mutt_zstrm_write(CONNECTION *conn, const char *buf, size_t count)
 
 void mutt_zstrm_wrap_conn(CONNECTION *conn)
 {
-  zstrmctx* zctx;
+  zstrmctx *zctx;
 
   zctx = (zstrmctx*) safe_calloc(1, sizeof(zstrmctx));
   /* store wrapped stream as next stream */
