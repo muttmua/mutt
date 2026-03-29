@@ -884,7 +884,7 @@ void imap_unmunge_mbox_name(IMAP_DATA *idata, char *s)
 int imap_wordcasecmp(const char *a, const char *b)
 {
   char tmp[SHORT_STRING];
-  char *s = (char *)b;
+  const char *s = b;
   int i;
 
   tmp[SHORT_STRING-1] = 0;

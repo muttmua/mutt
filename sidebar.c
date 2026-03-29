@@ -249,8 +249,8 @@ static void make_sidebar_entry(char *buf, unsigned int buflen, int width, const 
  */
 static int cb_qsort_sbe(const void *a, const void *b)
 {
-  const SBENTRY *sbe1 = *(const SBENTRY **) a;
-  const SBENTRY *sbe2 = *(const SBENTRY **) b;
+  const SBENTRY *sbe1 = *(const SBENTRY * const *) a;
+  const SBENTRY *sbe2 = *(const SBENTRY * const *) b;
   BUFFY *b1 = sbe1->buffy;
   BUFFY *b2 = sbe2->buffy;
 

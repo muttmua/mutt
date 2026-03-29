@@ -1160,8 +1160,8 @@ int imap_has_flag(LIST *flag_list, const char *flag)
 
 static int compare_uid(const void *a, const void *b)
 {
-  HEADER **pa = (HEADER **) a;
-  HEADER **pb = (HEADER **) b;
+  const HEADER * const *pa = (const HEADER * const *) a;
+  const HEADER * const *pb = (const HEADER * const *) b;
 
   return mutt_numeric_cmp(HEADER_DATA(*pa)->uid, HEADER_DATA(*pb)->uid);
 }
@@ -2089,7 +2089,7 @@ IMAP_STATUS *imap_mboxcache_get(IMAP_DATA *idata, const char *mbox, int create)
   if (create)
   {
     memset(&scache, 0, sizeof(scache));
-    scache.name = (char*)mbox;
+    scache.name = mbox;
     idata->mboxcache = mutt_add_list_n(idata->mboxcache, &scache,
                                        sizeof(scache));
     status = imap_mboxcache_get(idata, mbox, 0);

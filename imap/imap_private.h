@@ -137,7 +137,7 @@ typedef struct
 
 typedef struct
 {
-  char *name;
+  const char *name;
 
   unsigned int messages;
   unsigned int recent;

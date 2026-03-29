@@ -588,7 +588,7 @@ crc_matches(const char *d, unsigned int crc)
   if (!d)
     return 0;
 
-  restore_int(&mycrc, (unsigned char *) d, &off);
+  restore_int(&mycrc, (const unsigned char *) d, &off);
 
   return (crc == mycrc);
 }
@@ -1189,12 +1189,12 @@ hcache_open_gdbm(struct header_cache *h, const char *path)
   if (pagesize <= 0)
     pagesize = 16384;
 
-  h->db = gdbm_open((char *) path, pagesize, GDBM_WRCREAT, 00600, NULL);
+  h->db = gdbm_open(path, pagesize, GDBM_WRCREAT, 00600, NULL);
   if (h->db)
     return 0;
 
   /* if rw failed try ro */
-  h->db = gdbm_open((char *) path, pagesize, GDBM_READER, 00600, NULL);
+  h->db = gdbm_open(path, pagesize, GDBM_READER, 00600, NULL);
   if (h->db)
     return 0;
 

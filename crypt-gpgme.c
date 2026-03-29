@@ -396,7 +396,7 @@ static const char *crypt_fpr(crypt_key_t *k)
 /* Returns the fingerprint if available, otherwise
  * returns the long keyid.
  */
-static const char *crypt_fpr_or_lkeyid(crypt_key_t *k)
+static const char *crypt_fpr_or_lkeyid(const crypt_key_t *k)
 {
   const char *s = "????????????????";
 
@@ -3483,8 +3483,8 @@ static void crypt_entry(char *s, size_t l, MUTTMENU * menu, int num)
 /* Compare two addresses and the keyid to be used for sorting. */
 static int _crypt_compare_address(const void *a, const void *b)
 {
-  crypt_key_t **s = (crypt_key_t **) a;
-  crypt_key_t **t = (crypt_key_t **) b;
+  const crypt_key_t * const *s = (const crypt_key_t * const *) a;
+  const crypt_key_t * const *t = (const crypt_key_t * const *) b;
   int r;
 
   if ((r = mutt_strcasecmp((*s)->uid, (*t)->uid)))
@@ -3503,8 +3503,8 @@ static int crypt_compare_address(const void *a, const void *b)
 /* Compare two key IDs and the addresses to be used for sorting. */
 static int _crypt_compare_keyid(const void *a, const void *b)
 {
-  crypt_key_t **s = (crypt_key_t **) a;
-  crypt_key_t **t = (crypt_key_t **) b;
+  const crypt_key_t * const *s = (const crypt_key_t * const *) a;
+  const crypt_key_t * const *t = (const crypt_key_t * const *) b;
   int r;
 
   if ((r = mutt_strcasecmp(crypt_fpr_or_lkeyid(*s), crypt_fpr_or_lkeyid(*t))))
@@ -3522,8 +3522,8 @@ static int crypt_compare_keyid(const void *a, const void *b)
 /* Compare 2 creation dates and the addresses.  For sorting. */
 static int _crypt_compare_date(const void *a, const void *b)
 {
-  crypt_key_t **s = (crypt_key_t **) a;
-  crypt_key_t **t = (crypt_key_t **) b;
+  const crypt_key_t * const *s = (const crypt_key_t * const *) a;
+  const crypt_key_t * const *t = (const crypt_key_t * const *) b;
   unsigned long ts = 0, tt = 0;
 
   if ((*s)->kobj->subkeys && ((*s)->kobj->subkeys->timestamp > 0))
@@ -3549,8 +3549,8 @@ static int crypt_compare_date(const void *a, const void *b)
    addresses and the key IDs.  For sorting. */
 static int _crypt_compare_trust(const void *a, const void *b)
 {
-  crypt_key_t **s = (crypt_key_t **) a;
-  crypt_key_t **t = (crypt_key_t **) b;
+  const crypt_key_t * const *s = (const crypt_key_t * const *) a;
+  const crypt_key_t * const *t = (const crypt_key_t * const *) b;
   unsigned long ts = 0, tt = 0;
   int r;
 
