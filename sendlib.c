@@ -2173,10 +2173,10 @@ static int write_one_header(FILE *fp, int pfxw, int max, int wraplen,
 
 /* split several headers into individual ones and call write_one_header
  * for each one */
-int mutt_write_one_header(FILE *fp, const char *tag, const char *value,
+int mutt_write_one_header(FILE *fp, const char *tag, char *value,
                           const char *pfx, int wraplen, int flags)
 {
-  char *p = (char *)value, *last, *line;
+  char *p = value, *last, *line;
   int max = 0, w, rc = -1;
   int pfxw = mutt_strwidth(pfx);
   char *v = safe_strdup(value);
