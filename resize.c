@@ -39,46 +39,46 @@
 /* this routine should be called after receiving SIGWINCH */
 void mutt_resize_screen(void)
 {
+#ifndef USE_SLANG_CURSES
   char *cp;
   int fd;
   struct winsize w;
-#ifdef HAVE_RESIZETERM
-  int SLtt_Screen_Rows, SLtt_Screen_Cols;
-#endif
+  int screen_rows, screen_cols;
 
-  SLtt_Screen_Rows = -1;
-  SLtt_Screen_Cols = -1;
+  screen_rows = -1;
+  screen_cols = -1;
   if ((fd = open("/dev/tty", O_RDONLY)) != -1)
   {
     if (ioctl(fd, TIOCGWINSZ, &w) != -1)
     {
-      SLtt_Screen_Rows = w.ws_row;
-      SLtt_Screen_Cols = w.ws_col;
+      screen_rows = w.ws_row;
+      screen_cols = w.ws_col;
     }
     close(fd);
   }
-  if (SLtt_Screen_Rows <= 0)
+  if (screen_rows <= 0)
   {
     if ((cp = getenv("LINES")) != NULL)
-      mutt_atoi(cp, &SLtt_Screen_Rows, 0);
-    if (SLtt_Screen_Rows <= 0)
-      SLtt_Screen_Rows = 24;
+      mutt_atoi(cp, &screen_rows, 0);
+    if (screen_rows <= 0)
+      screen_rows = 24;
   }
-  if (SLtt_Screen_Cols <= 0)
+  if (screen_cols <= 0)
   {
     if ((cp = getenv("COLUMNS")) != NULL)
-      mutt_atoi(cp, &SLtt_Screen_Cols, 0);
-    if (SLtt_Screen_Cols <= 0)
-      SLtt_Screen_Cols = 80;
+      mutt_atoi(cp, &screen_cols, 0);
+    if (screen_cols <= 0)
+      screen_cols = 80;
   }
-#ifdef USE_SLANG_CURSES
+
+  resizeterm(screen_rows, screen_cols);
+#else
+  SLtt_get_screen_size();
+  SLsmg_reinit_smg();
   delwin(stdscr);
-  SLsmg_reset_smg();
-  SLsmg_init_smg();
   stdscr = newwin(0, 0, 0, 0);
   keypad(stdscr, TRUE);
-#else
-  resizeterm(SLtt_Screen_Rows, SLtt_Screen_Cols);
 #endif
+
   mutt_reflow_windows();
 }
