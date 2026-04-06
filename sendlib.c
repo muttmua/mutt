@@ -310,6 +310,8 @@ static void encode_8bit(FGETCONV *fc, FILE *fout, int istext)
 }
 
 
+/* The caller is responsible for terminating the headers with an
+ * additional '\n' before writing the body. */
 int mutt_write_mime_header(BODY *a, FILE *f)
 {
   PARAMETER *p;
@@ -474,12 +476,30 @@ int mutt_write_mime_body(BODY *a, FILE *f)
 
     for (t = a->parts; t ; t = t->next)
     {
-      fprintf(f, "\n--%s\n", boundary);
+      fprintf(f, "--%s\n", boundary);
       if (mutt_write_mime_header(t, f) == -1)
         return -1;
       fputc('\n', f);
       if (mutt_write_mime_body(t, f) == -1)
         return -1;
+
+      /* This '\n' is part of the following delimiter.  The very
+       * first dash-boundary printed in this loop already has a '\n'
+       * printed prior to calling this function (to separate the
+       * headers from the body).
+       *
+       * Reading RFC 2046, it's possible to conclude the '\n'
+       * separator between headers and body is different from the '\n'
+       * part of the first delimiter.  This is probably why mutt
+       * previously included a '\n' in front of every dash-boundary in
+       * this loop.
+       *
+       * However common practice and the examples shown in the RFC do
+       * not have a double '\n' separator between the message headers
+       * and a multipart body.
+       */
+      if (t->next)
+        fputc('\n', f);
     }
     fprintf(f, "\n--%s--\n", boundary);
     return (ferror(f) ? -1 : 0);
@@ -3305,7 +3325,8 @@ int mutt_write_fcc(const char *path, SEND_CONTEXT *sctx, const char *msgid, int 
     while (fgets(sasha, sizeof(sasha), tempfp) != NULL)
       lines++;
     fprintf(msg->fp, "Content-Length: " OFF_T_FMT "\n", (LOFF_T) ftello(tempfp));
-    fprintf(msg->fp, "Lines: %d\n\n", lines);
+    fprintf(msg->fp, "Lines: %d\n", lines);
+    fputc('\n', msg->fp); /* finish off the header */
 
     /* copy the body and clean up */
     rewind(tempfp);
