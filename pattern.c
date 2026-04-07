@@ -157,7 +157,7 @@ static const struct pattern_flags
     /* L10N:
        Pattern Completion Menu description for ~L
     */
-    N_("messages whose From/Sender/To/CC matches EXPR") },
+    N_("messages whose From/Sender/To/CC/BCC matches EXPR") },
   { 'm', MUTT_MESSAGE, 0, EAT_RANGE,
     /* L10N:
        Pattern Completion Menu description for ~m
@@ -1690,12 +1690,12 @@ mutt_pattern_exec(struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx, 
       return (pat->not ^ (match_reference(pat, h->env->references) ||
                           match_reference(pat, h->env->in_reply_to)));
     case MUTT_ADDRESS:
-      return (pat->not ^ match_adrlist(pat, flags & MUTT_MATCH_FULL_ADDRESS, 4,
+      return (pat->not ^ match_adrlist(pat, flags & MUTT_MATCH_FULL_ADDRESS, 5,
                                        h->env->from, h->env->sender,
-                                       h->env->to, h->env->cc));
+                                       h->env->to, h->env->cc, h->env->bcc));
     case MUTT_RECIPIENT:
       return (pat->not ^ match_adrlist(pat, flags & MUTT_MATCH_FULL_ADDRESS,
-                                       2, h->env->to, h->env->cc));
+                                       3, h->env->to, h->env->cc, h->env->bcc));
     case MUTT_LIST:     /* known list, subscribed or not */
       if (cache)
       {

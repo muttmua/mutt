@@ -678,10 +678,10 @@ messages carbon-copied to \fIEXPR\fP
 messages carbon-copied to any member of \fIGROUP\fP
 .TP
 ~C \fIEXPR\fP
-messages either to: or cc: \fIEXPR\fP
+messages either to:, cc:, or bcc: \fIEXPR\fP
 .TP
 %C \fIGROUP\fP
-messages either to: or cc: to any member of \fIGROUP\fP
+messages either to:, cc:, or bcc: to any member of \fIGROUP\fP
 .TP
 ~d \fIMIN\fP-\fIMAX\fP
 messages with \(lqdate-sent\(rq in a Date range

@@ -5964,8 +5964,8 @@ shows several ways to select messages.
 <row><entry>=B <emphasis>STRING</emphasis></entry><entry>If IMAP is enabled, like ~B but searches for <emphasis>STRING</emphasis> on the server, rather than downloading each message and searching it locally.</entry></row>
 <row><entry>~c <emphasis>EXPR</emphasis></entry><entry>messages carbon-copied to <emphasis>EXPR</emphasis></entry></row>
 <row><entry>%c <emphasis>GROUP</emphasis></entry><entry>messages carbon-copied to any member of <emphasis>GROUP</emphasis></entry></row>
-<row><entry>~C <emphasis>EXPR</emphasis></entry><entry>messages either to: or cc: <emphasis>EXPR</emphasis></entry></row>
-<row><entry>%C <emphasis>GROUP</emphasis></entry><entry>messages either to: or cc: to any member of <emphasis>GROUP</emphasis></entry></row>
+<row><entry>~C <emphasis>EXPR</emphasis></entry><entry>messages to:, cc:, or bcc: <emphasis>EXPR</emphasis></entry></row>
+<row><entry>%C <emphasis>GROUP</emphasis></entry><entry>messages to:, cc:, or bcc: to any member of <emphasis>GROUP</emphasis></entry></row>
 <row><entry>~d [<emphasis>MIN</emphasis>]-[<emphasis>MAX</emphasis>]</entry><entry>messages with <quote>date-sent</quote> in a Date range</entry></row>
 <row><entry>~D</entry><entry>deleted messages</entry></row>
 <row><entry>~e <emphasis>EXPR</emphasis></entry><entry>messages which contains <emphasis>EXPR</emphasis> in the <quote>Sender</quote> field</entry></row>
