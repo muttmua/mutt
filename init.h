@@ -4906,7 +4906,7 @@ struct option_t MuttVars[] = {
   ** Controls whether Mutt will ask you to press a key after an external command
   ** has been invoked by these functions: \fC<shell-escape>\fP,
   ** \fC<pipe-message>\fP, \fC<pipe-entry>\fP, \fC<print-message>\fP,
-  ** and \fC<print-entry>\fP commands.
+  ** \fC<print-entry>\fP, and \fC<filter-entry>\fP commands.
   ** .pp
   ** It is also used when viewing attachments with ``$auto_view'', provided
   ** that the corresponding mailcap entry has a \fIneedsterminal\fP flag,
