@@ -1476,6 +1476,8 @@ postpone the message.
 <row><entry>Esc k</entry><entry><literal>&lt;attach-key&gt;</literal></entry><entry>attach a PGP public key</entry></row>
 <row><entry>d</entry><entry><literal>&lt;edit-description&gt;</literal></entry><entry>edit description on attachment</entry></row>
 <row><entry>D</entry><entry><literal>&lt;detach-file&gt;</literal></entry><entry>detach a file</entry></row>
+<row><entry>F</entry><entry><literal>&lt;filter-entry&gt;</literal></entry><entry>filter attachment through a shell command</entry></row>
+<row><entry>G</entry><entry><literal>&lt;get-attachment&gt;</literal></entry><entry>get a temporary copy of an attachment</entry></row>
 <row><entry>t</entry><entry><literal>&lt;edit-to&gt;</literal></entry><entry>edit the To field</entry></row>
 <row><entry>Esc f</entry><entry><literal>&lt;edit-from&gt;</literal></entry><entry>edit the From field</entry></row>
 <row><entry>r</entry><entry><literal>&lt;edit-reply-to&gt;</literal></entry><entry>edit the Reply-To field</entry></row>
@@ -1496,11 +1498,24 @@ postpone the message.
 </table>
 
 <para>
-The compose menu is also used to edit the attachments for a message
-which can be either files or other messages. The
-<literal>&lt;attach-message&gt;</literal> function to will prompt you
-for a folder to attach messages from. You can now tag messages in that
-folder and they will be attached to the message you are sending.
+The compose menu is also used to edit the attachments for a message,
+which can be either files or other messages.
+<literal>&lt;attach-file&gt;</literal> will add an attachment and
+<literal>&lt;detach-file&gt;</literal> will remove an attachment from
+the message.  <literal>&lt;get-attachment&gt;</literal> will create a
+temporary copy of the attachment, which can be useful if you intend to
+modify it before sending.  For instance,
+<literal>&lt;filter-entry&gt;</literal>, which will pipe the
+attachment through a program and replace the attachment with the
+output of the pipe.  Because of the danger of unintentionally
+overwriting the attachment, mutt will always prompt to confirm before
+invoking the program.
+</para>
+
+<para>
+The <literal>&lt;attach-message&gt;</literal> function will prompt
+you for a folder to attach messages from. You can now tag messages in
+that folder and they will be attached to the message you are sending.
 </para>
 
 <note>
