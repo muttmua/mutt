@@ -23,8 +23,8 @@ environment:
 tasks:
 - check: |
     cd mutt
-    autoreconf -if
-    ./configure
+    autoreconf --version
+    ./prepare
     make check-local
 
 - default: |
