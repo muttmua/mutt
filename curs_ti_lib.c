@@ -28,8 +28,16 @@
  *       file than everywhere that includes mutt_curses.h.
  */
 
-#if !defined(USE_SLANG_CURSES) && defined(HAVE_TERM_H)
-#include <term.h>
+#if !defined(USE_SLANG_CURSES) && \
+  (defined(HAVE_TERM_H) || defined(HAVE_NCURSESW_TERM_H) || defined(HAVE_NCURSES_TERM_H))
+
+#if defined(HAVE_NCURSESW_TERM_H)
+  #include <ncursesw/term.h>
+#elif defined(HAVE_NCURSES_TERM_H)
+  #include <ncurses/term.h>
+#else
+  #include <term.h>
+#endif
 
 const char *mutt_tigetstr(const char *capname)
 {

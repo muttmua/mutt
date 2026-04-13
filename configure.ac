@@ -346,17 +346,17 @@ main ()
 
                   AC_CHECK_HEADERS(ncursesw/ncurses.h,[cf_cv_ncurses_header="ncursesw/ncurses.h"],
                     [AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])])
+                  AC_CHECK_HEADERS(ncursesw/term.h,,[AC_CHECK_HEADERS(term.h)])
                 else
                   AC_CHECK_LIB(tinfo, tgetent, [MUTTLIBS="$MUTTLIBS -ltinfo"])
 
                   AC_CHECK_HEADERS(ncurses/ncurses.h,[cf_cv_ncurses_header="ncurses/ncurses.h"],
                     [AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])])
+                  AC_CHECK_HEADERS(ncurses/term.h,,[AC_CHECK_HEADERS(term.h)])
                 fi],
 
                 [CF_CURSES_LIBS])
                 ])
-
-        AC_CHECK_HEADERS(term.h)
 
         old_LIBS="$LIBS"
         LIBS="$LIBS $MUTTLIBS"
