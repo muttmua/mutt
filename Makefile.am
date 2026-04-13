@@ -221,10 +221,11 @@ update-doc:
 	(cd doc && $(MAKE) update-doc)
 
 shellcheck:
-	(find . -name \*.sh && echo "gen_defs muttbug prepare") | xargs shellcheck
+	(find $(top_srcdir) -name \*.sh \
+		&& echo "$(srcdir)/gen_defs $(srcdir)/muttbug $(srcdir)/prepare") | xargs shellcheck
 
 tabcheck:
-	find . -name '*.[ch]' ! -name keymap_defs.h ! -name conststrings.c -print0 | \
+	find $(top_srcdir) -name '*.[ch]' ! -name keymap_defs.h ! -name conststrings.c -print0 | \
 		xargs -0 perl -n -e '/\t/ && die "tab found in $$ARGV"'
 
 .PHONY: commit pclean check-security shellcheck tabcheck
