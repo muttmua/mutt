@@ -4,7 +4,7 @@
 # grep for some things which may look like security problems.
 #
 
-TMPFILE=$(mktemp check_sec.tmp.XXXXXX) || exit 1
+TMPFILE=$(mktemp -p /tmp check_sec.tmp.XXXXXX) || exit 1
 
 RV=0;
 

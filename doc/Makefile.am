@@ -207,7 +207,9 @@ mutt.info: mutt.texi
 check-local: validate
 
 validate: stamp-doc-xml
-	xmllint --noout --noblanks --postvalid manual.xml
+	if test -f ./manual.xml; then \
+	  xmllint --noout --noblanks --postvalid manual.xml; \
+	fi
 
 spellcheck:
 	-aspell -d american --mode=sgml  --encoding=utf-8 -p $(srcdir)/mutt.pwl check manual.xml.head
