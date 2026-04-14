@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if autoreconf --install && ./configure "$@"
+if autoreconf -isvf && ./configure "$@"
 then
   echo
   echo "The mutt source code was successfully prepared and configured."
