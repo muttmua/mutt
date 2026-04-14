@@ -27,6 +27,33 @@
 /missing
 /mkinstalldirs
 
+# gettextize installed files
+/ABOUT-NLS
+/config.rpath
+/m4/build-to-host.m4
+/m4/gettext.m4
+/m4/host-cpu-c-abi.m4
+/m4/iconv.m4
+/m4/intlmacosx.m4
+/m4/lib-ld.m4
+/m4/lib-link.m4
+/m4/lib-prefix.m4
+/m4/nls.m4
+/m4/po.m4
+/m4/progtest.m4
+/po/Makefile.in.in
+/po/Makevars.template
+/po/Rules-quot
+/po/boldquot.sed
+/po/en@boldquot.header
+/po/en@quot.header
+/po/fetch-po
+/po/insert-header.sed
+/po/insert-header.sin
+/po/quot.sed
+/po/remove-potcdate.sed
+/po/remove-potcdate.sin
+
 # built objects
 /flea
 /hcversion.h
