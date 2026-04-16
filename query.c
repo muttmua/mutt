@@ -503,48 +503,46 @@ static void query_menu(char *buf, size_t buflen, QUERY *results, int retbuf)
     }
 
     /* if we need to return the selected entries */
-    if (retbuf && (done == 2))
+    if (retbuf)
     {
-      int tagged = 0;
-      size_t curpos = 0;
-
       memset(buf, 0, buflen);
 
-      /* check for tagged entries */
-      for (i = 0; i < menu->max; i++)
+      if (menu->tagged)
       {
-        if (QueryTable[i].tagged)
+        size_t curpos = 0;
+
+        for (i = 0; i < menu->max; i++)
         {
-          if (curpos == 0)
+          if (QueryTable[i].tagged)
           {
-            ADDRESS *tmpa = result_to_addr(QueryTable[i].data);
-            mutt_addrlist_to_local(tmpa);
-            tagged = 1;
-            rfc822_write_address(buf, buflen, tmpa, 0);
-            curpos = mutt_strlen(buf);
-            rfc822_free_address(&tmpa);
-          }
-          else if (curpos + 2 < buflen)
-          {
-            ADDRESS *tmpa = result_to_addr(QueryTable[i].data);
-            mutt_addrlist_to_local(tmpa);
-            strcat(buf, ", "); /* __STRCAT_CHECKED__ */
-            rfc822_write_address((char *) buf + curpos + 2, buflen - curpos - 2,
-                                 tmpa, 0);
-            curpos = mutt_strlen(buf);
-            rfc822_free_address(&tmpa);
+            if (curpos == 0)
+            {
+              ADDRESS *tmpa = result_to_addr(QueryTable[i].data);
+              mutt_addrlist_to_local(tmpa);
+              rfc822_write_address(buf, buflen, tmpa, 0);
+              curpos = mutt_strlen(buf);
+              rfc822_free_address(&tmpa);
+            }
+            else if (curpos + 2 < buflen)
+            {
+              ADDRESS *tmpa = result_to_addr(QueryTable[i].data);
+              mutt_addrlist_to_local(tmpa);
+              strcat(buf, ", "); /* __STRCAT_CHECKED__ */
+              rfc822_write_address((char *) buf + curpos + 2, buflen - curpos - 2,
+                                   tmpa, 0);
+              curpos = mutt_strlen(buf);
+              rfc822_free_address(&tmpa);
+            }
           }
         }
       }
-      /* then enter current message */
-      if (!tagged)
+      else if (done == 2)
       {
         ADDRESS *tmpa = result_to_addr(QueryTable[menu->current].data);
         mutt_addrlist_to_local(tmpa);
         rfc822_write_address(buf, buflen, tmpa, 0);
         rfc822_free_address(&tmpa);
       }
-
     }
 
     free_query(&results);
