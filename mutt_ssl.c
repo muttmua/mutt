@@ -957,7 +957,7 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
   int subj_alt_names_count;
   GENERAL_NAME *subj_alt_name;
   /* did we find a name matching hostname? */
-  int match_found;
+  int match_found, has_dns_entry = 0;
 
   /* Check if 'hostname' matches the one of the subjectAltName extensions of
    * type DNS or the Common Name (CN). */
@@ -982,6 +982,7 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
       subj_alt_name = sk_GENERAL_NAME_value(subj_alt_names, i);
       if (subj_alt_name->type == GEN_DNS)
       {
+        has_dns_entry = 1;
         if (subj_alt_name->d.ia5->length >= 0 &&
             mutt_strlen((char *)subj_alt_name->d.ia5->data) == (size_t)subj_alt_name->d.ia5->length &&
             (match_found = hostname_match(hostname_ascii,
@@ -992,6 +993,14 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
       }
     }
     GENERAL_NAMES_free(subj_alt_names);
+  }
+
+  if (has_dns_entry && !match_found)
+  {
+    if (err && errlen)
+      snprintf(err, errlen, _("certificate owner does not match hostname %s"),
+               hostname);
+    goto out;
   }
 
   if (!match_found)
