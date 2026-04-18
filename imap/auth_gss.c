@@ -108,7 +108,7 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method)
   int cflags;
   OM_uint32 maj_stat, min_stat;
   BUFFER *buf1 = NULL, *buf2 = NULL;
-  unsigned long buf_size;
+  uint32_t buf_size;
   int rc, retval = IMAP_AUTH_FAILURE;
 
   if (!mutt_bit_isset (idata->capabilities, AGSSAPI))
@@ -259,6 +259,14 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method)
   }
   dprint (2, (debugfile, "Credential exchange complete\n"));
 
+  if (send_token.length < 4)
+  {
+    /* TODO: convert to muttdbg() in master branch merge */
+    dprint(2, (debugfile, "Truncated security level data\n"));
+    gss_release_buffer(&min_stat, &send_token);
+    goto err_abort_cmd;
+  }
+
   /* first octet is security levels supported. We want NONE */
 #ifdef DEBUG
   server_conf_flags = ((char*) send_token.value)[0];
@@ -272,7 +280,7 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA* idata, const char* method)
 
   /* we don't care about buffer size if we don't wrap content. But here it is */
   ((char*) send_token.value)[0] = 0;
-  buf_size = ntohl (*((long *) send_token.value));
+  buf_size = ntohl(*((uint32_t *) send_token.value));
   gss_release_buffer (&min_stat, &send_token);
   dprint (2, (debugfile, "Unwrapped security level flags: %c%c%c\n",
               server_conf_flags & GSS_AUTH_P_NONE      ? 'N' : '-',
