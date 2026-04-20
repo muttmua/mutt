@@ -1425,7 +1425,7 @@ static int show_sig_summary(unsigned long sum,
 
   if ((sum & GPGME_SIGSUM_KEY_EXPIRED))
     {
-      time_t at = key->subkeys->expires ? key->subkeys->expires : 0;
+      time_t at = (key && key->subkeys) ? key->subkeys->expires : 0;
       if (at)
         {
           state_puts(_("Warning: The key used to create the "
