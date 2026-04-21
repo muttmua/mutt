@@ -149,7 +149,7 @@ static void hmac_md5(const char *password, char *challenge,
   if (secret_len > MD5_BLOCK_LEN)
   {
     md5_buffer(password, secret_len, hash_passwd);
-    strfcpy((char*) secret, (char*) hash_passwd, MD5_DIGEST_LEN);
+    memcpy(secret, hash_passwd, MD5_DIGEST_LEN);
     secret_len = MD5_DIGEST_LEN;
   }
   else
