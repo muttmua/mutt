@@ -423,6 +423,10 @@ AC_CHECK_TYPE(ssize_t, [],
 
 AC_CHECK_FUNCS(fgetpos memmove memccpy setegid srand48 strerror)
 
+dnl random data functions
+AC_CHECK_HEADERS(sys/random.h)
+AC_CHECK_FUNCS(getrandom arc4random_buf)
+
 AC_REPLACE_FUNCS([setenv strcasecmp strdup strsep strtok_r wcscasecmp])
 AC_REPLACE_FUNCS([strcasestr mkdtemp])
 

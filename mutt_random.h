@@ -25,6 +25,5 @@ typedef union random64
 } RANDOM64;
 
 void mutt_base64_random96(char output_B64[static 17]);
-void mutt_random_bytes(char *random_bytes, int length_requested);
-void mutt_reseed(void);
+void mutt_random_bytes(char *random_bytes, size_t length_requested);
 #endif

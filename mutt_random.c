@@ -25,25 +25,38 @@
 
 #include <fcntl.h>
 #include <string.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
+#ifdef HAVE_SYS_TIME_H
+  #include <sys/time.h>
+#endif
+#ifdef HAVE_SYS_RANDOM_H
+  #include <sys/random.h>
+#endif
+#include <errno.h>
+
+/* Built-in LRFS113 PRNG code and variables.
+ *
+ * It isn't used on OpenBSD, where only arc4random_buf() is available,
+ * so undef it for that case.
+ */
+#if defined(HAVE_GETRANDOM) || !defined(HAVE_ARC4RANDOM_BUF)
 
 static uint32_t z[4]; /* Keep state for LFRS113 PRNG */
 static int rand_bytes_produced = 0;
 static time_t time_last_reseed = 0;
 
-void mutt_random_bytes(char *random_bytes, int length_requested)
+static void prng_reseed(void);
+
+static void prng_random_bytes(char *random_bytes, size_t length_requested)
 {
   /* Reseed every day or after more than a 100000 random bytes produced */
   if (time(NULL) - time_last_reseed > 86400 || rand_bytes_produced > 100000)
-    mutt_reseed();
+    prng_reseed();
 
   uint32_t b;
 
   /* The loop below is our implementation of the LFRS113 PRNG algorithm by
    * Pierre L'Ecuyer */
-  for (int i = length_requested; i > 0;)
+  for (size_t i = length_requested; i > 0;)
   {
     b    = ((z[0] <<  6) ^ z[0]) >> 13;
     z[0] = ((z[0] & 4294967294U) << 18) ^ b;
@@ -56,17 +69,17 @@ void mutt_random_bytes(char *random_bytes, int length_requested)
 
     b    = z[0] ^ z[1] ^ z[2] ^ z[3];
 
-    if (--i >= 0) random_bytes[i] = (b >> 24) & 0xFF;
-    if (--i >= 0) random_bytes[i] = (b >> 16) & 0xFF;
-    if (--i >= 0) random_bytes[i] = (b >>  8) & 0xFF;
-    if (--i >= 0) random_bytes[i] = (b)       & 0xFF;
+    if (i > 0) random_bytes[--i] = (b >> 24) & 0xFF;
+    if (i > 0) random_bytes[--i] = (b >> 16) & 0xFF;
+    if (i > 0) random_bytes[--i] = (b >>  8) & 0xFF;
+    if (i > 0) random_bytes[--i] = (b)       & 0xFF;
   }
   rand_bytes_produced += length_requested;
 
   return;
 }
 
-void mutt_reseed(void)
+static void prng_reseed(void)
 {
   uint32_t t[4];                /* Temp seed values from /dev/urandom */
   char computer_says_no = TRUE; /* Whether /dev/urandom was usable */
@@ -104,6 +117,41 @@ void mutt_reseed(void)
   if (!computer_says_no) /* Mix in /dev/urandom values */
     for (int i = 0; i <= 3; i++)
       z[i] ^= t[i];
+}
+#endif /* defined(HAVE_GETRANDOM) || !defined(HAVE_ARC4RANDOM_BUF) */
+
+/* Generate length_requested random bytes of data */
+void mutt_random_bytes(char *random_bytes, size_t length_requested)
+{
+#if defined(HAVE_GETRANDOM)
+  ssize_t requested = length_requested;
+  ssize_t result;
+
+  while (requested > 0)
+  {
+    do
+    {
+      result = getrandom(random_bytes, requested, 0);
+    } while ((result == -1) && (errno == EINTR));
+
+    /* On some other errno, fall back to the PRNG */
+    if (result == -1)
+    {
+      prng_random_bytes(random_bytes, requested);
+      requested = 0;
+    }
+    else if (result > 0)
+    {
+      random_bytes += result;
+      requested -= result;
+    }
+  }
+
+#elif defined(HAVE_ARC4RANDOM_BUF)
+  arc4random_buf(random_bytes, length_requested);
+#else
+  prng_random_bytes(random_bytes, length_requested);
+#endif
 }
 
 /* Generate and Base64 encode 96 random bits and fill the buffer
