@@ -30,9 +30,7 @@
 #include "autocrypt.h"
 #include "autocrypt_private.h"
 
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 #include <errno.h>
 
 static int autocrypt_dir_init(int can_create)

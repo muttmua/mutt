@@ -54,10 +54,7 @@
 #include <errno.h>
 #include <string.h>
 #include <utime.h>
-
-#if HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 
 #define         INS_SORT_THRESHOLD              6
 

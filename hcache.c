@@ -44,9 +44,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#if HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 #include "mutt.h"
 #include "hcache.h"
 #include "hcversion.h"

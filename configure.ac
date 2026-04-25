@@ -373,7 +373,7 @@ main ()
         ])
 
 AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
-AC_CHECK_HEADERS(sys/time.h sys/resource.h)
+AC_CHECK_HEADERS(sys/resource.h)
 AC_CHECK_HEADERS(unix.h)
 
 AC_CHECK_FUNCS(setrlimit getsid)
