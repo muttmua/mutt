@@ -1,3 +1,107 @@
+2026-04-26 10:45:26 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4a9c9248)
+
+        * Update UPDATING file for 2.3.2 release.
+
+M	UPDATING
+
+2026-04-18 22:08:19 +0800  Kevin J. McCarthy  <kevin@8t8.us> (834c5a2e)
+
+        * Fix IMAP auth_cram MD5 digest of secret to use memcpy().
+        
+        For a secret longer than MD5_BLOCK_LEN, an MD5 digest is used instead.
+        However, mutt was incorrectly using strfcpy() instead of memcpy() on
+        the raw binary value returned by md5_buffer in hash_passwd.  If
+        hash_passwd contained an '\0' it would result in the value being
+        truncated.
+        
+        Additionally, the strfcpy was truncating the hash_passwd by one byte
+        regardless, due to passing a "size" of MD5_DIGEST_LEN when the data
+        itself was length MD5_DIGEST_LEN.
+        
+        This likely hasn't been a reported issue because:
+        1. CRAM-MD5 is not used much anymore
+        2. Most people likely don't have a password length greater than 64
+           bytes.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+
+M	imap/auth_cram.c
+
+2026-04-18 22:40:46 +0800  Kevin J. McCarthy  <kevin@8t8.us> (12f54fe3)
+
+        * Check for embedded nul in url_pct_decode().
+        
+        Consider %00 an invalid character in a URL.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	url.c
+
+2026-04-18 22:36:37 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f547a849)
+
+        * Fix imap_auth_gss() security level size check and buf_size type.
+        
+        Make sure send_token.length is 4 bytes before reading the data.
+        
+        Fix the buf_size type to be uint32_t instead of long.  ntohl()
+        operates on, and returns, a 32 bit unsigned integer.  Most
+        architectures now use a 64-bit long.
+        
+        I believe this only worked because in Little-Endian, the
+        least-significant bits come first, so even though we were using 8
+        bytes of send_token.value (4 of which were out of bounds) for the cast
+        to long, only the first 4 bytes were used to truncate to the uint32_t
+        that ntohl() used.  Likewise when we converted htonl() further down.
+        
+        Additionally, the comments indicate that mutt wasn't using buf_size in
+        any case, so perhaps that also explains the lack of bug reports.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	imap/auth_gss.c
+
+2026-04-18 21:54:34 +0800  Kevin J. McCarthy  <kevin@8t8.us> (fdc04a17)
+
+        * Fix infinite loop in gpgme data_object_to_stream().
+        
+        The code was not properly checking for a -1 return value in the read,
+        leading to an infinite loop, and printing past the buffer value to the
+        stream.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	crypt-gpgme.c
+
+2026-04-18 21:41:23 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ebfa2969)
+
+        * Fix NULL dereference in show_sig_summary().
+        
+        Inside show_one_sig_status(), if the error code is GPG_ERR_NO_PUBKEY,
+        key is NULL.  However, show_sig_summary() doesn't check for a NULL key
+        before dereferencing for the "key expired" case.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+        
+        Thanks to Alejandro Colomar for his review and suggestion to keep the
+        ternary operator.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	crypt-gpgme.c
+
+2026-03-20 13:26:34 +0800  Kevin J. McCarthy  <kevin@8t8.us> (519d1b9b)
+
+        * automatic post-release commit for mutt-2.3.1
+
+M	ChangeLog
+M	VERSION
+
 2026-03-20 13:18:13 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0f1f138c)
 
         * Update UPDATING file for 2.3.1 release.
