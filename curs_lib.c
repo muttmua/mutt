@@ -770,14 +770,46 @@ void mutt_progress_update(progress_t *progress, long pos, int percent)
 
     if (progress->size > 0)
     {
-      mutt_message("%s %s/%s (%d%%)", progress->msg, posstr, progress->sizestr,
+      /* L10N:
+       * This is a progress status message, printed as longer-running actions
+       * take place to give an update to the user.
+       *
+       * An example might be:
+       * "Fetching message headers... 40/200 (20%)"
+       *
+       * %1$s - the message: "Fetching message headers..."
+       * %2$s - the current position in the action: "40"
+       * %3$s - the total number to be completed: "200"
+       * %4$d - the percentage complete: 20
+       *
+       * Note that the various punctuation and the format of the percentage
+       * can be adjusted, including the order the parts are displayed in.
+       */
+      mutt_message(_("%1$s %2$s/%3$s (%4$d%%)"),
+                   progress->msg, posstr, progress->sizestr,
                    percent > 0 ? percent :
                    (int) (100.0 * (double) progress->pos / progress->size));
     }
     else
     {
       if (percent > 0)
-        mutt_message("%s %s (%d%%)", progress->msg, posstr, percent);
+      {
+        /* L10N:
+         * This is a progress status message, printed as longer-running actions
+         * take place to give an update to the user.
+         *
+         * An example might be:
+         * "Reading =mutt-po... 500 (30%)"
+         *
+         * %1$s - the message: "Reading =mutt-po..."
+         * %2$s - the current position in the action: "500"
+         * %3$d - the percentage complete: 30
+         *
+         * Note that the various punctuation and the format of the percentage
+         * can be adjusted, including the order the parts are displayed in.
+         */
+        mutt_message(_("%1$s %2$s (%3$d%%)"), progress->msg, posstr, percent);
+      }
       else
         mutt_message("%s %s", progress->msg, posstr);
     }
