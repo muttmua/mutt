@@ -225,7 +225,7 @@ status_format_str(char *buf, size_t buflen, size_t col, int cols, char op, const
       else
       {
         count = (100 * (menu->top + menu->pagelen)) / menu->max;
-        snprintf(tmp, sizeof(tmp), "%d%%", count);
+        snprintf(tmp, sizeof(tmp), mutt_i18n_percentage(), count);
         cp = tmp;
       }
       snprintf(fmt, sizeof(fmt), "%%%ss", prefix);

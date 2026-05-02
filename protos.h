@@ -168,6 +168,8 @@ const char *mutt_make_version(void);
 
 const char *mutt_fqdn(short);
 
+const char *mutt_i18n_percentage(void);
+
 group_t *mutt_pattern_group(const char *);
 
 REGEXP *mutt_compile_regexp(const char *, int);

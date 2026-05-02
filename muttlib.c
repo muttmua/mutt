@@ -1212,6 +1212,22 @@ void mutt_buffer_sanitize_filename(BUFFER *d, const char *f, int flags)
   }
 }
 
+/* L10N:
+ * A percentage value, for example 32%.  This is used in
+ * the index status line and pager status line.
+ * Note the %d is the number and %% is a percentage sign.
+ * You can reverse the order and/or substitute a different symbol
+ * that your locale uses, for example:
+ *   "%%%d"  which would generate "%32"
+ *   "%d %%" which would generate "32 %"
+ */
+static const char *localized_percentage = N_("%d%%");
+
+const char *mutt_i18n_percentage(void)
+{
+  return _(localized_percentage);
+}
+
 void mutt_expand_file_fmt(BUFFER *dest, const char *fmt, const char *src)
 {
   BUFFER *tmp;

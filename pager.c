@@ -2007,13 +2007,15 @@ static void pager_menu_redraw(MUTTMENU *pager_menu)
   if (pager_menu->redraw & REDRAW_STATUS)
   {
     struct hdr_format_info hfi;
-    char pager_progress_str[4];
+    char pager_progress_str[20];
 
     hfi.ctx = Context;
     hfi.pager_progress = pager_progress_str;
 
     if (rd->last_pos < rd->sb.st_size - 1)
-      snprintf(pager_progress_str, sizeof(pager_progress_str), OFF_T_FMT "%%", (100 * rd->last_offset / rd->sb.st_size));
+      snprintf(pager_progress_str, sizeof(pager_progress_str),
+               mutt_i18n_percentage(),
+               (int) (100 * rd->last_offset / rd->sb.st_size));
     else
       strfcpy(pager_progress_str, (rd->topline == 0) ? "all" : "end", sizeof(pager_progress_str));
 
