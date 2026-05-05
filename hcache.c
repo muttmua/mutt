@@ -54,6 +54,7 @@
 #include "lib.h"
 #include "md5.h"
 #include "rfc822.h"
+#include "url.h"
 
 unsigned int hcachever = 0x0;
 
@@ -986,7 +987,8 @@ static char* get_foldername (const char *folder)
 
   /* if the folder is local, canonify the path to avoid
    * to ensure equivalent paths share the hcache */
-  if (stat (mutt_b2s (path), &st) == 0)
+  if ((url_check_scheme(mutt_b2s(path)) == U_UNKNOWN) &&
+      stat(mutt_b2s(path), &st) == 0)
   {
     p = safe_malloc (PATH_MAX+1);
     if (!realpath (mutt_b2s (path), p))
