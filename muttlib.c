@@ -1410,6 +1410,8 @@ void mutt_buffer_concat_path(BUFFER *d, const char *dir, const char *fname)
   if (!*fname || (*dir && dir[strlen(dir)-1] == '/'))
     fmt = "%s%s";
 
+  fname += strspn(fname, "/");
+
   mutt_buffer_printf(d, fmt, dir, fname);
 }
 
