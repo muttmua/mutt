@@ -518,23 +518,42 @@ static int save_attachment_helper(FILE *fp, BODY *m, const char *path,
   return rc;
 }
 
+static void safe_attachment_filename(BUFFER *safe_filename, const char *filename,
+                                     int sendmode)
+{
+  if (sendmode)
+    mutt_buffer_strcpy(safe_filename, mutt_basename(filename));
+  else
+  {
+    mutt_buffer_clear(safe_filename);
+    for (; *filename; filename++)
+      if (*filename == '/')
+        mutt_buffer_addch(safe_filename, '_');
+      else
+        mutt_buffer_addch(safe_filename, *filename);
+  }
+}
+
 static int mutt_query_save_attachment(FILE *fp, BODY *body, HEADER *hdr, char **directory)
 {
   char *prompt;
-  BUFFER *buf = NULL, *tfile = NULL;
+  BUFFER *buf = NULL, *tfile = NULL, *safe_filename = NULL;
   int is_message;
   int append = 0;
   int rc = -1;
 
   buf = mutt_buffer_pool_get();
   tfile = mutt_buffer_pool_get();
+  safe_filename = mutt_buffer_pool_get();
+
+  safe_attachment_filename(safe_filename, NONULL(body->filename), (fp == NULL));
 
   if (body->filename)
   {
     if (directory && *directory)
-      mutt_buffer_concat_path(buf, *directory, mutt_basename(body->filename));
+      mutt_buffer_concat_path(buf, *directory, mutt_b2s(safe_filename));
     else
-      mutt_buffer_strcpy(buf, body->filename);
+      mutt_buffer_strcpy(buf, mutt_b2s(safe_filename));
   }
   else if (body->hdr &&
            body->encoding != ENCBASE64 &&
@@ -579,7 +598,7 @@ static int mutt_query_save_attachment(FILE *fp, BODY *body, HEADER *hdr, char **
     }
     else
     {
-      if ((rc = mutt_check_overwrite(body->filename, mutt_b2s(buf),
+      if ((rc = mutt_check_overwrite(mutt_b2s(safe_filename), mutt_b2s(buf),
                                      tfile, &append, directory)) == -1)
         goto cleanup;
       else if (rc == 1)
@@ -613,19 +632,24 @@ static int mutt_query_save_attachment(FILE *fp, BODY *body, HEADER *hdr, char **
 cleanup:
   mutt_buffer_pool_release(&buf);
   mutt_buffer_pool_release(&tfile);
+  mutt_buffer_pool_release(&safe_filename);
   return rc;
 }
 
 void mutt_save_attachment_list(ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *top, HEADER *hdr, MUTTMENU *menu)
 {
-  BUFFER *buf = NULL, *tfile = NULL, *orig_cwd = NULL;
+  BUFFER *buf = NULL, *tfile = NULL, *orig_cwd = NULL, *safe_filename = NULL;
   char *directory = NULL;
   int i, rc = 1, restore_cwd = 0;
   int last = menu ? menu->current : -1;
   FILE *fpout;
 
-  buf = mutt_buffer_pool_get();
-  tfile = mutt_buffer_pool_get();
+  if (!option(OPTATTACHSPLIT))
+  {
+    buf = mutt_buffer_pool_get();
+    tfile = mutt_buffer_pool_get();
+    safe_filename = mutt_buffer_pool_get();
+  }
 
   if (AttachSaveDir)
   {
@@ -686,7 +710,8 @@ void mutt_save_attachment_list(ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *to
         {
           append = 0;
 
-          mutt_buffer_strcpy(buf, mutt_basename(NONULL(top->filename)));
+          safe_attachment_filename(safe_filename, NONULL(top->filename), (fp == NULL));
+          mutt_buffer_strcpy(buf, mutt_b2s(safe_filename));
           prepend_curdir(buf);
 
           if ((mutt_buffer_get_field(_("Save to file: "), buf,
@@ -694,7 +719,7 @@ void mutt_save_attachment_list(ATTACH_CONTEXT *actx, FILE *fp, int tag, BODY *to
               !mutt_buffer_len(buf))
             goto cleanup;
           mutt_buffer_expand_path(buf);
-          if (mutt_check_overwrite(top->filename, mutt_b2s(buf), tfile,
+          if (mutt_check_overwrite(mutt_b2s(safe_filename), mutt_b2s(buf), tfile,
                                    &append, NULL))
             goto cleanup;
         }
@@ -750,6 +775,7 @@ cleanup:
   mutt_buffer_pool_release(&buf);
   mutt_buffer_pool_release(&tfile);
   mutt_buffer_pool_release(&orig_cwd);
+  mutt_buffer_pool_release(&safe_filename);
 }
 
 static void

@@ -1277,8 +1277,13 @@ void mutt_expand_fmt(BUFFER *dest, const char *fmt, const char *src)
   }
 }
 
-/* return 0 on success, -1 on abort, 1 on error */
-int mutt_check_overwrite(const char *attname, const char *path,
+/* return 0 on success, -1 on abort, 1 on error
+ *
+ * safe_attname should have been filtered through safe_attachment_filename()
+ * in recvattach.c to either get the basename in sendmode,
+ * or to filter '/' and unsafe characters in recvmode.
+ * */
+int mutt_check_overwrite(const char *safe_attname, const char *path,
                          BUFFER *fname, int *append, char **directory)
 {
   int rc = 0;
@@ -1321,7 +1326,7 @@ int mutt_check_overwrite(const char *attname, const char *path,
       return (rc == MUTT_NO) ? 1 : -1;
 
     tmp = mutt_buffer_pool_get();
-    mutt_buffer_strcpy(tmp, mutt_basename(NONULL(attname)));
+    mutt_buffer_strcpy(tmp, safe_attname);
     if ((mutt_buffer_get_field(_("File under directory: "), tmp,
                                MUTT_FILE | MUTT_CLEAR) != 0) ||
         !mutt_buffer_len(tmp))
