@@ -657,17 +657,17 @@ char *imap_next_word(char *s)
     }
     if (*s == '\"')
       quoted = quoted ? 0 : 1;
-    if (!quoted && IS_ASCII_WS (*s))
+    if (!quoted && IS_ASCII_WS(*s))
       break;
     s++;
   }
 
-  SKIP_ASCII_WS (s);
+  SKIP_ASCII_WS(s);
   return s;
 }
 
 /* imap_parse_date: date is of the form: DD-MMM-YYYY HH:MM:SS +ZZzz */
-time_t imap_parse_date (char *s)
+time_t imap_parse_date(char *s)
 {
   struct tm t;
   time_t tz;
@@ -677,7 +677,7 @@ time_t imap_parse_date (char *s)
   if (*s != '-')
     return 0;
   s++;
-  t.tm_mon = mutt_check_month (s);
+  t.tm_mon = mutt_check_month(s);
   s += 3;
   if (*s != '-')
     return 0;
@@ -711,21 +711,21 @@ time_t imap_parse_date (char *s)
   if (s[0] == '+')
     tz = -tz;
 
-  return (mutt_mktime (&t, 0) + tz);
+  return (mutt_mktime(&t, 0) + tz);
 }
 
 /* format date in IMAP style: DD-MMM-YYYY HH:MM:SS +ZZzz. */
-void imap_make_date (BUFFER *buf, time_t timestamp)
+void imap_make_date(BUFFER *buf, time_t timestamp)
 {
-  struct tm *tm = localtime (&timestamp);
-  time_t tz = mutt_local_tz (timestamp);
+  struct tm *tm = localtime(&timestamp);
+  time_t tz = mutt_local_tz(timestamp);
 
   tz /= 60;
 
-  mutt_buffer_printf (buf, "%02d-%s-%d %02d:%02d:%02d %+03d%02d",
-                      tm->tm_mday, Months[tm->tm_mon], tm->tm_year + 1900,
-                      tm->tm_hour, tm->tm_min, tm->tm_sec,
-                      (int) tz / 60, (int) abs ((int) tz) % 60);
+  mutt_buffer_printf(buf, "%02d-%s-%d %02d:%02d:%02d %+03d%02d",
+                     tm->tm_mday, Months[tm->tm_mon], tm->tm_year + 1900,
+                     tm->tm_hour, tm->tm_min, tm->tm_sec,
+                     (int) tz / 60, (int) abs((int) tz) % 60);
 }
 
 /* imap_qualify_path:
@@ -736,28 +736,28 @@ void imap_make_date (BUFFER *buf, time_t timestamp)
  * Note this will include the password in the URL, if it was present in the
  * account connection URL.
  */
-void imap_qualify_path (char *dest, size_t len, IMAP_MBOX *mx, char *path)
+void imap_qualify_path(char *dest, size_t len, IMAP_MBOX *mx, char *path)
 {
   ciss_url_t url;
 
-  mutt_account_tourl (&mx->account, &url, 0);
+  mutt_account_tourl(&mx->account, &url, 0);
   url.path = path;
 
-  url_ciss_tostring (&url, dest, len, U_DECODE_PASSWD);
+  url_ciss_tostring(&url, dest, len, U_DECODE_PASSWD);
 }
 
-void imap_buffer_qualify_path (BUFFER *dest, IMAP_MBOX *mx, char *path)
+void imap_buffer_qualify_path(BUFFER *dest, IMAP_MBOX *mx, char *path)
 {
   ciss_url_t url;
 
-  mutt_account_tourl (&mx->account, &url, 0);
+  mutt_account_tourl(&mx->account, &url, 0);
   url.path = path;
 
-  url_ciss_tobuffer (&url, dest, U_DECODE_PASSWD);
+  url_ciss_tobuffer(&url, dest, U_DECODE_PASSWD);
 }
 
 
-static void _imap_quote_string (char *dest, size_t dlen, const char *src,
+static void _imap_quote_string(char *dest, size_t dlen, const char *src,
                                 const char *to_quote)
 {
   char *pt;

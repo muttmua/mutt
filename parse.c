@@ -1719,18 +1719,18 @@ ADDRESS *mutt_parse_adrlist(ADDRESS *p, const char *s)
     BUFFER *tmp;
     char *r;
 
-    tmp = mutt_buffer_pool_get ();
-    mutt_buffer_strcpy (tmp, s);
+    tmp = mutt_buffer_pool_get();
+    mutt_buffer_strcpy(tmp, s);
     r = tmp->data;
-    while ((r = strtok (r, " \t")) != NULL)
+    while ((r = strtok(r, " \t")) != NULL)
     {
-      p = rfc822_parse_adrlist (p, r);
+      p = rfc822_parse_adrlist(p, r);
       r = NULL;
     }
-    mutt_buffer_pool_release (&tmp);
+    mutt_buffer_pool_release(&tmp);
   }
   else
-    p = rfc822_parse_adrlist (p, s);
+    p = rfc822_parse_adrlist(p, s);
 
   return p;
 }
@@ -1773,7 +1773,7 @@ static int count_body_parts_check(LIST **checklist, BODY *b, int dflt)
 #define AT_COUNT(why)   { shallcount = 1; }
 #define AT_NOCOUNT(why) { shallcount = 0; }
 
-static int count_body_parts (BODY *body, int flags)
+static int count_body_parts(BODY *body, int flags)
 {
   int count = 0;
   int shallcount, shallrecurse, recurse_flags = 0;

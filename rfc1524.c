@@ -173,28 +173,28 @@ static char *get_field(char *s)
       break;
     }
   }
-  mutt_remove_trailing_ascii_ws (s);
+  mutt_remove_trailing_ascii_ws(s);
   return ch;
 }
 
-static int get_field_text (char *field, char **entry,
-                           const char *type, const char *filename, int line)
+static int get_field_text(char *field, char **entry,
+                          const char *type, const char *filename, int line)
 {
-  field = mutt_skip_ascii_ws (field);
+  field = mutt_skip_ascii_ws(field);
   if (*field == '=')
   {
     if (entry)
     {
       field++;
-      field = mutt_skip_ascii_ws (field);
-      mutt_str_replace (entry, field);
+      field = mutt_skip_ascii_ws(field);
+      mutt_str_replace(entry, field);
     }
     return 1;
   }
   else
   {
-    mutt_error (_("Improperly formatted entry for type %s in \"%s\" line %d"),
-                type, filename, line);
+    mutt_error(_("Improperly formatted entry for type %s in \"%s\" line %d"),
+               type, filename, line);
     return 0;
   }
 }

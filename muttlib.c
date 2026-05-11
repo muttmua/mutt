@@ -979,19 +979,19 @@ void mutt_merge_envelopes(ENVELOPE *base, ENVELOPE **extra)
 
 static const char rx_special_chars[] = "^.[$()|*+?{\\";
 
-int mutt_rx_sanitize_string (BUFFER *dest, const char *src)
+int mutt_rx_sanitize_string(BUFFER *dest, const char *src)
 {
-  mutt_buffer_clear (dest);
+  mutt_buffer_clear(dest);
   while (*src)
   {
-    if (strchr (rx_special_chars, *src))
-      mutt_buffer_addch (dest, '\\');
-    mutt_buffer_addch (dest, *src++);
+    if (strchr(rx_special_chars, *src))
+      mutt_buffer_addch(dest, '\\');
+    mutt_buffer_addch(dest, *src++);
   }
   return 0;
 }
 
-void mutt_free_alias (ALIAS **p)
+void mutt_free_alias(ALIAS **p)
 {
   ALIAS *t;
 
@@ -999,41 +999,41 @@ void mutt_free_alias (ALIAS **p)
   {
     t = *p;
     *p = (*p)->next;
-    mutt_alias_delete_reverse (t);
-    FREE (&t->name);
-    rfc822_free_address (&t->addr);
-    FREE (&t);
+    mutt_alias_delete_reverse(t);
+    FREE(&t->name);
+    rfc822_free_address(&t->addr);
+    FREE(&t);
   }
 }
 
-void mutt_buffer_pretty_multi_mailbox (BUFFER *s, const char *delimiter)
+void mutt_buffer_pretty_multi_mailbox(BUFFER *s, const char *delimiter)
 {
-  delimited_buffer_map_join (s, delimiter, mutt_buffer_pretty_mailbox);
+  delimited_buffer_map_join(s, delimiter, mutt_buffer_pretty_mailbox);
 }
 
-void mutt_buffer_pretty_mailbox (BUFFER *s)
+void mutt_buffer_pretty_mailbox(BUFFER *s)
 {
   /* This reduces the size of the BUFFER, so we can pass it through.
    * We adjust the size just to make sure s->data is not NULL though */
-  mutt_buffer_increase_size (s, _POSIX_PATH_MAX);
-  mutt_pretty_mailbox (s->data, s->dsize);
-  mutt_buffer_fix_dptr (s);
+  mutt_buffer_increase_size(s, _POSIX_PATH_MAX);
+  mutt_pretty_mailbox(s->data, s->dsize);
+  mutt_buffer_fix_dptr(s);
 }
 
 /* collapse the pathname using ~ or = when possible */
-void mutt_pretty_mailbox (char *s, size_t buflen)
+void mutt_pretty_mailbox(char *s, size_t buflen)
 {
   char *p = s, *q = s;
   size_t len;
   url_scheme_t scheme;
   char tmp[PATH_MAX];
 
-  scheme = url_check_scheme (s);
+  scheme = url_check_scheme(s);
 
 #ifdef USE_IMAP
   if (scheme == U_IMAP || scheme == U_IMAPS)
   {
-    imap_pretty_mailbox (s, buflen);
+    imap_pretty_mailbox(s, buflen);
     return;
   }
 #endif
@@ -1042,7 +1042,7 @@ void mutt_pretty_mailbox (char *s, size_t buflen)
   if (scheme != U_UNKNOWN)
   {
     p = strchr(s, ':')+1;
-    if (!strncmp (p, "//", 2))
+    if (!strncmp(p, "//", 2))
       q = strchr(p+2, '/');
     if (!q)
       q = strchr(p, '\0');
