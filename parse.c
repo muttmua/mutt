@@ -231,11 +231,11 @@ static PARAMETER *parse_parameters(const char *s, int allow_value_spaces)
               {
                 s++;
                 /* Quote the next character */
-                mutt_buffer_addch (buffer, *s);
+                mutt_buffer_addch(buffer, *s);
               }
             }
             else
-              mutt_buffer_addch (buffer, *s);
+              mutt_buffer_addch(buffer, *s);
           }
           if (*s)
             s++; /* skip over the " */

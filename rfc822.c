@@ -231,8 +231,8 @@ next_token(const char *s, char *token, size_t *tokenlen, size_t tokenmax)
   if (*s == '(')
     return (rfc822_parse_comment(s + 1, token, tokenlen, tokenmax));
   if (*s == '"')
-    return (parse_quote (s + 1, token, tokenlen, tokenmax));
-  if (*s && is_special (*s))
+    return (parse_quote(s + 1, token, tokenlen, tokenmax));
+  if (*s && is_special(*s))
   {
     if (*tokenlen < tokenmax)
       token[(*tokenlen)++] = *s;
@@ -240,7 +240,7 @@ next_token(const char *s, char *token, size_t *tokenlen, size_t tokenmax)
   }
   while (*s)
   {
-    if (is_email_wsp(*s) || is_special (*s))
+    if (is_email_wsp(*s) || is_special(*s))
       break;
     if (*tokenlen < tokenmax)
       token[(*tokenlen)++] = *s;
@@ -250,9 +250,9 @@ next_token(const char *s, char *token, size_t *tokenlen, size_t tokenmax)
 }
 
 static const char *
-parse_mailboxdomain (const char *s, const char *nonspecial,
-                     char *mailbox, size_t *mailboxlen, size_t mailboxmax,
-                     char *comment, size_t *commentlen, size_t commentmax)
+parse_mailboxdomain(const char *s, const char *nonspecial,
+                    char *mailbox, size_t *mailboxlen, size_t mailboxmax,
+                    char *comment, size_t *commentlen, size_t commentmax)
 {
   const char *ps;
 
@@ -262,17 +262,17 @@ parse_mailboxdomain (const char *s, const char *nonspecial,
     if (! *s)
       return s;
 
-    if (strchr (nonspecial, *s) == NULL && is_special (*s))
+    if (strchr(nonspecial, *s) == NULL && is_special(*s))
       return s;
 
     if (*s == '(')
     {
       if (*commentlen && *commentlen < commentmax)
         comment[(*commentlen)++] = ' ';
-      ps = next_token (s, comment, commentlen, commentmax);
+      ps = next_token(s, comment, commentlen, commentmax);
     }
     else
-      ps = next_token (s, mailbox, mailboxlen, mailboxmax);
+      ps = next_token(s, mailbox, mailboxlen, mailboxmax);
     if (!ps)
       return NULL;
     s = ps;
@@ -282,9 +282,9 @@ parse_mailboxdomain (const char *s, const char *nonspecial,
 }
 
 static const char *
-parse_domain (const char *s,
-              char *mailbox, size_t *mailboxlen, size_t mailboxmax,
-              char *comment, size_t *commentlen, size_t commentmax)
+parse_domain(const char *s,
+             char *mailbox, size_t *mailboxlen, size_t mailboxmax,
+             char *comment, size_t *commentlen, size_t commentmax)
 {
   const char *ps;
   const char *nonspecial;
@@ -300,7 +300,7 @@ parse_domain (const char *s,
     {
       if (*commentlen && *commentlen < commentmax)
         comment[(*commentlen)++] = ' ';
-      ps = next_token (s, comment, commentlen, commentmax);
+      ps = next_token(s, comment, commentlen, commentmax);
     }
     else
     {
@@ -708,14 +708,14 @@ rfc822_cat(char *buf, size_t buflen, const char *value, const char *specials)
     }
     *pc++ = '"';
     *pc = 0;
-    strfcpy (buf, tmp, buflen);
+    strfcpy(buf, tmp, buflen);
   }
   else
-    strfcpy (buf, value, buflen);
+    strfcpy(buf, value, buflen);
 }
 
-void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
-                                  int display)
+void rfc822_write_address_single(char *buf, size_t buflen, ADDRESS *addr,
+                                 int display)
 {
   size_t len;
   char *pbuf = buf;
@@ -731,8 +731,8 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
   {
     if (!buflen)
       goto done;
-    strfcpy (pbuf, addr->val, buflen);
-    len = mutt_strlen (pbuf);
+    strfcpy(pbuf, addr->val, buflen);
+    len = mutt_strlen(pbuf);
     pbuf += len;
     buflen -= len;
     if (addr->group)
@@ -749,7 +749,7 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
 
   if (addr->personal)
   {
-    if (strpbrk (addr->personal, RFC822Specials))
+    if (strpbrk(addr->personal, RFC822Specials))
     {
       if (!buflen)
         goto done;

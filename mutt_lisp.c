@@ -96,7 +96,7 @@ static int read_list(BUFFER *list, BUFFER *line)
     }
     else if (ch == '`' && (!quotechar || quotechar == '"'))
     {
-      read_backticks (list, line);
+      read_backticks(list, line);
       continue;
     }
     else if (!quotechar)
@@ -151,12 +151,12 @@ static int read_atom(BUFFER *atom, BUFFER *line)
     }
     else if (ch == '`' && (!quotechar || quotechar == '"'))
     {
-      rc = read_backticks (atom, line);
+      rc = read_backticks(atom, line);
       continue;
     }
     else if (!quotechar)
     {
-      if (IS_ASCII_WS (ch) || ch == '(' || ch == ')')
+      if (IS_ASCII_WS(ch) || ch == '(' || ch == ')')
         break;
       if (ch == '"' || ch == '\'')
         quotechar = ch;

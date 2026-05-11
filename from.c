@@ -131,101 +131,101 @@ static int is_from_forward_scan(const char *s,
       len = (size_t) (p - s);
       if (len >= pathsize)
         len = pathsize - 1;
-      memcpy (path, s, len);
+      memcpy(path, s, len);
       path[len] = 0;
       muttdbg(3, "got return path: %s", path);
     }
 
     s = p + 1;
-    SKIP_ASCII_WS (s);
+    SKIP_ASCII_WS(s);
     if (!*s)
       return 0;
 
-    if (!is_day_name (s))
+    if (!is_day_name(s))
     {
       muttdbg(1, "expected weekday, got: %s", s);
       return 0;
     }
   }
 
-  s = next_word (s);
+  s = next_word(s);
   if (!*s) return 0;
 
   /* do a quick check to make sure that this isn't really the day of the week.
    * this could happen when receiving mail from a local user whose login name
    * is the same as a three-letter abbreviation of the day of the week.
    */
-  if (is_day_name (s))
+  if (is_day_name(s))
   {
-    s = next_word (s);
+    s = next_word(s);
     if (!*s) return 0;
   }
 
   /* now we should be on the month. */
-  if ((tm->tm_mon = mutt_check_month (s)) < 0)
+  if ((tm->tm_mon = mutt_check_month(s)) < 0)
     return 0;
 
   /* day */
-  s = next_word (s);
+  s = next_word(s);
   if (!*s)
     return 0;
-  if (sscanf (s, "%d", &tm->tm_mday) != 1)
+  if (sscanf(s, "%d", &tm->tm_mday) != 1)
     return 0;
 
   /* time */
-  s = next_word (s);
+  s = next_word(s);
   if (!*s)
     return 0;
-  if (check_time (s, tm) < 0)
+  if (check_time(s, tm) < 0)
     return 0;
 
   /* timezone? */
-  s = next_word (s);
+  s = next_word(s);
   if (!*s)
     return 0;
-  if (isalpha ((unsigned char) *s) || *s == '+' || *s == '-')
+  if (isalpha((unsigned char) *s) || *s == '+' || *s == '-')
   {
-    s = next_word (s);
+    s = next_word(s);
     if (!*s) return 0;
 
     /*
      * some places have two timezone fields after the time, e.g.
      *      From xxxx@yyyyyyy.fr Wed Aug  2 00:39:12 MET DST 1995
      */
-    if (isalpha ((unsigned char) *s))
+    if (isalpha((unsigned char) *s))
     {
-      s = next_word (s);
+      s = next_word(s);
       if (!*s) return 0;
     }
   }
 
   /* year */
-  if ((tm->tm_year = check_year (s)) < 0)
+  if ((tm->tm_year = check_year(s)) < 0)
     return 0;
 
   return 1;
 }
 
-static int is_from_reverse_scan (const char * const bos,
-                                 char *path, size_t pathsize,
-                                 struct tm *tm)
+static int is_from_reverse_scan(const char * const bos,
+                                char *path, size_t pathsize,
+                                struct tm *tm)
 {
-  const char *cur = bos + strlen (bos);
+  const char *cur = bos + strlen(bos);
 
   /* year */
-  cur = prev_word (bos, cur);
+  cur = prev_word(bos, cur);
   if (cur == bos)
     return 0;
-  if ((tm->tm_year = check_year (cur)) < 0)
+  if ((tm->tm_year = check_year(cur)) < 0)
     return 0;
 
   /* timezone? */
-  cur = prev_word (bos, cur);
+  cur = prev_word(bos, cur);
   if (cur == bos)
     return 0;
-  if (isalpha ((unsigned char) *cur) || *cur == '+' || *cur == '-')
+  if (isalpha((unsigned char) *cur) || *cur == '+' || *cur == '-')
   {
-    cur = prev_word (bos, cur);
+    cur = prev_word(bos, cur);
     if (cur == bos)
       return 0;
 
@@ -233,42 +233,42 @@ static int is_from_reverse_scan (const char * const bos,
      * some places have two timezone fields after the time, e.g.
      *      From xxxx@yyyyyyy.fr Wed Aug  2 00:39:12 MET DST 1995
      */
-    if (isalpha ((unsigned char) *cur))
+    if (isalpha((unsigned char) *cur))
     {
-      cur = prev_word (bos, cur);
+      cur = prev_word(bos, cur);
       if (cur == bos)
         return 0;
     }
   }
 
   /* time */
-  if (check_time (cur, tm) < 0)
+  if (check_time(cur, tm) < 0)
     return 0;
 
   /* day */
-  cur = prev_word (bos, cur);
+  cur = prev_word(bos, cur);
   if (cur == bos)
     return 0;
-  if (sscanf (cur, "%d", &tm->tm_mday) != 1)
+  if (sscanf(cur, "%d", &tm->tm_mday) != 1)
     return 0;
 
   /* month */
-  cur = prev_word (bos, cur);
+  cur = prev_word(bos, cur);
   if (cur == bos)
     return 0;
-  if ((tm->tm_mon = mutt_check_month (cur)) < 0)
+  if ((tm->tm_mon = mutt_check_month(cur)) < 0)
     return 0;
 
   /* day name */
-  cur = prev_word (bos, cur);
-  if (!is_day_name (cur))
+  cur = prev_word(bos, cur);
+  if (!is_day_name(cur))
   {
-    muttdbg (1, "expected weekday, got: %s", cur);
+    muttdbg(1, "expected weekday, got: %s", cur);
     return 0;
   }
 
   /* return path? */
-  while (cur > bos && IS_ASCII_WS (*(cur-1)))
+  while (cur > bos && IS_ASCII_WS(*(cur-1)))
     cur--;
   if (cur != bos && path)
   {
@@ -277,9 +277,9 @@ static int is_from_reverse_scan (const char * const bos,
     len = (size_t) (cur - bos);
     if (len >= pathsize)
       len = pathsize - 1;
-    memcpy (path, bos, len);
+    memcpy(path, bos, len);
     path[len] = 0;
-    muttdbg (3, "got return path: %s", path);
+    muttdbg(3, "got return path: %s", path);
   }
 
   return 1;
@@ -291,7 +291,7 @@ static int is_from_reverse_scan (const char * const bos,
  * From [ <return-path> ] <weekday> <month> <day> <time> [ <timezone> ] <year>
  */
 
-int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mode)
+int mutt_is_from(const char *s, char *path, size_t pathsize, time_t *tp, int mode)
 {
   struct tm tm;
 
@@ -300,32 +300,32 @@ int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mo
   if (tp)
     *tp = 0;
 
-  if (mutt_strncmp ("From ", s, 5) != 0)
+  if (mutt_strncmp("From ", s, 5) != 0)
     return 0;
 
-  s = next_word (s); /* skip over the From part. */
+  s = next_word(s); /* skip over the From part. */
   if (!*s)
     return 0;
 
   if ((mode == MUTT_IS_FROM_PREFIX) && !(path || tp))
     return 1;
 
-  muttdbg (3, "parsing: %s", s);
+  muttdbg(3, "parsing: %s", s);
 
   switch (mode)
   {
     case MUTT_IS_FROM_PREFIX:
-      if (!is_from_reverse_scan (s, path, pathsize, &tm))
+      if (!is_from_reverse_scan(s, path, pathsize, &tm))
         return 1;
       break;
 
     case MUTT_IS_FROM_LAX:
-      if (!is_from_reverse_scan (s, path, pathsize, &tm))
+      if (!is_from_reverse_scan(s, path, pathsize, &tm))
         return 0;
       break;
 
     case MUTT_IS_FROM_STRICT:
-      if (!is_from_forward_scan (s, path, pathsize, &tm))
+      if (!is_from_forward_scan(s, path, pathsize, &tm))
         return 0;
       break;
 
@@ -333,13 +333,13 @@ int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mo
       return 0;
   }
 
-  muttdbg (3, "month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.",
-           tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year);
+  muttdbg(3, "month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.",
+          tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tm.tm_year);
 
   if (tp)
   {
     tm.tm_isdst = -1;
-    *tp = mutt_mktime (&tm, 0);
+    *tp = mutt_mktime(&tm, 0);
   }
 
   return 1;
@@ -351,7 +351,7 @@ int mutt_is_from (const char *s, char *path, size_t pathsize, time_t *tp, int mo
  * The snprintf format string is used in the POSIX guide ctime
  * example, and also by glibc.
  */
-const char *mutt_ctime (const time_t *t)
+const char *mutt_ctime(const time_t *t)
 {
   static char result[42];
   const struct tm *local_tp;
@@ -360,7 +360,7 @@ const char *mutt_ctime (const time_t *t)
   if (!t)
     goto bail;
 
-  local_tp = localtime (t);
+  local_tp = localtime(t);
   if (!local_tp)
     goto bail;
 
@@ -375,15 +375,15 @@ const char *mutt_ctime (const time_t *t)
       (local_tp->tm_year > (INT_MAX - 1900)))
     goto bail;
 
-  rc = snprintf (result, sizeof(result),
-                 "%.3s %.3s%3d %.2d:%.2d:%.2d %d\n",
-                 Weekdays[local_tp->tm_wday],
-                 Months[local_tp->tm_mon],
-                 local_tp->tm_mday,
-                 local_tp->tm_hour,
-                 local_tp->tm_min,
-                 local_tp->tm_sec,
-                 1900 + local_tp->tm_year);
+  rc = snprintf(result, sizeof(result),
+                "%.3s %.3s%3d %.2d:%.2d:%.2d %d\n",
+                Weekdays[local_tp->tm_wday],
+                Months[local_tp->tm_mon],
+                local_tp->tm_mday,
+                local_tp->tm_hour,
+                local_tp->tm_min,
+                local_tp->tm_sec,
+                1900 + local_tp->tm_year);
 
   if (rc < 0 || rc >= sizeof(result))
     goto bail;

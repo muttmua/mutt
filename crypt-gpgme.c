@@ -740,7 +740,7 @@ static int data_object_to_stream(gpgme_data_t data, FILE *fp)
       return -1;
     }
 
-  while ((nread = gpgme_data_read(data, buf, sizeof (buf))) > 0)
+  while ((nread = gpgme_data_read(data, buf, sizeof(buf))) > 0)
     {
       /* fixme: we are not really converting CRLF to LF but just
          skipping CR. Doing it correctly needs a more complex logic */
@@ -3695,7 +3695,7 @@ parse_dn_part(struct dn_array_s *array, const unsigned char *string)
                   || *s == '<' || *s == '>' || *s == '#' || *s == ';'
                   || *s == '\\' || *s == '\"' || *s == ' ')
                 n++;
-              else if (hexdigitp (s) && hexdigitp (s+1))
+              else if (hexdigitp(s) && hexdigitp(s+1))
                 {
                   s++;
                   n++;
@@ -3712,14 +3712,14 @@ parse_dn_part(struct dn_array_s *array, const unsigned char *string)
             n++;
         }
 
-      p = safe_malloc (n+1);
+      p = safe_malloc(n+1);
       array->value = (char*)p;
       for (s=string; n; s++, n--)
         {
           if (*s == '\\')
             {
               s++;
-              if (hexdigitp (s))
+              if (hexdigitp(s))
                 {
                   *p++ = xtoi_2 (s);
                   s++;
@@ -3740,14 +3740,14 @@ parse_dn_part(struct dn_array_s *array, const unsigned char *string)
    parser and it does not support any old-stylish syntax; gpgme is
    expected to return only rfc2253 compatible strings. */
 static struct dn_array_s *
-parse_dn (const unsigned char *string)
+parse_dn(const unsigned char *string)
 {
   struct dn_array_s *array;
   size_t arrayidx, arraysize;
   int i;
 
   arraysize = 7; /* C,ST,L,O,OU,CN,email */
-  array = safe_malloc ((arraysize+1) * sizeof *array);
+  array = safe_malloc((arraysize+1) * sizeof *array);
   arrayidx = 0;
   while (*string)
     {
@@ -3760,7 +3760,7 @@ parse_dn (const unsigned char *string)
           struct dn_array_s *a2;
 
           arraysize += 5;
-          a2 = safe_malloc ((arraysize+1) * sizeof *array);
+          a2 = safe_malloc((arraysize+1) * sizeof *array);
           for (i=0; i < arrayidx; i++)
             {
               a2[i].key = array[i].key;
@@ -3771,7 +3771,7 @@ parse_dn (const unsigned char *string)
         }
       array[arrayidx].key = NULL;
       array[arrayidx].value = NULL;
-      string = parse_dn_part (array+arrayidx, string);
+      string = parse_dn_part(array+arrayidx, string);
       arrayidx++;
       if (!string)
         goto failure;
@@ -3802,35 +3802,35 @@ parse_dn (const unsigned char *string)
    for S/MIME's DNs.  USERID is a string as returned by the gpgme key
    functions.  It is utf-8 encoded. */
 static void
-parse_and_print_user_id (FILE *fp, const char *userid)
+parse_and_print_user_id(FILE *fp, const char *userid)
 {
   const char *s;
   int i;
 
   if (*userid == '<')
     {
-      s = strchr (userid+1, '>');
+      s = strchr(userid+1, '>');
       if (s)
-        print_utf8 (fp, userid+1, s-userid-1);
+        print_utf8(fp, userid+1, s-userid-1);
     }
   else if (*userid == '(')
-    fputs (_("[Can't display this user ID(unknown encoding)]"), fp);
+    fputs(_("[Can't display this user ID(unknown encoding)]"), fp);
   else if (!digit_or_letter ((const unsigned char *)userid))
-    fputs (_("[Can't display this user ID(invalid encoding)]"), fp);
+    fputs(_("[Can't display this user ID(invalid encoding)]"), fp);
   else
     {
-      struct dn_array_s *dn = parse_dn ((const unsigned char *)userid);
+      struct dn_array_s *dn = parse_dn((const unsigned char *)userid);
       if (!dn)
-        fputs (_("[Can't display this user ID(invalid DN)]"), fp);
+        fputs(_("[Can't display this user ID(invalid DN)]"), fp);
       else
         {
-          print_dn_parts (fp, dn);
+          print_dn_parts(fp, dn);
           for (i=0; dn[i].key; i++)
             {
-              FREE (&dn[i].key);
-              FREE (&dn[i].value);
+              FREE(&dn[i].key);
+              FREE(&dn[i].value);
             }
-          FREE (&dn);
+          FREE(&dn);
         }
     }
 }
@@ -3844,7 +3844,7 @@ typedef enum
 key_cap_t;
 
 static unsigned int
-key_check_cap (gpgme_key_t key, key_cap_t cap)
+key_check_cap(gpgme_key_t key, key_cap_t cap)
 {
   gpgme_subkey_t subkey = NULL;
   unsigned int ret = 0;
@@ -3910,7 +3910,7 @@ static const char * const KeyInfoPrompts[] =
 int KeyInfoPadding[KIP_END] = { 0 };
 
 /* Print verbose information about a key or certificate to FP. */
-static void print_key_info (gpgme_key_t key, FILE *fp)
+static void print_key_info(gpgme_key_t key, FILE *fp)
 {
   int idx;
   const char *s = NULL, *s2 = NULL;
@@ -3929,8 +3929,8 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
   {
     for (i = 0; i < KIP_END; i++)
     {
-      KeyInfoPadding[i] = mutt_strlen (_(KeyInfoPrompts[i]));
-      width = mutt_strwidth (_(KeyInfoPrompts[i]));
+      KeyInfoPadding[i] = mutt_strlen(_(KeyInfoPrompts[i]));
+      width = mutt_strwidth(_(KeyInfoPrompts[i]));
       if (max_header_width < width)
         max_header_width = width;
       KeyInfoPadding[i] -= width;
@@ -3949,20 +3949,20 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
       s = uid->uid;
 
       if (!idx)
-        fprintf (fp, "%*s", KeyInfoPadding[KIP_NAME], _(KeyInfoPrompts[KIP_NAME]));
+        fprintf(fp, "%*s", KeyInfoPadding[KIP_NAME], _(KeyInfoPrompts[KIP_NAME]));
       else
-        fprintf (fp, "%*s", KeyInfoPadding[KIP_AKA], _(KeyInfoPrompts[KIP_AKA]));
+        fprintf(fp, "%*s", KeyInfoPadding[KIP_AKA], _(KeyInfoPrompts[KIP_AKA]));
       if (uid->invalid)
         {
           /* L10N: comes after the Name or aka if the key is invalid */
-          fputs (_("[Invalid]"), fp);
-          putc (' ', fp);
+          fputs(_("[Invalid]"), fp);
+          putc(' ', fp);
         }
       if (is_pgp)
-        print_utf8 (fp, s, strlen(s));
+        print_utf8(fp, s, strlen(s));
       else
-        parse_and_print_user_id (fp, s);
-      putc ('\n', fp);
+        parse_and_print_user_id(fp, s);
+      putc('\n', fp);
     }
 
   if (key->subkeys && (key->subkeys->timestamp > 0))
@@ -3971,12 +3971,12 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
 
       tm = localtime (&tt);
 #ifdef HAVE_LANGINFO_D_T_FMT
-      strftime (shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
+      strftime(shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
 #else
-      strftime (shortbuf, sizeof shortbuf, "%c", tm);
+      strftime(shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-      fprintf (fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_FROM],
-               _(KeyInfoPrompts[KIP_VALID_FROM]), shortbuf);
+      fprintf(fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_FROM],
+              _(KeyInfoPrompts[KIP_VALID_FROM]), shortbuf);
     }
 
   if (key->subkeys && (key->subkeys->expires > 0))
@@ -3985,16 +3985,16 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
 
       tm = localtime (&tt);
 #ifdef HAVE_LANGINFO_D_T_FMT
-      strftime (shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
+      strftime(shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
 #else
-      strftime (shortbuf, sizeof shortbuf, "%c", tm);
+      strftime(shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-      fprintf (fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_TO],
-               _(KeyInfoPrompts[KIP_VALID_TO]), shortbuf);
+      fprintf(fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_TO],
+              _(KeyInfoPrompts[KIP_VALID_TO]), shortbuf);
     }
 
   if (key->subkeys)
-    s = gpgme_pubkey_algo_name (key->subkeys->pubkey_algo);
+    s = gpgme_pubkey_algo_name(key->subkeys->pubkey_algo);
   else
     s = "?";
 
@@ -4003,74 +4003,74 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
   if (key->subkeys)
     aval = key->subkeys->length;
 
-  fprintf (fp, "%*s", KeyInfoPadding[KIP_KEY_TYPE],
-           _(KeyInfoPrompts[KIP_KEY_TYPE]));
+  fprintf(fp, "%*s", KeyInfoPadding[KIP_KEY_TYPE],
+          _(KeyInfoPrompts[KIP_KEY_TYPE]));
   /* L10N: This is printed after "Key Type: " and looks like this:
    *       PGP, 2048 bit RSA */
-  fprintf (fp, _("%s, %lu bit %s\n"), s2, aval, s);
+  fprintf(fp, _("%s, %lu bit %s\n"), s2, aval, s);
 
-  fprintf (fp, "%*s", KeyInfoPadding[KIP_KEY_USAGE],
-           _(KeyInfoPrompts[KIP_KEY_USAGE]));
+  fprintf(fp, "%*s", KeyInfoPadding[KIP_KEY_USAGE],
+          _(KeyInfoPrompts[KIP_KEY_USAGE]));
   delim = "";
 
-  if (key_check_cap (key, KEY_CAP_CAN_ENCRYPT))
+  if (key_check_cap(key, KEY_CAP_CAN_ENCRYPT))
     {
       /* L10N: value in Key Usage: field */
-      fprintf (fp, "%s%s", delim, _("encryption"));
+      fprintf(fp, "%s%s", delim, _("encryption"));
       delim = _(", ");
     }
-  if (key_check_cap (key, KEY_CAP_CAN_SIGN))
+  if (key_check_cap(key, KEY_CAP_CAN_SIGN))
     {
       /* L10N: value in Key Usage: field */
-      fprintf (fp, "%s%s", delim, _("signing"));
+      fprintf(fp, "%s%s", delim, _("signing"));
       delim = _(", ");
     }
-  if (key_check_cap (key, KEY_CAP_CAN_CERTIFY))
+  if (key_check_cap(key, KEY_CAP_CAN_CERTIFY))
     {
       /* L10N: value in Key Usage: field */
-      fprintf (fp, "%s%s", delim, _("certification"));
+      fprintf(fp, "%s%s", delim, _("certification"));
       delim = _(", ");
     }
-  putc ('\n', fp);
+  putc('\n', fp);
 
   if (key->subkeys)
     {
       s = key->subkeys->fpr;
-      fprintf (fp, "%*s", KeyInfoPadding[KIP_FINGERPRINT],
-               _(KeyInfoPrompts[KIP_FINGERPRINT]));
+      fprintf(fp, "%*s", KeyInfoPadding[KIP_FINGERPRINT],
+              _(KeyInfoPrompts[KIP_FINGERPRINT]));
       if (is_pgp && strlen (s) == 40)
         {
           for (i=0; *s && s[1] && s[2] && s[3] && s[4]; s += 4, i++)
             {
-              putc (*s, fp);
-              putc (s[1], fp);
-              putc (s[2], fp);
-              putc (s[3], fp);
-              putc (is_pgp? ' ':':', fp);
+              putc(*s, fp);
+              putc(s[1], fp);
+              putc(s[2], fp);
+              putc(s[3], fp);
+              putc(is_pgp? ' ':':', fp);
               if (is_pgp && i == 4)
-                putc (' ', fp);
+                putc(' ', fp);
             }
         }
       else
         {
           for (i=0; *s && s[1] && s[2]; s += 2, i++)
             {
-              putc (*s, fp);
-              putc (s[1], fp);
-              putc (is_pgp? ' ':':', fp);
+              putc(*s, fp);
+              putc(s[1], fp);
+              putc(is_pgp? ' ':':', fp);
               if (is_pgp && i == 7)
-                putc (' ', fp);
+                putc(' ', fp);
             }
         }
-      fprintf (fp, "%s\n", s);
+      fprintf(fp, "%s\n", s);
     }
 
   if (key->issuer_serial)
     {
       s = key->issuer_serial;
       if (s)
-        fprintf (fp, "%*s0x%s\n", KeyInfoPadding[KIP_SERIAL_NO],
-                 _(KeyInfoPrompts[KIP_SERIAL_NO]), s);
+        fprintf(fp, "%*s0x%s\n", KeyInfoPadding[KIP_SERIAL_NO],
+                _(KeyInfoPrompts[KIP_SERIAL_NO]), s);
     }
 
   if (key->issuer_name)
@@ -4078,10 +4078,10 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
       s = key->issuer_name;
       if (s)
         {
-          fprintf (fp, "%*s", KeyInfoPadding[KIP_ISSUED_BY],
-                 _(KeyInfoPrompts[KIP_ISSUED_BY]));
-          parse_and_print_user_id (fp, s);
-          putc ('\n', fp);
+          fprintf(fp, "%*s", KeyInfoPadding[KIP_ISSUED_BY],
+                  _(KeyInfoPrompts[KIP_ISSUED_BY]));
+          parse_and_print_user_id(fp, s);
+          putc('\n', fp);
         }
     }
 
@@ -4095,49 +4095,49 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
         {
           s = subkey->keyid;
 
-          putc ('\n', fp);
-          if ( strlen (s) == 16)
+          putc('\n', fp);
+          if (strlen(s) == 16)
             s += 8; /* display only the short keyID */
-          fprintf (fp, "%*s0x%s", KeyInfoPadding[KIP_SUBKEY],
-                 _(KeyInfoPrompts[KIP_SUBKEY]), s);
+          fprintf(fp, "%*s0x%s", KeyInfoPadding[KIP_SUBKEY],
+                  _(KeyInfoPrompts[KIP_SUBKEY]), s);
           if (subkey->revoked)
             {
-              putc (' ', fp);
+              putc(' ', fp);
               /* L10N: describes a subkey */
-              fputs (_("[Revoked]"), fp);
+              fputs(_("[Revoked]"), fp);
             }
           if (subkey->invalid)
             {
-              putc (' ', fp);
+              putc(' ', fp);
               /* L10N: describes a subkey */
-              fputs (_("[Invalid]"), fp);
+              fputs(_("[Invalid]"), fp);
             }
           if (subkey->expired)
             {
-              putc (' ', fp);
+              putc(' ', fp);
               /* L10N: describes a subkey */
-              fputs (_("[Expired]"), fp);
+              fputs(_("[Expired]"), fp);
             }
           if (subkey->disabled)
             {
-              putc (' ', fp);
+              putc(' ', fp);
               /* L10N: describes a subkey */
-              fputs (_("[Disabled]"), fp);
+              fputs(_("[Disabled]"), fp);
             }
-          putc ('\n', fp);
+          putc('\n', fp);
 
           if (subkey->timestamp > 0)
             {
               tt = subkey->timestamp;
 
-              tm = localtime (&tt);
+              tm = localtime(&tt);
 #ifdef HAVE_LANGINFO_D_T_FMT
-              strftime (shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
+              strftime(shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
 #else
-              strftime (shortbuf, sizeof shortbuf, "%c", tm);
+              strftime(shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-              fprintf (fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_FROM],
-                       _(KeyInfoPrompts[KIP_VALID_FROM]), shortbuf);
+              fprintf(fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_FROM],
+                      _(KeyInfoPrompts[KIP_VALID_FROM]), shortbuf);
             }
 
           if (subkey->expires > 0)
@@ -4146,16 +4146,16 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
 
               tm = localtime (&tt);
 #ifdef HAVE_LANGINFO_D_T_FMT
-              strftime (shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
+              strftime(shortbuf, sizeof shortbuf, nl_langinfo (D_T_FMT), tm);
 #else
-              strftime (shortbuf, sizeof shortbuf, "%c", tm);
+              strftime(shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-              fprintf (fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_TO],
-                       _(KeyInfoPrompts[KIP_VALID_TO]), shortbuf);
+              fprintf(fp, "%*s%s\n", KeyInfoPadding[KIP_VALID_TO],
+                      _(KeyInfoPrompts[KIP_VALID_TO]), shortbuf);
             }
 
           if (subkey)
-            s = gpgme_pubkey_algo_name (subkey->pubkey_algo);
+            s = gpgme_pubkey_algo_name(subkey->pubkey_algo);
           else
             s = "?";
 
@@ -4164,30 +4164,30 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
           else
             aval = 0;
 
-          fprintf (fp, "%*s", KeyInfoPadding[KIP_KEY_TYPE],
-                   _(KeyInfoPrompts[KIP_KEY_TYPE]));
-          fprintf (fp, _("%s, %lu bit %s\n"), "PGP", aval, s);
+          fprintf(fp, "%*s", KeyInfoPadding[KIP_KEY_TYPE],
+                  _(KeyInfoPrompts[KIP_KEY_TYPE]));
+          fprintf(fp, _("%s, %lu bit %s\n"), "PGP", aval, s);
 
-          fprintf (fp, "%*s", KeyInfoPadding[KIP_KEY_USAGE],
-                   _(KeyInfoPrompts[KIP_KEY_USAGE]));
+          fprintf(fp, "%*s", KeyInfoPadding[KIP_KEY_USAGE],
+                  _(KeyInfoPrompts[KIP_KEY_USAGE]));
           delim = "";
 
           if (subkey->can_encrypt)
             {
-              fprintf (fp, "%s%s", delim, _("encryption"));
+              fprintf(fp, "%s%s", delim, _("encryption"));
               delim = _(", ");
             }
           if (subkey->can_sign)
             {
-              fprintf (fp, "%s%s", delim, _("signing"));
+              fprintf(fp, "%s%s", delim, _("signing"));
               delim = _(", ");
             }
           if (subkey->can_certify)
             {
-              fprintf (fp, "%s%s", delim, _("certification"));
+              fprintf(fp, "%s%s", delim, _("certification"));
               delim = _(", ");
             }
-          putc ('\n', fp);
+          putc('\n', fp);
         }
     }
 }
@@ -4195,7 +4195,7 @@ static void print_key_info (gpgme_key_t key, FILE *fp)
 
 /* Show detailed information about the selected key */
 static void
-verify_key (crypt_key_t *key)
+verify_key(crypt_key_t *key)
 {
   FILE *fp;
   char cmd[LONG_STRING];
@@ -4207,9 +4207,9 @@ verify_key (crypt_key_t *key)
   int maxdepth = 100;
 
   /* because of the do_pager() call below, we avoid using the buffer pool */
-  tempfile = mutt_buffer_new ();
-  mutt_buffer_mktemp (tempfile);
-  if (!(fp = safe_fopen (mutt_b2s (tempfile), "w")))
+  tempfile = mutt_buffer_new();
+  mutt_buffer_mktemp(tempfile);
+  if (!(fp = safe_fopen(mutt_b2s (tempfile), "w")))
     {
       mutt_perror _("Can't create temporary file");
       goto cleanup;

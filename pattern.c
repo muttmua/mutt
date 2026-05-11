@@ -595,16 +595,16 @@ static int eat_range(pattern_t *pat, int flags, BUFFER *s, BUFFER *err)
     if (*s->dptr == '>')
     {
       pat->max = MUTT_MAXRANGE;
-      pat->min = strtol (s->dptr + 1, &tmp, 0) + 1; /* exclusive range */
+      pat->min = strtol(s->dptr + 1, &tmp, 0) + 1; /* exclusive range */
     }
     else
-      pat->min = strtol (s->dptr, &tmp, 0);
-    if (toupper ((unsigned char) *tmp) == 'K') /* is there a prefix? */
+      pat->min = strtol(s->dptr, &tmp, 0);
+    if (toupper((unsigned char) *tmp) == 'K') /* is there a prefix? */
     {
       pat->min *= 1024;
       tmp++;
     }
-    else if (toupper ((unsigned char) *tmp) == 'M')
+    else if (toupper((unsigned char) *tmp) == 'M')
     {
       pat->min *= 1048576;
       tmp++;
@@ -629,16 +629,16 @@ static int eat_range(pattern_t *pat, int flags, BUFFER *s, BUFFER *err)
     tmp = s->dptr;
   }
 
-  if (isdigit ((unsigned char) *tmp))
+  if (isdigit((unsigned char) *tmp))
   {
     /* range maximum */
-    pat->max = strtol (tmp, &tmp, 0);
-    if (toupper ((unsigned char) *tmp) == 'K')
+    pat->max = strtol(tmp, &tmp, 0);
+    if (toupper((unsigned char) *tmp) == 'K')
     {
       pat->max *= 1024;
       tmp++;
     }
-    else if (toupper ((unsigned char) *tmp) == 'M')
+    else if (toupper((unsigned char) *tmp) == 'M')
     {
       pat->max *= 1048576;
       tmp++;
@@ -1813,13 +1813,13 @@ static void quote_simple(BUFFER *tmp, const char *p)
 }
 
 /* convert a simple search into a real request */
-void mutt_check_simple (BUFFER *s, const char *simple)
+void mutt_check_simple(BUFFER *s, const char *simple)
 {
   BUFFER *tmp = NULL;
   int do_simple = 1;
   const char *p;
 
-  for (p = mutt_b2s (s); p && *p; p++)
+  for (p = mutt_b2s(s); p && *p; p++)
   {
     if (*p == '\\' && *(p + 1))
       p++;
@@ -1837,37 +1837,37 @@ void mutt_check_simple (BUFFER *s, const char *simple)
   if (do_simple) /* yup, so spoof a real request */
   {
     /* convert old tokens into the new format */
-    if (ascii_strcasecmp ("all", mutt_b2s (s)) == 0 ||
-        !mutt_strcmp ("^", mutt_b2s (s)) ||
-        !mutt_strcmp (".", mutt_b2s (s))) /* ~A is more efficient */
-      mutt_buffer_strcpy (s, "~A");
-    else if (ascii_strcasecmp ("del", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~D");
-    else if (ascii_strcasecmp ("flag", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~F");
-    else if (ascii_strcasecmp ("new", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~N");
-    else if (ascii_strcasecmp ("old", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~O");
-    else if (ascii_strcasecmp ("repl", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~Q");
-    else if (ascii_strcasecmp ("read", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~R");
-    else if (ascii_strcasecmp ("tag", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~T");
-    else if (ascii_strcasecmp ("unread", mutt_b2s (s)) == 0)
-      mutt_buffer_strcpy (s, "~U");
+    if (ascii_strcasecmp("all", mutt_b2s(s)) == 0 ||
+        !mutt_strcmp("^", mutt_b2s(s)) ||
+        !mutt_strcmp(".", mutt_b2s(s))) /* ~A is more efficient */
+      mutt_buffer_strcpy(s, "~A");
+    else if (ascii_strcasecmp("del", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~D");
+    else if (ascii_strcasecmp("flag", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~F");
+    else if (ascii_strcasecmp("new", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~N");
+    else if (ascii_strcasecmp("old", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~O");
+    else if (ascii_strcasecmp("repl", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~Q");
+    else if (ascii_strcasecmp("read", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~R");
+    else if (ascii_strcasecmp("tag", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~T");
+    else if (ascii_strcasecmp("unread", mutt_b2s(s)) == 0)
+      mutt_buffer_strcpy(s, "~U");
     else
     {
-      tmp = mutt_buffer_pool_get ();
-      quote_simple (tmp, mutt_b2s (s));
-      mutt_expand_fmt (s, simple, mutt_b2s (tmp));
-      mutt_buffer_pool_release (&tmp);
+      tmp = mutt_buffer_pool_get();
+      quote_simple(tmp, mutt_b2s(s));
+      mutt_expand_fmt(s, simple, mutt_b2s(tmp));
+      mutt_buffer_pool_release(&tmp);
     }
   }
 }
 
-int mutt_pattern_func (int op, char *prompt)
+int mutt_pattern_func(int op, char *prompt)
 {
   pattern_t *pat = NULL;
   BUFFER *buf = NULL;
@@ -1876,45 +1876,45 @@ int mutt_pattern_func (int op, char *prompt)
   int i, rv = -1, padding, interrupted = 0;
   progress_t progress;
 
-  buf = mutt_buffer_pool_get ();
+  buf = mutt_buffer_pool_get();
 
-  mutt_buffer_strcpy (buf, NONULL (Context->pattern));
-  if ((mutt_buffer_get_field (prompt, buf, MUTT_PATTERN | MUTT_CLEAR) != 0) ||
-      !mutt_buffer_len (buf))
+  mutt_buffer_strcpy(buf, NONULL(Context->pattern));
+  if ((mutt_buffer_get_field(prompt, buf, MUTT_PATTERN | MUTT_CLEAR) != 0) ||
+      !mutt_buffer_len(buf))
   {
-    mutt_buffer_pool_release (&buf);
+    mutt_buffer_pool_release(&buf);
     return (-1);
   }
 
   mutt_message _("Compiling search pattern...");
 
-  simple = safe_strdup (mutt_b2s (buf));
-  mutt_check_simple (buf, NONULL (SimpleSearch));
+  simple = safe_strdup(mutt_b2s(buf));
+  mutt_check_simple(buf, NONULL(SimpleSearch));
 
-  mutt_buffer_init (&err);
+  mutt_buffer_init(&err);
   err.dsize = STRING;
   err.data = safe_malloc(err.dsize);
-  if ((pat = mutt_pattern_comp (buf->data, MUTT_FULL_MSG, &err)) == NULL)
+  if ((pat = mutt_pattern_comp(buf->data, MUTT_FULL_MSG, &err)) == NULL)
   {
-    mutt_error ("%s", err.data);
+    mutt_error("%s", err.data);
     goto bail;
   }
 
 #ifdef USE_IMAP
-  if (Context->magic == MUTT_IMAP && imap_search (Context, pat) < 0)
+  if (Context->magic == MUTT_IMAP && imap_search(Context, pat) < 0)
     goto bail;
 #endif
 
-  mutt_progress_init (&progress, _("Executing command on matching messages..."),
-                      MUTT_PROGRESS_MSG, ReadInc,
-                      (op == MUTT_LIMIT) ? Context->msgcount : Context->vcount);
+  mutt_progress_init(&progress, _("Executing command on matching messages..."),
+                     MUTT_PROGRESS_MSG, ReadInc,
+                     (op == MUTT_LIMIT) ? Context->msgcount : Context->vcount);
 
   if (op == MUTT_LIMIT)
   {
     Context->vcount    = 0;
     Context->vsize     = 0;
     Context->collapsed = 0;
-    padding = mx_msg_padding_size (Context);
+    padding = mx_msg_padding_size(Context);
 
     for (i = 0; i < Context->msgcount; i++)
     {
@@ -1924,13 +1924,13 @@ int mutt_pattern_func (int op, char *prompt)
         SigInt = 0;
         break;
       }
-      mutt_progress_update (&progress, i, -1);
+      mutt_progress_update(&progress, i, -1);
       /* new limit pattern implicitly uncollapses all threads */
       Context->hdrs[i]->virtual = -1;
       Context->hdrs[i]->limited = 0;
       Context->hdrs[i]->collapsed = 0;
       Context->hdrs[i]->num_hidden = 0;
-      if (mutt_pattern_exec (pat, MUTT_MATCH_FULL_ADDRESS, Context, Context->hdrs[i], NULL))
+      if (mutt_pattern_exec(pat, MUTT_MATCH_FULL_ADDRESS, Context, Context->hdrs[i], NULL))
       {
         BODY *this_body = Context->hdrs[i]->content;
 
@@ -1953,52 +1953,52 @@ int mutt_pattern_func (int op, char *prompt)
         SigInt = 0;
         break;
       }
-      mutt_progress_update (&progress, i, -1);
-      if (mutt_pattern_exec (pat, MUTT_MATCH_FULL_ADDRESS, Context, Context->hdrs[Context->v2r[i]], NULL))
+      mutt_progress_update(&progress, i, -1);
+      if (mutt_pattern_exec(pat, MUTT_MATCH_FULL_ADDRESS, Context, Context->hdrs[Context->v2r[i]], NULL))
       {
         switch (op)
         {
           case MUTT_UNDELETE:
-            mutt_set_flag (Context, Context->hdrs[Context->v2r[i]], MUTT_PURGE,
-                           0);
+            mutt_set_flag(Context, Context->hdrs[Context->v2r[i]], MUTT_PURGE,
+                          0);
             /* fall through */
           case MUTT_DELETE:
-            mutt_set_flag (Context, Context->hdrs[Context->v2r[i]], MUTT_DELETE,
-                           (op == MUTT_DELETE));
+            mutt_set_flag(Context, Context->hdrs[Context->v2r[i]], MUTT_DELETE,
+                          (op == MUTT_DELETE));
             break;
           case MUTT_TAG:
           case MUTT_UNTAG:
-            mutt_set_flag (Context, Context->hdrs[Context->v2r[i]], MUTT_TAG,
-                           (op == MUTT_TAG));
+            mutt_set_flag(Context, Context->hdrs[Context->v2r[i]], MUTT_TAG,
+                          (op == MUTT_TAG));
             break;
         }
       }
     }
   }
 
-  mutt_clear_error ();
+  mutt_clear_error();
 
   if (op == MUTT_LIMIT)
   {
     const char *pbuf;
 
     /* drop previous limit pattern */
-    FREE (&Context->pattern);
+    FREE(&Context->pattern);
     if (Context->limit_pattern)
-      mutt_pattern_free (&Context->limit_pattern);
+      mutt_pattern_free(&Context->limit_pattern);
 
     if (Context->msgcount && !Context->vcount)
       mutt_error _("No messages matched criteria.");
 
     /* record new limit pattern, unless match all */
-    pbuf = mutt_b2s (buf);
+    pbuf = mutt_b2s(buf);
     while (*pbuf == ' ')
       pbuf++;
-    if (mutt_strcmp (pbuf, "~A") != 0)
+    if (mutt_strcmp(pbuf, "~A") != 0)
     {
       Context->pattern = simple;
       simple = NULL; /* don't clobber it */
-      Context->limit_pattern = mutt_pattern_comp (buf->data, MUTT_FULL_MSG, &err);
+      Context->limit_pattern = mutt_pattern_comp(buf->data, MUTT_FULL_MSG, &err);
     }
   }
 
@@ -2008,15 +2008,15 @@ int mutt_pattern_func (int op, char *prompt)
   rv = 0;
 
 bail:
-  mutt_buffer_pool_release (&buf);
-  FREE (&simple);
-  mutt_pattern_free (&pat);
-  FREE (&err.data);
+  mutt_buffer_pool_release(&buf);
+  FREE(&simple);
+  mutt_pattern_free(&pat);
+  FREE(&err.data);
 
   return rv;
 }
 
-int mutt_search_command (int cur, int op)
+int mutt_search_command(int cur, int op)
 {
   int i, j;
   char buf[STRING];
@@ -2029,76 +2029,76 @@ int mutt_search_command (int cur, int op)
   {
     BUFFER *temp = NULL;
 
-    strfcpy (buf, *LastSearch ? LastSearch : "", sizeof (buf));
-    if (mutt_get_field ((op == OP_SEARCH || op == OP_SEARCH_NEXT) ?
-                        _("Search for: ") : _("Reverse search for: "),
-                        buf, sizeof (buf),
-                        MUTT_CLEAR | MUTT_PATTERN) != 0 || !buf[0])
+    strfcpy(buf, *LastSearch ? LastSearch : "", sizeof(buf));
+    if (mutt_get_field((op == OP_SEARCH || op == OP_SEARCH_NEXT) ?
+                       _("Search for: ") : _("Reverse search for: "),
+                       buf, sizeof(buf),
+                       MUTT_CLEAR | MUTT_PATTERN) != 0 || !buf[0])
       return (-1);
 
     if (op == OP_SEARCH || op == OP_SEARCH_NEXT)
-      unset_option (OPTSEARCHREVERSE);
+      unset_option(OPTSEARCHREVERSE);
     else
-      set_option (OPTSEARCHREVERSE);
+      set_option(OPTSEARCHREVERSE);
 
     /* compare the *expanded* version of the search pattern in case
        $simple_search has changed while we were searching */
-    temp = mutt_buffer_pool_get ();
-    mutt_buffer_strcpy (temp, buf);
-    mutt_check_simple (temp, NONULL (SimpleSearch));
+    temp = mutt_buffer_pool_get();
+    mutt_buffer_strcpy(temp, buf);
+    mutt_check_simple(temp, NONULL(SimpleSearch));
 
-    if (!SearchPattern || mutt_strcmp (mutt_b2s (temp), LastSearchExpn))
+    if (!SearchPattern || mutt_strcmp(mutt_b2s(temp), LastSearchExpn))
     {
       BUFFER err;
-      mutt_buffer_init (&err);
-      set_option (OPTSEARCHINVALID);
-      strfcpy (LastSearch, buf, sizeof (LastSearch));
-      strfcpy (LastSearchExpn, mutt_b2s (temp), sizeof (LastSearchExpn));
+      mutt_buffer_init(&err);
+      set_option(OPTSEARCHINVALID);
+      strfcpy(LastSearch, buf, sizeof(LastSearch));
+      strfcpy(LastSearchExpn, mutt_b2s(temp), sizeof(LastSearchExpn));
       mutt_message _("Compiling search pattern...");
-      mutt_pattern_free (&SearchPattern);
+      mutt_pattern_free(&SearchPattern);
       err.dsize = STRING;
-      err.data = safe_malloc (err.dsize);
-      if ((SearchPattern = mutt_pattern_comp (temp->data, MUTT_FULL_MSG, &err)) == NULL)
+      err.data = safe_malloc(err.dsize);
+      if ((SearchPattern = mutt_pattern_comp(temp->data, MUTT_FULL_MSG, &err)) == NULL)
       {
-        mutt_buffer_pool_release (&temp);
-        mutt_error ("%s", err.data);
-        FREE (&err.data);
+        mutt_buffer_pool_release(&temp);
+        mutt_error("%s", err.data);
+        FREE(&err.data);
         LastSearch[0] = '\0';
         LastSearchExpn[0] = '\0';
         return (-1);
       }
-      FREE (&err.data);
-      mutt_clear_error ();
+      FREE(&err.data);
+      mutt_clear_error();
     }
 
-    mutt_buffer_pool_release (&temp);
+    mutt_buffer_pool_release(&temp);
   }
 
-  if (option (OPTSEARCHINVALID))
+  if (option(OPTSEARCHINVALID))
   {
     for (i = 0; i < Context->msgcount; i++)
       Context->hdrs[i]->searched = 0;
 #ifdef USE_IMAP
-    if (Context->magic == MUTT_IMAP && imap_search (Context, SearchPattern) < 0)
+    if (Context->magic == MUTT_IMAP && imap_search(Context, SearchPattern) < 0)
       return -1;
 #endif
-    unset_option (OPTSEARCHINVALID);
+    unset_option(OPTSEARCHINVALID);
   }
 
-  incr = (option (OPTSEARCHREVERSE)) ? -1 : 1;
+  incr = (option(OPTSEARCHREVERSE)) ? -1 : 1;
   if (op == OP_SEARCH_OPPOSITE)
     incr = -incr;
 
-  mutt_progress_init (&progress, _("Searching..."), MUTT_PROGRESS_MSG,
-                      ReadInc, Context->vcount);
+  mutt_progress_init(&progress, _("Searching..."), MUTT_PROGRESS_MSG,
+                     ReadInc, Context->vcount);
 
   for (i = cur + incr, j = 0 ; j != Context->vcount; j++)
   {
-    mutt_progress_update (&progress, j, -1);
+    mutt_progress_update(&progress, j, -1);
     if (i > Context->vcount - 1)
     {
       i = 0;
-      if (option (OPTWRAPSEARCH))
+      if (option(OPTWRAPSEARCH))
         msg = _("Search wrapped to top.");
       else
       {
@@ -2109,7 +2109,7 @@ int mutt_search_command (int cur, int op)
     else if (i < 0)
     {
       i = Context->vcount - 1;
-      if (option (OPTWRAPSEARCH))
+      if (option(OPTWRAPSEARCH))
         msg = _("Search wrapped to bottom.");
       else
       {
@@ -2126,7 +2126,7 @@ int mutt_search_command (int cur, int op)
       {
         mutt_clear_error();
         if (msg && *msg)
-          mutt_message (msg);
+          mutt_message(msg);
         return i;
       }
     }
@@ -2134,11 +2134,11 @@ int mutt_search_command (int cur, int op)
     {
       /* remember that we've already searched this message */
       h->searched = 1;
-      if ((h->matched = (mutt_pattern_exec (SearchPattern, MUTT_MATCH_FULL_ADDRESS, Context, h, NULL) > 0)))
+      if ((h->matched = (mutt_pattern_exec(SearchPattern, MUTT_MATCH_FULL_ADDRESS, Context, h, NULL) > 0)))
       {
         mutt_clear_error();
         if (msg && *msg)
-          mutt_message (msg);
+          mutt_message(msg);
         return i;
       }
     }
@@ -2175,11 +2175,11 @@ static const struct mapping_t PatternHelp[] = {
   { NULL,         0 }
 };
 
-static const char *pattern_format_str (char *dest, size_t destlen, size_t col,
-                                       int cols, char op, const char *src,
-                                       const char *fmt, const char *ifstring,
-                                       const char *elsestring,
-                                       void *data, format_flag flags)
+static const char *pattern_format_str(char *dest, size_t destlen, size_t col,
+                                      int cols, char op, const char *src,
+                                      const char *fmt, const char *ifstring,
+                                      const char *elsestring,
+                                      void *data, format_flag flags)
 {
   PATTERN_ENTRY *entry = (PATTERN_ENTRY *)data;
   char tmp[SHORT_STRING];
@@ -2187,31 +2187,31 @@ static const char *pattern_format_str (char *dest, size_t destlen, size_t col,
   switch (op)
   {
     case 'd':
-      mutt_format_s (dest, destlen, fmt, NONULL (entry->descr));
+      mutt_format_s(dest, destlen, fmt, NONULL(entry->descr));
       break;
     case 'e':
-      mutt_format_s (dest, destlen, fmt, NONULL (entry->expr));
+      mutt_format_s(dest, destlen, fmt, NONULL(entry->expr));
       break;
     case 'n':
-      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-      snprintf (dest, destlen, tmp, entry->num);
+      snprintf(tmp, sizeof(tmp), "%%%sd", fmt);
+      snprintf(dest, destlen, tmp, entry->num);
       break;
   }
 
   return src;
 }
 
-static void make_pattern_entry (char *s, size_t slen, MUTTMENU *menu, int num)
+static void make_pattern_entry(char *s, size_t slen, MUTTMENU *menu, int num)
 {
   PATTERN_ENTRY *entry = &((PATTERN_ENTRY *)menu->data)[num];
 
-  mutt_FormatString (s, slen, 0, MuttIndexWindow->cols,
-                     NONULL (PatternFormat),
-                     pattern_format_str,
-                     entry, MUTT_FORMAT_ARROWCURSOR);
+  mutt_FormatString(s, slen, 0, MuttIndexWindow->cols,
+                    NONULL(PatternFormat),
+                    pattern_format_str,
+                    entry, MUTT_FORMAT_ARROWCURSOR);
 }
 
-static MUTTMENU *create_pattern_menu (void)
+static MUTTMENU *create_pattern_menu(void)
 {
   MUTTMENU *menu = NULL;
   PATTERN_ENTRY *entries = NULL;
@@ -2225,27 +2225,27 @@ static MUTTMENU *create_pattern_menu (void)
   /* Add three more hard-coded entries */
   num_entries += 3;
 
-  menu = mutt_new_menu (MENU_GENERIC);
+  menu = mutt_new_menu(MENU_GENERIC);
   menu->make_entry = make_pattern_entry;
 
   /* L10N:
      Pattern completion menu title
   */
   menu->title = _("Patterns");
-  helpstr = safe_malloc (STRING);
-  menu->help = mutt_compile_help (helpstr, STRING, MENU_GENERIC,
-                                  PatternHelp);
+  helpstr = safe_malloc(STRING);
+  menu->help = mutt_compile_help(helpstr, STRING, MENU_GENERIC,
+                                 PatternHelp);
 
-  menu->data = entries = safe_calloc (num_entries, sizeof(PATTERN_ENTRY));
+  menu->data = entries = safe_calloc(num_entries, sizeof(PATTERN_ENTRY));
   menu->max = num_entries;
 
-  entrybuf = mutt_buffer_pool_get ();
+  entrybuf = mutt_buffer_pool_get();
   while (Flags[i].tag)
   {
     entries[i].num = i + 1;
 
-    mutt_buffer_printf (entrybuf, "~%c", (char)Flags[i].tag);
-    entries[i].tag = safe_strdup (mutt_b2s (entrybuf));
+    mutt_buffer_printf(entrybuf, "~%c", (char)Flags[i].tag);
+    entries[i].tag = safe_strdup(mutt_b2s(entrybuf));
 
     switch (Flags[i].eat_arg)
     {
@@ -2253,25 +2253,25 @@ static MUTTMENU *create_pattern_menu (void)
         /* L10N:
            Pattern Completion Menu argument type: a regular expression
         */
-        mutt_buffer_add_printf (entrybuf, " %s", _("EXPR"));
+        mutt_buffer_add_printf(entrybuf, " %s", _("EXPR"));
         break;
       case EAT_RANGE:
         /* L10N:
            Pattern Completion Menu argument type: a numeric range.
            Used by ~m, ~n, ~X, ~z.
         */
-        mutt_buffer_add_printf (entrybuf, " %s", _("RANGE"));
+        mutt_buffer_add_printf(entrybuf, " %s", _("RANGE"));
         break;
       case EAT_DATE:
         /* L10N:
            Pattern Completion Menu argument type: a date range
            Used by ~d, ~r.
         */
-        mutt_buffer_add_printf (entrybuf, " %s", _("DATERANGE"));
+        mutt_buffer_add_printf(entrybuf, " %s", _("DATERANGE"));
         break;
     }
-    entries[i].expr = safe_strdup (mutt_b2s (entrybuf));
-    entries[i].descr = safe_strdup (_(Flags[i].desc));
+    entries[i].expr = safe_strdup(mutt_b2s(entrybuf));
+    entries[i].descr = safe_strdup(_(Flags[i].desc));
 
     i++;
   }
@@ -2286,9 +2286,9 @@ static MUTTMENU *create_pattern_menu (void)
   patternstr = _("PATTERN");
 
   entries[i].num = i + 1;
-  entries[i].tag = safe_strdup ("~()");
-  mutt_buffer_printf (entrybuf, "~(%s)", patternstr);
-  entries[i].expr = safe_strdup (mutt_b2s (entrybuf));
+  entries[i].tag = safe_strdup("~()");
+  mutt_buffer_printf(entrybuf, "~(%s)", patternstr);
+  entries[i].expr = safe_strdup(mutt_b2s(entrybuf));
   /* L10N:
      Pattern Completion Menu description for ~()
   */
@@ -2296,9 +2296,9 @@ static MUTTMENU *create_pattern_menu (void)
   i++;
 
   entries[i].num = i + 1;
-  entries[i].tag = safe_strdup ("~<()");
-  mutt_buffer_printf (entrybuf, "~<(%s)", patternstr);
-  entries[i].expr = safe_strdup (mutt_b2s (entrybuf));
+  entries[i].tag = safe_strdup("~<()");
+  mutt_buffer_printf(entrybuf, "~<(%s)", patternstr);
+  entries[i].expr = safe_strdup(mutt_b2s(entrybuf));
   /* L10N:
      Pattern Completion Menu description for ~<()
   */
@@ -2306,9 +2306,9 @@ static MUTTMENU *create_pattern_menu (void)
   i++;
 
   entries[i].num = i + 1;
-  entries[i].tag = safe_strdup ("~>()");
-  mutt_buffer_printf (entrybuf, "~>(%s)", patternstr);
-  entries[i].expr = safe_strdup (mutt_b2s (entrybuf));
+  entries[i].tag = safe_strdup("~>()");
+  mutt_buffer_printf(entrybuf, "~>(%s)", patternstr);
+  entries[i].expr = safe_strdup(mutt_b2s(entrybuf));
   /* L10N:
      Pattern Completion Menu description for ~>()
   */

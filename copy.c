@@ -575,8 +575,8 @@ _mutt_copy_message(FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
 
       quoted_date = mutt_buffer_pool_get();
       mutt_buffer_addch(quoted_date, '"');
-      mutt_make_date (quoted_date);
-      mutt_buffer_addch (quoted_date, '"');
+      mutt_make_date(quoted_date);
+      mutt_buffer_addch(quoted_date, '"');
 
       /* Count the number of lines and bytes to be deleted */
       fseeko(fpin, body->offset, SEEK_SET);

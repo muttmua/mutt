@@ -402,7 +402,7 @@ PARAMETER *rfc2231_encode_string(const char *attribute, char *value)
   max_value_len =
     78                      -    /* rfc suggested line length */
     1                       -    /* Leading tab on continuation line */
-    mutt_strlen (attribute) -    /* attribute */
+    mutt_strlen(attribute) -    /* attribute */
     (encode ? 1 : 0)        -    /* '*' encoding marker */
     1                       -    /* '=' */
     (add_quotes ? 2 : 0)    -    /* "...." */
@@ -425,40 +425,40 @@ PARAMETER *rfc2231_encode_string(const char *attribute, char *value)
   cur = src_value;
   if (encode)
   {
-    mutt_buffer_printf (cur_value, "%s''", charset);
-    cur_value_len = mutt_buffer_len (cur_value);
+    mutt_buffer_printf(cur_value, "%s''", charset);
+    cur_value_len = mutt_buffer_len(cur_value);
   }
 
   while (*cur)
   {
-    *lastp = current = mutt_new_parameter ();
+    *lastp = current = mutt_new_parameter();
     lastp = &current->next;
-    mutt_buffer_strcpy (cur_attribute, attribute);
+    mutt_buffer_strcpy(cur_attribute, attribute);
     if (split)
-      mutt_buffer_add_printf (cur_attribute, "*%d", continuation_number++);
+      mutt_buffer_add_printf(cur_attribute, "*%d", continuation_number++);
     if (encode)
-      mutt_buffer_addch (cur_attribute, '*');
+      mutt_buffer_addch(cur_attribute, '*');
 
     while (*cur && (!split || cur_value_len < max_value_len))
     {
       if (encode)
       {
         if (*cur < 0x20 || *cur >= 0x7f ||
-            strchr (MimeSpecials, *cur) ||
-            strchr ("*'%", *cur))
+            strchr(MimeSpecials, *cur) ||
+            strchr("*'%", *cur))
         {
-          mutt_buffer_add_printf (cur_value, "%%%02X", (unsigned char)*cur);
+          mutt_buffer_add_printf(cur_value, "%%%02X", (unsigned char)*cur);
           cur_value_len += 3;
         }
         else
         {
-          mutt_buffer_addch (cur_value, *cur);
+          mutt_buffer_addch(cur_value, *cur);
           cur_value_len++;
         }
       }
       else
       {
-        mutt_buffer_addch (cur_value, *cur);
+        mutt_buffer_addch(cur_value, *cur);
         cur_value_len++;
         if (*cur == '\\' || *cur == '"')
           cur_value_len++;
