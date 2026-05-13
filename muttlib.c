@@ -1404,7 +1404,7 @@ void mutt_safe_path(BUFFER *dest, ADDRESS *a)
 
   mutt_buffer_save_path(dest, a);
   for (p = dest->data; *p; p++)
-    if (*p == '/' || IS_ASCII_WS(*p) || !IsPrint((unsigned char) *p))
+    if (*p == '/' || IS_ASCII_WS(*p) || !IsPrint(*p))
       *p = '_';
 }
 
