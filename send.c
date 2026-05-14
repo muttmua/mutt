@@ -2447,16 +2447,6 @@ main_loop:
     }
   }
 
-  if (mutt_env_to_intl(sctx->msg->env, &tag, &err))
-  {
-    mutt_error(_("Bad IDN in \"%s\": '%s'"), tag, err);
-    FREE(&err);
-    if (!(sctx->flags & SENDBATCH))
-      goto main_loop;
-    else
-      goto cleanup;
-  }
-
   if (!sctx->msg->env->subject && ! (sctx->flags & SENDBATCH) &&
       (i = query_quadoption(OPT_SUBJECT, _("No subject, abort sending?"))) != MUTT_NO)
   {
@@ -2495,13 +2485,24 @@ main_loop:
   if (sctx->msg->content->next)
     sctx->msg->content = mutt_make_multipart_mixed(sctx->msg->content);
 
-  /*
-   * Ok, we need to do it this way instead of handling all fcc stuff in
-   * one place in order to avoid going to main_loop with encoded "env"
-   * in case of error.  Ugh.
-   */
-
+  /* Do intl encoding.  Set Message-ID, Mail-Followup-To. */
   mutt_encode_descriptions(sctx->msg->content, 1);
+  mutt_prepare_envelope(sctx->msg->env, 1);
+  if (mutt_env_to_intl(sctx->msg->env, &tag, &err))
+  {
+    mutt_error(_("Bad IDN in \"%s\": '%s'"), tag, err);
+    FREE(&err);
+    if (!(sctx->flags & SENDBATCH))
+    {
+      sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
+      sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
+      decode_descriptions(sctx->msg->content);
+      mutt_unprepare_envelope(sctx->msg->env);
+      goto main_loop;
+    }
+    else
+      goto cleanup;
+  }
 
   /*
    * Make sure that clear_content and free_clear_content are
@@ -2523,12 +2524,11 @@ main_loop:
       if ((crypt_get_keys(sctx->msg, &pgpkeylist, 0) == -1) ||
           mutt_protect(sctx, pgpkeylist, 0) == -1)
       {
+        FREE(&pgpkeylist);
         sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
         sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
-
-        FREE(&pgpkeylist);
-
         decode_descriptions(sctx->msg->content);
+        mutt_unprepare_envelope(sctx->msg->env);
         goto main_loop;
       }
       mutt_encode_descriptions(sctx->msg->content, 0);
@@ -2552,8 +2552,6 @@ main_loop:
 
   if (!option(OPTNOCURSES) && !(sctx->flags & SENDMAILX))
     mutt_message _("Sending message...");
-
-  mutt_prepare_envelope(sctx->msg->env, 1);
 
   if (option(OPTFCCBEFORESEND))
   {
