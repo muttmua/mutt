@@ -2435,19 +2435,14 @@ main_loop:
   if (!has_recips(sctx->msg->env->to) && !has_recips(sctx->msg->env->cc) &&
       !has_recips(sctx->msg->env->bcc))
   {
-    if (! (sctx->flags & SENDBATCH))
-    {
-      mutt_error _("No recipients are specified!");
-      goto main_loop;
-    }
-    else
-    {
-      puts _("No recipients were specified.");
+    mutt_error _("No recipients were specified.");
+    if (sctx->flags & SENDBATCH)
       goto cleanup;
-    }
+    goto main_loop;
   }
 
-  if (!sctx->msg->env->subject && ! (sctx->flags & SENDBATCH) &&
+  if (!(sctx->flags & SENDBATCH) &&
+      !sctx->msg->env->subject &&
       (i = query_quadoption(OPT_SUBJECT, _("No subject, abort sending?"))) != MUTT_NO)
   {
     /* if the abort is automatic, print an error message */
@@ -2476,10 +2471,9 @@ main_loop:
 
   if (generate_multipart_alternative(sctx->msg, sctx->flags))
   {
-    if (!(sctx->flags & SENDBATCH))
-      goto main_loop;
-    else
+    if (sctx->flags & SENDBATCH)
       goto cleanup;
+    goto main_loop;
   }
 
   if (sctx->msg->content->next)
@@ -2492,17 +2486,16 @@ main_loop:
   {
     mutt_error(_("Bad IDN in \"%s\": '%s'"), tag, err);
     FREE(&err);
-    if (!(sctx->flags & SENDBATCH))
-    {
-      sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
-      sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
-      decode_descriptions(sctx->msg->content);
-      mutt_unprepare_envelope(sctx->msg->env);
-      goto main_loop;
-    }
-    else
+
+    if (sctx->flags & SENDBATCH)
       goto cleanup;
-  }
+
+    sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
+    sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
+    decode_descriptions(sctx->msg->content);
+    mutt_unprepare_envelope(sctx->msg->env);
+    goto main_loop;
+   }
 
   /*
    * Make sure that clear_content and free_clear_content are
@@ -2562,50 +2555,48 @@ main_loop:
          In batch mode with $fcc_before_send set, Mutt will abort if any of
          the Fcc's fails.
       */
-      puts _("Fcc failed.  Aborting sending.");
+      mutt_error _("Fcc failed.  Aborting sending.");
       goto cleanup;
     }
   }
 
   if ((mta_rc = invoke_mta(sctx)) < 0)
   {
-    if (!(sctx->flags & SENDBATCH))
+    if (sctx->flags & SENDBATCH)
     {
-      if (!WithCrypto)
-        ;
-      else if ((sctx->msg->security & (ENCRYPT | AUTOCRYPT)) ||
-               ((sctx->msg->security & SIGN)
-                && sctx->msg->content->type == TYPEAPPLICATION))
-      {
-        mutt_free_body(&sctx->msg->content); /* destroy PGP data */
-        sctx->msg->content = clear_content;     /* restore clear text. */
-      }
-      else if ((sctx->msg->security & SIGN) &&
-               sctx->msg->content->type == TYPEMULTIPART &&
-               !ascii_strcasecmp(sctx->msg->content->subtype, "signed"))
-      {
-        mutt_free_body(&sctx->msg->content->parts->next);           /* destroy sig */
-        sctx->msg->content = mutt_remove_multipart(sctx->msg->content);
-      }
-
-      FREE(&pgpkeylist);
-
-      /* protected headers cleanup: */
-      mutt_free_envelope(&sctx->msg->content->mime_headers);
-      mutt_delete_parameter("protected-headers", &sctx->msg->content->parameter);
-      FREE(&sctx->date_header);
-
-      sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
-      sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
-      decode_descriptions(sctx->msg->content);
-      mutt_unprepare_envelope(sctx->msg->env);
-      goto main_loop;
-    }
-    else
-    {
-      puts _("Could not send the message.");
+      mutt_error _("Could not send the message.");
       goto cleanup;
     }
+
+    if (!WithCrypto)
+      ;
+    else if ((sctx->msg->security & (ENCRYPT | AUTOCRYPT)) ||
+             ((sctx->msg->security & SIGN)
+              && sctx->msg->content->type == TYPEAPPLICATION))
+    {
+      mutt_free_body(&sctx->msg->content); /* destroy PGP data */
+      sctx->msg->content = clear_content;     /* restore clear text. */
+    }
+    else if ((sctx->msg->security & SIGN) &&
+             sctx->msg->content->type == TYPEMULTIPART &&
+             !ascii_strcasecmp(sctx->msg->content->subtype, "signed"))
+    {
+      mutt_free_body(&sctx->msg->content->parts->next);           /* destroy sig */
+      sctx->msg->content = mutt_remove_multipart(sctx->msg->content);
+    }
+
+    FREE(&pgpkeylist);
+
+    /* protected headers cleanup: */
+    mutt_free_envelope(&sctx->msg->content->mime_headers);
+    mutt_delete_parameter("protected-headers", &sctx->msg->content->parameter);
+    FREE(&sctx->date_header);
+
+    sctx->msg->content = mutt_remove_multipart_mixed(sctx->msg->content);
+    sctx->msg->content = mutt_remove_multipart_alternative(sctx->msg->content);
+    decode_descriptions(sctx->msg->content);
+    mutt_unprepare_envelope(sctx->msg->env);
+    goto main_loop;
   }
 
   if (!option(OPTFCCBEFORESEND))
