@@ -77,12 +77,52 @@ static void set_local_mailbox(ADDRESS *a, char *local_mailbox)
   a->is_intl = 0;
 }
 
+/* NOTE: this doesn't set a state flag like the other two
+ * right now, because it's only used for a one-way transition
+ * when getting encryption keys.
+ */
+static void set_utf8_mailbox(ADDRESS *a, char *utf8_mailbox)
+{
+  FREE(&a->mailbox);
+  a->mailbox = utf8_mailbox;
+}
+
 static void set_intl_mailbox(ADDRESS *a, char *intl_mailbox)
 {
   FREE(&a->mailbox);
   a->mailbox = intl_mailbox;
   a->intl_checked = 1;
   a->is_intl = 1;
+}
+
+static char *intl_to_utf8(char *orig_user, char *orig_domain)
+{
+  char *utf8_user, *utf8_domain, *mailbox = NULL, *tmp = NULL;
+
+  utf8_user = orig_user;
+  utf8_domain = safe_strdup(orig_domain);
+
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
+  /* NOTE: since this transform is currently used for key lookups,
+   * the check for option(OPTIDNDECODE) is not included here.
+   * Compare to the invocation in intl_to_local()
+   */
+  if (check_idn(utf8_domain))
+  {
+    if (idna_to_unicode_8z8z(utf8_domain, &tmp, IDNA_ALLOW_UNASSIGNED) != IDNA_SUCCESS)
+      goto cleanup;
+    mutt_str_replace(&utf8_domain, tmp);
+  }
+#endif
+
+  mailbox = safe_malloc(mutt_strlen(utf8_user) + mutt_strlen(utf8_domain) + 2);
+  sprintf(mailbox, "%s@%s", NONULL(utf8_user), NONULL(utf8_domain)); /* __SPRINTF_CHECKED__ */
+
+cleanup:
+  FREE(&utf8_domain);
+  FREE(&tmp);
+
+  return mailbox;
 }
 
 static char *intl_to_local(char *orig_user, char *orig_domain, int flags)
@@ -253,6 +293,34 @@ int mutt_addrlist_to_intl(ADDRESS *a, char **err)
   }
 
   return rv;
+}
+
+/* NOTE: this function currently only handles a one-way transition
+ * from idn to utf-8, because it's only used for looking up
+ * encryption keys in crypt_get_keys().
+ *
+ * No state bit is set.  The resulting addresses should not be passed through
+ * other mutt_addrlist_to_xxx() functions.  They should be used and freed.
+ */
+int mutt_addrlist_to_utf8(ADDRESS *a)
+{
+  char *user = NULL, *domain = NULL;
+  char *utf8_mailbox = NULL;
+
+  for (; a; a = a->next)
+  {
+    if (!a->mailbox || !addr_is_intl(a))
+      continue;
+
+    if (mbox_to_udomain(a->mailbox, &user, &domain) == -1)
+      continue;
+
+    utf8_mailbox = intl_to_utf8(user, domain);
+    if (utf8_mailbox)
+      set_utf8_mailbox(a, utf8_mailbox);
+  }
+
+  return 0;
 }
 
 int mutt_addrlist_to_local(ADDRESS *a)

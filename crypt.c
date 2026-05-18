@@ -940,7 +940,7 @@ int crypt_get_keys(HEADER *msg, char **keylist, int oppenc_mode)
   last = rfc822_append(&adrlist, msg->env->to, 0);
   last = rfc822_append(last ? &last : &adrlist, msg->env->cc, 0);
   rfc822_append(last ? &last : &adrlist, msg->env->bcc, 0);
-  mutt_addrlist_to_local(adrlist);
+  mutt_addrlist_to_utf8(adrlist);
 
   if (fqdn)
     rfc822_qualify(adrlist, fqdn);

@@ -51,6 +51,7 @@
 
 #ifdef HAVE_ICONV
 int mutt_addrlist_to_intl(ADDRESS *, char **);
+int mutt_addrlist_to_utf8(ADDRESS *);
 int mutt_addrlist_to_local(ADDRESS *);
 
 void mutt_env_to_local(ENVELOPE *);
@@ -59,6 +60,11 @@ int mutt_env_to_intl(ENVELOPE *, char **, char **);
 const char *mutt_addr_for_display(ADDRESS *a);
 #else
 static inline int mutt_addrlist_to_intl(ADDRESS *addr, char **err)
+{
+  return 0;
+}
+
+static inline int mutt_addrlist_to_utf8(ADDRESS *addr)
 {
   return 0;
 }
