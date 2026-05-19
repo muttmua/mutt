@@ -1138,9 +1138,9 @@ static int _enter_fname(const char *prompt, BUFFER *fname, int flags,
   }
   else
   {
-    char *pc = safe_malloc(mutt_strlen(prompt) + 3);
+    char *pc;
 
-    sprintf(pc, "%s: ", prompt);       /* __SPRINTF_CHECKED__ */
+    safe_asprintf(&pc, "%s: ", prompt);
     mutt_unget_event(ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
 
     mutt_buffer_increase_size(fname, LONG_STRING);

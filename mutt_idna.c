@@ -115,8 +115,7 @@ static char *intl_to_utf8(char *orig_user, char *orig_domain)
   }
 #endif
 
-  mailbox = safe_malloc(mutt_strlen(utf8_user) + mutt_strlen(utf8_domain) + 2);
-  sprintf(mailbox, "%s@%s", NONULL(utf8_user), NONULL(utf8_domain)); /* __SPRINTF_CHECKED__ */
+  safe_asprintf(&mailbox, "%s@%s", NONULL(utf8_user), NONULL(utf8_domain));
 
 cleanup:
   FREE(&utf8_domain);
@@ -211,8 +210,7 @@ static char *intl_to_local(char *orig_user, char *orig_domain, int flags)
     }
   }
 
-  mailbox = safe_malloc(mutt_strlen(local_user) + mutt_strlen(local_domain) + 2);
-  sprintf(mailbox, "%s@%s", NONULL(local_user), NONULL(local_domain)); /* __SPRINTF_CHECKED__ */
+  safe_asprintf(&mailbox, "%s@%s", NONULL(local_user), NONULL(local_domain));
 
 cleanup:
   FREE(&local_user);
@@ -250,8 +248,7 @@ static char *local_to_intl(char *user, char *domain)
   }
 #endif /* defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2) */
 
-  mailbox = safe_malloc(mutt_strlen(intl_user) + mutt_strlen(intl_domain) + 2);
-  sprintf(mailbox, "%s@%s", NONULL(intl_user), NONULL(intl_domain)); /* __SPRINTF_CHECKED__ */
+  safe_asprintf(&mailbox, "%s@%s", NONULL(intl_user), NONULL(intl_domain));
 
 cleanup:
   FREE(&intl_user);

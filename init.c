@@ -4012,13 +4012,11 @@ void mutt_init(int skip_sys_rc, LIST *commands)
     if (domain)
     {
       /* we have a compile-time domain name, use that for Fqdn */
-      Fqdn = safe_malloc(mutt_strlen(domain) + mutt_strlen(Hostname) + 2);
-      sprintf(Fqdn, "%s.%s", NONULL(Hostname), domain);        /* __SPRINTF_CHECKED__ */
+      safe_asprintf(&Fqdn, "%s.%s", NONULL(Hostname), domain);
     }
     else if (!(getdnsdomainname(buffer)))
     {
-      Fqdn = safe_malloc(mutt_buffer_len(buffer) + mutt_strlen(Hostname) + 2);
-      sprintf(Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s(buffer));     /* __SPRINTF_CHECKED__ */
+      safe_asprintf(&Fqdn, "%s.%s", NONULL(Hostname), mutt_b2s(buffer));
     }
     else
       /*
