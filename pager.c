@@ -1268,6 +1268,48 @@ bail:
   return rc;
 }
 
+static void resolve_search(struct line_t *lineInfo, int n, char *fmt,
+                           regex_t *SearchRE)
+{
+  size_t fmtlen;
+  int has_nl = 0, offset = 0;
+  regmatch_t pmatch[1];
+
+  /* don't consider line endings part of the buffer
+   * for regex matching */
+  fmtlen = mutt_strlen(fmt);
+  if (fmtlen > 0 && fmt[fmtlen - 1] == '\n')
+  {
+    has_nl = 1;
+    fmt[fmtlen - 1] = 0;
+  }
+
+  offset = 0;
+  lineInfo[n].search_cnt = 0;
+  while (regexec(SearchRE, fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
+  {
+    if (++(lineInfo[n].search_cnt) > 1)
+      safe_realloc(&(lineInfo[n].search),
+                   (lineInfo[n].search_cnt) * sizeof(struct syntax_t));
+    else
+      lineInfo[n].search = safe_malloc(sizeof(struct syntax_t));
+    pmatch[0].rm_so += offset;
+    pmatch[0].rm_eo += offset;
+    (lineInfo[n].search)[lineInfo[n].search_cnt - 1].first = pmatch[0].rm_so;
+    (lineInfo[n].search)[lineInfo[n].search_cnt - 1].last = pmatch[0].rm_eo;
+
+    if (pmatch[0].rm_eo == pmatch[0].rm_so)
+      offset++; /* avoid degenerate cases */
+    else
+      offset = pmatch[0].rm_eo;
+    if (!fmt[offset])
+      break;
+  }
+
+  if (has_nl)
+    fmt[fmtlen - 1] = '\n';
+}
+
 static int format_line(struct line_t **lineInfo, int n, unsigned char *buf,
                        int flags, ansi_attr *pa, int cnt,
                        int *pspace, int *pvch, int *pcol, int *pspecial,
@@ -1483,12 +1525,10 @@ display_line(FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
   int ch, vch, col, cnt, b_read;
   int buf_ready = 0, change_last = 0;
   int special;
-  int offset;
   COLOR_ATTR def_color;
   int m;
   int rc = -1;
   ansi_attr a = {0,-1,-1,-1};
-  regmatch_t pmatch[1];
 
   if (n == *last)
   {
@@ -1567,27 +1607,7 @@ display_line(FILE *f, LOFF_T *last_pos, struct line_t **lineInfo, int n,
       goto out;
     }
 
-    offset = 0;
-    (*lineInfo)[n].search_cnt = 0;
-    while (regexec(SearchRE, (char *) fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
-    {
-      if (++((*lineInfo)[n].search_cnt) > 1)
-        safe_realloc(&((*lineInfo)[n].search),
-                     ((*lineInfo)[n].search_cnt) * sizeof(struct syntax_t));
-      else
-        (*lineInfo)[n].search = safe_malloc(sizeof(struct syntax_t));
-      pmatch[0].rm_so += offset;
-      pmatch[0].rm_eo += offset;
-      ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].first = pmatch[0].rm_so;
-      ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].last = pmatch[0].rm_eo;
-
-      if (pmatch[0].rm_eo == pmatch[0].rm_so)
-        offset++; /* avoid degenerate cases */
-      else
-        offset = pmatch[0].rm_eo;
-      if (!fmt[offset])
-        break;
-    }
+    resolve_search(*lineInfo, n, (char *) fmt, SearchRE);
   }
 
   if (!(flags & MUTT_SHOW) && (*lineInfo)[n+1].offset > 0)
@@ -1859,7 +1879,7 @@ static void pager_menu_redraw(MUTTMENU *pager_menu)
       if ((rd->SearchCompiled = Resize->SearchCompiled))
       {
         if ((err = REGCOMP(&rd->SearchRE, rd->searchbuf,
-                           REG_NEWLINE | mutt_which_case(rd->searchbuf))) != 0)
+                           mutt_which_case(rd->searchbuf))) != 0)
         {
           regerror(err, &rd->SearchRE, buffer, sizeof(buffer));
           mutt_error("%s", buffer);
@@ -2454,7 +2474,7 @@ search_next:
           }
         }
 
-        if ((err = REGCOMP(&rd.SearchRE, searchbuf, REG_NEWLINE | mutt_which_case(searchbuf))) != 0)
+        if ((err = REGCOMP(&rd.SearchRE, searchbuf, mutt_which_case(searchbuf))) != 0)
         {
           regerror(err, &rd.SearchRE, buffer, sizeof(buffer));
           mutt_error("%s", buffer);
