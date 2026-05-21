@@ -1288,11 +1288,9 @@ static void resolve_search(struct line_t *lineInfo, int n, char *fmt,
   lineInfo[n].search_cnt = 0;
   while (regexec(SearchRE, fmt + offset, 1, pmatch, (offset ? REG_NOTBOL : 0)) == 0)
   {
-    if (++(lineInfo[n].search_cnt) > 1)
-      safe_realloc(&(lineInfo[n].search),
-                   (lineInfo[n].search_cnt) * sizeof(struct syntax_t));
-    else
-      lineInfo[n].search = safe_malloc(sizeof(struct syntax_t));
+    lineInfo[n].search_cnt++;
+    safe_realloc(&(lineInfo[n].search),
+                 (lineInfo[n].search_cnt) * sizeof(struct syntax_t));
     pmatch[0].rm_so += offset;
     pmatch[0].rm_eo += offset;
     (lineInfo[n].search)[lineInfo[n].search_cnt - 1].first = pmatch[0].rm_so;
