@@ -117,7 +117,9 @@ static char *intl_to_utf8(char *orig_user, char *orig_domain)
 
   safe_asprintf(&mailbox, "%s@%s", NONULL(utf8_user), NONULL(utf8_domain));
 
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
 cleanup:
+#endif
   FREE(&utf8_domain);
   FREE(&tmp);
 
