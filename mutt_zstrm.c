@@ -21,7 +21,6 @@
 #endif
 
 #include <zlib.h>
-#include <errno.h>
 
 #include "mutt.h"
 #include "mutt_socket.h"

@@ -42,7 +42,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-#include <errno.h>
 
 int mutt_get_tmp_attachment(BODY *a)
 {

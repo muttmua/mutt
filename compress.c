@@ -20,7 +20,6 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>

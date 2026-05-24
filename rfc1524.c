@@ -39,7 +39,6 @@
 
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <errno.h>
 #include <unistd.h>
 
 /* The command semantics include the following:

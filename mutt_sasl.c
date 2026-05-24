@@ -27,7 +27,6 @@
 #include "mutt_sasl.h"
 #include "mutt_socket.h"
 
-#include <errno.h>
 #include <netdb.h>
 #include <sasl/sasl.h>
 #include <sys/socket.h>

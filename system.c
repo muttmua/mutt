@@ -23,7 +23,6 @@
 #include "mutt.h"
 #ifdef USE_IMAP
 # include "imap.h"
-# include <errno.h>
 #endif
 
 #include <stdlib.h>

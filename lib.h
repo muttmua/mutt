@@ -34,6 +34,9 @@
 # include <limits.h>
 # include <stdarg.h>
 # include <signal.h>
+# ifdef DEBUG
+#  include <errno.h>
+# endif
 
 # ifndef _POSIX_PATH_MAX
 #  include <limits.h>

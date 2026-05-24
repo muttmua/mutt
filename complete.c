@@ -30,7 +30,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <errno.h>
 
 /* given a partial pathname, this routine fills in as much of the rest of the
  * path as is unique.

@@ -33,7 +33,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/utsname.h>
-#include <errno.h>
 #include <sys/wait.h>
 
 group_t *mutt_pattern_group(const char *k)

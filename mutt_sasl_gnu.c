@@ -25,7 +25,6 @@
 #include "mutt_sasl_gnu.h"
 #include "mutt_socket.h"
 
-#include <errno.h>
 #include <gsasl.h>
 
 static Gsasl *mutt_gsasl_ctx = NULL;

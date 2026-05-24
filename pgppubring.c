@@ -49,7 +49,6 @@
 extern char *optarg;
 extern int optind;
 #endif
-#include <errno.h>
 
 #include "sha1.h"
 #include "md5.h"
