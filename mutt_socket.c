@@ -108,8 +108,7 @@ int mutt_socket_write_d(CONNECTION *conn, const char *buf, int len, int dbg)
   {
     if ((rc = conn->conn_write(conn, buf + sent, len - sent)) < 0)
     {
-      muttdbg(1, "mutt_socket_write: error writing (%s), closing socket",
-              strerror(errno));
+      mutt_errno_dbg(1, "mutt_socket_write: error writing, closing socket");
       mutt_socket_close(conn);
 
       return -1;
@@ -433,16 +432,14 @@ static int socket_connect(int fd, struct sockaddr *sa)
   {
     struct timeval tv = { SocketReceiveTimeout, 0 };
     if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv)) < 0)
-      muttdbg(1, "error setting receive timeout (%s)",
-              strerror(errno));
+      mutt_errno_dbg(1, "error setting receive timeout");
   }
 
   if (SocketSendTimeout > 0)
   {
     struct timeval tv = { SocketSendTimeout, 0 };
     if (setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv, sizeof(tv)) < 0)
-      muttdbg(1, "error setting send timeout (%s)",
-              strerror(errno));
+      mutt_errno_dbg(1, "error setting send timeout");
   }
 
   if (connect(fd, sa, sa_size) < 0)
