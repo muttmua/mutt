@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
 "POT-Creation-Date: 2026-01-11 21:00+0800\n"
-"PO-Revision-Date: 2026-01-09 09:04+0100\n"
+"PO-Revision-Date: 2026-05-29 17:11+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "Language: de\n"
@@ -3157,10 +3157,9 @@ msgstr "Erneute Verbindung wird versucht …"
 #. and sleep imap_reconnect_sleep seconds between each retry.
 #.
 #: imap/imap.c:612
-#, fuzzy, c-format
-#| msgid "Reconnect failed.  Mailbox closed."
+#, c-format
 msgid "Reconnect failed. Sleeping %d seconds."
-msgstr "Verbindung fehlgeschlagen. Postfach geschlossen."
+msgstr "Verbindung fehlgeschlagen. Es wird %d Sekunden geschlafen."
 
 #. L10N:
 #. Message when Mutt tries to reconnect to an IMAP mailbox but is
@@ -4270,10 +4269,8 @@ msgid "Certificate host check failed: %s"
 msgstr "Prüfung des Rechnernamens in Zertifikat gescheitert: %s"
 
 #: mutt_ssl.c:1205 mutt_ssl_gnutls.c:883
-#, fuzzy
-#| msgid "Warning: Couldn't save certificate"
 msgid "Untrusted server certificate"
-msgstr "Warnung: Zertifikat konnte nicht gespeichert werden."
+msgstr "Unvertrauenswürdiges Server-Zertifikat"
 
 #: mutt_ssl.c:1214 mutt_ssl_gnutls.c:938
 msgid "This certificate belongs to:"
@@ -5817,10 +5814,9 @@ msgstr "FCC wird in %s gespeichert"
 #. %s is the mailbox name.
 #.
 #: send.c:1277
-#, fuzzy, c-format
-#| msgid "Saving Fcc to %s"
+#, c-format
 msgid "Warning: Fcc to %s failed"
-msgstr "FCC wird in %s gespeichert"
+msgstr "Warnung: FCC nach %s fehlgeschlagen"
 
 #. L10N:
 #. Called when saving to $record or Fcc failed after sending.
@@ -5915,7 +5911,7 @@ msgstr "Nachricht wird versandt …"
 #.
 #: send.c:2566
 msgid "Fcc failed.  Aborting sending."
-msgstr ""
+msgstr "FCC fehlgeschlagen. Senden wird abgebrochen."
 
 #: send.c:2607
 msgid "Could not send the message."
@@ -6263,10 +6259,9 @@ msgid "SMTP session failed: %s"
 msgstr "SMTP-Verbindung fehlgeschlagen: %s"
 
 #: smtp.c:217
-#, fuzzy, c-format
-#| msgid "SMTP session failed: unable to open %s"
+#, c-format
 msgid "SMTP session failed: cannot add recipient <%s>"
-msgstr "SMTP-Verbindung fehlgeschlagen: %s kann nicht geöffnet werden"
+msgstr "SMTP-Verbindung fehlgeschlagen: Empfänger <%s> kann nicht hinzugefügt werden"
 
 #: smtp.c:240
 #, c-format
