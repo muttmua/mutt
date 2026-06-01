@@ -159,6 +159,8 @@ in the top-level source directory reports no errors/warnings.
 Documentation changes should be validated by running 'make validate'
 in the doc subdirectory.
 
+You can test the most important build configurations by running
+.builds/build (which is also run by the CI system in use).
 
 String comparisons
 ------------------

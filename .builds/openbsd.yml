@@ -20,6 +20,7 @@ environment:
   AUTOCONF_VERSION: 2.72
   AUTOMAKE_VERSION: 1.18
   LDFLAGS: -L/usr/local/lib
+  NPROC: '8'
 tasks:
 - check: |
     cd mutt
@@ -29,53 +30,16 @@ tasks:
 
 - default: |
     cd mutt
-    autoreconf -if
-    ./configure
-    make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build default
 
 - without-wc-funcs: |
     cd mutt
-    autoreconf -if
-    ./configure \
-        --without-wc-funcs
-    make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build without_wc_funcs
 
-- original: |
+- original_freebsd: |
     cd mutt
-    autoreconf -if
-    ./configure \
-        --enable-gpgme \
-        --enable-pop \
-        --enable-imap \
-        --enable-smtp \
-        --enable-hcache \
-        --enable-sidebar \
-        --with-kyotocabinet=/usr/local \
-        --with-mailpath=/var/spool/mail \
-        --with-curses \
-        --with-ssl \
-        --without-sasl \
-        --with-libiconv-prefix=/usr/local \
-        --with-libintl-prefix=/usr/local
-      make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build original_freebsd
 
 - openbsd: |
     cd mutt
-    autoreconf -if
-    ./configure \
-      --enable-compressed \
-      --enable-debug \
-      --enable-external_dotlock \
-      --disable-fcntl \
-      --enable-flock \
-      --with-idn2 \
-      --enable-imap \
-      --enable-pop \
-      --enable-sidebar \
-      --enable-smtp \
-      --mandir=${PREFIX}/man \
-      --with-docdir="${PREFIX}/share/doc/mutt" \
-      --with-ssl \
-      --enable-hcache \
-      --with-qdbm
-      make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build openbsd
