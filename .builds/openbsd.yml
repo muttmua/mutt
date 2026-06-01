@@ -43,3 +43,7 @@ tasks:
 - openbsd: |
     cd mutt
     ./.builds/build openbsd
+
+- lto: |
+    cd mutt
+    ./.builds/build lto

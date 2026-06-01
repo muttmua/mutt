@@ -37,3 +37,7 @@ tasks:
 - original_freebsd: |
     cd mutt
     ./.builds/build original_freebsd
+
+- lto: |
+    cd mutt
+    ./.builds/build lto

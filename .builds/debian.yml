@@ -40,3 +40,7 @@ tasks:
 - tcc: |
     cd mutt
     ./.builds/build tcc
+
+- lto: |
+    cd mutt
+    ./.builds/build lto

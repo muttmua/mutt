@@ -13,7 +13,7 @@
 # names starting with an underscore are utility functions and will not be
 # collected.
 
-cflags="-Werror $CFLAGS"
+cflags="-Werror -O2 $CFLAGS"
 dft_flags="$cflags"
 nproc=${NPROC:-1}
 
@@ -26,6 +26,12 @@ _die()
 
 default()
 {
+	./configure
+}
+
+lto()
+{
+	cflags="-flto $cflags"
 	./configure
 }
 
