@@ -463,7 +463,7 @@ AC_CHECK_FUNCS(fchdir, , [mutt_cv_fchdir=no])
 
 AC_ARG_WITH(bundled-regex,
         AS_HELP_STRING([--with-bundled-regex],[Use the bundled GNU regex library]),
-        [mutt_cv_regex=yes],
+        [mutt_cv_regex=${withval}],
         [AC_CHECK_FUNCS(regcomp, mutt_cv_regex=no, mutt_cv_regex=yes)])
 
 if test $mutt_cv_regex = no ; then
