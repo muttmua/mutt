@@ -1,0 +1,34 @@
+Welcome:
+
+If you are currently working on program translation for Mutt, or are
+interested in becoming a translator, please join the mailing list,
+mutt-po@mutt.org.  See: <http://www.mutt.org/mail-lists.html> for more
+information about our mailing lists, and
+<https://lists.mutt.org/mailman/listinfo/mutt-po> to subscribe.
+
+The Release Process:
+
+Mutt doesn't have a fixed release schedule, but we generally release
+two or three times per year.  About three weeks before the release,
+the maintainer will email the mutt-po mailing list to let translators
+know about the release schedule, and the upcoming code freeze.
+
+Two weeks before the release, the maintainer will freeze the code,
+generate a mutt.pot file, and regenerate all the po files in the
+repository.  At that time, the maintainer will email the mutt-po list,
+attaching the generated mutt.pot file and announcing the release date.
+This gives the translators two weeks to work on translations.  The
+updated po files can be found in the git repository at:
+<https://gitlab.com/muttmua/mutt/-/tree/master/po>.
+
+Posting Updated Po Files:
+
+You can do this in whatever way you find comfortable.  Most
+translators email their updated compressed po file back to the mutt-po
+mailing list.  Some translators email them directly to the maintainer,
+or use 'git send-email'.  Still others open a merge request using the
+GitLab interface.
+
+The maintainer will acknowledge receiving and committing your
+translation file, so if you don't see that within a day or two, feel
+free to email the list or maintainer directly.
