@@ -106,20 +106,21 @@ static void my_wcstombs(char *dest, size_t dlen, const wchar_t *src, size_t slen
     char buf[3 * MB_LEN_MAX];
     char *p = buf;
 
-    for (; slen && p - buf < dlen; p += k, src++, slen--)
+    for (; slen && p - buf < dlen &&
+           (size_t)(p - buf) + 2 * MB_LEN_MAX <= sizeof(buf); p += k, src++, slen--)
       if ((k = wcrtomb(p, *src, &st)) == (size_t)(-1))
         break;
     p += wcrtomb(p, 0, &st);
 
     /* If it fits into the destination buffer, we can stop now */
-    if (p - buf <= dlen)
+    if (p - buf > 0 && (size_t)(p - buf) <= dlen)
     {
       memcpy(dest, buf, p - buf);
       return;
     }
 
     /* Otherwise we truncate the string in an ugly fashion */
-    memcpy(dest, buf, dlen);
+    memcpy(dest, buf, dlen < sizeof(buf) ? dlen : sizeof(buf) - 1);
     dest[dlen - 1] = '\0'; /* assume original dlen > 0 */
   }
 }
