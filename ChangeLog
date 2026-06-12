@@ -1,3 +1,98 @@
+2026-06-12 10:59:57 +0800  Kevin J. McCarthy  <kevin@8t8.us> (dcb917dc)
+
+        * Update UPDATING files for 2.3.3 release.
+
+M	UPDATING
+
+2026-06-03 21:39:34 +0800  Kevin J. McCarthy  <kevin@8t8.us> (1386633a)
+
+        * Fix configure --with-bundled-regex test.
+        
+        The documentation in autoconf says:
+        
+         — Macro: AC_ARG_WITH(PACKAGE, HELP-STRING, [ACTION-IF-GIVEN],
+                  [ACTION-IF-NOT-GIVEN])
+             If the user gave ‘configure’ the option ‘--with-PACKAGE’ or
+             ‘--without-PACKAGE’, run shell commands ACTION-IF-GIVEN.  If
+             neither option was given, run shell commands ACTION-IF-NOT-GIVEN.
+        
+        This means the third parameter is evaluatated in both cases:
+        --with-bundled-regex and --without-bundled-regex.
+        And thus the code was incorrectly turning mutt_cv_regex on for both
+        cases, skipping the test for broken regex further below.
+        
+        Fix it to properly set mutt_cv_regex.  Further below, configure will
+        check the built-in system regex works if the value is 'no'.
+
+M	configure.ac
+
+2026-06-11 11:00:45 +0800  Kevin J. McCarthy  <kevin@8t8.us> (801f3a2d)
+
+        * Fix attachment list crash for deeply nested message types.
+        
+        Mutt already has checks for deeply nested messages.  However, for the
+        message type, parts of the code assume body->header will be set.
+        
+        The current parser simply exited the recursion at a certain depth, but
+        left the header set to NULL.  This caused a crash in the attachment
+        list menu, but probably causes a crash elsewhere in the code too.
+        
+        When deeply nested, instead change the type to text/plain before
+        giving up.
+        
+        Thanks to Acts1631 for the bug report, sample message causing the
+        crash, and possible suggested fix.  This fix is different from the
+        suggestion, instead fixing the parser, rather than the attachment list
+        code.
+
+M	parse.c
+
+2026-05-08 15:02:29 +0800  Kevin J. McCarthy  <kevin@8t8.us> (048f4ae2)
+
+        * Fix concat_path() functions to work for edge-cases too.
+        
+        This fixes the edge cases tested by Derek Martin.
+          "foo/bar/" + "/baz"  gave: "foo/bar//baz" should be: "foo/bar/baz"
+          ""         + "/baz"  gave: "//baz"        should be "/bar"
+          "/"        + "/foo"  gave  "//foo"        should be "/foo"
+        
+        All three bugs were triggered by a leading "/" in fname.
+        
+        The one line strspn() fix is by Alejandro Colomar, but has also been
+        applied to the lib.c version.
+        
+        Many thanks to Derek Martin, for noticing the edge case failures,
+        creating a suite of tests, and also working on proposed patches to fix
+        the problem.  Also thanks to Rene Kita for his feedback and proposed
+        version.
+        
+        In the end, this was the simplest version that was easy to apply to
+        both concat_path() functions.
+
+M	lib.c
+M	muttlib.c
+
+2026-05-05 10:47:29 +0800  Kevin J. McCarthy  <kevin@8t8.us> (d07674ac)
+
+        * Fix header cache get_foldername() bug.
+        
+        The canonifying code did not check whether the folder name was a URL
+        first.  If there is a file in the cwd of that name (which is possible,
+        for example, in a body cache directory), mutt will convert the URL
+        into a full path.
+        
+        Thanks to Matthew Frost for reporting the issue in a nicely detailed
+        bug report, and for helping me confirm the fix.
+
+M	hcache.c
+
+2026-04-26 10:49:49 +0800  Kevin J. McCarthy  <kevin@8t8.us> (31864ba9)
+
+        * automatic post-release commit for mutt-2.3.2
+
+M	ChangeLog
+M	VERSION
+
 2026-04-26 10:45:26 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4a9c9248)
 
         * Update UPDATING file for 2.3.2 release.
