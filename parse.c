@@ -604,6 +604,11 @@ static void _parse_part(FILE *fp, BODY *b, int *counter)
   if (recurse_level >= MUTT_MIME_MAX_DEPTH)
   {
     muttdbg(1, "recurse level too deep. giving up!");
+    if (b->type == TYPEMULTIPART || b->type == TYPEMESSAGE)
+    {
+      b->type = TYPETEXT;
+      mutt_str_replace(&b->subtype, "plain");
+    }
     return;
   }
   recurse_level++;
