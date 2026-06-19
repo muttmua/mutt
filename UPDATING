@@ -9,6 +9,35 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.4.0 (2026-06-19):
+
+  ! Maildir folders are now only recognized if they contain cur, new, and tmp
+    subfolders.  Previously mutt only checked for the cur subfolder when
+    opening.
+  ! --without-wc-funcs configure option is deprecated.
+  + New functions <open-thread>, <open-all-threads>, <close-thread>,
+    <close-all-threads> were added to explicitly open/close a thread, in
+    addition to the thread toggle functions.
+  + $tmpdraftdir, defaulting /var/tmp, sets the directory where message
+    composition drafts are saved.
+  ! --textmode is no longer required for pgp classic mode signing, although
+    mutt still keeps the flags in the sample config files.
+  ! ~C and ~L patterns match Bcc recipient lists too.
+  ! When querying for addresses, via <query> or <complete-query>,
+    the query menu can be exiting via <quit> after tagging entries.
+    Previously, <select-entry> had to be used for tagged entries to be
+    processed.
+  ! Classic S/MIME now generates application/pkcs7-mime and
+    application/pkcs7-signature types instead of the deprecated
+    x-pkcs7-mime and x-pkcs7-signature types.
+  ! Saving attachments will sanitize filenames by substituting '_' for '/'.
+  ! Regular expression handling when searching in the pager has been
+    improved slightly.  (REG_NEWLINE mode has been turned off, and
+    newlines are excluded from searches).  This means searches such
+    as /^$ now work properly.
+  ! When compiled with OpenSSL, Mutt follows RFC6125, and does not match
+    against CN entries in the certificate if there are any DNS entries.
+
 2.3.3 (2026-06-12):
 
   ! Bug fix release.
