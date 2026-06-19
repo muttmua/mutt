@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mutt 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-30 22:03+0800\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-06-02 21:04+0200\n"
 "Last-Translator: Ivan Vilata i Balaguer <ivan@selidor.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -4992,7 +4992,7 @@ msgstr "Ja s’ha avançat fins a passar les capçaleres."
 msgid "No text past headers."
 msgstr "No hi ha cap text després de les capçaleres."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "El missatge «multipart» no té paràmetre «boundary»."
 
@@ -5131,7 +5131,8 @@ msgstr "missatges adreçats a llistes de correu conegudes"
 #.
 #: pattern.c:160
 msgid "messages whose From/Sender/To/CC/BCC matches EXPR"
-msgstr "missatges amb capçaleres From/Sender/To/Cc/Bcc que concorden amb l’EXPRESSIÓ"
+msgstr ""
+"missatges amb capçaleres From/Sender/To/Cc/Bcc que concorden amb l’EXPRESSIÓ"
 
 #. L10N:
 #. Pattern Completion Menu description for ~m

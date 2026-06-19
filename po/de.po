@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-30 16:03+0200\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-05-31 08:40+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
@@ -4736,7 +4736,7 @@ msgstr "Bereits hinter die Kopfzeilen gesprungen."
 msgid "No text past headers."
 msgstr "Kein Text hinter den Kopfzeilen."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "Mehrteilige Nachricht hat keinen „boundary“-Parameter!"
 

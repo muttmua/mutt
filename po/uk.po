@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-30 17:03+0300\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-06-11 16:56+0300\n"
 "Last-Translator: Vsevolod Volkov <mutt@vvv.kyiv.ua>\n"
 "Language-Team: \n"
@@ -4677,7 +4677,7 @@ msgstr "Заголовки вже пропущені."
 msgid "No text past headers."
 msgstr "Після заголовків немає тексту."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "Багаточастинний лист не має параметру межі!"
 

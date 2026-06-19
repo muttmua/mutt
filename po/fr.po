@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.3.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-30 16:03+0200\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-05-31 22:09+0200\n"
 "Last-Translator: Vincent Lefevre <vincent@vinc17.net>\n"
 "Language-Team: Vincent Lefevre <vincent@vinc17.net>\n"
@@ -4896,7 +4896,7 @@ msgstr "En-têtes déjà sautés."
 msgid "No text past headers."
 msgstr "Pas de texte après les en-têtes."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "le message multipart n'a pas de paramètre boundary !"
 

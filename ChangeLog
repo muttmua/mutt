@@ -1,3 +1,2510 @@
+2026-06-19 10:48:43 +0800  Kevin J. McCarthy  <kevin@8t8.us> (358720c8)
+
+        * Update UPDATING file for 2.4.0 release.
+
+M	UPDATING
+
+2026-06-12 11:10:32 +0800  Kevin J. McCarthy  <kevin@8t8.us> (2de20fe4)
+
+        * Merge branch 'stable'
+
+2026-06-12 11:04:15 +0800  Kevin J. McCarthy  <kevin@8t8.us> (9073d26d)
+
+        * automatic post-release commit for mutt-2.3.3
+
+M	ChangeLog
+M	VERSION
+
+2026-06-12 10:12:26 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4f99ac3f)
+
+        * Merge branch 'stable'
+
+2026-06-12 10:08:44 +0800  Kevin J. McCarthy  <kevin@8t8.us> (759212eb)
+
+        * Merge branch 'stable'
+        
+        Fixed conflicts due to code reforamtting and dprint() being converted
+        to muttdbg().
+
+2026-06-12 09:54:36 +0800  Vsevolod Volkov  <mutt@vvv.kyiv.ua> (ae0dc0b8)
+
+        * Updated Russian translation.
+
+M	po/ru.po
+
+2026-06-12 09:53:14 +0800  Vsevolod Volkov  <mutt@vvv.kyiv.ua> (27fc6d68)
+
+        * Updated Ukrainian translation.
+
+M	po/uk.po
+
+2026-06-04 09:05:25 +0800  Kevin J. McCarthy  <kevin@8t8.us> (60e1ad54)
+
+        * Add README.TRANSLATORS file.
+        
+        Give an overview of the mailing list and translation process for new
+        members.
+        
+        This was requested by a few translators on the mutt-po mailing list.
+
+M	Makefile.am
+A	README.TRANSLATORS
+
+2026-06-03 21:39:34 +0800  Kevin J. McCarthy  <kevin@8t8.us> (56eca6af)
+
+        * Fix configure --with-bundled-regex test.
+        
+        The documentation in autoconf says:
+        
+         — Macro: AC_ARG_WITH(PACKAGE, HELP-STRING, [ACTION-IF-GIVEN],
+                  [ACTION-IF-NOT-GIVEN])
+             If the user gave ‘configure’ the option ‘--with-PACKAGE’ or
+             ‘--without-PACKAGE’, run shell commands ACTION-IF-GIVEN.  If
+             neither option was given, run shell commands ACTION-IF-NOT-GIVEN.
+        
+        This means the third parameter is evaluatated in both cases:
+        --with-bundled-regex and --without-bundled-regex.
+        And thus the code was incorrectly turning mutt_cv_regex on for both
+        cases, skipping the test for broken regex further below.
+        
+        Fix it to properly set mutt_cv_regex.  Further below, configure will
+        check the built-in system regex works if the value is 'no'.
+
+M	configure.ac
+
+2026-06-03 09:08:40 +0800  Ivan Vilata i Balaguer  <ivan@selidor.net> (513df32b)
+
+        * Update Catalan translations.
+
+M	po/ca.po
+
+2026-05-31 22:12:51 +0200  Vincent Lefevre  <vincent@vinc17.net> (66ab7ce0)
+
+        * Updated French translation.
+
+M	po/fr.po
+
+2026-05-31 15:06:55 +0800  Helge Kreutzmann  <debian@helgefjell.de> (2b759ca3)
+
+        * Update de.po.
+
+M	po/de.po
+
+2026-05-31 06:31:56 +0800  Grzegorz Szymaszek  <gszymaszek@short.pl> (ef81c82e)
+
+        * Update Polish translation.
+
+M	po/pl.po
+
+2026-05-30 16:03:19 +0200  Grzegorz Szymaszek  <gszymaszek@short.pl> (60a50888)
+
+        * Fix formatting of a few error messages in crypt-gpgme.c
+        
+        Those were broken in f31b98e7e22a16867584af2e82d46c29917bfd83
+        ("Formatting update: remove space between function and parenthesis."),
+        likely because "ID (unknown encoding)" may look like a function call.
+
+M	crypt-gpgme.c
+
+2026-05-30 08:22:06 +0800  Helge Kreutzmann  <debian@helgefjell.de> (cc48d737)
+
+        * Update de.po.
+
+M	po/de.po
+
+2026-05-25 19:37:28 +0300  Emir SARI  <emir_sari@icloud.com> (1a4ac3a1)
+
+        * Update Turkish translations
+        
+        Signed-off-by: Emir SARI <emir_sari@icloud.com>
+
+M	po/tr.po
+
+2026-05-24 17:26:15 +0800  Kevin J. McCarthy  <kevin@8t8.us> (91ee9afa)
+
+        * Clean up errno.h includes.
+        
+        With the creation of mutt_errno_dbg(), a lot of direct errno handling
+        is now moved inside the macro.
+        
+        Remove the include header from other parts of the code that are not
+        directly referencing errno anymore.
+        
+        Move the "#include <errno.h>" inside the lib.h header, where the macro
+        is defined, conditionally based on #ifdef DEBUG.  That way callers of
+        the macro don't have to think about including the header.
+
+M	attach.c
+M	complete.c
+M	compress.c
+M	crypt.c
+M	curs_main.c
+M	group.c
+M	imap/message.c
+M	lib.h
+M	mbox.c
+M	mutt_sasl.c
+M	mutt_sasl_gnu.c
+M	mutt_zstrm.c
+M	pager.c
+M	pgp.c
+M	pgppubring.c
+M	rfc1524.c
+M	send.c
+M	smime.c
+M	system.c
+
+2026-05-24 17:23:12 +0800  Kevin J. McCarthy  <kevin@8t8.us> (dc06005f)
+
+        * Convert three muttdbg() calls to mutt_errno_dbg().
+        
+        While working on the next commit (cleaning up errno.h includes), I
+        noticed three calls to muttdbg() in mutt_socket.c that were
+        referencing strerror(errno).
+        
+        Convert those three to mutt_errno_dbg().
+        
+        Thanks to Oswald Buddenhagen for suggesting this commit be broken out.
+
+M	mutt_socket.c
+
+2026-05-21 20:09:16 +0800  Kevin J. McCarthy  <kevin@8t8.us> (78834e19)
+
+        * Simplify resolve_search() reallocation for search matches.
+        
+        The lineInfo array is memset to 0 on allocation and reallocation, so
+        we can be sure lineInfo[n].search is NULL by default.
+        
+        safe_realloc() handles the initial allocation too, so there is no need
+        for an if/else branch.
+        
+        Thanks to Alejandro Colomar for the suggestion.
+
+M	pager.c
+
+2026-05-20 20:35:12 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cf8207f3)
+
+        * Fix pager search behavior with REG_NEWLINE.
+        
+        REG_NEWLINE causes ^ to match both BOS and after a newline, and $ to
+        match both EOS and just before a newline.
+        
+        This leads to weird behavior with a pager search such as /^a*$/.  This
+        will end up matching every line:
+          - ^ matches after the newline
+          - a* matches nothing
+          - $ matches EOS
+        
+        Removing the newlines would be more painful, because the parser
+        requires them in several places, for things like header to body
+        switching, matching signatures, and breaking out of some loops.
+        
+        Instead do the same thing that match_body_patterns() does: temporarily
+        remove the newlines during the regex search.
+        
+        Then, remove the REG_NEWLINE flag from all the REGCOMP calls.
+        
+        Thanks to Alejandro Colomar for his review and suggested cleanup.
+
+M	pager.c
+
+2026-05-21 10:50:07 +0800  Kevin J. McCarthy  <kevin@8t8.us> (1aa1dc21)
+
+        * Fix warning of unused cleanup label.
+        
+        This is causing a build failure in the sr.ht CI builds.
+
+M	mutt_idna.c
+
+2026-05-19 13:53:47 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f11e5f12)
+
+        * Change mutt_buffer_concatn_path() to use fixed algorithm.
+        
+        Revise it to use mutt_buffer_concat_path(), which was fixed in commit
+        048f4ae2.
+
+M	muttlib.c
+
+2026-05-19 11:03:05 +0800  Kevin J. McCarthy  <kevin@8t8.us> (64cd094b)
+
+        * Convert malloc() + sprintf() to safe_asprintf().
+        
+        Thanks to Alejandro Colomar for pointing out that it would be better
+        to use a safer sprintf() alternative in the previous commit.
+        
+        This fixes the calls in mutt_idna.c, as well as the rest of the
+        codebase where I found a malloc() followed by a sprintf().
+
+M	curs_lib.c
+M	init.c
+M	mutt_idna.c
+M	rfc822.c
+M	send.c
+
+2026-05-18 13:07:38 +0800  Kevin J. McCarthy  <kevin@8t8.us> (e14668a0)
+
+        * Search for keys by uid using utf-8.
+        
+        GPGME requires the uid to be in utf-8.  Gpg (classic-mode) uses the
+        current locale by default; add --utf8-strings to the command to change
+        it to also require utf-8.
+        
+        Add a one-way transition function from IDN to utf-8:
+        mutt_addrlist_to_utf8().  Change the crypt_get_keys() function to
+        invoke that on the generated list of addresses to look up.
+        
+        The helper function, intl_to_utf8(), is based off the same template as
+        intl_to_local() and local_to_intl().  I've kept the code basically the
+        same, for ease of understanding, even though it may seem a bit
+        verbose.
+        
+        Note that adding a whole new state to the IDNA code would be
+        significantly more complicated, requiring more state bits, and code to
+        connect between the three different states.  Since there isn't such a
+        requirement right now, I've kept the change simple and commented that
+        the function is only meant for a one-way transition from IDN to utf-8.
+
+M	contrib/gpg.rc
+M	crypt.c
+M	mutt_idna.c
+M	mutt_idna.h
+
+2026-05-16 12:37:37 +0800  Kevin J. McCarthy  <kevin@8t8.us> (db9200c7)
+
+        * Simplify error handling in send_message_resume_compose_menu().
+        
+        Handle batch mode first; this allows a positive comparison, e.g.
+          if (sctx->flags & SENDBATCH)
+        followed by a "goto cleanup;".  After the goto, no else branch is
+        needed.  Thanks to Alejandro Colomar for the suggestion!
+        
+        mutt_error() works in batch mode, so substitute it for the puts()
+        messages in batch mode.
+        
+        For the "no recipients" error handling, two different PO translation
+        messages were used in batch vs interactive mode.  Pick one message and
+        just use that.
+
+M	send.c
+
+2026-05-14 20:45:24 +0800  Kevin J. McCarthy  <kevin@8t8.us> (174bf46b)
+
+        * Convert pgp key lookups to use local mode addresses.
+        
+        By default Mutt stores the addresses in IDNA format during
+        compose/send.  This will cause gpg key lookups on international
+        domains to fail.
+        
+        I have no idea how this bug has been in there for this long without
+        any bug reports, but this obviously needs to be done when looking up
+        keys.
+
+M	crypt.c
+
+2026-05-14 14:35:47 +0800  Kevin J. McCarthy  <kevin@8t8.us> (2e5b5c38)
+
+        * Rearrange and consolidate final encoding steps when sending.
+        
+        Move the final mutt_prepare_envelope() before the last
+        mutt_env_to_intl().  This is standard practice elsewhere in the code.
+        Additionally, mutt_prepare_envelope(..., 1) sets Mail-Followup-To, so
+        it's prudent to ensure the value is IDNA encoded.
+        
+        Because the mutt_prepare_envelope() now occurs before mutt_protect(),
+        add mutt_unprepare_envelope() to its error handling block.
+        
+        While in this section of the code do some minor cleanup.  Remove a
+        comment that no longer has any relevance to the current state of the
+        code.  Change the error handling order for mutt_protect() to match
+        surrounding blocks: perform the FREE(&pgpkeylist) first, remove blank
+        lines.
+
+M	send.c
+
+2026-05-13 15:00:52 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f613607b)
+
+        * Remove unnecessary cast from IsPrint() call.
+        
+        The IsPrint() macro already performs an (unsigned char) cast.
+
+M	muttlib.c
+
+2026-05-09 12:23:57 +0800  Kevin J. McCarthy  <kevin@8t8.us> (fe8ae6c2)
+
+        * Filter directory paths when prompting to save attachments.
+        
+        The attachment filename isn't supposed to contain path separators, but
+        nothing technically stops them from being there.  The RFC (2183) says:
+        
+          "The receiving MUA SHOULD NOT respect any directory path information
+           that may seem to be present in the filename parameter.  The filename
+           should be treated as a terminal component only."
+        
+        Therefore, in receive mode, this commit converts all "/" to "_".  This
+        is preferable to simply taking the base name, because some attachments
+        might have a date in them formatted as yyyy/mm/dd, or other similar
+        naming issues.
+        
+        In send mode (the compose menu), simply take the basename, since it's
+        been attached by the user already, or else already filtered if via
+        forwarding.
+
+M	muttlib.c
+M	recvattach.c
+
+2026-05-11 19:44:30 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b750d79d)
+
+        * Reformatting: remove space between function and parenthesis v3.
+        
+        Thanks to Vincent Lefèvre for continuing to track down missing
+        reformatting.  This time was due to double backslashes before double
+        quotes and '\"' literal characters.
+
+M	imap/util.c
+M	muttlib.c
+M	parse.c
+M	rfc1524.c
+M	rfc822.c
+
+2026-05-11 17:49:21 +0800  Kevin J. McCarthy  <kevin@8t8.us> (95d3615f)
+
+        * Reformatting: remove space between function and parenthesis v2.
+        
+        The first round, in commit f31b98e7e22a16867584af2e82d46c29917bfd83,
+        missed sections of the code due to a bug in the script regular
+        expression, where it didn't properly handle '"' literal characters.
+        
+        Thanks to Vincent Lefèvre for finding the problem, and listing all the
+        places that were missed.
+        
+        I re-ran the script, adjust for '"', so hopefully this caught the
+        remaining places.
+
+M	alias.c
+M	copy.c
+M	crypt-gpgme.c
+M	from.c
+M	init.c
+M	mutt_lisp.c
+M	parse.c
+M	pattern.c
+M	rfc2231.c
+M	rfc822.c
+
+2026-05-09 10:26:04 +0800  Kevin J. McCarthy  <kevin@8t8.us> (19503b7b)
+
+        * Merge branch 'stable'
+
+2026-05-02 12:48:30 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ecba3147)
+
+        * Allow localization to the progress update messages.
+        
+        Rather than only adjusting the percentage, as with the previous
+        commit, allow the translators to update the whole format string.
+        
+        Different locales may want to use specific separators between
+        "current/total", or change the parenthesis around the percentage.  The
+        percentage format itself can, of course, be adjusted too.
+        
+        This is based on Emir SARI's patch sent to mutt-po.
+        
+        Thanks to Oswald Buddenhagen for his feedback and suggestion to make
+        the whole format string localized.
+
+M	curs_lib.c
+
+2026-05-02 10:19:14 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b750c22c)
+
+        * Add i18n percentage to pager and index status line.
+        
+        In the status line, the pager and index report where the current view
+        is as a percentage of the total, by default in the lower right.
+        
+        This commit allows that percentage to be localized by the translators.
+        For example, Turkish uses "%90", and French uses "90 %".
+        
+        Since there are only two places in the commit, I could have put the
+        translation marker around each usage, but I thought it might be more
+        useful in the future to have the L10N comments in one place.
+        
+        This is based on Emir SARI's patch sent to mutt-po.
+        
+        Thanks to Oswald Buddenhagen for his feedback.
+
+M	muttlib.c
+M	pager.c
+M	protos.h
+M	status.c
+
+2026-05-06 19:57:23 +0800  Kevin J. McCarthy  <kevin@8t8.us> (7bff920c)
+
+        * Merge branch 'stable'
+
+2026-04-25 13:11:19 +0800  Kevin J. McCarthy  <kevin@8t8.us> (d2f49ddd)
+
+        * Change Mutt to generate pkcs7-signature and pkcs7-mime.
+        
+        RFC5751 favors the use of application/pkcs7-mime and
+        application/pkcs7-signature.
+        
+        This change is pretty safe, since the GPGME code has been doing so for
+        a long time already.
+        
+        Update the documentation to refer to the newer mime types.
+        
+        Thanks to Ralf Hildebrandt for reporting the issue, and the reference
+        to RFC 5751.
+        
+        Thanks to Arnt Gulbrandsen for the original patch in his branch.  I
+        recreated it and added the documentation updates on top.
+
+M	contrib/smime.rc
+M	doc/Muttrc.head
+M	doc/manual.xml.head
+M	doc/smime-notes.txt
+M	init.h
+M	smime.c
+
+2026-04-25 12:12:30 +0800  Kevin J. McCarthy  <kevin@8t8.us> (bb63c648)
+
+        * Remove autoconf check for sys/time.h header.
+        
+        We've been including it init.c without an AC check for 16 years.
+        
+        As investigated by Alejandro Colomar:
+        
+          <sys/time.h> was standardized in POSIX.1-2001.  And well before that,
+          4.3BSD-Reno already had <sys/time.h>, with the file first added in 1983
+          (although 4.3BSD-Reno was released later in 1990).
+        
+          <https://www.tuhs.org/cgi-bin/utree.pl?file=4.3BSD-Reno/src/sys/sys/time.h>
+        
+          Because every modern BSD is descendant of 4.3BSD-Reno, we know the file
+          is present in every version of FreeBSD/NetBSD/OpenBSD.
+        
+          glibc also has the file since the very first commit.
+          musl libc also has the file since the very first commit.
+        
+          I think we can assume the header exists in every Unix-like system.
+        
+          And checking gnulib documentation, it seems that the only platform that
+          lacks this header file was MSVC 14.  Is mutt being built there?
+          If not, we could maybe remove that check in master everywhere.
+
+M	autocrypt/autocrypt.c
+M	configure.ac
+M	crypt-gpgme.c
+M	crypt.c
+M	curs_lib.c
+M	hcache.c
+M	mh.c
+M	mutt_random.c
+M	mutt_socket.c
+M	pgp.c
+M	smime.c
+
+2026-04-21 20:36:01 +0800  Kevin J. McCarthy  <kevin@8t8.us> (7322de13)
+
+        * Improve mutt's random data generator.
+        
+        Use getrandom() if available, or else arc4random_buf().  Only fall
+        back to using the built-in PRNG if those aren't found on the system.
+        
+        For the sizes of data mutt typically requests, getrandom() should
+        never fail, but nonetheless add code to make it retry on interrupt,
+        and fall back to the built-in PRNG only if it has to.
+        
+        FreeBSD and OpenBSD have rewritten arc4random() to use ChaCha20, which
+        should provide more than sufficient randomness.  The call has no
+        return value and always succeeds, so there is no error handling
+        written for it.
+        
+        Many thanks to Werner Koch, Greg KH, Alejandro Colomar, and Kurt
+        Hackenberg for their feedback.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	configure.ac
+M	mutt_random.c
+M	mutt_random.h
+
+2026-04-26 10:58:23 +0800  Kevin J. McCarthy  <kevin@8t8.us> (83ea9a8c)
+
+        * Merge branch 'stable'
+
+2026-04-23 11:21:39 +0800  Kevin J. McCarthy  <kevin@8t8.us> (e49e35b7)
+
+        * Fix curses_message() to use muttdbg().
+        
+        In a3f0bcc7, the dprintf() was accidentally converted to deprintf().
+        This is addding garbage errno information to the debug log for callers
+        of mutt_error() and mutt_message() where the errno is not set, or is
+        stale.
+
+M	curs_lib.c
+
+2026-04-16 13:54:44 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0088587c)
+
+        * Change query menu to return tagged entries on exit.
+        
+        Like other menus that allow tagging (for example, the attach-file
+        menu), simply require "quit"'ing the menu to automatically select
+        tagged entries.
+        
+        Previously, tagging entries in the query menu also required hitting
+        enter to "select" an arbitrary (and ignored) entry, which is
+        unintuitive if you've tagged entries.  Just hitting "quit" with tagged
+        entries did not select them.
+        
+        With this change, you can tag one or more results, quit from the menu,
+        and the selections are copied to the prompt.
+
+M	query.c
+
+2026-04-18 23:05:02 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cde1fcfc)
+
+        * Fix openssl cert name comparison.
+        
+        RFC 6125 section 6.4.4 says the client should not check the
+        Common Name if the cert contains any DNS entries.
+        
+        Flag if a GEN_DNS entry is found, and if none of them match, abort the
+        comparison.
+        
+        Thanks to evilrabbit@tutamail.com for the security report.
+        
+        Also thanks to Matthias Andree and Steffen Nurpmeso for confirming the
+        new behavior.  In fact, RFC 9525 goes further and forbids use of cn,
+        but I don't think Mutt is ready to make that big of a change just yet.
+
+M	mutt_ssl.c
+
+2026-04-21 10:06:06 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cebf3dfb)
+
+        * Merge branch 'stable'
+        
+        Adjusted patch due to code reformat in master branch.
+
+2026-04-20 11:38:48 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b91edfb8)
+
+        * Merge branch 'stable'
+        
+        Adjust due to code reformatting done in master.
+
+2026-04-20 11:27:49 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3d0ca671)
+
+        * Merge branch 'stable'
+        
+        Adjusted merge conflicts due to master branch code reformat.
+        
+        Adjusted dprint() invocation to muttdbg(), and removed the TODO comment.
+
+2026-04-20 11:15:33 +0800  Kevin J. McCarthy  <kevin@8t8.us> (9832b61d)
+
+        * Merge branch 'stable'
+        
+        Adjust for merge conflict due to code base reformatting in master.
+
+2026-04-20 11:09:12 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a74e7127)
+
+        * Merge branch 'stable'
+
+2026-04-13 23:49:54 +0200  Matthias Andree  <matthias.andree@gmx.de> (57a29d82)
+
+        * Makefile.am: support VPATH build in shellcheck and tabcheck
+
+M	Makefile.am
+
+2026-04-14 14:37:32 +0800  Kevin J. McCarthy  <kevin@8t8.us> (63f6c7f1)
+
+        * Fix 'make distcheck' issues.
+        
+        check_sec.sh doesn't have permissions to create the tempfiles, so
+        specify -p /tmp to create them under /tmp.
+        
+        The manual.xml doesn't exist inside the dist build, so just add an
+        existence -f check around it.
+
+M	check_sec.sh
+M	doc/Makefile.am
+
+2026-04-14 09:30:32 +0800  Kevin J. McCarthy  <kevin@8t8.us> (6ae35029)
+
+        * Change autoreconf params to -isvf.
+        
+        Thanks to Matthias Andree for the suggestion.
+
+M	prepare
+
+2026-04-14 09:21:12 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b0757cda)
+
+        * Gitignore gettextize installed files.
+
+M	.gitignore
+
+2026-04-14 09:17:17 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a133b5a3)
+
+        * Remove autoinstalled files by gettextize, declare gettext version.
+        
+        The gettext manual says, when not checking in the files, you can
+        instead add AM_GNU_GETTEXT_VERSION to configure.ac.
+        
+        Thanks to Matthias Andree for the suggestion and version number.
+
+D	ABOUT-NLS
+D	config.rpath
+M	configure.ac
+D	m4/gettext.m4
+D	m4/host-cpu-c-abi.m4
+D	m4/iconv.m4
+D	m4/intlmacosx.m4
+D	m4/lib-ld.m4
+D	m4/lib-link.m4
+D	m4/lib-prefix.m4
+D	m4/nls.m4
+D	m4/po.m4
+D	m4/progtest.m4
+D	po/Makefile.in.in
+D	po/Rules-quot
+D	po/boldquot.sed
+D	po/en@boldquot.header
+D	po/en@quot.header
+D	po/insert-header.sin
+D	po/quot.sed
+D	po/remove-potcdate.sin
+
+2026-04-13 12:37:45 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cc444522)
+
+        * Fix AC_CHECK_HEADERS for term.h to look in ncurses directory.
+        
+        When ncurses headers are installed inside a subdirectory, the term.h
+        file will be there too.
+
+M	configure.ac
+M	curs_ti_lib.c
+
+2026-04-13 08:02:32 +0200  Rene Kita  <mail@rkta.de> (527d656d)
+
+        * Use prepare script and show autoconf version in CI
+        
+        Make sure the prepare script is at least used once and show the used
+        version to help debugging autoconf errors.
+
+M	.builds/alpine.yml
+M	.builds/archlinux.yml
+M	.builds/debian.yml
+M	.builds/freebsd.yml
+M	.builds/openbsd.yml
+
+2026-04-13 10:14:36 +0800  Kevin J. McCarthy  <kevin@8t8.us> (22a10cad)
+
+        * Add documentation about compose attachment functions.
+        
+        Add <filter-entry> and <get-attachment> to the table of common
+        functions in the Sending Mail section.
+        
+        Comment on <attach-file>, <detach-file>, <get-attachment>, and
+        <filter-entry> below the table.  Note that mutt will always prompt to
+        confirm before invoking the <filter-entry> program.
+
+M	doc/manual.xml.head
+
+2026-04-11 12:34:04 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0b16b95d)
+
+        * Add <filter-entry> to list of $wait_key functions.
+        
+        This function also respects $wait_key, in
+        mutt_query_pipe_attachment() -> mutt_pipe_attachment().
+
+M	init.h
+
+2026-04-06 14:14:06 +0800  Kevin J. McCarthy  <kevin@8t8.us> (c5feb5f4)
+
+        * Remove double newline between headers and multipart body.
+        
+        Many thanks to Matthijs Kooijman for the bug report, complete with a
+        detailed explanation, pointers to the code causing the problem, and an
+        anaylsis of the RFC in question.  He all but wrote the simple patch
+        himself.
+        
+        I've added comments around the change, to hopefully make it clear why
+        the change was made to long standing behavior in mutt.
+        
+        I've also separated out the one place in the code where it wasn't
+        immediately obvious a header was being tied off with an extra newline,
+        inside mutt_write_fcc().
+
+M	sendlib.c
+
+2026-04-07 20:59:22 +0800  Kevin J. McCarthy  <kevin@8t8.us> (97bee3cd)
+
+        * Add Bcc to ~C and ~L pattern matching.
+        
+        The ~C is searching for "recipients" of a message.  Bcc searcing will
+        only work in the $record folder, but should still be searched.
+        
+        Likewise for ~L, which searches both "sender" and "recipients".
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+M	pattern.c
+
+2026-03-30 15:02:04 +0800  Kevin J. McCarthy  <kevin@8t8.us> (9400bb00)
+
+        * Fix S-Lang crashes on resize.
+        
+        Use the advice in the S-Lang docs: perform a SLtt_get_screen_size(),
+        and then SLsmg_reinit_smg().  SLtt_get_screen_size() does more than
+        just update SLtt_Screen_Rows/Cols, it also resizes internal buffers.
+        
+        I believe this is why the reset/init were crashing, because the
+        reset/init (now subsumed by the call to reinit) were assuming the data
+        structures were already resized.
+        
+        The docs also suggest calling SLsmg_reinit_smg() instead of separate
+        SLsmg_reset_smg()  SLsmg_init_smg() calls, so also change that.
+
+M	resize.c
+
+2026-03-29 17:04:29 +0200  Rene Kita  <mail@rkta.de> (20a0ebfb)
+
+        * Add more const correctness
+
+M	crypt-gpgme.c
+M	hcache.c
+M	imap/imap.c
+M	imap/imap_private.h
+M	imap/util.c
+M	sidebar.c
+
+2026-03-29 12:07:39 +0200  Rene Kita  <mail@rkta.de> (832e07d2)
+
+        * Remove unused macro
+        
+        Added in 739faa1e7 (add debug harness to lib.c functions, and a bunch of
+        dprint's to safe_rename()., 2007-01-02) but never used in the code.
+
+M	mutt.h
+
+2026-03-29 12:07:38 +0200  Rene Kita  <mail@rkta.de> (57458406)
+
+        * Fix redundant declarations on not-AIX systems
+
+M	protos.h
+
+2026-03-29 12:07:37 +0200  Rene Kita  <mail@rkta.de> (8f697ddc)
+
+        * Fix redundant declaration with getopt.h
+
+M	main.c
+M	pgppubring.c
+
+2026-03-29 12:07:36 +0200  Rene Kita  <mail@rkta.de> (d636b2f9)
+
+        * Remove redundant declaration
+
+M	mutt_menu.h
+M	rfc822.h
+
+2026-03-29 12:07:35 +0200  Rene Kita  <mail@rkta.de> (22f817cb)
+
+        * Drop const where we cannot keep the promise
+
+M	protos.h
+M	sendlib.c
+
+2026-03-29 12:07:34 +0200  Rene Kita  <mail@rkta.de> (fa53ce94)
+
+        * Drop unnecessary casts
+
+M	curs_lib.c
+
+2026-03-29 12:07:33 +0200  Rene Kita  <mail@rkta.de> (1a67b039)
+
+        * Fix const casts and use const where needed
+        
+        Found with -Wcast-qual.
+
+M	addrbook.c
+M	browser.c
+M	hash.c
+M	listmenu.c
+M	pager.c
+M	pgpkey.c
+M	rfc3676.c
+M	sort.c
+M	thread.c
+
+2026-03-29 12:07:32 +0200  Rene Kita  <mail@rkta.de> (fca49be7)
+
+        * Remove dead code
+        
+        gettext.c removed in
+        commit deadd27bd9766b316e696c225fd6f063f8cba432
+        Author: Ralf Wildenhues <wildenhues@ins.uni-bonn.de>
+        Date:   2006-08-31T23:32:18+00:00
+        
+            Remove superfluous empty file from CVS.
+
+M	pgppubring.c
+
+2026-03-29 09:59:59 +0200  Rene Kita  <mail@rkta.de> (ab8cf37f)
+
+        * Additional fixes for: Formatting update: pointer types * placement.
+
+M	mutt_ssl.c
+M	mutt_zstrm.c
+
+2026-03-28 13:25:08 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f31b98e7)
+
+        * Formatting update: remove space between function and parenthesis.
+        
+        This is the result of a script that skips comments and matches against
+        function calls, skipping C control flow statements (e.g. if, else,
+        while, for, return, switch).
+        
+        I had to manually fix #define function delcarations afterwards.  I
+        also manually fixed function pointer types.
+        
+        To align multi-line function calls, I used a batch emacs script that
+        invoked (indent-region).  I've done this in the past for early cleanup
+        of the codebase.  It did make a few unrelated changes, which
+        I (mostly) backed out.  But there are a few formatting changes I left
+        in as part of that.
+        
+        This cleanup purposely did not include third-party code (e.g. regex.c,
+        sha1.c).
+        
+        For gpgme.c, I decided to include the "space before function" removal,
+        but did not realign the whole file.  I manually fixed up multi-line
+        function calls in that file.
+
+M	account.c
+M	account.h
+M	addrbook.c
+M	alias.c
+M	ascii.c
+M	ascii.h
+M	attach.c
+M	attach.h
+M	autocrypt/autocrypt.c
+M	autocrypt/autocrypt.h
+M	autocrypt/autocrypt_acct_menu.c
+M	autocrypt/autocrypt_db.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_private.h
+M	autocrypt/autocrypt_schema.c
+M	background.c
+M	background.h
+M	base64.c
+M	bcache.c
+M	bcache.h
+M	browser.c
+M	buffer.c
+M	buffer.h
+M	buffy.c
+M	buffy.h
+M	charset.c
+M	charset.h
+M	color.c
+M	color.h
+M	commands.c
+M	complete.c
+M	compose.c
+M	compress.c
+M	compress.h
+M	copy.c
+M	copy.h
+M	crypt-gpgme.c
+M	crypt-gpgme.h
+M	crypt-mod-pgp-classic.c
+M	crypt-mod-pgp-gpgme.c
+M	crypt-mod-smime-classic.c
+M	crypt-mod-smime-gpgme.c
+M	crypt-mod.c
+M	crypt-mod.h
+M	crypt.c
+M	cryptglue.c
+M	curs_lib.c
+M	curs_main.c
+M	curs_ti_lib.c
+M	date.c
+M	dotlock.c
+M	dotlock.h
+M	edit.c
+M	editmsg.c
+M	enter.c
+M	extlib.c
+M	filter.c
+M	flags.c
+M	from.c
+M	getdomain.c
+M	gettext.h
+M	globals.h
+M	gnupgparse.c
+M	group.c
+M	group.h
+M	handler.c
+M	hash.c
+M	hash.h
+M	hcache.c
+M	hcache.h
+M	hdrline.c
+M	headers.c
+M	help.c
+M	history.c
+M	history.h
+M	hook.c
+M	imap/auth.c
+M	imap/auth.h
+M	imap/auth_anon.c
+M	imap/auth_cram.c
+M	imap/auth_gss.c
+M	imap/auth_login.c
+M	imap/auth_oauth.c
+M	imap/auth_sasl.c
+M	imap/auth_sasl_gnu.c
+M	imap/browse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/imap.h
+M	imap/imap_private.h
+M	imap/message.c
+M	imap/utf7.c
+M	imap/util.c
+M	init.c
+M	init.h
+M	keymap.c
+M	keymap.h
+M	lib.c
+M	lib.h
+M	listmenu.c
+M	mailbox.h
+M	main.c
+M	mapping.h
+M	mbox.c
+M	mbyte.c
+M	mbyte.h
+M	md5.c
+M	md5.h
+M	menu.c
+M	messageid.c
+M	mh.c
+M	mkdtemp.c
+M	monitor.c
+M	monitor.h
+M	mutt.h
+M	mutt_crypt.h
+M	mutt_curses.h
+M	mutt_idna.c
+M	mutt_idna.h
+M	mutt_lisp.c
+M	mutt_lisp.h
+M	mutt_menu.h
+M	mutt_random.c
+M	mutt_sasl.c
+M	mutt_sasl.h
+M	mutt_sasl_gnu.c
+M	mutt_sasl_gnu.h
+M	mutt_socket.c
+M	mutt_socket.h
+M	mutt_ssl.c
+M	mutt_ssl.h
+M	mutt_ssl_gnutls.c
+M	mutt_tunnel.c
+M	mutt_tunnel.h
+M	mutt_zstrm.c
+M	mutt_zstrm.h
+M	muttlib.c
+M	mx.c
+M	mx.h
+M	pager.c
+M	pager.h
+M	parse.c
+M	pattern.c
+M	pgp.c
+M	pgp.h
+M	pgpewrap.c
+M	pgpinvoke.c
+M	pgpkey.c
+M	pgplib.c
+M	pgplib.h
+M	pgpmicalg.c
+M	pgppacket.c
+M	pgppacket.h
+M	pgppubring.c
+M	pop.c
+M	pop.h
+M	pop_auth.c
+M	pop_lib.c
+M	postpone.c
+M	protos.h
+M	query.c
+M	recvattach.c
+M	recvcmd.c
+M	remailer.c
+M	remailer.h
+M	resize.c
+M	rfc1524.c
+M	rfc1524.h
+M	rfc2047.c
+M	rfc2047.h
+M	rfc2231.c
+M	rfc2231.h
+M	rfc3676.c
+M	rfc3676.h
+M	rfc822.c
+M	rfc822.h
+M	safe_asprintf.c
+M	score.c
+M	send.c
+M	send.h
+M	sendlib.c
+M	sidebar.c
+M	sidebar.h
+M	signal.c
+M	smime.c
+M	smime.h
+M	smtp.c
+M	sort.c
+M	sort.h
+M	status.c
+M	strcasecmp.c
+M	strdup.c
+M	strsep.c
+M	strtok_r.c
+M	system.c
+M	thread.c
+M	url.c
+M	url.h
+M	utf8.c
+M	wcscasecmp.c
+
+2026-03-27 15:24:51 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b94f4d64)
+
+        * Formatting update: pointer types * placement.
+        
+        Make the asterix more consistently be next to the variable.  That is,
+        change "int* foo" to "int *foo".
+        
+        This was done by a script that looked for basic C types (int, short,
+        char, float, etc) along with struct, xxx_t, and all caps words,
+        immediately followed by one or more "*", whitespace, and a word.
+        
+        So, there is a chance it missed a few cases, but seems to have gotten
+        them all.
+
+M	account.c
+M	account.h
+M	ascii.h
+M	bcache.c
+M	bcache.h
+M	buffer.c
+M	buffy.c
+M	compose.c
+M	crypt-gpgme.c
+M	crypt-gpgme.h
+M	crypt.c
+M	curs_lib.c
+M	edit.c
+M	hcache.c
+M	hcache.h
+M	hook.c
+M	imap/auth.c
+M	imap/auth.h
+M	imap/auth_anon.c
+M	imap/auth_cram.c
+M	imap/auth_gss.c
+M	imap/auth_login.c
+M	imap/auth_oauth.c
+M	imap/auth_sasl.c
+M	imap/auth_sasl_gnu.c
+M	imap/browse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/imap.h
+M	imap/imap_private.h
+M	imap/message.c
+M	imap/message.h
+M	imap/util.c
+M	init.c
+M	menu.c
+M	mh.c
+M	mutt_crypt.h
+M	mutt_curses.h
+M	mutt_sasl.c
+M	mutt_sasl.h
+M	mutt_sasl_gnu.c
+M	mutt_socket.c
+M	mutt_socket.h
+M	mutt_ssl.c
+M	mutt_ssl.h
+M	mutt_ssl_gnutls.c
+M	mutt_tunnel.c
+M	mutt_zstrm.c
+M	mutt_zstrm.h
+M	muttlib.c
+M	mx.c
+M	mx.h
+M	pattern.c
+M	pop.c
+M	pop.h
+M	pop_auth.c
+M	pop_lib.c
+M	protos.h
+M	sendlib.c
+M	sha1.c
+M	sha1.h
+M	smime.c
+M	smime.h
+M	smtp.c
+M	url.c
+M	url.h
+
+2026-03-17 14:32:30 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4b083a6a)
+
+        * Convert pgp_application_pgp_handler() to perform textmode conversion.
+        
+        Since this output is from fgetconv() and doesn't interface with the
+        library function, use a simple converter embedded in the function.
+
+M	pgp.c
+
+2026-03-17 14:20:26 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0bb9cea5)
+
+        * Convert pgp_traditional_encryptsign() to perform textmode conversion.
+        
+        This is similar to the last few commits.  Break the generated input
+        file into pgpinfile_lf and pgpinfile_crlf.  Introduce the library call
+        to convert from lf to crlf and then use the crlf file as input for the
+        pgp_invoke_traditional call.
+
+M	pgp.c
+
+2026-03-16 20:46:13 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cd01acbf)
+
+        * Convert pgp_encrypt_message() to perform textmode handling.
+        
+        The existing buffer and file variables were confusing, making it
+        difficult for me to introduce an intermediary.  Rename them to be
+        clearer:
+          - pgpin became pgpstdin.
+          - pgperr became pgpstderr.
+          - fpout became pgpstdout.
+        
+          - tempfile is actually the pgpstdoutfile generated, and was renamed
+            as such.
+          - pgperrfile became pgpstderrfile.
+        
+          - fptmp was renamed to fp_infile_lf, where the LF-line ending
+            input was written.
+          - pgpinfile was renamed to pgpinfile_lf.
+          - pgpinfile_crlf is the output from the mutt_convert_to_crlf() call.
+        
+        Add the call mutt_convert_to_crlf() in between the input file
+        generation and the call the pgp_invoke_encrypt().  Change the input to
+        gpg to use generated pgpinfile_crlf file.
+        
+        While tracing through, I noticed the pgpstdout file was not closed and
+        unlinked if encryption fails.  So I added the missing error handling.
+
+M	pgp.c
+
+2026-03-16 20:12:46 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0cdb2ba6)
+
+        * Convert pgp_sign_message() to perform textmode handling.
+        
+        Create an intermediate file, lf_file, where the content to sign is
+        stored.  Then call the mutt_convert_to_crlf() to generate the actual
+        signed file, in CRLF format to pass to gpg.
+
+M	pgp.c
+
+2026-03-17 14:39:16 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a8c420cf)
+
+        * Convert pgp_decrypt_part() to use textmode conversion function.
+        
+        It was already doing its own conversion but change it to use the
+        library function just introduced.
+        
+        While tracing through I discovered a missing close of pgperr during
+        error handling, so I added the missing call.
+
+M	pgp.c
+
+2026-03-17 14:38:54 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3120cea2)
+
+        * Add library functions to convert between CRLF and LF line endings.
+        
+        Currently Mutt relies on gpg to perform conversion to and from CRLF,
+        via the --textmode parameter passed to various gpg commands.
+        
+        While there is nothing wrong with this, the parameter is marked as
+        "legacy" in the gpg man page, and not all tools support it.
+        
+        To help reduce portability issues in the future, the next five commits
+        will change the pgp classic encrypt/sign functions to perform their
+        own "textmode" line end normalization before passing the files to gpg.
+        
+        The normalize_line_endigs() function accepts a file name string or a
+        FILE pointer for the input and output.  They can be mixed, to allow
+        flexibility.
+
+M	muttlib.c
+M	protos.h
+
+2026-03-20 13:34:51 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a446a1ac)
+
+        * Merge branch 'stable'
+
+2026-03-09 18:47:48 +0800  Kevin J. McCarthy  <kevin@8t8.us> (e98389ba)
+
+        * Add $tmpdraftdir for composing messages.
+        
+        Default it to use $TMPDIR, and if unset to /var/tmp, so that files
+        will survive an unfortunately timed computer reboot.
+        
+        Create two new functions for generating temp filenames in $tmpdraftdir:
+         - mutt_adv_mktemp_draft() for template-style naming
+         - mutt_buffer_mktemp_draft() for random naming with a "mutt" prefix.
+        
+        Modify compose temp files to use $tmpdraftdir functions.
+        
+        Handle the most common cases:
+          - compose and compose with $edit_headers
+          - postponed messages
+          - resend-message
+          - -H draft files via command line argument
+          - -i include body files via command line argument.
+        
+        Also change attachment menu forwarding and replying, which generate a
+        tempfile passed in as the body, to use $tmpdraftdir.
+        
+        Thanks for Raf and Rene Kita for suggesting $tmpdraftdir default to
+        $TMPDIR, and also to Raf for the man page suggested updates.
+
+M	doc/manual.xml.head
+M	doc/mutt.man
+M	globals.h
+M	headers.c
+M	init.c
+M	init.h
+M	main.c
+M	muttlib.c
+M	postpone.c
+M	protos.h
+M	recvcmd.c
+M	send.c
+
+2026-03-09 15:08:58 +0800  Kevin J. McCarthy  <kevin@8t8.us> (dd250408)
+
+        * Clean up tempdir definitions and file locations.
+        
+        Group all the tempdir protos together in protos.h and definitions in
+        muttlib.c.
+        
+        Add underscore prefix to mutt_buffer_mktemp_pfx_sfx(), to make it
+        obvious that there are no, and shouldn't be any, external direct
+        callers to this function.
+        
+        All external callers should use either mutt_adv_mktemp() with a
+        template parameter or else mutt_buffer_mktemp().
+
+M	muttlib.c
+M	protos.h
+
+2026-03-09 15:03:33 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ca2689a4)
+
+        * Remove unused non-buffer tempdir functions.
+        
+        These were converted to buffer versions a while ago, but I left the
+        old ones around in case of external patches.
+        
+        Remove them before the introduction of a seperate $tmpdraftdir
+        directory for composing emails in the next few commits.
+
+M	muttlib.c
+M	protos.h
+
+2026-03-06 14:45:18 +0800  Kevin J. McCarthy  <kevin@8t8.us> (39cf6a25)
+
+        * Add explicit open/close thread functions.
+        
+        The current functions <collapse-thread> and <collapse-all> are in fact
+        toggles.  This makes it tricky to control how a macro behaves, for
+        instance.
+        
+        Add functions <open-thread>, <close-thread>, <open-all-threads>,
+        <close-all-threads> to explicitly open or close threads.
+        
+        Renaming the existing toggle functions is not practical due to how
+        long they have been in use.  I could add new <toggle-thread>
+        <toggle-all-threads> functions but that would require new OPS to work
+        properly with keybindings.  I don't think it's worth the extra
+        trouble.
+
+M	OPS
+M	curs_main.c
+M	functions.h
+
+2026-03-04 13:14:33 +0800  Kevin J. McCarthy  <kevin@8t8.us> (2b64a67e)
+
+        * Add error handling to mutt_write_one_header() for missing \n.
+        
+        The function takes extra care to check for a missing newline above,
+        and abort the loop.  But the final call to write_one_header() outside
+        the loop does no checks.
+        
+        write_one_header() doesn't check for a NULL end.  It calls
+        mutt_substrdup(), which handles it properly.  But it also does things
+        like check if (end - start) > 5, and calls strchr(start, ':') and
+        checks if the result >= end.  So overall, the function is not really
+        properly handling that case thoroughly.
+        
+        I don't believe the current caller of mutt_write_one_header() (non-tag
+        version), mutt_copy_hdr(), will pass a non-terminated header group in,
+        which is why we haven't had any bug reports.
+        
+        However, it's better to check for the case and error out explicitly.
+
+M	sendlib.c
+
+2026-03-04 13:13:11 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cf90f7a8)
+
+        * Change unfold_header() return type to void.
+        
+        The function is not modifying the s parameter, so there is no need to
+        imply it may change by providing a return value.
+
+M	sendlib.c
+
+2026-03-04 11:10:58 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ead09457)
+
+        * Add documentation about $weed's effect.
+        
+        Note that it has to be set, or toggled on, for ignore and hdr_order to
+        be enabled.
+        
+        This is probably established by context somewhere else in the
+        documentation, but better to be explicit about it for new users
+        reading the section.
+
+M	doc/manual.xml.head
+M	doc/muttrc.man.head
+
+2026-02-28 14:01:48 +0800  Kevin J. McCarthy  <kevin@8t8.us> (e82ab3f4)
+
+        * Group un-commands next to commands where possible.
+        
+        The list has it both ways.  Some grouped together and some not.  I
+        prefer them grouped.
+
+M	init.h
+
+2026-02-27 09:40:48 +0100  Rene Kita  <mail@rkta.de> (51298a9b)
+
+        * Use Arch instead of Debian for sr.ht builds
+        
+        Debian is already used in the GitLab CI, pick something more bleeding
+        edge here.
+        
+        sr.ht only allows four parallel builds. Disable the Debian manifest, but
+        keep it around as a starter for someone wanting to test Debian with
+        sr.ht.
+
+A	.builds/archlinux.yml
+M	.builds/debian.yml
+
+2026-02-25 11:53:30 +0100  Rene Kita  <mail@rkta.de> (95db3060)
+
+        * Run check-local in sr.ht CI
+
+M	.builds/alpine.yml
+M	.builds/debian.yml
+M	.builds/freebsd.yml
+M	.builds/openbsd.yml
+
+2026-02-25 11:53:29 +0100  Rene Kita  <mail@rkta.de> (b8d698bc)
+
+        * Let check-local run shellcheck target
+
+M	Makefile.am
+
+2026-02-25 11:53:28 +0100  Rene Kita  <mail@rkta.de> (90eb5f93)
+
+        * Drop --exclude from shellcheck target
+        
+        Exceptions are now dealt with on a case-by-case basis. Drop global
+        exceptions.
+
+M	Makefile.am
+
+2026-02-25 11:53:27 +0100  Rene Kita  <mail@rkta.de> (798335e5)
+
+        * Add .shellcheckrc to ignore x-prefix warnings
+        
+        shellcheck warns:
+        Avoid x-prefix in comparisons as it no longer serves a purpose.
+        
+        While this is true, it also does not really harm - besides some
+        arguments about readability. As zsh fixed this only ~11 years ago, let's
+        keep it for some years but silence shellcheck.
+        
+        Consensus on the mutt-dev ML was to keep using the x-prefix. Make sure
+        it is ignored no matter how we invoke shellcheck.
+
+A	.shellcheckrc
+
+2026-02-25 11:53:26 +0100  Rene Kita  <mail@rkta.de> (15667df8)
+
+        * Use read -r in shell scripts
+        
+        Shellcheck warns:
+        read without -r will mangle backslashes.
+        
+        While it is unlikely to happen in our case, just guard against the rare
+        case and avoid dealing with a warning. See [0] and [1] for a thorough
+        rational.
+        
+        [0]: https://www.shellcheck.net/wiki/SC2162
+        [1]: https://mywiki.wooledge.org/BashFAQ/001
+
+M	contrib/bgedit-screen-tmux.sh
+M	patchlist.sh
+
+2026-02-25 11:53:25 +0100  Rene Kita  <mail@rkta.de> (261bb782)
+
+        * Always double-quote parameter expansions in shell
+        
+        There is no harm, it clearly marks the end of a variable name and
+        silences shellcheck warnings.
+        
+        E.g. TMPFILE is set by mktemp which uses the user-controlled TMPDIR
+        variable. There might be strange people out there who use whitespace
+        characters in their TMPDIR name making the script break.
+        
+        Add a comment and ignore the warning where we really do not want quotes.
+
+M	check_sec.sh
+M	contrib/bgedit-screen-tmux.sh
+M	contrib/iconv/make.sh
+M	doc/instdoc.sh.in
+M	mkchangelog.sh
+M	mkreldate.sh
+
+2026-02-25 11:53:24 +0100  Rene Kita  <mail@rkta.de> (29094aeb)
+
+        * Do not use shell's old-style command substitution
+        
+        To quote the BashFAQ[0]:
+        Why is $(...) preferred over `...` (backticks)?
+        
+        The `cmd` backtick format is the legacy syntax for command substitution,
+        required only by more than 30-year-old Bourne shells. ...
+        
+        [0]: http://mywiki.wooledge.org/BashFAQ/082
+
+M	check_sec.sh
+M	contrib/iconv/make.sh
+M	mkchangelog.sh
+M	mkreldate.sh
+M	version.sh
+
+2026-02-25 11:53:23 +0100  Rene Kita  <mail@rkta.de> (cbc52ab0)
+
+        * Drop check in obsolete intl directory
+        
+        The intl directory was removed in ccc18061 (Update gettext to version
+        0.21., 2021-02-07).
+
+M	check_sec.sh
+
+2026-02-26 11:05:40 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3467d1ab)
+
+        * Fix more const warnings on Arch linux with the latest glibc.
+        
+        See 19434821 for more details.
+        
+        These are in the IMAP code, which was accidentally skipped in the
+        previous testing.
+        
+        imap_get_literal_count() is always passed a modifiable buf parameter,
+        (which the callers are also modifying):.  Since the function is, in
+        fact, sneakily modifying buf, change the signature to reflect reality.
+        
+        Split off a different constc variable for the case inside
+        imap_parse_path() that was calling strchr on a const char * "path"
+        argument.
+
+M	imap/imap_private.h
+M	imap/util.c
+
+2026-02-25 14:04:44 +0100  Rene Kita  <mail@rkta.de> (65ab5bc3)
+
+        * Drop assert that is always true
+        
+        RFC2047Specials is defined as
+        const char RFC2047Specials[] = "@.,;:<>[]\\\"()?/= \t";
+        
+        As long as no dev drops it from RFC2047Specials this assert will always
+        be true. It adds dubious value but triggers compiler warnings.
+
+M	rfc2047.c
+
+2026-02-25 20:22:53 +0800  Kevin J. McCarthy  <kevin@8t8.us> (19434821)
+
+        * Fix const warnings on Arch linux with the latest glibc.
+        
+        The latest version of glibc changes string search functions, such as
+        strchr() and strrchr(), so that the return type is the same type as
+        the string passed in.
+        
+        This helped us catch a real bug in browser.c (3a8dfafc), and also
+        turned up some variable type issues, fixed here.
+        
+        Thanks to Rene Kita for the work on the Arch sr.ht build files which
+        turned up the bugs, and for an initial patch showing where the
+        warnings were, which this commit is based upon.
+        
+        Also thanks to Alejandro Colomar for quickly explaining what was going
+        on and helping debug the issues, and for the parse.c bsearch fix.
+        
+        Reviewed-by: Alejandro Colomar <alx@kernel.org>
+
+M	mh.c
+M	muttlib.c
+M	parse.c
+M	rfc1524.c
+M	sendlib.c
+M	url.c
+
+2026-02-25 12:38:36 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f2a004d4)
+
+        * Merge branch 'stable'
+
+2026-02-25 11:26:18 +0800  Kevin J. McCarthy  <kevin@8t8.us> (e232abc5)
+
+        * Merge branch 'stable'
+
+2026-02-23 14:59:45 +0100  Rene Kita  <mail@rkta.de> (8bdb7dd3)
+
+        * Add tcc build stage
+        
+        Omit OpenBSD for now as it shows a build error. Could be a problem on
+        the committer level, though. ;-)
+        
+        Also omit FreeBSD as the tcc is currently unmaintained there.
+
+M	.builds/alpine.yml
+M	.builds/debian.yml
+
+2026-02-23 14:59:44 +0100  Rene Kita  <mail@rkta.de> (e6142288)
+
+        * Add sr.ht build manifest for OpenBSD
+
+A	.builds/openbsd.yml
+
+2026-02-23 14:59:43 +0100  Rene Kita  <mail@rkta.de> (3fc519be)
+
+        * Adjust sr.ht build manifest for FreeBSD
+        
+        While there, sort packages.
+
+M	.builds/freebsd.yml
+
+2026-02-23 14:59:42 +0100  Rene Kita  <mail@rkta.de> (ba5c77ed)
+
+        * Adjust sr.ht build manifest for Debian Linux
+
+M	.builds/debian.yml
+
+2026-02-23 14:59:41 +0100  Rene Kita  <mail@rkta.de> (43cc1b7f)
+
+        * Adjust sr.ht build manifest for Alpine Linux
+
+M	.builds/alpine.yml
+
+2026-02-18 14:56:35 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4fb4575a)
+
+        * Swap out ISSPACE/SKIPWS usage for explicit ASCII versions.
+        
+        For more background on this change see commit
+        40228035ce0f397e682c985201df51dead3be3dc and the thread in mutt-users
+        starting at <YujJwwV3Fhlu+SSc@pllab.is.ocha.ac.jp>:
+        https://lists.mutt.org/pipermail/mutt-users/Week-of-Mon-20220801/003616.html
+        
+        On some platforms, isspace() returns true for unexpected 8-bit chars,
+        such as 0xa0 or 0x85.  Given that, I don't think Mutt should be using
+        it in most (if not all) cases, and especially not when parsing
+        protocols and emails.  (Note: iswspace() is a different story; enter.c
+        makes use of wchar_t, for instance.)
+        
+        Define IS_ASCII_WS to the set " \t\n\v\f\r".
+        
+        Convert SWIPWS() calls to SKIP_ASCII_WS().  Convert ISSPACE() calls to
+        IS_ASCII_WS().  Also change helper function names:
+        mutt_skip_whitespace() to mutt_skip_ascii_ws() and
+        mutt_remove_trailing_ws() to mutt_remove_trailing_ascii_ws().
+        
+        I initially kept the locale versions in a few prompts and the builtin
+        editor.  But the more I considered, the more I decided it was better
+        to explicitly use the ASCII version in each case.  So although I've
+        kept the locale-specific versions IS_LOCALE_WS and SKIP_LOCALE_WS,
+        they aren't currently used.
+
+M	browser.c
+M	check_sec.sh
+M	crypt.c
+M	edit.c
+M	from.c
+M	handler.c
+M	headers.c
+M	help.c
+M	hook.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	imap/util.c
+M	init.c
+M	keymap.c
+M	lib.c
+M	lib.h
+M	mbyte.c
+M	mutt_lisp.c
+M	muttlib.c
+M	pager.c
+M	parse.c
+M	pattern.c
+M	pgp.c
+M	pgpmicalg.c
+M	pop_lib.c
+M	rfc1524.c
+M	sendlib.c
+
+2026-02-13 09:27:43 +0100  Rene Kita  <mail@rkta.de> (989f0be4)
+
+        * Drop -pedantic from CFLAGS
+        
+        Consensus is that it does more harm than good.
+
+M	configure.ac
+
+2026-02-16 13:26:17 +0800  Kevin J. McCarthy  <kevin@8t8.us> (9845fa6e)
+
+        * Add wc-funcs warnings to configure.
+        
+        If --without-wc-funcs is explicitly provided, print a warning that the
+        option will be removed in 2.5.0.
+        
+        If, instead, the check for needed wc-funcs fails, print a different
+        warning that the system may no longer be able to compile mutt starting
+        with 2.5.0.
+        
+        The configuration option imposes a burden when trying to modernize the
+        code with functions such as wmem*() function.
+        
+        So the plan is to mark it as deprecated in 2.4.0 to see if it stirs
+        any feedback.  If not, remove it and the fallback code supporting it
+        in 2.5.0.  However, continue to test for wcwidth, and supply our
+        current fallback implementation in wcwidth.c if needed.
+        
+        This commit is the result of a discussion on mutt-dev starting with
+        Message-ID: <aY3rcwQks4kH4Mx3@mail.gmail.com>.
+        
+        It was generally agreed that <wchar.h> and <wctype.h> are standardized
+        long enough that all systems should be supporting them now, with the
+        possible exception of wcwidth().  Thanks to Daniel Tameling, Alejandro
+        Colomar, Steffen Nurpmeso, and Rene Kita for their knowledgeable and
+        detailed contributions in that discussion.
+
+M	configure.ac
+
+2026-02-16 12:24:41 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3d425717)
+
+        * Set up 'make check' and add tab scanner.
+        
+        Add target 'tabcheck', running a quick perl scan of the C source code
+        for tabs.  Note the double dollar sign $$ARGV is because of
+        Makefile.am escaping.
+        
+        Add check-security to the top level check-local target.
+        
+        Add manual.xml validation to the doc/check-local target.
+        
+        Don't add shellcheck target for now, because it appears to flag lots
+        of unimportant issues.  Perhaps someone more familiar with this tool
+        can fix it up and add it to check-local later on.
+
+M	Makefile.am
+M	doc/Makefile.am
+
+2026-02-16 20:08:32 +0800  Kevin J. McCarthy  <kevin@8t8.us> (816f2a05)
+
+        * Switch ci image to debian:trixie container.
+        
+        As with Arch, the latest shellcheck is giving (IMO) unhelpful errors.
+        For now I'm turning it off, but invite someone who cares to fix it and
+        re-enable it.
+
+M	.gitlab-ci.yml
+
+2026-02-13 13:52:25 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f2783f74)
+
+        * Remove redundant and incorrect wchar.h/wctype.h includes.
+        
+        These includes are already "correctly" handled inside mutt.h.
+        
+        configure.ac does a compile check for wchar_t, wint_t, and mbstate_t,
+        including wchar.h if it exists.  If the check fails, it defines
+        default values for those.  It does this prior to, and independently
+        from, the --without-wc-funcs check.
+        
+        That means, on a system with wchar.h containing those types,
+        configuring mutt --without-wc-funcs would generate errors using only
+        the mbyte.h version of includes, because no substitute wchar_t,
+        wint_t, and mbstate_t would be defined and wchar.h would not be
+        included even though it exists.
+        
+        These includes in mbyte.h are unnecessary and confusing.
+
+M	mbyte.h
+
+2026-02-14 12:25:55 +0800  Kevin J. McCarthy  <kevin@8t8.us> (850d1322)
+
+        * Merge branch 'stable'
+
+2026-02-14 11:22:29 +0800  Alejandro Colomar  <alx@kernel.org> (7c92f0d9)
+
+        * crypt.c: Fix allocation size calculation
+        
+        Fixes: b423ebbfa9d2 (1999-01-04; "Make the experimental branch the main trunk.")
+        Link: <https://github.com/neomutt/neomutt/pull/4294>
+        Cc: Oswald Buddenhagen <ossi@kde.org>
+        Cc: Pietro Cerutti <gahr@gahr.ch>
+        Cc: Richard Russon <rich@flatcap.org>
+        Signed-off-by: Alejandro Colomar <alx@kernel.org>
+        Cherry-picked-from: neomutt.git 3cba64098487 (2024-05-10; "ncrypt/crypt.c: Fix allocation size calculation")
+        Link: <https://github.com/neomutt/neomutt/pull/4297>
+        [alx: Adapted diff and message to mutt(1)]
+        Signed-off-by: Alejandro Colomar <alx@kernel.org>
+
+M	crypt.c
+
+2026-02-13 09:24:01 +0100  Rene Kita  <mail@rkta.de> (b297e0aa)
+
+        * Do not limit use of warnings to GCC
+        
+        These are not compiler specific warnings, use them everywhere.
+
+M	configure.ac
+
+2026-02-13 09:23:49 +0100  Rene Kita  <mail@rkta.de> (8bde082d)
+
+        * Drop -Wno-long-long from CFLAGS
+        
+        We already require C99.
+
+M	configure.ac
+
+2026-02-13 09:23:26 +0100  Rene Kita  <mail@rkta.de> (837beae3)
+
+        * Silence warning
+
+M	mutt_ssl.c
+
+2026-02-13 09:22:51 +0100  Rene Kita  <mail@rkta.de> (0a113818)
+
+        * Remove unused variable
+
+M	mbyte.c
+
+2026-02-11 15:00:54 +0800  Kevin J. McCarthy  <kevin@8t8.us> (cb33fbfe)
+
+        * Add a gitlab-ci stage to test for tabs in C source code.
+        
+        This is just a simple test using perl (which is already required for
+        the build).
+
+M	.gitlab-ci.yml
+
+2026-02-11 11:14:07 +0800  Kevin J. McCarthy  <kevin@8t8.us> (1eb9cfba)
+
+        * Rename dprintf() to muttdbg(), deprintf() to mutt_errno_dbg().
+        
+        It turns out dprintf() is in the libc API, standardized in
+        POSIX.1-2008.  Additionally, deprintf() is a little too similar to
+        eprintf(), a common wrapper around fprintf() that prints to stderr.
+        
+        Thanks very much to Alejandro Colomar for catching this issue early,
+        and bringing it to my attention.
+        
+        I renamed dprintf() to muttdbg() because it has the same number of
+        characters, which allowed the substitution without having to tidy up
+        indentation afterwards.
+        
+        All but one deprintf() were on a single line, and tended to use a very
+        short message.  So I opted to change this one to a bit more
+        verbose/descriptive name, mutt_errno_dbg().
+        
+        Reported-by: Alejandro Colomar <alx@kernel.org>
+
+M	alias.c
+M	attach.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_schema.c
+M	bcache.c
+M	buffer.c
+M	buffy.c
+M	color.c
+M	complete.c
+M	copy.c
+M	crypt-gpgme.c
+M	curs_lib.c
+M	curs_main.c
+M	from.c
+M	getdomain.c
+M	gnupgparse.c
+M	group.c
+M	handler.c
+M	hcache.c
+M	headers.c
+M	imap/auth.c
+M	imap/auth_anon.c
+M	imap/auth_cram.c
+M	imap/auth_gss.c
+M	imap/auth_login.c
+M	imap/auth_sasl.c
+M	imap/auth_sasl_gnu.c
+M	imap/browse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	imap/util.c
+M	init.c
+M	lib.c
+M	lib.h
+M	mbox.c
+M	menu.c
+M	mh.c
+M	monitor.c
+M	mutt_idna.c
+M	mutt_sasl.c
+M	mutt_sasl_gnu.c
+M	mutt_socket.c
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+M	mutt_zstrm.c
+M	muttlib.c
+M	mx.c
+M	pager.c
+M	parse.c
+M	pgp.c
+M	pgpinvoke.c
+M	pgpkey.c
+M	pgpmicalg.c
+M	pop.c
+M	pop_auth.c
+M	pop_lib.c
+M	postpone.c
+M	query.c
+M	recvattach.c
+M	rfc1524.c
+M	rfc3676.c
+M	send.c
+M	sendlib.c
+M	smime.c
+M	smtp.c
+
+2026-02-09 20:42:43 +0800  Kevin J. McCarthy  <kevin@8t8.us> (6589b44d)
+
+        * Add missing deprintf() define when DEBUG is not enabled.
+
+M	lib.h
+
+2026-02-09 20:30:30 +0800  Kevin J. McCarthy  <kevin@8t8.us> (522860e9)
+
+        * Prevent calling mutt_debug_f before debugfile is opened.
+        
+        start_debug() is called in mutt_init().  However, start_curses(),
+        called earlier, can also result in dprintf() being called for some of
+        the reflow functions.
+        
+        Passing NULL to the fprintf() can result in a crash.
+        
+        Add a check just like dprint() had.
+
+M	lib.h
+
+2025-08-27 11:58:18 -0700  David Champion  <dgc@c13.us> (9c73b64c)
+
+        * fix some printf token errors in previous commits
+        
+        While converting dprint() to dprintf() I changed some instances to
+        e.g. `dprintf(1, foo)` when it should be `dprintf(1, "%s", foo)`. This
+        matters when `foo` contains printf tokens.
+        
+        Rookie mistake.
+
+M	buffy.c
+M	complete.c
+M	curs_lib.c
+M	getdomain.c
+M	pgpinvoke.c
+M	sendlib.c
+M	smime.c
+
+2025-08-26 16:09:42 -0700  David Champion  <dgc@c13.us> (a3f0bcc7)
+
+        * add deprintf() for including errno
+        
+        A small number of dprintf() calls explicitly include `errno` as a
+        parameter. Most of these also include `strerror(errno)`. But the
+        formatting of these is inconsistent from one instance to another.  This
+        patch introduces `deprintf()`, which is EXACTLY like `dprintf()` but
+        includes errno+strerror at the end of the formatted debugging text in a
+        uniform way across the code.
+
+M	attach.c
+M	complete.c
+M	curs_lib.c
+M	lib.c
+M	lib.h
+M	mh.c
+M	monitor.c
+M	mutt_sasl.c
+M	mutt_socket.c
+M	muttlib.c
+M	mx.c
+M	pager.c
+M	send.c
+M	sendlib.c
+
+2025-08-26 13:26:44 -0700  David Champion  <dgc@c13.us> (4ea16f81)
+
+        * convert all dprint() to dprintf()
+        
+        dprintf() was introduced some years ago but barely used (except in some
+        other patches).  When Mutt was written it was a C89/C90 project (at
+        best?) and certain cpp macros and constructs could not be relied upon
+        (they were GCC extensions).  Now we are C99, and dprintf() allows us
+        to take advantage of __FILE__, __LINE__, __func__, and __VA_ARGS__ in
+        useful ways.
+        
+        We get:
+        * cleaner, shorter, easier-to-read code
+        * greater consistency
+        * all debug messages log the calling function, file, and line,
+          without special effort
+        
+        This patch removes dprint() and mutt_debug() from the code, and
+        converts every dprint() to a dprintf(). The work was done largely
+        programmatically (sed, awk, perl) but has been reviewed carefully.
+        There are a few categories of change here:
+        
+        * simple conversion, changing syntax and removing the unnecessary `\n`
+        * duplication of dprintf() where dprint() expected to append conditionally
+        * pulling up split lines where obviously reasonable
+        * removal of explicit function names since dprintf() embeds them
+        * minimal reformatting in service of above goals
+        
+        Every effort has been made to preserve information and intention.
+
+M	alias.c
+M	attach.c
+M	autocrypt/autocrypt_gpgme.c
+M	autocrypt/autocrypt_schema.c
+M	bcache.c
+M	buffer.c
+M	buffy.c
+M	color.c
+M	complete.c
+M	copy.c
+M	crypt-gpgme.c
+M	curs_lib.c
+M	curs_main.c
+M	from.c
+M	getdomain.c
+M	gnupgparse.c
+M	group.c
+M	handler.c
+M	hcache.c
+M	headers.c
+M	imap/auth.c
+M	imap/auth_anon.c
+M	imap/auth_cram.c
+M	imap/auth_gss.c
+M	imap/auth_login.c
+M	imap/auth_sasl.c
+M	imap/auth_sasl_gnu.c
+M	imap/browse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	imap/util.c
+M	init.c
+M	lib.c
+M	lib.h
+M	mbox.c
+M	menu.c
+M	mh.c
+M	monitor.c
+M	mutt_idna.c
+M	mutt_sasl.c
+M	mutt_sasl_gnu.c
+M	mutt_socket.c
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+M	mutt_zstrm.c
+M	muttlib.c
+M	mx.c
+M	pager.c
+M	parse.c
+M	pgp.c
+M	pgpinvoke.c
+M	pgpkey.c
+M	pgpmicalg.c
+M	pop.c
+M	pop_auth.c
+M	pop_lib.c
+M	postpone.c
+M	query.c
+M	recvattach.c
+M	rfc1524.c
+M	rfc3676.c
+M	send.c
+M	sendlib.c
+M	smime.c
+M	smtp.c
+
+2025-06-29 12:11:55 +0200  Grzegorz Szymaszek  <gszymaszek@short.pl> (14cf6b22)
+
+        * Use separate dprint for folding header for display
+        
+        The replaced dprint() call was used for both (flags & CH_DISPLAY) and
+        (pfxw + max > wraplen && !is_from). Use a different message in the first
+        case to not confuse the debug log reader.
+
+M	sendlib.c
+
+2026-02-06 13:00:22 +0800  Kevin J. McCarthy  <kevin@8t8.us> (09a7a751)
+
+        * Adjust pattern max year to 2037.
+        
+        2030 is no longer "far in the future".  But don't assume all clients
+        support 64 bit times yet.  For now, bump it up to just below the 2038
+        limit.
+
+M	pattern.c
+
+2026-02-04 13:12:40 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ac0539d6)
+
+        * Add checks for new and tmp directories to mx_is_maildir()
+        
+        This function is used by mx_get_magic() to check if a path is a
+        maildir mailbox.  I believe it was only looking for "cur" to save on
+        stat calls.
+        
+        However, this can cause misbehavior in some cases.  The browser won't
+        enter a (non-maildir) directory that contains only a subdirectory
+        "cur".  On the other other hand, mutt relies on the "tmp" and "new"
+        subdirectories existing or fails operations, such as append to
+        mailbox, or postponing mail.
+
+M	mh.c
+
+2026-02-04 13:13:32 +0800  Kevin J. McCarthy  <kevin@8t8.us> (773554eb)
+
+        * Remove old mercurial sigs and tags files.
+        
+        These weren't removed when we converted to git years ago.
+
+D	.hgsigs
+D	.hgtags
+
+2026-02-04 10:56:13 +0800  Kevin J. McCarthy  <kevin@8t8.us> (3d17d9cd)
+
+        * Add more comments to L10N strings in init.h.
+        
+        Some of the default config variable values are cryptic.  Add some more
+        information to try and help the translators.
+
+M	init.h
+
+2026-02-04 10:02:44 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b5ed53e8)
+
+        * Change is_from() pathlen parameter name to pathsize.
+        
+        The parameter is actually the size of the path buffer passed in, not
+        the length of path.  The code treats it corretly (as the size), but
+        the name invites misunderstandings and off-by-one errors.
+        
+        Also change the comparison from
+          if (len + 1 > pathlen)
+        to
+          if (len >= pathsize)
+        which is also clearer.
+        
+        Thanks to Alejandro Colomar for both of these suggestions during his
+        code review.
+
+M	from.c
+
+2026-01-31 15:05:00 +0800  Kevin J. McCarthy  <kevin@8t8.us> (361f35ad)
+
+        * When parsing mbox, change is_from() scanner to be dynamic.
+        
+        At the beginning of the file, or after a content-length delimited
+        message, accept anything with a "From " prefix.
+        
+        After a blank line, use the reverse scanner.  This allows for weird
+        return paths that the original scanner didn't accept (addressing
+        ticket 433).  There is more risk of a false positive, which is why
+        it's only used after a blank line.
+        
+        Otherwise use the traditional forward scanner.  This is still run to
+        minimize introducing new issues.
+        
+        Change is_from() to mutt_is_from() since it's in the global namespace.
+        Add a mode parameter that behaves as described above.
+        
+        All other calls to mutt_is_from() outside of mbox parsing default to
+        the "From " prefix mode, for maximum compatibility.
+
+M	attach.c
+M	copy.c
+M	editmsg.c
+M	from.c
+M	listmenu.c
+M	mbox.c
+M	parse.c
+M	protos.h
+
+2026-01-27 18:54:00 +0800  Kevin J. McCarthy  <kevin@8t8.us> (a9a1f944)
+
+        * Create is_from_reverse_scan().
+        
+        Use the helpers extracted from is_from_forward_scan().
+        
+        Create a helper to move backwards by token through the from line.
+
+M	from.c
+
+2026-01-27 18:49:49 +0800  Kevin J. McCarthy  <kevin@8t8.us> (b2479599)
+
+        * Extract is_from_forward_scan() function.
+        
+        Extract helpers check_time() and check_year() to be reused by the
+        reverse scan function created next.
+
+M	from.c
+
+2026-01-30 17:37:00 +0800  Kevin J. McCarthy  <kevin@8t8.us> (0cd56423)
+
+        * Convert a few more files from tab indentation to spaces.
+        
+        Note that check_sec.sh and txt2c.sh contain embedded tabs in grep and
+        sed expressions.  For those, expand only initial tabs.
+
+M	check_sec.sh
+M	configure.ac
+M	doc/makedoc.pl
+M	doc/manual.xml.head
+M	patchlist.sh
+M	txt2c.sh
+
+2026-01-29 20:19:20 +0800  Kevin J. McCarthy  <kevin@8t8.us> (de9ad709)
+
+        * Convert non-prefix tabs to spaces.
+        
+        The result of running:
+        find . -name '*.[ch]' -exec bash -c 'expand "$1" > "$1".new; mv "$1".new "$1"' bash {} \;
+        on the code base.
+
+M	_mutt_regex.h
+M	account.c
+M	addrbook.c
+M	alias.c
+M	attach.c
+M	autocrypt/autocrypt_acct_menu.c
+M	background.c
+M	bcache.c
+M	browser.c
+M	browser.h
+M	buffer.c
+M	buffer.h
+M	buffy.c
+M	buffy.h
+M	charset.c
+M	charset.h
+M	color.c
+M	commands.c
+M	compose.c
+M	copy.c
+M	crypt-gpgme.c
+M	crypt-mod-pgp-classic.c
+M	crypt-mod-pgp-gpgme.c
+M	crypt-mod-smime-classic.c
+M	crypt-mod-smime-gpgme.c
+M	crypt-mod.h
+M	crypt.c
+M	curs_lib.c
+M	curs_main.c
+M	date.c
+M	dotlock.c
+M	dotlock.h
+M	edit.c
+M	editmsg.c
+M	enter.c
+M	gnupgparse.c
+M	group.c
+M	handler.c
+M	hash.c
+M	hcache.c
+M	hdrline.c
+M	headers.c
+M	history.c
+M	hook.c
+M	imap/browse.c
+M	imap/imap.c
+M	imap/imap_private.h
+M	imap/message.c
+M	imap/message.h
+M	imap/utf7.c
+M	imap/util.c
+M	init.c
+M	init.h
+M	keymap.c
+M	keymap.h
+M	lib.c
+M	lib.h
+M	mailbox.h
+M	main.c
+M	mbox.c
+M	md5.c
+M	md5.h
+M	menu.c
+M	mh.c
+M	mutt.h
+M	mutt_crypt.h
+M	mutt_curses.h
+M	mutt_idna.h
+M	mutt_menu.h
+M	mutt_regex.h
+M	mutt_socket.c
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+M	muttlib.c
+M	mx.c
+M	pager.c
+M	pager.h
+M	parse.c
+M	pattern.c
+M	pgp.c
+M	pgpewrap.c
+M	pgpinvoke.c
+M	pgpkey.c
+M	pgplib.c
+M	pgpmicalg.c
+M	pgppacket.c
+M	pgppacket.h
+M	pgppubring.c
+M	pop.c
+M	pop.h
+M	pop_auth.c
+M	pop_lib.c
+M	postpone.c
+M	query.c
+M	recvcmd.c
+M	regex.c
+M	remailer.c
+M	rfc1524.c
+M	rfc2047.c
+M	rfc2231.c
+M	rfc822.c
+M	rfc822.h
+M	score.c
+M	send.c
+M	sendlib.c
+M	sha1.c
+M	sidebar.c
+M	smime.c
+M	smtp.c
+M	sort.h
+M	strdup.c
+M	strtok_r.c
+M	thread.c
+M	url.c
+
+2026-01-28 15:41:26 +0800  Kevin J. McCarthy  <kevin@8t8.us> (1bf0b214)
+
+        * Convert initial tabs to spaces.
+        
+        The output of running:
+        find . -name '*.[ch]' -exec bash -c 'expand -i "$1" > "$1".new; mv "$1".new "$1"' bash {} \;
+        on the repository.
+
+M	_mutt_regex.h
+M	addrbook.c
+M	alias.c
+M	attach.c
+M	attach.h
+M	autocrypt/autocrypt_acct_menu.c
+M	background.c
+M	base64.c
+M	bcache.c
+M	bcache.h
+M	browser.c
+M	buffy.c
+M	charset.c
+M	color.c
+M	commands.c
+M	complete.c
+M	compose.c
+M	copy.c
+M	copy.h
+M	crypt-gpgme.c
+M	crypt.c
+M	curs_lib.c
+M	curs_main.c
+M	date.c
+M	dotlock.c
+M	edit.c
+M	editmsg.c
+M	enter.c
+M	filter.c
+M	flags.c
+M	from.c
+M	gnupgparse.c
+M	group.c
+M	handler.c
+M	hash.c
+M	hcache.c
+M	hdrline.c
+M	help.c
+M	history.c
+M	hook.c
+M	imap/auth.c
+M	imap/auth_cram.c
+M	imap/auth_sasl.c
+M	imap/browse.c
+M	imap/command.c
+M	imap/imap.c
+M	imap/message.c
+M	imap/utf7.c
+M	imap/util.c
+M	init.c
+M	init.h
+M	keymap.c
+M	lib.c
+M	listmenu.c
+M	main.c
+M	mbox.c
+M	mbyte.c
+M	md5.c
+M	md5.h
+M	menu.c
+M	mh.c
+M	mutt.h
+M	mutt_curses.h
+M	mutt_sasl.c
+M	mutt_socket.c
+M	mutt_ssl.c
+M	mutt_ssl_gnutls.c
+M	mutt_tunnel.c
+M	mutt_zstrm.c
+M	muttlib.c
+M	mx.c
+M	pager.c
+M	parse.c
+M	pattern.c
+M	pgp.c
+M	pgp.h
+M	pgpinvoke.c
+M	pgpkey.c
+M	pgpmicalg.c
+M	pgppacket.c
+M	pgppubring.c
+M	pop.c
+M	pop_auth.c
+M	pop_lib.c
+M	postpone.c
+M	query.c
+M	recvattach.c
+M	recvcmd.c
+M	regex.c
+M	remailer.c
+M	rfc1524.c
+M	rfc2047.c
+M	rfc2231.c
+M	rfc3676.c
+M	rfc822.c
+M	safe_asprintf.c
+M	score.c
+M	send.c
+M	sendlib.c
+M	sha1.c
+M	sidebar.c
+M	signal.c
+M	smime.c
+M	smtp.c
+M	sort.c
+M	status.c
+M	strsep.c
+M	strtok_r.c
+M	system.c
+M	thread.c
+M	url.c
+
+2026-01-27 19:42:21 +0800  Kevin J. McCarthy  <kevin@8t8.us> (32993f5c)
+
+        * Remove unused return_path from is_from() call.
+        
+        mutt_read_rfc822_header() isn't making use of the return path, so pass
+        NULL, as other callers do.
+
+M	parse.c
+
+2026-01-27 11:42:12 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4f794bf8)
+
+        * Initial try at a gitlab issue template.
+
+A	.gitlab/issue_templates/Default.md
+
+2026-01-16 11:22:58 +0800  Kevin J. McCarthy  <kevin@8t8.us> (71f3e314)
+
+        * Switch to MBOX_SEP in other places in mbox.c.
+        
+        This just helps make the code a bit more readable.
+
+M	mbox.c
+
+2026-01-17 12:57:39 +0800  Kevin J. McCarthy  <kevin@8t8.us> (29f3bdae)
+
+        * Don't propagate missing mbox separators when copying.
+        
+        When one is missing, include the previous newline as part of the
+        message.
+        
+        This addresses ticket 415.  It's not a perfect solution, but it stops
+        the problem from propagating into other mbox files.
+
+M	mbox.c
+
+2022-06-13 19:33:15 -0700  Kevin J. McCarthy  <kevin@8t8.us> (be809294)
+
+        * Improve mbox parsing to address ticket 415.
+        
+        Check for newline separators between messages.  To allow parsing of
+        old mbox files, merely warn in the debug log, but continue allowing
+        parsing.
+        
+        Track when a content-length delimited message is not follow by a From_
+        line.  In that case, abort since it means there is some kind of
+        corruption and a message will otherwise likely be silently ignored.
+
+M	mbox.c
+M	mx.h
+
 2026-06-12 10:59:57 +0800  Kevin J. McCarthy  <kevin@8t8.us> (dcb917dc)
 
         * Update UPDATING files for 2.3.3 release.

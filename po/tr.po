@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-25 05:21+0300\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-05-25 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://gitlab.com/bitigchi/mutt\n"
@@ -1931,15 +1931,21 @@ msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- S/MIME ile şifrelenmiş bilginin sonu --]\n"
 
 #: crypt-gpgme.c:3817
-msgid "[Can't display this user ID(unknown encoding)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(unknown encoding)]"
+msgid "[Can't display this user ID (unknown encoding)]"
 msgstr "[Bu kullanıcı kimliği görüntülenemiyor (bilinmeyen kodlama)]"
 
 #: crypt-gpgme.c:3819
-msgid "[Can't display this user ID(invalid encoding)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(invalid encoding)]"
+msgid "[Can't display this user ID (invalid encoding)]"
 msgstr "[Bu kullanıcı kimliği görüntülenemiyor (geçersiz kodlama)]"
 
 #: crypt-gpgme.c:3824
-msgid "[Can't display this user ID(invalid DN)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(invalid DN)]"
+msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Bu kullanıcı kimliği görüntülenemiyor (geçersiz DN)]"
 
 #. L10N:
@@ -4692,7 +4698,7 @@ msgstr "Üstbilgiden sonrasına zaten atlandı."
 msgid "No text past headers."
 msgstr "Üstbilgi sonrasında metin yok."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "çok parçalı iletinin sınırlama parametresi yok!"
 

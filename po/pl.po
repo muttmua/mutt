@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mutt 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/muttmua/mutt/-/issues\n"
-"POT-Creation-Date: 2026-05-25 10:21+0800\n"
+"POT-Creation-Date: 2026-06-12 10:08+0800\n"
 "PO-Revision-Date: 2026-05-30 16:08+0200\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <mutt-po@mutt.org>\n"
@@ -1935,15 +1935,23 @@ msgid "[-- End of S/MIME encrypted data --]\n"
 msgstr "[-- Koniec danych zaszyfrowanych S/MIME. --]\n"
 
 #: crypt-gpgme.c:3817
-msgid "[Can't display this user ID(unknown encoding)]"
-msgstr "[Nie można wyświetlić identyfikatora tego użytkownika (nieznane kodowanie)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(unknown encoding)]"
+msgid "[Can't display this user ID (unknown encoding)]"
+msgstr ""
+"[Nie można wyświetlić identyfikatora tego użytkownika (nieznane kodowanie)]"
 
 #: crypt-gpgme.c:3819
-msgid "[Can't display this user ID(invalid encoding)]"
-msgstr "[Nie można wyświetlić identyfikatora tego użytkownika (błędne kodowanie)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(invalid encoding)]"
+msgid "[Can't display this user ID (invalid encoding)]"
+msgstr ""
+"[Nie można wyświetlić identyfikatora tego użytkownika (błędne kodowanie)]"
 
 #: crypt-gpgme.c:3824
-msgid "[Can't display this user ID(invalid DN)]"
+#, fuzzy
+#| msgid "[Can't display this user ID(invalid DN)]"
+msgid "[Can't display this user ID (invalid DN)]"
 msgstr "[Nie można wyświetlić identyfikatora tego użytkownika (błędny DN)]"
 
 #. L10N:
@@ -4700,7 +4708,7 @@ msgstr "Już przeniesiono poza nagłówki."
 msgid "No text past headers."
 msgstr "Brak tekstu poza nagłówkami."
 
-#: parse.c:715
+#: parse.c:720
 msgid "multipart message has no boundary parameter!"
 msgstr "wieloczęściowy list nie posiada wpisu ograniczającego!"
 
