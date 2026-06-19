@@ -17,6 +17,8 @@ packages:
 - urlview
 sources:
 - https://git.sr.ht/~mutt/mutt
+environment:
+  NPROC: '8'
 tasks:
 - check: |
     cd mutt
@@ -26,32 +28,16 @@ tasks:
 
 - default: |
     cd mutt
-    autoreconf -if
-    ./configure
-    make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build default
 
 - without-wc-funcs: |
     cd mutt
-    autoreconf -if
-    ./configure \
-        --without-wc-funcs
-    make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build without_wc_funcs
 
-- original: |
+- original_freebsd: |
     cd mutt
-    autoreconf -if
-    ./configure \
-        --enable-gpgme \
-        --enable-pop \
-        --enable-imap \
-        --enable-smtp \
-        --enable-hcache \
-        --enable-sidebar \
-        --with-kyotocabinet=/usr/local \
-        --with-mailpath=/var/spool/mail \
-        --with-curses \
-        --with-ssl \
-        --without-sasl \
-        --with-libiconv-prefix=/usr/local \
-        --with-libintl-prefix=/usr/local
-      make -j4 CFLAGS='-Wall -Werror'
+    ./.builds/build original_freebsd
+
+- lto: |
+    cd mutt
+    ./.builds/build lto

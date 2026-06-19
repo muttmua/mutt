@@ -1,0 +1,117 @@
+#!/bin/sh
+
+# Build and test multiple build configurations
+# USAGE: build [conf]...
+
+# Environment: CFLAGS and NPROC, see below.
+
+# If the script is called without any arguments it will automagically collect
+# all build configurations and run them all.
+
+# Every build configuration is a function. Make sure the function name is at
+# the start of the line and does only contain characters a-z and '_'. Function
+# names starting with an underscore are utility functions and will not be
+# collected.
+
+cflags="-Werror -O2 $CFLAGS"
+dft_flags="$cflags"
+nproc=${NPROC:-1}
+
+_die()
+{
+	>&2 printf "FAILED: Task: %s Step: %s\n" "$2" "$3"
+	exit "$1"
+}
+
+
+default()
+{
+	./configure
+}
+
+lto()
+{
+	cflags="-flto $cflags"
+	./configure
+}
+
+openbsd()
+{
+	./configure \
+		--enable-compressed \
+		--enable-debug \
+		--enable-external_dotlock \
+		--disable-fcntl \
+		--enable-flock \
+		--with-idn2 \
+		--enable-imap \
+		--enable-pop \
+		--enable-sidebar \
+		--enable-smtp \
+		--mandir=${PREFIX}/man \
+		--with-docdir="${PREFIX}/share/doc/mutt" \
+		--with-ssl \
+		--enable-hcache \
+		--with-qdbm
+}
+
+original()
+{
+	./configure \
+		--enable-gpgme \
+		--enable-pop \
+		--enable-imap \
+		--enable-smtp \
+		--enable-hcache \
+		--enable-sidebar \
+		--without-included-gettext \
+		--with-mailpath=/var/spool/mail \
+		--with-curses \
+		--with-ssl \
+		--with-sasl \
+		--with-idn2
+}
+
+original_freebsd()
+{
+	./configure \
+		--enable-gpgme \
+		--enable-pop \
+		--enable-imap \
+		--enable-smtp \
+		--enable-hcache \
+		--enable-sidebar \
+		--with-kyotocabinet=/usr/local \
+		--with-mailpath=/var/spool/mail \
+		--with-curses \
+		--with-ssl \
+		--without-sasl \
+		--with-libiconv-prefix=/usr/local \
+		--with-libintl-prefix=/usr/local
+}
+
+tcc()
+{
+	CC=tcc ./configure
+}
+
+without_wc_funcs()
+{
+	./configure \
+		--without-wc-funcs
+}
+
+# If no arguments were passed, get all the above function names (except _die)
+# and drop the parentheses.
+# shellcheck disable=SC2046
+test "$1" || set -- $(sed -n '/^[a-z][a-z_]\{1,\}()$/s/()//p' "$0")
+
+autoreconf -fi
+
+for conf
+do
+	cflags="$dft_flags"
+	make distclean || :
+	$conf || _die "$?" "$conf" configure
+	make -j"$nproc" CFLAGS="$cflags" || _die "$?" "$conf" make
+done
