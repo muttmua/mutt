@@ -113,6 +113,7 @@
  * 0x09-0x0d (\t \n \v \f \r)
  * 0x20      (space)
  */
+#define ASCII_WS       " \t\n\v\f\r"
 #define IS_ASCII_WS(c) ((9 <= (c) && (c) <= 13) || (c) == 32)
 
 #define SKIP_ASCII_WS(c) while (IS_ASCII_WS(*(c))) c++;

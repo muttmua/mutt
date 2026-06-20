@@ -328,7 +328,7 @@ void imap_quote_string_and_backquotes(char *dest, size_t dlen, const char *src);
 void imap_unquote_string(char *s);
 void imap_munge_mbox_name(IMAP_DATA *idata, char *dest, size_t dlen, const char *src);
 void imap_unmunge_mbox_name(IMAP_DATA *idata, char *s);
-int imap_wordcasecmp(const char *a, const char *b);
+int imap_wordcaseeq(const char *a, const char *b);
 SEQSET_ITERATOR *mutt_seqset_iterator_new(const char *seqset);
 int mutt_seqset_iterator_next(SEQSET_ITERATOR *iter, unsigned int *next);
 void mutt_seqset_iterator_free(SEQSET_ITERATOR **p_iter);

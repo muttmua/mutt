@@ -630,7 +630,7 @@ static void cmd_parse_capability(IMAP_DATA *idata, char *s)
   while (*s)
   {
     for (x = 0; x < CAPMAX; x++)
-      if (imap_wordcasecmp(Capabilities[x], s) == 0)
+      if (imap_wordcaseeq(Capabilities[x], s))
       {
         mutt_bit_set(idata->capabilities, x);
         break;

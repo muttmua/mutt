@@ -880,26 +880,17 @@ void imap_unmunge_mbox_name(IMAP_DATA *idata, char *s)
   FREE(&buf);
 }
 
-/* imap_wordcasecmp: find word a in word list b */
-int imap_wordcasecmp(const char *a, const char *b)
+/* imap_wordcaseeq:
+ *
+ * Checks if word a is case-independently equal to the initial
+ * ASCII_WS delimited word in word list b. */
+int imap_wordcaseeq(const char *a, const char *b)
 {
-  char tmp[SHORT_STRING];
-  const char *s = b;
-  int i;
+  size_t a_len, b_len;
 
-  tmp[SHORT_STRING-1] = 0;
-  for (i=0;i < SHORT_STRING-2;i++,s++)
-  {
-    if (!*s || IS_ASCII_WS(*s))
-    {
-      tmp[i] = 0;
-      break;
-    }
-    tmp[i] = *s;
-  }
-  tmp[i+1] = 0;
-
-  return ascii_strcasecmp(a, tmp);
+  a_len = mutt_strlen(a);
+  b_len = b ? strcspn(b, ASCII_WS) : 0;
+  return (a_len == b_len) && !ascii_strncasecmp(a, b, a_len);
 }
 
 /*
