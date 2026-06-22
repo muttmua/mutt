@@ -199,9 +199,11 @@ options are:
 	SSL is not available.
 
 --with-bundled-regex
-	use bundled GNU regex instead of local regexp routines.  Many systems
-	don't have the POSIX compliant regcomp/regexec/regfree
-	routines, so this provides a way to support them.
+	use bundled GNU regex instead of local regexp routines.  Very
+	old systems may not have POSIX compliant
+	regcomp/regexec/regfree routines, so this provides a way to
+	support them.  Almost all systems nowadays should have no need
+	for this option.
 
 --without-wc-funcs
 	by default Mutt uses the functions mbrtowc(), wctomb() and
