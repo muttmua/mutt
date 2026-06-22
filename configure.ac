@@ -264,7 +264,7 @@ AC_ARG_WITH(slang, AS_HELP_STRING([--with-slang@<:@=DIR@:>@],[Use S-Lang instead
                 [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/param.h>
 #include <stdlib.h>
 
-main ()
+int main(void)
 {
 #ifdef BSD
         exit (0);
@@ -472,7 +472,7 @@ AC_CACHE_CHECK([whether your system's regexp library is completely broken],
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <unistd.h>
 #include <regex.h>
-int main() {
+int main(void) {
   regex_t blah;
   regmatch_t p;
   p.rm_eo = p.rm_eo;
@@ -1297,7 +1297,7 @@ AC_CACHE_CHECK([whether this iconv is good enough], mutt_cv_iconv_good,
         LIBS="$LIBS $LIBICONV"
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <iconv.h>
-int main()
+int main(void)
 {
   iconv_t cd;
 changequote(, )dnl
@@ -1326,7 +1326,7 @@ AC_CACHE_CHECK([whether iconv is non-transcribing], mutt_cv_iconv_nontrans,
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <iconv.h>
 #include <string.h>
-int main()
+int main(void)
 {
   iconv_t cd;
   char *ib;
