@@ -24,7 +24,7 @@
 # include "config.h"
 #endif
 
-#ifndef HAVE_WC_FUNCS
+#ifndef HAVE_WCWIDTH
 
 #include "mutt.h"
 #include "mbyte.h"
@@ -168,7 +168,7 @@ int wcwidth_ucs(wchar_t ucs)
       (ucs >= 0x30000 && ucs <= 0x3fffd)));
 }
 
-#endif /* !HAVE_WC_FUNCS */
+#endif /* !HAVE_WCWIDTH */
 
 #if 0 /* original */
 int wcswidth(const wchar_t *pwcs, size_t n)

@@ -95,12 +95,6 @@ tcc()
 	CC=tcc ./configure
 }
 
-without_wc_funcs()
-{
-	./configure \
-		--without-wc-funcs
-}
-
 # If no arguments were passed, get all the above function names (except _die)
 # and drop the parentheses.
 # shellcheck disable=SC2046

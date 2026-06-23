@@ -477,10 +477,10 @@ static void show_version(void)
     "-LOCALES_HACK  "
 #endif
 
-#ifdef HAVE_WC_FUNCS
-    "+HAVE_WC_FUNCS  "
+#ifdef HAVE_WCWIDTH
+    "+HAVE_WCWIDTH  "
 #else
-    "-HAVE_WC_FUNCS  "
+    "-HAVE_WCWIDTH  "
 #endif
 
 #ifdef HAVE_LANGINFO_CODESET

@@ -126,10 +126,6 @@ options are:
 	you leave it unset, Mutt will attempt to use isprint() if either
 	of the environment variables LANG, LC_ALL or LC_CTYPE is set,
 	and will revert to the ISO-8859-* range if they aren't.
-	If you need --enable-locales-fix then you will probably need
-	--without-wc-funcs too. However, on a correctly configured
-	modern system you shouldn't need either (try setting LANG,
-	LC_ALL or LC_CTYPE instead).
 
 --enable-exact-address
 	By default, Mutt will rewrite all addresses in the form
@@ -204,19 +200,6 @@ options are:
 	regcomp/regexec/regfree routines, so this provides a way to
 	support them.  Almost all systems nowadays should have no need
 	for this option.
-
---without-wc-funcs
-	by default Mutt uses the functions mbrtowc(), wctomb() and
-	wcwidth() provided by the system, when they are available.
-	With this option Mutt will use its own version of those
-	functions, which should work with 8-bit display charsets, UTF-8,
-	euc-jp or shift_jis, even if the system doesn't normally support
-	those multibyte charsets.
-
-	If you find Mutt is displaying non-ascii characters as octal
-	escape sequences (e.g. \243), even though you have set LANG and
-	LC_CTYPE correctly, then you might find you can solve the problem
-	with either or both of --enable-locales-fix and --without-wc-funcs.
 
 --with-exec-shell=SHELL
 	on some versions of unix, /bin/sh has a bug that makes using emacs

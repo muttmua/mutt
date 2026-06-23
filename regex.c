@@ -80,12 +80,8 @@
 
 /* For platform which support the ISO C amendment 1 functionality we
    support user defined character classes.  */
-#ifdef HAVE_WCHAR_H
-# include <wchar.h>
-#endif
-#if defined(HAVE_WCTYPE_H) && defined(HAVE_WC_FUNCS)
-# include <wctype.h>
-#endif
+#include <wchar.h>
+#include <wctype.h>
 
 /* This is for other GNU distributions with internationalized messages.  */
 #if HAVE_LIBINTL_H || defined (_LIBC)
@@ -1691,16 +1687,10 @@ typedef struct
        }                                                                \
     }
 
-#if defined _LIBC || (defined HAVE_WCTYPE_H && defined HAVE_WCHAR_H)
 /* The GNU C library provides support for user-defined character classes
    and the functions from ISO C amendment 1.  */
 # ifdef CHARCLASS_NAME_MAX
 #  define CHAR_CLASS_MAX_LENGTH CHARCLASS_NAME_MAX
-# else
-/* This shouldn't happen but some implementation might still have this
-   problem.  Use a reasonable default value.  */
-#  define CHAR_CLASS_MAX_LENGTH 256
-# endif
 
 # define IS_CHAR_CLASS(string) wctype (string)
 #else
@@ -2191,7 +2181,6 @@ regex_compile (pattern, size, syntax, bufp)
                        the leading `:' and `[' (but set bits for them).  */
                     if (c == ':' && *p == ']')
                       {
-#if defined _LIBC || (defined HAVE_WC_FUNCS && defined HAVE_WCTYPE_H && defined HAVE_WCHAR_H)
                         boolean is_lower = STREQ (str, "lower");
                         boolean is_upper = STREQ (str, "upper");
                         wctype_t wt;
@@ -2219,55 +2208,6 @@ regex_compile (pattern, size, syntax, bufp)
                           }
 
                         had_char_class = true;
-#else
-                        int ch;
-                        boolean is_alnum = STREQ (str, "alnum");
-                        boolean is_alpha = STREQ (str, "alpha");
-                        boolean is_blank = STREQ (str, "blank");
-                        boolean is_cntrl = STREQ (str, "cntrl");
-                        boolean is_digit = STREQ (str, "digit");
-                        boolean is_graph = STREQ (str, "graph");
-                        boolean is_lower = STREQ (str, "lower");
-                        boolean is_print = STREQ (str, "print");
-                        boolean is_punct = STREQ (str, "punct");
-                        boolean is_space = STREQ (str, "space");
-                        boolean is_upper = STREQ (str, "upper");
-                        boolean is_xdigit = STREQ (str, "xdigit");
-
-                        if (!IS_CHAR_CLASS (str))
-                          FREE_STACK_RETURN (REG_ECTYPE);
-
-                        /* Throw away the ] at the end of the character
-                           class.  */
-                        PATFETCH (c);
-
-                        if (p == pend) FREE_STACK_RETURN (REG_EBRACK);
-
-                        for (ch = 0; ch < 1 << BYTEWIDTH; ch++)
-                          {
-                            /* This was split into 3 if's to
-                               avoid an arbitrary limit in some compiler.  */
-                            if (   (is_alnum  && ISALNUM (ch))
-                                || (is_alpha  && ISALPHA (ch))
-                                || (is_blank  && ISBLANK (ch))
-                                || (is_cntrl  && ISCNTRL (ch)))
-                              SET_LIST_BIT (ch);
-                            if (   (is_digit  && ISDIGIT (ch))
-                                || (is_graph  && ISGRAPH (ch))
-                                || (is_lower  && ISLOWER (ch))
-                                || (is_print  && ISPRINT (ch)))
-                              SET_LIST_BIT (ch);
-                            if (   (is_punct  && ISPUNCT (ch))
-                                || (is_space  && ISSPACE (ch))
-                                || (is_upper  && ISUPPER (ch))
-                                || (is_xdigit && ISXDIGIT (ch)))
-                              SET_LIST_BIT (ch);
-                            if (   translate && (is_upper || is_lower)
-                                && (ISUPPER (ch) || ISLOWER (ch)))
-                              SET_LIST_BIT (ch);
-                          }
-                        had_char_class = true;
-#endif  /* libc || wctype.h */
                       }
                     else
                       {

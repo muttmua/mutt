@@ -29,10 +29,6 @@ tasks:
     cd mutt
     ./.builds/build default
 
-- without-wc-funcs: |
-    cd mutt
-    ./.builds/build without_wc_funcs
-
 - original: |
     cd mutt
     ./.builds/build original

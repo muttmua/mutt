@@ -38,12 +38,9 @@
 #ifdef __APPLE_CC__
 #define _DONT_USE_CTYPE_INLINE_
 #endif
-#ifdef HAVE_WCHAR_H
-# include <wchar.h>
-#endif
-#if defined(HAVE_WCTYPE_H) && defined(HAVE_WC_FUNCS)
-# include <wctype.h>
-#endif
+
+#include <wchar.h>
+#include <wctype.h>
 
 #ifndef _POSIX_PATH_MAX
 #include <limits.h>
@@ -62,13 +59,6 @@
 #include "charset.h"
 #include "buffer.h"
 #include "color.h"
-
-#ifndef HAVE_WC_FUNCS
-# ifdef MB_LEN_MAX
-#  undef MB_LEN_MAX
-# endif
-# define MB_LEN_MAX 16
-#endif
 
 #ifdef HAVE_FGETS_UNLOCKED
 # ifdef fgets

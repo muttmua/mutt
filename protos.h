@@ -448,9 +448,6 @@ int mutt_from_base64(char*, const char*, size_t);
 void mutt_buffer_to_base64(BUFFER *, const unsigned char *, size_t);
 int mutt_buffer_from_base64(BUFFER *, const char *);
 
-/* utf8.c */
-int mutt_wctoutf8(char *s, unsigned int c, size_t buflen);
-
 #ifdef LOCALES_HACK
 #define IsPrint(c) (isprint((unsigned char)(c)) ||      \
                     ((unsigned char)(c) >= 0xa0))

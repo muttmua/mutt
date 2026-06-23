@@ -32,10 +32,6 @@ tasks:
     cd mutt
     ./.builds/build default
 
-- without-wc-funcs: |
-    cd mutt
-    ./.builds/build without_wc_funcs
-
 - original_freebsd: |
     cd mutt
     ./.builds/build original_freebsd
