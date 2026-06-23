@@ -937,7 +937,7 @@ int main(int argc, char **argv, char **environ)
       else
       {
         exit_code = 1;
-        printf("%s\n", alias_queries->data);
+        printf("%s\n", NONULL(alias_queries->data));
       }
     }
     mutt_free_list(&alias_queries);
@@ -1243,7 +1243,7 @@ int main(int argc, char **argv, char **environ)
             mutt_endwin(NULL);
             set_option(OPTNOCURSES);
           }
-          fprintf(stderr, _("%s: unable to attach file.\n"), t->data);
+          fprintf(stderr, _("%s: unable to attach file.\n"), NONULL(t->data));
           mutt_free_list(&attach);
           goto cleanup_and_exit;
         }
