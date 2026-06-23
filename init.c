@@ -3542,7 +3542,7 @@ int mutt_query_variables(LIST *queries)
 
   for (p = queries; p; p = p->next)
   {
-    snprintf(command, sizeof(command), "set ?%s\n", p->data);
+    snprintf(command, sizeof(command), "set ?%s\n", NONULL(p->data));
     if (mutt_parse_rc_line(command, &err) == -1)
     {
       fprintf(stderr, "%s\n", err.data);
