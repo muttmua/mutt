@@ -624,9 +624,6 @@ static void start_curses(void)
 #if HAVE_TYPEAHEAD
   typeahead(-1);       /* simulate smooth scrolling */
 #endif
-#if HAVE_META
-  meta(stdscr, TRUE);
-#endif
   init_extended_keys();
   mutt_reflow_windows();
 }
