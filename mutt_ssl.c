@@ -46,6 +46,15 @@
 #define SSL_has_pending SSL_pending
 #endif
 
+/* Starting OpenSSL v4, the ASN1_STRING type is now opaque */
+#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x40000000L)
+  #define mutt_get_asn1_string_length(str) ASN1_STRING_length((str))
+  #define mutt_get_asn1_string_data(str) ASN1_STRING_get0_data((str))
+#else
+  #define mutt_get_asn1_string_length(str) (str)->length
+  #define mutt_get_asn1_string_data(str) (str)->data
+#endif
+
 #undef _
 
 #include <string.h>
@@ -982,11 +991,13 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
       subj_alt_name = sk_GENERAL_NAME_value(subj_alt_names, i);
       if (subj_alt_name->type == GEN_DNS)
       {
+        int subj_alt_name_len = mutt_get_asn1_string_length(subj_alt_name->d.ia5);
+        const char *subj_alt_name_str = (const char *) mutt_get_asn1_string_data(subj_alt_name->d.ia5);
+
         has_dns_entry = 1;
-        if (subj_alt_name->d.ia5->length >= 0 &&
-            mutt_strlen((char *)subj_alt_name->d.ia5->data) == (size_t)subj_alt_name->d.ia5->length &&
-            (match_found = hostname_match(hostname_ascii,
-                                          (char *)(subj_alt_name->d.ia5->data))))
+        if (subj_alt_name_len >= 0 &&
+            mutt_strlen(subj_alt_name_str) == (size_t) subj_alt_name_len &&
+            (match_found = hostname_match(hostname_ascii, subj_alt_name_str)))
         {
           break;
         }
