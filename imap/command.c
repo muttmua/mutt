@@ -113,7 +113,7 @@ int imap_cmd_step(IMAP_DATA *idata)
     {
       safe_realloc(&idata->buf, idata->blen + IMAP_CMD_BUFSIZE);
       idata->blen = idata->blen + IMAP_CMD_BUFSIZE;
-      muttdbg(3, "grew buffer to %u bytes", idata->blen);
+      muttdbg(3, "grew buffer to %zu bytes", idata->blen);
     }
 
     /* back up over '\0' */
@@ -139,7 +139,7 @@ int imap_cmd_step(IMAP_DATA *idata)
   {
     safe_realloc(&idata->buf, IMAP_CMD_BUFSIZE);
     idata->blen = IMAP_CMD_BUFSIZE;
-    muttdbg(3, "imap_cmd_step: shrank buffer to %u bytes", idata->blen);
+    muttdbg(3, "imap_cmd_step: shrank buffer to %zu bytes", idata->blen);
   }
 
   idata->lastread = time(NULL);

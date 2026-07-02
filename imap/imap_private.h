@@ -190,7 +190,7 @@ typedef struct
   unsigned int seqno;
   time_t lastread; /* last time we read a command for the server */
   char *buf;
-  unsigned int blen;
+  size_t blen;
 
   /* If nonzero, we can send UTF-8, and the server will use UTF8 rather
    * than mUTF7 */
