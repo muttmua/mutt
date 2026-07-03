@@ -1538,12 +1538,11 @@ static void align_to_msg(const char *msg, const char *key, STATE *s)
   state_puts(key, s);
 }
 
-static void show_fingerprint(gpgme_key_t key, STATE *state)
+static void show_fingerprint(const char *msg, gpgme_key_t key, STATE *state)
 {
   const char *s;
   int i, is_pgp;
   char *buf, *p;
-  const char *prefix = _("Fingerprint: ");
 
   if (!key)
     return;
@@ -1552,9 +1551,9 @@ static void show_fingerprint(gpgme_key_t key, STATE *state)
     return;
   is_pgp = (key->protocol == GPGME_PROTOCOL_OpenPGP);
 
-  buf = safe_malloc( strlen(prefix) + strlen(s) * 4 + 2 );
-  strcpy(buf, prefix); /* __STRCPY_CHECKED__ */
-  p = buf + strlen(buf);
+  align_to_msg(msg, _("Fingerprint: "), state);
+  buf = safe_malloc( strlen(s) * 4 + 2 );
+  p = buf;
   if (is_pgp && strlen(s) == 40)
     {  /* PGP v4 style formatted. */
       for (i=0; *s && s[1] && s[2] && s[3] && s[4]; s += 4, i++)
@@ -1648,6 +1647,7 @@ static void print_smime_keyinfo(const char *msg, gpgme_signature_t sig,
 
       aka = 1;
     }
+    show_fingerprint(msg, key, s);
   }
   else
   {
@@ -1765,7 +1765,6 @@ static int show_one_sig_status(gpgme_ctx_t ctx, int idx, STATE *s)
            ultimate). */
         print_smime_keyinfo(_("Good signature from:"), sig, key, s);
         show_one_sig_validity(ctx, idx, s);
-        show_fingerprint(key,s);
         if (show_sig_summary(sum, ctx, key, idx, s, sig))
           anywarn = 1;
       }
