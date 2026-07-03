@@ -1527,6 +1527,16 @@ static int show_sig_summary(unsigned long sum,
   return severe;
 }
 
+static void align_to_msg(const char *msg, const char *key, STATE *s)
+{
+  int msgwid = mutt_strwidth(msg) - mutt_strwidth(_(key)) + 1;
+
+  if (msgwid < 0)
+    msgwid = 0;
+  for (int i = 0; i < msgwid; i++)
+    state_puts(" ", s);
+  state_puts(key, s);
+}
 
 static void show_fingerprint(gpgme_key_t key, STATE *state)
 {
@@ -1619,9 +1629,8 @@ static void show_one_sig_validity(gpgme_ctx_t ctx, int idx, STATE *s)
 static void print_smime_keyinfo(const char *msg, gpgme_signature_t sig,
                                 gpgme_key_t key, STATE *s)
 {
-  int msgwid;
   gpgme_user_id_t uids = NULL;
-  int i, aka = 0;
+  int aka = 0;
 
   state_puts(msg, s);
   state_puts(" ", s);
@@ -1633,14 +1642,7 @@ static void print_smime_keyinfo(const char *msg, gpgme_signature_t sig,
       if (uids->revoked)
         continue;
       if (aka)
-      {
-        msgwid = mutt_strwidth(msg) - mutt_strwidth(_("aka: ")) + 1;
-        if (msgwid < 0)
-          msgwid = 0;
-        for (i = 0; i < msgwid; i++)
-          state_puts(" ", s);
-        state_puts(_("aka: "), s);
-      }
+        align_to_msg(msg, _("aka: "), s);
       state_puts(uids->uid, s);
       state_puts("\n", s);
 
@@ -1666,12 +1668,7 @@ static void print_smime_keyinfo(const char *msg, gpgme_signature_t sig,
      "Jan 1 1970" is not the created date. */
   if (sig->timestamp)
   {
-    msgwid = mutt_strwidth(msg) - mutt_strwidth(_("created: ")) + 1;
-    if (msgwid < 0)
-      msgwid = 0;
-    for (i = 0; i < msgwid; i++)
-      state_puts(" ", s);
-    state_puts(_("created: "), s);
+    align_to_msg(msg, _("created: "), s);
     print_time(sig->timestamp, s);
     state_puts("\n", s);
   }
