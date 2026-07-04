@@ -9,6 +9,14 @@ http://www.mutt.org/relnotes/
 The keys used are:
   !: modified feature, -: deleted feature, +: new feature
 
+2.4.1 (2026-07-04):
+
+  ! Bug fix release.
+  ! Mutt no longer calls ncurses meta(3).  This fixes Alt keybindings
+    in the foot terminal emulator.  Removing this restores default
+    behavior back to the teriminal configuration, where it should be.
+  ! Fixes for OpenSSL 4.0 compilation.
+
 2.4.0 (2026-06-19):
 
   ! Maildir folders are now only recognized if they contain cur, new, and tmp
