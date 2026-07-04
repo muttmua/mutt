@@ -1,3 +1,144 @@
+2026-07-04 13:34:06 +0800  Kevin J. McCarthy  <kevin@8t8.us> (8ed69a5b)
+
+        * Update UPDATING file for 2.4.1 release.
+
+M	UPDATING
+
+2026-06-29 16:05:48 -0400  Acts1631  <acts1631kjv@proton.me> (a739e126)
+
+        * Prevent unsigned int overflow in imap_cmd_step buffer growth.
+        
+        The idata->blen field is unsigned int (32-bit) while the companion
+        variable len is size_t (64-bit on LP64).  When a malicious IMAP server
+        sends a response line longer than UINT_MAX bytes without newline, the
+        expression  wraps to a small value,
+        causing safe_realloc() to shrink the buffer while len retains its
+        original huge value.  The subsequent mutt_socket_readln() then writes
+        far past the shrunken allocation.
+        
+        Fix by changing idata->blen from unsigned int to size_t, matching the
+        type of len and preventing the overflow on all platforms.
+
+M	imap/command.c
+M	imap/imap_private.h
+
+2026-06-29 13:26:51 +0800  Kevin J. McCarthy  <kevin@8t8.us> (7bfd91dc)
+
+        * Fix build failures with OpenSSL 4.0
+        
+        Starting with 4.0, the ASN1_STRING is now opaque and can no longer be
+        accessed directly.
+        
+        See <https://openssl-library.org/post/2026-04-13-asn1_string/>
+        
+        Thanks to Dennis Preiser for the bug report and patch.  I've done some
+        minor cosmetic changes to the patch.
+
+M	mutt_ssl.c
+
+2026-06-24 10:12:31 +0800  Kevin J. McCarthy  <kevin@8t8.us> (7f8a0929)
+
+        * Remove ncurses meta() call.
+        
+        The meta() call enables 8-bit mode on a terminal via the smm terminfo
+        entry (or the CS8 flag).  This is an older mode that most likely isn't
+        necessary anymore.  On some terminals it allows Alt-x to be sent as an
+        8-bit value instead of Esc-x.  However, it also affects other input.
+        For more information see:
+        <https://invisible-island.net/ncurses/man/curs_inopts.3x.html#h3-meta>.
+        
+        This mode is affecting some modern terminals badly, including foot.
+        Additionally, mutt turned the mode on but did not turn it off, leaving
+        foot in a state where Alt-f/b no longer worked properly after running
+        mutt.
+
+M	main.c
+
+2026-06-23 13:09:28 +0800  Kevin J. McCarthy  <kevin@8t8.us> (f0a370b5)
+
+        * Protect against empty -A, -a, and -Q command line arguments.
+        
+        The code wasn't checking for empty values passed as command line
+        arguments in these cases.  -A caused a crash.  -a and -Q didn't crash,
+        but did trigger strange error messages.
+        
+        Add NONULL() checks around them to prevent problems.
+        
+        Thanks to Nikolas N for reporting the bug!
+
+M	init.c
+M	main.c
+
+2026-06-01 09:17:57 +0200  Rene Kita  <mail@rkta.de> (68063c83)
+
+        * Add lto stage to builds
+        
+        While at it, explicitly request to use -O2 when compiling to allow the
+        compiler to create more warnings.
+
+M	.builds/alpine.yml
+M	.builds/archlinux.yml
+M	.builds/build
+M	.builds/debian.yml
+M	.builds/freebsd.yml
+M	.builds/openbsd.yml
+
+2026-06-01 09:17:56 +0200  Rene Kita  <mail@rkta.de> (f84621fb)
+
+        * Use script to test build configurations
+        
+        This centralizes the configure command line arguments used for CI builds
+        in a single script.  It makes it easier to test locally and keeps the
+        manifests dry.
+        
+        Differences among the manifests are mostly kept as they were, this
+        can/should be cleaned up in future commit.
+
+M	.builds/alpine.yml
+M	.builds/archlinux.yml
+A	.builds/build
+M	.builds/debian.yml
+M	.builds/freebsd.yml
+M	.builds/openbsd.yml
+M	doc/devel-notes.txt
+
+2026-06-19 10:55:08 +0800  Kevin J. McCarthy  <kevin@8t8.us> (68744a27)
+
+        * automatic post-release commit for mutt-2.4.0
+
+M	ChangeLog
+M	VERSION
+M	po/bg.po
+M	po/ca.po
+M	po/cs.po
+M	po/da.po
+M	po/de.po
+M	po/el.po
+M	po/eo.po
+M	po/es.po
+M	po/et.po
+M	po/eu.po
+M	po/fi.po
+M	po/fr.po
+M	po/ga.po
+M	po/gl.po
+M	po/hu.po
+M	po/id.po
+M	po/it.po
+M	po/ja.po
+M	po/ko.po
+M	po/lt.po
+M	po/nl.po
+M	po/pl.po
+M	po/pt_BR.po
+M	po/ru.po
+M	po/sk.po
+M	po/sv.po
+M	po/tr.po
+M	po/uk.po
+M	po/zh_CN.po
+M	po/zh_TW.po
+
 2026-06-19 10:48:43 +0800  Kevin J. McCarthy  <kevin@8t8.us> (358720c8)
 
         * Update UPDATING file for 2.4.0 release.
