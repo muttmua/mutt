@@ -168,6 +168,7 @@ const struct mapping_t SortAliasMethods[] = {  /* DT_SORT_ALIAS */
 const struct mapping_t SortKeyMethods[] = {  /* DT_SORT_KEYS */
   { "address",  SORT_ADDRESS },
   { "date",     SORT_DATE },
+  { "expires",  SORT_EXPIRES },
   { "keyid",    SORT_KEYID },
   { "trust",    SORT_TRUST },
   { NULL,       0 }
@@ -2641,6 +2642,7 @@ struct option_t MuttVars[] = {
   ** .dt %c     .dd capabilities
   ** .dt %t     .dd trust/validity of the key-uid association
   ** .dt %[<s>] .dd date of the key where <s> is an \fCstrftime(3)\fP expression
+  ** .dt %(<s>) .dd expires date of the key where <s> is an \fCstrftime(3)\fP expression
   ** .de
   ** .pp
   ** (PGP only)
@@ -2834,6 +2836,7 @@ struct option_t MuttVars[] = {
   ** .dt address .dd sort alphabetically by user id
   ** .dt keyid   .dd sort alphabetically by key id
   ** .dt date    .dd sort by key creation date
+  ** .dt expires .dd sort by key expiration date
   ** .dt trust   .dd sort by the trust of the key
   ** .de
   ** .pp

@@ -152,13 +152,14 @@ static const char *pgp_entry_fmt(char *dest,
   switch (ascii_tolower(op))
   {
     case '[':
-
+    case '(':
     {
       const char *cp;
       char buf2[SHORT_STRING], *p;
       int do_locales;
       struct tm *tm;
       size_t len;
+      int expires = (op == '(');
 
       p = dest;
 
@@ -172,7 +173,7 @@ static const char *pgp_entry_fmt(char *dest,
         do_locales = 1;
 
       len = destlen - 1;
-      while (len > 0 && *cp != ']')
+      while (len > 0 && *cp != (expires ? ')' : ']'))
       {
         if (*cp == '%')
         {
@@ -196,7 +197,7 @@ static const char *pgp_entry_fmt(char *dest,
       *p = 0;
 
 
-      tm = localtime(&key->gen_time);
+      tm = localtime(expires ? &key->exp_time : &key->gen_time);
 
       if (!do_locales)
         setlocale(LC_TIME, "C");
@@ -355,6 +356,23 @@ static int pgp_compare_date(const void *a, const void *b)
           : _pgp_compare_date(a, b));
 }
 
+static int _pgp_compare_expires(const void *a, const void *b)
+{
+  int r;
+  const pgp_uid_t * const *s = (const pgp_uid_t * const *) a;
+  const pgp_uid_t * const *t = (const pgp_uid_t * const *) b;
+
+  if ((r = mutt_numeric_cmp((*s)->parent->exp_time, (*t)->parent->exp_time)))
+    return r;
+  return (mutt_strcasecmp((*s)->addr, (*t)->addr));
+}
+
+static int pgp_compare_expires(const void *a, const void *b)
+{
+  return ((PgpSortKeys & SORT_REVERSE) ? !_pgp_compare_expires(a, b)
+          : _pgp_compare_expires(a, b));
+}
+
 static int _pgp_compare_trust(const void *a, const void *b)
 {
   int r;
@@ -501,6 +519,9 @@ static pgp_key_t pgp_select_key(pgp_key_t keys,
   {
     case SORT_DATE:
       f = pgp_compare_date;
+      break;
+    case SORT_EXPIRES:
+      f = pgp_compare_expires;
       break;
     case SORT_KEYID:
       f = pgp_compare_keyid;

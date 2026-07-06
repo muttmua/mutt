@@ -3287,12 +3287,14 @@ static const char *crypt_entry_fmt(char *dest,
   switch (ascii_tolower(op))
     {
     case '[':
+    case '(':
       {
         const char *cp;
         char buf2[SHORT_STRING], *p;
         int do_locales;
         struct tm *tm;
         size_t len;
+        int expires = (op == '(');
 
         p = dest;
 
@@ -3306,7 +3308,7 @@ static const char *crypt_entry_fmt(char *dest,
           do_locales = 1;
 
         len = destlen - 1;
-        while (len > 0 && *cp != ']')
+        while (len > 0 && *cp != (expires ? ')' : ']'))
         {
           if (*cp == '%')
           {
@@ -3332,7 +3334,9 @@ static const char *crypt_entry_fmt(char *dest,
         {
           time_t tt = 0;
 
-          if (key->kobj->subkeys && (key->kobj->subkeys->timestamp > 0))
+          if (expires && key->kobj->subkeys && (key->kobj->subkeys->expires > 0))
+            tt = key->kobj->subkeys->expires;
+          else if (!expires && key->kobj->subkeys && (key->kobj->subkeys->timestamp > 0))
             tt = key->kobj->subkeys->timestamp;
 
           tm = localtime(&tt);
@@ -3537,6 +3541,32 @@ static int crypt_compare_date(const void *a, const void *b)
 {
   return ((PgpSortKeys & SORT_REVERSE) ? !_crypt_compare_date(a, b)
                                          :  _crypt_compare_date(a, b));
+}
+
+/* Compare 2 creation dates and the addresses.  For sorting. */
+static int _crypt_compare_expires(const void *a, const void *b)
+{
+  const crypt_key_t * const *s = (const crypt_key_t * const *) a;
+  const crypt_key_t * const *t = (const crypt_key_t * const *) b;
+  unsigned long ts = 0, tt = 0;
+
+  if ((*s)->kobj->subkeys && ((*s)->kobj->subkeys->expires > 0))
+    ts = (*s)->kobj->subkeys->expires;
+  if ((*t)->kobj->subkeys && ((*t)->kobj->subkeys->expires > 0))
+    tt = (*t)->kobj->subkeys->expires;
+
+  if (ts > tt)
+    return 1;
+  if (ts < tt)
+    return -1;
+
+  return mutt_strcasecmp((*s)->uid, (*t)->uid);
+}
+
+static int crypt_compare_expires(const void *a, const void *b)
+{
+  return ((PgpSortKeys & SORT_REVERSE) ? !_crypt_compare_expires(a, b)
+                                         :  _crypt_compare_expires(a, b));
 }
 
 /* Compare two trust values, the key length, the creation dates. the
@@ -4538,6 +4568,9 @@ static crypt_key_t *crypt_select_key(crypt_key_t *keys,
   {
     case SORT_DATE:
       f = crypt_compare_date;
+      break;
+    case SORT_EXPIRES:
+      f = crypt_compare_expires;
       break;
     case SORT_KEYID:
       f = crypt_compare_keyid;

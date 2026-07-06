@@ -38,6 +38,7 @@ struct pgp_keyinfo
   int flags;
   short keylen;
   time_t gen_time;
+  time_t exp_time;
   int numalg;
   const char *algorithm;
   struct pgp_keyinfo *parent;

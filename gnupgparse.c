@@ -116,6 +116,53 @@ static void fix_uid(char *uid)
   }
 }
 
+static int parse_timestamp(char *p, time_t *timestamp)
+{
+  if (strchr(p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
+  {
+    char tstr[11];
+    struct tm time;
+
+    time.tm_sec = 0;
+    time.tm_min = 0;
+    time.tm_hour = 12;
+    strncpy(tstr, p, 11);
+    tstr[4] = '\0';
+    tstr[7] = '\0';
+    if (mutt_atoi(tstr, &time.tm_year, 0) < 0)
+    {
+      p = tstr;
+      goto bail;
+    }
+    time.tm_year -= 1900;
+    if (mutt_atoi(tstr+5, &time.tm_mon, 0) < 0)
+    {
+      p = tstr+5;
+      goto bail;
+    }
+    time.tm_mon -= 1;
+    if (mutt_atoi(tstr+8, &time.tm_mday, 0) < 0)
+    {
+      p = tstr+8;
+      goto bail;
+    }
+    *timestamp = mutt_mktime(&time, 0);
+  }
+  else                  /* gpg 2.0.10+ uses seconds since 1970-01-01 */
+  {
+    unsigned long long secs;
+
+    if (mutt_atoull(p, &secs, MUTT_ATOI_ALLOW_EMPTY) < 0)
+      goto bail;
+    *timestamp = (time_t)secs;
+  }
+
+  return 0;
+
+bail:
+  return -1;
+}
+
 static pgp_key_t parse_pub_line(char *buf, int *is_subkey, pgp_key_t k)
 {
   pgp_uid_t *uid = NULL;
@@ -245,50 +292,15 @@ static pgp_key_t parse_pub_line(char *buf, int *is_subkey, pgp_key_t k)
 
       }
       case 6:                   /* timestamp (1998-02-28) */
-      {
         muttdbg(2, "time stamp: %s", p);
-
-        if (strchr(p, '-'))   /* gpg pre-2.0.10 used format (yyyy-mm-dd) */
-        {
-          char tstr[11];
-          struct tm time;
-
-          time.tm_sec = 0;
-          time.tm_min = 0;
-          time.tm_hour = 12;
-          strncpy(tstr, p, 11);
-          tstr[4] = '\0';
-          tstr[7] = '\0';
-          if (mutt_atoi(tstr, &time.tm_year, 0) < 0)
-          {
-            p = tstr;
-            goto bail;
-          }
-          time.tm_year -= 1900;
-          if (mutt_atoi(tstr+5, &time.tm_mon, 0) < 0)
-          {
-            p = tstr+5;
-            goto bail;
-          }
-          time.tm_mon -= 1;
-          if (mutt_atoi(tstr+8, &time.tm_mday, 0) < 0)
-          {
-            p = tstr+8;
-            goto bail;
-          }
-          tmp.gen_time = mutt_mktime(&time, 0);
-        }
-        else                  /* gpg 2.0.10+ uses seconds since 1970-01-01 */
-        {
-          unsigned long long secs;
-
-          if (mutt_atoull(p, &secs, MUTT_ATOI_ALLOW_EMPTY) < 0)
-            goto bail;
-          tmp.gen_time = (time_t)secs;
-        }
+        if (parse_timestamp(p, &tmp.gen_time))
+          goto bail;
         break;
-      }
-      case 7:                   /* valid for n days */
+
+      case 7:                   /* expires timestamp */
+        muttdbg(2, "expires time stamp: %s", p);
+        if (parse_timestamp(p, &tmp.exp_time))
+          goto bail;
         break;
       case 8:                   /* Local id         */
         break;
