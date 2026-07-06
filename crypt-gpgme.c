@@ -4440,6 +4440,13 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app, int secret)
           if (key_check_cap (key, KEY_CAP_CAN_SIGN))
             flags |= KEYFLAG_CANSIGN;
 
+          if (key->revoked)
+            flags |= KEYFLAG_REVOKED;
+          if (key->expired)
+            flags |= KEYFLAG_EXPIRED;
+          if (key->disabled)
+            flags |= KEYFLAG_DISABLED;
+
           for (idx = 0, uid = key->uids; uid; idx++, uid = uid->next)
             {
               k = safe_calloc (1, sizeof *k);
