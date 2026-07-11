@@ -14,7 +14,7 @@ The keys used are:
   ! Bug fix release.
   ! Mutt no longer calls ncurses meta(3).  This fixes Alt keybindings
     in the foot terminal emulator.  Removing this restores default
-    behavior back to the teriminal configuration, where it should be.
+    behavior back to the terminal configuration, where it should be.
   ! Fixes for OpenSSL 4.0 compilation.
 
 2.4.0 (2026-06-19):
