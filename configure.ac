@@ -259,9 +259,23 @@ if test $ISPELL != no; then
         AC_DEFINE_UNQUOTED(ISPELL,"$ISPELL",[ Where to find ispell on your system. ])
 fi
 
-AC_ARG_WITH(slang, AS_HELP_STRING([--with-slang@<:@=DIR@:>@],[Use S-Lang instead of ncurses]),
-        [AC_CACHE_CHECK([if this is a BSD system], mutt_cv_bsdish,
-                [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/param.h>
+dnl -- curses and s-lang --
+
+AC_ARG_WITH(slang, AS_HELP_STRING([--with-slang@<:@=DIR@:>@],[Use S-Lang instead of ncurses]),,
+            with_slang="no")
+
+AC_ARG_WITH(curses, AS_HELP_STRING([--with-curses=DIR],[Where ncurses is installed]),,
+            with_curses="yes")
+
+if test "$with_slang" = "no" && test "$with_curses" = "no"; then
+        AC_MSG_ERROR([Mutt requires either S-Lang or Curses to be enabled])
+fi
+
+dnl -- s-lang --
+
+if test "$with_slang" != "no"; then
+        AC_CACHE_CHECK([if this is a BSD system], mutt_cv_bsdish,
+                       [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/param.h>
 #include <stdlib.h>
 
 int main(void)
@@ -274,7 +288,7 @@ int main(void)
 }]])],[mutt_cv_bsdish=yes],[mutt_cv_bsdish=no],[mutt_cv_bsdish=no])])
 
         AC_MSG_CHECKING(for S-Lang)
-        if test $withval = yes; then
+        if test $with_slang = yes; then
                 if test -d $srcdir/../slang; then
                         mutt_cv_slang=$srcdir/../slang/src
                         CPPFLAGS="$CPPFLAGS -I${mutt_cv_slang}"
@@ -288,48 +302,44 @@ int main(void)
                         mutt_cv_slang=yes
                 fi
         else
-                dnl ---Check to see if $withval is a source directory
-                if test -f $withval/src/slang.h; then
-                        mutt_cv_slang=$withval/src
+                dnl ---Check to see if $with_slang is a source directory
+                if test -f $with_slang/src/slang.h; then
+                        mutt_cv_slang=$with_slang/src
                         CPPFLAGS="$CPPFLAGS -I${mutt_cv_slang}"
                         LDFLAGS="$LDFLAGS -L${mutt_cv_slang}/objs"
                 else
                         dnl ---Must be installed somewhere
-                        mutt_cv_slang=$withval
-                        if test -d $withval/include/slang; then
-                                CPPFLAGS="$CPPFLAGS -I${withval}/include/slang"
-                        elif test -d $withval/include; then
-                                CPPFLAGS="$CPPFLAGS -I${withval}/include"
+                        mutt_cv_slang=$with_slang
+                        if test -d $with_slang/include/slang; then
+                                CPPFLAGS="$CPPFLAGS -I${with_slang}/include/slang"
+                        elif test -d $with_slang/include; then
+                                CPPFLAGS="$CPPFLAGS -I${with_slang}/include"
                         fi
-                        LDFLAGS="$LDFLAGS -L${withval}/lib"
+                        LDFLAGS="$LDFLAGS -L${with_slang}/lib"
                 fi
         fi
         AC_MSG_RESULT($mutt_cv_slang)
+
         if test $mutt_cv_bsdish = yes; then
                 AC_CHECK_LIB(termlib, main)
         fi
+
         AC_DEFINE(USE_SLANG_CURSES,1,
                 [ Define if you compile with SLang instead of curses/ncurses. ])
         AC_DEFINE(HAVE_COLOR,1,[ Define if your curses library supports color. ])
         MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS resize.o"
 
-        dnl --- now that we've found it, check the link
-
         AC_CHECK_LIB(slang, SLtt_get_terminfo,
                 [MUTTLIBS="$MUTTLIBS -lslang -lm"],
                 [AC_MSG_ERROR(unable to compile.  check config.log)], -lm)
 
-        ],
+dnl -- curses --
 
-        [mutt_cv_curses=/usr
-        AC_ARG_WITH(curses, AS_HELP_STRING([--with-curses=DIR],[Where ncurses is installed]),
-                [if test x$withval != xyes; then
-                        mutt_cv_curses=$withval
-                fi
-                if test x$mutt_cv_curses != x/usr; then
-                        LDFLAGS="$LDFLAGS -L${mutt_cv_curses}/lib"
-                        CPPFLAGS="$CPPFLAGS -I${mutt_cv_curses}/include"
-                fi])
+else
+        if test "$with_curses" != "yes"; then
+                LDFLAGS="$LDFLAGS -L${with_curses}/lib"
+                CPPFLAGS="$CPPFLAGS -I${with_curses}/include"
+        fi
 
         AC_CHECK_FUNC(initscr,,[
         cf_ncurses="ncurses"
@@ -370,7 +380,9 @@ int main(void)
         fi
         AC_CHECK_FUNCS([use_extended_names])
         LIBS="$old_LIBS"
-        ])
+fi
+
+dnl -- various headers and functions --
 
 AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
 AC_CHECK_HEADERS(sys/resource.h)
