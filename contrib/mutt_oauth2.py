@@ -102,7 +102,7 @@ if path.exists():
         sys.exit('Token file has unsafe mode. Suggest deleting and starting over.')
     try:
         sub = subprocess.run(DECRYPTION_PIPE, check=True, input=path.read_bytes(),
-                             capture_output=True)
+                             capture_output=True, shell=False)
         token = json.loads(sub.stdout)
     except subprocess.CalledProcessError:
         sys.exit('Difficulty decrypting token file. Is your decryption agent primed for '
@@ -117,7 +117,7 @@ def writetokenfile():
     if 0o777 & path.stat().st_mode != 0o600:
         sys.exit('Token file has unsafe mode. Suggest deleting and starting over.')
     sub2 = subprocess.run(ENCRYPTION_PIPE, check=True, input=json.dumps(token).encode(),
-                          capture_output=True)
+                          capture_output=True, shell=False)
     path.write_bytes(sub2.stdout)
 
 
