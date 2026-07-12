@@ -329,6 +329,7 @@ void mutt_parse_content_type(char *s, BODY *ct)
   char *subtype;
 
   FREE(&ct->subtype);
+  FREE(&ct->xtype);
   mutt_free_parameter(&ct->parameter);
 
   /* First extract any existing parameters */
