@@ -110,7 +110,6 @@ HASH *mutt_make_subj_hash(CONTEXT *);
 
 char *mutt_read_rfc822_line(FILE *, char *, size_t *);
 ENVELOPE *mutt_read_rfc822_header(FILE *, HEADER *, short, short);
-HEADER *mutt_dup_header(HEADER *);
 
 int mutt_check_month(const char *);
 const char *mutt_ctime(const time_t *t);
@@ -211,7 +210,6 @@ void mutt_decode_attachment(const BODY *, STATE *);
 void mutt_decode_base64(STATE *s, LOFF_T len, int istext, iconv_t cd);
 void mutt_default_save(char *, size_t, HEADER *);
 void mutt_display_address(ENVELOPE *);
-void mutt_display_sanitize(char *);
 int mutt_edit_content_type(HEADER *, BODY *, FILE *);
 void mutt_edit_file(const char *, const char *);
 int mutt_edit_headers(const char *, SEND_CONTEXT *, int);

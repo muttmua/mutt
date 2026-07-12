@@ -382,15 +382,6 @@ LIST *mutt_copy_list(LIST *p)
   return (l);
 }
 
-HEADER *mutt_dup_header(HEADER *h)
-{
-  HEADER *hnew;
-
-  hnew = mutt_new_header();
-  memcpy(hnew, h, sizeof(HEADER));
-  return hnew;
-}
-
 void mutt_free_header(HEADER **h)
 {
   if (!h || !*h) return;
@@ -2148,15 +2139,6 @@ int state_putws(const wchar_t *ws, STATE *s)
     p++;
   }
   return 0;
-}
-
-void mutt_display_sanitize(char *s)
-{
-  for (; *s; s++)
-  {
-    if (!IsPrint(*s))
-      *s = '?';
-  }
 }
 
 void mutt_sleep(short s)

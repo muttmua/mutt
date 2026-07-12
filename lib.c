@@ -756,19 +756,6 @@ void mutt_remove_trailing_ascii_ws(char *s)
     *p = 0;
 }
 
-char *mutt_concat_path(char *d, const char *dir, const char *fname, size_t l)
-{
-  const char *fmt = "%s/%s";
-
-  if (!*fname || (*dir && dir[strlen(dir)-1] == '/'))
-    fmt = "%s%s";
-
-  fname += strspn(fname, "/");
-
-  snprintf(d, l, fmt, dir, fname);
-  return d;
-}
-
 const char *mutt_basename(const char *f)
 {
   const char *p = strrchr(f, '/');

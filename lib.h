@@ -203,7 +203,6 @@ void mutt_debug_f(const char *, const int, const char *, const int err, const ch
 
 /* The actual library functions. */
 
-char *mutt_concat_path(char *, const char *, const char *, size_t);
 char *mutt_read_line(char *, size_t *, FILE *, int *, int);
 char *mutt_skip_ascii_ws(char *);
 char *mutt_strlower(char *);
