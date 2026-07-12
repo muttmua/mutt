@@ -1128,7 +1128,7 @@ int mutt_edit_content_type(HEADER *h, BODY *b, FILE *fp)
   mutt_parse_content_type(buf, b);
 
 
-  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), NONULL(b->subtype));
+  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), b->subtype);
   type_changed = ascii_strcasecmp(tmp, obuf);
   charset_changed = ascii_strcasecmp(charset, mutt_get_parameter("charset", b->parameter));
 
@@ -1145,7 +1145,7 @@ int mutt_edit_content_type(HEADER *h, BODY *b, FILE *fp)
 
   /* inform the user */
 
-  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), NONULL(b->subtype));
+  snprintf(tmp, sizeof(tmp), "%s/%s", TYPE(b), b->subtype);
   if (type_changed)
     mutt_message(_("Content-Type changed to %s."), tmp);
   if (b->type == TYPETEXT && charset_changed)
