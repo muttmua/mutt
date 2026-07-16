@@ -153,7 +153,8 @@ int mmdf_parse_mailbox(CONTEXT *ctx)
 
       if (fgets(buf, sizeof(buf) - 1, ctx->fp) == NULL)
       {
-        /* TODO: memory leak??? */
+        mutt_free_header(&hdr);
+        ctx->hdrs[ctx->msgcount] = NULL;
         muttdbg(1, "unexpected EOF");
         break;
       }
@@ -164,6 +165,8 @@ int mmdf_parse_mailbox(CONTEXT *ctx)
       {
         if (fseeko(ctx->fp, loc, SEEK_SET) != 0)
         {
+          mutt_free_header(&hdr);
+          ctx->hdrs[ctx->msgcount] = NULL;
           muttdbg(1, "fseek() failed");
           mutt_error _("Mailbox is corrupt!");
           return (-1);

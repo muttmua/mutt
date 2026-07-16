@@ -1154,12 +1154,14 @@ int main(int argc, char **argv, char **environ)
         if (fstat(fileno(fin), &st))
         {
           perror(draftFile);
+          mutt_free_header(&context_hdr);
           goto cleanup_and_exit;
         }
         context_hdr->content->length = st.st_size;
 
         if (mutt_prepare_template(fin, NULL, msg, context_hdr, 0) < 0)
         {
+          mutt_free_header(&context_hdr);
           if (!option(OPTNOCURSES))
           {
             mutt_endwin(NULL);
