@@ -648,10 +648,7 @@ int imap_reconnect(IMAP_DATA **p_idata)
         mutt_set_flag(&new_ctx, new_hdr, MUTT_OLD, old_hdr->old);
         mutt_set_flag(&new_ctx, new_hdr, MUTT_READ, old_hdr->read);
 
-        /* TODO: the ->env check is unfortunately voodoo that I
-         * haven't taken the time to track down yet.  It's in other
-         * parts of the code but I don't know why yet. */
-        if (old_hdr->env && old_hdr->env->changed)
+        if (old_hdr->env->changed)
         {
           new_hdr->env->changed = old_hdr->env->changed;
           new_hdr->changed = 1;
@@ -1546,8 +1543,7 @@ int imap_sync_mailbox(CONTEXT *ctx, int expunge, int *index_hint)
       /* if the message has been rethreaded or attachments have been deleted
        * we delete the message and reupload it.
        * This works better if we're expunging, of course. */
-      /* TODO: why the h->env check? */
-      if ((h->env && h->env->changed) || h->attach_del)
+      if (h->env->changed || h->attach_del)
       {
         /* NOTE and TODO:
          *
@@ -1582,9 +1578,7 @@ int imap_sync_mailbox(CONTEXT *ctx, int expunge, int *index_hint)
           muttdbg(1, "imap_sync_mailbox: Error opening mailbox in append mode");
         else
           _mutt_save_message(h, appendctx, 1, 0, 0);
-        /* TODO: why the check for h->env?  Is this possible? */
-        if (h->env)
-          h->env->changed = 0;
+        h->env->changed = 0;
 #if USE_HCACHE
         idata->hcache = imap_hcache_open(idata, NULL);
 #endif

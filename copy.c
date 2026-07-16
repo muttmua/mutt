@@ -368,11 +368,10 @@ mutt_copy_header(FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
   char buffer[SHORT_STRING];
   char *temp_hdr = NULL;
 
-  if (h->env)
-    flags |= ((h->env->changed & MUTT_ENV_CHANGED_IRT) ? CH_UPDATE_IRT : 0)
-      | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0)
-      | ((h->env->changed & MUTT_ENV_CHANGED_XLABEL) ? CH_UPDATE_LABEL : 0)
-      | ((h->env->changed & MUTT_ENV_CHANGED_SUBJECT) ? CH_UPDATE_SUBJECT : 0);
+  flags |= ((h->env->changed & MUTT_ENV_CHANGED_IRT) ? CH_UPDATE_IRT : 0)
+    | ((h->env->changed & MUTT_ENV_CHANGED_REFS) ? CH_UPDATE_REFS : 0)
+    | ((h->env->changed & MUTT_ENV_CHANGED_XLABEL) ? CH_UPDATE_LABEL : 0)
+    | ((h->env->changed & MUTT_ENV_CHANGED_SUBJECT) ? CH_UPDATE_SUBJECT : 0);
 
   if (mutt_copy_hdr(in, out, h->offset, h->content->offset, flags, prefix) == -1)
     return -1;

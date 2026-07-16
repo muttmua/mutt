@@ -598,8 +598,11 @@ int mutt_prepare_template(FILE *fp, CONTEXT *ctx, HEADER *newhdr, HEADER *hdr,
 
   bfp = fp;
 
-  /* parse the message header and MIME structure */
-
+  /* parse the message header and MIME structure
+   *
+   * Note that in some cases the hdr parameter does not contain an envelope,
+   * e.g. from main.c draftFile processing
+   */
   fseeko(fp, hdr->offset, SEEK_SET);
   newhdr->offset = hdr->offset;
   /* enable header weeding for resent messages */
