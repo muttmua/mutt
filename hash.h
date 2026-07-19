@@ -34,7 +34,7 @@ struct hash_elem
 
 typedef struct
 {
-  int nelem;
+  int bucket_count;                  /* size of hash->table array */
   unsigned int strdup_keys : 1;      /* if set, the key->strkey is strdup'ed */
   unsigned int allow_dups : 1;       /* if set, duplicate keys are allowed */
   struct hash_elem **table;
