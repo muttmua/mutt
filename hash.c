@@ -117,15 +117,46 @@ HASH *int_hash_create(int bucket_count, int flags)
   return table;
 }
 
+static void resize_hash(HASH *table)
+{
+  struct hash_elem **old_buckets = table->table;
+  int old_bucket_count = table->bucket_count;
+  int bucket, hash;
+  struct hash_elem *elem, *next_elem;
+
+  while (table->elem_count > table->bucket_count * 1.2)
+    table->bucket_count *= 2;
+  table->table = safe_calloc(table->bucket_count, sizeof(struct hash_elem *));
+
+  for (bucket = 0; bucket < old_bucket_count; bucket++)
+  {
+    elem = old_buckets[bucket];
+    while (elem)
+    {
+      next_elem = elem->next;
+
+      hash = table->gen_hash(elem->key, table->bucket_count);
+      elem->next = table->table[hash];
+      table->table[hash] = elem;
+
+      elem = next_elem;
+    }
+  }
+  FREE(&old_buckets);
+}
+
 /* table        hash table to update
  * key          key to hash on
  * data         data to associate with `key'
  * allow_dup    if nonzero, duplicate keys are allowed in the table
  */
-static int union_hash_insert(HASH * table, union hash_key key, void *data)
+static int union_hash_insert(HASH *table, union hash_key key, void *data)
 {
   struct hash_elem *ptr;
   unsigned int h;
+
+  if (table->elem_count > table->bucket_count * 1.2)
+    resize_hash(table);
 
   ptr = (struct hash_elem *) safe_malloc(sizeof(struct hash_elem));
   h = table->gen_hash(key, table->bucket_count);
