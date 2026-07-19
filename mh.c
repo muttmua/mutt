@@ -65,7 +65,6 @@ struct maildir
 {
   HEADER *h;
   char *canon_fname;
-  unsigned header_parsed:1;
 #ifdef HAVE_DIRENT_D_INO
   ino_t inode;
 #endif /* HAVE_DIRENT_D_INO */
@@ -1101,40 +1100,18 @@ static void mh_sort_natural(CONTEXT *ctx, struct maildir **md)
   *md = maildir_sort(*md, (size_t) -1, md_cmp_path);
 }
 
-#if HAVE_DIRENT_D_INO
-static struct maildir *skip_duplicates(struct maildir *p, struct maildir **last)
-{
-  /*
-   * Skip ahead to the next non-duplicate message.
-   *
-   * p should never reach NULL, because we couldn't have reached this point unless
-   * there was a message that needed to be parsed.
-   *
-   * the check for p->header_parsed is likely unnecessary since the dupes will most
-   * likely be at the head of the list.  but it is present for consistency with
-   * the check at the top of the for() loop in maildir_delayed_parsing().
-   */
-  while (!p->h || p->header_parsed)
-  {
-    *last = p;
-    p = p->next;
-  }
-  return p;
-}
-#endif
-
 /*
  * This function does the second parsing pass
  */
-static void maildir_delayed_parsing(CONTEXT * ctx, struct maildir **md,
+static void maildir_delayed_parsing(CONTEXT *ctx, struct maildir **md,
                                     progress_t *progress)
 {
-  struct maildir *p, *last = NULL;
+  struct maildir *p;
+#if HAVE_DIRENT_D_INO
+  struct maildir *last = NULL;
+#endif
   BUFFER *fn = NULL;
   int count;
-#if HAVE_DIRENT_D_INO
-  int sort = 0;
-#endif
 #if USE_HCACHE
   header_cache_t *hc = NULL;
   void *data;
@@ -1143,45 +1120,40 @@ static void maildir_delayed_parsing(CONTEXT * ctx, struct maildir **md,
   int ret;
 #endif
 
-#if HAVE_DIRENT_D_INO
-#define DO_SORT()                                                       \
-  do                                                                    \
-  {                                                                     \
-    if (!sort)                                                          \
-    {                                                                   \
-      muttdbg(4, "maildir: need to sort %s by inode", ctx->path);       \
-      p = maildir_sort(p, (size_t) -1, md_cmp_inode);                   \
-      if (!last)                                                        \
-        *md = p;                                                        \
-      else                                                              \
-        last->next = p;                                                 \
-      sort = 1;                                                         \
-      p = skip_duplicates(p, &last);                                    \
-      mutt_buffer_printf(fn, "%s/%s", ctx->path, p->h->path);           \
-    }                                                                   \
-  } while (0)
-#else
-#define DO_SORT()       /* nothing */
-#endif
-
 #if USE_HCACHE
   hc = mutt_hcache_open(HeaderCache, ctx->path, NULL);
 #endif
-
   fn = mutt_buffer_pool_get();
+  p = *md;
 
-  for (p = *md, count = 0; p; p = p->next, count++)
+  /*
+   * If available, sort by inode number to reduce seek time.
+   */
+#if HAVE_DIRENT_D_INO
+  /* Skip over any initial entries without a header to make sorting faster. */
+  for (; p && !p->h; p = p->next)
+    last = p;
+  if (!p)
+    goto cleanup;
+
+  muttdbg(4, "sorting %s by inode", ctx->path);
+  p = maildir_sort(p, (size_t) -1, md_cmp_inode);
+
+  /* Reattach the initial entries without a header, if any, to the sorted list.
+   * This is needed so that md is properly freed by the caller. */
+  if (last)
+    last->next = p;
+  else
+    *md = p;
+#endif
+
+  for (count = 0; p; p = p->next, count++)
   {
-    if (! (p && p->h && !p->header_parsed))
-    {
-      last = p;
+    if (!p->h)
       continue;
-    }
 
     if (!ctx->quiet && progress)
       mutt_progress_update(progress, count, -1);
-
-    DO_SORT();
 
     mutt_buffer_printf(fn, "%s/%s", ctx->path, p->h->path);
 
@@ -1215,7 +1187,6 @@ static void maildir_delayed_parsing(CONTEXT * ctx, struct maildir **md,
 
       if (maildir_parse_message(ctx->magic, mutt_b2s(fn), p->h->old, p->h))
       {
-        p->header_parsed = 1;
 #if USE_HCACHE
         if (ctx->magic == MUTT_MH)
           mutt_hcache_store(hc, p->h->path, p->h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
@@ -1229,16 +1200,15 @@ static void maildir_delayed_parsing(CONTEXT * ctx, struct maildir **md,
     }
     mutt_hcache_free(&data);
 #endif
-    last = p;
   }
+
+#if HAVE_DIRENT_D_INO
+cleanup:
+#endif
 #if USE_HCACHE
   mutt_hcache_close(hc);
 #endif
-
   mutt_buffer_pool_release(&fn);
-
-#undef DO_SORT
-
   mh_sort_natural(ctx, md);
 }
 
