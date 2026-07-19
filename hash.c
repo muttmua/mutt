@@ -162,14 +162,14 @@ static int union_hash_insert(HASH * table, union hash_key key, void *data)
   return h;
 }
 
-int hash_insert(HASH * table, const char *strkey, void *data)
+int hash_insert(HASH *table, const char *strkey, void *data)
 {
   union hash_key key;
   key.strkey = table->strdup_keys ? safe_strdup(strkey) : strkey;
   return union_hash_insert(table, key, data);
 }
 
-int int_hash_insert(HASH * table, unsigned int intkey, void *data)
+int int_hash_insert(HASH *table, unsigned int intkey, void *data)
 {
   union hash_key key;
   key.intkey = intkey;
