@@ -843,7 +843,6 @@ const struct menu_func_op_t OpEditor[] = { /* map: editor */
 const struct menu_op_seq_t EditorDefaultBindings[] = { /* map: editor */
   { OP_EDITOR_BACKSPACE,       "\010" },
   { OP_EDITOR_BACKSPACE,       "<backspace>" },
-  { OP_EDITOR_BACKSPACE,       "<delete>" },
   { OP_EDITOR_BACKSPACE,       "\177" },
   { OP_EDITOR_BACKWARD_CHAR,   "\002" },
   { OP_EDITOR_BACKWARD_CHAR,   "<left>" },
@@ -855,6 +854,7 @@ const struct menu_op_seq_t EditorDefaultBindings[] = { /* map: editor */
   { OP_EDITOR_COMPLETE,        "\t"   },
   { OP_EDITOR_COMPLETE_QUERY,  "\024" },
   { OP_EDITOR_DELETE_CHAR,     "\004" },
+  { OP_EDITOR_DELETE_CHAR,     "<delete>" },
   { OP_EDITOR_DOWNCASE_WORD,   "\033l"},
   { OP_EDITOR_EOL,             "\005" },
   { OP_EDITOR_EOL,             "<end>" },
