@@ -2223,11 +2223,16 @@ struct option_t MuttVars[] = {
   ** The old Message-ID format can be used by setting this to:
   ** ``\fC<%Y%02m%02d%02H%02M%02S.G%c%p@%f>\fP''
   ** .pp
+  ** An alternative to using %f is %F.  This expando includes a '@',
+  ** so when used there must not be a second '@' in the variable:
+  ** ``\fC<%z_%F>\fP''
+  ** .pp
   ** The following \fCprintf(3)\fP-style sequences are understood:
   ** .dl
   ** .dt %c .dd step counter looping from ``A'' to ``Z''
   ** .dt %d .dd current day of the month (GMT)
   ** .dt %f .dd $$hostname
+  ** .dt %F .dd from address of the message, including an '@'
   ** .dt %H .dd current hour using a 24-hour clock (GMT)
   ** .dt %m .dd current month number (GMT)
   ** .dt %M .dd current minute of the hour (GMT)

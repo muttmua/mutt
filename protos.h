@@ -156,7 +156,7 @@ void mutt_buffer_expand_multi_path_norel(BUFFER *src, const char *delimiter);
 void mutt_buffer_remove_path_password(BUFFER *dest, const char *src);
 char *mutt_find_hook(int, const char *);
 char *mutt_gecos_name(char *, size_t, struct passwd *);
-char *mutt_gen_msgid(void);
+char *mutt_gen_msgid(ENVELOPE *);
 char *mutt_get_body_charset(char *, size_t, BODY *);
 const char *mutt_get_name(ADDRESS *);
 char *mutt_get_parameter(const char *, PARAMETER *);

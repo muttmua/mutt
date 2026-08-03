@@ -22,6 +22,7 @@
 
 #include "mutt.h"
 #include "mutt_random.h"
+#include "mutt_idna.h"
 
 static char MsgIdPfx = 'A';
 
@@ -30,7 +31,29 @@ typedef struct msg_id_data
   time_t now;
   struct tm tm;
   const char *fqdn;
+  ENVELOPE *env;
 } MSG_ID_DATA;
+
+/* This function is much stricter than RFC5322 specifies, because we also want
+ * the message-id to be passed in a URL as a path segment or parameter without
+ * needing encoding.
+ */
+static void filter_from_addr(char *from)
+{
+  int has_at = 0;
+
+  if (!from)
+    return;
+
+  while (*from)
+  {
+    if (*from == '@' && !has_at)
+      has_at = 1;
+    else if (!strchr(CTYPE_PFCHAR_C, *from))
+      *from = '_';
+    from++;
+  }
+}
 
 static const char *id_format_str(char *dest, size_t destlen, size_t col,
                                  int cols, char op, const char *src,
@@ -44,6 +67,7 @@ static const char *id_format_str(char *dest, size_t destlen, size_t col,
   unsigned char r_out[4 + 1];
   unsigned char z_raw[12]; /* 32 bit timestamp, plus 64 bit randomness */
   unsigned char z_out[16 + 1];
+  ADDRESS *from;
 
   switch (op)
   {
@@ -107,12 +131,26 @@ static const char *id_format_str(char *dest, size_t destlen, size_t col,
     case 'f':
       mutt_format_s(dest, destlen, fmt, id_data->fqdn);
       break;
+
+    case 'F':
+      from = rfc822_cpy_adr(id_data->env->from, 1);
+      if (!from || !from->mailbox)
+      {
+        snprintf(tmp, sizeof(tmp), "@%s", id_data->fqdn);
+        mutt_format_s(dest, destlen, fmt, tmp);
+        break;
+      }
+      mutt_addrlist_to_intl(from, NULL);
+      filter_from_addr(from->mailbox);
+      mutt_format_s(dest, destlen, fmt, from->mailbox);
+      rfc822_free_address(&from);
+      break;
   }
 
   return (src);
 }
 
-char *mutt_gen_msgid(void)
+char *mutt_gen_msgid(ENVELOPE *env)
 {
   MSG_ID_DATA id_data;
   BUFFER *buf, *tmp;
@@ -123,6 +161,7 @@ char *mutt_gen_msgid(void)
   memcpy(&id_data.tm, gmtime(&id_data.now), sizeof(id_data.tm));
   if (!(id_data.fqdn = mutt_fqdn(0)))
     id_data.fqdn = NONULL(Hostname);
+  id_data.env = env;
 
   fmt = MessageIdFormat;
   if (!fmt)

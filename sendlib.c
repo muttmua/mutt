@@ -2912,7 +2912,7 @@ void mutt_prepare_envelope(ENVELOPE *env, int final)
     mutt_set_followup_to(env);
 
     if (!env->message_id)
-      env->message_id = mutt_gen_msgid();
+      env->message_id = mutt_gen_msgid(env);
   }
 
   /* Take care of 8-bit => 7-bit conversion. */
@@ -2975,7 +2975,7 @@ static int _mutt_bounce_message(FILE *fp, HEADER *h, ADDRESS *to, const char *re
     fprintf(f, "Resent-Date: %s\n", mutt_b2s(date));
     mutt_buffer_pool_release(&date);
 
-    msgid_str = mutt_gen_msgid();
+    msgid_str = mutt_gen_msgid(h->env);
     fprintf(f, "Resent-Message-ID: %s\n", msgid_str);
     fputs("Resent-To: ", f);
     mutt_write_address_list(to, f, 11, 0);
