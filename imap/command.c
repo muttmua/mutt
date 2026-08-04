@@ -701,7 +701,7 @@ static void cmd_parse_vanished(IMAP_DATA *idata, char *s)
   end_of_seqset = s;
   while (*end_of_seqset)
   {
-    if (!strchr("0123456789:,", *end_of_seqset))
+    if (!strchr(CTYPE_UIDS_RFC7162_C, *end_of_seqset))
       *end_of_seqset = '\0';
     else
       end_of_seqset++;

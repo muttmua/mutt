@@ -573,7 +573,7 @@ success:
 }
 
 
-static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%";
+static const char safe_chars[] = CTYPE_PFCHAR_C "+@{}:%";
 
 void mutt_sanitize_filename(char *f, int flags)
 {

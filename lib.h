@@ -148,6 +148,20 @@ static inline char *skip_email_wsp(const char *s)
 #define SKIP_LOCALE_WS(c) while (*(c) && IS_LOCALE_WS(*(c))) c++;
 
 /*
+ * Various useful sets of characters
+ */
+#define CTYPE_LOWER_C         "abcdefghijklmnopqrstuvwxyz"
+#define CTYPE_UPPER_C         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define CTYPE_DIGIT_C         "0123456789"
+#define CTYPE_ALPHA_C         CTYPE_LOWER_C CTYPE_UPPER_C
+#define CTYPE_ALNUM_C         CTYPE_ALPHA_C CTYPE_DIGIT_C
+#define CTYPE_PFCHAR_C        CTYPE_ALNUM_C "._-"      // portable filename character set
+#define CTYPE_UXDIGIT_C       CTYPE_DIGIT_C "ABCDEF"   // uppercase hex
+#define CTYPE_XDIGIT_C        CTYPE_UXDIGIT_C "abcdef" // hex
+
+#define CTYPE_UIDS_RFC7162_C  CTYPE_DIGIT_C ":,"  // known-uids
+
+/*
  * These functions aren't defined in lib.c, but
  * they are used there.
  *

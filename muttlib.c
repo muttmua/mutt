@@ -1178,7 +1178,7 @@ void _mutt_buffer_quote_filename(BUFFER *d, const char *f, int add_outer)
     mutt_buffer_addch(d, '\'');
 }
 
-static const char safe_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+@{}._-:%";
+static const char safe_chars[] = CTYPE_PFCHAR_C "+@{}:%";
 
 void mutt_buffer_sanitize_filename(BUFFER *d, const char *f, int flags)
 {

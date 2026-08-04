@@ -1295,7 +1295,7 @@ short crypt_is_numerical_keyid(const char *s)
   if (strlen(s) % 8)
     return 0;
   while (*s)
-    if (strchr("0123456789ABCDEFabcdef", *s++) == NULL)
+    if (strchr(CTYPE_XDIGIT_C, *s++) == NULL)
       return 0;
 
   return 1;

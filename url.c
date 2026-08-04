@@ -193,7 +193,7 @@ int url_parse_ciss(ciss_url_t *ciss, char *src)
 
 static void url_pct_encode(char *dst, size_t l, const char *src)
 {
-  static const char *alph = "0123456789ABCDEF";
+  static const char *alph = CTYPE_UXDIGIT_C;
 
   *dst = 0;
   l--;

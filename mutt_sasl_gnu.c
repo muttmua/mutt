@@ -66,7 +66,7 @@ void mutt_gsasl_done(void)
 }
 
 static const char *VALID_MECHANISM_CHARACTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+  CTYPE_UPPER_C CTYPE_DIGIT_C "-_";
 
 /* This logic is derived from the libgsasl suggest code */
 static int mechlist_contains(const char *uc_mech, const char *uc_mechlist)
