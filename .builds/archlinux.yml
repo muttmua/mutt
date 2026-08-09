@@ -12,7 +12,6 @@ packages:
 - perl
 - shellcheck
 - tcc
-- tcc-libs-static
 sources:
 - https://git.sr.ht/~mutt/mutt
 environment:
