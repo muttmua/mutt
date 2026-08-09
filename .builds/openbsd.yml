@@ -1,7 +1,7 @@
 image: openbsd/latest
 packages:
 - autoconf-2.72p0
-- automake-1.18
+- automake-1.18.1
 - gettext-runtime
 - gettext-tools
 - gpgme
