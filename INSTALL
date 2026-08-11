@@ -137,7 +137,7 @@ options are:
 --enable-hcache
         Enable header caching support.  If no backend library is
         specified via a --with option (e.g. --with-kyotocabinet), Mutt
-        will scan in the order: kyotocabinet, tokyocabinet, lmdb,
+        will scan in the order: tkrzw, kyotocabinet, tokyocabinet, lmdb,
         qdbm, gdbm, bdb.  To skip scanning one or more of these
         libraries, use the corresponding --without option.
 

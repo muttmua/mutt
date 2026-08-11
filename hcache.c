@@ -30,6 +30,8 @@
 #include <tcbdb.h>
 #elif HAVE_KC
 #include <kclangc.h>
+#elif HAVE_TKRZW
+#include <tkrzw_langc.h>
 #elif HAVE_GDBM
 #include <gdbm.h>
 #elif HAVE_DB4
@@ -74,6 +76,13 @@ struct header_cache
 struct header_cache
 {
   KCDB *db;
+  char *folder;
+  unsigned int crc;
+};
+#elif HAVE_TKRZW
+struct header_cache
+{
+  TkrzwDBM *db;
   char *folder;
   unsigned int crc;
 };
@@ -841,6 +850,8 @@ mutt_hcache_fetch_raw(header_cache_t *h, const char *filename,
   rv = tcbdbget(h->db, mutt_b2s(path), ksize, &sp);
 #elif HAVE_KC
   rv = kcdbget(h->db, mutt_b2s(path), ksize, &sp);
+#elif HAVE_TKRZW
+  rv = tkrzw_dbm_get(h->db, mutt_b2s(path), ksize, NULL);
 #elif HAVE_GDBM
   key.dptr = path->data;
   key.dsize = ksize;
@@ -940,6 +951,8 @@ mutt_hcache_store_raw(header_cache_t *h, const char *filename, void *data,
   rv = tcbdbput(h->db, mutt_b2s(path), ksize, data, dlen);
 #elif HAVE_KC
   rv = kcdbset(h->db, mutt_b2s(path), ksize, data, dlen);
+#elif HAVE_TKRZW
+  rv = tkrzw_dbm_set(h->db, mutt_b2s(path), ksize, data, dlen, true);
 #elif HAVE_GDBM
   key.dptr = path->data;
   key.dsize = ksize;
@@ -1174,6 +1187,69 @@ mutt_hcache_delete(header_cache_t *h, const char *filename,
   ksize = strlen(h->folder) + keylen(filename);
 
   rc = kcdbremove(h->db, mutt_b2s(path), ksize);
+
+  mutt_buffer_pool_release(&path);
+  return rc;
+}
+
+#elif HAVE_TKRZW
+static int
+hcache_open_tkrzw(struct header_cache *h, const char *path)
+{
+  int rc = -1;
+
+/* Options are discussed at:
+ * https://dbmx.net/tkrzw/api/classtkrzw_1_1PolyDBM.html
+ * in the OpenAdvanced method call.
+ *
+ * Unfortunately the "compression" option requires specifying a specific library,
+ * and mutt has no way of knowing which libraries tkrzw was built with, so we ignore
+ * OPTHCACHECOMPRESS.
+ */
+  h->db = tkrzw_dbm_open(path, true, "dbm=TreeDBM");
+  if (!h->db)
+  {
+    muttdbg(2, "tkrzw_dbm_open failed for %s: %s (%d)", path,
+            tkrzw_get_last_status_message(), tkrzw_get_last_status_code());
+    goto cleanup;
+  }
+
+  rc = 0;
+
+cleanup:
+  return rc;
+}
+
+void
+mutt_hcache_close(header_cache_t *h)
+{
+  if (!h)
+    return;
+
+  if (!tkrzw_dbm_close(h->db))
+    muttdbg(2, "tkrzw_dbm_close failed for %s: %s (ecode %d)", h->folder,
+            tkrzw_get_last_status_message(), tkrzw_get_last_status_code());
+  FREE(&h->folder);
+  FREE(&h);
+}
+
+int
+mutt_hcache_delete(header_cache_t *h, const char *filename,
+                   size_t (*keylen)(const char *fn))
+{
+  BUFFER *path = NULL;
+  int ksize, rc;
+
+  if (!h)
+    return -1;
+
+  path = mutt_buffer_pool_get();
+  mutt_buffer_strcpy(path, h->folder);
+  mutt_buffer_addstr(path, filename);
+
+  ksize = strlen(h->folder) + keylen(filename);
+
+  rc = tkrzw_dbm_remove(h->db, mutt_b2s(path), ksize);
 
   mutt_buffer_pool_release(&path);
   return rc;
@@ -1478,6 +1554,8 @@ mutt_hcache_open(const char *path, const char *folder, hcache_namer_t namer)
   hcache_open= hcache_open_tc;
 #elif HAVE_KC
   hcache_open= hcache_open_kc;
+#elif HAVE_TKRZW
+  hcache_open = hcache_open_tkrzw;
 #elif HAVE_GDBM
   hcache_open = hcache_open_gdbm;
 #elif HAVE_DB4
@@ -1601,6 +1679,13 @@ const char *mutt_hcache_backend(void)
 {
   static char backend[SHORT_STRING];
   snprintf(backend, sizeof(backend), "kyotocabinet %s", KCVERSION);
+  return backend;
+}
+#elif HAVE_TKRZW
+const char *mutt_hcache_backend(void)
+{
+  static char backend[SHORT_STRING];
+  snprintf(backend, sizeof(backend), "tkrzw %s", TKRZW_LIBRARY_VERSION);
   return backend;
 }
 #endif
