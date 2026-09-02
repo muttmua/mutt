@@ -2442,6 +2442,19 @@ int mutt_write_rfc822_header(FILE *fp, ENVELOPE *env, BODY *attach, char *date,
     fputs("MIME-Version: 1.0\n", fp);
     mutt_write_mime_header(attach, fp);
   }
+  else if (mode == MUTT_WRITE_HEADER_EDITHDRS)
+  {
+    /* Only write these out for the $forward_references case,
+     * so the user can decide to remove the references header if they
+     * change their mind.
+     */
+    if (env->references && !env->in_reply_to)
+    {
+      fputs("References:", fp);
+      mutt_write_references(env->references, fp, 10);
+      fputc('\n', fp);
+    }
+  }
 
   if (env->in_reply_to)
   {

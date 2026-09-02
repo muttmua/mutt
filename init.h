@@ -1399,6 +1399,20 @@ struct option_t MuttVars[] = {
   { "forw_quote",       DT_SYN,  R_NONE, {.p="forward_quote"}, {.p=0} },
   /*
   */
+  { "forward_references", DT_QUAD, R_NONE, {.l=OPT_FORWREFS}, {.l=MUTT_NO} },
+  /*
+  ** .pp
+  ** This quadoption controls whether or not a \fIReferences:\fP header
+  ** is included in the forwarded email.  Strictly speaking, this is
+  ** not condoned by the RFCs, but it does allow the sent message to
+  ** be threaded underneath the original forwarded message, which some users
+  ** prefer.
+  ** .pp
+  ** When answered yes, the \fIReferences:\fP header will appear in the
+  ** editor when $$edit_headers is set.  The references may be deleted,
+  ** to remove it from the sent email.  However, edits to the references
+  ** will be ignored.
+  **/
   { "from",             DT_ADDR, R_NONE, {.p=&From}, {.p=0} },
   /*
   ** .pp

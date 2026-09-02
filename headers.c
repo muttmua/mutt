@@ -142,9 +142,14 @@ int mutt_edit_headers(const char *editor,
        $edit_headers set, we remove References: as they're likely invalid;
        we can simply compare strings as we don't generate References for
        multiple Message-Ids in IRT anyways */
-    if (sctx->msg->env->in_reply_to &&
-        (!n->in_reply_to || mutt_strcmp(n->in_reply_to->data,
-                                        sctx->msg->env->in_reply_to->data) != 0))
+    if (sctx->msg->env->in_reply_to)
+    {
+      if (!n->in_reply_to ||
+          mutt_strcmp(n->in_reply_to->data, sctx->msg->env->in_reply_to->data) != 0)
+        mutt_free_list(&sctx->msg->env->references);
+    }
+    /* For $forward_references, allow the user to remove the references */
+    else if (sctx->msg->env->references && !n->references)
       mutt_free_list(&sctx->msg->env->references);
 
     /* restore old info. */

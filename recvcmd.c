@@ -656,6 +656,29 @@ static void attach_forward_msgs(FILE * fp, HEADER * hdr,
   tmphdr->env = mutt_new_envelope();
   mutt_make_forward_subject(tmphdr->env, Context, curhdr);
 
+  /* L10N: Used for the $forward_references prompt */
+  if (query_quadoption(OPT_FORWREFS, _("Include References header in forward?")) == MUTT_YES)
+  {
+    if (cur)
+      mutt_add_to_reference_headers(tmphdr->env, curhdr->env, NULL, NULL);
+    else
+    {
+      LIST **p = NULL, **q = NULL;
+      int tagged = 0;
+
+      for (i = 0; i < actx->idxlen; i++)
+      {
+        if (actx->idx[i]->content->tagged)
+        {
+          tagged++;
+          mutt_add_to_reference_headers(tmphdr->env, actx->idx[i]->content->hdr->env, &p, &q);
+        }
+      }
+      if (tagged > 1 && tmphdr->env->in_reply_to && tmphdr->env->in_reply_to->next)
+        mutt_free_list(&tmphdr->env->references);
+    }
+    mutt_free_list(&tmphdr->env->in_reply_to);
+  }
 
   tmpbody = mutt_buffer_pool_get();
 

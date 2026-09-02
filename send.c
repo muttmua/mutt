@@ -889,7 +889,15 @@ envelope_defaults(ENVELOPE *env, CONTEXT *ctx, HEADER *cur, int flags)
     }
   }
   else if (flags & SENDFORWARD)
+  {
+    /* L10N: Used for the $forward_references prompt */
+    if (query_quadoption(OPT_FORWREFS, _("Include References header in forward?")) == MUTT_YES)
+    {
+      mutt_make_reference_headers(tag ? NULL : curenv, env, ctx);
+      mutt_free_list(&env->in_reply_to);
+    }
     mutt_make_forward_subject(env, ctx, cur);
+  }
 
   return (0);
 }
