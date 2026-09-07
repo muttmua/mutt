@@ -882,12 +882,18 @@ attach_reply_envelope_defaults(ENVELOPE *env, ATTACH_CONTEXT *actx,
   else
   {
     LIST **p = NULL, **q = NULL;
+    int tagged = 0;
 
     for (i = 0; i < actx->idxlen; i++)
     {
       if (actx->idx[i]->content->tagged)
+      {
+        tagged++;
         mutt_add_to_reference_headers(env, actx->idx[i]->content->hdr->env, &p, &q);
+      }
     }
+    if (tagged > 1 && env->in_reply_to && env->in_reply_to->next)
+      mutt_free_list(&env->references);
   }
 
   return 0;
