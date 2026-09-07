@@ -827,7 +827,7 @@ mutt_make_reference_headers(ENVELOPE *curenv, ENVELOPE *env, CONTEXT *ctx)
   /* if there's more than entry in In-Reply-To (i.e. message has
      multiple parents), don't generate a References: header as it's
      discouraged by RfC2822, sect. 3.6.4 */
-  if (ctx->tagged > 0 && env->in_reply_to && env->in_reply_to->next)
+  if (ctx->tagged > 1 && env->in_reply_to && env->in_reply_to->next)
     mutt_free_list(&env->references);
 }
 
