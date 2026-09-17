@@ -234,6 +234,7 @@ typedef struct
   LIST *flags;
 #ifdef USE_HCACHE
   header_cache_t *hcache;
+  unsigned int hcache_open_count;
 #endif
 } IMAP_DATA;
 /* I wish that were called IMAP_CONTEXT :( */
@@ -299,7 +300,8 @@ int imap_commit_message(CONTEXT *ctx, MESSAGE *msg);
 /* util.c */
 #ifdef USE_HCACHE
 header_cache_t *imap_hcache_open(IMAP_DATA *idata, const char *path);
-void imap_hcache_close(IMAP_DATA *idata);
+void imap_idata_hcache_open(IMAP_DATA *idata);
+void imap_idata_hcache_close(IMAP_DATA *idata);
 HEADER *imap_hcache_get(IMAP_DATA *idata, unsigned int uid);
 int imap_hcache_put(IMAP_DATA *idata, HEADER *h);
 int imap_hcache_del(IMAP_DATA *idata, unsigned int uid);

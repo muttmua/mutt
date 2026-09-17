@@ -200,13 +200,25 @@ cleanup:
   return rv;
 }
 
-void imap_hcache_close(IMAP_DATA *idata)
+void imap_idata_hcache_open(IMAP_DATA *idata)
+{
+  if (!idata->hcache_open_count)
+    idata->hcache = imap_hcache_open(idata, NULL);
+  if (idata->hcache)
+    idata->hcache_open_count++;
+}
+
+void imap_idata_hcache_close(IMAP_DATA *idata)
 {
   if (!idata->hcache)
     return;
 
-  mutt_hcache_close(idata->hcache);
-  idata->hcache = NULL;
+  idata->hcache_open_count--;
+  if (!idata->hcache_open_count)
+  {
+    mutt_hcache_close(idata->hcache);
+    idata->hcache = NULL;
+  }
 }
 
 HEADER *imap_hcache_get(IMAP_DATA *idata, unsigned int uid)

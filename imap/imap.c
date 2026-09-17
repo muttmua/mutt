@@ -263,7 +263,7 @@ void imap_expunge_mailbox(IMAP_DATA *idata)
   short old_sort;
 
 #ifdef USE_HCACHE
-  idata->hcache = imap_hcache_open(idata, NULL);
+  imap_idata_hcache_open(idata);
 #endif
 
   old_sort = Sort;
@@ -323,7 +323,7 @@ void imap_expunge_mailbox(IMAP_DATA *idata)
   }
 
 #if USE_HCACHE
-  imap_hcache_close(idata);
+  imap_idata_hcache_close(idata);
 #endif
 
   /* We may be called on to expunge at any time. We can't rely on the caller
@@ -1519,7 +1519,7 @@ int imap_sync_mailbox(CONTEXT *ctx, int expunge, int *index_hint)
   }
 
 #if USE_HCACHE
-  idata->hcache = imap_hcache_open(idata, NULL);
+  imap_idata_hcache_open(idata);
 #endif
 
   /* save messages with real (non-flag) changes */
@@ -1545,30 +1545,6 @@ int imap_sync_mailbox(CONTEXT *ctx, int expunge, int *index_hint)
        * This works better if we're expunging, of course. */
       if (h->env->changed || h->attach_del)
       {
-        /* NOTE and TODO:
-         *
-         * The mx_open_mailbox() in append mode below merely hijacks an existing
-         * idata; it doesn't reset idata->ctx.  imap_append_message() ends up
-         * using (borrowing) the same idata we are using.
-         *
-         * Right after the APPEND operation finishes, the server can send an
-         * EXISTS notifying of the new message.  Then, while still inside
-         * imap_append_message(), imap_cmd_step() -> imap_cmd_finish() will
-         * call imap_read_headers() to download those (because the idata's
-         * reopen_allow is set).
-         *
-         * The imap_read_headers() will open (and clobber) the idata->hcache we
-         * just opened above, then close it.
-         *
-         * The easy and less dangerous fix done here (for a stable branch bug
-         * fix) is to close and reopen the header cache around the operation.
-         *
-         * A better fix would be allowing idata->hcache reuse.  When that is
-         * done, the close/reopen in read_headers_condstore_qresync_updates()
-         * can also be removed. */
-#if USE_HCACHE
-        imap_hcache_close(idata);
-#endif
         if (!ctx->quiet)
           mutt_message(_("Saving changed messages... [%d/%d]"), n+1,
                        ctx->msgcount);
@@ -1579,15 +1555,12 @@ int imap_sync_mailbox(CONTEXT *ctx, int expunge, int *index_hint)
         else
           _mutt_save_message(h, appendctx, 1, 0, 0);
         h->env->changed = 0;
-#if USE_HCACHE
-        idata->hcache = imap_hcache_open(idata, NULL);
-#endif
       }
     }
   }
 
 #if USE_HCACHE
-  imap_hcache_close(idata);
+  imap_idata_hcache_close(idata);
 #endif
 
   /* presort here to avoid doing 10 resorts in imap_exec_msgset.
@@ -1766,6 +1739,9 @@ int imap_close_mailbox(CONTEXT *ctx)
     }
 
     mutt_bcache_close(&idata->bcache);
+    mutt_hcache_close(idata->hcache);
+    idata->hcache = NULL;
+    idata->hcache_open_count = 0;
   }
 
   /* free IMAP part of headers */
@@ -1874,17 +1850,12 @@ static int imap_save_to_header_cache(CONTEXT *ctx, HEADER *h)
 {
   int rc = 0;
 #ifdef USE_HCACHE
-  int close_hc = 1;
   IMAP_DATA *idata;
 
   idata = (IMAP_DATA *)ctx->data;
-  if (idata->hcache)
-    close_hc = 0;
-  else
-    idata->hcache = imap_hcache_open(idata, NULL);
+  imap_idata_hcache_open(idata);
   rc = imap_hcache_put(idata, h);
-  if (close_hc)
-    imap_hcache_close(idata);
+  imap_idata_hcache_close(idata);
 #endif
   return rc;
 }

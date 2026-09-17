@@ -267,7 +267,7 @@ retry:
   idata->newMailCount = 0;
 
 #if USE_HCACHE
-  idata->hcache = imap_hcache_open(idata, NULL);
+  imap_idata_hcache_open(idata);
 
   if (idata->hcache && initial_download)
   {
@@ -423,7 +423,7 @@ retry:
 
 bail:
 #if USE_HCACHE
-  imap_hcache_close(idata);
+  imap_idata_hcache_close(idata);
   FREE(&uid_seqset);
 #endif /* USE_HCACHE */
 
@@ -730,14 +730,12 @@ static int read_headers_condstore_qresync_updates(IMAP_DATA *idata,
   if (idata->reopen & IMAP_EXPUNGE_PENDING)
   {
     short old_sort;
-    imap_hcache_close(idata);
 
     old_sort = Sort;
     Sort = SORT_ORDER;
     imap_expunge_mailbox(idata);
     Sort = old_sort;
 
-    idata->hcache = imap_hcache_open(idata, NULL);
     idata->reopen &= ~IMAP_EXPUNGE_PENDING;
   }
 
@@ -810,7 +808,7 @@ fail:
 
   mutt_hcache_delete(idata->hcache, "/MODSEQ", imap_hcache_keylen);
   imap_hcache_clear_uid_seqset(idata);
-  imap_hcache_close(idata);
+  imap_idata_hcache_close(idata);
 
   if (!ctx->quiet)
   {
