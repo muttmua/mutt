@@ -1206,7 +1206,7 @@ static void maildir_delayed_parsing(CONTEXT *ctx, struct maildir **md,
 cleanup:
 #endif
 #if USE_HCACHE
-  mutt_hcache_close(hc);
+  mutt_hcache_close(&hc);
 #endif
   mutt_buffer_pool_release(&fn);
   mh_sort_natural(ctx, md);
@@ -2043,7 +2043,7 @@ int mh_sync_mailbox(CONTEXT * ctx, int *index_hint)
 
 #if USE_HCACHE
   if (ctx->magic == MUTT_MAILDIR || ctx->magic == MUTT_MH)
-    mutt_hcache_close(hc);
+    mutt_hcache_close(&hc);
 #endif /* USE_HCACHE */
 
   if (ctx->magic == MUTT_MH)
@@ -2072,7 +2072,7 @@ err:
   mutt_buffer_pool_release(&tmp);
 #if USE_HCACHE
   if (ctx->magic == MUTT_MAILDIR || ctx->magic == MUTT_MH)
-    mutt_hcache_close(hc);
+    mutt_hcache_close(&hc);
 #endif /* USE_HCACHE */
   return -1;
 }
@@ -2504,7 +2504,7 @@ static int maildir_save_to_header_cache(CONTEXT *ctx, HEADER *h)
   hc = mutt_hcache_open(HeaderCache, ctx->path, NULL);
   rc = mutt_hcache_store(hc, h->path + 3, h, 0, &maildir_hcache_keylen,
                          MUTT_GENERATE_UIDVALIDITY);
-  mutt_hcache_close(hc);
+  mutt_hcache_close(&hc);
 #endif
   return rc;
 }
@@ -2518,7 +2518,7 @@ static int mh_save_to_header_cache(CONTEXT *ctx, HEADER *h)
 
   hc = mutt_hcache_open(HeaderCache, ctx->path, NULL);
   rc = mutt_hcache_store(hc, h->path, h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
-  mutt_hcache_close(hc);
+  mutt_hcache_close(&hc);
 #endif
   return rc;
 }

@@ -28,7 +28,7 @@ typedef void(*hcache_namer_t)(const char *path, BUFFER *dest);
 
 header_cache_t *mutt_hcache_open(const char *path, const char *folder,
                                  hcache_namer_t namer);
-void mutt_hcache_close(header_cache_t *h);
+void mutt_hcache_close(header_cache_t **ph);
 HEADER *mutt_hcache_restore(const unsigned char *d, HEADER **oh);
 void *mutt_hcache_fetch(header_cache_t *h, const char *filename, size_t (*keylen)(const char *fn));
 void *mutt_hcache_fetch_raw(header_cache_t *h, const char *filename,

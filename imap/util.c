@@ -215,10 +215,7 @@ void imap_idata_hcache_close(IMAP_DATA *idata)
 
   idata->hcache_open_count--;
   if (!idata->hcache_open_count)
-  {
-    mutt_hcache_close(idata->hcache);
-    idata->hcache = NULL;
-  }
+    mutt_hcache_close(&idata->hcache);
 }
 
 HEADER *imap_hcache_get(IMAP_DATA *idata, unsigned int uid)

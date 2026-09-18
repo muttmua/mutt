@@ -1739,8 +1739,7 @@ int imap_close_mailbox(CONTEXT *ctx)
     }
 
     mutt_bcache_close(&idata->bcache);
-    mutt_hcache_close(idata->hcache);
-    idata->hcache = NULL;
+    mutt_hcache_close(&idata->hcache);
     idata->hcache_open_count = 0;
   }
 
@@ -2075,7 +2074,7 @@ IMAP_STATUS *imap_mboxcache_get(IMAP_DATA *idata, const char *mbox, int create)
         mutt_hcache_free((void **)&puidvalidity);
         mutt_hcache_free((void **)&puidnext);
         mutt_hcache_free((void **)&pmodseq);
-        mutt_hcache_close(hc);
+        mutt_hcache_close(&hc);
         return imap_mboxcache_get(idata, mbox, 1);
       }
       memcpy(&status->uidvalidity, puidvalidity, sizeof(unsigned int));
@@ -2095,7 +2094,7 @@ IMAP_STATUS *imap_mboxcache_get(IMAP_DATA *idata, const char *mbox, int create)
     mutt_hcache_free((void **)&puidvalidity);
     mutt_hcache_free((void **)&puidnext);
     mutt_hcache_free((void **)&pmodseq);
-    mutt_hcache_close(hc);
+    mutt_hcache_close(&hc);
   }
 #endif
 

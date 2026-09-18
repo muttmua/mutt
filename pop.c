@@ -404,7 +404,7 @@ static int pop_fetch_headers(CONTEXT *ctx)
   }
 
 #if USE_HCACHE
-  mutt_hcache_close(hc);
+  mutt_hcache_close(&hc);
 #endif
 
   if (ret < 0)
@@ -794,7 +794,7 @@ static int pop_sync_mailbox(CONTEXT *ctx, int *index_hint)
     }
 
 #if USE_HCACHE
-    mutt_hcache_close(hc);
+    mutt_hcache_close(&hc);
 #endif
 
     if (ret == 0)
@@ -862,7 +862,7 @@ static int pop_save_to_header_cache(CONTEXT *ctx, HEADER *h)
   pop_data = (POP_DATA *)ctx->data;
   hc = pop_hcache_open(pop_data, ctx->path);
   rc = mutt_hcache_store(hc, h->data, h, 0, strlen, MUTT_GENERATE_UIDVALIDITY);
-  mutt_hcache_close(hc);
+  mutt_hcache_close(&hc);
 #endif
 
   return rc;
