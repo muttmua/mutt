@@ -930,7 +930,7 @@ int mutt_decode_save_attachment(FILE *fp, BODY *m, const char *path,
   {
     m->length = 0;
     m->encoding = saved_encoding;
-    if (saved_parts)
+    if (saved_parts || saved_hdr)
     {
       mutt_free_header(&m->hdr);
       m->parts = saved_parts;
