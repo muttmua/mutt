@@ -139,7 +139,7 @@ int mutt_account_fromurl(ACCOUNT *account, ciss_url_t *url)
  * to prevent cross-muttrc name collisions.  For that case, pass 1 to
  * force_users
  */
-void mutt_account_tourl(ACCOUNT *account, ciss_url_t *url, int force_user)
+void mutt_account_tourl(const ACCOUNT *account, ciss_url_t *url, int force_user)
 {
   url->scheme = U_UNKNOWN;
   url->user = NULL;
