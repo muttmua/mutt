@@ -333,7 +333,7 @@ static pop_auth_res_t pop_auth_apop(POP_DATA *pop_data, const char *method)
   size_t i;
 
   if (mutt_account_getpass(&pop_data->conn->account) ||
-      !pop_data->conn->account.pass[0])
+      !pop_data->conn->account.pass)
     return POP_A_FAILURE;
 
   if (!pop_data->timestamp)
@@ -351,7 +351,7 @@ static pop_auth_res_t pop_auth_apop(POP_DATA *pop_data, const char *method)
   /* Compute the authentication hash to send to the server */
   md5_init_ctx(&ctx);
   md5_process_bytes(pop_data->timestamp, strlen(pop_data->timestamp), &ctx);
-  md5_process_bytes(pop_data->conn->account.pass,
+  md5_process_bytes(NONULL(pop_data->conn->account.pass),
                     mutt_strlen(pop_data->conn->account.pass), &ctx);
   md5_finish_ctx(&ctx, digest);
 
@@ -359,7 +359,7 @@ static pop_auth_res_t pop_auth_apop(POP_DATA *pop_data, const char *method)
     sprintf(hash + 2 * i, "%02x", digest[i]);
 
   /* Send APOP command to server */
-  snprintf(buf, sizeof(buf), "APOP %s %s\r\n", pop_data->conn->account.user, hash);
+  snprintf(buf, sizeof(buf), "APOP %s %s\r\n", NONULL(pop_data->conn->account.user), hash);
 
   switch (pop_query(pop_data, buf, sizeof(buf)))
   {
@@ -385,12 +385,12 @@ static pop_auth_res_t pop_auth_user(POP_DATA *pop_data, const char *method)
     return POP_A_UNAVAIL;
 
   if (mutt_account_getpass(&pop_data->conn->account) ||
-      !pop_data->conn->account.pass[0])
+      !pop_data->conn->account.pass)
     return POP_A_FAILURE;
 
   mutt_message _("Logging in...");
 
-  snprintf(buf, sizeof(buf), "USER %s\r\n", pop_data->conn->account.user);
+  snprintf(buf, sizeof(buf), "USER %s\r\n", NONULL(pop_data->conn->account.user));
   ret = pop_query(pop_data, buf, sizeof(buf));
 
   if (pop_data->cmd_user == 2)
@@ -558,7 +558,7 @@ int pop_authenticate(POP_DATA *pop_data)
   int attempts = 0;
   int ret = POP_A_UNAVAIL;
 
-  if (mutt_account_getuser(acct) || !acct->user[0])
+  if (mutt_account_getuser(acct) || !acct->user)
     return -3;
 
   if (PopAuthenticators)

@@ -554,7 +554,7 @@ static int ssl_negotiate(CONNECTION *conn, sslsockdata *ssldata)
   const char *errmsg;
   char *hostname;
 
-  hostname = SslVerifyHostOverride ? SslVerifyHostOverride : conn->account.host;
+  hostname = SslVerifyHostOverride ? SslVerifyHostOverride : NONULL(conn->account.host);
 
   if (HostExDataIndex == -1)
   {
@@ -1415,7 +1415,7 @@ static void client_cert_prompt(char *prompt, size_t prompt_size, ACCOUNT *accoun
      to decrypt the cert.  %s is the hostname.
   */
   snprintf(prompt, prompt_size, _("Password for %s client cert: "),
-           account->host);
+           NONULL(account->host));
 }
 
 static int ssl_passwd_cb(char *buf, int size, int rwflag, void *userdata)
@@ -1430,5 +1430,5 @@ static int ssl_passwd_cb(char *buf, int size, int rwflag, void *userdata)
   if (_mutt_account_getpass(account, client_cert_prompt))
     return 0;
 
-  return snprintf(buf, size, "%s", account->pass);
+  return snprintf(buf, size, "%s", NONULL(account->pass));
 }

@@ -184,7 +184,7 @@ int mutt_socket_readchar(CONNECTION *conn, char *c)
     conn->bufpos = 0;
     if (conn->available == 0)
     {
-      mutt_error(_("Connection to %s closed"), conn->account.host);
+      mutt_error(_("Connection to %s closed"), NONULL(conn->account.host));
       mutt_sleep(2);
     }
     if (conn->available <= 0)
@@ -489,7 +489,7 @@ int raw_socket_read(CONNECTION *conn, char *buf, size_t len)
 
   if (rc < 0)
   {
-    mutt_error(_("Error talking to %s (%s)"), conn->account.host,
+    mutt_error(_("Error talking to %s (%s)"), NONULL(conn->account.host),
                strerror(errno));
     mutt_sleep(2);
     return -1;
@@ -512,7 +512,7 @@ int raw_socket_write(CONNECTION *conn, const char *buf, size_t count)
 
     if (rc < 0)
     {
-      mutt_error(_("Error talking to %s (%s)"), conn->account.host,
+      mutt_error(_("Error talking to %s (%s)"), NONULL(conn->account.host),
                  strerror(errno));
       mutt_sleep(2);
       return -1;
@@ -594,9 +594,9 @@ int raw_socket_open(CONNECTION *conn)
   snprintf(port, sizeof(port), "%d", conn->account.port);
 
 # if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
-  if (idna_to_ascii_lz(conn->account.host, &host_idna, 1) != IDNA_SUCCESS)
+  if (idna_to_ascii_lz(NONULL(conn->account.host), &host_idna, 1) != IDNA_SUCCESS)
   {
-    mutt_error(_("Bad IDN \"%s\"."), conn->account.host);
+    mutt_error(_("Bad IDN \"%s\"."), NONULL(conn->account.host));
     return -1;
   }
 # else
@@ -604,7 +604,7 @@ int raw_socket_open(CONNECTION *conn)
 # endif
 
   if (!option(OPTNOCURSES))
-    mutt_message(_("Looking up %s..."), conn->account.host);
+    mutt_message(_("Looking up %s..."), NONULL(conn->account.host));
 
   rc = getaddrinfo(host_idna, port, &hints, &res);
 
@@ -614,13 +614,13 @@ int raw_socket_open(CONNECTION *conn)
 
   if (rc)
   {
-    mutt_error(_("Could not find the host \"%s\""), conn->account.host);
+    mutt_error(_("Could not find the host \"%s\""), NONULL(conn->account.host));
     mutt_sleep(2);
     return -1;
   }
 
   if (!option(OPTNOCURSES))
-    mutt_message(_("Connecting to %s..."), conn->account.host);
+    mutt_message(_("Connecting to %s..."), NONULL(conn->account.host));
 
   rc = -1;
   for (cur = res; cur != NULL; cur = cur->ai_next)
@@ -703,7 +703,7 @@ int raw_socket_open(CONNECTION *conn)
 #endif
   if (rc)
   {
-    mutt_error(_("Could not connect to %s (%s)."), conn->account.host,
+    mutt_error(_("Could not connect to %s (%s)."), NONULL(conn->account.host),
                (rc > 0) ? strerror(rc) : _("unknown error"));
     mutt_sleep(2);
     return -1;

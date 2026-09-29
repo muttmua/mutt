@@ -121,7 +121,7 @@ imap_auth_res_t imap_auth_gss(IMAP_DATA *idata, const char *method)
   buf2 = mutt_buffer_pool_get();
 
   /* get an IMAP service ticket for the server */
-  mutt_buffer_printf(buf1, "imap@%s", idata->conn->account.host);
+  mutt_buffer_printf(buf1, "imap@%s", NONULL(idata->conn->account.host));
   request_buf.value = buf1->data;
   request_buf.length = mutt_buffer_len(buf1);
   maj_stat = gss_import_name(&min_stat, &request_buf, gss_nt_service_name,
@@ -305,7 +305,7 @@ imap_auth_res_t imap_auth_gss(IMAP_DATA *idata, const char *method)
 
   mutt_buffer_to_base64(buf1, send_token.value, send_token.length);
   muttdbg(2, "Requesting authorisation as %s",
-          idata->conn->account.user);
+          NONULL(idata->conn->account.user));
   mutt_buffer_addstr(buf1, "\r\n");
   mutt_socket_write(idata->conn, mutt_b2s(buf1));
 

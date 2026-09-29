@@ -236,7 +236,7 @@ int pop_connect(POP_DATA *pop_data)
   if (mutt_socket_open(pop_data->conn) < 0 ||
       mutt_socket_readln(buf, sizeof(buf), pop_data->conn) < 0)
   {
-    mutt_error(_("Error connecting to server: %s"), pop_data->conn->account.host);
+    mutt_error(_("Error connecting to server: %s"), NONULL(pop_data->conn->account.host));
     return -1;
   }
 

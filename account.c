@@ -213,7 +213,7 @@ int mutt_account_getuser(ACCOUNT *account)
   /* prompt (defaults to unix username), copy into account->user */
   else
   {
-    snprintf(prompt, sizeof(prompt), _("Username at %s: "), account->host);
+    snprintf(prompt, sizeof(prompt), _("Username at %s: "), NONULL(account->host));
     strfcpy(userbuf, NONULL(Username), sizeof(userbuf));
     if (mutt_get_field_unbuffered(prompt, userbuf, sizeof(userbuf), 0))
       return -1;
@@ -259,8 +259,8 @@ static void getpass_prompt(char *prompt, size_t prompt_size, ACCOUNT *account)
      %s@%s is user@host
   */
   snprintf(prompt, prompt_size, _("Password for %s@%s: "),
-           account->flags & MUTT_ACCT_LOGIN ? account->login : account->user,
-           account->host);
+           account->flags & MUTT_ACCT_LOGIN ? NONULL(account->login) : NONULL(account->user),
+           NONULL(account->host));
 }
 
 int _mutt_account_getpass(ACCOUNT *account,
@@ -385,11 +385,11 @@ int mutt_account_getoauthbearer(ACCOUNT *account, BUFFER *authbearer, int xoauth
   if (xoauth2)
     mutt_buffer_printf(unencoded_bearertoken,
                        "user=%s\001auth=Bearer %s\001\001",
-                       account->login, token);
+                       NONULL(account->login), token);
   else
     mutt_buffer_printf(unencoded_bearertoken,
                        "n,a=%s,\001host=%s\001port=%d\001auth=Bearer %s\001\001",
-                       account->login, account->host, account->port, token);
+                       NONULL(account->login), NONULL(account->host), account->port, token);
 
   FREE(&token);
 

@@ -172,7 +172,7 @@ static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
     case GSASL_PASSWORD:
       if (mutt_account_getpass(&conn->account))
         return rc;
-      gsasl_property_set(sctx, GSASL_PASSWORD, conn->account.pass);
+      gsasl_property_set(sctx, GSASL_PASSWORD, NONULL(conn->account.pass));
       rc = GSASL_OK;
       break;
 
@@ -180,7 +180,7 @@ static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
       /* whom the provided password belongs to: login */
       if (mutt_account_getlogin(&conn->account))
         return rc;
-      gsasl_property_set(sctx, GSASL_AUTHID, conn->account.login);
+      gsasl_property_set(sctx, GSASL_AUTHID, NONULL(conn->account.login));
       rc = GSASL_OK;
       break;
 
@@ -188,7 +188,7 @@ static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
       /* name of the user whose mail/resources you intend to access: user */
       if (mutt_account_getuser(&conn->account))
         return rc;
-      gsasl_property_set(sctx, GSASL_AUTHZID, conn->account.user);
+      gsasl_property_set(sctx, GSASL_AUTHZID, NONULL(conn->account.user));
       rc = GSASL_OK;
       break;
 
@@ -217,7 +217,7 @@ static int mutt_gsasl_callback(Gsasl *ctx, Gsasl_session *sctx,
       break;
 
     case GSASL_HOSTNAME:
-      gsasl_property_set(sctx, GSASL_HOSTNAME, conn->account.host);
+      gsasl_property_set(sctx, GSASL_HOSTNAME, NONULL(conn->account.host));
       rc = GSASL_OK;
       break;
 

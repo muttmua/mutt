@@ -46,8 +46,8 @@ imap_auth_res_t imap_auth_login(IMAP_DATA *idata, const char *method)
 
   mutt_message _("Logging in...");
 
-  imap_quote_string(q_user, sizeof(q_user), idata->conn->account.user);
-  imap_quote_string(q_pass, sizeof(q_pass), idata->conn->account.pass);
+  imap_quote_string(q_user, sizeof(q_user), NONULL(idata->conn->account.user));
+  imap_quote_string(q_pass, sizeof(q_pass), NONULL(idata->conn->account.pass));
 
 #ifdef DEBUG
   /* don't print the password unless we're at the ungodly debugging level
@@ -56,7 +56,7 @@ imap_auth_res_t imap_auth_login(IMAP_DATA *idata, const char *method)
    * additional protection */
 
   if (debuglevel < IMAP_LOG_PASS)
-    muttdbg(2, "Sending LOGIN command for %s...", idata->conn->account.user);
+    muttdbg(2, "Sending LOGIN command for %s...", NONULL(idata->conn->account.user));
 #endif
 
   snprintf(buf, sizeof(buf), "LOGIN %s %s", q_user, q_pass);

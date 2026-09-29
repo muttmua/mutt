@@ -152,7 +152,7 @@ static int tunnel_socket_close(CONNECTION *conn)
   waitpid(tunnel->pid, &status, 0);
   if (!WIFEXITED(status) || WEXITSTATUS(status))
   {
-    mutt_error(_("Tunnel to %s returned error %d (%s)"), conn->account.host,
+    mutt_error(_("Tunnel to %s returned error %d (%s)"), NONULL(conn->account.host),
                WEXITSTATUS(status),
                NONULL(mutt_strsysexit(WEXITSTATUS(status))));
     mutt_sleep(2);
@@ -174,7 +174,7 @@ static int tunnel_socket_read(CONNECTION *conn, char *buf, size_t len)
 
   if (rc < 0)
   {
-    mutt_error(_("Tunnel error talking to %s: %s"), conn->account.host,
+    mutt_error(_("Tunnel error talking to %s: %s"), NONULL(conn->account.host),
                strerror(errno));
     mutt_sleep(1);
     return -1;
@@ -198,7 +198,7 @@ static int tunnel_socket_write(CONNECTION *conn, const char *buf, size_t len)
 
     if (rc < 0)
     {
-      mutt_error(_("Tunnel error talking to %s: %s"), conn->account.host,
+      mutt_error(_("Tunnel error talking to %s: %s"), NONULL(conn->account.host),
                  strerror(errno));
       mutt_sleep(1);
       return -1;

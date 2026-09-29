@@ -244,7 +244,7 @@ int imap_mailbox_create(const char *folder, BUFFER *result)
 
   if (!(idata = imap_conn_find(&mx.account, MUTT_IMAP_CONN_NONEW)))
   {
-    muttdbg(1, "imap_mailbox_create: Couldn't find open connection to %s", mx.account.host);
+    muttdbg(1, "imap_mailbox_create: Couldn't find open connection to %s", NONULL(mx.account.host));
     goto fail;
   }
 
@@ -299,7 +299,7 @@ int imap_mailbox_rename(const char *mailbox, BUFFER *result)
 
   if (!(idata = imap_conn_find(&mx.account, MUTT_IMAP_CONN_NONEW)))
   {
-    muttdbg(1, "imap_mailbox_rename: Couldn't find open connection to %s", mx.account.host);
+    muttdbg(1, "imap_mailbox_rename: Couldn't find open connection to %s", NONULL(mx.account.host));
     goto fail;
   }
 
