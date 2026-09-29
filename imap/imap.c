@@ -153,17 +153,16 @@ int imap_rename_mailbox(IMAP_DATA *idata, IMAP_MBOX *mx, const char *newname)
   return rc;
 }
 
-int imap_delete_mailbox(CONTEXT *ctx, IMAP_MBOX mx)
+int imap_delete_mailbox(CONTEXT *ctx, IMAP_MBOX *mx)
 {
   char buf[LONG_STRING*2], mbox[LONG_STRING];
   IMAP_DATA *idata;
 
   if (!ctx || !ctx->data)
   {
-    if (!(idata = imap_conn_find(&mx.account,
+    if (!(idata = imap_conn_find(&mx->account,
                                  option(OPTIMAPPASSIVE) ? MUTT_IMAP_CONN_NONEW : 0)))
     {
-      FREE(&mx.mbox);
       return -1;
     }
   }
@@ -172,7 +171,7 @@ int imap_delete_mailbox(CONTEXT *ctx, IMAP_MBOX mx)
     idata = ctx->data;
   }
 
-  imap_munge_mbox_name(idata, mbox, sizeof(mbox), mx.mbox);
+  imap_munge_mbox_name(idata, mbox, sizeof(mbox), mx->mbox);
   snprintf(buf, sizeof(buf), "DELETE %s", mbox);
 
   if (imap_exec((IMAP_DATA*) idata, buf, 0) != 0)
