@@ -1120,7 +1120,7 @@ static void cmd_parse_status(IMAP_DATA *idata, char *s)
   char *mailbox;
   char *value;
   BUFFY *inc;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   unsigned long ulcount;
   unsigned int count;
   IMAP_STATUS *status;
@@ -1232,7 +1232,7 @@ static void cmd_parse_status(IMAP_DATA *idata, char *s)
       {
         value = safe_strdup(mx.mbox);
         imap_fix_path(idata, mx.mbox, value, mutt_strlen(value) + 1);
-        FREE(&mx.mbox);
+        imap_mbox_free(&mx);
       }
       else
         value = safe_strdup("INBOX");
@@ -1274,6 +1274,7 @@ static void cmd_parse_status(IMAP_DATA *idata, char *s)
              opened */
           status->uidnext = oldun;
 
+        imap_mbox_free(&mx);
         FREE(&value);
         return;
       }
@@ -1281,7 +1282,7 @@ static void cmd_parse_status(IMAP_DATA *idata, char *s)
       FREE(&value);
     }
 
-    FREE(&mx.mbox);
+    imap_mbox_free(&mx);
   }
 }
 

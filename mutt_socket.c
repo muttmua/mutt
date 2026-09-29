@@ -276,6 +276,7 @@ void mutt_socket_free(CONNECTION *conn)
   if (iter == conn)
   {
     Connections = iter->next;
+    mutt_account_free(&iter->account);
     FREE(&iter);
     return;
   }
@@ -286,6 +287,7 @@ void mutt_socket_free(CONNECTION *conn)
     {
       tmp = iter->next;
       iter->next = tmp->next;
+      mutt_account_free(&tmp->account);
       FREE(&tmp);
       return;
     }
@@ -319,7 +321,7 @@ CONNECTION *mutt_conn_find(const CONNECTION *start, const ACCOUNT *account)
   }
 
   conn = socket_new_conn();
-  memcpy(&conn->account, account, sizeof(ACCOUNT));
+  mutt_account_copy(&conn->account, account);
 
   conn->next = Connections;
   Connections = conn;

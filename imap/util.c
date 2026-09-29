@@ -51,7 +51,7 @@
  *   fails, which it might if there isn't enough room in the buffer. */
 int imap_expand_path(BUFFER *path)
 {
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   IMAP_DATA *idata;
   ciss_url_t url;
   char fixedpath[LONG_STRING];
@@ -66,14 +66,14 @@ int imap_expand_path(BUFFER *path)
   url.path = fixedpath;
 
   rc = url_ciss_tobuffer(&url, path, U_DECODE_PASSWD);
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
 
   return rc;
 }
 
 int imap_buffer_remove_path_password(BUFFER *dest, const char *src)
 {
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   ciss_url_t url;
   int rc;
 
@@ -87,7 +87,7 @@ int imap_buffer_remove_path_password(BUFFER *dest, const char *src)
 
   /* flags = 0 will strip the password, if present */
   rc = url_ciss_tobuffer(&url, dest, 0);
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
 
   return rc;
 }
@@ -158,7 +158,7 @@ static void imap_hcache_namer(const char *path, BUFFER *dest)
 
 header_cache_t *imap_hcache_open(IMAP_DATA *idata, const char *path)
 {
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   ciss_url_t url;
   BUFFER *cachepath = NULL;
   BUFFER *mbox = NULL;
@@ -176,7 +176,6 @@ header_cache_t *imap_hcache_open(IMAP_DATA *idata, const char *path)
       goto cleanup;
 
     imap_cachepath(idata, mx.mbox, mbox);
-    FREE(&mx.mbox);
   }
 
   if (strstr(mutt_b2s(mbox), "/../") ||
@@ -195,6 +194,7 @@ header_cache_t *imap_hcache_open(IMAP_DATA *idata, const char *path)
   rv = mutt_hcache_open(HeaderCache, mutt_b2s(cachepath), imap_hcache_namer);
 
 cleanup:
+  imap_mbox_free(&mx);
   mutt_buffer_pool_release(&mbox);
   mutt_buffer_pool_release(&cachepath);
   return rv;
@@ -321,7 +321,7 @@ int imap_parse_path(const char *path, IMAP_MBOX *mx)
   static unsigned short ImapPort = 0;
   static unsigned short ImapsPort = 0;
   struct servent *service;
-  char tmp[128];
+  char tmp[128], tmp2[128];
   ciss_url_t url;
   char *c;
   const char *constc;
@@ -355,8 +355,9 @@ int imap_parse_path(const char *path, IMAP_MBOX *mx)
   url_parse_ciss(&url, c);
   if (url.scheme == U_IMAP || url.scheme == U_IMAPS)
   {
-    if (mutt_account_fromurl(&mx->account, &url) < 0 || !*mx->account.host)
+    if (mutt_account_fromurl(&mx->account, &url) < 0 || !mx->account.host)
     {
+      mutt_account_free(&mx->account);
       FREE(&c);
       return -1;
     }
@@ -385,18 +386,19 @@ int imap_parse_path(const char *path, IMAP_MBOX *mx)
     if ((c = strrchr(tmp, '@')))
     {
       *c = '\0';
-      strfcpy(mx->account.user, tmp, sizeof(mx->account.user));
+      mx->account.user = safe_strdup(tmp);
       strfcpy(tmp, c+1, sizeof(tmp));
       mx->account.flags |= MUTT_ACCT_USER;
       mx->account.flags |= MUTT_ACCT_USER_FROM_URL;
     }
 
-    if ((n = sscanf(tmp, "%127[^:/]%127s", mx->account.host, tmp)) < 1)
+    if ((n = sscanf(tmp, "%127[^:/]%127s", tmp2, tmp)) < 1)
     {
       muttdbg(1, "imap_parse_path: NULL host in %s", path);
-      FREE(&mx->mbox);
+      imap_mbox_free(mx);
       return -1;
     }
+    mx->account.host = safe_strdup(tmp2);
 
     if (n > 1)
     {
@@ -409,7 +411,7 @@ int imap_parse_path(const char *path, IMAP_MBOX *mx)
         else
         {
           muttdbg(1, "imap_parse_path: Unknown connection type in %s", path);
-          FREE(&mx->mbox);
+          imap_mbox_free(mx);
           return -1;
         }
       }
@@ -420,6 +422,16 @@ int imap_parse_path(const char *path, IMAP_MBOX *mx)
     mx->account.port = ImapsPort;
 
   return 0;
+}
+
+/* The IMAP_MBOX structures aren't dynamically allocated, but its members are. */
+void imap_mbox_free(IMAP_MBOX *mbox)
+{
+  if (!mbox)
+    return;
+
+  mutt_account_free(&mbox->account);
+  FREE(&mbox->mbox);
 }
 
 /* silly helper for mailbox name string comparisons, because of INBOX */
@@ -453,7 +465,7 @@ int imap_mxcmp(const char *mx1, const char *mx2)
  *   look nice. */
 void imap_pretty_mailbox(char *path, size_t pathlen)
 {
-  IMAP_MBOX home, target;
+  IMAP_MBOX home = { 0 }, target = { 0 };
   ciss_url_t url;
   char *delim;
   int tlen;
@@ -478,7 +490,6 @@ void imap_pretty_mailbox(char *path, size_t pathlen)
           if (target.mbox[hlen] == *delim)
             home_match = 1;
     }
-    FREE(&home.mbox);
   }
 
   /* do the '=' substitution */
@@ -498,7 +509,8 @@ void imap_pretty_mailbox(char *path, size_t pathlen)
     url_ciss_tostring(&url, path, pathlen, 0);
   }
 
-  FREE(&target.mbox);
+  imap_mbox_free(&home);
+  imap_mbox_free(&target);
 }
 
 /* -- library functions -- */

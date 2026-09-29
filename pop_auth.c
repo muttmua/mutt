@@ -352,7 +352,7 @@ static pop_auth_res_t pop_auth_apop(POP_DATA *pop_data, const char *method)
   md5_init_ctx(&ctx);
   md5_process_bytes(pop_data->timestamp, strlen(pop_data->timestamp), &ctx);
   md5_process_bytes(pop_data->conn->account.pass,
-                    strlen(pop_data->conn->account.pass), &ctx);
+                    mutt_strlen(pop_data->conn->account.pass), &ctx);
   md5_finish_ctx(&ctx, digest);
 
   for (i = 0; i < sizeof(digest); i++)

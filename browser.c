@@ -1221,12 +1221,13 @@ void _mutt_buffer_select_file(BUFFER *f, int flags, char ***files, int *numfiles
         else
         {
           char msg[SHORT_STRING];
-          IMAP_MBOX mx;
+          IMAP_MBOX mx = { 0 };
           int nentry = menu->current;
 
           imap_parse_path(state.entry[nentry].full_path, &mx);
           if (!mx.mbox)
           {
+            imap_mbox_free(&mx);
             mutt_error _("Cannot delete root folder");
             break;
           }
@@ -1256,7 +1257,7 @@ void _mutt_buffer_select_file(BUFFER *f, int flags, char ***files, int *numfiles
           }
           else
             mutt_message _("Mailbox not deleted.");
-          FREE(&mx.mbox);
+          imap_mbox_free(&mx);
         }
         break;
 #endif

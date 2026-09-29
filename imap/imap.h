@@ -65,6 +65,7 @@ void imap_logout_all(void);
 int imap_expand_path(BUFFER *path);
 int imap_buffer_remove_path_password(BUFFER *dest, const char *src);
 int imap_parse_path(const char *path, IMAP_MBOX *mx);
+void imap_mbox_free(IMAP_MBOX *mbox);
 void imap_pretty_mailbox(char *path, size_t pathlen);
 
 int imap_wait_keepalive(pid_t pid);

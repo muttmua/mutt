@@ -53,7 +53,7 @@ int imap_browse(const char *path, struct browser_state *state)
   char ctmp;
   short showparents = 0;
   int save_lsub;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
 
   if (imap_parse_path(path, &mx))
   {
@@ -218,13 +218,13 @@ int imap_browse(const char *path, struct browser_state *state)
   if (save_lsub)
     set_option(OPTIMAPCHECKSUBSCRIBED);
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return 0;
 
 fail:
   if (save_lsub)
     set_option(OPTIMAPCHECKSUBSCRIBED);
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return -1;
 }
 
@@ -232,7 +232,7 @@ fail:
 int imap_mailbox_create(const char *folder, BUFFER *result)
 {
   IMAP_DATA *idata;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   char buf[LONG_STRING];
   short n;
 
@@ -276,18 +276,18 @@ int imap_mailbox_create(const char *folder, BUFFER *result)
   mutt_message _("Mailbox created.");
   mutt_sleep(0);
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return 0;
 
 fail:
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return -1;
 }
 
 int imap_mailbox_rename(const char *mailbox, BUFFER *result)
 {
   IMAP_DATA *idata;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   char buf[LONG_STRING];
   char newname[SHORT_STRING];
 
@@ -336,11 +336,11 @@ int imap_mailbox_rename(const char *mailbox, BUFFER *result)
   mutt_message(_("Mailbox renamed."));
   mutt_sleep(0);
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return 0;
 
 fail:
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return -1;
 }
 
@@ -348,7 +348,7 @@ static int browse_add_list_result(IMAP_DATA *idata, const char *cmd,
                                   struct browser_state *state, short isparent)
 {
   IMAP_LIST list;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   int rc;
 
   if (imap_parse_path(state->folder, &mx))
@@ -379,7 +379,7 @@ static int browse_add_list_result(IMAP_DATA *idata, const char *cmd,
   while (rc == IMAP_CMD_CONTINUE);
   idata->cmddata = NULL;
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return rc == IMAP_CMD_OK ? 0 : -1;
 }
 
@@ -394,7 +394,7 @@ static void imap_add_folder(char delim, char *folder, int noselect,
 {
   char tmp[LONG_STRING];
   char relpath[LONG_STRING];
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   BUFFY *b;
 
   if (imap_parse_path(state->folder, &mx))
@@ -467,7 +467,7 @@ static void imap_add_folder(char delim, char *folder, int noselect,
 
   (state->entrylen)++;
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
 }
 
 static int compare_names(struct folder_file *a, struct folder_file *b)

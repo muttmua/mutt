@@ -27,6 +27,40 @@
 #include "url.h"
 #include "mutt_curses.h"
 
+/* Accounts aren't independently allocated.  They are members of the
+ * CONNECTION and IMAP_DATA structs.  This function frees the char*
+ * members of the ACCOUNT and resets the integer values in case the
+ * structure is reused in a loop.
+ */
+void mutt_account_free(ACCOUNT *account)
+{
+  if (!account)
+    return;
+
+  FREE(&account->user);
+  FREE(&account->login);
+  FREE(&account->pass);
+  FREE(&account->host);
+  account->port = 0;
+  account->type = 0;
+  account->flags = 0;
+}
+
+void mutt_account_copy(ACCOUNT *dest, const ACCOUNT *src)
+{
+  if (!dest || !src)
+    return;
+
+  dest->user = safe_strdup(src->user);
+  dest->login = safe_strdup(src->login);
+  dest->pass = safe_strdup(src->pass);
+  dest->host = safe_strdup(src->host);
+  dest->port = src->port;
+  dest->type = src->type;
+  dest->flags = src->flags;
+}
+
+
 /* mutt_account_match: compare account info (host/port/user) */
 int mutt_account_match(const ACCOUNT *a1, const ACCOUNT *a2)
 {
@@ -53,11 +87,11 @@ int mutt_account_match(const ACCOUNT *a1, const ACCOUNT *a2)
 #endif
 
   if (a1->flags & a2->flags & MUTT_ACCT_USER)
-    return (!strcmp(a1->user, a2->user));
+    return (!mutt_strcmp(a1->user, a2->user));
   if (a1->flags & MUTT_ACCT_USER)
-    return (!strcmp(a1->user, user));
+    return (!mutt_strcmp(a1->user, user));
   if (a2->flags & MUTT_ACCT_USER)
-    return (!strcmp(a2->user, user));
+    return (!mutt_strcmp(a2->user, user));
 
   return 1;
 }
@@ -67,19 +101,19 @@ int mutt_account_fromurl(ACCOUNT *account, ciss_url_t *url)
 {
   /* must be present */
   if (url->host)
-    strfcpy(account->host, url->host, sizeof(account->host));
+    mutt_str_replace(&account->host, url->host);
   else
     return -1;
 
   if (url->user)
   {
-    strfcpy(account->user, url->user, sizeof(account->user));
+    mutt_str_replace(&account->user, url->user);
     account->flags |= MUTT_ACCT_USER;
     account->flags |= MUTT_ACCT_USER_FROM_URL;
   }
   if (url->pass)
   {
-    strfcpy(account->pass, url->pass, sizeof(account->pass));
+    mutt_str_replace(&account->pass, url->pass);
     account->flags |= MUTT_ACCT_PASS;
     account->flags |= MUTT_ACCT_PASS_FROM_URL;
   }
@@ -161,17 +195,18 @@ void mutt_account_tourl(ACCOUNT *account, ciss_url_t *url, int force_user)
 int mutt_account_getuser(ACCOUNT *account)
 {
   char prompt[SHORT_STRING];
+  char userbuf[LONG_STRING];
 
   /* already set */
   if (account->flags & MUTT_ACCT_USER)
     return 0;
 #ifdef USE_IMAP
   else if ((account->type == MUTT_ACCT_TYPE_IMAP) && ImapUser)
-    strfcpy(account->user, ImapUser, sizeof(account->user));
+    mutt_str_replace(&account->user, ImapUser);
 #endif
 #ifdef USE_POP
   else if ((account->type == MUTT_ACCT_TYPE_POP) && PopUser)
-    strfcpy(account->user, PopUser, sizeof(account->user));
+    mutt_str_replace(&account->user, PopUser);
 #endif
   else if (option(OPTNOCURSES))
     return -1;
@@ -179,9 +214,10 @@ int mutt_account_getuser(ACCOUNT *account)
   else
   {
     snprintf(prompt, sizeof(prompt), _("Username at %s: "), account->host);
-    strfcpy(account->user, NONULL(Username), sizeof(account->user));
-    if (mutt_get_field_unbuffered(prompt, account->user, sizeof(account->user), 0))
+    strfcpy(userbuf, NONULL(Username), sizeof(userbuf));
+    if (mutt_get_field_unbuffered(prompt, userbuf, sizeof(userbuf), 0))
       return -1;
+    mutt_str_replace(&account->user, userbuf);
   }
 
   account->flags |= MUTT_ACCT_USER;
@@ -199,7 +235,7 @@ int mutt_account_getlogin(ACCOUNT *account)
   {
     if (ImapLogin)
     {
-      strfcpy(account->login, ImapLogin, sizeof(account->login));
+      mutt_str_replace(&account->login, ImapLogin);
       account->flags |= MUTT_ACCT_LOGIN;
     }
   }
@@ -208,7 +244,7 @@ int mutt_account_getlogin(ACCOUNT *account)
   if (!(account->flags & MUTT_ACCT_LOGIN))
   {
     mutt_account_getuser(account);
-    strfcpy(account->login, account->user, sizeof(account->login));
+    mutt_str_replace(&account->login, account->user);
   }
 
   account->flags |= MUTT_ACCT_LOGIN;
@@ -231,29 +267,31 @@ int _mutt_account_getpass(ACCOUNT *account,
                           void (*prompt_func)(char *, size_t, ACCOUNT *))
 {
   char prompt[SHORT_STRING];
+  char passbuf[LONG_STRING];
 
   if (account->flags & MUTT_ACCT_PASS)
     return 0;
 #ifdef USE_IMAP
   else if ((account->type == MUTT_ACCT_TYPE_IMAP) && ImapPass)
-    strfcpy(account->pass, ImapPass, sizeof(account->pass));
+    mutt_str_replace(&account->pass, ImapPass);
 #endif
 #ifdef USE_POP
   else if ((account->type == MUTT_ACCT_TYPE_POP) && PopPass)
-    strfcpy(account->pass, PopPass, sizeof(account->pass));
+    mutt_str_replace(&account->pass, PopPass);
 #endif
 #ifdef USE_SMTP
   else if ((account->type == MUTT_ACCT_TYPE_SMTP) && SmtpPass)
-    strfcpy(account->pass, SmtpPass, sizeof(account->pass));
+    mutt_str_replace(&account->pass, SmtpPass);
 #endif
   else if (option(OPTNOCURSES))
     return -1;
   else
   {
     prompt_func(prompt, sizeof(prompt), account);
-    account->pass[0] = '\0';
-    if (mutt_get_password(prompt, account->pass, sizeof(account->pass)))
+    passbuf[0] = '\0';
+    if (mutt_get_password(prompt, passbuf, sizeof(passbuf)))
       return -1;
+    mutt_str_replace(&account->pass, passbuf);
   }
 
   account->flags |= MUTT_ACCT_PASS;

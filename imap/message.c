@@ -1323,7 +1323,7 @@ int imap_append_message(CONTEXT *ctx, MESSAGE *msg)
   progress_t progressbar;
   size_t sent;
   int c, last;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   int rc;
 
   idata = (IMAP_DATA*) ctx->data;
@@ -1422,7 +1422,7 @@ int imap_append_message(CONTEXT *ctx, MESSAGE *msg)
   if (rc != IMAP_CMD_OK)
     goto cmd_step_fail;
 
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return 0;
 
 cmd_step_fail:
@@ -1442,7 +1442,7 @@ cmd_step_fail:
 
 fail:
   safe_fclose(&fp);
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
   return -1;
 }
 
@@ -1461,7 +1461,7 @@ int imap_copy_messages(CONTEXT *ctx, HEADER *h, const char *dest, int delete)
   char prompt[LONG_STRING];
   int rc;
   int n;
-  IMAP_MBOX mx;
+  IMAP_MBOX mx = { 0 };
   int err_continue = MUTT_NO;
   int triedcreate = 0;
 
@@ -1626,7 +1626,7 @@ int imap_copy_messages(CONTEXT *ctx, HEADER *h, const char *dest, int delete)
 out:
   mutt_buffer_pool_release(&sync_cmd);
   mutt_buffer_pool_release(&cmd);
-  FREE(&mx.mbox);
+  imap_mbox_free(&mx);
 
   return rc < 0 ? -1 : rc;
 }
