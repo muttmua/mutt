@@ -335,7 +335,7 @@ mutt_smtp_send(const ADDRESS *from, const ADDRESS *to, const ADDRESS *cc,
                const ADDRESS *bcc, const char *msgfile, int eightbit)
 {
   CONNECTION *conn;
-  ACCOUNT account;
+  ACCOUNT account = { 0 };
   const char *envfrom;
   char buf[1024];
   int ret = -1;
@@ -343,7 +343,9 @@ mutt_smtp_send(const ADDRESS *from, const ADDRESS *to, const ADDRESS *cc,
   if (smtp_fill_account(&account) < 0)
     return ret;
 
-  if (!(conn = mutt_conn_find(NULL, &account)))
+  conn = mutt_conn_find(NULL, &account);
+  mutt_account_free(&account);
+  if (!conn)
     return -1;
 
   /* it might be better to synthesize an envelope from from user and host

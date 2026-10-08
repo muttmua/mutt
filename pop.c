@@ -428,10 +428,10 @@ static int pop_fetch_headers(CONTEXT *ctx)
 /* open POP mailbox - fetch only headers */
 static int pop_open_mailbox(CONTEXT *ctx)
 {
-  int ret;
+  int fetch_retval, retval = -1;
   char buf[LONG_STRING];
   CONNECTION *conn;
-  ACCOUNT acct;
+  ACCOUNT acct = { 0 };
   POP_DATA *pop_data;
   ciss_url_t url;
 
@@ -439,7 +439,7 @@ static int pop_open_mailbox(CONTEXT *ctx)
   {
     mutt_error(_("%s is an invalid POP path"), ctx->path);
     mutt_sleep(2);
-    return -1;
+    goto cleanup;
   }
 
   mutt_account_tourl(&acct, &url, 0);
@@ -447,7 +447,7 @@ static int pop_open_mailbox(CONTEXT *ctx)
   url_ciss_tostring(&url, buf, sizeof(buf), 0);
   conn = mutt_conn_find(NULL, &acct);
   if (!conn)
-    return -1;
+    goto cleanup;
 
   FREE(&ctx->path);
   FREE(&ctx->realpath);
@@ -459,7 +459,7 @@ static int pop_open_mailbox(CONTEXT *ctx)
   ctx->data = pop_data;
 
   if (pop_open_connection(pop_data) < 0)
-    return -1;
+    goto cleanup;
 
   conn->data = pop_data;
   pop_data->bcache = mutt_bcache_open(&acct, NULL);
@@ -477,23 +477,31 @@ static int pop_open_mailbox(CONTEXT *ctx)
   FOREVER
   {
     if (pop_reconnect(ctx) < 0)
-      return -1;
+      goto cleanup;
 
     ctx->size = pop_data->size;
 
     mutt_message _("Fetching list of messages...");
 
-    ret = pop_fetch_headers(ctx);
+    fetch_retval = pop_fetch_headers(ctx);
 
-    if (ret >= 0)
-      return 0;
+    if (fetch_retval >= 0)
+    {
+      retval = 0;
+      break;
+    }
 
-    if (ret < -1)
+    if (fetch_retval < -1)
     {
       mutt_sleep(2);
-      return -1;
+      retval = -1;
+      break;
     }
   }
+
+cleanup:
+  mutt_account_free(&acct);
+  return retval;
 }
 
 /* delete all cached messages */
@@ -878,7 +886,7 @@ void pop_fetch_mail(void)
   CONNECTION *conn;
   CONTEXT ctx;
   MESSAGE *msg = NULL;
-  ACCOUNT acct;
+  ACCOUNT acct = { 0 };
   POP_DATA *pop_data;
 
   if (!PopHost)
@@ -900,10 +908,12 @@ void pop_fetch_mail(void)
   if (ret)
   {
     mutt_error(_("%s is an invalid POP path"), PopHost);
+    mutt_account_free(&acct);
     return;
   }
 
   conn = mutt_conn_find(NULL, &acct);
+  mutt_account_free(&acct);
   if (!conn)
     return;
 

@@ -415,19 +415,19 @@ static int mutt_sasl_cb_authname(void *context, int id, const char **result,
 
   muttdbg(2, "getting %s for %s:%u",
           id == SASL_CB_AUTHNAME ? "authname" : "user",
-          account->host, account->port);
+          NONULL(account->host), account->port);
 
   if (id == SASL_CB_AUTHNAME)
   {
     if (mutt_account_getlogin(account))
       return SASL_FAIL;
-    *result = account->login;
+    *result = NONULL(account->login);
   }
   else
   {
     if (mutt_account_getuser(account))
       return SASL_FAIL;
-    *result = account->user;
+    *result = NONULL(account->user);
   }
 
   if (len)
@@ -445,13 +445,13 @@ static int mutt_sasl_cb_pass(sasl_conn_t *conn, void *context, int id,
   if (!account || !psecret)
     return SASL_BADPARAM;
 
-  muttdbg(2, "getting password for %s@%s:%u", account->login,
-          account->host, account->port);
+  muttdbg(2, "getting password for %s@%s:%u", NONULL(account->login),
+          NONULL(account->host), account->port);
 
   if (mutt_account_getpass(account))
     return SASL_FAIL;
 
-  len = strlen(account->pass);
+  len = mutt_strlen(account->pass);
 
   safe_realloc(&secret_ptr, sizeof(sasl_secret_t) + len);
   memcpy((char *) secret_ptr->data, account->pass, (size_t) len);

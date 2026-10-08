@@ -1282,7 +1282,7 @@ static void client_cert_prompt(char *prompt, size_t prompt_size, ACCOUNT *accoun
      to decrypt the cert.  %s is the hostname.
   */
   snprintf(prompt, prompt_size, _("Password for %s client cert: "),
-           account->host);
+           NONULL(account->host));
 }
 
 static int tls_passwd_cb(void *userdata, int attempt, const char *token_url,
@@ -1300,6 +1300,6 @@ static int tls_passwd_cb(void *userdata, int attempt, const char *token_url,
   if (_mutt_account_getpass(account, client_cert_prompt))
     return GNUTLS_E_INVALID_PASSWORD;
 
-  snprintf(buf, size, "%s", account->pass);
+  snprintf(buf, size, "%s", NONULL(account->pass));
   return GNUTLS_E_SUCCESS;
 }
