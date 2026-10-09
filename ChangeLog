@@ -1,3 +1,59 @@
+2026-10-09 17:53:05 +0800  Kevin J. McCarthy  <kevin@8t8.us> (667b81b6)
+
+        * Update UPDATING file for 2.4.3 release.
+
+M	UPDATING
+
+2026-10-06 13:50:42 +0800  Kevin J. McCarthy  <kevin@8t8.us> (7752d93f)
+
+        * Fix OOB heap write in convert_file_from_to().
+        
+        This issue was reported by Calif.io, in collaboration with Anthropic,
+        with a full reproduce and suggested patch.  I've reviewed the patch
+        and concur it is the best approach.
+        
+        This is due to a logic error in convert_file_from_to() in sendlib.c.
+        It first counts the number of charsets to try in one loop, and then
+        allocates and copies the charsets over in a separate loop afterwards.
+        
+        Unfortunately the second loop's logic does not follow the first loop
+        exactly, and the counter gets out of sync with a zero-length charset.
+        For example ":utf-8" where ":" is the delimiter.
+        
+        The fix is to keep the counter logic the same: incrementing after the
+        initial zero-length charset check instead of in the for loop increment
+        clause.
+        
+        It takes user interaction to trigger this OOB write: using the
+        received message as a template in a new message via <resend-message>.
+        The write is of arbitrary length.
+        
+        Calif.io did not report any exploitation beyond the OOB write.
+        Nonetheless, I recommend all shipping distributions apply this patch.
+
+M	sendlib.c
+
+2026-09-08 12:52:44 +0800  Kevin J. McCarthy  <kevin@8t8.us> (4364e5b0)
+
+        * Fix mutt_signed_handler() goodsig setting.
+        
+        The signed handler did not properly handle the case where
+        crypt_write_signed() fails, or the case where an unknown signature
+        type is encountered.  In both those cases, goodsig would be left as 1,
+        giving a status flag in the index as 'S', indicating a goodsig.
+        
+        Thanks to Acts1631 for the ticket, with a detailed description of the
+        problem and suggested fix, which this patch is based on.
+
+M	crypt.c
+
+2026-08-30 10:49:50 +0800  Kevin J. McCarthy  <kevin@8t8.us> (ce069def)
+
+        * automatic post-release commit for mutt-2.4.2
+
+M	ChangeLog
+M	VERSION
+
 2026-08-30 10:46:17 +0800  Kevin J. McCarthy  <kevin@8t8.us> (bd1a8ef8)
 
         * Update UPDATING file for 2.4.2 release.
