@@ -1737,8 +1737,10 @@ int imap_close_mailbox(CONTEXT *ctx)
     }
 
     mutt_bcache_close(&idata->bcache);
+#if USE_HCACHE
     mutt_hcache_close(&idata->hcache);
     idata->hcache_open_count = 0;
+#endif
   }
 
   /* free IMAP part of headers */
