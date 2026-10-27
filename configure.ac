@@ -519,6 +519,21 @@ if test $mutt_cv_regex = yes; then
         AC_LIBOBJ(regex)
 fi
 
+dnl -- locking, spoolfile options --
+
+AC_ARG_ENABLE(flock, AS_HELP_STRING([--enable-flock],[Use flock() to lock files]),
+              [],
+              [enable_flock=no])
+if test "x$enable_flock" = "xyes"; then
+    AC_DEFINE(USE_FLOCK,1, [ Define to use flock() to lock mailboxes. ])
+fi
+
+AC_ARG_ENABLE(fcntl, AS_HELP_STRING([--disable-fcntl],[Do NOT use fcntl() to lock files]),
+              [],
+              [enable_fcntl=yes])
+if test "x$enable_fcntl" = "xyes"; then
+    AC_DEFINE(USE_FCNTL,1, [ Define to use fcntl() to lock folders. ])
+fi
 
 AC_ARG_WITH(homespool,
   AS_HELP_STRING([--with-homespool@<:@=FILE@:>@],[File in user's directory where new mail is spooled]), with_homespool=${withval})
@@ -935,19 +950,6 @@ AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[Enable debugging support])
                 AC_DEFINE(DEBUG,1,[ Define to enable debugging info. ])
           fi
          ])
-
-AC_ARG_ENABLE(flock, AS_HELP_STRING([--enable-flock],[Use flock() to lock files]),
-        [if test $enableval = yes; then
-                AC_DEFINE(USE_FLOCK,1, [ Define to use flock() to lock mailboxes. ])
-        fi])
-
-mutt_cv_fcntl=yes
-AC_ARG_ENABLE(fcntl, AS_HELP_STRING([--disable-fcntl],[Do NOT use fcntl() to lock files]),
-        [if test $enableval = no; then mutt_cv_fcntl=no; fi])
-
-if test $mutt_cv_fcntl = yes; then
-        AC_DEFINE(USE_FCNTL,1, [ Define to use fcntl() to lock folders. ])
-fi
 
 AC_ARG_ENABLE(filemonitor, AS_HELP_STRING([--disable-filemonitor],[Disable file monitoring support (Linux only)]),
 [       if test x$enableval = xno ; then
