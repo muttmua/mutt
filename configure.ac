@@ -535,22 +535,29 @@ if test "x$enable_fcntl" = "xyes"; then
     AC_DEFINE(USE_FCNTL,1, [ Define to use fcntl() to lock folders. ])
 fi
 
+AC_ARG_ENABLE(dotlock, AS_HELP_STRING([--disable-dotlock],[Do NOT use dotlocking to lock files]),
+              [],
+              [enable_dotlock=yes])
+
+AC_ARG_ENABLE(external_dotlock, AS_HELP_STRING([--enable-external-dotlock],[Force use of an external dotlock program]),
+              [],
+              [enable_external_dotlock=no])
+
 AC_ARG_WITH(homespool,
   AS_HELP_STRING([--with-homespool@<:@=FILE@:>@],[File in user's directory where new mail is spooled]), with_homespool=${withval})
+
 if test x$with_homespool != x; then
-        if test $with_homespool = yes; then
-                with_homespool=mailbox
-        fi
-        AC_DEFINE_UNQUOTED(MAILPATH,"$with_homespool",[ Where new mail is spooled. ])
-        AC_DEFINE(HOMESPOOL,1,
+    if test $with_homespool = yes; then
+        with_homespool=mailbox
+    fi
+    AC_DEFINE_UNQUOTED(MAILPATH,"$with_homespool",[ Where new mail is spooled. ])
+    AC_DEFINE(HOMESPOOL,1,
           [Is mail spooled to the user's home directory?  If defined,
            MAILPATH should be set to the filename of the spool mailbox
            relative the the home directory.
            use: configure --with-homespool=FILE])
-        AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
-        mutt_cv_setgid=no
 else
-        AC_ARG_WITH(mailpath, AS_HELP_STRING([--with-mailpath=DIR],[Directory where spool mailboxes are located]),
+    AC_ARG_WITH(mailpath, AS_HELP_STRING([--with-mailpath=DIR],[Directory where spool mailboxes are located]),
                 [mutt_cv_mailpath=$withval],
                 [ AC_CACHE_CHECK(where new mail is stored, mutt_cv_mailpath,
                         [mutt_cv_mailpath=no
@@ -564,11 +571,17 @@ else
                                 mutt_cv_mailpath=/usr/mail
                         fi])
                 ])
-        if test "$mutt_cv_mailpath" = no; then
-                AC_MSG_ERROR("Could not determine where new mail is stored.")
-        fi
-        AC_DEFINE_UNQUOTED(MAILPATH,"$mutt_cv_mailpath",[ Where new mail is spooled. ])
+    if test "$mutt_cv_mailpath" = no; then
+        AC_MSG_ERROR("Could not determine where new mail is stored.")
+    fi
+    AC_DEFINE_UNQUOTED(MAILPATH,"$mutt_cv_mailpath",[ Where new mail is spooled. ])
+fi
 
+if test x"$enable_dotlock" = "xyes"; then
+    if test x$with_homespool != x; then
+        AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
+        mutt_cv_setgid=no
+    else
         AC_CACHE_CHECK(if $mutt_cv_mailpath is world writable, mutt_cv_worldwrite, [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -584,10 +597,10 @@ int main (int argc, char **argv)
 
         mutt_cv_setgid=no
         if test $mutt_cv_worldwrite = yes; then
-                AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
+            AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
         else
 
-                AC_CACHE_CHECK(if $mutt_cv_mailpath is group writable, mutt_cv_groupwrite, [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
+            AC_CACHE_CHECK(if $mutt_cv_mailpath is group writable, mutt_cv_groupwrite, [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 
@@ -600,24 +613,22 @@ int main (int argc, char **argv)
         exit (1);
 }]])],[mutt_cv_groupwrite=yes],[mutt_cv_groupwrite=no],[mutt_cv_groupwrite=no])])
 
-                if test $mutt_cv_groupwrite = yes; then
-                        AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
-                        AC_DEFINE(USE_SETGID,1,[ Define if mutt should run setgid "mail". ])
-                        mutt_cv_setgid=yes
-                fi
+            if test $mutt_cv_groupwrite = yes; then
+                AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
+                AC_DEFINE(USE_SETGID,1,[ Define if mutt should run setgid "mail". ])
+                mutt_cv_setgid=yes
+            fi
         fi
-fi
+    fi
 
-AC_ARG_ENABLE(external_dotlock, AS_HELP_STRING([--enable-external-dotlock],[Force use of an external dotlock program]),
-        [mutt_cv_external_dotlock="$enableval"])
-
-if test "x$mutt_cv_setgid" = "xyes" || test "x$mutt_cv_fchdir" = "xno" \
-        || test "x$mutt_cv_external_dotlock" = "xyes"
-then
+    if test "x$mutt_cv_setgid" = "xyes" || test "x$mutt_cv_fchdir" = "xno" \
+        || test "x$enable_external_dotlock" = "xyes"
+    then
         AC_DEFINE(DL_STANDALONE,1,[ Define if you want to use an external dotlocking program. ])
         DOTLOCK_TARGET="mutt_dotlock\$(EXEEXT)"
-else
+    else
         MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS dotlock.o"
+    fi
 fi
 
 AC_SUBST(DOTLOCK_TARGET)

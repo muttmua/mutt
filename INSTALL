@@ -107,6 +107,10 @@ options are:
 	result in poor performance on read/write.  Note that using this
 	option could be dangerous if dotlocking is also disabled.
 
+--disable-dotlock
+	Turn off the use of dotlocking to lock files.  Note that using this
+	option could be dangerous if fcntl is also disabled.
+
 --disable-filemonitor
         disables inotify support for faster local mailbox monitoring.
         The filemonitor option is only available on Linux.
