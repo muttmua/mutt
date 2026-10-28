@@ -543,6 +543,12 @@ AC_ARG_ENABLE(external_dotlock, AS_HELP_STRING([--enable-external-dotlock],[Forc
               [],
               [enable_external_dotlock=no])
 
+if test x"$enable_flock" != "xyes" -a x"$enable_fcntl" != "xyes" \
+    -a x"$enable_dotlock" != "xyes"
+then
+        AC_MSG_ERROR([At least one of flock, fcntl, or dotlock must be enabled])
+fi
+
 AC_ARG_WITH(homespool,
   AS_HELP_STRING([--with-homespool@<:@=FILE@:>@],[File in user's directory where new mail is spooled]), with_homespool=${withval})
 
@@ -578,9 +584,12 @@ else
 fi
 
 if test x"$enable_dotlock" = "xyes"; then
+    mutt_cv_dotlock_set=no
+
     if test x$with_homespool != x; then
         AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
         mutt_cv_setgid=no
+        mutt_cv_dotlock_set=yes
     else
         AC_CACHE_CHECK(if $mutt_cv_mailpath is world writable, mutt_cv_worldwrite, [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
 #include <sys/stat.h>
@@ -598,6 +607,7 @@ int main (int argc, char **argv)
         mutt_cv_setgid=no
         if test $mutt_cv_worldwrite = yes; then
             AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
+            mutt_cv_dotlock_set=yes
         else
 
             AC_CACHE_CHECK(if $mutt_cv_mailpath is group writable, mutt_cv_groupwrite, [AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
@@ -617,8 +627,15 @@ int main (int argc, char **argv)
                 AC_DEFINE(USE_DOTLOCK,1,[ Define to use dotlocking for mailboxes. ])
                 AC_DEFINE(USE_SETGID,1,[ Define if mutt should run setgid "mail". ])
                 mutt_cv_setgid=yes
+                mutt_cv_dotlock_set=yes
             fi
         fi
+    fi
+
+    if test "x$mutt_cv_dotlock_set" != "xyes" -a \
+        x"$enable_flock" != "xyes" -a x"$enable_fcntl" != "xyes"
+    then
+      AC_MSG_ERROR([Dotlock is not usable.  Flock or fcntl must be enabled])
     fi
 
     if test "x$mutt_cv_setgid" = "xyes" || test "x$mutt_cv_fchdir" = "xno" \
