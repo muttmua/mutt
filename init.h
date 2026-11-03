@@ -338,7 +338,7 @@ struct option_t MuttVars[] = {
   ** Note: for Japanese users, ``iso-2022-*'' must be put at the head
   ** of the value as shown above if included.
   */
-  { "attach_format",    DT_STR,  R_NONE, {.p=&AttachFormat}, {.p="%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "} },
+  { "attach_format",    DT_STR,  R_NONE, {.p=&AttachFormat}, {.p="%u%D%I %t%4n %T%d%*  [%.7m/%.10M, %.6e%?C?, %C?, %s] "} },
   /*
   ** .pp
   ** This variable describes the format of the ``attachment'' menu.  The
