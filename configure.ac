@@ -245,7 +245,12 @@ AC_ARG_WITH(mixmaster, AS_HELP_STRING([--with-mixmaster@<:@=PATH@:>@],[Include M
      OPS="$OPS \$(srcdir)/OPS.MIX"
      MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS remailer.o"
      AC_DEFINE_UNQUOTED(MIXMASTER,"$MIXMASTER", [Where to find mixmaster on your system.])
-   fi])
+   fi],
+   [with_mixmaster=no])
+
+if test "x$with_mixmaster" != "xno"; then
+        AC_MSG_WARN([--with-mixmaster is deprecated and will be removed in mutt 2.6.0])
+fi
 
 # We now require all OPS
 OPS="$OPS \$(srcdir)/OPS.PGP \$(srcdir)/OPS.SMIME \$(srcdir)/OPS.CRYPT "
