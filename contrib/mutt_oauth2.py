@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
 # Mutt OAuth2 token management script, version 2026-11-07
-# Modified by Aiden Woodruff to mention Google's removal of authcode.
+# Modified by Aiden Woodruff to mention Google's removal of authcode and store
+# client_id and client_secret in the encrypted token.
 #
 # Mutt OAuth2 token management script, version 2020-08-07
 # Written against python 3.7.3, not tried with earlier python versions.
@@ -142,6 +143,10 @@ if not token:
     if token['authflow'] not in authflows:
         sys.exit(f'ERROR: Unknown authflow "{token['authflow']}".')
     token['email'] = input('Account e-mail address: ')
+    if not registration['client_id']:
+        token['client_id'] = input('Client ID: ')
+    if not registration['client_secret']:
+        token['client_secret'] = input('Client secret: ')
     token['access_token'] = ''
     token['access_token_expiration'] = ''
     token['refresh_token'] = ''
@@ -159,6 +164,12 @@ if args.authflow:
 if args.authflow == 'authcode' and token['registration'] == 'google':
     sys.exit('Google has removed the standard authcode method for security'
              'reasons. Use localauthcode.')
+
+if 'client_id' in token:
+    registration['client_id'] = token['client_id']
+
+if 'client_secret' in token:
+    registration['client_secret'] = token['client_secret']
 
 baseparams = {'client_id': registration['client_id']}
 # Microsoft uses 'tenant' but Google does not

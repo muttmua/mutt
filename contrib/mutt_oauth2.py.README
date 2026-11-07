@@ -152,12 +152,12 @@ might want an official app registration from a developer (the creation of
 which and blessing by the cloud provider might require payment and/or arduous
 review), or might perhaps be willing to roll their own "in-house" registration.
 
-What you ultimately need is the "client_id" (and "client_secret" if
-one was set) for this registration. Those values must be edited into
-the mutt_oauth2.py script.  If your work or school environment has a
-knowledge base that provides the client_id, then someone already took
-care of the app registration, and you can skip the step of creating
-your own registration.
+What you ultimately need is the "client_id" (and "client_secret" if one was
+set) for this registration. Those values must be edited into the mutt_oauth2.py
+script or interactively supplied with "--authorize".  If your work or school
+environment has a knowledge base that provides the client_id, then someone
+already took care of the app registration, and you can skip the step of
+creating your own registration.
 
 
 -- How to create a Google registration --
@@ -177,8 +177,9 @@ matter and could be "mutt registration project".
  - At top, choose Create Credentials / OAuth2 client iD
    - Application type is "Desktop app"
 
-Edit the client_id (and client_secret if there is one) into the
-mutt_oauth2.py script.
+Edit the client_id (and client_secret if there is one) into the mutt_oauth2.py
+script. These values can also be interactively entered with "--authorize" which
+saves them to the encrypted token file.
 
 
 -- How to create a Microsoft registration --
@@ -212,8 +213,9 @@ portal.azure.com for their work/school account can temporarily use an
 incognito browser window to create a free outlook.com account and use that
 to create the app registration.
 
-Edit the client_id (and client_secret if there is one) into the
-mutt_oauth2.py script.
+Edit the client_id (and client_secret if there is one) into the mutt_oauth2.py
+script. These values can also be interactively entered with "--authorize" which
+saves them to the encrypted token file.
 
 
 Running the script manually to authorize tokens
