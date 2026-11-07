@@ -233,6 +233,8 @@ flow question:
 manually extract a "code" parameter from a subsequent URL in the
 browser address bar and paste that back to the script.
 
+    - This method has been disabled by Google for security reasons.
+
 - "localhostauthcode": you again paste the complicated URL into a browser
 but that's it --- the code is automatically extracted from the response
 relying on a localhost redirect and temporarily listening on a localhost

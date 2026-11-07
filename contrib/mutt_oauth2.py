@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 #
+# Mutt OAuth2 token management script, version 2026-11-07
+# Modified by Aiden Woodruff to mention Google's removal of authcode.
+#
 # Mutt OAuth2 token management script, version 2020-08-07
 # Written against python 3.7.3, not tried with earlier python versions.
 #
@@ -128,8 +131,16 @@ if not token:
         sys.exit('You must run script with "--authorize" at least once.')
     print('Available app and endpoint registrations:', *registrations)
     token['registration'] = input('OAuth2 registration: ')
-    token['authflow'] = input('Preferred OAuth2 flow ("authcode" or "localhostauthcode" '
-                              'or "devicecode"): ')
+    if token['registration'] not in registrations:
+        sys.exit(f'ERROR: Unknown registration "{token["registration"]}".')
+    registration = registrations[token['registration']]
+    authflows = {
+        'google': ['localhostauthcode', 'devicecode'],
+        'microsoft': ['authcode', 'localhostauthcode', 'devicecode'],
+    }[token['registration']]
+    token['authflow'] = input(f'Preferred OAuth2 flow (from {authflows}): ')
+    if token['authflow'] not in authflows:
+        sys.exit(f'ERROR: Unknown authflow "{token['authflow']}".')
     token['email'] = input('Account e-mail address: ')
     token['access_token'] = ''
     token['access_token_expiration'] = ''
@@ -144,6 +155,10 @@ registration = registrations[token['registration']]
 authflow = token['authflow']
 if args.authflow:
     authflow = args.authflow
+
+if args.authflow == 'authcode' and token['registration'] == 'google':
+    sys.exit('Google has removed the standard authcode method for security'
+             'reasons. Use localauthcode.')
 
 baseparams = {'client_id': registration['client_id']}
 # Microsoft uses 'tenant' but Google does not
