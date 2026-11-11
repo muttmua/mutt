@@ -5164,15 +5164,12 @@ macro pager ,x '\
 </example>
 
 <para>
-Since Mutt expands such values already when parsing the configuration
-file(s), the value of <literal>$my_delete</literal> in the
-last example would be the value of <link linkend="delete">$delete</link> exactly
-as it was at that point during parsing the configuration file. If
-another statement would change the value for <link linkend="delete">$delete</link>
-later in the same or another file, it would have no effect on
-<literal>$my_delete</literal>. However, the expansion can
-be deferred to runtime, as shown in the next example, when escaping the
-dollar sign.
+When double quotes are used, Mutt expands variables while parsing the
+configuration file.  This is why the above example used single quotes
+around the macro: to use the values of $delete and $my_delete as
+defined at macro run time.  When double quotes are required, another
+way to defer variable expansion is shown in the next example: escaping
+the dollar sign.
 </para>
 
 <example id="ex-myvar3">
