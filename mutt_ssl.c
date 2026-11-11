@@ -46,8 +46,11 @@
 #define SSL_has_pending SSL_pending
 #endif
 
+#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x40100000L)
+  #define mutt_get_asn1_string_length(str) ASN1_STRING_get_length((str))
+  #define mutt_get_asn1_string_data(str) ASN1_STRING_get0_data((str))
 /* Starting OpenSSL v4, the ASN1_STRING type is now opaque */
-#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x40000000L)
+#elif (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x40000000L)
   #define mutt_get_asn1_string_length(str) ASN1_STRING_length((str))
   #define mutt_get_asn1_string_data(str) ASN1_STRING_get0_data((str))
 #else
