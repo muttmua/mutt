@@ -125,6 +125,7 @@ static int ssl_load_certificates(SSL_CTX *ctx)
   X509 *cert = NULL;
   X509_STORE *store;
   int rv = 1;
+  time_t now;
 #ifdef DEBUG
   char buf[STRING];
 #endif
@@ -142,8 +143,12 @@ static int ssl_load_certificates(SSL_CTX *ctx)
 
   while (NULL != PEM_read_X509(fp, &cert, NULL, NULL))
   {
-    if ((X509_cmp_current_time(X509_get0_notBefore(cert)) >= 0) ||
-        (X509_cmp_current_time(X509_get0_notAfter(cert)) <= 0))
+    now = time(NULL);
+    /* "not before" must be before now.  "not after" mutt be after now.
+     * The function returns -2 on error, which we also count as a failure.
+     */
+    if ((ASN1_TIME_cmp_time_t(X509_get0_notBefore(cert), now) != -1) ||
+        (ASN1_TIME_cmp_time_t(X509_get0_notAfter(cert), now) != 1))
     {
       muttdbg(2, "filtering expired cert: %s",
               X509_NAME_oneline(X509_get_subject_name(cert), buf, sizeof(buf)));
@@ -846,9 +851,14 @@ static int check_certificate_cache(X509 *peercert)
 
 static int check_certificate_expiration(X509 *peercert, int silent)
 {
+  time_t now;
+
   if (option(OPTSSLVERIFYDATES) != MUTT_NO)
   {
-    if (X509_cmp_current_time(X509_get0_notBefore(peercert)) >= 0)
+    now = time(NULL);
+
+    /* "not before" must be before now */
+    if (ASN1_TIME_cmp_time_t(X509_get0_notBefore(peercert), now) != -1)
     {
       if (!silent)
       {
@@ -858,7 +868,8 @@ static int check_certificate_expiration(X509 *peercert, int silent)
       }
       return 0;
     }
-    if (X509_cmp_current_time(X509_get0_notAfter(peercert)) <= 0)
+    /* "not after" must be after now */
+    if (ASN1_TIME_cmp_time_t(X509_get0_notAfter(peercert), now) != 1)
     {
       if (!silent)
       {
