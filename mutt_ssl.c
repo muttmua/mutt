@@ -752,7 +752,7 @@ static void ssl_dprint_err_stack(void)
 }
 
 
-static char *x509_get_part(X509_NAME *name, int nid)
+static char *x509_get_part(const X509_NAME *name, int nid)
 {
   static char ret[SHORT_STRING];
 
@@ -972,7 +972,7 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
   /* hostname in ASCII format: */
   char *hostname_ascii = NULL;
   /* needed to get the common name: */
-  X509_NAME *x509_subject;
+  const X509_NAME *x509_subject;
   char *buf = NULL;
   int bufsize;
   /* needed to get the DNS subjectAltNames: */
@@ -1219,8 +1219,8 @@ static int interactive_check_cert(X509 *cert, int idx, int len, SSL *ssl, int al
       NID_localityName,           /* L */
       NID_stateOrProvinceName,    /* ST */
       NID_countryName             /* C */ };
-  X509_NAME *x509_subject;
-  X509_NAME *x509_issuer;
+  const X509_NAME *x509_subject;
+  const X509_NAME *x509_issuer;
   char helpstr[LONG_STRING];
   char buf[STRING];
   char title[STRING];
