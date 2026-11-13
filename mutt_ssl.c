@@ -991,7 +991,7 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
 {
   int i, rc = 0;
   /* hostname in ASCII format: */
-  char *hostname_ascii = NULL;
+  char *hostname_ascii = NULL, *common_name_ascii = NULL;
   /* needed to get the common name: */
   const X509_NAME *x509_subject;
   BUFFER *common_name_buf = NULL;
@@ -1067,8 +1067,18 @@ static int check_host(X509 *x509cert, const char *hostname, char *err, size_t er
     }
 
     /* This checks for embedded nuls */
-    if (mutt_buffer_len(common_name_buf) == mutt_strlen(mutt_b2s(common_name_buf)))
-      match_found = hostname_match(hostname_ascii, mutt_b2s(common_name_buf));
+    if (mutt_buffer_len(common_name_buf) > 0 &&
+        mutt_buffer_len(common_name_buf) == mutt_strlen(mutt_b2s(common_name_buf)))
+    {
+#if defined(HAVE_LIBIDN) || defined(HAVE_LIBIDN2)
+      if (idna_to_ascii_8z(mutt_b2s(common_name_buf), &common_name_ascii, 0) != IDNA_SUCCESS)
+        common_name_ascii = safe_strdup(mutt_b2s(common_name_buf));
+#else
+      common_name_ascii = safe_strdup(mutt_b2s(common_name_buf));
+#endif
+      match_found = hostname_match(hostname_ascii, common_name_ascii);
+      FREE(&common_name_ascii);
+    }
   }
 
   if (!match_found)
