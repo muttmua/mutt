@@ -5176,7 +5176,7 @@ the dollar sign.
 <title>Deferring user-defined variable expansion to runtime</title>
 <screen>
 macro pager &lt;PageDown&gt; "\
-&lt;enter-command&gt; set my_old_pager_stop=\$pager_stop pager_stop&lt;Enter&gt;\
+&lt;enter-command&gt; set my_old_pager_stop=\$pager_stop&lt;Enter&gt;\
 &lt;next-page&gt;\
 &lt;enter-command&gt; set pager_stop=\$my_old_pager_stop&lt;Enter&gt;\
 &lt;enter-command&gt; unset my_old_pager_stop&lt;Enter&gt;"
