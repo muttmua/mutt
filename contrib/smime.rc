@@ -47,7 +47,10 @@
 # unset smime_decrypt_use_default_key
 
 # Path to a file or directory with trusted certificates
-set smime_ca_location="~/.smime/ca-bundle.crt"
+set smime_ca_location=\
+  "`for f in \
+  $HOME/.smime/ca-certificates.crt $HOME/.smime/ca-bundle.crt \
+  ; do if [ -e $f ] ; then echo $f ; exit ; fi ; done`"
 
 # Path to where all known certificates go. (must exist!)
 set smime_certificates="~/.smime/certificates"
@@ -97,11 +100,11 @@ set smime_sign_command="openssl smime -sign -md %d -signer %c -inkey %k -passin 
 set smime_decrypt_command="openssl cms -decrypt -passin stdin -inform DER -in %f -inkey %k -recip %c"
 
 # Verify a signature of type multipart/signed
-set smime_verify_command="openssl smime -verify -inform DER -in %s %C -content %f"
+set smime_verify_command="openssl smime -verify -inform DER -in %s %?C?%C? -content %f"
 
 # Verify a signature of type application/pkcs7-mime
 set smime_verify_opaque_command="\
-openssl smime -verify -inform DER -in %s %C || \
+openssl smime -verify -inform DER -in %s %?C?%C? || \
 openssl smime -verify -inform DER -in %s -noverify 2>/dev/null"
 
 # application/pkcs7-mime ".p7m" messages should have a smime-type
