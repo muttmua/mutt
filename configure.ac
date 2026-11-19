@@ -856,6 +856,12 @@ AC_ARG_WITH(ssl, AS_HELP_STRING([--with-ssl@<:@=PFX@:>@],[Enable TLS support usi
 
 AC_ARG_WITH([gnutls], AS_HELP_STRING([--with-gnutls@<:@=PFX@:>@],[enable TLS support using gnutls]),
     [gnutls_prefix="$withval"], [gnutls_prefix="no"])
+
+AC_ARG_WITH([gnutls-default-ca-cert-file],
+            AS_HELP_STRING([--with-gnutls-default-ca-cert-file@<:@=FILE@:>@],[Default trusted CA certificates]),
+            [],
+            [with_gnutls_default_ca_cert_file="no"])
+
 if test "$gnutls_prefix" != "no" && test x"$need_ssl" != xyes
 then
   if test "$need_socket" != "yes"
@@ -893,6 +899,37 @@ then
       MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_ssl_gnutls.o"
       need_ssl=yes],
       [AC_MSG_ERROR([could not find libgnutls])])
+
+      mutt_cv_ca_file=""
+      if test x"$with_gnutls_default_ca_cert_file" = x"yes"; then
+        AC_MSG_CHECKING([for gnutls_default_ca_cert_file in common locations])
+        for f in /etc/ssl/certs/ca-certificates.crt \
+                 /etc/pki/tls/certs/ca-bundle.crt \
+                 /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
+                 /usr/share/ssl/certs/ca-bundle.crt \
+                 /usr/local/share/certs/ca-root-nss.crt \
+                 /etc/ssl/cert.pem ; do
+          if test -f $f; then
+            AC_MSG_RESULT([$f])
+            mutt_cv_ca_file="$f"
+            break
+          fi
+        done
+
+        if test x"$mutt_cv_ca_file" = x""; then
+          AC_MSG_RESULT([not found])
+        fi
+      elif test x"$with_gnutls_default_ca_cert_file" != x"no"; then
+        mutt_cv_ca_file="$with_gnutls_default_ca_cert_file"
+      fi
+
+      if test x"$mutt_cv_ca_file" != x""; then
+        AC_DEFINE_UNQUOTED([GNUTLS_DEFAULT_CA_FILE], ["$mutt_cv_ca_file"],
+                           [Path to default value for $ssl_ca_certificates_file])
+      else
+        AC_DEFINE([GNUTLS_DEFAULT_CA_FILE], 0,
+                  [Path to default value for $ssl_ca_certificates_file])
+      fi
   fi
 fi
 
