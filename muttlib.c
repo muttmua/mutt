@@ -1892,13 +1892,12 @@ void mutt_FormatString(char *dest,             /* output buffer */
               *p = '_';
         }
 
-        if ((len = mutt_strlen(buf)) + wlen > destlen)
-          len = mutt_wstr_trunc(buf, destlen - wlen, cols - col, NULL);
+        len = mutt_wstr_trunc(buf, destlen - wlen, cols - col, &wid);
 
         memcpy(wptr, buf, len);
         wptr += len;
         wlen += len;
-        col += mutt_strwidth(buf);
+        col += wid;
       }
     }
     else if (*src == '\\')
