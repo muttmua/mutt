@@ -401,8 +401,8 @@ static void include_header(int quote, FILE * ifp,
     if (_prefix)
       strfcpy(prefix, _prefix, sizeof(prefix));
     else if (!option(OPTTEXTFLOWED))
-      _mutt_make_string(prefix, sizeof(prefix), NONULL(Prefix),
-                        Context, hdr, 0);
+      mutt_make_data_hdrfmt_string(prefix, sizeof(prefix), NONULL(Prefix),
+                                   Context, hdr, 0);
     else
       strfcpy(prefix, ">", sizeof(prefix));
 
@@ -500,8 +500,8 @@ static void attach_forward_bodies(FILE * fp, HEADER * hdr,
   if (option(OPTFORWQUOTE))
   {
     if (!option(OPTTEXTFLOWED))
-      _mutt_make_string(prefix, sizeof(prefix), NONULL(Prefix), Context,
-                        parent_hdr, 0);
+      mutt_make_data_hdrfmt_string(prefix, sizeof(prefix), NONULL(Prefix), Context,
+                                   parent_hdr, 0);
     else
       strfcpy(prefix, ">", sizeof(prefix));
   }
@@ -1026,8 +1026,8 @@ void mutt_attach_reply(FILE * fp, HEADER * hdr,
     st.fpout = tmpfp;
 
     if (!option(OPTTEXTFLOWED))
-      _mutt_make_string(prefix, sizeof(prefix), NONULL(Prefix),
-                        Context, parent_hdr, 0);
+      mutt_make_data_hdrfmt_string(prefix, sizeof(prefix), NONULL(Prefix),
+                                   Context, parent_hdr, 0);
     else
       strfcpy(prefix, ">", sizeof(prefix));
 

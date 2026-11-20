@@ -796,8 +796,9 @@ hdr_format_str(char *dest,
 #undef THREAD_OLD
 }
 
-void
-_mutt_make_string(char *dest, size_t destlen, const char *s, CONTEXT *ctx, HEADER *hdr, format_flag flags)
+void mutt_make_window_hdrfmt_string(char *dest, size_t destlen, int cols,
+                                    const char *s, CONTEXT *ctx, HEADER *hdr,
+                                    format_flag flags)
 {
   struct hdr_format_info hfi;
 
@@ -805,11 +806,24 @@ _mutt_make_string(char *dest, size_t destlen, const char *s, CONTEXT *ctx, HEADE
   hfi.ctx = ctx;
   hfi.pager_progress = 0;
 
-  mutt_FormatString(dest, destlen, 0, MuttIndexWindow->cols, s, hdr_format_str, &hfi, flags);
+  mutt_FormatString(dest, destlen, 0, cols, s, hdr_format_str, &hfi, flags);
 }
 
-void
-mutt_make_string_info(char *dst, size_t dstlen, int cols, const char *s, struct hdr_format_info *hfi, format_flag flags)
+void mutt_make_window_hdrfmt_info_string(char *dest, size_t destlen, int cols,
+                                         const char *s, struct hdr_format_info *hfi,
+                                         format_flag flags)
 {
-  mutt_FormatString(dst, dstlen, 0, cols, s, hdr_format_str, hfi, flags);
+  mutt_FormatString(dest, destlen, 0, cols, s, hdr_format_str, hfi, flags);
+}
+
+void mutt_make_data_hdrfmt_string(char *dest, size_t destlen, const char *s,
+                                  CONTEXT *ctx, HEADER *hdr, format_flag flags)
+{
+  struct hdr_format_info hfi;
+
+  hfi.hdr = hdr;
+  hfi.ctx = ctx;
+  hfi.pager_progress = 0;
+
+  mutt_FormatString(dest, destlen, 0, destlen * 2, s, hdr_format_str, &hfi, flags);
 }

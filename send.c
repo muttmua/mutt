@@ -347,7 +347,7 @@ void mutt_forward_intro(CONTEXT *ctx, HEADER *cur, FILE *fp)
   if (ForwardAttrIntro)
   {
     setlocale(LC_TIME, NONULL(AttributionLocale));
-    mutt_make_string(buffer, sizeof(buffer), ForwardAttrIntro, ctx, cur);
+    mutt_make_data_hdrfmt_string(buffer, sizeof(buffer), ForwardAttrIntro, ctx, cur, 0);
     setlocale(LC_TIME, "");
     fputs(buffer, fp);
     fputs("\n\n", fp);
@@ -361,7 +361,7 @@ void mutt_forward_trailer(CONTEXT *ctx, HEADER *cur, FILE *fp)
   if (ForwardAttrTrailer)
   {
     setlocale(LC_TIME, NONULL(AttributionLocale));
-    mutt_make_string(buffer, sizeof(buffer), ForwardAttrTrailer, ctx, cur);
+    mutt_make_data_hdrfmt_string(buffer, sizeof(buffer), ForwardAttrTrailer, ctx, cur, 0);
     setlocale(LC_TIME, "");
     fputc('\n', fp);
     fputs(buffer, fp);
@@ -519,7 +519,7 @@ void mutt_make_attribution(CONTEXT *ctx, HEADER *cur, FILE *out)
   if (Attribution)
   {
     setlocale(LC_TIME, NONULL(AttributionLocale));
-    mutt_make_string(buffer, sizeof(buffer), Attribution, ctx, cur);
+    mutt_make_data_hdrfmt_string(buffer, sizeof(buffer), Attribution, ctx, cur, 0);
     setlocale(LC_TIME, "");
     fputs(buffer, out);
     fputc('\n', out);
@@ -531,7 +531,7 @@ void mutt_make_post_indent(CONTEXT *ctx, HEADER *cur, FILE *out)
   char buffer[STRING];
   if (PostIndentString)
   {
-    mutt_make_string(buffer, sizeof(buffer), PostIndentString, ctx, cur);
+    mutt_make_data_hdrfmt_string(buffer, sizeof(buffer), PostIndentString, ctx, cur, 0);
     fputs(buffer, out);
     fputc('\n', out);
   }
@@ -757,7 +757,7 @@ void mutt_make_forward_subject(ENVELOPE *env, CONTEXT *ctx, HEADER *cur)
   char buffer[STRING];
 
   /* set the default subject for the message. */
-  mutt_make_string(buffer, sizeof(buffer), NONULL(ForwFmt), ctx, cur);
+  mutt_make_data_hdrfmt_string(buffer, sizeof(buffer), NONULL(ForwFmt), ctx, cur, 0);
   mutt_str_replace(&env->subject, buffer);
 }
 

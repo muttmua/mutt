@@ -267,7 +267,7 @@ void index_make_entry(char *s, size_t l, MUTTMENU *menu, int num)
     }
   }
 
-  _mutt_make_string(s, l, NONULL(HdrFmt), Context, h, flag);
+  mutt_make_window_hdrfmt_string(s, l, MuttIndexWindow->cols, NONULL(HdrFmt), Context, h, flag);
 }
 
 COLOR_ATTR index_color(int index_no)

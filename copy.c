@@ -558,7 +558,7 @@ _mutt_copy_message(FILE *fpout, FILE *fpin, HEADER *hdr, BODY *body,
     if (option(OPTTEXTFLOWED))
       strfcpy(prefix, ">", sizeof(prefix));
     else
-      _mutt_make_string(prefix, sizeof(prefix), NONULL(Prefix), Context, hdr, 0);
+      mutt_make_data_hdrfmt_string(prefix, sizeof(prefix), NONULL(Prefix), Context, hdr, 0);
   }
 
   if ((flags & MUTT_CM_NOHEADER) == 0)

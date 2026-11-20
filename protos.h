@@ -25,10 +25,6 @@
 
 #define MoreArgs(p) (*p->dptr && *p->dptr != ';' && *p->dptr != '#')
 
-#define mutt_make_string(A,B,C,D,E) _mutt_make_string(A,B,C,D,E,0)
-void _mutt_make_string(char *, size_t, const char *, CONTEXT *,
-                       HEADER *, format_flag);
-
 struct hdr_format_info
 {
   CONTEXT *ctx;
@@ -36,7 +32,14 @@ struct hdr_format_info
   const char *pager_progress;
 };
 
-void mutt_make_string_info(char *, size_t, int, const char *, struct hdr_format_info *, format_flag);
+void mutt_make_window_hdrfmt_string(char *dest, size_t destlen, int cols,
+                                    const char *s, CONTEXT *ctx, HEADER *hdr,
+                                    format_flag flags);
+void mutt_make_window_hdrfmt_info_string(char *dest, size_t destlen, int cols,
+                                         const char *s, struct hdr_format_info *hfi,
+                                         format_flag flags);
+void mutt_make_data_hdrfmt_string(char *dest, size_t destlen, const char *s,
+                                  CONTEXT *ctx, HEADER *hdr, format_flag flags);
 
 int mutt_extract_token(BUFFER *, BUFFER *, int);
 void mutt_free_opts(void);

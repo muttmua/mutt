@@ -2045,7 +2045,9 @@ static void pager_menu_redraw(MUTTMENU *pager_menu)
       size_t l1 = rd->pager_status_window->cols * MB_LEN_MAX;
       size_t l2 = sizeof(buffer);
       hfi.hdr = (IsHeader(rd->extra)) ? rd->extra->hdr : rd->extra->bdy->hdr;
-      mutt_make_string_info(buffer, l1 < l2 ? l1 : l2, rd->pager_status_window->cols, NONULL(PagerFmt), &hfi, 0);
+      mutt_make_window_hdrfmt_info_string(buffer, l1 < l2 ? l1 : l2,
+                                          rd->pager_status_window->cols,
+                                          NONULL(PagerFmt), &hfi, 0);
       mutt_paddstr(rd->pager_status_window->cols, buffer);
     }
     else

@@ -157,7 +157,7 @@ int mutt_parse_hook(BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *
   else if (data & MUTT_SAVEHOOK)
   {
     /* Do not perform relative path expansion.  "\^" can be expanded later:
-     *   mutt_default_save() => mutt_addr_hook() => mutt_make_string()
+     *   mutt_default_save() => mutt_addr_hook() => mutt_make_data_hdrfmt_string()
      * which will perform backslash expansion, converting "\^" to "^".
      * The saving code then calls mutt_buffer_expand_path() after prompting.
      */
@@ -166,7 +166,7 @@ int mutt_parse_hook(BUFFER *buf, BUFFER *s, union pointer_long_t udata, BUFFER *
   else if (data & MUTT_FCCHOOK)
   {
     /* Do not perform relative path expansion.  "\^" can be expanded later:
-     *   mutt_select_fcc() => mutt_addr_hook() => mutt_make_string()
+     *   mutt_select_fcc() => mutt_addr_hook() => mutt_make_data_hdrfmt_string()
      * which will perform backslash expansion, converting "\^" to "^".
      * save_fcc_mailbox_part() then calls mutt_buffer_expand_path() on each part.
      */
@@ -565,7 +565,7 @@ mutt_addr_hook(char *path, size_t pathlen, int type, CONTEXT *ctx, HEADER *hdr)
     if (hook->type & type)
       if ((mutt_pattern_exec(hook->pattern, 0, ctx, hdr, &cache) > 0) ^ hook->rx.not)
       {
-        mutt_make_string(path, pathlen, hook->command, ctx, hdr);
+        mutt_make_data_hdrfmt_string(path, pathlen, hook->command, ctx, hdr, 0);
         return 0;
       }
   }

@@ -164,7 +164,7 @@ be_include_messages(char *msg, char **buf, int *bufmax, int *buflen,
       if (Attribution)
       {
         setlocale(LC_TIME, NONULL(AttributionLocale));
-        mutt_make_string(tmp, sizeof(tmp) - 1, Attribution, Context, Context->hdrs[n]);
+        mutt_make_data_hdrfmt_string(tmp, sizeof(tmp) - 1, Attribution, Context, Context->hdrs[n], 0);
         setlocale(LC_TIME, "");
         strcat(tmp, "\n");     /* __STRCAT_CHECKED__ */
       }

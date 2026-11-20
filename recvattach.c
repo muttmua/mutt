@@ -204,8 +204,8 @@ const char *mutt_attach_fmt(char *dest,
             MsgFmt && aptr->content->hdr)
         {
           char s[SHORT_STRING];
-          _mutt_make_string(s, sizeof(s), MsgFmt, NULL, aptr->content->hdr,
-                            MUTT_FORMAT_FORCESUBJ | MUTT_FORMAT_ARROWCURSOR);
+          mutt_make_data_hdrfmt_string(s, sizeof(s), MsgFmt, NULL, aptr->content->hdr,
+                                       MUTT_FORMAT_FORCESUBJ | MUTT_FORMAT_ARROWCURSOR);
           if (*s)
           {
             mutt_format_s(dest, destlen, prefix, s);
