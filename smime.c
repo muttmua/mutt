@@ -321,7 +321,7 @@ static const char *_mutt_fmt_smime_command(char *dest,
 static void mutt_smime_command(char *d, size_t dlen,
                                struct smime_command_context *cctx, const char *fmt)
 {
-  mutt_FormatString(d, dlen, 0, MuttIndexWindow->cols, NONULL(fmt), _mutt_fmt_smime_command,
+  mutt_FormatString(d, dlen, 0, dlen * 2, NONULL(fmt), _mutt_fmt_smime_command,
                     cctx, 0);
   muttdbg(2, "%s", d);
 }

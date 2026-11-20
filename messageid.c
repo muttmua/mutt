@@ -168,7 +168,7 @@ char *mutt_gen_msgid(ENVELOPE *env)
     fmt = "<%z@%f>";
 
   buf = mutt_buffer_pool_get();
-  mutt_FormatString(buf->data, buf->dsize, 0, buf->dsize,
+  mutt_FormatString(buf->data, buf->dsize, 0, buf->dsize * 2,
                     fmt, id_format_str, &id_data, 0);
   mutt_buffer_fix_dptr(buf);
 

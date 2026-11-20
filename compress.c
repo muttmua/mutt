@@ -372,7 +372,7 @@ expand_command_str(CONTEXT *ctx, const char *cmd, char *buf, int buflen)
   if (!ctx || !cmd || !buf)
     return;
 
-  mutt_FormatString(buf, buflen, 0, buflen, cmd, cb_format_str, ctx, 0);
+  mutt_FormatString(buf, buflen, 0, buflen * 2, cmd, cb_format_str, ctx, 0);
 }
 
 /**
