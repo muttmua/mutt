@@ -1694,9 +1694,12 @@ void mutt_FormatString(char *dest,             /* output buffer */
     {
       if (*++src == '%')
       {
-        *wptr++ = '%';
-        wlen++;
-        col++;
+        if (col < cols)
+        {
+          *wptr++ = '%';
+          wlen++;
+          col++;
+        }
         src++;
         continue;
       }
@@ -1904,31 +1907,34 @@ void mutt_FormatString(char *dest,             /* output buffer */
     {
       if (!*++src)
         break;
-      switch (*src)
+      if (col < cols)
       {
-        case 'n':
-          *wptr = '\n';
-          break;
-        case 't':
-          *wptr = '\t';
-          break;
-        case 'r':
-          *wptr = '\r';
-          break;
-        case 'f':
-          *wptr = '\f';
-          break;
-        case 'v':
-          *wptr = '\v';
-          break;
-        default:
-          *wptr = *src;
-          break;
+        switch (*src)
+        {
+          case 'n':
+            *wptr = '\n';
+            break;
+          case 't':
+            *wptr = '\t';
+            break;
+          case 'r':
+            *wptr = '\r';
+            break;
+          case 'f':
+            *wptr = '\f';
+            break;
+          case 'v':
+            *wptr = '\v';
+            break;
+          default:
+            *wptr = *src;
+            break;
+        }
+        wptr++;
+        wlen++;
+        col++;
       }
       src++;
-      wptr++;
-      wlen++;
-      col++;
     }
     else
     {
@@ -1936,19 +1942,30 @@ void mutt_FormatString(char *dest,             /* output buffer */
       /* in case of error, simply copy byte */
       if ((tmp = mutt_charlen(src, &w)) < 0)
         tmp = w = 1;
-      if (tmp > 0 && wlen + tmp < destlen)
+
+      if (!tmp || (wlen + tmp > destlen))
+        break;
+
+      if (col + w <= cols)
       {
         memcpy(wptr, src, tmp);
         wptr += tmp;
-        src += tmp;
         wlen += tmp;
         col += w;
       }
+      /* There is destlen room to fit but not enough cols.  Pad with
+         spaces to avoid following characters of less width taking up
+         the slot */
       else
       {
-        src += destlen - wlen;
-        wlen = destlen;
+        while ((wlen < destlen) && (col < cols))
+        {
+          *wptr++ = ' ';
+          wlen++;
+          col++;
+        }
       }
+      src += tmp;
     }
   }
   *wptr = 0;
